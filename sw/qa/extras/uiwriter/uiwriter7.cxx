@@ -74,8 +74,6 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
-
 int CountFilesInDirectory(const OUString& rURL)
 {
     int nRet = 0;
@@ -101,7 +99,7 @@ class SwUiWriterTest7 : public SwModelTestBase
 {
 public:
     SwUiWriterTest7()
-        : SwModelTestBase(DATA_DIRECTORY)
+        : SwModelTestBase("/sw/qa/extras/uiwriter/data/")
     {
     }
 };
@@ -2057,9 +2055,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::Concat(u"hash%23path/")
-                    + "embedded-data-source.odt";
-    loadURL(aURL, nullptr);
+    OUString aURL = OUString::Concat(u"hash%23path/") + "embedded-data-source.odt";
+    createSwDoc(aURL.toUtf8().getStr());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
     // Data source has a table named Sheet1.

@@ -313,8 +313,6 @@ protected:
 
     void loadURLWithComponent(OUString const& rURL, OUString const& rComponent, const char* pName, const char* pPassword);
 
-    void loadURL(OUString const& rURL, const char* pName, const char* pPassword = nullptr);
-
     void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.

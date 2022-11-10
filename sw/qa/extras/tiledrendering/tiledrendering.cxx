@@ -161,7 +161,7 @@ void SwTiledRenderingTest::tearDown()
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter", nullptr);
+        createSwDoc();
     else
         load(pName);
 

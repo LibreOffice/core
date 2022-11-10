@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -762,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -1267,7 +1267,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -2079,7 +2079,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -2698,7 +2698,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -3379,14 +3379,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 {
     createSwDoc("tdf109137.docx");
+    // FIXME: it's not possible to use 'reload' here because the validation fails with
+    // Error: attribute "text:start-value" has a bad value
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     }));
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    loadURL(aTempFile.GetURL(), "tdf109137.odt");
+    xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 0, the blue rectangle moved from the 1st to the 2nd page.
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
@@ -3496,14 +3496,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134463)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
     createSwDoc("tdf117188.docx");
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    }));
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    loadURL(aTempFile.GetURL(), "tdf117188.odt");
+    reload("writer8", "tdf117188.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString sWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "width");
     OUString sHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height");
@@ -4280,7 +4273,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
 #if !defined(MACOSX) && !defined(_WIN32)
     // Create an empty document with two, intentionally overlapping shapes.
     // Set their AllowOverlap property to false.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     awt::Point aPoint(1000, 1000);
     awt::Size aSize(2000, 2000);
@@ -4335,7 +4328,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
 {
     // Create an empty document with two, intentionally overlapping shapes.
     // Set their AllowOverlap property to false and their wrap to through.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     awt::Point aPoint(1000, 1000);
     awt::Size aSize(2000, 2000);

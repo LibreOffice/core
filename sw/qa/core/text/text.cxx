@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFootnoteConnect)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
 {
     // Create an in-memory empty document.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Set text to half-transparent and type a character.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
@@ -324,7 +324,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
 {
     // Given a document with two anchored objects (left height is 5cm, right height is 7.5cm) and a
     // clearing break (type=left):
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
@@ -375,7 +375,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
 {
     // Given a document with an anchored object in an RTL para and a clearing break (type=left):
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
@@ -416,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
 {
     // Given a document with an anchored object in a vertical page and a clearing break (type=all):
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();

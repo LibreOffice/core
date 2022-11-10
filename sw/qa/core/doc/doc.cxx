@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
 {
     // Given a document with an image with a hyperlink:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();

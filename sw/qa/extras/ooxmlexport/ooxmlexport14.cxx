@@ -404,7 +404,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.docx")
 CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
 {
     // Create a document, set footnote numbering type to ARABIC_ZERO.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
@@ -432,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
 CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
 {
     // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133771)
 CPPUNIT_TEST_FIXTURE(Test, testZeroLineSpacing)
 {
     // Create the doc model.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     style::LineSpacing aSpacing;
     aSpacing.Mode = style::LineSpacingMode::MINIMUM;
@@ -834,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(Test, testZeroLineSpacing)
 CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
 {
     // Create an in-memory empty document.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Set text to half-transparent and type a character.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
@@ -876,7 +876,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149546)
 CPPUNIT_TEST_FIXTURE(Test, testUserField)
 {
     // Create an in-memory empty document with a user field.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XDependentTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.User"), uno::UNO_QUERY);

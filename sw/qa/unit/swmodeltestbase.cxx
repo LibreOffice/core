@@ -513,11 +513,6 @@ void SwModelTestBase::loadURLWithComponent(OUString const& rURL, OUString const&
         calcLayout();
 }
 
-void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
-{
-    loadURLWithComponent(rURL, "com.sun.star.text.TextDocument", pName, pPassword);
-}
-
 void SwModelTestBase::reload(const char* pFilter, const char* pName, const char* pPassword)
 {
     save(OUString::createFromAscii(pFilter), pName, pPassword);
@@ -617,7 +612,8 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 SwDoc* SwModelTestBase::createSwDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter", nullptr);
+        loadURLWithComponent("private:factory/swriter", "com.sun.star.text.TextDocument", pName,
+                             nullptr);
     else
         load(pName);
 
@@ -627,7 +623,8 @@ SwDoc* SwModelTestBase::createSwDoc(const char* pName)
 SwDoc* SwModelTestBase::createSwWebDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter/web", nullptr);
+        loadURLWithComponent("private:factory/swriter/web", "com.sun.star.text.TextDocument", pName,
+                             nullptr);
     else
         load_web(pName);
 

@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakTextPortionEnum)
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
 {
     // Given a document with a user field:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XDependentTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.User"), uno::UNO_QUERY);
@@ -359,7 +359,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
 {
     // Given a document with an image and a hyperlink on it:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();

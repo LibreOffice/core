@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
 {
     // Create a new document, type a character, set its char style to Emphasis
     // and assert the style was set.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> const xText(xTextDocument->getText());
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> const xText(xTextDocument->getText());
     uno::Reference<text::XTextPortionAppend> const xTextA(xText, uno::UNO_QUERY);
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> const xText(xTextDocument->getText());
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsHints)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> const xText(xTextDocument->getText());
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsH
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Create a graphic object, but don't insert it yet.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Load a bitmap into the bitmap table.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -655,7 +655,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
 {
     // Create an empty new document with a single char
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
@@ -678,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* const pWrtShell(pTextDoc->GetDocShell()->GetWrtShell());
@@ -841,7 +841,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Insert initial string.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -958,7 +958,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     uno::Reference<lang::XMultiServiceFactory> xDoc(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
     // Create a new document, type a character, pass a set of property/value pairs consisting of one
     // unknown property and CharStyleName, assert that it threw UnknownPropertyException (actually
     // wrapped into WrappedTargetException), and assert the style was set, not discarded.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
@@ -1046,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     // Test the AllowOverlap frame/shape property.
 
     // Create a new document and insert a rectangle.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     awt::Point aPoint(1000, 1000);
     awt::Size aSize(10000, 10000);
@@ -1094,7 +1094,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
 {
     // Create a new document and add a text with several repeated sequences.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSimpleText = xTextDocument->getText();
     xSimpleText->insertString(xSimpleText->getStart(), "Abc aBc abC", false);
@@ -1133,7 +1133,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
     // Test the CharTransparence text portion property.
 
     // Create a new document.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Set a custom transparency.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
@@ -1147,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
 {
     // Create a new document and add a table
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
                                                                 css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
@@ -1169,7 +1169,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
 {
     // Create a new document and add a table
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
                                                                 css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,

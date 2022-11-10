@@ -1122,7 +1122,7 @@ DECLARE_RTFEXPORT_TEST(testTdf104744, "tdf104744.rtf")
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
 {
     // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();

@@ -235,7 +235,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128501, "tdf128501.doc")
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
 {
     // Create a document, set footnote numbering type to ARABIC_ZERO.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
 {
     // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();

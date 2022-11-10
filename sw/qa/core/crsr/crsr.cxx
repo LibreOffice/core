@@ -39,7 +39,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
 {
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
 
     // Given: a document with two "foo" in it, the second followed by a formatted soft hyphen.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

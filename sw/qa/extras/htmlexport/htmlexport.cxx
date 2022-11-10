@@ -802,7 +802,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
 {
     // Given a document with a table in it, with an explicit row height:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aTableProperties = {
         comphelper::makePropertyValue("Rows", static_cast<sal_Int32>(1)),
         comphelper::makePropertyValue("Columns", static_cast<sal_Int32>(1)),
@@ -1049,7 +1049,7 @@ DECLARE_HTMLEXPORT_TEST(testTdf126879, "tdf126879.odt")
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
 {
     // Build a document model that uses the Quotations paragraph style.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     xParagraph->setPropertyValue("ParaStyleName", uno::Any(OUString("Quotations")));
 
@@ -1114,7 +1114,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
 {
     // Create a document with a comment in it.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Text", uno::Any(OUString("some text")) },
         { "Author", uno::Any(OUString("me")) },
@@ -1135,7 +1135,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
 {
     // Create a document with a custom font name and size in it.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     xParagraph->setPropertyValue("CharFontName", uno::Any(OUString("Liberation Serif")));
     float fCharHeight = 14.0;
@@ -1163,7 +1163,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
 {
     // Create a document with an explicitly aligned paragraph.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     xParagraph->setPropertyValue("ParaAdjust",
                                  uno::Any(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT)));
@@ -1304,7 +1304,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
 {
     // Create a document with 3 list items: A, B&C and D.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("A");
@@ -1348,7 +1348,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
 {
     // Create a document with a single paragraph: its underlying is set to an explicit 'none' value.
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     xText->insertString(xText->getEnd(), "x", /*bAbsorb=*/false);
@@ -1446,7 +1446,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifObjdataPresentationDataSize)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
 {
     // Given a document with a list heading:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("list header");
@@ -1477,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
 {
     // Given a document with a list, first para is numbered, second is not:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("list header");
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
 {
     // Given a document with a list, first para is not numbered, but the second is:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("not numbered");
@@ -1560,7 +1560,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
 {
     // Given a document with some text, para style set to Quotations, no bottom margin:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     xText->insertString(xText->getEnd(), "string", /*bAbsorb=*/false);
@@ -1590,7 +1590,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
 {
     // Given a document with an image:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FileName", createFileURL(u"ole2.png")),
     };
@@ -1633,7 +1633,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGDirectly)
 {
     // Given a document with an image:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FileName", createFileURL(u"ole2.png")),
     };
@@ -1657,7 +1657,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGDirectly)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGDirectly)
 {
     // Given a document with an image:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FileName", createFileURL(u"reqif-ole-img.jpg")),
     };
@@ -1683,7 +1683,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGDirectly)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeDirectly)
 {
     // Given a document with an image shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
@@ -1710,7 +1710,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeDirectly)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGShapeDirectly)
 {
     // Given a document with an image:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
@@ -1740,7 +1740,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGShapeDirectly)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
 {
     // Given a document with an image shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
@@ -1774,7 +1774,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
 {
     // Given a document with a shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
@@ -1809,7 +1809,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
 {
     // Given a document with a shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
@@ -1830,7 +1830,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
 {
     // Given a document with a shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
@@ -1858,7 +1858,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
 {
     // Given a document with a shape:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
@@ -1906,7 +1906,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
 {
     // Given a document with a transparent image:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FileName", createFileURL(u"transparent.png")),
     };
@@ -1948,7 +1948,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
 {
     // Given a document with lh, lh, li, li, lh and lh nodes:
-    loadURL("private:factory/swriter", nullptr);
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("list 1, header 1");
