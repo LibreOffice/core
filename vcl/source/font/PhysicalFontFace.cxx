@@ -344,7 +344,7 @@ class TrueTypeFace final : public AbstractTrueTypeFont
     }
 
 public:
-    TrueTypeFace(const RawFace aFace, const FontCharMapRef rCharMap)
+    TrueTypeFace(RawFace aFace, const FontCharMapRef rCharMap)
         : AbstractTrueTypeFont(nullptr, rCharMap)
         , m_aFace(std::move(aFace))
     {
