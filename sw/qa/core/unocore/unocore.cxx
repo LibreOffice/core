@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> const xMSF(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextDocument> const xTD(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextFrame> const xTextFrame(
@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:

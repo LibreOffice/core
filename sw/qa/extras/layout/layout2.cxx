@@ -746,12 +746,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     // inline the loading because currently properties can't be passed...
     mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
                                   comphelper::containerToSequence(aFilterOptions));
-    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
-    }));
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), props);
+    save("writer_pdf_Export");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
@@ -776,8 +771,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
                 "top", "7200");
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds",
                 "height", "231");
-
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
@@ -2246,6 +2239,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
     // Reload (docx)
+    // FIXME: if we use 'reload' here, it fails with
+    //  Assertion `!m_pFirst && !m_pLast && "There are still indices registered"' failed.
     save("Office Open XML Text");
 
     // The second part: check if the reloaded doc has flys inside a fly

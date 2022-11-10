@@ -249,7 +249,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
 {
     // Given a document with a content control around one or more text portions:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
 CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
 {
     // Given a document with a checkbox content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
 CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
 {
     // Given a document with a dropdown content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
 CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
 {
     // Given a document with a picture content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
 CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
 {
     // Given a document with a date content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -983,10 +983,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
     load("tdf147978_enhancedPath_commandABVW.odt");
-    CPPUNIT_ASSERT(mxComponent);
-    save("Office Open XML Text");
-    mxComponent->dispose();
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    reload("Office Open XML Text", nullptr);
     // Make sure the new implemented export for commands A,B,V and W use the correct arc between
     // the given two points, here the short one.
     for (sal_Int16 i = 1 ; i <= 4; ++i)

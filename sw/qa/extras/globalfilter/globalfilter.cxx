@@ -1068,10 +1068,7 @@ void Test::testRedlineFlags()
         "Office Open XML Text",
     };
 
-    mxComponent = loadFromDesktop("private:factory/swriter");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = createSwDoc();
 
     SwPaM pam(SwPosition(pDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1)));
     pDoc->getIDocumentContentOperations().InsertString(pam, "foo bar baz");

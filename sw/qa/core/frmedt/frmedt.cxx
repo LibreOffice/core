@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
 {
     // Insert a shape and anchor it vertically in a way, so its position is from the top of the page
     // bottom margin area.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);

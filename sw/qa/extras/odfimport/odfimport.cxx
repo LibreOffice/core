@@ -1192,8 +1192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf151375)
 {
-    // Create a new document.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -1209,8 +1208,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151375)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 {
-    // Create a new document.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
@@ -1228,8 +1226,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 
 CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
 {
-    // Create a new document.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     {
         // Set some direct formatting on the first paragraph, but leave paragraph adjust at its
         // default (left).

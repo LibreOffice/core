@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
 CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
 {
     // Create a document, insert a shape and position it 1cm above the bottom of the body area.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     // Create a document, insert three shapes and align it the bottom,center,top of page print area bottom.
     // The size of shapes are 284 ~ 0.5cm
     // The height of page print area bottom is 1134 ~ 2cm
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
     //Create first shape and align bottom of page print area bottom.
