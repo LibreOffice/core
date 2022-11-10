@@ -35,12 +35,9 @@ public:
     {
     }
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
-    {
-        return (nIndex < mxIndexAccess->getCount());
-    }
+    sal_Bool SAL_CALL hasMoreElements() override { return (nIndex < mxIndexAccess->getCount()); }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    uno::Any SAL_CALL nextElement() override
     {
         if (nIndex < mxIndexAccess->getCount())
         {
