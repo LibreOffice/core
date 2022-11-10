@@ -115,16 +115,16 @@ class FormFieldCollectionHelper
                                     container::XEnumerationAccess>
 {
 private:
-    const uno::Reference<XHelperInterface> mxParent;
-    const uno::Reference<uno::XComponentContext> mxContext;
-    const css::uno::Reference<frame::XModel>& mxModel;
+    uno::Reference<XHelperInterface> mxParent;
+    uno::Reference<uno::XComponentContext> mxContext;
+    css::uno::Reference<frame::XModel> mxModel;
     sw::mark::IFieldmark* m_pCache;
 
 public:
     /// @throws css::uno::RuntimeException
-    FormFieldCollectionHelper(const css::uno::Reference<ov::XHelperInterface> xParent,
-                              const css::uno::Reference<css::uno::XComponentContext> xContext,
-                              const css::uno::Reference<frame::XModel>& xModel)
+    FormFieldCollectionHelper(css::uno::Reference<ov::XHelperInterface> xParent,
+                              css::uno::Reference<css::uno::XComponentContext> xContext,
+                              css::uno::Reference<frame::XModel> xModel)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
         , mxModel(std::move(xModel))

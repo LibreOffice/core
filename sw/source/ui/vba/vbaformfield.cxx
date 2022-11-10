@@ -45,7 +45,7 @@ SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>&
                                const uno::Reference<frame::XModel>& xModel,
                                sw::mark::IFieldmark& rFormField)
     : SwVbaFormField_BASE(rParent, rContext)
-    , mxModel(std::move(xModel))
+    , mxModel(xModel)
     , m_rFormField(rFormField)
 {
 }
