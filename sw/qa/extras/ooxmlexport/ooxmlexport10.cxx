@@ -1045,10 +1045,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
 
     //default style has numbering enabled.  Styles inherit numbering unless specifically disabled
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//body/txt/Special", 3);  //first three paragraphs have numbering
-    assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "a.");
-    assertXPath(pXmlDoc, "//body/txt[2]/Special", "rText", "b.");
-    assertXPath(pXmlDoc, "//body/txt[3]/Special", "rText", "c.");
+    assertXPath(pXmlDoc, "//body/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", 3);  //first three paragraphs have numbering
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "a.");
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "b.");
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "c.");
     assertXPath(pXmlDoc, "/root/page/body/txt[4]/Special", 0); //last paragraph style disables numbering
 }
 
