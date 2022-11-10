@@ -407,7 +407,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                 = makeGlyphsSubset(itWhole->second, outputDevice, text, nIndex, nLen);
             if (mLastTemporaryGlyphs.IsValid())
             {
-                mLastTemporaryKey = std::move(key);
+                mLastTemporaryKey = key;
 #ifdef DBG_UTIL
                 std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
                 if (layoutCache == nullptr)
