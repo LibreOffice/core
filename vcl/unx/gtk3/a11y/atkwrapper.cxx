@@ -46,6 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 
 #include "atkwrapper.hxx"
@@ -474,6 +475,8 @@ static AtkObject *
 wrapper_ref_child( AtkObject *atk_obj,
                    gint       i )
 {
+    SolarMutexGuard aGuard;
+
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
     if (obj->mpSysObjChild)
@@ -512,6 +515,8 @@ wrapper_ref_child( AtkObject *atk_obj,
 static gint
 wrapper_get_index_in_parent( AtkObject *atk_obj )
 {
+    SolarMutexGuard aGuard;
+
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
     //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
