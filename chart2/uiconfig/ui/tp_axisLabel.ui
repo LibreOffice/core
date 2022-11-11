@@ -110,7 +110,7 @@
                     <property name="group">tile</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="even-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|even">Stagger numbers on the axes, odd numbers lower than even numbers.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|even">Stagger numbers on the axis, odd numbers lower than even numbers.</property>
                       </object>
                     </child>
                   </object>
