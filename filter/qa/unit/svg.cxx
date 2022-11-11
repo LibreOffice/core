@@ -19,6 +19,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -139,6 +141,57 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 
     // Second shape has normal text.
     assertXPath(pXmlDoc, "//svg:text[2]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity]", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
+{
+    // Given a shape with semi-transparent, multi-paragraph text:
+    mxComponent
+        = loadFromDesktop("private:factory/simpress", "com.sun.star.drawing.DrawingDocument");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.TextShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                               uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<text::XSimpleText> xShapeText(xShape, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor = xShapeText->createTextCursor();
+    xShapeText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xShapeText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
+                                       /*bAbsorb=*/false);
+    xShapeText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("CharColor", uno::Any(static_cast<sal_Int32>(0xff0000)));
+    xShapeProps->setPropertyValue("CharTransparence", uno::Any(static_cast<sal_Int16>(20)));
+
+    // When exporting to SVG:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Then make sure that the two semi-tranparent paragraphs have the same X position:
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]", "x",
+                "250");
+    assertXPath(pXmlDoc,
+                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]/svg:tspan",
+                "fill-opacity", "0.8");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 250
+    // - Actual  : 8819
+    // i.e. the X position of the second paragraph was wrong.
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]", "x",
+                "250");
+    assertXPath(pXmlDoc,
+                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]/svg:tspan",
+                "fill-opacity", "0.8");
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)

@@ -634,6 +634,11 @@ sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, size_t& nCurAc
                 {
                     // Text is found in the inner metafile.
                     bConfigured = true;
+
+                    // nTextFound == 1 is only possible if the inner setTextPosition() had bEmpty ==
+                    // false, adjust our bEmpty accordingly.
+                    bEmpty = false;
+
                     mrActionWriter.StartMask(pA->GetPoint(), pA->GetSize(), pA->GetGradient(),
                                              nWriteFlags, &maTextOpacity);
                 }
