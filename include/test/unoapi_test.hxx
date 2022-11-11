@@ -14,7 +14,9 @@
 
 #include <string_view>
 
+#include <rtl/ref.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <test/testinteractionhandler.hxx>
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/file.hxx>
@@ -28,23 +30,31 @@ class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unot
 public:
     UnoApiTest(OUString path);
 
-    OUString createFileURL(std::u16string_view aFileBase);
-    OUString loadFromURL(std::u16string_view aFileBase);
-
     virtual void setUp() override;
     virtual void tearDown() override;
+
+    OUString createFileURL(std::u16string_view aFileBase);
+    void load(const OUString& rURL, const char* pPassword = nullptr);
+    OUString loadFromURL(std::u16string_view aFileBase, const char* pPassword = nullptr);
 
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
     void save(const OUString& rFilter, const char* pPassword = nullptr);
     void saveAndClose(const OUString& rFilter);
-    void saveAndReload(const OUString& rFilter);
+    void saveAndReload(const OUString& rFilter, const char* pPassword = nullptr);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
 
     void skipValidation() { mbSkipValidation = true; }
     void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
+
+    void setImportFilterOptions(const OUString& rFilterOptions)
+    {
+        maImportFilterOptions = rFilterOptions;
+    }
+
+    void setImportFilterName(const OUString& rFilterName) { maImportFilterName = rFilterName; }
 
 protected:
     // reference to document component that we are testing
@@ -54,10 +64,19 @@ protected:
 
     SvMemoryStream maMemory; // Underlying memory for parsed PDF files.
 
+    rtl::Reference<TestInteractionHandler> xInteractionHandler;
+
 private:
+    void
+    setTestInteractionHandler(const char* pPassword,
+                              std::vector<com::sun::star::beans::PropertyValue>& rFilterOptions);
+
     bool mbSkipValidation;
     OUString m_aBaseString;
     OUString maFilterOptions;
+
+    OUString maImportFilterOptions;
+    OUString maImportFilterName;
 };
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

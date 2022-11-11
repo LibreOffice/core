@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_functionlistobj, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_functionlistobj, \
 	cppu \
+	cppuhelper \
 	sal \
 	subsequenttest \
 	test \

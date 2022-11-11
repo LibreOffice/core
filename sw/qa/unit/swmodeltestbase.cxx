@@ -20,7 +20,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/app.hxx>
@@ -448,48 +447,10 @@ uno::Reference<drawing::XShape> SwModelTestBase::getTextFrameByName(const OUStri
     return xShape;
 }
 
-void SwModelTestBase::setTestInteractionHandler(const char* pPassword,
-                                                std::vector<beans::PropertyValue>& rFilterOptions)
-{
-    OUString sPassword = OUString::createFromAscii(pPassword);
-    rFilterOptions.emplace_back();
-    xInteractionHandler
-        = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
-    uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler);
-    rFilterOptions[0].Name = "InteractionHandler";
-    rFilterOptions[0].Value <<= xInteraction;
-}
-
 void SwModelTestBase::header() {}
 
 void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    std::vector<beans::PropertyValue> aFilterOptions;
-
-    if (pPassword)
-    {
-        setTestInteractionHandler(pPassword, aFilterOptions);
-    }
-
-    if (!maImportFilterOptions.isEmpty())
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "FilterOptions";
-        aValue.Value <<= maImportFilterOptions;
-        aFilterOptions.push_back(aValue);
-    }
-
-    if (!maImportFilterName.isEmpty())
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "FilterName";
-        aValue.Value <<= maImportFilterName;
-        aFilterOptions.push_back(aValue);
-    }
-
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
     if (!isExported())
     {
@@ -498,14 +459,7 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
         mnStartTime = osl_getGlobalTimer();
     }
 
-    mxComponent
-        = loadFromDesktop(rURL, OUString(), comphelper::containerToSequence(aFilterOptions));
-
-    if (pPassword)
-    {
-        CPPUNIT_ASSERT_MESSAGE("Password set but not requested",
-                               xInteractionHandler->wasPasswordRequested());
-    }
+    UnoApiXmlTest::load(rURL, pPassword);
 
     discardDumpedLayout();
     if (pName && mustCalcLayoutOf(pName))

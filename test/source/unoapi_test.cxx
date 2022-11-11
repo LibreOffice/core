@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -56,7 +57,19 @@ OUString UnoApiTest::createFileURL(std::u16string_view aFileBase)
     return m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
 }
 
-OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase)
+void UnoApiTest::setTestInteractionHandler(const char* pPassword,
+                                           std::vector<beans::PropertyValue>& rFilterOptions)
+{
+    OUString sPassword = OUString::createFromAscii(pPassword);
+    rFilterOptions.emplace_back();
+    xInteractionHandler
+        = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
+    css::uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler);
+    rFilterOptions[0].Name = "InteractionHandler";
+    rFilterOptions[0].Value <<= xInteraction;
+}
+
+void UnoApiTest::load(OUString const& rURL, const char* pPassword)
 {
     if (mxComponent.is())
     {
@@ -64,8 +77,43 @@ OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase)
         mxComponent.clear();
     }
 
+    std::vector<beans::PropertyValue> aFilterOptions;
+
+    if (pPassword)
+    {
+        setTestInteractionHandler(pPassword, aFilterOptions);
+    }
+
+    if (!maImportFilterOptions.isEmpty())
+    {
+        beans::PropertyValue aValue;
+        aValue.Name = "FilterOptions";
+        aValue.Value <<= maImportFilterOptions;
+        aFilterOptions.push_back(aValue);
+    }
+
+    if (!maImportFilterName.isEmpty())
+    {
+        beans::PropertyValue aValue;
+        aValue.Name = "FilterName";
+        aValue.Value <<= maImportFilterName;
+        aFilterOptions.push_back(aValue);
+    }
+
+    mxComponent
+        = loadFromDesktop(rURL, OUString(), comphelper::containerToSequence(aFilterOptions));
+
+    if (pPassword)
+    {
+        CPPUNIT_ASSERT_MESSAGE("Password set but not requested",
+                               xInteractionHandler->wasPasswordRequested());
+    }
+}
+
+OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase, const char* pPassword)
+{
     OUString aFileName = createFileURL(aFileBase);
-    mxComponent = loadFromDesktop(aFileName);
+    load(aFileName, pPassword);
     return aFileName;
 }
 
@@ -139,17 +187,17 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 
 void UnoApiTest::saveAndClose(const OUString& rFilter)
 {
-    save(rFilter);
+    save(rFilter, nullptr);
 
     mxComponent->dispose();
     mxComponent.clear();
 }
 
-void UnoApiTest::saveAndReload(const OUString& rFilter)
+void UnoApiTest::saveAndReload(const OUString& rFilter, const char* pPassword)
 {
-    saveAndClose(rFilter);
+    save(rFilter, pPassword);
 
-    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    load(maTempFile.GetURL(), pPassword);
 }
 
 std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)

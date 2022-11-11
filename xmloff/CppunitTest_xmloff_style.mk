@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,xmloff_style, \
 $(eval $(call gb_CppunitTest_use_libraries,xmloff_style, \
     comphelper \
     cppu \
+    cppuhelper \
     subsequenttest \
     embobj \
     sal \

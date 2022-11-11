@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_drawingml, \
 $(eval $(call gb_CppunitTest_use_libraries,oox_drawingml, \
     comphelper \
     cppu \
+    cppuhelper \
     oox \
     sal \
     subsequenttest \

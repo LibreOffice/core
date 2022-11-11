@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_shape, \
 $(eval $(call gb_CppunitTest_use_libraries,oox_shape, \
     comphelper \
     cppu \
+    cppuhelper \
     oox \
     sal \
     subsequenttest \

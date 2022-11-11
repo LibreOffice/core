@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_firebird_test, \
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_firebird_test, \
     comphelper \
     cppu \
+    cppuhelper \
     dbaxml \
     firebird_sdbc \
     sal \

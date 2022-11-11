@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \
     basegfx \
     comphelper \
     cppu \
+    cppuhelper \
     oox \
     sal \
     subsequenttest \

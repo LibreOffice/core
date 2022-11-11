@@ -24,7 +24,6 @@
 
 #include "swqahelperdllapi.h"
 #include <test/unoapixml_test.hxx>
-#include <test/testinteractionhandler.hxx>
 #include <unotools/tempfile.hxx>
 
 #include <doc.hxx>
@@ -94,13 +93,9 @@ class PDFiumDocument;
 class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
 {
 private:
-    OUString maImportFilterOptions;
-    OUString maImportFilterName;
     bool mbExported; ///< Does maTempFile already contain something useful?
 
 protected:
-    rtl::Reference<TestInteractionHandler> xInteractionHandler;
-
     xmlBufferPtr mpXmlBuffer;
     const char* mpFilter;
 
@@ -112,16 +107,6 @@ protected:
     void paste(std::u16string_view aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
-    void setImportFilterOptions(const OUString &rFilterOptions)
-    {
-        maImportFilterOptions = rFilterOptions;
-    }
-
-    void setImportFilterName(const OUString &rFilterName)
-    {
-        maImportFilterName = rFilterName;
-    }
-
     SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const char* pFilter = "");
 
 protected:
@@ -361,8 +346,6 @@ protected:
     bool isExported(){ return mbExported; }
 
 private:
-    void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
-
     void loadURL(OUString const& rURL, const char* pName, const char* pPassword);
 
     void load(const char* pName, const char* pPassword = nullptr)

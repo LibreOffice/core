@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_$(1), \
 $(eval $(call gb_CppunitTest_use_libraries,sc_$(1), \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     salhelper \
     sc \

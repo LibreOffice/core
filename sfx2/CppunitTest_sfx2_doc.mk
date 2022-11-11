@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_doc, \
 $(eval $(call gb_CppunitTest_use_libraries,sfx2_doc, \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     subsequenttest \
     test \

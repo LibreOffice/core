@@ -28,6 +28,7 @@ endif
 $(eval $(call gb_CppunitTest_use_libraries,sc_pdf_export, \
     comphelper \
     cppu \
+    cppuhelper \
     editeng \
     sal \
     sax \
