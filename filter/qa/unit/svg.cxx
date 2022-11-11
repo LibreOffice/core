@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
     xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-    // Then make sure that the two semi-tranparent paragraphs have the same X position:
+    // Then make sure that the two semi-transparent paragraphs have the same X position:
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]", "x",
                 "250");
