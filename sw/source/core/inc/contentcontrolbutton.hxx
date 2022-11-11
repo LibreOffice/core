@@ -25,6 +25,7 @@ public:
     virtual void dispose() override;
 
     void CalcPosAndSize(const SwRect& rPortionPaintArea);
+    void SetRTL(bool bRTL) { m_bRTL = bRTL; }
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
@@ -46,6 +47,7 @@ protected:
     std::shared_ptr<SwContentControl> m_pContentControl;
     std::unique_ptr<weld::Builder> m_xPopupBuilder;
     std::unique_ptr<weld::Popover> m_xPopup;
+    bool m_bRTL = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
