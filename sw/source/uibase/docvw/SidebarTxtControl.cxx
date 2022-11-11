@@ -54,6 +54,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <AnnotationWin.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <redline.hxx>
 #include <memory>
 
@@ -116,7 +117,7 @@ void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // for layout in the sidebar.
     Size aPaperSize(mrPostItMgr.GetSidebarWidth(), pEditEngine->GetPaperSize().Height());
     pEditEngine->SetPaperSize(aPaperSize);
-    pEditEngine->SetRefDevice(&rDevice);
+    pEditEngine->SetRefDevice(mrDocView.GetWrtShell().getIDocumentDeviceAccess().getReferenceDevice(false));
 
     pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
     pEditView->SetBackgroundColor(aBgColor);

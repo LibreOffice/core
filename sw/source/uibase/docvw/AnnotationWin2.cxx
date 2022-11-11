@@ -501,7 +501,6 @@ void SwAnnotationWin::Rescale()
 
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
-    mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
     mxSidebarTextControl->SetMapMode( aMode );
     const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
