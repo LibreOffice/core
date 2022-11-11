@@ -14,6 +14,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
@@ -158,6 +162,31 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 
     // Second shape has normal text.
     assertXPath(pXmlDoc, "//svg:text[2]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity]", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
+{
+    // Given a shape with semi-transparent, multi-paragraph text:
+    load(u"semi-transparent-multi-para.odg");
+
+    // When exporting to SVG:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Then make sure that the two semi-tranparent paragraphs have the same X position:
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[1]", "x", "5908");
+    assertXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[1]/svg:tspan", "fill-opacity",
+                "0.8");
+    assertXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[2]", "x", "5908");
+    assertXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[2]/svg:tspan", "fill-opacity",
+                "0.8");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
