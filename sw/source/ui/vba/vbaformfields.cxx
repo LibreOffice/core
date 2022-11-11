@@ -128,6 +128,7 @@ public:
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
         , mxModel(std::move(xModel))
+        , m_pCache(nullptr)
     {
     }
 
