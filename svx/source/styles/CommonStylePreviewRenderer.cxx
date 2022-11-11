@@ -295,7 +295,7 @@ void CommonStylePreviewRenderer::CalcRenderSize()
     while(true);
 
     double fRatio = 1;
-    if (mnHeight > mnMaxHeight)
+    if (mnHeight > mnMaxHeight && mnHeight != 0)
         fRatio = double(mnMaxHeight) / mnHeight;
 
     mnHeight *= fRatio;
