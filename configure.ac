@@ -6703,35 +6703,23 @@ find_winsdk()
 find_msms()
 {
     # Return value: $msmdir
+    local version="$1"
 
-    AC_MSG_CHECKING([for MSVC merge modules directory])
-    local my_msm_files
+    AC_MSG_CHECKING([for MSVC $version merge modules directory])
+    local my_msm_file="Microsoft_VC${version}_CRT_x86.msm"
     local my_msm_dir
 
-    dnl Order my_msm_files in increasing order. Then check the directories returned
-    dnl by ls in an inner loop; assuming they are also ordered in increasing order,
-    dnl the result will be the highest MSM version found in the highest directory.
-
-    case "$VCVER" in
-        16.0 | 17.0 | 17.4)
-        my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm Microsoft_VC143_CRT_x86.msm ${my_msm_files}"
-        ;;
-    esac
-    for f in $my_msm_files; do
-        echo "$as_me:$LINENO: searching for $f" >&5
-    done
+    echo "$as_me:$LINENO: searching for $my_msm_file" >&5
 
     msmdir=
     case "$VCVER" in
     16.0 | 17.0 | 17.4)
-        for f in ${my_msm_files}; do
-            for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-                my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
-                echo "$as_me:$LINENO: looking for $my_msm_dir${f}])" >&5
-                if test -e "$my_msm_dir${f}"; then
-                    msmdir=$my_msm_dir
-                fi
-            done
+        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
+            my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
+            echo "$as_me:$LINENO: looking for $my_msm_dir${my_msm_file}])" >&5
+            if test -e "$my_msm_dir${my_msm_file}"; then
+                msmdir=$my_msm_dir
+            fi
         done
         ;;
     esac
@@ -6744,7 +6732,7 @@ find_msms()
             AC_MSG_FAILURE([not found])
         else
             AC_MSG_WARN([not found (check config.log)])
-            add_warning "MSM none of ${my_msm_files} found"
+            add_warning "MSM ${my_msm_file} not found"
         fi
     fi
 }
@@ -8565,25 +8553,25 @@ AC_ARG_WITH(ucrt-dir,
 UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
+    MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
+    MSVC_DLLS="$msvcdlls"
+    if echo "$msvcdllpath" | grep -q "VC143.CRT$"; then
+        with_redist=143
+    elif echo "$msvcdllpath" | grep -q "VC142.CRT$"; then
+        with_redist=142
+    elif echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
+        with_redist=141
+    fi
     for i in $PKGFORMAT; do
         if test "$i" = msi; then
-            find_msms
+            find_msms "$with_redist"
+            if test -n "$msmdir"; then
+                MSM_PATH=`win_short_path_for_make "$msmdir"`
+                SCPDEFS="$SCPDEFS -DWITH_VC_REDIST=$with_redist"
+            fi
             break
         fi
     done
-    MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
-    MSVC_DLLS="$msvcdlls"
-    test -n "$msmdir" && MSM_PATH=`win_short_path_for_make "$msmdir"`
-    # MSVC 15.3 changed it to VC141
-    if echo "$msvcdllpath" | grep -q "VC143.CRT$"; then
-        SCPDEFS="$SCPDEFS -DWITH_VC143_REDIST"
-    elif echo "$msvcdllpath" | grep -q "VC142.CRT$"; then
-        SCPDEFS="$SCPDEFS -DWITH_VC142_REDIST"
-    elif echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
-        SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
-    else
-        SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
-    fi
 
     if test "$UCRT_REDISTDIR" = "no"; then
         dnl explicitly disabled

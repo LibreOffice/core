@@ -18,16 +18,27 @@
 
 #include "macros.inc"
 
-#if defined(WITH_VC142_REDIST)
+#if defined(WITH_VC_REDIST)
+#if WITH_VC_REDIST == 143
+    #define WINDOWS_X64_MERGEMODULE gid_MergeModule_Microsoft_VC143_CRT_x64
+    #define WINDOWS_X64_MERGEMODULE_FILE "Microsoft_VC143_CRT_x64.msm"
+    #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC143_CRT_x86
+    #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC143_CRT_x86.msm"
+#elif WITH_VC_REDIST == 142
     #define WINDOWS_X64_MERGEMODULE gid_MergeModule_Microsoft_VC142_CRT_x64
     #define WINDOWS_X64_MERGEMODULE_FILE "Microsoft_VC142_CRT_x64.msm"
     #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC142_CRT_x86
     #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC142_CRT_x86.msm"
-#elif defined(WITH_VC141_REDIST)
+#elif WITH_VC_REDIST == 141
     #define WINDOWS_X64_MERGEMODULE gid_MergeModule_Microsoft_VC141_CRT_x64
     #define WINDOWS_X64_MERGEMODULE_FILE "Microsoft_VC141_CRT_x64.msm"
     #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC141_CRT_x86
     #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC141_CRT_x86.msm"
+#else
+    // The next string will result in "malformed par file" error, terminating build as expected.
+    // Possibly a new version of CRT was enabled in configure.ac, but not handled here yet?
+    error: unknown VC redist version WITH_VC_REDIST. Check configure.ac
+#endif
 #endif
 
 #if defined(WINDOWS_X86_MERGEMODULE)
