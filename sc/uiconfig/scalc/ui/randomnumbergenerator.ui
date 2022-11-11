@@ -415,7 +415,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="enable-rounding-check-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|enable-rounding-check">Truncate the number to a given number of Decimal Places.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|enable-rounding-check">Round the number to a given number of Decimal Places.</property>
                       </object>
                     </child>
                   </object>
