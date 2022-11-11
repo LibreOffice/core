@@ -40,7 +40,7 @@ class HtmlImportTest : public SwModelTestBase
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
 {
-    load("picture.html");
+    createSwWebDoc("picture.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // The document contains two pictures stored as a link.
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 {
-    load("inlined_image.html");
+    createSwWebDoc("inlined_image.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // The document contains only one embedded picture inlined in img's src attribute.
@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
 {
-    load("PageAndParagraphFilled.html");
+    createSwWebDoc("PageAndParagraphFilled.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
 {
-    load("list-style.html");
+    createSwWebDoc("list-style.html");
     // check unnumbered list style - should be type circle here
     uno::Reference< beans::XPropertySet > xParagraphProperties(getParagraph(4),
                                                                uno::UNO_QUERY);
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testMetaIsoDates)
 {
-    load("meta-ISO8601-dates.html");
+    createSwWebDoc("meta-ISO8601-dates.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell(pTextDoc->GetDocShell());
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testMetaIsoDates)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
 {
-    load("image-width-auto.html");
+    createSwWebDoc("image-width-auto.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
 {
-    load("image-lazy-read.html");
+    createSwWebDoc("image-lazy-read.html");
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
 {
-    load("meta-changedby.html");
+    createSwWebDoc("meta-changedby.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell(pTextDoc->GetDocShell());
@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTableBorder1px)
 {
-    load("table_border_1px.html");
+    createSwWebDoc("table_border_1px.html");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTableBorder1px)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
 {
-    load("outline-level.html");
+    createSwWebDoc("outline-level.html");
     // This was 0, HTML imported into Writer lost the outline numbering for
     // Heading 1 styles.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
@@ -312,14 +312,14 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfBr)
 {
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("reqif-br.xhtml");
+    createSwDoc("reqif-br.xhtml");
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf80194_subscript)
 {
-    load("tdf80194_subscript.html");
+    createSwWebDoc("tdf80194_subscript.html");
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
     // Most recently, the default subscript was 33%, which is much too large for a subscript.
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 {
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("reqif-table.xhtml");
+    createSwDoc("reqif-table.xhtml");
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -365,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 {
-    load("image-size.html");
+    createSwWebDoc("image-size.html");
     awt::Size aSize = getShape(1)->getSize();
     OutputDevice* pDevice = Application::GetDefaultDevice();
     Size aPixelSize(200, 400);
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
 {
-    load("tdf142781.html");
+    createSwWebDoc("tdf142781.html");
     OutputDevice* pDevice = Application::GetDefaultDevice();
     Size aPixelSize(672, 480);
     Size aExpected = pDevice->PixelToLogic(aPixelSize, MapMode(MapUnit::Map100thMM));
@@ -398,7 +398,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
 {
-    load("tdf122789.html");
+    createSwWebDoc("tdf122789.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 {
-    load("tdf118579.html");
+    createSwWebDoc("tdf118579.html");
     //Without the fix in place, the file fails to load
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 {
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("reqif-page-style.xhtml");
+    createSwDoc("reqif-page-style.xhtml");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: Standard, Actual  : HTML'.
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
@@ -461,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testHiddenTextframe)
 {
     // Load HTML content into Writer, similar to HTML paste.
-    load("hidden-textframe.html");
+    createSwWebDoc("hidden-textframe.html");
 
     // Check the content of the draw page.
     uno::Reference<drawing::XDrawPageSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImg)
     // ignored):
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("ole-img.xhtml");
+    createSwDoc("ole-img.xhtml");
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
     // ignored):
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("ole-img-svg.xhtml");
+    createSwDoc("ole-img-svg.xhtml");
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
 {
-    load("emojis16BE.html");
+    createSwWebDoc("emojis16BE.html");
     // tdf#146173: non-BMP characters' surrogates didn't combine correctly
     CPPUNIT_ASSERT_EQUAL(OUString(u"a text with emojis: 🌾 ☀👨🏼‍🌾🏃🏼‍♂️🤙🏽🔍"),
                          getParagraph(1)->getString());
@@ -526,7 +526,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
     // (containing PNG):
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("ole-data.xhtml");
+    createSwDoc("ole-data.xhtml");
 
     // Then make sure the result is a single clickable Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
     // Given an XHTML with 2 objects: the first has a link, the second does not have:
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load("ole-data2.xhtml");
+    createSwDoc("ole-data2.xhtml");
 
     // Then make sure that the second image doesn't have a link set:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);

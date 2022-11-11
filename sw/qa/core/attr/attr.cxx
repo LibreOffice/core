@@ -28,7 +28,8 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
 {
     // Given a document with track changes and the whole document is selected:
-    SwDoc* pDoc = createSwDoc("attr-set.docx");
+    createSwDoc("attr-set.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     dispatchCommand(mxComponent, ".uno:SelectAll", {});

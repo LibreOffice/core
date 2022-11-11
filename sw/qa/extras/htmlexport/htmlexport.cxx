@@ -943,7 +943,7 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
 {
-    load("transparent-image.odt");
+    createSwDoc("transparent-image.odt");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
@@ -1098,7 +1098,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
 {
     // Load a document with Chinese text in it.
-    load("reqif-chinese.odt");
+    createSwDoc("reqif-chinese.odt");
 
     // Export it.
     ExportToReqif();
@@ -1186,7 +1186,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
 {
     // Save to reqif-xhtml.
-    load("pdf-ole.odt");
+    createSwDoc("pdf-ole.odt");
 
     ExportToReqif();
     OUString aRtfUrl = GetOlePath();
@@ -1273,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
 {
     // Given a document with a 8bpp bitmap:
-    load("paint-ole-bitmap-format.odt");
+    createSwDoc("paint-ole-bitmap-format.odt");
 
     // When exporting to reqif-xhtml with ExportImagesAsOLE enabled:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1370,7 +1370,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataNoOle2)
 {
     // Save to reqif-xhtml.
-    load("no-ole2-pres-data.odt");
+    createSwDoc("no-ole2-pres-data.odt");
     ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
@@ -1386,7 +1386,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataNoOle2)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataWmfOnly)
 {
     // Save to reqif-xhtml.
-    load("ole1-pres-data-wmf.odt");
+    createSwDoc("ole1-pres-data-wmf.odt");
     ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
@@ -1403,7 +1403,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataWmfOnly)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
 {
     // Given a document with an as-char anchored embedded object:
-    load("reqif-aschar-objsize.odt");
+    createSwDoc("reqif-aschar-objsize.odt");
 
     // When exporting to reqif-xhtml:
     ExportToReqif();
@@ -1425,7 +1425,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifObjdataPresentationDataSize)
 {
     // Given a document with an OLE2 embedded object, containing a preview:
-    load("reqif-objdata-presentationdatasize.odt");
+    createSwDoc("reqif-objdata-presentationdatasize.odt");
 
     // When exporting to ReqIF:
     ExportToReqif();
@@ -2035,7 +2035,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
 {
     // Given a document containing an embedded object, with EMF preview:
-    load("ole2.odt");
+    createSwDoc("ole2.odt");
 
     // When exporting to HTML:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -2055,7 +2055,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
 {
     // Given a documented with nested lists:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("first");
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
@@ -2094,7 +2095,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
 {
     // Given a document with a trailing line-break:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("test\n");
 
@@ -2134,7 +2136,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
 {
     // Given a document with leading tabs:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("\t first");
     pWrtShell->SplitNode();
@@ -2170,7 +2173,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
 {
     // Given a document with leading tabs:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("\t test");
 
@@ -2226,7 +2230,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
 
     // Given a document with an at-para anchored image + a clearing break:
     // When loading that file:
-    load("clearing-break.html");
+    createSwWebDoc("clearing-break.html");
     // Then make sure that the clear property of the break is not ignored:
     verify();
     reload(mpFilter, "clearing-break.html");
@@ -2238,7 +2242,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
 {
     // Given a document with two tables: first stable has a background, second table has a
     // background in its first row:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
                                              /*nRowsToRepeat=*/0);
@@ -2313,7 +2318,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
 {
     // Given a document with a section:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("test");
     pWrtShell->SelAll();
@@ -2337,7 +2343,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
 {
     // Create document from scratch since relative urls to filesystem can be replaced
     // by absolute during save/load
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("Hyperlink1");
     pWrtShell->SplitNode();

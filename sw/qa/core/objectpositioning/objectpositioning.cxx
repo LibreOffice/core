@@ -29,7 +29,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
 {
     // Load a document with 2 images.
-    load("overlap-crash.odt");
+    createSwDoc("overlap-crash.odt");
 
     // Change their anchor type to to-char.
     uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
 CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithFooter)
 {
     // Load an empty document with footer.
-    load("bottom-margin-with-footer.docx");
+    createSwDoc("bottom-margin-with-footer.docx");
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
     // Insert three shapes and align it the bottom,center,top of page print area bottom.
@@ -221,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBott
 {
     // Load a document, with two shapes.
     // The shapes align the outside and inside of page print area bottom.
-    load("inside-outside-vert-align.docx");
+    createSwDoc("inside-outside-vert-align.docx");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //15704
@@ -244,7 +244,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
     // The shapes align the top,center,bottom,outside and inside of page print area bottom.
     // The height of page print area bottom is 4320 ~ 7.62cm.
     // The size of shapes are 442 ~ 0.78cm
-    load("vml-vertical-alignment.docx");
+    createSwDoc("vml-vertical-alignment.docx");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //11803

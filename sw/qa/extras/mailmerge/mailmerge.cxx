@@ -216,7 +216,7 @@ public:
         // Windows before MM uses it, MM won't work, as it's already open.
         // Don't move the load before the mail merge execution!
         // (see gb_CppunitTest_use_instdir_configuration)
-        load(maMMtestFilename);
+        createSwDoc(maMMtestFilename);
 
         if (mnCurOutputType == text::MailMergeType::SHELL)
         {

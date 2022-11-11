@@ -35,7 +35,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutSave)
 {
     // Load the document and select all.
-    load("textbox-cut-save.docx");
+    createSwDoc("textbox-cut-save.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutSave)
 
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
 {
-    load("textbox-cut-undo.docx");
+    createSwDoc("textbox-cut-undo.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
 {
     // Given a document with two table cells and redlining enabled:
-    load("table-copy-redline.odt");
+    createSwDoc("table-copy-redline.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();

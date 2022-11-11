@@ -39,7 +39,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionMargins)
 {
-    load("floating-table-section-margins.doc");
+    createSwDoc("floating-table-section-margins.doc");
     sal_Int32 pageLeft = parseDump("/root/page[2]/infos/bounds", "left").toInt32();
     sal_Int32 pageWidth = parseDump("/root/page[2]/infos/bounds", "width").toInt32();
     sal_Int32 tableLeft = parseDump("//tab/infos/bounds", "left").toInt32();
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionMargins)
 
 CPPUNIT_TEST_FIXTURE(Test, testN816593)
 {
-    load("n816593.doc");
+    createSwDoc("n816593.doc");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Make sure that even if we import the two tables as non-floating, we
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN816593)
 
 CPPUNIT_TEST_FIXTURE(Test, testBnc875715)
 {
-    load("bnc875715.doc");
+    createSwDoc("bnc875715.doc");
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // Was incorrectly set as -1270.
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc875715)
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 {
-    load("floating-table-section-columns.doc");
+    createSwDoc("floating-table-section-columns.doc");
     OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124601)
 {
-    load("tdf124601.doc");
+    createSwDoc("tdf124601.doc");
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124601)
 
 CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead)
 {
-    load("image-lazy-read.doc");
+    createSwDoc("image-lazy-read.doc");
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead)
 
 CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead0size)
 {
-    load("image-lazy-read-0size.doc");
+    createSwDoc("image-lazy-read-0size.doc");
     // Load a document with a single bitmap in it: it's declared as a WMF one, but actually a TGA
     // bitmap.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead0size)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
 {
-    load("tdf106799.doc");
+    createSwDoc("tdf106799.doc");
     // Ensure that all text portions are calculated before testing.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
 {
-    load("tdf121734.doc");
+    createSwDoc("tdf121734.doc");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
 {
-    load("tdf125281.doc");
+    createSwDoc("tdf125281.doc");
 #if !defined(_WIN32)
     // Windows fails with actual == 26171 for some reason; also lazy load isn't lazy in Windows
     // debug builds, reason is not known at the moment.
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
 {
-    load("tdf122425_1.doc");
+    createSwDoc("tdf122425_1.doc");
     // This is for header text in case we use a hack for fixed-height headers
     // (see SwWW8ImplReader::Read_HdFtTextAsHackedFrame)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf110987)
 {
-    load("tdf110987");
+    createSwDoc("tdf110987");
     // The input document is an empty .doc, but without file name
     // extension. Check that it was loaded as a normal .doc document,
     // and not a template.
@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf110987)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
 {
-    load("tdf120761_zOrder.dot");
+    createSwDoc("tdf120761_zOrder.dot");
     //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "ZOrder"));
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
 {
-    load("changes-in-footnote.doc");
+    createSwDoc("changes-in-footnote.doc");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);

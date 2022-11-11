@@ -21,7 +21,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckDocumentIssues)
 {
-    SwDoc* pDoc = createSwDoc("DocumentTest.odt");
+    createSwDoc("DocumentTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -33,7 +34,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckDocumentIssues)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableSplitMergeAndAltText)
 {
-    SwDoc* pDoc = createSwDoc("AccessibilityTests1.odt");
+    createSwDoc("AccessibilityTests1.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -53,7 +55,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckParagraphIssues)
 {
     // Tests whether formatting issues are detected when the whole paragraph has them instead of
     // some text inside the paragraph
-    SwDoc* pDoc = createSwDoc("ParagraphTest.odt");
+    createSwDoc("ParagraphTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -64,7 +67,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckParagraphIssues)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckBackgroundImage)
 {
-    SwDoc* pDoc = createSwDoc("BackgroundImageTest.odt");
+    createSwDoc("BackgroundImageTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -75,7 +79,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckBackgroundImage)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckNewlineSpace)
 {
-    SwDoc* pDoc = createSwDoc("NewlineTest.odt");
+    createSwDoc("NewlineTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -87,7 +92,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckNewlineSpace)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
 {
-    SwDoc* pDoc = createSwDoc("SpaceTest.odt");
+    createSwDoc("SpaceTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -98,7 +104,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testHyperlinks)
 {
-    SwDoc* pDoc = createSwDoc("HyperlinkTest.odt");
+    createSwDoc("HyperlinkTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -110,7 +117,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testHyperlinks)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
 {
-    SwDoc* pDoc = createSwDoc("HighlightTest.odt");
+    createSwDoc("HighlightTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -121,7 +129,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testNumberingCheck)
 {
-    SwDoc* pDoc = createSwDoc("AccessibilityTests_NumberingCheck.odt");
+    createSwDoc("AccessibilityTests_NumberingCheck.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -136,7 +145,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testNumberingCheck)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeFootnote)
 {
-    SwDoc* pDoc = createSwDoc("FakeFootnoteTest.odt");
+    createSwDoc("FakeFootnoteTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -148,7 +158,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeFootnote)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeCaption)
 {
-    SwDoc* pDoc = createSwDoc("FakeCaptionTest.odt");
+    createSwDoc("FakeCaptionTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -159,7 +170,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeCaption)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTableFormatting)
 {
-    SwDoc* pDoc = createSwDoc("TableFormattingTest.odt");
+    createSwDoc("TableFormattingTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -170,7 +182,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTableFormatting)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
 {
-    SwDoc* pDoc = createSwDoc("TabsTest.odt");
+    createSwDoc("TabsTest.odt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();

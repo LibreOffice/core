@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
 {
     // Load a document that has an image anchored in the header.
     // It also has a table which has the wrap around the image.
-    load("table-fly-overlap.docx");
+    createSwDoc("table-fly-overlap.docx");
     SwTwips nFlyTop = parseDump("//header/txt/anchored/fly/infos/bounds", "top").toInt32();
     SwTwips nFlyHeight = parseDump("//header/txt/anchored/fly/infos/bounds", "height").toInt32();
     SwTwips nFlyBottom = nFlyTop + nFlyHeight;
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
 {
     // Load a document that has two paragraphs in the header.
     // The second paragraph should have its bottom spacing applied.
-    load("tdf128195.docx");
+    createSwDoc("tdf128195.docx");
     sal_Int32 nTxtHeight = parseDump("//header/txt[2]/infos/bounds", "height").toInt32();
     sal_Int32 nTxtBottom = parseDump("//header/txt[2]/infos/bounds", "bottom").toInt32();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2269), nTxtHeight);
@@ -67,14 +67,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBIRT)
 {
     // this looped
-    load("birt_min.odt");
+    createSwDoc("birt_min.odt");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
 {
     // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
     // a solid upper border.
-    load("border-collapse-compat.docx");
+    createSwDoc("border-collapse-compat.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
 {
     // Load a document which has a table. The A1 cell has btlr text direction, and the A1..A3 cells
     // are merged.
-    load("btlr-table-row-span.odt");
+    createSwDoc("btlr-table-row-span.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlapSpacing)
 {
     // Load a document that has an image on the right of a table.  The table wraps around the image.
-    load("table-fly-overlap-spacing.docx");
+    createSwDoc("table-fly-overlap-spacing.docx");
     SwTwips nFlyTop = parseDump("//body/txt/anchored/fly/infos/bounds", "top").toInt32();
     SwTwips nFlyHeight = parseDump("//body/txt/anchored/fly/infos/bounds", "height").toInt32();
     SwTwips nFlyBottom = nFlyTop + nFlyHeight;
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlapSpacing)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
 {
     // Load a document with 1 pages: empty content on first page, then 21 tables on the second page.
-    load("tables-move-backwards.odt");
+    createSwDoc("tables-move-backwards.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
 {
     // Load a document with the ContinuousEndnotes flag turned on.
-    load("continuous-endnotes-move-backwards.doc");
+    createSwDoc("continuous-endnotes-move-backwards.doc");
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // We have 2 pages.
     assertXPath(pLayout, "/root/page", 2);
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
 {
     // tdf#134783 check whether position of shape is good if it is anchored to paragraph and
     // the "Don't add space between paragraphs of the same style" option is set
-    load("tdf134783_testAnchorPositionBasedOnParagraph.fodt");
+    createSwDoc("tdf134783_testAnchorPositionBasedOnParagraph.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "top", "1671");
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
 {
     // tdf#135198: check whether text box stays inside shape after moving it upwards
-    load("shape-textbox.odt");
+    createSwDoc("shape-textbox.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
 {
     // tdf#138050: a freshly opened document containing a shape with a text box
     // should not appear to be modified
-    load("textbox-phantom-change.docx");
+    createSwDoc("textbox-phantom-change.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
 
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 {
-    load("textbox-autogrow-vertical.docx");
+    createSwDoc("textbox-autogrow-vertical.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)
 {
     // Load a document with a textbox in it: the layout will have to position the shape part.
-    load("textbox-modification.docx");
+    createSwDoc("textbox-modification.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
 
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
 {
     // Load a document with a nested table, the inner A1 cell has a btlr text direction.
-    load("btlr-nested-cell.odt");
+    createSwDoc("btlr-nested-cell.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -272,7 +272,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
     // conflicting requirements.
     // Without the accompanying fix in place, this test would have failed with a layout loop in
     // SwEditShell::CalcLayout().
-    load("keepwithnext-fullheight.fodt");
+    createSwDoc("keepwithnext-fullheight.fodt");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -288,7 +288,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
 {
     // Create a document, remember the old left edge of the page print area (the rectangle that is
     // inside margins).
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -313,7 +314,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
 {
     // Create a document, remember the old top edge of the page print area (the rectangle that is
     // inside margins).
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
@@ -340,7 +342,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
 {
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->InsertPageBreak();
@@ -370,7 +373,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
 {
     // Given a document with a right margin:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -399,7 +403,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 //       the actual values were 6346, 10066) - something broke metafile generation on Windows?
 #if !defined(MACOSX) && !defined(_WIN32)
     // Given a document with a non-0 gutter margin.
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
@@ -427,13 +432,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf45908_invoice)
 {
     // without the fix, this was hanging (and slowly consuming memory) on fileopen.
-    load("tdf45908_invoice.odt");
+    createSwDoc("tdf45908_invoice.odt");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
 {
     // Given a document with a table: 2 columns, 5 rows. B2 -> B5 is merged:
-    SwDoc* pDoc = createSwDoc("vmerge-cell-border.docx");
+    createSwDoc("vmerge-cell-border.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering the table:
@@ -504,12 +510,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrashRemoveFromLayout) { load("tdf122894-4.doc"); }
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrashRemoveFromLayout)
+{
+    createSwDoc("tdf122894-4.doc");
+}
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
 {
     // Given a document with a graphic bullet, where the image is a linked one:
-    load("linked-bullet.odt");
+    createSwDoc("linked-bullet.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
 
@@ -529,7 +538,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
 {
     // Given a table with both outer and inner borders:
-    SwDoc* pDoc = createSwDoc("inner-border.docx");
+    createSwDoc("inner-border.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering table borders:
@@ -582,7 +592,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
 {
     // Given a table with a left and right double border, outer is thick, inner is thin:
-    SwDoc* pDoc = createSwDoc("double-border-vertical.docx");
+    createSwDoc("double-border-vertical.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering that document:
@@ -630,7 +641,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
 {
     // Given a table with a top and bottom double border, outer is thin, inner is thick:
-    SwDoc* pDoc = createSwDoc("double-border-horizontal.docx");
+    createSwDoc("double-border-horizontal.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering table borders:
@@ -678,7 +690,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testParaBorderInCellClip)
 {
     // Given a document which has outside-cell borders defined, which should not be visible:
-    SwDoc* pDoc = createSwDoc("para-border-in-cell-clip.docx");
+    createSwDoc("para-border-in-cell-clip.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering those borders:
@@ -698,7 +711,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testParaBorderInCellClip)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoublePageBorder)
 {
     // Given a page with a top and bottom double border, outer is thick, inner is thin:
-    SwDoc* pDoc = createSwDoc("double-page-border.docx");
+    createSwDoc("double-page-border.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // When rendering that document:

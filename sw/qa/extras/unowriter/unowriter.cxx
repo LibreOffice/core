@@ -308,7 +308,7 @@ static bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
 {
-    load("xautotextgroup.odt");
+    createSwDoc("xautotextgroup.odt");
     uno::Reference<text::XAutoTextContainer> xAutoTextContainer
         = text::AutoTextContainer::create(comphelper::getProcessComponentContext());
 
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
 {
     // this contains a section that starts with a table
-    load("tdf134250.fodt");
+    createSwDoc("tdf134250.fodt");
 
     uno::Reference<text::XTextTablesSupplier> const xTextTablesSupplier(mxComponent,
                                                                         uno::UNO_QUERY);
@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
 {
     // this contains a section that ends with a table (plus another section)
-    load("tdf134252.fodt");
+    createSwDoc("tdf134252.fodt");
 
     uno::Reference<text::XTextTablesSupplier> const xTextTablesSupplier(mxComponent,
                                                                         uno::UNO_QUERY);
@@ -498,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
 {
     // this contains a section that ends with a table (plus another section)
-    load("tdf134252_onlytable_protected.fodt");
+    createSwDoc("tdf134252_onlytable_protected.fodt");
 
     uno::Reference<text::XTextTablesSupplier> const xTextTablesSupplier(mxComponent,
                                                                         uno::UNO_QUERY);
@@ -557,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
 {
-    load("bookmarkintable.fodt");
+    createSwDoc("bookmarkintable.fodt");
 
     uno::Reference<text::XBookmarksSupplier> const xBS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> const xMarks(xBS->getBookmarks());
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
 {
-    load("selection-in-table-enum.odt");
+    createSwDoc("selection-in-table-enum.odt");
     // Select the A1 cell's text.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -760,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
 {
-    load("selection-in-table-enum.odt");
+    createSwDoc("selection-in-table-enum.odt");
     // Select from "Before" till the table end.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -799,7 +799,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 {
-    load("renderable-page-position.odt");
+    createSwDoc("renderable-page-position.odt");
     // Make sure that the document has 2 pages.
     uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(mxComponent.is());
@@ -916,7 +916,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
 {
     // Load a document with an at-char image in it (and a comment on the image).
-    load("image-comment-at-char.odt");
+    createSwDoc("image-comment-at-char.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -992,7 +992,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
 {
     // Load a document with 2 pages, but a single paragraph.
-    load("view-cursor-page-style.fodt");
+    createSwDoc("view-cursor-page-style.fodt");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(),
@@ -1072,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
     // Load a document which has a table with a single cell.
     // The cell has both a table style and a paragraph style, with different line spacing
     // heights.
-    load("table-line-spacing.docx");
+    createSwDoc("table-line-spacing.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);

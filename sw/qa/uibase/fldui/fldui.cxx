@@ -32,7 +32,8 @@ class Test : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
 {
     // Given a document with 2 biblio fields, same properties, but different page number in the URL:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);

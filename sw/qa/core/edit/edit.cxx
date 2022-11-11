@@ -29,7 +29,8 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testRedlineHidden)
 {
     // Given a document with ShowRedlineChanges=false:
-    SwDoc* pDoc = createSwDoc("redline-hidden.fodt");
+    createSwDoc("redline-hidden.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // When formatting a paragraph by setting the para adjust to center, then make sure setting the
     // new item set on the paragraph doesn't crash:

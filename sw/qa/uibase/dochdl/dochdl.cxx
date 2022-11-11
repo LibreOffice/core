@@ -27,7 +27,8 @@ class SwUibaseDochdlTest : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
 {
     // Create a new document and cut a character.
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2("x");
@@ -53,7 +54,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
 CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelection)
 {
     // Given a document where a text node has hints, but no as-char images.
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2("abc");

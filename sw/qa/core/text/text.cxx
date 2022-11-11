@@ -53,7 +53,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFootnoteConnect)
 {
-    SwDoc* pDoc = createSwDoc("footnote-connect.fodt");
+    createSwDoc("footnote-connect.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // Jump to the start of the next page.
     pWrtShell->SttNxtPg();
@@ -168,7 +169,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineHeight)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
 {
     // Given a document with an as-char image, width in twips not fitting into sal_uInt16:
-    SwDoc* pDoc = createSwDoc("line-width.fodt");
+    createSwDoc("line-width.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
 
@@ -208,7 +210,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRuby)
 {
     // Given a document with multiple ruby portions:
-    SwDoc* pDoc = createSwDoc("ruby.fodt");
+    createSwDoc("ruby.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // When laying out that document:
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -475,7 +478,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
 {
     // Given a document with an as-char image:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
@@ -518,7 +522,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
 {
     // Given a document with A4 paper size, some text, redlining on, but hidden:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     {
@@ -558,7 +563,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf120715_CursorMoveWhenTypingSpaceAtCenteredLineEnd)
 {
-    SwDoc* pDoc = createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
@@ -580,7 +586,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
     // These differences are based on its paragraphs
     // - alignment (left, center, right, justified),
     // - line count (1 line, 2 lines, blank line containing only spaces)
-    SwDoc* pDoc = createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
@@ -627,7 +634,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
 {
     // Given a file with a content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -669,7 +677,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
 {
     // Given a file with a checkbox content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
@@ -694,7 +703,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
 {
     // Given a file with a dropdown content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
@@ -719,7 +729,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
 {
     // Given a file with a date content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
@@ -744,7 +755,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
 {
     // Given a document with a custom 24pt font size and a content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE> aSet(pWrtShell->GetAttrPool());
     SvxFontHeightItem aItem(480, 100, RES_CHRATR_FONTSIZE);
@@ -771,7 +783,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
 {
     // Given a file with a combo box content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
@@ -797,7 +810,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
 {
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
     pWrtShell->SttEndDoc(/*bStt=*/true);

@@ -163,7 +163,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     if (!pName)
         createSwDoc();
     else
-        load(pName);
+        createSwDoc(pName);
 
     SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDocument);

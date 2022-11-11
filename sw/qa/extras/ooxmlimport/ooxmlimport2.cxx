@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_twoShapes)
     // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
     // It contains two shapes. Error was, that the lockedCanvas was not imported as group at all,
     // and only one shape was imported and that one was scaled to lockedCanvas area.
-    load("tdf143476_lockedCanvas_twoShapes.docx");
+    createSwDoc("tdf143476_lockedCanvas_twoShapes.docx");
     // The group shape corresponds to the lockedCanvas.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_position)
     // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
     // Tests fix for regression introduced by 3262fc5ef3bde5b158909d11ccb008161ea95519
     // Error was, that the imported shape had wrong position.
-    load("tdf143476_lockedCanvas_position.docx");
+    createSwDoc("tdf143476_lockedCanvas_position.docx");
     // The group shape corresponds to the lockedCanvas.
     uno::Reference<drawing::XShape> xGroupShape(getShape(1), uno::UNO_QUERY);
     // Without fix in place the test failed with position 185|947.
@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_image_line)
 {
     // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
     // It contains an image and a line. Error was, that both were not imported.
-    load("tdf143476_lockedCanvas_image_line.docx");
+    createSwDoc("tdf143476_lockedCanvas_image_line.docx");
     CPPUNIT_ASSERT_MESSAGE("No shapes imported", getShapes() > 0);
 }
 
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007imageInline)
     // Given a docx document with compatibility to Word version 12 (2007), which has a shape
     // rotated by 75deg. Similar to testTdf143475rotatedWord2007image but with inline anchored
     // shape, as in bug report.
-    load("tdf143475_rotatedWord2007imageInline.docx");
+    createSwDoc("tdf143475_rotatedWord2007imageInline.docx");
 
     // Word 2007 does not swap width and height for rotated images as done in later versions.
     // This was not considered and lead to wrong distance to text on import and wrong effectExtent
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007image)
 {
     // Given a docx document with compatibility to Word version 12 (2007), which has a shape
     // rotated by 75deg.
-    load("tdf143475_rotatedWord2007image.docx");
+    createSwDoc("tdf143475_rotatedWord2007image.docx");
 
     // Word 2007 does not swap width and height for rotated images as done in later versions.
     // This was not considered and lead to wrong distance to text on import and wrong effectExtent
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007image)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143219ContourWrapRotate)
 {
-    load("tdf143219_ContourWrap_rotate.docx");
+    createSwDoc("tdf143219_ContourWrap_rotate.docx");
     const uno::Reference<drawing::XShape> xShape = getShape(1);
     const uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
     sal_Int32 nWrapDistanceLeft = -1;
@@ -163,14 +163,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143219ContourWrapRotate)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108545_embeddedDocxIcon)
 {
-    load("tdf108545_embeddedDocxIcon.docx");
+    createSwDoc("tdf108545_embeddedDocxIcon.docx");
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(embed::Aspects::MSOLE_ICON, xSupplier->getAspect());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121203)
 {
-    load("tdf121203.docx");
+    createSwDoc("tdf121203.docx");
     // We imported the date field
     uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
     OUString aPortionType;
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121203)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109053)
 {
-    load("tdf109053.docx");
+    createSwDoc("tdf109053.docx");
     // Table was imported into a text frame which led to a one page document
     // Originally the table takes two pages, so Writer should import it accordingly.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -213,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109053)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121664)
 {
-    load("tdf121664.docx");
+    createSwDoc("tdf121664.docx");
     uno::Reference<text::XLineNumberingProperties> xLineNumbering(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xLineNumbering.is());
     // Without the accompanying fix in place, numbering did not restart on the
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121664)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108849)
 {
-    load("tdf108849.docx");
+    createSwDoc("tdf108849.docx");
     // sectPr element that is child element of body must be the last child. However, Word accepts it
     // in wrong places, and we should do the same (bug-to-bug compatibility) without creating extra sections.
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108849)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf97038)
 {
-    load("tdf97038.docx");
+    createSwDoc("tdf97038.docx");
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Kep2"), "IsFollowingTextFlow"));
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf97038)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
 {
-    load("tdf114212.docx");
+    createSwDoc("tdf114212.docx");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1428
     // - Actual  : 387
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109524)
 {
-    load("tdf109524.docx");
+    createSwDoc("tdf109524.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109524)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120547)
 {
-    load("tdf120547.docx");
+    createSwDoc("tdf120547.docx");
     uno::Reference<drawing::XShape> xGroupShape = getShape(1);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
@@ -318,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120547)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 {
-    load("tdf118693.docx");
+    createSwDoc("tdf118693.docx");
     uno::Reference<drawing::XShape> xGroupShape = getShape(1);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
@@ -357,7 +357,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
 {
-    load("groupshape-fontname.docx");
+    createSwDoc("groupshape-fontname.docx");
     // Font names inside a group shape were not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 {
-    load("tdf124600.docx");
+    createSwDoc("tdf124600.docx");
     // uno::Reference<drawing::XShape> xShape = getShape(1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
@@ -403,7 +403,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
 {
-    load("tdf120548.docx");
+    createSwDoc("tdf120548.docx");
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
     CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"),
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
 
 CPPUNIT_TEST_FIXTURE(Test, test120551)
 {
-    load("tdf120551.docx");
+    createSwDoc("tdf120551.docx");
     auto nHoriOrientPosition = getProperty<sal_Int32>(getShape(1), "HoriOrientPosition");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 430, Actual  : -2542'.
@@ -423,7 +423,7 @@ CPPUNIT_TEST_FIXTURE(Test, test120551)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf111550)
 {
-    load("tdf111550.docx");
+    createSwDoc("tdf111550.docx");
     // The test document has following ill-formed structure:
     //
     //    <w:tbl>
@@ -490,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111550)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117843)
 {
-    load("tdf117843.docx");
+    createSwDoc("tdf117843.docx");
     uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
     uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XText> xHeaderText
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117843)
 // related tdf#124754
 CPPUNIT_TEST_FIXTURE(Test, testTdf43017)
 {
-    load("tdf43017.docx");
+    createSwDoc("tdf43017.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2, "kick the bucket");
 
@@ -515,7 +515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf43017)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
 {
-    load("tdf127778.docx");
+    createSwDoc("tdf127778.docx");
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with:
     // equality assertion failed
@@ -528,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
 // related tdf#43017
 CPPUNIT_TEST_FIXTURE(Test, testTdf124754)
 {
-    load("tdf124754.docx");
+    createSwDoc("tdf124754.docx");
     uno::Reference<text::XText> textbox(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs(textbox));
 
@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124754)
 
 CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
 {
-    load("text-copy.docx");
+    createSwDoc("text-copy.docx");
     // The document has a header on the second page that is copied as part of the import process.
     // The header has a single paragraph: make sure shapes anchored to it are not lost.
     // Note that the single paragraph itself has no text portions.
@@ -570,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
 {
-    load("tdf112443.docx");
+    createSwDoc("tdf112443.docx");
     // the position of the flying text frame should be off page
     // 30624 below its anchor
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -591,13 +591,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
 // and as result only one page should be generated.
 CPPUNIT_TEST_FIXTURE(Test, testTdf113182)
 {
-    load("tdf113182.docx");
+    createSwDoc("tdf113182.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBtlrFrameVml)
 {
-    load("btlr-frame-vml.docx");
+    createSwDoc("btlr-frame-vml.docx");
     uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
@@ -609,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrameVml)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124398)
 {
-    load("tdf124398.docx");
+    createSwDoc("tdf124398.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
     // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
@@ -622,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124398)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 {
-    load("tdf104167.docx");
+    createSwDoc("tdf104167.docx");
     // Make sure that heading 1 paragraphs start on a new page.
     uno::Any xStyle = getStyles("ParagraphStyles")->getByName("Heading 1");
     // Without the accompanying fix in place, this test would have failed with:
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
-    load("tdf113946.docx");
+    createSwDoc("tdf113946.docx");
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
@@ -647,7 +647,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
 {
-    load("tdf121804.docx");
+    createSwDoc("tdf121804.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFirstPara = getParagraphOfText(1, xShape->getText());
@@ -666,14 +666,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf114217)
 {
-    load("tdf114217.docx");
+    createSwDoc("tdf114217.docx");
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
 {
-    load("tdf119200.docx");
+    createSwDoc("tdf119200.docx");
     auto xPara = getParagraph(1);
     // Check that we import MathType functional symbols as symbols, not functions with missing args
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2208 } {}"), getFormula(getRun(xPara, 1)));
@@ -687,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115094)
 {
-    load("tdf115094.docx");
+    createSwDoc("tdf115094.docx");
     // anchor of graphic has to be the text in the text frame
     // xray ThisComponent.DrawPage(1).Anchor.Text
     uno::Reference<text::XTextContent> xShape(getShape(2), uno::UNO_QUERY);
@@ -705,7 +705,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115094v2)
 {
-    load("tdf115094v2.docx");
+    createSwDoc("tdf115094v2.docx");
     // layoutInCell="1" combined with <wp:wrapNone/>
 
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
@@ -714,7 +714,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094v2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122224)
 {
-    load("tdf122224.docx");
+    createSwDoc("tdf122224.docx");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122224)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121440)
 {
-    load("tdf121440.docx");
+    createSwDoc("tdf121440.docx");
     // Insert some text in front of footnote
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -743,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121440)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124670)
 {
-    load("tdf124670.docx");
+    createSwDoc("tdf124670.docx");
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     // We need to take xml:space attribute into account, even in w:document element
     uno::Reference<text::XTextRange> paragraph = getParagraph(1);
@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124670)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126114)
 {
-    load("tdf126114.docx");
+    createSwDoc("tdf126114.docx");
     // The problem was that after the drop-down form field, also the placeholder string
     // was imported as text. Beside the duplication of the field, it also caused a crash.
     // the word is from replacement of the drop-down field in ModelToViewHelper
@@ -763,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126114)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
 {
-    load("tdf127825.docx");
+    createSwDoc("tdf127825.docx");
     // The document has a shape with Japanese-style text in it. The shape has relative size and also
     // has automatic height.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -788,7 +788,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
 {
-    load("numbering-circle.docx");
+    createSwDoc("numbering-circle.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125038)
 {
-    load("tdf125038.docx");
+    createSwDoc("tdf125038.docx");
     OUString aActual = getParagraph(1)->getString();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: phone:...
@@ -819,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125038)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125038b)
 {
-    load("tdf125038b.docx");
+    createSwDoc("tdf125038b.docx");
     // Load a document with an IF field, where the IF field command contains a paragraph break.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(),
@@ -844,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125038b)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125038c)
 {
-    load("tdf125038c.docx");
+    createSwDoc("tdf125038c.docx");
     OUString aActual = getParagraph(1)->getString();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: email: test@test.test
@@ -855,19 +855,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125038c)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130214)
 {
-    load("tdf130214.docx");
+    createSwDoc("tdf130214.docx");
     // Currently this file imports with errors because of tdf#126435; it must not segfault on load
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129659)
 {
-    load("tdf129659.docx");
+    createSwDoc("tdf129659.docx");
     // don't crash on footnote with page break
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 {
-    load("tdf129912.docx");
+    createSwDoc("tdf129912.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
 {
-    load("tdf126426.docx");
+    createSwDoc("tdf126426.docx");
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroup->getCount());
@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119039)
 {
-    load("tdf119039_bad_embedded_compound.docx");
+    createSwDoc("tdf119039_bad_embedded_compound.docx");
     // Should not crash/hang because of problematic embedded compound
 }
 

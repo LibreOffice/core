@@ -36,7 +36,8 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxDeleteAsChar)
 {
     // Load a document with an as-char shape in it that has a textbox and an image in it.
-    SwDoc* pDoc = createSwDoc("as-char-textbox.docx");
+    createSwDoc("as-char-textbox.docx");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     sal_Int32 nActual = pPage->GetObjCount();
@@ -62,7 +63,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
     // - picture
     // - draw format + fly format and a picture in it
     // - picture
-    SwDoc* pDoc = createSwDoc("textbox-undo-ordnum.docx");
+    createSwDoc("textbox-undo-ordnum.docx");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     // Test the state before del + undo.
@@ -109,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
 CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
 {
     // Load a document with a textframe without border, one with only left border
-    load("tdf107727_FrameBorder.odt");
+    createSwDoc("tdf107727_FrameBorder.odt");
 
     // Export to RTF and reload
     reload("Rich Text Format", nullptr);
@@ -143,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testSdtTextboxHeader)
     // shape+fly pair (textbox) anchored in the same header
     // When loading that document, then make sure that layout doesn't fail with an assertion because
     // the "master SdrObj should have the highest index" invariant doesn't hold:
-    load("sdt-textbox-header.docx");
+    createSwDoc("sdt-textbox-header.docx");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

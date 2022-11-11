@@ -1123,7 +1123,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95777, "tdf95777.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94374)
 {
-    load("hello.docx");
+    createSwDoc("hello.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();

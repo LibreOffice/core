@@ -872,7 +872,7 @@ DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
 CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 {
     // Given a document with a <w:sdt> tag:
-    load("content-control-grab-bag.docx");
+    createSwDoc("content-control-grab-bag.docx");
 
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
@@ -883,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 {
     // Given a document with a <w:sdt> tag:
-    load("content-control-shape.docx");
+    createSwDoc("content-control-shape.docx");
 
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
@@ -894,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
     // Test how we can roundtrip sdt plain text with databindings support
-    load("tdf104823.docx");
+    createSwDoc("tdf104823.docx");
 
     // First paragraph: content from core properties
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);

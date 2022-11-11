@@ -116,7 +116,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a biblio entry field with an URL:
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -159,7 +160,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
 {
     // Given an empty document with a file:// base URL:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),

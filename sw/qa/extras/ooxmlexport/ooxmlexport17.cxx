@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 CPPUNIT_TEST_FIXTURE(Test, TestTdf146802)
 {
-    load("tdf146802.docx");
+    createSwDoc("tdf146802.docx");
 
     // First check if the load failed, as before the fix.
     CPPUNIT_ASSERT(mxComponent);
@@ -982,7 +982,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
-    load("tdf147978_enhancedPath_commandABVW.odt");
+    createSwDoc("tdf147978_enhancedPath_commandABVW.odt");
     reload("Office Open XML Text", nullptr);
     // Make sure the new implemented export for commands A,B,V and W use the correct arc between
     // the given two points, here the short one.

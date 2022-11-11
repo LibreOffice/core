@@ -798,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_true)
     officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);
     batch->commit();
 
-    load("combobox-control.docx");
+    createSwDoc("combobox-control.docx");
     verifyComboBoxExport(true);
 }
 
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
     officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(false, batch);
     batch->commit();
 
-    load("combobox-control.docx");
+    createSwDoc("combobox-control.docx");
     verifyComboBoxExport(false);
 }
 

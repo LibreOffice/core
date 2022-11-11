@@ -26,7 +26,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testWrappedMathObject)
 {
     // The document includes a Math object with explicit wrapping.
-    load("wrapped-math-object.docx");
+    createSwDoc("wrapped-math-object.docx");
     uno::Reference<drawing::XShape> xMath = getShape(1);
 
     // Without the accompanying fix in place, this test would have failed with:

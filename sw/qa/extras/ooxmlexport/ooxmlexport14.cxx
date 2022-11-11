@@ -73,11 +73,11 @@ DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
 {
-    load("128197_compat14.docx");
+    createSwDoc("128197_compat14.docx");
     xmlDocUniquePtr pLayout14 = parseLayoutDump();
     sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
 
-    load("128197_compat15.docx");
+    createSwDoc("128197_compat15.docx");
     xmlDocUniquePtr pLayout15 = parseLayoutDump();
     sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
 
@@ -795,7 +795,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleConfNested)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133771)
 {
     // Create the doc model.
-    load("tdf133771.odt", /*pPassword*/ "test");
+    createSwDoc("tdf133771.odt", /*pPassword*/ "test");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Password Protected"), getParagraph(1)->getString());
 
@@ -864,13 +864,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147485)
 {
     // Before the fix this was impossible.
-    load("Tdf147485.docx");
+    createSwDoc("Tdf147485.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149546)
 {
     // Before the fix this was impossible.
-    load("tdf149546.docx");
+    createSwDoc("tdf149546.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUserField)
@@ -909,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
 CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 {
     // Create the doc model.
-    load("tdf135774_numberingCRProps.docx");
+    createSwDoc("tdf135774_numberingCRProps.docx");
 
     // This only affects when saving as w:highlight - which is not the default since 7.0.
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();

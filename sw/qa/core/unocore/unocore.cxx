@@ -44,7 +44,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
 {
     // Load a doc with a nested table in it.
-    load("tdf119081.odt");
+    createSwDoc("tdf119081.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
@@ -198,7 +198,7 @@ static void BasicDisplayErrorHandler(const OUString& /*rErr*/, const OUString& /
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
 {
     // Given a document with a broken embedded object (the XML markup is not well-formed):
-    load("broken-embedded-object.odt");
+    createSwDoc("broken-embedded-object.odt");
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
                                                      uno::UNO_QUERY);
@@ -222,7 +222,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a line-break with properties:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -314,7 +315,8 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a content control around one or more text portions:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -384,7 +386,8 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
 {
     // Given a document with a content control around one or more text portions:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -441,7 +444,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a checkbox content control:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -479,7 +483,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a dropdown content control:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -556,7 +561,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testInsertFileInContentControlException)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a picture content control:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -593,7 +599,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a date content control:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -657,7 +664,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)
 {
     // Given a document with 3 paragraphs: an outer numbering on para 1 & 3, an inner numbering on
     // para 2:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     {
         SfxItemSetFixed<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE> aSet(pWrtShell->GetAttrPool());
@@ -696,7 +704,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a plain text content control around a text portion:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -748,7 +757,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlComboBox)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a combobox content control:
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);

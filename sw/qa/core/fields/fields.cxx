@@ -36,7 +36,8 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 {
     // Create a document with a bibliography reference in it.
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);

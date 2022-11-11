@@ -20,11 +20,11 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureText) { load("feature_text.odt"); }
+CPPUNIT_TEST_FIXTURE(Test, testFeatureText) { createSwDoc("feature_text.odt"); }
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureTextBold) { load("feature_text_bold.odt"); }
+CPPUNIT_TEST_FIXTURE(Test, testFeatureTextBold) { createSwDoc("feature_text_bold.odt"); }
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureTextItalic) { load("feature_text_italic.odt"); }
+CPPUNIT_TEST_FIXTURE(Test, testFeatureTextItalic) { createSwDoc("feature_text_italic.odt"); }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

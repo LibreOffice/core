@@ -103,7 +103,7 @@ void Test::testEmbeddedGraphicRoundtrip()
     {
         // Check whether the export code swaps in the image which was swapped out before by auto mechanism
 
-        load("document_with_two_images.odt");
+        createSwDoc("document_with_two_images.odt");
 
         // Export the document and import again for a check
         reload(rFilterName.toUtf8().getStr(), nullptr);
@@ -157,7 +157,7 @@ void Test::testLinkedGraphicRT()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("document_with_linked_graphic.odt");
+        createSwDoc("document_with_linked_graphic.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -213,7 +213,7 @@ void Test::testImageWithSpecialID()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("images_with_special_IDs.odt");
+        createSwDoc("images_with_special_IDs.odt");
 
         // Export the document and import again for a check
         reload(rFilterName.toUtf8().getStr(), nullptr);
@@ -296,7 +296,7 @@ void Test::testGraphicShape()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("graphic_shape.odt");
+        createSwDoc("graphic_shape.odt");
 
         // Export the document and import again for a check
         reload(rFilterName.toUtf8().getStr(), nullptr);
@@ -390,7 +390,7 @@ void Test::testMultipleIdenticalGraphics()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("multiple_identical_graphics.odt");
+        createSwDoc("multiple_identical_graphics.odt");
 
         // Export the document and import again for a check
         reload(rFilterName.toUtf8().getStr(), nullptr);
@@ -432,7 +432,7 @@ void Test::testCharHighlightBody()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("char_highlight.docx");
+        createSwDoc("char_highlight.docx");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -515,7 +515,7 @@ void Test::testCharStyleHighlight()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("tdf138345_charstyle_highlight.odt");
+        createSwDoc("tdf138345_charstyle_highlight.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -548,7 +548,7 @@ void Test::testCharHighlight()
 
 void Test::testCharHighlightODF()
 {
-    load("char_background_editing.docx");
+    createSwDoc("char_background_editing.docx");
 
     // don't check import, testMSCharBackgroundEditing already does that
 
@@ -627,7 +627,7 @@ void Test::testMSCharBackgroundEditing()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("char_background_editing.docx");
+        createSwDoc("char_background_editing.docx");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -726,7 +726,7 @@ void Test::testCharBackgroundToHighlighting()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        load("char_background.odt");
+        createSwDoc("char_background.odt");
 
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -790,7 +790,7 @@ void Test::testSkipImages()
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterNamePair.first.toUtf8();
 
         setImportFilterOptions(rFilterNamePair.second);
-        load(rFilterNamePair.first.toUtf8().getStr());
+        createSwDoc(rFilterNamePair.first.toUtf8().getStr());
         sFailedMessage += " - " + rFilterNamePair.second.toUtf8();
 
         // Check shapes (images, textboxes, custom shapes)
@@ -911,7 +911,7 @@ void Test::testNestedFieldmark()
 
     for (auto const & rFilterName : aFilterNames)
     {
-        load(rFilterName.second.toUtf8().getStr());
+        createSwDoc(rFilterName.second.toUtf8().getStr());
 
         verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
 
@@ -956,7 +956,7 @@ auto Test::verifyText13(char const*const pTestName) -> void
 void Test::testODF13()
 {
     // import
-    load("text13e.odt");
+    createSwDoc("text13e.odt");
 
     // check model
     verifyText13("import");
@@ -1068,7 +1068,8 @@ void Test::testRedlineFlags()
         "Office Open XML Text",
     };
 
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     SwPaM pam(SwPosition(pDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1)));
     pDoc->getIDocumentContentOperations().InsertString(pam, "foo bar baz");
@@ -1114,7 +1115,7 @@ void Test::testBulletAsImage()
     {
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
-        load("BulletAsImage.odt");
+        createSwDoc("BulletAsImage.odt");
 
         // Check if import was successful
         {
@@ -1236,7 +1237,7 @@ void Test::testTextFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        load("text_form_field.odt");
+        createSwDoc("text_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1289,7 +1290,7 @@ void Test::testCheckBoxFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        load("checkbox_form_field.odt");
+        createSwDoc("checkbox_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1342,7 +1343,7 @@ void Test::testDropDownFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        load("dropdown_form_field.odt");
+        createSwDoc("dropdown_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1417,7 +1418,7 @@ void Test::testDateFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        load("date_form_field.odt");
+        createSwDoc("date_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1601,7 +1602,7 @@ void Test::testDateFormFieldCharacterFormatting()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        load("date_form_field_char_formatting.odt");
+        createSwDoc("date_form_field_char_formatting.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 

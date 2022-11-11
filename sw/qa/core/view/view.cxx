@@ -40,7 +40,8 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testUpdateOleObjectPreviews)
 {
     // Given a document with two embedded objects, both with broken native data:
-    SwDoc* pDoc = createSwDoc("update-ole-object-previews.odt");
+    createSwDoc("update-ole-object-previews.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // When updating the previews of those embedded objects (right after document load, before

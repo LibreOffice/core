@@ -28,7 +28,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 {
     // Load a document where a delete redline ends right before a ToC, then redlines are hidden at a
     // layout level.
-    SwDoc* pDoc = createSwDoc("redline-ends-before-toc.docx");
+    createSwDoc("redline-ends-before-toc.docx");
+    SwDoc* pDoc = getSwDoc();
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     // Without the accompanying fix in place, this test would have resulted in an assertion failure
     // in InsertCnt_(), because the start of the section was hidden, but not its end.
@@ -41,7 +42,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
 {
     // Load a document where an insert redline ends right before a ToC
-    SwDoc* pDoc = createSwDoc("tdf150086.docx");
+    createSwDoc("tdf150086.docx");
+    SwDoc* pDoc = getSwDoc();
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(8), rTable.size());
 

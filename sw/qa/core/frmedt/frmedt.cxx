@@ -37,7 +37,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
 {
     // Load a document with a textframe and a textbox(shape+textframe).
-    load("textbox-reanchor.odt");
+    createSwDoc("textbox-reanchor.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pDrawPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
 CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
 {
     // Given a document that contains a textbox, which contains an sw image (fly frame)
-    load("paste-fly-in-textbox.docx");
+    createSwDoc("paste-fly-in-textbox.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();

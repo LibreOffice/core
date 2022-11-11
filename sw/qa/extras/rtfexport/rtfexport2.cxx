@@ -575,7 +575,7 @@ DECLARE_RTFEXPORT_TEST(testFdo55493, "fdo55493.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
 {
-    load("copypaste-pagestyle.rtf");
+    createSwDoc("copypaste-pagestyle.rtf");
     // The problem was that RTF import during copy&paste did not ignore page styles.
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -591,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
 {
-    load("copypaste-footnote.rtf");
+    createSwDoc("copypaste-footnote.rtf");
     // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -603,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo63428)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     // Pasting content that contained an annotation caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
@@ -629,7 +629,7 @@ DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     // Pasting content that contained a footnote caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
@@ -654,7 +654,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     // This crashed, the shape push/pop and table manager stack went out of
     // sync -> we tried to de-reference an empty stack.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

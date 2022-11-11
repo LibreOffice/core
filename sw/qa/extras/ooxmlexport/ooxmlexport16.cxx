@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
                                      getProperty<sal_Int32>(getShape(1), "BottomMargin"), 1);
     };
     // Given a document with a shape with contour wrap, that has glow effect and rotation.
-    load("tdf143219ContourWrap_glow_rotate.docx");
+    createSwDoc("tdf143219ContourWrap_glow_rotate.docx");
 
     // Error was, that the margins, which were added on import to approximate Word's rendering of
     // contour wrap, contained the effect extent for rotation. But LibreOffice extents the wrap
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
                                      getProperty<sal_Int32>(getShape(1), "BottomMargin"), 1);
     };
     // Given a document with a shape with contour wrap, that has a fat stroke and large shadow.
-    load("tdf143219ContourWrap_stroke_shadow.docx");
+    createSwDoc("tdf143219ContourWrap_stroke_shadow.docx");
 
     // Error was, that the margins, which were added on import to approximate Word's rendering of
     // contour wrap, were not removed on export and so used twice on reload.
@@ -639,7 +639,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeHyperlink, "hyperlinkshape.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
 {
     // Make sure hyperlink is imported correctly
-    load("docxopenhyperlinkbox.docx");
+    createSwDoc("docxopenhyperlinkbox.docx");
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 {
-    load("tdf146171.docx");
+    createSwDoc("tdf146171.docx");
     // false alarm? during ODF roundtrip:
     // 'Error: "1970-01-01" does not satisfy the "dateTime" type'
     // disable and check only the conversion of the invalid (zeroed) change date
@@ -714,7 +714,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
 
     // Given a document with a shape that has a non-zero line width and effect extent:
     // When loading the document:
-    load("effect-extent-line-width.docx");
+    createSwDoc("effect-extent-line-width.docx");
     // Then make sure that the line width is not taken twice (once as part of the margin, and then
     // also as the line width):
     // Without the accompanying fix in place, this test would have failed with:
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 {
     // Given a document with RTL gutter:
-    load("rtl-gutter.docx");
+    createSwDoc("rtl-gutter.docx");
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
             uno::UNO_QUERY);
     CPPUNIT_ASSERT(getProperty<bool>(xStandard, "RtlGutter"));

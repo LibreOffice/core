@@ -31,7 +31,8 @@ class Test : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(Test, testShiftClickOnImage)
 {
     // Given a document with a fly frame:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -140,7 +141,8 @@ int GraphicDialogInterceptor::GetGraphicDialogs() const { return m_nGraphicDialo
 CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
 {
     // Given a document with a fly frame, and an interceptor to catch the graphic dialog:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

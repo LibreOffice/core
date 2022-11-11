@@ -69,7 +69,7 @@ protected:
 
 CPPUNIT_TEST_FIXTURE(Test, testN695479)
 {
-    load("n695479.rtf");
+    createSwDoc("n695479.rtf");
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
@@ -119,14 +119,14 @@ CPPUNIT_TEST_FIXTURE(Test, testN695479)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117246)
 {
-    load("tdf117246.rtf");
+    createSwDoc("tdf117246.rtf");
     // This was 2, all but the last \page was lost.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108943)
 {
-    load("tdf108943.rtf");
+    createSwDoc("tdf108943.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108943)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo46662)
 {
-    load("fdo46662.rtf");
+    createSwDoc("fdo46662.rtf");
 
     OUString listStyle;
 
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46662)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115715)
 {
-    load("tdf115715.rtf");
+    createSwDoc("tdf115715.rtf");
     // This was 0, second paragraph was shifted to the right, it had the same
     // horizontal position as the 3rd paragraph.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1270),
@@ -209,14 +209,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115715)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81943)
 {
-    load("tdf81943.rtf");
+    createSwDoc("tdf81943.rtf");
     // The shape wasn't in background.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115155)
 {
-    load("tdf115155.rtf");
+    createSwDoc("tdf115155.rtf");
     auto xLevels
         = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules");
     // 1st level
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115155)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108951)
 {
-    load("tdf108951.rtf");
+    createSwDoc("tdf108951.rtf");
     // This test is import-only, as we assert the list ID, which is OK to
     // re-order on export, but then this test would not pass anymore.
 
@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108951)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo47036)
 {
-    load("fdo47036.rtf");
+    createSwDoc("fdo47036.rtf");
 
     int nShapes = getShapes();
     CPPUNIT_ASSERT_EQUAL(3, nShapes);
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47036)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45182)
 {
-    load("fdo45182.rtf");
+    createSwDoc("fdo45182.rtf");
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
@@ -272,7 +272,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45182)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo85812)
 {
-    load("fdo85812.rtf");
+    createSwDoc("fdo85812.rtf");
     lang::Locale locale(
         getProperty<lang::Locale>(getRun(getParagraph(1), 1, "This "), "CharLocale"));
     // the \lang inside the group was applied to CJK not Western
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo85812)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
 {
-    load("fdo49692.rtf");
+    createSwDoc("fdo49692.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -357,7 +357,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45190)
 {
-    load("fdo45190.rtf");
+    createSwDoc("fdo45190.rtf");
     // inherited \fi should be reset
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45190)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf59699)
 {
-    load("tdf59699.rtf");
+    createSwDoc("tdf59699.rtf");
     // This resulted in a lang.IndexOutOfBoundsException: the referenced graphic data wasn't imported.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xImage, "Graphic");
@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59699)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo52066)
 {
-    load("fdo52066.rtf");
+    createSwDoc("fdo52066.rtf");
     /*
      * The problem was that the height of the shape was too big.
      *
@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52066)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
 {
-    load("tdf112211-2.rtf");
+    createSwDoc("tdf112211-2.rtf");
     // Spacing between the bullet and the actual text was too large.
     // This is now around 269, large old value was 629.
     int nWidth = parseDump("/root/page/body/txt[2]/Text[@nType='PortionType::TabLeft']", "nWidth")
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122430)
 {
-    load("tdf122430.rtf");
+    createSwDoc("tdf122430.rtf");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 18, Actual  : 12', i.e. the font was smaller than expected.
     CPPUNIT_ASSERT_EQUAL(18.0f, getProperty<float>(getRun(getParagraph(1), 2), "CharHeight"));
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122430)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo49892)
 {
-    load("fdo49892.rtf");
+    createSwDoc("fdo49892.rtf");
     int nShapes = getShapes();
     CPPUNIT_ASSERT_EQUAL(5, nShapes);
     for (int i = 0; i < nShapes; ++i)
@@ -432,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49892)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo52052)
 {
-    load("fdo52052.rtf");
+    createSwDoc("fdo52052.rtf");
     // Make sure the textframe containing the text "third" appears on the 3rd page.
     CPPUNIT_ASSERT_EQUAL(OUString("third"),
                          parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"));
@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52052)
 
 CPPUNIT_TEST_FIXTURE(Test, testInk)
 {
-    load("ink.rtf");
+    createSwDoc("ink.rtf");
     /*
      * The problem was that the second segment had wrong command count and wrap type.
      *
@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInk)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo79319)
 {
-    load("fdo79319.rtf");
+    createSwDoc("fdo79319.rtf");
     // the thin horizontal rule was imported as a big fat rectangle
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape, "RelativeWidth"));
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79319)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo48442)
 {
-    load("fdo48442.rtf");
+    createSwDoc("fdo48442.rtf");
     // The problem was that \pvmrg is the default in RTF, but not in Writer.
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA,
@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48442)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo55525)
 {
-    load("fdo55525.rtf");
+    createSwDoc("fdo55525.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo55525)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo57708)
 {
-    load("fdo57708.rtf");
+    createSwDoc("fdo57708.rtf");
     // There were two issues: the doc was of 2 pages and the picture was missing.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two objects: a picture and a textframe.
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo57708)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45183)
 {
-    load("fdo45183.rtf");
+    createSwDoc("fdo45183.rtf");
     // Was text::WrapTextMode_PARALLEL, i.e. shpfblwtxt didn't send the shape below text.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,
                          getProperty<text::WrapTextMode>(getShape(1), "Surround"));
@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45183)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo59953)
 {
-    load("fdo59953.rtf");
+    createSwDoc("fdo59953.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -549,7 +549,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59953)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf84684)
 {
-    load("tdf84684.rtf");
+    createSwDoc("tdf84684.rtf");
     // The ZOrder of the two children of the group shape were swapped.
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xChild1(xGroup->getByIndex(0), uno::UNO_QUERY);
@@ -562,7 +562,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf84684)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81944)
 {
-    load("fdo81944.rtf");
+    createSwDoc("fdo81944.rtf");
     // font properties in style were not imported
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81944)
 
 CPPUNIT_TEST_FIXTURE(Test, testSbkodd)
 {
-    load("sbkodd.rtf");
+    createSwDoc("sbkodd.rtf");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
@@ -590,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSbkodd)
 
 CPPUNIT_TEST_FIXTURE(Test, testSbkeven)
 {
-    load("sbkeven.rtf");
+    createSwDoc("sbkeven.rtf");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSbkeven)
 
 CPPUNIT_TEST_FIXTURE(Test, testPoshPosv)
 {
-    load("posh-posv.rtf");
+    createSwDoc("posh-posv.rtf");
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
                          getProperty<sal_Int16>(getShape(1), "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER,
@@ -615,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPoshPosv)
 
 CPPUNIT_TEST_FIXTURE(Test, testPoshLeftRight)
 {
-    load("posh-leftright.rtf");
+    createSwDoc("posh-leftright.rtf");
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
                          getProperty<sal_Int16>(getShape(1), "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT,
@@ -624,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPoshLeftRight)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf96326)
 {
-    load("tdf96326.rtf");
+    createSwDoc("tdf96326.rtf");
     // Make sure this is not checked.
     auto xFormField
         = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(1), 2), "Bookmark");
@@ -641,7 +641,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96326)
 
 CPPUNIT_TEST_FIXTURE(Test, testN823655)
 {
-    load("n823655.rtf");
+    createSwDoc("n823655.rtf");
     uno::Sequence<beans::PropertyValue> aProps
         = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
@@ -665,7 +665,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN823655)
 
 CPPUNIT_TEST_FIXTURE(Test, testN823675)
 {
-    load("n823675.rtf");
+    createSwDoc("n823675.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -687,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN823675)
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupshape)
 {
-    load("groupshape.rtf");
+    createSwDoc("groupshape.rtf");
     // There should be a single groupshape with 2 children.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> xGroupshape(getShape(1), uno::UNO_QUERY);
@@ -696,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshape)
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupshape_notext)
 {
-    load("groupshape-notext.rtf");
+    createSwDoc("groupshape-notext.rtf");
     // There should be a single groupshape with 2 children.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> xGroupshape(getShape(1), uno::UNO_QUERY);
@@ -705,7 +705,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshape_notext)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81033)
 {
-    load("fdo81033.rtf");
+    createSwDoc("fdo81033.rtf");
     // Number of tabstops in the paragraph should be 2, was 3.
     uno::Sequence<style::TabStop> tabs(
         getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops"));
@@ -720,7 +720,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81033)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116269)
 {
-    load("tdf116269.rtf");
+    createSwDoc("tdf116269.rtf");
     // This was 2540, implicit 0 left margin was ignored on import (inherited
     // value from list definition is repeated if it's not 0).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116269)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
 {
-    load("tdf116265.rtf");
+    createSwDoc("tdf116265.rtf");
     // This was -635, \fi as direct formatting has to be ignored due to
     // matching \fi in list definition (and with invalid level numbers).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
@@ -738,7 +738,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
 {
-    load("fdo66565.rtf");
+    createSwDoc("fdo66565.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -752,7 +752,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo67365)
 {
-    load("fdo67365.rtf");
+    createSwDoc("fdo67365.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -773,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo67365)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo47440)
 {
-    load("fdo47440.rtf");
+    createSwDoc("fdo47440.rtf");
     // Vertical and horizontal orientation of the picture wasn't imported (was text::RelOrientation::FRAME).
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
@@ -783,7 +783,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47440)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo53556)
 {
-    load("fdo53556.rtf");
+    createSwDoc("fdo53556.rtf");
     // This was drawing::FillStyle_SOLID, which resulted in being non-transparent, hiding text which would be visible.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
                          getProperty<drawing::FillStyle>(getShape(3), "FillStyle"));
@@ -796,14 +796,14 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53556)
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupshapeRotation)
 {
-    load("groupshape-rotation.rtf");
+    createSwDoc("groupshape-rotation.rtf");
     // Rotation on groupshapes wasn't handled correctly, RotateAngle was 4500.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115153)
 {
-    load("tdf115153.rtf");
+    createSwDoc("tdf115153.rtf");
     auto const xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(xShape, "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
@@ -818,7 +818,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115153)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo68291)
 {
-    load("fdo68291.odt");
+    createSwDoc("fdo68291.odt");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -840,13 +840,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105511)
     auto batch = comphelper::ConfigurationChanges::create();
     DefaultLocale::set("ru-RU", batch);
     batch->commit();
-    load("tdf105511.rtf");
+    createSwDoc("tdf105511.rtf");
     getParagraph(1, u"\u0418\u043C\u044F");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)
 {
-    load("cont-section-pagebreak.rtf");
+    createSwDoc("cont-section-pagebreak.rtf");
     uno::Reference<text::XTextRange> xParaSecond = getParagraph(2);
     CPPUNIT_ASSERT_EQUAL(OUString("SECOND"), xParaSecond->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
@@ -873,7 +873,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)
 
 CPPUNIT_TEST_FIXTURE(Test, testBackground)
 {
-    load("background.rtf");
+    createSwDoc("background.rtf");
     // The first shape wasn't in the foreground.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "Opaque"));
@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBackground)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo74823)
 {
-    load("fdo74823.rtf");
+    createSwDoc("fdo74823.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -895,7 +895,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74823)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo74599)
 {
-    load("fdo74599.rtf");
+    createSwDoc("fdo74599.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Heading 3"), uno::UNO_QUERY);
     // Writer default styles weren't disabled, so the color was gray, not default (black).
@@ -905,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74599)
 
 CPPUNIT_TEST_FIXTURE(Test, testColumnBreak)
 {
-    load("column-break.rtf");
+    createSwDoc("column-break.rtf");
     // Column break at the very start of the document was ignored.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE,
                          getProperty<style::BreakType>(getParagraph(2), "BreakType"));
@@ -913,7 +913,7 @@ CPPUNIT_TEST_FIXTURE(Test, testColumnBreak)
 
 CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumnsCompat)
 {
-    load("unbalanced-columns-compat.rtf");
+    createSwDoc("unbalanced-columns-compat.rtf");
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
                                                           uno::UNO_QUERY);
@@ -924,7 +924,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumnsCompat)
 
 CPPUNIT_TEST_FIXTURE(Test, testOleInline)
 {
-    load("ole-inline.rtf");
+    createSwDoc("ole-inline.rtf");
     // Problem was that inline shape had at-page anchor.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
@@ -932,7 +932,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOleInline)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
 {
-    load("tdf128611.rtf");
+    createSwDoc("tdf128611.rtf");
     auto aPolyPolySequence
         = getProperty<uno::Sequence<uno::Sequence<awt::Point>>>(getShape(1), "PolyPolygon");
     CPPUNIT_ASSERT(aPolyPolySequence.hasElements());
@@ -951,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo80742)
 {
-    load("fdo80742.rtf");
+    createSwDoc("fdo80742.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Heading 2"), uno::UNO_QUERY);
     // This was 0, outline level was body text.
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80742)
 
 CPPUNIT_TEST_FIXTURE(Test, testBehindDoc)
 {
-    load("behind-doc.rtf");
+    createSwDoc("behind-doc.rtf");
     // The problem was that "behind doc" didn't result in the shape being in the background, only in being wrapped as "through".
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,
@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehindDoc)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82114)
 {
-    load("fdo82114.rtf");
+    createSwDoc("fdo82114.rtf");
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Converted1"), "HeaderText");
     OUString aActual = xHeaderText->getString();
@@ -981,7 +981,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82114)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo44984)
 {
-    load("fdo44984.rtf");
+    createSwDoc("fdo44984.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44984)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82071)
 {
-    load("fdo82071.rtf");
+    createSwDoc("fdo82071.rtf");
     // The problem was that in TOC, chapter names were underlined, but they should not be.
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
     // Make sure we test the right text portion.
@@ -1006,7 +1006,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82071)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo85179)
 {
-    load("fdo85179.rtf");
+    createSwDoc("fdo85179.rtf");
     // This was 0, border around the picture was ignored on import.
     // 360: EMU -> MM100
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(50800 / 360),
@@ -1042,7 +1042,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82512)
 {
-    load("fdo82512.rtf");
+    createSwDoc("fdo82512.rtf");
     // This was style::BreakType_NONE, column break was before the 3rd paragraph, not before the 2nd one.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE,
                          getProperty<style::BreakType>(getParagraph(2), "BreakType"));
@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82512)
 
 CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumns)
 {
-    load("unbalanced-columns.rtf");
+    createSwDoc("unbalanced-columns.rtf");
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
                                                           uno::UNO_QUERY);
@@ -1061,7 +1061,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumns)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126173)
 {
-    load("tdf126173.rtf");
+    createSwDoc("tdf126173.rtf");
     // Without the accompanying fix in place, this test would have failed, as the TextFrame was lost
     // on import.
     CPPUNIT_ASSERT(getShape(1).is());
@@ -1069,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126173)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo84685)
 {
-    load("fdo84685.rtf");
+    createSwDoc("fdo84685.rtf");
     // index mark was not imported
     uno::Reference<text::XDocumentIndexMark> xMark(
         getProperty<uno::Reference<text::XDocumentIndexMark>>(getRun(getParagraph(1), 1),
@@ -1088,7 +1088,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo84685)
 // This testcase illustrate leveltext with multibyte strings coded in cp950 ( BIG5 ).
 CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext1)
 {
-    load("cp950listleveltext1.rtf");
+    createSwDoc("cp950listleveltext1.rtf");
     // suffix with Chinese only ( most common case generated by MSO2010 TC)
     // This is a dot that is generally used as suffix of Chinese list number
     static constexpr OUStringLiteral aExpectedNumbering = u"\u4e00\u3001";
@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext1)
 // This testcase illustrate leveltext with multibyte strings coded in cp950 ( BIG5 ).
 CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext2)
 {
-    load("cp950listleveltext2.rtf");
+    createSwDoc("cp950listleveltext2.rtf");
     // Prefix and suffix with Chinese only ( tweaked from default in MSO2010 TC)
     static constexpr OUStringLiteral aExpectedNumbering = u"\u524d\u7f6e\u7532\u3001\u5f8c\u7f6e";
 
@@ -1113,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext2)
 // This testcase illustrate leveltext with multibyte strings coded in cp950 ( BIG5 )
 CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext3)
 {
-    load("cp950listleveltext3.rtf");
+    createSwDoc("cp950listleveltext3.rtf");
     // Numbering is a mix Chinese and English ( tweaked from default in MSO2010 TC)
     static constexpr OUStringLiteral aExpectedNumbering = u"\u524da\u7f6eb\u7532\u3001"
                                                           "c\u5f8cd\u7f6ee";
@@ -1125,7 +1125,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCp950listleveltext3)
 
 CPPUNIT_TEST_FIXTURE(Test, testChtOutlineNumberingRtf)
 {
-    load("chtoutline.rtf");
+    createSwDoc("chtoutline.rtf");
 
     static constexpr OUStringLiteral aExpectedNumbering = u"\u7b2c 1 \u7ae0";
 
@@ -1136,7 +1136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChtOutlineNumberingRtf)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90046)
 {
-    load("tdf90046.rtf");
+    createSwDoc("tdf90046.rtf");
     // this was crashing on importing the footnote
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -1146,7 +1146,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90046)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo49893)
 {
-    load("fdo49893.rtf");
+    createSwDoc("fdo49893.rtf");
     // Image from shape was not loaded, invalid size of image after load
     uno::Reference<drawing::XShape> xShape = getShape(2);
     CPPUNIT_ASSERT(xShape.is());
@@ -1156,7 +1156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo49893_3)
 {
-    load("fdo49893-3.rtf");
+    createSwDoc("fdo49893-3.rtf");
     // No artifacts (black lines in left top corner) as shape #3 are expected
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -1167,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893_3)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapDistance)
 {
-    load("wrap-distance.rtf");
+    createSwDoc("wrap-distance.rtf");
     // Custom shape, handled directly in RTFSdrImport.
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapDistance)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90260Par)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -1204,7 +1204,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90260Par)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119599)
 {
-    load("tdf119599.rtf");
+    createSwDoc("tdf119599.rtf");
     uno::Reference<beans::XPropertyState> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
     // This was beans::PropertyState_DIRECT_VALUE, changing the font size in
     // the style had no effect on the rendering result.
@@ -1213,7 +1213,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119599)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90315)
 {
-    load("tdf90315.rtf");
+    createSwDoc("tdf90315.rtf");
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
                                                           uno::UNO_QUERY);
@@ -1226,14 +1226,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90315)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf59454)
 {
-    load("tdf59454.rtf");
+    createSwDoc("tdf59454.rtf");
     // This was 1, section break was ignored right before a table.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf96308Tabpos)
 {
-    load("tdf96308-tabpos.rtf");
+    createSwDoc("tdf96308-tabpos.rtf");
     // Get the tab stops of the second para in the B1 cell of the first table in the document.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
@@ -1251,7 +1251,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96308Tabpos)
 
 CPPUNIT_TEST_FIXTURE(Test, testLndscpsxn)
 {
-    load("lndscpsxn.rtf");
+    createSwDoc("lndscpsxn.rtf");
     // Check landscape flag.
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
@@ -1291,7 +1291,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLndscpsxn)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99498)
 {
-    load("tdf99498.rtf");
+    createSwDoc("tdf99498.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99498)
 
 CPPUNIT_TEST_FIXTURE(Test, testClassificatonPaste)
 {
-    load("hello.rtf");
+    createSwDoc("hello.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -1320,7 +1320,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClassificatonPaste)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90097)
 {
-    load("tdf90097.rtf");
+    createSwDoc("tdf90097.rtf");
     // Get the second child of the group shape.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
@@ -1334,7 +1334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90097)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf91684)
 {
-    load("tdf91684.rtf");
+    createSwDoc("tdf91684.rtf");
     // Scaling of the group shape children were incorrect, this was 3203.
     // (Unit was assumed to be twips, but it was relative coordinates.)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1337), getShape(1)->getSize().Height);
@@ -1342,7 +1342,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf91684)
 
 CPPUNIT_TEST_FIXTURE(Test, testFlip)
 {
-    load("flip.rtf");
+    createSwDoc("flip.rtf");
     comphelper::SequenceAsHashMap aMap = getProperty<uno::Sequence<beans::PropertyValue>>(
         getShapeByName(u"h-and-v"), "CustomShapeGeometry");
     // This resulted in a uno::RuntimeException, as MirroredX wasn't set at all, so could not extract void to boolean.
@@ -1367,7 +1367,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFlip)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 {
-    load("tdf78506.rtf");
+    createSwDoc("tdf78506.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -1387,7 +1387,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117403)
 {
-    load("tdf117403.rtf");
+    createSwDoc("tdf117403.rtf");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -1402,7 +1402,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117403)
 
 CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
 {
-    load("tdf108055.rtf");
+    createSwDoc("tdf108055.rtf");
     // The RTF import sometimes added Header and Footer multiple Times
     // as well as added the Header to the document body.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1457,7 +1457,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
 {
-    load("tdf108947.rtf");
+    createSwDoc("tdf108947.rtf");
     //Check if Headers/Footers contain what they should in this document
     uno::Reference<text::XText> xHeaderTextRight = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextRight");
@@ -1476,7 +1476,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
 
 CPPUNIT_TEST_FIXTURE(Test, testWatermark)
 {
-    load("watermark.rtf");
+    createSwDoc("watermark.rtf");
     Size aExpectedSize(14965, 7482);
     uno::Reference<drawing::XShape> xShape = getShape(1);
     awt::Size aActualSize(xShape->getSize());
@@ -1487,7 +1487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104016)
 {
-    load("tdf104016.rtf");
+    createSwDoc("tdf104016.rtf");
     uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
     // This was beans::PropertyState_DIRECT_VALUE, leading to lack of
     // inheritance from numbering.
@@ -1497,7 +1497,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104016)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115242)
 {
-    load("tdf115242.rtf");
+    createSwDoc("tdf115242.rtf");
     // This was 0, overridden left margin was lost by too aggressive style
     // deduplication.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2787),
@@ -1506,7 +1506,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115242)
 
 CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
 {
-    load("default-values.rtf");
+    createSwDoc("default-values.rtf");
     // tdf#105910: control words without values must be treated as having default values,
     // instead of being silently ignored
 
@@ -1637,7 +1637,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
 
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
 {
-    load("para-style-bottom-margin.rtf");
+    createSwDoc("para-style-bottom-margin.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));

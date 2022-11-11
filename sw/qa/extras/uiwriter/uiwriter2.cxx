@@ -69,7 +69,8 @@ protected:
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 {
-    SwDoc* pDoc = createSwDoc("tdf47471_paraStyleBackground.odt");
+    createSwDoc("tdf47471_paraStyleBackground.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
@@ -102,7 +103,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 {
-    SwDoc* pDoc = createSwDoc("tdf117923.docx");
+    createSwDoc("tdf117923.docx");
+    SwDoc* pDoc = getSwDoc();
 
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -152,7 +154,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 {
     // Copy the first paragraph of the document.
-    SwDoc* pDoc = createSwDoc("tdf101534.fodt");
+    createSwDoc("tdf101534.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
@@ -177,7 +180,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Insert(" foo");
@@ -210,7 +214,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SplitNode();
@@ -267,7 +272,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
 {
-    SwDoc* pDoc = createSwDoc("try2.fodt");
+    createSwDoc("try2.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
@@ -306,7 +312,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Insert("A");
@@ -384,7 +391,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
-    SwDoc* const pDoc(createSwDoc());
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bReplaceStyles = true;
@@ -411,7 +419,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
 {
-    SwDoc* pDoc = createSwDoc("tdf134250.fodt");
+    createSwDoc("tdf134250.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
@@ -481,7 +490,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)
 {
-    SwDoc* pDoc = createSwDoc("tdf134436.fodt");
+    createSwDoc("tdf134436.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -623,7 +633,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136452)
 {
-    SwDoc* const pDoc(createSwDoc("tdf136452.fodt"));
+    createSwDoc("tdf136452.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     SwNodeOffset const nNodes(pDoc->GetNodes().Count());
 
@@ -669,7 +680,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136452)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
 {
-    SwDoc* pDoc = createSwDoc("tdf136453.fodt");
+    createSwDoc("tdf136453.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
 
     SwNodeOffset const nNodes(pDoc->GetNodes().Count());
@@ -716,7 +728,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 {
-    SwDoc* const pDoc(createSwDoc());
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bSetBorder = true;
@@ -796,7 +809,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 {
-    SwDoc* pDoc = createSwDoc("tdf132236.odt");
+    createSwDoc("tdf132236.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // select everything and delete
     SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
@@ -816,7 +830,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -964,7 +979,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Insert("foo");
@@ -1051,7 +1067,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // turn on redlining and show changes
@@ -1101,7 +1118,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Insert("foobar");
@@ -1198,7 +1216,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
 // FIXME: disabled on Windows because of a not reproducible problem (not related to the patch)
 #if !defined(_WIN32)
     // check move down with redlining
-    SwDoc* pDoc = createSwDoc("tdf39721.fodt");
+    createSwDoc("tdf39721.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     //turn on red-lining and show changes
@@ -1251,7 +1270,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
 {
     // check move down with redlining: jumping over a deleted paragraph
     // resulted bad deletion of the not deleted adjacent paragraph in Show Changes mode
-    SwDoc* pDoc = createSwDoc("tdf39721.fodt");
+    createSwDoc("tdf39721.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1290,7 +1310,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145311_move_over_empty_paragraphs)
 {
     // check move up/down with redlining: jumping over an empty paragraph
     // resulted bad insertion of the empty paragraph in Show Changes mode
-    SwDoc* pDoc = createSwDoc("tdf145311.fodt");
+    createSwDoc("tdf145311.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1323,7 +1344,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145311_move_over_empty_paragraphs)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -1352,7 +1374,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819b.odt");
+    createSwDoc("tdf54819b.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // heading
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -1436,7 +1459,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
 {
     // as the previous test, but with partial paragraph deletion:
     // all deleted paragraphs get the formatting of the first (the partially deleted) one
-    SwDoc* pDoc = createSwDoc("tdf54819b.odt");
+    createSwDoc("tdf54819b.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // heading
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -1538,7 +1562,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
 {
     // as the previous test, but with partial paragraph deletion:
     // all deleted paragraphs get the formatting of the first (the partially deleted) one
-    SwDoc* pDoc = createSwDoc("tdf54819b.odt");
+    createSwDoc("tdf54819b.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // heading
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -1624,7 +1649,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
 {
-    SwDoc* const pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -1662,7 +1688,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
@@ -1712,7 +1739,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 {
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
@@ -1758,7 +1786,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
 {
-    SwDoc* const pDoc(createSwDoc());
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
@@ -1788,7 +1817,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
 {
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1834,7 +1864,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
-    SwDoc* pDoc = createSwDoc("tdf64242_optimizeTable.odt");
+    createSwDoc("tdf64242_optimizeTable.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1875,7 +1906,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf45525)
 {
-    SwDoc* pDoc = createSwDoc("tdf45525.odt");
+    createSwDoc("tdf45525.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1908,7 +1940,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf45525)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 {
-    SwDoc* pDoc = createSwDoc("tdf126784_distributeSelectedColumns.odt");
+    createSwDoc("tdf126784_distributeSelectedColumns.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1935,7 +1968,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
 {
-    SwDoc* pDoc = createSwDoc("tdf144317.odt");
+    createSwDoc("tdf144317.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1965,7 +1999,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
-    SwDoc* pDoc = createSwDoc("tdf108687_tabstop.odt");
+    createSwDoc("tdf108687_tabstop.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwNodeOffset nStartIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), nStartIndex);
@@ -1982,7 +2017,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -2015,7 +2051,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
 {
-    SwDoc* pDoc = createSwDoc("tdf144058.fodt");
+    createSwDoc("tdf144058.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -2051,7 +2088,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147507)
 {
-    SwDoc* pDoc = createSwDoc("tdf147507.fodt");
+    createSwDoc("tdf147507.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2071,7 +2109,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147507)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 {
     // check handling of overlapping redlines
-    SwDoc* pDoc = createSwDoc("tdf119019.docx");
+    createSwDoc("tdf119019.docx");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."),
                          getParagraph(2)->getString());
@@ -2102,7 +2141,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 {
     // check handling of overlapping redlines with Redo
-    SwDoc* pDoc = createSwDoc("tdf119019.docx");
+    createSwDoc("tdf119019.docx");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "
                                   "et netus et malesuada fames ac turpis egestas. "
@@ -2162,7 +2202,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
 {
-    SwDoc* pDoc = createSwDoc("tdf105413.fodt");
+    createSwDoc("tdf105413.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // all paragraphs have got Standard paragraph style
     for (int i = 1; i < 4; ++i)
@@ -2200,7 +2241,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
 {
-    SwDoc* pDoc = createSwDoc("num-parent-style.docx");
+    createSwDoc("num-parent-style.docx");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
@@ -2358,7 +2400,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
 {
-    SwDoc* pDoc = createSwDoc("tdf76817.docx");
+    createSwDoc("tdf76817.docx");
+    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -2423,7 +2466,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 {
     // The floating table in the test document is too small, so we don't provide an unfloat button
-    SwDoc* pDoc = createSwDoc("small_floating_table.odt");
+    createSwDoc("small_floating_table.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -2458,7 +2502,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
         OString sTestFileName = OUStringToOString(aTestFile, RTL_TEXTENCODING_UTF8);
         OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
-        SwDoc* pDoc = createSwDoc(sTestFileName.getStr());
+        createSwDoc(sTestFileName.getStr());
+        SwDoc* pDoc = getSwDoc();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
 
@@ -2493,7 +2538,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
 {
     // In read only mode we don't show the unfloat button even if we have a multipage floating table
-    SwDoc* pDoc = createSwDoc("unfloatable_floating_table.odt");
+    createSwDoc("unfloatable_floating_table.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->SetReadonlyOption(true);
@@ -2529,7 +2575,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
         OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
         // Test what happens when pushing the unfloat button
-        SwDoc* pDoc = createSwDoc("unfloatable_floating_table.docx");
+        createSwDoc("unfloatable_floating_table.docx");
+        SwDoc* pDoc = getSwDoc();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
 
@@ -2600,7 +2647,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
 {
-    SwDoc* pDoc = createSwDoc("tdf105413.fodt");
+    createSwDoc("tdf105413.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // all paragraphs are left-aligned with preset single line spacing
     for (int i = 1; i < 4; ++i)
@@ -2641,7 +2689,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
 {
-    SwDoc* pDoc = createSwDoc("tdf105413.fodt");
+    createSwDoc("tdf105413.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // all paragraphs with zero borders
     for (int i = 1; i < 4; ++i)
@@ -2679,7 +2728,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
 {
-    SwDoc* pDoc = createSwDoc("tdf122942.odt");
+    createSwDoc("tdf122942.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Do the moral equivalent of mouse button down, move and up.
@@ -2733,7 +2783,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132160)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
 {
-    SwDoc* pDoc = createSwDoc("tdf132160.odt");
+    createSwDoc("tdf132160.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -2757,7 +2808,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
 {
-    SwDoc* pDoc = createSwDoc("tdf132160.odt");
+    createSwDoc("tdf132160.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -2786,7 +2838,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
 {
-    SwDoc* pDoc = createSwDoc("tdf132160.odt");
+    createSwDoc("tdf132160.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -2816,7 +2869,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
 {
-    SwDoc* const pDoc(createSwDoc());
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // turn on red-lining and show changes
@@ -2844,7 +2898,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
 {
-    SwDoc* pDoc = createSwDoc("tdf132160.odt");
+    createSwDoc("tdf132160.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -2887,7 +2942,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
 {
-    SwDoc* pDoc = createSwDoc("tdf132160.odt");
+    createSwDoc("tdf132160.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -2932,7 +2988,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
 {
-    SwDoc* pDoc = createSwDoc("tdf142130.fodt");
+    createSwDoc("tdf142130.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2972,7 +3029,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
 {
-    SwDoc* pDoc = createSwDoc("tdf142196.fodt");
+    createSwDoc("tdf142196.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -3016,7 +3074,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142700)
 {
-    SwDoc* pDoc = createSwDoc("tdf142700.fodt");
+    createSwDoc("tdf142700.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -3060,7 +3119,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142700)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // switch on "Show changes in margin" mode
@@ -3113,7 +3173,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -3150,7 +3211,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140757)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
@@ -3205,7 +3267,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
     if (!pPDFium)
         return;
 
-    SwDoc* pDoc = createSwDoc("HiddenSection.odt");
+    createSwDoc("HiddenSection.odt");
+    SwDoc* pDoc = getSwDoc();
 
     // Check section conditional hidden status - all should be hidden (IsCondHidden == true)
     for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)

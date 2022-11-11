@@ -296,12 +296,6 @@ protected:
 
     void header();
 
-    void load(const char* pName, const char* pPassword = nullptr)
-    {
-        return loadURL(createFileURL(OUString::createFromAscii(pName)), pName, pPassword);
-
-    }
-
     void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
@@ -337,20 +331,21 @@ protected:
      * Creates a new document to be used with the internal sw/ API.
      *
      * Examples:
-     * SwDoc* pDoc = createSwDoc();
-     * SwDoc* pDoc = createSwDoc("test.fodt");
+     * createSwDoc();
+     * createSwDoc("test.fodt");
+     * createSwDoc("test.fodt", "test");
      */
-    SwDoc* createSwDoc(const char* pName = nullptr);
+    void createSwDoc(const char* pName = nullptr, const char* pPassword = nullptr);
 
     /**
      * As createSwDoc except a Web Document in Browse Mode
      */
-    SwDoc* createSwWebDoc(const char* pName = nullptr);
+    void createSwWebDoc(const char* pName = nullptr);
 
     /**
      * As createSwDoc except a Global Document
      */
-    SwDoc* createSwGlobalDoc(const char* pName = nullptr);
+    void createSwGlobalDoc(const char* pName = nullptr);
 
     /**
      * Gets SwXTextDocument from loaded component
@@ -375,6 +370,11 @@ private:
 
     void loadURL(OUString const& rURL, const char* pName, const char* pPassword);
 
+    void load(const char* pName, const char* pPassword = nullptr)
+    {
+        return loadURL(createFileURL(OUString::createFromAscii(pName)), pName, pPassword);
+
+    }
 };
 
 /**

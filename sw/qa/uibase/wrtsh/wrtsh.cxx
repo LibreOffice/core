@@ -37,7 +37,8 @@ class Test : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(Test, testInsertLineBreak)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a clearing break:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -60,7 +61,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertLineBreak)
 CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
 {
     // Given a document with a content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -96,7 +98,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
 {
     // Given a document with a checkbox (checked) content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -133,7 +136,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -149,7 +153,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -170,7 +175,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
 {
     // Given a document with a dropdown content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -221,7 +227,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -244,7 +251,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
 {
     // Given a document with a picture content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -289,7 +297,8 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertPictureContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -311,7 +320,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPictureContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
 {
     // Given a document with a date content control:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -350,7 +360,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertDateContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a date content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -371,7 +382,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDateContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a plain text content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -392,7 +404,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertComboBoxContentControl)
 {
     // Given an empty document:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // When inserting a combo box content control:
     dispatchCommand(mxComponent, ".uno:InsertComboBoxContentControl", {});

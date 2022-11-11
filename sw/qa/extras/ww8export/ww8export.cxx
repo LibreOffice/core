@@ -1516,7 +1516,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearFramePams)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
 {
-    load("tdf94386.odt");
+    createSwDoc("tdf94386.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();

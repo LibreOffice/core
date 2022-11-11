@@ -2653,7 +2653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles3)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
 {
-    load("table_styles_4.odt");
+    createSwDoc("table_styles_4.odt");
     // Test if loaded styles overwrite existing styles
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());

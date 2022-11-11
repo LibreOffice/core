@@ -379,7 +379,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
 {
     // Open the bugdoc
-    auto pDoc = createSwDoc("tdf138951.odt");
+    createSwDoc("tdf138951.odt");
+    auto pDoc = getSwDoc();
 
     // Get the only shape
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
@@ -449,7 +450,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 {
-    SwDoc* pDoc = createSwDoc("tdf42748.fodt");
+    createSwDoc("tdf42748.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -473,7 +475,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
 {
-    SwDoc* pDoc = createSwDoc("tdf115523.fodt");
+    createSwDoc("tdf115523.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -494,7 +497,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
 {
-    SwDoc* pDoc = createSwDoc("tdf115524.fodt");
+    createSwDoc("tdf115524.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -515,7 +519,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 {
-    SwDoc* pDoc = createSwDoc("tdf149710.fodt");
+    createSwDoc("tdf149710.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -557,7 +562,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
 {
-    SwDoc* pDoc = createSwDoc("tdf149709.fodt");
+    createSwDoc("tdf149709.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -614,7 +620,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMark)
 {
-    SwDoc* pDoc = createSwDoc("tdf149711.docx");
+    createSwDoc("tdf149711.docx");
+    SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 6);
 
@@ -631,7 +638,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
-    SwDoc* pDoc = createSwDoc("tdf85610.fodt");
+    createSwDoc("tdf85610.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -649,7 +657,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 {
-    SwDoc* pDoc = createSwDoc("tdf42748.fodt");
+    createSwDoc("tdf42748.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // create a 3-element list without change tracking
@@ -677,7 +686,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
 {
-    SwDoc* pDoc = createSwDoc("tdf42748.fodt");
+    createSwDoc("tdf42748.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // create a 3-element list without change tracking
@@ -710,7 +720,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 {
-    SwDoc* pDoc = createSwDoc("tdf104797.docx");
+    createSwDoc("tdf104797.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -775,7 +786,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
 {
-    SwDoc* pDoc = createSwDoc("tdf145719.odt");
+    createSwDoc("tdf145719.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -791,7 +803,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
 {
-    SwDoc* pDoc = createSwDoc("changed_table_rows.fodt");
+    createSwDoc("changed_table_rows.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -810,7 +823,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertion)
 {
-    SwDoc* pDoc = createSwDoc("tdf42748.fodt");
+    createSwDoc("tdf42748.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -845,7 +859,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideChangesMode)
 {
-    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
+    createSwDoc("tdf54819.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -877,7 +892,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 {
-    SwDoc* pDoc = createSwDoc("tdf125300.docx");
+    createSwDoc("tdf125300.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -900,7 +916,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116830)
 {
-    SwDoc* pDoc = createSwDoc("tdf116830.odt");
+    createSwDoc("tdf116830.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -927,7 +944,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116830)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114163)
 {
-    SwDoc* pDoc = createSwDoc("tdf114163.odt");
+    createSwDoc("tdf114163.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -952,7 +970,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf131707)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 {
-    SwDoc* pDoc = createSwDoc("tdf122225.docx");
+    createSwDoc("tdf122225.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -977,7 +996,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
 {
-    SwDoc* pDoc = createSwDoc("tdf125335.odt");
+    createSwDoc("tdf125335.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -992,7 +1012,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
 {
-    SwDoc* pDoc = createSwDoc("legend-itemorder-min.docx");
+    createSwDoc("legend-itemorder-min.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1007,7 +1028,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
 {
-    SwDoc* pDoc = createSwDoc("tdf75659.docx");
+    createSwDoc("tdf75659.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1024,7 +1046,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
 {
-    SwDoc* pDoc = createSwDoc("tdf136816.odt");
+    createSwDoc("tdf136816.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1039,7 +1062,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
 {
-    SwDoc* pDoc = createSwDoc("long_legendentry.docx");
+    createSwDoc("long_legendentry.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1056,7 +1080,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
 {
-    CPPUNIT_ASSERT(createSwDoc("tdf138465min.docx"));
+    createSwDoc("tdf138465min.docx");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1072,7 +1096,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
 {
-    SwDoc* pDoc = createSwDoc("tdf123268.odt");
+    createSwDoc("tdf123268.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1090,7 +1115,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
 {
-    SwDoc* pDoc = createSwDoc("tdf133005.odt");
+    createSwDoc("tdf133005.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1116,7 +1142,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
 {
-    SwDoc* pDoc = createSwDoc("tdf115630.docx");
+    createSwDoc("tdf115630.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1141,7 +1168,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
 {
-    SwDoc* pDoc = createSwDoc("tdf108021.odt");
+    createSwDoc("tdf108021.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1156,7 +1184,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
 {
-    SwDoc* pDoc = createSwDoc("tdf125334.odt");
+    createSwDoc("tdf125334.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1171,7 +1200,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
 {
-    SwDoc* pDoc = createSwDoc("tdf122800.odt");
+    createSwDoc("tdf122800.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1186,7 +1216,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
 {
-    SwDoc* pDoc = createSwDoc("testTruncatedAxisLabel.odt");
+    createSwDoc("testTruncatedAxisLabel.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1204,7 +1235,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
 {
-    SwDoc* pDoc = createSwDoc("tdf128996.docx");
+    createSwDoc("tdf128996.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1218,7 +1250,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
 {
-    SwDoc* pDoc = createSwDoc("tdf126244.docx");
+    createSwDoc("tdf126244.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1246,7 +1279,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
 {
-    SwDoc* pDoc = createSwDoc("tdf127304.odt");
+    createSwDoc("tdf127304.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1271,7 +1305,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
 {
-    SwDoc* pDoc = createSwDoc("horizontal_multilevel.odt");
+    createSwDoc("horizontal_multilevel.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1367,7 +1402,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
 {
-    SwDoc* pDoc = createSwDoc("xaxis-labelbreak.docx");
+    createSwDoc("xaxis-labelbreak.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1405,7 +1441,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146272)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
 {
-    SwDoc* pDoc = createSwDoc("tdf138773.docx");
+    createSwDoc("tdf138773.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1423,7 +1460,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 {
-    SwDoc* pDoc = createSwDoc("tdf124796.odt");
+    createSwDoc("tdf124796.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1441,7 +1479,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
 {
-    SwDoc* pDoc = createSwDoc("tdf72727.odt");
+    createSwDoc("tdf72727.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1460,7 +1499,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
 {
-    SwDoc* pDoc = createSwDoc("tdf130969.docx");
+    createSwDoc("tdf130969.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1475,7 +1515,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
 {
-    SwDoc* pDoc = createSwDoc("tdf40260.odt");
+    createSwDoc("tdf40260.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1493,7 +1534,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 {
-    SwDoc* pDoc = createSwDoc("tdf129054.docx");
+    createSwDoc("tdf129054.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1519,7 +1561,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
 {
-    SwDoc* pDoc = createSwDoc("testAreaChartNumberFormat.docx");
+    createSwDoc("testAreaChartNumberFormat.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1534,7 +1577,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
 {
-    SwDoc* pDoc = createSwDoc("tdf134866.docx");
+    createSwDoc("tdf134866.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1549,7 +1593,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
 {
-    SwDoc* pDoc = createSwDoc("tdf137116.docx");
+    createSwDoc("tdf137116.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1569,7 +1614,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
 {
-    SwDoc* pDoc = createSwDoc("tdf137154.docx");
+    createSwDoc("tdf137154.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1589,7 +1635,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
 {
-    SwDoc* pDoc = createSwDoc("outside_long_data_label.docx");
+    createSwDoc("outside_long_data_label.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1607,7 +1654,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
 {
-    SwDoc* pDoc = createSwDoc("tdf130031.docx");
+    createSwDoc("tdf130031.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1626,7 +1674,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
 {
-    SwDoc* pDoc = createSwDoc("tdf130242.odt");
+    createSwDoc("tdf130242.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1653,7 +1702,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
 {
-    SwDoc* pDoc = createSwDoc("piechart_leaderline.odt");
+    createSwDoc("piechart_leaderline.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1668,7 +1718,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
 {
-    SwDoc* pDoc = createSwDoc("tdf138018.docx");
+    createSwDoc("tdf138018.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1685,7 +1736,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 {
-    SwDoc* pDoc = createSwDoc("tdf130380.docx");
+    createSwDoc("tdf130380.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1708,7 +1760,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
 {
-    SwDoc* pDoc = createSwDoc("tdf129095.docx");
+    createSwDoc("tdf129095.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1723,7 +1776,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
 {
-    SwDoc* pDoc = createSwDoc("tdf132956.docx");
+    createSwDoc("tdf132956.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1739,7 +1793,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
 {
     // Open the bugdoc and check if it went wrong
-    SwDoc* pDoc = createSwDoc("tdf137819.fodt");
+    createSwDoc("tdf137819.fodt");
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // Change the anchor if the textbox to As_char
@@ -1761,7 +1816,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
 {
-    SwDoc* pDoc = createSwDoc("tdf122014.docx");
+    createSwDoc("tdf122014.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1778,7 +1834,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
 {
-    SwDoc* pDoc = createSwDoc("tdf134659.docx");
+    createSwDoc("tdf134659.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1795,7 +1852,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134235)
 {
-    SwDoc* pDoc = createSwDoc("tdf134235.docx");
+    createSwDoc("tdf134235.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1812,7 +1870,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134235)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
 {
-    SwDoc* pDoc = createSwDoc("tdf134676.docx");
+    createSwDoc("tdf134676.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1829,7 +1888,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
 {
-    SwDoc* pDoc = createSwDoc("tdf134146.docx");
+    createSwDoc("tdf134146.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1848,7 +1908,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
 {
-    SwDoc* pDoc = createSwDoc("tdf136061.docx");
+    createSwDoc("tdf136061.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1862,7 +1923,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
 {
-    SwDoc* pDoc = createSwDoc("tdf116925.docx");
+    createSwDoc("tdf116925.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1882,7 +1944,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 {
-    SwDoc* pDoc = createSwDoc("tdf117028.docx");
+    createSwDoc("tdf117028.docx");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1904,7 +1967,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
 {
-    SwDoc* pDoc = createSwDoc("tdf106390.odt");
+    createSwDoc("tdf106390.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1922,7 +1986,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion1)
 {
-    SwDoc* pDoc = createSwDoc("table-extrusion1.odt");
+    createSwDoc("table-extrusion1.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1942,7 +2007,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion1)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion2)
 {
-    SwDoc* pDoc = createSwDoc("table-extrusion2.odt");
+    createSwDoc("table-extrusion2.odt");
+    SwDoc* pDoc = getSwDoc();
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -1961,7 +2027,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion2)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116848)
 {
-    SwDoc* pDoc = createSwDoc("tdf116848.odt");
+    createSwDoc("tdf116848.odt");
+    SwDoc* pDoc = getSwDoc();
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
@@ -2175,7 +2242,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf141220)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTextBoxChangeViaUNO)
 {
-    CPPUNIT_ASSERT(createSwDoc("TextBoxFrame.odt"));
+    createSwDoc("TextBoxFrame.odt");
     // this file has a shape and a frame inside. Try to set up
     // the frame for the shape as textbox. Before this was not
     // implemented. This will be necessary for proper WPG import.
@@ -2216,7 +2283,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTextBoxChangeViaUNO)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
 {
-    auto pDoc = createSwDoc("Tdf121509.odt");
+    createSwDoc("Tdf121509.odt");
+    auto pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // Get all shape/frame formats
@@ -2304,7 +2372,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
         aOptions.Commit();
     });
 
-    SwDoc* pDoc = createSwDoc("user-field-type-language.fodt");
+    createSwDoc("user-field-type-language.fodt");
+    SwDoc* pDoc = getSwDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->UpdateFields();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -2351,7 +2420,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
 {
 #if !defined(_WIN32) && !defined(MACOSX)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
-    SwDoc* pDoc = createSwDoc("tdf124261.docx");
+    createSwDoc("tdf124261.docx");
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPageFrame = pLayout->GetLower();
     CPPUNIT_ASSERT(pPageFrame->IsPageFrame());

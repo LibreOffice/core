@@ -608,20 +608,18 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
-SwDoc* SwModelTestBase::createSwDoc(const char* pName)
+void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 {
     if (!pName)
         loadURL("private:factory/swriter", pName, nullptr);
     else
-        load(pName);
+        load(pName, pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
-
-    return getSwDoc();
 }
 
-SwDoc* SwModelTestBase::createSwWebDoc(const char* pName)
+void SwModelTestBase::createSwWebDoc(const char* pName)
 {
     if (!pName)
         loadURL("private:factory/swriter/web", pName, nullptr);
@@ -630,11 +628,9 @@ SwDoc* SwModelTestBase::createSwWebDoc(const char* pName)
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.WebDocument"));
-
-    return getSwDoc();
 }
 
-SwDoc* SwModelTestBase::createSwGlobalDoc(const char* pName)
+void SwModelTestBase::createSwGlobalDoc(const char* pName)
 {
     if (!pName)
         loadURL("private:factory/swriter/GlobalDocument", pName, nullptr);
@@ -643,8 +639,6 @@ SwDoc* SwModelTestBase::createSwGlobalDoc(const char* pName)
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
-
-    return getSwDoc();
 }
 
 SwXTextDocument& SwModelTestBase::getSwXTextDocument()
