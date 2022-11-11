@@ -298,20 +298,9 @@ protected:
 
     void load(const char* pName, const char* pPassword = nullptr)
     {
-        return loadURLWithComponent(createFileURL(OUString::createFromAscii(pName)),
-                                    "com.sun.star.text.TextDocument", pName, pPassword);
+        return loadURL(createFileURL(OUString::createFromAscii(pName)), pName, pPassword);
 
     }
-
-    void load_web(const char* pName, const char* pPassword = nullptr)
-    {
-        return loadURLWithComponent(createFileURL(OUString::createFromAscii(pName)),
-                                    "com.sun.star.text.WebDocument", pName, pPassword);
-    }
-
-    void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
-
-    void loadURLWithComponent(OUString const& rURL, OUString const& rComponent, const char* pName, const char* pPassword);
 
     void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
 
@@ -359,6 +348,11 @@ protected:
     SwDoc* createSwWebDoc(const char* pName = nullptr);
 
     /**
+     * As createSwDoc except a Global Document
+     */
+    SwDoc* createSwGlobalDoc(const char* pName = nullptr);
+
+    /**
      * Gets SwXTextDocument from loaded component
      */
     SwXTextDocument& getSwXTextDocument();
@@ -375,6 +369,12 @@ protected:
     void WrapReqifFromTempFile(SvMemoryStream& rStream);
 
     bool isExported(){ return mbExported; }
+
+private:
+    void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
+
+    void loadURL(OUString const& rURL, const char* pName, const char* pPassword);
+
 };
 
 /**

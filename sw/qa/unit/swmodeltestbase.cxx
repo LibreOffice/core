@@ -462,8 +462,7 @@ void SwModelTestBase::setTestInteractionHandler(const char* pPassword,
 
 void SwModelTestBase::header() {}
 
-void SwModelTestBase::loadURLWithComponent(OUString const& rURL, OUString const& rComponent,
-                                           const char* pName, const char* pPassword)
+void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -500,7 +499,7 @@ void SwModelTestBase::loadURLWithComponent(OUString const& rURL, OUString const&
     }
 
     mxComponent
-        = loadFromDesktop(rURL, rComponent, comphelper::containerToSequence(aFilterOptions));
+        = loadFromDesktop(rURL, OUString(), comphelper::containerToSequence(aFilterOptions));
 
     if (pPassword)
     {
@@ -517,7 +516,7 @@ void SwModelTestBase::reload(const char* pFilter, const char* pName, const char*
 {
     save(OUString::createFromAscii(pFilter), pName, pPassword);
 
-    loadURLWithComponent(maTempFile.GetURL(), "com.sun.star.text.TextDocument", pName, pPassword);
+    loadURL(maTempFile.GetURL(), pName, pPassword);
 }
 
 void SwModelTestBase::save(const OUString& aFilterName, const char* pName, const char* pPassword)
@@ -612,10 +611,12 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 SwDoc* SwModelTestBase::createSwDoc(const char* pName)
 {
     if (!pName)
-        loadURLWithComponent("private:factory/swriter", "com.sun.star.text.TextDocument", pName,
-                             nullptr);
+        loadURL("private:factory/swriter", pName, nullptr);
     else
         load(pName);
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
 
     return getSwDoc();
 }
@@ -623,10 +624,25 @@ SwDoc* SwModelTestBase::createSwDoc(const char* pName)
 SwDoc* SwModelTestBase::createSwWebDoc(const char* pName)
 {
     if (!pName)
-        loadURLWithComponent("private:factory/swriter/web", "com.sun.star.text.TextDocument", pName,
-                             nullptr);
+        loadURL("private:factory/swriter/web", pName, nullptr);
     else
-        load_web(pName);
+        load(pName);
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.WebDocument"));
+
+    return getSwDoc();
+}
+
+SwDoc* SwModelTestBase::createSwGlobalDoc(const char* pName)
+{
+    if (!pName)
+        loadURL("private:factory/swriter/GlobalDocument", pName, nullptr);
+    else
+        load(pName);
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
 
     return getSwDoc();
 }

@@ -2333,7 +2333,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
 {
-    SwDoc* const pGlobalDoc = createSwDoc("DUMMY.odm");
+    SwDoc* const pGlobalDoc = createSwGlobalDoc("DUMMY.odm");
     CPPUNIT_ASSERT_EQUAL(
         size_t(1),
         pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
