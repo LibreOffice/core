@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_IMAGE_H
 
 #include <vcl/bitmapex.hxx>
+#include <vcl/gdimtf.hxx>
 
 class SalGraphics;
 
@@ -32,7 +33,8 @@ private:
     Size maSizePixel;
     /// If set - defines the bitmap via images.zip*
     OUString maStockName;
-
+    /// rare case of dynamically created Image contents
+    std::unique_ptr<GDIMetaFile> mxMetaFile;
 
     /// Original bitmap - or cache of a potentially scaled bitmap
     BitmapEx maBitmapEx;
@@ -42,6 +44,7 @@ private:
 
 public:
     ImplImage(const BitmapEx& rBitmapEx);
+    ImplImage(const GDIMetaFile& rMetaFile);
     ImplImage(OUString aStockName);
 
     bool isStock() const

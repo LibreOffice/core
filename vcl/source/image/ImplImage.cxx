@@ -21,7 +21,9 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/ImageTree.hxx>
 #include <bitmap/BitmapDisabledImageFilter.hxx>
@@ -40,6 +42,13 @@ ImplImage::ImplImage(const BitmapEx &rBitmapEx)
 ImplImage::ImplImage(OUString aStockName)
     : maBitmapChecksum(0)
     , maStockName(std::move(aStockName))
+{
+}
+
+ImplImage::ImplImage(const GDIMetaFile& rMetaFile)
+    : maBitmapChecksum(0)
+    , maSizePixel(rMetaFile.GetPrefSize())
+    , mxMetaFile(new GDIMetaFile(rMetaFile))
 {
 }
 
@@ -142,14 +151,25 @@ bool ImplImage::isEqual(const ImplImage &ref) const
 
 BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGraphics)
 {
-    if (isStock() && pGraphics)
+    if ((isStock() || mxMetaFile) && pGraphics)
     {   // check we have the right bitmap cached.
         double fScale = 1.0;
         pGraphics->ShouldDownscaleIconsAtSurface(&fScale);
         Size aTarget(maSizePixel.Width()*fScale,
                      maSizePixel.Height()*fScale);
         if (maBitmapEx.GetSizePixel() != aTarget)
-            loadStockAtScale(pGraphics, maBitmapEx);
+        {
+            if (isStock())
+                loadStockAtScale(pGraphics, maBitmapEx);
+            else // if (mxMetaFile)
+            {
+                ScopedVclPtrInstance<VirtualDevice> aVDev(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                aVDev->SetOutputSizePixel(aTarget);
+                mxMetaFile->WindStart();
+                mxMetaFile->Play(*aVDev, Point(), aTarget);
+                maBitmapEx = aVDev->GetBitmapEx(Point(), aTarget);
+            }
+        }
     }
     return getBitmapEx(bDisabled);
 }

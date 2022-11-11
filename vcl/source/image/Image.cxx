@@ -47,6 +47,8 @@ Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
         OUString aPath;
         if (aGraphic.getOriginURL().startsWith("private:graphicrepository/", &aPath))
             mpImplData = std::make_shared<ImplImage>(aPath);
+        else if (aGraphic.GetType() == GraphicType::GdiMetafile)
+            mpImplData = std::make_shared<ImplImage>(aGraphic.GetGDIMetaFile());
         else
             ImplInit(aGraphic.GetBitmapEx());
     }
