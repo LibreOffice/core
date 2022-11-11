@@ -348,11 +348,6 @@ protected:
     void createSwGlobalDoc(const char* pName = nullptr);
 
     /**
-     * Gets SwXTextDocument from loaded component
-     */
-    SwXTextDocument& getSwXTextDocument();
-
-    /**
      * Gets SwDoc from loaded component
      */
     SwDoc* getSwDoc();

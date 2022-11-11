@@ -641,14 +641,13 @@ void SwModelTestBase::createSwGlobalDoc(const char* pName)
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
 }
 
-SwXTextDocument& SwModelTestBase::getSwXTextDocument()
+SwDoc* SwModelTestBase::getSwDoc()
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    return *pTextDoc;
-}
 
-SwDoc* SwModelTestBase::getSwDoc() { return getSwXTextDocument().GetDocShell()->GetDoc(); }
+    return pTextDoc->GetDocShell()->GetDoc();
+}
 
 void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
 {
