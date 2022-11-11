@@ -83,6 +83,8 @@ namespace svx
         virtual OUString GetQuickHelpText() const = 0;
         virtual void SetImage(VirtualDevice* pVirDev) = 0;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const = 0;
+        // true -> use Device to Record to Metafile, false -> Render to Device
+        virtual bool RecordVirtualDevice() const = 0;
         virtual vcl::ImageType GetImageSize() const = 0;
         virtual Size GetItemSize(const Size& rImageSize) const = 0;
     };
@@ -103,6 +105,10 @@ namespace svx
         virtual OUString GetQuickHelpText() const override;
         virtual void SetImage(VirtualDevice* pVirDev) override;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+        virtual bool RecordVirtualDevice() const  override
+        {
+            return true;
+        }
         virtual vcl::ImageType GetImageSize() const override;
         virtual Size GetItemSize(const Size& rImageSize) const override;
     };
@@ -121,6 +127,10 @@ namespace svx
         virtual OUString GetQuickHelpText() const override;
         virtual void SetImage(VirtualDevice* pVirDev) override;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+        virtual bool RecordVirtualDevice() const  override
+        {
+            return false;
+        }
         virtual vcl::ImageType GetImageSize() const override;
         virtual Size GetItemSize(const Size& rImageSize) const override;
     };
