@@ -6,10 +6,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
 from uitest.framework import UITestCase
-from uitest.uihelper.common import select_pos, get_state_as_dict
+from uitest.uihelper.common import select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_url_for_data_file
+
 
 class tdf127900(UITestCase):
 

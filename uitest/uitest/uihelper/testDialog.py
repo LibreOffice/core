@@ -5,8 +5,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
+
 
 # opens the dialogs, closes it with the given close button
 # and if there is an "OK" button open the dialog again and close it by using the OK button

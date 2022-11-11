@@ -8,11 +8,8 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict
-import time
-from uitest.uihelper.common import select_pos
 #Bug 85360 - LibreOffice crashes and crashes desktop too on inserting 4th slide
+
 
 class insertSlide(UITestCase):
 
