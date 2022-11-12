@@ -324,6 +324,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext(std::move( xContext )),
         m_bForceGenericFields(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
+        m_bIsDecimalComma( false ),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
         m_bSetDateValue( false ),
@@ -5556,8 +5557,10 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     icu::RegexMatcher rmatch6("\\b(ABOVE|BELOW|LEFT|RIGHT)\\b", usInput, rMatcherFlags, status);
     usInput = rmatch6.replaceAll(icu::UnicodeString(" $1 "), status);
 
-    /* fix decimal separator */
-    if ( m_pSettingsTable->GetDecimalSymbol() == "," )
+    /* DOCX allows to set decimal symbol independently from the locale of the document, so if
+     * needed, convert decimal comma to get working formula in a document language (locale),
+     * which doesn't use decimal comma */
+    if ( m_pSettingsTable->GetDecimalSymbol() == "," && !m_bIsDecimalComma )
     {
         icu::RegexMatcher rmatch7("\\b([0-9]+),([0-9]+([eE][-]?[0-9]+)?)\\b", usInput, rMatcherFlags, status);
         usInput = rmatch7.replaceAll(icu::UnicodeString("$1.$2"), status);

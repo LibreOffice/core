@@ -1400,7 +1400,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)
 {
-    // load a document with table formulas with comma delimiter
+    // load a document with table formulas with comma delimiter,
+    // but with a document language with default point delimiter
     createSwDoc("tdf148799.docx");
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1428,6 +1429,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)
     CPPUNIT_ASSERT_EQUAL(OUString("2345"), xCellA3->getString());
     uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("D5"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("23684.5"), xCellA4->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151993)
+{
+    // load a document with table formulas with comma delimiter
+    // (with a document language with default comma delimiter)
+    createSwDoc("tdf151993.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // check formula update
+
+    // put cursor in the first table row
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
+
+    // This was 0
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("30"), xCellA1->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148849)

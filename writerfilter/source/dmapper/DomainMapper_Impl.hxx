@@ -476,6 +476,8 @@ private:
     std::stack<std::pair<TextAppendContext, bool>>                                  m_aHeaderFooterTextAppendStack;
     std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
+    /// Type of decimal symbol associated to the document language in Writer locale definition
+    bool                                                                            m_bIsDecimalComma;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
@@ -687,6 +689,7 @@ public:
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
+    void SetIsDecimalComma() { m_bIsDecimalComma = true; };
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
