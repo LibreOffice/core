@@ -213,7 +213,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             InitClipRegion();
 
         if( mbOutputClipped )
-            return false;
+            return true;
 
         if( mbInitLineColor )
             InitLineColor();
