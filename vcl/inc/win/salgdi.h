@@ -78,8 +78,6 @@ private:
 
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
-    bool                    mbAliasSymbolsHigh;
-    bool                    mbAliasSymbolsLow;
     LOGFONTW                maLogFont;
 };
 

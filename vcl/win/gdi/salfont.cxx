@@ -509,30 +509,8 @@ WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& 
     mnId( 0 ),
     meWinCharSet(rEnumFont.elfLogFont.lfCharSet),
     mnPitchAndFamily(rMetric.tmPitchAndFamily),
-    mbAliasSymbolsHigh( false ),
-    mbAliasSymbolsLow( false ),
     maLogFont(rEnumFont.elfLogFont)
 {
-    if (meWinCharSet == SYMBOL_CHARSET)
-    {
-        if ((mnPitchAndFamily & TMPF_TRUETYPE) != 0)
-        {
-            // truetype fonts need their symbols as U+F0xx
-            mbAliasSymbolsHigh = true;
-        }
-        else if ((mnPitchAndFamily & (TMPF_VECTOR|TMPF_DEVICE))
-                                  == (TMPF_VECTOR|TMPF_DEVICE))
-        {
-            // scalable device fonts (e.g. builtin printer fonts)
-            // need their symbols as U+00xx
-            mbAliasSymbolsLow  = true;
-        }
-        else if ((mnPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) == 0)
-        {
-            // bitmap fonts need their symbols as U+F0xx
-            mbAliasSymbolsHigh = true;
-        }
-    }
 }
 
 WinFontFace::~WinFontFace()
