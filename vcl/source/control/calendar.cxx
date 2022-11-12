@@ -260,6 +260,9 @@ void Calendar::ImplFormat()
             nDay %= 7;
         }
 
+        // header position for the last day of week
+        mnDayOfWeekAry[7] = mnMonthWidth;
+
         mbCalc = false;
     }
 
@@ -705,9 +708,9 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             Point aStartPos(nDayX, nDeltaY);
             rRenderContext.DrawLine(aStartPos, Point(nDayX + (7 * mnDayWidth), nDeltaY));
             std::vector<sal_Int32> aTmp;
-            for (int k=0; k<6; ++k)
+            for (int k=0; k<7; ++k)
                 aTmp.push_back(mnDayOfWeekAry[k+1]);
-            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, aTmp);
+            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, aTmp, {}, 0, aTmp.size());
 
             // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();

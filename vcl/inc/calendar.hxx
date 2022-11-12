@@ -126,7 +126,7 @@ class Calendar final : public Control
     tools::Rectangle       maPrevRect;
     tools::Rectangle       maNextRect;
     OUString        maDayOfWeekText;
-    sal_Int32       mnDayOfWeekAry[7];
+    sal_Int32       mnDayOfWeekAry[8];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
     Date            maFirstDate;

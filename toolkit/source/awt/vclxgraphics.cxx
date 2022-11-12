@@ -468,7 +468,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
         {
             aDXA[i] = rLongs[i];
         }
-        mpOutputDevice->DrawTextArray( Point( x, y ), rText, aDXA );
+        mpOutputDevice->DrawTextArray( Point( x, y ), rText, aDXA , {}, 0, rText.getLength());
     }
 }
 

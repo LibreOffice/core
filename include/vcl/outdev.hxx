@@ -1038,9 +1038,9 @@ public:
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                o3tl::span<const sal_Int32> pDXAry,
-                                               o3tl::span<const sal_Bool> pKashidaAry={},
-                                               sal_Int32 nIndex = 0,
-                                               sal_Int32 nLen = -1,
+                                               o3tl::span<const sal_Bool> pKashidaAry,
+                                               sal_Int32 nIndex,
+                                               sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
     tools::Long                        GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
