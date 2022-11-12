@@ -169,6 +169,7 @@ struct VCL_DLLPUBLIC CairoCommon
     cairo_t* getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const;
     void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
                              const basegfx::B2DRange& rExtents) const;
+
     cairo_t* createTmpCompatibleCairoContext() const;
 
     void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
@@ -198,6 +199,11 @@ struct VCL_DLLPUBLIC CairoCommon
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
+
+private:
+    void doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop, sal_Int32 nExtentsRight,
+                        sal_Int32 nExtentsBottom, cairo_surface_t* const surface,
+                        sal_Int32 nWidth) const;
 };
 
 class SurfaceHelper
