@@ -179,7 +179,7 @@ OTableEditorDelUndoAct::~OTableEditorDelUndoAct()
 void OTableEditorDelUndoAct::Undo()
 {
     // Insert the deleted line
-    sal_uLong nPos;
+    sal_Int32 nPos;
 
     std::shared_ptr<OTableRow>  pNewOrigRow;
     std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
