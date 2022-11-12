@@ -58,6 +58,7 @@
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Context.hxx>
+#include <unotools/viewoptions.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,6 +80,8 @@ const char CMDURL_SPART_ONLY    [] = "Style:string=";
 const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
 constexpr OUStringLiteral STYLEPROP_UINAME = u"DisplayName";
+constexpr OUStringLiteral MACRO_SELECTOR_CONFIGNAME = u"MacroSelectorDialog";
+constexpr OUStringLiteral LAST_RUN_MACRO_INFO = u"LastRunMacro";
 
 OUString SfxStylesInfo_Impl::generateCommand(
     std::u16string_view sFamily, std::u16string_view sStyle)
@@ -1159,6 +1162,11 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_aStylesInfo.init(aModuleName, xModel);
     m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
+    // The hide/show commands below are a workaround to make scroll_to_row work as expected in kf5/x11
+    m_xDialog->hide();
+    m_xDialog->show();
+
+    LoadLastUsedMacro();
     UpdateUI();
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -1225,7 +1233,6 @@ SvxScriptSelectorDialog::UpdateUI()
     {
         OUString sMessage = m_xCommands->GetHelpText();
         m_xDescriptionText->set_text(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
-
         m_xOKButton->set_sensitive(true);
     }
     else
@@ -1243,6 +1250,7 @@ IMPL_LINK(SvxScriptSelectorDialog, ClickHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xOKButton.get())
     {
+        SaveLastUsedMacro();
         m_xDialog->response(RET_OK);
     }
 }
@@ -1272,6 +1280,102 @@ SvxScriptSelectorDialog::GetScriptURL() const
     }
 
     return result;
+}
+
+void
+SvxScriptSelectorDialog::SaveLastUsedMacro()
+{
+    // Gets the current selection in the dialog as a series of selected entries
+    OUString sMacroInfo;
+    sMacroInfo = m_xCommands->get_selected_text();
+    weld::TreeView& xCategories = m_xCategories->get_widget();
+    std::unique_ptr<weld::TreeIter> xIter = xCategories.make_iterator();
+
+    if (!xCategories.get_selected(xIter.get()))
+        return;
+
+    do
+    {
+        sMacroInfo = xCategories.get_text(*xIter) + "|" + sMacroInfo;
+    } while (xCategories.iter_parent(*xIter));
+
+    SvtViewOptions( EViewType::Dialog, MACRO_SELECTOR_CONFIGNAME ).SetUserItem(
+        LAST_RUN_MACRO_INFO, Any(sMacroInfo));
+}
+
+void
+SvxScriptSelectorDialog::LoadLastUsedMacro()
+{
+    SvtViewOptions aDlgOpt( EViewType::Dialog, MACRO_SELECTOR_CONFIGNAME );
+    if (!aDlgOpt.Exists())
+        return;
+
+    OUString sMacroInfo;
+    aDlgOpt.GetUserItem(LAST_RUN_MACRO_INFO) >>= sMacroInfo;
+    if (sMacroInfo.isEmpty())
+        return;
+
+    // Counts how many entries exist in the macro info string
+    sal_Int16 nInfoParts = 0;
+    sal_Int16 nLastIndex = sMacroInfo.indexOf('|');
+    if (nLastIndex > -1)
+    {
+        nInfoParts = 1;
+        while ( nLastIndex != -1 )
+        {
+            nInfoParts++;
+            nLastIndex = sMacroInfo.indexOf('|', nLastIndex + 1);
+        }
+    }
+
+    weld::TreeView& xCategories = m_xCategories->get_widget();
+    std::unique_ptr<weld::TreeIter> xIter = xCategories.make_iterator();
+    if (!xCategories.get_iter_first(*xIter))
+        return;
+
+    // Expand the nodes in the category tree
+    OUString sNodeToExpand;
+    bool bIsIterValid;
+    sal_Int16 nOpenedNodes = 0;
+    for (sal_Int16 i=0; i<nInfoParts - 1; i++)
+    {
+        sNodeToExpand = sMacroInfo.getToken(i, '|');
+        bIsIterValid = true;
+        while (bIsIterValid && xCategories.get_text(*xIter) != sNodeToExpand)
+            bIsIterValid = xCategories.iter_next_sibling(*xIter);
+
+        if (bIsIterValid)
+        {
+            xCategories.expand_row(*xIter);
+            nOpenedNodes++;
+        }
+        if (xCategories.iter_has_child(*xIter))
+            xCategories.iter_children(*xIter);
+        else if (nOpenedNodes < nInfoParts - 1)
+            // If the number of levels in the tree is smaller than the
+            // number of parts in the macro info string, then return
+            return;
+    }
+    xCategories.select(*xIter);
+    xCategories.scroll_to_row(*xIter);
+    m_xCategories->GroupSelected();
+
+    // Select the macro in the command tree
+    weld::TreeView& xCommands = m_xCommands->get_widget();
+    xIter = xCommands.make_iterator();
+    if (!xCommands.get_iter_first(*xIter))
+        return;
+
+    OUString sMacroName = sMacroInfo.getToken(nInfoParts - 1, '|');
+    bIsIterValid = true;
+    while (bIsIterValid && xCommands.get_text(*xIter) != sMacroName)
+        bIsIterValid = xCommands.iter_next_sibling(*xIter);
+
+    if (bIsIterValid)
+    {
+        xCommands.scroll_to_row(*xIter);
+        xCommands.select(*xIter);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

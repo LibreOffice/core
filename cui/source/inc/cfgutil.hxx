@@ -263,6 +263,8 @@ public:
 
     OUString    GetScriptURL() const;
     void        SetRunLabel();
+    void        SaveLastUsedMacro();
+    void        LoadLastUsedMacro();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
