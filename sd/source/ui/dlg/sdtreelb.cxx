@@ -1296,23 +1296,18 @@ void SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
 {
     if (pObj)
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_iter_first(*xEntry))
-        {
-            do
+        m_xTreeView->all_foreach([this, &pObj](weld::TreeIter& rEntry){
+            if (weld::fromId<SdrObject*>(m_xTreeView->get_id(rEntry)) == pObj)
             {
-                if (weld::fromId<SdrObject*>(m_xTreeView->get_id(*xEntry)) == pObj)
-                {
-                    // Only scroll to the row of the first selected. And only when the treeview
-                    // doesn't have the focus.
-                    if (!m_xTreeView->has_focus() && m_xTreeView->get_selected_rows().empty())
-                        m_xTreeView->set_cursor(*xEntry);
-                    m_xTreeView->select(*xEntry);
-                    break;
-                }
+                // Only scroll to the row of the first selected. And only when the treeview
+                // doesn't have the focus.
+                if (!m_xTreeView->has_focus() && m_xTreeView->get_selected_rows().empty())
+                    m_xTreeView->set_cursor(rEntry);
+                m_xTreeView->select(rEntry);
+                return true;
             }
-            while (m_xTreeView->iter_next(*xEntry));
-        }
+            return false;
+        });
     }
 }
 
