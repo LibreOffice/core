@@ -53,7 +53,11 @@ void ScInterpreterContext::ResetTokens()
 
 void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
 {
-    mpDoc = &rDoc;
+    if (mpDoc != &rDoc)
+    {
+        mxScLookupCache.reset();
+        mpDoc = &rDoc;
+    }
     mpFormatter = pFormatter;
 }
 
