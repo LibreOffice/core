@@ -70,12 +70,22 @@
 #include <swcrsr.hxx>
 #include <hints.hxx>
 #include <frameformats.hxx>
+#include <OnlineAccessibilityCheck.hxx>
 #ifdef DBG_UTIL
 #include <sal/backtrace.hxx>
 #endif
 
 using namespace ::com::sun::star::i18n;
 
+namespace sw
+{
+
+void AccessibilityCheckStatus::reset()
+{
+    pCollection.reset();
+}
+
+}
 
 /*
  * Some local helper functions for the attribute set handle of a content node.
@@ -2188,5 +2198,11 @@ void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
     assert(it != m_aAnchoredFlys.end());
     m_aAnchoredFlys.erase(it);
 }
+
+void SwNode::resetAndQueueAccessibilityCheck()
+{
+    GetDoc().getOnlineAccessibilityCheck()->resetAndQueue(this);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

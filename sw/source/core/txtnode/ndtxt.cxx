@@ -496,6 +496,9 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         }
         SetSmartTagDirty( true );
 
+        resetAndQueueAccessibilityCheck();
+        pNode->resetAndQueueAccessibilityCheck();
+
         if ( pNode->HasHints() )
         {
             if ( pNode->m_pSwpHints->CanBeDeleted() )
@@ -632,6 +635,9 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             pNode->SetSmartTags( pList2->SplitList( nSplitPos ) );
             SetSmartTags( std::move(pList2) );
         }
+
+        resetAndQueueAccessibilityCheck();
+        pNode->resetAndQueueAccessibilityCheck();
 
         if (pContentIndexRestore)
         {   // call before making frames and before RegisterToNode
@@ -1091,6 +1097,8 @@ SwContentNode *SwTextNode::JoinNext()
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );
 
+        resetAndQueueAccessibilityCheck();
+
         if (bOldHasNumberingWhichNeedsLayoutUpdate || HasNumberingWhichNeedsLayoutUpdate(*this))
         {
             // Repaint all text frames that belong to this numbering to avoid outdated generated
@@ -1192,6 +1200,7 @@ void SwTextNode::JoinPrev()
         SetWrong( std::move(pList) );
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );
+        resetAndQueueAccessibilityCheck();
         InvalidateNumRule();
         sw::CheckResetRedlineMergeFlag(*this,
                 eOldMergeFlag == SwNode::Merge::NonFirst

@@ -87,6 +87,7 @@ namespace sw
 struct AccessibilityCheckStatus
 {
     std::unique_ptr<sfx::AccessibilityIssueCollection> pCollection;
+    void reset();
 };
 
 }
@@ -334,6 +335,8 @@ public:
     {
         return m_aAccessibilityCheckStatus;
     }
+
+    void resetAndQueueAccessibilityCheck();
 
 private:
     SwNode( const SwNode & rNodes ) = delete;
