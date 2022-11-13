@@ -25,7 +25,7 @@ enum class IssueObject
     TEXT,
 };
 
-class AccessibilityIssue final : public sfx::AccessibilityIssue
+class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
 {
 private:
     IssueObject m_eIssueObject;
@@ -58,6 +58,10 @@ public:
 
     bool canGotoIssue() const override;
     void gotoIssue() const override;
+
+    sal_Int32 getStart() { return m_nStart; }
+    sal_Int32 getEnd() { return m_nEnd; }
+    SwNode* getNode() { return m_pNode; }
 };
 
 } // end sw namespace

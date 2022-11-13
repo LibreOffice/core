@@ -26,11 +26,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_accessibilitycheck, \
     sfx \
     subsequenttest \
     sw \
-	swqahelper \
+    swqahelper \
     test \
     unotest \
     utl \
     tl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_core_accessibilitycheck,\
