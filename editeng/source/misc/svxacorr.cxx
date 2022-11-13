@@ -1280,7 +1280,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 
 // search preceding opening quote in the paragraph before the insert position
 static bool lcl_HasPrecedingChar( std::u16string_view rTxt, sal_Int32 nPos,
-                const sal_Unicode sPrecedingChar, const sal_Unicode* aStopChars )
+                const sal_Unicode sPrecedingChar, const sal_Unicode sStopChar, const sal_Unicode* aStopChars )
 {
     sal_Unicode cTmpChar;
 
@@ -1288,6 +1288,9 @@ static bool lcl_HasPrecedingChar( std::u16string_view rTxt, sal_Int32 nPos,
         cTmpChar = rTxt[ --nPos ];
         if ( cTmpChar == sPrecedingChar )
             return true;
+
+        if ( cTmpChar == sStopChar )
+            return false;
 
         for ( const sal_Unicode* pCh = aStopChars; *pCh; ++pCh )
             if ( cTmpChar == *pCh )
@@ -1358,13 +1361,15 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         ( ( eLang == LANGUAGE_HUNGARIAN &&
                             lcl_HasPrecedingChar( rTxt, nInsPos,
                                 bSttQuote ? aStopDoubleAngleQuoteStart[0] : aStopDoubleAngleQuoteEnd[0],
-                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 1 ) ) ||
+                                bSttQuote ? aStopDoubleAngleQuoteStart[1] : aStopDoubleAngleQuoteEnd[1],
+                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 2 ) ) ||
                           ( eLang.anyOf(
                                 LANGUAGE_ROMANIAN,
                                 LANGUAGE_ROMANIAN_MOLDOVA ) &&
                             lcl_HasPrecedingChar( rTxt, nInsPos,
                                 bSttQuote ? aStopDoubleAngleQuoteStart[0] : aStopDoubleAngleQuoteEndRo[0],
-                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEndRo + 1 ) ) ) )
+                                bSttQuote ? aStopDoubleAngleQuoteStart[1] : aStopDoubleAngleQuoteEndRo[1],
+                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEndRo + 2 ) ) ) )
                     {
                         LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
                         // only if the opening double quotation mark is the default one
@@ -1375,7 +1380,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         // tdf#128860 use apostrophe outside of second level quotation in Czech, German, Icelandic,
                         // Slovak and Slovenian instead of the – in this case, bad – closing quotation mark U+2018.
                         // tdf#123786 the same for Russian and Ukrainian
-                        ( ( eLang.anyOf (
+                        ( eLang.anyOf (
                                  LANGUAGE_CZECH,
                                  LANGUAGE_GERMAN,
                                  LANGUAGE_GERMAN_SWISS,
@@ -1384,17 +1389,33 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                  LANGUAGE_GERMAN_LIECHTENSTEIN,
                                  LANGUAGE_ICELANDIC,
                                  LANGUAGE_SLOVAK,
-                                 LANGUAGE_SLOVENIAN ) &&
-                            !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEnd[0],  aStopSingleQuoteEnd + 1 ) ) ||
+                                 LANGUAGE_SLOVENIAN ) ) )
+                    {
+                        sal_Unicode sStartChar = GetStartSingleQuote();
+                        sal_Unicode sEndChar = GetEndSingleQuote();
+                        if ( !sStartChar || !sEndChar ) {
+                            LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
+                            if ( !sStartChar ) sStartChar = rLcl.getQuotationMarkStart()[0];
+                            if ( !sEndChar ) sEndChar = rLcl.getQuotationMarkStart()[0];
+                        }
+                        if ( !lcl_HasPrecedingChar( rTxt, nInsPos, sStartChar, sEndChar, aStopSingleQuoteEnd + 1 ) )
+                        {
+                            CharClass& rCC = GetCharClass( eLang );
+                            if ( rCC.isLetter(rTxt, nInsPos-1) )
+                            {
+                                eType = ACQuotes::UseApostrophe;
+                            }
+                        }
+                    }
+                    else if ( bSingle && nInsPos && !bSttQuote &&
                           ( eLang.anyOf (
                                  LANGUAGE_RUSSIAN,
                                  LANGUAGE_UKRAINIAN ) &&
-                            !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEndRuUa[0],  aStopSingleQuoteEndRuUa + 1 ) ) ) )
+                            !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEndRuUa[0], aStopSingleQuoteEndRuUa[1],  aStopSingleQuoteEndRuUa + 2 ) ) )
                     {
                         LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
                         CharClass& rCC = GetCharClass( eLang );
-                        if ( ( rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEnd[0]) ||
-                             rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEndRuUa[0]) ) &&
+                        if ( rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEndRuUa[0]) &&
                              // use apostrophe only after letters, not after digits or punctuation
                              rCC.isLetter(rTxt, nInsPos-1) )
                         {

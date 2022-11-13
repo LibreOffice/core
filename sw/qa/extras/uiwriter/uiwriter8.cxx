@@ -37,8 +37,22 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
+#include <officecfg/Office/Common.hxx>
 
 /// 8th set of tests asserting the behavior of Writer user interface shells.
+namespace
+{
+void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
+{
+    for (const char16_t c : rStr)
+    {
+        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+} //namespace
+
 class SwUiWriterTest8 : public SwModelTestBase
 {
 public:
@@ -2496,6 +2510,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "/root/page[1]/body/txt[6]/anchored/fly/section/txt[3]/SwParaPortion/"
                 "SwLineLayout[1]/SwLinePortion[1]",
                 "portion", "another sub three");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151801)
+{
+    Resetter resetter([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);
+        officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(0, pBatch);
+        return pBatch->commit();
+    });
+    // Set Single Quotes › and ‹
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(8250, pBatch);
+    officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(8249, pBatch);
+    pBatch->commit();
+
+    createSwDoc("tdf151801.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    // Single starting quote: 'word -> ›word
+    emulateTyping(*pTextDoc, u"'word");
+    OUString sReplaced(u"\u203Aword");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+    // Single ending quote: ›word' -> ›word‹
+    emulateTyping(*pTextDoc, u"'");
+    sReplaced += u"\u2039";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+    // Use apostrophe without preceding starting quote: word' -> word’
+    emulateTyping(*pTextDoc, u" word'");
+    sReplaced += u" word\u2019";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
