@@ -1808,6 +1808,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     emulateTyping(*pXTextDocument, u"word] ");
     sReplaced += u"𐳮𐳛𐳢𐳇] "; // This was "word]" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // tdf#148672 transliterate words with parenthesis (libnumbertext 1.0.11)
+    emulateTyping(*pXTextDocument, u"(word) ");
+    sReplaced += u"(𐳮𐳛𐳢𐳇) "; // This was "(word)" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"(word ");
+    sReplaced += u"(𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"word) ");
+    sReplaced += u"𐳮𐳛𐳢𐳇) "; // This was "word)" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"{word} ");
+    sReplaced += u"{𐳮𐳛𐳢𐳇} "; // This was "(word)" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"{word ");
+    sReplaced += u"{𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"word} ");
+    sReplaced += u"𐳮𐳛𐳢𐳇} "; // This was "word)" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"[word] ");
+    sReplaced += u"[𐳮𐳛𐳢𐳇] "; // This was "(word)" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    emulateTyping(*pXTextDocument, u"[word ");
+    sReplaced += u"[𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testAutoCorr)
