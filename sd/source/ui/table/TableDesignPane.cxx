@@ -24,14 +24,18 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <tools/debug.hxx>
@@ -44,15 +48,21 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdetc.hxx>
+#include <svx/svxdlg.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <o3tl/enumrange.hxx>
 
 #include <TableDesignPane.hxx>
 
+#include <stlsheet.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <bitmaps.hlst>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <EventMultiplexer.hxx>
@@ -89,6 +99,7 @@ const std::string_view gPropNames[CB_COUNT] =
 
 TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBase)
     : mrBase(rBase)
+    , m_xMenu(rBuilder.weld_menu("menu"))
     , m_xValueSet(new TableValueSet(rBuilder.weld_scrolled_window("previewswin", true)))
     , m_xValueSetWin(new weld::CustomWeld(rBuilder, "previews", *m_xValueSet))
 {
@@ -97,6 +108,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
     m_xValueSet->setModal(false);
     m_xValueSet->SetColor();
     m_xValueSet->SetSelectHdl(LINK(this, TableDesignWidget, implValueSetHdl));
+    m_xValueSet->SetContextMenuHandler(LINK(this, TableDesignWidget, implContextMenuHandler));
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
@@ -114,6 +126,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
         mxTableFamily.set( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
+        mxCellFamily.set( xFamilies->getByName( "cell" ), UNO_QUERY_THROW );
     }
     catch (const Exception&)
     {
@@ -127,6 +140,263 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
 TableDesignWidget::~TableDesignWidget()
 {
     removeListener();
+}
+
+void TableDesignWidget::setDocumentModified()
+{
+    try
+    {
+        Reference<XController> xController(mrBase.GetController(), UNO_SET_THROW);
+        Reference<util::XModifiable> xModifiable(xController->getModel(), UNO_QUERY_THROW);
+        xModifiable->setModified(true);
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::setDocumentModified()");
+    }
+}
+
+IMPL_LINK(TableDesignWidget, implContextMenuHandler, const Point*, pPoint, void)
+{
+    auto nClickedItemId = pPoint ? m_xValueSet->GetItemId(*pPoint) : m_xValueSet->GetSelectedItemId();
+
+    try
+    {
+        if (nClickedItemId > mxTableFamily->getCount())
+            return;
+
+        if (nClickedItemId)
+        {
+            Reference<XStyle> xStyle(mxTableFamily->getByIndex(nClickedItemId - 1), UNO_QUERY_THROW);
+
+            m_xMenu->set_visible("clone", true);
+            m_xMenu->set_visible("format", true);
+            m_xMenu->set_visible("delete", xStyle->isUserDefined());
+            m_xMenu->set_visible("reset", !xStyle->isUserDefined());
+            m_xMenu->set_sensitive("reset", Reference<util::XModifiable>(xStyle, UNO_QUERY_THROW)->isModified());
+        }
+        else
+        {
+            m_xMenu->set_visible("clone", false);
+            m_xMenu->set_visible("format", false);
+            m_xMenu->set_visible("delete", false);
+            m_xMenu->set_visible("reset", false);
+        }
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::implContextMenuHandler()");
+    }
+
+    m_xValueSet->SelectItem(nClickedItemId);
+
+    Point aPosition = pPoint ? *pPoint : m_xValueSet->GetItemRect(nClickedItemId).Center();
+    OString aCommand = m_xMenu->popup_at_rect(m_xValueSet->GetDrawingArea(), ::tools::Rectangle(aPosition, Size(1,1)));
+
+    if (aCommand == "new")
+        InsertStyle();
+    else if (aCommand == "clone")
+        CloneStyle();
+    else if (aCommand == "delete")
+        DeleteStyle();
+    else if (aCommand == "reset")
+        ResetStyle();
+    else if (!aCommand.isEmpty())
+        EditStyle(aCommand);
+}
+
+namespace
+{
+    OUString getNewValidTableStyleName(const Reference<XNameContainer>& rTableFamily)
+    {
+        OUString aName;
+        sal_Int32 nIndex = 1;
+        do
+        {
+            aName = "table" + OUString::number(nIndex++);
+        }
+        while(rTableFamily->hasByName(aName));
+
+        return aName;
+    }
+}
+
+void TableDesignWidget::InsertStyle()
+{
+    try
+    {
+        Reference<XSingleServiceFactory> xFactory(mxTableFamily, UNO_QUERY_THROW);
+        Reference<XNameContainer> xTableFamily(mxTableFamily, UNO_QUERY_THROW);
+        Reference<XNameReplace> xTableStyle(xFactory->createInstance(), UNO_QUERY_THROW);
+        const OUString aName(getNewValidTableStyleName(xTableFamily));
+        xTableFamily->insertByName(aName, Any(xTableStyle));
+
+        Reference<XStyle> xCellStyle(mxCellFamily->getByName("default"), UNO_QUERY_THROW);
+
+        xTableStyle->replaceByName("body", Any(xCellStyle));
+        xTableStyle->replaceByName("odd-rows" , Any(xCellStyle));
+        xTableStyle->replaceByName("odd-columns" , Any(xCellStyle));
+        xTableStyle->replaceByName("first-row" , Any(xCellStyle));
+        xTableStyle->replaceByName("first-column" , Any(xCellStyle));
+        xTableStyle->replaceByName("last-row" , Any(xCellStyle));
+        xTableStyle->replaceByName("last-column" , Any(xCellStyle));
+
+        updateControls();
+        selectStyle(aName);
+        setDocumentModified();
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::InsertStyle()");
+    }
+}
+
+void TableDesignWidget::CloneStyle()
+{
+    try
+    {
+        Reference<XIndexAccess> xSrcTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
+
+        Reference<XSingleServiceFactory> xFactory(mxTableFamily, UNO_QUERY_THROW);
+        Reference<XNameContainer> xTableFamily(mxTableFamily, UNO_QUERY_THROW);
+        Reference<XIndexReplace> xDestTableStyle(xFactory->createInstance(), UNO_QUERY_THROW);
+        const OUString aName(getNewValidTableStyleName(xTableFamily));
+        xTableFamily->insertByName(aName, Any(xDestTableStyle));
+
+        for (sal_Int32 i = 0; i < xDestTableStyle->getCount(); ++i)
+        {
+            Reference<XStyle> xSrcCellStyle(xSrcTableStyle->getByIndex(i), UNO_QUERY);
+            if (xSrcCellStyle && xSrcCellStyle->isUserDefined())
+            {
+                Reference<XSingleServiceFactory> xCellFactory(mxCellFamily, UNO_QUERY_THROW);
+                Reference<XStyle> xDestCellStyle(xCellFactory->createInstance(), UNO_QUERY_THROW);
+                xDestCellStyle->setParentStyle(xSrcCellStyle->getParentStyle());
+                mxCellFamily->insertByName(xDestCellStyle->getName(), Any(xDestCellStyle));
+
+                rtl::Reference xSrcStyleSheet = static_cast<SdStyleSheet*>(xSrcCellStyle.get());
+                rtl::Reference xDestStyleSheet = static_cast<SdStyleSheet*>(xDestCellStyle.get());
+
+                xDestStyleSheet->GetItemSet().Put(xSrcStyleSheet->GetItemSet());
+
+                xDestTableStyle->replaceByIndex(i, Any(xDestCellStyle));
+            }
+            else
+                xDestTableStyle->replaceByIndex(i, Any(xSrcCellStyle));
+        }
+
+        updateControls();
+        selectStyle(aName);
+        setDocumentModified();
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::CloneStyle()");
+    }
+}
+
+void TableDesignWidget::ResetStyle()
+{
+    try
+    {
+        Reference<XIndexReplace> xTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
+
+        for (sal_Int32 i = 0; i < xTableStyle->getCount(); ++i)
+        {
+            Reference<XStyle> xCellStyle(xTableStyle->getByIndex(i), UNO_QUERY);
+            if (xCellStyle && xCellStyle->isUserDefined())
+                xTableStyle->replaceByIndex(i, mxCellFamily->getByName(xCellStyle->getParentStyle()));
+        }
+
+        Reference<util::XModifiable>(xTableStyle, UNO_QUERY_THROW)->setModified(false);
+
+        updateControls();
+        setDocumentModified();
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::ResetStyle()");
+    }
+}
+
+void TableDesignWidget::DeleteStyle()
+{
+    try
+    {
+        Reference<XStyle> xTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
+
+        if (xTableStyle->isInUse())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                m_xValueSet->GetDrawingArea(), VclMessageType::Question, VclButtonsType::YesNo, SdResId(STR_REMOVE_TABLESTYLE)));
+
+            if (xBox->run() != RET_YES)
+                return;
+        }
+
+        Reference<XNameContainer>(mxTableFamily, UNO_QUERY_THROW)->removeByName(xTableStyle->getName());
+
+        updateControls();
+        setDocumentModified();
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::DeleteStyle()");
+    }
+}
+
+void TableDesignWidget::EditStyle(std::string_view rCommand)
+{
+    try
+    {
+        Reference<XNameReplace> xTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
+        Reference<XStyle> xCellStyle(xTableStyle->getByName(OUString::fromUtf8(rCommand)), UNO_QUERY_THROW);
+
+        bool bUserDefined = xCellStyle->isUserDefined();
+        if (!bUserDefined)
+        {
+            Reference<XSingleServiceFactory> xFactory(mxCellFamily, UNO_QUERY_THROW);
+            Reference<XStyle> xNewStyle(xFactory->createInstance(), UNO_QUERY_THROW);
+            xNewStyle->setParentStyle(xCellStyle->getName());
+            xCellStyle = xNewStyle;
+        }
+
+        rtl::Reference xStyleSheet = static_cast<SdStyleSheet*>(xCellStyle.get());
+        SfxItemSet aNewAttr(xStyleSheet->GetItemSet());
+
+        // merge drawing layer text distance items into SvxBoxItem used by the dialog
+        SvxBoxItem aBoxItem(sdr::table::SvxTableController::TextDistancesToSvxBoxItem(aNewAttr));
+        aNewAttr.Put(aBoxItem);
+
+        // inner borders do not apply to a cell style
+        SvxBoxInfoItem aBoxInfoItem(aNewAttr.Get(SDRATTR_TABLE_BORDER_INNER));
+        aBoxInfoItem.SetTable(false);
+        aNewAttr.Put(aBoxInfoItem);
+
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxFormatCellsDialog(
+            mrBase.GetFrameWeld(), &aNewAttr, *mrBase.GetDrawView()->GetModel(), true) : nullptr);
+        if (pDlg && pDlg->Execute() == RET_OK)
+        {
+            if (!bUserDefined)
+            {
+                mxCellFamily->insertByName(xCellStyle->getName(), Any(xCellStyle));
+                xTableStyle->replaceByName(OUString::fromUtf8(rCommand), Any(xCellStyle));
+            }
+
+            SfxItemSet aNewSet(*pDlg->GetOutputItemSet());
+            sdr::table::SvxTableController::SvxBoxItemToTextDistances(aBoxItem, aNewSet);
+            sdr::properties::CleanupFillProperties(aNewSet);
+            xStyleSheet->GetItemSet().Put(aNewSet);
+            xStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
+
+            updateControls();
+            setDocumentModified();
+        }
+    }
+    catch (Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::EditStyle()");
+    }
 }
 
 static SfxBindings* getBindings( ViewShellBase const & rBase )
@@ -161,6 +431,11 @@ void TableDesignWidget::ApplyStyle()
         {
             Reference< XNameAccess > xNames( mxTableFamily, UNO_QUERY_THROW );
             sStyleName = xNames->getElementNames()[nIndex];
+        }
+        else if (nIndex == mxTableFamily->getCount())
+        {
+            InsertStyle();
+            return;
         }
 
         if( sStyleName.isEmpty() )
@@ -281,6 +556,15 @@ void TableDesignWidget::onSelectionChanged()
     }
 }
 
+bool TableValueSet::Command(const CommandEvent& rEvent)
+{
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return ValueSet::Command(rEvent);
+
+    maContextMenuHandler.Call(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
+    return true;
+}
+
 void TableValueSet::Resize()
 {
     ValueSet::Resize();
@@ -302,10 +586,10 @@ void TableValueSet::Resize()
     if (nRowCount < 1)
         nRowCount = 1;
 
-    int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
+    int nVisibleRowCount = std::min(nRowCount, getMaxRowCount());
 
     SetColCount (static_cast<sal_uInt16>(nColumnCount));
-    SetLineCount (static_cast<sal_uInt16>(nRowCount));
+    SetLineCount (static_cast<sal_uInt16>(nVisibleRowCount));
 
     if( !m_bModal )
     {
@@ -364,25 +648,24 @@ void TableDesignWidget::updateControls()
     m_xValueSet->updateSettings();
     m_xValueSet->Resize();
 
-    sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
     {
         Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( "TableTemplate" ), UNO_QUERY );
         if( xNamed.is() )
-        {
-            const OUString sStyleName( xNamed->getName() );
-
-            Reference< XNameAccess > xNames( mxTableFamily, UNO_QUERY );
-            if( xNames.is() )
-            {
-                Sequence< OUString > aNames( xNames->getElementNames() );
-                sal_Int32 nIndex = comphelper::findValue(aNames, sStyleName);
-                if (nIndex != -1)
-                    nSelection = static_cast<sal_uInt16>(nIndex) + 1;
-            }
-        }
+            selectStyle(xNamed->getName());
     }
-    m_xValueSet->SelectItem( nSelection );
+}
+
+void TableDesignWidget::selectStyle(std::u16string_view rStyle)
+{
+    Reference< XNameAccess > xNames( mxTableFamily, UNO_QUERY );
+    if( xNames.is() )
+    {
+        Sequence< OUString > aNames( xNames->getElementNames() );
+        sal_Int32 nIndex = comphelper::findValue(aNames, rStyle);
+        if (nIndex != -1)
+            m_xValueSet->SelectItem(static_cast<sal_uInt16>(nIndex) + 1);
+    }
 }
 
 void TableDesignWidget::addListener()
@@ -735,8 +1018,10 @@ void TableDesignWidget::FillDesignPreviewControl()
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
         }
+        m_xValueSet->InsertItem(++nCount, Image(StockImage::Yes, BMP_INSERT_TABLESTYLE), SdResId(STR_INSERT_TABLESTYLE));
+
         sal_Int32 nCols = 3;
-        sal_Int32 nRows = (nCount+2)/3;
+        sal_Int32 nRows = std::min<sal_Int32>((nCount+2)/3, TableValueSet::getMaxRowCount());
         m_xValueSet->SetColCount(nCols);
         m_xValueSet->SetLineCount(nRows);
         WinBits nStyle = m_xValueSet->GetStyle() & ~WB_VSCROLL;

@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::container { class XIndexAccess; class XNameContainer; }
 namespace com::sun::star::drawing { class XDrawView; }
 
 namespace sd
@@ -52,12 +52,16 @@ class TableValueSet final : public ValueSet
 {
 private:
     bool m_bModal;
+    Link<const Point*, void> maContextMenuHandler;
 public:
     TableValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
+    virtual bool Command(const CommandEvent& rEvent) override;
     virtual void Resize() override;
     virtual void StyleUpdated() override;
     void updateSettings();
     void setModal(bool bModal) { m_bModal = bModal; }
+    void SetContextMenuHandler(const Link<const Point*, void>& rLink) { maContextMenuHandler = rLink; }
+    static constexpr int getMaxRowCount() { return 3; }
 };
 
 class TableDesignWidget final
@@ -71,20 +75,29 @@ public:
 
     void ApplyOptions();
     void ApplyStyle();
+    void InsertStyle();
+    void CloneStyle();
+    void ResetStyle();
+    void DeleteStyle();
+    void EditStyle(std::string_view rCommand);
 
 private:
     void addListener();
     void removeListener();
     void updateControls();
+    void selectStyle(std::u16string_view rStyle);
+    void setDocumentModified();
 
     void FillDesignPreviewControl();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(implContextMenuHandler, const Point*, void);
     DECL_LINK(implValueSetHdl, ValueSet*, void);
     DECL_LINK(implCheckBoxHdl, weld::Toggleable&, void);
 
     ViewShellBase& mrBase;
 
+    std::unique_ptr<weld::Menu> m_xMenu;
     std::unique_ptr<TableValueSet> m_xValueSet;
     std::unique_ptr<weld::CustomWeld> m_xValueSetWin;
     std::unique_ptr<weld::CheckButton> m_aCheckBoxes[CB_COUNT];
@@ -92,6 +105,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxSelectedTable;
     css::uno::Reference< css::drawing::XDrawView > mxView;
     css::uno::Reference< css::container::XIndexAccess > mxTableFamily;
+    css::uno::Reference< css::container::XNameContainer > mxCellFamily;
 };
 
 class TableDesignPane final : public PanelLayout

@@ -23,10 +23,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XReset.hpp>
 
@@ -60,7 +60,7 @@ namespace sdr::table {
 
 typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
-typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener, XPropertySet > TableDesignStyleBase;
+typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexReplace, XModifiable, XModifyListener, XPropertySet > TableDesignStyleBase;
 
 namespace {
 
@@ -97,6 +97,9 @@ public:
     virtual sal_Int32 SAL_CALL getCount() override ;
     virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
+    // XIndexReplace
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) override;
+
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) override;
 
@@ -108,6 +111,10 @@ public:
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
+
+    // XModifiable
+    virtual sal_Bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const Reference< XModifyListener >& aListener ) override;
@@ -356,6 +363,21 @@ Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index )
 }
 
 
+// XIndexReplace
+
+void SAL_CALL TableDesignStyle::replaceByIndex( sal_Int32 Index, const Any& aElement )
+{
+    if( (Index < 0) || (Index >= style_count) )
+        throw IndexOutOfBoundsException();
+
+    const CellStyleNameMap& rMap = getCellStyleNameMap();
+    auto iter = std::find_if(rMap.begin(), rMap.end(),
+        [&Index](const auto& item) { return Index == item.second; });
+    if (iter != rMap.end())
+        replaceByName(iter->first, aElement);
+}
+
+
 // XNameReplace
 
 
@@ -448,6 +470,19 @@ void TableDesignStyle::addVetoableChangeListener( const OUString&, const Referen
 
 void TableDesignStyle::removeVetoableChangeListener( const OUString&,const Reference<XVetoableChangeListener>& )
 {
+}
+
+// XModifiable
+
+sal_Bool TableDesignStyle::isModified()
+{
+    return mbModified;
+}
+
+void TableDesignStyle::setModified( sal_Bool bModified )
+{
+    mbModified = bModified;
+    notifyModifyListener();
 }
 
 

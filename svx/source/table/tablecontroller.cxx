@@ -890,18 +890,34 @@ void SvxTableController::onSelect( sal_uInt16 nSId )
     gotoCell( aStart, true, nullptr );
 }
 
-namespace
+SvxBoxItem SvxTableController::TextDistancesToSvxBoxItem(const SfxItemSet& rAttrSet)
 {
-    SvxBoxItem mergeDrawinglayerTextDistancesAndSvxBoxItem(const SfxItemSet& rAttrSet)
-    {
-        // merge drawing layer text distance items into SvxBoxItem used by the dialog
-        SvxBoxItem aBoxItem( rAttrSet.Get( SDRATTR_TABLE_BORDER ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LEFTDIST).GetValue()), SvxBoxItemLine::LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST).GetValue()), SvxBoxItemLine::RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_UPPERDIST).GetValue()), SvxBoxItemLine::TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LOWERDIST).GetValue()), SvxBoxItemLine::BOTTOM );
-        return aBoxItem;
-    }
+    // merge drawing layer text distance items into SvxBoxItem used by the dialog
+    SvxBoxItem aBoxItem( rAttrSet.Get( SDRATTR_TABLE_BORDER ) );
+    aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LEFTDIST).GetValue()), SvxBoxItemLine::LEFT );
+    aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST).GetValue()), SvxBoxItemLine::RIGHT );
+    aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_UPPERDIST).GetValue()), SvxBoxItemLine::TOP );
+    aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LOWERDIST).GetValue()), SvxBoxItemLine::BOTTOM );
+    return aBoxItem;
+}
+
+void SvxTableController::SvxBoxItemToTextDistances(const SvxBoxItem& pOriginalItem, SfxItemSet& rAttrSet)
+{
+    const SvxBoxItem* pNewItem( rAttrSet.GetItemIfSet( SDRATTR_TABLE_BORDER ) );
+    if ( !pNewItem )
+        return;
+
+    if( pNewItem->GetDistance( SvxBoxItemLine::LEFT ) != pOriginalItem.GetDistance( SvxBoxItemLine::LEFT ) )
+        rAttrSet.Put(makeSdrTextLeftDistItem( pNewItem->GetDistance( SvxBoxItemLine::LEFT ) ) );
+
+    if( pNewItem->GetDistance( SvxBoxItemLine::RIGHT ) != pOriginalItem.GetDistance( SvxBoxItemLine::RIGHT ) )
+        rAttrSet.Put(makeSdrTextRightDistItem( pNewItem->GetDistance( SvxBoxItemLine::RIGHT ) ) );
+
+    if( pNewItem->GetDistance( SvxBoxItemLine::TOP ) != pOriginalItem.GetDistance( SvxBoxItemLine::TOP ) )
+        rAttrSet.Put(makeSdrTextUpperDistItem( pNewItem->GetDistance( SvxBoxItemLine::TOP ) ) );
+
+    if( pNewItem->GetDistance( SvxBoxItemLine::BOTTOM ) != pOriginalItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
+        rAttrSet.Put(makeSdrTextLowerDistItem( pNewItem->GetDistance( SvxBoxItemLine::BOTTOM ) ) );
 }
 
 void SvxTableController::onFormatTable(const SfxRequest& rReq)
@@ -919,7 +935,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
     SfxItemSet aNewAttr(rModel.GetItemPool());
 
     // merge drawing layer text distance items into SvxBoxItem used by the dialog
-    SvxBoxItem aBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(aNewAttr));
+    SvxBoxItem aBoxItem(TextDistancesToSvxBoxItem(aNewAttr));
 
     SvxBoxInfoItem aBoxInfoItem( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
 
@@ -966,19 +982,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
                 aNewSet.Put(aBoxInfoItem);
             }
 
-            SvxBoxItem aNewBoxItem( aNewSet.Get( SDRATTR_TABLE_BORDER ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) != aBoxItem.GetDistance( SvxBoxItemLine::LEFT ) )
-                aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) != aBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) )
-                aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) != aBoxItem.GetDistance( SvxBoxItemLine::TOP ) )
-                aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) != aBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
-                aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) ) );
+            SvxBoxItemToTextDistances(aBoxItem, aNewSet);
 
             if (checkTableObject() && mxTable.is())
             {
@@ -3210,7 +3214,7 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
             nCellPosFlags |= (nCol > aEnd.mnCol)    ? CellPosFlag::After : CellPosFlag::NONE;
 
             const SfxItemSet& rSet = xCell->GetItemSet();
-            SvxBoxItem aCellBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(rSet));
+            SvxBoxItem aCellBoxItem(TextDistancesToSvxBoxItem(rSet));
             lcl_MergeCommonBorderAttr( aLinesState, aCellBoxItem, nCellPosFlags );
         }
     }

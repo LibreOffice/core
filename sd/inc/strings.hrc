@@ -484,5 +484,7 @@
 #define RID_SVXSTR_MENU_LAST                            NC_("RID_SVXSTR_MENU_LAST", "~Last Slide")
 
 #define STR_CLOSE_PANE                                  NC_("STR_CLOSE_PANE", "Close Pane")
+#define STR_INSERT_TABLESTYLE                           NC_("STR_INSERT_TABLESTYLE", "Add a new design")
+#define STR_REMOVE_TABLESTYLE                           NC_("STR_REMOVE_TABLESTYLE", "The selected style is in use in this document.\nIf you will delete this style, tables using it will revert to the default style.\nDo you still wish to delete this style?\n")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,6 +78,7 @@ inline constexpr OUStringLiteral BMP_POINTER_ICON = u"sd/res/pointericon.png";
 inline constexpr OUStringLiteral BMP_WAIT_ICON = u"sd/res/waiticon.png";
 inline constexpr OUStringLiteral BMP_FADE_EFFECT_INDICATOR = u"sd/res/fade_effect_indicator.png";
 inline constexpr OUStringLiteral BMP_CUSTOM_ANIMATION_INDICATOR = u"sd/res/click_16.png";
+inline constexpr OUStringLiteral BMP_INSERT_TABLESTYLE = u"sd/res/addtablestyle.png";
 // Presenter Screen bitmaps:
 inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_LEFT = u"sd/res/presenterscreen-BorderLeft.png";
 inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_DISABLED = u"sd/res/presenterscreen-ButtonSlideNextDisabled.png";

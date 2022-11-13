@@ -87,6 +87,9 @@ public:
         const SdrTableObj& rObj,
         const rtl::Reference< sdr::SelectionController >& xRefController);
 
+    static SvxBoxItem TextDistancesToSvxBoxItem(const SfxItemSet& rAttrSet);
+    static void SvxBoxItemToTextDistances(const SvxBoxItem& pOriginalItem, SfxItemSet& rAttrSet);
+
     SVX_DLLPRIVATE void MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
     SVX_DLLPRIVATE void SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll);
     void SetAttrToSelectedShape(const SfxItemSet& rAttr);
