@@ -1280,7 +1280,7 @@ void ScDocument::ClearLookupCaches()
     GetNonThreadedContext().mxScLookupCache.reset();
     mxScSortedRangeCache->aCacheMap.clear();
     // Clear lookup cache in all interpreter-contexts in the (threaded/non-threaded) pools.
-    ScInterpreterContextPool::ClearLookupCaches();
+    ScInterpreterContextPool::ClearLookupCaches(this);
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)

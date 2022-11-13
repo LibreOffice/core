@@ -74,7 +74,11 @@ void ScInterpreterContext::Cleanup()
     ResetTokens();
 }
 
-void ScInterpreterContext::ClearLookupCache() { mxScLookupCache.reset(); }
+void ScInterpreterContext::ClearLookupCache(const ScDocument* pDoc)
+{
+    if (pDoc == mpDoc)
+        mxScLookupCache.reset();
+}
 
 SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
 {
@@ -161,12 +165,12 @@ void ScInterpreterContextPool::ReturnToPool()
 }
 
 // static
-void ScInterpreterContextPool::ClearLookupCaches()
+void ScInterpreterContextPool::ClearLookupCaches(const ScDocument* pDoc)
 {
     for (auto& rPtr : aThreadedInterpreterPool.maPool)
-        rPtr->ClearLookupCache();
+        rPtr->ClearLookupCache(pDoc);
     for (auto& rPtr : aNonThreadedInterpreterPool.maPool)
-        rPtr->ClearLookupCache();
+        rPtr->ClearLookupCache(pDoc);
 }
 
 /* ScThreadedInterpreterContextGetterGuard */

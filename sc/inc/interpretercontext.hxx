@@ -82,7 +82,7 @@ private:
     void ResetTokens();
     void SetDocAndFormatter(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
     void Cleanup();
-    void ClearLookupCache();
+    void ClearLookupCache(const ScDocument* pDoc);
     void initFormatTable();
     SvNumberFormatter* mpFormatter;
     mutable NFIndexAndFmtType maNFTypeCache;
@@ -135,7 +135,7 @@ class ScInterpreterContextPool
 
 public:
     // Only to be used to clear lookup cache in all pool elements
-    static void ClearLookupCaches();
+    static void ClearLookupCaches(const ScDocument* pDoc);
 };
 
 class ScThreadedInterpreterContextGetterGuard
