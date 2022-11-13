@@ -72,6 +72,9 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>[NatNum1]#٬###٫00</FormatCode>
     </FormatElement>
+    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER" formatindex="101">
+      <FormatCode>[NatNum12 cardinal]0</FormatCode>
+    </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>[NatNum1]0٫00E+000</FormatCode>
     </FormatElement>
