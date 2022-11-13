@@ -109,7 +109,7 @@ public:
     void notifyModifyListener();
 
     // this function is called upon disposing the component
-    virtual void disposing(std::unique_lock<std::mutex>&) override;
+    virtual void disposing(std::unique_lock<std::mutex>& aGuard) override;
 
     static const CellStyleNameMap& getCellStyleNameMap();
 
@@ -374,8 +374,10 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
 // XComponent
 
 
-void TableDesignStyle::disposing(std::unique_lock<std::mutex>&)
+void TableDesignStyle::disposing(std::unique_lock<std::mutex>& aGuard)
 {
+    maModifyListeners.disposeAndClear(aGuard, EventObject(Reference<XComponent>(this)));
+
     for(Reference<XStyle> & rCellStyle : maCellStyles)
     {
         Reference<XModifyBroadcaster> xBroadcaster(rCellStyle, UNO_QUERY);

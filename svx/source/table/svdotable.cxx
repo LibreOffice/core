@@ -749,12 +749,24 @@ void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 // XEventListener
 
 
-void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source*/ )
+void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& Source )
 {
-    mxActiveCell.clear();
-    mxTable.clear();
-    mpLayouter.reset();
-    mpTableObj = nullptr;
+    assert(Source.Source == mxTableStyle);
+    (void)Source;
+
+    Reference<XIndexAccess> xDefaultStyle;
+    try
+    {
+        Reference<XStyleFamiliesSupplier> xSupplier(mpTableObj->getSdrModelFromSdrObject().getUnoModel(), UNO_QUERY_THROW);
+        Reference<XNameAccess> xTableFamily(xSupplier->getStyleFamilies()->getByName("table"), UNO_QUERY_THROW);
+        xDefaultStyle.set(xTableFamily->getByName("default"), UNO_QUERY_THROW);
+    }
+    catch( Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("svx.table", "");
+    }
+
+    mpTableObj->setTableStyle(xDefaultStyle);
 }
 
 
