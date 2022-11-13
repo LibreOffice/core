@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/form/XReset.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -47,6 +48,7 @@
 #include <map>
 
 
+using namespace css;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::lang;
@@ -58,7 +60,7 @@ namespace sdr::table {
 
 typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
-typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener > TableDesignStyleBase;
+typedef ::comphelper::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener, XPropertySet > TableDesignStyleBase;
 
 namespace {
 
@@ -98,6 +100,15 @@ public:
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) override;
 
+    // XPropertySet
+    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
+
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const Reference< XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener( const Reference< XModifyListener >& aListener ) override;
@@ -107,12 +118,14 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     void notifyModifyListener();
+    void resetUserDefined();
 
     // this function is called upon disposing the component
     virtual void disposing(std::unique_lock<std::mutex>& aGuard) override;
 
     static const CellStyleNameMap& getCellStyleNameMap();
 
+    bool mbUserDefined, mbModified;
     OUString msName;
     Reference< XStyle > maCellStyles[style_count];
     comphelper::OInterfaceContainerHelper4<XModifyListener> maModifyListeners;
@@ -124,7 +137,7 @@ typedef std::vector< Reference< XStyle > > TableDesignStyleVector;
 
 namespace {
 
-class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet >
+class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet, form::XReset >
 {
 public:
     // XServiceInfo
@@ -174,12 +187,19 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
 
+    // XReset
+    virtual void SAL_CALL reset() override;
+    virtual void SAL_CALL addResetListener( const Reference<form::XResetListener>& aListener ) override;
+    virtual void SAL_CALL removeResetListener( const Reference<form::XResetListener>& aListener ) override;
+
     TableDesignStyleVector  maDesigns;
 };
 
 }
 
 TableDesignStyle::TableDesignStyle()
+    : mbUserDefined(true)
+    , mbModified(false)
 {
 }
 
@@ -221,7 +241,12 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames()
 // XStyle
 sal_Bool SAL_CALL TableDesignStyle::isUserDefined()
 {
-    return false;
+    return mbUserDefined;
+}
+
+void TableDesignStyle::resetUserDefined()
+{
+    mbUserDefined = false;
 }
 
 sal_Bool SAL_CALL TableDesignStyle::isInUse()
@@ -367,6 +392,9 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
     if( xNewBroadcaster.is() )
         xNewBroadcaster->addModifyListener( xListener );
 
+    if (xNewStyle && xNewStyle->isUserDefined())
+        mbModified = true;
+
     maCellStyles[nIndex] = xNewStyle;
 }
 
@@ -385,6 +413,41 @@ void TableDesignStyle::disposing(std::unique_lock<std::mutex>& aGuard)
             xBroadcaster->removeModifyListener(this);
         rCellStyle.clear();
     }
+}
+
+// XPropertySet
+
+Reference<XPropertySetInfo> TableDesignStyle::getPropertySetInfo()
+{
+    return {};
+}
+
+void TableDesignStyle::setPropertyValue( const OUString&, const Any& )
+{
+}
+
+Any TableDesignStyle::getPropertyValue( const OUString& PropertyName )
+{
+    if (PropertyName != "IsPhysical")
+        throw UnknownPropertyException("unknown property: " + PropertyName, static_cast<OWeakObject *>(this));
+
+    return Any(mbModified || mbUserDefined);
+}
+
+void TableDesignStyle::addPropertyChangeListener( const OUString&, const Reference<XPropertyChangeListener>& )
+{
+}
+
+void TableDesignStyle::removePropertyChangeListener( const OUString&, const Reference<XPropertyChangeListener>& )
+{
+}
+
+void TableDesignStyle::addVetoableChangeListener( const OUString&, const Reference<XVetoableChangeListener>& )
+{
+}
+
+void TableDesignStyle::removeVetoableChangeListener( const OUString&,const Reference<XVetoableChangeListener>& )
+{
 }
 
 
@@ -602,6 +665,9 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
         [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
     if (iter != maDesigns.end())
     {
+        if (!(*iter)->isUserDefined())
+            static_cast<TableDesignStyle*>(xStyle.get())->resetUserDefined();
+
         Reference<XComponent> xComponent(*iter, UNO_QUERY);
         if (xComponent)
             xComponent->dispose();
@@ -707,6 +773,21 @@ void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Re
     OSL_FAIL( "###unexpected!" );
 }
 
+// XReset
+
+void TableDesignFamily::reset()
+{
+    for (const auto& aDesign : maDesigns)
+        static_cast<TableDesignStyle*>(aDesign.get())->resetUserDefined();
+}
+
+void TableDesignFamily::addResetListener( const Reference<form::XResetListener>& )
+{
+}
+
+void TableDesignFamily::removeResetListener( const Reference<form::XResetListener>& )
+{
+}
 
 Reference< XNameAccess > CreateTableDesignFamily()
 {

@@ -598,14 +598,24 @@ void XMLTableExport::exportTableTemplates()
             SvtSaveOptions::ODFSaneDefaultVersion eVersion = mrExport.getSaneDefaultVersion();
 
             Reference< XStyle > xTableStyle( xTableFamily->getByIndex( nIndex ), UNO_QUERY_THROW );
-            if( !xTableStyle->isInUse() )
+            Reference<XPropertySet> xTableStylePropSet( xTableStyle, UNO_QUERY_THROW );
+            bool bPhysical = false;
+
+            try
+            {
+                xTableStylePropSet->getPropertyValue("IsPhysical") >>= bPhysical;
+            }
+            catch(const Exception&)
+            {
+            }
+
+            if (!xTableStyle->isInUse() && !bPhysical)
                 continue;
 
             const TableStyleElement* pElements;
             if (mbWriter)
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, xTableStyle->getName());
-                Reference<XPropertySet> xTableStylePropSet(xTableStyle, UNO_QUERY_THROW);
                 pElements = getWriterSpecificTableStyleAttributes();
                 while(pElements->meElement != XML_TOKEN_END)
                 {

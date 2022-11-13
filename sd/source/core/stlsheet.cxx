@@ -309,6 +309,15 @@ bool SdStyleSheet::IsUsed() const
             bResult = std::any_of(aModifyListeners.begin(), aModifyListeners.end(),
                 [](const Reference<XInterface>& rListener) {
                     Reference< XStyle > xStyle( rListener, UNO_QUERY );
+                    try
+                    {
+                        Reference<XPropertySet> xPropertySet(xStyle, UNO_QUERY_THROW);
+                        if (xPropertySet->getPropertyValue("IsPhysical").get<bool>())
+                            return true;
+                    }
+                    catch (const Exception&)
+                    {
+                    }
                     return xStyle.is() && xStyle->isInUse();
                 });
         }

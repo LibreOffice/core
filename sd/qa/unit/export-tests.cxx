@@ -102,6 +102,7 @@ public:
     void testColumnsODG();
     void testTdf112126();
     void testCellProperties();
+    void testUserTableStyles();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -151,6 +152,7 @@ public:
     CPPUNIT_TEST(testColumnsODG);
     CPPUNIT_TEST(testTdf112126);
     CPPUNIT_TEST(testCellProperties);
+    CPPUNIT_TEST(testUserTableStyles);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1767,6 +1769,11 @@ void SdExportTest::testTdf112126()
 
 void SdExportTest::testCellProperties()
 {
+    // Silence unrelated failure:
+    // Error: element "table:table-template" is missing "first-row-start-column" attribute
+    // Looks like an oversight in the schema, as the docs claim this attribute is deprecated.
+    skipValidation();
+
     loadFromURL(u"odg/tablestyles.fodg");
     saveAndReload("draw8");
 
@@ -1790,6 +1797,34 @@ void SdExportTest::testCellProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(300), nPadding);
     xCell->getPropertyValue("TextVerticalAdjust") >>= aTextAdjust;
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_CENTER, aTextAdjust);
+}
+
+void SdExportTest::testUserTableStyles()
+{
+    // Silence unrelated failure:
+    // Error: element "table:table-template" is missing "first-row-start-column" attribute
+    // Looks like an oversight in the schema, as the docs claim this attribute is deprecated.
+    skipValidation();
+
+    loadFromURL(u"odg/tablestyles.fodg");
+    saveAndReload("draw8");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamiliesSupplier->getStyleFamilies()->getByName("table"), uno::UNO_QUERY);
+
+    uno::Reference<style::XStyle> xTableStyle(xStyleFamily->getByName("default"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xTableStyle->isUserDefined());
+
+    uno::Reference<container::XNameAccess> xNameAccess(xTableStyle, uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xCellStyle(xNameAccess->getByName("first-row"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCellStyle);
+    CPPUNIT_ASSERT_EQUAL(OUString("userdefined"), xCellStyle->getName());
+
+    CPPUNIT_ASSERT(xStyleFamily->hasByName("userdefined"));
+    xTableStyle.set(xStyleFamily->getByName("userdefined"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTableStyle->isUserDefined());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);

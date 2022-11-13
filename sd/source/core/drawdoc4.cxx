@@ -21,6 +21,7 @@
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/form/XReset.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/dispatch.hxx>
@@ -785,6 +786,10 @@ void SdDrawDocument::CreateDefaultCellStyles()
     Any aYellow3( implMakeSolidCellStyle( pSSPool, "yellow3" , aDefaultCellStyleName, Color(255,204,153)));
 
     implCreateTableTemplate( xTableFamily, "yellow" , aYellow1, aYellow3, aYellow2 );
+
+    Reference<form::XReset> xReset(xTableFamily, UNO_QUERY);
+    if (xReset)
+        xReset->reset();
 }
 
 // Number of pages that reference a master page
