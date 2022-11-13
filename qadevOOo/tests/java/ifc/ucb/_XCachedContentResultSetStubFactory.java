@@ -65,7 +65,7 @@ public class _XCachedContentResultSetStubFactory extends MultiMethodTest {
     /**
     * Creates cached result set stub from static result set. After that number
     * of rows in cached result set created and its source set are retrieved
-    * and comared. <p>
+    * and compared. <p>
     * Has <b>OK</b> status if numbers of rows are equal and they are
     * greater than 0 (because JAR file contains at least one entry).
     */

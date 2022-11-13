@@ -67,7 +67,7 @@ public class _XCachedContentResultSetFactory extends MultiMethodTest {
     /**
     * Creates result set from result set stub. After that number
     * of rows from result set created and its stub are retrieved
-    * using their static representations and comared. <p>
+    * using their static representations and compared. <p>
     * Has <b>OK</b> status if numbers of rows are equal and they are
     * greater than 0 (because JAR file contains at least one entry).
     */

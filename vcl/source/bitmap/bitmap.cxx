@@ -1765,7 +1765,7 @@ void Bitmap::RemoveBlendedStartColor(
             // get alpha value
             const sal_uInt8 nAlpha8(pAlphaAcc->GetColor(y, x).GetRed());
 
-            // not or completely transparent, no adaption needed
+            // not or completely transparent, no adaptation needed
             if(0 == nAlpha8 || 255 == nAlpha8)
                 continue;
 

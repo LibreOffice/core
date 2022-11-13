@@ -151,7 +151,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
 
     // Create target VirtualDevice. Go back to using a simple RGB
-    // target version (comared with former version, see history).
+    // target version (compared with former version, see history).
     // Reasons are manyfold:
     // - Avoid the RGBA mode for VirtualDevice (two VDevs)
     //   - It's not suggested to be used outside presentation engine
@@ -163,13 +163,13 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     //   than the VCL-based ones) will probably not support splitted
     //   VDevs for content/alpha, so require a method that works with
     //   RGB targeting (for now)
-    // - Less ressource usage, better speed (no 2 VDevs, no merge of
+    // - Less resource usage, better speed (no 2 VDevs, no merge of
     //   AlphaChannels)
     // As long as not all our mechanisms are changed to RGBA completely,
     // mixing these is just too dangerous and expensive and may to wrong
     // or deliver bad quality results.
     // Nonetheless we need a RGBA result here. Luckily we are able to
-    // create a copmplete and valid AlphaChannel using 'createAlphaMask'
+    // create a complete and valid AlphaChannel using 'createAlphaMask'
     // above.
     // When we know the content (RGB result from renderer), alpha
     // (result from createAlphaMask) and the start condition (content
@@ -181,7 +181,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     // any other rendering. It could be further optimized, too.
     // This gives good results, it is in principle comparable with
     // the results using pre-multiplied alpha tooling, also reducing
-    // the range of values where high alpha vlaues are used.
+    // the range of values where high alpha values are used.
     ScopedVclPtrInstance< VirtualDevice > pContent(*Application::GetDefaultDevice());
 
     // prepare vdev

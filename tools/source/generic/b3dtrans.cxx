@@ -252,7 +252,7 @@ void B3dTransformationSet::CalcViewport()
     // #i36281#
     // OpenGL needs a little more rough additional size to not let
     // the front face vanish. Changed from SMALL_DVALUE to 0.000001,
-    // which is 1/10000th, comared with 1/tenth of a million from SMALL_DVALUE.
+    // which is 1/10000th, compared with 1/tenth of a million from SMALL_DVALUE.
     const double fDistPart((gfFarBound - gfNearBound) * 0.0001);
 
     // To avoid critical clipping, set Near & Far generously
