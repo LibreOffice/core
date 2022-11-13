@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
     external/libnumbertext/MSVCNonBMPBug.patch1 \
     external/libnumbertext/WinUnicodePath.patch1 \
-    external/libnumbertext/EmptyString.patch1 \
     external/libnumbertext/deprecated.patch.0 \
 ))
 

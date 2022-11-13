@@ -40,6 +40,7 @@ module com { module sun { module star { module linguistic2 {
         <li>eo : Esperanto</li>
         <li>es : Spanish</li>
         <li>et : Estonian</li>
+        <li>fa : Persian (Farsi)</li>
         <li>fi : Finnish</li>
         <li>fr : French</li>
         <li>fr-BE : Belgian French</li>
@@ -63,6 +64,7 @@ module com { module sun { module star { module linguistic2 {
         <li>mr : Marathi</li>
         <li>ms : Malay</li>
         <li>mt : Maltese</li>
+        <li>mul : multiple languages (footnote numbering styles)</li>
         <li>nb : Bokmål (Norwegian)</li>
         <li>nl : Dutch</li>
         <li>nn : Nynorsk (Norwegian)</li>
