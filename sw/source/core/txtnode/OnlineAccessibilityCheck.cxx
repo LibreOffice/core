@@ -263,12 +263,25 @@ void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
         SwNode* pNode = pNodes[n];
         if (pNode)
         {
-            auto& rStatus = pNode->getAccessibilityCheckStatus();
-            rStatus.pCollection.reset();
+            pNode->getAccessibilityCheckStatus().reset();
         }
     }
 
     m_aNodes.clear();
+    updateStatusbar();
+}
+
+void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode)
+{
+    bool bOnlineCheckStatus
+        = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+    if (!bOnlineCheckStatus)
+        return;
+
+    pNode->getAccessibilityCheckStatus().reset();
+    m_aNodes.erase(pNode);
+    runAccessibilityCheck(pNode);
+    updateNodeStatus(pNode);
     updateStatusbar();
 }
 
