@@ -36,14 +36,25 @@ IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(
-    weld::Window* pParent, sfx::AccessibilityIssueCollection aIssueCollection)
+    weld::Window* pParent, sfx::AccessibilityIssueCollection aIssueCollection,
+    std::function<sfx::AccessibilityIssueCollection()> getIssueCollection)
     : GenericDialogController(pParent, "svx/ui/accessibilitycheckdialog.ui",
                               "AccessibilityCheckDialog")
     , m_aIssueCollection(std::move(aIssueCollection))
+    , m_getIssueCollection(getIssueCollection)
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
+    , m_xRescanBtn(m_xBuilder->weld_button("rescan"))
+{
+    m_xRescanBtn->connect_clicked(LINK(this, AccessibilityCheckDialog, RescanButtonClicked));
+
+    populateIssues();
+}
+
+AccessibilityCheckDialog::~AccessibilityCheckDialog() {}
+
+void AccessibilityCheckDialog::populateIssues()
 {
     sal_Int32 i = 0;
-
     for (std::shared_ptr<sfx::AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
     {
         auto xEntry
@@ -53,7 +64,15 @@ AccessibilityCheckDialog::AccessibilityCheckDialog(
     }
 }
 
-AccessibilityCheckDialog::~AccessibilityCheckDialog() {}
+IMPL_LINK_NOARG(AccessibilityCheckDialog, RescanButtonClicked, weld::Button&, void)
+{
+    // Remove old issue widgets
+    for (auto const& xEntry : m_aAccessibilityCheckEntries)
+        m_xAccessibilityCheckBox->move(xEntry->get_widget(), nullptr);
+
+    m_aIssueCollection = m_getIssueCollection();
+    populateIssues();
+}
 
 } // end svx namespace
 

@@ -318,7 +318,10 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
             sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
             if (!aCollection.getIssues().empty())
             {
-                mpAccessibilityCheckDialog = std::make_shared<svx::AccessibilityCheckDialog>(mpParent, aCollection);
+                mpAccessibilityCheckDialog = std::make_shared<svx::AccessibilityCheckDialog>(
+                    mpParent, aCollection, [pShell]() -> sfx::AccessibilityIssueCollection {
+                        return pShell->runAccessibilityCheck();
+                    });
                 weld::DialogController::runAsync(mpAccessibilityCheckDialog, [this](sal_Int32 retValue){
                     m_xDialog->response(retValue);
                 });

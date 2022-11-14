@@ -41,14 +41,21 @@ class SVX_DLLPUBLIC AccessibilityCheckDialog final : public weld::GenericDialogC
 {
 private:
     sfx::AccessibilityIssueCollection m_aIssueCollection;
+    std::function<sfx::AccessibilityIssueCollection()> m_getIssueCollection;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aAccessibilityCheckEntries;
 
     // Controls
     std::unique_ptr<weld::Box> m_xAccessibilityCheckBox;
+    std::unique_ptr<weld::Button> m_xRescanBtn;
+
+    DECL_LINK(RescanButtonClicked, weld::Button&, void);
+
+    void populateIssues();
 
 public:
     AccessibilityCheckDialog(weld::Window* pParent,
-                             sfx::AccessibilityIssueCollection rIssueCollection);
+                             sfx::AccessibilityIssueCollection rIssueCollection,
+                             std::function<sfx::AccessibilityIssueCollection()> getIssueCollection);
     virtual ~AccessibilityCheckDialog() override;
 };
 

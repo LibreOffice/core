@@ -2798,7 +2798,14 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         {
             sw::AccessibilityCheck aCheck(rSh.GetDoc());
             aCheck.check();
-            std::shared_ptr<svx::AccessibilityCheckDialog> aDialog = std::make_shared<svx::AccessibilityCheckDialog>(pMDI, aCheck.getIssueCollection());
+            std::shared_ptr<svx::AccessibilityCheckDialog> aDialog
+                = std::make_shared<svx::AccessibilityCheckDialog>(
+                    pMDI, aCheck.getIssueCollection(),
+                    [&rSh]() -> sfx::AccessibilityIssueCollection {
+                        sw::AccessibilityCheck aA11yCheck(rSh.GetDoc());
+                        aA11yCheck.check();
+                        return aA11yCheck.getIssueCollection();
+                    });
             weld::DialogController::runAsync(aDialog, [](int){});
         }
         break;
