@@ -13,6 +13,8 @@
 #include <svl/intitem.hxx>
 #include <vcl/status.hxx>
 #include <vcl/event.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <bitmaps.hlst>
 
 SFX_IMPL_STATUSBAR_CONTROL(sw::AccessibilityStatusBarControl, SfxInt32Item);
 
@@ -22,6 +24,8 @@ AccessibilityStatusBarControl::AccessibilityStatusBarControl(sal_uInt16 _nSlotId
                                                              StatusBar& rStb)
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
     , mnIssues(0)
+    , maImageIssuesFound(Image(StockImage::Yes, RID_BMP_A11Y_CHECK_ISSUES_FOUND))
+    , maImageIssuesNotFound(Image(StockImage::Yes, RID_BMP_A11Y_CHECK_ISSUES_NOT_FOUND))
 {
 }
 
@@ -31,49 +35,45 @@ void AccessibilityStatusBarControl::StateChangedAtStatusBarControl(sal_uInt16 /*
                                                                    SfxItemState eState,
                                                                    const SfxPoolItem* pState)
 {
-    if (eState != SfxItemState::DEFAULT)
-    {
-        mnIssues = -1;
-    }
-    else if (auto pItem = dynamic_cast<const SfxInt32Item*>(pState))
-    {
-        mnIssues = pItem->GetValue();
-    }
-    else
-    {
-        mnIssues = -1;
-    }
+    mnIssues = -1;
 
-    GetStatusBar().SetItemData(GetId(), nullptr); // necessary ?
-    GetStatusBar().SetItemText(GetId(), ""); // necessary ?
+    bool bOnlineCheckStatus
+        = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
 
-    if (eState == SfxItemState::DEFAULT) // Can access pState
+    if (eState == SfxItemState::DEFAULT && bOnlineCheckStatus)
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_ACCESSIBILITY_CHECK_HINT));
+        if (auto pItem = dynamic_cast<const SfxInt32Item*>(pState))
+            mnIssues = pItem->GetValue();
+        OUString aString = SwResId(STR_ACCESSIBILITY_CHECK_HINT)
+                               .replaceFirst("%issues%", OUString::number(mnIssues));
+        GetStatusBar().SetQuickHelpText(GetId(), aString);
     }
     else
     {
         GetStatusBar().SetQuickHelpText(GetId(), u"");
     }
+
+    GetStatusBar().Invalidate();
 }
 
 void AccessibilityStatusBarControl::Paint(const UserDrawEvent& rUserEvent)
 {
+    if (mnIssues < 0)
+        return;
+
     vcl::RenderContext* pRenderContext = rUserEvent.GetRenderContext();
 
     tools::Rectangle aRect = rUserEvent.GetRect();
-    Color aOldLineColor = pRenderContext->GetLineColor();
-    Color aOldFillColor = pRenderContext->GetFillColor();
+    const tools::Rectangle aControlRect = getControlRect();
 
-    if (mnIssues > 0)
-        pRenderContext->SetFillColor(COL_RED);
-    else
-        pRenderContext->SetFillColor(COL_GREEN);
+    Image aImage = mnIssues > 0 ? maImageIssuesFound : maImageIssuesNotFound;
 
-    pRenderContext->DrawRect(aRect);
+    Size aSize(aImage.GetSizePixel());
 
-    pRenderContext->SetLineColor(aOldLineColor);
-    pRenderContext->SetFillColor(aOldFillColor);
+    auto aPosition = Point(aRect.Left() + (aControlRect.GetWidth() - aSize.Width()) / 2,
+                           aRect.Top() + (aControlRect.GetHeight() - aSize.Height()) / 2);
+
+    pRenderContext->DrawImage(aPosition, aImage);
 }
 
 } // end sw

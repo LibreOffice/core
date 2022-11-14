@@ -111,6 +111,10 @@
 
 #define RID_BMP_PREVIEW_FALLBACK                "sw/res/image-example.png"
 
+#define RID_BMP_A11Y_CHECK_ISSUES_NOT_FOUND     "svx/res/a11y_check_issues_not_found.png"
+#define RID_BMP_A11Y_CHECK_ISSUES_FOUND         "svx/res/a11y_check_issues_found.png"
+
 #endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -67,6 +67,7 @@ public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
     void update(SwPosition const& rNewPos);
     void resetAndQueue(SwNode* pNode);
+    void updateCheckerActivity();
     sal_Int32 getNumberOfAccessibilityIssues() { return m_nAccessibilityIssues; }
 };
 
