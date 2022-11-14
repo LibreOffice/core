@@ -3703,8 +3703,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #ifdef _WIN32
     // pBuffer was not used there
-    tools::Rectangle r(pDevice->PixelToLogic({ Point(0, 0), Size(nCanvasWidth + 1, nCanvasHeight + 1) }));
-    BitmapEx aBmpEx = pDevice->GetBitmapEx(r.TopLeft(), r.GetSize());
+    pDevice->EnableMapMode(false);
+    BitmapEx aBmpEx = pDevice->GetBitmapEx({ 0, 0 }, { nCanvasWidth, nCanvasHeight });
     Bitmap aBmp = aBmpEx.GetBitmap();
     Bitmap aAlpha = aBmpEx.GetAlpha();
     Bitmap::ScopedReadAccess sraBmp(aBmp);
