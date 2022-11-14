@@ -1308,44 +1308,38 @@ void SVGFilter::implGenerateMetaData()
                         }
 
                         // Date/Time Field
-                        xPropSet->getPropertyValue( "IsDateTimeVisible" ) >>= bDateTimeVisibility;
-                        if( bDateTimeVisibility ) // visibility default value: 'visible'
+                        bool bDateTimeFixed           = true;     // default: fixed
+                        xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
+                        if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
                         {
-                            bool bDateTimeFixed           = true;     // default: fixed
-                            xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
-                            if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
+                            xPropSet->getPropertyValue( "DateTimeText" ) >>= aFixedDateTimeField.text;
+                            if( !aFixedDateTimeField.text.isEmpty() )
                             {
-                                xPropSet->getPropertyValue( "DateTimeText" ) >>= aFixedDateTimeField.text;
-                                if( !aFixedDateTimeField.text.isEmpty() )
-                                {
-                                    OUString sFieldId = implGenerateFieldId( aFieldSet, aFixedDateTimeField, aElemTextFieldId, xMasterPage );
-                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
-                                }
-                            }
-                            else // the inverse applies: we are interested only in the date/time format not in the field text
-                            {
-                                xPropSet->getPropertyValue( "DateTimeFormat" ) >>= aVariableDateTimeField.format;
-                                OUString sFieldId = implGenerateFieldId( aFieldSet, aVariableDateTimeField, aElemTextFieldId, xMasterPage );
+                                OUString sFieldId = implGenerateFieldId( aFieldSet, aFixedDateTimeField, aElemTextFieldId, xMasterPage );
                                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
                             }
                         }
-                        else
+                        else // the inverse applies: we are interested only in the date/time format not in the field text
+                        {
+                            xPropSet->getPropertyValue( "DateTimeFormat" ) >>= aVariableDateTimeField.format;
+                            OUString sFieldId = implGenerateFieldId( aFieldSet, aVariableDateTimeField, aElemTextFieldId, xMasterPage );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
+                        }
+                        xPropSet->getPropertyValue( "IsDateTimeVisible" ) >>= bDateTimeVisibility;
+                        if( !bDateTimeVisibility ) // visibility default value: 'visible'
                         {
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "date-time-visibility", "hidden" );
                         }
 
                         // Footer Field
-                        xPropSet->getPropertyValue( "IsFooterVisible" )  >>= bFooterVisibility;
-                        if( bFooterVisibility ) // visibility default value: 'visible'
+                        xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
+                        if( !aFooterField.text.isEmpty() )
                         {
-                            xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
-                            if( !aFooterField.text.isEmpty() )
-                            {
-                                OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
-                            }
+                            OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
                         }
-                        else
+                        xPropSet->getPropertyValue( "IsFooterVisible" )  >>= bFooterVisibility;
+                        if( !bFooterVisibility ) // visibility default value: 'visible'
                         {
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "footer-visibility", "hidden" );
                         }
