@@ -26,6 +26,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <comphelper/lok.hxx>
+
 namespace {
 
 /** Collection of data that is stored for all active preview caches.
@@ -297,7 +299,8 @@ std::shared_ptr<BitmapCache> PageCacheManager::ChangeSize (
 
             pResult = rpCache;
         }
-        else
+        // In multi user view this can happen - no issue (reset after switching MasterPage)
+        else if (!comphelper::LibreOfficeKit::isActive())
         {
             assert(iCacheToChange != mpPageCaches->end());
         }
