@@ -133,6 +133,9 @@ public:
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 };
 
+/// Represents the current text cursor of one opened edit window.
+///
+/// See SwShellTableCursor for a table cursor that extends this class.
 class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects
 {
 private:
