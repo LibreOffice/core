@@ -274,6 +274,9 @@ void SwHeaderFooterWin::ShowAll(bool bShow)
     m_xMenuButton->set_visible(!bIsEmptyHeaderFooter);
     m_xPushButton->set_visible(bIsEmptyHeaderFooter);
 
+    if (m_bIsAppearing == bShow)
+        return;
+
     m_bIsAppearing = bShow;
 
     if (m_aFadeTimer.IsActive())
