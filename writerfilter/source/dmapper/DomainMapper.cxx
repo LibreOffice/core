@@ -75,6 +75,7 @@
 #include <editeng/escapementitem.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include "TextEffectsHandler.hxx"
@@ -658,6 +659,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
         case NS_ooxml::LN_CT_Language_bidi: //90316
         {
+            // store decimal symbol associated to the language of the document
+            if ( m_pImpl->IsDocDefaultsImport() && ( nName == NS_ooxml::LN_CT_Language_val ) )
+            {
+                LanguageTag aLanguageTag( sStringValue );
+                LocaleDataWrapper aLocaleWrapper( std::move(aLanguageTag) );
+                if ( aLocaleWrapper.getNumDecimalSep() == "," )
+                    m_pImpl->SetIsDecimalComma();
+
+            }
             if (nName == NS_ooxml::LN_CT_Language_eastAsia)
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsia", sStringValue);
             else if (nName == NS_ooxml::LN_CT_Language_val)
