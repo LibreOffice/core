@@ -110,4 +110,7 @@ inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_PARALLEL = u"sw/res/wr010.
 
 inline constexpr OUStringLiteral RID_BMP_PREVIEW_FALLBACK = u"sw/res/image-example.png";
 
+inline constexpr OUStringLiteral RID_BMP_A11Y_CHECK_ISSUES_NOT_FOUND = u"svx/res/a11y_check_issues_not_found.png";
+inline constexpr OUStringLiteral RID_BMP_A11Y_CHECK_ISSUES_FOUND = u"svx/res/a11y_check_issues_found.png";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

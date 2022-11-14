@@ -170,7 +170,7 @@ void OnlineAccessibilityCheck::initialCheck()
     m_bInitialCheck = true;
 }
 
-void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
+void OnlineAccessibilityCheck::updateCheckerActivity()
 {
     bool bOnlineCheckStatus
         = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
@@ -185,13 +185,24 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
         if (!bOnlineCheckStatus)
         {
             clearAccessibilityIssuesFromAllNodes(); // cleanup all accessibility check data on nodes
-            updateStatusbar();
+            m_nAccessibilityIssues = -1;
+        }
+        else
+        {
+            m_nAccessibilityIssues = 0;
         }
 
         m_bOnlineCheckStatus = bOnlineCheckStatus;
-    }
 
-    if (!bOnlineCheckStatus)
+        updateStatusbar();
+    }
+}
+
+void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
+{
+    updateCheckerActivity();
+
+    if (!m_bOnlineCheckStatus)
         return;
 
     initialCheck();

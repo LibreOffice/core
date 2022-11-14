@@ -10,12 +10,15 @@
 #pragma once
 
 #include <sfx2/stbitem.hxx>
+#include <vcl/image.hxx>
 
 namespace sw
 {
 class AccessibilityStatusBarControl final : public SfxStatusBarControl
 {
     sal_Int32 mnIssues;
+    Image maImageIssuesFound;
+    Image maImageIssuesNotFound;
 
 public:
     SFX_DECL_STATUSBAR_CONTROL();

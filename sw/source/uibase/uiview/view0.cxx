@@ -34,6 +34,7 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
@@ -51,6 +52,7 @@
 #include <cmdid.h>
 #include <globdoc.hxx>
 #include <wview.hxx>
+#include <OnlineAccessibilityCheck.hxx>
 
 #define ShellClass_SwView
 #define ShellClass_Text
@@ -595,6 +597,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(bSet, batch);
         batch->commit();
+
+        SwDocShell *pDocSh = GetDocShell();
+        SwDoc* pDocument = pDocSh? pDocSh->GetDoc() : nullptr;
+        if (pDocument)
+            pDocument->getOnlineAccessibilityCheck()->updateCheckerActivity();
     }
     break;
 
