@@ -472,8 +472,11 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
     cairo_surface_t* target_surface = m_pSurface;
     if (cairo_surface_get_type(target_surface) != CAIRO_SURFACE_TYPE_IMAGE)
     {
-        //in the unlikely case we can't use m_pSurface directly, copy contents
-        //to another temp image surface
+    //in the unlikely case we can't use m_pSurface directly, copy contents
+    //to another temp image surface
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+        target_surface = cairo_surface_map_to_image(target_surface, nullptr);
+#else
         cairo_t* copycr = createTmpCompatibleCairoContext();
         cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
                         nExtentsBottom - nExtentsTop);
@@ -481,6 +484,7 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
         cairo_fill(copycr);
         target_surface = cairo_get_target(copycr);
         cairo_destroy(copycr);
+#endif
     }
 
     cairo_surface_flush(target_surface);
@@ -550,6 +554,9 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
 
     if (target_surface != m_pSurface)
     {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+        cairo_surface_unmap_image(m_pSurface, target_surface);
+#else
         cairo_t* copycr = cairo_create(m_pSurface);
         //unlikely case we couldn't use m_pSurface directly, copy contents
         //back from image surface
@@ -559,6 +566,7 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
         cairo_fill(copycr);
         cairo_destroy(copycr);
         cairo_surface_destroy(target_surface);
+#endif
     }
 
     cairo_surface_destroy(surface);
