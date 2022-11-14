@@ -3826,7 +3826,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     {
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
-        const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
+        const int aType = doc_getDocumentType(pThis);
+        const bool isText = (aType == LOK_DOCTYPE_TEXT);
         int nViewId = nOrigViewId;
         int nLastNonEditorView = nViewId;
         if (!isText)
@@ -3862,6 +3863,14 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 doc_setView(pThis, nLastNonEditorView);
             }
 
+            // Disable callbacks while we are painting - after setting the view
+            if (nViewId != nOrigViewId && nViewId >= 0)
+            {
+                const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
+                if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+                    handlerIt->second->disableCallbacks();
+            }
+
             nOrigPart = doc_getPart(pThis);
             if (nPart != nOrigPart)
             {
@@ -3889,6 +3898,13 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         }
         if (!isText && nViewId != nOrigViewId)
         {
+            if (nViewId >= 0)
+            {
+                const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
+                if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+                    handlerIt->second->enableCallbacks();
+            }
+
             doc_setView(pThis, nOrigViewId);
         }
     }
