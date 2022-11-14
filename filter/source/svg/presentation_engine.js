@@ -5388,12 +5388,18 @@ function getTextFieldType ( elem )
             var sContent = aPlaceholderElement.textContent
             if (sContent === '<number>')
                 sFieldType = aSlideNumberClassName;
+            else if (sContent === '<date/time>')
+                sFieldType = aDateTimeClassName;
             else if (sContent === '<date>')
                 sFieldType = aDateClassName;
             else if (sContent === '<time>')
                 sFieldType = aTimeClassName;
             else if (sContent === '<slide-name>')
                 sFieldType = aSlideNameClassName;
+            else if (sContent === '<footer>')
+                sFieldType = aFooterClassName;
+            else if (sContent === '<header>')
+                sFieldType = aHeaderClassName;
         }
     }
     return sFieldType;
@@ -5401,8 +5407,8 @@ function getTextFieldType ( elem )
 
 function isTextFieldByClassName ( sClassName )
 {
-    return sClassName === aDateTimeClassName || sClassName === aFooterClassName
-        || sClassName === aHeaderClassName || sClassName.indexOf( aSlideNumberClassName ) == 0
+    return sClassName.indexOf( aDateTimeClassName ) == 0 || sClassName.indexOf( aFooterClassName ) == 0
+        || sClassName.indexOf( aHeaderClassName ) == 0 || sClassName.indexOf( aSlideNumberClassName ) == 0
         || sClassName.indexOf( aDateClassName ) == 0 || sClassName.indexOf( aTimeClassName ) == 0
         || sClassName.indexOf( aSlideNameClassName ) == 0;
 }
@@ -5882,7 +5888,10 @@ MasterPageView.prototype.createElement = function()
                                                    aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
-            else if( sId.indexOf( aDateClassName ) == 0
+            else if( sId.indexOf( aDateTimeClassName ) == 0
+                || sId.indexOf( aFooterClassName ) == 0
+                || sId.indexOf( aHeaderClassName ) == 0
+                || sId.indexOf( aDateClassName ) == 0
                 || sId.indexOf( aTimeClassName ) == 0
                 || sId.indexOf( aSlideNameClassName ) == 0 )
             {
@@ -5922,21 +5931,21 @@ MasterPageView.prototype.initTextFieldHandler =
     if( aPlaceholderShape  && aPlaceholderShape.isValid()
         && aTextFieldContentProvider )
     {
-        var sTextFieldContentProviderId = aTextFieldContentProvider.sId;
+        var sTextFiedHandlerKey = aTextFieldContentProvider.sId + '.' + sId;
         // We create only one single TextFieldHandler object (and so one only
         // text field clone) per master slide and text content.
-        if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] )
+        if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFiedHandlerKey ] )
         {
-            aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] =
+            aTextFieldHandlerSet[ sMasterSlideId ][ sTextFiedHandlerKey ] =
                 new TextFieldHandler( aPlaceholderShape,
                                       aTextFieldContentProvider );
-            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
+            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFiedHandlerKey ];
             aTextFieldHandler.update();
             aTextFieldHandler.appendTo( aDefsElement );
         }
         else
         {
-            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
+            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFiedHandlerKey ];
         }
         sRefId = aTextFieldHandler.sId;
     }
