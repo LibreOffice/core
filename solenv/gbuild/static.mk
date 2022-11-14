@@ -51,7 +51,7 @@
 # doesn't seem to happen in any breaking way and it works to link multiple Executable
 # with large and small expanded dependency lists.
 #
-# Then there is the special static "components" library, which simply depends on all build
+# Then there is the special static "components" library, which simply depends on all built
 # components. In theory these could be limited per-module (Writer, Calc, etc.), but currently
 # this is not implemented and instead solenv/bin/native-code.py is used, so actually
 # everything is build and "cleaned up" at link time, which is especially expensive for WASM.

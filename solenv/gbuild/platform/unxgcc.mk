@@ -152,10 +152,12 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 		    -Wl$(COMMA)--start-group \
-		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
-		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		    $(patsubst $(gb_LinkTarget__syslib),%,$(T_LIBS)) \
-		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
+			$(shell echo -n \
+				$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
+				$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+				$(patsubst $(gb_LinkTarget__syslib),%,$(T_LIBS)) \
+				$(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
+				| tee $@.linkdeps) \
 		    -Wl$(COMMA)--end-group \
 		, \
 		    -Wl$(COMMA)--start-group \

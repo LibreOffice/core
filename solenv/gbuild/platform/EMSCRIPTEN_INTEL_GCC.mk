@@ -64,6 +64,7 @@ gb_COMPILERNOOPTFLAGS := -O1 -fstrict-aliasing -fstrict-overflow
 # cleanup addition JS and wasm files for binaries
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
+        $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
         $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
@@ -75,6 +76,7 @@ endef
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
+        $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
         $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
