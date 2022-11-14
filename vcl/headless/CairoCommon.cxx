@@ -478,7 +478,7 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
         cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
                         nExtentsBottom - nExtentsTop);
         cairo_set_source_surface(copycr, m_pSurface, 0, 0);
-        cairo_paint(copycr);
+        cairo_fill(copycr);
         target_surface = cairo_get_target(copycr);
         cairo_destroy(copycr);
     }
@@ -556,7 +556,7 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
         cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
                         nExtentsBottom - nExtentsTop);
         cairo_set_source_surface(copycr, target_surface, 0, 0);
-        cairo_paint(copycr);
+        cairo_fill(copycr);
         cairo_destroy(copycr);
         cairo_surface_destroy(target_surface);
     }
