@@ -116,11 +116,10 @@ namespace
                         helper::xmlStrToOString( sTitle ).
                             replaceAll("$[officename]","%PRODUCTNAME").
                                 replaceAll("$[officeversion]","%PRODUCTVERSION");
-                    xmlNodeSetContent(
-                        pReturn,
-                        xmlEncodeSpecialChars( nullptr,
-                            reinterpret_cast<const xmlChar*>(
-                                sNewTitle.getStr() )));
+                    xmlChar *xmlString = xmlEncodeSpecialChars(nullptr,
+                        reinterpret_cast<const xmlChar*>( sNewTitle.getStr() ));
+                    xmlNodeSetContent( pReturn, xmlString);
+                    xmlFree( xmlString );
                     xmlFree( sTitle );
                     break;
                 }
