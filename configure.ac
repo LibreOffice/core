@@ -13593,7 +13593,7 @@ if test "$test_cairo" = "yes"; then
         SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
 
-        PKG_CHECK_MODULES( CAIRO, cairo >= 1.8.0 )
+        PKG_CHECK_MODULES( CAIRO, cairo >= 1.12.0 )
         CAIRO_CFLAGS=$(printf '%s' "$CAIRO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${CAIRO_LIBS}"
         CAIRO_LIBS="${filteredlibs}"

@@ -30,6 +30,10 @@
 #include <sal/log.hxx>
 #include <osl/module.h>
 
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
+#error "require at least cairo 1.12.0"
+#endif
+
 void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale, double y_scale)
 {
 #if !HAVE_DLAPI
@@ -472,19 +476,9 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
     cairo_surface_t* target_surface = m_pSurface;
     if (cairo_surface_get_type(target_surface) != CAIRO_SURFACE_TYPE_IMAGE)
     {
-    //in the unlikely case we can't use m_pSurface directly, copy contents
-    //to another temp image surface
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+        //in the unlikely case we can't use m_pSurface directly, copy contents
+        //to another temp image surface
         target_surface = cairo_surface_map_to_image(target_surface, nullptr);
-#else
-        cairo_t* copycr = createTmpCompatibleCairoContext();
-        cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
-                        nExtentsBottom - nExtentsTop);
-        cairo_set_source_surface(copycr, m_pSurface, 0, 0);
-        cairo_fill(copycr);
-        target_surface = cairo_get_target(copycr);
-        cairo_destroy(copycr);
-#endif
     }
 
     cairo_surface_flush(target_surface);
@@ -554,19 +548,7 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
 
     if (target_surface != m_pSurface)
     {
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
         cairo_surface_unmap_image(m_pSurface, target_surface);
-#else
-        cairo_t* copycr = cairo_create(m_pSurface);
-        //unlikely case we couldn't use m_pSurface directly, copy contents
-        //back from image surface
-        cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
-                        nExtentsBottom - nExtentsTop);
-        cairo_set_source_surface(copycr, target_surface, 0, 0);
-        cairo_fill(copycr);
-        cairo_destroy(copycr);
-        cairo_surface_destroy(target_surface);
-#endif
     }
 
     cairo_surface_destroy(surface);
@@ -574,13 +556,9 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
 
 cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
 {
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    cairo_surface_t* target = cairo_surface_create_similar_image(
-        m_pSurface,
-#else
-    cairo_surface_t* target = cairo_image_surface_create(
-#endif
-        CAIRO_FORMAT_ARGB32, m_aFrameSize.getX() * m_fScale, m_aFrameSize.getY() * m_fScale);
+    cairo_surface_t* target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32,
+                                                                 m_aFrameSize.getX() * m_fScale,
+                                                                 m_aFrameSize.getY() * m_fScale);
 
     dl_cairo_surface_set_device_scale(target, m_fScale, m_fScale);
 
@@ -1002,10 +980,6 @@ cairo_pattern_t* create_stipple()
 }
 } // end anonymous ns
 
-#if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
-#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
-#endif
-
 void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias)
 {
     cairo_t* cr = getCairoContext(false, bAntiAlias);
@@ -1018,14 +992,7 @@ void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, boo
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
-    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
-    {
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-    }
-    else
-    {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
-    }
+    cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
 
     if (nFlags & SalInvert::TrackFrame)
     {

@@ -593,12 +593,8 @@ void SvpGraphicsBackend::drawBitmapBuffer(const SalTwoRect& rTR, const BitmapBuf
 
 Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
 {
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     cairo_surface_t* target
         = cairo_surface_create_similar_image(m_rCairoCommon.m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
-#else
-    cairo_surface_t* target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
-#endif
 
     cairo_t* cr = cairo_create(target);
 
