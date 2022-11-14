@@ -19,7 +19,7 @@ interface XTextInput
 
     /// Returns and sets the default text.
     [attribute] string Default;
-    /// Returns the string that specifies how the text should be formated (like date/time, currency)
+    /// Returns the string that specifies how the text should be formatted (like date/time, currency)
     [attribute, readonly] string Format;
     /// Returns the type of content: oovbaapi/ooo/vba/word/WdTextFormFieldType.idl
     [attribute, readonly] long Type;
