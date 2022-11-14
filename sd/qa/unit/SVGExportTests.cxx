@@ -72,29 +72,6 @@ bool isValidTiledBackgroundId(const OUString& sId)
 
 class SdSVGFilterTest : public UnoApiXmlTest
 {
-    class Resetter
-    {
-    private:
-        std::function<void ()> m_Func;
-
-    public:
-        Resetter(std::function<void ()> const& rFunc)
-            : m_Func(rFunc)
-        {
-        }
-        ~Resetter()
-        {
-            try
-            {
-                m_Func();
-            }
-            catch (...) // has to be reliable
-            {
-                CPPUNIT_FAIL("resetter failed with exception");
-            }
-        }
-    };
-
 public:
     SdSVGFilterTest()
         : UnoApiXmlTest("/sd/qa/unit/data/odp/")
