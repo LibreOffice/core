@@ -570,6 +570,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="PresenterScreenFullScreen" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+           <desc>Indicates whether the Presenter Screen Console is shown in FullScreen mode.</desc>
+           <label>Presenter Screen FullScreen</label>
+         </info>
+         <value>true</value>
+       </prop>
       </group>
       <group oor:name="Compatibility">
         <info>

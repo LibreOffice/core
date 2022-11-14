@@ -77,7 +77,8 @@ private:
 
     static void ExtractArguments (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        sal_Int32& rnScreenNumberReturnValue);
+        sal_Int32& rnScreenNumberReturnValue,
+        bool& rbFullScreen);
 };
 
 } // end of namespace sd::framework

@@ -409,7 +409,8 @@ SdOptionsMisc::SdOptionsMisc( bool bImpress, bool bUseConfig ) :
     bDoubleClickTextEdit( true ),
     bClickChangeRotation( false ),
     bEnableSdremote( false ),
-    bEnablePresenterScreen( true),
+    bEnablePresenterScreen( true ),
+    bPresenterScreenFullScreen( true ),
     bSolidDragging( true ),
     bSummationOfParagraphs( false ),
     bTabBarVisible( true ),
@@ -443,7 +444,8 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsEnableSdremote() == rOpt.IsEnableSdremote() &&
-            IsEnablePresenterScreen() == rOpt.IsEnablePresenterScreen()&&
+            IsEnablePresenterScreen() == rOpt.IsEnablePresenterScreen() &&
+            IsPresenterScreenFullScreen() == rOpt.IsPresenterScreenFullScreen() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsTabBarVisible() == rOpt.IsTabBarVisible() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
@@ -500,6 +502,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "PenWidth",
         "Start/EnableSdremote",
         "Start/EnablePresenterScreen",
+        "Start/PresenterScreenFullScreen",
         "TabBarVisible"
     };
 
@@ -562,8 +565,11 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
         if( pValues[25].hasValue() )
             SetEnablePresenterScreen( *o3tl::doAccess<bool>(pValues[ 25 ]) );
 
-        if( pValues[26].hasValue() ) {
-            SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 26 ]) );
+        if (pValues[26].hasValue() )
+            SetPresenterScreenFullScreen( *o3tl::doAccess<bool>(pValues[ 26 ]) );
+
+        if( pValues[27].hasValue() ) {
+            SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 27 ]) );
         }
     }
 
@@ -606,7 +612,8 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 23 ] <<= GetPresentationPenWidth();
         pValues[ 24 ] <<= IsEnableSdremote();
         pValues[ 25 ] <<= IsEnablePresenterScreen();
-        pValues[ 26 ] <<= IsTabBarVisible();
+        pValues[ 26 ] <<= IsPresenterScreenFullScreen();
+        pValues[ 27 ] <<= IsTabBarVisible();
     }
 
     return true;
@@ -633,6 +640,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
         maOptionsMisc.SetEnableSdremote( pOpts->IsEnableSdremote() );
         maOptionsMisc.SetEnablePresenterScreen( pOpts->IsEnablePresenterScreen() );
+        maOptionsMisc.SetPresenterScreenFullScreen( pOpts->IsPresenterScreenFullScreen() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
         maOptionsMisc.SetTabBarVisible( pOpts->IsTabBarVisible() );
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
@@ -710,6 +718,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
     pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
     pOpts->SetEnablePresenterScreen( maOptionsMisc.IsEnablePresenterScreen() );
+    pOpts->SetPresenterScreenFullScreen( maOptionsMisc.IsPresenterScreenFullScreen() );
     pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
     pOpts->SetTabBarVisible( maOptionsMisc.IsTabBarVisible() );
 

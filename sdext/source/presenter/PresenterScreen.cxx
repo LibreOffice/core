@@ -261,6 +261,19 @@ bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::un
             >>= dEnablePresenterScreen;
         return dEnablePresenterScreen;
 }
+
+bool PresenterScreen::isPresenterScreenFullScreen(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+{
+    bool dPresenterScreenFullScreen = true;
+    PresenterConfigurationAccess aConfiguration (
+        rxContext,
+        "/org.openoffice.Office.Impress/",
+        PresenterConfigurationAccess::READ_ONLY);
+    aConfiguration.GetConfigurationNode("Misc/Start/PresenterScreenFullScreen")
+        >>= dPresenterScreenFullScreen;
+    return dPresenterScreenFullScreen;
+}
+
 void SAL_CALL PresenterScreen::disposing()
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
@@ -324,7 +337,7 @@ void PresenterScreen::InitializePresenterScreen()
         mxConfigurationControllerWeak = xCC;
 
         Reference<drawing::framework::XResourceId> xMainPaneId(
-            GetMainPaneId(xPresentation));
+            GetMainPaneId(xPresentation, xContext));
         // An empty reference means that the presenter screen can
         // not or must not be displayed.
         if ( ! xMainPaneId.is())
@@ -506,7 +519,8 @@ sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentation
 }
 
 Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
-    const Reference<presentation::XPresentation2>& rxPresentation) const
+    const Reference<presentation::XPresentation2>& rxPresentation,
+    const Reference<XComponentContext>& xContext) const
 {
     // A negative value means that the presentation spans all available
     // displays.  That leaves no room for the presenter.
@@ -514,10 +528,16 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
     if (nScreen < 0)
         return nullptr;
 
+    auto fullScreenStr = isPresenterScreenFullScreen(xContext)
+        ? OUString("true")
+        : OUString("false");
+
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
         PresenterHelper::msFullScreenPaneURL
-                + "?FullScreen=true&ScreenNumber="
+                + "?FullScreen="
+                + fullScreenStr
+                + "&ScreenNumber="
                 + OUString::number(nScreen));
 }
 

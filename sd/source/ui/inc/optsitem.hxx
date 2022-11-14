@@ -185,25 +185,26 @@ private:
     sal_Int32   nDefaultObjectSizeWidth;
     sal_Int32   nDefaultObjectSizeHeight;
 
-    bool    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
-    bool    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
-    bool    bMoveOnlyDragging       : 1;    // Currently, not in use !!!
-    bool    bCrookNoContortion      : 1;    // Misc/NoDistort
-    bool    bQuickEdit              : 1;    // Misc/TextObject/QuickEditing
-    bool    bMasterPageCache        : 1;    // Misc/BackgroundCache
-    bool    bDragWithCopy           : 1;    // Misc/CopyWhileMoving
-    bool    bPickThrough            : 1;    // Misc/TextObject/Selectable
-    bool    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
-    bool    bClickChangeRotation    : 1;    // Misc/RotateClick
-    bool    bEnableSdremote         : 1;    // Misc/Start/EnableSdremote
-    bool    bEnablePresenterScreen : 1;    // Misc/Start/EnablePresenterDisplay
-    bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
-    bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
-    bool    bTabBarVisible          : 1;    // Misc/TabBarVisible
-    bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
+    bool    bStartWithTemplate          : 1;    // Misc/NewDoc/AutoPilot
+    bool    bMarkedHitMovesAlways       : 1;    // Misc/ObjectMoveable
+    bool    bMoveOnlyDragging           : 1;    // Currently, not in use !!!
+    bool    bCrookNoContortion          : 1;    // Misc/NoDistort
+    bool    bQuickEdit                  : 1;    // Misc/TextObject/QuickEditing
+    bool    bMasterPageCache            : 1;    // Misc/BackgroundCache
+    bool    bDragWithCopy               : 1;    // Misc/CopyWhileMoving
+    bool    bPickThrough                : 1;    // Misc/TextObject/Selectable
+    bool    bDoubleClickTextEdit        : 1;    // Misc/DclickTextedit
+    bool    bClickChangeRotation        : 1;    // Misc/RotateClick
+    bool    bEnableSdremote             : 1;    // Misc/Start/EnableSdremote
+    bool    bEnablePresenterScreen      : 1;    // Misc/Start/EnablePresenterScreen
+    bool    bPresenterScreenFullScreen  : 1;    // Misc/Start/PresenterScreenFullScreen
+    bool    bSolidDragging              : 1;    // Misc/ModifyWithAttributes
+    bool    bSummationOfParagraphs      : 1;    // misc/SummationOfParagraphs
+    bool    bTabBarVisible              : 1;    // Misc/TabBarVisible
+    bool    bShowUndoDeleteWarning      : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
-    bool    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
-    bool    bShowComments           : 1;    // Misc/ShowComments
+    bool    bSlideshowRespectZOrder     : 1;    // Misc/SlideshowRespectZOrder
+    bool    bShowComments               : 1;    // Misc/ShowComments
 
     bool    bPreviewNewEffects;
     bool    bPreviewChangedEffects;
@@ -247,6 +248,7 @@ public:
     bool    IsClickChangeRotation() const { Init(); return bClickChangeRotation; }
     bool    IsEnableSdremote() const { Init(); return bEnableSdremote; }
     bool    IsEnablePresenterScreen() const { Init(); return bEnablePresenterScreen; }
+    bool    IsPresenterScreenFullScreen() const { Init(); return bPresenterScreenFullScreen; }
     bool    IsSolidDragging() const { Init(); return bSolidDragging; }
     bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs; };
     bool    IsTabBarVisible() const { Init(); return bTabBarVisible; };
@@ -287,6 +289,7 @@ public:
     void    SetClickChangeRotation( bool bOn ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetEnableSdremote( bool bOn ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
     void    SetEnablePresenterScreen( bool bOn ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
+    void    SetPresenterScreenFullScreen( bool bOn ) { if ( bPresenterScreenFullScreen != bOn) { OptionsChanged(); bPresenterScreenFullScreen = bOn; } }
     void    SetSummationOfParagraphs( bool bOn ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     void    SetTabBarVisible( bool bOn ){ if ( bOn != bTabBarVisible ) { OptionsChanged(); bTabBarVisible = bOn; } }
     /** Set the printer independent layout mode.
