@@ -9,6 +9,7 @@
 #
 
 include $(SRCDIR)/sc/common_unoapi_tests.mk
+include $(SRCDIR)/sc/functions_setup.mk
 include $(SRCDIR)/sc/ucalc_setup.mk
 include $(SRCDIR)/sc/subsequent_setup.mk
 

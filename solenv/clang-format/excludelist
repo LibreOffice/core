@@ -8025,7 +8025,7 @@ sc/qa/unit/functions_spreadsheet.cxx
 sc/qa/unit/functions_statistical.cxx
 sc/qa/unit/functions_test.cxx
 sc/qa/unit/functions_test.hxx
-sc/qa/unit/functions_test_old.cxx
+sc/qa/unit/functions_old.cxx
 sc/qa/unit/functions_text.cxx
 sc/qa/unit/helper/csv_handler.hxx
 sc/qa/unit/helper/qahelper.cxx
