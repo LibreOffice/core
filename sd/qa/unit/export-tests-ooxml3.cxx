@@ -2080,9 +2080,9 @@ void SdOOXMLExportTest3::testTdf151622_oleIcon()
 {
     loadFromURL(u"odp/ole_icon.odp");
 
-    utl::TempFileNamed tmpfile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: prop

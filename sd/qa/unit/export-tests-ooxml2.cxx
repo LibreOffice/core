@@ -227,9 +227,9 @@ public:
 void SdOOXMLExportTest2::testTdf142291()
 {
     loadFromURL(u"pptx/tdt142291.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[1]/"
                 "a:tcPr/a:lnL/a:prstDash",
