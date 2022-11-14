@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -267,6 +268,32 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
     // i.e. inline content control had its start and end in different text nodes, which is not
     // allowed.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
+{
+    // Given an empty document:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // When inserting an ODF_UNHANDLED fieldmark:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // Then make sure that it's type/name is correct:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    pCursor->SttEndDoc(/*bSttDoc=*/true);
+    sw::mark::IFieldmark* pFieldmark
+        = pDoc->getIDocumentMarkAccess()->getFieldmarkAt(*pCursor->GetPoint());
+    CPPUNIT_ASSERT(pFieldmark);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: vnd.oasis.opendocument.field.UNHANDLED
+    // - Actual  : vnd.oasis.opendocument.field.FORMTEXT
+    // i.e. the custom type parameter was ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_UNHANDLED), pFieldmark->GetFieldname());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

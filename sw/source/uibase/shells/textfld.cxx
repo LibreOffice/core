@@ -686,6 +686,14 @@ FIELD_INSERT:
 
         case FN_INSERT_TEXT_FORMFIELD:
         {
+            OUString aFieldType(ODF_FORMTEXT);
+            const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pFieldType)
+            {
+                // Allow overwriting the default type.
+                aFieldType = pFieldType->GetValue();
+            }
+
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
 
             SwPaM* pCursorPos = rSh.GetCursor();
@@ -699,7 +707,7 @@ FIELD_INSERT:
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                     SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - vEnSpaces.getLength(),
                                     pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
-                    pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT,
+                    pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), aFieldType,
                             aFieldPam.Start());
                 }
             }
