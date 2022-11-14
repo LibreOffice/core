@@ -10,6 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_HEADERFOOTERWIN_HXX
 
 #include "edtwin.hxx"
+#include "DashedLine.hxx"
 #include "FrameControl.hxx"
 #include <vcl/timer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -26,38 +27,67 @@ public:
                             const tools::Rectangle& rRect, bool bOnTop);
 };
 
+class SwHeaderFooterWin;
+
 /** Class for the header and footer separator control window.
 
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterWin final : public SwFrameMenuButtonBase
+class SwHeaderFooterDashedLine : public SwDashedLine, public ISwFrameControl
+{
+private:
+    VclPtr<SwHeaderFooterWin> m_pWin;
+    VclPtr<SwEditWin> m_pEditWin;
+    const SwFrame* m_pFrame;
+    bool m_bIsHeader;
+
+    void EnsureWin();
+
+    bool IsOnScreen();
+
+public:
+    SwHeaderFooterDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame, bool bIsHeader);
+
+    virtual ~SwHeaderFooterDashedLine() override { disposeOnce(); }
+    virtual void dispose() override { m_pWin.disposeAndClear(); m_pEditWin.clear(); SwDashedLine::dispose(); }
+
+    virtual const SwFrame* GetFrame() override { return m_pFrame; }
+    virtual SwEditWin* GetEditWin() override { return m_pEditWin; }
+    virtual void ShowAll(bool bShow) override;
+    virtual bool Contains(const Point &rDocPt) const override;
+    virtual void SetReadonly(bool bReadonly) override;
+
+    void SetOffset( Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd );
+    bool IsHeader() const { return m_bIsHeader; };
+};
+
+class SwHeaderFooterWin final : public InterimItemWindow
 {
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     std::unique_ptr<weld::Button> m_xPushButton;
+    VclPtr<SwEditWin>     m_pEditWin;
+    VclPtr<VirtualDevice> m_xVirDev;
+    const SwFrame*        m_pFrame;
     OUString              m_sLabel;
     bool                  m_bIsHeader;
-    VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
     Timer                 m_aFadeTimer;
 
 public:
-    SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrame *pFrame, bool bHeader );
+    SwHeaderFooterWin(SwEditWin *pEditWin, const SwFrame *pFrame, bool bHeader);
     virtual ~SwHeaderFooterWin( ) override;
     virtual void dispose() override;
 
-    void SetOffset( Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd );
-
-    virtual void ShowAll( bool bShow ) override;
-    virtual bool Contains( const Point &rDocPt ) const override;
+    void SetOffset(Point aOffset);
+    void ShowAll(bool bShow);
+    bool Contains(const Point &rDocPt) const;
 
     bool IsHeader() const { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( ) const;
 
     void ExecuteCommand(std::string_view rIdent);
-
-    void SetReadonly( bool bReadonly ) override;
 
 private:
     DECL_LINK(FadeHandler, Timer *, void);
