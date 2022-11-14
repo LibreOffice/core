@@ -73,7 +73,7 @@ struct ScInterpreterTableOpParams
         return *this;
     }
 
-    bool operator ==( const ScInterpreterTableOpParams& r )
+    bool operator ==( const ScInterpreterTableOpParams& r ) const
     {
         return
             bValid && r.bValid &&

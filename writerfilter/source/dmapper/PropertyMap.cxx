@@ -2119,7 +2119,7 @@ ParagraphProperties::ParagraphProperties()
 {
 }
 
-bool ParagraphProperties::operator==( const ParagraphProperties& rCompare )
+bool ParagraphProperties::operator==( const ParagraphProperties& rCompare ) const
 {
     return ( m_bFrameMode  == rCompare.m_bFrameMode &&
              m_nDropCap    == rCompare.m_nDropCap &&

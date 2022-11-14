@@ -449,7 +449,7 @@ public:
     ParagraphProperties & operator =(ParagraphProperties &&) = default;
 
     // Does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
-    bool operator==( const ParagraphProperties& );
+    bool operator==( const ParagraphProperties& ) const;
 
     sal_Int32 GetListId() const          { return m_nListId; }
     void      SetListId( sal_Int32 nId ) { m_nListId = nId; }
