@@ -386,7 +386,7 @@ FrameMap const aVAsCharHtmlMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB::RelRow}
 };
 
-const WhichRangesContainer SwFramePage::aPageRg(svl::Items<
+const WhichRangesContainer SwFramePage::s_aPageRg(svl::Items<
     RES_FRM_SIZE, RES_FRM_SIZE,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,

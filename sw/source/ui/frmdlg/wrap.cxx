@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-const WhichRangesContainer SwWrapTabPage::m_aWrapPageRg(svl::Items<
+const WhichRangesContainer SwWrapTabPage::s_aWrapPageRg(svl::Items<
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PRINT, RES_PRINT,
     RES_PROTECT, RES_SURROUND

@@ -174,8 +174,8 @@ public:
 
 class SwAutoMarkDlg_Impl : public weld::GenericDialogController
 {
-    OUString            sAutoMarkURL;
-    bool                bCreateMode;
+    OUString            m_sAutoMarkURL;
+    bool                m_bCreateMode;
 
     std::unique_ptr<weld::Button> m_xOKPB;
     std::unique_ptr<weld::Container> m_xTable;
@@ -474,7 +474,7 @@ namespace {
 
 class SwAddStylesDlg_Impl : public SfxDialogController
 {
-    OUString*       pStyleArr;
+    OUString*       m_pStyleArr;
 
     std::unique_ptr<weld::Button> m_xOk;
     std::unique_ptr<weld::Button> m_xLeftPB;
@@ -499,7 +499,7 @@ public:
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             SwWrtShell const & rWrtSh, OUString rStringArr[])
     : SfxDialogController(pParent, "modules/swriter/ui/assignstylesdialog.ui", "AssignStylesDialog")
-    , pStyleArr(rStringArr)
+    , m_pStyleArr(rStringArr)
     , m_xOk(m_xBuilder->weld_button("ok"))
     , m_xLeftPB(m_xBuilder->weld_button("left"))
     , m_xRightPB(m_xBuilder->weld_button("right"))
@@ -681,7 +681,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, KeyInput, const KeyEvent&, rKEvt, bool)
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        pStyleArr[i].clear();
+        m_pStyleArr[i].clear();
 
     int nChildren = m_xHeaderTree->n_children();
     for (int i = 0; i < nChildren; ++i)
@@ -698,9 +698,9 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
         if (nToggleColumn)
         {
             int nLevel = nToggleColumn - 1;
-            if(!pStyleArr[nLevel].isEmpty())
-                pStyleArr[nLevel] += OUStringChar(TOX_STYLE_DELIMITER);
-            pStyleArr[nLevel] += m_xHeaderTree->get_text(i, 0);
+            if(!m_pStyleArr[nLevel].isEmpty())
+                m_pStyleArr[nLevel] += OUStringChar(TOX_STYLE_DELIMITER);
+            m_pStyleArr[nLevel] += m_xHeaderTree->get_text(i, 0);
         }
     }
 
@@ -3983,8 +3983,8 @@ bool SwEntryBrowseBox::IsModified()const
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, OUString aAutoMarkURL,
         bool bCreate)
     : GenericDialogController(pParent, "modules/swriter/ui/createautomarkdialog.ui", "CreateAutomarkDialog")
-    , sAutoMarkURL(std::move(aAutoMarkURL))
-    , bCreateMode(bCreate)
+    , m_sAutoMarkURL(std::move(aAutoMarkURL))
+    , m_bCreateMode(bCreate)
     , m_xOKPB(m_xBuilder->weld_button("ok"))
     , m_xTable(m_xBuilder->weld_container("area"))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
@@ -3993,13 +3993,13 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, OUString aAutoMark
     m_xEntriesBB->Show();
     m_xOKPB->connect_clicked(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
-    m_xDialog->set_title(m_xDialog->get_title() + ": " + sAutoMarkURL);
+    m_xDialog->set_title(m_xDialog->get_title() + ": " + m_sAutoMarkURL);
     bool bError = false;
-    if( bCreateMode )
+    if( m_bCreateMode )
         m_xEntriesBB->RowInserted(0);
     else
     {
-        SfxMedium aMed( sAutoMarkURL, StreamMode::STD_READ );
+        SfxMedium aMed( m_sAutoMarkURL, StreamMode::STD_READ );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             m_xEntriesBB->ReadEntries( *aMed.GetInStream() );
         else
@@ -4023,10 +4023,10 @@ SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, weld::Button&, void)
 {
     bool bError = false;
-    if (m_xEntriesBB->IsModified() || bCreateMode)
+    if (m_xEntriesBB->IsModified() || m_bCreateMode)
     {
-        SfxMedium aMed( sAutoMarkURL,
-                        bCreateMode ? StreamMode::WRITE
+        SfxMedium aMed( m_sAutoMarkURL,
+                        m_bCreateMode ? StreamMode::WRITE
                                     : StreamMode::WRITE| StreamMode::TRUNC );
         SvStream* pStrm = aMed.GetOutStream();
         // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding

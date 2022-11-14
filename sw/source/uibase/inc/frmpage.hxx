@@ -173,14 +173,14 @@ class SwFramePage final : public SfxTabPage
 
     SwWrtShell *getFrameDlgParentShell();
 
-    static const WhichRangesContainer aPageRg;
+    static const WhichRangesContainer s_aPageRg;
 
 public:
     SwFramePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwFramePage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static WhichRangesContainer GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return s_aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
