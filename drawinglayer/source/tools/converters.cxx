@@ -73,7 +73,7 @@ bool implPrepareConversion(drawinglayer::primitive2d::Primitive2DContainer& rSeq
 
 AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& rSequence,
                               const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-                              const Size& rSizePixel)
+                              const Size& rSizePixel, bool bUseLuminance)
 {
     ScopedVclPtrInstance<VirtualDevice> pContent;
 
@@ -98,11 +98,24 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     // set alpha to all white (fully transparent)
     pContent->Erase();
 
+    basegfx::BColorModifierSharedPtr aBColorModifier;
+
+    if (bUseLuminance)
+    {
+        // new mode: bUseLuminance allows simple creation of alpha channels
+        //           for any content (e.g. gradients)
+        aBColorModifier = std::make_shared<basegfx::BColorModifier_luminance_to_alpha>();
+    }
+    else
+    {
+        // Embed primitives to paint them black
+        aBColorModifier
+            = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0, 0.0, 0.0));
+    }
     // embed primitives to paint them black
     const drawinglayer::primitive2d::Primitive2DReference xRef(
-        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-            std::move(rSequence),
-            std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0, 0.0, 0.0))));
+        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(rSequence),
+                                                                aBColorModifier));
     const drawinglayer::primitive2d::Primitive2DContainer xSeq{ xRef };
 
     // render
@@ -121,7 +134,7 @@ namespace drawinglayer
 AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                           const geometry::ViewInformation2D& rViewInformation2D,
                           sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
-                          sal_uInt32 nMaxSquarePixels)
+                          sal_uInt32 nMaxSquarePixels, bool bUseLuminance)
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
 
@@ -132,7 +145,7 @@ AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq
 
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
 
-    return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel);
+    return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, bUseLuminance);
 }
 
 BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
@@ -182,7 +195,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     // This gives good results, it is in principle comparable with
     // the results using pre-multiplied alpha tooling, also reducing
     // the range of values where high alpha values are used.
-    ScopedVclPtrInstance< VirtualDevice > pContent(*Application::GetDefaultDevice());
+    ScopedVclPtrInstance<VirtualDevice> pContent(*Application::GetDefaultDevice());
 
     // prepare vdev
     if (!pContent->SetOutputSizePixel(aSizePixel, false))
@@ -217,7 +230,8 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
             OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
         if (!sDumpPath.isEmpty())
         {
-            SvFileStream aNew(sDumpPath + "test_content.bmp", StreamMode::WRITE | StreamMode::TRUNC);
+            SvFileStream aNew(sDumpPath + "test_content.bmp",
+                              StreamMode::WRITE | StreamMode::TRUNC);
             WriteDIB(aRetval, aNew, false, true);
         }
     }
@@ -226,7 +240,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     // Create the AlphaMask using a method that does this always correct (also used
     // now in GlowPrimitive2D and ShadowPrimitive2D which both only need the
     // AlphaMask to do their job, so speeding that up, too).
-    AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel));
+    AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, false));
 
 #ifdef DBG_UTIL
     if (bDoSaveForVisualControl)
