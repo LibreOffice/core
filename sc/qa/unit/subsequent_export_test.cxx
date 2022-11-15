@@ -346,8 +346,6 @@ void ScExportTest::testTdf139167()
 {
     createScDoc("xlsx/tdf139167.xlsx");
 
-    saveAndReload("Calc Office Open XML");
-
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/styles.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -360,8 +358,6 @@ void ScExportTest::testTdf139167()
 void ScExportTest::testTdf113271()
 {
     createScDoc("xlsx/tdf113271.xlsx");
-
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/styles.xml");
@@ -379,8 +375,6 @@ void ScExportTest::testTdf113271()
 void ScExportTest::testTdf139394()
 {
     createScDoc("xlsx/tdf139394.xlsx");
-
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
@@ -406,8 +400,6 @@ void ScExportTest::testTdf139394()
 void ScExportTest::testExtCondFormatXLSX()
 {
     createScDoc("xlsx/tdf139021.xlsx");
-
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
@@ -449,8 +441,6 @@ void ScExportTest::testTdf90104()
 {
     createScDoc("xlsx/tdf90104.xlsx");
 
-    saveAndReload("Calc Office Open XML");
-
     save("Calc Office Open XML");
 
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
@@ -471,8 +461,6 @@ void ScExportTest::testTdf111876()
     // Document with relative path hyperlink
 
     createScDoc("xlsx/tdf111876.xlsx");
-
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/_rels/sheet1.xml.rels");
@@ -1506,7 +1494,6 @@ void ScExportTest::testNamedRangeBugfdo62729()
 void ScExportTest::testBuiltinRangesXLSX()
 {
     createScDoc("xlsx/built-in_ranges.xlsx");
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/workbook.xml");
@@ -3736,8 +3723,6 @@ void ScExportTest::testSheetTextBoxHyperlinkXLSX()
 {
     createScDoc("xlsx/textbox-hyperlink.xlsx");
 
-    saveAndReload("Calc Office Open XML");
-
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -3782,8 +3767,6 @@ void ScExportTest::testSheetCharacterKerningSpaceXLSX()
 void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
 {
     createScDoc("xlsx/textbox-CondensedCharacterSpace.xlsx");
-
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/drawings/drawing1.xml");
@@ -3832,8 +3815,6 @@ void ScExportTest::testSheetRunParagraphPropertyXLSX()
 {
     createScDoc("xlsx/TextColor.xlsx");
 
-    saveAndReload("Calc Office Open XML");
-
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -3845,7 +3826,6 @@ void ScExportTest::testSheetRunParagraphPropertyXLSX()
 void ScExportTest::testPreserveTextWhitespaceXLSX()
 {
     createScDoc("xlsx/preserve-whitespace.xlsx");
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
@@ -3856,7 +3836,6 @@ void ScExportTest::testPreserveTextWhitespaceXLSX()
 void ScExportTest::testPreserveTextWhitespace2XLSX()
 {
     createScDoc("xlsx/preserve_space.xlsx");
-    saveAndReload("Calc Office Open XML");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
