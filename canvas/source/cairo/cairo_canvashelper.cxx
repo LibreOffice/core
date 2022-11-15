@@ -1175,8 +1175,13 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
 
-            int nPixelWidth = std::round(rSize.Width * aMatrix.xx);
-            int nPixelHeight = std::round(rSize.Height * aMatrix.yy);
+            // Use cairo_matrix_transform_distance() to determine the scaling, as that works even if
+            // the matrix also has rotation.
+            double fPixelWidth = rSize.Width;
+            double fPixelHeight = rSize.Height;
+            cairo_matrix_transform_distance(&aMatrix, &fPixelWidth, &fPixelHeight);
+            int nPixelWidth = std::round(fPixelWidth);
+            int nPixelHeight = std::round(fPixelHeight);
             if (std::abs(nPixelWidth) > 0 && std::abs(nPixelHeight) > 0)
             {
                 // Only render the image if it's at least 1x1 px sized.
