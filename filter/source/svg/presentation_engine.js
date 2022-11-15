@@ -5401,6 +5401,29 @@ function getTextFieldType ( elem )
             else if (sContent === '<header>')
                 sFieldType = aHeaderClassName;
         }
+
+        if( sFieldType )
+            return sFieldType;
+
+        var aTextPortionElement = getElementByClassName( elem, 'TextPortion' );
+        if( aTextPortionElement )
+        {
+            var sContent = aTextPortionElement.textContent
+            if( sContent.indexOf( '<number>' ) != -1 )
+                sFieldType = aSlideNumberClassName;
+            else if( sContent.indexOf( '<date/time>' ) != -1 )
+                sFieldType = aDateTimeClassName;
+            else if( sContent.indexOf( '<date>' ) != -1 )
+                sFieldType = aDateClassName;
+            else if( sContent.indexOf( '<time>' ) != -1 )
+                sFieldType = aTimeClassName;
+            else if( sContent.indexOf( '<slide-name>' ) != -1 )
+                sFieldType = aSlideNameClassName;
+            else if( sContent.indexOf( '<footer>' ) != -1 )
+                sFieldType = aFooterClassName;
+            else if( sContent.indexOf( '<header>' ) != -1 )
+                sFieldType = aHeaderClassName;
+        }
     }
     return sFieldType;
 }
@@ -5610,6 +5633,20 @@ PlaceholderShape.prototype.init = function()
         var aTextElem = getElementByClassName( aTextFieldElement, 'SVGTextShape' );
         if( aTextElem )
         {
+            var aTextParagraphSet = getElementsByClassName( aTextElem, 'TextParagraph' );
+            // When the text field width is too small, the placeholder text spans several lines.
+            // We remove all text lines but the first one which is used as a placeholder.
+            // This is a workaround but it should work in the majority of cases.
+            // A complete solution needs to support svg text wrapping.
+            if( aTextParagraphSet.length > 1 )
+            {
+                var i = aTextParagraphSet.length;
+                while( i > 1 )
+                {
+                    aTextElem.removeChild(aTextParagraphSet[i-1]);
+                    --i;
+                }
+            }
             var aPlaceholderElement = getElementByClassName(aTextElem, 'PlaceholderText');
             if( aPlaceholderElement )
             {
