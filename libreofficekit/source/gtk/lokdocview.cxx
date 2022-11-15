@@ -2840,6 +2840,8 @@ static gboolean spin_lok_loop(void *pData)
 static void updateClientZoom(LOKDocView *pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_fZoom)
+        return; // Not initialized yet?
     gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
     gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
     GError* error = nullptr;
