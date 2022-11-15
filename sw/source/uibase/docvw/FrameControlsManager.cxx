@@ -94,7 +94,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFra
     else
     {
         SwFrameControlPtr pNewControl =
-                std::make_shared<SwFrameControl>( VclPtr<SwHeaderFooterWin>::Create(
+                std::make_shared<SwFrameControl>( VclPtr<SwHeaderFooterDashedLine>::Create(
                                         m_pEditWin, pPageFrame, bHeader ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
@@ -104,7 +104,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFra
 
     tools::Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrame->getFrameArea().SVRect() );
 
-    SwHeaderFooterWin* pWin = dynamic_cast<SwHeaderFooterWin *>(pControl->GetWindow());
+    SwHeaderFooterDashedLine* pWin = dynamic_cast<SwHeaderFooterDashedLine*>(pControl->GetWindow());
     assert( pWin != nullptr) ;
     assert( pWin->IsHeader() == bHeader );
     pWin->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
