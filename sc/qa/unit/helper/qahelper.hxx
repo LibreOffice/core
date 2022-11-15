@@ -267,8 +267,6 @@ SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
 #define ASSERT_FORMULA_EQUAL(doc, pos, expected, msg) \
     checkFormula(doc, pos, expected, msg, CPPUNIT_SOURCELINE())
 
-SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
-
 SCQAHELPER_DLLPUBLIC void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sFormat);
 
 SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);

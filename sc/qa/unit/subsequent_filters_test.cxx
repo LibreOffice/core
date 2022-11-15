@@ -65,7 +65,7 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Filters test */
 
-class ScFiltersTest : public ScBootstrapFixture
+class ScFiltersTest : public ScModelTestBase
 {
 public:
     ScFiltersTest();
@@ -282,8 +282,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void testImportCrash(std::u16string_view rFileName, sal_Int32 nFormat);
-    void testPassword_Impl(std::u16string_view rFileNameBase);
+    void testImportCrash(const char* rFileName);
 };
 
 namespace
@@ -325,11 +324,11 @@ void testRangeNameImpl(const ScDocument& rDoc)
 
 void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf139928.", FORMAT_XLSX);
+    createScDoc("xlsx/tdf139928.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
     CPPUNIT_ASSERT(pFormat);
 
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -352,16 +351,14 @@ void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
 
     pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::EndsWith, pCondition->GetOperation());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf119292()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf119292.", FORMAT_XLSX);
+    createScDoc("xlsx/tdf119292.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    auto* pDev = rDoc.GetRefDevice();
+    ScDocument* pDoc = getScDoc();
+    auto* pDev = pDoc->GetRefDevice();
     Size aMarkSize(4, 6);
     Color aArrowFillCol(COL_LIGHTRED);
 
@@ -386,151 +383,139 @@ void ScFiltersTest::testTdf119292()
     CPPUNIT_ASSERT_EQUAL(Point(108, 54), aPoly270Pos1);
     CPPUNIT_ASSERT_EQUAL(Point(111, 57), aPoly270Pos2);
     CPPUNIT_ASSERT_EQUAL(Point(114, 54), aPoly270Pos3);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf150452()
 {
     // Without the fix in place, this test would have crashed
-    ScDocShellRef xDocSh = loadDoc(u"tdf150452.", FORMAT_CSV);
+    createScDoc("csv/tdf150452.csv");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1-GDUSF"), rDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("1-GE41L"), rDoc.GetString(0, 3998, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("1-GDUSF"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("1-GE41L"), pDoc->GetString(0, 3998, 0));
 }
 
 void ScFiltersTest::testTdf48731()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf48731.", FORMAT_CSV);
+    createScDoc("csv/tdf48731.csv");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("'"), rDoc.GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("''"), rDoc.GetString(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'''"), rDoc.GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("''"), pDoc->GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'''"), pDoc->GetString(1, 3, 0));
 
     // Without the fix in place, this test would have failed with
     // - Expected: '3
     // - Actual  : 3
-    CPPUNIT_ASSERT_EQUAL(OUString("'3"), rDoc.GetString(1, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'word"), rDoc.GetString(1, 5, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), rDoc.GetString(1, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'3"), pDoc->GetString(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'word"), pDoc->GetString(1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), pDoc->GetString(1, 6, 0));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("'"), rDoc.GetString(1, 9, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("''"), rDoc.GetString(1, 10, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'''"), rDoc.GetString(1, 11, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'3"), rDoc.GetString(1, 12, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'word"), rDoc.GetString(1, 13, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), rDoc.GetString(1, 14, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("'"), pDoc->GetString(1, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("''"), pDoc->GetString(1, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'''"), pDoc->GetString(1, 11, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'3"), pDoc->GetString(1, 12, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'word"), pDoc->GetString(1, 13, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), pDoc->GetString(1, 14, 0));
 }
 
 void ScFiltersTest::testCondFormatFormulaIsXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf113013.", FORMAT_XLSX);
+    createScDoc("xlsx/tdf113013.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // "Formula is" condition
-    ScConditionalFormat* pFormatB1 = rDoc.GetCondFormat(1, 0, 0);
+    ScConditionalFormat* pFormatB1 = pDoc->GetCondFormat(1, 0, 0);
     CPPUNIT_ASSERT(pFormatB1);
-    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
     CPPUNIT_ASSERT(pFormatA2);
 
-    ScRefCellValue aCellB1(rDoc, ScAddress(1, 0, 0));
+    ScRefCellValue aCellB1(*pDoc, ScAddress(1, 0, 0));
     OUString aCellStyleB1 = pFormatB1->GetCellStyle(aCellB1, ScAddress(1, 0, 0));
     CPPUNIT_ASSERT(!aCellStyleB1.isEmpty());
 
-    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
     OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
     CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf120749.", FORMAT_XLSX);
+    createScDoc("xlsx/tdf120749.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // begins with and ends with conditions
-    ScConditionalFormat* pFormatA1 = rDoc.GetCondFormat(0, 0, 0);
+    ScConditionalFormat* pFormatA1 = pDoc->GetCondFormat(0, 0, 0);
     CPPUNIT_ASSERT(pFormatA1);
-    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
     CPPUNIT_ASSERT(pFormatA2);
-    ScConditionalFormat* pFormatA3 = rDoc.GetCondFormat(0, 2, 0);
+    ScConditionalFormat* pFormatA3 = pDoc->GetCondFormat(0, 2, 0);
     CPPUNIT_ASSERT(pFormatA3);
-    ScConditionalFormat* pFormatA4 = rDoc.GetCondFormat(0, 3, 0);
+    ScConditionalFormat* pFormatA4 = pDoc->GetCondFormat(0, 3, 0);
     CPPUNIT_ASSERT(pFormatA4);
 
-    ScRefCellValue aCellA1(rDoc, ScAddress(0, 0, 0));
+    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
     OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
 
-    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
     OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
     CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
 
-    ScRefCellValue aCellA3(rDoc, ScAddress(0, 2, 0));
+    ScRefCellValue aCellA3(*pDoc, ScAddress(0, 2, 0));
     OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
     CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
 
-    ScRefCellValue aCellA4(rDoc, ScAddress(0, 3, 0));
+    ScRefCellValue aCellA4(*pDoc, ScAddress(0, 3, 0));
     OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
     CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testExtCondFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf122102.", FORMAT_XLSX);
+    createScDoc("xlsx/tdf122102.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // contains text and not contains text conditions
-    ScConditionalFormat* pFormatA1 = rDoc.GetCondFormat(0, 0, 0);
+    ScConditionalFormat* pFormatA1 = pDoc->GetCondFormat(0, 0, 0);
     CPPUNIT_ASSERT(pFormatA1);
-    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
     CPPUNIT_ASSERT(pFormatA2);
-    ScConditionalFormat* pFormatA3 = rDoc.GetCondFormat(0, 2, 0);
+    ScConditionalFormat* pFormatA3 = pDoc->GetCondFormat(0, 2, 0);
     CPPUNIT_ASSERT(pFormatA3);
-    ScConditionalFormat* pFormatA4 = rDoc.GetCondFormat(0, 3, 0);
+    ScConditionalFormat* pFormatA4 = pDoc->GetCondFormat(0, 3, 0);
     CPPUNIT_ASSERT(pFormatA4);
 
-    ScRefCellValue aCellA1(rDoc, ScAddress(0, 0, 0));
+    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
     OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
 
-    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
     OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
     CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
 
-    ScRefCellValue aCellA3(rDoc, ScAddress(0, 2, 0));
+    ScRefCellValue aCellA3(*pDoc, ScAddress(0, 2, 0));
     OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
     CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
 
-    ScRefCellValue aCellA4(rDoc, ScAddress(0, 3, 0));
+    ScRefCellValue aCellA4(*pDoc, ScAddress(0, 3, 0));
     OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
     CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testUpdateCircleInMergedCellODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"updateCircleInMergedCell.", FORMAT_ODS);
+    createScDoc("ods/updateCircleInMergedCell.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.EnableChangeReadOnly(true);
+    ScDocument* pDoc = getScDoc();
+    pDoc->EnableChangeReadOnly(true);
 
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
 
@@ -539,26 +524,25 @@ void ScFiltersTest::testUpdateCircleInMergedCellODS()
 
     ScCellMergeOption aCellMergeOption(0, 0, 1, 1); // A1:B2
     aCellMergeOption.maTabs.insert(0);
-    xDocSh->GetDocFunc().MergeCells(aCellMergeOption, false, true, true, false);
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->GetDocFunc().MergeCells(aCellMergeOption, false, true, true, false);
 
     // There should be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
-    xDocSh->GetDocFunc().UnmergeCells(aCellMergeOption, true, nullptr);
+    pDocSh->GetDocFunc().UnmergeCells(aCellMergeOption, true, nullptr);
 
     // There should be four circle objects!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pPage->GetObjCount());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDeleteCircleInMergedCellODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"deleteCircleInMergedCell.", FORMAT_ODS);
+    createScDoc("ods/deleteCircleInMergedCell.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
 
@@ -567,229 +551,207 @@ void ScFiltersTest::testDeleteCircleInMergedCellODS()
 
     ScRefCellValue aMergedCell;
     ScAddress aPosMergedCell(0, 0, 0);
-    aMergedCell.assign(rDoc, aPosMergedCell);
+    aMergedCell.assign(*pDoc, aPosMergedCell);
 
     // The value of merged cell change to 6.
     aMergedCell = ScRefCellValue(6);
 
     // Check that the data is valid.(True if the value = 6)
-    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    const ScValidationData* pData = pDoc->GetValidationEntry(1);
     bool bValidA1 = pData->IsDataValid(aMergedCell, aPosMergedCell);
     // if valid, delete circle.
     if (bValidA1)
-        ScDetectiveFunc(rDoc, 0).DeleteCirclesAt(aPosMergedCell.Col(), aPosMergedCell.Row());
+        ScDetectiveFunc(*pDoc, 0).DeleteCirclesAt(aPosMergedCell.Col(), aPosMergedCell.Row());
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBasicCellContentODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"basic-cell-content.", FORMAT_ODS);
+    createScDoc("ods/basic-cell-content.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aStr = rDoc.GetString(1, 1, 0); // B2
+    ScDocument* pDoc = getScDoc();
+    OUString aStr = pDoc->GetString(1, 1, 0); // B2
     CPPUNIT_ASSERT_EQUAL(OUString("LibreOffice Calc"), aStr);
-    double fVal = rDoc.GetValue(1, 2, 0); // B3
+    double fVal = pDoc->GetValue(1, 2, 0); // B3
     CPPUNIT_ASSERT_EQUAL(12345.0, fVal);
-    aStr = rDoc.GetString(1, 3, 0); // B4
+    aStr = pDoc->GetString(1, 3, 0); // B4
     CPPUNIT_ASSERT_EQUAL(OUString("A < B"), aStr);
 
     // Numeric value of 0.
     ScRefCellValue aCell;
-    aCell.assign(rDoc, ScAddress(1, 4, 0)); // B5
+    aCell.assign(*pDoc, ScAddress(1, 4, 0)); // B5
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This cell must be numeric.", CELLTYPE_VALUE, aCell.getType());
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.getDouble());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBooleanFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"check-boolean.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
+    createScDoc("xlsx/check-boolean.xlsx");
+    ScDocument* pDoc = getScDoc();
+    SvNumberFormatter* pNumFormatter = pDoc->GetFormatTable();
     // Saved as >"TRUE";"TRUE";"FALSE"< but reading converted back to >BOOLEAN<
     const OUString aBooleanTypeStr = "BOOLEAN";
 
     for (SCROW i = 0; i <= 1; i++)
     {
-        sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, i, 0);
+        sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(0, i, 0);
         const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf143809()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf143809.", FORMAT_ODS);
+    createScDoc("ods/tdf143809.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aFormula = rDoc.GetFormula(0, 0, 0);
+    OUString aFormula = pDoc->GetFormula(0, 0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMPRODUCT(IFERROR(CEILING.MATH(DURATIONS,300),0))"), aFormula);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 53700
     // - Actual  : Err:502
-    CPPUNIT_ASSERT_EQUAL(OUString("53700"), rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("53700"), pDoc->GetString(0, 0, 0));
 
-    aFormula = rDoc.GetFormula(0, 1, 0);
+    aFormula = pDoc->GetFormula(0, 1, 0);
     CPPUNIT_ASSERT_EQUAL(
         OUString(
             "=SUMPRODUCT(IFERROR(CEILING(SUMIFS(DURATIONS,IDS,IDS),300)/COUNTIFS(IDS,IDS),0))"),
         aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("51900"), rDoc.GetString(0, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("51900"), pDoc->GetString(0, 1, 0));
 }
 
 void ScFiltersTest::testTdf76310()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf76310.", FORMAT_ODS);
+    createScDoc("ods/tdf76310.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aFormula = rDoc.GetFormula(0, 0, 0);
+    OUString aFormula = pDoc->GetFormula(0, 0, 0);
     // Without the fix in place, this test would have failed with
     // - Expected: =1
     // +
     // 2
     // - Actual  : =1 + 2
     CPPUNIT_ASSERT_EQUAL(OUString("=1\n+\n2"), aFormula);
-    ASSERT_DOUBLES_EQUAL(3.0, rDoc.GetValue(0, 0, 0));
-
-    xDocSh->DoClose();
+    ASSERT_DOUBLES_EQUAL(3.0, pDoc->GetValue(0, 0, 0));
 }
 
 void ScFiltersTest::testRangeNameXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"named-ranges-global.", FORMAT_XLS);
-    xDocSh->DoHardRecalc();
+    createScDoc("xls/named-ranges-global.xls");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testRangeNameImpl(rDoc);
+    ScDocument* pDoc = getScDoc();
+    testRangeNameImpl(*pDoc);
 
-    OUString aCSVPath;
-    createCSVPath("rangeExp_Sheet2.", aCSVPath);
+    OUString aCSVPath = createFilePath(u"contentCSV/rangeExp_Sheet2.csv");
     // fdo#44587
-    testFile(aCSVPath, rDoc, 1);
-
-    xDocSh->DoClose();
+    testFile(aCSVPath, *pDoc, 1);
 }
 
 void ScFiltersTest::testRangeNameLocalXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"named-ranges-local.", FORMAT_XLS);
-    xDocSh->DoHardRecalc();
+    createScDoc("xls/named-ranges-local.xls");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScRangeName* pRangeName = rDoc.GetRangeName(0);
+    ScDocument* pDoc = getScDoc();
+    ScRangeName* pRangeName = pDoc->GetRangeName(0);
     CPPUNIT_ASSERT(pRangeName);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
 
-    OUString aFormula = rDoc.GetFormula(3, 11, 0);
+    OUString aFormula = pDoc->GetFormula(3, 11, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
-    ASSERT_DOUBLES_EQUAL(14.0, rDoc.GetValue(3, 11, 0));
+    ASSERT_DOUBLES_EQUAL(14.0, pDoc->GetValue(3, 11, 0));
 
-    aFormula = rDoc.GetFormula(6, 4, 0);
+    aFormula = pDoc->GetFormula(6, 4, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testRangeNameXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"named-ranges-global.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc();
+    createScDoc("xlsx/named-ranges-global.xlsx");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testRangeNameImpl(rDoc);
-
-    xDocSh->DoClose();
+    ScDocument* pDoc = getScDoc();
+    testRangeNameImpl(*pDoc);
 }
 
 void ScFiltersTest::testHyperlinksXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"hyperlinks.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xlsx/hyperlinks.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC10"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC11"), rDoc.GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC12"), rDoc.GetString(ScAddress(0, 3, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC10"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC11"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC12"), pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
 void ScFiltersTest::testHardRecalcODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"hard-recalc.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/hard-recalc.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocument* pDoc = getScDoc();
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath("hard-recalc.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/hard-recalc.csv");
+    testFile(aCSVPath, *pDoc, 0);
 }
 
 void ScFiltersTest::testFunctionsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"functions.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/functions.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocument* pDoc = getScDoc();
 
     //test logical functions
-    createCSVPath("logical-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
+    OUString aCSVPath = createFilePath(u"contentCSV/logical-functions.csv");
+    testFile(aCSVPath, *pDoc, 0);
     //test spreadsheet functions
-    createCSVPath("spreadsheet-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 1);
+    aCSVPath = createFilePath(u"contentCSV/spreadsheet-functions.csv");
+    testFile(aCSVPath, *pDoc, 1);
     //test mathematical functions
-    createCSVPath("mathematical-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 2, StringType::PureString);
+    aCSVPath = createFilePath(u"contentCSV/mathematical-functions.csv");
+    testFile(aCSVPath, *pDoc, 2, StringType::PureString);
     //test information functions
-    createCSVPath("information-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 3);
+    aCSVPath = createFilePath(u"contentCSV/information-functions.csv");
+    testFile(aCSVPath, *pDoc, 3);
     // text functions
-    createCSVPath("text-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 4, StringType::PureString);
+    aCSVPath = createFilePath(u"contentCSV/text-functions.csv");
+    testFile(aCSVPath, *pDoc, 4, StringType::PureString);
     // statistical functions
-    createCSVPath("statistical-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 5);
+    aCSVPath = createFilePath(u"contentCSV/statistical-functions.csv");
+    testFile(aCSVPath, *pDoc, 5);
     // financial functions
-    createCSVPath("financial-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 6);
+    aCSVPath = createFilePath(u"contentCSV/financial-functions.csv");
+    testFile(aCSVPath, *pDoc, 6);
 
-    xDocSh->DoClose();
+    createScDoc("ods/database-functions.ods");
+    pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    pDoc = getScDoc();
 
-    xDocSh = loadDoc(u"database-functions.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
-    ScDocument& rDoc2 = xDocSh->GetDocument();
+    aCSVPath = createFilePath(u"contentCSV/database-functions.csv");
+    testFile(aCSVPath, *pDoc, 0);
 
-    createCSVPath("database-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc2, 0);
-
-    xDocSh->DoClose();
-
-    xDocSh = loadDoc(u"date-time-functions.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
-    ScDocument& rDoc3 = xDocSh->GetDocument();
-    createCSVPath("date-time-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc3, 0, StringType::PureString);
-
-    xDocSh->DoClose();
+    createScDoc("ods/date-time-functions.ods");
+    pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    pDoc = getScDoc();
+    aCSVPath = createFilePath(u"contentCSV/date-time-functions.csv");
+    testFile(aCSVPath, *pDoc, 0, StringType::PureString);
 
     // crashes at exit while unloading StarBasic code
     // xDocSh = loadDoc("user-defined-function.", FORMAT_ODS);
@@ -801,70 +763,62 @@ void ScFiltersTest::testFunctionsODS()
 
 void ScFiltersTest::testFunctionsExcel2010()
 {
-    ScDocShellRef xDocSh = loadDoc(u"functions-excel-2010.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
+    createScDoc("xlsx/functions-excel-2010.xlsx");
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll(); // perform hard re-calculation.
 
-    testFunctionsExcel2010_Impl(rDoc);
-
-    xDocSh->DoClose();
+    testFunctionsExcel2010_Impl(*pDoc);
 }
 
 void ScFiltersTest::testCeilingFloorXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"ceiling-floor.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
+    createScDoc("xlsx/ceiling-floor.xlsx");
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll(); // perform hard re-calculation.
 
-    testCeilingFloor_Impl(rDoc);
-
-    xDocSh->DoClose();
+    testCeilingFloor_Impl(*pDoc);
 }
 
 void ScFiltersTest::testCachedFormulaResultsODS()
 {
     {
-        ScDocShellRef xDocSh = loadDoc(u"functions.", FORMAT_ODS);
+        createScDoc("ods/functions.ods");
 
-        ScDocument& rDoc = xDocSh->GetDocument();
-        OUString aCSVFileName;
+        ScDocument* pDoc = getScDoc();
 
         //test cached formula results of logical functions
-        createCSVPath("logical-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 0);
+        OUString aCSVPath = createFilePath(u"contentCSV/logical-functions.csv");
+        testFile(aCSVPath, *pDoc, 0);
         //test cached formula results of spreadsheet functions
-        createCSVPath("spreadsheet-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 1);
+        aCSVPath = createFilePath(u"contentCSV/spreadsheet-functions.csv");
+        testFile(aCSVPath, *pDoc, 1);
         //test cached formula results of mathematical functions
-        createCSVPath("mathematical-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 2, StringType::PureString);
+        aCSVPath = createFilePath(u"contentCSV/mathematical-functions.csv");
+        testFile(aCSVPath, *pDoc, 2, StringType::PureString);
         //test cached formula results of information functions
-        createCSVPath("information-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 3);
+        aCSVPath = createFilePath(u"contentCSV/information-functions.csv");
+        testFile(aCSVPath, *pDoc, 3);
         // text functions
-        createCSVPath("text-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 4, StringType::PureString);
-
-        xDocSh->DoClose();
+        aCSVPath = createFilePath(u"contentCSV/text-functions.csv");
+        testFile(aCSVPath, *pDoc, 4, StringType::PureString);
     }
 
     {
-        ScDocShellRef xDocSh = loadDoc(u"cachedValue.", FORMAT_ODS);
+        createScDoc("ods/cachedValue.ods");
 
-        ScDocument& rDoc = xDocSh->GetDocument();
-        OUString aCSVFileName;
-        createCSVPath("cachedValue.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 0);
+        ScDocument* pDoc = getScDoc();
+        OUString aCSVPath = createFilePath(u"contentCSV/cachedValue.csv");
+        testFile(aCSVPath, *pDoc, 0);
 
         //we want to me sure that volatile functions are always recalculated
         //regardless of cached results.  if you update the ods file, you must
         //update the values here.
         //if NOW() is recalculated, then it should never equal "01/25/13 01:06 PM"
-        OUString sTodayRecalc(rDoc.GetString(0, 0, 1));
+        OUString sTodayRecalc(pDoc->GetString(0, 0, 1));
 
         CPPUNIT_ASSERT("01/25/13 01:06 PM" != sTodayRecalc);
 
-        OUString sTodayRecalcRef(rDoc.GetString(1, 0, 1));
+        OUString sTodayRecalcRef(pDoc->GetString(1, 0, 1));
         CPPUNIT_ASSERT_EQUAL(sTodayRecalc, sTodayRecalcRef);
 
         // make sure that error values are not being treated as string values
@@ -874,38 +828,35 @@ void ScFiltersTest::testCachedFormulaResultsODS()
             {
                 OUString aFormula = "=ISERROR(" + OUStringChar(static_cast<char>('A' + nCol))
                                     + OUString::number(nRow) + ")";
-                rDoc.SetString(nCol, nRow + 2, 2, aFormula);
+                pDoc->SetString(nCol, nRow + 2, 2, aFormula);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), OUString("TRUE"),
-                    rDoc.GetString(nCol, nRow + 2, 2));
+                    pDoc->GetString(nCol, nRow + 2, 2));
 
                 OUString aIsTextFormula = "=ISTEXT("
                                           + OUString::number(static_cast<char>('A' + nCol))
                                           + OUString::number(nRow) + ")";
-                rDoc.SetString(nCol, nRow + 4, 2, aIsTextFormula);
-                CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(nCol, nRow + 4, 2));
+                pDoc->SetString(nCol, nRow + 4, 2, aIsTextFormula);
+                CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), pDoc->GetString(nCol, nRow + 4, 2));
             }
         }
-
-        xDocSh->DoClose();
     }
 }
 
 void ScFiltersTest::testCachedMatrixFormulaResultsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"matrix.", FORMAT_ODS);
+    createScDoc("ods/matrix.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     //test matrix
-    OUString aCSVFileName;
-    createCSVPath("matrix.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
+    OUString aCSVPath = createFilePath(u"contentCSV/matrix.csv");
+    testFile(aCSVPath, *pDoc, 0);
     //test matrices with special cases
-    createCSVPath("matrix2.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 1);
-    createCSVPath("matrix3.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 2);
+    aCSVPath = createFilePath(u"contentCSV/matrix2.csv");
+    testFile(aCSVPath, *pDoc, 1);
+    aCSVPath = createFilePath(u"contentCSV/matrix3.csv");
+    testFile(aCSVPath, *pDoc, 2);
     //The above testFile() does not catch the below case.
     //If a matrix formula has a matrix reference cell that is intended to have
     //a blank text result, the matrix reference cell is actually saved(export)
@@ -913,74 +864,69 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     //Import works around this by setting these cells as text cells so that
     //the blank text is used for display instead of the number 0.
     //If this is working properly, the following cell should NOT have value data.
-    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(3, 0, 2));
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(3, 0, 2));
 
     // fdo#59293 with cached value import error formulas require special
     // treatment
-    rDoc.SetString(2, 5, 2, "=ISERROR(A6)");
-    double nVal = rDoc.GetValue(2, 5, 2);
+    pDoc->SetString(2, 5, 2, "=ISERROR(A6)");
+    double nVal = pDoc->GetValue(2, 5, 2);
     CPPUNIT_ASSERT_EQUAL(1.0, nVal);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testFormulaDepAcrossSheetsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"formula-across-sheets.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/formula-across-sheets.ods");
+    ScDocument* pDoc = getScDoc();
 
-    sc::AutoCalcSwitch aACSwitch(rDoc, true); // Make sure auto calc is turned on.
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // Make sure auto calc is turned on.
 
     // Save the original values of A4:C4.
-    double fA4 = rDoc.GetValue(ScAddress(0, 3, 2));
-    double fB4 = rDoc.GetValue(ScAddress(1, 3, 2));
-    double fC4 = rDoc.GetValue(ScAddress(2, 3, 2));
+    double fA4 = pDoc->GetValue(ScAddress(0, 3, 2));
+    double fB4 = pDoc->GetValue(ScAddress(1, 3, 2));
+    double fC4 = pDoc->GetValue(ScAddress(2, 3, 2));
 
     // Change the value of D4. This should trigger A4:C4 to be recalculated.
-    double fD4 = rDoc.GetValue(ScAddress(3, 3, 2));
-    rDoc.SetValue(ScAddress(3, 3, 2), fD4 + 1.0);
+    double fD4 = pDoc->GetValue(ScAddress(3, 3, 2));
+    pDoc->SetValue(ScAddress(3, 3, 2), fD4 + 1.0);
 
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.",
-                           fA4 != rDoc.GetValue(ScAddress(0, 3, 2)));
+                           fA4 != pDoc->GetValue(ScAddress(0, 3, 2)));
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.",
-                           fB4 != rDoc.GetValue(ScAddress(1, 3, 2)));
+                           fB4 != pDoc->GetValue(ScAddress(1, 3, 2)));
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.",
-                           fC4 != rDoc.GetValue(ScAddress(2, 3, 2)));
-
-    xDocSh->DoClose();
+                           fC4 != pDoc->GetValue(ScAddress(2, 3, 2)));
 }
 
 void ScFiltersTest::testFormulaDepDeleteContentsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"formula-delete-contents.", FORMAT_ODS, true);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/formula-delete-contents.ods");
+    ScDocument* pDoc = getScDoc();
 
-    sc::UndoSwitch aUndoSwitch(rDoc, true); // Enable undo.
-    sc::AutoCalcSwitch aACSwitch(rDoc, true); // Make sure auto calc is turned on.
+    sc::UndoSwitch aUndoSwitch(*pDoc, true); // Enable undo.
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // Make sure auto calc is turned on.
 
-    CPPUNIT_ASSERT_EQUAL(195.0, rDoc.GetValue(ScAddress(3, 15, 0))); // formula in D16
+    CPPUNIT_ASSERT_EQUAL(195.0, pDoc->GetValue(ScAddress(3, 15, 0))); // formula in D16
 
     // Delete D2:D5.
-    ScDocFunc& rFunc = xDocSh->GetDocFunc();
+    ScDocShell* pDocSh = getScDocShell();
+    ScDocFunc& rFunc = pDocSh->GetDocFunc();
     ScRange aRange(3, 1, 0, 3, 4, 0);
-    ScMarkData aMark(rDoc.GetSheetLimits());
+    ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     aMark.MarkToMulti();
     bool bGood = rFunc.DeleteContents(aMark, InsertDeleteFlags::ALL, true, true);
     CPPUNIT_ASSERT(bGood);
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 4, 0)));
 
-    CPPUNIT_ASSERT_EQUAL(94.0, rDoc.GetValue(ScAddress(3, 15, 0))); // formula in D16
+    CPPUNIT_ASSERT_EQUAL(94.0, pDoc->GetValue(ScAddress(3, 15, 0))); // formula in D16
 
-    SfxUndoManager* pUndoMgr = rDoc.GetUndoManager();
+    SfxUndoManager* pUndoMgr = pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
     pUndoMgr->Undo();
-    CPPUNIT_ASSERT_EQUAL(195.0, rDoc.GetValue(ScAddress(3, 15, 0))); // formula in D16
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(195.0, pDoc->GetValue(ScAddress(3, 15, 0))); // formula in D16
 }
 
 namespace
@@ -1031,46 +977,46 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
 
 void ScFiltersTest::testDatabaseRangesODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"database.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/database.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(rDoc, FORMAT_ODS);
-    xDocSh->DoClose();
+    testDBRanges_Impl(*pDoc, FORMAT_ODS);
 }
 
 void ScFiltersTest::testDatabaseRangesXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"database.", FORMAT_XLS);
-    xDocSh->DoHardRecalc();
+    createScDoc("xls/database.xls");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(rDoc, FORMAT_XLS);
-    xDocSh->DoClose();
+    testDBRanges_Impl(*pDoc, FORMAT_XLS);
 }
 
 void ScFiltersTest::testDatabaseRangesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"database.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc();
+    createScDoc("xlsx/database.xlsx");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(rDoc, FORMAT_XLSX);
-    xDocSh->DoClose();
+    testDBRanges_Impl(*pDoc, FORMAT_XLSX);
 }
 
 void ScFiltersTest::testFormatsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"formats.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/formats.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    testFormats(this, &rDoc, FORMAT_ODS);
-    xDocSh->DoClose();
+    testFormats(this, &*pDoc, u"calc8");
 }
 
 // void ScFiltersTest::testFormatsXLS()
@@ -1081,7 +1027,6 @@ void ScFiltersTest::testFormatsODS()
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
 //     testFormats(this, rDoc, FORMAT_XLS);
-//     xDocSh->DoClose();
 // }
 
 // void ScFiltersTest::testFormatsXLSX()
@@ -1092,75 +1037,69 @@ void ScFiltersTest::testFormatsODS()
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
 //     testFormats(this, rDoc, FORMAT_XLSX);
-//     xDocSh->DoClose();
 // }
 
 void ScFiltersTest::testMatrixODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"matrix.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/matrix.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aCSVFileName;
-    createCSVPath("matrix.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/matrix.csv");
+    testFile(aCSVPath, *pDoc, 0);
 }
 
 void ScFiltersTest::testMatrixXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"matrix.", FORMAT_XLS);
-    xDocSh->DoHardRecalc();
+    createScDoc("xls/matrix.xls");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aCSVFileName;
-    createCSVPath("matrix.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/matrix.csv");
+    testFile(aCSVPath, *pDoc, 0);
 }
 
 void ScFiltersTest::testDoubleThinBorder()
 {
     // double-thin borders created with size less than 1.15 where invisible (and subsequently lost) on round-trips.
-    ScDocShellRef xDocSh = loadDoc(u"tdf88827_borderDoubleThin.", FORMAT_ODS);
+    createScDoc("ods/tdf88827_borderDoubleThin.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     const editeng::SvxBorderLine* pLeft = nullptr;
     const editeng::SvxBorderLine* pTop = nullptr;
     const editeng::SvxBorderLine* pRight = nullptr;
     const editeng::SvxBorderLine* pBottom = nullptr;
 
-    rDoc.GetBorderLines(2, 2, 0, &pLeft, &pTop, &pRight, &pBottom);
+    pDoc->GetBorderLines(2, 2, 0, &pLeft, &pTop, &pRight, &pBottom);
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle());
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBorderODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"border.", FORMAT_ODS);
+    createScDoc("ods/border.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     const editeng::SvxBorderLine* pLeft = nullptr;
     const editeng::SvxBorderLine* pTop = nullptr;
     const editeng::SvxBorderLine* pRight = nullptr;
     const editeng::SvxBorderLine* pBottom = nullptr;
 
-    rDoc.GetBorderLines(0, 1, 0, &pLeft, &pTop, &pRight, &pBottom);
+    pDoc->GetBorderLines(0, 1, 0, &pLeft, &pTop, &pRight, &pBottom);
     CPPUNIT_ASSERT(!pLeft);
     CPPUNIT_ASSERT(!pTop);
     CPPUNIT_ASSERT(!pBottom);
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
 
-    rDoc.GetBorderLines(2, 1, 0, &pLeft, &pTop, &pRight, &pBottom);
+    pDoc->GetBorderLines(2, 1, 0, &pLeft, &pTop, &pRight, &pBottom);
     CPPUNIT_ASSERT(!pLeft);
     CPPUNIT_ASSERT(!pTop);
     CPPUNIT_ASSERT(!pBottom);
@@ -1169,7 +1108,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(tools::Long(20), pRight->GetWidth());
 
-    rDoc.GetBorderLines(2, 8, 0, &pLeft, &pTop, &pRight, &pBottom);
+    pDoc->GetBorderLines(2, 8, 0, &pLeft, &pTop, &pRight, &pBottom);
 
     CPPUNIT_ASSERT(pLeft);
     CPPUNIT_ASSERT(pTop);
@@ -1178,8 +1117,6 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(tools::Long(5), pRight->GetWidth());
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pRight->GetColor());
-
-    xDocSh->DoClose();
 }
 
 namespace
@@ -1270,9 +1207,9 @@ void ScFiltersTest::testBordersOoo33()
     borders.emplace_back(4, 11, 100, 100, 100, 100, 100, 0, 0, 100, 0, 0, 100, 0, 0, 100, 0, 0, 0,
                          0, 0, 0);
 
-    ScDocShellRef xDocSh = loadDoc(u"borders_ooo33.", FORMAT_ODS);
+    createScDoc("ods/borders_ooo33.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     const editeng::SvxBorderLine* pLeft = nullptr;
     const editeng::SvxBorderLine* pTop = nullptr;
@@ -1283,7 +1220,7 @@ void ScFiltersTest::testBordersOoo33()
     {
         for (sal_Int32 j = 0; j < 22; ++j)
         {
-            rDoc.GetBorderLines(i, j, 0, &pLeft, &pTop, &pRight, &pBottom);
+            pDoc->GetBorderLines(i, j, 0, &pLeft, &pTop, &pRight, &pBottom);
             if (pLeft != nullptr && pTop != nullptr && pRight != nullptr && pBottom != nullptr)
             {
                 CPPUNIT_ASSERT_EQUAL(borders[temp].column, i);
@@ -1316,59 +1253,54 @@ void ScFiltersTest::testBordersOoo33()
             }
         }
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"bug-fixes.", FORMAT_ODS);
+    createScDoc("ods/bug-fixes.ods");
 
-    xDocSh->DoHardRecalc();
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    ScDocument* pDoc = getScDoc();
 
     {
         // fdo#40967
-        OUString aCSVFileName;
-        createCSVPath("bugFix_Sheet2.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 1);
+        OUString aCSVPath = createFilePath(u"contentCSV/bugFix_Sheet2.csv");
+        testFile(aCSVPath, *pDoc, 1);
     }
 
     {
         // fdo#40426
-        ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE1");
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE1");
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(pDBData->HasHeader());
         // no header
-        pDBData = rDoc.GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE2");
+        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE2");
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(!pDBData->HasHeader());
     }
 
     {
         // fdo#59240
-        OUString aCSVFileName;
-        createCSVPath("bugFix_Sheet4.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 3);
+        OUString aCSVPath = createFilePath(u"contentCSV/bugFix_Sheet4.csv");
+        testFile(aCSVPath, *pDoc, 3);
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"bug-fixes.", FORMAT_XLS);
+    createScDoc("xls/bug-fixes.xls");
 
-    xDocSh->DoHardRecalc();
-    xDocSh->DoClose();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 }
 
 void ScFiltersTest::testBugFixesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"bug-fixes.", FORMAT_XLSX);
+    createScDoc("xlsx/bug-fixes.xlsx");
 
-    xDocSh->DoHardRecalc();
-    xDocSh->DoClose();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 }
 
 namespace
@@ -1391,46 +1323,38 @@ void checkMergedCells(ScDocument& rDoc, const ScAddress& rStartAddress,
 
 void ScFiltersTest::testMergedCellsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"merged.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/merged.ods");
+    ScDocument* pDoc = getScDoc();
 
     //check sheet1 content
-    OUString aCSVFileName1;
-    createCSVPath("merged1.", aCSVFileName1);
-    testFile(aCSVFileName1, rDoc, 0);
+    OUString aCSVPath = createFilePath(u"contentCSV/merged1.csv");
+    testFile(aCSVPath, *pDoc, 0);
 
     //check sheet1 merged cells
-    checkMergedCells(rDoc, ScAddress(0, 0, 0), ScAddress(5, 11, 0));
-    checkMergedCells(rDoc, ScAddress(7, 2, 0), ScAddress(9, 12, 0));
-    checkMergedCells(rDoc, ScAddress(3, 15, 0), ScAddress(7, 23, 0));
+    checkMergedCells(*pDoc, ScAddress(0, 0, 0), ScAddress(5, 11, 0));
+    checkMergedCells(*pDoc, ScAddress(7, 2, 0), ScAddress(9, 12, 0));
+    checkMergedCells(*pDoc, ScAddress(3, 15, 0), ScAddress(7, 23, 0));
 
     //check sheet2 content
-    OUString aCSVFileName2;
-    createCSVPath("merged2.", aCSVFileName2);
-    testFile(aCSVFileName2, rDoc, 1);
+    aCSVPath = createFilePath(u"contentCSV/merged2.csv");
+    testFile(aCSVPath, *pDoc, 1);
 
     //check sheet2 merged cells
-    checkMergedCells(rDoc, ScAddress(4, 3, 1), ScAddress(6, 15, 1));
-
-    xDocSh->DoClose();
+    checkMergedCells(*pDoc, ScAddress(4, 3, 1), ScAddress(6, 15, 1));
 }
 
 void ScFiltersTest::testRepeatedColumnsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"repeatedColumns.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/repeatedColumns.ods");
+    ScDocument* pDoc = getScDoc();
 
     //text
-    OUString aCSVFileName1;
-    createCSVPath("repeatedColumns1.", aCSVFileName1);
-    testFile(aCSVFileName1, rDoc, 0);
+    OUString aCSVPath = createFilePath(u"contentCSV/repeatedColumns1.csv");
+    testFile(aCSVPath, *pDoc, 0);
 
     //numbers
-    OUString aCSVFileName2;
-    createCSVPath("repeatedColumns2.", aCSVFileName2);
-    testFile(aCSVFileName2, rDoc, 1);
-
-    xDocSh->DoClose();
+    aCSVPath = createFilePath(u"contentCSV/repeatedColumns2.csv");
+    testFile(aCSVPath, *pDoc, 1);
 }
 
 namespace
@@ -1543,8 +1467,8 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
 
 void ScFiltersTest::testDataValidityODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"dataValidity.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/dataValidity.ods");
+    ScDocument* pDoc = getScDoc();
 
     ScAddress aValBaseAddr1(2, 6, 0); //sheet1
     ScAddress aValBaseAddr2(2, 3, 1); //sheet2
@@ -1552,17 +1476,17 @@ void ScFiltersTest::testDataValidityODS()
 
     //sheet1's expected Data Validation Entry values
     ValDataTestParams aVDTParams1(SC_VALID_DECIMAL, ScConditionMode::Greater, "3.14", OUString(),
-                                  rDoc, aValBaseAddr1, "Too small",
+                                  *pDoc, aValBaseAddr1, "Too small",
                                   "The number you are trying to enter is not greater than 3.14! "
                                   "Are you sure you want to enter it anyway?",
                                   SC_VALERR_WARNING, 1);
     //sheet2's expected Data Validation Entry values
-    ValDataTestParams aVDTParams2(SC_VALID_WHOLE, ScConditionMode::Between, "1", "10", rDoc,
+    ValDataTestParams aVDTParams2(SC_VALID_WHOLE, ScConditionMode::Between, "1", "10", *pDoc,
                                   aValBaseAddr2, "Error sheet 2",
                                   "Must be a whole number between 1 and 10.", SC_VALERR_STOP, 2);
     //sheet3's expected Data Validation Entry values
     ValDataTestParams aVDTParams3(SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)",
-                                  OUString(), rDoc, aValBaseAddr3, "Error sheet 3",
+                                  OUString(), *pDoc, aValBaseAddr3, "Error sheet 3",
                                   "Must not be a numerical value.", SC_VALERR_STOP, 3);
     //check each sheet's Data Validation Entries
     checkValiditationEntries(aVDTParams1);
@@ -1575,30 +1499,25 @@ void ScFiltersTest::testDataValidityODS()
     ScRange aRange3(2, 2, 2, 2, 6, 2); //sheet3
 
     //check each sheet's cells for data validity
-    checkCellValidity(aValBaseAddr1, aRange1, rDoc);
-    checkCellValidity(aValBaseAddr2, aRange2, rDoc);
-    checkCellValidity(aValBaseAddr3, aRange3, rDoc);
+    checkCellValidity(aValBaseAddr1, aRange1, *pDoc);
+    checkCellValidity(aValBaseAddr2, aRange2, *pDoc);
+    checkCellValidity(aValBaseAddr3, aRange3, *pDoc);
 
     //check each sheet's content
-    OUString aCSVFileName1;
-    createCSVPath("dataValidity1.", aCSVFileName1);
-    testFile(aCSVFileName1, rDoc, 0);
+    OUString aCSVPath = createFilePath(u"contentCSV/dataValidity1.csv");
+    testFile(aCSVPath, *pDoc, 0);
 
-    OUString aCSVFileName2;
-    createCSVPath("dataValidity2.", aCSVFileName2);
-    testFile(aCSVFileName2, rDoc, 1);
+    aCSVPath = createFilePath(u"contentCSV/dataValidity2.csv");
+    testFile(aCSVPath, *pDoc, 1);
 
-    OUString aCSVFileName3;
-    createCSVPath("dataValidity3.", aCSVFileName3);
-    testFile(aCSVFileName3, rDoc, 2);
-
-    xDocSh->DoClose();
+    aCSVPath = createFilePath(u"contentCSV/dataValidity3.csv");
+    testFile(aCSVPath, *pDoc, 2);
 }
 
 void ScFiltersTest::testDataValidityXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"dataValidity.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xlsx/dataValidity.xlsx");
+    ScDocument* pDoc = getScDoc();
 
     ScAddress aValBaseAddr1(2, 6, 0); //sheet1
     ScAddress aValBaseAddr2(2, 3, 1); //sheet2
@@ -1610,192 +1529,146 @@ void ScFiltersTest::testDataValidityXLSX()
     ScRange aRange3(2, 2, 2, 2, 6, 2); //sheet3
 
     //check each sheet's cells for data validity
-    checkCellValidity(aValBaseAddr1, aRange1, rDoc);
-    checkCellValidity(aValBaseAddr2, aRange2, rDoc);
-    checkCellValidity(aValBaseAddr3, aRange3, rDoc);
-
-    xDocSh->DoClose();
+    checkCellValidity(aValBaseAddr1, aRange1, *pDoc);
+    checkCellValidity(aValBaseAddr2, aRange2, *pDoc);
+    checkCellValidity(aValBaseAddr3, aRange3, *pDoc);
 }
 
 void ScFiltersTest::testDataTableMortgageXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"data-table/mortgage.", FORMAT_XLS);
+    createScDoc("xls/data-table/mortgage.xls");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // One-variable table
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 1, 0), "PMT(B3/12,B4,-B5)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 2, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 1, 0), "PMT(B3/12,B4,-B5)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 2, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 3, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 3, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 4, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 4, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)",
                          "Wrong formula!");
 
     // Two-variable table
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(2, 7, 0), "PMT(B9/12,B10,-B11)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(2, 7, 0), "PMT(B9/12,B10,-B11)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(3, 10, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 10, 0),
+                         "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)",
                          "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4, 10, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)",
-                         "Wrong formula!");
-
-    xDocSh->DoClose();
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 10, 0),
+                         "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)", "Wrong formula!");
 }
 
 void ScFiltersTest::testDataTableOneVarXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"data-table/one-variable.", FORMAT_XLSX);
+    createScDoc("xlsx/data-table/one-variable.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Right now, we have a bug that prevents Calc from re-calculating these
     // cells automatically upon file load. We can remove this call if/when we
     // fix the aforementioned bug.
-    rDoc.CalcAll();
+    pDoc->CalcAll();
 
     // B5:B11 should have multiple operations formula cells.  Just check the
     // top and bottom cells.
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(1, 4, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 4, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)",
                          "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(1, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 4, 0)));
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(1, 10, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 10, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)",
                          "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(14.0, rDoc.GetValue(ScAddress(1, 10, 0)));
+    CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(1, 10, 0)));
 
     // Likewise, E5:I5 should have multiple operations formula cells.  Just
     // check the left- and right-most cells.
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)",
                          "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(4, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(4, 4, 0)));
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(8, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(8, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)",
                          "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(50.0, rDoc.GetValue(ScAddress(8, 4, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(8, 4, 0)));
 }
 
 void ScFiltersTest::testDataTableMultiTableXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"data-table/multi-table.", FORMAT_XLSX);
+    createScDoc("xlsx/data-table/multi-table.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Right now, we have a bug that prevents Calc from re-calculating these
     // cells automatically upon file load. We can remove this call if/when we
     // fix the aforementioned bug.
-    rDoc.CalcAll();
+    pDoc->CalcAll();
 
     // B4:M15 should have multiple operations formula cells.  We'll just check
     // the top-left and bottom-right ones.
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(1, 3, 0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)",
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 3, 0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)",
                          "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 3, 0)));
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(12, 14, 0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)",
-                         "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(12, 14, 0),
+                         "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)", "Wrong formula!");
 
-    CPPUNIT_ASSERT_EQUAL(144.0, rDoc.GetValue(ScAddress(12, 14, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(144.0, pDoc->GetValue(ScAddress(12, 14, 0)));
 }
 
 void ScFiltersTest::testBrokenQuotesCSV()
 {
-    OUString aFileExtension(getFileFormats()[FORMAT_CSV].pName,
-                            strlen(getFileFormats()[FORMAT_CSV].pName), RTL_TEXTENCODING_UTF8);
-    OUString aFilterName(getFileFormats()[FORMAT_CSV].pFilterName,
-                         strlen(getFileFormats()[FORMAT_CSV].pFilterName), RTL_TEXTENCODING_UTF8);
-    OUString aFileName;
-    createFileURL(u"fdo48621_broken_quotes.", aFileExtension, aFileName);
-    OUString aFilterType(getFileFormats()[FORMAT_CSV].pTypeName,
-                         strlen(getFileFormats()[FORMAT_CSV].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << getFileFormats()[FORMAT_CSV].pName << " Test" << std::endl;
+    createScDoc("csv/fdo48621_broken_quotes.csv");
 
-    SfxFilterFlags nFormatType = getFileFormats()[FORMAT_CSV].nFormatType;
-    SotClipboardFormatId nClipboardId
-        = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-                                                    nFormatType, nClipboardId);
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo48621_broken_quotes.csv", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-
-    OUString aCSVPath;
-    createCSVPath("fdo48621_broken_quotes_exported.", aCSVPath);
+    OUString aCSVPath = createFilePath(u"contentCSV/fdo48621_broken_quotes_exported.csv");
     // fdo#48621
-    testFile(aCSVPath, rDoc, 0, StringType::PureString);
-
-    xDocSh->DoClose();
+    testFile(aCSVPath, *pDoc, 0, StringType::PureString);
 }
 
 void ScFiltersTest::testCellValueXLSX()
 {
-    static const OUStringLiteral aFileNameBase(u"cell-value.");
-    OUString aFileExtension(getFileFormats()[FORMAT_XLSX].pName,
-                            strlen(getFileFormats()[FORMAT_XLSX].pName), RTL_TEXTENCODING_UTF8);
-    OUString aFilterName(getFileFormats()[FORMAT_XLSX].pFilterName,
-                         strlen(getFileFormats()[FORMAT_XLSX].pFilterName), RTL_TEXTENCODING_UTF8);
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(getFileFormats()[FORMAT_XLSX].pTypeName,
-                         strlen(getFileFormats()[FORMAT_XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << getFileFormats()[FORMAT_XLSX].pName << " Test" << std::endl;
+    createScDoc("xlsx/cell-value.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-    SfxFilterFlags nFormatType = getFileFormats()[FORMAT_XLSX].nFormatType;
-    SotClipboardFormatId nClipboardId
-        = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-                                                    nFormatType, nClipboardId);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-
-    OUString aCSVPath;
-    createCSVPath(aFileNameBase, aCSVPath);
-    testFile(aCSVPath, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/cell-value.csv");
+    testFile(aCSVPath, *pDoc, 0);
 }
 
 void ScFiltersTest::testRowIndex1BasedXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"row-index-1-based.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xlsx/row-index-1-based.xlsx");
+    ScDocument* pDoc = getScDoc();
 
     // A1
-    OUString aStr = rDoc.GetString(ScAddress(0, 0, 0));
+    OUString aStr = pDoc->GetString(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Name"), aStr);
 
     // B1
-    aStr = rDoc.GetString(ScAddress(1, 0, 0));
+    aStr = pDoc->GetString(ScAddress(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Description"), aStr);
 
     // A2
-    aStr = rDoc.GetString(ScAddress(0, 1, 0));
+    aStr = pDoc->GetString(ScAddress(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Jerry"), aStr);
 
     // B2 - multi-line text.
-    const EditTextObject* pText = rDoc.GetEditText(ScAddress(1, 1, 0));
+    const EditTextObject* pText = pDoc->GetEditText(ScAddress(1, 1, 0));
     CPPUNIT_ASSERT(pText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pText->GetParagraphCount());
     aStr = pText->GetText(0);
@@ -1804,66 +1677,40 @@ void ScFiltersTest::testRowIndex1BasedXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Second line."), aStr);
     aStr = pText->GetText(2);
     CPPUNIT_ASSERT_EQUAL(OUString("Third line."), aStr);
-
-    xDocSh->DoClose();
 }
 
-void ScFiltersTest::testImportCrash(std::u16string_view rFileName, sal_Int32 nFormat)
+void ScFiltersTest::testImportCrash(const char* rFileName)
 {
-    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat);
+    createScDoc(rFileName);
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testPassword_Impl(std::u16string_view aFileNameBase)
-{
-    OUString aFileExtension(getFileFormats()[0].pName, strlen(getFileFormats()[0].pName),
-                            RTL_TEXTENCODING_UTF8);
-    OUString aFilterName(getFileFormats()[0].pFilterName, strlen(getFileFormats()[0].pFilterName),
-                         RTL_TEXTENCODING_UTF8);
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName),
-                         RTL_TEXTENCODING_UTF8);
-
-    SfxFilterFlags nFormatType = getFileFormats()[0].nFormatType;
-    OUString aPass("test");
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-                                                    nFormatType, SotClipboardFormatId::STARCALC_8,
-                                                    SOFFICE_FILEFORMAT_CURRENT, &aPass);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load password.ods", xDocSh.is());
-    xDocSh->DoClose();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll(); // perform hard re-calculation.
 }
 
 void ScFiltersTest::testPasswordNew()
 {
     //tests opening a file with new password algorithm
-    testPassword_Impl(u"password.");
+    createScDoc("ods/password.ods", /*pPassword*/ "test");
 }
 
 void ScFiltersTest::testPasswordOld()
 {
     //tests opening a file with old password algorithm
-    testPassword_Impl(u"passwordOld.");
+    createScDoc("ods/passwordOld.ods", /*pPassword*/ "test");
 }
 
 void ScFiltersTest::testPasswordWrongSHA()
 {
     //tests opening a file wrongly using the new password algorithm
     //in a sxc with the key algorithm missing
-    testPassword_Impl(u"passwordWrongSHA.");
+    createScDoc("ods/passwordWrongSHA.ods", /*pPassword*/ "test");
 }
 
 void ScFiltersTest::testControlImport()
 {
-    ScDocShellRef xDocSh = loadDoc(u"singlecontrol.", FORMAT_XLSX);
+    createScDoc("xlsx/singlecontrol.xlsx");
 
-    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
                                                                  UNO_QUERY_THROW);
@@ -1871,15 +1718,12 @@ void ScFiltersTest::testControlImport()
                                                          UNO_QUERY_THROW);
     uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
                                                          UNO_QUERY_THROW);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testActiveXOptionButtonGroup()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf111980_radioButtons.", FORMAT_XLSX);
-    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, UNO_QUERY_THROW);
+    createScDoc("xlsx/tdf111980_radioButtons.xlsx");
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
                                                                  UNO_QUERY_THROW);
@@ -1949,34 +1793,32 @@ void ScFiltersTest::testActiveXOptionButtonGroup()
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
     xPropertySet->getPropertyValue("GroupName") >>= sGroupName10;
     CPPUNIT_ASSERT_EQUAL(sGroupName, sGroupName10);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testChartImportODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"chart-import-basic.", FORMAT_ODS);
+    createScDoc("ods/chart-import-basic.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Ensure that the document contains "Empty", "Chart", "Data" and "Title" sheets in this exact order.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 4 sheets in this document.", sal_Int16(4),
-                                 rDoc.GetTableCount());
+                                 pDoc->GetTableCount());
     OUString aName;
-    rDoc.GetName(0, aName);
+    pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Empty"), aName);
-    rDoc.GetName(1, aName);
+    pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Chart"), aName);
-    rDoc.GetName(2, aName);
+    pDoc->GetName(2, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Data"), aName);
-    rDoc.GetName(3, aName);
+    pDoc->GetName(3, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), aName);
 
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
-    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 1);
+    const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
-    ScRangeList aRanges = getChartRanges(rDoc, *pOleObj);
+    ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
 
     CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.",
                            aRanges.Contains(ScAddress(1, 0, 3))); // B1 on Title
@@ -1984,82 +1826,75 @@ void ScFiltersTest::testChartImportODS()
                            aRanges.Contains(ScRange(0, 1, 2, 0, 3, 2))); // A2:A4 on Data
     CPPUNIT_ASSERT_MESSAGE("Data series value range not found.",
                            aRanges.Contains(ScRange(1, 1, 2, 1, 3, 2))); // B2:B4 on Data
-
-    xDocSh->DoClose();
 }
 
 #if HAVE_MORE_FONTS
 void ScFiltersTest::testChartImportXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"chartx.", FORMAT_XLS);
+    createScDoc("xls/chartx.xls");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
-    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 0);
+    const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(11137), pOleObj->GetLogicRect().getOpenWidth());
     CPPUNIT_ASSERT(8640L > pOleObj->GetLogicRect().getOpenHeight());
-
-    xDocSh->DoClose();
 }
 #endif
 
 void ScFiltersTest::testNumberFormatHTML()
 {
-    ScDocShellRef xDocSh = loadDoc(u"numberformat.", FORMAT_HTML);
+    setImportFilterName("calc_HTML_WebQuery");
+    createScDoc("html/numberformat.html");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Check the header just in case.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Product"),
-                                 rDoc.GetString(0, 0, 0));
+                                 pDoc->GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Price"),
-                                 rDoc.GetString(1, 0, 0));
+                                 pDoc->GetString(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Note"),
-                                 rDoc.GetString(2, 0, 0));
+                                 pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
-    bool bHasValue = rDoc.HasValueData(1, 1, 0);
+    bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, rDoc.GetValue(1, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 }
 
 void ScFiltersTest::testNumberFormatCSV()
 {
-    ScDocShellRef xDocSh = loadDoc(u"numberformat.", FORMAT_CSV);
+    createScDoc("csv/numberformat.csv");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // Check the header just in case.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Product"),
-                                 rDoc.GetString(0, 0, 0));
+                                 pDoc->GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Price"),
-                                 rDoc.GetString(1, 0, 0));
+                                 pDoc->GetString(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Note"),
-                                 rDoc.GetString(2, 0, 0));
+                                 pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
-    bool bHasValue = rDoc.HasValueData(1, 1, 0);
+    bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, rDoc.GetValue(1, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 }
 
 void ScFiltersTest::testCellAnchoredShapesODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"cell-anchored-shapes.", FORMAT_ODS);
+    createScDoc("ods/cell-anchored-shapes.ods");
 
     // There are two cell-anchored objects on the first sheet.
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", pDoc->GetTableCount() > 0);
 
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
     const size_t nCount = pPage->GetObjCount();
@@ -2073,20 +1908,18 @@ void ScFiltersTest::testCellAnchoredShapesODS()
         CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                                !pData->getShapeRect().IsEmpty());
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"cell-anchored-hidden-shapes.", FORMAT_XLSX);
+    createScDoc("xlsx/cell-anchored-hidden-shapes.xlsx");
 
     // There are two cell-anchored objects on the first sheet.
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", pDoc->GetTableCount() > 0);
 
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
     const size_t nCount = pPage->GetObjCount();
@@ -2097,75 +1930,72 @@ void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
     CPPUNIT_ASSERT_MESSAGE(
         "The shape having same twocellanchor from and to attribute values, is visible.",
         !pObj->IsVisible());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testRowHeightODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"row-height-import.", FORMAT_ODS);
+    createScDoc("ods/row-height-import.ods");
 
     SCTAB nTab = 0;
     SCROW nRow = 0;
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // The first 3 rows have manual heights.
-    int nHeight = rDoc.GetRowHeight(nRow, nTab, false);
-    bool bManual = rDoc.IsManualRowHeight(nRow, nTab);
+    int nHeight = pDoc->GetRowHeight(nRow, nTab, false);
+    bool bManual = pDoc->IsManualRowHeight(nRow, nTab);
     CPPUNIT_ASSERT_EQUAL(600, nHeight);
     CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
-    nHeight = rDoc.GetRowHeight(++nRow, nTab, false);
-    bManual = rDoc.IsManualRowHeight(nRow, nTab);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
     CPPUNIT_ASSERT_EQUAL(1200, nHeight);
     CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
-    nHeight = rDoc.GetRowHeight(++nRow, nTab, false);
-    bManual = rDoc.IsManualRowHeight(nRow, nTab);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
     CPPUNIT_ASSERT_EQUAL(1800, nHeight);
     CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
 
     // This one should have an automatic row height.
-    bManual = rDoc.IsManualRowHeight(++nRow, nTab);
+    bManual = pDoc->IsManualRowHeight(++nRow, nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 
     // Followed by a row with manual height.
-    nHeight = rDoc.GetRowHeight(++nRow, nTab, false);
-    bManual = rDoc.IsManualRowHeight(nRow, nTab);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
     CPPUNIT_ASSERT_EQUAL(2400, nHeight);
     CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
 
     // And all the rest should have automatic heights.
-    bManual = rDoc.IsManualRowHeight(++nRow, nTab);
+    bManual = pDoc->IsManualRowHeight(++nRow, nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 
-    bManual = rDoc.IsManualRowHeight(rDoc.MaxRow(), nTab);
+    bManual = pDoc->IsManualRowHeight(pDoc->MaxRow(), nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testRichTextContentODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"rich-text-cells.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/rich-text-cells.ods");
+    ScDocument* pDoc = getScDoc();
 
     OUString aTabName;
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the name of the first sheet.", rDoc.GetName(0, aTabName));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the name of the first sheet.",
+                           pDoc->GetName(0, aTabName));
 
     // All tested cells are in the first column.
     ScAddress aPos(0, 0, 0);
 
     // Normal simple string with no formatting.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Normal string with bold applied to the whole cell.
     {
         aPos.IncRow();
-        CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
         CPPUNIT_ASSERT_EQUAL(OUString("All bold"),
-                             rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
-        const ScPatternAttr* pAttr = rDoc.GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+                             pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+        const ScPatternAttr* pAttr = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
         CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
         const SvxWeightItem& rWeightItem = pAttr->GetItem(ATTR_FONT_WEIGHT);
         CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetWeight());
@@ -2174,8 +2004,8 @@ void ScFiltersTest::testRichTextContentODS()
     // This cell has an unformatted but multi-line content. Multi-line text is
     // stored in edit cell even if it has no formatting applied.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    const EditTextObject* pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     OUString aParaText = pEditText->GetText(0);
@@ -2187,21 +2017,21 @@ void ScFiltersTest::testRichTextContentODS()
 
     // Cell with sheet name field item.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Sheet name is "));
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.",
                            pEditText->HasField(text::textfield::Type::TABLE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, &rDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with URL field item.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
@@ -2209,43 +2039,42 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.",
                            pEditText->HasField(text::textfield::Type::URL));
     CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"),
-                         ScEditUtil::GetString(*pEditText, &rDoc));
+                         ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"),
                          ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with Date field item.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Date: "));
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.",
                            pEditText->HasField(text::textfield::Type::DATE));
-    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with rDoc.",
-                           ScEditUtil::GetString(*pEditText, &rDoc).indexOf("/20") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with pDoc->",
+                           ScEditUtil::GetString(*pEditText, pDoc).indexOf("/20") > 0);
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.",
                            ScEditUtil::GetString(*pEditText, nullptr).indexOf("/20") > 0);
 
     // Cell with DocInfo title field item.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Title: "));
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.",
                            pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"),
-                         ScEditUtil::GetString(*pEditText, &rDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"), ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with sentence with both bold and italic sequences.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
@@ -2277,8 +2106,8 @@ void ScFiltersTest::testRichTextContentODS()
 
     // Cell with multi-line content with formatting applied.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
@@ -2324,35 +2153,35 @@ void ScFiltersTest::testRichTextContentODS()
     // field objects gets imported.  Later we should add checks for the
     // formats.
     aPos.IncRow();
-    pEditText = rDoc.GetEditText(aPos);
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.",
                            pEditText->HasField(text::textfield::Type::URL));
 
     // Sheet name with formats applied.
     aPos.IncRow();
-    pEditText = rDoc.GetEditText(aPos);
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.",
                            pEditText->HasField(text::textfield::Type::TABLE));
 
     // Date with formats applied.
     aPos.IncRow();
-    pEditText = rDoc.GetEditText(aPos);
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.",
                            pEditText->HasField(text::textfield::Type::DATE));
 
     // Document title with formats applied.
     aPos.IncRow();
-    pEditText = rDoc.GetEditText(aPos);
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.",
                            pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
 
     // URL for a file in the same directory. It should be converted into an absolute URL on import.
     aPos.IncRow();
-    pEditText = rDoc.GetEditText(aPos);
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
     CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData);
@@ -2364,20 +2193,20 @@ void ScFiltersTest::testRichTextContentODS()
 
     // Embedded spaces as <text:s text:c='4' />, normal text
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString("one     two"),
-                         rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+                         pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Leading space as <text:s />.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(" =3+4"), rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(" =3+4"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Embedded spaces with <text:s text:c='4' /> inside a <text:span>, text
     // partly bold.
     aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, rDoc.GetCellType(aPos));
-    pEditText = rDoc.GetEditText(aPos);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
@@ -2396,86 +2225,70 @@ void ScFiltersTest::testRichTextContentODS()
         }
         CPPUNIT_ASSERT_MESSAGE("Expected a bold sequence.", bHasBold);
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDataBarODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"databar.", FORMAT_ODS);
+    createScDoc("ods/databar.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testDataBar_Impl(rDoc);
-
-    xDocSh->DoClose();
+    ScDocument* pDoc = getScDoc();
+    testDataBar_Impl(*pDoc);
 }
 
 void ScFiltersTest::testDataBarXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"databar.", FORMAT_XLSX);
+    createScDoc("xlsx/databar.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testDataBar_Impl(rDoc);
-
-    xDocSh->DoClose();
+    ScDocument* pDoc = getScDoc();
+    testDataBar_Impl(*pDoc);
 }
 
 void ScFiltersTest::testColorScaleODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"colorscale.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/colorscale.ods");
+    ScDocument* pDoc = getScDoc();
 
-    testColorScale2Entry_Impl(rDoc);
-    testColorScale3Entry_Impl(rDoc);
-
-    xDocSh->DoClose();
+    testColorScale2Entry_Impl(*pDoc);
+    testColorScale3Entry_Impl(*pDoc);
 }
 
 void ScFiltersTest::testColorScaleXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"colorscale.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xlsx/colorscale.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-    testColorScale2Entry_Impl(rDoc);
-    testColorScale3Entry_Impl(rDoc);
-
-    xDocSh->DoClose();
+    testColorScale2Entry_Impl(*pDoc);
+    testColorScale3Entry_Impl(*pDoc);
 }
 
 void ScFiltersTest::testNewCondFormatODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"new_cond_format_test.", FORMAT_ODS);
+    createScDoc("ods/new_cond_format_test.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aCSVPath;
-    createCSVPath("new_cond_format_test.", aCSVPath);
-    testCondFile(aCSVPath, &rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test.csv");
+    testCondFile(aCSVPath, pDoc, 0);
 }
 
 void ScFiltersTest::testNewCondFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"new_cond_format_test.", FORMAT_XLSX);
+    createScDoc("xlsx/new_cond_format_test.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    OUString aCSVPath;
-    createCSVPath("new_cond_format_test.", aCSVPath);
-    testCondFile(aCSVPath, &rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test.csv");
+    testCondFile(aCSVPath, pDoc, 0);
 }
 
 void ScFiltersTest::testCondFormatImportCellIs()
 {
-    ScDocShellRef xDocSh = loadDoc(u"condFormat_cellis.", FORMAT_XLSX);
+    createScDoc("xlsx/condFormat_cellis.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(0)->size());
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
 
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
     CPPUNIT_ASSERT(pFormat);
 
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -2497,16 +2310,14 @@ void ScFiltersTest::testCondFormatImportCellIs()
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$1"), aStr);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatThemeColorXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"condformat_theme_color.", FORMAT_XLSX);
+    createScDoc("xlsx/condformat_theme_color.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Databar, pEntry->GetType());
@@ -2517,8 +2328,8 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, *pDataBarFormatData->mxNegativeColor);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(1)->size());
-    pFormat = rDoc.GetCondFormat(0, 0, 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(1)->size());
+    pFormat = pDoc->GetCondFormat(0, 0, 1);
     CPPUNIT_ASSERT(pFormat);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     pEntry = pFormat->GetEntry(0);
@@ -2533,16 +2344,14 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     pColorScaleEntry = pColorScale->GetEntry(1);
     CPPUNIT_ASSERT(pColorScaleEntry);
     CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pColorScaleEntry->GetColor());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatThemeColor2XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"cond_format_theme_color2.", FORMAT_XLSX);
+    createScDoc("xlsx/cond_format_theme_color2.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(5, 5, 0);
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(5, 5, 0);
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
@@ -2554,8 +2363,6 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
-
-    xDocSh->DoClose();
 }
 
 namespace
@@ -2575,10 +2382,10 @@ void checkDatabarPositiveColor(const ScConditionalFormat* pFormat, const Color& 
 
 void ScFiltersTest::testCondFormatThemeColor3XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"cond_format_theme_color3.", FORMAT_XLSX);
+    createScDoc("xlsx/cond_format_theme_color3.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 3, 0);
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(1, 3, 0);
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
@@ -2594,19 +2401,17 @@ void ScFiltersTest::testCondFormatThemeColor3XLSX()
     CPPUNIT_ASSERT(pColorScaleEntry);
     CPPUNIT_ASSERT_EQUAL(Color(51, 63, 80), pColorScaleEntry->GetColor());
 
-    pFormat = rDoc.GetCondFormat(3, 3, 0);
+    pFormat = pDoc->GetCondFormat(3, 3, 0);
     checkDatabarPositiveColor(pFormat, Color(59, 56, 56));
 
-    pFormat = rDoc.GetCondFormat(5, 3, 0);
+    pFormat = pDoc->GetCondFormat(5, 3, 0);
     checkDatabarPositiveColor(pFormat, Color(173, 185, 202));
 
-    pFormat = rDoc.GetCondFormat(7, 3, 0);
+    pFormat = pDoc->GetCondFormat(7, 3, 0);
     checkDatabarPositiveColor(pFormat, Color(89, 89, 89));
 
-    pFormat = rDoc.GetCondFormat(9, 3, 0);
+    pFormat = pDoc->GetCondFormat(9, 3, 0);
     checkDatabarPositiveColor(pFormat, Color(217, 217, 217));
-
-    xDocSh->DoClose();
 }
 
 namespace
@@ -2647,36 +2452,34 @@ void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
 
 void ScFiltersTest::testComplexIconSetsXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"complex_icon_set.", FORMAT_XLSX);
+    createScDoc("xlsx/complex_icon_set.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_EQUAL(size_t(3), rDoc.GetCondFormList(0)->size());
-    testComplexIconSetsXLSX_Impl(rDoc, 1, IconSet_3Triangles);
-    testComplexIconSetsXLSX_Impl(rDoc, 3, IconSet_3Stars);
-    testComplexIconSetsXLSX_Impl(rDoc, 5, IconSet_5Boxes);
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pDoc->GetCondFormList(0)->size());
+    testComplexIconSetsXLSX_Impl(*pDoc, 1, IconSet_3Triangles);
+    testComplexIconSetsXLSX_Impl(*pDoc, 3, IconSet_3Stars);
+    testComplexIconSetsXLSX_Impl(*pDoc, 5, IconSet_5Boxes);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(2), rDoc.GetCondFormList(1)->size());
-    testCustomIconSetsXLSX_Impl(rDoc, 1, 1, IconSet_3ArrowsGray, 0);
-    testCustomIconSetsXLSX_Impl(rDoc, 1, 2, IconSet_3ArrowsGray, -1);
-    testCustomIconSetsXLSX_Impl(rDoc, 1, 3, IconSet_3Arrows, 1);
-    testCustomIconSetsXLSX_Impl(rDoc, 1, 4, IconSet_3ArrowsGray, -1);
-    testCustomIconSetsXLSX_Impl(rDoc, 1, 5, IconSet_3Arrows, 2);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetCondFormList(1)->size());
+    testCustomIconSetsXLSX_Impl(*pDoc, 1, 1, IconSet_3ArrowsGray, 0);
+    testCustomIconSetsXLSX_Impl(*pDoc, 1, 2, IconSet_3ArrowsGray, -1);
+    testCustomIconSetsXLSX_Impl(*pDoc, 1, 3, IconSet_3Arrows, 1);
+    testCustomIconSetsXLSX_Impl(*pDoc, 1, 4, IconSet_3ArrowsGray, -1);
+    testCustomIconSetsXLSX_Impl(*pDoc, 1, 5, IconSet_3Arrows, 2);
 
-    testCustomIconSetsXLSX_Impl(rDoc, 3, 1, IconSet_4RedToBlack, 3);
-    testCustomIconSetsXLSX_Impl(rDoc, 3, 2, IconSet_3TrafficLights1, 1);
-    testCustomIconSetsXLSX_Impl(rDoc, 3, 3, IconSet_3Arrows, 2);
-
-    xDocSh->DoClose();
+    testCustomIconSetsXLSX_Impl(*pDoc, 3, 1, IconSet_4RedToBlack, 3);
+    testCustomIconSetsXLSX_Impl(*pDoc, 3, 2, IconSet_3TrafficLights1, 1);
+    testCustomIconSetsXLSX_Impl(*pDoc, 3, 3, IconSet_3Arrows, 2);
 }
 
 void ScFiltersTest::testTdf101104()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf101104.", FORMAT_ODS);
+    createScDoc("ods/tdf101104.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_EQUAL(size_t(2), rDoc.GetCondFormList(0)->size());
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetCondFormList(0)->size());
 
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 1, 0);
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(1, 1, 0);
     CPPUNIT_ASSERT(pFormat);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -2693,18 +2496,16 @@ void ScFiltersTest::testTdf101104()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pInfo->nIconIndex);
         CPPUNIT_ASSERT_EQUAL(IconSet_3Arrows, pInfo->eIconSetType);
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf64401()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf64401.", FORMAT_ODS);
+    createScDoc("ods/tdf64401.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(0)->size());
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
 
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
     CPPUNIT_ASSERT(pFormat);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -2727,8 +2528,8 @@ void ScFiltersTest::testTdf64401()
     }
 
     // Update values in B4 and B5
-    rDoc.SetValue(ScAddress(1, 3, 0), 2.0);
-    rDoc.SetValue(ScAddress(1, 4, 0), 9.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 2.0);
+    pDoc->SetValue(ScAddress(1, 4, 0), 9.0);
 
     for (size_t i = 0; i < 10; ++i)
     {
@@ -2743,30 +2544,26 @@ void ScFiltersTest::testTdf64401()
         CPPUNIT_ASSERT_EQUAL(nIndex, pInfo->nIconIndex);
         CPPUNIT_ASSERT_EQUAL(IconSet_3Arrows, pInfo->eIconSetType);
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatParentXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"cond_parent.", FORMAT_XLSX);
+    createScDoc("xlsx/cond_parent.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    const SfxItemSet* pCondSet = rDoc.GetCondResult(2, 5, 0);
-    const ScPatternAttr* pPattern = rDoc.GetPattern(2, 5, 0);
+    ScDocument* pDoc = getScDoc();
+    const SfxItemSet* pCondSet = pDoc->GetCondResult(2, 5, 0);
+    const ScPatternAttr* pPattern = pDoc->GetPattern(2, 5, 0);
     const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
     const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
     CPPUNIT_ASSERT_EQUAL(SvxCellVerJustify::Top, rVerJustify.GetValue());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testColorScaleNumWithRefXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"colorscale_num_with_ref.", FORMAT_XLSX);
+    createScDoc("xlsx/colorscale_num_with_ref.xlsx");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
@@ -2786,8 +2583,6 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
     const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(1);
     CPPUNIT_ASSERT_EQUAL(OUString("=$A$1"),
                          pColorScaleEntry->GetFormula(formula::FormulaGrammar::GRAM_NATIVE));
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testOrcusODSStyleInterface()
@@ -3052,125 +2847,113 @@ void ScFiltersTest::testOrcusODSStyleInterface()
 
 void ScFiltersTest::testLiteralInFormulaXLS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"shared-string/literal-in-formula.", FORMAT_XLS);
+    createScDoc("xls/shared-string/literal-in-formula.xls");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
 
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 0, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
 void ScFiltersTest::testFormulaDependency()
 {
-    ScDocShellRef xDocSh = loadDoc(u"dependencyTree.", FORMAT_ODS);
+    createScDoc("ods/dependencyTree.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     // check if formula in A1 changes value
-    double nVal = rDoc.GetValue(0, 0, 0);
+    double nVal = pDoc->GetValue(0, 0, 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-10);
-    rDoc.SetValue(0, 1, 0, 0.0);
-    nVal = rDoc.GetValue(0, 0, 0);
+    pDoc->SetValue(0, 1, 0, 0.0);
+    nVal = pDoc->GetValue(0, 0, 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 2.0, 1e-10);
 
     // check that the number format is implicitly inherited
-    // CPPUNIT_ASSERT_EQUAL(rDoc.GetString(0,4,0), rDoc.GetString(0,5,0));
-
-    xDocSh->DoClose();
+    // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), rDoc.GetString(0,5,0));
 }
 
 void ScFiltersTest::testTdf151046()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf151046.", FORMAT_ODS);
+    createScDoc("ods/tdf151046.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 1, 0));
 
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : 0
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 2, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 2, 0));
 }
 
 void ScFiltersTest::testImportCrashes()
 {
-    testImportCrash(u"tdf149752.", FORMAT_ODS);
-    testImportCrash(u"tdf122643.", FORMAT_ODS);
-    testImportCrash(u"tdf132278.", FORMAT_ODS);
-    testImportCrash(u"tdf130959.", FORMAT_XLSX);
-    testImportCrash(u"tdf129410.", FORMAT_ODS);
-    testImportCrash(u"tdf138507.", FORMAT_ODS);
-    testImportCrash(u"tdf131380.", FORMAT_XLSX);
-    testImportCrash(u"tdf139782.", FORMAT_ODS);
-    testImportCrash(u"tdf136551.", FORMAT_ODS);
-    testImportCrash(u"tdf90391.", FORMAT_ODS);
-    testImportCrash(u"tdf121887.", FORMAT_XLSX); // 'Maximum number of rows per sheet' warning
-    testImportCrash(u"tdf111974.", FORMAT_XLSM);
-    testImportCrash(u"tdf149679.", FORMAT_ODS);
+    testImportCrash("ods/tdf149752.ods");
+    testImportCrash("ods/tdf122643.ods");
+    testImportCrash("ods/tdf132278.ods");
+    testImportCrash("xlsx/tdf130959.xlsx");
+    testImportCrash("ods/tdf129410.ods");
+    testImportCrash("ods/tdf138507.ods");
+    testImportCrash("xlsx/tdf131380.xlsx");
+    testImportCrash("ods/tdf139782.ods");
+    testImportCrash("ods/tdf136551.ods");
+    testImportCrash("ods/tdf90391.ods");
+    testImportCrash("xlsx/tdf121887.xlsx"); // 'Maximum number of rows per sheet' warning
+    testImportCrash("xlsm/tdf111974.xlsm");
+    testImportCrash("ods/tdf149679.ods");
 }
 
 void ScFiltersTest::testTdf129681()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf129681.", FORMAT_ODS);
+    createScDoc("ods/tdf129681.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Lamb"), rDoc.GetString(ScAddress(4, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Beef"), rDoc.GetString(ScAddress(4, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Pork"), rDoc.GetString(ScAddress(4, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), rDoc.GetString(ScAddress(4, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), rDoc.GetString(ScAddress(4, 6, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(4, 7, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(4, 8, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Deer"), rDoc.GetString(ScAddress(4, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Lamb"), pDoc->GetString(ScAddress(4, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Beef"), pDoc->GetString(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Pork"), pDoc->GetString(ScAddress(4, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), pDoc->GetString(ScAddress(4, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), pDoc->GetString(ScAddress(4, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(4, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(4, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Deer"), pDoc->GetString(ScAddress(4, 9, 0)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(6, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), rDoc.GetString(ScAddress(6, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), rDoc.GetString(ScAddress(6, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), rDoc.GetString(ScAddress(6, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("8"), rDoc.GetString(ScAddress(6, 6, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 7, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 8, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 9, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(6, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(6, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(6, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetString(ScAddress(6, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("8"), pDoc->GetString(ScAddress(6, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 9, 0)));
 }
 
 void ScFiltersTest::testTdf149484()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf149484.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf149484.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Without the fix in place, this test would have failed with
     // - Expected: -TRUE-
     // - Actual  : TRUE
-    CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), rDoc.GetString(0, 2, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), pDoc->GetString(0, 2, 0));
 }
 
 void ScFiltersTest::testEscapedUnicodeXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"escape-unicode.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xlsx/escape-unicode.xlsx");
+    ScDocument* pDoc = getScDoc();
 
     // Without the fix, there would be "_x000D_" after every new-line char.
-    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), pDoc->GetString(1, 1, 0));
 }
 
 void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf144758-dbdata-no-orientation.", FORMAT_FODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScDBData* pAnonDBData = rDoc.GetAnonymousDBData(0);
+    createScDoc("fods/tdf144758-dbdata-no-orientation.fods");
+    ScDocument* pDoc = getScDoc();
+    ScDBData* pAnonDBData = pDoc->GetAnonymousDBData(0);
     CPPUNIT_ASSERT(pAnonDBData);
 
     ScSortParam aSortParam;
@@ -3179,12 +2962,10 @@ void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
     // Without the fix, the default value for bByRow (in absence of 'table:orientation' attribute
     // in 'table:database-range' element) was false
     CPPUNIT_ASSERT(aSortParam.bByRow);
-
-    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScBootstrapFixture("sc/qa/unit/data")
+    : ScModelTestBase("sc/qa/unit/data")
 {
 }
 
