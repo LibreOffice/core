@@ -97,10 +97,10 @@ static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
 {
     // Left
     OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
-                   + " actual "
-                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(
-        sMsg.getStr(), std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
+                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
+                   + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
 
     // Top
     sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
@@ -109,15 +109,15 @@ static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
 
     // Width
     sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
-           + " actual "
-           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
 
     // Height
     sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
-           + " actual "
-           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
@@ -127,8 +127,8 @@ static void lcl_AssertPointEqualWithTolerance(std::string_view sInfo, const Poin
 {
     // X
     OString sMsg = OString::Concat(sInfo) + " X expected " + OString::number(rExpected.X())
-                   + " actual "
-                   + OString::number(rActual.X()) + " Tolerance " + OString::number(nTolerance);
+                   + " actual " + OString::number(rActual.X()) + " Tolerance "
+                   + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
     // Y
     sMsg = OString::Concat(sInfo) + " Y expected " + OString::number(rExpected.Y()) + " actual "
@@ -367,7 +367,7 @@ void ScFiltersTest::testTdf43534()
 
 void ScFiltersTest::testTdf91979()
 {
-    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
+    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
     ScDocShellRef xDocSh = loadEmptyDocument(args);
     CPPUNIT_ASSERT(xDocSh);
 
@@ -426,7 +426,8 @@ void ScFiltersTest::testTdf88821()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // B2 should be 'Périmètre', not 'PÃ©rimÃ¨tre'
-    CPPUNIT_ASSERT_EQUAL(OStringToOUString("P\xC3\xA9rim\xC3\xA8tre", RTL_TEXTENCODING_UTF8), rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OStringToOUString("P\xC3\xA9rim\xC3\xA8tre", RTL_TEXTENCODING_UTF8),
+                         rDoc.GetString(1, 1, 0));
 
     xDocSh->DoClose();
 }
@@ -437,7 +438,9 @@ void ScFiltersTest::testTdf88821_2()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
-    CPPUNIT_ASSERT_EQUAL(OStringToOUString("ABCabc\xC4\x8C\xC5\xA0\xC5\xBD\xC4\x8D\xC5\xA1\xC5\xBE", RTL_TEXTENCODING_UTF8), rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OStringToOUString("ABCabc\xC4\x8C\xC5\xA0\xC5\xBD\xC4\x8D\xC5\xA1\xC5\xBE",
+                                           RTL_TEXTENCODING_UTF8),
+                         rDoc.GetString(0, 1, 0));
 
     xDocSh->DoClose();
 }
@@ -495,9 +498,9 @@ void ScFiltersTest::testTdf104310()
         std::vector<ScTypedStrData> aList;
         pData->FillSelectionList(aList, ScAddress(0, 1, 0));
         CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("1"),   aList[0].GetString());
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), aList[0].GetString());
         CPPUNIT_ASSERT_EQUAL(OUString("2,3"), aList[1].GetString());
-        CPPUNIT_ASSERT_EQUAL(OUString("4"),   aList[2].GetString());
+        CPPUNIT_ASSERT_EQUAL(OUString("4"), aList[2].GetString());
 
         xDocSh->DoClose();
     }
@@ -509,7 +512,8 @@ void ScFiltersTest::testTdf31231()
     ScDocShellRef xDocSh = loadDoc(u"tdf31231.", FORMAT_ODS, true);
     xDocSh->DoHardRecalc();
 
-    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
+                           xDocSh->IsEnableSetModified());
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
 
     xDocSh->DoClose();
@@ -520,7 +524,8 @@ void ScFiltersTest::testTdf141914()
     // We must open it read-write to allow setting modified flag
     ScDocShellRef xDocSh = loadDoc(u"tdf141914.", FORMAT_ODS, true);
 
-    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
+                           xDocSh->IsEnableSetModified());
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
 
     xDocSh->DoClose();
@@ -550,14 +555,14 @@ void ScFiltersTest::testTdf128951()
     CPPUNIT_ASSERT_NO_THROW(xDoc->getSheets()->insertByName("mustNotThrow", css::uno::Any(xSheet)));
 }
 
-namespace {
-
-SdrCaptionObj* checkCaption( ScDocument& rDoc, const ScAddress& rAddress, bool bIsShown)
+namespace
 {
-    ScPostIt *pNote = rDoc.GetNote(rAddress);
+SdrCaptionObj* checkCaption(ScDocument& rDoc, const ScAddress& rAddress, bool bIsShown)
+{
+    ScPostIt* pNote = rDoc.GetNote(rAddress);
 
     CPPUNIT_ASSERT(pNote);
-    CPPUNIT_ASSERT_EQUAL(pNote->IsCaptionShown(), bIsShown );
+    CPPUNIT_ASSERT_EQUAL(pNote->IsCaptionShown(), bIsShown);
 
     if (!bIsShown)
         pNote->ShowCaption(rAddress, true);
@@ -571,113 +576,112 @@ SdrCaptionObj* checkCaption( ScDocument& rDoc, const ScAddress& rAddress, bool b
 
 void ScFiltersTest::testTdf129789()
 {
-
     ScDocShellRef xDocSh = loadDoc(u"tdf129789.", FORMAT_ODS, true);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     {
         // Fill: None
-        SdrCaptionObj *const pCaptionB2 = checkCaption(rDoc, ScAddress(1, 1, 0), true);
+        SdrCaptionObj* const pCaptionB2 = checkCaption(rDoc, ScAddress(1, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemB2 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionB2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemB2
+            = dynamic_cast<const XFillStyleItem&>(pCaptionB2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleItemB2.GetValue());
 
-        SdrCaptionObj *const pCaptionB9 = checkCaption(rDoc, ScAddress(1, 8, 0), false);
+        SdrCaptionObj* const pCaptionB9 = checkCaption(rDoc, ScAddress(1, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemB9 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionB9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemB9
+            = dynamic_cast<const XFillStyleItem&>(pCaptionB9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleItemB9.GetValue());
     }
 
     {
         // Fill: Solid
-        SdrCaptionObj *const pCaptionE2 = checkCaption(rDoc, ScAddress(4, 1, 0), true);
+        SdrCaptionObj* const pCaptionE2 = checkCaption(rDoc, ScAddress(4, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemE2 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionE2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemE2
+            = dynamic_cast<const XFillStyleItem&>(pCaptionE2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItemE2.GetValue());
 
-        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
-            pCaptionE2->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem
+            = dynamic_cast<const XFillColorItem&>(pCaptionE2->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem.GetColorValue());
 
-        SdrCaptionObj *const pCaptionE9 = checkCaption(rDoc, ScAddress(4, 8, 0), false);
+        SdrCaptionObj* const pCaptionE9 = checkCaption(rDoc, ScAddress(4, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemE9 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionE9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemE9
+            = dynamic_cast<const XFillStyleItem&>(pCaptionE9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItemE9.GetValue());
 
-        const XFillColorItem& rColorItem2 = dynamic_cast<const XFillColorItem&>(
-            pCaptionE9->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem2
+            = dynamic_cast<const XFillColorItem&>(pCaptionE9->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem2.GetColorValue());
     }
 
     {
         // Fill: Gradient
-        SdrCaptionObj *const pCaptionH2 = checkCaption(rDoc, ScAddress(7, 1, 0), true);
+        SdrCaptionObj* const pCaptionH2 = checkCaption(rDoc, ScAddress(7, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemH2 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionH2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemH2
+            = dynamic_cast<const XFillStyleItem&>(pCaptionH2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
-        const XFillGradientItem& rGradientItem = dynamic_cast<const XFillGradientItem&>(
-            pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
+        const XFillGradientItem& rGradientItem
+            = dynamic_cast<const XFillGradientItem&>(pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem.GetGradientValue().GetStartColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem.GetGradientValue().GetEndColor());
 
-        SdrCaptionObj *const pCaptionH9 = checkCaption(rDoc, ScAddress(7, 8, 0), false);
+        SdrCaptionObj* const pCaptionH9 = checkCaption(rDoc, ScAddress(7, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemH9 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionH9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemH9
+            = dynamic_cast<const XFillStyleItem&>(pCaptionH9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
-        const XFillGradientItem& rGradientItem2 = dynamic_cast<const XFillGradientItem&>(
-            pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
+        const XFillGradientItem& rGradientItem2
+            = dynamic_cast<const XFillGradientItem&>(pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem2.GetGradientValue().GetStartColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem2.GetGradientValue().GetEndColor());
     }
 
     {
         // Fill: Hatch
-        SdrCaptionObj *const pCaptionK2 = checkCaption(rDoc, ScAddress(10, 1, 0), true);
+        SdrCaptionObj* const pCaptionK2 = checkCaption(rDoc, ScAddress(10, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemK2 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionK2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemK2
+            = dynamic_cast<const XFillStyleItem&>(pCaptionK2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK2.GetValue());
-        const XFillHatchItem& rHatchItem = dynamic_cast<const XFillHatchItem&>(
-            pCaptionK2->GetMergedItem(XATTR_FILLHATCH));
+        const XFillHatchItem& rHatchItem
+            = dynamic_cast<const XFillHatchItem&>(pCaptionK2->GetMergedItem(XATTR_FILLHATCH));
         CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem.GetHatchValue().GetColor());
 
-        SdrCaptionObj *const pCaptionK9 = checkCaption(rDoc, ScAddress(10, 8, 0), false);
+        SdrCaptionObj* const pCaptionK9 = checkCaption(rDoc, ScAddress(10, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemK9 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionK9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemK9
+            = dynamic_cast<const XFillStyleItem&>(pCaptionK9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK9.GetValue());
-        const XFillHatchItem& rHatchItem2 = dynamic_cast<const XFillHatchItem&>(
-            pCaptionK9->GetMergedItem(XATTR_FILLHATCH));
+        const XFillHatchItem& rHatchItem2
+            = dynamic_cast<const XFillHatchItem&>(pCaptionK9->GetMergedItem(XATTR_FILLHATCH));
         CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem2.GetHatchValue().GetColor());
     }
 
     {
         // Fill: Bitmap
-        SdrCaptionObj *const pCaptionN2 = checkCaption(rDoc, ScAddress(13, 1, 0), true);
+        SdrCaptionObj* const pCaptionN2 = checkCaption(rDoc, ScAddress(13, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemN2 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionN2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemN2
+            = dynamic_cast<const XFillStyleItem&>(pCaptionN2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN2.GetValue());
 
-        SdrCaptionObj *const pCaptionN9 = checkCaption(rDoc, ScAddress(13, 8, 0), false);
+        SdrCaptionObj* const pCaptionN9 = checkCaption(rDoc, ScAddress(13, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemN9 = dynamic_cast<const XFillStyleItem&>(
-            pCaptionN9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemN9
+            = dynamic_cast<const XFillStyleItem&>(pCaptionN9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN9.GetValue());
     }
@@ -687,7 +691,7 @@ void ScFiltersTest::testTdf129789()
 
 void ScFiltersTest::testTdf130725()
 {
-    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
+    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
     ScDocShellRef xDocSh = loadEmptyDocument(args);
     CPPUNIT_ASSERT(xDocSh);
 
@@ -696,14 +700,14 @@ void ScFiltersTest::testTdf130725()
 
     // 2. Insert 0.0042 into a cell as a formula, to force the conversion from string to double
     css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
-        css::uno::UNO_QUERY_THROW);
+                                                               css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
     xCell->setFormula("0.0042"); // this assumes en-US locale
 
     // 3. Check that the value is the nearest double-precision representation of the decimal 0.0042
     //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value must be the nearest representation of decimal 0.0042",
-        0.0042, xCell->getValue()); // strict equality
+                                 0.0042, xCell->getValue()); // strict equality
 
     xDocSh->DoClose();
 }
@@ -741,9 +745,8 @@ void ScFiltersTest::testTdf108188_pagestyle()
     xDocSh->DoClose();
 }
 
-
 ScFiltersTest::ScFiltersTest()
-      : ScBootstrapFixture( "sc/qa/unit/data" )
+    : ScBootstrapFixture("sc/qa/unit/data")
 {
 }
 
