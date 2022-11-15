@@ -83,24 +83,6 @@ struct TestParam
         int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
         bool bOptimal;
     };
-    const char* sTestDoc;
-    int nImportType;
-    int nExportType; // -1 for import test, otherwise this is an export test
-    int nRowData;
-    RowData const * pData;
-};
-
-struct TestParam2
-{
-    struct RowData
-    {
-        SCROW nStartRow;
-        SCROW nEndRow;
-        SCTAB nTab;
-        int nExpectedHeight; // -1 for default height
-        int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
-        bool bOptimal;
-    };
     const std::u16string_view sTestDoc;
     const OUString sExportType; // empty for import test, otherwise this is an export test
     int nRowData;
@@ -244,8 +226,6 @@ public:
 
     std::shared_ptr<utl::TempFileNamed> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
-    void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
-
     virtual void setUp() override;
     virtual void tearDown() override;
 };
@@ -272,7 +252,7 @@ public:
     void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr);
     ScDocument* getScDoc();
     ScDocShell* getScDocShell();
-    void miscRowHeightsTest( TestParam2 const * aTestValues, unsigned int numElems);
+    void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems);
 };
 
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \

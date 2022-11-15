@@ -933,48 +933,6 @@ std::shared_ptr<utl::TempFileNamed> ScBootstrapFixture::exportTo( ScDocShell& rS
     return pTempFile;
 }
 
-void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems )
-{
-    for ( unsigned int index=0; index<numElems; ++index )
-    {
-        OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
-        SAL_INFO( "sc.qa", "aTestValues[" << index << "] " << sFileName );
-        int nImportType =  aTestValues[ index ].nImportType;
-        int nExportType =  aTestValues[ index ].nExportType;
-        ScDocShellRef xShell = loadDoc( sFileName, nImportType );
-
-        if ( nExportType != -1 )
-            xShell = saveAndReload(*xShell, nExportType );
-
-        CPPUNIT_ASSERT(xShell.is());
-
-        ScDocument& rDoc = xShell->GetDocument();
-
-        for (int i=0; i<aTestValues[ index ].nRowData; ++i)
-        {
-            SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
-            SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
-            SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
-            int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
-            if ( nExpectedHeight == -1 )
-                nExpectedHeight = convertTwipToMm100(ScGlobal::GetStandardRowHeight());
-            bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
-            for ( ; nRow <= nEndRow; ++nRow )
-            {
-                SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
-                int nHeight = convertTwipToMm100(rDoc.GetRowHeight(nRow, nTab, false));
-                if ( bCheckOpt )
-                {
-                    bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
-                    CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
-                }
-                CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
-            }
-        }
-        xShell->DoClose();
-    }
-}
-
 void ScBootstrapFixture::setUp()
 {
     test::BootstrapFixture::setUp();
@@ -1041,7 +999,7 @@ ScDocShell* ScModelTestBase::getScDocShell()
     return pDocSh;
 }
 
-void ScModelTestBase::miscRowHeightsTest( TestParam2 const * aTestValues, unsigned int numElems)
+void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems)
 {
     for ( unsigned int index=0; index<numElems; ++index )
     {

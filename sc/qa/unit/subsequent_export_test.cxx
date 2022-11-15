@@ -1342,7 +1342,7 @@ void ScExportTest::testDataBarExportXLSX()
 
 void ScExportTest::testMiscRowHeightExport()
 {
-    static const TestParam2::RowData DfltRowData[] = {
+    static const TestParam::RowData DfltRowData[] = {
         { 0, 4, 0, 529, 0, false },
         { 5, 10, 0, 1058, 0, false },
         { 17, 20, 0, 1746, 0, false },
@@ -1351,7 +1351,7 @@ void ScExportTest::testMiscRowHeightExport()
         { 1048573, 1048575, 0, 529, 0, false },
     };
 
-    static const TestParam2::RowData EmptyRepeatRowData[] = {
+    static const TestParam::RowData EmptyRepeatRowData[] = {
         // rows 0-4, 5-10, 17-20 are all set at various
         // heights, there is no content in the rows, there
         // was a bug where only the first row ( of repeated rows )
@@ -1361,7 +1361,7 @@ void ScExportTest::testMiscRowHeightExport()
         { 17, 20, 0, 1767, 0, false },
     };
 
-    TestParam2 aTestValues[] = {
+    TestParam aTestValues[] = {
         // Checks that some distributed ( non-empty ) heights remain set after export (roundtrip)
         // additionally there is effectively a default row height ( 5.29 mm ). So we test the
         // unset rows at the end of the document to ensure the effective xlsx default height

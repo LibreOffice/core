@@ -26,6 +26,7 @@
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <sortparam.hxx>
+#include <scerrors.hxx>
 #include <scopetools.hxx>
 #include <scmod.hxx>
 #include <undomanager.hxx>
@@ -84,6 +85,7 @@ public:
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
     void testSortWithFormattingXLS();
+    void testTooManyColsRows();
     void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
@@ -112,6 +114,7 @@ public:
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
     CPPUNIT_TEST(testSortWithFormattingXLS);
+    CPPUNIT_TEST(testTooManyColsRows);
     CPPUNIT_TEST(testForcepoint107);
 
     CPPUNIT_TEST_SUITE_END();
@@ -884,6 +887,23 @@ void ScFiltersTest::testSortWithFormattingXLS()
     // Without the fix, sort would crash.
     bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTooManyColsRows()
+{
+    // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
+    // should be a warning on load.
+    ScDocShellRef xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_ODS, /*bReadWrite*/ false,
+                                   /*bCheckErrorCode*/ false);
+    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+    xDocSh->DoClose();
+
+    xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_XLSX, /*bReadWrite*/ false,
+                     /*bCheckErrorCode*/ false);
+    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
 }
 
