@@ -34,6 +34,7 @@
 #include <vcl/pdf/PDFFindFlags.hxx>
 #include <vcl/pdf/PDFErrorType.hxx>
 #include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFAnnotAActionType.hxx>
 
 class SvMemoryStream;
 
@@ -105,6 +106,9 @@ public:
     virtual float getFontSize(PDFiumDocument* pDoc) = 0;
     virtual OUString getFormFieldAlternateName(PDFiumDocument* pDoc) = 0;
     virtual int getFormFieldFlags(PDFiumDocument* pDoc) = 0;
+    virtual OUString getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
+                                                       PDFAnnotAActionType eEvent)
+        = 0;
 };
 
 class PDFiumTextPage;

@@ -750,6 +750,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     // Also check the form widget type (our date is a mode of text in PDF terms):
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
+    OUString aAction = pAnnotation->getFormAdditionalActionJavaScript(
+        pPdfDocument.get(), vcl::pdf::PDFAnnotAActionType::KeyStroke);
+    CPPUNIT_ASSERT_EQUAL(OUString("AFDate_KeystrokeEx(\"mm/dd/yy\");"), aAction);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
