@@ -277,8 +277,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     SwDoc* pDoc = getSwDoc();
 
     // When inserting an ODF_UNHANDLED fieldmark:
+    OUString aExpectedCommand("ADDIN ZOTERO_BIBL foo bar");
+    OUString aExpectedResult("(Abrikosov, n.d.)");
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand", uno::Any(aExpectedCommand)),
+        comphelper::makePropertyValue("FieldResult", uno::Any(aExpectedResult)),
     };
     dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
 
@@ -294,6 +298,15 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     // - Actual  : vnd.oasis.opendocument.field.FORMTEXT
     // i.e. the custom type parameter was ignored.
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_UNHANDLED), pFieldmark->GetFieldname());
+
+    auto it = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+    CPPUNIT_ASSERT(it != pFieldmark->GetParameters()->end());
+    OUString aActualCommand;
+    it->second >>= aActualCommand;
+    CPPUNIT_ASSERT_EQUAL(aExpectedCommand, aActualCommand);
+
+    OUString aActualResult = pFieldmark->GetContent();
+    CPPUNIT_ASSERT_EQUAL(aExpectedResult, aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

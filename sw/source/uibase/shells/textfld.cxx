@@ -694,6 +694,14 @@ FIELD_INSERT:
                 aFieldType = pFieldType->GetValue();
             }
 
+            OUString aFieldCode;
+            const SfxStringItem* pFieldCode = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+            if (pFieldCode)
+            {
+                // Allow specifying a field code/command.
+                aFieldCode = pFieldCode->GetValue();
+            }
+
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
 
             SwPaM* pCursorPos = rSh.GetCursor();
@@ -701,14 +709,27 @@ FIELD_INSERT:
             {
                 // Insert five En Space into the text field so the field has extent
                 static constexpr OUStringLiteral vEnSpaces = u"\u2002\u2002\u2002\u2002\u2002";
-                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, vEnSpaces);
+                OUString aFieldResult(vEnSpaces);
+                const SfxStringItem* pFieldResult = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
+                if (pFieldResult)
+                {
+                    // Allow specifying a field result / expanded value.
+                    aFieldResult = pFieldResult->GetValue();
+                }
+
+                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, aFieldResult);
                 if(bSuccess)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - vEnSpaces.getLength(),
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - aFieldResult.getLength(),
                                     pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
-                    pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), aFieldType,
-                            aFieldPam.Start());
+                    sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
+                        aFieldPam, OUString(), aFieldType, aFieldPam.Start());
+                    if (pFieldmark && !aFieldCode.isEmpty())
+                    {
+                        pFieldmark->GetParameters()->insert(
+                            std::pair<OUString, uno::Any>(ODF_CODE_PARAM, uno::Any(aFieldCode)));
+                    }
                 }
             }
 
