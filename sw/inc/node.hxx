@@ -368,7 +368,7 @@ class SwEndNode final : public SwNode
     SwEndNode & operator= ( const SwEndNode & rNode ) = delete;
 };
 
-// Accessibiity check
+// Accessibility check
 
 namespace sw
 {
