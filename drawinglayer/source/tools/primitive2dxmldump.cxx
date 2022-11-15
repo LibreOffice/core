@@ -664,7 +664,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("bitmap");
                 writeMatrix(rWriter, rBitmapPrimitive2D.getTransform());
 
-                const BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapPrimitive2D.getXBitmap()));
+                const BitmapEx aBitmapEx(rBitmapPrimitive2D.getBitmap());
                 const Size& rSizePixel(aBitmapEx.GetSizePixel());
 
                 rWriter.attribute("height", rSizePixel.getHeight());

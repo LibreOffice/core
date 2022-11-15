@@ -428,7 +428,7 @@ namespace drawinglayer::processor2d
                         if(!aRange.isEmpty())
                         {
                             const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                            const BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapCandidate.getXBitmap()));
+                            const BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
                             const Size& rSizePixel(aBitmapEx.GetSizePixel());
 
                             // When tiled rendering, don't bother with the pixel size of the candidate.

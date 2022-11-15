@@ -472,7 +472,7 @@ namespace drawinglayer::primitive2d
             // create bitmap primitive and add
             rContainer.push_back(
                 new BitmapPrimitive2D(
-                    VCLUnoHelper::CreateVCLXBitmap(maOldRenderedBitmap),
+                    maOldRenderedBitmap,
                     aNew2DTransform));
 
             // test: Allow to add an outline in the debugger when tests are needed

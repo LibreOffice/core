@@ -1539,7 +1539,7 @@ namespace emfplushelper
                                 {
                                     mrTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                            VCLUnoHelper::CreateVCLXBitmap(aBmp), aTransformMatrix));
+                                            aBmp, aTransformMatrix));
                                 }
                                 else
                                     SAL_WARN("drawinglayer.emf", "EMF+\t warning: empty bitmap");

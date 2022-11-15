@@ -26,9 +26,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-BitmapPrimitive2D::BitmapPrimitive2D(css::uno::Reference<css::awt::XBitmap> xXBitmap,
-                                     basegfx::B2DHomMatrix aTransform)
-    : maXBitmap(std::move(xXBitmap))
+BitmapPrimitive2D::BitmapPrimitive2D(BitmapEx xXBitmap, basegfx::B2DHomMatrix aTransform)
+    : maBitmap(std::move(xXBitmap))
     , maTransform(std::move(aTransform))
 {
 }
@@ -39,7 +38,7 @@ bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
         const BitmapPrimitive2D& rCompare = static_cast<const BitmapPrimitive2D&>(rPrimitive);
 
-        return (getXBitmap() == rCompare.getXBitmap() && getTransform() == rCompare.getTransform());
+        return (getBitmap() == rCompare.getBitmap() && getTransform() == rCompare.getTransform());
     }
 
     return false;
@@ -55,19 +54,11 @@ BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInforma
 
 sal_Int64 BitmapPrimitive2D::estimateUsage()
 {
-    if (!getXBitmap().is())
+    if (getBitmap().IsEmpty())
     {
         return 0;
     }
-
-    uno::Reference<util::XAccounting> const xAcc(getXBitmap(), uno::UNO_QUERY);
-
-    if (!xAcc.is())
-    {
-        return 0;
-    }
-
-    return xAcc->estimateUsage();
+    return getBitmap().GetSizeBytes();
 }
 
 // provide unique ID

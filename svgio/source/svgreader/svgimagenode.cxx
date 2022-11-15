@@ -301,7 +301,7 @@ namespace svgio::svgreader
                 // as transformation to map the picture data correctly
                 aNewTarget.resize(1);
                 aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
-                    VCLUnoHelper::CreateVCLXBitmap(aBitmapEx),
+                    aBitmapEx,
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         aViewBox.getRange(),
                         aViewBox.getMinimum()));

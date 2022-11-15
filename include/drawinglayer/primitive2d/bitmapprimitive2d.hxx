@@ -23,27 +23,19 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-namespace com::sun::star::awt
-{
-class XBitmap;
-}
+#include <vcl/bitmapex.hxx>
 
 namespace drawinglayer::primitive2d
 {
 /** BitmapPrimitive2D class
 
     This class is the central primitive for Bitmap-based primitives.
-    To keep it independent of Bitmap implementations, use UNO API
-    XBitmap object as wrapper due to formally used class Bitmap being
-    vcl-dependent and requiring linking against it. Use VCLUnoHelper
-    to convert awt::XBitmap <-> Bitmap
  */
 class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the Bitmap-data
-    css::uno::Reference<css::awt::XBitmap> maXBitmap;
+    BitmapEx maBitmap;
 
     /** the object transformation from unit coordinates, defining
         size, shear, rotate and position
@@ -52,11 +44,10 @@ private:
 
 public:
     /// constructor
-    BitmapPrimitive2D(css::uno::Reference<css::awt::XBitmap> xXBitmap,
-                      basegfx::B2DHomMatrix aTransform);
+    BitmapPrimitive2D(BitmapEx xBitmap, basegfx::B2DHomMatrix aTransform);
 
     /// data read access
-    const css::uno::Reference<css::awt::XBitmap>& getXBitmap() const { return maXBitmap; }
+    const BitmapEx& getBitmap() const { return maBitmap; }
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
     /// compare operator

@@ -423,7 +423,7 @@ void VclProcessor2D::RenderPolygonHairlinePrimitive2D(
 // direct draw of transformed BitmapEx primitive
 void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
-    BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapCandidate.getXBitmap()));
+    BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
     const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation
                                                 * rBitmapCandidate.getTransform());
 

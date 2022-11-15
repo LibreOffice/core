@@ -225,11 +225,10 @@ void GlowPrimitive2D::create2DDecomposition(
             // Independent from discrete sizes of glow alpha creation, always
             // map and project glow result to geometry range extended by glow
             // radius, but to the eventually clipped instance (ClippedRange)
-            const primitive2d::Primitive2DReference xEmbedRefBitmap(
-                new BitmapPrimitive2D(VCLUnoHelper::CreateVCLXBitmap(result),
-                                      basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                          aClippedRange.getWidth(), aClippedRange.getHeight(),
-                                          aClippedRange.getMinX(), aClippedRange.getMinY())));
+            const primitive2d::Primitive2DReference xEmbedRefBitmap(new BitmapPrimitive2D(
+                result, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                            aClippedRange.getWidth(), aClippedRange.getHeight(),
+                            aClippedRange.getMinX(), aClippedRange.getMinY())));
 
             rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
         }

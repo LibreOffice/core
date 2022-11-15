@@ -91,8 +91,7 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
     // create primitive
     return drawinglayer::primitive2d::Primitive2DContainer{
-        new drawinglayer::primitive2d::BitmapPrimitive2D(
-            VCLUnoHelper::CreateVCLXBitmap(aReplacement), aBitmapTransform)
+        new drawinglayer::primitive2d::BitmapPrimitive2D(aReplacement, aBitmapTransform)
     }
         .toSequence();
 }

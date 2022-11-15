@@ -63,7 +63,7 @@ namespace drawinglayer::primitive2d
 
                 rContainer.push_back(
                     new BitmapPrimitive2D(
-                        VCLUnoHelper::CreateVCLXBitmap(getMarker()),
+                        getMarker(),
                         aTransform));
             }
         }

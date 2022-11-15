@@ -148,7 +148,7 @@ namespace drawinglayer::primitive2d
                     {
                         const primitive2d::Primitive2DReference xEmbedRefBitmap(
                             new primitive2d::BitmapPrimitive2D(
-                                VCLUnoHelper::CreateVCLXBitmap(aBitmapEx),
+                                aBitmapEx,
                                 basegfx::B2DHomMatrix()));
                         aContent = primitive2d::Primitive2DContainer { xEmbedRefBitmap };
                     }

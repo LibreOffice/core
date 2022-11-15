@@ -66,7 +66,7 @@ namespace drawinglayer::primitive2d
             // create BitmapPrimitive2D with now object-local coordinate data
             rContainer.push_back(
                 new BitmapPrimitive2D(
-                    VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                    getBitmapEx(),
                     aObjectTransform));
         }
 

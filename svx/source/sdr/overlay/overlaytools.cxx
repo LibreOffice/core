@@ -184,7 +184,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
             rContainer.push_back(
                 new BitmapPrimitive2D(
-                    VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                    getBitmapEx(),
                     aTransform));
         }
 

@@ -198,7 +198,7 @@ namespace drawinglayer::primitive2d
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(
-                                    VCLUnoHelper::CreateVCLXBitmap(aContent),
+                                    aContent,
                                     aBitmapTransform);
                             }
                             catch( const uno::Exception& )

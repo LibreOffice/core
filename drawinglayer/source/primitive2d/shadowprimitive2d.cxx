@@ -273,10 +273,9 @@ void ShadowPrimitive2D::create2DDecomposition(
     // map and project blur result to geometry range extended by blur
     // radius, but to the eventually clipped instance (ClippedRange)
     const primitive2d::Primitive2DReference xEmbedRefBitmap(
-        new BitmapPrimitive2D(VCLUnoHelper::CreateVCLXBitmap(result),
-                              basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                  aClippedRange.getWidth(), aClippedRange.getHeight(),
-                                  aClippedRange.getMinX(), aClippedRange.getMinY())));
+        new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                          aClippedRange.getWidth(), aClippedRange.getHeight(),
+                                          aClippedRange.getMinX(), aClippedRange.getMinY())));
 
     rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 }

@@ -54,7 +54,7 @@ namespace drawinglayer::primitive2d
 
                         Primitive2DReference xReference(
                             new BitmapPrimitive2D(
-                                VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                                getBitmapEx(),
                                 aObjectTransform));
 
                         aRetval = xReference;
@@ -153,7 +153,7 @@ namespace drawinglayer::primitive2d
 
                             Primitive2DReference xReference(
                                 new BitmapPrimitive2D(
-                                    VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                                    getBitmapEx(),
                                     aObjectTransform));
                             aRetval = xReference;
 

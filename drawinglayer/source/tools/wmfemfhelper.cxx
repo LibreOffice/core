@@ -626,7 +626,7 @@ namespace wmfemfhelper
 
         rTarget.append(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                VCLUnoHelper::CreateVCLXBitmap(rBitmapEx),
+                rBitmapEx,
                 aObjectTransform));
     }
 

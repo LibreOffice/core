@@ -187,7 +187,7 @@ namespace drawinglayer::primitive2d
 
                 return Primitive2DReference(
                     new BitmapPrimitive2D(
-                        VCLUnoHelper::CreateVCLXBitmap(bitmap),
+                        bitmap,
                         getTransform()));
             }
 
@@ -526,7 +526,7 @@ namespace drawinglayer::primitive2d
                     {
                         aRetval.resize(1);
                         aRetval[0] = new BitmapPrimitive2D(
-                            VCLUnoHelper::CreateVCLXBitmap(rGraphic.GetBitmapEx()),
+                            rGraphic.GetBitmapEx(),
                             rTransform);
                     }
 
