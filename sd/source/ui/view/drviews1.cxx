@@ -409,7 +409,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             OUString aPageName = pPage->GetName();
             maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
-            if ( pPage->IsSelected() )
+            if ( !comphelper::LibreOfficeKit::isActive() && pPage->IsSelected() )
             {
                 nActualPageId = pPage->getPageId();
             }
