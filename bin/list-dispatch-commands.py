@@ -16,11 +16,17 @@ Script to generate https://wiki.documentfoundation.org/Development/DispatchComma
 
 import os
 
+# It is assumed that the script is called from $BUILDDIR;
+# and __file__ refers to the script location in $SRCDIR.
+# This allows to use it in separate builddir configuration.
+srcdir = os.path.dirname(os.path.realpath(__file__)) + '/..' # go up from /bin
+builddir = os.getcwd()
+
 REPO = 'https://opengrok.libreoffice.org/xref/core/'
 
 BLACKLIST = ('_SwitchViewShell0', '_SwitchViewShell1', '_SwitchViewShell2', '_SwitchViewShell3', '_SwitchViewShell4')
 
-XCU_DIR = 'officecfg/registry/data/org/openoffice/Office/UI/'
+XCU_DIR = srcdir + '/officecfg/registry/data/org/openoffice/Office/UI/'
 XCU_FILES = (   XCU_DIR + 'BasicIDECommands.xcu',
                 XCU_DIR + 'CalcCommands.xcu',
                 XCU_DIR + 'ChartCommands.xcu',
@@ -31,7 +37,7 @@ XCU_FILES = (   XCU_DIR + 'BasicIDECommands.xcu',
                 XCU_DIR + 'ReportCommands.xcu',
                 XCU_DIR + 'WriterCommands.xcu')
 
-HXX_DIR = './workdir/SdiTarget/'
+HXX_DIR = builddir + '/workdir/SdiTarget/'
 HXX_FILES = (   HXX_DIR + 'basctl/sdi/basslots.hxx',
                 HXX_DIR + 'sc/sdi/scslots.hxx',
                 HXX_DIR + 'sd/sdi/sdgslots.hxx',
@@ -41,12 +47,12 @@ HXX_FILES = (   HXX_DIR + 'basctl/sdi/basslots.hxx',
                 HXX_DIR + 'svx/sdi/svxslots.hxx',
                 HXX_DIR + 'sw/sdi/swslots.hxx')
 
-SDI_FILES = (   'sc/sdi/scalc.sdi',
-                'sd/sdi/sdraw.sdi',
-                'sfx2/sdi/sfx.sdi',
-                'starmath/sdi/smath.sdi',
-                'svx/sdi/svx.sdi',
-                'sw/sdi/swriter.sdi')
+SDI_FILES = (   srcdir + '/sc/sdi/scalc.sdi',
+                srcdir + '/sd/sdi/sdraw.sdi',
+                srcdir + '/sfx2/sdi/sfx.sdi',
+                srcdir + '/starmath/sdi/smath.sdi',
+                srcdir + '/svx/sdi/svx.sdi',
+                srcdir + '/sw/sdi/swriter.sdi')
 
 # Category is defined by the 1st file where the command has been found. Precedence: 1. xcu, 2. hxx, 3. sdi.
 MODULES = {'BasicIDE':      'Basic IDE, Forms, Dialogs',
