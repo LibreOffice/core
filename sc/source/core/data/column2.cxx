@@ -740,7 +740,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
     if ( pParam && pParam->mbSimpleText )
     {   // all the same except for number format
-        const ScPatternAttr* pPattern = GetPattern( 0 );
+        SCROW nRow = 0;
+        const ScPatternAttr* pPattern = GetPattern( nRow );
         vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
@@ -752,6 +753,17 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+        while ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && nRow <= 2)
+        {
+            // This is often used with CSV import or other data having a header
+            // row; if there is no specific format set try next row for actual
+            // data format.
+            // Or again in case there was a leading sep=";" row or two header
+            // rows..
+            const ScPatternAttr* pNextPattern = GetPattern( ++nRow );
+            if (pNextPattern != pPattern)
+                nFormat = pNextPattern->GetNumberFormat( pFormatter );
+        }
         OUString aLongStr;
         const Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
