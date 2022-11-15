@@ -33,10 +33,13 @@
               <object class="GtkLabel" id="browseurllabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="halign">start</property>
                 <property name="label" translatable="yes" context="connectionpage|browseurllabel">Path to the dBASE files:</property>
                 <property name="use-underline">True</property>
+                <property name="wrap">True</property>
                 <property name="mnemonic-widget">browseurl</property>
+                <property name="width-chars">38</property>
+                <property name="max-width-chars">38</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
