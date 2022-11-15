@@ -34,6 +34,8 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <docsh.hxx>
+#include <bookmark.hxx>
+#include <ndtxt.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/shells/data/";
 
@@ -239,14 +241,37 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+namespace
+{
+// sw::mark::TextFieldmark::GetContent() on master.
+OUString TextFieldmarkGetContent(sw::mark::IFieldmark* pFieldmark)
+{
+    const SwTextNode& rTextNode = *pFieldmark->GetMarkEnd().nNode.GetNode().GetTextNode();
+    SwPosition const sepPos(sw::mark::FindFieldSep(*pFieldmark));
+    const sal_Int32 nStart(sepPos.nContent.GetIndex());
+    const sal_Int32 nEnd(pFieldmark->GetMarkEnd().nContent.GetIndex());
+
+    OUString sContent;
+    const sal_Int32 nLen = rTextNode.GetText().getLength();
+    if (nStart + 1 < nLen && nEnd <= nLen && nEnd > nStart + 2)
+        sContent = rTextNode.GetText().copy(nStart + 1, nEnd - nStart - 2);
+
+    return sContent;
+}
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
 {
     // Given an empty document:
     SwDoc* pDoc = createSwDoc();
 
     // When inserting an ODF_UNHANDLED fieldmark:
+    OUString aExpectedCommand("ADDIN ZOTERO_BIBL foo bar");
+    OUString aExpectedResult("(Abrikosov, n.d.)");
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand", uno::Any(aExpectedCommand)),
+        comphelper::makePropertyValue("FieldResult", uno::Any(aExpectedResult)),
     };
     dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
 
@@ -262,6 +287,15 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     // - Actual  : vnd.oasis.opendocument.field.FORMTEXT
     // i.e. the custom type parameter was ignored.
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_UNHANDLED), pFieldmark->GetFieldname());
+
+    auto it = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+    CPPUNIT_ASSERT(it != pFieldmark->GetParameters()->end());
+    OUString aActualCommand;
+    it->second >>= aActualCommand;
+    CPPUNIT_ASSERT_EQUAL(aExpectedCommand, aActualCommand);
+
+    OUString aActualResult = TextFieldmarkGetContent(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(aExpectedResult, aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
