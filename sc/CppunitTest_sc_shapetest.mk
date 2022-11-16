@@ -11,7 +11,11 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_shapetest))
 
-$(eval $(call gb_CppunitTest_use_external,sc_shapetest,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_shapetest, \
+	boost_headers \
+	mdds_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_shapetest))
 
@@ -24,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_shapetest, \
     cppuhelper \
     sal \
     sc \
+    scqahelper \
     sfx \
     subsequenttest \
     svl \
