@@ -24,14 +24,14 @@ namespace sw
 {
 /// Contains the node and tracks if the node gets deleted.
 /// Note: the node needs to extend sw::BroadcastingModify.
-class WeakContentNodeContainer : public SvtListener
+class WeakNodeContainer : public SvtListener
 {
 private:
     SwNode* m_pNode;
 
 public:
-    WeakContentNodeContainer(SwNode* pNode);
-    ~WeakContentNodeContainer();
+    WeakNodeContainer(SwNode* pNode);
+    ~WeakNodeContainer();
 
     /// Is the node still alive or it was deleted?
     bool isAlive();
@@ -44,7 +44,7 @@ public:
 class OnlineAccessibilityCheck : public SvtListener
 {
 private:
-    std::map<SwNode*, std::unique_ptr<WeakContentNodeContainer>> m_aNodes;
+    std::map<SwNode*, std::unique_ptr<WeakNodeContainer>> m_aNodes;
 
     SwDoc& m_rDocument;
     sw::AccessibilityCheck m_aAccessibilityCheck;

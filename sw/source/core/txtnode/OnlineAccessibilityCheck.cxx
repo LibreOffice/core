@@ -30,7 +30,7 @@
 
 namespace sw
 {
-WeakContentNodeContainer::WeakContentNodeContainer(SwNode* pNode)
+WeakNodeContainer::WeakNodeContainer(SwNode* pNode)
     : m_pNode(pNode)
 {
     if (m_pNode)
@@ -44,16 +44,16 @@ WeakContentNodeContainer::WeakContentNodeContainer(SwNode* pNode)
     }
 }
 
-WeakContentNodeContainer::~WeakContentNodeContainer() { EndListeningAll(); }
+WeakNodeContainer::~WeakNodeContainer() { EndListeningAll(); }
 
-bool WeakContentNodeContainer::isAlive()
+bool WeakNodeContainer::isAlive()
 {
     if (!HasBroadcaster())
         m_pNode = nullptr;
     return m_pNode;
 }
 
-SwNode* WeakContentNodeContainer::getNode()
+SwNode* WeakNodeContainer::getNode()
 {
     if (isAlive())
         return m_pNode;
@@ -84,7 +84,7 @@ void OnlineAccessibilityCheck::updateNodeStatus(SwNode* pNode)
     auto it = m_aNodes.find(pNode);
     if (it == m_aNodes.end())
     {
-        m_aNodes.emplace(pNode, std::make_unique<WeakContentNodeContainer>(pNode));
+        m_aNodes.emplace(pNode, std::make_unique<WeakNodeContainer>(pNode));
     }
 
     for (auto iterator = m_aNodes.begin(); iterator != m_aNodes.end();)
