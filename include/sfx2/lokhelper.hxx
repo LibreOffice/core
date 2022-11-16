@@ -13,6 +13,8 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/event.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
@@ -162,6 +164,15 @@ public:
     /// Notify all views of a media update.
     /// This could be a new insertion or property modifications to an existing one.
     static void notifyMediaUpdate(boost::property_tree::ptree& json);
+
+    /// Process the mouse event in the currently active in-place component (if any).
+    /// Returns true if the event has been processed, and no further processing is necessary.
+    static bool testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+                                                  int nY, int nCount, int nButtons, int nModifier,
+                                                  double fScaleX, double fScaleY,
+                                                  bool bNegativeX = false);
+
+    static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
 
 private:
     static int createView(SfxViewFrame* pViewFrame, ViewShellDocId docId);
