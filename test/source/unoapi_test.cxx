@@ -190,14 +190,6 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
     }
 }
 
-void UnoApiTest::saveAndClose(const OUString& rFilter)
-{
-    save(rFilter, nullptr);
-
-    mxComponent->dispose();
-    mxComponent.clear();
-}
-
 void UnoApiTest::saveAndReload(const OUString& rFilter, const char* pPassword)
 {
     save(rFilter, pPassword);

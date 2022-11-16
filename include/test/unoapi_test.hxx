@@ -42,7 +42,6 @@ public:
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
     void save(const OUString& rFilter, const char* pPassword = nullptr);
-    void saveAndClose(const OUString& rFilter);
     void saveAndReload(const OUString& rFilter, const char* pPassword = nullptr);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
