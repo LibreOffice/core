@@ -75,50 +75,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_chart2dataprovider,\
 $(eval $(call gb_CppunitTest_use_ure,sc_chart2dataprovider))
 $(eval $(call gb_CppunitTest_use_vcl,sc_chart2dataprovider))
 
-$(eval $(call gb_CppunitTest_use_components,sc_chart2dataprovider,\
-	basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    embeddedobj/util/embobj \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/source/search/i18nsearch \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    sc/util/sc \
-    sc/util/scfilt \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/util/svl \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    vcl/vcl.common \
-    xmloff/util/xo \
-    xmlsecurity/util/xmlsecurity \
-))
-
-$(eval $(call gb_CppunitTest_use_components,sc_chart2dataprovider,\
-    xmlsecurity/util/xsec_xmlsec \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_chart2dataprovider,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_chart2dataprovider))
 

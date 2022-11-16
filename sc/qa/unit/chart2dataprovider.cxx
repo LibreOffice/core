@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <comphelper/propertyvalue.hxx>
-#include <test/bootstrapfixture.hxx>
 
 #include <docsh.hxx>
 #include <chart2uno.hxx>
@@ -23,7 +22,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScChart2DataProviderTest : public ScBootstrapFixture
+class ScChart2DataProviderTest : public ScModelTestBase
 {
 public:
     ScChart2DataProviderTest();
@@ -71,22 +70,20 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
 
 void ScChart2DataProviderTest::testHeaderExpansion()
 {
-    ScDocShellRef xDocSh = loadDoc(u"chart2dataprovider.", FORMAT_ODS);
+    createScDoc("ods/chart2dataprovider.ods");
 
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
-    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$1:$D$4", false, false, 4, 4);
-    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$1:$D$4", true, true, 4, 3);
+    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$1:$D$4", false, false, 4, 4);
+    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$1:$D$4", true, true, 4, 3);
 
-    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$17:$D$20", true, true, 3, 2);
+    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$17:$D$20", true, true, 3, 2);
 
-    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$25:$D$28", true, true, 4, 2);
-
-    xDocSh->DoClose();
+    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$25:$D$28", true, true, 4, 2);
 }
 
 ScChart2DataProviderTest::ScChart2DataProviderTest()
-    : ScBootstrapFixture("sc/qa/unit/data")
+    : ScModelTestBase("sc/qa/unit/data")
 {
 }
 
