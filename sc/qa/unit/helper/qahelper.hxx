@@ -201,7 +201,6 @@ protected:
 
     ScDocShellRef load(const OUString& rURL, sal_Int32 nFormat, bool bReadWrite = false);
 
-    ScDocShellRef loadEmptyDocument(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rPropertyValues = {});
     ScDocShellRef loadDoc(
         std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false, bool bCheckErrorCode = true );
 
@@ -209,22 +208,10 @@ private:
     // reference to document interface that we are testing
     css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 public:
-    static const FileFormat* getFileFormats() { return aFileFormats; }
-
     explicit ScBootstrapFixture( const OUString& rsBaseString );
     virtual ~ScBootstrapFixture() override;
 
     void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
-    void createCSVPath(const char* aFileBase, OUString& rCSVPath);
-    void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
-
-    ScDocShellRef saveAndReload(ScDocShell& rShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
-    std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr, const OUString* pPassword = nullptr, bool bClose = true );
-
-    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
-
-    std::shared_ptr<utl::TempFileNamed> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
     virtual void setUp() override;
     virtual void tearDown() override;

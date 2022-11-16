@@ -645,25 +645,6 @@ ScDocShellRef ScBootstrapFixture::load(const OUString& rURL, sal_Int32 nFormat, 
     return load(bReadWrite, rURL, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
 }
 
-ScDocShellRef ScBootstrapFixture::loadEmptyDocument(const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
-    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-        "private:factory/scalc",
-        "_blank",
-        0,
-        rPropertyValues);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    return dynamic_cast<ScDocShell*>(pFoundShell);
-}
-
 ScDocShellRef ScBootstrapFixture::loadDoc(
     std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite, bool bCheckErrorCode )
 {
@@ -685,15 +666,6 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
 ScBootstrapFixture::~ScBootstrapFixture() {}
 
-namespace {
-OUString EnsureSeparator(const OUStringBuffer& rFilePath)
-{
-    return (rFilePath.getLength() == 0) || (rFilePath[rFilePath.getLength() - 1] != '/') ?
-        OUString("/") :
-        OUString();
-}
-}
-
 void ScBootstrapFixture::createFileURL(
     std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
 {
@@ -705,117 +677,6 @@ void ScBootstrapFixture::createFileURL(
     url.insertName(aFileExtension, true);
     url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
     rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-}
-
-void ScBootstrapFixture::createCSVPath(const char* aFileBase, OUString& rCSVPath)
-{
-    OUStringBuffer aBuffer( m_directories.getSrcRootPath());
-    aBuffer.append(EnsureSeparator(aBuffer));
-    aBuffer.append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer));
-    aBuffer.append("contentCSV/").appendAscii(aFileBase).append("csv");
-    rCSVPath = aBuffer.makeStringAndClear();
-}
-
-void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath)
-{
-    OUStringBuffer aBuffer( m_directories.getSrcRootPath());
-    aBuffer.append(EnsureSeparator(aBuffer));
-    aBuffer.append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer));
-    aBuffer.append("contentCSV/");
-    aBuffer.append(aFileBase);
-    aBuffer.append("csv");
-    rCSVPath = aBuffer.makeStringAndClear();
-}
-
-ScDocShellRef ScBootstrapFixture::saveAndReload(
-    ScDocShell& rShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
-    std::shared_ptr<utl::TempFileNamed>* pTempFileOut,  const OUString* pPassword, bool bClose)
-{
-    auto pTempFile = std::make_shared<utl::TempFileNamed>();
-    SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
-    SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
-    if (nFormatType == ODS_FORMAT_TYPE)
-        nExportFormat = SotClipboardFormatId::STARCHART_8;
-    auto pExportFilter = std::make_shared<SfxFilter>(
-        rFilter,
-        OUString(), nFormatType, nExportFormat, rTypeName, OUString(),
-        rUserData, "private:factory/scalc*" );
-    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-    aStoreMedium.SetFilter(pExportFilter);
-
-    if (pPassword)
-    {
-        SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
-        uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( *pPassword );
-        pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
-
-        uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
-        ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
-    }
-    rShell.DoSaveAs( aStoreMedium );
-    if (bClose)
-        rShell.DoClose();
-
-    //std::cout << "File: " << pTempFile->GetURL() << std::endl;
-
-    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
-    if (nFormatType == ODS_FORMAT_TYPE)
-        nFormat = SotClipboardFormatId::STARCALC_8;
-
-    ScDocShellRef xDocSh = load(pTempFile->GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
-    if(nFormatType == XLSX_FORMAT_TYPE)
-        validate(pTempFile->GetFileName(), test::OOXML);
-    else if (nFormatType == ODS_FORMAT_TYPE)
-        validate(pTempFile->GetFileName(), test::ODF);
-    pTempFile->EnableKillingFile();
-    if(pTempFileOut)
-        *pTempFileOut = pTempFile;
-    return xDocSh;
-}
-
-ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile )
-{
-    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile);
-
-    CPPUNIT_ASSERT(xDocSh.is());
-    return xDocSh;
-}
-
-std::shared_ptr<utl::TempFileNamed> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat, bool bValidate )
-{
-    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-
-    auto pTempFile = std::make_shared<utl::TempFileNamed>();
-    pTempFile->EnableKillingFile();
-    SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
-    SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
-    SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
-    if (nFormatType == ODS_FORMAT_TYPE)
-        nExportFormat = SotClipboardFormatId::STARCHART_8;
-    auto pExportFilter = std::make_shared<SfxFilter>(
-        aFilterName,
-        OUString(), nFormatType, nExportFormat, aFilterType, OUString(),
-        OUString(), "private:factory/scalc*" );
-    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-    aStoreMedium.SetFilter(pExportFilter);
-    rShell.DoSaveAs( aStoreMedium );
-    rShell.DoClose();
-
-    if(bValidate)
-    {
-        if(nFormatType == XLSX_FORMAT_TYPE)
-            validate(pTempFile->GetFileName(), test::OOXML);
-        else if (nFormatType == ODS_FORMAT_TYPE)
-            validate(pTempFile->GetFileName(), test::ODF);
-    }
-
-    return pTempFile;
 }
 
 void ScBootstrapFixture::setUp()
