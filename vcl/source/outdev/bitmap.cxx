@@ -171,8 +171,8 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                     if ( nScaleX < 1.0 || nScaleY < 1.0 )
                     {
                         aBmp.Scale(nScaleX, nScaleY);
-                        aPosAry.mnSrcWidth = aPosAry.mnDestWidth;
-                        aPosAry.mnSrcHeight = aPosAry.mnDestHeight;
+                        aPosAry.mnSrcWidth = aPosAry.mnDestWidth * fScale;
+                        aPosAry.mnSrcHeight = aPosAry.mnDestHeight * fScale;
                     }
                 }
 
