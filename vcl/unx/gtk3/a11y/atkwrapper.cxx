@@ -659,6 +659,7 @@ atk_object_wrapper_finalize (GObject *obj)
     if( pWrap->mpAccessible.is() )
     {
         ooo_wrapper_registry_remove( pWrap->mpAccessible );
+        SolarMutexGuard aGuard;
         pWrap->mpAccessible.clear();
     }
 
