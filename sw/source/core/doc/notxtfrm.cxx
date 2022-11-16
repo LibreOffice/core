@@ -1214,139 +1214,148 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
     if( !bContinue )
         return;
 
-    if( rGrfObj.GetGraphic().IsSupportedGraphic())
+    if( !rGrfObj.GetGraphic().IsSupportedGraphic())
     {
-        const bool bAnimate = rGrfObj.IsAnimated() &&
-                                 !pShell->IsPreview() &&
-                                 !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
-        // #i9684# Stop animation during printing/pdf export
-                                  pShell->GetWin();
+        ImplPaintPictureReplacement(rGrfObj, pGrfNd, rAlignedGrfArea, pShell);
+        return;
+    }
 
-        if( bAnimate &&
-            FindFlyFrame() != ::GetFlyFromMarked( nullptr, pShell ))
+    const bool bAnimate = rGrfObj.IsAnimated() &&
+                             !pShell->IsPreview() &&
+                             !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
+    // #i9684# Stop animation during printing/pdf export
+                              pShell->GetWin();
+    if( bAnimate &&
+        FindFlyFrame() != ::GetFlyFromMarked( nullptr, pShell ))
+    {
+        ImplPaintPictureAnimate(pOut, pShell, pGrfNd, rAlignedGrfArea);
+        return;
+    }
+
+    // MM02 To allow system-dependent buffering of the involved
+    // bitmaps it is necessary to re-use the involved primitives
+    // and their already executed decomposition (also for
+    // performance reasons). This is usually done in DrawingLayer
+    // by using the VOC-Mechanism (see descriptions elsewhere).
+    // To get that here, make the involved SwNoTextFrame (this)
+    // a sdr::contact::ViewContact supplier by supporting
+    // a GetViewContact() - call. For ObjectContact we can use
+    // the already existing ObjectContact from the involved
+    // DrawingLayer. For this, the helper classes
+    //     ViewObjectContactOfSwNoTextFrame
+    //     ViewContactOfSwNoTextFrame
+    // are created which support the VOC-mechanism in its minimal
+    // form. This allows automatic and view-dependent (multiple edit
+    // windows, print, etc.) re-use of the created primitives.
+    // Also: Will be very useful when completely changing the Writer
+    // repaint to VOC and Primitives, too.
+    static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
+    static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
+    // tdf#130951 for safety reasons use fallback if ViewObjectContactMechanism
+    // fails for some reason - usually could only be not to find the correct
+    // SdrPageWindow
+    bool bSucceeded(false);
+
+    if(bUseViewObjectContactMechanism)
+    {
+        // MM02 use VOC-mechanism and buffer primitives
+        SwViewShellImp* pImp(pShell->Imp());
+        SdrPageView* pPageView(nullptr != pImp
+            ? pImp->GetPageView()
+            : nullptr);
+        // tdf#130951 caution - target may be Window, use the correct OutputDevice
+        OutputDevice* pTarget(pShell->isOutputToWindow()
+            ? pShell->GetWin()->GetOutDev()
+            : pShell->GetOut());
+        SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
+            ? pPageView->FindPageWindow(*pTarget)
+            : nullptr);
+
+        if(nullptr != pPageWindow)
         {
-            OutputDevice* pVout;
-            if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
-            {
-                pVout = pOut;
-                pOut = pShell->GetOut();
-            }
-            else if( pShell->GetWin() && pOut->IsVirtual() )
-            {
-                pVout = pOut;
-                pOut = pShell->GetWin()->GetOutDev();
-            }
-            else
-                pVout = nullptr;
+            sdr::contact::ObjectContact& rOC(pPageWindow->GetObjectContact());
+            sdr::contact::ViewContact& rVC(GetViewContact());
+            sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
+            sdr::contact::DisplayInfo aDisplayInfo;
 
-            OSL_ENSURE( !pOut->IsVirtual() ||
-                    pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
-                    "pOut should not be a virtual device" );
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
+            const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
 
-            pGrfNd->StartGraphicAnimation(pOut, rAlignedGrfArea.Pos(),
-                                rAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
-                                pVout );
+            paintGraphicUsingPrimitivesHelper(
+                *pOut,
+                aPrimitives,
+                aGraphicTransform,
+                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                rNoTNd.GetTitle(),
+                rNoTNd.GetDescription());
+            bSucceeded = true;
         }
-        else
-        {
-            // MM02 To allow system-dependent buffering of the involved
-            // bitmaps it is necessary to re-use the involved primitives
-            // and their already executed decomposition (also for
-            // performance reasons). This is usually done in DrawingLayer
-            // by using the VOC-Mechanism (see descriptions elsewhere).
-            // To get that here, make the involved SwNoTextFrame (this)
-            // a sdr::contact::ViewContact supplier by supporting
-            // a GetViewContact() - call. For ObjectContact we can use
-            // the already existing ObjectContact from the involved
-            // DrawingLayer. For this, the helper classes
-            //     ViewObjectContactOfSwNoTextFrame
-            //     ViewContactOfSwNoTextFrame
-            // are created which support the VOC-mechanism in its minimal
-            // form. This allows automatic and view-dependent (multiple edit
-            // windows, print, etc.) re-use of the created primitives.
-            // Also: Will be very useful when completely changing the Writer
-            // repaint to VOC and Primitives, too.
-            static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
-            static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
-            // tdf#130951 for safety reasons use fallback if ViewObjectContactMechanism
-            // fails for some reason - usually could only be not to find the correct
-            // SdrPageWindow
-            bool bSucceeded(false);
+    }
 
-            if(bUseViewObjectContactMechanism)
-            {
-                // MM02 use VOC-mechanism and buffer primitives
-                SwViewShellImp* pImp(pShell->Imp());
-                SdrPageView* pPageView(nullptr != pImp
-                    ? pImp->GetPageView()
-                    : nullptr);
-                // tdf#130951 caution - target may be Window, use the correct OutputDevice
-                OutputDevice* pTarget(pShell->isOutputToWindow()
-                    ? pShell->GetWin()->GetOutDev()
-                    : pShell->GetOut());
-                SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
-                    ? pPageView->FindPageWindow(*pTarget)
-                    : nullptr);
+    if(!bSucceeded)
+    {
+        // MM02 fallback to direct paint with primitive-recreation
+        // which will block reusage of system-dependent bitmap data
+        const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
 
-                if(nullptr != pPageWindow)
-                {
-                    sdr::contact::ObjectContact& rOC(pPageWindow->GetObjectContact());
-                    sdr::contact::ViewContact& rVC(GetViewContact());
-                    sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
-                    sdr::contact::DisplayInfo aDisplayInfo;
+        paintGraphicUsingPrimitivesHelper(
+            *pOut,
+            rGrfObj,
+            aGrfAttr,
+            aGraphicTransform,
+            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+            rNoTNd.GetTitle(),
+            rNoTNd.GetDescription());
+    }
+}
 
-                    drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
-                    const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
-
-                    paintGraphicUsingPrimitivesHelper(
-                        *pOut,
-                        aPrimitives,
-                        aGraphicTransform,
-                        nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
-                        rNoTNd.GetTitle(),
-                        rNoTNd.GetDescription());
-                    bSucceeded = true;
-                }
-            }
-
-            if(!bSucceeded)
-            {
-                // MM02 fallback to direct paint with primitive-recreation
-                // which will block reusage of system-dependent bitmap data
-                const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
-
-                paintGraphicUsingPrimitivesHelper(
-                    *pOut,
-                    rGrfObj,
-                    aGrfAttr,
-                    aGraphicTransform,
-                    nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
-                    rNoTNd.GetTitle(),
-                    rNoTNd.GetDescription());
-            }
-        }
+void SwNoTextFrame::ImplPaintPictureAnimate(vcl::RenderContext* pOut, SwViewShell* pShell,
+        SwGrfNode* pGrfNd, const SwRect& rAlignedGrfArea) const
+{
+    OutputDevice* pVout;
+    if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
+    {
+        pVout = pOut;
+        pOut = pShell->GetOut();
+    }
+    else if( pShell->GetWin() && pOut->IsVirtual() )
+    {
+        pVout = pOut;
+        pOut = pShell->GetWin()->GetOutDev();
     }
     else
+        pVout = nullptr;
+
+    OSL_ENSURE( !pOut->IsVirtual() ||
+            pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
+            "pOut should not be a virtual device" );
+
+    pGrfNd->StartGraphicAnimation(pOut, rAlignedGrfArea.Pos(),
+                        rAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
+                        pVout );
+}
+
+void SwNoTextFrame::ImplPaintPictureReplacement(const GraphicObject& rGrfObj, SwGrfNode* pGrfNd,
+        const SwRect& rAlignedGrfArea, SwViewShell* pShell) const
+{
+    TranslateId pResId;
+
+    if( GraphicType::NONE == rGrfObj.GetType() )
+        pResId = STR_COMCORE_READERROR;
+    else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
+        pResId = STR_COMCORE_CANT_SHOW;
+
+    OUString aText;
+    if ( !pResId &&
+         (aText = pGrfNd->GetTitle()).isEmpty() &&
+         (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
     {
-        TranslateId pResId;
-
-        if( GraphicType::NONE == rGrfObj.GetType() )
-            pResId = STR_COMCORE_READERROR;
-        else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
-            pResId = STR_COMCORE_CANT_SHOW;
-
-        OUString aText;
-        if ( !pResId &&
-             (aText = pGrfNd->GetTitle()).isEmpty() &&
-             (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
-        {
-            pResId = STR_COMCORE_READERROR;
-        }
-        if (pResId)
-            aText = SwResId(pResId);
-
-        ::lcl_PaintReplacement( rAlignedGrfArea, aText, *pShell, this, true );
+        pResId = STR_COMCORE_READERROR;
     }
+    if (pResId)
+        aText = SwResId(pResId);
+
+    ::lcl_PaintReplacement( rAlignedGrfArea, aText, *pShell, this, true );
 }
 
 void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,

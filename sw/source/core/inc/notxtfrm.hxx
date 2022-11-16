@@ -66,6 +66,10 @@ private:
     void ImplPaintPictureBitmap( vcl::RenderContext* pOut,
             SwOLENode* pOLENd, bool bIsChart, bool bPrn,
             const SwRect& rAlignedGrfArea, SwViewShell* pShell ) const;
+    void ImplPaintPictureAnimate(vcl::RenderContext* pOut, SwViewShell* pShell,
+            SwGrfNode* pGrfNd, const SwRect& rAlignedGrfArea) const;
+    void ImplPaintPictureReplacement(const GraphicObject& rGrfObj, SwGrfNode* pGrfNd,
+            const SwRect& rAlignedGrfArea, SwViewShell* pShell) const;
 
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );
