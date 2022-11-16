@@ -3537,9 +3537,7 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
     if (!pView)
         return {};
 
-    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pView).GetWindow())
-        return pWindow;
-    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pView).GetWidgetWindow())
+    if (VclPtr<vcl::Window> pWindow = SfxLokHelper::getInPlaceDocWindow(pView))
         return pWindow;
 
     return &(pView->GetEditWin());
@@ -3637,23 +3635,9 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
     double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
-    // check if the user hit a chart/math object which is being edited by this view
-    if (LokChartHelper(m_pDocShell->GetView()).postMouseEvent(nType, nX, nY,
-                                                              nCount, nButtons, nModifier,
-                                                              fScale, fScale))
+    if (SfxLokHelper::testInPlaceComponentMouseEventHit(
+            m_pDocShell->GetView(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
-    if (LokStarMathHelper(m_pDocShell->GetView()).postMouseEvent(nType, nX, nY,
-                                                                 nCount, nButtons, nModifier,
-                                                                 fScale, fScale))
-        return;
-
-    // check if the user hit a chart which is being edited by someone else
-    // and, if so, skip current mouse event
-    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
-    {
-        if (LokChartHelper::HitAny(Point(nX, nY)))
-            return;
-    }
 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     LokMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,

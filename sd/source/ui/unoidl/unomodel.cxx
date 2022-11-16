@@ -2432,10 +2432,7 @@ VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
     if (!pViewShell)
         return {};
 
-    SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
-    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pSfxViewShell).GetWindow())
-        return pWindow;
-    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pSfxViewShell).GetWidgetWindow())
+    if (VclPtr<vcl::Window> pWindow = SfxLokHelper::getInPlaceDocWindow(pViewShell->GetViewShell()))
         return pWindow;
 
     return pViewShell->GetActiveWindow();
@@ -2605,23 +2602,9 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
 
     constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
-    // check if user hit a chart which is being edited by him
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
-                                    nCount, nButtons, nModifier,
-                                    fScale, fScale))
+    if (SfxLokHelper::testInPlaceComponentMouseEventHit(
+            pViewShell->GetViewShell(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
-    if (LokStarMathHelper(pViewShell->GetViewShell())
-            .postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
-        return;
-
-    // check if the user hit a chart which is being edited by someone else
-    // and, if so, skip current mouse event
-    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
-    {
-        if (LokChartHelper::HitAny(Point(nX, nY)))
-            return;
-    }
 
     const Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
     LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,

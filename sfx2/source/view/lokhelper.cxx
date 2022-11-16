@@ -11,6 +11,7 @@
 
 #include <string_view>
 
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -908,6 +909,45 @@ void SfxLokHelper::notifyMediaUpdate(boost::property_tree::ptree& json)
     const std::string str = aStream.str();
 
     SfxLokHelper::notifyAllViews(LOK_CALLBACK_MEDIA_SHAPE, str.c_str());
+}
+
+bool SfxLokHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+                                                     int nY, int nCount, int nButtons,
+                                                     int nModifier, double fScaleX, double fScaleY,
+                                                     bool bNegativeX)
+{
+    // In LOK RTL mode draw/svx operates in negative X coordinates
+    // But the coordinates from client is always positive, so negate nX.
+    if (bNegativeX)
+        nX = -nX;
+
+    // check if the user hit a chart/math object which is being edited by this view
+    if (LokChartHelper aChartHelper(pViewShell, bNegativeX);
+        aChartHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
+        return true;
+
+    if (LokStarMathHelper aMathHelper(pViewShell);
+        aMathHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
+        return true;
+
+    // check if the user hit a chart which is being edited by someone else
+    // and, if so, skip current mouse event
+    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
+    {
+        if (LokChartHelper::HitAny({nX, nY}, bNegativeX))
+            return true;
+    }
+
+    return false;
+}
+
+VclPtr<vcl::Window> SfxLokHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
+{
+    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pViewShell).GetWindow())
+        return pWindow;
+    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pViewShell).GetWidgetWindow())
+        return pWindow;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
