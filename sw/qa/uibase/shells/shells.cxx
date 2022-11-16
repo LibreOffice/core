@@ -278,11 +278,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
 
     // When inserting an ODF_UNHANDLED fieldmark:
     OUString aExpectedCommand("ADDIN ZOTERO_BIBL foo bar");
-    OUString aExpectedResult("(Abrikosov, n.d.)");
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
         comphelper::makePropertyValue("FieldCommand", uno::Any(aExpectedCommand)),
-        comphelper::makePropertyValue("FieldResult", uno::Any(aExpectedResult)),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
     };
     dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
 
@@ -305,8 +304,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     it->second >>= aActualCommand;
     CPPUNIT_ASSERT_EQUAL(aExpectedCommand, aActualCommand);
 
-    OUString aActualResult = pFieldmark->GetContent();
-    CPPUNIT_ASSERT_EQUAL(aExpectedResult, aActualResult);
+    SwPaM aPam(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
+    // Ignore the leading field start + sep.
+    aPam.GetMark()->SetContent(aPam.GetMark()->GetContentIndex() + 2);
+    // Ignore the trailing field end.
+    aPam.GetPoint()->SetContent(aPam.GetPoint()->GetContentIndex() - 1);
+    CPPUNIT_ASSERT(aPam.HasMark());
+    OUString aActualResult = aPam.GetText();
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

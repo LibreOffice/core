@@ -63,6 +63,7 @@
 #include <IMark.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
+#include <translatehelper.hxx>
 
 
 using namespace nsSwDocInfoSubType;
@@ -703,6 +704,9 @@ FIELD_INSERT:
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+            // Don't update the layout after inserting content and before deleting temporary
+            // text nodes.
+            rSh.StartAction();
 
             SwPaM* pCursorPos = rSh.GetCursor();
             if(pCursorPos)
@@ -717,12 +721,40 @@ FIELD_INSERT:
                     aFieldResult = pFieldResult->GetValue();
                 }
 
-                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, aFieldResult);
+                // Split node to remember where the start position is.
+                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().SplitNode(
+                    *pCursorPos->GetPoint(), false);
                 if(bSuccess)
                 {
+                    SwPaM aFieldPam(*pCursorPos->GetPoint());
+                    aFieldPam.Move(fnMoveBackward, GoInContent);
+                    if (pFieldResult)
+                    {
+                        // Paste HTML content.
+                        SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aFieldResult.toUtf8(),
+                                                          true);
+                        if (pCursorPos->GetPoint()->GetContentIndex() == 0)
+                        {
+                            // The paste created a last empty text node, remove it.
+                            SwPaM aPam(*pCursorPos->GetPoint());
+                            aPam.SetMark();
+                            aPam.Move(fnMoveBackward, GoInContent);
+                            rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPam);
+                        }
+                    }
+                    else
+                    {
+                        // Insert default placeholder.
+                        rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos,
+                                                                                   aFieldResult);
+                    }
+                    // Undo the above SplitNode().
+                    aFieldPam.SetMark();
+                    aFieldPam.Move(fnMoveForward, GoInContent);
+                    rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aFieldPam);
+                    *aFieldPam.GetMark() = *pCursorPos->GetPoint();
+
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - aFieldResult.getLength(),
-                                    pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
                     sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                         aFieldPam, OUString(), aFieldType, aFieldPam.Start());
                     if (pFieldmark && !aFieldCode.isEmpty())
@@ -733,6 +765,7 @@ FIELD_INSERT:
                 }
             }
 
+            rSh.EndAction();
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
             rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
         }
