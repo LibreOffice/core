@@ -2411,16 +2411,16 @@ VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
 {
     SolarMutexGuard aGuard;
     DrawViewShell* pViewShell = GetViewShell();
-    VclPtr<vcl::Window> pWindow;
-    if (pViewShell)
-        pWindow = pViewShell->GetActiveWindow();
+    if (!pViewShell)
+        return {};
 
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-        pWindow = pChartWindow;
+    SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pSfxViewShell).GetWindow())
+        return pWindow;
+    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pSfxViewShell).GetWidgetWindow())
+        return pWindow;
 
-    return pWindow;
+    return pViewShell->GetActiveWindow();
 }
 
 void SdXImpressDocument::setPartMode( int nPartMode )
@@ -2592,6 +2592,9 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     if (aChartHelper.postMouseEvent(nType, nX, nY,
                                     nCount, nButtons, nModifier,
                                     fScale, fScale))
+        return;
+    if (LokStarMathHelper(pViewShell->GetViewShell())
+            .postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
     // check if the user hit a chart which is being edited by someone else
