@@ -241,25 +241,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-namespace
-{
-// sw::mark::TextFieldmark::GetContent() on master.
-OUString TextFieldmarkGetContent(sw::mark::IFieldmark* pFieldmark)
-{
-    const SwTextNode& rTextNode = *pFieldmark->GetMarkEnd().nNode.GetNode().GetTextNode();
-    SwPosition const sepPos(sw::mark::FindFieldSep(*pFieldmark));
-    const sal_Int32 nStart(sepPos.nContent.GetIndex());
-    const sal_Int32 nEnd(pFieldmark->GetMarkEnd().nContent.GetIndex());
-
-    OUString sContent;
-    const sal_Int32 nLen = rTextNode.GetText().getLength();
-    if (nStart + 1 < nLen && nEnd <= nLen && nEnd > nStart + 2)
-        sContent = rTextNode.GetText().copy(nStart + 1, nEnd - nStart - 2);
-
-    return sContent;
-}
-}
-
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
 {
     // Given an empty document:
@@ -267,11 +248,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
 
     // When inserting an ODF_UNHANDLED fieldmark:
     OUString aExpectedCommand("ADDIN ZOTERO_BIBL foo bar");
-    OUString aExpectedResult("(Abrikosov, n.d.)");
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
         comphelper::makePropertyValue("FieldCommand", uno::Any(aExpectedCommand)),
-        comphelper::makePropertyValue("FieldResult", uno::Any(aExpectedResult)),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
     };
     dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
 
@@ -294,8 +274,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     it->second >>= aActualCommand;
     CPPUNIT_ASSERT_EQUAL(aExpectedCommand, aActualCommand);
 
-    OUString aActualResult = TextFieldmarkGetContent(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(aExpectedResult, aActualResult);
+    SwPaM aPam(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
+    // Ignore the leading field start + sep.
+    aPam.GetMark()->nContent = aPam.GetMark()->nContent.GetIndex() + 2;
+    // Ignore the trailing field end.
+    aPam.GetPoint()->nContent = aPam.GetPoint()->nContent.GetIndex() - 1;
+    CPPUNIT_ASSERT(aPam.HasMark());
+    OUString aActualResult = aPam.GetText();
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
