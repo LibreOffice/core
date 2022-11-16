@@ -570,6 +570,12 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
 
+ifeq ($(SYSTEM_LIBFIXMATH),TRUE)
+$(eval $(call gb_Library_add_libs,vcl,\
+        -llibfixmath \
+))
+endif
+
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/window/screensaverinhibitor \
