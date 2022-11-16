@@ -41,14 +41,14 @@ public:
     SwNode* getNode();
 };
 
-class OnlineAccessibilityCheck : public SvtListener
+class OnlineAccessibilityCheck
 {
 private:
     std::map<SwNode*, std::unique_ptr<WeakNodeContainer>> m_aNodes;
 
     SwDoc& m_rDocument;
     sw::AccessibilityCheck m_aAccessibilityCheck;
-    SwNode* m_pPreviousNode;
+    std::unique_ptr<WeakNodeContainer> m_pPreviousNode;
     SwNodeOffset m_nPreviousNodeIndex;
     sal_Int32 m_nAccessibilityIssues;
     bool m_bInitialCheck;

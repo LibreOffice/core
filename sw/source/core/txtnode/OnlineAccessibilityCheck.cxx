@@ -35,11 +35,15 @@ WeakNodeContainer::WeakNodeContainer(SwNode* pNode)
 {
     if (m_pNode)
     {
-        auto* pBroadcast = dynamic_cast<sw::BroadcastingModify*>(pNode);
+        auto* pBroadcast = dynamic_cast<sw::BroadcastingModify*>(m_pNode);
         if (pBroadcast)
         {
             EndListeningAll();
             StartListening(pBroadcast->GetNotifier());
+        }
+        else
+        {
+            m_pNode = nullptr;
         }
     }
 }
@@ -48,6 +52,8 @@ WeakNodeContainer::~WeakNodeContainer() { EndListeningAll(); }
 
 bool WeakNodeContainer::isAlive()
 {
+    if (!m_pNode)
+        return false;
     if (!HasBroadcaster())
         m_pNode = nullptr;
     return m_pNode;
@@ -63,7 +69,6 @@ SwNode* WeakNodeContainer::getNode()
 OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     : m_rDocument(rDocument)
     , m_aAccessibilityCheck(&m_rDocument)
-    , m_pPreviousNode(nullptr)
     , m_nPreviousNodeIndex(-1)
     , m_nAccessibilityIssues(0)
     , m_bInitialCheck(false)
@@ -177,8 +182,7 @@ void OnlineAccessibilityCheck::updateCheckerActivity()
 
     if (bOnlineCheckStatus != m_bOnlineCheckStatus)
     {
-        EndListeningAll();
-        m_pPreviousNode = nullptr;
+        m_pPreviousNode.reset();
         m_nPreviousNodeIndex = SwNodeOffset(-1);
         m_bInitialCheck = false; // force initial check
 
@@ -218,16 +222,14 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
     if (!pCurrentNode->IsContentNode() && !pCurrentNode->IsTableNode())
         return;
 
-    auto* pCurrentBroadcast = dynamic_cast<sw::BroadcastingModify*>(pCurrentNode);
-    if (!pCurrentBroadcast)
+    auto pCurrentWeak = std::make_unique<WeakNodeContainer>(pCurrentNode);
+    if (!pCurrentWeak->isAlive())
         return;
 
     // Check if previous node was deleted
-    if (!HasBroadcaster())
+    if (!m_pPreviousNode || !m_pPreviousNode->isAlive())
     {
-        EndListeningAll();
-        StartListening(pCurrentBroadcast->GetNotifier());
-        m_pPreviousNode = pCurrentNode;
+        m_pPreviousNode = std::move(pCurrentWeak);
         m_nPreviousNodeIndex = nCurrenNodeIndex;
         return;
     }
@@ -240,9 +242,7 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
     if (m_nPreviousNodeIndex < SwNodeOffset(0)
         || m_nPreviousNodeIndex >= pCurrentNode->GetNodes().Count())
     {
-        EndListeningAll();
-        StartListening(pCurrentBroadcast->GetNotifier());
-        m_pPreviousNode = pCurrentNode;
+        m_pPreviousNode = std::move(pCurrentWeak);
         m_nPreviousNodeIndex = nCurrenNodeIndex;
         return;
     }
@@ -257,14 +257,12 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
         updateStatusbar();
 
         // Assign previous node and index
-        EndListeningAll();
-        StartListening(pCurrentBroadcast->GetNotifier());
-        m_pPreviousNode = pCurrentNode;
+        m_pPreviousNode = std::move(pCurrentWeak);
         m_nPreviousNodeIndex = nCurrenNodeIndex;
     }
     else
     {
-        m_pPreviousNode = nullptr;
+        m_pPreviousNode.reset();
         m_nPreviousNodeIndex = SwNodeOffset(-1);
     }
 }
