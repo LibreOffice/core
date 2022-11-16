@@ -44,6 +44,7 @@
 #include <stlpool.hxx>
 #include <detfunc.hxx>
 #include <cellmergeoption.hxx>
+#include <postit.hxx>
 #include <sortparam.hxx>
 #include <undomanager.hxx>
 
@@ -71,6 +72,15 @@ public:
     ScFiltersTest();
 
     //ods, xls, xlsx filter tests
+    void testContentODS();
+    void testContentXLS();
+    void testContentXLSX();
+    void testContentXLSXStrict(); // strict OOXML
+    void testContentLotus123();
+    void testContentDIF();
+    void testContentXLSB();
+    void testContentXLS_XML();
+    void testContentGnumeric();
     void testCondFormatOperatorsSameRangeXLSX();
     void testTdf150452();
     void testTdf119292();
@@ -87,6 +97,7 @@ public:
     void testRangeNameXLS();
     void testRangeNameLocalXLS();
     void testRangeNameXLSX();
+    void testRangeNameODS();
     void testHyperlinksXLSX();
     void testHardRecalcODS();
     void testFunctionsODS();
@@ -180,6 +191,15 @@ public:
     void testTdf144758_DBDataDefaultOrientation();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testContentODS);
+    CPPUNIT_TEST(testContentXLS);
+    CPPUNIT_TEST(testContentXLSX);
+    CPPUNIT_TEST(testContentXLSXStrict);
+    CPPUNIT_TEST(testContentLotus123);
+    CPPUNIT_TEST(testContentDIF);
+    CPPUNIT_TEST(testContentXLSB);
+    CPPUNIT_TEST(testContentXLS_XML);
+    CPPUNIT_TEST(testContentGnumeric);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
     CPPUNIT_TEST(testTdf150452);
     CPPUNIT_TEST(testTdf119292);
@@ -196,6 +216,7 @@ public:
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameLocalXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
+    CPPUNIT_TEST(testRangeNameODS);
     CPPUNIT_TEST(testHyperlinksXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
@@ -320,6 +341,133 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
+
+void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
+{
+    double fValue;
+    //check value import
+    fValue = rDoc.GetValue(0, 0, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 1.0, fValue);
+    fValue = rDoc.GetValue(0, 1, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 2.0, fValue);
+    OUString aString = rDoc.GetString(1, 0, 0);
+
+    //check string import
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("string imported not correctly", OUString("String1"), aString);
+    aString = rDoc.GetString(1, 1, 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", OUString("String2"), aString);
+
+    //check basic formula import
+    // in case of DIF it just contains values
+    fValue = rDoc.GetValue(2, 0, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("=2*3", 6.0, fValue);
+    fValue = rDoc.GetValue(2, 1, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("=2+3", 5.0, fValue);
+    fValue = rDoc.GetValue(2, 2, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("=2-3", -1.0, fValue);
+    fValue = rDoc.GetValue(2, 3, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("=C1+C2", 11.0, fValue);
+
+    //check merged cells import
+    if (bCheckMergedCells)
+    {
+        SCCOL nCol = 4;
+        SCROW nRow = 1;
+        rDoc.ExtendMerge(4, 1, nCol, nRow, 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("merged cells are not imported", SCCOL(5), nCol);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("merged cells are not imported", SCROW(2), nRow);
+
+        //check notes import
+        ScAddress aAddress(7, 2, 0);
+        ScPostIt* pNote = rDoc.GetNote(aAddress);
+        CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", OUString("Test"),
+                                     pNote->GetText());
+    }
+
+    //add additional checks here
+}
+}
+
+void ScFiltersTest::testContentODS()
+{
+    createScDoc("ods/universal-content.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), true);
+}
+
+void ScFiltersTest::testContentXLS()
+{
+    createScDoc("xls/universal-content.xls");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), true);
+}
+
+void ScFiltersTest::testContentXLSX()
+{
+    createScDoc("xlsx/universal-content.xlsx");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), true);
+}
+
+void ScFiltersTest::testContentXLSXStrict()
+{
+    createScDoc("xlsx/universal-content-strict.xlsx");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), true);
+}
+
+void ScFiltersTest::testContentLotus123()
+{
+    createScDoc("123/universal-content.123");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), false);
+}
+
+void ScFiltersTest::testContentDIF()
+{
+    createScDoc("dif/universal-content.dif");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), false);
+}
+
+void ScFiltersTest::testContentXLSB()
+{
+    createScDoc("xlsb/universal-content.xlsb");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), true);
+}
+
+void ScFiltersTest::testContentXLS_XML()
+{
+    createScDoc("xml/universal-content.xml");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), false);
+}
+
+void ScFiltersTest::testContentGnumeric()
+{
+    createScDoc("gnumeric/universal-content.gnumeric");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    testContentImpl(*getScDoc(), false);
 }
 
 void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
@@ -682,6 +830,20 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = getScDoc();
     testRangeNameImpl(*pDoc);
+}
+
+void ScFiltersTest::testRangeNameODS()
+{
+    createScDoc("ods/named-ranges-global.ods");
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    ScDocument* pDoc = getScDoc();
+    testRangeNameImpl(*pDoc);
+
+    OUString aCSVPath = createFilePath(u"contentCSV/rangeExp_Sheet2.csv");
+    testFile(aCSVPath, *pDoc, 1);
 }
 
 void ScFiltersTest::testHyperlinksXLSX()

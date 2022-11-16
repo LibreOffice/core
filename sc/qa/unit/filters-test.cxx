@@ -59,17 +59,7 @@ public:
     void testCVEs();
 
     //ods, xls, xlsx filter tests
-    void testRangeNameODS(); // only test ods here, xls and xlsx in subsequent_filters-test
-    void testContentODS();
-    void testContentXLS();
-    void testContentXLSX();
-    void testContentXLSXStrict(); // strict OOXML
-    void testContentLotus123();
     void testContentofz9704();
-    void testContentDIF();
-    void testContentXLSB();
-    void testContentXLS_XML();
-    void testContentGnumeric();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
     void testSharedFormulaRefUpdateXLSX();
@@ -88,17 +78,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
-    CPPUNIT_TEST(testRangeNameODS);
-    CPPUNIT_TEST(testContentODS);
-    CPPUNIT_TEST(testContentXLS);
-    CPPUNIT_TEST(testContentXLSX);
-    CPPUNIT_TEST(testContentXLSXStrict);
-    CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentofz9704);
-    CPPUNIT_TEST(testContentDIF);
-    CPPUNIT_TEST(testContentXLSB);
-    CPPUNIT_TEST(testContentXLS_XML);
-    CPPUNIT_TEST(testContentGnumeric);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
@@ -162,147 +142,6 @@ void ScFiltersTest::testCVEs()
 #endif
 }
 
-namespace {
-
-void testRangeNameImpl(const ScDocument& rDoc)
-{
-    //check one range data per sheet and one global more detailed
-    //add some more checks here
-    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("GLOBAL1"));
-    CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
-    double aValue = rDoc.GetValue(1,0,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
-    pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
-    aValue = rDoc.GetValue(1,2,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
-    pRangeData = rDoc.GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
-    //check for correct results for the remaining formulas
-    aValue = rDoc.GetValue(1,1,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=global2 should be 2", 2.0, aValue);
-    aValue = rDoc.GetValue(1,3,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=local2 should be 4", 4.0, aValue);
-    aValue = rDoc.GetValue(2,0,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
-}
-
-}
-
-void ScFiltersTest::testRangeNameODS()
-{
-    ScDocShellRef xDocSh = loadDoc(u"named-ranges-global.", FORMAT_ODS);
-
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testRangeNameImpl(rDoc);
-
-    OUString aCSVPath;
-    createCSVPath( "rangeExp_Sheet2.", aCSVPath );
-    testFile( aCSVPath, rDoc, 1);
-    xDocSh->DoClose();
-}
-
-namespace {
-
-void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, xls, xlsx
-{
-    double fValue;
-    //check value import
-    fValue = rDoc.GetValue(0,0,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 1.0, fValue);
-    fValue = rDoc.GetValue(0,1,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 2.0, fValue);
-    OUString aString = rDoc.GetString(1, 0, 0);
-
-    //check string import
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("string imported not correctly", OUString("String1"), aString);
-    aString = rDoc.GetString(1, 1, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", OUString("String2"), aString);
-
-    //check basic formula import
-    // in case of DIF it just contains values
-    fValue = rDoc.GetValue(2,0,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=2*3", 6.0, fValue);
-    fValue = rDoc.GetValue(2,1,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=2+3", 5.0, fValue);
-    fValue = rDoc.GetValue(2,2,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=2-3", -1.0, fValue);
-    fValue = rDoc.GetValue(2,3,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("=C1+C2", 11.0, fValue);
-
-    //check merged cells import
-    if (nFormat != FORMAT_LOTUS123 && nFormat != FORMAT_DIF && nFormat != FORMAT_XLS_XML
-            && nFormat != FORMAT_GNUMERIC)
-    {
-        SCCOL nCol = 4;
-        SCROW nRow = 1;
-        rDoc.ExtendMerge(4, 1, nCol, nRow, 0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("merged cells are not imported", SCCOL(5), nCol);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("merged cells are not imported", SCROW(2), nRow);
-
-        //check notes import
-        ScAddress aAddress(7, 2, 0);
-        ScPostIt* pNote = rDoc.GetNote(aAddress);
-        CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", OUString("Test"), pNote->GetText() );
-    }
-
-    //add additional checks here
-}
-
-}
-
-void ScFiltersTest::testContentODS()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_ODS);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_ODS);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentXLS()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_XLS);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_XLS);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentXLSX()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_XLSX);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentXLSXStrict()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content-strict.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_XLSX);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentLotus123()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_LOTUS123);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_LOTUS123);
-    xDocSh->DoClose();
-}
 
 void ScFiltersTest::testContentofz9704()
 {
@@ -310,41 +149,6 @@ void ScFiltersTest::testContentofz9704()
     createFileURL(u"ofz9704.", u"123", aFileName);
     SvFileStream aFileStream(aFileName, StreamMode::READ);
     TestImportWKS(aFileStream);
-}
-
-void ScFiltersTest::testContentDIF()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_DIF);
-
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentXLSB()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_XLSB);
-    xDocSh->DoHardRecalc();
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_XLSB);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentXLS_XML()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_XLS_XML);
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_XLS_XML);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testContentGnumeric()
-{
-    ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_GNUMERIC);
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    testContentImpl(rDoc, FORMAT_GNUMERIC);
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testSharedFormulaXLS()
