@@ -1,0 +1,47 @@
+From 26efeceefab9c45b080c3636daaf9452779c79c7 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Fri, 11 Nov 2022 12:45:12 -0700
+Subject: [PATCH] [GPOS.PairPos] Adjust unsafe-to-break for non-zero
+ ValueFormat2
+
+Fixes https://github.com/harfbuzz/harfbuzz/issues/3824
+---
+ src/OT/Layout/GPOS/PairPosFormat2.hh | 4 ++++
+ src/OT/Layout/GPOS/PairSet.hh        | 7 ++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/src/OT/Layout/GPOS/PairPosFormat2.hh b/src/OT/Layout/GPOS/PairPosFormat2.hh
+index 83b093b988..1bb0d60ae2 100644
+--- a/src/OT/Layout/GPOS/PairPosFormat2.hh
++++ b/src/OT/Layout/GPOS/PairPosFormat2.hh
+@@ -244,7 +244,11 @@ struct PairPosFormat2_4
+ 
+     buffer->idx = skippy_iter.idx;
+     if (len2)
++    {
+       buffer->idx++;
++      // https://github.com/harfbuzz/harfbuzz/issues/3824
++      buffer->unsafe_to_break (buffer->idx - 1, buffer->idx + 1);
++    }
+ 
+     return_trace (true);
+   }
+diff --git a/src/OT/Layout/GPOS/PairSet.hh b/src/OT/Layout/GPOS/PairSet.hh
+index aa48d933c3..b1d9f83bc9 100644
+--- a/src/OT/Layout/GPOS/PairSet.hh
++++ b/src/OT/Layout/GPOS/PairSet.hh
+@@ -128,8 +128,13 @@ struct PairSet
+ 
+       if (applied_first || applied_second)
+         buffer->unsafe_to_break (buffer->idx, pos + 1);
++
+       if (len2)
+-        pos++;
++      {
++	pos++;
++	// https://github.com/harfbuzz/harfbuzz/issues/3824
++	buffer->unsafe_to_break (pos - 1, pos + 1);
++      }
+ 
+       buffer->idx = pos;
+       return_trace (true);
