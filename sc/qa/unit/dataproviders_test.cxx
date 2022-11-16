@@ -22,7 +22,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScDataProvidersTest : public ScBootstrapFixture
+class ScDataProvidersTest : public ScModelTestBase
 {
 public:
     ScDataProvidersTest();
@@ -44,94 +44,84 @@ public:
 
 void ScDataProvidersTest::testCSVImport()
 {
-    ScDocShellRef xDocSh = loadEmptyDocument();
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
     bool bInserted
-        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
-    OUString aFileURL;
-    createFileURL(u"test1.", u"csv", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", &rDoc);
+    OUString aFileURL = createFileURL(u"csv/test1.csv");
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", pDoc);
     aDataSource.setDBData(pDBData->GetName());
 
-    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
+    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(&rDoc, true);
+    rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test3"), rDoc.GetString(2, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), pDoc->GetString(2, 1, 0));
 }
 
 void ScDataProvidersTest::testDataLargerThanDB()
 {
-    ScDocShellRef xDocSh = loadEmptyDocument();
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
     bool bInserted
-        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
-    OUString aFileURL;
-    createFileURL(u"test1.", u"csv", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", &rDoc);
+    OUString aFileURL = createFileURL(u"csv/test1.csv");
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", pDoc);
     aDataSource.setDBData(pDBData->GetName());
 
-    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
+    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(&rDoc, true);
+    rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(2, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(2, 1, 0));
 }
 
 void ScDataProvidersTest::testHTMLImport()
 {
-    ScDocShellRef xDocSh = loadEmptyDocument();
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
     bool bInserted
-        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
-    OUString aFileURL;
-    createFileURL(u"test1.", u"html", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", &rDoc);
+    OUString aFileURL = createFileURL(u"html/test1.html");
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", pDoc);
     aDataSource.setID("//table");
     aDataSource.setDBData(pDBData->GetName());
 
-    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
+    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(&rDoc, true);
+    rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     std::vector<OUString> aCarManufacturers = { "Audi", "GM", "Nissan", "Ferrari", "Peugeot" };
@@ -141,34 +131,30 @@ void ScDataProvidersTest::testHTMLImport()
         2, 2.1, 40179, 2, 2,
     }; // 40179 is equal to 2010-1-1
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), rDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), rDoc.GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col3"), rDoc.GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col4"), rDoc.GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col3"), pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col4"), pDoc->GetString(3, 0, 0));
 
     for (SCROW nRow = 0; nRow <= 4; ++nRow)
     {
-        ASSERT_DOUBLES_EQUAL(aFirstCol[nRow], rDoc.GetValue(0, nRow + 1, 0));
-        ASSERT_DOUBLES_EQUAL(aSecondCol[nRow], rDoc.GetValue(1, nRow + 1, 0));
-        CPPUNIT_ASSERT_EQUAL(aCarManufacturers[nRow], rDoc.GetString(2, nRow + 1, 0));
-        CPPUNIT_ASSERT_EQUAL(aCities[nRow], rDoc.GetString(3, nRow + 1, 0));
+        ASSERT_DOUBLES_EQUAL(aFirstCol[nRow], pDoc->GetValue(0, nRow + 1, 0));
+        ASSERT_DOUBLES_EQUAL(aSecondCol[nRow], pDoc->GetValue(1, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCarManufacturers[nRow], pDoc->GetString(2, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCities[nRow], pDoc->GetString(3, nRow + 1, 0));
     }
-
-    xDocSh->DoClose();
 }
 
 void ScDataProvidersTest::testXMLImport()
 {
-    ScDocShellRef xDocSh = loadEmptyDocument();
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
     bool bInserted
-        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
-    OUString aFileURL;
     ScOrcusImportXMLParam aParam;
 
     ScOrcusImportXMLParam::RangeLink aRangeLink;
@@ -178,64 +164,59 @@ void ScDataProvidersTest::testXMLImport()
     aRangeLink.maRowGroups.push_back("/bookstore/book");
     aParam.maRangeLinks.push_back(aRangeLink);
 
-    createFileURL(u"test1.", u"xml", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", &rDoc);
+    OUString aFileURL = createFileURL(u"xml/test1.xml");
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", pDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setXMLImportParam(aParam);
 
-    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
+    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(&rDoc, true);
+    rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("title"), rDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("author"), rDoc.GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(0, 3, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test3"), rDoc.GetString(1, 3, 0));
-    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(0, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test4"), rDoc.GetString(1, 4, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("title"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("author"), pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), pDoc->GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(0, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), pDoc->GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test4"), pDoc->GetString(1, 4, 0));
 }
 
 /*
 void ScDataProvidersTest::testBaseImport()
 {
-    ScDocShellRef xDocSh = loadEmptyDocument();
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    bool bInserted = rDoc.GetDBCollection()->getNamedDBs().insert(pDBData);
+    ScDocument* pDoc = getScDoc();
+    bool bInserted = pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
     CPPUNIT_ASSERT(bInserted);
 
-    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", &rDoc);
+    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", pDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setID("biblio@Bibliography");
 
 
-    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
+    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(&rDoc, true);
+    rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), rDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), rDoc.GetString(1, 1, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), pDoc->GetString(1, 1, 0));
 }
 */
 
 ScDataProvidersTest::ScDataProvidersTest()
-    : ScBootstrapFixture("sc/qa/unit/data/dataprovider")
+    : ScModelTestBase("sc/qa/unit/data/dataprovider")
 {
 }
 
