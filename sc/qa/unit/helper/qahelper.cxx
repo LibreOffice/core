@@ -884,6 +884,14 @@ ScDocShell* ScModelTestBase::getScDocShell()
     return pDocSh;
 }
 
+ScTabViewShell* ScModelTestBase::getViewShell()
+{
+    ScDocShell* pDocSh = getScDocShell();
+    ScTabViewShell* pTabViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pTabViewShell);
+    return pTabViewShell;
+}
+
 void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems)
 {
     for ( unsigned int index=0; index<numElems; ++index )

@@ -252,6 +252,7 @@ public:
     void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr);
     ScDocument* getScDoc();
     ScDocShell* getScDocShell();
+    ScTabViewShell* getViewShell();
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems);
 };
 

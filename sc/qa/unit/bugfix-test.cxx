@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScFiltersTest : public ScBootstrapFixture
+class ScFiltersTest : public ScModelTestBase
 {
 public:
     ScFiltersTest();
@@ -142,11 +142,11 @@ void ScFiltersTest::testTdf137576_Measureline()
     // length 37mm. Save and reload had resulted in a line of 0mm length.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc(u"tdf137576_Measureline.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf137576_Measureline.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Get shape
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
@@ -160,11 +160,11 @@ void ScFiltersTest::testTdf137576_Measureline()
     lcl_AssertPointEqualWithTolerance("Load, end point: ", Point(4800, 5200), aEnd, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
-    ScDocument& rDoc2 = xDocSh->GetDocument();
+    saveAndReload("calc8");
+    pDoc = getScDoc();
 
     // Get shape
-    pDrawLayer = rDoc2.GetDrawLayer();
+    pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
@@ -176,8 +176,6 @@ void ScFiltersTest::testTdf137576_Measureline()
     lcl_AssertPointEqualWithTolerance("Reload start point: ", Point(4800, 1500), aStart2, 1);
     const Point aEnd2 = pObj->GetPoint(1);
     lcl_AssertPointEqualWithTolerance("Reload end point: ", Point(4800, 5200), aEnd2, 1);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf137216_HideCol()
@@ -186,11 +184,11 @@ void ScFiltersTest::testTdf137216_HideCol()
     // Error was, that hiding column C did not make the shape invisible.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc(u"tdf137216_HideCol.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf137216_HideCol.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Get shape
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
     const SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
@@ -199,7 +197,7 @@ void ScFiltersTest::testTdf137216_HideCol()
 
     // Assert object is visible before and invisible after hiding column.
     CPPUNIT_ASSERT_MESSAGE("before column hide: Object should be visible", pObj->IsVisible());
-    rDoc.SetColHidden(2, 2, 0, true); // col C in UI = col index 2 to 2.
+    pDoc->SetColHidden(2, 2, 0, true); // col C in UI = col index 2 to 2.
     CPPUNIT_ASSERT_MESSAGE("after column hide: Object should be invisible", !pObj->IsVisible());
 }
 
@@ -210,11 +208,11 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // in a wrong end cell offset and thus a wrong height of the shape.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc(u"tdf137044_CoverHiddenRows.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf137044_CoverHiddenRows.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Get shape
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
@@ -229,14 +227,14 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     lcl_AssertPointEqualWithTolerance("Load: end offset", Point(2000, 2499), aOriginalEndOffset, 1);
 
     // Hide rows 5 and 6 in UI = row index 4 to 5.
-    rDoc.SetRowHidden(4, 5, 0, true);
+    pDoc->SetRowHidden(4, 5, 0, true);
 
     // Save and reload
-    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
-    ScDocument& rDoc2 = xDocSh->GetDocument();
+    saveAndReload("calc8");
+    pDoc = getScDoc();
 
     // Get shape
-    pDrawLayer = rDoc2.GetDrawLayer();
+    pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
@@ -249,18 +247,16 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     lcl_AssertRectEqualWithTolerance(
         "Reload:", tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
     lcl_AssertPointEqualWithTolerance("Reload: end offset", Point(2000, 2499), aReloadEndOffset, 1);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf137020_FlipVertical()
 {
     // Get document
-    ScDocShellRef xDocSh = loadDoc(u"tdf137020_FlipVertical.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf137020_FlipVertical.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Get shape
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
@@ -275,11 +271,11 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     lcl_AssertRectEqualWithTolerance("Mirror:", aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
-    ScDocument& rDoc2 = xDocSh->GetDocument();
+    saveAndReload("calc8");
+    pDoc = getScDoc();
 
     // Get shape
-    pDrawLayer = rDoc2.GetDrawLayer();
+    pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
@@ -289,102 +285,80 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     // Check pos and size of shape again, should be unchanged
     const tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
     lcl_AssertRectEqualWithTolerance("Reload:", aSnapRectOrig, aSnapRectReload, 1);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf64229()
 {
-    ScDocShellRef xDocSh = loadDoc(u"fdo64229b.", FORMAT_ODS);
+    createScDoc("ods/fdo64229b.ods");
 
-    xDocSh->DoHardRecalc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo64229b.*", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocument* pDoc = getScDoc();
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath("fdo64229b.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVFileName = createFilePath(u"contentCSV/fdo64229b.csv");
+    testFile(aCSVFileName, *pDoc, 0);
 }
 
 void ScFiltersTest::testTdf36933()
 {
-    ScDocShellRef xDocSh = loadDoc(u"fdo36933test.", FORMAT_ODS);
+    createScDoc("ods/fdo36933test.ods");
 
-    xDocSh->DoHardRecalc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo36933test.*", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocument* pDoc = getScDoc();
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath("fdo36933test.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVFileName = createFilePath(u"contentCSV/fdo36933test.csv");
+    testFile(aCSVFileName, *pDoc, 0);
 }
 
 void ScFiltersTest::testTdf43700()
 {
-    ScDocShellRef xDocSh = loadDoc(u"fdo43700test.", FORMAT_ODS);
+    createScDoc("ods/fdo43700test.ods");
 
-    xDocSh->DoHardRecalc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43700test.*", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocument* pDoc = getScDoc();
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath("fdo43700test.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
+    OUString aCSVFileName = createFilePath(u"contentCSV/fdo43700test.csv");
+    testFile(aCSVFileName, *pDoc, 0);
 }
 
 void ScFiltersTest::testTdf43534()
 {
-    ScDocShellRef xDocSh = loadDoc(u"fdo43534test.", FORMAT_ODS);
+    createScDoc("ods/fdo43534test.ods");
 
-    xDocSh->DoHardRecalc();
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43534test.*", xDocSh.is());
-    // ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath("fdo43534test.", aCSVFileName);
+    // createCSVPath("fdo43534test.", aCSVFileName);
     // testFile(aCSVFileName, rDoc, 0);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf91979()
 {
-    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
-    ScDocShellRef xDocSh = loadEmptyDocument(args);
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
-    // Get the document controller
-    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell != nullptr);
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
     auto& aViewData = pViewShell->GetViewData();
-    auto& rDoc = aViewData.GetDocument();
 
     // Check coordinates of a distant cell
-    Point aPos = aViewData.GetScrPos(rDoc.MaxCol() - 1, 10000, SC_SPLIT_TOPLEFT, true);
-    int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(0, 0), aViewData.GetPPTX());
-    int nRowHeight = ScViewData::ToPixel(rDoc.GetRowHeight(0, 0), aViewData.GetPPTY());
-    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>((rDoc.MaxCol() - 1) * nColWidth), aPos.getX());
+    Point aPos = aViewData.GetScrPos(pDoc->MaxCol() - 1, 10000, SC_SPLIT_TOPLEFT, true);
+    int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(0, 0), aViewData.GetPPTX());
+    int nRowHeight = ScViewData::ToPixel(pDoc->GetRowHeight(0, 0), aViewData.GetPPTY());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>((pDoc->MaxCol() - 1) * nColWidth), aPos.getX());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10000 * nRowHeight), aPos.getY());
-
-    xDocSh->DoClose();
 }
 
 /*
@@ -396,84 +370,77 @@ void ScFiltersTest::testTdf40110()
     xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFileName;
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo40110test."), aCSVFileName);
+    createCSVPath(OUString("fdo40110test."));
     testFile(aCSVFileName, rDoc, 0);
 
-    xDocSh->DoClose();
 }
 */
 
 void ScFiltersTest::testTdf98657()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf98657.", FORMAT_ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf98657.ods");
+    ScDocument* pDoc = getScDoc();
 
-    xDocSh->DoHardRecalc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 
     // this was a NaN before the fix
-    CPPUNIT_ASSERT_EQUAL(285.0, rDoc.GetValue(ScAddress(1, 1, 0)));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(285.0, pDoc->GetValue(ScAddress(1, 1, 0)));
 }
 
 void ScFiltersTest::testTdf88821()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf88821.", FORMAT_HTML);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    setImportFilterName("calc_HTML_WebQuery");
+    createScDoc("html/tdf88821.html");
+    ScDocument* pDoc = getScDoc();
 
     // B2 should be 'Périmètre', not 'PÃ©rimÃ¨tre'
     CPPUNIT_ASSERT_EQUAL(OStringToOUString("P\xC3\xA9rim\xC3\xA8tre", RTL_TEXTENCODING_UTF8),
-                         rDoc.GetString(1, 1, 0));
-
-    xDocSh->DoClose();
+                         pDoc->GetString(1, 1, 0));
 }
 
 void ScFiltersTest::testTdf88821_2()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf88821-2.", FORMAT_HTML);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    setImportFilterName("calc_HTML_WebQuery");
+    createScDoc("html/tdf88821-2.html");
+    ScDocument* pDoc = getScDoc();
 
     // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
     CPPUNIT_ASSERT_EQUAL(OStringToOUString("ABCabc\xC4\x8C\xC5\xA0\xC5\xBD\xC4\x8D\xC5\xA1\xC5\xBE",
                                            RTL_TEXTENCODING_UTF8),
-                         rDoc.GetString(0, 1, 0));
-
-    xDocSh->DoClose();
+                         pDoc->GetString(0, 1, 0));
 }
 
 void ScFiltersTest::testTdf103960()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf103960.", FORMAT_HTML);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    setImportFilterName("calc_HTML_WebQuery");
+    createScDoc("html/tdf103960.html");
+    ScDocument* pDoc = getScDoc();
 
     // A1 should be 'Data', not the entire content of the file
-    CPPUNIT_ASSERT_EQUAL(OStringToOUString("Data", RTL_TEXTENCODING_UTF8), rDoc.GetString(0, 0, 0));
-
-    xDocSh->DoClose();
+    CPPUNIT_ASSERT_EQUAL(OStringToOUString("Data", RTL_TEXTENCODING_UTF8),
+                         pDoc->GetString(0, 0, 0));
 }
 
 void ScFiltersTest::testRhbz1390776()
 {
-    ScDocShellRef xDocSh = loadDoc(u"rhbz1390776.", FORMAT_XLS_XML);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("xml/rhbz1390776.xml");
+    ScDocument* pDoc = getScDoc();
 
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
-
-    xDocSh->DoClose();
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
 }
 
 void ScFiltersTest::testTdf104310()
 {
     // 1. Test x14 extension
     {
-        ScDocShellRef xDocSh = loadDoc(u"tdf104310.", FORMAT_XLSX);
-        ScDocument& rDoc = xDocSh->GetDocument();
+        createScDoc("xlsx/tdf104310.xlsx");
+        ScDocument* pDoc = getScDoc();
 
-        const ScValidationData* pData = rDoc.GetValidationEntry(1);
+        const ScValidationData* pData = pDoc->GetValidationEntry(1);
         CPPUNIT_ASSERT(pData);
 
         // Make sure the list is correct.
@@ -482,16 +449,14 @@ void ScFiltersTest::testTdf104310()
         CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
         for (size_t i = 0; i < 5; ++i)
             CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), aList[i].GetValue(), 1e-8);
-
-        xDocSh->DoClose();
     }
 
     // 2. Test x12ac extension
     {
-        ScDocShellRef xDocSh = loadDoc(u"tdf104310-2.", FORMAT_XLSX);
-        ScDocument& rDoc = xDocSh->GetDocument();
+        createScDoc("xlsx/tdf104310-2.xlsx");
+        ScDocument* pDoc = getScDoc();
 
-        const ScValidationData* pData = rDoc.GetValidationEntry(1);
+        const ScValidationData* pData = pDoc->GetValidationEntry(1);
         CPPUNIT_ASSERT(pData);
 
         // Make sure the list is correct.
@@ -501,56 +466,54 @@ void ScFiltersTest::testTdf104310()
         CPPUNIT_ASSERT_EQUAL(OUString("1"), aList[0].GetString());
         CPPUNIT_ASSERT_EQUAL(OUString("2,3"), aList[1].GetString());
         CPPUNIT_ASSERT_EQUAL(OUString("4"), aList[2].GetString());
-
-        xDocSh->DoClose();
     }
 }
 
 void ScFiltersTest::testTdf31231()
 {
     // We must open it read-write to allow setting modified flag
-    ScDocShellRef xDocSh = loadDoc(u"tdf31231.", FORMAT_ODS, true);
-    xDocSh->DoHardRecalc();
+    createScDoc("ods/tdf31231.ods");
+    ScDocShell* pDocSh = getScDocShell();
 
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
-                           xDocSh->IsEnableSetModified());
-    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
+                           pDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !pDocSh->IsModified());
 
-    xDocSh->DoClose();
+    pDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
+                           pDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", pDocSh->IsModified());
 }
 
 void ScFiltersTest::testTdf141914()
 {
     // We must open it read-write to allow setting modified flag
-    ScDocShellRef xDocSh = loadDoc(u"tdf141914.", FORMAT_ODS, true);
+    createScDoc("ods/tdf141914.ods");
+    ScDocShell* pDocSh = getScDocShell();
 
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
-                           xDocSh->IsEnableSetModified());
-    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
+                           pDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !pDocSh->IsModified());
 
-    xDocSh->DoClose();
+    pDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state",
+                           pDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", pDocSh->IsModified());
 }
 
 void ScFiltersTest::testTdf128951()
 {
-    css::uno::Reference<css::frame::XDesktop2> xDesktop
-        = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
-    // 1. Create spreadsheet
-    css::uno::Sequence aHiddenArgList{ comphelper::makePropertyValue("Hidden", true) };
-
-    css::uno::Reference<css::lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
-    CPPUNIT_ASSERT(xComponent.is());
+    createScDoc();
 
     // 2. Create a new sheet instance
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xComponent,
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(mxComponent,
                                                               css::uno::UNO_QUERY_THROW);
     auto xSheet = xFac->createInstance("com.sun.star.sheet.Spreadsheet");
 
     // 3. Insert sheet into the spreadsheet (was throwing IllegalArgumentException)
-    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(xComponent,
+    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
                                                                css::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_NO_THROW(xDoc->getSheets()->insertByName("mustNotThrow", css::uno::Any(xSheet)));
 }
@@ -576,19 +539,19 @@ SdrCaptionObj* checkCaption(ScDocument& rDoc, const ScAddress& rAddress, bool bI
 
 void ScFiltersTest::testTdf129789()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf129789.", FORMAT_ODS, true);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("ods/tdf129789.ods");
+    ScDocument* pDoc = getScDoc();
 
     {
         // Fill: None
-        SdrCaptionObj* const pCaptionB2 = checkCaption(rDoc, ScAddress(1, 1, 0), true);
+        SdrCaptionObj* const pCaptionB2 = checkCaption(*pDoc, ScAddress(1, 1, 0), true);
 
         const XFillStyleItem& rStyleItemB2
             = dynamic_cast<const XFillStyleItem&>(pCaptionB2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleItemB2.GetValue());
 
-        SdrCaptionObj* const pCaptionB9 = checkCaption(rDoc, ScAddress(1, 8, 0), false);
+        SdrCaptionObj* const pCaptionB9 = checkCaption(*pDoc, ScAddress(1, 8, 0), false);
 
         const XFillStyleItem& rStyleItemB9
             = dynamic_cast<const XFillStyleItem&>(pCaptionB9->GetMergedItem(XATTR_FILLSTYLE));
@@ -598,7 +561,7 @@ void ScFiltersTest::testTdf129789()
 
     {
         // Fill: Solid
-        SdrCaptionObj* const pCaptionE2 = checkCaption(rDoc, ScAddress(4, 1, 0), true);
+        SdrCaptionObj* const pCaptionE2 = checkCaption(*pDoc, ScAddress(4, 1, 0), true);
 
         const XFillStyleItem& rStyleItemE2
             = dynamic_cast<const XFillStyleItem&>(pCaptionE2->GetMergedItem(XATTR_FILLSTYLE));
@@ -609,7 +572,7 @@ void ScFiltersTest::testTdf129789()
             = dynamic_cast<const XFillColorItem&>(pCaptionE2->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem.GetColorValue());
 
-        SdrCaptionObj* const pCaptionE9 = checkCaption(rDoc, ScAddress(4, 8, 0), false);
+        SdrCaptionObj* const pCaptionE9 = checkCaption(*pDoc, ScAddress(4, 8, 0), false);
 
         const XFillStyleItem& rStyleItemE9
             = dynamic_cast<const XFillStyleItem&>(pCaptionE9->GetMergedItem(XATTR_FILLSTYLE));
@@ -623,7 +586,7 @@ void ScFiltersTest::testTdf129789()
 
     {
         // Fill: Gradient
-        SdrCaptionObj* const pCaptionH2 = checkCaption(rDoc, ScAddress(7, 1, 0), true);
+        SdrCaptionObj* const pCaptionH2 = checkCaption(*pDoc, ScAddress(7, 1, 0), true);
 
         const XFillStyleItem& rStyleItemH2
             = dynamic_cast<const XFillStyleItem&>(pCaptionH2->GetMergedItem(XATTR_FILLSTYLE));
@@ -634,7 +597,7 @@ void ScFiltersTest::testTdf129789()
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem.GetGradientValue().GetStartColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem.GetGradientValue().GetEndColor());
 
-        SdrCaptionObj* const pCaptionH9 = checkCaption(rDoc, ScAddress(7, 8, 0), false);
+        SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
         const XFillStyleItem& rStyleItemH9
             = dynamic_cast<const XFillStyleItem&>(pCaptionH9->GetMergedItem(XATTR_FILLSTYLE));
@@ -648,7 +611,7 @@ void ScFiltersTest::testTdf129789()
 
     {
         // Fill: Hatch
-        SdrCaptionObj* const pCaptionK2 = checkCaption(rDoc, ScAddress(10, 1, 0), true);
+        SdrCaptionObj* const pCaptionK2 = checkCaption(*pDoc, ScAddress(10, 1, 0), true);
 
         const XFillStyleItem& rStyleItemK2
             = dynamic_cast<const XFillStyleItem&>(pCaptionK2->GetMergedItem(XATTR_FILLSTYLE));
@@ -658,7 +621,7 @@ void ScFiltersTest::testTdf129789()
             = dynamic_cast<const XFillHatchItem&>(pCaptionK2->GetMergedItem(XATTR_FILLHATCH));
         CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem.GetHatchValue().GetColor());
 
-        SdrCaptionObj* const pCaptionK9 = checkCaption(rDoc, ScAddress(10, 8, 0), false);
+        SdrCaptionObj* const pCaptionK9 = checkCaption(*pDoc, ScAddress(10, 8, 0), false);
 
         const XFillStyleItem& rStyleItemK9
             = dynamic_cast<const XFillStyleItem&>(pCaptionK9->GetMergedItem(XATTR_FILLSTYLE));
@@ -671,32 +634,27 @@ void ScFiltersTest::testTdf129789()
 
     {
         // Fill: Bitmap
-        SdrCaptionObj* const pCaptionN2 = checkCaption(rDoc, ScAddress(13, 1, 0), true);
+        SdrCaptionObj* const pCaptionN2 = checkCaption(*pDoc, ScAddress(13, 1, 0), true);
 
         const XFillStyleItem& rStyleItemN2
             = dynamic_cast<const XFillStyleItem&>(pCaptionN2->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN2.GetValue());
 
-        SdrCaptionObj* const pCaptionN9 = checkCaption(rDoc, ScAddress(13, 8, 0), false);
+        SdrCaptionObj* const pCaptionN9 = checkCaption(*pDoc, ScAddress(13, 8, 0), false);
 
         const XFillStyleItem& rStyleItemN9
             = dynamic_cast<const XFillStyleItem&>(pCaptionN9->GetMergedItem(XATTR_FILLSTYLE));
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN9.GetValue());
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf130725()
 {
-    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
-    ScDocShellRef xDocSh = loadEmptyDocument(args);
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc();
 
-    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     // 2. Insert 0.0042 into a cell as a formula, to force the conversion from string to double
     css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
@@ -708,45 +666,38 @@ void ScFiltersTest::testTdf130725()
     //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value must be the nearest representation of decimal 0.0042",
                                  0.0042, xCell->getValue()); // strict equality
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
 {
-    ScDocShellRef xShell = loadDoc(u"tdf104502_hiddenColsCountedInPageCount.", FORMAT_ODS);
+    createScDoc("ods/tdf104502_hiddenColsCountedInPageCount.ods");
 
-    ScDocument& rDoc = xShell->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     //Check that hidden columns are not calculated into Print Area
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    CPPUNIT_ASSERT(rDoc.GetPrintArea(0, nEndCol, nEndRow, false));
+    CPPUNIT_ASSERT(pDoc->GetPrintArea(0, nEndCol, nEndRow, false));
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), nEndCol);
     CPPUNIT_ASSERT_EQUAL(SCROW(55), nEndRow);
-
-    xShell->DoClose();
 }
 void ScFiltersTest::testTdf108188_pagestyle()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf108188_pagestyle.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh);
+    createScDoc("ods/tdf108188_pagestyle.ods");
 
     // Check if the user defined page style is present
     const OUString aTestPageStyle = "TestPageStyle";
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_EQUAL(aTestPageStyle, rDoc.GetPageStyle(0));
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
 
     // Without the accompanying fix in place, the page styles are always used
-    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+    ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     CPPUNIT_ASSERT(pStylePool->Find(aTestPageStyle, SfxStyleFamily::Page)->IsUsed());
     CPPUNIT_ASSERT(!pStylePool->Find("Default", SfxStyleFamily::Page)->IsUsed());
-
-    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScBootstrapFixture("sc/qa/unit/data")
+    : ScModelTestBase("sc/qa/unit/data")
 {
 }
 
