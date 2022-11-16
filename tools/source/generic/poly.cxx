@@ -1432,8 +1432,8 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 
         const tools::Long nX = rPt.X() - nCenterX;
         const tools::Long nY = rPt.Y() - nCenterY;
-        rPt.setX( FRound( fCos * nX + fSin * nY ) + nCenterX );
-        rPt.setY( - FRound( fSin * nX - fCos * nY ) + nCenterY );
+        rPt.setX( FRound(fCos * nX + fSin * nY + nCenterX) );
+        rPt.setY( - FRound(fSin * nX - fCos * nY - nCenterY) );
     }
 }
 
