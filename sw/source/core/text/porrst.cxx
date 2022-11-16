@@ -853,7 +853,7 @@ void SwBookmarkPortion::HandlePortion( SwPortionHandler& rPH ) const
         }
     }
 
-    rPH.Special( GetLen(), aStr.makeStringAndClear(), GetWhichPor(), Height(), Width() );
+    rPH.Special( GetLen(), aStr.makeStringAndClear(), GetWhichPor() );
 }
 
 void SwBookmarkPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const

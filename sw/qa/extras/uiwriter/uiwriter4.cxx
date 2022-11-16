@@ -1828,7 +1828,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf106701_tabOverMarginAutotab)
     sal_Int32 nRightMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
     // Automatic tabstops should never be affected by tabOverMargin compatibility
     // The 1st line's width previously was ~9506
-    sal_Int32 nWidth = getXPath(pXmlDoc, "//LineBreak[1]", "nWidth").toInt32();
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE("1st line's width is less than the right margin", nWidth < nRightMargin);
 }
 
@@ -1878,7 +1878,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107362)
         = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nWidth").toInt32();
     sal_Int32 nWidth2
         = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nWidth").toInt32();
-    sal_Int32 nLineWidth = getXPath(pXmlDoc, "//LineBreak", "nWidth").toInt32();
+    sal_Int32 nLineWidth = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout", "width").toInt32();
     sal_Int32 nKernWidth = nLineWidth - nWidth1 - nWidth2;
     // Test only if fonts are available
     if (nWidth1 > 500 && nWidth2 > 200)
@@ -2085,7 +2085,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf58604)
     createSwDoc("tdf58604.odt");
     CPPUNIT_ASSERT_EQUAL(
         OUString("PortionType::Break"),
-        parseDump("(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType"));
+        parseDump("(/root/page/body/txt/SwParaPortion/SwLineLayout[1]/child::*)[last()]", "type"));
 #endif
 }
 

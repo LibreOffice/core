@@ -3795,14 +3795,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // this one was 0 height
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/LineBreak", "Line",
-                "Important information here!");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/SwParaPortion/SwLineLayout",
+                "portion", "Important information here!");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/infos/bounds", "height",
                 "253");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/infos/bounds", "top",
                 "7925");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/LineBreak", "Line",
-                "xxx 111 ");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/SwParaPortion/SwLineLayout",
+                "portion", "xxx 111 ");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/infos/bounds", "height",
                 "697");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/infos/bounds", "top",

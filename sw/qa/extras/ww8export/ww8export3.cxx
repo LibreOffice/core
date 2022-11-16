@@ -679,9 +679,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
 
 DECLARE_WW8EXPORT_TEST(testTdf108518_CRnumformatting, "tdf108518_CRnumformatting.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("6.2.3."), parseDump("//body/txt[4]/Special[@nType='PortionType::Number']", "rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("6.2.3."), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand"));
     //Without this fix in place, it would become 200 (and non-bold).
-    CPPUNIT_ASSERT_EQUAL(OUString("220"), parseDump("//body/txt[4]/Special[@nType='PortionType::Number']", "nHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("220"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "font-height"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf120711.doc")

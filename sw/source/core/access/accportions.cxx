@@ -110,7 +110,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
 
 void SwAccessiblePortionData::Special(
     TextFrameIndex const nLength, const OUString& rText, PortionType nType,
-    sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/, const SwFont* /*pFont*/)
+    const SwFont* /*pFont*/)
 {
     OSL_ENSURE(m_nViewPosition >= TextFrameIndex(0), "illegal position");
     OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
@@ -196,7 +196,7 @@ void SwAccessiblePortionData::Special(
     m_nViewPosition += nLength;
 }
 
-void SwAccessiblePortionData::LineBreak(sal_Int32 /*nWidth*/)
+void SwAccessiblePortionData::LineBreak()
 {
     OSL_ENSURE( !m_bFinished, "We are already done!" );
 
@@ -222,8 +222,8 @@ void SwAccessiblePortionData::Finish()
     // position before the end
     Special( TextFrameIndex(0), OUString(), POR_TERMINATE );
     Special( TextFrameIndex(0), OUString(), POR_TERMINATE );
-    LineBreak(0);
-    LineBreak(0);
+    LineBreak();
+    LineBreak();
 
     m_sAccessibleString = m_aBuffer.makeStringAndClear();
     m_bFinished = true;

@@ -2548,13 +2548,12 @@ public:
     }
 
     virtual void Special(TextFrameIndex nLength, const OUString& /*rText*/, PortionType nType,
-                         sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/,
                          const SwFont* /*pFont*/) override
     {
         mPortionItems.emplace_back("special", sal_Int32(nLength), nType);
     }
 
-    virtual void LineBreak(sal_Int32 /*nWidth*/) override
+    virtual void LineBreak() override
     {
         mPortionItems.emplace_back("line_break", 0, PortionType::NONE);
     }

@@ -1101,7 +1101,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
     // Note: _Toc and _Ref hidden bookmarks are imported from OOXML as normal bookmarks.
     // Without hiding them from visible bookmarks (SwBookmarkPortion), this line would be
     // shown as "A.2.1 [[[[[.DESCRIPTION]]]] with XML layout dump "A.2.1 #_Ref... Bookmark Start..."
-    assertXPath(pXmlDoc, "//body/txt[5]/LineBreak", "Line", "A.2.1 .DESCRIPTION");
+    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[1]", "expand", "A.2.1 ");
+    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[2]", "portion", ".DESCRIPTION");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testVerticalBorders)

@@ -617,7 +617,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112448)
 
     // check actual number of line breaks in the paragraph
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)

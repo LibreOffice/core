@@ -315,7 +315,7 @@ bool SwLinePortion::GetExpText( const SwTextSizeInfo &, OUString & ) const
 
 void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), OUString(), GetWhichPor(), Height(), Width() );
+    rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
 void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const

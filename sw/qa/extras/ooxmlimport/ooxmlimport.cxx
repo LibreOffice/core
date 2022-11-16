@@ -416,8 +416,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "height", "253");
 
     // tdf#150947 check a11y of the newly inserted bookmark portions
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "rText", "#BookmarkTest Bookmark Start");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "rText", "#BookmarkTest Bookmark End");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "colors", "#BookmarkTest Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "colors", "#BookmarkTest Bookmark End");
 
     /*
      * Next problem was that the page margin contained the width of the page border as well.

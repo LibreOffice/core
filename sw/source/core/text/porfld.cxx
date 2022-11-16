@@ -464,14 +464,7 @@ bool SwFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) c
 
 void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    sal_Int32 nH = 0;
-    sal_Int32 nW = 0;
-    if (m_pFont)
-    {
-        nH = m_pFont->GetSize(m_pFont->GetActual()).Height();
-        nW = m_pFont->GetSize(m_pFont->GetActual()).Width();
-    }
-    rPH.Special( GetLen(), m_aExpand, GetWhichPor(), nH, nW, m_pFont.get() );
+    rPH.Special( GetLen(), m_aExpand, GetWhichPor(), m_pFont.get() );
 }
 
 void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,

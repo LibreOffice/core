@@ -208,31 +208,15 @@ class XmlPortionDumper:public SwPortionHandler
                 text which is painted on-screen
         @param nType
                 type of this portion
-        @param nHeight
-                font size of the painted text
       */
     virtual void Special( TextFrameIndex nLength,
                           const OUString & rText,
                           PortionType nType,
-                          sal_Int32 nHeight,
-                          sal_Int32 nWidth,
                           const SwFont* pFont ) override
     {
         (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Special"));
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
-                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
                                                 sw::PortionTypeToString(nType));
-        OString sText8 = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("rText"), "%s", sText8.getStr());
-
-        if (nHeight > 0)
-            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nHeight"), "%i",
-                                                    static_cast<int>(nHeight));
-
-        if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
-                                                    static_cast<int>(nWidth));
 
         if (pFont)
             pFont->dumpAsXml(m_Writer);
@@ -242,18 +226,9 @@ class XmlPortionDumper:public SwPortionHandler
         m_Ofs += nLength;
     }
 
-    virtual void LineBreak( sal_Int32 nWidth ) override
+    virtual void LineBreak() override
     {
         (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("LineBreak"));
-        if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
-                                                    static_cast<int>(nWidth));
-        if (!m_aLine.isEmpty())
-        {
-            (void)xmlTextWriterWriteAttribute(m_Writer, BAD_CAST("Line"),
-                                              BAD_CAST(m_aLine.toUtf8().getStr()));
-            m_aLine.clear();
-        }
         (void)xmlTextWriterEndElement(m_Writer);
     }
 
@@ -264,8 +239,6 @@ class XmlPortionDumper:public SwPortionHandler
     virtual void Skip( TextFrameIndex nLength ) override
     {
         (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Skip"));
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
-                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
         (void)xmlTextWriterEndElement(m_Writer);
         m_Ofs += nLength;
     }

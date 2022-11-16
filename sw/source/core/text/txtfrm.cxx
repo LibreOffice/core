@@ -3958,7 +3958,7 @@ void SwTextFrame::VisitPortions( SwPortionHandler& rPH ) const
                 pPor = pPor->GetNextPortion();
             }
 
-            rPH.LineBreak(pLine->Width());
+            rPH.LineBreak();
             pLine = pLine->GetNext();
         }
     }

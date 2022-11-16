@@ -75,7 +75,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     //Without the fix in place, it would have failed with
     //- Expected: 2.
     //- Actual  : 4.
-    CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='PortionType::Number']","rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']","expand"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
