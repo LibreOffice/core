@@ -14,6 +14,7 @@
 #include <svl/zformat.hxx>
 
 #include <svx/svdpage.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdoole2.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -29,8 +30,12 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
 #include <dbdata.hxx>
+#include <dbdocfun.hxx>
+#include <inputopt.hxx>
+#include <globalnames.hxx>
 #include <validat.hxx>
 #include <userdat.hxx>
+#include <scmod.hxx>
 #include <stlsheet.hxx>
 #include <docfunc.hxx>
 #include <markdata.hxx>
@@ -47,6 +52,7 @@
 #include <postit.hxx>
 #include <sortparam.hxx>
 #include <undomanager.hxx>
+#include <tabprotection.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>
@@ -189,6 +195,18 @@ public:
     void testTdf149484();
     void testEscapedUnicodeXLSX();
     void testTdf144758_DBDataDefaultOrientation();
+    void testSharedFormulaXLS();
+    void testSharedFormulaXLSX();
+    void testSharedFormulaRefUpdateXLSX();
+    void testSheetNamesXLSX();
+    void testTdf150599();
+    void testCommentSize();
+    void testEnhancedProtectionXLS();
+    void testEnhancedProtectionXLSX();
+    void testSortWithSharedFormulasODS();
+    void testSortWithSheetExternalReferencesODS();
+    void testSortWithFormattingXLS();
+    void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testContentODS);
@@ -299,6 +317,18 @@ public:
     CPPUNIT_TEST(testTdf149484);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
     CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
+    CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaXLSX);
+    CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
+    CPPUNIT_TEST(testSheetNamesXLSX);
+    CPPUNIT_TEST(testTdf150599);
+    CPPUNIT_TEST(testCommentSize);
+    CPPUNIT_TEST(testEnhancedProtectionXLS);
+    CPPUNIT_TEST(testEnhancedProtectionXLSX);
+    CPPUNIT_TEST(testSortWithSharedFormulasODS);
+    CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
+    CPPUNIT_TEST(testSortWithFormattingXLS);
+    CPPUNIT_TEST(testForcepoint107);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3124,6 +3154,426 @@ void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
     // Without the fix, the default value for bByRow (in absence of 'table:orientation' attribute
     // in 'table:database-range' element) was false
     CPPUNIT_ASSERT(aSortParam.bByRow);
+}
+
+void ScFiltersTest::testSharedFormulaXLS()
+{
+    createScDoc("xls/shared-formula/basic.xls");
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 18; ++i)
+    {
+        double fVal = pDoc->GetValue(ScAddress(1, i, 0));
+        double fCheck = i * 10.0;
+        CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
+    }
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 18, 0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
+    ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
+    CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect group geometry.", SCROW(1),
+                                 xGroup->mpTopCell->aPos.Row());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect group geometry.", SCROW(18), xGroup->mnLength);
+
+    // The following file contains shared formula whose range is inaccurate.
+    // Excel can easily mess up shared formula ranges, so we need to be able
+    // to handle these wrong ranges that Excel stores.
+
+    createScDoc("xls/shared-formula/gap.xls");
+    pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 0, 0), "A1*20", "Wrong formula.");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 1, 0), "A2*20", "Wrong formula.");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 2, 0), "A3*20", "Wrong formula.");
+
+    // There is an intentional gap at row 4.
+
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 4, 0), "A5*20", "Wrong formula.");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 5, 0), "A6*20", "Wrong formula.");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 6, 0), "A7*20", "Wrong formula.");
+    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 7, 0), "A8*20", "Wrong formula.");
+
+    // We re-group formula cells on load. Let's check that as well.
+
+    ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
+    CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    pFC = pDoc->GetFormulaCell(ScAddress(1, 4, 0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
+    CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+}
+
+void ScFiltersTest::testSharedFormulaXLSX()
+{
+    createScDoc("xlsx/shared-formula/basic.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 18; ++i)
+    {
+        double fVal = pDoc->GetValue(ScAddress(1, i, 0));
+        double fCheck = i * 10.0;
+        CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
+    }
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 18, 0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
+    ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
+    CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect group geometry.", SCROW(1),
+                                 xGroup->mpTopCell->aPos.Row());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect group geometry.", SCROW(18), xGroup->mnLength);
+}
+
+void ScFiltersTest::testSharedFormulaRefUpdateXLSX()
+{
+    createScDoc("xlsx/shared-formula/refupdate.xlsx");
+    ScDocument* pDoc = getScDoc();
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn auto calc on.
+    pDoc->DeleteRow(ScRange(0, 4, 0, pDoc->MaxCol(), 4, 0)); // delete row 5.
+
+    struct TestCase
+    {
+        ScAddress aPos;
+        const char* pExpectedFormula;
+        const char* pErrorMsg;
+    };
+
+    TestCase aCases[4] = {
+        { ScAddress(1, 0, 0), "B29+1", "Wrong formula in B1" },
+        { ScAddress(2, 0, 0), "C29+1", "Wrong formula in C1" },
+        { ScAddress(3, 0, 0), "D29+1", "Wrong formula in D1" },
+        { ScAddress(4, 0, 0), "E29+1", "Wrong formula in E1" },
+    };
+
+    for (size_t nIdx = 0; nIdx < 4; ++nIdx)
+    {
+        TestCase& rCase = aCases[nIdx];
+        ASSERT_FORMULA_EQUAL(*pDoc, rCase.aPos, rCase.pExpectedFormula, rCase.pErrorMsg);
+    }
+}
+
+void ScFiltersTest::testSheetNamesXLSX()
+{
+    createScDoc("xlsx/sheet-names.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The document should have 5 sheets in total.", size_t(5),
+                                 aTabNames.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("S&P"), aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sam's Club"), aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("\"The Sheet\""), aTabNames[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("A<B"), aTabNames[3]);
+    CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
+}
+
+void ScFiltersTest::testTdf150599()
+{
+    createScDoc("dif/tdf150599.dif");
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : #IND:?
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("32"), pDoc->GetString(ScAddress(31, 0, 0)));
+}
+
+void ScFiltersTest::testCommentSize()
+{
+    createScDoc("ods/comment.ods");
+    ScDocument* pDoc = getScDoc();
+
+    ScAddress aPos(0, 0, 0);
+    ScPostIt* pNote = pDoc->GetNote(aPos);
+    CPPUNIT_ASSERT(pNote);
+
+    pNote->ShowCaption(aPos, true);
+    CPPUNIT_ASSERT(pNote->IsCaptionShown());
+
+    SdrCaptionObj* pCaption = pNote->GetCaption();
+    CPPUNIT_ASSERT(pCaption);
+
+    const tools::Rectangle& rOldRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getOpenHeight());
+
+    pNote->SetText(aPos, "first\nsecond\nthird");
+
+    const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), rNewRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getOpenHeight());
+
+    pDoc->GetUndoManager()->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), pCaption->GetLogicRect().getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenHeight(), pCaption->GetLogicRect().getOpenHeight());
+}
+
+static void testEnhancedProtectionImpl(const ScDocument& rDoc)
+{
+    const ScTableProtection* pProt = rDoc.GetTabProtection(0);
+
+    CPPUNIT_ASSERT(pProt);
+
+    CPPUNIT_ASSERT(!pProt->isBlockEditable(ScRange(0, 0, 0, 0, 0, 0))); // locked
+    CPPUNIT_ASSERT(pProt->isBlockEditable(ScRange(0, 1, 0, 0, 1, 0))); // editable without password
+    CPPUNIT_ASSERT(pProt->isBlockEditable(ScRange(0, 2, 0, 0, 2, 0))); // editable without password
+    CPPUNIT_ASSERT(
+        !pProt->isBlockEditable(ScRange(0, 3, 0, 0, 3, 0))); // editable with password "foo"
+    CPPUNIT_ASSERT(!pProt->isBlockEditable(ScRange(0, 4, 0, 0, 4, 0))); // editable with descriptor
+    CPPUNIT_ASSERT(!pProt->isBlockEditable(
+        ScRange(0, 5, 0, 0, 5, 0))); // editable with descriptor and password "foo"
+    CPPUNIT_ASSERT(
+        pProt->isBlockEditable(ScRange(0, 1, 0, 0, 2, 0))); // union of two different editables
+    CPPUNIT_ASSERT(
+        !pProt->isBlockEditable(ScRange(0, 0, 0, 0, 1, 0))); // union of locked and editable
+    CPPUNIT_ASSERT(!pProt->isBlockEditable(
+        ScRange(0, 2, 0, 0, 3, 0))); // union of editable and password editable
+}
+
+void ScFiltersTest::testEnhancedProtectionXLS()
+{
+    createScDoc("xls/enhanced-protection.xls");
+    ScDocument* pDoc = getScDoc();
+
+    testEnhancedProtectionImpl(*pDoc);
+}
+
+void ScFiltersTest::testEnhancedProtectionXLSX()
+{
+    createScDoc("xlsx/enhanced-protection.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    testEnhancedProtectionImpl(*pDoc);
+}
+
+void ScFiltersTest::testSortWithSharedFormulasODS()
+{
+    createScDoc("ods/shared-formula/sort-crash.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // E2:E10 should be shared.
+    const ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(4, 1, 0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
+
+    // E12:E17 should be shared.
+    pFC = pDoc->GetFormulaCell(ScAddress(4, 11, 0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
+
+    // Set A1:E17 as an anonymous database range to sheet, or else Calc would
+    // refuse to sort the range.
+    std::unique_ptr<ScDBData> pDBData(
+        new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 16, true, true));
+    pDoc->SetAnonymousDBData(0, std::move(pDBData));
+
+    // Sort ascending by Column E.
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 4;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 16;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 4;
+    aSortData.maKeyState[0].bAscending = true;
+
+    // Do the sorting.  This should not crash.
+    ScDocShell* pDocSh = getScDocShell();
+    ScDBDocFunc aFunc(*pDocSh);
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // After the sort, E2:E16 should be shared.
+    pFC = pDoc->GetFormulaCell(ScAddress(4, 1, 0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedLength());
+}
+
+namespace
+{
+void testSortWithSheetExternalReferencesODS_Impl(ScDocShell& rDocSh, SCROW nRow1, SCROW nRow2,
+                                                 bool bCheckRelativeInSheet)
+{
+    ScDocument& rDoc = rDocSh.GetDocument();
+
+    // Check the original data is there.
+    for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+    {
+        double const aCheck[] = { 1, 2, 3, 4, 5 };
+        CPPUNIT_ASSERT_EQUAL(aCheck[nRow - nRow1 - 1], rDoc.GetValue(ScAddress(0, nRow, 0)));
+    }
+    for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = 1; nCol <= 3; ++nCol)
+        {
+            double const aCheck[] = { 1, 12, 123, 1234, 12345 };
+            CPPUNIT_ASSERT_EQUAL(aCheck[nRow - nRow1 - 1], rDoc.GetValue(ScAddress(nCol, nRow, 0)));
+        }
+    }
+
+    // Set as an anonymous database range to sort.
+    std::unique_ptr<ScDBData> pDBData(
+        new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, nRow1, 3, nRow2, true, true));
+    rDoc.SetAnonymousDBData(0, std::move(pDBData));
+
+    // Sort descending by Column A.
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 3;
+    aSortData.nRow1 = nRow1;
+    aSortData.nRow2 = nRow2;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = false;
+
+    // Do the sorting.
+    ScDBDocFunc aFunc(rDocSh);
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+    rDoc.CalcAll();
+
+    // Check the sort and that all sheet references and external references are
+    // adjusted to point to the original location.
+    for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+    {
+        double const aCheck[] = { 5, 4, 3, 2, 1 };
+        CPPUNIT_ASSERT_EQUAL(aCheck[nRow - nRow1 - 1], rDoc.GetValue(ScAddress(0, nRow, 0)));
+    }
+    // The last column (D) are in-sheet relative references.
+    SCCOL nEndCol = (bCheckRelativeInSheet ? 3 : 2);
+    for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = 1; nCol <= nEndCol; ++nCol)
+        {
+            double const aCheck[] = { 12345, 1234, 123, 12, 1 };
+            CPPUNIT_ASSERT_EQUAL(aCheck[nRow - nRow1 - 1], rDoc.GetValue(ScAddress(nCol, nRow, 0)));
+        }
+    }
+}
+}
+
+// https://bugs.freedesktop.org/attachment.cgi?id=100089 from fdo#77018
+// mentioned also in fdo#79441
+// Document contains cached external references.
+void ScFiltersTest::testSortWithSheetExternalReferencesODS()
+{
+    // We reset the SortRefUpdate value back to the original in tearDown().
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    bool bUpdateReferenceOnSort = aInputOption.GetSortRefUpdate();
+
+    createScDoc("ods/sort-with-sheet-external-references.ods");
+    ScDocument* pDoc = getScDoc();
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn auto calc on.
+    pDoc->CalcAll();
+
+    // The complete relative test only works with UpdateReferenceOnSort==true,
+    // but the internal and external sheet references have to work in both
+    // modes.
+
+    aInputOption.SetSortRefUpdate(true);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A15:D20 with relative row references. UpdateReferenceOnSort==true
+    // With in-sheet relative references.
+    ScDocShell* pDocSh = getScDocShell();
+    testSortWithSheetExternalReferencesODS_Impl(*pDocSh, 14, 19, true);
+
+    // Undo sort with relative references to perform same sort.
+    pDoc->GetUndoManager()->Undo();
+    pDoc->CalcAll();
+
+    aInputOption.SetSortRefUpdate(false);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A15:D20 with relative row references. UpdateReferenceOnSort==false
+    // Without in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl(*pDocSh, 14, 19, false);
+
+    // Undo sort with relative references to perform new sort.
+    pDoc->GetUndoManager()->Undo();
+    pDoc->CalcAll();
+
+    // Sort with absolute references has to work in both UpdateReferenceOnSort
+    // modes.
+
+    aInputOption.SetSortRefUpdate(true);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==true
+    // With in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl(*pDocSh, 22, 27, true);
+
+    // Undo sort with absolute references to perform same sort.
+    pDoc->GetUndoManager()->Undo();
+    pDoc->CalcAll();
+
+    aInputOption.SetSortRefUpdate(false);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==false
+    // With in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl(*pDocSh, 22, 27, true);
+
+    if (bUpdateReferenceOnSort != aInputOption.GetSortRefUpdate())
+    {
+        aInputOption.SetSortRefUpdate(bUpdateReferenceOnSort);
+        SC_MOD()->SetInputOptions(aInputOption);
+    }
+}
+
+void ScFiltersTest::testSortWithFormattingXLS()
+{
+    createScDoc("xls/tdf129127.xls");
+    ScDocument* pDoc = getScDoc();
+
+    // Set as an anonymous database range to sort.
+    std::unique_ptr<ScDBData> pDBData(
+        new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 9, false, false));
+    pDoc->SetAnonymousDBData(0, std::move(pDBData));
+
+    // Sort ascending by Row 1
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 4;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 9;
+    aSortData.bHasHeader = false;
+    aSortData.bByRow = false;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    // Do the sorting.
+    ScDocShell* pDocSh = getScDocShell();
+    ScDBDocFunc aFunc(*pDocSh);
+    // Without the fix, sort would crash.
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+}
+
+// just needs to not crash on recalc
+void ScFiltersTest::testForcepoint107()
+{
+    createScDoc("xlsx/forcepoint107.xlsx");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
 }
 
 ScFiltersTest::ScFiltersTest()
