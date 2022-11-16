@@ -907,7 +907,7 @@ static bool paintUsingPrimitivesHelper(
     return false;
 }
 
-// MM02 original using falölback to VOC and primitive-based version
+// MM02 original using fallback to VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
     vcl::RenderContext & rOutputDevice,
     GraphicObject const& rGrfObj,
@@ -1136,183 +1136,9 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
         // Fix for bug fdo#33781
         const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (SwDrawView::IsAntiAliasing())
-        {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | AntialiasingFlags::Enable );
-        }
 
-        bool bContinue = true;
-        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj(bPrn);
-
-        GraphicAttr aGrfAttr;
-        pGrfNd->GetGraphicAttr( aGrfAttr, this );
-
-        if( !bPrn )
-        {
-            // #i73788#
-            if ( pGrfNd->IsLinkedInputStreamReady() )
-            {
-                pGrfNd->UpdateLinkWithInputStream();
-            }
-            // #i85717#, #i90395# - check, if asynchronous retrieval
-            // if input stream for the graphic is possible
-            else if ( ( rGrfObj.GetType() == GraphicType::Default ||
-                        rGrfObj.GetType() == GraphicType::NONE ) &&
-                      pGrfNd->IsLinkedFile() &&
-                      pGrfNd->IsAsyncRetrieveInputStreamPossible() )
-            {
-                Size aTmpSz;
-                ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
-                if( !pGrfObj ||
-                    !pGrfObj->IsDataComplete() ||
-                    !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
-                    !aTmpSz.Height())
-                {
-                    pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
-                }
-                OUString aText( pGrfNd->GetTitle() );
-                if ( aText.isEmpty() )
-                    GetRealURL( *pGrfNd, aText );
-                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, false );
-                bContinue = false;
-            }
-        }
-
-        if( bContinue )
-        {
-            if( rGrfObj.GetGraphic().IsSupportedGraphic())
-            {
-                const bool bAnimate = rGrfObj.IsAnimated() &&
-                                         !pShell->IsPreview() &&
-                                         !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
-                // #i9684# Stop animation during printing/pdf export
-                                          pShell->GetWin();
-
-                if( bAnimate &&
-                    FindFlyFrame() != ::GetFlyFromMarked( nullptr, pShell ))
-                {
-                    OutputDevice* pVout;
-                    if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
-                    {
-                        pVout = pOut;
-                        pOut = pShell->GetOut();
-                    }
-                    else if( pShell->GetWin() && pOut->IsVirtual() )
-                    {
-                        pVout = pOut;
-                        pOut = pShell->GetWin()->GetOutDev();
-                    }
-                    else
-                        pVout = nullptr;
-
-                    OSL_ENSURE( !pOut->IsVirtual() ||
-                            pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
-                            "pOut should not be a virtual device" );
-
-                    pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
-                                        aAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
-                                        pVout );
-                }
-                else
-                {
-                    // MM02 To allow system-dependent buffering of the involved
-                    // bitmaps it is necessary to re-use the involved primitives
-                    // and their already executed decomposition (also for
-                    // performance reasons). This is usually done in DrawingLayer
-                    // by using the VOC-Mechanism (see descriptions elsewhere).
-                    // To get that here, make the involved SwNoTextFrame (this)
-                    // a sdr::contact::ViewContact supplier by supporting
-                    // a GetViewContact() - call. For ObjectContact we can use
-                    // the already existing ObjectContact from the involved
-                    // DrawingLayer. For this, the helper classes
-                    //     ViewObjectContactOfSwNoTextFrame
-                    //     ViewContactOfSwNoTextFrame
-                    // are created which support the VOC-mechanism in its minimal
-                    // form. This allows automatic and view-dependent (multiple edit
-                    // windows, print, etc.) re-use of the created primitives.
-                    // Also: Will be very useful when completely changing the Writer
-                    // repaint to VOC and Primitives, too.
-                    static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
-                    static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
-                    // tdf#130951 for safety reasons use fallback if ViewObjectContactMechanism
-                    // fails for some reason - usually could only be not to find the correct
-                    // SdrPageWindow
-                    bool bSucceeded(false);
-
-                    if(bUseViewObjectContactMechanism)
-                    {
-                        // MM02 use VOC-mechanism and buffer primitives
-                        SwViewShellImp* pImp(pShell->Imp());
-                        SdrPageView* pPageView(nullptr != pImp
-                            ? pImp->GetPageView()
-                            : nullptr);
-                        // tdf#130951 caution - target may be Window, use the correct OutputDevice
-                        OutputDevice* pTarget(pShell->isOutputToWindow()
-                            ? pShell->GetWin()->GetOutDev()
-                            : pShell->GetOut());
-                        SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
-                            ? pPageView->FindPageWindow(*pTarget)
-                            : nullptr);
-
-                        if(nullptr != pPageWindow)
-                        {
-                            sdr::contact::ObjectContact& rOC(pPageWindow->GetObjectContact());
-                            sdr::contact::ViewContact& rVC(GetViewContact());
-                            sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
-                            sdr::contact::DisplayInfo aDisplayInfo;
-
-                            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
-                            const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
-
-                            paintGraphicUsingPrimitivesHelper(
-                                *pOut,
-                                aPrimitives,
-                                aGraphicTransform,
-                                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
-                                rNoTNd.GetTitle(),
-                                rNoTNd.GetDescription());
-                            bSucceeded = true;
-                        }
-                    }
-
-                    if(!bSucceeded)
-                    {
-                        // MM02 fallback to direct paint with primitive-recreation
-                        // which will block reusage of system-dependent bitmap data
-                        const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
-
-                        paintGraphicUsingPrimitivesHelper(
-                            *pOut,
-                            rGrfObj,
-                            aGrfAttr,
-                            aGraphicTransform,
-                            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
-                            rNoTNd.GetTitle(),
-                            rNoTNd.GetDescription());
-                    }
-                }
-            }
-            else
-            {
-                TranslateId pResId;
-
-                if( GraphicType::NONE == rGrfObj.GetType() )
-                    pResId = STR_COMCORE_READERROR;
-                else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
-                    pResId = STR_COMCORE_CANT_SHOW;
-
-                OUString aText;
-                if ( !pResId &&
-                     (aText = pGrfNd->GetTitle()).isEmpty() &&
-                     (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
-                {
-                    pResId = STR_COMCORE_READERROR;
-                }
-                if (pResId)
-                    aText = SwResId(pResId);
-
-                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
-            }
-        }
+        ImplPaintPictureGraphic( pOut, pGrfNd, bPrn, aAlignedGrfArea, pShell, rNoTNd );
 
         if ( SwDrawView::IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
@@ -1333,76 +1159,263 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             pOut->SetAntialiasing( nNewAntialiasingAtOutput );
         }
 
-        bool bDone(false);
-
-        if(bIsChart)
-        {
-            basegfx::B2DRange aSourceRange;
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence(
-                pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
-                    aSourceRange,
-                    bPrn));
-
-            if(!aSequence.empty() && !aSourceRange.isEmpty())
-            {
-                const basegfx::B2DRange aTargetRange(
-                    aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
-                    aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
-
-                bDone = paintUsingPrimitivesHelper(
-                    *pOut,
-                    aSequence,
-                    aSourceRange,
-                    aTargetRange);
-            }
-        }
-
-        if(!bDone && pOLENd)
-        {
-            // SwOLENode does not have a known GraphicObject, need to
-            // work with Graphic instead
-            const Graphic* pGraphic = pOLENd->GetGraphic();
-            const Point aPosition(aAlignedGrfArea.Pos());
-            const Size aSize(aAlignedGrfArea.SSize());
-
-            if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
-            {
-                pGraphic->Draw(*pOut, aPosition, aSize);
-
-                // shade the representation if the object is activated outplace
-                uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
-                if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
-                {
-
-                    ::svt::EmbeddedObjectRef::DrawShading(
-                        tools::Rectangle(
-                            aPosition,
-                            aSize),
-                        pOut);
-                }
-            }
-            else
-            {
-                ::svt::EmbeddedObjectRef::DrawPaintReplacement(
-                    tools::Rectangle(aPosition, aSize),
-                    pOLENd->GetOLEObj().GetCurrentPersistName(),
-                    pOut);
-            }
-
-            sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr &&
-                    (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
-            {
-                const SwFlyFrame *pFly = FindFlyFrame();
-                assert( pFly != nullptr );
-                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->getFramePrintArea(), pFly->getFrameArea());
-            }
-        }
+        ImplPaintPictureBitmap( pOut, pOLENd, bIsChart, bPrn, aAlignedGrfArea, pShell );
 
         // see #i99665#
         if (SwDrawView::IsAntiAliasing())
         {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
+        }
+    }
+}
+
+void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
+    SwGrfNode* pGrfNd, bool bPrn,
+    const SwRect& rAlignedGrfArea, SwViewShell* pShell,
+    SwNoTextNode& rNoTNd ) const
+{
+    bool bContinue = true;
+    const GraphicObject& rGrfObj = pGrfNd->GetGrfObj(bPrn);
+
+    GraphicAttr aGrfAttr;
+    pGrfNd->GetGraphicAttr( aGrfAttr, this );
+
+    if( !bPrn )
+    {
+        // #i73788#
+        if ( pGrfNd->IsLinkedInputStreamReady() )
+        {
+            pGrfNd->UpdateLinkWithInputStream();
+        }
+        // #i85717#, #i90395# - check, if asynchronous retrieval
+        // if input stream for the graphic is possible
+        else if ( ( rGrfObj.GetType() == GraphicType::Default ||
+                    rGrfObj.GetType() == GraphicType::NONE ) &&
+                  pGrfNd->IsLinkedFile() &&
+                  pGrfNd->IsAsyncRetrieveInputStreamPossible() )
+        {
+            Size aTmpSz;
+            ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
+            if( !pGrfObj ||
+                !pGrfObj->IsDataComplete() ||
+                !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
+                !aTmpSz.Height())
+            {
+                pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
+            }
+            OUString aText( pGrfNd->GetTitle() );
+            if ( aText.isEmpty() )
+                GetRealURL( *pGrfNd, aText );
+            ::lcl_PaintReplacement( rAlignedGrfArea, aText, *pShell, this, false );
+            bContinue = false;
+        }
+    }
+
+    if( bContinue )
+    {
+        if( rGrfObj.GetGraphic().IsSupportedGraphic())
+        {
+            const bool bAnimate = rGrfObj.IsAnimated() &&
+                                     !pShell->IsPreview() &&
+                                     !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
+            // #i9684# Stop animation during printing/pdf export
+                                      pShell->GetWin();
+
+            if( bAnimate &&
+                FindFlyFrame() != ::GetFlyFromMarked( nullptr, pShell ))
+            {
+                OutputDevice* pVout;
+                if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
+                {
+                    pVout = pOut;
+                    pOut = pShell->GetOut();
+                }
+                else if( pShell->GetWin() && pOut->IsVirtual() )
+                {
+                    pVout = pOut;
+                    pOut = pShell->GetWin()->GetOutDev();
+                }
+                else
+                    pVout = nullptr;
+
+                OSL_ENSURE( !pOut->IsVirtual() ||
+                        pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
+                        "pOut should not be a virtual device" );
+
+                pGrfNd->StartGraphicAnimation(pOut, rAlignedGrfArea.Pos(),
+                                    rAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
+                                    pVout );
+            }
+            else
+            {
+                // MM02 To allow system-dependent buffering of the involved
+                // bitmaps it is necessary to re-use the involved primitives
+                // and their already executed decomposition (also for
+                // performance reasons). This is usually done in DrawingLayer
+                // by using the VOC-Mechanism (see descriptions elsewhere).
+                // To get that here, make the involved SwNoTextFrame (this)
+                // a sdr::contact::ViewContact supplier by supporting
+                // a GetViewContact() - call. For ObjectContact we can use
+                // the already existing ObjectContact from the involved
+                // DrawingLayer. For this, the helper classes
+                //     ViewObjectContactOfSwNoTextFrame
+                //     ViewContactOfSwNoTextFrame
+                // are created which support the VOC-mechanism in its minimal
+                // form. This allows automatic and view-dependent (multiple edit
+                // windows, print, etc.) re-use of the created primitives.
+                // Also: Will be very useful when completely changing the Writer
+                // repaint to VOC and Primitives, too.
+                static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
+                static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
+                // tdf#130951 for safety reasons use fallback if ViewObjectContactMechanism
+                // fails for some reason - usually could only be not to find the correct
+                // SdrPageWindow
+                bool bSucceeded(false);
+
+                if(bUseViewObjectContactMechanism)
+                {
+                    // MM02 use VOC-mechanism and buffer primitives
+                    SwViewShellImp* pImp(pShell->Imp());
+                    SdrPageView* pPageView(nullptr != pImp
+                        ? pImp->GetPageView()
+                        : nullptr);
+                    // tdf#130951 caution - target may be Window, use the correct OutputDevice
+                    OutputDevice* pTarget(pShell->isOutputToWindow()
+                        ? pShell->GetWin()->GetOutDev()
+                        : pShell->GetOut());
+                    SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
+                        ? pPageView->FindPageWindow(*pTarget)
+                        : nullptr);
+
+                    if(nullptr != pPageWindow)
+                    {
+                        sdr::contact::ObjectContact& rOC(pPageWindow->GetObjectContact());
+                        sdr::contact::ViewContact& rVC(GetViewContact());
+                        sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
+                        sdr::contact::DisplayInfo aDisplayInfo;
+
+                        drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
+                        const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+
+                        paintGraphicUsingPrimitivesHelper(
+                            *pOut,
+                            aPrimitives,
+                            aGraphicTransform,
+                            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                            rNoTNd.GetTitle(),
+                            rNoTNd.GetDescription());
+                        bSucceeded = true;
+                    }
+                }
+
+                if(!bSucceeded)
+                {
+                    // MM02 fallback to direct paint with primitive-recreation
+                    // which will block reusage of system-dependent bitmap data
+                    const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+
+                    paintGraphicUsingPrimitivesHelper(
+                        *pOut,
+                        rGrfObj,
+                        aGrfAttr,
+                        aGraphicTransform,
+                        nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                        rNoTNd.GetTitle(),
+                        rNoTNd.GetDescription());
+                }
+            }
+        }
+        else
+        {
+            TranslateId pResId;
+
+            if( GraphicType::NONE == rGrfObj.GetType() )
+                pResId = STR_COMCORE_READERROR;
+            else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
+                pResId = STR_COMCORE_CANT_SHOW;
+
+            OUString aText;
+            if ( !pResId &&
+                 (aText = pGrfNd->GetTitle()).isEmpty() &&
+                 (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
+            {
+                pResId = STR_COMCORE_READERROR;
+            }
+            if (pResId)
+                aText = SwResId(pResId);
+
+            ::lcl_PaintReplacement( rAlignedGrfArea, aText, *pShell, this, true );
+        }
+    }
+}
+
+void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
+    SwOLENode* pOLENd, bool bIsChart, bool bPrn, const SwRect& rAlignedGrfArea,
+    SwViewShell* pShell ) const
+{
+    bool bDone(false);
+
+    if(bIsChart)
+    {
+        basegfx::B2DRange aSourceRange;
+        const drawinglayer::primitive2d::Primitive2DContainer aSequence(
+            pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
+                aSourceRange,
+                bPrn));
+
+        if(!aSequence.empty() && !aSourceRange.isEmpty())
+        {
+            const basegfx::B2DRange aTargetRange(
+                rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
+                rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
+
+            bDone = paintUsingPrimitivesHelper(
+                *pOut,
+                aSequence,
+                aSourceRange,
+                aTargetRange);
+        }
+    }
+
+    if(!bDone && pOLENd)
+    {
+        // SwOLENode does not have a known GraphicObject, need to
+        // work with Graphic instead
+        const Graphic* pGraphic = pOLENd->GetGraphic();
+        const Point aPosition(rAlignedGrfArea.Pos());
+        const Size aSize(rAlignedGrfArea.SSize());
+
+        if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
+        {
+            pGraphic->Draw(*pOut, aPosition, aSize);
+
+            // shade the representation if the object is activated outplace
+            uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+            if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
+            {
+
+                ::svt::EmbeddedObjectRef::DrawShading(
+                    tools::Rectangle(
+                        aPosition,
+                        aSize),
+                    pOut);
+            }
+        }
+        else
+        {
+            ::svt::EmbeddedObjectRef::DrawPaintReplacement(
+                tools::Rectangle(aPosition, aSize),
+                pOLENd->GetOLEObj().GetCurrentPersistName(),
+                pOut);
+        }
+
+        sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
+        if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr &&
+                (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
+        {
+            const SwFlyFrame *pFly = FindFlyFrame();
+            assert( pFly != nullptr );
+            static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->getFramePrintArea(), pFly->getFrameArea());
         }
     }
 }

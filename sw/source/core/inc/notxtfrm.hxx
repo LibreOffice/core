@@ -60,6 +60,13 @@ private:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
+    void ImplPaintPictureGraphic( vcl::RenderContext* pOut,
+            SwGrfNode* pGrfNd, bool bPrn,
+            const SwRect& rAlignedGrfArea, SwViewShell* pShell, SwNoTextNode& rNoTNd ) const;
+    void ImplPaintPictureBitmap( vcl::RenderContext* pOut,
+            SwOLENode* pOLENd, bool bIsChart, bool bPrn,
+            const SwRect& rAlignedGrfArea, SwViewShell* pShell ) const;
+
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );
 
