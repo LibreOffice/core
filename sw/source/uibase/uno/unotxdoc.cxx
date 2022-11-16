@@ -3534,16 +3534,15 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
 {
     SolarMutexGuard aGuard;
     SwView* pView = m_pDocShell->GetView();
+    if (!pView)
+        return {};
 
     if (VclPtr<vcl::Window> pWindow = LokChartHelper(pView).GetWindow())
         return pWindow;
     if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pView).GetWidgetWindow())
         return pWindow;
 
-    if (pView)
-        return &(pView->GetEditWin());
-
-    return {};
+    return &(pView->GetEditWin());
 }
 
 void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)

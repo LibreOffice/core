@@ -12,10 +12,12 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/window.hxx>
 
@@ -135,7 +137,18 @@ const SfxViewShell* LokStarMathHelper::GetSmViewShell()
 
 tools::Rectangle LokStarMathHelper::GetBoundingBox() const
 {
-    return mpIPClient ? mpIPClient->GetObjArea() : tools::Rectangle{};
+    if (mpIPClient)
+    {
+        tools::Rectangle r(mpIPClient->GetObjArea());
+        if (SfxObjectShell* pObjShell = const_cast<SfxViewShell*>(mpViewShell)->GetObjectShell())
+        {
+            const o3tl::Length unit = MapToO3tlLength(pObjShell->GetMapUnit());
+            if (unit != o3tl::Length::twip && unit != o3tl::Length::invalid)
+                r = o3tl::convert(r, unit, o3tl::Length::twip);
+        }
+        return r;
+    }
+    return {};
 }
 
 bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
