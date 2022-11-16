@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 				$(call gb_ExternalProject_get_build_flags,freetype) \
 				$(gb_VISIBILITY_FLAGS) \
 				$(gb_EMSCRIPTEN_CPPFLAGS)" \
+			CPPFLAGS='$(CPPFLAGS) -DZ_PREFIX' \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,freetype)" \
 		&& $(MAKE) install \
 		&& touch $@	)

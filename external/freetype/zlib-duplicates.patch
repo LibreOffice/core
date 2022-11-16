@@ -1,0 +1,22 @@
+--- src/gzip/ftzconf.h
++++ src/gzip/ftzconf.h
+@@ -130,10 +130,8 @@
+ #    define uncompress2           z_uncompress2
+ #  endif
+ #  define zError                z_zError
+-#  ifndef Z_SOLO
+ #    define zcalloc               z_zcalloc
+ #    define zcfree                z_zcfree
+-#  endif
+ #  define zlibCompileFlags      z_zlibCompileFlags
+ #  define zlibVersion           z_zlibVersion
+ 
+@@ -163,6 +161,8 @@
+ #  define gz_header_s           z_gz_header_s
+ #  define internal_state        z_internal_state
+ 
++#define z_errmsg z_z_errmsg
++
+ #endif
+ 
+ #if defined(__MSDOS__) && !defined(MSDOS)
