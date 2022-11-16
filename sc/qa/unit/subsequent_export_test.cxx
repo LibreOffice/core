@@ -96,6 +96,8 @@ public:
     void testConditionalFormatContainsTextXLSX();
     void testConditionalFormatPriorityCheckXLSX();
     void testConditionalFormatOriginXLSX();
+    void testTdf79998();
+    void testLegacyCellAnchoredRotatedShape();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testBuiltinRangesXLSX();
@@ -216,6 +218,8 @@ public:
     CPPUNIT_TEST(testConditionalFormatContainsTextXLSX);
     CPPUNIT_TEST(testConditionalFormatPriorityCheckXLSX);
     CPPUNIT_TEST(testConditionalFormatOriginXLSX);
+    CPPUNIT_TEST(testTdf79998);
+    CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testBuiltinRangesXLSX);
@@ -4151,6 +4155,138 @@ void ScExportTest::testConditionalFormatOriginXLSX()
     OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula",
                                  OUString("NOT(ISERROR(SEARCH(\"BAC\",B1)))"), aFormula);
+}
+
+// FILESAVE: XLSX export with long sheet names (length > 31 characters)
+void ScExportTest::testTdf79998()
+{
+    // check: original document has tab name > 31 characters
+    createScDoc("ods/tdf79998.ods");
+    ScDocument* pDoc = getScDoc();
+    const std::vector<OUString> aTabNames1 = pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkarten etc)"), aTabNames1[1]);
+
+    // check: saved XLSX document has truncated tab name
+    saveAndReload("Calc Office Open XML");
+    pDoc = getScDoc();
+    const std::vector<OUString> aTabNames2 = pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
+}
+
+static void impl_testLegacyCellAnchoredRotatedShape(ScDocument& rDoc, const tools::Rectangle& aRect,
+                                                    const ScDrawObjData& aAnchor,
+                                                    tools::Long TOLERANCE = 30 /* 30 hmm */)
+{
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    SdrObject* pObj = pPage->GetObj(0);
+    const tools::Rectangle& aSnap = pObj->GetSnapRect();
+    printf("expected height %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n",
+           sal_Int64(aRect.GetHeight()), sal_Int64(aSnap.GetHeight()));
+    CPPUNIT_ASSERT_EQUAL(true,
+                         testEqualsWithTolerance(aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE));
+    printf("expected width %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n",
+           sal_Int64(aRect.GetWidth()), sal_Int64(aSnap.GetWidth()));
+    CPPUNIT_ASSERT_EQUAL(true,
+                         testEqualsWithTolerance(aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE));
+    printf("expected left %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Left()),
+           sal_Int64(aSnap.Left()));
+    CPPUNIT_ASSERT_EQUAL(true, testEqualsWithTolerance(aRect.Left(), aSnap.Left(), TOLERANCE));
+    printf("expected right %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Top()),
+           sal_Int64(aSnap.Top()));
+    CPPUNIT_ASSERT_EQUAL(true, testEqualsWithTolerance(aRect.Top(), aSnap.Top(), TOLERANCE));
+
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
+    printf("expected startrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n",
+           aAnchor.maStart.Row(), pData->maStart.Row());
+    CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Row(), pData->maStart.Row());
+    printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col());
+    CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Col(), pData->maStart.Col());
+    printf("expected endrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n", aAnchor.maEnd.Row(),
+           pData->maEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(aAnchor.maEnd.Row(), pData->maEnd.Row());
+    printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(aAnchor.maEnd.Col(), pData->maEnd.Col());
+}
+
+void ScExportTest::testLegacyCellAnchoredRotatedShape()
+{
+    {
+        // This example doc contains cell anchored shape that is rotated, the
+        // rotated shape is in fact clipped by the sheet boundaries (and thus
+        // is a good edge case test to see if we import it still correctly)
+        createScDoc("ods/legacycellanchoredrotatedclippedshape.ods");
+
+        ScDocument* pDoc = getScDoc();
+        // ensure the imported legacy rotated shape is in the expected position
+        tools::Rectangle aRect(6000, -2000, 8000, 4000);
+        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
+        // terms of the rotated shape ) is more or less contains the correct info
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow(0);
+        aAnchor.maStart.SetCol(5);
+        aAnchor.maEnd.SetRow(3);
+        aAnchor.maEnd.SetCol(7);
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+        // test save and reload
+        // for some reason having this test in subsequent_export-test.cxx causes
+        // a core dump in editeng ( so moved to here )
+        saveAndReload("calc8");
+        pDoc = getScDoc();
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    }
+    {
+        // This example doc contains cell anchored shape that is rotated, the
+        // rotated shape is in fact clipped by the sheet boundaries, additionally
+        // the shape is completely hidden because the rows the shape occupies
+        // are hidden
+        createScDoc("ods/legacycellanchoredrotatedhiddenshape.ods");
+        ScDocument* pDoc = getScDoc();
+        // ensure the imported legacy rotated shape is in the expected position
+        tools::Rectangle aRect(6000, -2000, 8000, 4000);
+
+        // ensure the imported (and converted) anchor (note we internally now store the anchor in
+        // terms of the rotated shape) is more or less contains the correct info
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow(0);
+        aAnchor.maStart.SetCol(5);
+        aAnchor.maEnd.SetRow(3);
+        aAnchor.maEnd.SetCol(7);
+        pDoc->ShowRows(0, 9, 0, true); // show relevant rows
+        pDoc->SetDrawPageSize(0); // trigger recalcpos
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+        // test save and reload
+        saveAndReload("calc8");
+        pDoc = getScDoc();
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    }
+    {
+        // This example doc contains cell anchored shape that is rotated
+        createScDoc("ods/legacycellanchoredrotatedshape.ods");
+
+        ScDocument* pDoc = getScDoc();
+        // ensure the imported legacy rotated shape is in the expected position
+        tools::Rectangle aRect(6000, 3000, 8000, 9000);
+        // ensure the imported (and converted) anchor (note we internally now store the anchor in
+        // terms of the rotated shape) more or less contains the correct info
+
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow(3);
+        aAnchor.maStart.SetCol(6);
+        aAnchor.maEnd.SetRow(9);
+        aAnchor.maEnd.SetCol(8);
+        // test import
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+        // test save and reload
+        saveAndReload("calc8");
+        pDoc = getScDoc();
+        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    }
 }
 
 void ScExportTest::testTdf113646()

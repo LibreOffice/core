@@ -74,10 +74,8 @@ public:
     void testSharedFormulaXLSX();
     void testSharedFormulaRefUpdateXLSX();
     void testSheetNamesXLSX();
-    void testTdf79998();
     void testTdf150599();
     void testCommentSize();
-    void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
     void testSortWithSharedFormulasODS();
@@ -105,10 +103,8 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
-    CPPUNIT_TEST(testTdf79998);
     CPPUNIT_TEST(testTdf150599);
     CPPUNIT_TEST(testCommentSize);
-    CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
@@ -475,23 +471,6 @@ void ScFiltersTest::testSheetNamesXLSX()
     xDocSh->DoClose();
 }
 
-// FILESAVE: XLSX export with long sheet names (length > 31 characters)
-void ScFiltersTest::testTdf79998()
-{
-    // check: original document has tab name > 31 characters
-    ScDocShellRef xDocSh = loadDoc(u"tdf79998.", FORMAT_ODS);
-    ScDocument& rDoc1 = xDocSh->GetDocument();
-    const std::vector<OUString> aTabNames1 = rDoc1.GetAllTableNames();
-    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkarten etc)"), aTabNames1[1]);
-
-    // check: saved XLSX document has truncated tab name
-    xDocSh = saveAndReload( *xDocSh, FORMAT_XLSX);
-    ScDocument& rDoc2 = xDocSh->GetDocument();
-    const std::vector<OUString> aTabNames2 = rDoc2.GetAllTableNames();
-    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
-
-    xDocSh->DoClose();
-}
 
 void ScFiltersTest::testTdf150599()
 {
@@ -538,118 +517,6 @@ void ScFiltersTest::testCommentSize()
     CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenHeight(), pCaption->GetLogicRect().getOpenHeight());
 
     xDocSh->DoClose();
-}
-
-static void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, const tools::Rectangle& aRect, const ScDrawObjData& aAnchor, tools::Long TOLERANCE = 30 /* 30 hmm */ )
-{
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
-    SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), pPage->GetObjCount() );
-
-    SdrObject* pObj = pPage->GetObj(0);
-    const tools::Rectangle& aSnap = pObj->GetSnapRect();
-    printf("expected height %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.GetHeight()), sal_Int64(aSnap.GetHeight()) );
-    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-    printf("expected width %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.GetWidth()), sal_Int64(aSnap.GetWidth()) );
-    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
-    printf("expected left %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Left()), sal_Int64(aSnap.Left()) );
-    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Left(), aSnap.Left(), TOLERANCE ) );
-    printf("expected right %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Top()), sal_Int64(aSnap.Top()) );
-    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Top(), aSnap.Top(), TOLERANCE ) );
-
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-    CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
-    printf("expected startrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n", aAnchor.maStart.Row(), pData->maStart.Row()  );
-    CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() );
-    printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col()  );
-    CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Col(), pData->maStart.Col() );
-    printf("expected endrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n", aAnchor.maEnd.Row(), pData->maEnd.Row()  );
-    CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Row(), pData->maEnd.Row() );
-    printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col()  );
-    CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() );
-}
-
-void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
-{
-    {
-        // This example doc contains cell anchored shape that is rotated, the
-        // rotated shape is in fact clipped by the sheet boundaries (and thus
-        // is a good edge case test to see if we import it still correctly)
-        ScDocShellRef xDocSh = loadDoc(u"legacycellanchoredrotatedclippedshape.", FORMAT_ODS);
-
-        ScDocument& rDoc = xDocSh->GetDocument();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect( 6000, -2000, 8000, 4000 );
-        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
-        // terms of the rotated shape ) is more or less contains the correct info
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow( 0 );
-        aAnchor.maStart.SetCol( 5 );
-        aAnchor.maEnd.SetRow( 3 );
-        aAnchor.maEnd.SetCol( 7 );
-        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
-        // test save and reload
-        // for some reason having this test in subsequent_export-test.cxx causes
-        // a core dump in editeng ( so moved to here )
-        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
-        ScDocument& rDoc2 = xDocSh->GetDocument();
-        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
-
-        xDocSh->DoClose();
-    }
-    {
-        // This example doc contains cell anchored shape that is rotated, the
-        // rotated shape is in fact clipped by the sheet boundaries, additionally
-        // the shape is completely hidden because the rows the shape occupies
-        // are hidden
-        ScDocShellRef xDocSh = loadDoc(u"legacycellanchoredrotatedhiddenshape.", FORMAT_ODS, true);
-        ScDocument& rDoc = xDocSh->GetDocument();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect( 6000, -2000, 8000, 4000 );
-
-        // ensure the imported (and converted) anchor (note we internally now store the anchor in
-        // terms of the rotated shape) is more or less contains the correct info
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow( 0 );
-        aAnchor.maStart.SetCol( 5 );
-        aAnchor.maEnd.SetRow( 3 );
-        aAnchor.maEnd.SetCol( 7 );
-        rDoc.ShowRows(0, 9, 0, true); // show relevant rows
-        rDoc.SetDrawPageSize(0); // trigger recalcpos
-        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor);
-        // test save and reload
-        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
-        ScDocument& rDoc2 = xDocSh->GetDocument();
-        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
-
-        xDocSh->DoClose();
-    }
-    {
-        // This example doc contains cell anchored shape that is rotated
-        ScDocShellRef xDocSh = loadDoc(u"legacycellanchoredrotatedshape.", FORMAT_ODS);
-
-        ScDocument& rDoc = xDocSh->GetDocument();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect( 6000, 3000, 8000, 9000 );
-        // ensure the imported (and converted) anchor (note we internally now store the anchor in
-        // terms of the rotated shape) more or less contains the correct info
-
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow( 3 );
-        aAnchor.maStart.SetCol( 6 );
-        aAnchor.maEnd.SetRow( 9 );
-        aAnchor.maEnd.SetCol( 8 );
-        // test import
-        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
-        // test save and reload
-        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
-        ScDocument& rDoc2 = xDocSh->GetDocument();
-        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
-
-        xDocSh->DoClose();
-    }
 }
 
 static void testEnhancedProtectionImpl( const ScDocument& rDoc )
