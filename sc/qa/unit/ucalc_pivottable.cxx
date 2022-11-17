@@ -43,40 +43,6 @@ struct DPFieldDef
     bool bRepeatItemLabels;
 };
 
-template<size_t Size>
-ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount)
-{
-    // Insert field names in row 0.
-    for (size_t i = 0; i < nFieldCount; ++i)
-        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
-
-    // Insert data into row 1 and downward.
-    for (size_t i = 0; i < nDataCount; ++i)
-    {
-        SCROW nRow = static_cast<SCROW>(i) + 1;
-        for (size_t j = 0; j < nFieldCount; ++j)
-        {
-            SCCOL nCol = static_cast<SCCOL>(j);
-            pDoc->SetString(
-                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
-        }
-    }
-
-    SCROW nRow1 = 0, nRow2 = 0;
-    SCCOL nCol1 = 0, nCol2 = 0;
-    pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCCOL(0), nCol1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
-                           static_cast<SCCOL>(nFieldCount - 1), nCol2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
-                           static_cast<SCROW>(nDataCount), nRow2);
-
-    ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    printRange(pDoc, aSrcRange, "Data sheet content");
-    return aSrcRange;
-}
-
 bool checkDPTableOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aOutputCheck, const char* pCaption )
@@ -304,7 +270,46 @@ public:
     CPPUNIT_TEST(testPivotTableMedianFunc);
 
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    template<size_t Size>
+    ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount);
 };
+
+template<size_t Size>
+ScRange TestPivottable::insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount)
+{
+    // Insert field names in row 0.
+    for (size_t i = 0; i < nFieldCount; ++i)
+        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < nDataCount; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        for (size_t j = 0; j < nFieldCount; ++j)
+        {
+            SCCOL nCol = static_cast<SCCOL>(j);
+            pDoc->SetString(
+                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCCOL(0), nCol1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCCOL>(nFieldCount - 1), nCol2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCROW>(nDataCount), nRow2);
+
+    ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    printRange(pDoc, aSrcRange, "Data sheet content");
+    return aSrcRange;
+}
+
 
 void TestPivottable::testPivotTable()
 {

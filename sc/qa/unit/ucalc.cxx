@@ -67,6 +67,17 @@
 class ScUndoPaste;
 class ScUndoCut;
 
+namespace {
+
+struct HoriIterCheck
+{
+    SCCOL nCol;
+    SCROW nRow;
+    const char* pVal;
+};
+
+}
+
 class Test : public ScSimpleBootstrapFixture
 {
 public:
@@ -322,6 +333,10 @@ public:
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
     CPPUNIT_TEST(testInsertColumnsWithFormulaCells);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData,
+            const HoriIterCheck* pChecks, size_t nCheckCount);
 };
 
 void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
@@ -1094,16 +1109,7 @@ void Test::testCopyToDocument()
     m_pDoc->DeleteTab(0);
 }
 
-namespace {
-
-struct HoriIterCheck
-{
-    SCCOL nCol;
-    SCROW nRow;
-    const char* pVal;
-};
-
-bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData, const HoriIterCheck* pChecks, size_t nCheckCount)
+bool Test::checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData, const HoriIterCheck* pChecks, size_t nCheckCount)
 {
     ScAddress aPos(0,0,0);
     insertRangeData(&rDoc, aPos, rData);
@@ -1142,8 +1148,6 @@ bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<con
     }
 
     return true;
-}
-
 }
 
 void Test::testHorizontalIterator()

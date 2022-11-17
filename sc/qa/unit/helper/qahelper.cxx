@@ -469,54 +469,6 @@ bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected
     return true;
 }
 
-bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
-{
-    OUString aStr(rPos.Format(ScRefFlags::VALID));
-    const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
-    if (!pFC)
-    {
-        cerr << "Formula cell expected at " << aStr << " but not found." << endl;
-        return false;
-    }
-
-    if (pFC->aPos != rPos)
-    {
-        OUString aStr2(pFC->aPos.Format(ScRefFlags::VALID));
-        cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
-        return false;
-    }
-
-    return true;
-}
-
-bool checkFormulaPositions(
-    ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount)
-{
-    ScAddress aPos(nCol, 0, nTab);
-    for (size_t i = 0; i < nRowCount; ++i)
-    {
-        SCROW nRow = pRows[i];
-        aPos.SetRow(nRow);
-
-        if (!checkFormulaPosition(rDoc, aPos))
-        {
-            OUString aStr(aPos.Format(ScRefFlags::VALID));
-            cerr << "Formula cell position failed at " << aStr << "." << endl;
-            return false;
-        }
-    }
-    return true;
-}
-
-std::unique_ptr<ScTokenArray> compileFormula(
-    ScDocument* pDoc, const OUString& rFormula,
-    formula::FormulaGrammar::Grammar eGram )
-{
-    ScAddress aPos(0,0,0);
-    ScCompiler aComp(*pDoc, aPos, eGram);
-    return aComp.CompileString(rFormula);
-}
-
 bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption )
@@ -553,25 +505,6 @@ bool checkOutput(
     }
     printer.print(pCaption);
     return bResult;
-}
-
-void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
-{
-    const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
-    for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
-    {
-        for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
-        {
-            for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
-            {
-                ScAddress aPos(nCol, nRow, nTab);
-                ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
-                if (pFC)
-                    pFC->SetChanged(false);
-            }
-        }
-    }
 }
 
 bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
@@ -799,7 +732,7 @@ void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected,
     }
 }
 
-ScRange insertRangeData(
+ScRange ScSimpleBootstrapFixture::insertRangeData(
     ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
 {
     if (rData.empty())
@@ -846,7 +779,7 @@ ScRange insertRangeData(
     return aRange;
 }
 
-ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
+ScUndoCut* ScSimpleBootstrapFixture::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
 {
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
 
@@ -880,7 +813,7 @@ ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pCli
     return nullptr;
 }
 
-void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
+void ScSimpleBootstrapFixture::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
 {
     ScClipParam aClipParam(rRange, false);
     ScMarkData aMark(pSrcDoc->GetSheetLimits());
@@ -888,14 +821,14 @@ void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 }
 
-void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
+void ScSimpleBootstrapFixture::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
-ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
+ScUndoPaste* ScSimpleBootstrapFixture::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
 {
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());
@@ -906,7 +839,7 @@ ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocume
         &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
 }
 
-void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
+void ScSimpleBootstrapFixture::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
@@ -918,14 +851,14 @@ void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDoc
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
-void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
+void ScSimpleBootstrapFixture::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
 {
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetCalcAsShown(bCalcAsShown);
     pDoc->SetDocOptions(aOpt);
 }
 
-ScDocShell* findLoadedDocShellByName(std::u16string_view rName)
+ScDocShell* ScSimpleBootstrapFixture::findLoadedDocShellByName(std::u16string_view rName)
 {
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
@@ -942,7 +875,7 @@ ScDocShell* findLoadedDocShellByName(std::u16string_view rName)
     return nullptr;
 }
 
-bool insertRangeNames(
+bool ScSimpleBootstrapFixture::insertRangeNames(
     ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)
 {
     ScAddress aA1(0, 0, 0);
@@ -966,20 +899,20 @@ bool insertRangeNames(
     return true;
 }
 
-OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
+OUString ScSimpleBootstrapFixture::getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
 {
     ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
     CPPUNIT_ASSERT(pName);
     return pName->GetSymbol(pDoc->GetGrammar());
 }
 
-OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+OUString ScSimpleBootstrapFixture::getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     return pDoc->GetFormula(nCol, nRow, nTab);
 }
 
 #if CALC_DEBUG_OUTPUT != 0
-void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
+void ScSimpleBootstrapFixture::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
 {
     if (pCaption != nullptr)
         cout << pCaption << ", ";
@@ -988,10 +921,10 @@ void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const ch
 }
 #else
 // Avoid unused parameter warning
-void printFormula(ScDocument*, SCCOL, SCROW, SCTAB, const char*) {}
+void ScSimpleBootstrapFixture::printFormula(ScDocument*, SCCOL, SCROW, SCTAB, const char*) {}
 #endif
 
-void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
+void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
                 const bool printFormula)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
@@ -1011,13 +944,13 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
     printer.print(pCaption);
 }
 
-void printRange(ScDocument* pDoc, const ScRange& rRange, const OString& rCaption,
+void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRange, const OString& rCaption,
                 const bool printFormula)
 {
     printRange(pDoc, rRange, rCaption.getStr(), printFormula);
 }
 
-void clearRange(ScDocument* pDoc, const ScRange& rRange)
+void ScSimpleBootstrapFixture::clearRange(ScDocument* pDoc, const ScRange& rRange)
 {
     ScMarkData aMarkData(pDoc->GetSheetLimits());
     aMarkData.SetMarkArea(rRange);
@@ -1026,10 +959,78 @@ void clearRange(ScDocument* pDoc, const ScRange& rRange)
         rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, InsertDeleteFlags::CONTENTS);
 }
 
-void clearSheet(ScDocument* pDoc, SCTAB nTab)
+void ScSimpleBootstrapFixture::clearSheet(ScDocument* pDoc, SCTAB nTab)
 {
     ScRange aRange(0,0,nTab,pDoc->MaxCol(),pDoc->MaxRow(),nTab);
     clearRange(pDoc, aRange);
 }
+
+bool ScSimpleBootstrapFixture::checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
+{
+    OUString aStr(rPos.Format(ScRefFlags::VALID));
+    const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+    {
+        cerr << "Formula cell expected at " << aStr << " but not found." << endl;
+        return false;
+    }
+
+    if (pFC->aPos != rPos)
+    {
+        OUString aStr2(pFC->aPos.Format(ScRefFlags::VALID));
+        cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool ScSimpleBootstrapFixture::checkFormulaPositions(
+    ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount)
+{
+    ScAddress aPos(nCol, 0, nTab);
+    for (size_t i = 0; i < nRowCount; ++i)
+    {
+        SCROW nRow = pRows[i];
+        aPos.SetRow(nRow);
+
+        if (!checkFormulaPosition(rDoc, aPos))
+        {
+            OUString aStr(aPos.Format(ScRefFlags::VALID));
+            cerr << "Formula cell position failed at " << aStr << "." << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+std::unique_ptr<ScTokenArray> ScSimpleBootstrapFixture::compileFormula(
+    ScDocument* pDoc, const OUString& rFormula,
+    formula::FormulaGrammar::Grammar eGram )
+{
+    ScAddress aPos(0,0,0);
+    ScCompiler aComp(*pDoc, aPos, eGram);
+    return aComp.CompileString(rFormula);
+}
+
+void ScSimpleBootstrapFixture::clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
+{
+    const ScAddress& s = rRange.aStart;
+    const ScAddress& e = rRange.aEnd;
+    for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
+    {
+        for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
+        {
+            for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
+            {
+                ScAddress aPos(nCol, nRow, nTab);
+                ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
+                if (pFC)
+                    pFC->SetChanged(false);
+            }
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

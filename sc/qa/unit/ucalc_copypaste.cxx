@@ -310,6 +310,8 @@ private:
                                ScPasteFunc nFunction = ScPasteFunc::NONE,
                                InsCellCmd eMoveMode = InsCellCmd::INS_NONE);
 
+    void printValuesAndFormulasInRange(ScDocument* pDoc, const ScRange& rRange,
+                                       const OString& rCaption);
     OUString getFormula(SCCOL nCol, SCROW nRow, SCTAB nTab);
     OUString getRangeByName(const OUString& aRangeName);
     ScAddress setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString noteText);
@@ -330,8 +332,8 @@ static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCRO
     return ScAddress(rMerge.GetColMerge(), rMerge.GetRowMerge(), nTab);
 }
 
-static void lcl_printValuesAndFormulasInRange(ScDocument* pDoc, const ScRange& rRange,
-                                              const OString& rCaption)
+void TestCopyPaste::printValuesAndFormulasInRange(ScDocument* pDoc, const ScRange& rRange,
+                                                  const OString& rCaption)
 {
     printRange(pDoc, rRange, rCaption, false);
     printRange(pDoc, rRange, rCaption, true);
@@ -339,12 +341,12 @@ static void lcl_printValuesAndFormulasInRange(ScDocument* pDoc, const ScRange& r
 
 OUString TestCopyPaste::getFormula(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    return ::getFormula(m_pDoc, nCol, nRow, nTab);
+    return ScSimpleBootstrapFixture::getFormula(m_pDoc, nCol, nRow, nTab);
 }
 
 OUString TestCopyPaste::getRangeByName(const OUString& aRangeName)
 {
-    return ::getRangeByName(m_pDoc, aRangeName);
+    return ScSimpleBootstrapFixture::getRangeByName(m_pDoc, aRangeName);
 }
 
 ScAddress TestCopyPaste::setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString noteText)
@@ -2056,7 +2058,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
 
             m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(), &aClipDoc,
                                  true, bAsLink, bIncludedFiltered, bSkipEmpty);
-            lcl_printValuesAndFormulasInRange(m_pDoc, aDestRange, "Dest sheet");
+            printValuesAndFormulasInRange(m_pDoc, aDestRange, "Dest sheet");
         }
 
         if (bCut)
@@ -7283,8 +7285,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
             CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(j, i, nSrcTab));
         }
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative references");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative references");
     CPPUNIT_ASSERT_EQUAL(OUString("=B2"), getFormula(0, 20, nSrcTab)); // A21
     CPPUNIT_ASSERT_EQUAL(OUString("=C2"), getFormula(1, 20, nSrcTab)); // B21
     CPPUNIT_ASSERT_EQUAL(OUString("=D2"), getFormula(2, 20, nSrcTab)); // C21
@@ -7298,8 +7300,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 21, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 21, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 2, 31, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute references");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 2, 31, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute references");
     CPPUNIT_ASSERT_EQUAL(OUString("=$B$2"), getFormula(0, 30, nSrcTab)); // A31
     CPPUNIT_ASSERT_EQUAL(OUString("=$C$2"), getFormula(1, 30, nSrcTab)); // B31
     CPPUNIT_ASSERT_EQUAL(OUString("=$D$2"), getFormula(2, 30, nSrcTab)); // C31
@@ -7324,8 +7326,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$D$3"), getRangeByName("Range_B2_D3"));
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 2, 41, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute ranges");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 2, 41, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute ranges");
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), getFormula(0, 40, nSrcTab)); // A41
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), getFormula(1, 40, nSrcTab)); // B41
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_D2"), getFormula(2, 40, nSrcTab)); // C41
@@ -7339,8 +7341,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 41, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 2, 51, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative ranges");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 2, 51, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative ranges");
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(0, 50, nSrcTab)); // A51
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(1, 50, nSrcTab)); // B51
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(2, 50, nSrcTab)); // C51
@@ -7354,8 +7356,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 51, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 2, 61, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 2, 61, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), getFormula(0, 60, nSrcTab)); // A61
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), getFormula(1, 60, nSrcTab)); // B61
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), getFormula(2, 60, nSrcTab)); // C61
@@ -7369,8 +7371,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 61, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 2, 71, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 2, 71, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), getFormula(0, 70, nSrcTab)); // A71
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), getFormula(1, 70, nSrcTab)); // B71
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), getFormula(2, 70, nSrcTab)); // C71
@@ -7384,8 +7386,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 71, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 2, 81, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative range sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 2, 81, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative range sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), getFormula(0, 80, nSrcTab)); // A81
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), getFormula(1, 80, nSrcTab)); // B81
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), getFormula(2, 80, nSrcTab)); // C81
@@ -7399,8 +7401,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 81, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 2, 91, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 2, 91, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), getFormula(0, 90, nSrcTab)); // A91
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), getFormula(1, 90, nSrcTab)); // B91
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), getFormula(2, 90, nSrcTab)); // C91
@@ -7414,8 +7416,8 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(2, 91, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 2, 101, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative range sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 2, 101, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative range sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"), getFormula(0, 100, nSrcTab)); // A101
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"), getFormula(1, 100, nSrcTab)); // B101
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"), getFormula(2, 100, nSrcTab)); // C101
@@ -7606,12 +7608,12 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
         // Paste
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
                              pTransClip.get(), true, false, true, false);
-        lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                          "Relative references after copy");
+        printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
+                                      "Relative references after copy");
 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
-        lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                          "Relative references after UpdateTranspose");
+        printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
+                                      "Relative references after UpdateTranspose");
         pTransClip.reset();
     }
     else
@@ -8197,8 +8199,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
             CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(j, i, nSrcTab));
         }
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 1, 22, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative references");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 1, 22, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative references");
     CPPUNIT_ASSERT_EQUAL(OUString("=B2"), getFormula(0, 20, nSrcTab)); // A21
     CPPUNIT_ASSERT_EQUAL(OUString("=B3"), getFormula(0, 21, nSrcTab)); // A22
     CPPUNIT_ASSERT_EQUAL(OUString("=B4"), getFormula(0, 22, nSrcTab)); // A23
@@ -8212,8 +8214,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 21, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 22, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 1, 32, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute references");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 1, 32, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute references");
     CPPUNIT_ASSERT_EQUAL(OUString("=$B$2"), getFormula(0, 30, nSrcTab)); // A31
     CPPUNIT_ASSERT_EQUAL(OUString("=$B$3"), getFormula(0, 31, nSrcTab)); // A32
     CPPUNIT_ASSERT_EQUAL(OUString("=$B$4"), getFormula(0, 32, nSrcTab)); // A33
@@ -8238,8 +8240,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$C$4"), getRangeByName("Range_B2_C4"));
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 1, 42, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute ranges");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 1, 42, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute ranges");
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), getFormula(0, 40, nSrcTab)); // A41
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), getFormula(0, 41, nSrcTab)); // A42
     CPPUNIT_ASSERT_EQUAL(OUString("=Range_B4"), getFormula(0, 42, nSrcTab)); // A43
@@ -8253,8 +8255,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 42, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 1, 52, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative ranges");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 1, 52, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative ranges");
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(0, 50, nSrcTab)); // A51
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(0, 51, nSrcTab)); // A52
     CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), getFormula(0, 52, nSrcTab)); // A53
@@ -8268,8 +8270,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 52, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 1, 62, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 1, 62, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), getFormula(0, 60, nSrcTab)); // A61
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), getFormula(0, 61, nSrcTab)); // A62
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), getFormula(0, 62, nSrcTab)); // A63
@@ -8283,8 +8285,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 62, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 1, 72, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 1, 72, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), getFormula(0, 70, nSrcTab)); // A71
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), getFormula(0, 71, nSrcTab)); // A72
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), getFormula(0, 72, nSrcTab)); // A73
@@ -8298,8 +8300,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 72, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 1, 82, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative range sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 1, 82, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative range sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), getFormula(0, 80, nSrcTab)); // A81
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), getFormula(0, 81, nSrcTab)); // A82
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), getFormula(0, 82, nSrcTab)); // A83
@@ -8313,8 +8315,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 82, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 1, 92, nSrcTab),
-                                      rDesc.toUtf8() + ": Absolute sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 1, 92, nSrcTab),
+                                  rDesc.toUtf8() + ": Absolute sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), getFormula(0, 90, nSrcTab)); // A91
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), getFormula(0, 91, nSrcTab)); // A92
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), getFormula(0, 92, nSrcTab)); // A93
@@ -8328,8 +8330,8 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 92, nSrcTab));
 
-    lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 1, 102, nSrcTab),
-                                      rDesc.toUtf8() + ": Relative range sum");
+    printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 1, 102, nSrcTab),
+                                  rDesc.toUtf8() + ": Relative range sum");
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"), getFormula(0, 100, nSrcTab)); // A101
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"), getFormula(0, 101, nSrcTab)); // A102
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"), getFormula(0, 102, nSrcTab)); // A103
@@ -8551,12 +8553,12 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
         // Paste
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
                              pTransClip.get(), true, false, true, false);
-        lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                          "Relative references after copy");
+        printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
+                                      "Relative references after copy");
 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
-        lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                          "Relative references after UpdateTranspose");
+        printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
+                                      "Relative references after UpdateTranspose");
         pTransClip.reset();
     }
     else

@@ -115,19 +115,9 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode&
 
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
-bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
-bool checkFormulaPositions(
-    ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount);
-
-std::unique_ptr<ScTokenArray> compileFormula(
-    ScDocument* pDoc, const OUString& rFormula,
-    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
-
 SCQAHELPER_DLLPUBLIC bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );
-
-void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange );
 
 /**
  * Check if the cell at specified position is a formula cell that doesn't
@@ -197,6 +187,40 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
+                                       const std::vector<std::vector<const char*>>& rData);
+    void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
+    void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                                        ScDocument* pClipDoc);
+    ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
+                                        ScDocumentUniquePtr pUndoDoc);
+    void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                                         ScDocument* pClipDoc,
+                                         InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
+    void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
+    ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
+    ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
+                                        bool bCreateUndo);
+    bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
+                                       const RangeNameDef* pEnd);
+    OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName);
+    OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab);
+    void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                           const char* pCaption = nullptr);
+    void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
+                                         const bool printFormula = false);
+    void printRange(ScDocument* pDoc, const ScRange& rRange,
+                                         const OString& rCaption, const bool printFormula = false);
+    void clearRange(ScDocument* pDoc, const ScRange& rRange);
+    void clearSheet(ScDocument* pDoc, SCTAB nTab);
+    bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
+    bool checkFormulaPositions(
+        ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount);
+    std::unique_ptr<ScTokenArray> compileFormula(
+        ScDocument* pDoc, const OUString& rFormula,
+        formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
+    void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange );
+
 protected:
     ScDocShellRef m_xDocShell;
     ScDocument* m_pDoc;
@@ -255,31 +279,5 @@ SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& 
 
 SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
 
-SCQAHELPER_DLLPUBLIC ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
-                                    bool bCreateUndo);
-SCQAHELPER_DLLPUBLIC void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
-SCQAHELPER_DLLPUBLIC void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                    ScDocument* pClipDoc);
-SCQAHELPER_DLLPUBLIC ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
-                                    ScDocumentUniquePtr pUndoDoc);
-SCQAHELPER_DLLPUBLIC void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                     ScDocument* pClipDoc,
-                                     InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
-SCQAHELPER_DLLPUBLIC void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
-SCQAHELPER_DLLPUBLIC ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
-SCQAHELPER_DLLPUBLIC ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
-                                   const std::vector<std::vector<const char*>>& rData);
-SCQAHELPER_DLLPUBLIC bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
-                                   const RangeNameDef* pEnd);
-SCQAHELPER_DLLPUBLIC OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName);
-SCQAHELPER_DLLPUBLIC OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab);
-SCQAHELPER_DLLPUBLIC void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                       const char* pCaption = nullptr);
-SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
-                                     const bool printFormula = false);
-SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange,
-                                     const OString& rCaption, const bool printFormula = false);
-SCQAHELPER_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
-SCQAHELPER_DLLPUBLIC void clearSheet(ScDocument* pDoc, SCTAB nTab);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

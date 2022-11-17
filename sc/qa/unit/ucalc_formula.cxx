@@ -186,6 +186,15 @@ public:
 
 }
 
+namespace {
+
+struct StrStrCheck {
+    const char* pVal;
+    const char* pRes;
+};
+
+}
+
 class TestFormula : public ScSimpleBootstrapFixture
 {
 public:
@@ -430,6 +439,18 @@ public:
     CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
 
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    template<size_t DataSize, size_t FormulaSize, int Type>
+    void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize]);
+
+    template<size_t DataSize, size_t FormulaSize, int Type>
+    void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize]);
+
+    void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc);
+    void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc);
+    void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc);
+    void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc);
 };
 
 void TestFormula::testFormulaCreateStringFromTokens()
@@ -5977,17 +5998,8 @@ void TestFormula::testFuncVLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
-namespace {
-
-struct StrStrCheck {
-    const char* pVal;
-    const char* pRes;
-};
-
-}
-
 template<size_t DataSize, size_t FormulaSize, int Type>
-static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
+void TestFormula::runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
 {
     size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
@@ -6019,7 +6031,7 @@ static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const St
 }
 
 template<size_t DataSize, size_t FormulaSize, int Type>
-static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
+void TestFormula::runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
 {
     size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
@@ -7015,7 +7027,7 @@ void TestFormula::testExternalRangeName()
     m_pDoc->DeleteTab(0);
 }
 
-static void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
+void TestFormula::testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
@@ -7036,7 +7048,7 @@ static void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
 
-static void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
+void TestFormula::testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
@@ -7049,7 +7061,7 @@ static void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_EQUAL(1.2, pDoc->GetValue(ScAddress(0,0,0)));
 }
 
-static void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
+void TestFormula::testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
@@ -7080,7 +7092,7 @@ static void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
 }
 
-static void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
+void TestFormula::testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
