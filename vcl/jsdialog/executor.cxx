@@ -59,7 +59,8 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
 
     if (sControlType == "responsebutton")
     {
-        if (pWidget == nullptr)
+        auto pButton = dynamic_cast<weld::Button*>(pWidget);
+        if (pWidget == nullptr || (pButton && !pButton->is_custom_handler_set()))
         {
             // welded wrapper not found - use response code instead
             pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, "__DIALOG__");
