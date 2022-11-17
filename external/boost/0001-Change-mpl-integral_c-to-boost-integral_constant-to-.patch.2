@@ -1,0 +1,91 @@
+From 50a1eae942effb0a9b90724323ef8f2a67e7984a Mon Sep 17 00:00:00 2001
+From: Peter Dimov <pdimov@gmail.com>
+Date: Wed, 16 Nov 2022 10:43:31 +0200
+Subject: [PATCH] Change mpl::integral_c to boost::integral_constant to avoid
+ Clang 16 errors when constructing out of range enums (refs #24,
+ https://github.com/boostorg/mpl/issues/69)
+
+---
+ .../numeric/conversion/detail/int_float_mixture.hpp    | 10 +++++-----
+ .../boost/numeric/conversion/detail/sign_mixture.hpp   | 10 +++++-----
+ .../numeric/conversion/detail/udt_builtin_mixture.hpp  | 10 +++++-----
+ 3 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/include/boost/numeric/conversion/detail/int_float_mixture.hpp b/include/boost/numeric/conversion/detail/int_float_mixture.hpp
+index 464e527..7690d07 100644
+--- a/include/boost/numeric/conversion/detail/int_float_mixture.hpp
++++ b/include/boost/numeric/conversion/detail/int_float_mixture.hpp
+@@ -16,15 +16,15 @@
+ #include "boost/numeric/conversion/int_float_mixture_enum.hpp"
+ #include "boost/numeric/conversion/detail/meta.hpp"
+ 
+-#include "boost/mpl/integral_c.hpp"
++#include "boost/type_traits/integral_constant.hpp"
+ 
+ namespace boost { namespace numeric { namespace convdetail
+ {
+   // Integral Constants for 'IntFloatMixture'
+-  typedef mpl::integral_c<int_float_mixture_enum, integral_to_integral> int2int_c ;
+-  typedef mpl::integral_c<int_float_mixture_enum, integral_to_float>    int2float_c ;
+-  typedef mpl::integral_c<int_float_mixture_enum, float_to_integral>    float2int_c ;
+-  typedef mpl::integral_c<int_float_mixture_enum, float_to_float>       float2float_c ;
++  typedef boost::integral_constant<int_float_mixture_enum, integral_to_integral> int2int_c ;
++  typedef boost::integral_constant<int_float_mixture_enum, integral_to_float>    int2float_c ;
++  typedef boost::integral_constant<int_float_mixture_enum, float_to_integral>    float2int_c ;
++  typedef boost::integral_constant<int_float_mixture_enum, float_to_float>       float2float_c ;
+ 
+   // Metafunction:
+   //
+diff --git a/include/boost/numeric/conversion/detail/sign_mixture.hpp b/include/boost/numeric/conversion/detail/sign_mixture.hpp
+index c7f9e42..fde1584 100644
+--- a/include/boost/numeric/conversion/detail/sign_mixture.hpp
++++ b/include/boost/numeric/conversion/detail/sign_mixture.hpp
+@@ -16,15 +16,15 @@
+ #include "boost/numeric/conversion/sign_mixture_enum.hpp"
+ #include "boost/numeric/conversion/detail/meta.hpp"
+ 
+-#include "boost/mpl/integral_c.hpp"
++#include "boost/type_traits/integral_constant.hpp"
+ 
+ namespace boost { namespace numeric { namespace convdetail
+ {
+   // Integral Constants for 'SignMixture'
+-  typedef mpl::integral_c<sign_mixture_enum, unsigned_to_unsigned> unsig2unsig_c ;
+-  typedef mpl::integral_c<sign_mixture_enum, signed_to_signed>     sig2sig_c ;
+-  typedef mpl::integral_c<sign_mixture_enum, signed_to_unsigned>   sig2unsig_c ;
+-  typedef mpl::integral_c<sign_mixture_enum, unsigned_to_signed>   unsig2sig_c ;
++  typedef boost::integral_constant<sign_mixture_enum, unsigned_to_unsigned> unsig2unsig_c ;
++  typedef boost::integral_constant<sign_mixture_enum, signed_to_signed>     sig2sig_c ;
++  typedef boost::integral_constant<sign_mixture_enum, signed_to_unsigned>   sig2unsig_c ;
++  typedef boost::integral_constant<sign_mixture_enum, unsigned_to_signed>   unsig2sig_c ;
+ 
+   // Metafunction:
+   //
+diff --git a/include/boost/numeric/conversion/detail/udt_builtin_mixture.hpp b/include/boost/numeric/conversion/detail/udt_builtin_mixture.hpp
+index 36dbc49..a39d29f 100644
+--- a/include/boost/numeric/conversion/detail/udt_builtin_mixture.hpp
++++ b/include/boost/numeric/conversion/detail/udt_builtin_mixture.hpp
+@@ -15,15 +15,15 @@
+ #include "boost/numeric/conversion/udt_builtin_mixture_enum.hpp"
+ #include "boost/numeric/conversion/detail/meta.hpp"
+ 
+-#include "boost/mpl/integral_c.hpp"
++#include "boost/type_traits/integral_constant.hpp"
+ 
+ namespace boost { namespace numeric { namespace convdetail
+ {
+   // Integral Constants for 'UdtMixture'
+-  typedef mpl::integral_c<udt_builtin_mixture_enum, builtin_to_builtin> builtin2builtin_c ;
+-  typedef mpl::integral_c<udt_builtin_mixture_enum, builtin_to_udt>     builtin2udt_c ;
+-  typedef mpl::integral_c<udt_builtin_mixture_enum, udt_to_builtin>     udt2builtin_c ;
+-  typedef mpl::integral_c<udt_builtin_mixture_enum, udt_to_udt>         udt2udt_c ;
++  typedef boost::integral_constant<udt_builtin_mixture_enum, builtin_to_builtin> builtin2builtin_c ;
++  typedef boost::integral_constant<udt_builtin_mixture_enum, builtin_to_udt>     builtin2udt_c ;
++  typedef boost::integral_constant<udt_builtin_mixture_enum, udt_to_builtin>     udt2builtin_c ;
++  typedef boost::integral_constant<udt_builtin_mixture_enum, udt_to_udt>         udt2udt_c ;
+ 
+   // Metafunction:
+   //
+-- 
+2.37.1 (Apple Git-137.1)
+

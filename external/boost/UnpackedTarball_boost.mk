@@ -37,7 +37,7 @@ boost_patches += boost-ios.patch.0
 
 # <https://github.com/boostorg/numeric_conversion/pull/25> "Fix ill-formed constant expression
 # errors":
-boost_patches += constexpr.patch.0
+boost_patches += 0001-Change-mpl-integral_c-to-boost-integral_constant-to-.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
