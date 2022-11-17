@@ -300,10 +300,10 @@ public:
                     rDev.SetLineColor(COL_BLACK);
                     basegfx::B2DPolygon aPoly;
                     tools::Rectangle aSub(aRegions[i]);
-                    for (size_t j = 0; j < SAL_N_ELEMENTS(aPoints); j++)
+                    for (const auto& rPoint : aPoints)
                     {
-                        aPoly.append(basegfx::B2DPoint(aSub.Left() + aSub.GetWidth() * aPoints[j].nX,
-                                                       aSub.Top()  + aSub.GetHeight() * aPoints[j].nY));
+                        aPoly.append(basegfx::B2DPoint(aSub.Left() + aSub.GetWidth() * rPoint.nX,
+                                                       aSub.Top()  + aSub.GetHeight() * rPoint.nY));
                     }
                     rDev.DrawPolyLine(aPoly, aLineWidths[i], eJoins[i], eLineCaps[i]);
                 }
@@ -369,7 +369,7 @@ public:
                 {
                     for (int x = 0; x < 4; x++)
                     {
-                        assert(i < SAL_N_ELEMENTS(aRenderData));
+                        assert(i < std::size(aRenderData));
                         drawText(rDev, aSubRegions[i], aRenderData[i].mbClip,
                                  aRenderData[i].mbArabicText, aRenderData[i].mbRotate);
                         i++;
@@ -550,7 +550,7 @@ public:
             Point aPos(r.Left(), r.Top()+20);
 
             tools::Long nMaxTextHeight = 0;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aRuns); ++i)
+            for (size_t i = 0; i < std::size(aRuns); ++i)
             {
                 // Legend
                 vcl::Font aIndexFont("sans", Size(0,20));
@@ -573,7 +573,7 @@ public:
                                     aRuns[i].mpFont),
                                 Size(0,42));
                 aFont.SetColor(COL_BLACK);
-                for (size_t j = 0; j < SAL_N_ELEMENTS(aWeights); ++j)
+                for (size_t j = 0; j < std::size(aWeights); ++j)
                 {
                     aFont.SetItalic(aItalics[j]);
                     aFont.SetWeight(aWeights[j]);
@@ -867,9 +867,9 @@ public:
             tools::Long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
 
             // and yes - we really do this in the page border rendering code ...
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
+            for (const auto& rSize : aSizes)
             {
-                aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
+                aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), rSize),
                                      BmpScaleFlag::Fast);
 
                 rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
@@ -947,8 +947,8 @@ public:
                     tools::Rectangle aSubRect(r);
                     aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
                     aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
-                    tools::Polygon aPoly(SAL_N_ELEMENTS(aPoints));
-                    for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
+                    tools::Polygon aPoly(std::size(aPoints));
+                    for (size_t v = 0; v < std::size(aPoints); v++)
                     {
                         aPoly.SetPoint(Point(aSubRect.Left() +
                                              aSubRect.GetWidth() * aPoints[v].nX,
