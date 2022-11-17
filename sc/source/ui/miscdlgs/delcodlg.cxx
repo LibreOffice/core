@@ -37,7 +37,6 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
     , m_xBtnDelNotes(m_xBuilder->weld_check_button("comments"))
     , m_xBtnDelAttrs(m_xBuilder->weld_check_button("formats"))
     , m_xBtnDelObjects(m_xBuilder->weld_check_button("objects"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
     m_xBtnDelAll->set_active( ScDeleteContentsDlg::bPreviousAllCheck );
     m_xBtnDelStrings->set_active( bool(InsertDeleteFlags::STRING & ScDeleteContentsDlg::nPreviousChecks) );
