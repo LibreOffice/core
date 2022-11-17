@@ -598,7 +598,7 @@ struct ApiNameMap
         { std::u16string_view(u"Title A4"), HID_POOLSHEET_A4_TITLE },
         { std::u16string_view(u"Heading A4"), HID_POOLSHEET_A4_HEADLINE },
         { std::u16string_view(u"Text A4"), HID_POOLSHEET_A4_TEXT },
-        { std::u16string_view(u"A4"), HID_POOLSHEET_A0 },
+        { std::u16string_view(u"A0"), HID_POOLSHEET_A0 },
         { std::u16string_view(u"Title A0"), HID_POOLSHEET_A0_TITLE },
         { std::u16string_view(u"Heading A0"), HID_POOLSHEET_A0_HEADLINE },
         { std::u16string_view(u"Text A0"), HID_POOLSHEET_A0_TEXT },
