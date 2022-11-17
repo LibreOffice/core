@@ -2371,6 +2371,49 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
         if (!rStructureTagCandidate.isBackground())
         {
             mpPDFExtOutDevData->BeginStructureElement(rTagElement);
+            switch (rTagElement)
+            {
+                case vcl::PDFWriter::H1:
+                case vcl::PDFWriter::H2:
+                case vcl::PDFWriter::H3:
+                case vcl::PDFWriter::H4:
+                case vcl::PDFWriter::H5:
+                case vcl::PDFWriter::H6:
+                case vcl::PDFWriter::Paragraph:
+                case vcl::PDFWriter::Heading:
+                case vcl::PDFWriter::Caption:
+                case vcl::PDFWriter::BlockQuote:
+                case vcl::PDFWriter::Table:
+                case vcl::PDFWriter::TableRow:
+                case vcl::PDFWriter::Formula:
+                case vcl::PDFWriter::Figure:
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
+                                                              vcl::PDFWriter::Block);
+                    break;
+                case vcl::PDFWriter::TableData:
+                case vcl::PDFWriter::TableHeader:
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
+                                                              vcl::PDFWriter::Inline);
+                    break;
+                default:
+                    break;
+            }
+            switch (rTagElement)
+            {
+                case vcl::PDFWriter::Table:
+                case vcl::PDFWriter::Formula:
+                case vcl::PDFWriter::Figure:
+                {
+                    auto const range(rStructureTagCandidate.getB2DRange(getViewInformation2D()));
+                    tools::Rectangle const aLogicRect(
+                        basegfx::fround(range.getMinX()), basegfx::fround(range.getMinY()),
+                        basegfx::fround(range.getMaxX()), basegfx::fround(range.getMaxY()));
+                    mpPDFExtOutDevData->SetStructureBoundingBox(aLogicRect);
+                    break;
+                }
+                default:
+                    break;
+            }
         }
         // background object
         else
