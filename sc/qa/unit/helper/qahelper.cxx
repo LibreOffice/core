@@ -125,7 +125,7 @@ bool testEqualsWithTolerance( tools::Long nVal1, tools::Long nVal2, tools::Long 
     return ( std::abs( nVal1 - nVal2 ) <= nTol );
 }
 
-void loadFile(const OUString& aFileName, std::string& aContent)
+void ScModelTestBase::loadFile(const OUString& aFileName, std::string& aContent)
 {
     OString aOFileName = OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
 
@@ -150,7 +150,7 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
-void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
+void ScModelTestBase::testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
 {
     csv_handler aHandler(&rDoc, nTab, aStringFormat);
     orcus::csv::parser_config aConfig;
@@ -175,7 +175,7 @@ void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringTyp
     }
 }
 
-void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+void ScModelTestBase::testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 {
     conditional_format_handler aHandler(pDoc, nTab);
     orcus::csv::parser_config aConfig;
@@ -198,10 +198,10 @@ void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     }
 }
 
-void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sFormat)
+void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
 {
     //test Sheet1 with csv file
-    OUString aCSVFileName = pTest->createFilePath(u"contentCSV/numberFormat.csv");
+    OUString aCSVFileName = createFilePath(u"contentCSV/numberFormat.csv");
     testFile(aCSVFileName, *pDoc, 0, StringType::PureString);
     //need to test the color of B3
     //it's not a font color!
@@ -272,7 +272,7 @@ void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sF
     //test Sheet3 only for ods and xlsx
     if ( sFormat == u"calc8" || sFormat == u"Calc Office Open XML" )
     {
-        aCSVFileName = pTest->createFilePath(u"contentCSV/conditionalFormatting.csv");
+        aCSVFileName = createFilePath(u"contentCSV/conditionalFormatting.csv");
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )
         if ( sFormat == u"Calc Office Open XML" )
@@ -312,7 +312,7 @@ void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sF
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
 }
 
-const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
+const SdrOle2Obj* ScModelTestBase::getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
 {
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -351,7 +351,7 @@ const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
     return static_cast<const SdrOle2Obj*>(pObj);
 }
 
-const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
+const SdrOle2Obj* ScModelTestBase::getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
 {
     const SdrOle2Obj* pObj = getSingleOleObject(rDoc, nPage);
 
@@ -413,7 +413,7 @@ static std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rCha
     return aRangeReps;
 }
 
-ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
+ScRangeList ScModelTestBase::getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
 {
     std::vector<OUString> aRangeReps = getChartRangeRepresentations(rChartObj);
     ScRangeList aRanges;

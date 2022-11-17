@@ -767,7 +767,7 @@ void ScExportTest::testFormatExportODS()
 
     ScDocument* pDoc = getScDoc();
 
-    testFormats(this, &*pDoc, u"calc8");
+    testFormats(pDoc, u"calc8");
 }
 
 void ScExportTest::testCommentExportXLSX()

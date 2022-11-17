@@ -1208,7 +1208,7 @@ void ScFiltersTest::testFormatsODS()
 
     ScDocument* pDoc = getScDoc();
 
-    testFormats(this, &*pDoc, u"calc8");
+    testFormats(pDoc, u"calc8");
 }
 
 // void ScFiltersTest::testFormatsXLS()
@@ -1218,7 +1218,7 @@ void ScFiltersTest::testFormatsODS()
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
-//     testFormats(this, rDoc, FORMAT_XLS);
+//     testFormats(rDoc, FORMAT_XLS);
 // }
 
 // void ScFiltersTest::testFormatsXLSX()
@@ -1228,7 +1228,7 @@ void ScFiltersTest::testFormatsODS()
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
-//     testFormats(this, rDoc, FORMAT_XLSX);
+//     testFormats(rDoc, FORMAT_XLSX);
 // }
 
 void ScFiltersTest::testMatrixODS()

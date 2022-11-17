@@ -113,25 +113,6 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const Color& 
 
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
 
-// Why is this here and not in osl, and using the already existing file
-// handling APIs? Do we really want to add arbitrary new file handling
-// wrappers here and there (and then having to handle the Android (and
-// eventually perhaps iOS) special cases here, too)?  Please move this to osl,
-// it sure looks generally useful. Or am I missing something?
-
-void loadFile(const OUString& aFileName, std::string& aContent);
-
-SCQAHELPER_DLLPUBLIC void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
-
-//need own handler because conditional formatting strings must be generated
-SCQAHELPER_DLLPUBLIC void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
-
-SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage);
-
-SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
-
-SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
-
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
 bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
@@ -241,6 +222,28 @@ public:
     ScDocShell* getScDocShell();
     ScTabViewShell* getViewShell();
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems);
+
+    void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
+
+    //need own handler because conditional formatting strings must be generated
+    void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
+
+    const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage);
+
+    const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
+
+    ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
+
+    void testFormats(ScDocument* pDoc,std::u16string_view sFormat);
+
+private:
+    // Why is this here and not in osl, and using the already existing file
+    // handling APIs? Do we really want to add arbitrary new file handling
+    // wrappers here and there (and then having to handle the Android (and
+    // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
+    // it sure looks generally useful. Or am I missing something?
+
+    void loadFile(const OUString& aFileName, std::string& aContent);
 };
 
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \
@@ -254,8 +257,6 @@ SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
 
 #define ASSERT_FORMULA_EQUAL(doc, pos, expected, msg) \
     checkFormula(doc, pos, expected, msg, CPPUNIT_SOURCELINE())
-
-SCQAHELPER_DLLPUBLIC void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sFormat);
 
 SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
 
