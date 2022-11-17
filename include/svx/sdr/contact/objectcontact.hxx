@@ -137,6 +137,7 @@ public:
 
     // pdf export? Default is false
     virtual bool isOutputToPDFFile() const;
+    virtual bool isExportTaggedPDF() const;
 
     // gray display mode
     virtual bool isDrawModeGray() const;

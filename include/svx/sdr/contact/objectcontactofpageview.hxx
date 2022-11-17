@@ -92,6 +92,7 @@ namespace sdr::contact
 
             // pdf export? Default is false
             virtual bool isOutputToPDFFile() const override;
+            virtual bool isExportTaggedPDF() const override;
 
             // gray display mode
             virtual bool isDrawModeGray() const override;

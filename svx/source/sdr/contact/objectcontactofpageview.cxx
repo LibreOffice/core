@@ -37,6 +37,7 @@
 #include <svx/unoapi.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <comphelper/lok.hxx>
 
 #include <memory>
@@ -371,6 +372,21 @@ namespace sdr::contact
         bool ObjectContactOfPageView::isOutputToPDFFile() const
         {
             return OUTDEV_PDF == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType();
+        }
+
+        bool ObjectContactOfPageView::isExportTaggedPDF() const
+        {
+            if (isOutputToPDFFile())
+            {
+                vcl::PDFExtOutDevData* pPDFExtOutDevData(dynamic_cast<vcl::PDFExtOutDevData*>(
+                    mrPageWindow.GetPaintWindow().GetOutputDevice().GetExtOutDevData()));
+
+                if (nullptr != pPDFExtOutDevData)
+                {
+                    return pPDFExtOutDevData->GetIsExportTaggedPDF();
+                }
+            }
+            return false;
         }
 
         // gray display mode
