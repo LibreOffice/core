@@ -184,6 +184,25 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                     }
                 }
             }
+
+            uint16_t Compression;
+            if (TIFFGetField(tif, TIFFTAG_COMPRESSION, &Compression) == 1)
+            {
+                if (Compression == COMPRESSION_CCITTFAX4)
+                {
+                    if (TIFFIsTiled(tif))
+                    {
+                        uint32_t tw;
+                        if (TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw) == 1)
+                        {
+                            uint32_t DspRuns;
+                            bOk = !o3tl::checked_multiply(tw, static_cast<uint32_t>(4), DspRuns) && DspRuns < MAX_PIXEL_SIZE;
+                            SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile width: " << tw);
+                        }
+                    }
+                }
+            }
+
         }
 
         if (!bOk)
