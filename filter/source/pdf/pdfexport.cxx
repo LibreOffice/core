@@ -108,6 +108,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbRemoveTransparencies      ( false ),
 
     mbIsRedactMode              ( false ),
+    maWatermarkColor            ( COL_LIGHTGREEN ),
 
     mbHideViewerToolbar         ( false ),
     mbHideViewerMenubar         ( false ),
@@ -559,6 +560,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= mbAddStream;
                 else if ( rProp.Name == "Watermark" )
                     rProp.Value >>= msWatermark;
+                else if ( rProp.Name == "WatermarkColor" )
+                {
+                    sal_Int32 nColor{};
+                    if (rProp.Value >>= nColor)
+                    {
+                        maWatermarkColor = Color(ColorTransparency, nColor);
+                    }
+                }
                 else if ( rProp.Name == "TiledWatermark" )
                     rProp.Value >>= msTiledWatermark;
                 // now all the security related properties...
@@ -1192,7 +1201,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.Push();
     rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
     rWriter.SetFont( aFont );
-    rWriter.SetTextColor( COL_LIGHTGREEN );
+    rWriter.SetTextColor(maWatermarkColor);
     Point aTextPoint;
     tools::Rectangle aTextRect;
     if( rPageSize.Width() > rPageSize.Height() )
