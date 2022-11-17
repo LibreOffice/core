@@ -72,9 +72,6 @@ private:
     bool getThreadingFlag() const;
     void setThreadingFlag(bool bSet);
 
-    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
-    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
-
     bool m_bThreadingFlagCfg;
 };
 
@@ -88,47 +85,6 @@ void ScParallelismTest::setThreadingFlag( bool bSet )
     std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bSet, xBatch);
     xBatch->commit();
-}
-
-ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
-{
-    ScDocument* pSrcDoc = &rDocSh.GetDocument();
-
-    ScClipParam aClipParam(rRange, true);
-    ScMarkData aMark(pSrcDoc->GetSheetLimits());
-    aMark.SetMarkArea(rRange);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
-
-    // Taken from ScViewFunc::CutToClip()
-    ScDocumentUniquePtr pUndoDoc;
-    if (bCreateUndo)
-    {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
-        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
-        ScRange aCopyRange = rRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(pSrcDoc->GetTableCount()-1);
-        pSrcDoc->CopyToDocument( aCopyRange,
-                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS,
-                false, *pUndoDoc );
-    }
-
-    aMark.MarkToMulti();
-    pSrcDoc->DeleteSelection( InsertDeleteFlags::ALL, aMark );
-    aMark.MarkToSimple();
-
-    if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
-
-    return nullptr;
-}
-
-void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
-{
-    ScMarkData aMark(pDestDoc->GetSheetLimits());
-    aMark.SetMarkArea(rDestRange);
-    pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
 void ScParallelismTest::setUp()
