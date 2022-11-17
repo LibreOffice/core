@@ -106,6 +106,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
 {
     // For now just ensure roundtrip is successful
+
+    //tdf#151548 - ensure block SDT preserves id (instead of random re-assignment)
+    if (!isExported())
+        return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id", "val", "1802566103");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")

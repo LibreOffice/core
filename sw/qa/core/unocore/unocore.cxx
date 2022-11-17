@@ -633,6 +633,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
+    xContentControlProps->setPropertyValue("Id", uno::Any(static_cast<sal_Int32>(123)));
     xContentControlProps->setPropertyValue("TabIndex", uno::Any(sal_uInt32(1)));
     xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtContentLocked")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
@@ -660,6 +661,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
     CPPUNIT_ASSERT_EQUAL(OUString("myalias"), pContentControl->GetAlias());
     CPPUNIT_ASSERT_EQUAL(OUString("mytag"), pContentControl->GetTag());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(123), pContentControl->GetId());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(1), pContentControl->GetTabIndex());
     CPPUNIT_ASSERT_EQUAL(OUString("sdtContentLocked"), pContentControl->GetLock());
 }

@@ -152,6 +152,14 @@ void XMLContentControlContext::startFastElement(
                 m_aTag = rIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_ID):
+            {
+                if (sax::Converter::convertNumber(nTmp, rIter.toView()))
+                {
+                    m_nId = nTmp;
+                }
+                break;
+            }
             case XML_ELEMENT(LO_EXT, XML_TAB_INDEX):
             {
                 if (sax::Converter::convertNumber(nTmp, rIter.toView()))
@@ -274,6 +282,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (!m_aTag.isEmpty())
     {
         xPropertySet->setPropertyValue("Tag", uno::Any(m_aTag));
+    }
+
+    if (m_nId)
+    {
+        xPropertySet->setPropertyValue("Id", uno::Any(m_nId));
     }
 
     if (m_nTabIndex)
