@@ -1534,15 +1534,12 @@ class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin&    rLayerAdmin;
     SdrPageView*            pSdrPageView;
-    vcl::PDFExtOutDevData*  pPDFExtOutDevData;
-
-    vcl::PDFWriter::StructElement ImplBegStructureTag( const SdrObject& rObject );
 
 public:
     bool IsVisible  ( const SdrObject* pObj ) const;
     bool IsPrintable( const SdrObject* pObj ) const;
 
-    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData );
+    ImplRenderPaintProc(const SdrLayerAdmin& rLA, SdrPageView* pView);
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
@@ -1554,10 +1551,9 @@ public:
 
 }
 
-ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )
-:   rLayerAdmin         ( rLA ),
-    pSdrPageView        ( pView ),
-    pPDFExtOutDevData   ( pData )
+ImplRenderPaintProc::ImplRenderPaintProc(const SdrLayerAdmin& rLA, SdrPageView *const pView)
+    : rLayerAdmin(rLA)
+    , pSdrPageView(pView)
 {
 }
 
@@ -1755,32 +1751,6 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
     }
 }
 
-vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const SdrObject& rObject )
-{
-    vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
-
-    if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
-    {
-        SdrInventor nInventor   = rObject.GetObjInventor();
-        SdrObjKind  nIdentifier = rObject.GetObjIdentifier();
-        bool        bIsTextObj  = DynCastSdrTextObj( &rObject ) !=  nullptr;
-
-        if ( nInventor == SdrInventor::Default )
-        {
-            if ( nIdentifier == SdrObjKind::Group )
-                eElement = vcl::PDFWriter::Section;
-            else if ( nIdentifier == SdrObjKind::TitleText )
-                eElement = vcl::PDFWriter::Heading;
-            else if ( nIdentifier == SdrObjKind::OutlineText )
-                eElement = vcl::PDFWriter::Division;
-            else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(rObject).HasText() )
-                eElement = vcl::PDFWriter::Figure;
-        }
-    }
-
-    return eElement;
-}
-
 void ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo,
@@ -1801,31 +1771,7 @@ void ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
     if(!IsVisible(pObject) || !IsPrintable(pObject))
         return;
 
-    const vcl::PDFWriter::StructElement eElement(ImplBegStructureTag( *pObject ));
-    const bool bTagUsed(vcl::PDFWriter::NonStructElement != eElement);
-
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-    sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, xRetval);
-
-    if(!xRetval.empty() && bTagUsed)
-    {
-        // embed Primitive2DSequence in a structure tag element for
-        // exactly this purpose (StructureTagPrimitive2D)
-
-        const bool bBackground(pSdrPage->IsMasterPage());
-        const bool bImage(pObject->GetObjIdentifier() == SdrObjKind::Graphic);
-
-        drawinglayer::primitive2d::Primitive2DReference xReference(
-            new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                eElement,
-                bBackground,
-                bImage,
-                std::move(xRetval)));
-
-        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
-    }
-
-    rVisitor.visit(xRetval);
+    sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, rVisitor);
 }
 
 bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
@@ -1959,7 +1905,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         }
 
         ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-            pPV, pPDFExtOutDevData );
+            pPV);
 
         // background color for outliner :o
         SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : nullptr;
@@ -2192,7 +2138,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             SdrPageView* pPV = nullptr;
 
             ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-                                pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
+                            pOldSdView ? pOldSdView->GetSdrPageView() : nullptr);
 
             for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
             {

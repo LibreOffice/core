@@ -29,8 +29,12 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdotext.hxx>
+#include <vcl/pdfwriter.hxx>
 
 using namespace com::sun::star;
 
@@ -338,19 +342,15 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // only some of the top-level apps are any good at reliably invalidating us (e.g. writer is not)
-    if (SdrObject* pSdrObj = mrViewContact.TryToGetSdrObject())
-        if (pSdrObj->getSdrModelFromSdrObject().IsVOCInvalidationIsReliable())
-        {
-            if (!mxPrimitive2DSequence.empty())
-                return mxPrimitive2DSequence;
-        }
+    SdrObject* pSdrObj(mrViewContact.TryToGetSdrObject());
 
-    /**
-    This method is weird because
-    (1) we have to re-walk the primitive tree because the flushing is unreliable
-    (2) we cannot just always use the new data because the old data has cached bitmaps in it e.g. see the documents in tdf#104878
-    */
+    if (nullptr != pSdrObj && pSdrObj->getSdrModelFromSdrObject().IsVOCInvalidationIsReliable())
+    {
+        if (!mxPrimitive2DSequence.empty())
+            return mxPrimitive2DSequence;
+    }
 
+    // prepare new representation
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
     // take care of redirectors and create new list
@@ -365,22 +365,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         createPrimitive2DSequence(rDisplayInfo, xNewPrimitiveSequence);
     }
 
-    // local up-to-date checks. New list different from local one?
-    if(mxPrimitive2DSequence == xNewPrimitiveSequence)
-        return mxPrimitive2DSequence;
-
-    // has changed, copy content
-    const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = std::move(xNewPrimitiveSequence);
-
-    // check for animated stuff
-    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
-
-    // always update object range when PrimitiveSequence changes
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
-
-    // check and eventually embed to GridOffset transform primitive
-    if(GetObjectContact().supportsGridOffsets())
+    // check and eventually embed to GridOffset transform primitive (calc only)
+    if(!xNewPrimitiveSequence.empty() && GetObjectContact().supportsGridOffsets())
     {
         const basegfx::B2DVector& rGridOffset(getGridOffset());
 
@@ -390,22 +376,77 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                 basegfx::utils::createTranslateB2DHomMatrix(
                     rGridOffset));
             drawinglayer::primitive2d::Primitive2DReference aEmbed(
-                 new drawinglayer::primitive2d::TransformPrimitive2D(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
                     aTranslateGridOffset,
-                    std::move(const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence)));
-
-            // Set values at local data. So for now, the mechanism is to reset some of the
-            // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the
-            // buffered data (including maObjectRange). It *could* be changed to keep
-            // the unmodified PrimitiveSequence and only update the GridOffset, but this
-            // would require a 2nd instance of maObjectRange and mxPrimitive2DSequence. I
-            // started doing so, but it just makes the code more complicated. For now,
-            // just allow re-creation of the PrimitiveSequence (and removing buffered
-            // decomposed content of it). May be optimized, though. OTOH it only happens
-            // in calc which traditionally does not have a huge amount of DrawObjects anyways.
-            const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
-            const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
+                    std::move(xNewPrimitiveSequence)));
+            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
         }
+    }
+
+    // Check if we need to embed to a StructureTagPrimitive2D, too. This
+    // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
+    if(!xNewPrimitiveSequence.empty() && nullptr != pSdrObj && GetObjectContact().isExportTaggedPDF())
+    {
+        vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
+        const SdrInventor nInventor(pSdrObj->GetObjInventor());
+        const SdrObjKind nIdentifier(pSdrObj->GetObjIdentifier());
+        const bool bIsTextObj(nullptr != DynCastSdrTextObj(pSdrObj));
+
+        if ( nInventor == SdrInventor::Default )
+        {
+            if ( nIdentifier == SdrObjKind::Group )
+                eElement = vcl::PDFWriter::Section;
+            else if ( nIdentifier == SdrObjKind::TitleText )
+                eElement = vcl::PDFWriter::Heading;
+            else if ( nIdentifier == SdrObjKind::OutlineText )
+                eElement = vcl::PDFWriter::Division;
+            else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(*pSdrObj).HasText() )
+                eElement = vcl::PDFWriter::Figure;
+        }
+
+        if(vcl::PDFWriter::NonStructElement != eElement)
+        {
+            SdrPage* pSdrPage(pSdrObj->getSdrPageFromSdrObject());
+
+            if(pSdrPage)
+            {
+                const bool bBackground(pSdrPage->IsMasterPage());
+                const bool bImage(SdrObjKind::Graphic == pSdrObj->GetObjIdentifier());
+
+                drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                        eElement,
+                        bBackground,
+                        bImage,
+                        std::move(xNewPrimitiveSequence)));
+                xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+            }
+        }
+    }
+
+    // Local up-to-date checks. New list different from local one?
+    // This is the important point where it gets decided if the current or the new
+    // representation gets used. This is important for performance, since the
+    // current representation contains possible precious decompositions. That
+    // comparisons triggers exactly if something in the object visualization
+    // has changed.
+    // Note: That is the main reason for BasePrimitive2D::operator== at all. I
+    // have alternatively tried to invalidate the local representation on object
+    // change, but that is simply not reliable.
+    // Note2: I did that once in aw080, the lost CWS, and it worked well enough
+    // so that I could remove *all* operator== from all derivations of
+    // BasePrimitive2D, so it can be done again (with the needed ressources)
+    if(mxPrimitive2DSequence != xNewPrimitiveSequence)
+    {
+        // has changed, copy content
+        const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = std::move(xNewPrimitiveSequence);
+
+        // check for animated stuff
+        const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
+
+        // always update object range when PrimitiveSequence changes
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+        const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
     }
 
     // return current Primitive2DContainer

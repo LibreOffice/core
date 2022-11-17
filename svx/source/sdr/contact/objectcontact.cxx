@@ -171,6 +171,11 @@ bool ObjectContact::isOutputToPDFFile() const
     return false;
 }
 
+bool ObjectContact::isExportTaggedPDF() const
+{
+    return false;
+}
+
 // gray display mode
 bool ObjectContact::isDrawModeGray() const
 {

@@ -29,6 +29,7 @@
 #include <svx/unoapi.hxx>
 #include <tools/debug.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <memory>
 
 namespace sdr::contact {
@@ -134,6 +135,21 @@ bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
 bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
 {
     return OUTDEV_PDF == mrTargetOutputDevice.GetOutDevType();
+}
+
+bool ObjectContactOfObjListPainter::isExportTaggedPDF() const
+{
+    if (isOutputToPDFFile())
+    {
+        vcl::PDFExtOutDevData* pPDFExtOutDevData(dynamic_cast<vcl::PDFExtOutDevData*>(
+            mrTargetOutputDevice.GetExtOutDevData()));
+
+        if (nullptr != pPDFExtOutDevData)
+        {
+            return pPDFExtOutDevData->GetIsExportTaggedPDF();
+        }
+    }
+    return false;
 }
 
 OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const

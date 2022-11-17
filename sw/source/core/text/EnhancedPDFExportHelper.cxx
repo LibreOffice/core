@@ -661,7 +661,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             }
         }
 
-        // Formally here bAlternateText was triggered for PDF export, but this
+        // Formerly here bAlternateText was triggered for PDF export, but this
         // was moved for more general use to primitives and usage in
         // VclMetafileProcessor2D (see processGraphicPrimitive2D).
 
