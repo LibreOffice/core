@@ -286,6 +286,14 @@ OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefaul
     return rDefault;
 }
 
+OUString AttributeList::getStringDefaulted( sal_Int32 nAttrToken ) const
+{
+    // check if the attribute exists (empty string may be different to missing attribute)
+    if( mxAttribs->hasAttribute( nAttrToken ) )
+        return mxAttribs->getOptionalValue( nAttrToken );
+    return OUString();
+}
+
 OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
     return getXString( nAttrToken ).get( rDefault );

@@ -610,7 +610,7 @@ bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     if (bDoUpdate && eRet != UR_INVALID)
     {
         // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
-        AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
+        AdjustTableColumnAttributes( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
         ::std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
         // tdf#48025, tdf#141946: update the column index of the filter criteria,
@@ -687,7 +687,12 @@ void ScDBData::SetTableColumnNames( ::std::vector< OUString >&& rNames )
     mbTableColumnNamesDirty = false;
 }
 
-void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+void ScDBData::SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes )
+{
+    maTableColumnAttributes = std::move(rAttributes);
+}
+
+void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
         SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 )
 {
     if (maTableColumnNames.empty())
@@ -699,6 +704,7 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
         return;     // not moved or entirely moved, nothing to do
 
     ::std::vector<OUString> aNewNames;
+    ::std::vector<TableColumnAttributes> aNewAttributes;
     if (eUpdateRefMode == URM_INSDEL)
     {
         if (nDx > 0)
@@ -715,22 +721,27 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
             if (nDx > 0)
                 n += nDx;
             aNewNames.resize(n);
+            aNewAttributes.resize(n);
+            maTableColumnAttributes.resize(n);
             // Copy head.
             for (size_t i = 0; i < nHead; ++i)
             {
                 aNewNames[i] = maTableColumnNames[i];
+                aNewAttributes[i] = maTableColumnAttributes[i];
             }
             // Copy tail, inserted middle range, if any, stays empty.
             for (size_t i = n - nTail, j = maTableColumnNames.size() - nTail; i < n; ++i, ++j)
             {
                 aNewNames[i] = maTableColumnNames[j];
+                aNewAttributes[i] = maTableColumnAttributes[j];
             }
         }
     } // else   empty aNewNames invalidates names/offsets
 
     SAL_WARN_IF( !maTableColumnNames.empty() && aNewNames.empty(),
-            "sc.core", "ScDBData::AdjustTableColumnNames - invalidating column names/offsets");
+            "sc.core", "ScDBData::AdjustTableColumnAttributes - invalidating column attributes/offsets");
     aNewNames.swap( maTableColumnNames);
+    aNewAttributes.swap(maTableColumnAttributes);
     if (maTableColumnNames.empty())
         mbTableColumnNamesDirty = true;
     if (mbTableColumnNamesDirty)
