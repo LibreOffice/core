@@ -920,7 +920,7 @@ void ScFiltersTest2::testEmbeddedImageXLS()
 
 void ScFiltersTest2::testErrorOnExternalReferences()
 {
-    createScDoc("ods/blank.ods");
+    createScDoc();
 
     ScDocument* pDoc = getScDoc();
 
@@ -953,7 +953,7 @@ void ScFiltersTest2::testTdf145054()
 
 void ScFiltersTest2::testTdf84762()
 {
-    createScDoc("ods/blank.ods");
+    createScDoc();
 
     ScDocument* pDoc = getScDoc();
 
@@ -986,7 +986,7 @@ void ScFiltersTest2::testTdf84762()
 
 void ScFiltersTest2::testTdf44076()
 {
-    createScDoc("ods/blank.ods");
+    createScDoc();
 
     ScDocument* pDoc = getScDoc();
 
