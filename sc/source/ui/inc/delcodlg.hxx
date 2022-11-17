@@ -35,7 +35,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnDelNotes;
     std::unique_ptr<weld::CheckButton> m_xBtnDelAttrs;
     std::unique_ptr<weld::CheckButton> m_xBtnDelObjects;
-    std::unique_ptr<weld::Button> m_xBtnOk;
 
     static bool bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
