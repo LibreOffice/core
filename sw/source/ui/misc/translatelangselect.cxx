@@ -55,6 +55,7 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
           SwLanguageListItem("EL", "Greek"),
           SwLanguageListItem("EN-GB", "English (British)"),
           SwLanguageListItem("EN-US", "English (American)"),
+          SwLanguageListItem("ES", "Spanish"),
           SwLanguageListItem("ET", "Estonian"),
           SwLanguageListItem("FI", "Finnish"),
           SwLanguageListItem("FR", "French"),
