@@ -9,3 +9,15 @@
  
      /* outer loop steps through master designs to be blended */
      for ( master = 0; master < varData->regionIdxCount; master++ )
+--- src/psaux/psobjs.c.orig	2022-11-17 16:52:21.913211573 +0100
++++ src/psaux/psobjs.c	2022-11-17 16:53:17.905127207 +0100
+@@ -201,7 +201,8 @@
+     /* add the object to the base block and adjust offset */
+     table->elements[idx] = FT_OFFSET( table->block, table->cursor );
+     table->lengths [idx] = length;
+-    FT_MEM_COPY( table->block + table->cursor, object, length );
++    if (table->block + table->cursor)
++      FT_MEM_COPY( table->block + table->cursor, object, length );
+ 
+     table->cursor += length;
+     return FT_Err_Ok;
