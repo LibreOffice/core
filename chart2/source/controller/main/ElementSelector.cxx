@@ -158,7 +158,8 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         sal_uInt16 nN=0;
         for (auto const& entry : m_aEntries)
         {
-            m_xWidget->append_text(entry.UIName);
+            // tdf#152087 strip any newlines from the entry
+            m_xWidget->append_text(entry.UIName.replaceAll("\n", " "));
             if ( !bSelectionFound && aSelectedOID == entry.OID )
             {
                 nEntryPosToSelect = nN;
