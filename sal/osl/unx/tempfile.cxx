@@ -330,13 +330,7 @@ oslFileError SAL_CALL osl_createTempFile(
     }
 
     if (temp_file_handle)
-    {
         osl_closeFile(temp_file_handle);
-        if (pHandle)
-        {
-            *pHandle = nullptr;
-        }
-    }
 
     rtl_uString_release(base_directory);
 
