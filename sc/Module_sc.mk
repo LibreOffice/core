@@ -41,6 +41,7 @@ ifneq ($(OS),iOS)
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
+	CppunitTest_sc_parallelism \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sc_ucalc) \
 	CppunitTest_sc_ucalc_condformat \
@@ -202,7 +203,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_namedrangesobj \
 	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_outlineobj \
-	CppunitTest_sc_parallelism \
 	CppunitTest_sc_recentfunctionsobj \
 	CppunitTest_sc_recordchanges \
 	CppunitTest_sc_scenariosobj \
