@@ -503,6 +503,20 @@ void SwWW8ImplReader::UpdateFields()
     m_rDoc.SetInitDBFields(true);             // Also update fields in the database
 }
 
+// Sanity check the PaM to see if it makes sense wrt sw::CalcBreaks
+static bool SanityCheck(const SwPaM& rFieldPam)
+{
+    SwNodeOffset const nEndNode(rFieldPam.End()->nNode.GetIndex());
+    SwNodes const& rNodes(rFieldPam.GetPoint()->nNode.GetNodes());
+    SwNode *const pFinalNode(rNodes[nEndNode]);
+    if (pFinalNode->IsTextNode())
+    {
+        SwTextNode & rTextNode(*pFinalNode->GetTextNode());
+        return (rTextNode.Len() >= rFieldPam.End()->nContent.GetIndex());
+    }
+    return true;
+}
+
 sal_uInt16 SwWW8ImplReader::End_Field()
 {
     sal_uInt16 nRet = 0;
@@ -531,9 +545,9 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPosition aEndPos = *m_pPaM->GetPoint();
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
-            IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
+            IFieldmark *pFieldmark = SanityCheck(aFieldPam) ? pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
-                        aFieldPam.Start() /*same pos as start!*/ );
+                        aFieldPam.Start() /*same pos as start!*/ ) : nullptr;
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
                 // adapt redline positions to inserted field mark start
