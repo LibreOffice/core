@@ -1432,6 +1432,7 @@ public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
     void clicked() { signal_clicked(); }
+    bool is_custom_handler_set() { return m_aClickHdl.IsSet(); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
