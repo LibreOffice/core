@@ -2980,13 +2980,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
         else if (nSprmId == NS_ooxml::LN_CT_SdtPr_showingPlcHdr)
         {
+            // Grabbag boolean values
             beans::PropertyValue aValue;
             aValue.Name = sName;
             aValue.Value <<= bool(nIntValue);
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
         }
-        else if (nSprmId == NS_ooxml::LN_CT_SdtPr_tabIndex)
+        else if (nSprmId == NS_ooxml::LN_CT_SdtPr_id || nSprmId == NS_ooxml::LN_CT_SdtPr_tabIndex)
         {
+            // Grabbag integer values
             beans::PropertyValue aValue;
             aValue.Name = sName;
             aValue.Value <<= nIntValue;

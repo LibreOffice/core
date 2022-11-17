@@ -3009,6 +3009,11 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:attribute>
       </rng:optional>
       <rng:optional>
+        <rng:attribute name="loext:id">
+          <rng:ref name="integer"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
         <rng:attribute name="loext:tab-index">
           <rng:ref name="nonNegativeInteger"/>
         </rng:attribute>

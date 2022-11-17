@@ -624,13 +624,13 @@ void SdtBlockHelper::DeleteAndResetTheLists()
     if (!m_aColor.isEmpty())
         m_aColor.clear();
     m_bShowingPlaceHolder = false;
+    m_nId = 0;
     m_nTabIndex = 0;
-    m_bHasId = false;
 }
 
 void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
 {
-    if (m_nSdtPrToken <= 0 && !m_pDataBindingAttrs.is() && !m_bHasId)
+    if (m_nSdtPrToken <= 0 && !m_pDataBindingAttrs.is() && !m_nId)
         return;
 
     // sdt start mark
@@ -690,10 +690,10 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
 void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
 {
-    if (m_nSdtPrToken == FSNS(XML_w, XML_id) || m_bHasId)
-        //Word won't open a document with an empty id tag, we fill it with a random number
-        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
-            OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())));
+    if (m_nId)
+    {
+        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val), OString::number(m_nId));
+    }
 
     if (m_pDataBindingAttrs.is())
     {
@@ -848,6 +848,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             if (!(aPropertyValue.Value >>= m_aTag))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt tag value");
         }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
+        {
+            if (!(aPropertyValue.Value >>= m_nId))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt id value");
+        }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_tabIndex" && !m_nTabIndex)
         {
             if (!(aPropertyValue.Value >>= m_nTabIndex))
@@ -858,8 +863,6 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             if (!(aPropertyValue.Value >>= m_aLock))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt lock value");
         }
-        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
-            m_bHasId = true;
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
             m_nSdtPrToken = FSNS(XML_w, XML_citation);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||

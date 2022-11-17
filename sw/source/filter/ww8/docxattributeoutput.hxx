@@ -128,14 +128,14 @@ class SdtBlockHelper
 {
 public:
     SdtBlockHelper()
-        : m_bHasId(false)
+        : m_nId(0)
         , m_bStartedSdt(false)
         , m_bShowingPlaceHolder(false)
         , m_nTabIndex(0)
         , m_nSdtPrToken(0)
     {}
 
-    bool m_bHasId;
+    sal_Int32 m_nId;
     bool m_bStartedSdt;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenChildren;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenAttributes;
