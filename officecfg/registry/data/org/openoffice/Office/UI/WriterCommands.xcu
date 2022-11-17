@@ -416,7 +416,7 @@
       </node>
       <node oor:name=".uno:OutlineLevelsShown" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Show outline-content to level...</value>
+          <value xml:lang="en-US">Show Outline Content up to Level...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
