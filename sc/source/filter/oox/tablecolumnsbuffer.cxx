@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
-#include <dbdata.hxx>
 
 namespace oox::xls {
 
@@ -38,6 +37,8 @@ void TableColumn::importTableColumn( const AttributeList& rAttribs )
     mnId = rAttribs.getInteger( XML_id, -1 );
     maName = rAttribs.getString( XML_name, OUString() );
     mnDataDxfId = rAttribs.getInteger( XML_dataDxfId, -1 );
+    if ( rAttribs.hasAttribute( XML_totalsRowFunction ) )
+        maColumnAttributes.maTotalsFunction = rAttribs.getStringDefaulted( XML_totalsRowFunction );
 }
 
 void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
@@ -49,6 +50,11 @@ void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
 const OUString& TableColumn::getName() const
 {
     return maName;
+}
+
+const TableColumnAttributes& TableColumn::getColumnAttributes() const
+{
+    return maColumnAttributes;
 }
 
 TableColumns::TableColumns( const WorkbookHelper& rHelper ) :
@@ -83,13 +89,16 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
     {
         /* TODO: use svl::SharedString for names */
         ::std::vector< OUString > aNames( maTableColumnVector.size());
+        ::std::vector< TableColumnAttributes > aAttributesVector( maTableColumnVector.size() );
         size_t i = 0;
         for (const auto& rxTableColumn : maTableColumnVector)
         {
             aNames[i] = rxTableColumn->getName();
+            aAttributesVector[i] = rxTableColumn->getColumnAttributes();
             ++i;
         }
         pDBData->SetTableColumnNames( std::move(aNames) );
+        pDBData->SetTableColumnAttributes( std::move(aAttributesVector) );
         return true;
     }
     return false;

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <oox/helper/refvector.hxx>
+#include <dbdata.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox { class AttributeList; }
@@ -41,11 +42,14 @@ public:
     void                importTableColumn( SequenceInputStream& rStrm );
     /** Gets the name of this column. */
     const OUString&     getName() const;
+    /** Gets the attributes of this column. */
+    const TableColumnAttributes& getColumnAttributes() const;
 
 private:
     OUString            maName;
     sal_Int32           mnId;
     sal_Int32           mnDataDxfId;
+    TableColumnAttributes maColumnAttributes;
 };
 
 class TableColumns : public WorkbookHelper
