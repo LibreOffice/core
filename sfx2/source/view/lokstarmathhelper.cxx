@@ -170,6 +170,10 @@ bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
             // 2. Adjust the position according to the scales
             aMousePos
                 = Point(std::round(aMousePos.X() * fScaleX), std::round(aMousePos.Y() * fScaleY));
+            // 3. Take window own scaling into account (reverses the conversion done in
+            // SmGraphicWidget::MouseButtonDown, albeit incompletely - it does not handle
+            // GetFormulaDrawPos; hopefully, in lok/in-place case, it's always [ 0, 0 ]?)
+            aMousePos = pWindow->LogicToPixel(aMousePos);
 
             LokMouseEventData aMouseEventData(
                 nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
