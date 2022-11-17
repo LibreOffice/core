@@ -455,6 +455,10 @@ void SdtHelper::clear()
     m_bChecked = false;
     m_aCheckedState.clear();
     m_aUncheckedState.clear();
+    m_aPlaceholderDocPart.clear();
+    m_aColor.clear();
+    m_aAlias.clear();
+    m_aTag.clear();
 }
 
 void SdtHelper::SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
