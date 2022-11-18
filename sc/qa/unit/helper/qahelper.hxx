@@ -171,19 +171,12 @@ protected:
     OUString m_aBaseString;
 
     ScDocShellRef load(
-        bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-        sal_Int32 nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
-
-    ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_Int32 nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
 
-    ScDocShellRef load(const OUString& rURL, sal_Int32 nFormat, bool bReadWrite = false);
-
     ScDocShellRef loadDoc(
-        std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false, bool bCheckErrorCode = true );
+        std::u16string_view rFileName, sal_Int32 nFormat, bool bCheckErrorCode = true );
 
 private:
     // reference to document interface that we are testing

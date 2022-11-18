@@ -117,14 +117,12 @@ void ScFiltersTest::testTooManyColsRows()
 {
     // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
     // should be a warning on load.
-    ScDocShellRef xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_ODS, /*bReadWrite*/ false,
-                                   /*bCheckErrorCode*/ false);
+    ScDocShellRef xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_ODS, /*bCheckErrorCode*/ false);
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
 
-    xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_XLSX, /*bReadWrite*/ false,
-                     /*bCheckErrorCode*/ false);
+    xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_XLSX, /*bCheckErrorCode*/ false);
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
