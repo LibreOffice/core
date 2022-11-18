@@ -161,14 +161,7 @@ void Font::SetFamily( FontFamily eFamily )
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
     if (const_cast<const ImplType&>(mpImplFont)->GetCharSet() != eCharSet)
-    {
         mpImplFont->SetCharSet( eCharSet );
-
-        if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->SetSymbolFlag( true );
-        else
-            mpImplFont->SetSymbolFlag( false );
-    }
 }
 
 bool Font::IsSymbolFont() const
@@ -977,7 +970,6 @@ ImplFont::ImplFont() :
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
     maCJKLanguageTag( LANGUAGE_DONTKNOW ),
-    mbSymbolFlag( false ),
     mbOutline( false ),
     mbConfigLookup( false ),
     mbShadow( false ),
@@ -1011,7 +1003,6 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
     maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
-    mbSymbolFlag( rImplFont.mbSymbolFlag ),
     mbOutline( rImplFont.mbOutline ),
     mbConfigLookup( rImplFont.mbConfigLookup ),
     mbShadow( rImplFont.mbShadow ),
