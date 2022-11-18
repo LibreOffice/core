@@ -256,6 +256,8 @@ public:
     vcl::Cursor*        mpCursor;
     PointerStyle        maPointer;
     Fraction            maZoom;
+    double              mfPartialScrollX;
+    double              mfPartialScrollY;
     OUString            maText;
     std::optional<vcl::Font>
                         mpControlFont;
