@@ -186,13 +186,13 @@ sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension 
     return bHasVolume ? 2 : 1;
 }
 
-void StockChartTypeTemplate::applyStyle(
+void StockChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     try
     {
         sal_Int32 nNewAxisIndex = 0;
@@ -225,10 +225,10 @@ void StockChartTypeTemplate::applyStyle(
     }
 }
 
-void StockChartTypeTemplate::resetStyles(
+void StockChartTypeTemplate::resetStyles2(
     const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
-    ChartTypeTemplate::resetStyles( xDiagram );
+    ChartTypeTemplate::resetStyles2( xDiagram );
     if( getDimension() == 3 )
     {
         std::vector< rtl::Reference< DataSeries > > aSeriesVec =
@@ -337,7 +337,7 @@ void StockChartTypeTemplate::createChartTypes(
 }
 
 // ____ ChartTypeTemplate ____
-bool StockChartTypeTemplate::matchesTemplate(
+bool StockChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool /* bAdaptProperties */ )
 {
@@ -401,7 +401,7 @@ bool StockChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -419,7 +419,7 @@ rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-rtl::Reference< DataInterpreter > StockChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > StockChartTypeTemplate::getDataInterpreter2()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant ) );

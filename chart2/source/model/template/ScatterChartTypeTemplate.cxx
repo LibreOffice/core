@@ -167,13 +167,13 @@ StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex *
     return StackMode::NONE;
 }
 
-void ScatterChartTypeTemplate::applyStyle(
+void ScatterChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     try
     {
@@ -189,17 +189,17 @@ void ScatterChartTypeTemplate::applyStyle(
     }
 }
 
-// ____ ChartTypeTemplate ____
-bool ScatterChartTypeTemplate::supportsCategories()
+// ____ XChartTypeTemplate ____
+sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
 {
     return false;
 }
 
-bool ScatterChartTypeTemplate::matchesTemplate(
+bool ScatterChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
-    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate2( xDiagram, bAdaptProperties );
 
     // check symbol-style and line-style
     // for a template with symbols (or with lines) it is ok, if there is at least one series
@@ -303,7 +303,7 @@ rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForIndex( sal_
     return xResult;
 }
 
-rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -329,7 +329,7 @@ rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-rtl::Reference< DataInterpreter > ScatterChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ScatterChartTypeTemplate::getDataInterpreter2()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new XYDataInterpreter );

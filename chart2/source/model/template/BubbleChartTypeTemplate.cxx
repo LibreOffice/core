@@ -139,18 +139,18 @@ StackMode BubbleChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */
     return StackMode::NONE;
 }
 
-void BubbleChartTypeTemplate::applyStyle(
+void BubbleChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-// ____ ChartTypeTemplate ____
-bool BubbleChartTypeTemplate::supportsCategories()
+// ____ XChartTypeTemplate ____
+sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
 {
     return false;
 }
@@ -160,7 +160,7 @@ rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForIndex( sal_I
     return new BubbleChartType();
 }
 
-rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -179,7 +179,7 @@ rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-rtl::Reference< DataInterpreter > BubbleChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > BubbleChartTypeTemplate::getDataInterpreter2()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new BubbleDataInterpreter );

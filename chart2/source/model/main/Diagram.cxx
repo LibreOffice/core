@@ -395,7 +395,7 @@ void SAL_CALL Diagram::setDiagramData(
         xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.Column" );
     if(!xTemplate.is())
         return;
-    xTemplate->changeDiagramData( this, xDataSource, aArguments );
+    xTemplate->changeDiagramData( rtl::Reference< ::chart::Diagram >(this), xDataSource, aArguments );
 }
 
 // ____ XTitled ____

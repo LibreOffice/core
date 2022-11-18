@@ -137,7 +137,7 @@ ChartTypeTemplate::~ChartTypeTemplate()
 {}
 
 // ____ ChartTypeTemplate ____
-rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
+rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource2(
     const uno::Reference< data::XDataSource >& xDataSource,
     const uno::Sequence< beans::PropertyValue >& aArguments )
 {
@@ -149,7 +149,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
         xDia = new Diagram(GetComponentContext());
 
         // modify diagram
-        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData(
             xInterpreter->interpretDataSource(
                 xDataSource, aArguments, {} ));
@@ -170,7 +170,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
     return xDia;
 }
 
-bool ChartTypeTemplate::supportsCategories()
+sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
 {
     return true;
 }
@@ -188,7 +188,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
 
         // chart-type specific interpretation of existing data series
-        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData;
         aData.Series = aSeriesSeq;
         aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
@@ -254,7 +254,7 @@ void ChartTypeTemplate::changeDiagramData(
         std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq =
             DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
-        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData =
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
 
@@ -266,7 +266,7 @@ void ChartTypeTemplate::changeDiagramData(
                 if( nIndex >= nFormerSeriesCount )
                 {
                     lcl_applyDefaultStyle( aData.Series[i][j], nIndex, xDiagram );
-                    applyStyle( aData.Series[i][j], i, j, aData.Series[i].size() );
+                    applyStyle2( aData.Series[i][j], i, j, aData.Series[i].size() );
                 }
             }
 
@@ -287,7 +287,7 @@ void ChartTypeTemplate::changeDiagramData(
     }
 }
 
-bool ChartTypeTemplate::matchesTemplate(
+bool ChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool /* bAdaptProperties */ )
 {
@@ -306,7 +306,7 @@ bool ChartTypeTemplate::matchesTemplate(
         if( bResult )
         {
             std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
-            rtl::Reference<ChartType> xOldCT = getChartTypeForNewSeries(aFormerlyUsedChartTypes);
+            rtl::Reference<ChartType> xOldCT = getChartTypeForNewSeries2(aFormerlyUsedChartTypes);
             if (!xOldCT.is())
                 return false;
 
@@ -342,7 +342,7 @@ bool ChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-rtl::Reference< DataInterpreter > ChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ChartTypeTemplate::getDataInterpreter2()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new DataInterpreter );
@@ -350,7 +350,7 @@ rtl::Reference< DataInterpreter > ChartTypeTemplate::getDataInterpreter()
     return m_xDataInterpreter;
 }
 
-void ChartTypeTemplate::applyStyle(
+void ChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 /* nSeriesIndex */,
@@ -399,14 +399,14 @@ void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& x
     {
         const sal_Int32 nNumSeries = aNewSeriesSeq[i].size();
         for( sal_Int32 j=0; j<nNumSeries; ++j )
-            applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
+            applyStyle2( aNewSeriesSeq[i][j], i, j, nNumSeries );
     }
 
     //ensure valid empty cell handling (for first chart type...)
     lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0 ) );
 }
 
-void ChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
+void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // reset number format if we had percent stacking on
     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
@@ -479,7 +479,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     if( ! xDiagram.is())
         return;
     std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
-    rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
+    rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries2(aFormerlyUsedChartTypes));
     if( ! xChartType.is())
         return;
     rtl::Reference< BaseCoordinateSystem > xCooSys = xChartType->createCoordinateSystem2( getDimension());
@@ -563,7 +563,7 @@ void ChartTypeTemplate::adaptScales(
                         aData.Categories = xCategories;
                         if(bSupportsCategories)
                         {
-                            rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries({});
+                            rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries2({});
                             if( aData.AxisType == AxisType::CATEGORY )
                             {
                                 aData.ShiftedCategoryPosition = m_aServiceName.indexOf("Column") != -1 || m_aServiceName.indexOf("Bar") != -1 || m_aServiceName.endsWith("Close");
@@ -736,7 +736,7 @@ void ChartTypeTemplate::createChartTypes(
         if( aSeriesSeq.empty() )
         {
             // we need a new chart type
-            xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
+            xCT = getChartTypeForNewSeries2( aOldChartTypesSeq );
             rCoordSys[nCooSysIdx]->setChartTypes(std::vector{ xCT });
         }
         else
@@ -746,7 +746,7 @@ void ChartTypeTemplate::createChartTypes(
                 if( nSeriesIdx == nCooSysIdx )
                 {
                     // we need a new chart type
-                    xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
+                    xCT = getChartTypeForNewSeries2( aOldChartTypesSeq );
                     std::vector< rtl::Reference< ChartType > > aCTSeq( rCoordSys[nCooSysIdx]->getChartTypes2());
                     if( !aCTSeq.empty())
                     {
@@ -804,6 +804,57 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
     }
     if( xSource.is() )
         comphelper::copyProperties( xSource, xNewChartType );
+}
+
+css::uno::Reference< css::uno::XInterface > ChartTypeTemplate::getDataInterpreter()
+{
+    return static_cast<cppu::OWeakObject*>(getDataInterpreter2().get());
+}
+css::uno::Reference< css::chart2::XDiagram > ChartTypeTemplate::createDiagramByDataSource(
+    const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+    const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+{
+    return createDiagramByDataSource2(xDataSource, aArguments);
+}
+void ChartTypeTemplate::changeDiagram(
+    const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+{
+    changeDiagram(rtl::Reference<Diagram>(dynamic_cast<Diagram*>(xDiagram.get())));
+}
+void ChartTypeTemplate::changeDiagramData(
+    const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+    const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+    const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+{
+    changeDiagramData(rtl::Reference<Diagram>(dynamic_cast<Diagram*>(xDiagram.get())), xDataSource, aArguments);
+}
+sal_Bool ChartTypeTemplate::matchesTemplate(
+    const css::uno::Reference<css::chart2::XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
+{
+    return matchesTemplate2(dynamic_cast<Diagram*>(xDiagram.get()), static_cast<bool>(bAdaptProperties));
+}
+css::uno::Reference< ::css::chart2::XChartType > ChartTypeTemplate::getChartTypeForNewSeries(
+    const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )
+{
+    std::vector< rtl::Reference< ::chart::ChartType > > aTmp;
+    aTmp.reserve(aFormerlyUsedChartTypes.getLength());
+    for (auto const & rxChartType : aFormerlyUsedChartTypes)
+        aTmp.push_back(dynamic_cast<ChartType*>(rxChartType.get()));
+    return getChartTypeForNewSeries2(aTmp);
+}
+void ChartTypeTemplate::applyStyle(
+    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+{
+    applyStyle2(dynamic_cast<DataSeries*>(xSeries.get()), nChartTypeIndex, nSeriesIndex, nSeriesCount);
+}
+void ChartTypeTemplate::resetStyles(
+    const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+{
+    resetStyles2(dynamic_cast<Diagram*>(xDiagram.get()));
 }
 
 } //  namespace chart

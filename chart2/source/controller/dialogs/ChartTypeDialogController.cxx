@@ -318,7 +318,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
     if( aTemplateWithService.xChartTypeTemplate.is())
-        aTemplateWithService.xChartTypeTemplate->resetStyles( xDiagram );
+        aTemplateWithService.xChartTypeTemplate->resetStyles2( xDiagram );
     xTemplate->changeDiagram( xDiagram );
     if( AllSettings::GetMathLayoutRTL() )
         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

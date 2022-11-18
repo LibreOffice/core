@@ -19,7 +19,9 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
+#include "DataInterpreter.hxx"
 #include "StackMode.hxx"
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
@@ -39,7 +41,6 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
-class DataInterpreter;
 class DataSeries;
 class Diagram;
 class LabeledDataSequence;
@@ -78,7 +79,8 @@ class LabeledDataSequence;
 
     * create an XLegend via the global service factory, set it at the diagram.
  */
-class SAL_DLLPUBLIC_RTTI ChartTypeTemplate : public ::cppu::WeakImplHelper<
+class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeTemplate : public ::cppu::WeakImplHelper<
+        css::chart2::XChartTypeTemplate,
         css::lang::XServiceName >
 {
 public:
@@ -86,34 +88,55 @@ public:
         OUString aServiceName );
     virtual ~ChartTypeTemplate() override;
 
-    OOO_DLLPUBLIC_CHARTTOOLS
-    rtl::Reference< ::chart::Diagram > createDiagramByDataSource(
+    rtl::Reference< ::chart::Diagram > createDiagramByDataSource2(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
 
+    // ____ XChartTypeTemplate ____
+    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     /// denotes if the chart needs categories at the first scale
-    virtual bool supportsCategories();
+    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual void SAL_CALL changeDiagram(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
+    virtual void SAL_CALL changeDiagramData(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
+    virtual sal_Bool SAL_CALL matchesTemplate(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        sal_Bool bAdaptProperties ) override final;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getDataInterpreter() override final;
+    virtual css::uno::Reference< ::css::chart2::XChartType > SAL_CALL getChartTypeForNewSeries(
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
+    virtual void SAL_CALL applyStyle(
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount ) override final;
+    virtual void SAL_CALL resetStyles(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
 
-    OOO_DLLPUBLIC_CHARTTOOLS
     void changeDiagram(
         const rtl::Reference< ::chart::Diagram >& xDiagram );
     void changeDiagramData(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
-    virtual bool matchesTemplate(
+    virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties );
     virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries( const std::vector<
+        getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) = 0;
-    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter();
-    virtual void applyStyle(
+    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter2();
+    virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount );
-    virtual void resetStyles(
+    virtual void resetStyles2(
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     /// @throws css::uno::RuntimeException

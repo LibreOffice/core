@@ -253,7 +253,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
             if( nGroupIndex == aCTs.size())
                 nGroupIndex = 0;
         }
-        xTemplate->applyStyle( xResult, nGroupIndex, nNewSeriesIndex, nTotalNumberOfSeriesInCTGroup );
+        xTemplate->applyStyle2( xResult, nGroupIndex, nNewSeriesIndex, nTotalNumberOfSeriesInCTGroup );
     }
 
     if( bCreateDataCachedSequences )
@@ -270,7 +270,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
             //special handling for candlestick type
             if( xTemplate.is())
             {
-                rtl::Reference< ::chart::DataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                rtl::Reference< ::chart::DataInterpreter > xInterpreter( xTemplate->getDataInterpreter2());
                 if( xInterpreter.is())
                 {
                     sal_Int32 nStockVariant;
@@ -704,7 +704,7 @@ void DialogModel::setData(
             xDataProvider->createDataSource( rArguments ) );
 
         rtl::Reference< ::chart::DataInterpreter > xInterpreter(
-            m_xTemplate->getDataInterpreter());
+            m_xTemplate->getDataInterpreter2());
         if( xInterpreter.is())
         {
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
@@ -795,7 +795,7 @@ void DialogModel::applyInterpretedData(
                             aSeries[nSeries]->setPropertyValue( "Color" ,
                                 uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                     }
-                    m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
+                    m_xTemplate->applyStyle2( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
                 }
             }
         }

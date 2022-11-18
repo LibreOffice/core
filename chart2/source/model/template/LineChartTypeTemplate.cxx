@@ -167,11 +167,11 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
 }
 
 // ____ ChartTypeTemplate ____
-bool LineChartTypeTemplate::matchesTemplate(
+bool LineChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
-    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate2( xDiagram, bAdaptProperties );
 
     // check symbol-style and line-style
     // for a template with symbols (or with lines) it is ok, if there is at least one series
@@ -275,7 +275,7 @@ rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int
     return xResult;
 }
 
-rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -301,13 +301,13 @@ rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-void LineChartTypeTemplate::applyStyle(
+void LineChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     try
     {

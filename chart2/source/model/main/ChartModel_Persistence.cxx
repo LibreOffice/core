@@ -402,7 +402,7 @@ void ChartModel::insertDefaultChart()
                                                      beans::PropertyState_DIRECT_VALUE ) };
                 }
 
-                rtl::Reference< Diagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
+                rtl::Reference< Diagram > xDiagram( xTemplate->createDiagramByDataSource2( xDataSource, aParam ) );
 
                 setFirstDiagram( xDiagram );
 

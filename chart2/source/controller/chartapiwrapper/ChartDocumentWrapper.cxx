@@ -1195,7 +1195,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
                         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
                     if( aTemplateWithService.xChartTypeTemplate.is())
-                        aTemplateWithService.xChartTypeTemplate->resetStyles( xDiagram );//#i109371#
+                        aTemplateWithService.xChartTypeTemplate->resetStyles2( xDiagram );//#i109371#
                     xTemplate->changeDiagram( xDiagram );
                     if( AllSettings::GetMathLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

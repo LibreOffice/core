@@ -63,21 +63,19 @@ protected:
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual bool matchesTemplate(
+    virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties ) override;
     virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries( const std::vector<
+        getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual void applyStyle(
+    virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
-    virtual void resetStyles(
+    virtual void resetStyles2(
         const rtl::Reference< ::chart::Diagram >& xDiagram ) override;
-
-    // ____ ChartTypeTemplate ____
     virtual rtl::Reference< ::chart::ChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
     virtual sal_Int32 getDimension() const override;

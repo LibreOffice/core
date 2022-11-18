@@ -61,13 +61,13 @@ StackMode NetChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) 
     return m_eStackMode;
 }
 
-void NetChartTypeTemplate::applyStyle(
+void NetChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     try
     {
@@ -82,11 +82,11 @@ void NetChartTypeTemplate::applyStyle(
 }
 
 // ____ ChartTypeTemplate ____
-bool NetChartTypeTemplate::matchesTemplate(
+bool NetChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
-    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate2( xDiagram, bAdaptProperties );
 
     if( bResult )
     {
@@ -162,7 +162,7 @@ rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_Int3
         return new NetChartType();
 }
 
-rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );

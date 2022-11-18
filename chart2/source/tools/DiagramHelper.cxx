@@ -98,7 +98,7 @@ DiagramHelper::tTemplateWithServiceName
             rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
                 xChartTypeManager->createTemplate( aServiceNames[ i ] );
 
-            if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
+            if (xTempl.is() && xTempl->matchesTemplate2(xDiagram, true))
             {
                 aResult.xChartTypeTemplate = xTempl;
                 aResult.sServiceName = aServiceNames[ i ];
