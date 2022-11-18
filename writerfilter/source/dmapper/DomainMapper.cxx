@@ -1109,6 +1109,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 switch (m_pImpl->m_pSdtHelper->getControlType())
                 {
                     case SdtControlType::richText:
+                    case SdtControlType::plainText:
                     case SdtControlType::checkBox:
                     case SdtControlType::dropDown:
                     case SdtControlType::comboBox:
@@ -1118,11 +1119,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         break;
                     default:
                         break;
-                }
-
-                if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
-                {
-                    m_pImpl->PopSdt();
                 }
             }
 
