@@ -357,6 +357,13 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         rOutput.WriteUInt32AsString( nVal );
 
         rtl_TextEncoding eChrSet = pFontItem->GetCharSet();
+        // tdf#47679 OpenSymbol is not encoded in Symbol Encoding
+        // and anyway we always attempt to write as eDestEnc
+        // of RTL_TEXTENCODING_MS_1252 and pay no attention
+        // on export what encoding we claim to use for these
+        // fonts.
+        if (IsStarSymbol(pFontItem->GetFamilyName()))
+            eChrSet = RTL_TEXTENCODING_UTF8;
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
             eChrSet = osl_getThreadTextEncoding();
