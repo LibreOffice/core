@@ -507,15 +507,6 @@ bool checkOutput(
     return bResult;
 }
 
-bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
-{
-    ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
-    if (!pFC)
-        return false;
-
-    return pFC->GetErrCode() == FormulaError::NONE;
-}
-
 OUString toString(
     ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
 {

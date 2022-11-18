@@ -120,12 +120,6 @@ SCQAHELPER_DLLPUBLIC bool checkOutput(
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );
 
 /**
- * Check if the cell at specified position is a formula cell that doesn't
- * have an error value.
- */
-SCQAHELPER_DLLPUBLIC bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos);
-
-/**
  * Convert formula token array to a formula string.
  */
 SCQAHELPER_DLLPUBLIC OUString toString(

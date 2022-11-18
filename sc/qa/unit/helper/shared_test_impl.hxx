@@ -154,6 +154,15 @@ void testColorScale3Entry_Impl(const ScDocument& rDoc)
     }
 }
 
+bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
+{
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+        return false;
+
+    return pFC->GetErrCode() == FormulaError::NONE;
+}
+
 void testFunctionsExcel2010_Impl( ScDocument& rDoc )
 {
     // Original test case document is functions-excel-2010.xlsx
