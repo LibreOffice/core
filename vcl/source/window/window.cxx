@@ -590,6 +590,8 @@ WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
 {
     mxOutDev = VclPtr<vcl::WindowOutputDevice>::Create(rWindow);
     maZoom                              = Fraction( 1, 1 );
+    mfPartialScrollX                    = 0.0;
+    mfPartialScrollY                    = 0.0;
     maWinRegion                         = vcl::Region(true);
     maWinClipRegion                     = vcl::Region(true);
     mpWinData                           = nullptr;                      // Extra Window Data, that we don't need for all windows

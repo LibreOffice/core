@@ -598,12 +598,14 @@ tools::Long Window::GetDrawPixel( OutputDevice const * pDev, tools::Long nPixels
     return nP;
 }
 
-static void lcl_HandleScrollHelper( Scrollable* pScrl, double nN, bool isMultiplyByLineSize )
+// returns how much was actually scrolled (so that abs(retval) <= abs(nN))
+static double lcl_HandleScrollHelper( Scrollable* pScrl, double nN, bool isMultiplyByLineSize )
 {
     if (!pScrl || !nN || pScrl->Inactive())
-        return;
+        return 0.0;
 
     tools::Long nNewPos = pScrl->GetThumbPos();
+    double scrolled = nN;
 
     if ( nN == double(-LONG_MAX) )
         nNewPos += pScrl->GetPageSize();
@@ -616,13 +618,22 @@ static void lcl_HandleScrollHelper( Scrollable* pScrl, double nN, bool isMultipl
             nN*=pScrl->GetLineSize();
         }
 
-        const double fVal = nNewPos - nN;
+        // compute how many quantized units to scroll
+        tools::Long magnitude = o3tl::saturating_cast<tools::Long>(abs(nN));
+        tools::Long change = copysign(magnitude, nN);
 
-        nNewPos = o3tl::saturating_cast<tools::Long>(fVal);
+        nNewPos = nNewPos - change;
+
+        scrolled = double(change);
+        // convert back to chunked/continuous
+        if(isMultiplyByLineSize){
+            scrolled /= pScrl->GetLineSize();
+        }
     }
 
     pScrl->DoScroll( nNewPos );
 
+    return scrolled;
 }
 
 bool Window::HandleScrollCommand( const CommandEvent& rCmd,
@@ -668,6 +679,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                     {
                         double nScrollLines = pData->GetScrollLines();
                         double nLines;
+                        double* partialScroll = pData->IsHorz()
+                            ? &mpWindowImpl->mfPartialScrollX
+                            : &mpWindowImpl->mfPartialScrollY;
                         if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
                         {
                             if ( pData->GetDelta() < 0 )
@@ -676,13 +690,12 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                                 nLines = double(LONG_MAX);
                         }
                         else
-                            nLines = pData->GetNotchDelta() * nScrollLines;
+                            nLines = *partialScroll + pData->GetNotchDelta() * nScrollLines;
                         if ( nLines )
                         {
-                            ImplHandleScroll( nullptr,
-                                          0L,
-                                          pData->IsHorz() ? pHScrl : pVScrl,
-                                          nLines );
+                            Scrollable* pScrl = pData->IsHorz() ? pHScrl : pVScrl;
+                            double scrolled = lcl_HandleScrollHelper( pScrl, nLines, true );
+                            *partialScroll = nLines - scrolled;
                             bRet = true;
                         }
                     }
@@ -805,12 +818,6 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
     return bRet;
 }
-
-// Note that when called for CommandEventId::Wheel above, despite its name,
-// pVScrl isn't necessarily the vertical scroll bar. Depending on
-// whether the scroll is horizontal or vertical, it is either the
-// horizontal or vertical scroll bar. nY is correspondingly either
-// the horizontal or vertical scroll amount.
 
 void Window::ImplHandleScroll( Scrollable* pHScrl, double nX,
                                Scrollable* pVScrl, double nY )
