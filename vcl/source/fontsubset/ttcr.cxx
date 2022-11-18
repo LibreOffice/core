@@ -747,7 +747,6 @@ TrueTypeTablePost::TrueTypeTablePost(sal_Int32 format,
     m_underlinePosition = underlinePosition;
     m_underlineThickness = underlineThickness;
     m_isFixedPitch = isFixedPitch;
-    m_ptr = nullptr;
 }
 
 void TrueTypeTableCmap::cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)

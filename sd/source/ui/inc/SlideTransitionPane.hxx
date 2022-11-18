@@ -100,9 +100,7 @@ private:
 
     std::unique_ptr<TransitionPane> mxVS_TRANSITION_ICONS;
     std::unique_ptr<weld::CustomWeld> mxVS_TRANSITION_ICONSWin;
-    std::unique_ptr<weld::Label> mxFT_VARIANT;
     std::unique_ptr<weld::ComboBox> mxLB_VARIANT;
-    std::unique_ptr<weld::Label> mxFT_duration;
     std::unique_ptr<weld::MetricSpinButton> mxCBX_duration;
     std::unique_ptr<weld::Label> mxFT_SOUND;
     std::unique_ptr<weld::ComboBox> mxLB_SOUND;

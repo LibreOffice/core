@@ -287,7 +287,6 @@ struct TableEntry;
         sal_Int16  m_underlinePosition;
         sal_Int16  m_underlineThickness;
         sal_uInt32 m_isFixedPitch;
-        void   *m_ptr;                        /* format-specific pointer */
     };
 
 } // namespace

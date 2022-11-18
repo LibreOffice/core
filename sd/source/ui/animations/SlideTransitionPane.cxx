@@ -413,9 +413,7 @@ constexpr sal_uInt16 nNoneId = std::numeric_limits<sal_uInt16>::max();
 
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
-    mxFT_VARIANT = m_xBuilder->weld_label("variant_label");
     mxLB_VARIANT = m_xBuilder->weld_combo_box("variant_list");
-    mxFT_duration = m_xBuilder->weld_label("duration_label");
     mxCBX_duration = m_xBuilder->weld_metric_spin_button("transition_duration", FieldUnit::SECOND);
     mxFT_SOUND = m_xBuilder->weld_label("sound_label");
     mxLB_SOUND = m_xBuilder->weld_combo_box("sound_list");
@@ -485,9 +483,7 @@ SlideTransitionPane::~SlideTransitionPane()
     removeListener();
     mxVS_TRANSITION_ICONSWin.reset();
     mxVS_TRANSITION_ICONS.reset();
-    mxFT_VARIANT.reset();
     mxLB_VARIANT.reset();
-    mxFT_duration.reset();
     mxCBX_duration.reset();
     mxFT_SOUND.reset();
     mxLB_SOUND.reset();

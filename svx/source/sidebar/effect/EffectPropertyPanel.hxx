@@ -43,8 +43,6 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxGlowRadius;
     std::unique_ptr<ColorListBox> mxLBGlowColor;
     std::unique_ptr<weld::MetricSpinButton> mxGlowTransparency;
-    std::unique_ptr<weld::Label> mxFTRadiusSoftEdge;
-    std::unique_ptr<weld::Label> mxFTRadiusGlow;
     std::unique_ptr<weld::Label> mxFTColor;
     std::unique_ptr<weld::MetricSpinButton> mxSoftEdgeRadius;
 

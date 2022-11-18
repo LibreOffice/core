@@ -150,7 +150,6 @@ namespace dbp
         m_xFormDatasource = m_xBuilder->weld_label("datasource");
         m_xFormDatasourceLabel = m_xBuilder->weld_label("datasourcelabel");
         m_xFormTable = m_xBuilder->weld_label("formtable");
-        m_xFormTableLabel = m_xBuilder->weld_label("formtablelabel");
 
         const OControlWizardContext& rContext = getContext();
         if ( rContext.bEmbedded )

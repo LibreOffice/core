@@ -49,7 +49,6 @@ namespace dbp
         std::unique_ptr<weld::Label> m_xFormDatasource;
         std::unique_ptr<weld::Label> m_xFormContentTypeLabel;
         std::unique_ptr<weld::Label> m_xFormContentType;
-        std::unique_ptr<weld::Label> m_xFormTableLabel;
         std::unique_ptr<weld::Label> m_xFormTable;
         std::unique_ptr<weld::Frame> m_xFrame;
 
