@@ -62,8 +62,6 @@ COMMA :=,
 OPEN_PAREN :=(
 CLOSE_PAREN :=)
 
-gb_SPACE:=$(gb_SPACE) $(gb_SPACE)
-
 gb_VERBOSE := $(verbose)
 
 include $(GBUILDDIR)/Helper.mk
