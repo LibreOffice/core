@@ -107,9 +107,6 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     mRTProps(D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
                                           D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
                                           0, 0)),
-    mpFontFace(nullptr),
-    mlfEmHeight(0.0f),
-    mhDC(nullptr),
     mbRenderingModeNatural(bRenderingModeNatural),
     meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
@@ -229,8 +226,9 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         return ExTextOutRenderer()(rLayout, rGraphics, hDC, bRenderingModeNatural);
     }
 
-    mlfEmHeight = 0;
-    if (!GetDWriteFaceFromHDC(hDC, &mpFontFace, &mlfEmHeight))
+    IDWriteFontFace* pFontFace;
+    float lfEmHeight = 0;
+    if (!GetDWriteFaceFromHDC(hDC, &pFontFace, &lfEmHeight))
         return false;
 
     const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
@@ -268,8 +266,8 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
                                        static_cast<FLOAT>(aPos.getY() - bounds.Top()) };
             WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline, pGlyph->IsVertical());
             DWRITE_GLYPH_RUN glyphs = {
-                mpFontFace,
-                mlfEmHeight,
+                pFontFace,
+                lfEmHeight,
                 1,
                 glyphIndices,
                 glyphAdvances,
@@ -287,7 +285,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (pBrush)
         pBrush->Release();
 
-    ReleaseFont();
+    pFontFace->Release();
 
     if (hr == D2DERR_RECREATE_TARGET)
     {
@@ -296,72 +294,6 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     }
 
     return succeeded;
-}
-
-bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
-{
-    // A TextOutRender can only be bound to one font at a time, so the
-    assert(mpFontFace == nullptr);
-    if (mpFontFace)
-    {
-        ReleaseFont();
-        return false;
-    }
-
-    // Initially bind to an empty rectangle to get access to the font face,
-    //  we'll update it once we've calculated a bounding rect in DrawGlyphs
-    if (FAILED(BindDC(mhDC = hDC)))
-        return false;
-
-    mlfEmHeight = 0;
-    return GetDWriteFaceFromHDC(hDC, &mpFontFace, &mlfEmHeight);
-}
-
-bool D2DWriteTextOutRenderer::ReleaseFont()
-{
-    mpFontFace->Release();
-    mpFontFace = nullptr;
-    mhDC = nullptr;
-
-    return true;
-}
-
-// GetGlyphInkBoxes
-// The inkboxes returned have their origin on the baseline, to a -ve value
-// of Top() means the glyph extends abs(Top()) many pixels above the
-// baseline, and +ve means the ink starts that many pixels below.
-std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t const * pGid, uint16_t const * pGidEnd) const
-{
-    ptrdiff_t nGlyphs = pGidEnd - pGid;
-    if (nGlyphs < 0)
-        return std::vector<tools::Rectangle>();
-
-    DWRITE_FONT_METRICS aFontMetrics;
-    mpFontFace->GetMetrics(&aFontMetrics);
-
-    std::vector<DWRITE_GLYPH_METRICS> metrics(nGlyphs);
-    if (!SUCCEEDED(CHECKHR(mpFontFace->GetDesignGlyphMetrics(pGid, nGlyphs, metrics.data()))))
-        return std::vector<tools::Rectangle>();
-
-    std::vector<tools::Rectangle> aOut(nGlyphs);
-    auto pOut = aOut.begin();
-    for (auto &m : metrics)
-    {
-        const auto left  = m.leftSideBearing;
-        const auto top   = m.topSideBearing - m.verticalOriginY;
-        const auto right = m.advanceWidth - m.rightSideBearing;
-        const auto bottom = INT32(m.advanceHeight) - m.verticalOriginY - m.bottomSideBearing;
-
-        // Scale to screen space.
-        pOut->SetLeft( std::floor(left * mlfEmHeight / aFontMetrics.designUnitsPerEm) );
-        pOut->SetTop( std::floor(top * mlfEmHeight / aFontMetrics.designUnitsPerEm) );
-        pOut->SetRight( std::ceil(right * mlfEmHeight / aFontMetrics.designUnitsPerEm) );
-        pOut->SetBottom( std::ceil(bottom * mlfEmHeight / aFontMetrics.designUnitsPerEm) );
-
-        ++pOut;
-    }
-
-    return aOut;
 }
 
 bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
