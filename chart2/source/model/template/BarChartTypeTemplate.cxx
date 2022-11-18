@@ -160,11 +160,11 @@ bool BarChartTypeTemplate::isSwapXAndY() const
 }
 
 // ____ ChartTypeTemplate ____
-bool  BarChartTypeTemplate::matchesTemplate(
+bool  BarChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
-    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate2( xDiagram, bAdaptProperties );
 
     //check BarDirection
     if( bResult )
@@ -202,7 +202,7 @@ rtl::Reference< ChartType > BarChartTypeTemplate::getChartTypeForIndex( sal_Int3
     return new ColumnChartType();
 }
 
-rtl::Reference< ChartType > BarChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > BarChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
@@ -232,13 +232,13 @@ Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertyS
     return *StaticBarChartTypeTemplateInfo::get();
 }
 
-void BarChartTypeTemplate::applyStyle(
+void BarChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
     if( getDimension() != 3 )
         return;
@@ -256,10 +256,10 @@ void BarChartTypeTemplate::applyStyle(
     }
 }
 
-void BarChartTypeTemplate::resetStyles(
+void BarChartTypeTemplate::resetStyles2(
     const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
-    ChartTypeTemplate::resetStyles( xDiagram );
+    ChartTypeTemplate::resetStyles2( xDiagram );
     std::vector< rtl::Reference< DataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );

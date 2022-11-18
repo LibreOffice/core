@@ -203,13 +203,13 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     }
 }
 
-void ColumnLineChartTypeTemplate::applyStyle(
+void ColumnLineChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     if( nChartTypeIndex==0 ) // columns
     {
@@ -231,7 +231,7 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
 }
 
 // ____ XChartTypeTemplate ____
-bool ColumnLineChartTypeTemplate::matchesTemplate(
+bool ColumnLineChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
@@ -312,7 +312,7 @@ rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForIndex( s
         return new LineChartType();
 }
 
-rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -330,7 +330,7 @@ rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSerie
     return xResult;
 }
 
-rtl::Reference< DataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter2()
 {
     if( ! m_xDataInterpreter.is())
     {

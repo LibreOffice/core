@@ -175,19 +175,19 @@ StackMode AreaChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
 }
 
 // ____ ChartTypeTemplate ____
-void AreaChartTypeTemplate::applyStyle(
+void AreaChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-void AreaChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
+void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
-    ChartTypeTemplate::resetStyles( xDiagram );
+    ChartTypeTemplate::resetStyles2( xDiagram );
     std::vector< rtl::Reference< ::chart::DataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
@@ -205,7 +205,7 @@ rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal_Int
     return new AreaChartType();
 }
 
-rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );

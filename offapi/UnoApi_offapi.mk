@@ -642,6 +642,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2,\
 	ChartDocumentWrapper \
 	ChartType \
 	ChartTypeManager \
+	ChartTypeTemplate\
 	CoordinateSystem \
 	CoordinateSystemType \
 	DataPoint \
@@ -2029,6 +2030,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XChartType \
 	XChartTypeContainer \
 	XChartTypeManager \
+	XChartTypeTemplate \
 	XColorScheme \
 	XCoordinateSystem \
 	XCoordinateSystemContainer \

@@ -52,12 +52,12 @@ protected:
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual bool supportsCategories() override;
+    virtual sal_Bool SAL_CALL supportsCategories() override;
     virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries( const std::vector<
+        getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter() override;
-    virtual void applyStyle(
+    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter2() override;
+    virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,

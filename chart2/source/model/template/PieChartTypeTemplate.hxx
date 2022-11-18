@@ -56,19 +56,19 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
-    // ____ XChartTypeTemplate ____
-    virtual bool matchesTemplate(
+    // ____ ChartTypeTemplate ____
+    virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties ) override;
     virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries( const std::vector<
+        getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual void applyStyle(
+    virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
-    virtual void resetStyles(
+    virtual void resetStyles2(
         const rtl::Reference< ::chart::Diagram >& xDiagram ) override;
 
     // ____ ChartTypeTemplate ____

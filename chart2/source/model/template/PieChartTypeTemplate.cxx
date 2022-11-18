@@ -272,11 +272,11 @@ void PieChartTypeTemplate::createChartTypes(
 }
 
 // ____ XChartTypeTemplate ____
-bool PieChartTypeTemplate::matchesTemplate(
+bool PieChartTypeTemplate::matchesTemplate2(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
-    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate2( xDiagram, bAdaptProperties );
 
     bool bTemplateUsesRings = false;
     getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
@@ -379,7 +379,7 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int3
     return xResult;
 }
 
-rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
+rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries2(
         const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
     rtl::Reference< ChartType > xResult;
@@ -399,13 +399,13 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-void PieChartTypeTemplate::applyStyle(
+void PieChartTypeTemplate::applyStyle2(
     const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
 {
-    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     try
     {
@@ -492,7 +492,7 @@ void PieChartTypeTemplate::applyStyle(
     }
 }
 
-void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
+void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // reset axes and grids
     if( xDiagram.is())
@@ -529,7 +529,7 @@ void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >
         }
     }
 
-    ChartTypeTemplate::resetStyles( xDiagram );
+    ChartTypeTemplate::resetStyles2( xDiagram );
 
     // vary colors by point,
     // line style
