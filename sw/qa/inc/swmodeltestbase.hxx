@@ -147,13 +147,6 @@ protected:
     }
 
     /**
-     * Override this function if interested in skipping import test for this file
-     */
-     virtual bool mustTestImportOf(const char* /* filename */) const
-     {
-        return true;
-     }
-    /**
      * Override this function if some special filename-specific setup is needed
      */
     virtual std::unique_ptr<Resetter> preTest(const char* /*filename*/)

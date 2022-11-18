@@ -64,17 +64,13 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* 
 
 void SwModelTestBase::executeImportTest(const char* filename, const char* pPassword)
 {
-    // If the testcase is stored in some other format, it's pointless to test.
-    if (mustTestImportOf(filename))
-    {
-        maTempFile.EnableKillingFile(false);
-        header();
-        std::unique_ptr<Resetter> const pChanges(preTest(filename));
-        load(filename, pPassword);
-        verify();
-        finish();
-        maTempFile.EnableKillingFile();
-    }
+    maTempFile.EnableKillingFile(false);
+    header();
+    std::unique_ptr<Resetter> const pChanges(preTest(filename));
+    load(filename, pPassword);
+    verify();
+    finish();
+    maTempFile.EnableKillingFile();
 }
 
 void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const char* pPassword)
@@ -83,10 +79,7 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
     load(filename, pPassword);
-    if (mustTestImportOf(filename))
-    {
-        verify();
-    }
+    verify();
     postLoad(filename);
     reload(mpFilter, filename, pPassword);
     verify();
