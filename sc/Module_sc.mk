@@ -41,23 +41,23 @@ ifneq ($(OS),iOS)
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
-	CppunitTest_sc_parallelism \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sc_ucalc) \
 	CppunitTest_sc_ucalc_condformat \
 	CppunitTest_sc_ucalc_copypaste \
+	CppunitTest_sc_ucalc_datatransformation \
 	CppunitTest_sc_ucalc_formula \
+	CppunitTest_sc_ucalc_parallelism \
 	CppunitTest_sc_ucalc_pivottable \
+	CppunitTest_sc_ucalc_rangelst \
+	CppunitTest_sc_ucalc_range \
 	CppunitTest_sc_ucalc_sharedformula \
 	CppunitTest_sc_ucalc_sort \
 	CppunitTest_sc_bugfix_test \
 	CppunitTest_sc_filters_test \
-	CppunitTest_sc_rangelst_test \
-	CppunitTest_sc_range_test \
 	CppunitTest_sc_mark_test \
 	CppunitTest_sc_core \
 	CppunitTest_sc_dataprovider \
-	CppunitTest_sc_datatransformation \
 	CppunitTest_sc_cache_test \
     CppunitTest_sc_shapetest \
 ))

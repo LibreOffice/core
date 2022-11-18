@@ -8010,7 +8010,6 @@ sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
 sc/qa/perf/scperfobj.cxx
 sc/qa/unit/copy_paste_test.cxx
-sc/qa/unit/datatransformation_test.cxx
 sc/qa/unit/filters-test.cxx
 sc/qa/unit/functions_addin.cxx
 sc/qa/unit/functions_array.cxx
@@ -8035,15 +8034,16 @@ sc/qa/unit/helper/xpath.cxx
 sc/qa/unit/helper/xpath.hxx
 sc/qa/unit/mark_test.cxx
 sc/qa/unit/opencl-test.cxx
-sc/qa/unit/parallelism.cxx
-sc/qa/unit/range.cxx
-sc/qa/unit/rangelst_test.cxx
 sc/qa/unit/screenshots/screenshots.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
 sc/qa/unit/ucalc_condformat.cxx
+sc/qa/unit/ucalc_datatransformation.cxx
 sc/qa/unit/ucalc_formula.cxx
+sc/qa/unit/ucalc_parallelism.cxx
 sc/qa/unit/ucalc_pivottable.cxx
+sc/qa/unit/ucalc_range.cxx
+sc/qa/unit/ucalc_rangelst.cxx
 sc/qa/unit/ucalc_sharedformula.cxx
 sc/qa/unit/ucalc_sort.cxx
 sc/source/core/data/attarray.cxx
