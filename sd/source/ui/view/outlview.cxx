@@ -206,7 +206,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
     {
         if (mpOutlinerViews[nView] == nullptr)
         {
-            mpOutlinerViews[nView].reset( new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(pWin)) );
+            mpOutlinerViews[nView].reset( new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(pWin->GetOwnerWindow())) );
             mpOutlinerViews[nView]->SetBackgroundColor( aWhiteColor );
             mrOutliner.InsertView(mpOutlinerViews[nView].get(), EE_APPEND);
             bAdded = true;
