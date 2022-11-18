@@ -84,7 +84,6 @@ public:
     void ShowAll(bool bShow);
     bool Contains(const Point &rDocPt) const;
 
-    bool IsHeader() const { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( ) const;
 
     void ExecuteCommand(std::string_view rIdent);

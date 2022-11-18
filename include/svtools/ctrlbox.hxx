@@ -256,7 +256,6 @@ private:
     DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
 
     void            UpdateEntries();
-    sal_Int32       GetStylePos(sal_Int32 nListPos) const;
 
     void UpdatePreview();
 

@@ -75,7 +75,6 @@ public:
     // Bitmap
     static BitmapEx                                                         GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap );
     static css::uno::Reference< css::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
-    static css::uno::Reference< css::awt::XBitmap>    CreateVCLXBitmap( const BitmapEx& rBitmap );
 
     // Window
     static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow );

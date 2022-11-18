@@ -290,14 +290,6 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     sal_uInt16      HitPageBreak( const Point& rMouse, ScRange* pSource,
                                   SCCOLROW* pBreak, SCCOLROW* pPrev );
 
-    /** The cell may be covered by text that overflows from a previous cell.
-
-        @return if true, the given cell is covered by (overflowing) text and
-        rTextStartPosX returns the column where the text that overflows
-        starts.
-    */
-    bool            IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCCOL &rTextStartPosX);
-
     void            PasteSelection( const Point& rPosPixel );
 
     void            SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY );

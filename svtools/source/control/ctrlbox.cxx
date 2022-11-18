@@ -1473,25 +1473,6 @@ OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
     return sRet;
 }
 
-sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos ) const
-{
-    sal_Int32 nPos = -1;
-    --nListPos;
-
-    sal_Int32 n = 0;
-    size_t i = 0;
-    size_t nCount = m_vLineList.size();
-    while ( nPos == -1 && i < nCount )
-    {
-        if ( nListPos == n )
-            nPos = static_cast<sal_Int32>(i);
-        n++;
-        i++;
-    }
-
-    return nPos;
-}
-
 void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 {
     if (nStyle == SvxBorderLineStyle::NONE)
