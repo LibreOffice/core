@@ -498,8 +498,6 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
 
 void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
-    bool bStandardPaint = true;
-
     SdDrawDocument* pDoc = mpDocShell->GetDoc();
     if( pDoc && pDoc->GetDocumentType() == DocumentType::Impress)
     {
@@ -511,15 +509,12 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
             {
                 if( pShowWindow == pOutDev && mpViewSh )
                     xSlideshow->paint();
-                bStandardPaint = false;
+                return;
             }
         }
     }
 
-    if(bStandardPaint)
-    {
-        ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
-    }
+    ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
 }
 
 /**
