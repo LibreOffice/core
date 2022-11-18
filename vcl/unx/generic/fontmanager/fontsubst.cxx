@@ -101,8 +101,8 @@ bool FcPreMatchSubstitution::FindFontSubstitute(vcl::font::FontSelectPattern &rF
     // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
         return false;
-    // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if ( IsStarSymbol(rFontSelData.maSearchName) )
+    // OpenSymbol is a unicode font, but it still deserves to be treated as a symbol font
+    if ( IsOpenSymbol(rFontSelData.maSearchName) )
         return false;
 
     //see fdo#41556 and fdo#47636
@@ -177,8 +177,8 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute(vcl::font::FontSelectPatter
     // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
         return false;
-    // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if ( IsStarSymbol(rFontSelData.maSearchName) )
+    // OpenSymbol is a unicode font, but it still deserves to be treated as a symbol font
+    if ( IsOpenSymbol(rFontSelData.maSearchName) )
         return false;
 
     const vcl::font::FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );

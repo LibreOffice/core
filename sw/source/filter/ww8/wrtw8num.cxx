@@ -508,7 +508,7 @@ void MSWordExportBase::NumberingLevel(
         sFontName = pBulletFont->GetFamilyName();
         eFamily = pBulletFont->GetFamilyType();
 
-        if (IsStarSymbol(sFontName))
+        if (IsOpenSymbol(sFontName))
             SubstituteBullet(sNumStr, eChrSet, sFontName);
     }
 

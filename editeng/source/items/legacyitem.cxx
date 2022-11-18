@@ -107,7 +107,7 @@ namespace legacy
 
         SvStream& Store(const SvxFontItem& rItem, SvStream& rStrm, sal_uInt16)
         {
-            const bool bToBats(IsStarSymbol(rItem.GetFamilyName()));
+            const bool bToBats(IsOpenSymbol(rItem.GetFamilyName()));
 
             rStrm.WriteUChar(rItem.GetFamily()).WriteUChar(rItem.GetPitch()).WriteUChar(bToBats ?
                     RTL_TEXTENCODING_SYMBOL :

@@ -569,7 +569,7 @@ OUString GetSubsFontName( std::u16string_view rName, SubsFontFlags nFlags )
     return aName;
 }
 
-bool IsStarSymbol(std::u16string_view rFontName)
+bool IsOpenSymbol(std::u16string_view rFontName)
 {
     sal_Int32 nIndex = 0;
     OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));

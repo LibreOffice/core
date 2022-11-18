@@ -4892,7 +4892,7 @@ void DrawingML::WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEn
 
 sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc )
 {
-    if ( IsStarSymbol(rFontDesc.Name) )
+    if ( IsOpenSymbol(rFontDesc.Name) )
     {
         rtl_TextEncoding eCharSet = rFontDesc.CharSet;
         cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eCharSet, rFontDesc.Name);

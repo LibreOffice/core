@@ -497,7 +497,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 }
             }
 
-            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetFamilyName() ) )    // after conversion the characters are not original, so we
+            if ( ( i != nStringLen ) || IsOpenSymbol( aSrcFont.GetFamilyName() ) )    // after conversion the characters are not original, so we
             {                                                                   // will store the unicode string and a polypoly replacement
                 Color aOldFillColor( aSrcFillColor );
                 Color aOldLineColor( aSrcLineColor );

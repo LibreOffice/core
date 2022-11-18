@@ -79,7 +79,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
             {
                 m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
-                if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
+                if( IsOpenSymbol( m_pImpl->pCurrentEntry->sFontName ))
                     m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             }
             break;
@@ -89,7 +89,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
             m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
             // Older LO versions used to write incorrect character set for OpenSymbol, fix.
-            if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
+            if( IsOpenSymbol( m_pImpl->pCurrentEntry->sFontName ))
                 m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             break;
         }

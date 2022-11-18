@@ -108,7 +108,7 @@ void QtFontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA
     QFontInfo aFontInfo(rFont);
 
     rFA.SetFamilyName(toOUString(aFontInfo.family()));
-    if (IsStarSymbol(toOUString(aFontInfo.family())))
+    if (IsOpenSymbol(toOUString(aFontInfo.family())))
         rFA.SetSymbolFlag(true);
     rFA.SetStyleName(toOUString(aFontInfo.styleName()));
     rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
@@ -142,7 +142,7 @@ QtFontFace* QtFontFace::fromQFontDatabase(const QString& aFamily, const QString&
     FontAttributes aFA;
 
     aFA.SetFamilyName(toOUString(aFamily));
-    if (IsStarSymbol(aFA.GetFamilyName()))
+    if (IsOpenSymbol(aFA.GetFamilyName()))
         aFA.SetSymbolFlag(true);
     aFA.SetStyleName(toOUString(aStyle));
     aFA.SetPitch(isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE);

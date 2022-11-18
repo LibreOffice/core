@@ -137,7 +137,7 @@ bool isSymbolFont(const vcl::Font &rFont)
             rFont.GetFamilyName().startsWith("STIXNonUnicode") ||
             rFont.GetFamilyName().startsWith("STIXSize") ||
             rFont.GetFamilyName().startsWith("STIXVariants") ||
-            IsStarSymbol(rFont.GetFamilyName());
+            IsOpenSymbol(rFont.GetFamilyName());
 }
 
 bool canRenderNameOfSelectedFont(OutputDevice const &rDevice)
@@ -162,7 +162,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rD
         return aImplAdobeSymbolText;
     }
 
-    const bool bOpenSymbol = IsStarSymbol(rDevice.GetFont().GetFamilyName());
+    const bool bOpenSymbol = IsOpenSymbol(rDevice.GetFont().GetFamilyName());
 
     if (!bOpenSymbol)
     {

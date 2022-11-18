@@ -46,9 +46,9 @@ PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
     , mpHbUnscaledFont(nullptr)
     , mbFontCapabilitiesRead(false)
 {
-    // StarSymbol is a unicode font, but it still deserves the symbol flag
+    // OpenSymbol is a unicode font, but it still deserves the symbol flag
     if (!IsSymbolFont())
-        if (IsStarSymbol(GetFamilyName()))
+        if (IsOpenSymbol(GetFamilyName()))
             SetSymbolFlag(true);
 }
 

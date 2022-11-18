@@ -1259,7 +1259,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 
             if (!cRetVal && mpSubsFontName)
             {
-                if ( IsStarSymbol( OUString::createFromAscii(mpSubsFontName) ) )
+                if ( IsOpenSymbol( OUString::createFromAscii(mpSubsFontName) ) )
                 {
                     cRetVal = 0xE12C;
                     SAL_WARN( "unotools.misc", "Forcing a bullet substitution from 0x" <<

@@ -96,15 +96,15 @@ UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( std::u16string_view rName 
 */
 UNOTOOLS_DLLPUBLIC OUString StripScriptFromName(const OUString& rName);
 
-/** Determine if the font is the special Star|Open Symbol font
+/** Determine if the font is the special Open|Star Symbol font
 
     @param rFontName
-    The FontName to test for being Star|Open Symbol
+    The FontName to test for being Open|Star Symbol
 
-    @return true if this is Star|Open Symbol
+    @return true if this is Open|Star Symbol
 */
 // FIXME It's quite possible that code using this should instead check for RTL_TEXTENCODING_SYMBOL.
-UNOTOOLS_DLLPUBLIC bool IsStarSymbol(std::u16string_view rFontName);
+UNOTOOLS_DLLPUBLIC bool IsOpenSymbol(std::u16string_view rFontName);
 
 #endif // INCLUDED_UNOTOOLS_FONTDEFS_HXX
 

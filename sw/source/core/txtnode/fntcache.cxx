@@ -364,7 +364,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
                Interestingly enough, bSymbol is false for 'StarSymbol; Arial Unicode MS', so
                also check explicitly.
             */
-            if( m_bSymbol || IsStarSymbol( m_pPrtFont->GetFamilyName()))
+            if( m_bSymbol || IsOpenSymbol( m_pPrtFont->GetFamilyName()))
                 m_nExtLeading = 0;
         }
 

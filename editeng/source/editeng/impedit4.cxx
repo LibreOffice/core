@@ -362,7 +362,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         // of RTL_TEXTENCODING_MS_1252 and pay no attention
         // on export what encoding we claim to use for these
         // fonts.
-        if (IsStarSymbol(pFontItem->GetFamilyName()))
+        if (IsOpenSymbol(pFontItem->GetFamilyName()))
             eChrSet = RTL_TEXTENCODING_UTF8;
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )

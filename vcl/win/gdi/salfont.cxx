@@ -162,7 +162,7 @@ const std::map<OUString, OUString> aBitmapFontSubs =
 // TODO: See if Windows have API that we can use here to improve font fallback.
 bool WinPreMatchFontSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData) const
 {
-    if (rFontSelData.IsSymbolFont() || IsStarSymbol(rFontSelData.maSearchName))
+    if (rFontSelData.IsSymbolFont() || IsOpenSymbol(rFontSelData.maSearchName))
         return false;
 
     for (const auto& aSub : aBitmapFontSubs)
