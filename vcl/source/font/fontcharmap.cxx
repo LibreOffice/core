@@ -76,6 +76,8 @@ bool HasSymbolCmap(const unsigned char* pCmap, int nLength)
     {
         int nPlatform = GetUShort(p);
         int nEncoding = GetUShort(p + 2);
+        // https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6cmap.html
+        // When the platformID is 3 (Windows), an encoding of 0 is Symbol
         if (nPlatform == 3 && nEncoding == 0)
             return true;
     }
