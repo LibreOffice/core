@@ -2018,6 +2018,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf142080)
         "top", OUString::number(nPage9Top + 1460));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf152106)
+{
+    // this caused an infinite loop
+    createSwDoc("tdf152106.odt");
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // frame on page 3
+    assertXPath(pLayout, "/root/page[3]/sorted_objs/fly", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
 {
     createSwDoc("tdf128198-1.docx");

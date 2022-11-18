@@ -1474,6 +1474,8 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 
         // FME 2007-08-30 #i81146# new loop control
         int nLoopControlRuns = 0;
+        // tdf#152106 loop control for multi-column sections
+        int nLoopControlRunsInMultiCol = 0;
         const int nLoopControlMax = 20;
         const SwFrame* pLoopControlCond = nullptr;
 
@@ -1626,10 +1628,16 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 // #i28701# - restart layout process, if
                 // requested by floating screen object formatting
                 if (bRestartLayoutProcess
+                    // tdf#152106 loop control in multi-column sections to avoid of freezing
+                    && nLoopControlRunsInMultiCol < nLoopControlMax
                     // tdf#142080 if it was already on next page, and still is,
                     // ignore restart, as restart could cause infinite loop
                     && (wasFrameLowerOfLay || pLay->IsAnLower(pFrame)))
                 {
+                    bool bIsMultiColumn = pSect && pSect->GetSection() && pSect->Lower() &&
+                            pSect->Lower()->IsColumnFrame() && pSect->Lower()->GetNext();
+                    if ( bIsMultiColumn )
+                        ++nLoopControlRunsInMultiCol;
                     pFrame = pLay->ContainsAny();
                     pAgainObj1 = nullptr;
                     pAgainObj2 = nullptr;
