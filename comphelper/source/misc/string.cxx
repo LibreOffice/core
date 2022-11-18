@@ -530,6 +530,15 @@ OUString reverseString(std::u16string_view rStr)
     return sBuf.makeStringAndClear();
 }
 
+OUString reverseCodePoints(OUString const & str) {
+    auto const len = str.getLength();
+    OUStringBuffer buf(len);
+    for (auto i = len; i != 0;) {
+        buf.appendUtf32(str.iterateCodePoints(&i, -1));
+    }
+    return buf.makeStringAndClear();
+}
+
 sal_Int32 indexOfAny(std::u16string_view rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos)
 {

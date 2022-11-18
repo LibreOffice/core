@@ -123,7 +123,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
     }
 
     if (isRTL)  // If so, reverse string
-        str = ::comphelper::string::reverseString(str);
+        str = ::comphelper::string::reverseCodePoints(str);
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 

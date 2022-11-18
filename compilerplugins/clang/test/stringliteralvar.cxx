@@ -110,4 +110,25 @@ void f11(int nStreamType)
     (void)sStreamType;
 }
 
+extern sal_Unicode const extarr[1];
+
+sal_Unicode init();
+
+void f12()
+{
+    // Suppress warnings if the array contains a malformed sequence of UTF-16 code units...:
+    static sal_Unicode const arr1[] = { 0xD800 };
+    f(OUString(arr1, 1));
+    // ...Or potentially contains a malformed sequence of UTF-16 code units...:
+    f(OUString(extarr, 1));
+    sal_Unicode const arr2[] = { init() };
+    f(OUString(arr2, 1));
+    // ...But generate a warning if the array contains a well-formed sequence of UTF-16 code units
+    // containing surrogates:
+    // expected-error-re@+1 {{change type of variable 'arr3' from constant character array ('const sal_Unicode{{ ?}}[2]'{{( \(aka 'const char16_t\[2\]'\))?}}) to OUStringLiteral [loplugin:stringliteralvar]}}
+    static sal_Unicode const arr3[] = { 0xD800, 0xDC00 };
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
+    f(OUString(arr3, 2));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
