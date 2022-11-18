@@ -45,10 +45,6 @@ PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
     , mpHbFace(nullptr)
     , mpHbUnscaledFont(nullptr)
 {
-    // OpenSymbol is a unicode font, but it still deserves the symbol flag
-    if (!IsSymbolFont())
-        if (IsOpenSymbol(GetFamilyName()))
-            SetSymbolFlag(true);
 }
 
 PhysicalFontFace::~PhysicalFontFace()

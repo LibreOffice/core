@@ -516,10 +516,6 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 
     rxTo->SetOrientation(mrFontInstance.GetFontSelectPattern().mnOrientation);
 
-    //Always consider [open]symbol as symbol fonts
-    if ( IsOpenSymbol( rxTo->GetFamilyName() ) )
-        rxTo->SetSymbolFlag( true );
-
     FT_Activate_Size( maSizeFT );
 
     rxTo->ImplCalcLineSpacing(&mrFontInstance);
