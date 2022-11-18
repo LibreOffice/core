@@ -82,8 +82,8 @@ public:
     rtl::Reference<SdrObject> CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     virtual void MarkListHasChanged() override;
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) override;
-    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) override;
+    virtual void AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow) override;
+    virtual void DeleteDeviceFromPaintView(OutputDevice& rOldDev) override;
 
     static void createControlLabelPair(
         OutputDevice const * _pOutDev,

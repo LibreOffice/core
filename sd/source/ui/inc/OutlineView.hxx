@@ -75,8 +75,8 @@ public:
     static SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
     static SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
-    virtual void AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow) override;
-    virtual void DeleteWindowFromPaintView(OutputDevice* pWin) override;
+    virtual void AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow) override;
+    virtual void DeleteDeviceFromPaintView(OutputDevice& rDev) override;
 
     OutlinerView*   GetViewByWindow(vcl::Window const * pWin) const;
     SdrOutliner&    GetOutliner() { return mrOutliner; }

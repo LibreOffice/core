@@ -175,7 +175,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
         SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);
 
     if (pOut)
-        AddWindowToPaintView(pOut, nullptr);
+        AddDeviceToPaintView(*pOut, nullptr);
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();
@@ -385,10 +385,9 @@ void SdrPaintView::HideSdrPage()
     }
 }
 
-void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWindow)
+void SdrPaintView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window *pWindow)
 {
-    DBG_ASSERT(pNewWin, "SdrPaintView::AddWindowToPaintView: No OutputDevice(!)");
-    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, *pNewWin, pWindow);
+    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, rNewDev, pWindow);
     maPaintWindows.emplace_back(pNewPaintWindow);
 
     if(mpPageView)
@@ -397,10 +396,9 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWin
     }
 }
 
-void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
+void SdrPaintView::DeleteDeviceFromPaintView(OutputDevice& rOldDev)
 {
-    assert(pOldWin && "SdrPaintView::DeleteWindowFromPaintView: No OutputDevice(!)");
-    SdrPaintWindow* pCandidate = FindPaintWindow(*pOldWin);
+    SdrPaintWindow* pCandidate = FindPaintWindow(rOldDev);
 
     if(pCandidate)
     {

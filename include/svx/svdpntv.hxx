@@ -299,9 +299,9 @@ public:
     // Iterate over all registered PageViews
     SdrPageView* GetSdrPageView() const { return mpPageView.get(); }
 
-    // A SdrView can be displayed on multiple Windows at the same time
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow);
-    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
+    // A SdrView can be output to multiple devices at the same time
+    virtual void AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow);
+    virtual void DeleteDeviceFromPaintView(OutputDevice& rOldDev);
 
     void SetLayerVisible(const OUString& rName, bool bShow);
     bool IsLayerVisible(const OUString& rName) const;

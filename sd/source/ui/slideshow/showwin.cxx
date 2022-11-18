@@ -587,7 +587,7 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
 void ShowWindow::DeleteWindowFromPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->DeleteWindowFromPaintView( GetOutDev() );
+        mpViewShell->GetView()->DeleteDeviceFromPaintView( *GetOutDev() );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
@@ -597,7 +597,7 @@ void ShowWindow::DeleteWindowFromPaintView()
 void ShowWindow::AddWindowToPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->AddWindowToPaintView( GetOutDev(), nullptr );
+        mpViewShell->GetView()->AddDeviceToPaintView( *GetOutDev(), nullptr );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )

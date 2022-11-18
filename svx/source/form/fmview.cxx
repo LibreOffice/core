@@ -174,28 +174,25 @@ namespace
 }
 
 
-void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow)
+void FmFormView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow)
 {
-    E3dView::AddWindowToPaintView(pNewWin, pWindow);
-
-    if ( !pNewWin )
-        return;
+    E3dView::AddDeviceToPaintView(rNewDev, pWindow);
 
     // look up the PageViewWindow for the newly inserted window, and care for it
     // #i39269# / 2004-12-20 / frank.schoenheit@sun.com
-    const SdrPageWindow* pPageWindow = findPageWindow( this, pNewWin );
+    const SdrPageWindow* pPageWindow = findPageWindow( this, &rNewDev );
     if ( pPageWindow )
         pImpl->addWindow( *pPageWindow );
 }
 
 
-void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
+void FmFormView::DeleteDeviceFromPaintView(OutputDevice& rNewDev)
 {
-    const SdrPageWindow* pPageWindow = findPageWindow( this, pNewWin );
+    const SdrPageWindow* pPageWindow = findPageWindow( this, &rNewDev );
     if ( pPageWindow )
         pImpl->removeWindow( pPageWindow->GetControlContainer() );
 
-    E3dView::DeleteWindowFromPaintView(pNewWin);
+    E3dView::DeleteDeviceFromPaintView(rNewDev);
 }
 
 

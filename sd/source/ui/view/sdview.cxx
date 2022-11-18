@@ -161,7 +161,7 @@ View::~View()
     while(PaintWindowCount())
     {
         // remove all registered OutDevs
-        suppress_fun_call_w_exception(DeleteWindowFromPaintView(GetFirstOutputDevice()));
+        suppress_fun_call_w_exception(DeleteDeviceFromPaintView(*GetFirstOutputDevice()));
     }
 }
 

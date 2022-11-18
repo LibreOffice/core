@@ -2483,37 +2483,37 @@ void SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
     SdrGlueEditView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
 
-void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow)
+void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow)
 {
-    SdrGlueEditView::AddWindowToPaintView(pNewWin, pWindow);
+    SdrGlueEditView::AddDeviceToPaintView(rNewDev, pWindow);
 
     if (mxWeakTextEditObj.get() && !mbTextEditOnlyOneView
-        && pNewWin->GetOutDevType() == OUTDEV_WINDOW)
+        && rNewDev.GetOutDevType() == OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView = ImpMakeOutlinerView(pNewWin->GetOwnerWindow(), nullptr);
+        OutlinerView* pOutlView = ImpMakeOutlinerView(rNewDev.GetOwnerWindow(), nullptr);
         mpTextEditOutliner->InsertView(pOutlView);
     }
 }
 
-void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
+void SdrObjEditView::DeleteDeviceFromPaintView(OutputDevice& rOldDev)
 {
-    SdrGlueEditView::DeleteWindowFromPaintView(pOldWin);
+    SdrGlueEditView::DeleteDeviceFromPaintView(rOldDev);
 
     if (mxWeakTextEditObj.get() && !mbTextEditOnlyOneView
-        && pOldWin->GetOutDevType() == OUTDEV_WINDOW)
+        && rOldDev.GetOutDevType() == OUTDEV_WINDOW)
     {
         for (size_t i = mpTextEditOutliner->GetViewCount(); i > 0;)
         {
             i--;
             OutlinerView* pOLV = mpTextEditOutliner->GetView(i);
-            if (pOLV && pOLV->GetWindow() == pOldWin->GetOwnerWindow())
+            if (pOLV && pOLV->GetWindow() == rOldDev.GetOwnerWindow())
             {
                 mpTextEditOutliner->RemoveView(i);
             }
         }
     }
 
-    lcl_RemoveTextEditOutlinerViews(this, GetSdrPageView(), pOldWin);
+    lcl_RemoveTextEditOutlinerViews(this, GetSdrPageView(), &rOldDev);
 }
 
 bool SdrObjEditView::IsTextEditInSelectionMode() const

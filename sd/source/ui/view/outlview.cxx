@@ -194,7 +194,7 @@ void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pW
     }
 }
 
-void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
+void OutlineView::AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow)
 {
     bool bAdded = false;
     bool bValidArea = false;
@@ -206,7 +206,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
     {
         if (mpOutlinerViews[nView] == nullptr)
         {
-            mpOutlinerViews[nView].reset( new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(pWin->GetOwnerWindow())) );
+            mpOutlinerViews[nView].reset( new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(rDev.GetOwnerWindow())) );
             mpOutlinerViews[nView]->SetBackgroundColor( aWhiteColor );
             mrOutliner.InsertView(mpOutlinerViews[nView].get(), EE_APPEND);
             bAdded = true;
@@ -226,12 +226,12 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
     }
 
     // white background in Outliner
-    pWin->SetBackground( Wallpaper( aWhiteColor ) );
+    rDev.SetBackground( Wallpaper( aWhiteColor ) );
 
-    ::sd::View::AddWindowToPaintView(pWin, pWindow);
+    ::sd::View::AddDeviceToPaintView(rDev, pWindow);
 }
 
-void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
+void OutlineView::DeleteDeviceFromPaintView(OutputDevice& rDev)
 {
     bool bRemoved = false;
     sal_uInt16 nView = 0;
@@ -243,7 +243,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
         {
             pWindow = mpOutlinerViews[nView]->GetWindow();
 
-            if (pWindow->GetOutDev() == pWin)
+            if (pWindow->GetOutDev() == &rDev)
             {
                 mrOutliner.RemoveView( mpOutlinerViews[nView].get() );
                 mpOutlinerViews[nView].reset();
@@ -254,7 +254,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
         nView++;
     }
 
-    ::sd::View::DeleteWindowFromPaintView(pWin);
+    ::sd::View::DeleteDeviceFromPaintView(rDev);
 }
 
 /**

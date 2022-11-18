@@ -628,7 +628,7 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
 
     // take DrawView from presentation window, but give the old window back
     if( mpShowWindow && mpView )
-        mpView->DeleteWindowFromPaintView( mpShowWindow->GetOutDev() );
+        mpView->DeleteDeviceFromPaintView( *mpShowWindow->GetOutDev() );
 
     if( mpView )
         mpView->SetAnimationPause( false );
@@ -781,7 +781,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddWindowToPaintView( mpShowWindow->GetOutDev(), nullptr );
+            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
             mpView->SetAnimationPause( true );
         }
 
@@ -967,7 +967,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 
             if( mpView )
             {
-                mpView->AddWindowToPaintView( mpShowWindow->GetOutDev(), nullptr );
+                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
                 mpView->SetAnimationPause( true );
             }
 
