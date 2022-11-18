@@ -26,6 +26,7 @@
 #include <docsh.hxx>
 #include <cmdid.h>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
 
 namespace sw
 {
@@ -67,7 +68,9 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     , m_nAccessibilityIssues(0)
     , m_bInitialCheck(false)
     , m_bOnlineCheckStatus(
-          officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get())
+          !utl::ConfigManager::IsFuzzing()
+              ? officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get()
+              : false)
 {
 }
 
