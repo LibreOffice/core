@@ -150,7 +150,7 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::string_view rIn, char cTok);
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok);
 
-/** Reverse an OUString
+/** Reverse an OUString's UTF-16 code units.
 
   @param    rIn     the input OUString
   @return   the reversed input
@@ -164,6 +164,9 @@ COMPHELPER_DLLPUBLIC OUString reverseString(std::u16string_view rStr);
 */
 COMPHELPER_DLLPUBLIC OString reverseString(std::string_view rStr);
 
+/** Reverse an OUString's Unicode code points.
+*/
+COMPHELPER_DLLPUBLIC OUString reverseCodePoints(OUString const & str);
 
 namespace detail
 {

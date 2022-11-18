@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <iterator>
+
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
@@ -43,6 +47,7 @@ public:
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
     void testReverseString();
+    void testReverseCodePoints();
     void testSplit();
     void testRemoveAny();
 
@@ -55,6 +60,7 @@ public:
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testReverseString);
+    CPPUNIT_TEST(testReverseCodePoints);
     CPPUNIT_TEST(testSplit);
     CPPUNIT_TEST(testRemoveAny);
     CPPUNIT_TEST_SUITE_END();
@@ -178,9 +184,28 @@ void TestString::testTokenCount()
 
 void TestString::testReverseString()
 {
-    OString aOut = ::comphelper::string::reverseString("ABC");
+    CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseString(u""));
+    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseString(u"abc"));
+    static sal_Unicode const rev[] = {'w', 0xDFFF, 0xDBFF, 'v', 0xDC00, 0xD800, 'u'};
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(rev, std::size(rev)),
+        comphelper::string::reverseString(u"u\U00010000v\U0010FFFFw"));
+    static sal_Unicode const malformed[] = {0xDC00, 0xD800};
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\U00010000"),
+        comphelper::string::reverseString(std::u16string_view(malformed, std::size(malformed))));
+}
 
-    CPPUNIT_ASSERT_EQUAL(OString("CBA"), aOut);
+void TestString::testReverseCodePoints() {
+    CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseCodePoints(""));
+    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseCodePoints("abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"w\U0010FFFFv\U00010000u"),
+        comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"));
+    static sal_Unicode const malformed[] = {0xDC00, 0xD800};
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\U00010000"),
+        comphelper::string::reverseCodePoints(OUString(malformed, std::size(malformed))));
 }
 
 void TestString::testSplit()

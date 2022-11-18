@@ -28,6 +28,7 @@
 #include <cassert>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -137,6 +138,10 @@ public:
                     return true;
                 }
                 auto const d = e1->getDecl();
+                if (isPotentiallyInitializedWithMalformedUtf16(d))
+                {
+                    return true;
+                }
                 if (!reportedArray_.insert(d).second)
                 {
                     return true;
@@ -188,6 +193,10 @@ public:
             return true;
         }
         auto const d = e->getDecl();
+        if (isPotentiallyInitializedWithMalformedUtf16(d))
+        {
+            return true;
+        }
         if (!reportedArray_.insert(d).second)
         {
             return true;
@@ -244,6 +253,61 @@ private:
         {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
+    }
+
+    // There is some confusion on the semantics of numeric-escape-sequences in string literals, see
+    // <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2029r4.html> "Proposed resolution
+    // for core issues 411, 1656, and 2333; numeric and universal character escapes in character and
+    // string literals", so suppress warnings about arrays that are deliberately not written as
+    // UTF-16 string literals because they contain lone surrogates:
+    bool isPotentiallyInitializedWithMalformedUtf16(ValueDecl const* decl) const
+    {
+        if (!decl->getType()->getArrayElementTypeNoTypeQual()->isChar16Type())
+        {
+            return false;
+        }
+        auto const init = cast<VarDecl>(decl)->getAnyInitializer();
+        if (init == nullptr)
+        {
+            return true;
+        }
+        auto const list = dyn_cast<InitListExpr>(init);
+        if (list == nullptr)
+        {
+            // Assuming that the initializer already is a string literal, assume that that string
+            // literal has no issues with malformed UTF-16:
+            if (isDebugMode())
+            {
+                assert(isa<clang::StringLiteral>(init));
+            }
+            return false;
+        }
+        auto highSurrogate = false;
+        for (auto const e : list->inits())
+        {
+            llvm::APSInt v;
+            if (!compat::EvaluateAsInt(e, v, compiler.getASTContext()))
+            {
+                return true;
+            }
+            if (highSurrogate)
+            {
+                if (v < 0xDC00 || v > 0xDFFF)
+                {
+                    return true;
+                }
+                highSurrogate = false;
+            }
+            else if (v >= 0xD800 && v <= 0xDBFF)
+            {
+                highSurrogate = true;
+            }
+            else if (v >= 0xDC00 && v <= 0xDFFF)
+            {
+                return true;
+            }
+        }
+        return highSurrogate;
     }
 
     std::set<Decl const*> reportedAutomatic_;
