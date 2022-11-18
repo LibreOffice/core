@@ -155,20 +155,31 @@ namespace drawinglayer::primitive2d
 
         /** TextHierarchyEditPrimitive2D class
 
-            #i97628#
-            Primitive to encapsulate text from an active text edit; some
-            renderers need to suppress this output due to painting the
-            edited text in e.g. an OutlinerEditView. It's derived from
-            GroupPrimitive2D, so the implicit decomposition will use the
-            content. To suppress, this primitive needs to be parsed by
-            the renderer without taking any action.
+            Primitive to encapsulate text from an active text edit; this is
+            separate from other text data since some renderers need to suppress
+            this output due to painting the edited text in e.g. an
+            OutlinerEditView in the active text edit control.
+            Deriving now from BasePrimitive2D to turn around functionality:
+            This will decompose to nothing -> suppress. In renderers that need to
+            visualize it (only VclMetafileProcessor2D for now), it needs
+            to be detected and used (see there).
+            Doing it this way around since we will potentially have many
+            pixel renderers and only one MetafileProcessor, so it will
+            be one action less to support (and to potentially forget about )
+            in these implementations.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyEditPrimitive2D final : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyEditPrimitive2D final : public BasePrimitive2D
         {
         private:
+            /// the content
+            Primitive2DContainer                             maContent;
+
         public:
             /// constructor
-            explicit TextHierarchyEditPrimitive2D(Primitive2DContainer&& aChildren);
+            explicit TextHierarchyEditPrimitive2D(Primitive2DContainer&& aContent);
+
+            /// data read access
+            const Primitive2DContainer& getContent() const { return maContent; }
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

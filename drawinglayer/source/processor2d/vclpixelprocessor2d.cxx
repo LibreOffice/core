@@ -355,17 +355,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
                 static_cast<const primitive2d::BackgroundColorPrimitive2D&>(rCandidate));
             break;
         }
-        case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
-        {
-            // #i97628#
-            // This primitive means that the content is derived from an active text edit,
-            // not from model data itself. Some renderers need to suppress this content, e.g.
-            // the pixel renderer used for displaying the edit view (like this one). It's
-            // not to be suppressed by the MetaFile renderers, so that the edited text is
-            // part of the MetaFile, e.g. needed for presentation previews.
-            // Action: Ignore here, do nothing.
-            break;
-        }
         case PRIMITIVE2D_ID_INVERTPRIMITIVE2D:
         {
             processInvertPrimitive2D(rCandidate);

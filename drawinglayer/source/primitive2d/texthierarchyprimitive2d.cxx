@@ -136,8 +136,9 @@ namespace drawinglayer::primitive2d
         }
 
 
-        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(Primitive2DContainer&& aChildren)
-        :   GroupPrimitive2D(std::move(aChildren))
+        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(Primitive2DContainer&& aContent)
+        :   BasePrimitive2D()
+        ,   maContent(std::move(aContent))
         {
         }
 
