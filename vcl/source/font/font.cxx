@@ -176,24 +176,6 @@ bool Font::IsSymbolFont() const
     return mpImplFont->IsSymbolFont();
 }
 
-void Font::SetSymbolFlag( bool bSymbol )
-{
-    if (const_cast<const ImplType&>(mpImplFont)->mbSymbolFlag != bSymbol)
-    {
-        mpImplFont->SetSymbolFlag( bSymbol );
-
-        if ( IsSymbolFont() )
-        {
-            mpImplFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
-        }
-        else
-        {
-            if ( std::as_const(mpImplFont)->GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-                mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-        }
-    }
-}
-
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
     if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag != rLanguageTag)

@@ -85,8 +85,6 @@ public:
     void                SetAlignment( TextAlign );
     void                SetCharSet( rtl_TextEncoding );
 
-    void                SetSymbolFlag( bool );
-
     // Device dependent functions
     int                 GetQuality() const;
 
