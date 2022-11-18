@@ -70,6 +70,7 @@ static void assertMotionPath(std::u16string_view rStr1, std::u16string_view rStr
 class SdOOXMLExportTest2 : public SdModelTestBaseXML
 {
 public:
+    void testRepeatBitmapMode();
     void testTdf151492();
     void testTdf149697();
     void testTdf149126();
@@ -140,6 +141,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
+    CPPUNIT_TEST(testRepeatBitmapMode);
     CPPUNIT_TEST(testTdf151492);
     CPPUNIT_TEST(testTdf149697);
     CPPUNIT_TEST(testTdf149126);
@@ -215,6 +217,29 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest2::testRepeatBitmapMode()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/repeatBitmapMode.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "tx", "1269669");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "ty", "186051");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sx", "100000");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sy", "100000");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "tr");
+
+    // if the "Scale" setting is checked in the images settings dialog.
+    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "tx", "0");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "ty", "0");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sx", "682760");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sy", "639983");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "ctr");
+}
 
 void SdOOXMLExportTest2::testTdf151492()
 {
