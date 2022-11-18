@@ -76,6 +76,7 @@ public:
     {
     }
 
+    void testRepeatBitmapMode();
     void testTdf142291();
     void testTdf151492();
     void testTdf149697();
@@ -147,6 +148,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
+    CPPUNIT_TEST(testRepeatBitmapMode);
     CPPUNIT_TEST(testTdf142291);
     CPPUNIT_TEST(testTdf151492);
     CPPUNIT_TEST(testTdf149697);
@@ -223,6 +225,27 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest2::testRepeatBitmapMode()
+{
+    loadFromURL(u"odp/repeatBitmapMode.odp");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "tx", "1269669");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "ty", "186051");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sx", "100000");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sy", "100000");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "tr");
+
+    // if the "Scale" setting is checked in the images settings dialog.
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "tx", "0");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "ty", "0");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sx", "682760");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sy", "639983");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "ctr");
+}
 
 void SdOOXMLExportTest2::testTdf142291()
 {

@@ -100,6 +100,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/random.hxx>
@@ -1615,7 +1616,7 @@ void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const 
     switch (eBitmapMode)
     {
     case BitmapMode_REPEAT:
-        mpFS->singleElementNS(XML_a, XML_tile);
+        WriteXGraphicTile(rXPropSet, rxGraphic);
         break;
     case BitmapMode_STRETCH:
         WriteXGraphicStretch(rXPropSet, rxGraphic);
@@ -1836,6 +1837,112 @@ void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const &
     }
 
     mpFS->endElementNS(XML_a, XML_stretch);
+}
+
+static OUString lclConvertRectanglePointToToken(RectanglePoint eRectanglePoint)
+{
+    OUString sAlignment;
+    switch (eRectanglePoint)
+    {
+        case RectanglePoint_LEFT_TOP:
+            sAlignment = "tl";
+            break;
+        case RectanglePoint_MIDDLE_TOP:
+            sAlignment = "t";
+            break;
+        case RectanglePoint_RIGHT_TOP:
+            sAlignment = "tr";
+            break;
+        case RectanglePoint_LEFT_MIDDLE:
+            sAlignment = "l";
+            break;
+        case RectanglePoint_MIDDLE_MIDDLE:
+            sAlignment = "ctr";
+            break;
+        case RectanglePoint_RIGHT_MIDDLE:
+            sAlignment = "r";
+            break;
+        case RectanglePoint_LEFT_BOTTOM:
+            sAlignment = "bl";
+            break;
+        case RectanglePoint_MIDDLE_BOTTOM:
+            sAlignment = "b";
+            break;
+        case RectanglePoint_RIGHT_BOTTOM:
+            sAlignment = "br";
+            break;
+        default:
+            break;
+    }
+    return sAlignment;
+}
+
+void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXPropSet,
+                                  uno::Reference<graphic::XGraphic> const& rxGraphic)
+{
+    Graphic aGraphic(rxGraphic);
+    Size aOriginalSize(aGraphic.GetPrefSize());
+    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
+    // if the original size is in pixel, convert it to mm100
+    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
+                                                                      MapMode(MapUnit::Map100thMM));
+    sal_Int32 nOffsetX = 0;
+    if (GetProperty(rXPropSet, "FillBitmapPositionOffsetX"))
+        nOffsetX = (*o3tl::doAccess<sal_Int32>(mAny)) * aOriginalSize.Width() * 3.6;
+
+    sal_Int32 nOffsetY = 0;
+    if (GetProperty(rXPropSet, "FillBitmapPositionOffsetY"))
+        nOffsetY = (*o3tl::doAccess<sal_Int32>(mAny)) * aOriginalSize.Height() * 3.6;
+
+    // convert the X size of bitmap to a percentage
+    sal_Int32 nSizeX = 0;
+    if (GetProperty(rXPropSet, "FillBitmapSizeX"))
+    {
+        mAny >>= nSizeX;
+        if (nSizeX > 0)
+            nSizeX = double(nSizeX) / aOriginalSize.Width() * 100000;
+        else if (nSizeX < 0)
+            nSizeX *= 1000;
+        else
+            nSizeX = 100000;
+    }
+
+    // convert the Y size of bitmap to a percentage
+    sal_Int32 nSizeY = 0;
+    if (GetProperty(rXPropSet, "FillBitmapSizeY"))
+    {
+        mAny >>= nSizeY;
+        if (nSizeY > 0)
+            nSizeY = double(nSizeY) / aOriginalSize.Height() * 100000;
+        else if (nSizeY < 0)
+            nSizeY *= 1000;
+        else
+            nSizeY = 100000;
+    }
+
+    // if the "Scale" setting is checked in the images settings dialog.
+    if (nSizeX < 0 && nSizeY < 0)
+    {
+        Reference<drawing::XDrawPagesSupplier> xDPS(GetFB()->getModel(), UNO_QUERY_THROW);
+        Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), UNO_SET_THROW);
+        // in this case, the size of the first slide is enough, because all slides are the same size
+        Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(0), UNO_QUERY);
+        css::uno::Reference<css::beans::XPropertySet> mXPagePropSet(xDrawPage, UNO_QUERY);
+        double nPageWidth, nPageHeight;
+        mXPagePropSet->getPropertyValue("Width") >>= nPageWidth;
+        mXPagePropSet->getPropertyValue("Height") >>= nPageHeight;
+        nSizeX = nPageWidth / aOriginalSize.Width() * std::abs(nSizeX);
+        nSizeY = nPageHeight / aOriginalSize.Height() * std::abs(nSizeY);
+    }
+
+    OUString sRectanglePoint;
+    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint"))
+        sRectanglePoint = lclConvertRectanglePointToToken(*o3tl::doAccess<RectanglePoint>(mAny));
+
+    mpFS->singleElementNS(XML_a, XML_tile, XML_tx, OUString::number(nOffsetX), XML_ty,
+                          OUString::number(nOffsetY), XML_sx, OUString::number(nSizeX), XML_sy,
+                          OUString::number(nSizeY), XML_algn, sRectanglePoint);
 }
 
 namespace
