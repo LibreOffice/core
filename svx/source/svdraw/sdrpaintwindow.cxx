@@ -252,7 +252,7 @@ SdrPaintWindow::~SdrPaintWindow()
 {
     mxOverlayManager.clear();
 
-    DestroyPreRenderDevice();
+    mpPreRenderDevice.reset();
 }
 
 rtl::Reference< sdr::overlay::OverlayManager > const & SdrPaintWindow::GetOverlayManager() const
@@ -292,21 +292,12 @@ void SdrPaintWindow::PreparePreRenderDevice()
         {
             mpPreRenderDevice.reset(new SdrPreRenderDevice(*mpOutputDevice));
         }
+        mpPreRenderDevice->PreparePreRenderDevice();
     }
     else
     {
-        DestroyPreRenderDevice();
+        mpPreRenderDevice.reset();
     }
-
-    if(mpPreRenderDevice)
-    {
-        mpPreRenderDevice->PreparePreRenderDevice();
-    }
-}
-
-void SdrPaintWindow::DestroyPreRenderDevice()
-{
-    mpPreRenderDevice.reset();
 }
 
 void SdrPaintWindow::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)

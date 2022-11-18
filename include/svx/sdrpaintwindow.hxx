@@ -123,7 +123,6 @@ public:
 
     // prepare PreRendering (evtl.)
     void PreparePreRenderDevice();
-    void DestroyPreRenderDevice();
     void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
     SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice.get(); }
 
