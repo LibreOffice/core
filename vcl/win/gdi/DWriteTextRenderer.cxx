@@ -101,8 +101,6 @@ HRESULT checkResult(HRESULT hr, const char* file, size_t line)
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     : mpD2DFactory(nullptr),
-    mpDWriteFactory(nullptr),
-    mpGdiInterop(nullptr),
     mpRT(nullptr),
     mRTProps(D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
                                           D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
@@ -110,14 +108,11 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     mbRenderingModeNatural(bRenderingModeNatural),
     meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
+    WinSalGraphics::getDWriteFactory(&mpDWriteFactory, &mpGdiInterop);
     HRESULT hr = S_OK;
     hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), nullptr, reinterpret_cast<void **>(&mpD2DFactory));
-    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&mpDWriteFactory));
     if (SUCCEEDED(hr))
-    {
-        hr = mpDWriteFactory->GetGdiInterop(&mpGdiInterop);
         hr = CreateRenderTarget(bRenderingModeNatural);
-    }
     meTextAntiAliasMode = lclGetSystemTextAntiAliasMode();
 }
 
@@ -125,10 +120,6 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
 {
     if (mpRT)
         mpRT->Release();
-    if (mpGdiInterop)
-        mpGdiInterop->Release();
-    if (mpDWriteFactory)
-        mpDWriteFactory->Release();
     if (mpD2DFactory)
         mpD2DFactory->Release();
 }
@@ -181,7 +172,7 @@ HRESULT D2DWriteTextOutRenderer::CreateRenderTarget(bool bRenderingModeNatural)
 
 bool D2DWriteTextOutRenderer::Ready() const
 {
-    return mpGdiInterop && mpRT;
+    return mpRT;
 }
 
 HRESULT D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)

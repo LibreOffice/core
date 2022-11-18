@@ -124,13 +124,12 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
 sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFONT hfont) try
 {
     using sal::systools::ThrowIfFailed;
+    IDWriteFactory* dwriteFactory;
+    IDWriteGdiInterop* dwriteGdiInterop;
+    WinSalGraphics::getDWriteFactory(&dwriteFactory, &dwriteGdiInterop);
     if (!dwriteDone)
     {
-        ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-                                          reinterpret_cast<IUnknown**>(&dwriteFactory)),
-                      SAL_WHERE);
-        ThrowIfFailed(dwriteFactory->GetGdiInterop(&dwriteGdiInterop), SAL_WHERE);
-        dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory.get());
+        dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
         dwriteDone = true;
     }
     if (!dwriteFontMgr)
@@ -343,8 +342,6 @@ void WinSkiaSalGraphicsImpl::ClearDevFontCache()
     dwriteFontMgr.reset();
     dwriteFontSetBuilder.clear();
     dwritePrivateCollection.clear();
-    dwriteFactory.clear();
-    dwriteGdiInterop.clear();
     dwriteDone = false;
     initFontInfo(); // get font info again, just in case
 }

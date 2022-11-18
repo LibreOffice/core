@@ -30,6 +30,7 @@
 #include <impfont.hxx>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <systools/win32/comtools.hxx>
 
 #include <memory>
 #include <unordered_set>
@@ -161,6 +162,10 @@ private:
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
 
+    inline static sal::systools::COMReference<IDWriteFactory> mxDWriteFactory;
+    inline static sal::systools::COMReference<IDWriteGdiInterop> mxDWriteGdiInterop;
+    inline static bool bDWriteDone = false;
+
     // just call both from setHDC!
     void InitGraphics();
     void DeInitGraphics();
@@ -188,6 +193,8 @@ public:
         WINDOW,
         SCREEN
     };
+
+    static void getDWriteFactory(IDWriteFactory** pFactory, IDWriteGdiInterop** pInterop = nullptr);
 
 public:
 

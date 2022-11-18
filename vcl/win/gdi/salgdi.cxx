@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
@@ -753,6 +754,37 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     // the printer seems not to work in this case
     if( !rDPIX || !rDPIY )
         rDPIX = rDPIY = 600;
+}
+
+void WinSalGraphics::getDWriteFactory(IDWriteFactory** pFactory, IDWriteGdiInterop** pInterop)
+{
+    if (!bDWriteDone)
+    {
+        HRESULT hr = S_OK;
+        hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                 reinterpret_cast<IUnknown**>(&mxDWriteFactory));
+        if (FAILED(hr))
+        {
+            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                               << WindowsErrorStringFromHRESULT(hr));
+            abort();
+        }
+
+        hr = mxDWriteFactory->GetGdiInterop(&mxDWriteGdiInterop);
+        if (FAILED(hr))
+        {
+            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                               << WindowsErrorStringFromHRESULT(hr));
+            abort();
+        }
+
+        bDWriteDone = true;
+    }
+
+    if (pFactory)
+        *pFactory = mxDWriteFactory.get();
+    if (pInterop)
+        *pInterop = mxDWriteGdiInterop.get();
 }
 
 sal_uInt16 WinSalGraphics::GetBitCount() const
