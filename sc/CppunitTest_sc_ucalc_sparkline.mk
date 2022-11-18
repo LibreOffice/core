@@ -9,21 +9,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_sparkline_test, \
-    sc/qa/unit/SparklineImportExportTest \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc_sparkline, \
+    sc/qa/unit/ucalc_sparkline \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sc_sparkline_test, \
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc_sparkline, \
     boost_headers \
     mdds_headers \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_sparkline_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc_sparkline, \
     basegfx \
     comphelper \
     cppu \
@@ -42,33 +42,33 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sparkline_test, \
     vcl \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sc_sparkline_test,\
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc_sparkline,\
     boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_sparkline_test,\
+$(eval $(call gb_CppunitTest_set_include,sc_ucalc_sparkline,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_sparkline_test,\
+$(eval $(call gb_CppunitTest_use_api,sc_ucalc_sparkline,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_sparkline_test))
-$(eval $(call gb_CppunitTest_use_vcl,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_use_ure,sc_ucalc_sparkline))
+$(eval $(call gb_CppunitTest_use_vcl,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_use_rdb,sc_sparkline_test,services))
+$(eval $(call gb_CppunitTest_use_rdb,sc_ucalc_sparkline,services))
 
-$(eval $(call gb_CppunitTest_use_components,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_use_components,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_sparkline_test))
+$(eval $(call gb_CppunitTest_use_configuration,sc_ucalc_sparkline))
 
-$(eval $(call gb_CppunitTest_add_arguments,sc_sparkline_test, \
+$(eval $(call gb_CppunitTest_add_arguments,sc_ucalc_sparkline, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
 
