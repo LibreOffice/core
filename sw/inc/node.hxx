@@ -80,7 +80,7 @@ namespace drawinglayer::attribute {
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
 }
 
-// Accessibiity check
+// Accessibility check
 
 namespace sw
 {
