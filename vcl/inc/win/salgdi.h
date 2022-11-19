@@ -59,14 +59,14 @@ class ImplFontMetricData;
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
 // win32 specific physically available font face
-class WinFontFace : public vcl::font::PhysicalFontFace
+class WinFontFace final : public vcl::font::PhysicalFontFace
 {
 public:
     explicit                WinFontFace(const ENUMLOGFONTEXW&, const NEWTEXTMETRICW&);
-    virtual                 ~WinFontFace() override;
+                            ~WinFontFace() override;
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
-    virtual sal_IntPtr      GetFontId() const override;
+    rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
+    sal_IntPtr              GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
 
     BYTE                    GetCharSet() const          { return meWinCharSet; }
@@ -74,7 +74,7 @@ public:
 
     IDWriteFontFace*        GetDWFontFace() const;
 
-    virtual hb_blob_t*      GetHbTable(hb_tag_t nTag) const override;
+    hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
 
 private:
     sal_IntPtr              mnId;
