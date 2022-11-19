@@ -706,8 +706,50 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     )
                 {
                     pCur->updateGeometryWith( pNext );
-                    // append text to current element
-                    pCur->Text.append( pNext->Text );
+                    if (pPara->bRtl)
+                    {
+                        // Tdf#152083: If RTL, reverse the text in pNext so that its correct order is
+                        // restored when the combined text is reversed in DrawXmlEmitter::visit.
+                        OUString tempStr;
+                        bool bNeedReverse=false;
+                        str = pNext->Text.toString();
+                        for (sal_Int32 i=0; i < str.getLength(); i++)
+                        {
+                            if (str[i] == u' ')
+                            {   // Space char (e.g. the space as in " م") needs special treatment.
+                                //   First, append the space char to pCur.
+                                pCur->Text.append(OUStringChar(str[i]));
+                                //   Then, check whether the tmpStr needs reverse, if so then reverse and append.
+                                if (bNeedReverse)
+                                {
+                                    tempStr = ::comphelper::string::reverseCodePoints(tempStr);
+                                    pCur->Text.append(tempStr);
+                                    tempStr = u"";
+                                }
+                                bNeedReverse = false;
+                            }
+                            else
+                            {
+                                tempStr += OUStringChar(str[i]);
+                                bNeedReverse = true;
+                            }
+                        }
+                        // Do the last append
+                        if (bNeedReverse)
+                        {
+                            tempStr = ::comphelper::string::reverseCodePoints(tempStr);
+                            pCur->Text.append(tempStr);
+                        }
+                        else
+                        {
+                            pCur->Text.append(tempStr);
+                        }
+                    }
+                    else
+                    {
+                        // append text to current element directly without reverse
+                        pCur->Text.append( pNext->Text );
+                    }
 
                     str = pCur->Text.toString();
                     for(int i=0; i< str.getLength(); i++)
