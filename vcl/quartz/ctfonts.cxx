@@ -379,8 +379,6 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, reinterpret_cast<const void**>(&pSymbolNum) ) )
     {
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
-        rDFA.SetSymbolFlag( (nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass );
-
         if (nSymbolTrait & kCTFontMonoSpaceTrait)
             rDFA.SetPitch(PITCH_FIXED);
     }
