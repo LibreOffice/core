@@ -566,10 +566,11 @@ IDWriteFontFace* WinFontFace::GetDWFontFace() const
     return mxDWFontFace;
 }
 
-std::vector<hb_variation_t> WinFontFace::GetVariations() const
+const std::vector<hb_variation_t>& WinFontFace::GetVariations() const
 {
-    if (m_aVariations.empty())
+    if (!mxVariations)
     {
+        mxVariations.emplace();
         auto pDWFontFace = WinFontFace::GetDWFontFace();
         if (pDWFontFace)
         {
@@ -583,16 +584,16 @@ std::vector<hb_variation_t> WinFontFace::GetVariations() const
                 hr = xDWFontFace5->GetFontAxisValues(aAxisValues.data(), aAxisValues.size());
                 if (SUCCEEDED(hr))
                 {
-                    m_aVariations.reserve(aAxisValues.size());
+                    mxVariations->reserve(aAxisValues.size());
                     for (auto& rAxisValue : aAxisValues)
-                        m_aVariations.push_back(
+                        mxVariations->push_back(
                             { OSL_NETDWORD(rAxisValue.axisTag), rAxisValue.value });
                 }
             }
         }
     }
 
-    return m_aVariations;
+    return *mxVariations;
 }
 
 namespace

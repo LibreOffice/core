@@ -268,12 +268,13 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
     return pBlob;
 }
 
-std::vector<hb_variation_t> CoreTextFontFace::GetVariations() const
+const std::vector<hb_variation_t>& CoreTextFontFace::GetVariations() const
 {
     CTFontRef pFont = CTFontCreateWithFontDescriptor(mxFontDescriptor, 0.0, nullptr);
 
-    if (m_aVariations.empty())
+    if (!mxVariations)
     {
+        mxVariations.emplace();
         CFArrayRef pAxes = CTFontCopyVariationAxes(pFont);
         if (pAxes)
         {
@@ -300,7 +301,7 @@ std::vector<hb_variation_t> CoreTextFontFace::GetVariations() const
                             continue;
                         CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
 
-                        m_aVariations.push_back({ nTag, fValue });
+                        mxVariations->push_back({ nTag, fValue });
                     }
                 }
                 CFRelease(pVariations);
@@ -309,7 +310,7 @@ std::vector<hb_variation_t> CoreTextFontFace::GetVariations() const
         }
     }
 
-    return m_aVariations;
+    return *mxVariations;
 }
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const

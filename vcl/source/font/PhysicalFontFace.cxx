@@ -44,7 +44,6 @@ PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
     : FontAttributes(rDFA)
     , mpHbFace(nullptr)
     , mpHbUnscaledFont(nullptr)
-    , mbFontCapabilitiesRead(false)
 {
     // OpenSymbol is a unicode font, but it still deserves the symbol flag
     if (!IsSymbolFont())
@@ -287,16 +286,15 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
 
 bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
-    if (!mbFontCapabilitiesRead)
+    if (!mxFontCapabilities)
     {
-        mbFontCapabilitiesRead = true;
-
+        mxFontCapabilities.emplace();
         RawFontData aData(GetRawFontData(HB_TAG('O', 'S', '/', '2')));
-        getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange,
+        getTTCoverage(mxFontCapabilities->oUnicodeRange, mxFontCapabilities->oCodePageRange,
                       aData.data(), aData.size());
     }
 
-    rFontCapabilities = maFontCapabilities;
+    rFontCapabilities = *mxFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
@@ -391,12 +389,12 @@ bool PhysicalFontFace::HasColorLayers() const
 
 const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
 {
-    if (maColorPalettes.empty())
+    if (!mxColorPalettes)
     {
+        mxColorPalettes.emplace();
         const auto pHbFace = GetHbFace();
-
         auto nPalettes = hb_ot_color_palette_get_count(pHbFace);
-        maColorPalettes.reserve(nPalettes);
+        mxColorPalettes->reserve(nPalettes);
         for (auto nPalette = 0u; nPalette < nPalettes; nPalette++)
         {
             auto nColors = hb_ot_color_palette_get_colors(pHbFace, nPalette, 0, nullptr, nullptr);
@@ -412,11 +410,11 @@ const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
                 auto b = hb_color_get_blue(aColor);
                 aPalette[nColor] = Color(ColorAlphaTag::ColorAlpha, a, r, g, b);
             }
-            maColorPalettes.push_back(aPalette);
+            mxColorPalettes->push_back(aPalette);
         }
     }
 
-    return maColorPalettes[nIndex];
+    return (*mxColorPalettes)[nIndex];
 }
 
 std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyphIndex) const
@@ -510,6 +508,16 @@ OUString PhysicalFontFace::GetName(NameID aNameID, const LanguageTag& rLanguageT
     }
 
     return sName;
+}
+
+const std::vector<hb_variation_t>& PhysicalFontFace::GetVariations() const
+{
+    if (!mxVariations)
+    {
+        SAL_WARN("vcl.fonts", "Getting font variations is not supported.");
+        mxVariations.emplace();
+    }
+    return *mxVariations;
 }
 }
 

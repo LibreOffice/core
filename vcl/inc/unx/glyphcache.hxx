@@ -129,8 +129,6 @@ public:
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
-    std::vector<hb_variation_t> GetVariations() const;
-
 private:
     friend class FreetypeFontInstance;
     friend class FreetypeManager;

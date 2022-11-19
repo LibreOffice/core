@@ -194,16 +194,15 @@ public:
         return nullptr;
     }
 
-    virtual std::vector<hb_variation_t> GetVariations() const { return {}; };
+    virtual const std::vector<hb_variation_t>& GetVariations() const;
 
 protected:
     mutable hb_face_t* mpHbFace;
     mutable hb_font_t* mpHbUnscaledFont;
     mutable FontCharMapRef mxCharMap;
-    mutable vcl::FontCapabilities maFontCapabilities;
-    mutable bool mbFontCapabilitiesRead;
-    mutable std::vector<ColorPalette> maColorPalettes;
-    mutable std::vector<hb_variation_t> m_aVariations;
+    mutable std::optional<vcl::FontCapabilities> mxFontCapabilities;
+    mutable std::optional<std::vector<ColorPalette>> mxColorPalettes;
+    mutable std::optional<std::vector<hb_variation_t>> mxVariations;
 
     explicit PhysicalFontFace(const FontAttributes&);
 
