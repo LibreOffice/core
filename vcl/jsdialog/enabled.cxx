@@ -81,7 +81,13 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"cui/ui/formatnumberdialog.ui" || rUIFile == u"cui/ui/password.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui"
-        || rUIFile == u"modules/scalc/ui/deletecontents.ui")
+        || rUIFile == u"modules/scalc/ui/deletecontents.ui"
+        || rUIFile == u"modules/scalc/ui/groupdialog.ui"
+        || rUIFile == u"modules/scalc/ui/ungroupdialog.ui"
+        || rUIFile == u"modules/scalc/ui/rowheightdialog.ui"
+        || rUIFile == u"modules/scalc/ui/optimalrowheightdialog.ui"
+        || rUIFile == u"modules/scalc/ui/colwidthdialog.ui"
+        || rUIFile == u"modules/scalc/ui/optimalcolwidthdialog.ui")
     {
         return true;
     }
