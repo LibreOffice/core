@@ -1360,7 +1360,7 @@ void CffSubsetterContext::convertOneTypeOp()
             auto bchar = popVal();
             auto ady = popVal();
             auto adx = popVal();
-            int nBase, nAccent;
+            int nBase = {}, nAccent = {};
             if (getBaseAccent(bchar, achar, &nBase, &nAccent))
             {
                 maExtraGlyphIds.push_back(nBase);
