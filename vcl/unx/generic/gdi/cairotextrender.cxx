@@ -344,7 +344,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         {
             cairo_matrix_t shear;
             cairo_matrix_init_identity(&shear);
-            shear.xy = -shear.xx * 0x6000L / 0x10000L;
+            shear.xy = -shear.xx * ARTIFICIAL_ITALIC_SKEW;
             cairo_matrix_multiply(&m, &shear, &m);
         }
 

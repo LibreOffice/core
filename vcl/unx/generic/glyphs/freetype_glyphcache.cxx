@@ -858,8 +858,8 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
     if( mbArtItalic )
     {
         FT_Matrix aMatrix;
-        aMatrix.xx = aMatrix.yy = 0x10000L;
-        aMatrix.xy = 0x6000L;
+        aMatrix.xx = aMatrix.yy = ARTIFICIAL_ITALIC_MATRIX_XX;
+        aMatrix.xy = ARTIFICIAL_ITALIC_MATRIX_XY;
         aMatrix.yx = 0;
         FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
     }

@@ -6504,7 +6504,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
            GetFontInstance()->GetFontFace()->GetItalic() != ITALIC_OBLIQUE )
         )
     {
-        fSkew = M_PI/12.0;
+        fSkew = ARTIFICIAL_ITALIC_SKEW;
     }
 
     // if the mapmode is distorted we need to adjust for that also

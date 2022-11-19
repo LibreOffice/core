@@ -51,7 +51,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     font.setSize(nHeight);
     font.setScaleX(1.0 * nWidth / nHeight);
     if (rFont.NeedsArtificialItalic())
-        font.setSkewX(1.0 * -0x4000L / 0x10000L);
+        font.setSkewX(-1.0 * ARTIFICIAL_ITALIC_SKEW);
     if (rFont.NeedsArtificialBold())
         font.setEmbolden(true);
 

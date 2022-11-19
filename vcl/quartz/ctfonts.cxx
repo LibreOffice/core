@@ -76,7 +76,7 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
          (rFSP.GetItalic() == ITALIC_OBLIQUE)) &&
         (rPFF.GetItalic() == ITALIC_NONE))
     {
-        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, basegfx::deg2rad(12), 1, 0, 0));
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, ARTIFICIAL_ITALIC_SKEW, 1, 0, 0));
     }
 
     CTFontDescriptorRef pFontDesc = rPFF.GetFontDescriptorRef();
