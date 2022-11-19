@@ -12,6 +12,7 @@ src:cairo*.h
 src:*/boost/boost/rational.hpp
 src:*/include/tools/gen.hxx
 src:*/tools/source/generic/gen.cxx
+src:*/tools/source/generic/poly.cxx
 src:*/vcl/source/outdev/map.cxx
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
