@@ -72,6 +72,8 @@ public:
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
+    IDWriteFontFace*        GetDWFontFace() const;
+
     virtual hb_blob_t*      GetHbTable(hb_tag_t nTag) const override;
 
 private:
@@ -80,6 +82,7 @@ private:
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
     LOGFONTW                maLogFont;
+    mutable sal::systools::COMReference<IDWriteFontFace> mxDWFontFace;
 };
 
 /** Class that creates (and destroys) a compatible Device Context.

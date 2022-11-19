@@ -121,12 +121,12 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return true;
 }
 
-sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFONT hfont) try
+sk_sp<SkTypeface>
+WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const WinFontInstance* pWinFont) try
 {
     using sal::systools::ThrowIfFailed;
     IDWriteFactory* dwriteFactory;
-    IDWriteGdiInterop* dwriteGdiInterop;
-    WinSalGraphics::getDWriteFactory(&dwriteFactory, &dwriteGdiInterop);
+    WinSalGraphics::getDWriteFactory(&dwriteFactory);
     if (!dwriteDone)
     {
         dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
@@ -135,30 +135,20 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     if (!dwriteFontMgr)
         return nullptr;
 
-    // tdf#137122: We need to get the exact same font as HFONT refers to,
-    // since VCL core computes things like glyph ids based on that, and getting
-    // a different font could lead to mismatches (e.g. if there's a slightly
-    // different version of the same font installed system-wide).
-    // For that CreateFromFaceFromHdc() is necessary. The simpler
-    // CreateFontFromLOGFONT() seems to search for the best matching font,
-    // which may not be the exact font.
-    sal::systools::COMReference<IDWriteFontFace> fontFace;
-    {
-        comphelper::ScopeGuard g(
-            [ hdc, oldFont(SelectFont(hdc, hfont)) ] { SelectFont(hdc, oldFont); });
-        ThrowIfFailed(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace), SAL_WHERE);
-    }
+    IDWriteFontFace* fontFace = pWinFont->GetFontFace()->GetDWFontFace();
+    if (!fontFace)
+        return nullptr;
 
     sal::systools::COMReference<IDWriteFontCollection> collection;
     ThrowIfFailed(dwriteFactory->GetSystemFontCollection(&collection), SAL_WHERE);
     sal::systools::COMReference<IDWriteFont> font;
     // As said above, this fails for our fonts.
-    if (FAILED(collection->GetFontFromFontFace(fontFace.get(), &font)))
+    if (FAILED(collection->GetFontFromFontFace(fontFace, &font)))
     {
         // If not found in system collection, try our private font collection.
         // If that's not possible we'll fall back to Skia's GDI-based font rendering.
         if (!dwritePrivateCollection
-            || FAILED(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font)))
+            || FAILED(dwritePrivateCollection->GetFontFromFontFace(fontFace, &font)))
         {
             // Our private fonts are installed using AddFontResourceExW( FR_PRIVATE )
             // and that does not make them available to the DWrite system font
@@ -206,14 +196,13 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
             ThrowIfFailed(dwriteFactory3->CreateFontCollectionFromFontSet(fontSet.get(),
                                                                           &dwritePrivateCollection),
                           SAL_WHERE);
-            ThrowIfFailed(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font),
-                          SAL_WHERE);
+            ThrowIfFailed(dwritePrivateCollection->GetFontFromFontFace(fontFace, &font), SAL_WHERE);
         }
     }
     sal::systools::COMReference<IDWriteFontFamily> fontFamily;
     ThrowIfFailed(font->GetFontFamily(&fontFamily), SAL_WHERE);
     return sk_sp<SkTypeface>(
-        SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace.get(), font.get(), fontFamily.get()));
+        SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace, font.get(), fontFamily.get()));
 }
 catch (const sal::systools::ComError& e)
 {
@@ -240,7 +229,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     sk_sp<SkTypeface> typeface = pWinFont->GetSkiaTypeface();
     if (!typeface)
     {
-        typeface = createDirectWriteTypeface(mWinParent.getHDC(), hLayoutFont);
+        typeface = createDirectWriteTypeface(pWinFont);
         bool dwrite = true;
         if (!typeface) // fall back to GDI text rendering
         {

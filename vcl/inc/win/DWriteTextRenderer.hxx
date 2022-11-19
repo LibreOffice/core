@@ -60,7 +60,7 @@ private:
     D2DWriteTextOutRenderer(const D2DWriteTextOutRenderer &) = delete;
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
-    bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
+    IDWriteFontFace* GetDWriteFace(const WinFontInstance& rWinFont, float * lfSize) const;
     bool performRender(GenericSalLayout const &rLayout, SalGraphics &rGraphics, HDC hDC, bool& bRetry, bool bRenderingModeNatural);
 
     ID2D1Factory        * mpD2DFactory;

@@ -108,7 +108,7 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     mbRenderingModeNatural(bRenderingModeNatural),
     meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
-    WinSalGraphics::getDWriteFactory(&mpDWriteFactory, &mpGdiInterop);
+    WinSalGraphics::getDWriteFactory(&mpDWriteFactory);
     HRESULT hr = S_OK;
     hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), nullptr, reinterpret_cast<void **>(&mpD2DFactory));
     if (SUCCEEDED(hr))
@@ -217,13 +217,13 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         return ExTextOutRenderer()(rLayout, rGraphics, hDC, bRenderingModeNatural);
     }
 
-    IDWriteFontFace* pFontFace;
-    float lfEmHeight = 0;
-    if (!GetDWriteFaceFromHDC(hDC, &pFontFace, &lfEmHeight))
-        return false;
-
     const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
     float fHScale = rWinFont.getHScale();
+
+    float lfEmHeight = 0;
+    IDWriteFontFace* pFontFace = GetDWriteFace(rWinFont, &lfEmHeight);
+    if (!pFontFace)
+        return false;
 
     tools::Rectangle bounds;
     bool succeeded = rLayout.GetBoundRect(bounds);
@@ -276,8 +276,6 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (pBrush)
         pBrush->Release();
 
-    pFontFace->Release();
-
     if (hr == D2DERR_RECREATE_TARGET)
     {
         CreateRenderTarget(bRenderingModeNatural);
@@ -287,14 +285,14 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     return succeeded;
 }
 
-bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
+IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFace(const WinFontInstance& rWinFont,
+                                                        float* lfSize) const
 {
-    bool succeeded = SUCCEEDED(CHECKHR(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace)));
-
-    if (succeeded)
+    auto pFontFace = rWinFont.GetFontFace()->GetDWFontFace();
+    if (pFontFace)
     {
         LOGFONTW aLogFont;
-        HFONT hFont = static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT));
+        HFONT hFont = rWinFont.GetHFONT();
 
         GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
         float dpix, dpiy;
@@ -305,7 +303,7 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
         *lfSize *= -1;
     }
 
-    return succeeded;
+    return pFontFace;
 }
 
 WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale,

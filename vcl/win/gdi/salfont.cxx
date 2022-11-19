@@ -51,6 +51,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/windowserrorstring.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -529,6 +530,33 @@ rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::f
         return new SkiaWinFontInstance(*this, rFSD);
 #endif
     return new WinFontInstance(*this, rFSD);
+}
+
+IDWriteFontFace* WinFontFace::GetDWFontFace() const
+{
+    if (!mxDWFontFace)
+    {
+        IDWriteGdiInterop* pDWriteGdiInterop;
+        WinSalGraphics::getDWriteFactory(nullptr, &pDWriteGdiInterop);
+
+        HDC hDC(::GetDC(nullptr));
+        HFONT hFont = ::CreateFontIndirectW(&maLogFont);
+        HFONT hOldFont = ::SelectFont(hDC, hFont);
+
+        HRESULT hr = pDWriteGdiInterop->CreateFontFaceFromHdc(hDC, &mxDWFontFace);
+        if (FAILED(hr))
+        {
+            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                               << WindowsErrorStringFromHRESULT(hr));
+            mxDWFontFace = nullptr;
+        }
+
+        ::SelectFont(hDC, hOldFont);
+        ::DeleteFont(hFont);
+        ::ReleaseDC(nullptr, hDC);
+    }
+
+    return mxDWFontFace;
 }
 
 namespace
