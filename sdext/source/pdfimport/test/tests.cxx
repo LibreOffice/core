@@ -798,15 +798,14 @@ namespace
             // Test for امُ عَلَيْكَ
             OString xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 14821.9583333333 2159.23861112778)']/draw:text-box/text:p/text:span)";
             OUString sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"اُم َعَلْيَك"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"امُ عَلَيَْك"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
-            // Test for ٱلسََّل . It appears in the 3rd frame, i.e. after the امُ عَلَيْكَ which is in the 2nd frame (from left to right)
+            // Test for ٱلسََّل . It appears in the 3rd frame, i.e. after the امُ عَلَيَْك which is in the 2nd frame (from left to right)
             // thus these two frames together appear as ٱلسََّل امُ عَلَيْكَ in Draw‬.
             // FIXME: Should be ٱلسَّلَامُ عَلَيْكَ (i.e. the two text frames should be merged into one so that the ل and the ا will show as لَا rather than ل ا)
-            // Note: this is commented due to ٱلسََّل is currently shown as ٱلَّسَل and will be fixed in a separate commit.
-            //xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span)";
-            //sContent = getXPathContent(pXmlDoc, xpath);
-            //CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"ٱلسََّل"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span)";
+            sContent = getXPathContent(pXmlDoc, xpath);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"ٱلسََّل"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for "LibreOffice RTL"
             xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span)";
