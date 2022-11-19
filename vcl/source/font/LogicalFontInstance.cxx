@@ -67,6 +67,13 @@ hb_font_t* LogicalFontInstance::InitHbFont()
     if (!aVariations.empty())
         hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
 
+#if HB_VERSION_ATLEAST(3, 3, 0)
+    // If we are applying artificial italic, instruct HarfBuzz to do the same
+    // so that mark positioning is also transformed.
+    if (NeedsArtificialItalic())
+        hb_font_set_synthetic_slant(pHbFont, ARTIFICIAL_ITALIC_SKEW);
+#endif
+
     ImplInitHbFont(pHbFont);
 
     return pHbFont;
