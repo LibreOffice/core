@@ -164,7 +164,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
      Then I removed the whole XChartTypeTemplate interface in
      commit 58766f997d59e4684f2887fd8cdeb12d2f8a9366.
      Which turned out to be a bad idea, so I restored it.
-     I restored it in this form because I want to restore binary compatibily with vtable
+     I restored it in this form because I want to restore binary compatibility with vtable
      layout, but I don't want to restore the XDataInterpreter stuff, which was not
      useful for external use.
     */
