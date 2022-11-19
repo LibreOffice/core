@@ -32,6 +32,13 @@
 #include <svsys.h>
 #include <vector>
 
+#include <dwrite_3.h>
+// Currently, we build with _WIN32_WINNT=0x0601 (Windows 7), which means newer
+// declarations in dwrite_3.h will not be visible.
+#if WINVER < 0x0A00
+#  include "dw-extra.h"
+#endif
+
 #include <o3tl/lru_map.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -557,6 +564,35 @@ IDWriteFontFace* WinFontFace::GetDWFontFace() const
     }
 
     return mxDWFontFace;
+}
+
+std::vector<hb_variation_t> WinFontFace::GetVariations() const
+{
+    if (m_aVariations.empty())
+    {
+        auto pDWFontFace = WinFontFace::GetDWFontFace();
+        if (pDWFontFace)
+        {
+            sal::systools::COMReference<IDWriteFontFace5> xDWFontFace5;
+            auto hr = pDWFontFace->QueryInterface(__uuidof(IDWriteFontFace5),
+                                                  reinterpret_cast<void**>(&xDWFontFace5));
+            if (SUCCEEDED(hr) && xDWFontFace5->HasVariations())
+            {
+                std::vector<DWRITE_FONT_AXIS_VALUE> aAxisValues(
+                    xDWFontFace5->GetFontAxisValueCount());
+                hr = xDWFontFace5->GetFontAxisValues(aAxisValues.data(), aAxisValues.size());
+                if (SUCCEEDED(hr))
+                {
+                    m_aVariations.reserve(aAxisValues.size());
+                    for (auto& rAxisValue : aAxisValues)
+                        m_aVariations.push_back(
+                            { OSL_NETDWORD(rAxisValue.axisTag), rAxisValue.value });
+                }
+            }
+        }
+    }
+
+    return m_aVariations;
 }
 
 namespace
