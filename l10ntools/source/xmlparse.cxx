@@ -488,8 +488,8 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 {
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                     {
-                        XMLParentNode* pElement = static_cast<XMLParentNode*>((*GetChildList())[ i ]);
-                        if( pElement->GetNodeType() ==  XMLNodeType::ELEMENT ) CheckExportStatus( pElement );//, i);
+                        XMLChildNode* pElement = (*GetChildList())[ i ];
+                        if( pElement->GetNodeType() ==  XMLNodeType::ELEMENT ) CheckExportStatus( static_cast<XMLParentNode*>(pElement) );//, i);
                     }
                 }
             }
@@ -520,7 +520,13 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 else if ( pElement->GetChildList() )
                 {
                     for (size_t k = 0; k < pElement->GetChildList()->size(); ++k)
-                        CheckExportStatus( static_cast<XMLParentNode*>((*pElement->GetChildList())[k]) );
+                    {
+                        auto const child = (*pElement->GetChildList())[k];
+                        auto const type = child->GetNodeType();
+                        if (type != XMLNodeType::DATA && type != XMLNodeType::COMMENT) {
+                            CheckExportStatus( static_cast<XMLParentNode*>(child) );
+                        }
+                    }
                 }
             }
             break;
