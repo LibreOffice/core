@@ -134,6 +134,21 @@ CfgParser::CfgParser()
 
 CfgParser::~CfgParser()
 {
+    // CfgParser::ExecuteAnalyzedToken pushes onto aStack some XML entities (like XML and document
+    // type declarations) that don't have corresponding closing tags, so will never be popped off
+    // aStack again.  But not pushing them onto aStack in the first place would change the
+    // identifiers computed in CfgStack::GetAccessPath, which could make the existing translation
+    // mechanisms fail.  So, for simplicity, and short of more thorough input error checking, take
+    // into account here all the patterns of such declarations encountered during a build and during
+    // `make translations` (some inputs start with no such declarations at all, some inputs start
+    // with an XML declaration, and some inputs start with an XML declaration followed by a document
+    // type declaration) and pop any corresponding remaining excess elements off aStack:
+    if (aStack.size() == 2 && aStack.GetStackData()->GetTagType() == "!DOCTYPE") {
+        aStack.Pop();
+    }
+    if (aStack.size() == 1 && aStack.GetStackData()->GetTagType() == "?xml") {
+        aStack.Pop();
+    }
 }
 
 bool CfgParser::IsTokenClosed(std::string_view rToken)
