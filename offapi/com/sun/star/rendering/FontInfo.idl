@@ -80,6 +80,12 @@ struct FontInfo
 
     /** Specifies whether the font is a symbol font.<p>
 
+        This refers solely to a font using the Microsoft SYMBOL_CHARSET
+        charset (i.e. RTL_TEXTENCODING_SYMBOL), and not a font using any
+        different "Symbol" encoding (e.g. RTL_TEXTENCODING_ADOBE_SYMBOL,
+        RTL_TEXTENCODING_ADOBE_DINGBATS) or a font only useful for
+        icons, dingbats or technical symbols.
+
         If yes, text written in this symbol font does not have a
         specified meaning.<p>
      */
