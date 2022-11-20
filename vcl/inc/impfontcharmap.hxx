@@ -30,8 +30,8 @@ typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 class ImplFontCharMap final : public SvRefBase
 {
 public:
-    explicit            ImplFontCharMap( bool bSymbolic,
-                                         std::vector<sal_uInt32> aRangeCodes);
+    explicit            ImplFontCharMap(bool bMicrosoftSymbolMap,
+                                        std::vector<sal_uInt32> aRangeCodes);
     virtual             ~ImplFontCharMap() override;
 
 private:
@@ -40,16 +40,16 @@ private:
                         ImplFontCharMap( const ImplFontCharMap& ) = delete;
     void                operator=( const ImplFontCharMap& ) = delete;
 
-    static ImplFontCharMapRef const & getDefaultMap( bool bSymbols=false);
+    static ImplFontCharMapRef const & getDefaultMap(bool bMicrosoftSymbolMap = false);
     bool                isDefaultMap() const;
 
 private:
     std::vector<sal_uInt32> maRangeCodes; // pairs of StartCode/(EndCode+1)
     int                 mnCharCount;      // covered codepoints
-    const bool m_bSymbolic;
+    const bool m_bMicrosoftSymbolMap;
 };
 
-bool VCL_DLLPUBLIC HasSymbolCmap(const unsigned char* pRawData, int nRawLength);
+bool VCL_DLLPUBLIC HasMicrosoftSymbolCmap(const unsigned char* pRawData, int nRawLength);
 
 #endif // INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 

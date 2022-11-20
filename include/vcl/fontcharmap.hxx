@@ -42,7 +42,7 @@ public:
 
     /** A new FontCharMap is created based on passed arguments.
      */
-    FontCharMap(bool bSymbolic, std::vector<sal_UCS4> aRangeCodes);
+    FontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_UCS4> aRangeCodes);
 
     virtual ~FontCharMap() override;
 
@@ -50,7 +50,7 @@ public:
 
         @returns the default font character map.
      */
-    static FontCharMapRef GetDefaultMap( bool bSymbols );
+    static FontCharMapRef GetDefaultMap(bool bMicrosoftSymbolMap);
 
     /** Determines if the font character map is the "default". The default map
         includes all codepoints in the Unicode BMP range, including surrogates.
@@ -136,7 +136,7 @@ public:
      */
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
-    bool isSymbolic() const;
+    bool isMicrosoftSymbolMap() const;
 
 private:
     ImplFontCharMapRef mpImplFontCharMap;

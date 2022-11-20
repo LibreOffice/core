@@ -252,7 +252,7 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
     // Check if this font is using symbol cmap subtable, most likely redundant
     // since HarfBuzz handles mapping symbol fonts for us.
     RawFontData aData(GetRawFontData(HB_TAG('c', 'm', 'a', 'p')));
-    bool bSymbol = HasSymbolCmap(aData.data(), aData.size());
+    bool bSymbol = HasMicrosoftSymbolCmap(aData.data(), aData.size());
 
     hb_face_t* pHbFace = GetHbFace();
     hb_set_t* pUnicodes = hb_set_create();

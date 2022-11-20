@@ -1185,7 +1185,7 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
     , m_nVertMetrics(0)
     , m_nUnitsPerEm(0)
     , m_xCharMap(xCharMap)
-    , m_bIsSymbolFont(false)
+    , m_bMicrosoftSymbolEncoded(false)
 {
     if (pFileName)
         m_sFileName = pFileName;
@@ -1287,10 +1287,10 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
     if (!m_xCharMap.is())
     {
         table = this->table(O_cmap, table_size);
-        m_bIsSymbolFont = HasSymbolCmap(table, table_size);
+        m_bMicrosoftSymbolEncoded = HasMicrosoftSymbolCmap(table, table_size);
     }
     else
-        m_bIsSymbolFont = m_xCharMap->isSymbolic();
+        m_bMicrosoftSymbolEncoded = m_xCharMap->isMicrosoftSymbolMap();
 
     return SFErrCodes::Ok;
 }
@@ -2204,7 +2204,7 @@ void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->subfamily = ttf->subfamily;
     info->usubfamily = ttf->usubfamily;
     info->psname = ttf->psname;
-    info->symbolEncoded = ttf->IsSymbolFont();
+    info->microsoftSymbolEncoded = ttf->IsMicrosoftSymbolEncoded();
 
     sal_uInt32 table_size;
     const sal_uInt8* table = ttf->table(O_OS2, table_size);

@@ -617,7 +617,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
         if( aInfo.italicAngle == 0 && (aInfo.macStyle & 2) )
             rFont.m_eItalic = ITALIC_NORMAL;
 
-        rFont.m_aEncoding = aInfo.symbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
+        rFont.m_aEncoding = aInfo.microsoftSymbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
 
         if( aInfo.ascender && aInfo.descender )
         {
