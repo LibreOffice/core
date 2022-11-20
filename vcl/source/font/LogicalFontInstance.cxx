@@ -63,7 +63,7 @@ hb_font_t* LogicalFontInstance::InitHbFont()
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
 
-    auto aVariations = pFace->GetVariations();
+    auto aVariations = pFace->GetVariations(*this);
     if (!aVariations.empty())
         hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
 

@@ -101,7 +101,7 @@ public:
     virtual hb_face_t* GetHbFace() const override;
     virtual hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 
-    const std::vector<hb_variation_t>& GetVariations() const override;
+    const std::vector<hb_variation_t>& GetVariations(const LogicalFontInstance&) const override;
 };
 
 class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance

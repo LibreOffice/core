@@ -288,7 +288,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
 IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFace(const WinFontInstance& rWinFont,
                                                         float* lfSize) const
 {
-    auto pFontFace = rWinFont.GetFontFace()->GetDWFontFace();
+    auto pFontFace = rWinFont.GetDWFontFace();
     if (pFontFace)
     {
         LOGFONTW aLogFont;

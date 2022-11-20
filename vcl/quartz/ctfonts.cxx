@@ -268,7 +268,7 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
     return pBlob;
 }
 
-const std::vector<hb_variation_t>& CoreTextFontFace::GetVariations() const
+const std::vector<hb_variation_t>& CoreTextFontFace::GetVariations(const LogicalFontInstance&) const
 {
     CTFontRef pFont = CTFontCreateWithFontDescriptor(mxFontDescriptor, 0.0, nullptr);
 

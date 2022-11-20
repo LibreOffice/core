@@ -510,7 +510,7 @@ OUString PhysicalFontFace::GetName(NameID aNameID, const LanguageTag& rLanguageT
     return sName;
 }
 
-const std::vector<hb_variation_t>& PhysicalFontFace::GetVariations() const
+const std::vector<hb_variation_t>& PhysicalFontFace::GetVariations(const LogicalFontInstance&) const
 {
     if (!mxVariations)
     {

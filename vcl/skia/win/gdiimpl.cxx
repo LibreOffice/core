@@ -135,7 +135,7 @@ WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const WinFontInstance* pWinFon
     if (!dwriteFontMgr)
         return nullptr;
 
-    IDWriteFontFace* fontFace = pWinFont->GetFontFace()->GetDWFontFace();
+    IDWriteFontFace* fontFace = pWinFont->GetDWFontFace();
     if (!fontFace)
         return nullptr;
 

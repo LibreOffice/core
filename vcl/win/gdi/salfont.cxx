@@ -539,39 +539,13 @@ rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::f
     return new WinFontInstance(*this, rFSD);
 }
 
-IDWriteFontFace* WinFontFace::GetDWFontFace() const
-{
-    if (!mxDWFontFace)
-    {
-        IDWriteGdiInterop* pDWriteGdiInterop;
-        WinSalGraphics::getDWriteFactory(nullptr, &pDWriteGdiInterop);
-
-        HDC hDC(::GetDC(nullptr));
-        HFONT hFont = ::CreateFontIndirectW(&maLogFont);
-        HFONT hOldFont = ::SelectFont(hDC, hFont);
-
-        HRESULT hr = pDWriteGdiInterop->CreateFontFaceFromHdc(hDC, &mxDWFontFace);
-        if (FAILED(hr))
-        {
-            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                               << WindowsErrorStringFromHRESULT(hr));
-            mxDWFontFace = nullptr;
-        }
-
-        ::SelectFont(hDC, hOldFont);
-        ::DeleteFont(hFont);
-        ::ReleaseDC(nullptr, hDC);
-    }
-
-    return mxDWFontFace;
-}
-
-const std::vector<hb_variation_t>& WinFontFace::GetVariations() const
+const std::vector<hb_variation_t>&
+WinFontFace::GetVariations(const LogicalFontInstance& rFont) const
 {
     if (!mxVariations)
     {
         mxVariations.emplace();
-        auto pDWFontFace = WinFontFace::GetDWFontFace();
+        auto pDWFontFace = static_cast<const WinFontInstance&>(rFont).GetDWFontFace();
         if (pDWFontFace)
         {
             sal::systools::COMReference<IDWriteFontFace5> xDWFontFace5;
@@ -1422,6 +1396,37 @@ bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& 
     }
 
     return true;
+}
+
+IDWriteFontFace* WinFontInstance::GetDWFontFace() const
+{
+    if (!mxDWFontFace)
+    {
+        assert(m_pGraphics);
+        HDC hDC = m_pGraphics->getHDC();
+        const HFONT hOrigFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
+        const HFONT hFont = GetHFONT();
+        if (hFont != hOrigFont)
+            SelectObject(hDC, hFont);
+
+        const ::comphelper::ScopeGuard aFontRestoreScopeGuard([hFont, hOrigFont, hDC]() {
+            if (hFont != hOrigFont)
+                SelectObject(hDC, hOrigFont);
+        });
+
+        IDWriteGdiInterop* pDWriteGdiInterop;
+        WinSalGraphics::getDWriteFactory(nullptr, &pDWriteGdiInterop);
+
+        HRESULT hr = pDWriteGdiInterop->CreateFontFaceFromHdc(hDC, &mxDWFontFace);
+        if (FAILED(hr))
+        {
+            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                               << WindowsErrorStringFromHRESULT(hr));
+            mxDWFontFace = nullptr;
+        }
+    }
+
+    return mxDWFontFace;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

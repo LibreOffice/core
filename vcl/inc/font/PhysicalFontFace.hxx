@@ -194,7 +194,7 @@ public:
         return nullptr;
     }
 
-    virtual const std::vector<hb_variation_t>& GetVariations() const;
+    virtual const std::vector<hb_variation_t>& GetVariations(const LogicalFontInstance&) const;
 
 protected:
     mutable hb_face_t* mpHbFace;

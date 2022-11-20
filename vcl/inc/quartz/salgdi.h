@@ -72,7 +72,7 @@ public:
 
     hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 
-    const std::vector<hb_variation_t>& GetVariations() const override;
+    const std::vector<hb_variation_t>& GetVariations(const LogicalFontInstance&) const override;
 
 private:
     CTFontDescriptorRef             mxFontDescriptor;
