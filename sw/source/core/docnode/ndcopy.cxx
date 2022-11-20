@@ -258,11 +258,14 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     {
         const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
         for( size_t n = rTableFormats.size(); n; )
-            if( rTableFormats[ --n ]->GetName() == sTableName )
+        {
+            const SwFrameFormat* pFormat = rTableFormats[--n];
+            if (pFormat->GetName() == sTableName && rDoc.IsUsed(*pFormat))
             {
                 sTableName = rDoc.GetUniqueTableName();
                 break;
             }
+        }
     }
 
     SwFrameFormat* pTableFormat = rDoc.MakeTableFrameFormat( sTableName, rDoc.GetDfltFrameFormat() );

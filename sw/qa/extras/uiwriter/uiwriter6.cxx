@@ -2259,6 +2259,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
     CPPUNIT_ASSERT_EQUAL(OUString("Shape"), pObject->GetName());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // insert a table
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(TableOpt, 1, 1);
+
+    // move cursor into the table
+    CPPUNIT_ASSERT(pWrtShell->MoveTable(GotoPrevTable, fnTableStart));
+
+    SwFrameFormat* pFormat = pWrtShell->GetTableFormat();
+    CPPUNIT_ASSERT(pFormat);
+
+    // set name of table to 'MyTableName'
+    pWrtShell->SetTableName(*pFormat, "MyTableName");
+
+    // cut and paste the table
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // move cursor into the pasted table
+    CPPUNIT_ASSERT(pWrtShell->MoveTable(GotoPrevTable, fnTableStart));
+
+    pFormat = pWrtShell->GetTableFormat();
+    CPPUNIT_ASSERT(pFormat);
+
+    // Before the fix the pasted table name was 'Table1'.
+    CPPUNIT_ASSERT_EQUAL(OUString("MyTableName"), pFormat->GetName());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
