@@ -102,9 +102,15 @@ static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString&
         xFP->setDisplayDirectory( aPathOpt.GetUserConfigPath() );
     }
 
-    if( aDlgHelper.Execute() == ERRCODE_NONE )
+    const ErrCode aErrCode = aDlgHelper.Execute();
+    if (aErrCode == ERRCODE_NONE)
     {
         sRet = xFP->getSelectedFiles().getConstArray()[0];
+    }
+    // tdf#120405 - use previously selected file, if selection is aborted
+    else if (aErrCode == ERRCODE_ABORT && !rURL.isEmpty())
+    {
+        sRet = rURL;
     }
 
     return sRet;
