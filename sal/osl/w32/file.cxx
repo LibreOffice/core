@@ -34,6 +34,7 @@
 #include <cassert>
 #include <algorithm>
 #include <limits>
+#include <mutex>
 
 #ifdef max /* conflict w/ std::numeric_limits<T>::max() */
 #undef max
@@ -64,7 +65,7 @@ namespace {
 */
 struct FileHandle_Impl
 {
-    CRITICAL_SECTION m_mutex;
+    std::mutex       m_mutex;
     HANDLE           m_hFile;
 
     StateBits m_state;
@@ -127,32 +128,10 @@ struct FileHandle_Impl
         SIZE_T          nBytes);
 
     oslFileError syncFile();
-
-    /** Guard.
-     */
-    class Guard
-    {
-        LPCRITICAL_SECTION m_mutex;
-
-    public:
-        explicit Guard(LPCRITICAL_SECTION pMutex);
-        ~Guard();
-    };
 };
 
 }
 
-FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
-    : m_mutex (pMutex)
-{
-    assert(pMutex);
-    ::EnterCriticalSection (m_mutex);
-}
-
-FileHandle_Impl::Guard::~Guard()
-{
-    ::LeaveCriticalSection (m_mutex);
-}
 
 FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
     : m_hFile   (hFile),
@@ -165,7 +144,6 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_bufsiz  (getpagesize()),
       m_buffer  (nullptr)
 {
-    ::InitializeCriticalSection (&m_mutex);
     m_buffer = static_cast<sal_uInt8 *>(calloc(m_bufsiz, 1));
 }
 
@@ -173,7 +151,6 @@ FileHandle_Impl::~FileHandle_Impl()
 {
     free(m_buffer);
     m_buffer = nullptr;
-    ::DeleteCriticalSection (&m_mutex);
 }
 
 SIZE_T FileHandle_Impl::getpagesize()
@@ -679,7 +656,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
 
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
@@ -697,21 +674,23 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
-    ::EnterCriticalSection(&(pImpl->m_mutex));
-
-    oslFileError result = pImpl->syncFile();
-    if (result != osl_File_E_None)
+    oslFileError result;
     {
-        /* ignore double failure */
-        (void)::CloseHandle(pImpl->m_hFile);
-    }
-    else if (!::CloseHandle(pImpl->m_hFile))
-    {
-        /* translate error code */
-        result = oslTranslateFileError(GetLastError());
+        std::lock_guard lock(pImpl->m_mutex);
+
+        result = pImpl->syncFile();
+        if (result != osl_File_E_None)
+        {
+            /* ignore double failure */
+            (void)::CloseHandle(pImpl->m_hFile);
+        }
+        else if (!::CloseHandle(pImpl->m_hFile))
+        {
+            /* translate error code */
+            result = oslTranslateFileError(GetLastError());
+        }
     }
 
-    ::LeaveCriticalSection(&(pImpl->m_mutex));
     delete pImpl;
     return result;
 }
@@ -820,7 +799,7 @@ SAL_CALL osl_readLine(
     sal_uInt64 uBytesRead = 0;
 
     // read at current filepos; filepos += uBytesRead;
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     oslFileError result = pImpl->readLineAt(
         pImpl->m_filepos, ppSequence, &uBytesRead);
     if (result == osl_File_E_None)
@@ -839,7 +818,7 @@ oslFileError SAL_CALL osl_readFile(
         return osl_File_E_INVAL;
 
     // read at current filepos; filepos += *pBytesRead;
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     oslFileError result = pImpl->readFileAt(
         pImpl->m_filepos, pBuffer, uBytesRequested, pBytesRead);
     if (result == osl_File_E_None)
@@ -859,7 +838,7 @@ oslFileError SAL_CALL osl_writeFile(
         return osl_File_E_INVAL;
 
     // write at current filepos; filepos += *pBytesWritten;
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     oslFileError result = pImpl->writeFileAt(
         pImpl->m_filepos, pBuffer, uBytesToWrite, pBytesWritten);
     if (result == osl_File_E_None)
@@ -899,7 +878,7 @@ oslFileError SAL_CALL osl_readFileAt(
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
     // read at specified fileptr
-    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
+    std::lock_guard lock (pImpl->m_mutex);
     return pImpl->readFileAt(nOffset, pBuffer, uBytesRequested, pBytesRead);
 }
 
@@ -922,7 +901,7 @@ oslFileError SAL_CALL osl_writeFileAt(
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
     // write at specified fileptr
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     return pImpl->writeFileAt(nOffset, pBuffer, uBytesToWrite, pBytesWritten);
 }
 
@@ -933,7 +912,7 @@ oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, sal_Bool *pIsEOF)
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile) || (!pIsEOF))
         return osl_File_E_INVAL;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     *pIsEOF = (pImpl->getPos() == pImpl->getSize());
     return osl_File_E_None;
 }
@@ -960,7 +939,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
         return osl_File_E_OVERFLOW;
     LONGLONG nPos = 0, nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     switch (uHow)
     {
         case osl_Pos_Absolut:
@@ -1000,7 +979,7 @@ oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile) || (!pSize))
         return osl_File_E_INVAL;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     *pSize = pImpl->getSize();
     return osl_File_E_None;
 }
@@ -1017,7 +996,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     if (exceedsMaxLONGLONG(uSize))
         return osl_File_E_OVERFLOW;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    std::lock_guard lock(pImpl->m_mutex);
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return result;

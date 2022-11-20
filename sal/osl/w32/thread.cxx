@@ -32,6 +32,7 @@
 #include <systools/win32/comtools.hxx>
 
 #include <errno.h>
+#include <mutex>
 
 namespace {
 
@@ -392,9 +393,9 @@ typedef struct TLS_
 } TLS, *PTLS;
 
 PTLS g_pThreadKeyList = nullptr;
-osl::Mutex& getThreadKeyListMutex()
+std::mutex& getThreadKeyListMutex()
 {
-    static osl::Mutex g_ThreadKeyListMutex;
+    static std::mutex g_ThreadKeyListMutex;
     return g_ThreadKeyListMutex;
 }
 
@@ -404,7 +405,7 @@ static void AddKeyToList( PTLS pTls )
 {
     if ( pTls )
     {
-        osl::MutexGuard aGuard(getThreadKeyListMutex());
+        std::lock_guard aGuard(getThreadKeyListMutex());
 
         pTls->pNext = g_pThreadKeyList;
         pTls->pPrev = nullptr;
@@ -420,7 +421,7 @@ static void RemoveKeyFromList( PTLS pTls )
 {
     if ( pTls )
     {
-        osl::MutexGuard aGuard(getThreadKeyListMutex());
+        std::lock_guard aGuard(getThreadKeyListMutex());
         if ( pTls->pPrev )
             pTls->pPrev->pNext = pTls->pNext;
         else
@@ -438,7 +439,7 @@ void osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
-    osl::MutexGuard aGuard(getThreadKeyListMutex());
+    std::lock_guard aGuard(getThreadKeyListMutex());
     pTls = g_pThreadKeyList;
     while ( pTls )
     {
