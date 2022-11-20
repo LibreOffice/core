@@ -26,7 +26,6 @@ public:
     void testItalic();
     void testAlignment();
     void testQuality();
-    void testSymbolFlagAndCharSet();
     void testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese();
     void testEmphasisMarkShouldBePosAboveWhenNotSimplifiedChinese();
     void testEmphasisMarkInitAsNone();
@@ -43,7 +42,6 @@ public:
     CPPUNIT_TEST(testItalic);
     CPPUNIT_TEST(testAlignment);
     CPPUNIT_TEST(testQuality);
-    CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST(testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese);
     CPPUNIT_TEST(testEmphasisMarkShouldBePosAboveWhenNotSimplifiedChinese);
     CPPUNIT_TEST(testEmphasisMarkInitAsNone);
@@ -133,29 +131,6 @@ void VclFontTest::testQuality()
 
     aFont.DecreaseQualityBy( 100 );
     CPPUNIT_ASSERT_EQUAL( int(50), aFont.GetQuality() );
-}
-
-
-void VclFontTest::testSymbolFlagAndCharSet()
-{
-    // default constructor should set scalable flag to false
-    vcl::Font aFont;
-
-    CPPUNIT_ASSERT_MESSAGE( "Should not be seen as a symbol font after default constructor called", !aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Character set should be RTL_TEXTENCODING_DONTKNOW after default constructor called",
-                            RTL_TEXTENCODING_DONTKNOW, aFont.GetCharSet() );
-
-    aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-
-    CPPUNIT_ASSERT_MESSAGE( "Test 1: Symbol font flag should be on", aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 1: Character set should be RTL_TEXTENCODING_SYMBOL",
-                            RTL_TEXTENCODING_SYMBOL, aFont.GetCharSet() );
-
-    aFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
-
-    CPPUNIT_ASSERT_MESSAGE( "Test 2: Symbol font flag should be off", !aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 2: Character set should be RTL_TEXTENCODING_UNICODE",
-                            RTL_TEXTENCODING_UNICODE, aFont.GetCharSet() );
 }
 
 void VclFontTest::testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese()

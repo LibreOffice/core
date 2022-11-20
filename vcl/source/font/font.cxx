@@ -164,11 +164,6 @@ void Font::SetCharSet( rtl_TextEncoding eCharSet )
         mpImplFont->SetCharSet( eCharSet );
 }
 
-bool Font::IsSymbolFont() const
-{
-    return mpImplFont->IsSymbolFont();
-}
-
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
     if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag != rLanguageTag)
