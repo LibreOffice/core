@@ -49,8 +49,6 @@ public:
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
     const Size&         GetFontSize() const                      { return maAverageFontSize; }
 
-    bool                IsSymbolFont() const                            { return meCharSet == RTL_TEXTENCODING_SYMBOL; }
-
     void                SetFamilyName( const OUString& sFamilyName )    { maFamilyName = sFamilyName; }
     void                SetStyleName( const OUString& sStyleName )      { maStyleName = sStyleName; }
     void                SetFamilyType( const FontFamily eFontFamily )   { meFamily = eFontFamily; }
