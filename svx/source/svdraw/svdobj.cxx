@@ -3094,6 +3094,7 @@ void SdrObject::MakeNameUnique()
 {
     if (GetName().isEmpty())
     {
+        OUString aName;
         if (const E3dScene* pE3dObj = DynCastE3dScene(this))
         {
             SdrObjList* pObjList = pE3dObj->GetSubList();
@@ -3101,11 +3102,12 @@ void SdrObject::MakeNameUnique()
             {
                 SdrObject* pObj0 = pObjList->GetObj(0);
                 if (pObj0)
-                    SetName(pObj0->TakeObjNameSingul());
+                    aName = pObj0->TakeObjNameSingul();
             }
         }
         else
-            SetName(TakeObjNameSingul());
+            aName = TakeObjNameSingul();
+        SetName(aName + " 1");
     }
 
     std::unordered_set<OUString> aNameSet;
@@ -3143,8 +3145,6 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
         while (nPos > 0 && rtl::isAsciiDigit(sName[--nPos]));
         sRootName = o3tl::trim(sName.subView(0, nPos + 1));
     }
-    else
-        sName += " 1";
 
     for (sal_uInt32 n = 1; rNameSet.find(sName) != rNameSet.end(); n++)
         sName = sRootName + " " + OUString::number(n);

@@ -2222,6 +2222,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
+{
+    createSwDoc();
+
+    // Add a basic shape to the document.
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, ".uno:BasicShapes", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    auto xBasicShape = getShape(1);
+    auto pObject = SdrObject::getSdrObjectFromXShape(xBasicShape);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // rename the shape name
+    pObject->SetName("Shape");
+
+    // cut and paste it
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // it is required to get the shape objet again after paste
+    xBasicShape = getShape(1);
+    pObject = SdrObject::getSdrObjectFromXShape(xBasicShape);
+
+    // Without fix in place, the shape name was 'Shape 1' after paste.
+    CPPUNIT_ASSERT_EQUAL(OUString("Shape"), pObject->GetName());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
