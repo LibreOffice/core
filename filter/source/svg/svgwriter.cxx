@@ -3329,7 +3329,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         Color aNewLineColor( mpVDev->GetLineColor() ), aNewFillColor( mpVDev->GetFillColor() );
 
-                        aNewLineColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        // tdf#149800 do not change transparency of fully transparent
+                        // i.e. invisible line, because it makes it visible,
+                        // resulting an extra line behind the normal shape line
+                        if ( aNewLineColor.GetAlpha() > 0 )
+                            aNewLineColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
                         aNewFillColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
 
                         maAttributeWriter.AddPaintAttr( aNewLineColor, aNewFillColor );

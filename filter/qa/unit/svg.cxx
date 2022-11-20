@@ -105,6 +105,38 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     CPPUNIT_ASSERT_EQUAL(30, nPercent);
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
+{
+    // Load a document with a shape with semi-transparent fill and line
+    loadFromURL(u"semi-transparent-fill.odg");
+
+    // Export it to SVG.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Get the style of the group around the actual <path> element.
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    OUString aStyle = getXPath(
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:g", "style");
+    CPPUNIT_ASSERT(aStyle.startsWith("opacity: ", &aStyle));
+    int nPercent = std::round(aStyle.toDouble() * 100);
+    // Make sure that the line is still 50% opaque
+    CPPUNIT_ASSERT_EQUAL(50, nPercent);
+
+    // Get the stroke of the fill of the EllipseShape (it must be "none")
+    OUString aStroke = getXPath(
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:path", "stroke");
+    // Without the accompanying fix in place, this test would have failed, as the stroke was
+    // "rgb(255,255,255)", not "none".
+    CPPUNIT_ASSERT_EQUAL(OUString("none"), aStroke);
+}
+
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 {
     // Two shapes, one with transparent text and the other one with
