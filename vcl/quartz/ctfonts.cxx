@@ -45,7 +45,6 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
-    , mbFauxBold(false)
     , mpCTFont(nullptr)
 {
     double fScaledFontHeight = rFSP.mfExactHeight;
@@ -63,21 +62,9 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
 
-    // fake bold
-    if ( (rFSP.GetWeight() >= WEIGHT_BOLD) &&
-         ((rPFF.GetWeight() < WEIGHT_SEMIBOLD) &&
-          (rPFF.GetWeight() != WEIGHT_DONTKNOW)) )
-    {
-        mbFauxBold = true;
-    }
-
-    // fake italic
-    if (((rFSP.GetItalic() == ITALIC_NORMAL) ||
-         (rFSP.GetItalic() == ITALIC_OBLIQUE)) &&
-        (rPFF.GetItalic() == ITALIC_NONE))
-    {
+    // artificial italic
+    if (NeedsArtificialItalic())
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, ARTIFICIAL_ITALIC_SKEW, 1, 0, 0));
-    }
 
     CTFontDescriptorRef pFontDesc = rPFF.GetFontDescriptorRef();
     mpCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );

@@ -6498,14 +6498,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     // perform artificial italics if necessary
-    if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
-          m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        ( GetFontInstance()->GetFontFace()->GetItalic() != ITALIC_NORMAL &&
-           GetFontInstance()->GetFontFace()->GetItalic() != ITALIC_OBLIQUE )
-        )
-    {
+    if (GetFontInstance()->NeedsArtificialItalic())
         fSkew = ARTIFICIAL_ITALIC_SKEW;
-    }
 
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
@@ -6528,8 +6522,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bPop = false;
     bool bABold = false;
     // artificial bold necessary ?
-    if( GetFontInstance()->GetFontFace()->GetWeight() <= WEIGHT_MEDIUM &&
-        GetFontInstance()->GetFontSelectPattern().GetWeight() > WEIGHT_MEDIUM )
+    if (GetFontInstance()->NeedsArtificialBold())
     {
         aLine.append("q ");
         bPop = true;

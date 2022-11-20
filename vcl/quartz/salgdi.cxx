@@ -391,7 +391,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
     CGContextSetShouldAntialias(mrShared.maContextHolder.get(), !mrShared.mbNonAntialiasedText);
     CGContextSetFillColor(mrShared.maContextHolder.get(), textColor.AsArray());
 
-    if (rFont.mbFauxBold)
+    if (rFont.NeedsArtificialBold())
     {
 
         float fSize = rFontSelect.mnHeight / 23.0f;

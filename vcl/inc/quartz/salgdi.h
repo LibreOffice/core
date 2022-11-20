@@ -94,8 +94,6 @@ public:
     float mfFontStretch;
     /// text rotation in radian
     float mfFontRotation;
-    /// faux bold - true, if font doesn't have proper bold variants
-    bool mbFauxBold;
 
 private:
     explicit CoreTextFont(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);

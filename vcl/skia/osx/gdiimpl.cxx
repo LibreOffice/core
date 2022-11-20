@@ -305,7 +305,7 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
     SkFont font(typeface);
     font.setSize(nHeight);
     //    font.setScaleX(rFont.mfFontStretch); TODO
-    if (rFont.mbFauxBold)
+    if (rFont.NeedsArtificialBold())
         font.setEmbolden(true);
 
     SkFont::Edging ePreferredAliasing

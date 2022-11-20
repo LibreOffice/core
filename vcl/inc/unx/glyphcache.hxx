@@ -120,8 +120,6 @@ public:
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     const FontConfigFontOptions* GetFontOptions() const;
-    bool                    NeedsArtificialBold() const { return mbArtBold; }
-    bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
 
@@ -154,8 +152,6 @@ private:
     mutable std::unique_ptr<FontConfigFontOptions> mxFontOptions;
 
     bool                    mbFaceOk;
-    bool                    mbArtItalic;
-    bool                    mbArtBold;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

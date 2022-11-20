@@ -285,7 +285,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     CairoFontsCache::CacheId aId;
     aId.maFace = aFace;
     aId.mpOptions = rFont.GetFontOptions();
-    aId.mbEmbolden = rFont.NeedsArtificialBold();
+    aId.mbEmbolden = rInstance.NeedsArtificialBold();
 
     cairo_matrix_t m;
 
@@ -340,7 +340,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             cairo_set_matrix(cr, &em_square);
         }
 
-        if (rFont.NeedsArtificialItalic())
+        if (rInstance.NeedsArtificialItalic())
         {
             cairo_matrix_t shear;
             cairo_matrix_init_identity(&shear);

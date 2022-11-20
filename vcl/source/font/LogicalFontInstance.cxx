@@ -214,4 +214,14 @@ bool LogicalFontInstance::NeedOffsetCorrection(sal_Int32 nYOffset)
     return bRet;
 }
 
+bool LogicalFontInstance::NeedsArtificialBold() const
+{
+    return m_aFontSelData.GetWeight() > WEIGHT_MEDIUM && m_pFontFace->GetWeight() <= WEIGHT_MEDIUM;
+}
+
+bool LogicalFontInstance::NeedsArtificialItalic() const
+{
+    return m_aFontSelData.GetItalic() != ITALIC_NONE && m_pFontFace->GetItalic() == ITALIC_NONE;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

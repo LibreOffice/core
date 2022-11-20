@@ -496,8 +496,8 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
 
     const vcl::font::FontSelectPattern& rFSD = fi->GetFontSelectPattern();
     disabledLigatures = rFSD.GetPitch() == PITCH_FIXED;
-    artificialItalic = rFSD.GetItalic() != ITALIC_NONE && fontMetric.GetItalic() == ITALIC_NONE;
-    artificialBold = rFSD.GetWeight() > WEIGHT_MEDIUM && fontMetric.GetWeight() <= WEIGHT_MEDIUM;
+    artificialItalic = fi->NeedsArtificialItalic();
+    artificialBold = fi->NeedsArtificialBold();
 
     hashValue = 0;
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));

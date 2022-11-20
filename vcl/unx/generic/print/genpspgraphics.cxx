@@ -170,22 +170,6 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
 
     const vcl::font::FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
 
-    // determine which font attributes need to be emulated
-    bool bArtItalic = false;
-    bool bArtBold = false;
-    if( rEntry.GetItalic() == ITALIC_OBLIQUE || rEntry.GetItalic() == ITALIC_NORMAL )
-    {
-        FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
-        if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
-            bArtItalic = true;
-    }
-    FontWeight nWeight = rEntry.GetWeight();
-    FontWeight nRealWeight = m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-    if( nRealWeight <= WEIGHT_MEDIUM && nWeight > WEIGHT_MEDIUM )
-    {
-        bArtBold = true;
-    }
-
     // also set the serverside font for layouting
     // requesting a font provided by builtin rasterizer
     FreetypeFontInstance* pFreetypeFont = static_cast<FreetypeFontInstance*>(pFontInstance);
@@ -201,8 +185,8 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
                             rEntry.mnWidth,
                             rEntry.mnOrientation,
                             rEntry.mbVertical,
-                            bArtItalic,
-                            bArtBold
+                            pFontInstance->NeedsArtificialItalic(),
+                            pFontInstance->NeedsArtificialBold()
                             );
 }
 

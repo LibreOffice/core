@@ -112,6 +112,9 @@ public: // TODO: make data members private
 
     void GetScale(double* nXScale, double* nYScale) const;
 
+    bool NeedsArtificialItalic() const;
+    bool NeedsArtificialBold() const;
+
 protected:
     explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&,
                                  const vcl::font::FontSelectPattern&);

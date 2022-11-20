@@ -408,9 +408,7 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
     mnLoadFlags( 0 ),
     maFaceFT( nullptr ),
     maSizeFT( nullptr ),
-    mbFaceOk( false ),
-    mbArtItalic( false ),
-    mbArtBold(false)
+    mbFaceOk( false )
 {
     int nPrioEmbedded = nDefaultPrioEmbedded;
 
@@ -467,9 +465,6 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
-    mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && mxFontInfo->GetFontAttributes().GetItalic() == ITALIC_NONE);
-    mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && mxFontInfo->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
-
     if( ((mnCos != 0) && (mnSin != 0)) || (nPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
@@ -487,7 +482,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     if (!mxFontOptions)
     {
         mxFontOptions = GetFCFontOptions(mxFontInfo->GetFontAttributes(), mrFontInstance.GetFontSelectPattern().mnHeight);
-        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), NeedsArtificialBold());
+        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), mrFontInstance.NeedsArtificialBold());
     }
     return mxFontOptions.get();
 }
@@ -633,7 +628,7 @@ bool FreetypeFont::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, b
     if (rc != FT_Err_Ok)
         return false;
 
-    if (mbArtBold)
+    if (mrFontInstance.NeedsArtificialBold())
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
@@ -841,7 +836,7 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
     if( rc != FT_Err_Ok )
         return false;
 
-    if (mbArtBold)
+    if (mrFontInstance.NeedsArtificialBold())
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
@@ -855,7 +850,7 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
         return false;
     }
 
-    if( mbArtItalic )
+    if (mrFontInstance.NeedsArtificialItalic())
     {
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = ARTIFICIAL_ITALIC_MATRIX_XX;
