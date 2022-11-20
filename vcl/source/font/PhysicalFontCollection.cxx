@@ -1157,7 +1157,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     }
 
     // if a target symbol font is not available use a default symbol font
-    if( rFSD.IsSymbolFont() )
+    if( rFSD.IsMicrosoftSymbolEncoded() )
     {
         LanguageTag aDefaultLanguageTag("en");
         if (utl::ConfigManager::IsFuzzing())
@@ -1233,7 +1233,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     else
     {
         nSearchType |= lcl_IsCJKFont( rFSD.GetFamilyName() );
-        if( rFSD.IsSymbolFont() )
+        if( rFSD.IsMicrosoftSymbolEncoded() )
             nSearchType |= ImplFontAttrs::Symbol;
     }
 

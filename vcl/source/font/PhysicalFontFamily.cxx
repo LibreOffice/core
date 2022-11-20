@@ -131,7 +131,7 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     // set attributes for attribute based font matching
     mnTypeFaces |= FontTypeFaces::Scalable;
 
-    if( pNewFontFace->IsSymbolFont() )
+    if( pNewFontFace->IsMicrosoftSymbolEncoded() )
         mnTypeFaces |= FontTypeFaces::Symbol;
     else
         mnTypeFaces |= FontTypeFaces::NoneSymbol;

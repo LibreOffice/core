@@ -317,7 +317,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     rDFA.SetWidthType( WIDTH_NORMAL );
     rDFA.SetWeight( WEIGHT_NORMAL );
     rDFA.SetItalic( ITALIC_NONE );
-    rDFA.SetSymbolFlag( false );
+    rDFA.SetMicrosoftSymbolEncoded( false );
 
     // get font name
 #ifdef MACOSX

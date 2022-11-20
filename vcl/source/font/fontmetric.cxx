@@ -61,7 +61,7 @@ FontMetric::FontMetric(vcl::font::PhysicalFontFace const& rFace)
 {
     SetFamilyName(rFace.GetFamilyName());
     SetStyleName(rFace.GetStyleName());
-    SetCharSet(rFace.GetCharSet());
+    SetCharSet(rFace.IsMicrosoftSymbolEncoded() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
     SetFamily(rFace.GetFamilyType());
     SetPitch(rFace.GetPitch());
     SetWeight(rFace.GetWeight());

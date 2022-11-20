@@ -99,7 +99,7 @@ namespace
 bool FcPreMatchSubstitution::FindFontSubstitute(vcl::font::FontSelectPattern &rFontSelData) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
-    if( rFontSelData.IsSymbolFont() )
+    if( rFontSelData.IsMicrosoftSymbolEncoded() )
         return false;
     // OpenSymbol is a unicode font, but it still deserves to be treated as a symbol font
     if ( IsOpenSymbol(rFontSelData.maSearchName) )
@@ -175,7 +175,7 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute(vcl::font::FontSelectPatter
     OUString& rMissingCodes ) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
-    if( rFontSelData.IsSymbolFont() )
+    if( rFontSelData.IsMicrosoftSymbolEncoded() )
         return false;
     // OpenSymbol is a unicode font, but it still deserves to be treated as a symbol font
     if ( IsOpenSymbol(rFontSelData.maSearchName) )

@@ -64,7 +64,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const vcl::font::FontSelectPattern& r
 
     // Symbol fonts may recode from one type to another So they are only
     // safely equivalent for equal targets
-    if (rA.IsSymbolFont() || rB.IsSymbolFont())
+    if (rA.IsMicrosoftSymbolEncoded() || rB.IsMicrosoftSymbolEncoded())
     {
         if (rA.maTargetName != rB.maTargetName)
             return false;
@@ -152,7 +152,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 
         // if we're substituting from or to a symbol font we may need a symbol
         // conversion table
-        if( pFontData->IsSymbolFont() || aFontSelData.IsSymbolFont() )
+        if( pFontData->IsMicrosoftSymbolEncoded() || aFontSelData.IsMicrosoftSymbolEncoded() )
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
                 pFontInstance->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );

@@ -170,7 +170,7 @@ const std::map<OUString, OUString> aBitmapFontSubs =
 // TODO: See if Windows have API that we can use here to improve font fallback.
 bool WinPreMatchFontSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData) const
 {
-    if (rFontSelData.IsSymbolFont() || IsOpenSymbol(rFontSelData.maSearchName))
+    if (rFontSelData.IsMicrosoftSymbolEncoded() || IsOpenSymbol(rFontSelData.maSearchName))
         return false;
 
     for (const auto& aSub : aBitmapFontSubs)
@@ -448,7 +448,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     aDFA.SetWeight(ImplWeightToSal( rLogFont.lfWeight ));
     aDFA.SetItalic((rLogFont.lfItalic) ? ITALIC_NORMAL : ITALIC_NONE);
     aDFA.SetPitch(ImplLogPitchToSal( rLogFont.lfPitchAndFamily ));
-    aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
+    aDFA.SetMicrosoftSymbolEncoded(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
     aDFA.SetFamilyName(OUString(o3tl::toU(rLogFont.lfFaceName)));
@@ -697,7 +697,7 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
     }
     else
     {
-        rLogFont.lfCharSet = rFont.IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
+        rLogFont.lfCharSet = rFont.IsMicrosoftSymbolEncoded() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
         rLogFont.lfPitchAndFamily = ImplPitchToWin( rFont.GetPitch() )
                                   | ImplFamilyToWin( rFont.GetFamilyType() );
     }
@@ -860,7 +860,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     // device independent font attributes
     rxFontMetric->SetFamilyType(ImplFamilyToSal( aWinMetric.tmPitchAndFamily ));
-    rxFontMetric->SetSymbolFlag(aWinMetric.tmCharSet == SYMBOL_CHARSET);
+    rxFontMetric->SetMicrosoftSymbolEncoded(aWinMetric.tmCharSet == SYMBOL_CHARSET);
     rxFontMetric->SetWeight(ImplWeightToSal( aWinMetric.tmWeight ));
     rxFontMetric->SetPitch(ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily ));
     rxFontMetric->SetItalic(aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE);

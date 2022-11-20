@@ -259,7 +259,7 @@ void VclPhysicalFontCollectionTest::testShouldFindSymbolFamilyByMatchType()
 
     FontAttributes aFontAttr;
     aFontAttr.SetFamilyName("symbols");
-    aFontAttr.SetSymbolFlag(true);
+    aFontAttr.SetMicrosoftSymbolEncoded(true);
     aFontAttr.SetWeight(WEIGHT_NORMAL);
     pFontFamily->AddFontFace(new TestFontFace(aFontAttr, FONTID));
 
@@ -278,7 +278,7 @@ void VclPhysicalFontCollectionTest::testImpossibleSymbolFamily()
 
     FontAttributes aFontAttr;
     aFontAttr.SetFamilyName("testsymbolfamily");
-    aFontAttr.SetSymbolFlag(true);
+    aFontAttr.SetMicrosoftSymbolEncoded(true);
     aFontAttr.SetWeight(WEIGHT_NORMAL);
     TestFontFace* pFontFace = new TestFontFace(aFontAttr, FONTID);
     pFontFamily->AddFontFace(pFontFace);

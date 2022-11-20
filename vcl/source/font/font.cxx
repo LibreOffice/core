@@ -414,7 +414,7 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetItalic( mpImplFont->GetItalicNoAsk() );
     rAttrs.SetWeight( mpImplFont->GetWeightNoAsk() );
     rAttrs.SetWidthType( WIDTH_DONTKNOW );
-    rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
+    rAttrs.SetMicrosoftSymbolEncoded( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
 // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation

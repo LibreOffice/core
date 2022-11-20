@@ -275,7 +275,7 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
     hb_set_destroy(pUnicodes);
 
     if (!mxCharMap.is())
-        mxCharMap = FontCharMap::GetDefaultMap(IsSymbolFont());
+        mxCharMap = FontCharMap::GetDefaultMap(IsMicrosoftSymbolEncoded());
 
     return mxCharMap;
 }

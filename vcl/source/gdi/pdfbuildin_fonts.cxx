@@ -59,7 +59,8 @@ FontAttributes BuildinFont::GetFontAttributes() const
     aDFA.SetFamilyName(OUString::createFromAscii(m_pName));
     aDFA.SetStyleName(OUString::createFromAscii(m_pStyleName));
     aDFA.SetFamilyType(m_eFamily);
-    aDFA.SetSymbolFlag(m_eCharSet != RTL_TEXTENCODING_MS_1252);
+    // dubious, see BuildinFont::GetFontCharMap
+    aDFA.SetMicrosoftSymbolEncoded(m_eCharSet != RTL_TEXTENCODING_MS_1252);
     aDFA.SetPitch(m_ePitch);
     aDFA.SetWeight(m_eWeight);
     aDFA.SetItalic(m_eItalic);
