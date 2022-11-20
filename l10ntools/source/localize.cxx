@@ -46,6 +46,8 @@
 
 namespace {
 
+OString libraryPathEnvVarOverride;
+
 bool matchList(
     std::u16string_view rUrl, const std::u16string_view* pList, size_t nLength)
 {
@@ -89,6 +91,17 @@ void handleCommand(
     OStringBuffer buf;
     if (rExecutable == "uiex" || rExecutable == "hrcex")
     {
+#if !defined _WIN32
+        // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it
+        // on  Windows (which doesn't support the relevant shell syntax for (un-)setting environment
+        // variables).
+        auto const n = libraryPathEnvVarOverride.indexOf('=');
+        if (n == -1) {
+            buf.append("unset -v " + libraryPathEnvVarOverride + " && ");
+        } else {
+            buf.append(libraryPathEnvVarOverride + " ");
+        }
+#endif
         auto const env = getenv("SRC_ROOT");
         assert(env != nullptr);
         buf.append(env);
@@ -485,16 +498,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     try
     {
-        if (argc != 3)
+        if (argc != 4)
         {
             std::cerr
                 << ("localize (c)2001 by Sun Microsystems\n\n"
                     "As part of the L10N framework, localize extracts en-US\n"
                     "strings for translation out of the toplevel modules defined\n"
                     "in projects array in l10ntools/source/localize.cxx.\n\n"
-                    "Syntax: localize <source-root> <outfile>\n");
+                    "Syntax: localize <source-root> <outfile> <library-path-env-var-override>\n");
             exit(EXIT_FAILURE);
         }
+        libraryPathEnvVarOverride = argv[3];
         handleProjects(argv[1],argv[2]);
     }
     catch (std::exception& e)
