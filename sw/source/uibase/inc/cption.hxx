@@ -52,7 +52,6 @@ class SwCaptionDialog final : public SfxDialogController
     std::unique_ptr<weld::Entry> m_xNumberingSeparatorED;
     std::unique_ptr<weld::Label> m_xSepText;
     std::unique_ptr<weld::Entry> m_xSepEdit;
-    std::unique_ptr<weld::Label> m_xPosText;
     std::unique_ptr<weld::ComboBox> m_xPosBox;
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::Button> m_xAutoCaptionButton;

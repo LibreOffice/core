@@ -112,7 +112,6 @@ public:
 
 class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler
 {
-    std::unique_ptr<weld::Label> m_xBodyFT;
     std::unique_ptr<weld::TextView> m_xBodyMLE;
     std::unique_ptr<weld::Button> m_xOK;
 

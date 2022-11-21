@@ -49,15 +49,12 @@ class SwFieldFuncPage : public SwFieldPage
 
     //controls of "Input list"
     std::unique_ptr<weld::Widget> m_xListGroup;
-    std::unique_ptr<weld::Label> m_xListItemFT;
     std::unique_ptr<weld::Entry> m_xListItemED;
     std::unique_ptr<weld::Button> m_xListAddPB;
-    std::unique_ptr<weld::Label> m_xListItemsFT;
     std::unique_ptr<weld::TreeView> m_xListItemsLB;
     std::unique_ptr<weld::Button> m_xListRemovePB;
     std::unique_ptr<weld::Button> m_xListUpPB;
     std::unique_ptr<weld::Button> m_xListDownPB;
-    std::unique_ptr<weld::Label> m_xListNameFT;
     std::unique_ptr<weld::Entry> m_xListNameED;
 
     DECL_LINK( TypeHdl, weld::TreeView&, void );

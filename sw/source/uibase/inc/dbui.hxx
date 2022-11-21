@@ -26,7 +26,6 @@
 class PrintMonitor final : public weld::GenericDialogController
 {
 public:
-    std::unique_ptr<weld::Label> m_xDocName;
     std::unique_ptr<weld::Label> m_xPrinter;
     std::unique_ptr<weld::Label> m_xPrintInfo;
 

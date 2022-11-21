@@ -87,7 +87,6 @@ public:
 class SwContentTree final : public SfxListener
 {
     std::unique_ptr<weld::TreeView> m_xTreeView;
-    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     SwContentTreeDropTarget m_aDropTargetHelper;
     SwNavigationPI*     m_pDialog;
     OUString            m_sSpace;

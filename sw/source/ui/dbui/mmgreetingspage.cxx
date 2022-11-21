@@ -341,7 +341,6 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, weld::Button&, rButton, 
 SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/mmmailbody.ui", "MailBodyDialog")
     , SwGreetingsHandler(*GetActiveView()->GetMailMergeConfigItem(), *m_xBuilder)
-    , m_xBodyFT(m_xBuilder->weld_label("bodyft"))
     , m_xBodyMLE(m_xBuilder->weld_text_view("bodymle"))
     , m_xOK(m_xBuilder->weld_button("ok"))
 {

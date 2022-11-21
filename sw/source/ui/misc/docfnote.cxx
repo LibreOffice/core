@@ -79,7 +79,6 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
     , m_xNumCountBox(m_xBuilder->weld_combo_box("countinglb"))
     , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
     , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
-    , m_xPosFT(m_xBuilder->weld_label("pos"))
     , m_xPosPageBox(m_xBuilder->weld_radio_button("pospagecb"))
     , m_xPosChapterBox(m_xBuilder->weld_radio_button("posdoccb"))
     , m_xStylesContainer(m_xBuilder->weld_widget("allstyles"))

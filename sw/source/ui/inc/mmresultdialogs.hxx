@@ -57,7 +57,6 @@ class SwMMResultPrintDialog final : public SfxDialogController
 {
     VclPtr<Printer>        m_pTempPrinter;
 
-    std::unique_ptr<weld::Label>        m_xPrinterFT;
     std::unique_ptr<weld::ComboBox> m_xPrinterLB;
     std::unique_ptr<weld::Button>       m_xPrinterSettingsPB;
     std::unique_ptr<weld::RadioButton>  m_xPrintAllRB;
@@ -87,12 +86,9 @@ class SwMMResultEmailDialog final : public SfxDialogController
     OUString        m_sBCC;
     OUString        m_sBody;
 
-    std::unique_ptr<weld::Label> m_xMailToFT;
     std::unique_ptr<weld::ComboBox> m_xMailToLB;
     std::unique_ptr<weld::Button> m_xCopyToPB;
-    std::unique_ptr<weld::Label> m_xSubjectFT;
     std::unique_ptr<weld::Entry> m_xSubjectED;
-    std::unique_ptr<weld::Label> m_xSendAsFT;
     std::unique_ptr<weld::ComboBox> m_xSendAsLB;
     std::unique_ptr<weld::Button> m_xSendAsPB;
     std::unique_ptr<weld::Widget> m_xAttachmentGroup;
@@ -164,7 +160,6 @@ class SwSendMailDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::TreeView> m_xStatus;
     std::unique_ptr<weld::Button> m_xStop;
     std::unique_ptr<weld::Button> m_xCancel;
-    std::unique_ptr<weld::Expander> m_xExpander;
 
     DECL_LINK( StopHdl_Impl, weld::Button&, void );
     DECL_LINK( CancelHdl_Impl, weld::Button& , void);

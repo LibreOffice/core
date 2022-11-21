@@ -547,7 +547,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , mxOKButton(m_xBuilder->weld_button("ok"))
     , mxCancelButton(m_xBuilder->weld_button("cancel"))
     , mxHelpButton(m_xBuilder->weld_button("help"))
-    , mxMoreOptionsBtn(m_xBuilder->weld_button("moreoptionsbtn"))
     , mxBackwardBtn(m_xBuilder->weld_button("backward"))
     , mxForwardBtn(m_xBuilder->weld_button("forward"))
     , mxFirstBtn(m_xBuilder->weld_button("btnFirst"))

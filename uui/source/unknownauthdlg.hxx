@@ -31,7 +31,6 @@ private:
     std::unique_ptr<weld::Button> m_xCommandButtonOK;
     std::unique_ptr<weld::Button> m_xView_Certificate;
     std::unique_ptr<weld::RadioButton> m_xOptionButtonAccept;
-    std::unique_ptr<weld::RadioButton> m_xOptionButtonDontAccept;
 
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;

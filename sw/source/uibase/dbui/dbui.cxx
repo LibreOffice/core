@@ -35,7 +35,6 @@ SaveMonitor::~SaveMonitor()
 PrintMonitor::PrintMonitor(weld::Window *pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/printmonitordialog.ui",
         "PrintMonitorDialog")
-    , m_xDocName(m_xBuilder->weld_label("docname"))
     , m_xPrinter(m_xBuilder->weld_label("printer"))
     , m_xPrintInfo(m_xBuilder->weld_label("printinfo"))
 {

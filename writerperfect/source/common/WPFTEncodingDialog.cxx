@@ -96,7 +96,6 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
                               "WPFTEncodingDialog")
     , m_userHasCancelled(false)
     , m_xLbCharset(m_xBuilder->weld_combo_box("comboboxtext"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
     m_xBtnCancel->connect_clicked(LINK(this, WPFTEncodingDialog, CancelHdl));

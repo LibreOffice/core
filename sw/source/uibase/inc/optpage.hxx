@@ -54,7 +54,6 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xMetricLB;
 
     std::unique_ptr<weld::CheckButton> m_xShowInlineTooltips;
-    std::unique_ptr<weld::Label> m_xOutlineLabel;
     std::unique_ptr<weld::CheckButton> m_xShowOutlineContentVisibilityButton;
     std::unique_ptr<weld::CheckButton> m_xTreatSubOutlineLevelsAsContent;
     std::unique_ptr<weld::CheckButton> m_xShowChangesInMargin;

@@ -27,8 +27,6 @@ class SwWrtShell;
 class SwSplitTableDlg final : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::RadioButton> m_xHorzBox;
-    std::unique_ptr<weld::RadioButton> m_xContentCopyRB;
     std::unique_ptr<weld::RadioButton> m_xBoxAttrCopyWithParaRB;
     std::unique_ptr<weld::RadioButton> m_xBoxAttrCopyNoParaRB;
     std::unique_ptr<weld::RadioButton> m_xBorderCopyRB;

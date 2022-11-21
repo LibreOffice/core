@@ -1060,7 +1060,6 @@ const TranslateId STR_CONTEXT_ARY[] =
 
 SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog)
     : m_xTreeView(std::move(xTreeView))
-    , m_xScratchIter(m_xTreeView->make_iterator())
     , m_aDropTargetHelper(*this)
     , m_pDialog(pDialog)
     , m_sSpace(OUString("                    "))

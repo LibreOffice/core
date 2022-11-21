@@ -100,7 +100,6 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))
     , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
     , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
-    , m_xOutlineLabel(m_xBuilder->weld_label("outlinelabel"))
     , m_xShowOutlineContentVisibilityButton(m_xBuilder->weld_check_button("outlinecontentvisibilitybutton"))
     , m_xTreatSubOutlineLevelsAsContent(m_xBuilder->weld_check_button("suboutlinelevelsascontent"))
     , m_xShowChangesInMargin(m_xBuilder->weld_check_button("changesinmargin"))

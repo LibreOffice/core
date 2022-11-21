@@ -46,8 +46,6 @@ class SwTestAccountSettingsDialog : public SfxDialogController
 
     std::unique_ptr<weld::Button> m_xStopPB;
     std::unique_ptr<weld::TextView> m_xErrorsED;
-    std::unique_ptr<weld::Label> m_xEstablish;
-    std::unique_ptr<weld::Label> m_xFind;
     std::unique_ptr<weld::Label> m_xResult1;
     std::unique_ptr<weld::Label> m_xResult2;
     std::unique_ptr<weld::Image> m_xImage1;
@@ -210,8 +208,6 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     , m_pParent(pParent)
     , m_xStopPB(m_xBuilder->weld_button("stop"))
     , m_xErrorsED(m_xBuilder->weld_text_view("errors"))
-    , m_xEstablish(m_xBuilder->weld_label("establish"))
-    , m_xFind(m_xBuilder->weld_label("find"))
     , m_xResult1(m_xBuilder->weld_label("result1"))
     , m_xResult2(m_xBuilder->weld_label("result2"))
     , m_xImage1(m_xBuilder->weld_image("image1"))

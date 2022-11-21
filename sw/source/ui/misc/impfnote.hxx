@@ -41,7 +41,6 @@ class SwEndNoteOptionPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xNumCountBox;
     std::unique_ptr<weld::Entry> m_xPrefixED;
     std::unique_ptr<weld::Entry> m_xSuffixED;
-    std::unique_ptr<weld::Label> m_xPosFT;
     std::unique_ptr<weld::RadioButton> m_xPosPageBox;
     std::unique_ptr<weld::RadioButton> m_xPosChapterBox;
     std::unique_ptr<weld::Widget> m_xStylesContainer;

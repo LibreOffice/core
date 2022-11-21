@@ -52,15 +52,12 @@ SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController*
     , m_xCond2ED(new ConditionEdit(m_xBuilder->weld_entry("cond2")))
     , m_xMacroBT(m_xBuilder->weld_button("macro"))
     , m_xListGroup(m_xBuilder->weld_widget("listgroup"))
-    , m_xListItemFT(m_xBuilder->weld_label("itemft"))
     , m_xListItemED(m_xBuilder->weld_entry("item"))
     , m_xListAddPB(m_xBuilder->weld_button("add"))
-    , m_xListItemsFT(m_xBuilder->weld_label("listitemft"))
     , m_xListItemsLB(m_xBuilder->weld_tree_view("listitems"))
     , m_xListRemovePB(m_xBuilder->weld_button("remove"))
     , m_xListUpPB(m_xBuilder->weld_button("up"))
     , m_xListDownPB(m_xBuilder->weld_button("down"))
-    , m_xListNameFT(m_xBuilder->weld_label("listnameft"))
     , m_xListNameED(m_xBuilder->weld_entry("listname"))
 {
     FillFieldSelect(*m_xSelectionLB);

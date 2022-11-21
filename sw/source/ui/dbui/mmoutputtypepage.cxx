@@ -224,7 +224,6 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     , m_xStatus(m_xBuilder->weld_tree_view("container"))
     , m_xStop(m_xBuilder->weld_button("stop"))
     , m_xCancel(m_xBuilder->weld_button("cancel"))
-    , m_xExpander(m_xBuilder->weld_expander("details"))
 {
     m_sStop = m_xStop->get_label();
     m_sTransferStatus = m_xTransferStatus->get_label();

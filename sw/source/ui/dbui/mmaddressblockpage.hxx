@@ -260,10 +260,6 @@ class SwAssignFieldsDialog : public SfxDialogController
     std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
     std::unique_ptr<SwAssignFieldsControl> m_xFieldsControl;
 
-    std::unique_ptr<weld::SizeGroup> m_xLabelGroup;
-    std::unique_ptr<weld::SizeGroup> m_xComboGroup;
-    std::unique_ptr<weld::SizeGroup> m_xPreviewGroup;
-
     css::uno::Sequence< OUString > CreateAssignments();
     DECL_LINK(OkHdl_Impl, weld::Button&, void);
     DECL_LINK(AssignmentModifyHdl_Impl, LinkParamNone*, void);

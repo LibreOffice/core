@@ -23,7 +23,6 @@
 
 SwSplitTableDlg::SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, "modules/swriter/ui/splittable.ui", "SplitTableDialog")
-    , m_xContentCopyRB(m_xBuilder->weld_radio_button("copyheading"))
     , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
     , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button("customheading"))
     , m_xBorderCopyRB(m_xBuilder->weld_radio_button("noheading"))

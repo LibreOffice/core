@@ -50,7 +50,6 @@ UnknownAuthDialog::UnknownAuthDialog(
     , m_xCommandButtonOK(m_xBuilder->weld_button("ok"))
     , m_xView_Certificate(m_xBuilder->weld_button("examine"))
     , m_xOptionButtonAccept(m_xBuilder->weld_radio_button("accept"))
-    , m_xOptionButtonDontAccept(m_xBuilder->weld_radio_button("reject"))
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {

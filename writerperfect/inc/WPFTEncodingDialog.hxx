@@ -31,7 +31,6 @@ private:
     bool m_userHasCancelled;
 
     std::unique_ptr<weld::ComboBox> m_xLbCharset;
-    std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
 private:
