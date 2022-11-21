@@ -165,7 +165,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInpu
     SAL_WARN_IF( !xInputStream.is(), "package.xstor", "No input stream is provided!" );
     assert(xContext.is());
 
-    m_pSwitchStream = new SwitchablePersistenceStream(xContext, xInputStream);
+    m_pSwitchStream = new SwitchablePersistenceStream(xInputStream);
     m_xInputStream = m_pSwitchStream->getInputStream();
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
@@ -207,12 +207,12 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
-        m_pSwitchStream = new SwitchablePersistenceStream(xContext, xStream);
+        m_pSwitchStream = new SwitchablePersistenceStream(xStream);
         m_xStream = static_cast< io::XStream* >( m_pSwitchStream.get() );
     }
     else
     {
-        m_pSwitchStream = new SwitchablePersistenceStream(xContext, xStream->getInputStream());
+        m_pSwitchStream = new SwitchablePersistenceStream(xStream->getInputStream());
         m_xInputStream = m_pSwitchStream->getInputStream();
     }
 }

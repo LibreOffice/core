@@ -67,7 +67,6 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::X
     , m_xRowSet(std::move(xRowSet))
     , m_xActions(m_xBuilder->weld_toolbar("toolbox"))
     , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
-    , m_xHelpText(m_xBuilder->weld_label("helptext"))
     , m_nCommandType(0)
     , m_bEscapeProcessing(false)
 {

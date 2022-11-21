@@ -49,8 +49,6 @@ class SwitchablePersistenceStream
 {
     std::mutex    m_aMutex;
 
-    const css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     std::unique_ptr<SPStreamData_Impl> m_pStreamData;
 
     void CloseAll_Impl();
@@ -58,11 +56,9 @@ class SwitchablePersistenceStream
 public:
 
     SwitchablePersistenceStream(
-        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::io::XStream >& xStream );
 
     SwitchablePersistenceStream(
-        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::io::XInputStream >& xInStream );
 
     virtual ~SwitchablePersistenceStream() override;

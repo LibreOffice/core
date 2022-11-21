@@ -188,8 +188,6 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     , bModified(false)
     , pBindings(pBind)
     , m_pImpl(new SvxRubyData_Impl)
-    , m_xLeftFT(m_xBuilder->weld_label("basetextft"))
-    , m_xRightFT(m_xBuilder->weld_label("rubytextft"))
     , m_xLeft1ED(m_xBuilder->weld_entry("Left1ED"))
     , m_xRight1ED(m_xBuilder->weld_entry("Right1ED"))
     , m_xLeft2ED(m_xBuilder->weld_entry("Left2ED"))

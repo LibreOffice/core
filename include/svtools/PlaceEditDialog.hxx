@@ -42,7 +42,6 @@ public:
     std::unique_ptr<weld::Entry> m_xEDUsername;
     std::unique_ptr<weld::Label> m_xFTUsernameLabel;
     std::unique_ptr<weld::Button> m_xBTOk;
-    std::unique_ptr<weld::Button> m_xBTCancel;
     std::unique_ptr<weld::Button> m_xBTDelete;
     std::unique_ptr<weld::Button> m_xBTRepoRefresh;
     std::unique_ptr<weld::CheckButton> m_xCBPassword;

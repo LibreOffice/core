@@ -128,7 +128,6 @@ protected:
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateDlgLocalView> mxLocalView;
-    std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
     std::unique_ptr<weld::Toggleable> mxListViewButton;
     std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;
@@ -145,9 +144,7 @@ private:
     bool mbIsNewCategory;
 
     std::unique_ptr<weld::TreeView> mxLBCategory;
-    std::unique_ptr<weld::Label> mxSelectLabel;
     std::unique_ptr<weld::Entry> mxNewCategoryEdit;
-    std::unique_ptr<weld::Label> mxCreateLabel;
     std::unique_ptr<weld::Button> mxOKButton;
 
 public:

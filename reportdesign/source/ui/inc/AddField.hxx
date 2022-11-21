@@ -52,7 +52,6 @@ class  OAddFieldWindow : public weld::GenericDialogController
 
     std::unique_ptr<weld::Toolbar>                                              m_xActions;
     std::unique_ptr<weld::TreeView>                                             m_xListBox;
-    std::unique_ptr<weld::Label>                                                m_xHelpText;
 
     Link<OAddFieldWindow&,void>                                                 m_aCreateLink;
     OUString                                                                    m_aCommandName;

@@ -64,8 +64,6 @@ class SvxRubyDialog final : public SfxModelessDialogController
     rtl::Reference<SvxRubyData_Impl> m_pImpl;
     weld::Entry* aEditArr[8];
 
-    std::unique_ptr<weld::Label> m_xLeftFT;
-    std::unique_ptr<weld::Label> m_xRightFT;
     std::unique_ptr<weld::Entry> m_xLeft1ED;
     std::unique_ptr<weld::Entry> m_xRight1ED;
     std::unique_ptr<weld::Entry> m_xLeft2ED;

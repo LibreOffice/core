@@ -35,10 +35,8 @@ class OPageNumberDialog : public weld::GenericDialogController
     ::rptui::OReportController*                    m_pController;
     css::uno::Reference< css::report::XReportDefinition>
                                                    m_xHoldAlive;
-    std::unique_ptr<weld::RadioButton> m_xPageN;
     std::unique_ptr<weld::RadioButton> m_xPageNofM;
     std::unique_ptr<weld::RadioButton> m_xTopPage;
-    std::unique_ptr<weld::RadioButton> m_xBottomPage;
     std::unique_ptr<weld::ComboBox> m_xAlignmentLst;
     std::unique_ptr<weld::CheckButton> m_xShowNumberOnFirstPage;
 

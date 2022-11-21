@@ -63,17 +63,13 @@ struct SPStreamData_Impl
 };
 
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< io::XStream >& xStream )
-: m_xContext(std::move( xContext ))
 {
     SwitchPersistenceTo( xStream );
 }
 
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< io::XInputStream >& xInputStream )
-: m_xContext(std::move( xContext ))
 {
     SwitchPersistenceTo( xInputStream );
 }

@@ -1265,9 +1265,7 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "sfx/ui/templatecategorydlg.ui", "TemplatesCategoryDialog")
     , mbIsNewCategory(false)
     , mxLBCategory(m_xBuilder->weld_tree_view("categorylb"))
-    , mxSelectLabel(m_xBuilder->weld_label("select_label"))
     , mxNewCategoryEdit(m_xBuilder->weld_entry("category_entry"))
-    , mxCreateLabel(m_xBuilder->weld_label("create_label"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
 {
     mxLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));

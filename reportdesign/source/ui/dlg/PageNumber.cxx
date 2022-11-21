@@ -38,10 +38,8 @@ OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
     : GenericDialogController(pParent, "modules/dbreport/ui/pagenumberdialog.ui", "PageNumberDialog")
     , m_pController(_pController)
     , m_xHoldAlive(std::move(_xHoldAlive))
-    , m_xPageN(m_xBuilder->weld_radio_button("pagen"))
     , m_xPageNofM(m_xBuilder->weld_radio_button("pagenofm"))
     , m_xTopPage(m_xBuilder->weld_radio_button("toppage"))
-    , m_xBottomPage(m_xBuilder->weld_radio_button("bottompage"))
     , m_xAlignmentLst(m_xBuilder->weld_combo_box("alignment"))
     , m_xShowNumberOnFirstPage(m_xBuilder->weld_check_button("shownumberonfirstpage"))
 {
