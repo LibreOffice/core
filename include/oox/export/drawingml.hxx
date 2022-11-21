@@ -143,7 +143,7 @@ class OOX_DLLPUBLIC DrawingML
 {
 
 private:
-    static int mnImageCounter;
+    static std::stack<sal_Int32> mnImageCounter;
     static int mnWdpImageCounter;
     static std::map<OUString, OUString> maWdpCache;
     static sal_Int32 mnDrawingMLCount;

@@ -1010,6 +1010,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ContentsHeading']/w:name", "val", "TOC Heading");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
+{
+    loadAndReload("embedded_images.odt");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    int nImageFiles = 0;
+    for (const auto& rElementName : aNames)
+        if (rElementName.startsWith("word/media/image"))
+            nImageFiles++;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 3
+    // i.e. the once embedded picture wouldn't have been saved.
+    CPPUNIT_ASSERT_EQUAL(4, nImageFiles);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
