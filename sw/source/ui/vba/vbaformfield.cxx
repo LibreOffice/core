@@ -26,9 +26,6 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 /**
- * Information about the method and properties of FormFields was gathered from
- * https://www.codevba.com/Word/FormField.htm
- *
  * FormFields are inline text objects that are only found in MS Word.
  * They cannot be created in Excel or in Calc.
  *

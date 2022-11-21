@@ -102,8 +102,8 @@ SwVbaFormFieldDropDownListEntries::SwVbaFormFieldDropDownListEntries(
 }
 
 // XListEntries
-uno::Reference<word::XListEntry>
-    SAL_CALL SwVbaFormFieldDropDownListEntries::Add(const OUString& rName, const uno::Any& rIndex)
+uno::Reference<word::XListEntry> SwVbaFormFieldDropDownListEntries::Add(const OUString& rName,
+                                                                        const uno::Any& rIndex)
 {
     sal_Int32 nZIndex = 0;
     rIndex >>= nZIndex;
@@ -124,7 +124,7 @@ uno::Reference<word::XListEntry>
         new SwVbaFormFieldDropDownListEntry(mxParent, mxContext, m_rDropDown, nZIndex));
 }
 
-void SAL_CALL SwVbaFormFieldDropDownListEntries::Clear() { m_rDropDown.DelContent(); }
+void SwVbaFormFieldDropDownListEntries::Clear() { m_rDropDown.DelContent(); }
 
 sal_Int32 SwVbaFormFieldDropDownListEntries::getCount()
 {
