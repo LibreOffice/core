@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_GRAPHICFILTER_INTERNAL_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_GRAPHICFILTER_INTERNAL_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 
 sal_uInt8* ImplSearchEntry(sal_uInt8*, sal_uInt8 const*, sal_uLong, sal_uLong);
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_GRAPHICFILTER_INTERNAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
