@@ -23,6 +23,7 @@
 #include <i18nlangtag/languagetagicu.hxx>
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
+#include <unicode/uchar.h>
 #include <unicode/numfmt.h>
 #include "unicode_data.h"
 #include <rtl/character.hxx>
@@ -94,6 +95,11 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
             ? UnicodeDirectionBlockValue[address]
             : UnicodeDirectionValue[((address - UnicodeDirectionNumberBlock) << 8) + (ch & 0xff)];
     return r;
+}
+
+sal_uInt32 unicode::GetMirroredChar(sal_uInt32 nChar) {
+    nChar = u_charMirror(nChar);
+    return nChar;
 }
 
 #define bit(name)   (1U << name)

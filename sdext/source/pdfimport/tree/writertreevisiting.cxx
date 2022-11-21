@@ -112,7 +112,12 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< std::unique_pt
     }
 
     if (isRTL)  // If so, reverse string
+    {
+        // First, produce mirrored-image for each code point which has the Bidi_Mirrored property.
+        str = PDFIProcessor::SubstituteBidiMirrored(str);
+        // Then, reverse the code points in the string, in backward order.
         str = ::comphelper::string::reverseCodePoints(str);
+    }
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 

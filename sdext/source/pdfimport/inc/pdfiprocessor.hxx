@@ -79,7 +79,7 @@ namespace pdfi
 
         static void sortElements( Element* pElement );
 
-        static OUString mirrorString( const OUString& i_rInString );
+        static OUString SubstituteBidiMirrored(const OUString& rString);
 
     private:
         void processGlyphLine();

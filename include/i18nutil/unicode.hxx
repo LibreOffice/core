@@ -43,6 +43,7 @@ public:
     static sal_Unicode getUnicodeScriptStart(css::i18n::UnicodeScript type);
     static sal_Unicode getUnicodeScriptEnd(css::i18n::UnicodeScript type);
     static sal_uInt8 getUnicodeDirection(const sal_Unicode ch);
+    static sal_uInt32 GetMirroredChar(sal_uInt32);
     static bool isControl(const sal_Unicode ch);
     static bool isAlpha(const sal_Unicode ch);
     static bool isSpace(const sal_Unicode ch);
