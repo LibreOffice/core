@@ -1,7 +1,7 @@
 diff -ur gpgmepp.org/lang/cpp/src/callbacks.cpp gpgmepp/lang/cpp/src/callbacks.cpp
 --- gpgmepp.org/lang/cpp/src/callbacks.cpp	2016-10-18 19:22:02.000000000 +0200
 +++ gpgmepp/lang/cpp/src/callbacks.cpp	2017-11-20 18:03:04.290060900 +0100
-@@ -38,7 +38,9 @@
+@@ -40,7 +40,9 @@
  #include <cassert>
  #include <cerrno>
  #include <cstring>
@@ -29,7 +29,7 @@ diff -ur gpgmepp.org/lang/cpp/src/data.h gpgmepp/lang/cpp/src/data.h
 diff -ur gpgmepp.org/lang/cpp/src/editinteractor.cpp gpgmepp/lang/cpp/src/editinteractor.cpp
 --- gpgmepp.org/lang/cpp/src/editinteractor.cpp	2017-03-09 09:01:10.000000000 +0100
 +++ gpgmepp/lang/cpp/src/editinteractor.cpp	2017-11-20 18:09:33.022674700 +0100
-@@ -30,9 +30,11 @@
+@@ -33,9 +33,11 @@
  
  #include <gpgme.h>
  
@@ -46,7 +46,7 @@ diff -ur gpgmepp.org/lang/cpp/src/editinteractor.cpp gpgmepp/lang/cpp/src/editin
 diff -ur gpgmepp.org/lang/cpp/src/gpgmepp_export.h gpgmepp/lang/cpp/src/gpgmepp_export.h
 --- gpgmepp.org/lang/cpp/src/gpgmepp_export.h	2016-08-04 15:03:09.000000000 +0200
 +++ gpgmepp/lang/cpp/src/gpgmepp_export.h	2017-11-20 16:57:47.805691100 +0100
-@@ -29,14 +29,14 @@
+@@ -30,14 +30,14 @@
  #  ifndef GPGMEPP_EXPORT
  #    ifdef BUILDING_GPGMEPP
          /* We are building this library */
@@ -63,7 +63,7 @@ diff -ur gpgmepp.org/lang/cpp/src/gpgmepp_export.h gpgmepp/lang/cpp/src/gpgmepp_
  #       define GPGMEPP_EXPORT __declspec(dllimport)
  #      else
  #       define GPGMEPP_EXPORT __attribute__((visibility("default")))
-@@ -45,7 +45,7 @@
+@@ -46,7 +46,7 @@
  #  endif
  
  #  ifndef GPGMEPP_NO_EXPORT
@@ -72,7 +72,7 @@ diff -ur gpgmepp.org/lang/cpp/src/gpgmepp_export.h gpgmepp/lang/cpp/src/gpgmepp_
  #     define GPGMEPP_NO_EXPORT
  #    else
  #     define GPGMEPP_NO_EXPORT __attribute__((visibility("hidden")))
-@@ -54,7 +54,11 @@
+@@ -55,7 +55,11 @@
  #endif
  
  #ifndef GPGMEPP_DEPRECATED
@@ -88,7 +88,7 @@ diff -ur gpgmepp.org/lang/cpp/src/gpgmepp_export.h gpgmepp/lang/cpp/src/gpgmepp_
 diff -ur gpgmepp.org/lang/cpp/src/interfaces/dataprovider.h gpgmepp/lang/cpp/src/interfaces/dataprovider.h
 --- gpgmepp.org/lang/cpp/src/interfaces/dataprovider.h	2016-05-17 14:32:37.000000000 +0200
 +++ gpgmepp/lang/cpp/src/interfaces/dataprovider.h	2017-11-20 18:03:11.332715700 +0100
-@@ -29,6 +29,11 @@
+@@ -31,6 +31,11 @@
  
  #include <gpg-error.h>
  
@@ -103,7 +103,7 @@ diff -ur gpgmepp.org/lang/cpp/src/interfaces/dataprovider.h gpgmepp/lang/cpp/src
 diff -ur gpgmepp.org/lang/cpp/src/key.cpp gpgmepp/lang/cpp/src/key.cpp
 --- gpgmepp.org/lang/cpp/src/key.cpp	2017-03-20 20:10:15.000000000 +0100
 +++ gpgmepp/lang/cpp/src/key.cpp	2017-11-20 17:44:50.321858800 +0100
-@@ -33,11 +33,17 @@
+@@ -34,11 +34,17 @@
  #include <gpgme.h>
  
  #include <string.h>
@@ -135,7 +135,7 @@ diff -ur gpgmepp.org/lang/cpp/src/key.h gpgmepp/lang/cpp/src/key.h
 diff -ur gpgmepp.org/lang/qt/src/qgpgme_export.h gpgmepp/lang/qt/src/qgpgme_export.h
 --- gpgmepp.org/lang/qt/src/qgpgme_export.h	2016-11-03 17:32:30.000000000 +0100
 +++ gpgmepp/lang/qt/src/qgpgme_export.h	2017-11-20 16:58:27.395388000 +0100
-@@ -39,14 +39,14 @@
+@@ -40,14 +40,14 @@
  #  ifndef QGPGME_EXPORT
  #    ifdef BUILDING_QGPGME
          /* We are building this library */
@@ -152,7 +152,7 @@ diff -ur gpgmepp.org/lang/qt/src/qgpgme_export.h gpgmepp/lang/qt/src/qgpgme_expo
  #       define QGPGME_EXPORT __declspec(dllimport)
  #      else
  #       define QGPGME_EXPORT __attribute__((visibility("default")))
-@@ -55,7 +55,7 @@
+@@ -56,7 +56,7 @@
  #  endif
  
  #  ifndef QGPGME_NO_EXPORT
@@ -161,7 +161,7 @@ diff -ur gpgmepp.org/lang/qt/src/qgpgme_export.h gpgmepp/lang/qt/src/qgpgme_expo
  #     define QGPGME_NO_EXPORT
  #    else
  #     define QGPGME_NO_EXPORT __attribute__((visibility("hidden")))
-@@ -64,7 +64,11 @@
+@@ -65,7 +65,11 @@
  #endif
  
  #ifndef QGPGME_DEPRECATED
