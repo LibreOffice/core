@@ -47,7 +47,6 @@
 #include <AnnotationWin.hxx>
 #include "com/sun/star/text/XDefaultNumberingProvider.hpp"
 #include "com/sun/star/awt/FontUnderline.hpp"
-#include <com/sun/star/document/XDocumentInsertable.hpp>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -130,7 +129,6 @@ public:
     void testDOCXAutoTextGallery();
     void testWatermarkDOCX();
     void testTdf67238();
-    void testInsertFileInInputFieldException();
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
@@ -280,7 +278,6 @@ public:
     CPPUNIT_TEST(testDOCXAutoTextGallery);
     CPPUNIT_TEST(testWatermarkDOCX);
     CPPUNIT_TEST(testTdf67238);
-    CPPUNIT_TEST(testInsertFileInInputFieldException);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
@@ -560,24 +557,6 @@ void SwUiWriterTest::testBookmarkCopy()
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
         CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
     }
-}
-
-void SwUiWriterTest::testInsertFileInInputFieldException()
-{
-    createDoc();
-    uno::Reference<text::XTextDocument> const xTextDoc(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> const xBody(xTextDoc->getText());
-    uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextCursor> const xCursor(xBody->createTextCursor());
-    uno::Reference<document::XDocumentInsertable> const xInsertable(xCursor, uno::UNO_QUERY);
-    uno::Reference<text::XTextContent> const xContent(
-        xFactory->createInstance("com.sun.star.text.textfield.Input"), uno::UNO_QUERY);
-    xBody->insertTextContent(xCursor, xContent, false);
-    xCursor->goLeft(1, false);
-    // try to insert some random file
-    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo75110.odt");
-    // inserting even asserts in debug builds - document model goes invalid with input field split across 2 nodes
-    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(url, {}), uno::RuntimeException);
 }
 
 void SwUiWriterTest::testTdf67238()

@@ -955,16 +955,6 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
 void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
 {
-    if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->nNode.GetNode().GetTextNode())
-    {
-        // TODO: check meta field here too in case it ever grows a 2nd char
-        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
-                    RES_TXTATR_INPUTFIELD, SwTextNode::PARENT))
-        {
-            throw uno::RuntimeException("cannot insert file inside input field");
-        }
-    }
-
     std::unique_ptr<SfxMedium> pMed;
     SwDoc* pDoc = pUnoCursor->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
