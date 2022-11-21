@@ -426,24 +426,6 @@ void Scheduler::CallbackTaskScheduling()
             break;
     }
 
-// tdf#148435 Apparently calling AnyInput on Mac and filtering for just input, gives
-// you window creation / re-sizing events which then trigger idle paint
-// events which then deadlock if called with the scheduler lock.
-// So since this is an optimisation, just don't do this on mac.
-#ifndef MACOSX
-    // Delay invoking tasks with idle priorities as long as there are user input or repaint events
-    // in the OS event queue. This will often effectively compress such events and repaint only
-    // once at the end, improving performance in cases such as repeated zooming with a complex document.
-    if ( pMostUrgent && pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE
-        && Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT ))
-    {
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
-            << " idle priority task " << pMostUrgent << " delayed, system events pending" );
-        pMostUrgent = nullptr;
-        nMinPeriod = 0;
-    }
-#endif
-
     if (InfiniteTimeoutMs != nMinPeriod)
         SAL_INFO("vcl.schedule",
                  "Calculated minimum timeout as " << nMinPeriod << " of " << nTasks << " tasks");
@@ -459,9 +441,6 @@ void Scheduler::CallbackTaskScheduling()
 
     comphelper::ProfileZone aZone( pTask->GetDebugName() );
 
-    // prepare Scheduler object for deletion after handling
-    pTask->SetDeletionFlags();
-
     assert(!pMostUrgent->mbInScheduler);
     pMostUrgent->mbInScheduler = true;
 
@@ -471,8 +450,17 @@ void Scheduler::CallbackTaskScheduling()
     rSchedCtx.mpSchedulerStack = pMostUrgent;
     rSchedCtx.mpSchedulerStackTop = pMostUrgent;
 
+    bool bIsHighPriorityIdle = pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE;
+
     // invoke the task
     Unlock();
+
+    // Delay invoking tasks with idle priorities as long as there are user input or repaint events
+    // in the OS event queue. This will often effectively compress such events and repaint only
+    // once at the end, improving performance in cases such as repeated zooming with a complex document.
+    bool bDelayInvoking = bIsHighPriorityIdle &&
+        Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT );
+
     /*
     * Current policy is that scheduler tasks aren't allowed to throw an exception.
     * Because otherwise the exception is caught somewhere totally unrelated.
@@ -482,7 +470,16 @@ void Scheduler::CallbackTaskScheduling()
     */
     try
     {
-        pTask->Invoke();
+        if (bDelayInvoking)
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+                      << " idle priority task " << pTask->GetDebugName()
+                      << " delayed, system events pending" );
+        else
+        {
+            // prepare Scheduler object for deletion after handling
+            pTask->SetDeletionFlags();
+            pTask->Invoke();
+        }
     }
     catch (css::uno::Exception&)
     {
