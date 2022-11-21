@@ -2,7 +2,7 @@ diff --git a/configure.ac b/configure.ac
 index f28480b..92a3e85 100644
 --- configure.ac
 +++ configure.ac
-@@ -674,15 +674,34 @@ AC_CHECK_FUNCS(setlocale)
+@@ -719,8 +719,18 @@
  
  # Checking for libgpg-error.
  have_gpg_error=no
@@ -22,6 +22,8 @@ index f28480b..92a3e85 100644
 +
  AC_DEFINE(GPG_ERR_SOURCE_DEFAULT, GPG_ERR_SOURCE_GPGME,
            [The default error source for GPGME.])
+ 
+@@ -729,8 +739,17 @@
  
  # And for libassuan.
  have_libassuan=no
@@ -53,7 +55,7 @@ index f28480b..92a3e85 100644
  AM_CPPFLAGS = -I$(top_srcdir)/lang/cpp/src -I$(top_builddir)/src \
 --- lang/cpp/tests/Makefile.in	2020-06-20 00:44:49.542344510 +0200
 +++ lang/cpp/tests/Makefile.in~	2020-06-13 00:55:19.021212970 +0200
-@@ -415,7 +415,7 @@
+@@ -427,7 +427,7 @@
  top_srcdir = @top_srcdir@
  AM_LDFLAGS = -no-install
  LDADD = ../../cpp/src/libgpgmepp.la \

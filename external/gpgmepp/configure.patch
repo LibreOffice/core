@@ -1,6 +1,6 @@
 --- configure.ac
 +++ configure.ac
-@@ -619,6 +619,15 @@
+@@ -617,6 +617,15 @@
  AC_SUBST(API__SSIZE_T)
  AM_SUBST_NOTMAKE(API__SSIZE_T)
  
@@ -16,7 +16,7 @@
  # Checks for compiler features.
  if test "$GCC" = yes; then
      CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
-@@ -679,15 +679,6 @@
+@@ -677,15 +686,6 @@
  
  AC_FUNC_FSEEKO
  

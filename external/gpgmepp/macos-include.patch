@@ -1,0 +1,10 @@
+--- lang/cpp/src/importresult.cpp	2022-08-10 18:17:33.000000000 +0900
++++ lang/cpp/src/importresult.cpp	2022-11-29 01:37:44.786604882 +0900
+@@ -31,6 +31,7 @@
+ #include "result_p.h"
+ 
+ #include <gpgme.h>
++#include <algorithm>
+ #include <cstdlib>
+ #include <cstring>
+ 

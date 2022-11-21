@@ -1,8 +1,8 @@
 --- src/engine-gpg.c
 +++ src/engine-gpg.c
-@@ -60,6 +60,15 @@
+@@ -61,6 +61,15 @@
  		      building command line to this location.  */
-   char arg[1];     /* Used if data above is not used.  */
+   char arg[FLEXIBLE_ARRAY_MEMBER];     /* Used if data above is not used.  */
  };
 +struct arg_without_data_s
 +{
@@ -16,8 +16,8 @@
  
  
  struct fd_data_map_s
-@@ -299,23 +308,24 @@
-   a = malloc (sizeof *a - 1);
+@@ -310,23 +319,24 @@
+   a = malloc (offsetof (struct arg_and_data_s, arg));
    if (!a)
      return gpg_error_from_syserror ();
 -  a->next = NULL;
