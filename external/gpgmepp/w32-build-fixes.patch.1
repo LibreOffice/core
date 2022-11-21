@@ -13,7 +13,7 @@ diff -ru gpgme.orig/m4/ax_cxx_compile_stdcxx.m4 gpgme/m4/ax_cxx_compile_stdcxx.m
 diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
 --- gpgme.orig/src/dirinfo.c	2017-03-21 11:09:41.000000000 +0100
 +++ gpgme/src/dirinfo.c	2017-09-30 08:36:13.239279300 +0200
-@@ -33,6 +33,10 @@
+@@ -34,6 +34,10 @@
  
  DEFINE_STATIC_LOCK (dirinfo_lock);
  
@@ -27,7 +27,7 @@ diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
 diff -ru gpgme.orig/src/mbox-util.c gpgme/src/mbox-util.c
 --- gpgme.orig/src/mbox-util.c	2016-11-16 13:22:41.000000000 +0100
 +++ gpgme/src/mbox-util.c	2017-09-30 08:18:29.270567500 +0200
-@@ -28,7 +28,9 @@
+@@ -29,7 +29,9 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
@@ -40,7 +40,7 @@ diff -ru gpgme.orig/src/mbox-util.c gpgme/src/mbox-util.c
 diff -ru gpgme.orig/src/priv-io.h gpgme/src/priv-io.h
 --- gpgme.orig/src/priv-io.h	2016-11-16 13:23:14.000000000 +0100
 +++ gpgme/src/priv-io.h	2017-09-30 08:20:38.770562400 +0200
-@@ -36,6 +36,9 @@
+@@ -33,6 +33,9 @@
  #ifdef HAVE_SYS_TYPES_H
  # include <sys/types.h>
  #endif
@@ -53,7 +53,7 @@ diff -ru gpgme.orig/src/priv-io.h gpgme/src/priv-io.h
 diff -ru gpgme.orig/src/util.h gpgme/src/util.h
 --- gpgme.orig/src/util.h	2017-03-28 11:41:30.000000000 +0200
 +++ gpgme/src/util.h	2017-09-30 08:10:54.194049100 +0200
-@@ -39,6 +39,9 @@
+@@ -35,6 +35,9 @@
  #ifdef HAVE_UNISTD_H
  # include <unistd.h>
  #endif
@@ -66,7 +66,7 @@ diff -ru gpgme.orig/src/util.h gpgme/src/util.h
 diff -ru gpgme.orig/src/w32-util.c gpgme/src/w32-util.c
 --- gpgme.orig/src/w32-util.c	2017-03-09 09:01:10.000000000 +0100
 +++ gpgme/src/w32-util.c	2017-09-30 08:32:02.114330500 +0200
-@@ -721,7 +721,8 @@
+@@ -772,7 +772,8 @@
        v /= 62;
        XXXXXX[5] = letters[v % 62];
  
@@ -79,7 +79,7 @@ diff -ru gpgme.orig/src/w32-util.c gpgme/src/w32-util.c
 diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
 --- gpgme.orig/src/Makefile.am	2017-09-30 11:50:07.456960000 +0200
 +++ gpgme/src/Makefile.am	2017-09-30 11:51:29.609649400 +0200
-@@ -26,7 +26,7 @@
+@@ -35,7 +35,7 @@
  m4data_DATA = gpgme.m4
  nodist_include_HEADERS = gpgme.h
  
@@ -88,7 +88,7 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
  
  if BUILD_W32_GLIB
  ltlib_gpgme_glib = libgpgme-glib.la
-@@ -99,11 +99,11 @@
+@@ -107,11 +107,11 @@
  # versions, because then every object file is only compiled once.
  AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
  
@@ -104,7 +104,7 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
  
  
  if HAVE_W32_SYSTEM
-@@ -120,7 +120,7 @@
+@@ -126,7 +126,7 @@
  SUFFIXES = .rc .lo
  
  .rc.lo:

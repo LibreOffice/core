@@ -58,9 +58,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,gpgmepp,\
 	UnpackedTarball/gpgmepp/lang/cpp/src/engineinfo \
 	UnpackedTarball/gpgmepp/lang/cpp/src/eventloopinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/exception \
+	UnpackedTarball/gpgmepp/lang/cpp/src/gpgaddexistingsubkeyeditinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpgadduserideditinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpgagentgetinfoassuantransaction \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpggencardkeyinteractor \
+	UnpackedTarball/gpgmepp/lang/cpp/src/gpgrevokekeyeditinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpgsetexpirytimeeditinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpgsetownertrusteditinteractor \
 	UnpackedTarball/gpgmepp/lang/cpp/src/gpgsignkeyeditinteractor \
@@ -73,6 +75,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,gpgmepp,\
 	UnpackedTarball/gpgmepp/lang/cpp/src/swdbresult \
 	UnpackedTarball/gpgmepp/lang/cpp/src/tofuinfo \
 	UnpackedTarball/gpgmepp/lang/cpp/src/trustitem \
+	UnpackedTarball/gpgmepp/lang/cpp/src/util \
 	UnpackedTarball/gpgmepp/lang/cpp/src/verificationresult \
 	UnpackedTarball/gpgmepp/lang/cpp/src/vfsmountresult \
 ))
