@@ -160,10 +160,6 @@ namespace {
 /// Asks the user if editing a read-only document is really wanted.
 class SfxEditDocumentDialog : public weld::MessageDialogController
 {
-private:
-    std::unique_ptr<weld::Button> m_xEditDocument;
-    std::unique_ptr<weld::Button> m_xCancel;
-
 public:
     SfxEditDocumentDialog(weld::Widget* pParent);
 };
@@ -171,8 +167,6 @@ public:
 SfxEditDocumentDialog::SfxEditDocumentDialog(weld::Widget* pParent)
     : MessageDialogController(pParent, "sfx/ui/editdocumentdialog.ui",
             "EditDocumentDialog")
-    , m_xEditDocument(m_xBuilder->weld_button("edit"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
 {
 }
 

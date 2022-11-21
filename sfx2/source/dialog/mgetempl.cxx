@@ -65,7 +65,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     , m_xFilterFt(m_xBuilder->weld_label("categoryft"))
     , m_xFilterLb(m_xBuilder->weld_combo_box("category"))
     , m_xDescFt(m_xBuilder->weld_label("desc"))
-    , m_xNameFt(m_xBuilder->weld_label("nameft"))
 {
     m_xFollowLb->make_sorted();
     // tdf#120188 like SwCharURLPage limit the width of the style combos

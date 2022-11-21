@@ -172,7 +172,6 @@ void SfxCommonTemplateDialog_Impl::connect_stylelist_set_water_can_state(
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container* pC, weld::Builder* pBuilder)
     : pBindings(pB)
-    , mpContainer(pC)
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(nullptr)
     , m_aStyleList(pBuilder, pB, this, pC, "treeview", "flatview")

@@ -41,9 +41,7 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
     , m_xBtnRemove(m_xBuilder->weld_button("delete"))
     , m_xBtnCopy(m_xBuilder->weld_button("copy"))
-    , m_xBtnHelp(m_xBuilder->weld_button("help"))
     , m_xBtnStartShow(m_xBuilder->weld_button("startshow"))
-    , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
     m_xLbCustomShows->set_size_request(m_xLbCustomShows->get_approximate_digit_width() * 32,
                                        m_xLbCustomShows->get_height_rows(8));
@@ -252,8 +250,6 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
     , m_xLbCustomPages(m_xBuilder->weld_tree_view("custompages"))
     , m_xDropTargetHelper(new weld::ReorderingDropTarget(*m_xLbCustomPages))
     , m_xBtnOK(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xBtnHelp(m_xBuilder->weld_button("help"))
 {
     Link<weld::Button&,void> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
     m_xBtnAdd->connect_clicked( aLink );

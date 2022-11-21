@@ -114,7 +114,6 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xDistBorderFT(m_xBuilder->weld_label("indent"))
     , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FieldUnit::CM))
     , m_xRelativeCB(m_xBuilder->weld_check_button("relative"))
-    , m_xIndentFT(m_xBuilder->weld_label("numberingwidth"))
     , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FieldUnit::CM))
     , m_xLeftTB(m_xBuilder->weld_toggle_button("left"))
     , m_xCenterTB(m_xBuilder->weld_toggle_button("center"))

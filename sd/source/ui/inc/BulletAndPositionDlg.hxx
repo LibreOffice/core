@@ -98,7 +98,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xDistBorderFT;
     std::unique_ptr<weld::MetricSpinButton> m_xDistBorderMF;
     std::unique_ptr<weld::CheckButton> m_xRelativeCB;
-    std::unique_ptr<weld::Label> m_xIndentFT;
     std::unique_ptr<weld::MetricSpinButton> m_xIndentMF;
     std::unique_ptr<weld::Toggleable> m_xLeftTB;
     std::unique_ptr<weld::Toggleable> m_xCenterTB;

@@ -37,9 +37,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnEdit;
     std::unique_ptr<weld::Button> m_xBtnRemove;
     std::unique_ptr<weld::Button> m_xBtnCopy;
-    std::unique_ptr<weld::Button> m_xBtnHelp;
     std::unique_ptr<weld::Button> m_xBtnStartShow;
-    std::unique_ptr<weld::Button> m_xBtnOK;
 
     void            CheckState();
 
@@ -69,8 +67,6 @@ private:
     std::unique_ptr<weld::TreeView> m_xLbCustomPages;
     std::unique_ptr<weld::ReorderingDropTarget> m_xDropTargetHelper;
     std::unique_ptr<weld::Button> m_xBtnOK;
-    std::unique_ptr<weld::Button> m_xBtnCancel;
-    std::unique_ptr<weld::Button> m_xBtnHelp;
 
     void            CheckState();
     void            CheckCustomShow();

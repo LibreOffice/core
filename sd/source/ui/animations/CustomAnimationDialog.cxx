@@ -902,7 +902,6 @@ private:
     std::unique_ptr<weld::Label> mxFTSound;
     std::unique_ptr<weld::ComboBox> mxLBSound;
     std::unique_ptr<weld::Button> mxPBSoundPreview;
-    std::unique_ptr<weld::Label> mxFTAfterEffect;
     std::unique_ptr<weld::ComboBox> mxLBAfterEffect;
     std::unique_ptr<weld::Label> mxFTDimColor;
     std::unique_ptr<ColorListBox> mxCLBDimColor;
@@ -927,7 +926,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
     , mxFTSound(mxBuilder->weld_label("sound_label"))
     , mxLBSound(mxBuilder->weld_combo_box("sound_list"))
     , mxPBSoundPreview(mxBuilder->weld_button("sound_preview"))
-    , mxFTAfterEffect(mxBuilder->weld_label("aeffect_label"))
     , mxLBAfterEffect(mxBuilder->weld_combo_box("aeffect_list"))
     , mxFTDimColor(mxBuilder->weld_label("dim_color_label"))
     , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button("dim_color_list"), [pDialog]{ return pDialog; }))
@@ -1433,9 +1431,7 @@ private:
 
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
-    std::unique_ptr<weld::Label> mxFTStart;
     std::unique_ptr<weld::ComboBox> mxLBStart;
-    std::unique_ptr<weld::Label> mxFTStartDelay;
     std::unique_ptr<weld::MetricSpinButton> mxMFStartDelay;
     std::unique_ptr<weld::Label> mxFTDuration;
     std::unique_ptr<weld::MetricSpinButton> mxCBXDuration;
@@ -1451,9 +1447,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     : mpSet(pSet)
     , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationtimingtab.ui"))
     , mxContainer(mxBuilder->weld_container("TimingTab"))
-    , mxFTStart(mxBuilder->weld_label("start_label"))
     , mxLBStart(mxBuilder->weld_combo_box("start_list"))
-    , mxFTStartDelay(mxBuilder->weld_label("delay_label"))
     , mxMFStartDelay(mxBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
     , mxFTDuration(mxBuilder->weld_label("duration_label"))
     , mxCBXDuration(mxBuilder->weld_metric_spin_button("anim_duration", FieldUnit::SECOND))
@@ -1785,7 +1779,6 @@ private:
 
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
-    std::unique_ptr<weld::Label> mxFTGroupText;
     std::unique_ptr<weld::ComboBox> mxLBGroupText;
     std::unique_ptr<weld::CheckButton> mxCBXGroupAuto;
     std::unique_ptr<weld::MetricSpinButton> mxMFGroupAuto;
@@ -1798,7 +1791,6 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(weld::Container* 
     , mbHasVisibleShapes(true)
     , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationtexttab.ui"))
     , mxContainer(mxBuilder->weld_container("TextAnimationTab"))
-    , mxFTGroupText(mxBuilder->weld_label("group_text_label"))
     , mxLBGroupText(mxBuilder->weld_combo_box("group_text_list"))
     , mxCBXGroupAuto(mxBuilder->weld_check_button("auto_after"))
     , mxMFGroupAuto(mxBuilder->weld_metric_spin_button("auto_after_value",FieldUnit::SECOND))

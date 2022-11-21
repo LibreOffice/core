@@ -77,10 +77,6 @@ class SfxCmisVersionsDialog final : public SfxDialogController
     SfxViewFrame* m_pViewFrame;
     std::unique_ptr<SfxVersionTableDtor> m_pTable;
 
-    std::unique_ptr<weld::Button> m_xOpenButton;
-    std::unique_ptr<weld::Button> m_xViewButton;
-    std::unique_ptr<weld::Button> m_xDeleteButton;
-    std::unique_ptr<weld::Button> m_xCompareButton;
     std::unique_ptr<weld::TreeView> m_xVersionBox;
 
     void LoadVersions();

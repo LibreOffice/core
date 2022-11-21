@@ -1246,14 +1246,13 @@ namespace {
 class BinaryInput
 {
     Sequence< sal_Int8 >                    m_aData;
-    Reference< XComponentContext >          m_xContext;
 
     const sal_Int8*                         m_pData;
     sal_Int32                               m_nCurPos;
     sal_Int32                               m_nSize;
 
 public:
-    BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XComponentContext > const & xContext );
+    BinaryInput( const Sequence< ::sal_Int8 >& aData );
 
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
 
@@ -1269,9 +1268,8 @@ public:
 
 }
 
-BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XComponentContext > const & xContext )
+BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData )
         : m_aData( aData )
-        , m_xContext( xContext )
 {
     m_pData = m_aData.getConstArray();
     m_nCurPos = 0;
@@ -1384,7 +1382,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
     while( nOldLocaleCount > 0 );
 
     // Import data
-    BinaryInput aIn( Data, m_xContext );
+    BinaryInput aIn( Data );
 
     aIn.readInt16(); // version
     sal_Int32 nLocaleCount = aIn.readInt16();

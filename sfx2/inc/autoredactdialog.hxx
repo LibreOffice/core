@@ -102,7 +102,6 @@ class SfxAutoRedactDialog final : public SfxDialogController
     bool m_bIsValidState;
     bool m_bTargetsCopied;
 
-    std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
     std::unique_ptr<TargetsTable> m_xTargetsBox;
     std::unique_ptr<weld::Button> m_xLoadBtn;
     std::unique_ptr<weld::Button> m_xSaveBtn;

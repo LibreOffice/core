@@ -64,8 +64,6 @@ protected:
 
     SfxBindings* pBindings;
 
-    weld::Container* mpContainer;
-
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
