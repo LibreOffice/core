@@ -67,7 +67,6 @@ public:
     int                   GetFontFaceIndex() const  { return mnFaceNum; }
     int                   GetFontFaceVariation() const  { return mnFaceVariation; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
-    bool                  IsMicrosoftSymbolEncoded() const { return maDevFontAttributes.IsMicrosoftSymbolEncoded(); }
     const FontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
     void                  AnnounceFont( vcl::font::PhysicalFontCollection* );
