@@ -872,17 +872,12 @@ OUString ScSimpleBootstrapFixture::getRangeByName(ScDocument* pDoc, const OUStri
     return pName->GetSymbol(pDoc->GetGrammar());
 }
 
-OUString ScSimpleBootstrapFixture::getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
-{
-    return pDoc->GetFormula(nCol, nRow, nTab);
-}
-
 #if CALC_DEBUG_OUTPUT != 0
 void ScSimpleBootstrapFixture::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
 {
     if (pCaption != nullptr)
         cout << pCaption << ", ";
-    cout << nCol << "/" << nRow << ": " << getFormula(pDoc, nCol, nRow, nTab);
+    cout << nCol << "/" << nRow << ": " << pDoc->GetFormula(nCol, nRow, nTab);
     cout << endl;
 }
 #else
@@ -902,7 +897,7 @@ void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRang
         {
             ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
             ScRefCellValue aCell(*pDoc, aPos);
-            OUString aVal = printFormula ? getFormula(pDoc, nCol, nRow, rRange.aStart.Tab())
+            OUString aVal = printFormula ? pDoc->GetFormula(nCol, nRow, rRange.aStart.Tab())
                                          : ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
             printer.set(nRow - nRow1, nCol - nCol1, aVal);
         }

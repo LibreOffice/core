@@ -194,7 +194,6 @@ public:
     bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                        const RangeNameDef* pEnd);
     OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName);
-    OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab);
     void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                            const char* pCaption = nullptr);
     void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
