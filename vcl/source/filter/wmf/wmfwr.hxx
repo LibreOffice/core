@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WMFWR_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_WMF_WMFWR_HXX
+#pragma once
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
@@ -199,7 +198,5 @@ public:
     WMFWriter();
     bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem const * pFilterConfigItem, bool bPlaceable);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
