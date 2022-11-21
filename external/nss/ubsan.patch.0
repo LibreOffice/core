@@ -27,7 +27,7 @@
                count * sizeof(lgdbSlotData);
  
      data->data = (unsigned char *)PORT_ZAlloc(dataLen);
-@@ -327,7 +327,7 @@
+@@ -329,7 +329,7 @@
      }
      if ((encoded->major == LGDB_DB_EXT1_VERSION_MAJOR) &&
          (encoded->minor >= LGDB_DB_EXT1_VERSION_MINOR)) {
