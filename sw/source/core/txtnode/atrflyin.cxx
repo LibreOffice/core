@@ -56,6 +56,18 @@ SwFormatFlyCnt* SwFormatFlyCnt::Clone( SfxItemPool* ) const
     return new SwFormatFlyCnt( m_pFormat );
 }
 
+void SwFormatFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFlyCnt"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("text-attr"), "%p", m_pTextAttr);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("format"), "%p", m_pFormat);
+
+    SfxPoolItem::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
 {

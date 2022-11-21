@@ -47,6 +47,8 @@ public:
     void SetFlyFormat( SwFrameFormat* pNew = nullptr )   { m_pFormat = pNew; }
 
     const SwTextFlyCnt *GetTextFlyCnt() const { return m_pTextAttr; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

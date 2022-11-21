@@ -170,6 +170,9 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         case RES_TXTATR_CONTENTCONTROL:
             GetContentControl().dumpAsXml(pWriter);
             break;
+        case RES_TXTATR_FLYCNT:
+            GetFlyCnt().dumpAsXml(pWriter);
+            break;
         default:
             SAL_WARN("sw.core", "Unhandled TXTATR");
             break;
