@@ -356,8 +356,8 @@ void SAL_CALL QtFilePicker::appendFilter(const OUString& title, const OUString& 
     sGlobFilter.replace("*.*", "*");
 
     m_aNamedFilterList << QStringLiteral("%1 (%2)").arg(sFilterName, sGlobFilter);
-    m_aTitleToFilterMap[sTitle] = m_aNamedFilterList.constLast();
-    m_aNamedFilterToExtensionMap[m_aNamedFilterList.constLast()] = sGlobFilter;
+    m_aTitleToFilterMap[sTitle] = m_aNamedFilterList.last();
+    m_aNamedFilterToExtensionMap[m_aNamedFilterList.last()] = sGlobFilter;
 }
 
 void SAL_CALL QtFilePicker::setCurrentFilter(const OUString& title)

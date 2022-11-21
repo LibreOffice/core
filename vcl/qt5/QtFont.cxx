@@ -69,7 +69,7 @@ static inline void applyStretch(QtFont& rFont, FontWidth eWidthType)
     switch (eWidthType)
     {
         case WIDTH_DONTKNOW:
-            rFont.setStretch(QFont::AnyStretch);
+            rFont.setStretch(0);
             break;
         case WIDTH_ULTRA_CONDENSED:
             rFont.setStretch(QFont::UltraCondensed);

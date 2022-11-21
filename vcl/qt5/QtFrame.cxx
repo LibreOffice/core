@@ -36,7 +36,6 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtCore/QThread>
-#include <QtCore/QVersionNumber>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QIcon>
@@ -235,8 +234,6 @@ void QtFrame::fixICCCMwindowGroup()
 
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb)
         return;
-    if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12))
-        return;
 
     xcb_connection_t* conn = QX11Info::connection();
     xcb_window_t win = asChild()->winId();
@@ -361,7 +358,7 @@ QWidget* QtFrame::asChild() const
     return m_pQWidget;
 }
 
-qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatioF(); }
+qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatio(); }
 
 bool QtFrame::isWindow() const { return asChild()->isWindow(); }
 

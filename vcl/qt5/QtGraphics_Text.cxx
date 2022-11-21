@@ -241,7 +241,7 @@ bool QtGraphics::CreateFontSubset(const OUString& rToFile,
     // fill details about the subsetted font
     rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aPSName = toOUString(aRawFont.familyName());
-    rInfo.m_nCapHeight = aRawFont.capHeight();
+    rInfo.m_nCapHeight =
     rInfo.m_nAscent = aRawFont.ascent();
     rInfo.m_nDescent = aRawFont.descent();
 

@@ -24,6 +24,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include <QtGui/QImage>
+#include <QtGui/QColor>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

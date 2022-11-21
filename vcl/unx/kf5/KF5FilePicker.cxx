@@ -59,13 +59,6 @@ KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     // set layout so custom widgets show up in our native file dialog
     setCustomControlWidgetLayout(_layout.get());
 
-    m_pFileDialog->setSupportedSchemes({
-        QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),
-        QStringLiteral("https"), QStringLiteral("webdav"), QStringLiteral("webdavs"),
-        QStringLiteral("smb"),
-        QStringLiteral(""), // this makes removable devices shown
-    });
-
     // used to set the custom controls
     qApp->installEventFilter(this);
 }

@@ -27,11 +27,7 @@
 #include <QtGui/QWindow>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
-namespace com::sun::star::accessibility
-{
-class XAccessibleTable;
-}
+#include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 class QtFrame;
 class QtWidget;

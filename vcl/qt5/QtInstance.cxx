@@ -226,7 +226,7 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_pActivePopup(nullptr)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
+    const OUString sToolkit = "qt" + OUString::number(5);
     pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
 
     // this one needs to be blocking, so that the handling in main thread
@@ -270,10 +270,6 @@ QtInstance::~QtInstance()
 
 void QtInstance::AfterAppInit()
 {
-    // set the default application icon via desktop file just on Wayland,
-    // as this otherwise overrides the individual desktop icons on X11.
-    if (QGuiApplication::platformName() == "wayland")
-        QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter.desktop"));
     QGuiApplication::setLayoutDirection(AllSettings::GetLayoutRTL() ? Qt::RightToLeft
                                                                     : Qt::LeftToRight);
 }
@@ -697,9 +693,6 @@ void QtInstance::MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
 std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** pArgv)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // for Qt 6, setting Qt::AA_EnableHighDpiScaling and Qt::AA_UseHighDpiPixmaps
-    // is deprecated, they're always enabled
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     // for scaled icons in the native menus
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
