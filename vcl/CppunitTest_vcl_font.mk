@@ -20,7 +20,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_font, \
 	vcl/qa/cppunit/physicalfontfacecollection \
 	vcl/qa/cppunit/physicalfontfamily \
 	vcl/qa/cppunit/physicalfontcollection \
-	vcl/qa/cppunit/logicalfontinstance \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_font,\
@@ -56,9 +55,5 @@ $(eval $(call gb_CppunitTest_use_components,vcl_font,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_font))
-
-$(eval $(call gb_CppunitTest_use_more_fonts,vcl_font))
-
-$(eval $(call gb_CppunitTest_set_non_application_font_use,vcl_font,abort))
 
 # vim: set noet sw=4 ts=4:
