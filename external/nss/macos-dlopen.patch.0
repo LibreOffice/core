@@ -1,6 +1,6 @@
 --- nspr/pr/src/linking/prlink.c
 +++ nspr/pr/src/linking/prlink.c
-@@ -799,7 +799,7 @@
+@@ -555,7 +555,7 @@
           * The reason is that DARWIN's dlopen ignores the provided path
           * and checks for the plain filename in DYLD_LIBRARY_PATH,
           * which could load an unexpected version of a library. */

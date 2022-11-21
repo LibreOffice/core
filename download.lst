@@ -425,8 +425,8 @@ NEON_TARBALL := neon-0.31.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NSS_SHA256SUM := b1e1198fa7ee4e0fe4fa6937245c94820fd3c3c6897779493858af1bf6310b30
-NSS_TARBALL := nss-3.83-with-nspr-4.34.1.tar.gz
+NSS_SHA256SUM := 8b5a2e9e3d632a78ad4d9c8d2ea502d2790d7a8e7b1986d173107232eca27432
+NSS_TARBALL := nss-3.86-with-nspr-4.35.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
