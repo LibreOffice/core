@@ -27,7 +27,6 @@ private:
     ScAddress maPos;
 
     std::unique_ptr<weld::Button> mxBtnOk;
-    std::unique_ptr<weld::Button> mxBtnCancel;
 
     std::unique_ptr<ColorListBox> mxLbPos;
     std::unique_ptr<ColorListBox> mxLbNeg;

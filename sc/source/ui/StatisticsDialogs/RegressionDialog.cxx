@@ -148,7 +148,6 @@ ScRegressionDialog::ScRegressionDialog(
     , mxWithLabelsCheckBox(m_xBuilder->weld_check_button("withlabels-check"))
     , mxLinearRadioButton(m_xBuilder->weld_radio_button("linear-radio"))
     , mxLogarithmicRadioButton(m_xBuilder->weld_radio_button("logarithmic-radio"))
-    , mxPowerRadioButton(m_xBuilder->weld_radio_button("power-radio"))
     , mxErrorMessage(m_xBuilder->weld_label("error-message"))
     , mxConfidenceLevelField(m_xBuilder->weld_spin_button("confidencelevel-spin"))
     , mxCalcResidualsCheckBox(m_xBuilder->weld_check_button("calcresiduals-check"))

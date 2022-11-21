@@ -63,7 +63,6 @@ private:
     OUString            m_sSheetDotDotDot;
 
     std::unique_ptr<weld::RadioButton> m_xBtnBefore;
-    std::unique_ptr<weld::RadioButton> m_xBtnBehind;
     std::unique_ptr<weld::RadioButton> m_xBtnNew;
     std::unique_ptr<weld::RadioButton> m_xBtnFromFile;
     std::unique_ptr<weld::Label> m_xFtCount;

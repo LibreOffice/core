@@ -43,7 +43,6 @@ ScInsertTableDlg::ScInsertTableDlg(weld::Window* pParent, ScViewData& rData, SCT
     , nSelTabIndex(0)
     , nTableCount(nTabCount)
     , m_xBtnBefore(m_xBuilder->weld_radio_button("before"))
-    , m_xBtnBehind(m_xBuilder->weld_radio_button("after"))
     , m_xBtnNew(m_xBuilder->weld_radio_button("new"))
     , m_xBtnFromFile(m_xBuilder->weld_radio_button("fromfile"))
     , m_xFtCount(m_xBuilder->weld_label("countft"))

@@ -29,7 +29,6 @@ public:
 
 private:
     std::unique_ptr<weld::Frame> m_xFrame;
-    std::unique_ptr<weld::RadioButton> m_xBtnRows;
     std::unique_ptr<weld::RadioButton> m_xBtnCols;
     std::unique_ptr<weld::Button> m_xBtnOk;
 

@@ -175,7 +175,6 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xFtCellRef(m_xBuilder->weld_label("cellreflabel"))
     , m_xEdLeft1(new ScCursorRefEdit(m_xBuilder->weld_entry("ref1edit")))
     , m_xRBLeft1(new formula::RefButton(m_xBuilder->weld_button("ref1button")))
-    , m_xFtOperator(m_xBuilder->weld_label("oplabel"))
     , m_xLbOp1(m_xBuilder->weld_combo_box("op1list"))
     , m_xFtConstraint(m_xBuilder->weld_label("constraintlabel"))
     , m_xEdRight1(new ScCursorRefEdit(m_xBuilder->weld_entry("val1edit")))

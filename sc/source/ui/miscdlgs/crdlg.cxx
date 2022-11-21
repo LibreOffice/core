@@ -26,7 +26,6 @@ ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle,
                              const OUString& rStrLabel)
     : GenericDialogController(pParent, "modules/scalc/ui/colorrowdialog.ui", "ColOrRowDialog")
     , m_xFrame(m_xBuilder->weld_frame("frame"))
-    , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
     , m_xBtnCols(m_xBuilder->weld_radio_button("columns"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {

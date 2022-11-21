@@ -59,7 +59,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbFormulas;
     std::unique_ptr<weld::CheckButton> m_xCbQuoteAll;
     std::unique_ptr<weld::CheckButton> m_xCbFixed;
-    std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<SvxTextEncodingBox> m_xLbCharset;
     std::unique_ptr<SvxTextEncodingTreeView> m_xTvCharset;
 

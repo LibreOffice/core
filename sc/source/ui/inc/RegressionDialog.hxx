@@ -24,7 +24,6 @@ class ScRegressionDialog : public ScStatisticsTwoVariableDialog
     std::unique_ptr<weld::CheckButton> mxWithLabelsCheckBox;
     std::unique_ptr<weld::RadioButton> mxLinearRadioButton;
     std::unique_ptr<weld::RadioButton> mxLogarithmicRadioButton;
-    std::unique_ptr<weld::RadioButton> mxPowerRadioButton;
     std::unique_ptr<weld::Label> mxErrorMessage;
     std::unique_ptr<weld::SpinButton> mxConfidenceLevelField;
     std::unique_ptr<weld::CheckButton> mxCalcResidualsCheckBox;

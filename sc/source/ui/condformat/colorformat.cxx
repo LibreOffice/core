@@ -74,7 +74,6 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBa
     , mpDoc(pDoc)
     , maPos(rPos)
     , mxBtnOk(m_xBuilder->weld_button("ok"))
-    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
     , mxLbPos(new ColorListBox(m_xBuilder->weld_menu_button("positive_colour"), [this]{ return m_xDialog.get(); }))
     , mxLbNeg(new ColorListBox(m_xBuilder->weld_menu_button("negative_colour"), [this]{ return m_xDialog.get(); }))
     , mxLbAxisCol(new ColorListBox(m_xBuilder->weld_menu_button("axis_colour"), [this]{ return m_xDialog.get(); }))
