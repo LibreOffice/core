@@ -234,7 +234,7 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
 }
 
 // not thread safe
-int DrawingML::mnImageCounter = 1;
+std::stack<sal_Int32> DrawingML::mnImageCounter;
 int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
 sal_Int32 DrawingML::mnDrawingMLCount = 0;
@@ -267,7 +267,6 @@ sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 
 void DrawingML::ResetCounters()
 {
-    mnImageCounter = 1;
     mnWdpImageCounter = 1;
     maWdpCache.clear();
 }
@@ -280,11 +279,13 @@ void DrawingML::ResetMlCounters()
 
 void DrawingML::PushExportGraphics()
 {
+    mnImageCounter.push(1);
     maExportGraphics.emplace();
 }
 
 void DrawingML::PopExportGraphics()
 {
+    mnImageCounter.pop();
     maExportGraphics.pop();
 }
 
@@ -1393,7 +1394,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(
             OUStringBuffer()
                 .appendAscii(GetComponentDir())
-                .append("/media/image" + OUString::number(mnImageCounter))
+                .append("/media/image" + OUString::number(mnImageCounter.top()))
                 .appendAscii(pExtension)
                 .makeStringAndClear(),
             sMediaType);
@@ -1409,7 +1410,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         sPath = OUStringBuffer()
                     .appendAscii(sRelationCompPrefix.getStr())
                     .appendAscii(sRelPathToMedia.getStr())
-                    .append(static_cast<sal_Int32>(mnImageCounter++))
+                    .append(static_cast<sal_Int32>(mnImageCounter.top()++))
                     .appendAscii(pExtension)
                     .makeStringAndClear();
 
@@ -1488,7 +1489,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
         Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
                                                                        .appendAscii(GetComponentDir())
                                                                        .append("/media/media" +
-                                                                            OUString::number(mnImageCounter) +
+                                                                            OUString::number(mnImageCounter.top()) +
                                                                             aExtension)
                                                                        .makeStringAndClear(),
                                                                        aMimeType);
@@ -1500,7 +1501,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
 
         // create the relation
         OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
-                                         .append("media/media" + OUString::number(mnImageCounter++) + aExtension)
+                                         .append("media/media" + OUString::number(mnImageCounter.top()++) + aExtension)
                                          .makeStringAndClear();
         aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), aPath);
         aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), aPath);
