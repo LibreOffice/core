@@ -452,11 +452,6 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
      * not need any glyph data from FreeType in this case */
     /*FT_Error rc = */ FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
-    if (mxFontInfo->IsMicrosoftSymbolEncoded())
-        FT_Select_Charmap(maFaceFT, FT_ENCODING_MS_SYMBOL);
-    else
-        FT_Select_Charmap(maFaceFT, FT_ENCODING_UNICODE);
-
     mbFaceOk = true;
 
     // TODO: query GASP table for load flags
