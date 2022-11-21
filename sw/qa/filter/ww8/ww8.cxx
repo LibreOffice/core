@@ -139,6 +139,26 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     // assertion failure for not-well-formed XML output):
     save("Office Open XML Text");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
+{
+    // Given a document with a dropdown content control, the only list item has no display text
+    // (only a value):
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When saving to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure that no display text attribute is written:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem' unexpected 'displayText' attribute
+    // i.e. we wrote an empty attribute instead of omitting it.
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem", "displayText");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
