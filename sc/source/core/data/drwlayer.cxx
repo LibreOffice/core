@@ -1033,13 +1033,17 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             position must not be done, if the cell containing the note has not
             been moved yet in the document. The calling code now passes an
             additional boolean stating if the cells are already moved. */
-        if( bUpdateNoteCaptionPos )
+        /*  tdf #152081 Do not change hidden objects. That would produce zero height
+            or width and loss of caption.*/
+        if (pObj->IsVisible() && bUpdateNoteCaptionPos)
+        {
             /*  When inside an undo action, there may be pending note captions
                 where cell note is already deleted (thus document cannot find
                 the note object anymore). The caption will be deleted later
                 with drawing undo. */
             if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
                 pNote->UpdateCaptionPos( rData.maStart );
+        }
         return;
     }
 
@@ -2476,12 +2480,9 @@ ScDrawLayer::GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow
     ScRange aRange( 0, nStartRow, nTab, pDoc->MaxCol(), nEndRow, nTab);
     while (pObject)
     {
-        if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
-        {
-            ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && aRange.Contains(pObjData->maStart))
-                aObjects.push_back(pObject);
-        }
+        ScDrawObjData* pObjData = GetObjData(pObject);
+        if (pObjData && aRange.Contains(pObjData->maStart))
+            aObjects.push_back(pObject);
         pObject = aIter.Next();
     }
     return aObjects;
@@ -2548,12 +2549,9 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
     ScRange aRange(nStartCol, 0, nTab, nEndCol, pDoc->MaxRow(), nTab);
     while (pObject)
     {
-        if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
-        {
-            ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && aRange.Contains(pObjData->maStart))
-                aObjects.push_back(pObject);
-        }
+        ScDrawObjData* pObjData = GetObjData(pObject);
+        if (pObjData && aRange.Contains(pObjData->maStart))
+            aObjects.push_back(pObject);
         pObject = aIter.Next();
     }
     return aObjects;
