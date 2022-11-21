@@ -1196,8 +1196,8 @@ bool SVGTextWriter::nextTextPortion()
 #if OSL_DEBUG_LEVEL > 0
                 sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ false ) + "; ";
 #endif
-                // This case handle Date or Time text field inserted by the user
-                // on both page/master page. It doesn't handle the standard Date/Time field.
+                // This case handles Date or Time text field inserted by the user
+                // on both page/master page. It doesn't handle the standard DateTime field.
                 if( sFieldName == "DateTime" )
                 {
                     Reference<XPropertySet> xTextFieldPropSet(xTextField, UNO_QUERY);
@@ -1206,7 +1206,7 @@ bool SVGTextWriter::nextTextPortion()
                         Reference<XPropertySetInfo> xPropSetInfo = xTextFieldPropSet->getPropertySetInfo();
                         if( xPropSetInfo.is() )
                         {
-                            // The standard Date/Time field has no property.
+                            // The standard DateTime field has no property.
                             // Trying to get a property value on such field would cause a runtime exception.
                             // So the hasPropertyByName check is needed.
                             bool bIsFixed = true;
@@ -1215,7 +1215,7 @@ bool SVGTextWriter::nextTextPortion()
                                 bool bIsDate = true;
                                 if( xPropSetInfo->hasPropertyByName("IsDate") && ( ( xTextFieldPropSet->getPropertyValue( "IsDate" ) ) >>= bIsDate ) )
                                 {
-                                    msDateTimeType = OUString::createFromAscii( bIsDate ? "<date>" : "<time>" );
+                                    msDateTimeType = OUString::createFromAscii( bIsDate ? "Date" : "Time" );
                                 }
                             }
                         }
@@ -1746,7 +1746,18 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
 
     if( mbIsPlaceholderShape )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
+        OUString sClass = "PlaceholderText";
+        // This case handles Date or Time text field inserted by the user
+        // on both page/master page. It doesn't handle the standard DateTime field.
+        if( !msDateTimeType.isEmpty() )
+        {
+            sClass += " " + msDateTimeType;
+        }
+        else if( !msTextFieldType.isEmpty() )
+        {
+            sClass += " " + msTextFieldType;
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sClass );
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
@@ -1776,26 +1787,6 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PageCount" );
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( msPageCount );
-    }
-    // This case handle Date or Time text field inserted by the user
-    // on both page/master page. It doesn't handle the standard Date/Time field.
-    else if ( !msDateTimeType.isEmpty() )
-    {
-        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
-        mrExport.GetDocHandler()->characters( msDateTimeType );
-    }
-    else if( mbIsPlaceholderShape && rText.startsWith("<") && rText.endsWith(">") )
-    {
-        OUString sContent;
-        if( msTextFieldType == "PageNumber" )
-            sContent = "<number>";
-        else if( msTextFieldType == "PageName" )
-            sContent = "<slide-name>";
-        else
-            sContent = rText;
-
-        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
-        mrExport.GetDocHandler()->characters( sContent );
     }
     else
     {

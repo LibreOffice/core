@@ -1321,7 +1321,7 @@ void SVGFilter::implGenerateMetaData()
                     if( !bBackgroundVisibility ) // visibility default value: 'visible'
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
 
-                    // Page Number, Date/Time, Footer and Header Fields are regarded as background objects.
+                    // Page Number, DateTime, Footer and Header Fields are regarded as background objects.
                     // So bBackgroundObjectsVisibility overrides visibility of master page text fields.
                     xPropSet->getPropertyValue( "IsBackgroundObjectsVisible" )  >>= bBackgroundObjectsVisibility;
                     if( bBackgroundObjectsVisibility ) // visibility default value: 'visible'
@@ -1338,7 +1338,7 @@ void SVGFilter::implGenerateMetaData()
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-number-visibility", "visible" );
                         }
 
-                        // Date/Time Field
+                        // DateTime Field
                         bool bDateTimeFixed           = true;     // default: fixed
                         xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
                         if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
@@ -2153,9 +2153,9 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
 
                     if( mbPresentation )
                     {
-                        bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
+                        bool bIsPageNumber  = ( aShapeClass == "PageNumber" );
                         bool bIsFooter      = ( aShapeClass == "Footer" );
-                        bool bIsDateTime    = ( aShapeClass == "Date/Time" );
+                        bool bIsDateTime    = ( aShapeClass == "DateTime" );
                         bool bTextField = bIsPageNumber || bIsFooter || bIsDateTime;
                         if( bTextField )
                         {
@@ -2632,9 +2632,9 @@ OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape
     else if( aShapeType.lastIndexOf( "presentation.FooterShape" ) != -1 )
         aRet = "Footer";
     else if( aShapeType.lastIndexOf( "presentation.DateTimeShape" ) != -1 )
-        aRet = "Date/Time";
+        aRet = "DateTime";
     else if( aShapeType.lastIndexOf( "presentation.SlideNumberShape" ) != -1 )
-        aRet = "Slide_Number";
+        aRet = "PageNumber";
     else if( aShapeType.lastIndexOf( "presentation.TitleTextShape" ) != -1 )
         aRet = "TitleText";
     else if( aShapeType.lastIndexOf( "presentation.OutlinerShape" ) != -1 )
