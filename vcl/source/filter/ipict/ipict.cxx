@@ -597,9 +597,8 @@ sal_uInt8 PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
         nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
-    const double pi = 2 * acos(0.0);
-    double fAng1 = static_cast<double>(nstartAngle) * pi / 180.0;
-    double fAng2 = static_cast<double>(nstartAngle + narcAngle) * pi / 180.0;
+    double fAng1 = basegfx::deg2rad(nstartAngle);
+    double fAng2 = basegfx::deg2rad(nstartAngle + narcAngle);
     PictReaderShape::drawArc( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastArcRect, fAng1, fAng2, nActPenSize );
     return 4;
 }
