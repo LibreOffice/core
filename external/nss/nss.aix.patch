@@ -1,7 +1,7 @@
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:47:42.984012225 +0100
 +++ b/b/nspr/configure	2014-09-29 16:50:33.907375937 +0100
-@@ -6369,7 +6369,6 @@
+@@ -6325,7 +6325,6 @@
          AIX_LINK_OPTS='-brtl -bnso -berok'
          ;;
      esac
@@ -12,7 +12,7 @@ diff -ru a/nspr/configure b/nspr/configure
 diff -ru a/nspr/configure.in b/nspr/configure.in
 --- a/a/nspr/configure.in	2014-09-29 16:46:35.257394860 +0100
 +++ b/b/nspr/configure.in	2014-09-29 16:50:33.908375942 +0100
-@@ -1229,7 +1229,8 @@
+@@ -1180,7 +1180,8 @@
      AC_DEFINE(XP_UNIX)
      AC_DEFINE(AIX)
      AC_DEFINE(SYSV)
@@ -22,7 +22,7 @@ diff -ru a/nspr/configure.in b/nspr/configure.in
      AC_CHECK_HEADER(sys/atomic_op.h, AC_DEFINE(AIX_HAVE_ATOMIC_OP_H))
      case "${target_os}" in
      aix3.2*)
-@@ -1269,10 +1270,9 @@
+@@ -1220,10 +1221,9 @@
          AC_DEFINE(HAVE_SOCKLEN_T)
          AC_DEFINE(HAVE_FCNTL_FILE_LOCKING)
          USE_IPV6=1
@@ -48,7 +48,7 @@ diff -ru a/nspr/pr/src/Makefile.in b/nspr/pr/src/Makefile.in
 diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
 --- a/a/nss/cmd/platlibs.mk	2014-09-29 16:47:42.987012253 +0100
 +++ b/b/nss/cmd/platlibs.mk	2014-09-29 16:50:33.910375955 +0100
-@@ -134,7 +134,7 @@
+@@ -171,7 +171,7 @@
  	$(NULL)
  
  ifeq ($(OS_ARCH), AIX) 
@@ -57,7 +57,7 @@ diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
  endif
  
  # $(PROGRAM) has NO explicit dependencies on $(EXTRA_SHARED_LIBS)
-@@ -180,7 +180,7 @@
+@@ -217,7 +217,7 @@
  	$(NULL)
  
  ifeq ($(OS_ARCH), AIX) 
