@@ -2396,9 +2396,14 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->startElementNS(XML_w, XML_dropDownList);
         for (const auto& rItem : m_pContentControl->GetListItems())
         {
-            m_pSerializer->singleElementNS(XML_w, XML_listItem,
-                    FSNS(XML_w, XML_displayText), rItem.m_aDisplayText,
-                    FSNS(XML_w, XML_value), rItem.m_aValue);
+            rtl::Reference<FastAttributeList> xAttributes = FastSerializerHelper::createAttrList();
+            if (!rItem.m_aDisplayText.isEmpty())
+            {
+                // If there is no display text, need to omit the attribute, not write an empty one.
+                xAttributes->add(FSNS(XML_w, XML_displayText), rItem.m_aDisplayText);
+            }
+            xAttributes->add(FSNS(XML_w, XML_value), rItem.m_aValue);
+            m_pSerializer->singleElementNS(XML_w, XML_listItem, xAttributes);
         }
         m_pSerializer->endElementNS(XML_w, XML_dropDownList);
     }

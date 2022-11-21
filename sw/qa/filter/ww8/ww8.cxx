@@ -10,6 +10,10 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <docsh.hxx>
+#include <formatcontentcontrol.hxx>
+#include <unotxdoc.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -80,6 +84,30 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
     save("Office Open XML Text", maTempFile);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
+{
+    // Given a document with a dropdown content control, the only list item has no display text
+    // (only a value):
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When saving to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure that no display text attribute is written:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem' unexpected 'displayText' attribute
+    // i.e. we wrote an empty attribute instead of omitting it.
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem", "displayText");
 }
 }
 
