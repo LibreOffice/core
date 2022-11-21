@@ -1,12 +1,11 @@
 diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.sub
 --- nss.org/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
 +++ nss/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
-@@ -111,6 +111,11 @@
+@@ -110,6 +110,11 @@
      exit 1;;
  esac
-
+ 
 +if test $1 = "arm-unknown-linux-androideabi"; then echo $1; exit; fi
-+if test $1 = "aarch64-unknown-linux-android"; then echo $1; exit; fi
 +if test $1 = "i686-pc-linux-android"; then echo $1; exit; fi
 +if test $1 = "x86_64-pc-linux-android"; then echo $1; exit; fi
 +
@@ -16,9 +15,9 @@ diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.s
 diff -ur nss.org/nspr/configure nss/nspr/configure
 --- nss.org/nspr/configure	2017-09-07 15:29:45.018246359 +0200
 +++ nss/nspr/configure	2017-09-07 15:31:47.604075663 +0200
-@@ -2737,18 +2739,15 @@
+@@ -2728,18 +2728,15 @@
      esac
-
+ 
          AS="$android_toolchain"/bin/"$android_tool_prefix"-as
 -    CC="$android_toolchain"/bin/"$android_tool_prefix"-gcc
 -    CXX="$android_toolchain"/bin/"$android_tool_prefix"-g++
@@ -30,18 +29,19 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
      AR="$android_toolchain"/bin/"$android_tool_prefix"-ar
      RANLIB="$android_toolchain"/bin/"$android_tool_prefix"-ranlib
      STRIP="$android_toolchain"/bin/"$android_tool_prefix"-strip
-
+ 
      CPPFLAGS="-I$android_platform/usr/include $CPPFLAGS"
 -    CFLAGS="-mandroid -I$android_platform/usr/include -fno-short-enums -fno-exceptions $CFLAGS"
 -    CXXFLAGS="-mandroid -I$android_platform/usr/include -fpic -fno-short-enums -fno-exceptions $CXXFLAGS"
 -    LDFLAGS="-mandroid -L$android_platform/usr/lib -Wl,-rpath-link=$android_platform/usr/lib --sysroot=$android_platform $LDFLAGS"
-
+ 
      $as_echo "#define ANDROID 1" >>confdefs.h
-
+ 
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200
 +++ nss/nss/Makefile	2017-09-07 15:32:04.347181076 +0200
-@@ -62,6 +62,6 @@
+@@ -65,7 +65,7 @@
+ 
  ifeq ($(OS_TARGET),Android)
  NSPR_CONFIGURE_OPTS += --with-android-ndk=$(ANDROID_NDK) \
 -                       --target=$(ANDROID_PREFIX) \
@@ -49,42 +49,3 @@ diff -ur nss.org/nss/Makefile nss/nss/Makefile
                         --with-android-version=$(OS_TARGET_RELEASE) \
                         --with-android-toolchain=$(ANDROID_TOOLCHAIN) \
                         --with-android-platform=$(ANDROID_SYSROOT)
-@@ -140,7 +140,6 @@
-
- build_nspr: $(NSPR_CONFIG_STATUS)
- 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
--	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/pr/tests
-
- install_nspr: build_nspr
- 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
---- nss/nss/lib/ckfw/builtins/manifest.mn	2019-11-26 15:18:22.185985193 +0100
-+++ nss/nss/lib/ckfw/builtins/manifest.mn	2020-08-18 18:04:29.151889733 +0300
-@@ -5,7 +5,7 @@
- 
- CORE_DEPTH = ../../..
- 
--DIRS = . testlib
-+DIRS =
- 
- testlib: .
- 
-diff -ur nss/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
---- nss/nss/coreconf/arch.mk	2019-11-01 10:29:44.933245745 +0100
-+++ nss/nss/coreconf/arch.mk	2019-11-01 10:32:04.347181076 +0100
-@@ -234,7 +234,15 @@
- #
- # this should be  configurable from the user
- #
--   OS_TEST := arm
-+   ifneq (,$(filter x86 x86_64,$(ANDROID_APP_ABI)))
-+       OS_TEST := $(ANDROID_APP_ABI)
-+   else
-+       ifeq ($(USE_64),1)
-+          OS_TEST := aarch64
-+       else
-+          OS_TEST := arm
-+       endif
-+   endif
-    OS_ARCH = Android
-    ifndef OS_TARGET_RELEASE
- 	OS_TARGET_RELEASE := 8
