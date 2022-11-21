@@ -162,14 +162,11 @@ class XmlPortionDumper:public SwPortionHandler
 {
   private:
       xmlTextWriterPtr m_Writer;
-      TextFrameIndex m_Ofs;
 
   public:
       explicit XmlPortionDumper(xmlTextWriterPtr some_writer)
           : m_Writer(some_writer)
-          , m_Ofs(0)
-      {
-    }
+      {}
 
     /**
         @param nLength
@@ -194,7 +191,6 @@ class XmlPortionDumper:public SwPortionHandler
             (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
                                                     static_cast<int>(nWidth));
         (void)xmlTextWriterEndElement(m_Writer);
-        m_Ofs += nLength;
     }
 
     /**
@@ -205,7 +201,7 @@ class XmlPortionDumper:public SwPortionHandler
         @param nType
                 type of this portion
       */
-    virtual void Special( TextFrameIndex nLength,
+    virtual void Special( TextFrameIndex /*nLength*/,
                           const OUString & /*rText*/,
                           PortionType nType,
                           const SwFont* pFont ) override
@@ -218,7 +214,6 @@ class XmlPortionDumper:public SwPortionHandler
             pFont->dumpAsXml(m_Writer);
 
         (void)xmlTextWriterEndElement(m_Writer);
-        m_Ofs += nLength;
     }
 
     virtual void LineBreak() override
@@ -231,11 +226,10 @@ class XmlPortionDumper:public SwPortionHandler
       * @param nLength
       *         number of 'model string' characters to be skipped
       */
-    virtual void Skip( TextFrameIndex nLength ) override
+    virtual void Skip( TextFrameIndex /*nLength*/ ) override
     {
         (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Skip"));
         (void)xmlTextWriterEndElement(m_Writer);
-        m_Ofs += nLength;
     }
 
     virtual void Finish(  ) override

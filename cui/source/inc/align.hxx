@@ -94,7 +94,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
     std::unique_ptr<weld::CheckButton> m_xCbAsianMode;
 
-    std::unique_ptr<weld::Widget> m_xBoxDirection;
     std::unique_ptr<weld::CheckButton> m_xBtnWrap;
     std::unique_ptr<weld::CheckButton> m_xBtnHyphen;
     std::unique_ptr<weld::CheckButton> m_xBtnShrink;

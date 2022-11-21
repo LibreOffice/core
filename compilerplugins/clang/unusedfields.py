@@ -88,10 +88,15 @@ for d in definitionSet:
     fieldType = definitionToTypeMap[d]
     if "ModuleClient" in fieldType:
         continue
-    # leave the weld stuff alone until Caolan is finished
-    if "weld::" in fieldType:
-        continue
     if "::sfx2::sidebar::ControllerItem" in fieldType:
+        continue
+    if "(lambda at " in d[0]:
+        continue
+    if "weld::CustomWeld" in fieldType:
+        continue
+    if "weld::Container" in fieldType:
+        continue
+    if "weld::Frame" in fieldType:
         continue
     untouchedSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))
     untouchedSetD.add(d)
@@ -124,12 +129,11 @@ for d in definitionSet:
         continue
     if "VclPtr<" in fieldType:
         continue
-    # leave the weld stuff alone until Caolan is finished
-    if "weld::" in fieldType:
-        continue
     if "osl::Mutex" in fieldType:
         continue
     if "::sfx2::sidebar::ControllerItem" in fieldType:
+        continue
+    if "(lambda at " in d[0]:
         continue
     onlyUsedInConstructorSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))
 
@@ -168,9 +172,6 @@ for d in definitionSet:
     # mutex locking
     if "Guard" in fieldType:
         continue
-    # leave the weld stuff alone until Caolan is finished
-    if "weld::" in fieldType:
-        continue
     # these are just all model classes
     if (srcLoc.startswith("oox/")
         or srcLoc.startswith("lotuswordpro/")
@@ -180,7 +181,14 @@ for d in definitionSet:
         or srcLoc.startswith("filter/")
         or srcLoc.startswith("vcl/source/filter/")):
         continue
-
+    if "(lambda at " in d[0]:
+        continue
+    if "weld::CustomWeld" in fieldType:
+        continue
+    if "weld::Container" in fieldType:
+        continue
+    if "weld::Frame" in fieldType:
+        continue
     writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 
 
@@ -205,8 +213,11 @@ for d in definitionSet:
     if (srcLoc.startswith("hwpfilter/")
         or srcLoc.startswith("lotuswordpro/")):
         continue
-    # leave the weld stuff alone until Caolan is finished
-    if "weld::" in fieldType:
+    if "(lambda at " in d[0]:
+        continue
+    if "weld::CustomWeld" in fieldType:
+        continue
+    if "weld::Container" in fieldType:
         continue
     readonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 

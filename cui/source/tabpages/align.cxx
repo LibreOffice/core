@@ -123,7 +123,6 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xCbStacked(m_xBuilder->weld_check_button("checkVertStack"))
     , m_xCbAsianMode(m_xBuilder->weld_check_button("checkAsianMode"))
     // Properties
-    , m_xBoxDirection(m_xBuilder->weld_widget("boxDirection"))
     , m_xBtnWrap(m_xBuilder->weld_check_button("checkWrapTextAuto"))
     , m_xBtnHyphen(m_xBuilder->weld_check_button("checkHyphActive"))
     , m_xBtnShrink(m_xBuilder->weld_check_button("checkShrinkFitCellSize"))

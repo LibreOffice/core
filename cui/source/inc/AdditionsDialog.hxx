@@ -68,7 +68,6 @@ public:
     css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
     std::unique_ptr<weld::Entry> m_xEntrySearch;
     std::unique_ptr<weld::Button> m_xButtonClose;
-    std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;
     std::vector<std::shared_ptr<AdditionsItem>> m_aAdditionsItems; // UI components
     std::vector<AdditionInfo> m_aAllExtensionsVector; // Stores the all extensions' info
 

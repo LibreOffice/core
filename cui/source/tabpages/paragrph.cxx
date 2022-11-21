@@ -999,7 +999,6 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xVertAlignLB(m_xBuilder->weld_combo_box("comboLB_VERTALIGN"))
     , m_xVertAlign(m_xBuilder->weld_label("labelFL_VERTALIGN"))
     , m_xVertAlignSdr(m_xBuilder->weld_label("labelST_VERTALIGN_SDR"))
-    , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
     SetExchangeSupport();

@@ -427,7 +427,6 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_aSearchDataTimer("AdditionsDialog SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
     , m_xButtonClose(m_xBuilder->weld_button("buttonClose"))
-    , m_xMenuButtonSettings(m_xBuilder->weld_menu_button("buttonGear"))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
     , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
