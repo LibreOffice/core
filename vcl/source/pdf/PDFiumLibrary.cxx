@@ -12,6 +12,7 @@
 
 #include <cassert>
 
+#include <sal/log.hxx>
 #include <fpdf_doc.h>
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
@@ -466,7 +467,8 @@ public:
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize,
                                                  const OString& rPassword) override;
     PDFErrorType getLastErrorCode() override;
-    std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) override;
+    /// @brief creates bitmap, can reduce size if needed, check nWidth and nHeight
+    std::unique_ptr<PDFiumBitmap> createBitmap(int& nWidth, int& nHeight, int nAlpha) override;
 };
 }
 
@@ -537,13 +539,36 @@ PDFErrorType PDFiumImpl::getLastErrorCode()
     return static_cast<PDFErrorType>(FPDF_GetLastError());
 }
 
-std::unique_ptr<PDFiumBitmap> PDFiumImpl::createBitmap(int nWidth, int nHeight, int nAlpha)
+std::unique_ptr<PDFiumBitmap> PDFiumImpl::createBitmap(int& nWidth, int& nHeight, int nAlpha)
 {
     std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+
     FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nWidth, nHeight, nAlpha);
     if (!pPdfBitmap)
     {
+        int nOriginal = nHeight;
+        // PDFium cannot create big bitmaps, max 2^14 x 2^14 x 4 bytes per pixel
+        if (nHeight > 16384)
+            nHeight = 16384;
+
+        if (nWidth > 16384)
+        {
+            nWidth = 16384.0 / nOriginal * nWidth;
+        }
+
+        if (nWidth * nHeight > 16384 * 16384)
+        {
+            nOriginal = nWidth;
+            nHeight = 16384.0 / nOriginal * nHeight;
+        }
+
+        pPdfBitmap = FPDFBitmap_Create(nWidth, nHeight, nAlpha);
+    }
+
+    if (!pPdfBitmap)
+    {
         maLastError = "Failed to create bitmap";
+        SAL_WARN("vcl.filter", "PDFiumImpl: " << getLastError());
     }
     else
     {
@@ -955,14 +980,14 @@ bool PDFiumPageObjectImpl::getDrawMode(PDFFillMode& rFillMode, bool& rStroke)
 
 BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
 {
-    size_t nPageWidth = getWidth();
-    size_t nPageHeight = getHeight();
-    auto pPdfBitmap = std::make_unique<PDFiumBitmapImpl>(
-        FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1));
+    int nPageWidth = getWidth();
+    int nPageHeight = getHeight();
+    std::unique_ptr<PDFiumBitmap> pPdfBitmap
+        = PDFiumLibrary::get()->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
     if (!pPdfBitmap)
-    {
         return 0;
-    }
+
+    PDFiumBitmapImpl* pBitmapImpl = static_cast<PDFiumBitmapImpl*>(pPdfBitmap.get());
 
     int nFlags = 0;
     if (nMDPPerm != 3)
@@ -970,16 +995,16 @@ BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
         // Annotations/commenting should affect the checksum, signature verification wants this.
         nFlags = FPDF_ANNOT;
     }
-    FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), mpPage, /*start_x=*/0, /*start_y=*/0,
+    FPDF_RenderPageBitmap(pBitmapImpl->getPointer(), mpPage, /*start_x=*/0, /*start_y=*/0,
                           nPageWidth, nPageHeight,
                           /*rotate=*/0, nFlags);
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         const auto pPdfBuffer
-            = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap->getPointer()));
-        const int nStride = FPDFBitmap_GetStride(pPdfBitmap->getPointer());
-        for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
+            = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pBitmapImpl->getPointer()));
+        const int nStride = FPDFBitmap_GetStride(pBitmapImpl->getPointer());
+        for (int nRow = 0; nRow < nPageHeight; ++nRow)
         {
             ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
             pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);

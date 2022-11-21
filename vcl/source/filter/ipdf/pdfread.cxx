@@ -65,12 +65,10 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 
         // Returned unit is points, convert that to pixel.
 
-        const size_t nPageWidth
-            = std::round(vcl::pdf::pointToPixel(nPageWidthPoints, fResolutionDPI)
-                         * PDF_INSERT_MAGIC_SCALE_FACTOR);
-        const size_t nPageHeight
-            = std::round(vcl::pdf::pointToPixel(nPageHeightPoints, fResolutionDPI)
-                         * PDF_INSERT_MAGIC_SCALE_FACTOR);
+        int nPageWidth = std::round(vcl::pdf::pointToPixel(nPageWidthPoints, fResolutionDPI)
+                                    * PDF_INSERT_MAGIC_SCALE_FACTOR);
+        int nPageHeight = std::round(vcl::pdf::pointToPixel(nPageHeightPoints, fResolutionDPI)
+                                     * PDF_INSERT_MAGIC_SCALE_FACTOR);
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
             = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
         if (!pPdfBitmap)
@@ -97,12 +95,12 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
             ConstScanline pPdfBuffer = pPdfBitmap->getBuffer();
             const int nStride = pPdfBitmap->getStride();
             std::vector<sal_uInt8> aScanlineAlpha(nPageWidth);
-            for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
+            for (int nRow = 0; nRow < nPageHeight; ++nRow)
             {
                 ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
                 // pdfium byte order is BGRA.
                 pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
-                for (size_t nCol = 0; nCol < nPageWidth; ++nCol)
+                for (int nCol = 0; nCol < nPageWidth; ++nCol)
                 {
                     // Invert alpha (source is alpha, target is opacity).
                     aScanlineAlpha[nCol] = ~pPdfLine[3];

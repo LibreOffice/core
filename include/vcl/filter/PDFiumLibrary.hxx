@@ -61,7 +61,8 @@ public:
                                                          const OString& rPassword)
         = 0;
     virtual PDFErrorType getLastErrorCode() = 0;
-    virtual std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) = 0;
+    /// createBitmap can reduce requested size to possible value
+    virtual std::unique_ptr<PDFiumBitmap> createBitmap(int& nWidth, int& nHeight, int nAlpha) = 0;
 };
 
 class PDFiumPage;
