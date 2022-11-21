@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_HTMLFMTFLT_HXX
-#define INCLUDED_VCL_OSX_HTMLFMTFLT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -35,7 +34,5 @@ css::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const css::uno::Sequence<sal_I
    @returns True if the MS Office Html format will be detected False otherwise.
  */
 bool isHTMLFormat(const css::uno::Sequence<sal_Int8>& aHtmlSequence);
-
-#endif // INCLUDED_VCL_OSX_HTMLFMTFLT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
