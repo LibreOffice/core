@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 
@@ -51,7 +50,5 @@ void drawPolygon(VirtualDevice *dev, bool drawFrame, tools::Polygon const &rect,
   */
   void drawArc(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &orig, const double& angle1, const double& angle2, Size const &pSize);
 }
-
-#endif // INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

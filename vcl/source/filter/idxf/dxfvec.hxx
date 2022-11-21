@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFVEC_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFVEC_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vcl/lineinfo.hxx>
@@ -211,8 +210,5 @@ inline bool DXFVector::operator == (const DXFVector & rV) const
     if (fx==rV.fx && fy==rV.fy && fz==rV.fz) return true;
     else return false;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
