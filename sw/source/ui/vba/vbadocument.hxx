@@ -55,6 +55,9 @@ public:
     virtual css::uno::Any SAL_CALL BuiltInDocumentProperties( const css::uno::Any& index ) override;
     virtual css::uno::Any SAL_CALL CustomDocumentProperties( const css::uno::Any& index ) override;
     virtual css::uno::Any SAL_CALL Bookmarks( const css::uno::Any& rIndex ) override;
+    css::uno::Any SAL_CALL ContentControls(const css::uno::Any& index) override;
+    css::uno::Any SAL_CALL SelectContentControlsByTag(const css::uno::Any& index) override;
+    css::uno::Any SAL_CALL SelectContentControlsByTitle(const css::uno::Any& index) override;
     virtual css::uno::Any SAL_CALL Variables( const css::uno::Any& rIndex ) override;
     virtual css::uno::Any SAL_CALL getAttachedTemplate() override;
     virtual void SAL_CALL setAttachedTemplate( const css::uno::Any& _attachedtemplate ) override;

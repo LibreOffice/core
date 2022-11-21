@@ -91,6 +91,10 @@ void SwMacrosTest::testVba()
             OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
         },
         {
+            OUString("testModernVBA.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+        },
+        {
             OUString("testFind.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
         },
