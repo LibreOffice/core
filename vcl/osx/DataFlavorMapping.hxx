@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_DATAFLAVORMAPPING_HXX
-#define INCLUDED_VCL_OSX_DATAFLAVORMAPPING_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
@@ -123,7 +122,5 @@ private:
 };
 
 typedef std::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
-
-#endif // INCLUDED_VCL_OSX_DATAFLAVORMAPPING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
