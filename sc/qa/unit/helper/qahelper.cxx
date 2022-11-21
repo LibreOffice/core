@@ -444,25 +444,6 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
     return pCell->GetCode();
 }
 
-bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
-{
-    ScTokenArray* pCode = getTokens(rDoc, rPos);
-    if (!pCode)
-    {
-        cerr << "Empty token array." << endl;
-        return false;
-    }
-
-    OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
-    if (aFormula != OUString::createFromAscii(pExpected))
-    {
-        cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
-        return false;
-    }
-
-    return true;
-}
-
 bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption )

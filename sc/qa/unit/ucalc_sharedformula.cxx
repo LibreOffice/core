@@ -537,9 +537,9 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
 
     // The formulas should have been adjusted for the move.
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,1,0), "R[-1]C[-1]"));
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,2,0), "R[-1]C[-1]"));
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,3,0), "R[-1]C[-1]"));
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "R[-1]C[-1]", "Wrong formula");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,2,0), "R[-1]C[-1]", "Wrong formula");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,3,0), "R[-1]C[-1]", "Wrong formula");
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
@@ -551,9 +551,9 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,3,0)));
 
     // And the formulas should have been re-adjusted to their original references.
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,1,0), "RC[-1]"));
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,2,0), "RC[-1]"));
-    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,3,0), "RC[-1]"));
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "RC[-1]", "Wrong formula");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,2,0), "RC[-1]", "Wrong formula");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,3,0), "RC[-1]", "Wrong formula");
 
     m_pDoc->DeleteTab(0);
 }
