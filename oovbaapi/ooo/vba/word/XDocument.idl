@@ -44,6 +44,9 @@ interface XDocument
     any BuiltInDocumentProperties( [in] any Index );
     any CustomDocumentProperties( [in] any Index );
     any Bookmarks( [in] any Index );
+    any ContentControls( [in] any Index );
+    any SelectContentControlsByTag( [in] any Index );
+    any SelectContentControlsByTitle( [in] any Index );
     any Variables( [in] any Index );
     any Paragraphs( [in] any Index );
     any Styles( [in] any Index ) raises (com::sun::star::script::BasicErrorException);

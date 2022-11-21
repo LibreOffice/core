@@ -1,0 +1,103 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module ooo {  module vba {  module word {
+
+interface XRange;
+interface XContentControlListEntries;
+interface XContentControl
+{
+    interface ooo::vba::XHelperInterface;
+
+    /// returns or sets whether users can add/remove sections from the specified repeating section
+    /// content control by using the user interface.
+    /// Use only with repeating section content controls.
+    [attribute] boolean AllowInsertDeleteSection;
+    /// returns or sets the appearance of the content control.
+    /// (wdContentControlBoundingBox/wdContentControlHidden/wdContentControlTags)
+    [attribute] long Appearance;
+    /// returns or sets a String that represents the category for a building block content control.
+    [attribute] string BuildingBlockCategory;
+    /// returns or sets a WdBuildingBlockTypes constant that represents the type of building block
+    /// for a building block content control.
+    [attribute] long BuildingBlockType;
+    /// returns or sets a Boolean that represents a check box's current state (checked/unchecked).
+    [attribute] boolean Checked;
+    /// returns or sets the color of the content control.
+    [attribute] long Color;
+    /// returns or sets a WdCalendarType constant that represents the calendar type.
+    [attribute] long DateCalendarType;
+    /// returns or sets a String that represents the format in which dates are displayed.
+    [attribute] string DateDisplayFormat;
+    /// returns a WdLanguageID that represents the language format for the date displayed.
+    [attribute, readonly] long DateDisplayLocale;
+    /// returns or sets a WdContentControlDateStorageFormat that represents the format for storage
+    /// and retrieval of dates when a date content control is bound to the XML data store.
+    [attribute] long DateStorageFormat;
+    /// returns or sets a Variant that represents the name of the character style to use to format text in a text content control.
+    //[attribute] string DefaultTextStyle;
+    /// returns a ContentControlListEntries collection that represents the items
+    /// in a drop-down list content control or in a combo box content control.
+    [attribute, readonly] any DropdownListEntries;
+    /// returns a String that represents the identification for a content control.
+    [attribute, readonly] string ID;
+    /// returns the level of the content control—whether the content control surrounds text, paragraphs, table cells, or table rows; or if it is inline.
+    /// (wdContentControlLevelCell/wdContentControlLevelInline/wdContentControlLevelParagraph/wdContentControlLevelRow)
+    [attribute, readonly] long Level;
+    /// returns or sets whether the user can delete a content control from the active document.
+    [attribute] boolean LockContentControl;
+    /// returns or sets whether the user can edit the contents of a content control.
+    [attribute] boolean LockContents;
+    /// returns or sets whether a text content control allows multiple lines of text.
+    [attribute] boolean MultiLine;
+    /// returns a ContentControl that represents the parent content control for a content control that is nested inside a rich-text control or group control.
+    //[attribute, readonly] XContentControl ParentContentControl;
+    /// returns a BuildingBlock object that represents the placeholder text for a content control.
+    [attribute, readonly] /*WRONG - should be XBuildingBlock*/ string PlaceholderText;
+    /// returns a Range that represents the contents of the content control in the active document.
+    [attribute, readonly] XRange Range;
+    /// returns the collection of repeating section items in the specified repeating section content control.
+    //[attribute, readonly] RepeatingSectionItems;
+    /// returns or sets the name of the repeating section items used in the context menu associated
+    /// with the specified repeating section content control.
+    [attribute] string RepeatingSectionItemTitle;
+    /// returns whether the placeholder text for the content control is displayed.
+    [attribute, readonly] boolean ShowingPlaceholderText;
+    /// returns or sets a String that represents a value to identify a content control.
+    [attribute] string Tag;
+    /// returns or sets whether to remove a content control from the active document
+    /// when the user edits the contents of the control.
+    [attribute] boolean Temporary;
+    /// returns or sets a String that represents the title for a content control.
+    [attribute] string Title;
+    /// returns or sets a WdContentControlType that represents the type for a content control.
+    [attribute] long Type;
+    /// returns an XMLMapping object that represents the mapping of a content control to XML data in the data store of a document.
+    //[attribute, readonly] XMLMapping;
+
+    /// Copies the content control from the active document to the Clipboard.
+    void Copy();
+    /// Removes the content control from the active document and moves it to the Clipboard.
+    void Cut();
+    /// Deletes the specified content control and the contents of the content control.
+    void Delete( [in] /*optional*/ any bDeleteContents );
+    /// Sets the symbol used to represent the checked state of a check box content control.
+    void SetCheckedSymbol( [in] long Character, [in] /*optional*/ any sFont );
+    /// Sets the symbol used to represent the unchecked state of a check box content control.
+    void SetUnCheckedSymbol( [in] long Character, [in] /*optional*/ any sFont );
+    /// Sets the placeholder text that displays until a user enters their own text.
+    void SetPlaceholderText( [in] /*optional*/ any BuildingBlock, [in] /*optional*/ any Range, [in] /*optional*/ any sFont );
+    /// Removes a group content control. Its children are no longer nested and can be freely edited.
+    void Ungroup();
+
+};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

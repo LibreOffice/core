@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include "vbafilterpropsfromformat.hxx"
+#include "vbacontentcontrols.hxx"
 #include "vbadocument.hxx"
 #include "vbaformfields.hxx"
 #include "vbarange.hxx"
@@ -200,6 +201,32 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
         return uno::makeAny( xBookmarksVba );
 
     return xBookmarksVba->Item( rIndex, uno::Any() );
+}
+
+uno::Any SAL_CALL SwVbaDocument::ContentControls(const uno::Any& index)
+{
+    uno::Reference<XCollection> xContentControls(
+        new SwVbaContentControls(this, mxContext, mxTextDocument, "", ""));
+    if (index.hasValue())
+        return xContentControls->Item(index, uno::Any());
+
+    return uno::Any(xContentControls);
+}
+
+uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTag(const uno::Any& index)
+{
+    OUString sTag;
+    index >>= sTag;
+    return uno::Any(uno::Reference<XCollection>(
+                        new SwVbaContentControls(this, mxContext, mxTextDocument, sTag, "")));
+}
+
+uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
+{
+    OUString sTitle;
+    index >>= sTitle;
+    return uno::Any(uno::Reference<XCollection>(
+                        new SwVbaContentControls(this, mxContext, mxTextDocument, "", sTitle)));
 }
 
 uno::Any SAL_CALL
