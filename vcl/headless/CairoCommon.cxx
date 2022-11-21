@@ -621,6 +621,19 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
         return true;
     }
 
+    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+    {
+        const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyLine));
+        if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
+            || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
+        {
+            SAL_WARN("vcl.gdi", "drawPolyLine, skipping suspicious range of: "
+                                    << aRange << " for fuzzing performance");
+        }
+        return true;
+    }
+
     // need to check/handle LineWidth when ObjectToDevice transformation is used
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
 
@@ -707,6 +720,7 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
+
     constexpr int MaxNormalLineWidth = 64;
     if (fLineWidth > MaxNormalLineWidth)
     {
@@ -719,7 +733,6 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
             SAL_WARN("vcl.gdi", "drawPolyLine, suspicious input line width of: "
                                     << fLineWidth << ", will be " << fLineWidthPixel
                                     << " pixels thick");
-            static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
             if (bFuzzing)
             {
                 basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
