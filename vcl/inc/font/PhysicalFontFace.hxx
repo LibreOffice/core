@@ -174,8 +174,9 @@ public:
     bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps(); }
 
     bool HasColorLayers() const;
-    const ColorPalette& GetColorPalette(size_t) const;
     std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
+
+    const std::vector<ColorPalette>& GetColorPalettes() const;
 
     bool HasColorBitmaps() const;
     RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;

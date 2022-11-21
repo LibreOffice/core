@@ -383,7 +383,7 @@ bool PhysicalFontFace::HasColorLayers() const
     return hb_ot_color_has_layers(pHbFace) && hb_ot_color_has_palettes(pHbFace);
 }
 
-const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
+const std::vector<ColorPalette>& PhysicalFontFace::GetColorPalettes() const
 {
     if (!mxColorPalettes)
     {
@@ -410,7 +410,7 @@ const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
         }
     }
 
-    return (*mxColorPalettes)[nIndex];
+    return *mxColorPalettes;
 }
 
 std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyphIndex) const

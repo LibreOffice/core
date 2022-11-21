@@ -2446,7 +2446,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
     if (g_bDebugDisableCompression)
         emitComment("PDFWriterImpl::emitType3Font");
 
-    const auto& aPalette = pFace->GetColorPalette(0);
+    const auto& rColorPalettes = pFace->GetColorPalettes();
 
     FontSubsetInfo aSubsetInfo;
     sal_GlyphId pTempGlyphIds[] = { 0 };
@@ -2587,7 +2587,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 // 0xFFFF is a special value means foreground color.
                 if (rLayer.m_nColorIndex != 0xFFFF)
                 {
-                    auto aColor(aPalette[rLayer.m_nColorIndex]);
+                    auto& rPalette = rColorPalettes[0];
+                    auto aColor(rPalette[rLayer.m_nColorIndex]);
                     appendNonStrokingColor(aColor, aContents);
                     aContents.append(" ");
                     if (aColor.GetAlpha() != 0xFF
