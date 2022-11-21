@@ -289,7 +289,7 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
     static constexpr OUStringLiteral pORef = u"Sheet1.K1";
     ScAddress aPos;
     aPos.Parse(pORef, rDoc);
-    ASSERT_FORMULA_EQUAL(rDoc, aPos, "AND(K3:K81)", "Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=AND(K3:K81)"), rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
     CPPUNIT_ASSERT_MESSAGE( OUString( pORef + " result is error.").toUtf8().getStr(),
             isFormulaWithoutError( rDoc, aPos));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));

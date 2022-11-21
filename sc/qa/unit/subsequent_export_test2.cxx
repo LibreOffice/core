@@ -1060,9 +1060,9 @@ void ScExportTest2::testTdf105272()
     //Expected: Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]
     //Actual  : table1[[#this row],[total]]/table1[[#this row],['# athletes]]
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(7, 3, 0),
-                         "Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]",
-                         "Wrong formula");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wrong formula", OUString("=Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]"),
+        pDoc->GetFormula(7, 3, 0));
 }
 
 void ScExportTest2::testTdf118990()
@@ -1076,13 +1076,15 @@ void ScExportTest2::testTdf118990()
     // file:///share/lookupsource.xlsx - which is incorrect, since it points to local filesystem
     // and not to Windows network share.
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 1, 0),
-                         "VLOOKUP(B1,'file://192.168.1.1/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
-                         "Wrong Windows share (using host IP) URL in A2");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wrong Windows share (using host IP) URL in A2",
+        OUString("=VLOOKUP(B1,'file://192.168.1.1/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)"),
+        pDoc->GetFormula(0, 1, 0));
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 2, 0),
-                         "VLOOKUP(B1,'file://NETWORKHOST/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
-                         "Wrong Windows share (using hostname) URL in A3");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wrong Windows share (using hostname) URL in A3",
+        OUString("=VLOOKUP(B1,'file://NETWORKHOST/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)"),
+        pDoc->GetFormula(0, 2, 0));
 }
 
 void ScExportTest2::testTdf121612()

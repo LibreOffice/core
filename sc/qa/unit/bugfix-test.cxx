@@ -430,7 +430,8 @@ void ScFiltersTest::testRhbz1390776()
     createScDoc("xml/rhbz1390776.xml");
     ScDocument* pDoc = getScDoc();
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range", OUString("=SUM(A18:A23)"),
+                                 pDoc->GetFormula(0, 27, 0));
 }
 
 void ScFiltersTest::testTdf104310()

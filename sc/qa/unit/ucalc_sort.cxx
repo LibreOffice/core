@@ -234,9 +234,9 @@ void TestSort::testSortHorizontal()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=CONCATENATE(C2;\"-\";D2)"), m_pDoc->GetFormula(1,1,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=CONCATENATE(C3;\"-\";D3)"), m_pDoc->GetFormula(1,2,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=CONCATENATE(C4;\"-\";D4)"), m_pDoc->GetFormula(1,3,0));
 
     m_pDoc->DeleteTab(0);
 }
@@ -805,7 +805,7 @@ void TestSort::testSortRefUpdate()
     }
 
     // C2 should now point to A4.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in C2!", OUString("=R[2]C[-2]"), m_pDoc->GetFormula(2,1,0));
 
     // Undo the sort.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -828,7 +828,7 @@ void TestSort::testSortRefUpdate()
     }
 
     // C2 should now point to A2.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "RC[-2]", "Wrong formula in C2!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in C2!", OUString("=RC[-2]"), m_pDoc->GetFormula(2,1,0));
 
     // Redo.
     pUndoMgr->Redo();
@@ -849,7 +849,7 @@ void TestSort::testSortRefUpdate()
     }
 
     // C2 should now point to A4.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in C2!", OUString("=R[2]C[-2]"), m_pDoc->GetFormula(2,1,0));
 
     // Undo again.
     pUndoMgr->Undo();
@@ -952,7 +952,7 @@ void TestSort::testSortRefUpdate2()
     // Formulas in column B should still point to their respective left neighbor cell.
     for (SCROW i = 1; i <= 4; ++i)
     {
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,i,0), "RC[-1]", "Wrong formula!");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=RC[-1]"), m_pDoc->GetFormula(1,i,0));
     }
 
     // Undo and check the result in column B.
@@ -1032,9 +1032,9 @@ void TestSort::testSortRefUpdate3()
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Make sure the formula cells have been adjusted correctly.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,3,0), "A2+A3", "Wrong formula in A4.");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,4,0), "A2+10", "Wrong formula in A5.");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,5,0), "A3+10", "Wrong formula in A6.");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in A4.", OUString("=A2+A3"), m_pDoc->GetFormula(0,3,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in A5.", OUString("=A2+10"), m_pDoc->GetFormula(0,4,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in A6.", OUString("=A3+10"), m_pDoc->GetFormula(0,5,0));
 
     // Undo and check the result.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -1171,17 +1171,17 @@ void TestSort::testSortRefUpdate4_Impl()
         // Make sure the formula cells have been adjusted correctly.
         const char* aCheck[][4] = {
             // Name          Lesson1       Lesson2       Average
-            { "Lesson1.A4", "Lesson1.B4", "Lesson2.B4", "AVERAGE(B2:C2)" },
-            { "Lesson1.A5", "Lesson1.B5", "Lesson2.B5", "AVERAGE(B3:C3)" },
-            { "Lesson1.A6", "Lesson1.B6", "Lesson2.B6", "AVERAGE(B4:C4)" },
-            { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
-            { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
+            { "=Lesson1.A4", "=Lesson1.B4", "=Lesson2.B4", "=AVERAGE(B2:C2)" },
+            { "=Lesson1.A5", "=Lesson1.B5", "=Lesson2.B5", "=AVERAGE(B3:C3)" },
+            { "=Lesson1.A6", "=Lesson1.B6", "=Lesson2.B6", "=AVERAGE(B4:C4)" },
+            { "=Lesson1.A3", "=Lesson1.B3", "=Lesson2.B3", "=AVERAGE(B5:C5)" },
+            { "=Lesson1.A2", "=Lesson1.B2", "=Lesson2.B2", "=AVERAGE(B6:C6)" },
         };
         for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr(), OUString::createFromAscii(aCheck[nRow][nCol]), m_pDoc->GetFormula(nCol,nRow+1,0));
             }
         }
 
@@ -1242,17 +1242,17 @@ void TestSort::testSortRefUpdate4_Impl()
         // Make sure the formula cells have been adjusted correctly.
         const char* aCheck[][4] = {
             // Name          Lesson1       Lesson2       Average
-            { "Lesson1.A6", "Lesson1.B6", "Lesson2.B6", "AVERAGE(B2:C2)" },
-            { "Lesson1.A5", "Lesson1.B5", "Lesson2.B5", "AVERAGE(B3:C3)" },
-            { "Lesson1.A4", "Lesson1.B4", "Lesson2.B4", "AVERAGE(B4:C4)" },
-            { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
-            { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
+            { "=Lesson1.A6", "=Lesson1.B6", "=Lesson2.B6", "=AVERAGE(B2:C2)" },
+            { "=Lesson1.A5", "=Lesson1.B5", "=Lesson2.B5", "=AVERAGE(B3:C3)" },
+            { "=Lesson1.A4", "=Lesson1.B4", "=Lesson2.B4", "=AVERAGE(B4:C4)" },
+            { "=Lesson1.A3", "=Lesson1.B3", "=Lesson2.B3", "=AVERAGE(B5:C5)" },
+            { "=Lesson1.A2", "=Lesson1.B2", "=Lesson2.B2", "=AVERAGE(B6:C6)" },
         };
         for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr(), OUString::createFromAscii(aCheck[nRow][nCol]), m_pDoc->GetFormula(nCol,nRow+1,0));
             }
         }
     }
@@ -1338,14 +1338,14 @@ void TestSort::testSortRefUpdate5()
     // Make sure the formula cells have been adjusted correctly.
     const char* aFormulaCheck[] = {
         // Volatile
-        "TODAY()-$A2",
-        "TODAY()-$A3",
-        "TODAY()-$A4",
-        "TODAY()-$A5",
+        "=TODAY()-$A2",
+        "=TODAY()-$A3",
+        "=TODAY()-$A4",
+        "=TODAY()-$A5",
     };
     for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
     {
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,nRow+1,0), aFormulaCheck[nRow], OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr(), OUString::createFromAscii(aFormulaCheck[nRow]), m_pDoc->GetFormula(1,nRow+1,0));
     }
 
     // Undo and check the result.
@@ -1435,9 +1435,9 @@ void TestSort::testSortRefUpdate6()
     }
 
     // Make sure that the formulas in C2:C4 are not adjusted.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "C1+B2", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,2,0), "C2+B3", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,3,0), "C3+B4", "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=C1+B2"), m_pDoc->GetFormula(2,1,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=C2+B3"), m_pDoc->GetFormula(2,2,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=C3+B4"), m_pDoc->GetFormula(2,3,0));
 
     // Undo and check.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -1569,14 +1569,14 @@ void TestSort::testSortBroadcaster()
         }
 
         // Make sure that the formulas in D1:G2 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3,0,0), "B1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3,1,0), "B2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4,0,0), "$B$1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4,1,0), "$B$2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5,0,0), "SUM(A1:B1)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5,1,0), "SUM(A2:B2)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6,0,0), "SUM($A$1:$B$1)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6,1,0), "SUM($A$2:$B$2)", "Wrong formula!");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=B1"), m_pDoc->GetFormula(3,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=B2"), m_pDoc->GetFormula(3,1,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=$B$1"), m_pDoc->GetFormula(4,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=$B$2"), m_pDoc->GetFormula(4,1,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(A1:B1)"), m_pDoc->GetFormula(5,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(A2:B2)"), m_pDoc->GetFormula(5,1,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM($A$1:$B$1)"), m_pDoc->GetFormula(6,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM($A$2:$B$2)"), m_pDoc->GetFormula(6,1,0));
 
         // Enter new value and check that it is broadcasted. First in empty cell.
         m_pDoc->SetString(1,1,0, "16");
@@ -1671,14 +1671,14 @@ void TestSort::testSortBroadcaster()
         }
 
         // Make sure that the formulas in A8:B11 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,7,0), "A6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,7,0), "B6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,8,0), "$A$6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,8,0), "$B$6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,9,0), "SUM(A5:A6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,9,0), "SUM(B5:B6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,10,0), "SUM($A$5:$A$6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,10,0), "SUM($B$5:$B$6)", "Wrong formula!");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=A6"), m_pDoc->GetFormula(0,7,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=B6"), m_pDoc->GetFormula(1,7,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=$A$6"), m_pDoc->GetFormula(0,8,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=$B$6"), m_pDoc->GetFormula(1,8,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(A5:A6)"), m_pDoc->GetFormula(0,9,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(B5:B6)"), m_pDoc->GetFormula(1,9,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM($A$5:$A$6)"), m_pDoc->GetFormula(0,10,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM($B$5:$B$6)"), m_pDoc->GetFormula(1,10,0));
 
         // Enter new value and check that it is broadcasted. First in empty cell.
         m_pDoc->SetString(1,5,0, "16");
@@ -1769,10 +1769,10 @@ void TestSort::testSortBroadcastBroadcaster()
         }
 
         // Make sure that the formulas in B1:C2 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,0,0), "A1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,1,0), "A2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,0,0), "B1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "B2", "Wrong formula!");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=A1"), m_pDoc->GetFormula(1,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=A2"), m_pDoc->GetFormula(1,1,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=B1"), m_pDoc->GetFormula(2,0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=B2"), m_pDoc->GetFormula(2,1,0));
     }
 
     m_pDoc->DeleteTab(0);

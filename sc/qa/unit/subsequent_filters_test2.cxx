@@ -933,8 +933,9 @@ void ScFiltersTest2::testErrorOnExternalReferences()
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoName), static_cast<int>(pFC->GetErrCode()));
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 0, 0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A",
-                         "Formula changed");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula changed",
+                                 OUString("='file:///Path/To/FileA.ods'#$Sheet1.A1A"),
+                                 pDoc->GetFormula(0, 0, 0));
 }
 
 void ScFiltersTest2::testTdf145054()
@@ -1561,23 +1562,22 @@ void ScFiltersTest2::testTdf131536()
     createScDoc("xlsx/tdf131536.xlsx");
     ScDocument* pDoc = getScDoc();
 
-    ScAddress aPos(3, 9, 0);
-    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(aPos));
-    ASSERT_FORMULA_EQUAL(
-        *pDoc, aPos,
-        "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),\"\")"
-        ",2,4)"
-        "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"\"),4))",
-        nullptr);
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(3, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(
+            "=IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),"
+            "\"\")"
+            ",2,4)"
+            "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"\"),4))"),
+        pDoc->GetFormula(3, 9, 0));
 
-    ScAddress aPos2(4, 9, 0);
-    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(aPos2));
-    ASSERT_FORMULA_EQUAL(
-        *pDoc, aPos2,
-        "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),"
-        "\"0\"),2,4)"
-        "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"0\"),4))",
-        nullptr);
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(4, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(
+            "=IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),"
+            "\"0\"),2,4)"
+            "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"0\"),4))"),
+        pDoc->GetFormula(4, 9, 0));
 }
 
 void ScFiltersTest2::testTdf130583()
@@ -1647,12 +1647,14 @@ void ScFiltersTest2::testNamedExpressionsXLSXML()
         // A7
         ScAddress aPos(0, 6, 0);
         CPPUNIT_ASSERT_EQUAL(15.0, pDoc->GetValue(aPos));
-        ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(MyRange)", nullptr);
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(MyRange)"),
+                             pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 
         // B7
         aPos.IncCol();
         CPPUNIT_ASSERT_EQUAL(55.0, pDoc->GetValue(aPos));
-        ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(MyRange2)", nullptr);
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(MyRange2)"),
+                             pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 
         const ScRangeData* pRD = pDoc->GetRangeName()->findByUpperName("MYRANGE");
         CPPUNIT_ASSERT(pRD);
@@ -1669,12 +1671,14 @@ void ScFiltersTest2::testNamedExpressionsXLSXML()
         // A7 on Sheet1
         ScAddress aPos(0, 6, 0);
         CPPUNIT_ASSERT_EQUAL(27.0, pDoc->GetValue(aPos));
-        ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(MyRange)", nullptr);
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(MyRange)"),
+                             pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 
         // A7 on Sheet2
         aPos.IncTab();
         CPPUNIT_ASSERT_EQUAL(74.0, pDoc->GetValue(aPos));
-        ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(MyRange)", nullptr);
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(MyRange)"),
+                             pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 
         const ScRangeName* pRN = pDoc->GetRangeName(0);
         CPPUNIT_ASSERT(pRN);
@@ -1714,7 +1718,8 @@ void ScFiltersTest2::testEmptyRowsXLSXML()
 
     ScAddress aPos;
     aPos.Parse("B9", *pDoc);
-    ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(B4:B8)", nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B4:B8)"),
+                         pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 }
 
 void ScFiltersTest2::testBorderDirectionsXLSXML()

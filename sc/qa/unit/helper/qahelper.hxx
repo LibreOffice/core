@@ -258,15 +258,6 @@ private:
 #define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
 
-SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
-        const char* expected, const char* msg, CppUnit::SourceLine const & sourceLine);
-
-#define ASSERT_FORMULA_EQUAL(doc, pos, expected, msg) \
-    checkFormula(doc, pos, expected, msg, CPPUNIT_SOURCELINE())
-
 SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
-
-SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

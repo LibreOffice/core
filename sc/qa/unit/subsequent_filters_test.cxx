@@ -1734,29 +1734,37 @@ void ScFiltersTest::testDataTableMortgageXLS()
 
     // One-variable table
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 1, 0), "PMT(B3/12,B4,-B5)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 2, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 3, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 4, 0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=PMT(B3/12,B4,-B5)"),
+                                 pDoc->GetFormula(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C3)"),
+                                 pDoc->GetFormula(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C4)"),
+                                 pDoc->GetFormula(3, 3, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C5)"),
+                                 pDoc->GetFormula(3, 4, 0));
 
     // Two-variable table
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(2, 7, 0), "PMT(B9/12,B10,-B11)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 10, 0),
-                         "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 8, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 9, 0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)",
-                         "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 10, 0),
-                         "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)", "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=PMT(B9/12,B10,-B11)"),
+                                 pDoc->GetFormula(2, 7, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)"),
+                                 pDoc->GetFormula(3, 8, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)"),
+                                 pDoc->GetFormula(3, 9, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)"),
+                                 pDoc->GetFormula(3, 10, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)"),
+                                 pDoc->GetFormula(4, 8, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)"),
+                                 pDoc->GetFormula(4, 9, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"),
+                                 pDoc->GetFormula(4, 10, 0));
 }
 
 void ScFiltersTest::testDataTableOneVarXLSX()
@@ -1773,26 +1781,26 @@ void ScFiltersTest::testDataTableOneVarXLSX()
     // B5:B11 should have multiple operations formula cells.  Just check the
     // top and bottom cells.
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 4, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(B$4,$A$2,$A5)"),
+                                 pDoc->GetFormula(1, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 4, 0)));
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 10, 0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(B$4,$A$2,$A11)"),
+                                 pDoc->GetFormula(1, 10, 0));
 
     CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(1, 10, 0)));
 
     // Likewise, E5:I5 should have multiple operations formula cells.  Just
     // check the left- and right-most cells.
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS($D5,$B$2,E$4)"),
+                                 pDoc->GetFormula(4, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(4, 4, 0)));
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(8, 4, 0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS($D5,$B$2,I$4)"),
+                                 pDoc->GetFormula(8, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(8, 4, 0)));
 }
@@ -1811,13 +1819,15 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
     // B4:M15 should have multiple operations formula cells.  We'll just check
     // the top-left and bottom-right ones.
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 3, 0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)",
-                         "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)"),
+                                 pDoc->GetFormula(1, 3, 0));
 
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 3, 0)));
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(12, 14, 0),
-                         "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)", "Wrong formula!");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
+                                 OUString("=MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)"),
+                                 pDoc->GetFormula(12, 14, 0));
 
     CPPUNIT_ASSERT_EQUAL(144.0, pDoc->GetValue(ScAddress(12, 14, 0)));
 }
@@ -3186,16 +3196,16 @@ void ScFiltersTest::testSharedFormulaXLS()
     pDoc = getScDoc();
     pDoc->CalcAll();
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 0, 0), "A1*20", "Wrong formula.");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 1, 0), "A2*20", "Wrong formula.");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 2, 0), "A3*20", "Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A1*20"), pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A2*20"), pDoc->GetFormula(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A3*20"), pDoc->GetFormula(1, 2, 0));
 
     // There is an intentional gap at row 4.
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 4, 0), "A5*20", "Wrong formula.");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 5, 0), "A6*20", "Wrong formula.");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 6, 0), "A7*20", "Wrong formula.");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 7, 0), "A8*20", "Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A5*20"), pDoc->GetFormula(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A6*20"), pDoc->GetFormula(1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A7*20"), pDoc->GetFormula(1, 6, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A8*20"), pDoc->GetFormula(1, 7, 0));
 
     // We re-group formula cells on load. Let's check that as well.
 
@@ -3242,22 +3252,26 @@ void ScFiltersTest::testSharedFormulaRefUpdateXLSX()
 
     struct TestCase
     {
-        ScAddress aPos;
+        SCCOL nCol;
+        SCROW nRow;
+        SCTAB nTab;
         const char* pExpectedFormula;
         const char* pErrorMsg;
     };
 
     TestCase aCases[4] = {
-        { ScAddress(1, 0, 0), "B29+1", "Wrong formula in B1" },
-        { ScAddress(2, 0, 0), "C29+1", "Wrong formula in C1" },
-        { ScAddress(3, 0, 0), "D29+1", "Wrong formula in D1" },
-        { ScAddress(4, 0, 0), "E29+1", "Wrong formula in E1" },
+        { 1, 0, 0, "=B29+1", "Wrong formula in B1" },
+        { 2, 0, 0, "=C29+1", "Wrong formula in C1" },
+        { 3, 0, 0, "=D29+1", "Wrong formula in D1" },
+        { 4, 0, 0, "=E29+1", "Wrong formula in E1" },
     };
 
     for (size_t nIdx = 0; nIdx < 4; ++nIdx)
     {
         TestCase& rCase = aCases[nIdx];
-        ASSERT_FORMULA_EQUAL(*pDoc, rCase.aPos, rCase.pExpectedFormula, rCase.pErrorMsg);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rCase.pErrorMsg,
+                                     OUString::createFromAscii(rCase.pExpectedFormula),
+                                     pDoc->GetFormula(rCase.nCol, rCase.nRow, rCase.nTab));
     }
 }
 

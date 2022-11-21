@@ -2057,7 +2057,8 @@ void ScExportTest::testFormulaRefSheetNameODS()
         sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn on auto calc.
         pDoc->SetString(ScAddress(1, 1, 0), "='90''s Data'.B2");
         CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1, 1, 0)));
-        ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 1, 0), "'90''s Data'.B2", "Wrong formula");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("='90''s Data'.B2"),
+                                     pDoc->GetFormula(1, 1, 0));
     }
     // Now, save and reload this document.
     saveAndReload("calc8");
@@ -2065,7 +2066,8 @@ void ScExportTest::testFormulaRefSheetNameODS()
     ScDocument* pDoc = getScDoc();
     pDoc->CalcAll();
     CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1, 1, 0)));
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(1, 1, 0), "'90''s Data'.B2", "Wrong formula");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("='90''s Data'.B2"),
+                                 pDoc->GetFormula(1, 1, 0));
 }
 
 void ScExportTest::testCellValuesExportODS()
@@ -2113,8 +2115,10 @@ void ScExportTest::testCellValuesExportODS()
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(5, 0, 0));
 
     // check formula
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(4, 0, 0), "10*C1/4", "Wrong formula =10*C1/4");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(7, 0, 0), "SUM(C1:F1)", "Wrong formula =SUM(C1:F1)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =10*C1/4", OUString("=10*C1/4"),
+                                 pDoc->GetFormula(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =SUM(C1:F1)", OUString("=SUM(C1:F1)"),
+                                 pDoc->GetFormula(7, 0, 0));
     CPPUNIT_ASSERT_EQUAL(16.5, pDoc->GetValue(7, 0, 0));
 
     // check string
@@ -2133,7 +2137,8 @@ void ScExportTest::testCellValuesExportODS()
     //check contiguous values
     CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(0, 5, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("a string"), pDoc->GetString(0, 6, 0));
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(0, 7, 0), "$A$6", "Wrong formula =$A$6");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =$A$6", OUString("=$A$6"),
+                                 pDoc->GetFormula(0, 7, 0));
     CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(0, 5, 0), pDoc->GetValue(0, 7, 0));
 }
 
@@ -2319,16 +2324,22 @@ void ScExportTest::testFormulaReferenceXLS()
 
     ScDocument* pDoc = getScDoc();
 
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 1, 0), "$A$2+$B$2+$C$2", "Wrong formula in D2");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 2, 0), "A3+B3+C3", "Wrong formula in D3");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 5, 0), "SUM($A$6:$C$6)", "Wrong formula in D6");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 6, 0), "SUM(A7:C7)", "Wrong formula in D7");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 9, 0), "$Two.$A$2+$Two.$B$2+$Two.$C$2",
-                         "Wrong formula in D10");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 10, 0), "$Two.A3+$Two.B3+$Two.C3",
-                         "Wrong formula in D11");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 13, 0), "MIN($Two.$A$2:$C$2)", "Wrong formula in D14");
-    ASSERT_FORMULA_EQUAL(*pDoc, ScAddress(3, 14, 0), "MAX($Two.A3:C3)", "Wrong formula in D15");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D2", OUString("=$A$2+$B$2+$C$2"),
+                                 pDoc->GetFormula(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D3", OUString("=A3+B3+C3"),
+                                 pDoc->GetFormula(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D6", OUString("=SUM($A$6:$C$6)"),
+                                 pDoc->GetFormula(3, 5, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D7", OUString("=SUM(A7:C7)"),
+                                 pDoc->GetFormula(3, 6, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D10", OUString("=$Two.$A$2+$Two.$B$2+$Two.$C$2"),
+                                 pDoc->GetFormula(3, 9, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D11", OUString("=$Two.A3+$Two.B3+$Two.C3"),
+                                 pDoc->GetFormula(3, 10, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D14", OUString("=MIN($Two.$A$2:$C$2)"),
+                                 pDoc->GetFormula(3, 13, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D15", OUString("=MAX($Two.A3:C3)"),
+                                 pDoc->GetFormula(3, 14, 0));
 }
 
 void ScExportTest::testSheetProtectionXLSX()
@@ -3501,23 +3512,14 @@ void ScExportTest::testSupBookVirtualPathXLS()
 
     ScDocument* pDoc = getScDoc();
 
-    ScAddress aPos(0, 0, 0);
-    ScTokenArray* pCode = getTokens(*pDoc, aPos);
-    if (!pCode)
-        CppUnit::Asserter::fail("empty token array", CPPUNIT_SOURCELINE());
-
-    OUString aFormula = toString(*pDoc, aPos, *pCode, pDoc->GetGrammar());
+    OUString aFormula = pDoc->GetFormula(0, 0, 0);
 #ifdef _WIN32
     aFormula = OUString::Concat(aFormula.subView(0, 9)) + aFormula.subView(12);
     // strip drive letter, e.g. 'C:/'
 #endif
-    OUString aExpectedFormula = "'file:///home/timar/Documents/external.xls'#$Sheet1.A1";
-    if (aFormula != aExpectedFormula)
-    {
-        CppUnit::Asserter::failNotEqual(
-            to_std_string(aExpectedFormula), to_std_string(aFormula), CPPUNIT_SOURCELINE(),
-            CppUnit::AdditionalMessage("Wrong SupBook VirtualPath URL"));
-    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wrong SupBook VirtualPath URL",
+        OUString("='file:///home/timar/Documents/external.xls'#$Sheet1.A1"), aFormula);
 }
 
 void ScExportTest::testLinkedGraphicRT()
@@ -3708,19 +3710,23 @@ void ScExportTest::testRelativeNamedExpressionsXLS()
     // Sheet1:G3
     ScAddress aPos(6, 2, 0);
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(aPos));
-    ASSERT_FORMULA_EQUAL(*pDoc, aPos, "single_cell_A3", nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("=single_cell_A3"),
+                         pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
     // Sheet2:F6
     aPos = ScAddress(5, 5, 1);
     CPPUNIT_ASSERT_EQUAL(18.0, pDoc->GetValue(aPos));
-    ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(test_conflict)", nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(test_conflict)"),
+                         pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
     // Sheet2:H3
     aPos = ScAddress(7, 2, 1);
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(aPos));
-    ASSERT_FORMULA_EQUAL(*pDoc, aPos, "single_global_A3", nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("=single_global_A3"),
+                         pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
     // Sheet2:H6
     aPos = ScAddress(7, 5, 1);
     CPPUNIT_ASSERT_EQUAL(75.0, pDoc->GetValue(aPos));
-    ASSERT_FORMULA_EQUAL(*pDoc, aPos, "SUM(A6:F6)", nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A6:F6)"),
+                         pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 }
 
 void ScExportTest::testSheetTextBoxHyperlinkXLSX()

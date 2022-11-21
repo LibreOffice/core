@@ -676,28 +676,6 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     }
 }
 
-std::string to_std_string(const OUString& rStr)
-{
-    return std::string(rStr.toUtf8().getStr());
-}
-
-void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected, const char* msg, CppUnit::SourceLine const & sourceLine)
-{
-    ScTokenArray* pCode = getTokens(rDoc, rPos);
-    if (!pCode)
-    {
-        CppUnit::Asserter::fail("empty token array", sourceLine);
-    }
-
-    OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
-    OUString aExpectedFormula = OUString::createFromAscii(expected);
-    if (aFormula != aExpectedFormula)
-    {
-        CppUnit::Asserter::failNotEqual(to_std_string(aExpectedFormula),
-                to_std_string(aFormula), sourceLine, CppUnit::AdditionalMessage(msg));
-    }
-}
-
 ScRange ScSimpleBootstrapFixture::insertRangeData(
     ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
 {
