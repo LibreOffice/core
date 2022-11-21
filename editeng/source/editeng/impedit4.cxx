@@ -363,7 +363,10 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         // on export what encoding we claim to use for these
         // fonts.
         if (IsOpenSymbol(pFontItem->GetFamilyName()))
+        {
+            SAL_WARN_IF(eChrSet == RTL_TEXTENCODING_SYMBOL, "editeng", "OpenSymbol should not have charset of RTL_TEXTENCODING_SYMBOL in new documents");
             eChrSet = RTL_TEXTENCODING_UTF8;
+        }
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
             eChrSet = osl_getThreadTextEncoding();

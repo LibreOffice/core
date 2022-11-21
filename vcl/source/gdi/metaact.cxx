@@ -1686,6 +1686,7 @@ MetaFontAction::MetaFontAction( vcl::Font aFont ) :
     if ( IsOpenSymbol( maFont.GetFamilyName() )
         && ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
     {
+        SAL_WARN_IF(maFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL, "vcl", "OpenSymbol should not have charset of RTL_TEXTENCODING_SYMBOL in new documents");
         maFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
     }
 }
