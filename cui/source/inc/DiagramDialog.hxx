@@ -25,7 +25,6 @@ private:
     SdrObjGroup& m_rDiagram;
     sal_uInt32 m_nUndos;
 
-    std::unique_ptr<weld::Button> mpBtnOk;
     std::unique_ptr<weld::Button> mpBtnCancel;
     std::unique_ptr<weld::Button> mpBtnAdd;
     std::unique_ptr<weld::Button> mpBtnRemove;

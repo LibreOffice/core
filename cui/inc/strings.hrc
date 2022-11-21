@@ -110,7 +110,6 @@
 #define RID_CUISTR_EDITHINT                         NC_("RID_SVXSTR_EDITHINT", "[Enter text here]")
 #define RID_CUISTR_HANGUL                           NC_("RID_SVXSTR_HANGUL", "Hangul")
 #define RID_CUISTR_HANJA                            NC_("RID_SVXSTR_HANJA", "Hanja")
-#define RID_CUISTR_BASICMACROS                      NC_("RID_SVXSTR_BASICMACROS", "BASIC Macros")
 #define RID_CUISTR_GROUP_STYLES                     NC_("RID_SVXSTR_GROUP_STYLES", "Styles")
 #define RID_CUISTR_GROUP_SIDEBARDECKS               NC_("RID_SVXSTR_GROUP_SIDEBARDECKS", "Sidebar Decks")
 

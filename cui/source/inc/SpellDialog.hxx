@@ -143,7 +143,6 @@ private:
     std::unique_ptr<weld::Label> m_xAltTitle;
     std::unique_ptr<weld::Label> m_xResumeFT;
     std::unique_ptr<weld::Label> m_xNoSuggestionsFT;
-    std::unique_ptr<weld::Label> m_xIgnoreOnceFT;
     std::unique_ptr<weld::Label> m_xLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::Label> m_xExplainFT;

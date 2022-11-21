@@ -602,7 +602,6 @@ class SvxNewToolbarDialog : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEdtName;
-    std::unique_ptr<weld::Button> m_xBtnOK;
 public:
     std::unique_ptr<weld::ComboBox> m_xSaveInListBox;
 

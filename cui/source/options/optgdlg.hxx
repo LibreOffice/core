@@ -38,7 +38,6 @@ private:
     std::unique_ptr<weld::Widget> m_xFileDlgFrame;
     std::unique_ptr<weld::Widget> m_xFileDlgROImage;
     std::unique_ptr<weld::CheckButton> m_xFileDlgCB;
-    std::unique_ptr<weld::CheckButton> m_xPrintDlgCB;
     std::unique_ptr<weld::CheckButton> m_xDocStatusCB;
     std::unique_ptr<weld::Widget> m_xYearFrame;
     std::unique_ptr<weld::SpinButton> m_xYearValueField;

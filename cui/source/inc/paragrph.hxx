@@ -53,7 +53,6 @@ private:
     // indention
     std::unique_ptr<SvxRelativeField> m_xLeftIndent;
 
-    std::unique_ptr<weld::Label> m_xRightLabel;
     std::unique_ptr<SvxRelativeField> m_xRightIndent;
 
     std::unique_ptr<weld::Label> m_xFLineLabel;

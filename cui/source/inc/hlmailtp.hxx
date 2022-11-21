@@ -31,7 +31,6 @@ class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 private:
     std::unique_ptr<SvxHyperURLBox> m_xCbbReceiver;
     std::unique_ptr<weld::Button> m_xBtAdrBook;
-    std::unique_ptr<weld::Label> m_xFtSubject;
     std::unique_ptr<weld::Entry> m_xEdSubject;
 
     DECL_STATIC_LINK(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, weld::Button&, void);

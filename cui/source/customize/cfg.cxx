@@ -2680,7 +2680,6 @@ void ToolbarSaveInData::LoadToolbar(
 SvxNewToolbarDialog::SvxNewToolbarDialog(weld::Window* pWindow, const OUString& rName)
     : GenericDialogController(pWindow, "cui/ui/newtoolbardialog.ui", "NewToolbarDialog")
     , m_xEdtName(m_xBuilder->weld_entry("edit"))
-    , m_xBtnOK(m_xBuilder->weld_button("ok"))
     , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
 {
     m_xEdtName->set_text(rName);

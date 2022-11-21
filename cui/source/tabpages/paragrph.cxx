@@ -668,7 +668,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     , nMinFixDist(0)
     , bRelativeMode(false)
     , m_xLeftIndent(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("spinED_LEFTINDENT", FieldUnit::CM)))
-    , m_xRightLabel(m_xBuilder->weld_label("labelFT_RIGHTINDENT"))
     , m_xRightIndent(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("spinED_RIGHTINDENT", FieldUnit::CM)))
     , m_xFLineLabel(m_xBuilder->weld_label("labelFT_FLINEINDENT"))
     , m_xFLineIndent(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("spinED_FLINEINDENT", FieldUnit::CM)))

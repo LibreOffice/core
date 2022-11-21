@@ -37,7 +37,6 @@ class SvxColorOptionsTabPage : public SfxTabPage
     std::unique_ptr<ColorConfigCtrl_Impl> m_xColorConfigCT;
     std::unique_ptr<weld::Widget> m_xTable;
     std::unique_ptr<weld::Label> m_xOnFT;
-    std::unique_ptr<weld::Label> m_xElementFT;
     std::unique_ptr<weld::Label> m_xColorFT;
     weld::Widget& m_rWidget1;
     weld::Widget& m_rWidget2;

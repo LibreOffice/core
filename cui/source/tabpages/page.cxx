@@ -149,7 +149,6 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("comboPageFormat")))
     , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button("spinWidth", FieldUnit::CM))
     , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FieldUnit::CM))
-    , m_xOrientationFT(m_xBuilder->weld_label("labelOrientation"))
     , m_xPortraitBtn(m_xBuilder->weld_radio_button("radiobuttonPortrait"))
     , m_xLandscapeBtn(m_xBuilder->weld_radio_button("radiobuttonLandscape"))
     , m_xTextFlowLbl(m_xBuilder->weld_label("labelTextFlow"))

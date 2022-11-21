@@ -93,7 +93,6 @@ private:
     std::unique_ptr<SvxPaperSizeListBox> m_xPaperSizeBox;
     std::unique_ptr<weld::MetricSpinButton> m_xPaperWidthEdit;
     std::unique_ptr<weld::MetricSpinButton> m_xPaperHeightEdit;
-    std::unique_ptr<weld::Label> m_xOrientationFT;
     std::unique_ptr<weld::RadioButton> m_xPortraitBtn;
     std::unique_ptr<weld::RadioButton> m_xLandscapeBtn;
     std::unique_ptr<weld::Label> m_xTextFlowLbl;

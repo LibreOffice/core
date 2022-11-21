@@ -697,7 +697,6 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::Dia
     , m_xColorConfigCT(new ColorConfigCtrl_Impl(pController->getDialog(), *m_xBuilder))
     , m_xTable(m_xBuilder->weld_widget("table"))
     , m_xOnFT(m_xBuilder->weld_label("on"))
-    , m_xElementFT(m_xBuilder->weld_label("uielements"))
     , m_xColorFT(m_xBuilder->weld_label("colorsetting"))
     , m_rWidget1(m_xColorConfigCT->GetWidget1())
     , m_rWidget2(m_xColorConfigCT->GetWidget2())

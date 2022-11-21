@@ -159,7 +159,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
     , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
     , m_xFileDlgCB(m_xBuilder->weld_check_button("filedlg"))
-    , m_xPrintDlgCB(m_xBuilder->weld_check_button("printdlg"))
     , m_xDocStatusCB(m_xBuilder->weld_check_button("docstatus"))
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))

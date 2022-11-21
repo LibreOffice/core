@@ -347,7 +347,6 @@ struct SvxConfigGroupBoxResource_Impl
 {
     OUString m_sMyMacros;
     OUString m_sProdMacros;
-    OUString m_sMacros;
     OUString m_sDlgMacros;
     OUString m_aStrGroupStyles;
     OUString m_aStrGroupSidebarDecks;
@@ -358,7 +357,6 @@ struct SvxConfigGroupBoxResource_Impl
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sMyMacros(CuiResId(RID_CUISTR_MYMACROS)),
     m_sProdMacros(CuiResId(RID_CUISTR_PRODMACROS)),
-    m_sMacros(CuiResId(RID_CUISTR_BASICMACROS)),
     m_sDlgMacros(CuiResId(RID_CUISTR_PRODMACROS)),
     m_aStrGroupStyles(CuiResId(RID_CUISTR_GROUP_STYLES)),
     m_aStrGroupSidebarDecks(CuiResId(RID_CUISTR_GROUP_SIDEBARDECKS))
