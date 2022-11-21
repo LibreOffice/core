@@ -136,6 +136,11 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 {
 }
 
+sal_Int32 SdrObjUserCall::GetPDFAnchorStructureElementId(SdrObject const&, OutputDevice const&)
+{
+    return -1;
+}
+
 SdrObjMacroHitRec::SdrObjMacroHitRec() :
     pVisiLayer(nullptr),
     pPageView(nullptr),

@@ -30,11 +30,13 @@ namespace drawinglayer::primitive2d
             const vcl::PDFWriter::StructElement& rStructureElement,
             bool bBackground,
             bool bIsImage,
-            Primitive2DContainer&& aChildren)
+            Primitive2DContainer&& aChildren,
+            sal_Int32 const nAnchorStructureElementId)
         :   GroupPrimitive2D(std::move(aChildren)),
             maStructureElement(rStructureElement),
             mbBackground(bBackground),
             mbIsImage(bIsImage)
+        ,   m_nAnchorStructureElementId(nAnchorStructureElementId)
         {
         }
 

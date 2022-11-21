@@ -49,6 +49,8 @@ namespace drawinglayer::primitive2d
             bool                                    mbBackground;
             /// flag for image (OBJ_GRAF)
             bool                                    mbIsImage;
+            /// anchor structure element (Writer)
+            sal_Int32 m_nAnchorStructureElementId;
 
         public:
             /// constructor
@@ -56,12 +58,14 @@ namespace drawinglayer::primitive2d
                 const vcl::PDFWriter::StructElement& rStructureElement,
                 bool bBackground,
                 bool bIsImage,
-                Primitive2DContainer&& aChildren);
+                Primitive2DContainer&& aChildren,
+                sal_Int32 nAnchorStructureElementId = -1);
 
             /// data read access
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
             bool isBackground() const { return mbBackground; }
             bool isImage() const { return mbIsImage; }
+            sal_Int32 GetAnchorStructureElementId() const { return m_nAnchorStructureElementId; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

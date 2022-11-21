@@ -81,6 +81,7 @@
 #include <strings.hrc>
 #include <frameformats.hxx>
 #include <authfld.hxx>
+#include <dcontact.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
@@ -337,6 +338,28 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 #endif
 }
 
+static auto GetReopenTagFromFrame(SwFrame const& rFrame) -> sal_Int32
+{
+    void const*const pKey = lcl_GetKeyFromFrame(rFrame);
+
+    if (pKey)
+    {
+        FrameTagIdMap const& rFrameTagIdMap(SwEnhancedPDFExportHelper::GetFrameTagIdMap());
+        auto const it(rFrameTagIdMap.find(pKey));
+        if (it != rFrameTagIdMap.end())
+        {
+            return (*it).second;
+        }
+    }
+    return -1;
+}
+
+sal_Int32 SwDrawContact::GetPDFAnchorStructureElementId(SdrObject const& rObj, OutputDevice const&)
+{
+    SwFrame const*const pAnchorFrame(GetAnchoredObj(&rObj)->GetAnchorFrame());
+    return pAnchorFrame ? GetReopenTagFromFrame(*pAnchorFrame) : -1;
+}
+
 bool SwTaggedPDFHelper::CheckReopenTag()
 {
     bool bRet = false;
@@ -377,15 +400,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
         if ( pKeyFrame )
         {
-            void* pKey = lcl_GetKeyFromFrame( *pKeyFrame );
-
-            if ( pKey )
-            {
-                FrameTagIdMap& rFrameTagIdMap = SwEnhancedPDFExportHelper::GetFrameTagIdMap();
-                const FrameTagIdMap::const_iterator aIter =  rFrameTagIdMap.find( pKey );
-                if ( aIter != rFrameTagIdMap.end() )
-                    nReopenTag = (*aIter).second;
-            }
+            nReopenTag = GetReopenTagFromFrame(*pKeyFrame);
         }
     }
 

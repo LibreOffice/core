@@ -412,13 +412,21 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             {
                 const bool bBackground(pSdrPage->IsMasterPage());
                 const bool bImage(SdrObjKind::Graphic == pSdrObj->GetObjIdentifier());
+                // note: there must be output device here, in PDF export
+                sal_Int32 nAnchorId(-1);
+                if (auto const pUserCall = pSdrObj->GetUserCall())
+                {
+                    nAnchorId = pUserCall->GetPDFAnchorStructureElementId(
+                        *pSdrObj, *GetObjectContact().TryToGetOutputDevice());
+                }
 
                 drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::StructureTagPrimitive2D(
                         eElement,
                         bBackground,
                         bImage,
-                        std::move(xNewPrimitiveSequence)));
+                        std::move(xNewPrimitiveSequence),
+                        nAnchorId));
                 xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
         }
