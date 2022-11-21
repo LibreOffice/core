@@ -33,7 +33,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/svapp.hxx>
+#include <i18nutil/unicode.hxx>
 
 using namespace com::sun::star;
 
@@ -693,6 +693,21 @@ void PDFIProcessor::sortElements(Element* pEle)
     // sort method from std::list is equivalent to stable_sort
     // See S Meyers, Effective STL
     pEle->Children.sort(lr_tb_sort);
+}
+
+/* Produce mirrored-image for each code point which has the Bidi_Mirrored property, within a string.
+   This need to be done in forward order.
+*/
+OUString PDFIProcessor::SubstituteBidiMirrored(const OUString& rString)
+{
+    const sal_Int32 nLen = rString.getLength();
+    OUStringBuffer aMirror(nLen);
+
+    for (sal_Int32 i = 0; i < nLen;) {
+        const sal_uInt32 nCodePoint = rString.iterateCodePoints(&i);
+        aMirror.appendUtf32(unicode::GetMirroredChar(nCodePoint));
+    }
+    return aMirror.makeStringAndClear();
 }
 
 }

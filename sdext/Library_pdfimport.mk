@@ -29,10 +29,12 @@ $(eval $(call gb_Library_use_libraries,pdfimport,\
     sal \
     tl \
     xo \
+    i18nutil \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
 	boost_headers \
+    icu_headers \
     zlib \
     $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
 ))

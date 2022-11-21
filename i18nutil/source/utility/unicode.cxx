@@ -97,6 +97,11 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
     return r;
 }
 
+sal_uInt32 unicode::GetMirroredChar(sal_uInt32 nChar) {
+    nChar = u_charMirror(nChar);
+    return nChar;
+}
+
 #define bit(name)   (1U << name)
 
 #define UPPERMASK   bit(UnicodeType::UPPERCASE_LETTER)

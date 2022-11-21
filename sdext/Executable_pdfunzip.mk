@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_use_libraries,pdfunzip,\
     vcl \
     tl \
     xo \
+    i18nutil \
 ))
 
 $(eval $(call gb_Executable_use_library_objects,pdfunzip,pdfimport))
