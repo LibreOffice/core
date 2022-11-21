@@ -166,43 +166,40 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                 break;
             }
 
-            uint16_t PhotometricInterpretation;
-            if (TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &PhotometricInterpretation) == 1)
+            if (TIFFIsTiled(tif))
             {
-                if (PhotometricInterpretation == PHOTOMETRIC_LOGL)
+                uint32_t tw, th;
+                TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
+                TIFFGetField(tif, TIFFTAG_TILELENGTH, &th);
+
+                if (tw > w || th > h)
                 {
-                    if (TIFFIsTiled(tif))
+                    bOk = th < 1000 * tw && tw < 1000 * th;
+                    SAL_WARN_IF(!bOk, "filter.tiff", "skipping slow bizarre ratio tile of " << tw << " x " << th << " for image of " << w << " x " << h);
+                }
+
+                uint16_t PhotometricInterpretation;
+                if (TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &PhotometricInterpretation) == 1)
+                {
+                    if (PhotometricInterpretation == PHOTOMETRIC_LOGL)
                     {
-                        uint32_t tw, th;
-                        if (TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw) == 1 &&
-                            TIFFGetField(tif, TIFFTAG_TILELENGTH, &th) == 1)
-                        {
-                            uint32_t nLogLBufferRequired;
-                            bOk = !o3tl::checked_multiply(tw, th, nLogLBufferRequired) && nLogLBufferRequired < MAX_PIXEL_SIZE;
-                            SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile " << tw << " x " << th);
-                        }
+                        uint32_t nLogLBufferRequired;
+                        bOk &= !o3tl::checked_multiply(tw, th, nLogLBufferRequired) && nLogLBufferRequired < MAX_PIXEL_SIZE;
+                        SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile " << tw << " x " << th);
+                    }
+                }
+
+                uint16_t Compression;
+                if (TIFFGetField(tif, TIFFTAG_COMPRESSION, &Compression) == 1)
+                {
+                    if (Compression == COMPRESSION_CCITTFAX4)
+                    {
+                        uint32_t DspRuns;
+                        bOk &= !o3tl::checked_multiply(tw, static_cast<uint32_t>(4), DspRuns) && DspRuns < MAX_PIXEL_SIZE;
+                        SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile width: " << tw);
                     }
                 }
             }
-
-            uint16_t Compression;
-            if (TIFFGetField(tif, TIFFTAG_COMPRESSION, &Compression) == 1)
-            {
-                if (Compression == COMPRESSION_CCITTFAX4)
-                {
-                    if (TIFFIsTiled(tif))
-                    {
-                        uint32_t tw;
-                        if (TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw) == 1)
-                        {
-                            uint32_t DspRuns;
-                            bOk = !o3tl::checked_multiply(tw, static_cast<uint32_t>(4), DspRuns) && DspRuns < MAX_PIXEL_SIZE;
-                            SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile width: " << tw);
-                        }
-                    }
-                }
-            }
-
         }
 
         if (!bOk)
