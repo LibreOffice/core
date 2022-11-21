@@ -1067,9 +1067,9 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
 {
     std::vector<std::unique_ptr<weld::Builder>> m_aBuilders;
 
-    Link<weld::Entry&,bool>       aShortNameCheckLink;
+    Link<weld::Entry&,bool>       m_aShortNameCheckLink;
 
-    SwWrtShell&     rWrtSh;
+    SwWrtShell&     m_rWrtSh;
 
     bool            m_bNewEntryMode;
     bool            m_bNameAllowed;
@@ -1077,7 +1077,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::vector<std::unique_ptr<weld::Container>> m_aOrigContainers;
     std::vector<std::unique_ptr<weld::Label>> m_aFixedTexts;
     std::unique_ptr<weld::Box> m_pBoxes[AUTH_FIELD_END];
-    std::unique_ptr<weld::Entry> pEdits[AUTH_FIELD_END];
+    std::unique_ptr<weld::Entry> m_pEdits[AUTH_FIELD_END];
     std::unique_ptr<weld::Button> m_xOKBT;
     std::unique_ptr<weld::Container> m_xBox;
     std::unique_ptr<weld::Container> m_xLeft;
@@ -1103,7 +1103,7 @@ public:
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(const Link<weld::Entry&,bool>& rLink) {aShortNameCheckLink = rLink;}
+    void            SetCheckNameHdl(const Link<weld::Entry&,bool>& rLink) {m_aShortNameCheckLink = rLink;}
 
 };
 
@@ -1567,7 +1567,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         bool bNewEntry,
         bool bCreate)
     : GenericDialogController(pParent, "modules/swriter/ui/createauthorentry.ui", "CreateAuthorEntryDialog")
-    , rWrtSh(rSh)
+    , m_rWrtSh(rSh)
     , m_bNewEntryMode(bNewEntry)
     , m_bNameAllowed(true)
     , m_xOKBT(m_xBuilder->weld_button("ok"))
@@ -1649,7 +1649,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         else
         {
             m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("vbox");
-            pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
+            m_pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
             else
@@ -1678,31 +1678,31 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 int nPageNumber;
                 if (SplitUrlAndPage(aText, aUrl, nPageNumber))
                 {
-                    pEdits[nIndex]->set_text(aUrl);
+                    m_pEdits[nIndex]->set_text(aUrl);
                     m_xLocalPageCB->set_active(true);
                     m_xLocalPageSB->set_sensitive(true);
                     m_xLocalPageSB->set_value(nPageNumber);
                 }
                 else
                 {
-                    pEdits[nIndex]->set_text(aText);
+                    m_pEdits[nIndex]->set_text(aText);
                 }
             }
             else
             {
-                pEdits[nIndex]->set_text(aText);
+                m_pEdits[nIndex]->set_text(aText);
             }
-            pEdits[nIndex]->show();
-            pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
+            m_pEdits[nIndex]->show();
+            m_pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
 
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
-                pEdits[nIndex]->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
+                m_pEdits[nIndex]->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
                 m_bNameAllowed = !pFields[nIndex].isEmpty();
                 if(!bCreate)
                 {
                     m_aFixedTexts.back()->set_sensitive(false);
-                    pEdits[nIndex]->set_sensitive(false);
+                    m_pEdits[nIndex]->set_sensitive(false);
                 }
             }
             else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
@@ -1712,7 +1712,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xLocalPageSB->show();
             }
 
-            m_aFixedTexts.back()->set_mnemonic_widget(pEdits[nIndex].get());
+            m_aFixedTexts.back()->set_mnemonic_widget(m_pEdits[nIndex].get());
         }
         if(bLeft)
             ++nLeftRow;
@@ -1745,11 +1745,11 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         {
             if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
-                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xLocalPageSB);
+                return MergeUrlAndPage(m_pEdits[nIndex]->get_text(), m_xLocalPageSB);
             }
             else
             {
-                return pEdits[nIndex]->get_text();
+                return m_pEdits[nIndex]->get_text();
             }
         }
     }
@@ -1760,7 +1760,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                m_rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
     if(!pFType)
         return;
 
@@ -1778,16 +1778,16 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
             m_xTypeListBox->set_active_text(
                         pEntry->GetAuthorField(aCurInfo.nToxField));
         else
-            pEdits[i]->set_text(
+            m_pEdits[i]->set_text(
                         pEntry->GetAuthorField(aCurInfo.nToxField));
     }
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 {
-    if (aShortNameCheckLink.IsSet())
+    if (m_aShortNameCheckLink.IsSet())
     {
-        bool bEnable = aShortNameCheckLink.Call(rEdit);
+        bool bEnable = m_aShortNameCheckLink.Call(rEdit);
         m_bNameAllowed |= bEnable;
         m_xOKBT->set_sensitive(m_xTypeListBox->get_active() != -1 && bEnable);
     }
@@ -1814,7 +1814,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
     }
     else
     {
-        OUString aBaseURL = rWrtSh.GetDoc()->GetDocShell()->getDocumentBaseURL();
+        OUString aBaseURL = m_rWrtSh.GetDoc()->GetDocShell()->getDocumentBaseURL();
         if (!aBaseURL.isEmpty())
         {
             aFileDlg.SetDisplayDirectory(aBaseURL);
@@ -1833,7 +1833,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
         const TextInfo& rCurInfo = aTextInfoArr[nIndex];
         if (rCurInfo.nToxField == AUTH_FIELD_LOCAL_URL && &rButton == m_xLocalBrowseButton.get())
         {
-            pEdits[nIndex]->set_text(aPath);
+            m_pEdits[nIndex]->set_text(aPath);
             break;
         }
     }

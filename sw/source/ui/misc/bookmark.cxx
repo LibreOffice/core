@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star;
 
-const char BookmarkTable::cSeparator(';');
+const char BookmarkTable::s_cSeparator(';');
 
 // callback to modify EditBox
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
@@ -72,7 +72,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     sal_Int32 nTokenIndex = 0;
     while (!sTmp.isEmpty() && nTokenIndex >= 0)
     {
-        OUString aToken = sTmp.getToken(0, BookmarkTable::cSeparator, nTokenIndex);
+        OUString aToken = sTmp.getToken(0, BookmarkTable::s_cSeparator, nTokenIndex);
         if (m_xBookmarksBox->GetBookmarkByName(aToken))
         {
             m_xBookmarksBox->SelectByName(aToken);
@@ -220,7 +220,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
     ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(
         rFact.CreateSwRenameXNamedDlg(m_xDialog.get(), xNamed, xNameAccess));
     pDlg->SetForbiddenChars(BookmarkTable::aForbiddenChars
-                            + OUStringChar(BookmarkTable::cSeparator));
+                            + OUStringChar(BookmarkTable::s_cSeparator));
 
     if (pDlg->Execute())
     {

@@ -1443,10 +1443,10 @@ public:
 class SwTOXEdit : public SwTOXWidget
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
-    SwFormToken           aFormToken;
-    Link<SwTOXEdit&,void> aModifiedLink;
-    Link<SwTOXEdit&,void> aPrevNextControlLink;
-    bool                  bNextControl;
+    SwFormToken           m_aFormToken;
+    Link<SwTOXEdit&,void> m_aModifiedLink;
+    Link<SwTOXEdit&,void> m_aPrevNextControlLink;
+    bool                  m_bNextControl;
     SwTokenWindow*        m_pParent;
     std::unique_ptr<weld::Entry> m_xEntry;
 
@@ -1454,8 +1454,8 @@ class SwTOXEdit : public SwTOXWidget
 public:
     SwTOXEdit(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
         : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), "modules/swriter/ui/toxentrywidget.ui"))
-        , aFormToken(rToken)
-        , bNextControl(false)
+        , m_aFormToken(rToken)
+        , m_bNextControl(false)
         , m_pParent(pTokenWin)
         , m_xEntry(m_xBuilder->weld_entry("entry"))
     {
@@ -1527,25 +1527,25 @@ public:
 
     void SetModifyHdl(const Link<SwTOXEdit&,void>& rLink)
     {
-        aModifiedLink = rLink;
+        m_aModifiedLink = rLink;
     }
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
 
-    bool    IsNextControl() const { return bNextControl; }
-    void SetPrevNextLink(const Link<SwTOXEdit&,void>& rLink) { aPrevNextControlLink = rLink; }
+    bool    IsNextControl() const { return m_bNextControl; }
+    void SetPrevNextLink(const Link<SwTOXEdit&,void>& rLink) { m_aPrevNextControlLink = rLink; }
 
     const SwFormToken& GetFormToken()
     {
-        aFormToken.sText = m_xEntry->get_text();
-        return aFormToken;
+        m_aFormToken.sText = m_xEntry->get_text();
+        return m_aFormToken;
     }
 
     void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
     {
-        aFormToken.sCharStyleName = rSet;
-        aFormToken.nPoolId = nPoolId;
+        m_aFormToken.sCharStyleName = rSet;
+        m_aFormToken.nPoolId = nPoolId;
     }
 
     void AdjustSize();
@@ -1553,7 +1553,7 @@ public:
 
 IMPL_LINK_NOARG(SwTOXEdit, ModifyHdl, weld::Entry&, void)
 {
-    aModifiedLink.Call(*this);
+    m_aModifiedLink.Call(*this);
 }
 
 IMPL_LINK(SwTOXEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -1568,12 +1568,12 @@ IMPL_LINK(SwTOXEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         vcl::KeyCode aCode = rKEvt.GetKeyCode();
         if (aCode.GetCode() == KEY_RIGHT && nMin == nTextLen)
         {
-            bNextControl = true;
+            m_bNextControl = true;
             bCall = true;
         }
         else if (aCode.GetCode() == KEY_LEFT && !nMin)
         {
-            bNextControl = false;
+            m_bNextControl = false;
             bCall = true;
         }
         else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -1583,8 +1583,8 @@ IMPL_LINK(SwTOXEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 m_pParent->SetFocus2theAllBtn();
             }
         }
-        if (bCall && aPrevNextControlLink.IsSet())
-            aPrevNextControlLink.Call(*this);
+        if (bCall && m_aPrevNextControlLink.IsSet())
+            m_aPrevNextControlLink.Call(*this);
         else
             bCall = false;
 
@@ -1607,16 +1607,16 @@ void SwTOXEdit::AdjustSize()
 class SwTOXButton : public SwTOXWidget
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
-    SwFormToken             aFormToken;
-    Link<SwTOXButton&,void> aPrevNextControlLink;
-    bool                    bNextControl;
+    SwFormToken             m_aFormToken;
+    Link<SwTOXButton&,void> m_aPrevNextControlLink;
+    bool                    m_bNextControl;
     SwTokenWindow*          m_pParent;
     std::unique_ptr<weld::ToggleButton> m_xButton;
 public:
     SwTOXButton(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
         : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), "modules/swriter/ui/toxbuttonwidget.ui"))
-        , aFormToken(rToken)
-        , bNextControl(false)
+        , m_aFormToken(rToken)
+        , m_bNextControl(false)
         , m_pParent(pTokenWin)
         , m_xButton(m_xBuilder->weld_toggle_button("button"))
     {
@@ -1673,24 +1673,24 @@ public:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
 
-    bool IsNextControl() const          {return bNextControl;}
-    void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {aPrevNextControlLink = rLink;}
-    const SwFormToken& GetFormToken() const {return aFormToken;}
+    bool IsNextControl() const          {return m_bNextControl;}
+    void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {m_aPrevNextControlLink = rLink;}
+    const SwFormToken& GetFormToken() const {return m_aFormToken;}
 
     void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
         {
-            aFormToken.sCharStyleName = rSet;
-            aFormToken.nPoolId = nPoolId;
+            m_aFormToken.sCharStyleName = rSet;
+            m_aFormToken.nPoolId = nPoolId;
         }
 
     void SetTabPosition(SwTwips nSet)
-        { aFormToken.nTabStopPosition = nSet; }
+        { m_aFormToken.nTabStopPosition = nSet; }
 
     void SetFillChar( sal_Unicode cSet )
-        { aFormToken.cTabFillChar = cSet; }
+        { m_aFormToken.cTabFillChar = cSet; }
 
     void SetTabAlign(SvxTabAdjust eAlign)
-         {  aFormToken.eTabAlign = eAlign;}
+         {  m_aFormToken.eTabAlign = eAlign;}
 
 //---> i89791
     //used for entry number format, in TOC only
@@ -1700,10 +1700,10 @@ public:
         {
         default:
         case 0:
-            aFormToken.nChapterFormat = CF_NUMBER;
+            m_aFormToken.nChapterFormat = CF_NUMBER;
             break;
         case 1:
-            aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            m_aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
             break;
         }
     }
@@ -1713,18 +1713,18 @@ public:
         {
         default:
         case 0:
-            aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            m_aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
             break;
         case 1:
-            aFormToken.nChapterFormat = CF_TITLE;
+            m_aFormToken.nChapterFormat = CF_TITLE;
             break;
         case 2:
-            aFormToken.nChapterFormat = CF_NUMBER_NOPREPST;
+            m_aFormToken.nChapterFormat = CF_NUMBER_NOPREPST;
             break;
         }
     }
 
-    void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
+    void SetOutlineLevel( sal_uInt16 nSet ) { m_aFormToken.nOutlineLevel = nSet;}//i53420
 
     void SetText(const OUString& rText)
     {
@@ -1733,20 +1733,20 @@ public:
 
     void SetLinkEnd()
     {
-        OSL_ENSURE(TOKEN_LINK_START == aFormToken.eTokenType,
+        OSL_ENSURE(TOKEN_LINK_START == m_aFormToken.eTokenType,
                                     "call SetLinkEnd for link start only!");
-        aFormToken.eTokenType = TOKEN_LINK_END;
-        aFormToken.sText = SwForm::GetFormLinkEnd();
-        SetText(aFormToken.sText);
+        m_aFormToken.eTokenType = TOKEN_LINK_END;
+        m_aFormToken.sText = SwForm::GetFormLinkEnd();
+        SetText(m_aFormToken.sText);
     }
 
     void SetLinkStart()
     {
-        OSL_ENSURE(TOKEN_LINK_END == aFormToken.eTokenType,
+        OSL_ENSURE(TOKEN_LINK_END == m_aFormToken.eTokenType,
                                     "call SetLinkStart for link start only!");
-        aFormToken.eTokenType = TOKEN_LINK_START;
-        aFormToken.sText = SwForm::GetFormLinkStt();
-        SetText(aFormToken.sText);
+        m_aFormToken.eTokenType = TOKEN_LINK_START;
+        m_aFormToken.sText = SwForm::GetFormLinkStt();
+        SetText(m_aFormToken.sText);
     }
 };
 
@@ -1756,12 +1756,12 @@ IMPL_LINK(SwTOXButton, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     if (aCode.GetCode() == KEY_RIGHT)
     {
-        bNextControl = true;
+        m_bNextControl = true;
         bCall = true;
     }
     else if (aCode.GetCode() == KEY_LEFT)
     {
-        bNextControl = false;
+        m_bNextControl = false;
         bCall = true;
     }
     else if (aCode.GetCode() == KEY_DELETE)
@@ -1777,8 +1777,8 @@ IMPL_LINK(SwTOXButton, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             m_pParent->SetFocus2theAllBtn();
         }
     }
-    if (bCall && aPrevNextControlLink.IsSet())
-        aPrevNextControlLink.Call(*this);
+    if (bCall && m_aPrevNextControlLink.IsSet())
+        m_aPrevNextControlLink.Call(*this);
     else
         bCall = false;
     return bCall;

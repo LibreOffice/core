@@ -62,7 +62,7 @@ public:
     void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
 
     static constexpr OUStringLiteral aForbiddenChars = u"/\\@*?\",#";
-    static const char     cSeparator;
+    static const char     s_cSeparator;
 };
 
 class SwInsertBookmarkDlg final : public SfxDialogController
