@@ -161,7 +161,7 @@ public:
     void Write( OString const &rFilename );
     void Write( std::ofstream &rStream, XMLNode *pCur = nullptr );
 
-    bool CheckExportStatus( XMLParentNode *pCur = nullptr );
+    bool CheckExportStatus( XMLChildNode *pCur = nullptr );
 
     XMLFile& operator=(const XMLFile& rObj);
 
