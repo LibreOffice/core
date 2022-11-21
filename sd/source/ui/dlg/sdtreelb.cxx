@@ -508,7 +508,7 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     if (m_rTreeView.get_iter_depth(*xSource) == 0)
         return DND_ACTION_NONE;
 
-    // disallow when the source is the parent or ancestoral parent of the target
+    // disallow when the source is the parent or ancestral parent of the target
     std::unique_ptr<weld::TreeIter> xTargetParent(m_rTreeView.make_iterator(xTarget.get()));
     while (m_rTreeView.get_iter_depth(*xTargetParent) > 1)
     {
@@ -581,7 +581,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if (m_rTreeView.iter_compare(*xSourceParent, *xTargetParent) == 0 && nIterCompare < 0)
             nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
 
-        // Remove the source object from soure parent list and insert it in the target parent list.
+        // Remove the source object from source parent list and insert it in the target parent list.
         SdrObject* pSourceParentObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xSourceParent));
         SdrObject* pTargetParentObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xTargetParent));
 
