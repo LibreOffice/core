@@ -130,6 +130,7 @@ class SVXCORE_DLLPUBLIC SdrObjUserCall
 public:
     virtual ~SdrObjUserCall();
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect);
+    virtual sal_Int32 GetPDFAnchorStructureElementId(SdrObject const& rObj, OutputDevice const&);
 };
 
 class SVXCORE_DLLPUBLIC SdrObjMacroHitRec

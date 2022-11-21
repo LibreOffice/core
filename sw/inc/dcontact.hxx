@@ -389,6 +389,7 @@ class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
 
         /// Virtual methods of SdrObjUserCall.
         virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect) override;
+        virtual sal_Int32 GetPDFAnchorStructureElementId(SdrObject const& rObj, OutputDevice const&) override;
 
         /** Used by Changed() and by UndoDraw.
          Notifies paragraphs that have to get out of the way. */
