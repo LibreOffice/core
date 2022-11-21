@@ -21,6 +21,34 @@ The build generates a Writer-only LO build. You should be able to run either
     $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
     $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_wasm-qt5-mandelbrot.html
 
+To run the WASM Qt-LibreOffice, it also works to just use the Chromium
+browser on Linux against a local web server as long as the following
+files (that have ended up after the build in instdir/program) are
+available in a folder through the web server:
+
+  qtloader.js
+  qtlogo.svg
+  qt_soffice.html
+  soffice.data
+  soffice.data.js.metadata
+  soffice.html
+  soffice.html.linkdeps
+  soffice.js
+  soffice.wasm
+  soffice.worker.js
+
+Either the instdir/program folder itself can be available in the web
+server, or you copy those files to some place that is. No emrun or
+container (as perhaps used to build the thing) necessary.
+
+Like this:
+
+  chromium-browser --enable-features=SharedArrayBuffer http://localhost/tml/wasm/
+
+Where the above mentioned files have been copied to a folder that
+shows up as tml/wasm on localhost, and qt_soffice.html has been
+renamed to index.html.
+
 REMINDER: Always start new tabs in the browser, reload might fail / cache!
 INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
