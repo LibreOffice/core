@@ -14,7 +14,7 @@
  #pragma intrinsic(_InterlockedExchange)
 --- nspr/pr/include/prbit.h
 +++ nspr/pr/include/prbit.h
-@@ -14,7 +14,7 @@
+@@ -15,7 +15,7 @@
  */
  #if defined(_WIN32) && (_MSC_VER >= 1300) && \
      (defined(_M_IX86) || defined(_M_X64) || defined(_M_ARM) || \
@@ -23,7 +23,7 @@
  # include <intrin.h>
  # pragma  intrinsic(_BitScanForward,_BitScanReverse)
  __forceinline static int __prBitScanForward32(unsigned int val)
-@@ -32,7 +32,7 @@
+@@ -33,7 +33,7 @@
  # define pr_bitscan_ctz32(val)  __prBitScanForward32(val)
  # define pr_bitscan_clz32(val)  __prBitScanReverse32(val)
  # define  PR_HAVE_BUILTIN_BITSCAN32
@@ -32,7 +32,7 @@
         (defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
          defined(__aarch64__))
  # define pr_bitscan_ctz32(val)  __builtin_ctz(val)
-@@ -136,7 +136,7 @@
+@@ -138,7 +138,7 @@
  */
  
  #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64) || \
@@ -61,9 +61,20 @@
  #pragma deprecated(CERTDB_VALID_PEER)
  #endif
  #define CERTDB_VALID_PEER CERTDB_TERMINAL_RECORD
+--- nss/lib/freebl/blapit.h
++++ nss/lib/freebl/blapit.h
+@@ -53,7 +53,7 @@
+  * Mark the old defines as deprecated. This will warn code that expected
+  * DSA1 only that they need to change if the are to support DSA2.
+  */
+-#if defined(__GNUC__) && (__GNUC__ > 3)
++#if defined(__GNUC__) && (__GNUC__ > 3) || defined __clang__
+ /* make GCC warn when we use these #defines */
+ typedef int __BLAPI_DEPRECATED __attribute__((deprecated));
+ #define DSA_SUBPRIME_LEN ((__BLAPI_DEPRECATED)DSA1_SUBPRIME_LEN)
 --- nss/lib/util/pkcs11n.h
 +++ nss/lib/util/pkcs11n.h
-@@ -426,7 +426,7 @@
+@@ -563,7 +563,7 @@
  /* keep the old value for compatibility reasons*/
  #define CKT_NSS_MUST_VERIFY ((__CKT_NSS_MUST_VERIFY)(CKT_NSS + 4))
  #else
@@ -80,7 +91,7 @@
 # in the outer pkcs11t.h:
 --- nss/lib/util/pkcs11t.h
 +++ nss/lib/util/pkcs11t.h
-@@ -72,7 +72,14 @@
+@@ -78,7 +78,14 @@
  #define CK_INVALID_HANDLE 0
  
  /* pack */
@@ -95,7 +106,7 @@
  
  typedef struct CK_VERSION {
      CK_BYTE major; /* integer portion of version number */
-@@ -1795,6 +1802,13 @@
+@@ -2586,6 +2593,13 @@
  #include "pkcs11n.h"
  
  /* undo packing */
