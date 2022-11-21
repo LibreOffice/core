@@ -3272,7 +3272,7 @@ void GtkSalFrame::DrawingAreaScroll(double delta_x, double delta_y, int nEventX,
     aEvent.mnY = nEventY;
     aEvent.mnCode = GetMouseModCode(nState);
 
-    // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
+    // rhbz#1344042 "Traditionally" in gtk3 we took a single up/down event as
     // equating to 3 scroll lines and a delta of 120. So scale the delta here
     // by 120 where a single mouse wheel click is an incoming delta_x of 1
     // and divide that by 40 to get the number of scroll lines
