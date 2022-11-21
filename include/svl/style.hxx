@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ref.hxx>
-#include <comphelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
@@ -113,7 +112,7 @@ SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) from:
    SfxStyleSheetBasePool::Clear()
 */
 
-class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
+class SVL_DLLPUBLIC SfxStyleSheetBase : public cppu::WeakImplHelper<>
 {
 private:
     friend class SfxStyleSheetBasePool;
@@ -224,7 +223,7 @@ friend class SfxStyleSheetBasePool;
 
 class SfxStyleSheetBasePool_Impl;
 
-class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphelper::OWeakTypeObject
+class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public cppu::WeakImplHelper<>
 {
 friend class SfxStyleSheetIterator;
 friend class SfxStyleSheetBase;

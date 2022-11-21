@@ -217,7 +217,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/weak.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

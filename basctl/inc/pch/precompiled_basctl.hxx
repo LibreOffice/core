@@ -351,7 +351,6 @@
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>

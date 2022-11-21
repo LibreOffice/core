@@ -269,7 +269,6 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

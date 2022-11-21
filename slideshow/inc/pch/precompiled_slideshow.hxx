@@ -215,7 +215,6 @@
 #include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/weak.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>

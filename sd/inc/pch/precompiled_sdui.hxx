@@ -314,7 +314,6 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>

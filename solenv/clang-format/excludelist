@@ -1419,7 +1419,6 @@ comphelper/source/misc/string.cxx
 comphelper/source/misc/synchronousdispatch.cxx
 comphelper/source/misc/syntaxhighlight.cxx
 comphelper/source/misc/threadpool.cxx
-comphelper/source/misc/weak.cxx
 comphelper/source/misc/weakeventlistener.cxx
 comphelper/source/misc/xmlsechelper.cxx
 comphelper/source/officeinstdir/officeinstallationdirectories.cxx
@@ -4946,7 +4945,6 @@ include/comphelper/types.hxx
 include/comphelper/unique_disposing_ptr.hxx
 include/comphelper/uno3.hxx
 include/comphelper/unwrapargs.hxx
-include/comphelper/weak.hxx
 include/comphelper/weakbag.hxx
 include/comphelper/weakeventlistener.hxx
 include/comphelper/windowsStart.hxx

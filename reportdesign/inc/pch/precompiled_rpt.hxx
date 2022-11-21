@@ -201,7 +201,6 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>

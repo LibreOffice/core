@@ -276,7 +276,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/weak.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
