@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFGRPRD_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFGRPRD_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <sal/types.h>
@@ -108,8 +107,5 @@ inline const OString& DXFGroupReader::GetS() const
 {
     return S;
 }
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
