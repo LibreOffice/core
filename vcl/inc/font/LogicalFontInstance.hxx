@@ -103,6 +103,7 @@ public: // TODO: make data members private
 
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
+    bool GetGlyphOutlineUntransformed(sal_GlyphId, basegfx::B2DPolyPolygon&) const;
 
     sal_GlyphId GetGlyphIndex(uint32_t, uint32_t = 0) const;
 
@@ -125,6 +126,8 @@ protected:
     virtual void ImplInitHbFont(hb_font_t*) {}
 
 private:
+    hb_font_t* GetHbFontUntransformed() const;
+
     struct MapEntry
     {
         OUString sFontName;
@@ -139,6 +142,7 @@ private:
     mutable ImplFontCache* mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
+    mutable hb_font_t* m_pHbFontUntransformed = nullptr;
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
@@ -151,6 +155,11 @@ private:
 
     // The value is initialized and used in NeedOffsetCorrection().
     std::optional<FontFamilyEnum> m_xeFontFamilyEnum;
+
+#if HB_VERSION_ATLEAST(4, 0, 0)
+    mutable hb_draw_funcs_t* m_pHbDrawFuncs = nullptr;
+    basegfx::B2DPolygon m_aDrawPolygon;
+#endif
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()

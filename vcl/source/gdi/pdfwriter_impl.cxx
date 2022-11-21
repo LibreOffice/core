@@ -2645,6 +2645,18 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append(" Do Q\n");
             }
 
+            const auto& rOutline = rGlyph.getOutline();
+            if (rOutline.count())
+            {
+                // XXX I have no idea why this transformation matrix is needed.
+                aContents.append("q 10 0 0 10 0 ");
+                appendDouble(m_aPages.back().getHeight() * -10, aContents, 3);
+                aContents.append(" cm\n");
+                m_aPages.back().appendPolyPolygon(rOutline, aContents);
+                aContents.append("f\n");
+                aContents.append("Q\n");
+            }
+
             aLine.setLength(0);
             aLine.append(nStream);
             aLine.append(" 0 obj\n<</Length ");
@@ -4194,7 +4206,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(nGlyphId, pFace, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+    registerGlyph(nGlyphId, pFace, pFontInstance, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -6137,16 +6149,18 @@ void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
 
 void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFace,
+                                  const LogicalFontInstance* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject)
 {
-    if (pFace->IsColorFont())
+    auto bVariations = !pFace->GetVariations(*pFont).empty();
+    if (pFace->IsColorFont() || bVariations)
     {
         // Font has colors, check if this glyph has color layers or bitmap.
         tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
         auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty())
+        if (!aLayers.empty() || !aBitmap.empty() || bVariations)
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);
@@ -6194,6 +6208,12 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                 }
                 else if (!aBitmap.empty())
                     rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
+                else if (bVariations)
+                {
+                    basegfx::B2DPolyPolygon aOutline;
+                    if (pFont->GetGlyphOutlineUntransformed(nFontGlyphId, aOutline))
+                        rNewGlyphEmit.setOutline(aOutline);
+                }
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
@@ -6646,7 +6666,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(nGlyphId, pFace, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+        registerGlyph(nGlyphId, pFace, pGlyphFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())

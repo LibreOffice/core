@@ -299,6 +299,7 @@ class GlyphEmit
     std::vector<ColorLayer>         m_aColorLayers;
     font::RawFontData               m_aColorBitmap;
     tools::Rectangle                m_aRect;
+    basegfx::B2DPolyPolygon         m_aOutline;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -324,6 +325,9 @@ public:
         rRect = m_aRect;
         return m_aColorBitmap;
     }
+
+    void setOutline(basegfx::B2DPolyPolygon aOutline) { m_aOutline = aOutline; }
+    const basegfx::B2DPolyPolygon& getOutline() const { return m_aOutline; }
 
     void addCode( sal_Ucs i_cCode )
     {
@@ -852,7 +856,7 @@ i12626
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
+    void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance* pFont, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
     void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
 
     /*  emits a text object according to the passed layout */
