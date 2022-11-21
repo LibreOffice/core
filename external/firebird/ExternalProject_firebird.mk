@@ -84,11 +84,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(filter MACOSX,$(OS)), \
-				$(if $(filter 1, \
-						$(shell expr '$(MAC_OS_X_VERSION_MIN_REQUIRED)' \
-							'<' 101200)), \
-					ac_cv_func_clock_gettime=no)) \
 		&& LC_ALL=C $(MAKE) \
 			$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
 			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(call gb_UnpackedTarball_get_dir,libtommath) -ltommath)" \
