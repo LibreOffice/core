@@ -32,9 +32,6 @@ using namespace ::com::sun::star::ui::dialogs;
 ODatasourceSelectDialog::ODatasourceSelectDialog(weld::Window* _pParent, const std::set<OUString>& _rDatasources)
     : GenericDialogController(_pParent, "dbaccess/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
     , m_xDatasource(m_xBuilder->weld_tree_view("treeview"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
-    , m_xManageDatasources(m_xBuilder->weld_button("organize"))
 {
     m_xDatasource->set_size_request(-1, m_xDatasource->get_height_rows(6));
 

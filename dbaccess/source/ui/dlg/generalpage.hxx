@@ -135,7 +135,6 @@ namespace dbaui
         std::unique_ptr<weld::ComboBox> m_xEmbeddedDBType;
 
         std::unique_ptr<weld::Label> m_xFT_DocListLabel;
-        std::unique_ptr<weld::Label> m_xFT_HelpText;
         std::unique_ptr<OpenDocumentListBox> m_xLB_DocumentList;
         std::unique_ptr<OpenDocumentButton> m_xPB_OpenDatabase;
 

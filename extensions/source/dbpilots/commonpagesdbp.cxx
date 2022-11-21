@@ -58,7 +58,6 @@ namespace dbp
         : OControlWizardPage(pPage, pWizard, "modules/sabpilot/ui/tableselectionpage.ui", "TableSelectionPage")
         , m_xTable(m_xBuilder->weld_tree_view("table"))
         , m_xDatasource(m_xBuilder->weld_tree_view("datasource"))
-        , m_xDatasourceLabel(m_xBuilder->weld_label("datasourcelabel"))
         , m_xSearchDatabase(m_xBuilder->weld_button("search"))
         , m_xSourceBox(m_xBuilder->weld_container("sourcebox"))
     {

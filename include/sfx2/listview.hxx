@@ -89,7 +89,6 @@ protected:
 protected:
     std::unique_ptr<weld::TreeView> mxTreeView;
     std::vector<std::unique_ptr<ListViewItem>> mListViewItems;
-    Link<weld::TreeView&, void> maSelectionChangedHdl;
     int mnSortColumn;
 };
 

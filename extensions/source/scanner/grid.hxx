@@ -33,7 +33,6 @@ enum class ResetType
 
 class GridDialog : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::ComboBox> m_xResetTypeBox;
     std::unique_ptr<weld::Button> m_xResetButton;
     std::unique_ptr<GridWindow> m_xGridWindow;

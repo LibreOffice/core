@@ -88,9 +88,7 @@ namespace dbaui
     {
         std::unique_ptr<weld::CheckButton> m_xAutoRetrievingEnabled;
         std::unique_ptr<weld::Widget> m_xGrid;
-        std::unique_ptr<weld::Label> m_xAutoIncrementLabel;
         std::unique_ptr<weld::Entry> m_xAutoIncrement;
-        std::unique_ptr<weld::Label> m_xAutoRetrievingLabel;
         std::unique_ptr<weld::Entry> m_xAutoRetrieving;
 
     public:

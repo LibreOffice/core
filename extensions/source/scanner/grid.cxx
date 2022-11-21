@@ -206,7 +206,6 @@ void GridWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 GridDialog::GridDialog(weld::Window* pParent, double* pXValues, double* pYValues, int nValues)
     : GenericDialogController(pParent, "modules/scanner/ui/griddialog.ui", "GridDialog")
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xResetTypeBox(m_xBuilder->weld_combo_box("resetTypeCombobox"))
     , m_xResetButton(m_xBuilder->weld_button("resetButton"))
     , m_xGridWindow(new GridWindow)

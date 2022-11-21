@@ -103,7 +103,6 @@ namespace dbaui
         DECL_LINK( ButtonClickHdl, weld::Button&, void );
     protected:
         std::unique_ptr<OWizTypeSelectList> m_xColumnNames;
-        std::unique_ptr<weld::Label> m_xColumns;
         std::unique_ptr<weld::Container> m_xControlContainer;
         std::unique_ptr<OWizTypeSelectControl> m_xTypeControl;
         std::unique_ptr<weld::Label> m_xAutoType;

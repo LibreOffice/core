@@ -454,7 +454,6 @@ namespace dbaui
         , m_xFT_EmbeddedDBLabel(m_xBuilder->weld_label("embeddeddbLabel"))
         , m_xEmbeddedDBType(m_xBuilder->weld_combo_box("embeddeddbList"))
         , m_xFT_DocListLabel(m_xBuilder->weld_label("docListLabel"))
-        , m_xFT_HelpText(m_xBuilder->weld_label("helpText"))
         , m_xLB_DocumentList(new OpenDocumentListBox(m_xBuilder->weld_combo_box("documentList"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_xPB_OpenDatabase(new OpenDocumentButton(m_xBuilder->weld_button("openDatabase"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_xFT_NoEmbeddedDBLabel(m_xBuilder->weld_label("noembeddeddbLabel"))

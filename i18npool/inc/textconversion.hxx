@@ -119,11 +119,6 @@ private:
 
 
 
-// for SChines/TChinese word conversion
-typedef struct {
-    sal_Int16 count;
-} STC_WordIndex;
-
 class TextConversion_zh final : public TextConversionService
 {
 public:

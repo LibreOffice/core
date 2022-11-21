@@ -498,7 +498,6 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxRbRange(m_xBuilder->weld_radio_button("range"))
     , mxRbSelection(m_xBuilder->weld_radio_button("selection"))
     , mxEdPages(m_xBuilder->weld_entry("pages"))
-    , mxSelectedSheets(m_xBuilder->weld_label("selectedsheets"))
     , mxRbLosslessCompression(m_xBuilder->weld_radio_button("losslesscompress"))
     , mxRbJPEGCompression(m_xBuilder->weld_radio_button("jpegcompress"))
     , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))

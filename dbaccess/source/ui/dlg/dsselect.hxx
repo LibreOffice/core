@@ -32,9 +32,6 @@ namespace dbaui
 class ODatasourceSelectDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::TreeView> m_xDatasource;
-    std::unique_ptr<weld::Button> m_xOk;
-    std::unique_ptr<weld::Button> m_xCancel;
-    std::unique_ptr<weld::Button> m_xManageDatasources;
 #ifdef HAVE_ODBC_ADMINISTRATION
     std::unique_ptr<OOdbcManagement> m_xODBCManagement;
 #endif

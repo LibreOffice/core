@@ -287,9 +287,7 @@ namespace dbaui
         : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/generatedvaluespage.ui", "GeneratedValuesPage", _rCoreAttrs)
         , m_xAutoRetrievingEnabled(m_xBuilder->weld_check_button("autoretrieve"))
         , m_xGrid(m_xBuilder->weld_widget("grid"))
-        , m_xAutoIncrementLabel(m_xBuilder->weld_label("statementft"))
         , m_xAutoIncrement(m_xBuilder->weld_entry("statement"))
-        , m_xAutoRetrievingLabel(m_xBuilder->weld_label("queryft"))
         , m_xAutoRetrieving(m_xBuilder->weld_entry("query"))
     {
         m_xAutoRetrievingEnabled->connect_toggled(LINK(this, GeneratedValuesPage, OnAutoToggleHdl));

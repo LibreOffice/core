@@ -205,7 +205,6 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
 OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream* pStream)
     : OWizardPage(pPage, pWizard, "dbaccess/ui/typeselectpage.ui", "TypeSelect")
     , m_xColumnNames(new OWizTypeSelectList(m_xBuilder->weld_tree_view("columnnames")))
-    , m_xColumns(m_xBuilder->weld_label("columns"))
     , m_xControlContainer(m_xBuilder->weld_container("control_container"))
     , m_xTypeControl(new OWizTypeSelectControl(m_xControlContainer.get(), this))
     , m_xAutoType(m_xBuilder->weld_label("autotype"))
