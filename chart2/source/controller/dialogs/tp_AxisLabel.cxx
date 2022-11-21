@@ -48,7 +48,6 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(weld::Container* pPage, weld::DialogCon
     , m_xCbTextOverlap(m_xBuilder->weld_check_button("overlapCB"))
     , m_xCbTextBreak(m_xBuilder->weld_check_button("breakCB"))
     , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
-    , m_xFlOrient(m_xBuilder->weld_label("labelTextOrient"))
     , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
     , m_xNfRotate(m_xBuilder->weld_metric_spin_button("OrientDegree", FieldUnit::DEGREE))
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))

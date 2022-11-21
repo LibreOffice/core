@@ -39,7 +39,6 @@ private:
     std::unique_ptr<weld::Label> m_xFtRotate;
     std::unique_ptr<weld::MetricSpinButton> m_xNfRotate;
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
-    std::unique_ptr<weld::Label> m_xFtTextDirection;
     std::unique_ptr<weld::Label> m_xFtABCD;
     std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
     std::unique_ptr<svx::DialControl> m_xCtrlDial;

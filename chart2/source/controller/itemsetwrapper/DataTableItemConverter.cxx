@@ -55,7 +55,6 @@ DataTableItemConverter::DataTableItemConverter(
     const uno::Reference<beans::XPropertySet>& rPropertySet, SfxItemPool& rItemPool,
     SdrModel& rDrawModel, const rtl::Reference<::chart::ChartModel>& xChartDoc)
     : ItemConverter(rPropertySet, rItemPool)
-    , m_xChartDoc(xChartDoc)
 {
     m_aConverters.emplace_back(new GraphicPropertyItemConverter(
         rPropertySet, rItemPool, rDrawModel, xChartDoc, GraphicObjectType::LineProperties));

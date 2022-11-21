@@ -35,7 +35,6 @@ SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogCon
     , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
     , m_xNfRotate(m_xBuilder->weld_metric_spin_button("OrientDegree", FieldUnit::DEGREE))
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
-    , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
     , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
     , m_xCtrlDial(new svx::DialControl)

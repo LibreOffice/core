@@ -50,7 +50,6 @@ protected:
 
 private:
     std::vector<std::unique_ptr<ItemConverter>> m_aConverters;
-    rtl::Reference<::chart::ChartModel> m_xChartDoc;
 };
 }
 

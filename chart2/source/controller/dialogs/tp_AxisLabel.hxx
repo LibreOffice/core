@@ -56,7 +56,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbTextOverlap;
     std::unique_ptr<weld::CheckButton> m_xCbTextBreak;
     std::unique_ptr<weld::Label> m_xFtABCD;
-    std::unique_ptr<weld::Label> m_xFlOrient;
     std::unique_ptr<weld::Label> m_xFtRotate;
     std::unique_ptr<weld::MetricSpinButton> m_xNfRotate;
     std::unique_ptr<weld::CheckButton> m_xCbStacked;

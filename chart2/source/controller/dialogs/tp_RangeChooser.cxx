@@ -69,7 +69,6 @@ RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogCon
     , m_rDialogModel( rDialogModel )
     , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(pController))
     , m_xFT_Caption(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
-    , m_xFT_Range(m_xBuilder->weld_label("FT_RANGE"))
     , m_xED_Range(m_xBuilder->weld_entry("ED_RANGE"))
     , m_xIB_Range(m_xBuilder->weld_button("IB_RANGE"))
     , m_xRB_Rows(m_xBuilder->weld_radio_button("RB_DATAROWS"))

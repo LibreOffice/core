@@ -60,7 +60,6 @@ private: //member:
     std::unique_ptr<weld::ComboBox> m_xLB_CrossesAt;
     std::unique_ptr<weld::FormattedSpinButton> m_xED_CrossesAt;
     std::unique_ptr<weld::ComboBox> m_xED_CrossesAtCategory;
-    std::unique_ptr<weld::CheckButton> m_xCB_AxisBetweenCategories;
 
     std::unique_ptr<weld::Frame> m_xFL_Position;
     std::unique_ptr<weld::RadioButton> m_xRB_On;
@@ -68,7 +67,6 @@ private: //member:
 
     std::unique_ptr<weld::Frame> m_xFL_Labels;
     std::unique_ptr<weld::ComboBox> m_xLB_PlaceLabels;
-    std::unique_ptr<weld::FormattedSpinButton> m_xED_LabelDistance;
 
     std::unique_ptr<weld::CheckButton> m_xCB_TicksInner;
     std::unique_ptr<weld::CheckButton> m_xCB_TicksOuter;
