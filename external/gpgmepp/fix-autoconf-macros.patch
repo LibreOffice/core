@@ -1,7 +1,7 @@
 diff -ur gpgme.org/configure.ac gpgme/configure.ac
 --- configure.ac	2017-02-16 15:18:45.051417378 +0100
 +++ configure.ac~	2017-02-16 15:20:03.635059285 +0100
-@@ -35,6 +35,11 @@
+@@ -38,6 +38,11 @@
  # the decimalized short revision number, a beta version string and a
  # flag indicating a development version (mym4_isbeta).  Note that the
  # m4 processing is done by autoconf and not during the configure run.
@@ -13,10 +13,10 @@ diff -ur gpgme.org/configure.ac gpgme/configure.ac
  m4_define([mym4_verslist], m4_split(m4_esyscmd([./autogen.sh --find-version] \
                             mym4_package mym4_major mym4_minor mym4_micro),[:]))
  m4_define([mym4_isbeta],       m4_argn(2, mym4_verslist))
-@@ -90,7 +90,22 @@
+@@ -98,7 +103,22 @@
  AC_CONFIG_MACRO_DIR([m4])
- AC_CONFIG_SRCDIR(src/gpgme.h.in)
- AC_CONFIG_HEADER(conf/config.h)
+ AC_CONFIG_SRCDIR([src/gpgme.h.in])
+ AC_CONFIG_HEADERS([conf/config.h])
 -AM_INIT_AUTOMAKE([serial-tests dist-bzip2 no-dist-gzip])
 +
 +dnl Initialize automake.  automake < 1.12 didn't have serial-tests and
