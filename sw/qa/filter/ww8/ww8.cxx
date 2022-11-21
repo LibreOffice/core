@@ -145,6 +145,26 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "font", "Wingdings");
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "char", "f0e0");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
+{
+    // Given a document with a dropdown content control, the only list item has no display text
+    // (only a value):
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When saving to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure that no display text attribute is written:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem' unexpected 'displayText' attribute
+    // i.e. we wrote an empty attribute instead of omitting it.
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem", "displayText");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
