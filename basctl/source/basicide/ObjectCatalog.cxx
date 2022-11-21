@@ -67,7 +67,9 @@ void ObjectCatalog::ToggleFloatingMode()
     DockingWindow::ToggleFloatingMode();
 
     bool const bFloating = IsFloatingMode();
-    m_xTitle->set_visible(!bFloating);
+    // tdf#152154: m_xTitle will be null during disposing
+    if (m_xTitle)
+        m_xTitle->set_visible(!bFloating);
 }
 
 void ObjectCatalog::SetCurrentEntry(BaseWindow* pCurWin)
