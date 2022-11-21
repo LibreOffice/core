@@ -145,13 +145,10 @@ private:
 
     std::unique_ptr<weld::CheckButton> m_xCB_Reverse;
 
-    std::unique_ptr<weld::Label> m_xFT_Term;
     std::unique_ptr<weld::Entry> m_xED_Term;
 
-    std::unique_ptr<weld::Label> m_xFT_Mapping;
     std::unique_ptr<weld::Entry> m_xED_Mapping;
 
-    std::unique_ptr<weld::Label> m_xFT_Property;
     std::unique_ptr<weld::ComboBox> m_xLB_Property;
 
     std::unique_ptr<DictionaryList> m_xCT_DictionaryToSimplified;

@@ -48,7 +48,6 @@ private:
     std::unique_ptr<weld::LinkButton> mxBugLink;
     std::unique_ptr<weld::LinkButton> mxUserProfileLink;
     std::unique_ptr<weld::Button> mxBtnCreateZip;
-    std::unique_ptr<weld::Expander> mxExpander;
 
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;

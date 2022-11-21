@@ -69,10 +69,6 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrContrast;
     std::unique_ptr<weld::ComboBox> mxLBColorMode;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrans;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrRed;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrGreen;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrBlue;
-    std::unique_ptr<weld::SpinButton> mxMtrGamma;
 
     DECL_LINK( ModifyBrightnessHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyContrastHdl, weld::MetricSpinButton&, void );

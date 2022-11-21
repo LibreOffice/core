@@ -364,7 +364,6 @@ namespace svxform
         std::unique_ptr<weld::Entry> m_xDefaultED;
         std::unique_ptr<weld::Button> m_xDefaultBtn;
         std::unique_ptr<weld::Widget> m_xSettingsFrame;
-        std::unique_ptr<weld::Label> m_xDataTypeFT;
         std::unique_ptr<weld::ComboBox> m_xDataTypeLB;
         std::unique_ptr<weld::CheckButton> m_xRequiredCB;
         std::unique_ptr<weld::Button> m_xRequiredBtn;
@@ -547,7 +546,6 @@ namespace svxform
         OUString                m_sAllFilterName;
 
         std::unique_ptr<weld::Entry> m_xNameED;
-        std::unique_ptr<weld::Label> m_xURLFT;
         std::unique_ptr<SvtURLBox> m_xURLED;
         std::unique_ptr<weld::Button> m_xFilePickerBtn;
         std::unique_ptr<weld::CheckButton> m_xLinkInstanceCB;
