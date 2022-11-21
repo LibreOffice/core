@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_DOCUMENTFOCUSLISTENER_HXX
-#define INCLUDED_VCL_OSX_DOCUMENTFOCUSLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 
@@ -94,7 +93,5 @@ private:
 
     AquaA11yFocusTracker& m_aFocusTracker;
 };
-
-#endif // INCLUDED_VCL_OSX_DOCUMENTFOCUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
