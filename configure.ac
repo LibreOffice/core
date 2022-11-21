@@ -3430,66 +3430,53 @@ if test $_os = Darwin; then
     # The SDK in the currently selected Xcode should be found.
 
     AC_MSG_CHECKING([what macOS SDK to use])
-    for macosx_sdk in 13.0 12.3 12.1 12.0 11.3 11.1 11.0 10.15 10.14; do
-        MACOSX_SDK_PATH=`xcrun --sdk macosx${macosx_sdk} --show-sdk-path 2> /dev/null`
-        if test -d "$MACOSX_SDK_PATH"; then
-            break
-        else
-            MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${macosx_sdk}.sdk"
-            if test -d "$MACOSX_SDK_PATH"; then
-                break
-            fi
-        fi
-    done
+    # XCode only ships with a single SDK for a while now, and using older SDKs alongside is not
+    # really supported anymore, instead you'd use different copies of Xcode, each with their own
+    # SDK, and thus xcrun will pick the SDK that matches the currently selected Xcode version
+    # also restricting the SDK version to "known good" versions doesn't seem necessary anyomre, the
+    # problems that existed in the PPC days with target versions not being respected or random
+    # failures seems to be a thing of the past or rather: limiting either the Xcode version or the
+    # SDK version is enough, no need to do both...
+    MACOSX_SDK_PATH=`xcrun --sdk macosx --show-sdk-path 2> /dev/null`
     if test ! -d "$MACOSX_SDK_PATH"; then
         AC_MSG_ERROR([Could not find an appropriate macOS SDK])
     fi
-
-    AC_MSG_RESULT([macOS SDK $macosx_sdk at $MACOSX_SDK_PATH])
-    MACOSX_SDK_BUILD_VERSION=$(xcodebuild -version -sdk "$MACOSX_SDK_PATH" ProductBuildVersion) 
-    case $macosx_sdk in
-    10.14)
-        MACOSX_SDK_VERSION=101400
-        ;;
-    10.15)
-        MACOSX_SDK_VERSION=101500
-        ;;
-    11.0)
-        MACOSX_SDK_VERSION=110000
-        ;;
-    11.1)
-        MACOSX_SDK_VERSION=110100
-        ;;
-    11.3)
-        MACOSX_SDK_VERSION=110300
-        ;;
-    12.0)
-        MACOSX_SDK_VERSION=120000
-        ;;
-    12.1)
-        MACOSX_SDK_VERSION=120100
-        ;;
-    12.3)
-        MACOSX_SDK_VERSION=120300
-        ;;
-    13.0)
-        MACOSX_SDK_VERSION=130000
-        ;;
-    *)
-        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported])
-        ;;
-    esac
-
-    if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
-        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported for Apple Silicon])
+    macosx_sdk=`xcodebuild -version -sdk "$MACOSX_SDK_PATH" SDKVersion`
+    MACOSX_SDK_BUILD_VERSION=$(xcodebuild -version -sdk "$MACOSX_SDK_PATH" ProductBuildVersion)
+    # format changed between 10.9 and 10.10 - up to 10.9 it was just four digits (1090), starting
+    # with macOS 10.10 it was switched to account for x.y.z with six digits, 10.10 is 101000,
+    # 10.10.2 is 101002
+    # we don't target the lower versions anymore, so it doesn't matter that we don't generate the
+    # correct version in case such an old SDK is specified, it will be rejected later anyway
+    MACOSX_SDK_VERSION=$(echo $macosx_sdk | $AWK -F. '{ print $1*10000+$2*100+$3 }')
+    if test $MACOSX_SDK_VERSION -lt 101400; then
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported, lowest supported version is 10.14])
     fi
+    if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported for Apple Silicon (need at least 11.0)])
+    fi
+    AC_MSG_RESULT([macOS SDK $macosx_sdk at $MACOSX_SDK_PATH])
 
+    AC_MSG_CHECKING([what minimum version of macOS to require])
     if test "$with_macosx_version_min_required" = "" ; then
         if test "$host_cpu" = x86_64; then
             with_macosx_version_min_required="10.14";
         else
             with_macosx_version_min_required="11.0";
         fi
+    fi
+    # see same notes about MACOSX_SDK_VERSION above
+    MAC_OS_X_VERSION_MIN_REQUIRED=$(echo $with_macosx_version_min_required | $AWK -F. '{ print $1*10000+$2*100+$3 }')
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 101400; then
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, minimum supported version is 10.14])
+    fi
+    AC_MSG_RESULT([$with_macosx_version_min_required])
+
+    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macos-with-sdk])
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MACOSX_SDK_VERSION; then
+        AC_MSG_ERROR([the version minimum required ($with_macosx_version_min_required) cannot be greater than the sdk level ($macosx_sdk)])
+    else
+        AC_MSG_RESULT([yes])
     fi
 
     # export this so that "xcrun" invocations later return matching values
@@ -3511,42 +3498,6 @@ if test $_os = Darwin; then
 
     my_xcode_ver1=$(xcrun xcodebuild -version | tail -n 1)
     MACOSX_XCODE_BUILD_VERSION=${my_xcode_ver1#Build version }
-
-    case "$with_macosx_version_min_required" in
-    10.14)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101400"
-        ;;
-    10.15)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101500"
-        ;;
-    10.16)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101600"
-        ;;
-    11.0)
-        MAC_OS_X_VERSION_MIN_REQUIRED="110000"
-        ;;
-    11.1)
-        MAC_OS_X_VERSION_MIN_REQUIRED="110100"
-        ;;
-    11.3)
-        MAC_OS_X_VERSION_MIN_REQUIRED="110300"
-        ;;
-    12.0)
-        MAC_OS_X_VERSION_MIN_REQUIRED="120000"
-        ;;
-    12.1)
-        MAC_OS_X_VERSION_MIN_REQUIRED="120100"
-        ;;
-    12.3)
-        MAC_OS_X_VERSION_MIN_REQUIRED="120300"
-        ;;
-    13.0)
-        MAC_OS_X_VERSION_MIN_REQUIRED="130000"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.14--13.0])
-        ;;
-    esac
 
     LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
@@ -3582,14 +3533,6 @@ if test $_os = Darwin; then
         LIBTOOL=`xcrun -find libtool`
         RANLIB=`xcrun -find ranlib`
     fi
-
-    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macos-with-sdk])
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MACOSX_SDK_VERSION; then
-        AC_MSG_ERROR([the version minimum required cannot be greater than the sdk level])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
 
     AC_MSG_CHECKING([whether to do code signing])
 
