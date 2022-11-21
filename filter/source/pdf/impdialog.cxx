@@ -52,7 +52,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     const Reference< XComponent >& rxDoc)
     : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
     mrDoc(rxDoc),
-    mpParent(pParent),
     maConfigItem( u"Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( u"Office.Common/I18N/CTL/" ),
     mbIsPresentation( false ),
@@ -319,9 +318,10 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
             if (!aCollection.getIssues().empty())
             {
                 mpAccessibilityCheckDialog = std::make_shared<svx::AccessibilityCheckDialog>(
-                    mpParent, aCollection, [pShell]() -> sfx::AccessibilityIssueCollection {
+                    m_xDialog.get(), aCollection, [pShell]() -> sfx::AccessibilityIssueCollection {
                         return pShell->runAccessibilityCheck();
                     });
+                mpAccessibilityCheckDialog->getDialog()->set_modal(true);
                 weld::DialogController::runAsync(mpAccessibilityCheckDialog, [this](sal_Int32 retValue){
                     m_xDialog->response(retValue);
                 });
@@ -348,6 +348,8 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     maConfigI18N.WriteModifiedConfig();
     if (mpAccessibilityCheckDialog)
     {
+        // restore set_modal to its original state
+        mpAccessibilityCheckDialog->getDialog()->set_modal(false);
         mpAccessibilityCheckDialog->response(RET_CANCEL);
     }
 }

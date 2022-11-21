@@ -59,7 +59,6 @@ class ImpPDFTabLinksPage;
 class ImpPDFTabDialog final : public SfxTabDialogController
 {
     css::uno::Reference<css::lang::XComponent> mrDoc;
-    weld::Window* mpParent;
 
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
