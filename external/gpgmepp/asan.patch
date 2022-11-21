@@ -1,6 +1,6 @@
 --- src/posix-io.c
 +++ src/posix-io.c
-@@ -468,6 +468,9 @@
+@@ -563,6 +563,9 @@
  
  	  if (atfork)
  	    atfork (atforkvalue, 0);
