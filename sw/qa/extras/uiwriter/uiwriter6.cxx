@@ -2251,7 +2251,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    // it is required to get the shape objet again after paste
+    // it is required to get the shape object again after paste
     xBasicShape = getShape(1);
     pObject = SdrObject::getSdrObjectFromXShape(xBasicShape);
 
