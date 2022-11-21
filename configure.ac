@@ -12172,11 +12172,6 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
             SKIA_GPU=VULKAN
             AC_SUBST(SKIA_GPU)
         fi
-
-        if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" && test "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
-            SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX=1
-            AC_SUBST(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX)
-        fi
     else
         AC_MSG_RESULT([no (freetype too old)])
         add_warning "freetype version is too old for Skia library, at least 2.8.1 required, Skia support disabled"
