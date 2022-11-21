@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SVMCONVERTER_HXX
-#define INCLUDED_VCL_INC_SVMCONVERTER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/gdimtf.hxx>
@@ -86,7 +85,5 @@ private:
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSVM(SvStream& rStream);
-
-#endif // INCLUDED_VCL_INC_SVMCONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
