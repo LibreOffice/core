@@ -445,7 +445,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
     // change, but that is simply not reliable.
     // Note2: I did that once in aw080, the lost CWS, and it worked well enough
     // so that I could remove *all* operator== from all derivations of
-    // BasePrimitive2D, so it can be done again (with the needed ressources)
+    // BasePrimitive2D, so it can be done again (with the needed resources)
     if(mxPrimitive2DSequence != xNewPrimitiveSequence)
     {
         // has changed, copy content
