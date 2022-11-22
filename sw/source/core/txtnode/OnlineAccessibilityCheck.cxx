@@ -285,6 +285,9 @@ void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
 
 void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode)
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return;
+
     bool bOnlineCheckStatus
         = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
     if (!bOnlineCheckStatus)
