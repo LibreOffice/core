@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
+#include <comphelper/date.hxx>
 #include <o3tl/string_view.hxx>
 #include <sstream>
 #include <iomanip>
@@ -148,95 +149,9 @@ namespace dbtools
                nHour * (minInHour * secInMin * nanoSecInSec);
     }
 
-
-    const sal_Int32 aDaysInMonth[12] = {   31, 28, 31, 30, 31, 30,
-                                            31, 31, 30, 31, 30, 31 };
-
-
-    static bool implIsLeapYear(sal_Int32 _nYear)
-    {
-        return  (    ((_nYear % 4) == 0)
-                 &&  ((_nYear % 100) != 0)
-                )
-
-                ||  ((_nYear % 400) == 0)
-                ;
-    }
-
-    static sal_Int32 implDaysInMonth(sal_Int32 _nMonth, sal_Int32 _nYear)
-    {
-        SAL_WARN_IF(_nMonth < 1 || _nMonth > 12, "connectivity.commontools", "Month has invalid value: " << _nMonth);
-        if (_nMonth < 1)
-            _nMonth = 1;
-        else if (_nMonth > 12)
-            _nMonth = 12;
-        if (_nMonth != 2)
-            return aDaysInMonth[_nMonth-1];
-        else
-        {
-            if (implIsLeapYear(_nYear))
-                return aDaysInMonth[_nMonth-1] + 1;
-            else
-                return aDaysInMonth[_nMonth-1];
-        }
-    }
-
     static sal_Int32 implRelativeToAbsoluteNull(const css::util::Date& _rDate)
     {
-        sal_Int32 nDays = 0;
-
-        // ripped this code from the implementation of tools::Date
-        sal_Int32 nNormalizedYear = _rDate.Year - 1;
-        nDays = nNormalizedYear * 365;
-        // leap years
-        nDays += (nNormalizedYear / 4) - (nNormalizedYear / 100) + (nNormalizedYear / 400);
-
-        for (sal_Int32 i = 1; i < _rDate.Month; ++i)
-            nDays += implDaysInMonth(i, _rDate.Year);
-
-        nDays += _rDate.Day;
-        return nDays;
-    }
-
-    static void implBuildFromRelative( const sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
-    {
-        sal_Int32   nTempDays;
-        sal_Int32   i = 0;
-        bool    bCalc;
-
-        do
-        {
-            nTempDays = nDays;
-            rYear = static_cast<sal_uInt16>((nTempDays / 365) - i);
-            nTempDays -= (rYear-1) * 365;
-            nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
-            bCalc = false;
-            if ( nTempDays < 1 )
-            {
-                i++;
-                bCalc = true;
-            }
-            else
-            {
-                if ( nTempDays > 365 )
-                {
-                    if ( (nTempDays != 366) || !implIsLeapYear( rYear ) )
-                    {
-                        i--;
-                        bCalc = true;
-                    }
-                }
-            }
-        }
-        while ( bCalc );
-
-        rMonth = 1;
-        while ( nTempDays > implDaysInMonth( rMonth, rYear ) )
-        {
-            nTempDays -= implDaysInMonth( rMonth, rYear );
-            rMonth++;
-        }
-        rDay = static_cast<sal_uInt16>(nTempDays);
+        return comphelper::date::convertDateToDaysNormalizing( _rDate.Day, _rDate.Month, _rDate.Year);
     }
 
     sal_Int32 DBTypeConversion::toDays(const css::util::Date& _rVal, const css::util::Date& _rNullDate)
@@ -282,7 +197,6 @@ namespace dbtools
             _rDate.Year     = 9999;
         }
         // TODO: can we replace that check by minDays? Would allow dates BCE
-        //       implBuildFromRelative probably needs to be updated for the "no year 0" question
         else if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
@@ -290,7 +204,7 @@ namespace dbtools
             _rDate.Year     = 1;
         }
         else
-            implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
+            comphelper::date::convertDaysToDate( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
 
     static void subDays(const sal_Int32 nDays, css::util::Date& _rDate )
@@ -305,7 +219,6 @@ namespace dbtools
             _rDate.Year     = 9999;
         }
         // TODO: can we replace that check by minDays? Would allow dates BCE
-        //       implBuildFromRelative probably needs to be updated for the "no year 0" question
         else if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
@@ -313,7 +226,7 @@ namespace dbtools
             _rDate.Year     = 1;
         }
         else
-            implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
+            comphelper::date::convertDaysToDate( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
 
     css::util::Date DBTypeConversion::toDate(const double dVal, const css::util::Date& _rNullDate)
