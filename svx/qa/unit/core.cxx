@@ -50,6 +50,10 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     // Without the accompanying fix in place, this test would have failed, because the output was
     // empty (0 bytes).
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    if (!pPdfDocument)
+    {
+        return;
+    }
     int nPageCount = pPdfDocument->getPageCount();
     CPPUNIT_ASSERT_GREATER(0, nPageCount);
 }

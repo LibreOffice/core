@@ -498,6 +498,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
 
     // Then make sure that line shape gets clipped:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pDoc = parsePDFExport();
+    if (!pDoc)
+    {
+        return;
+    }
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage1 = pDoc->openPage(0);
     CPPUNIT_ASSERT_EQUAL(3, pPage1->getObjectCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage2 = pDoc->openPage(1);
