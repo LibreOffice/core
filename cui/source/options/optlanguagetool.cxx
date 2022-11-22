@@ -28,6 +28,7 @@ OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
     , m_xBaseURLED(m_xBuilder->weld_entry("baseurl"))
     , m_xUsernameED(m_xBuilder->weld_entry("username"))
     , m_xApiKeyED(m_xBuilder->weld_entry("apikey"))
+    , m_xRestProtocol(m_xBuilder->weld_entry("restprotocol"))
     , m_xActivateBox(m_xBuilder->weld_check_button("activate"))
     , m_xSSLDisableVerificationBox(m_xBuilder->weld_check_button("verifyssl"))
     , m_xApiSettingsFrame(m_xBuilder->weld_frame("apisettings"))
@@ -59,6 +60,7 @@ void OptLanguageToolTabPage::Reset(const SfxItemSet*)
     m_xBaseURLED->set_text(rLanguageOpts.getBaseURL());
     m_xUsernameED->set_text(rLanguageOpts.getUsername());
     m_xApiKeyED->set_text(rLanguageOpts.getApiKey());
+    m_xRestProtocol->set_text(rLanguageOpts.getRestProtocol());
     m_xSSLDisableVerificationBox->set_active(rLanguageOpts.getSSLVerification() != true);
 }
 
@@ -68,6 +70,7 @@ bool OptLanguageToolTabPage::FillItemSet(SfxItemSet*)
     rLanguageOpts.setBaseURL(m_xBaseURLED->get_text());
     rLanguageOpts.setUsername(m_xUsernameED->get_text());
     rLanguageOpts.setApiKey(m_xApiKeyED->get_text());
+    rLanguageOpts.setRestProtocol(m_xRestProtocol->get_text());
     rLanguageOpts.setSSLVerification(m_xSSLDisableVerificationBox->get_active() != true);
     return false;
 }
