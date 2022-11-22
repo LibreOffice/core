@@ -37,7 +37,7 @@ with open(tokenfile_name) as tokenfile:
            tokens[arr[0]] = arr[1].upper()
 
 hxx = open(hxx_name, 'w')
-gperf = open(gperf_name, 'w')
+gperf = open(gperf_name, 'w', newline='\n')
 
 gperf.write(gperf_header)
 
