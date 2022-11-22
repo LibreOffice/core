@@ -14,6 +14,7 @@ $(eval $(call gb_Package_add_files,sd_xml,$(LIBO_SHARE_FOLDER)/config/soffice.cf
 	transitions.xml \
 	layoutlist.xml  \
 	objectlist.xml  \
+	styles.xml \
 ))
 
 # vim: set noet sw=4 ts=4:

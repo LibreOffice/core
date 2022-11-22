@@ -813,7 +813,11 @@ void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Re
 void TableDesignFamily::reset()
 {
     for (const auto& aDesign : maDesigns)
-        static_cast<TableDesignStyle*>(aDesign.get())->resetUserDefined();
+    {
+        auto aStyle = static_cast<TableDesignStyle*>(aDesign.get());
+        aStyle->resetUserDefined();
+        aStyle->setModified(false);
+    }
 }
 
 void TableDesignFamily::addResetListener( const Reference<form::XResetListener>& )

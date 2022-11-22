@@ -360,11 +360,6 @@
 #define STR_PSEUDOSHEET_NOTES                           NC_("STR_PSEUDOSHEET_NOTES", "Notes" )
 #define STR_POWERPOINT_IMPORT                           NC_("STR_POWERPOINT_IMPORT", "PowerPoint Import")
 #define STR_SAVE_DOC                                    NC_("STR_SAVE_DOC", "Save Document" )
-#define STR_POOLSHEET_BANDED_CELL                       NC_("STR_POOLSHEET_BANDED_CELL", "Banding cell" )
-#define STR_POOLSHEET_HEADER                            NC_("STR_POOLSHEET_HEADER", "Header" )
-#define STR_POOLSHEET_TOTAL                             NC_("STR_POOLSHEET_TOTAL", "Total line" )
-#define STR_POOLSHEET_FIRST_COLUMN                      NC_("STR_POOLSHEET_FIRST_COLUMN", "First column" )
-#define STR_POOLSHEET_LAST_COLUMN                       NC_("STR_POOLSHEET_LAST_COLUMN", "Last column" )
 #define STR_SHRINK_FONT_SIZE                            NC_("STR_SHRINK_FONT_SIZE", "Shrink font size")
 #define STR_GROW_FONT_SIZE                              NC_("STR_GROW_FONT_SIZE", "Grow font size")
 

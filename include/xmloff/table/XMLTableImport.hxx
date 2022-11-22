@@ -36,7 +36,10 @@
 class SvXMLStyleContext;
 
 typedef std::map< OUString, OUString > XMLTableTemplate;
-typedef std::map < OUString, std::shared_ptr< XMLTableTemplate > > XMLTableTemplateMap;
+// Not using a map here, as we want the templates to be
+// inserted in the same order they were defined in the
+// xml (at least for sd built in templates):
+typedef std::vector< std::pair< OUString, std::shared_ptr< XMLTableTemplate > > > XMLTableTemplateMap;
 
 class XMLOFF_DLLPUBLIC XMLTableImport final : public salhelper::SimpleReferenceObject
 {

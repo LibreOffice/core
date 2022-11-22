@@ -18,10 +18,14 @@
  */
 
 #include <sal/config.h>
+#include <config_folders.h>
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/dispatch.hxx>
@@ -31,6 +35,11 @@
 #include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <rtl/bootstrap.hxx>
+#include <unotools/streamwrap.hxx>
+#include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/idle.hxx>
@@ -593,63 +602,28 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
-static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString& rParent, const Color& rColor )
-{
-    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SfxStyleFamily::Frame, SfxStyleSearchBits::Auto));
-    pSheet->SetParent(rParent);
-    SfxItemSet* pISet = &pSheet->GetItemSet();
-    pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    pISet->Put(XFillColorItem(OUString(), rColor));
-
-    return Any( Reference< XStyle >( static_cast< XWeak* >( pSheet ), UNO_QUERY ) );
-}
-
-static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFamily, const OUString& rName, const Any& rBody, const Any& rHeading, const Any& rBanding )
-{
-    if( !xTableFamily.is() )
-        return;
-
-    try
-    {
-        if( !xTableFamily->hasByName( rName ) )
-        {
-            Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
-            Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
-            xTableFamily->insertByName( rName, Any( xDefaultTableStyle ) );
-
-            xDefaultTableStyle->replaceByName( "body", rBody  );
-            xDefaultTableStyle->replaceByName( "odd-rows" , rBanding );
-            xDefaultTableStyle->replaceByName( "odd-columns" , rBanding );
-            xDefaultTableStyle->replaceByName( "first-row" , rHeading );
-            xDefaultTableStyle->replaceByName( "first-column" , rHeading );
-            xDefaultTableStyle->replaceByName( "last-row" , rHeading );
-            xDefaultTableStyle->replaceByName( "last-column" , rHeading );
-        }
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::implCreateTableTemplate()");
-    }
-}
-
 void SdDrawDocument::CreateDefaultCellStyles()
 {
-    SdStyleSheetPool*       pSSPool = static_cast< SdStyleSheetPool* >(GetStyleSheetPool());
-    SfxStyleSheetBase*      pSheet = nullptr;
+    Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    Reference<css::document::XImporter> xImporter(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        "com.sun.star.comp.Draw.XMLOasisStylesImporter",
+        { Any(comphelper::makePropertyValue("OrganizerMode", true)) }, xContext), UNO_QUERY);
+    if (xImporter)
+        xImporter->setTargetDocument(mpDocSh->GetModel());
 
-    Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
+    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/soffice.cfg/simpress/styles.xml");
+    rtl::Bootstrap::expandMacros(aURL);
+    SvFileStream aFile(aURL, StreamMode::READ);
+    Reference<css::io::XInputStream> xInputStream(new utl::OInputStreamWrapper(aFile));
 
-    // ---- Default -----------------------------------------------
+    css::xml::sax::InputSource aParserInput;
+    aParserInput.sPublicId = aURL;
+    aParserInput.aInputStream = xInputStream;
+    Reference<css::xml::sax::XFastParser> xFastParser(xImporter, UNO_QUERY);
+    if (xFastParser)
+        xFastParser->parseStream(aParserInput);
 
-    OUString aDefaultCellStyleName( "default" );
-
-    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SfxStyleFamily::Frame, SfxStyleSearchBits::Auto));
-    pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
-    SfxItemSet& rISet = pSheet->GetItemSet();
-
-    rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), Color(0x00ccccff)));
-
+    // Set default fonts, if they were not defined in the xml.
     vcl::Font aLatinFont, aCJKFont, aCTLFont;
 
     getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
@@ -663,131 +637,28 @@ void SdDrawDocument::CreateDefaultCellStyles()
     SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamilyType(), aCTLFont.GetFamilyName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
-    rISet.Put( aSvxFontItem );
-    rISet.Put( aSvxFontItemCJK );
-    rISet.Put( aSvxFontItemCTL );
+    SdStyleSheetPool* pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
+    SfxStyleSheetBase* pDefaultStyle = pSSPool->Find("default", SfxStyleFamily::Frame);
+    if (pDefaultStyle)
+    {
+        SfxItemSet& rSet(pDefaultStyle->GetItemSet());
+        if (!rSet.HasItem(EE_CHAR_FONTINFO))
+            rSet.Put(aSvxFontItem);
+        if (!rSet.HasItem(EE_CHAR_FONTINFO_CJK))
+            rSet.Put(aSvxFontItemCJK);
+        if (!rSet.HasItem(EE_CHAR_FONTINFO_CTL))
+            rSet.Put(aSvxFontItemCTL);
+    }
 
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
-    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
+    // Reset the user defined flag.
+    SfxStyleSheetBase* pSheet = pSSPool->First(SfxStyleFamily::Frame);
+    while (pSheet)
+    {
+        pSheet->SetMask(SfxStyleSearchBits::Auto);
+        pSheet = pSSPool->Next();
+    }
 
-    rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
-
-    // Paragraph attributes (Edit Engine)
-    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
-    rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
-
-    rISet.Put( makeSdrTextLeftDistItem( 250 ) );
-    rISet.Put( makeSdrTextRightDistItem( 250 ) );
-    rISet.Put( makeSdrTextUpperDistItem( 130 ) );
-    rISet.Put( makeSdrTextLowerDistItem( 130 ) );
-
-    rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
-    rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
-    rISet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-    rISet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT) );
-
-    Color aWhite( COL_WHITE );
-    ::editeng::SvxBorderLine aBorderLine(
-            &aWhite, 1, SvxBorderLineStyle::SOLID);
-
-    SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
-    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::TOP );
-    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
-    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::LEFT );
-    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::RIGHT );
-
-    rISet.Put( aBoxItem );
-
-    // ---- default --------------------------------------------------
-
-    Any aGray1( implMakeSolidCellStyle( pSSPool, "gray1" , aDefaultCellStyleName, Color(230,230,230)));
-    Any aGray2( implMakeSolidCellStyle( pSSPool, "gray2" , aDefaultCellStyleName, Color(204,204,204)));
-    Any aGray3( implMakeSolidCellStyle( pSSPool, "gray3" , aDefaultCellStyleName, Color(179,179,179)));
-
-    implCreateTableTemplate( xTableFamily, "default" , aGray1, aGray3, aGray2 );
-
-    // ---- BW ------------------------------------------------
-
-    Any aBW1( implMakeSolidCellStyle( pSSPool, "bw1" , aDefaultCellStyleName, Color(255,255,255)));
-    Any aBW2( implMakeSolidCellStyle( pSSPool, "bw2" , aDefaultCellStyleName, Color(230,230,230)));
-    Any aBW3( implMakeSolidCellStyle( pSSPool, "bw3" , aDefaultCellStyleName, Color(0,0,0)));
-
-    implCreateTableTemplate( xTableFamily, "bw" , aBW1, aBW3, aBW2 );
-
-    // ---- Orange --------------------------------------------------
-
-    Any aOrange1( implMakeSolidCellStyle( pSSPool, "orange1" , aDefaultCellStyleName, Color(255,204,153)));
-    Any aOrange2( implMakeSolidCellStyle( pSSPool, "orange2" , aDefaultCellStyleName, Color(255,153,102)));
-    Any aOrange3( implMakeSolidCellStyle( pSSPool, "orange3" , aDefaultCellStyleName, Color(255,102,51)));
-
-    implCreateTableTemplate( xTableFamily, "orange" , aOrange1, aOrange3, aOrange2 );
-
-    // ---- Turquoise --------------------------------------------------
-
-    Any aTurquoise1( implMakeSolidCellStyle( pSSPool, "turquoise1" , aDefaultCellStyleName, Color(71,184,184)));
-    Any aTurquoise2( implMakeSolidCellStyle( pSSPool, "turquoise2" , aDefaultCellStyleName, Color(51,163,163)));
-    Any aTurquoise3( implMakeSolidCellStyle( pSSPool, "turquoise3" , aDefaultCellStyleName, Color(25,138,138)));
-
-    implCreateTableTemplate( xTableFamily, "turquoise" , aTurquoise1, aTurquoise3, aTurquoise2 );
-
-    // ---- Gray ------------------------------------------------
-
-    Any aBlue1( implMakeSolidCellStyle( pSSPool, "blue1" , aDefaultCellStyleName, Color(153,204,255)));
-    Any aBlue2( implMakeSolidCellStyle( pSSPool, "blue2" , aDefaultCellStyleName, Color(0,153,255)));
-    Any aBlue3( implMakeSolidCellStyle( pSSPool, "blue3" , aDefaultCellStyleName, Color(0,102,204)));
-
-    implCreateTableTemplate( xTableFamily, "blue" , aBlue1, aBlue3, aBlue2 );
-
-    // ---- Sun ------------------------------------------------
-
-    Any aSun1( implMakeSolidCellStyle( pSSPool, "sun1" , aDefaultCellStyleName, Color(230,230,255)));
-    Any aSun2( implMakeSolidCellStyle( pSSPool, "sun2" , aDefaultCellStyleName, Color(204,204,255)));
-    Any aSun3( implMakeSolidCellStyle( pSSPool, "sun3" , aDefaultCellStyleName, Color(153,153,255)));
-
-    implCreateTableTemplate( xTableFamily, "sun" , aSun1, aSun3, aSun2 );
-
-    // ---- Earth ----------------------------------------------
-
-    Any aEarth1( implMakeSolidCellStyle( pSSPool, "earth1" , aDefaultCellStyleName, Color(255,255,204)));
-    Any aEarth2( implMakeSolidCellStyle( pSSPool, "earth2" , aDefaultCellStyleName, Color(255,204,153)));
-    Any aEarth3( implMakeSolidCellStyle( pSSPool, "earth3" , aDefaultCellStyleName, Color(204,102,51)));
-
-    implCreateTableTemplate( xTableFamily, "earth" , aEarth1, aEarth3, aEarth2 );
-
-    // ---- Green ----------------------------------------------
-
-    Any aGreen1( implMakeSolidCellStyle( pSSPool, "green1" , aDefaultCellStyleName, Color(255,255,204)));
-    Any aGreen2( implMakeSolidCellStyle( pSSPool, "green2" , aDefaultCellStyleName, Color(148,189,94)));
-    Any aGreen3( implMakeSolidCellStyle( pSSPool, "green3" , aDefaultCellStyleName, Color(92,133,38)));
-
-    implCreateTableTemplate( xTableFamily, "green" , aGreen1, aGreen3, aGreen2 );
-
-    // ---- Seaweed ----------------------------------------------
-
-    Any aSeetang1( implMakeSolidCellStyle( pSSPool, "seetang1" , aDefaultCellStyleName, Color(204,255,255)));
-    Any aSeetang2( implMakeSolidCellStyle( pSSPool, "seetang2" , aDefaultCellStyleName, Color(71,184,184)));
-    Any aSeetang3( implMakeSolidCellStyle( pSSPool, "seetang3" , aDefaultCellStyleName, Color(51,163,163)));
-
-    implCreateTableTemplate( xTableFamily, "seetang" , aSeetang1, aSeetang3, aSeetang2 );
-
-    // ---- LightBlue ----------------------------------------------
-
-    Any aLightBlue1( implMakeSolidCellStyle( pSSPool, "lightblue1" , aDefaultCellStyleName, Color(255,255,255)));
-    Any aLightBlue2( implMakeSolidCellStyle( pSSPool, "lightblue2" , aDefaultCellStyleName, Color(230,230,255)));
-    Any aLightBlue3( implMakeSolidCellStyle( pSSPool, "lightblue3" , aDefaultCellStyleName, Color(153,153,204)));
-
-    implCreateTableTemplate( xTableFamily, "lightblue" , aLightBlue1, aLightBlue3, aLightBlue2 );
-
-    // ---- Yellow ----------------------------------------------
-
-    Any aYellow1( implMakeSolidCellStyle( pSSPool, "yellow1" , aDefaultCellStyleName, Color(255,255,204)));
-    Any aYellow2( implMakeSolidCellStyle( pSSPool, "yellow2" , aDefaultCellStyleName, Color(255,255,153)));
-    Any aYellow3( implMakeSolidCellStyle( pSSPool, "yellow3" , aDefaultCellStyleName, Color(255,204,153)));
-
-    implCreateTableTemplate( xTableFamily, "yellow" , aYellow1, aYellow3, aYellow2 );
-
-    Reference<form::XReset> xReset(xTableFamily, UNO_QUERY);
+    Reference<form::XReset> xReset(pSSPool->getByName("table"), UNO_QUERY);
     if (xReset)
         xReset->reset();
 }

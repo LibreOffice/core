@@ -67,13 +67,6 @@
 #define HID_PSEUDOSHEET_NOTES               (HID_SD_START + 98)
 #define HID_PSEUDOSHEET_SUBTITLE            (HID_SD_START + 101)
 
-#define HID_SD_CELL_STYLE_DEFAULT                           (HID_SD_START + 194)
-#define HID_SD_CELL_STYLE_BANDED                            (HID_SD_START + 195)
-#define HID_SD_CELL_STYLE_HEADER                            (HID_SD_START + 196)
-#define HID_SD_CELL_STYLE_TOTAL                             (HID_SD_START + 197)
-#define HID_SD_CELL_STYLE_FIRST_COLUMN                      (HID_SD_START + 198)
-#define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 199)
-
 #define SID_PAGESETUP                       (SID_SD_START+2)
     // FREE
 #define SID_COPYOBJECTS                     (SID_SD_START+4)

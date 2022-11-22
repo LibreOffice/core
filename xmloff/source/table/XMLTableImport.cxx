@@ -285,12 +285,16 @@ void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemp
 {
     auto xPtr = std::make_shared<XMLTableTemplate>();
     xPtr->swap( xTableTemplate );
-    maTableTemplates[rsStyleName] = xPtr;
+    maTableTemplates.emplace_back(rsStyleName, xPtr);
 }
 
 void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOverwrite)
 {
-    XMLTableTemplateMap::iterator it = maTableTemplates.find(rsStyleName);
+    // FIXME: All templates will be inserted eventually, but
+    // instead of simply iterating them, like in finishStyles(),
+    // we search here by name again and again.
+    auto it = std::find_if(maTableTemplates.begin(), maTableTemplates.end(),
+        [&rsStyleName](const auto& item) { return rsStyleName == item.first; });
     if (it == maTableTemplates.end())
         return;
 

@@ -973,13 +973,6 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_PSEUDOSHEET_BACKGROUND:    pNameId = STR_PSEUDOSHEET_BACKGROUND;   break;
                 case HID_PSEUDOSHEET_NOTES:         pNameId = STR_PSEUDOSHEET_NOTES;        break;
 
-                case HID_SD_CELL_STYLE_DEFAULT:         pNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_SD_CELL_STYLE_BANDED:          pNameId = STR_POOLSHEET_BANDED_CELL; break;
-                case HID_SD_CELL_STYLE_HEADER:          pNameId = STR_POOLSHEET_HEADER; break;
-                case HID_SD_CELL_STYLE_TOTAL:           pNameId = STR_POOLSHEET_TOTAL; break;
-                case HID_SD_CELL_STYLE_FIRST_COLUMN:    pNameId = STR_POOLSHEET_FIRST_COLUMN; break;
-                case HID_SD_CELL_STYLE_LAST_COLUMN:     pNameId = STR_POOLSHEET_LAST_COLUMN; break;
-
                 default:
                     // 0 or wrong (old) HelpId
                     bHelpKnown = false;
