@@ -402,6 +402,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                 eElement = vcl::PDFWriter::Division;
             else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(*pSdrObj).HasText() )
                 eElement = vcl::PDFWriter::Figure;
+            else
+                eElement = vcl::PDFWriter::Division;
         }
 
         if(vcl::PDFWriter::NonStructElement != eElement)
