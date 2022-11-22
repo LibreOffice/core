@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -22,20 +21,14 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers framework/source/loadenv/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
 public:
-    void setUp() override;
+    Test()
+        : UnoApiTest("/framework/qa/cppunit/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
 
 class DocumentOpener
 {
@@ -61,8 +54,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoubleLoading)
     // path.
     for (int i = 0; i < 2; ++i)
     {
-        auto pURL = std::make_unique<OUString>(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                               + "double-loading.odt");
+        auto pURL = std::make_unique<OUString>(createFileURL(u"double-loading.odt"));
         Application::PostUserEvent(LINK(nullptr, DocumentOpener, OpenDocument), pURL.release());
     }
     Scheduler::ProcessEventsToIdle();
