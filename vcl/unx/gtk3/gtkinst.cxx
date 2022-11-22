@@ -22768,40 +22768,10 @@ private:
     gulong m_nMappedSignalId;
 #endif
 
-    static void signalExpanded(GtkExpander* pExpander, GParamSpec*, gpointer widget)
+    static void signalExpanded(GtkExpander* /*pExpander*/, GParamSpec*, gpointer widget)
     {
         GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
         SolarMutexGuard aGuard;
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        if (gtk_expander_get_resize_toplevel(pExpander))
-        {
-            GtkWidget *pToplevel = widget_get_toplevel(GTK_WIDGET(pExpander));
-
-            // https://gitlab.gnome.org/GNOME/gtk/issues/70
-            // I imagine at some point a release with a fix will be available in which
-            // case this can be avoided depending on version number
-            if (pToplevel && GTK_IS_WINDOW(pToplevel) && gtk_widget_get_realized(pToplevel))
-            {
-                int nToplevelWidth, nToplevelHeight;
-                int nChildHeight;
-
-                GtkWidget* child = gtk_bin_get_child(GTK_BIN(pExpander));
-                gtk_widget_get_preferred_height(child, &nChildHeight, nullptr);
-                gtk_window_get_size(GTK_WINDOW(pToplevel), &nToplevelWidth, &nToplevelHeight);
-
-                if (pThis->get_expanded())
-                    nToplevelHeight += nChildHeight;
-                else
-                    nToplevelHeight -= nChildHeight;
-
-                gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
-            }
-        }
-#else
-        (void)pExpander;
-#endif
-
         pThis->signal_expanded();
     }
 
@@ -23322,6 +23292,36 @@ void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
 #endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+void fix_expander(GtkExpander* pExpander, GParamSpec*, gpointer)
+{
+    if (gtk_expander_get_resize_toplevel(pExpander))
+    {
+        GtkWidget *pToplevel = widget_get_toplevel(GTK_WIDGET(pExpander));
+
+        // https://gitlab.gnome.org/GNOME/gtk/issues/70
+        // I imagine at some point a release with a fix will be available in which
+        // case this can be avoided depending on version number
+        if (pToplevel && GTK_IS_WINDOW(pToplevel) && gtk_widget_get_realized(pToplevel))
+        {
+            int nToplevelWidth, nToplevelHeight;
+            int nChildHeight;
+
+            GtkWidget* child = gtk_bin_get_child(GTK_BIN(pExpander));
+            gtk_widget_get_preferred_height(child, &nChildHeight, nullptr);
+            gtk_window_get_size(GTK_WINDOW(pToplevel), &nToplevelWidth, &nToplevelHeight);
+
+            if (gtk_expander_get_expanded(pExpander))
+                nToplevelHeight += nChildHeight;
+            else
+                nToplevelHeight -= nChildHeight;
+
+            gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
+        }
+    }
+}
+#endif
+
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -23402,6 +23402,10 @@ private:
                 if (const gchar* label = gtk_tool_button_get_label(pToolButton))
                     gtk_widget_set_tooltip_text(pWidget, label);
             }
+        }
+        else if (GTK_IS_EXPANDER(pWidget))
+        {
+            g_signal_connect(pWidget, "notify::expanded", G_CALLBACK(fix_expander), this);
         }
 #else
         else if (GTK_IS_BUTTON(pWidget))
