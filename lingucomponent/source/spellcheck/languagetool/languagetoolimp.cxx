@@ -62,7 +62,7 @@ namespace
 Sequence<PropertyValue> lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
 {
     Color aColor;
-    if (rErrorId == "TYPOS")
+    if (rErrorId == "TYPOS" || rErrorId == "orth")
     {
         aColor = COL_LIGHTRED;
     }
@@ -261,11 +261,76 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
         return xRes;
     }
 
-    parseProofreadingJSONResponse(xRes, response_body);
+    if (rLanguageOpts.getRestProtocol() == sDuden)
+    {
+        parseDudenResponse(xRes, response_body);
+    }
+    else
+    {
+        parseProofreadingJSONResponse(xRes, response_body);
+    }
     // cache the result
     mCachedResults.insert(
         std::pair<OUString, Sequence<SingleProofreadingError>>(aText, xRes.aErrors));
     return xRes;
+}
+
+void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
+                                                    std::string_view aJSONBody)
+{
+    size_t nSize;
+    int nProposalSize;
+    boost::property_tree::ptree aRoot;
+    std::stringstream aStream(aJSONBody.data());
+    boost::property_tree::read_json(aStream, aRoot);
+
+    const boost::optional<boost::property_tree::ptree&> aPositions
+        = aRoot.get_child_optional("check-positions");
+    if (!aPositions || !(nSize = aPositions.get().size()))
+    {
+        return;
+    }
+
+    Sequence<SingleProofreadingError> aChecks(nSize);
+    auto pChecks = aChecks.getArray();
+    size_t nIndex1 = 0, nIndex2 = 0;
+    auto itPos = aPositions.get().begin();
+    while (itPos != aPositions.get().end())
+    {
+        const boost::property_tree::ptree& rTree = itPos->second;
+        const std::string sType = rTree.get<std::string>("type", "");
+        const int nOffset = rTree.get<int>("offset", 0);
+        const int nLength = rTree.get<int>("length", 0);
+
+        pChecks[nIndex1].nErrorStart = nOffset;
+        pChecks[nIndex1].nErrorLength = nLength;
+        pChecks[nIndex1].nErrorType = PROOFREADING_ERROR;
+        //pChecks[nIndex1].aShortComment = ??
+        //pChecks[nIndex1].aFullComment = ??
+        pChecks[nIndex1].aProperties = lcl_GetLineColorPropertyFromErrorId(sType);
+
+        const boost::optional<const boost::property_tree::ptree&> aProposals
+            = rTree.get_child_optional("proposals");
+        if (aProposals && (nProposalSize = aProposals.get().size()))
+        {
+            pChecks[nIndex1].aSuggestions.realloc(std::min(nProposalSize, MAX_SUGGESTIONS_SIZE));
+
+            nIndex2 = 0;
+            auto itProp = aProposals.get().begin();
+            auto pSuggestions = pChecks[nIndex1].aSuggestions.getArray();
+            while (itProp != aProposals.get().end() && nIndex2 < MAX_SUGGESTIONS_SIZE)
+            {
+                pSuggestions[nIndex2++]
+                    = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
+                itProp++;
+            }
+        }
+
+        nIndex1++;
+        itPos++;
+    }
+
+    rResult.aErrors = aChecks;
 }
 
 /*
