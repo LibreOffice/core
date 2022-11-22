@@ -368,23 +368,28 @@ template <class ListenerT>
 void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std::mutex>& rGuard,
                                                             const css::lang::EventObject& rEvt)
 {
-    OInterfaceIteratorHelper4<ListenerT> aIt(rGuard, *this);
-    maData
-        = DEFAULT(); // cheaper than calling maData->clear() because it doesn't allocate a new vector
-    rGuard.unlock();
-    // unlock followed by iterating is only safe because we are not going to call remove() on the iterator
-    while (aIt.hasMoreElements())
     {
-        try
+        OInterfaceIteratorHelper4<ListenerT> aIt(rGuard, *this);
+        maData
+            = DEFAULT(); // cheaper than calling maData->clear() because it doesn't allocate a new vector
+        rGuard.unlock();
+        // unlock followed by iterating is only safe because we are not going to call remove() on the iterator
+        while (aIt.hasMoreElements())
         {
-            aIt.next()->disposing(rEvt);
-        }
-        catch (css::uno::RuntimeException&)
-        {
-            // be robust, if e.g. a remote bridge has disposed already.
-            // there is no way to delegate the error to the caller :o(.
+            try
+            {
+                aIt.next()->disposing(rEvt);
+            }
+            catch (css::uno::RuntimeException&)
+            {
+                // be robust, if e.g. a remote bridge has disposed already.
+                // there is no way to delegate the error to the caller :o(.
+            }
         }
     }
+    // tdf#152077 need to destruct the OInterfaceIteratorHelper4 before we take the lock again
+    // because there is a vague chance that destructing it will trigger a call back into something
+    // that wants to take the lock.
     rGuard.lock();
 }
 
