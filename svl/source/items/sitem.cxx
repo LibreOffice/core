@@ -44,7 +44,7 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy),
     maSet(rCopy.maSet.CloneAsValue(true, pPool))
 {
-    assert(!dynamic_cast<const SfxAllItemSet*>(&rCopy) && "cannot handle SfxAllItemSet here");
+    assert(!dynamic_cast<const SfxAllItemSet*>(&rCopy.maSet) && "cannot handle SfxAllItemSet here");
 }
 
 
