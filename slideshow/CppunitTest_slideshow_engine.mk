@@ -23,9 +23,13 @@ $(eval $(call gb_CppunitTest_use_libraries,slideshow_engine, \
     comphelper \
     cppu \
     slideshow \
+    cppuhelper \
     sal \
+    subsequenttest \
     test \
     unotest \
+    utl \
+    tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,slideshow_engine))

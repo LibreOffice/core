@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -22,31 +21,14 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers slideshow/source/engine/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("slideshow/qa/engine/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 /// Get the first command node in the animation tree of the page, assuming that it's the first child
 /// (recursively).
@@ -75,9 +57,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
 {
     // Given a document with a looping video, the looping is defined as part of its auto-play
     // animation (and not on the media shape):
-    OUString aURL = m_directories.getURLFromSrc(u"slideshow/qa/engine/data/video-loop.pptx");
-    getComponent().set(loadFromDesktop(aURL));
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"video-loop.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<animations::XCommand> xCommandNode = GetFirstCommandNodeOfPage(xPage);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
