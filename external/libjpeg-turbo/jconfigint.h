@@ -1,7 +1,7 @@
 #include <sal/types.h>
 
 /* libjpeg-turbo build number */
-#define BUILD "20211020"
+#define BUILD  "20221122"
 
 /* Compiler's inline keyword */
 #undef inline
@@ -16,10 +16,10 @@
 #endif
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "libjpeg-turbo"
+#define PACKAGE_NAME  "libjpeg-turbo"
 
 /* Version number of package */
-#define VERSION "2.1.1"
+#define VERSION  "2.1.4"
 
 /* The size of `size_t', as computed by sizeof. */
 /* #undef SIZEOF_SIZE_T */
@@ -42,7 +42,7 @@
 
 #if defined(__has_attribute)
 #if __has_attribute(fallthrough)
-#define FALLTHROUGH __attribute__((fallthrough));
+#define FALLTHROUGH  __attribute__((fallthrough));
 #else
 #define FALLTHROUGH
 #endif

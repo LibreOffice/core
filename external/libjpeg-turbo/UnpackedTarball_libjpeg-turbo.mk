@@ -19,5 +19,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libjpeg-turbo,0))
 
 $(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfigint.h,external/libjpeg-turbo/jconfigint.h))
 $(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfig.h,external/libjpeg-turbo/jconfig.h))
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jversion.h,external/libjpeg-turbo/jversion.h))
 
 # vim: set noet sw=4 ts=4:

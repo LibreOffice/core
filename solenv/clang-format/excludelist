@@ -3868,6 +3868,9 @@ external/clucene/configs/_clucene-config-generic.h
 external/clucene/configs/clucene-config-GCC-atomic.h
 external/clucene/configs/clucene-config-MSVC.h
 external/clucene/configs/clucene-config-generic.h
+external/libjpeg-turbo/jconfig.h
+external/libjpeg-turbo/jconfigint.h
+external/libjpeg-turbo/jversion.h
 external/mariadb-connector-c/configs/linux_my_config.h
 external/mariadb-connector-c/configs/mac_my_config.h
 external/mariadb-connector-c/configs/mariadb_version.h
