@@ -39,6 +39,9 @@ public:
     const OUString& getBaseURL() const;
     void setBaseURL(const OUString& rVal);
 
+    const OUString& getRestProtocol() const;
+    void setRestProtocol(const OUString& rVal);
+
     const OUString& getUsername() const;
     void setUsername(const OUString& rVal);
 
