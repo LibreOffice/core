@@ -43,6 +43,12 @@ void UnoApiTest::setUp()
 
 void UnoApiTest::tearDown()
 {
+    if (mxComponent2.is())
+    {
+        mxComponent2->dispose();
+        mxComponent2.clear();
+    }
+
     if (mxComponent.is())
     {
         mxComponent->dispose();

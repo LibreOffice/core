@@ -2903,6 +2903,40 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149378)
     CPPUNIT_ASSERT_EQUAL(OUString("{=ABS({-1;-2})}"), pDoc->GetFormula(8, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152014)
+{
+    createScDoc();
+
+    insertStringToCell("A1", u"=MATCH(1,A2,0)");
+    insertStringToCell("A2", u"1");
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a second document
+    mxComponent2 = loadFromDesktop("private:factory/scalc");
+
+    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
+
+    dispatchCommand(mxComponent2, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScModelObj* pModelObj2 = dynamic_cast<ScModelObj*>(mxComponent2.get());
+    CPPUNIT_ASSERT(pModelObj2);
+    ScDocument* pDoc2 = pModelObj2->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: #N/A
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), pDoc2->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
     createScDoc();
