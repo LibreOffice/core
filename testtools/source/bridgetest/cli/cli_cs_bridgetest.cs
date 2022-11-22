@@ -366,7 +366,7 @@ bool performTest(XBridgeTest xLBT)
     assign( (TestElement)aData,
             true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
             0x123456789abcdef0, 0xfedcba9876543210,
-            17.0815f, 3.1415926359, TestEnum.LOLA,
+            17.03125f, 3.1415926359, TestEnum.LOLA,
             Constants.STRING_TEST_CONSTANT, xI,
             aAny);
 
@@ -719,15 +719,15 @@ static bool performSequenceTest(XBridgeTest xBT)
     TestElement[] arStruct = {new TestElement(), new TestElement(),
                                new TestElement()};
     assign( arStruct[0], true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
- 			0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+ 			0x123456789abcdef0, 0xfedcba9876543210, 17.03125f, 3.1415926359,
             TestEnum.LOLA, Constants.STRING_TEST_CONSTANT, arObject[0],
             new Any( typeof(Object),  arObject[0]) );
     assign( arStruct[1], true, 'A', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-			0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+			0x123456789abcdef0, 0xfedcba9876543210, 17.03125f, 3.1415926359,
             TestEnum.TWO, Constants.STRING_TEST_CONSTANT, arObject[1],
             new Any( typeof(Object), arObject[1]) );
     assign( arStruct[2], true, 'B', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-			0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+			0x123456789abcdef0, 0xfedcba9876543210, 17.03125f, 3.1415926359,
             TestEnum.CHECK, Constants.STRING_TEST_CONSTANT, arObject[2],
             new Any( typeof(Object), arObject[2] ) );
 

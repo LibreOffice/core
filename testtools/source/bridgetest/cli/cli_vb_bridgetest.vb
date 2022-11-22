@@ -243,17 +243,17 @@ Public Class BridgeTest
                                New TestElement()}
         assign( arStruct(0), True, "@"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _
             &H12345678, Convert.ToUInt32(&H123456), &H123456789abcdef0, _
-            Convert.ToUInt64(123456788), 17.0815F, 3.1415926359, _
+            Convert.ToUInt64(123456788), 17.03125F, 3.1415926359, _
             TestEnum.LOLA, CONSTANTS.STRING_TEST_CONSTANT, 18, &H5678, arObject(0), _
             New Any(GetType(System.Object), arObject(0)))
         assign( arStruct(1), True, "A"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _
             &H12345678, Convert.ToUInt32(&H123456), &H123456789abcdef0, _
-            Convert.ToUInt64(12345678), 17.0815F, 3.1415926359, _
+            Convert.ToUInt64(12345678), 17.03125F, 3.1415926359, _
             TestEnum.TWO, CONSTANTS.STRING_TEST_CONSTANT, 18, &H5678, arObject(1), _
             New Any(GetType(System.Object), arObject(1)) )
         assign( arStruct(2), True, "B"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _ 
             &H12345678, Convert.ToUInt32(654321), &H123456789abcdef0, _
-            Convert.ToUInt64(87654321), 17.0815F, 3.1415926359, _ 
+            Convert.ToUInt64(87654321), 17.03125F, 3.1415926359, _ 
             TestEnum.CHECK, Constants.STRING_TEST_CONSTANT, 18, &H5678, arObject(2), _
             New Any(GetType(System.Object), arObject(2)))
 
@@ -561,7 +561,7 @@ Public Class BridgeTest
 			True, "@"C, 17, &H1234, Convert.ToUInt16(&HdcS), &H12345678, _
             Convert.ToUInt32(4294967294), _
 			&H123456789abcdef0, Convert.ToUInt64(14294967294), _
-			17.0815f, 3.1415926359, TestEnum.LOLA, _
+			17.03125f, 3.1415926359, TestEnum.LOLA, _
 			CONSTANTS.STRING_TEST_CONSTANT, xI, _
 			aAny)
 

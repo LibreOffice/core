@@ -750,7 +750,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 SAL_CONST_INT64(0x123456789abcdef0),
                 SAL_CONST_UINT64(0xfedcba9876543210),
-                (float)17.0815, M_PI, TestEnum_LOLA, OUString("dumdidum"), xI,
+                (float)17.03125, M_PI, TestEnum_LOLA, OUString("dumdidum"), xI,
                 Any( &xI, cppu::UnoType<XInterface>::get()) );
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
