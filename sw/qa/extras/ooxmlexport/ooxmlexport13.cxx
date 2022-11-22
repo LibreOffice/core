@@ -437,7 +437,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 
     xmlDocUniquePtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[2]/body/txt[1]/Text", 0);
+    assertXPath(pDump, "/root/page[2]/body/txt[1]/SwParaPortion", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")

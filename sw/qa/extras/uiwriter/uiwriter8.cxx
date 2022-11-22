@@ -393,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/SwParaPortion", 0);
 
     // insert the 2-row table into the second paragraph of cell "A2" as a nested table
     // For this it's enough to positionate the text cursor not in the first paragraph

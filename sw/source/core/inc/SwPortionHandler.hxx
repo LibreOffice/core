@@ -56,9 +56,7 @@ public:
      */
     virtual void Text(
         TextFrameIndex nLength, ///< length of this portion in the view string
-        PortionType nType,       /// type of this portion
-        sal_Int32 nHeight = 0,   /// height of this portion
-        sal_Int32 nWidth = 0     /// width of this portion
+        PortionType nType       /// type of this portion
         ) = 0;
 
     /** special portion. This method is called for every non-text
@@ -69,8 +67,7 @@ public:
     virtual void Special(
         TextFrameIndex nLength, ///< length of this portion in the view string
         const OUString& rText, /// text which is painted on-screen
-        PortionType nType,         /// type of this portion
-        const SwFont* pFont = nullptr /// font of this portion
+        PortionType nType         /// type of this portion
         ) = 0;
 
     /** line break. This method is called whenever a line break in the

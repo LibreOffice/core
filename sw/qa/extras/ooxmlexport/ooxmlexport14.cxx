@@ -280,7 +280,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf130120)
 {
     loadAndSave("tdf130120.docx");
-    //Text for exporting the allowincell attribute:
+    // Text for exporting the allowincell attribute:
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
         "mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
@@ -551,7 +551,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Ensure that width of first tab is close to zero (previous value was ~1000 twips)
-    int nWidth = parseDump("/root/page/body/txt[1]/Text[@nType='PortionType::TabLeft']", "nWidth").toInt32();
+    int nWidth = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']", "width").toInt32();
     CPPUNIT_ASSERT_LESS(150, nWidth);
 }
 
@@ -731,7 +731,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
     // First paragraph does not have tab before
     // (same applies to all paragraphs in doc, but lets assume they are
     // behave same way)
-    OUString sNodeType = parseDump("/root/page[1]/body/txt[1]/Text[1]", "nType");
+    OUString sNodeType = parseDump("(/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*)[1]", "type");
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
 
     // tdf148380: creation-date field in header.xml was unsupported on export

@@ -141,7 +141,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTabOverMarginSection)
     createSwDoc("tabovermargin-section.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth
-        = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabRight']", "nWidth").toInt32();
+        = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']",
+                   "width")
+              .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected less than: 5000
     // - Actual  : 9372

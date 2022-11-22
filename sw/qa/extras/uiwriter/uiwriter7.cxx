@@ -2541,14 +2541,13 @@ public:
 
     void clear() { mPortionItems.clear(); }
 
-    virtual void Text(TextFrameIndex nLength, PortionType nType, sal_Int32 /*nHeight*/,
-                      sal_Int32 /*nWidth*/) override
+    virtual void Text(TextFrameIndex nLength, PortionType nType) override
     {
         mPortionItems.emplace_back("text", sal_Int32(nLength), nType);
     }
 
-    virtual void Special(TextFrameIndex nLength, const OUString& /*rText*/, PortionType nType,
-                         const SwFont* /*pFont*/) override
+    virtual void Special(TextFrameIndex nLength, const OUString& /*rText*/,
+                         PortionType nType) override
     {
         mPortionItems.emplace_back("special", sal_Int32(nLength), nType);
     }

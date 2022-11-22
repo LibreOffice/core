@@ -1873,11 +1873,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107362)
     createSwDoc("tdf107362.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nHeight
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nHeight").toInt32();
+        = getXPath(pXmlDoc, "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text'])[1]",
+                   "height")
+              .toInt32();
     sal_Int32 nWidth1
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nWidth").toInt32();
+        = getXPath(pXmlDoc, "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text'])[1]",
+                   "width")
+              .toInt32();
     sal_Int32 nWidth2
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nWidth").toInt32();
+        = getXPath(pXmlDoc, "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text'])[2]",
+                   "width")
+              .toInt32();
     sal_Int32 nLineWidth = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout", "width").toInt32();
     sal_Int32 nKernWidth = nLineWidth - nWidth1 - nWidth2;
     // Test only if fonts are available
@@ -1989,7 +1995,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf106736)
     createSwDoc("tdf106736-grid.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::TabLeft'])[1]", "nWidth").toInt32();
+        = getXPath(pXmlDoc,
+                   "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft'])[1]",
+                   "width")
+              .toInt32();
     // In tdf106736, width of tab overflow so that it got
     // width value around 9200, expected value is around 103
     CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~103", nWidth < 150);
@@ -2005,10 +2014,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
     calcLayout();
     // Check that trailing spaces spans have no width if option is enabled
 
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page/body/txt[2]/Text[4]", "nWidth"));
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page/body/txt[2]/Text[5]", "nWidth"));
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page/body/txt[3]/Text[4]", "nWidth"));
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page/body/txt[3]/Text[5]", "nWidth"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("0"),
+        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "width"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("0"),
+        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "width"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("0"),
+        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "width"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("0"),
+        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "width"));
 
     // The option is false in settings.xml
     createSwDoc("MsWordCompTrailingBlanksFalse.odt");
@@ -2017,10 +2034,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
                                     DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
     calcLayout();
     // Check that trailing spaces spans have width if option is disabled
-    CPPUNIT_ASSERT(!parseDump("/root/page/body/txt[2]/Text[4]", "nWidth").isEmpty());
-    CPPUNIT_ASSERT(!parseDump("/root/page/body/txt[2]/Text[5]", "nWidth").isEmpty());
-    CPPUNIT_ASSERT(!parseDump("/root/page/body/txt[3]/Text[4]", "nWidth").isEmpty());
-    CPPUNIT_ASSERT(!parseDump("/root/page/body/txt[3]/Text[5]", "nWidth").isEmpty());
+    CPPUNIT_ASSERT(
+        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "width") != "0");
+    CPPUNIT_ASSERT(
+        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "width") != "0");
+    CPPUNIT_ASSERT(
+        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "width") != "0");
+    CPPUNIT_ASSERT(
+        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "width") != "0");
 
     // MsWordCompTrailingBlanks option should be false by default in new documents
     createSwDoc();

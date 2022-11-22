@@ -157,89 +157,6 @@ const char* sw::PortionTypeToString(PortionType nType)
 }
 
 namespace {
-
-class XmlPortionDumper:public SwPortionHandler
-{
-  private:
-      xmlTextWriterPtr m_Writer;
-
-  public:
-      explicit XmlPortionDumper(xmlTextWriterPtr some_writer)
-          : m_Writer(some_writer)
-      {}
-
-    /**
-        @param nLength
-                length of this portion in the model string
-        @param rText
-                text which is painted on-screen
-      */
-    virtual void Text( TextFrameIndex nLength,
-                       PortionType nType,
-                       sal_Int32 nHeight,
-                       sal_Int32 nWidth) override
-    {
-        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Text"));
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
-                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
-                                                sw::PortionTypeToString(nType));
-        if (nHeight > 0)
-            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nHeight"), "%i",
-                                                    static_cast<int>(nHeight));
-        if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
-                                                    static_cast<int>(nWidth));
-        (void)xmlTextWriterEndElement(m_Writer);
-    }
-
-    /**
-        @param nLength
-                length of this portion in the model string
-        @param rText
-                text which is painted on-screen
-        @param nType
-                type of this portion
-      */
-    virtual void Special( TextFrameIndex /*nLength*/,
-                          const OUString & /*rText*/,
-                          PortionType nType,
-                          const SwFont* pFont ) override
-    {
-        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Special"));
-        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
-                                                sw::PortionTypeToString(nType));
-
-        if (pFont)
-            pFont->dumpAsXml(m_Writer);
-
-        (void)xmlTextWriterEndElement(m_Writer);
-    }
-
-    virtual void LineBreak() override
-    {
-        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("LineBreak"));
-        (void)xmlTextWriterEndElement(m_Writer);
-    }
-
-    /**
-      * @param nLength
-      *         number of 'model string' characters to be skipped
-      */
-    virtual void Skip( TextFrameIndex /*nLength*/ ) override
-    {
-        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Skip"));
-        (void)xmlTextWriterEndElement(m_Writer);
-    }
-
-    virtual void Finish(  ) override
-    {
-        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Finish"));
-        (void)xmlTextWriterEndElement(m_Writer);
-    }
-
-};
-
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
@@ -440,8 +357,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                                                           RTL_TEXTENCODING_UTF8 );
             (void)xmlTextWriterWriteString( writer,
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
-            XmlPortionDumper pdumper( writer );
-            pTextFrame->VisitPortions( pdumper );
             if (const SwParaPortion* pPara = pTextFrame->GetPara())
             {
                 (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));

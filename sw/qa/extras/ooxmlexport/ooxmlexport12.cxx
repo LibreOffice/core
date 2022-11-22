@@ -687,7 +687,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
     // page 3 header: 1 table, 1 paragraph, no text
     assertXPath(pXmlDoc, "/root/page[3]/header/txt", 1);
     assertXPath(pXmlDoc, "/root/page[3]/header/tab", 1);
-    assertXPath(pXmlDoc, "/root/page[3]/header/tab/row/cell/txt/Text", 0);
+    assertXPath(pXmlDoc,
+                "/root/page[3]/header/tab/row/cell/txt/SwParaPortion/SwLineLayout/child::*", 0);
     assertXPath(pXmlDoc, "/root/page[3]/header//anchored", 0);
     // tdf#149313: ensure 3rd page does not have extra empty paragraph at top
     assertXPathContent(pXmlDoc, "/root/page[3]/body//txt", "AUFGABENSTELLUNG");

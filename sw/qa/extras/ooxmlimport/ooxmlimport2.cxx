@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
     CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"),
-                         parseDump("//Special[@nType='PortionType::Number']/SwFont", "color"));
+                         parseDump("//SwFieldPortion[@type='PortionType::Number']", "font-color"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test120551)

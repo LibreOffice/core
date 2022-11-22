@@ -1049,7 +1049,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
     assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "a.");
     assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "b.");
     assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "c.");
-    assertXPath(pXmlDoc, "/root/page/body/txt[4]/Special", 0); //last paragraph style disables numbering
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", 0); //last paragraph style disables numbering
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")

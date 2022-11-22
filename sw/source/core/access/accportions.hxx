@@ -91,8 +91,8 @@ public:
     virtual ~SwAccessiblePortionData() override;
 
     // SwPortionHandler methods
-    virtual void Text(TextFrameIndex nLength, PortionType nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) override;
-    virtual void Special(TextFrameIndex nLength, const OUString& rText, PortionType nType, const SwFont* pFont = nullptr) override;
+    virtual void Text(TextFrameIndex nLength, PortionType nType) override;
+    virtual void Special(TextFrameIndex nLength, const OUString& rText, PortionType nType) override;
     virtual void LineBreak() override;
     virtual void Skip(TextFrameIndex nLength) override;
     virtual void Finish() override;

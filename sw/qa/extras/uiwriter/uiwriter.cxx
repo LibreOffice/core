@@ -1528,7 +1528,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90003)
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
-    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Fly']", 0);
+    assertXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::Fly']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)

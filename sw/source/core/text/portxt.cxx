@@ -673,7 +673,7 @@ tools::Long SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeI
 
 void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Text( GetLen(), GetWhichPor(), Height(), Width() );
+    rPH.Text( GetLen(), GetWhichPor() );
 }
 
 SwTextInputFieldPortion::SwTextInputFieldPortion()

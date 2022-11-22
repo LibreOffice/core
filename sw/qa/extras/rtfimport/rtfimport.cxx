@@ -393,7 +393,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
     createSwDoc("tdf112211-2.rtf");
     // Spacing between the bullet and the actual text was too large.
     // This is now around 269, large old value was 629.
-    int nWidth = parseDump("/root/page/body/txt[2]/Text[@nType='PortionType::TabLeft']", "nWidth")
+    int nWidth = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
+                           "child::*[@type='PortionType::TabLeft']",
+                           "width")
                      .toInt32();
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }

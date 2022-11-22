@@ -84,7 +84,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 }
 
 void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
-        PortionType nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
+        PortionType nType)
 {
     OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
                 "portion exceeds model string!" );
@@ -109,8 +109,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
 }
 
 void SwAccessiblePortionData::Special(
-    TextFrameIndex const nLength, const OUString& rText, PortionType nType,
-    const SwFont* /*pFont*/)
+    TextFrameIndex const nLength, const OUString& rText, PortionType nType)
 {
     OSL_ENSURE(m_nViewPosition >= TextFrameIndex(0), "illegal position");
     OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
