@@ -121,6 +121,12 @@ service ContentControl
         @since LibreOffice 7.5
     */
     [optional, property, readonly] string DateString;
+
+    /** A unique numeric id, used by macros to identify a specific control.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property] long Id;
 };
 
 

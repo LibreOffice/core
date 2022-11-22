@@ -176,6 +176,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The tag: just remembered.
     OUString m_aTag;
 
+    /// The id: just remembered.
+    sal_Int32 m_nId = 0;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -341,6 +344,10 @@ public:
     void SetTag(const OUString& rTag) { m_aTag = rTag; }
 
     const OUString& GetTag() const { return m_aTag; }
+
+    void SetId(sal_Int32 nId) { m_nId = nId; }
+
+    sal_Int32 GetId() const { return m_nId; }
 
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 

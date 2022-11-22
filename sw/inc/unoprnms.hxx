@@ -893,6 +893,7 @@
 #define UNO_NAME_COLOR "Color"
 #define UNO_NAME_ALIAS "Alias"
 #define UNO_NAME_TAG "Tag"
+#define UNO_NAME_ID "Id"
 #define UNO_NAME_DATE_STRING "DateString"
 #endif
 

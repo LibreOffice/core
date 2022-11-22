@@ -520,6 +520,7 @@ void SdtHelper::clear()
     m_aColor.clear();
     m_aAlias.clear();
     m_aTag.clear();
+    m_nId = 0;
 }
 
 void SdtHelper::SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
@@ -540,6 +541,10 @@ const OUString& SdtHelper::GetAlias() const { return m_aAlias; }
 void SdtHelper::SetTag(const OUString& rTag) { m_aTag = rTag; }
 
 const OUString& SdtHelper::GetTag() const { return m_aTag; }
+
+void SdtHelper::SetId(sal_Int32 nId) { m_nId = nId; }
+
+sal_Int32 SdtHelper::GetId() const { return m_nId; }
 
 } // namespace writerfilter::dmapper
 

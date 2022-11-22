@@ -2373,6 +2373,12 @@ void DocxAttributeOutput::WriteContentControlStart()
                                        m_pContentControl->GetTag());
     }
 
+    if (m_pContentControl->GetId())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
+                                       OString::number(m_pContentControl->GetId()));
+    }
+
     if (m_pContentControl->GetShowingPlaceHolder())
     {
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);

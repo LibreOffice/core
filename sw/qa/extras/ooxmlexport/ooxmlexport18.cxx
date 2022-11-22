@@ -155,6 +155,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
     assertXPathAttrs(pXmlDoc, "//wps:bodyPr", { { "tIns", "179640" }, { "bIns", "360000" } });
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
+{
+    // Given a document with 2 inline <w:sdt>, with each a <w:id>:
+    createSwDoc("sdt-duplicated-id.docx");
+
+    // When exporting that back to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure we write 2 <w:sdt> and no duplicates:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 4
+    // i.e. grab-bags introduced 2 unwanted duplicates.
+    assertXPath(pXmlDoc, "//w:sdt", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

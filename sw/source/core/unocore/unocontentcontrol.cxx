@@ -178,6 +178,7 @@ public:
     OUString m_aColor;
     OUString m_aAlias;
     OUString m_aTag;
+    sal_Int32 m_nId;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          uno::Reference<text::XText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
@@ -195,6 +196,7 @@ public:
         , m_bPlainText(false)
         , m_bComboBox(false)
         , m_bDropDown(false)
+        , m_nId(0)
     {
         if (m_pContentControl)
         {
@@ -490,6 +492,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetColor(m_pImpl->m_aColor);
     pContentControl->SetAlias(m_pImpl->m_aAlias);
     pContentControl->SetTag(m_pImpl->m_aTag);
+    pContentControl->SetId(m_pImpl->m_nId);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -965,6 +968,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_ID)
+    {
+        sal_Int32 nValue = 0;
+        if (rValue >>= nValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_nId = nValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetId(nValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -1214,6 +1232,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         if (!m_pImpl->m_bIsDescriptor)
         {
             aRet <<= m_pImpl->m_pContentControl->GetDateString();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_ID)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_nId;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetId();
         }
     }
     else

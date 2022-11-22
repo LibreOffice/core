@@ -435,6 +435,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("alias"),
                                       BAD_CAST(m_aAlias.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("tag"), BAD_CAST(m_aTag.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"),
+                                      BAD_CAST(OString::number(m_nId).getStr()));
 
     if (!m_aListItems.empty())
     {
