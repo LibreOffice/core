@@ -1163,8 +1163,6 @@ emscripten)
     test_system_freetype=no
     enable_compiler_plugins=no
     enable_customtarget_components=yes
-    enable_qt5=yes
-    enable_scripting=no
     enable_split_debug=yes
     enable_wasm_strip=yes
     with_system_zlib=no
