@@ -86,6 +86,7 @@ private:
     void removeListener();
     void updateControls();
     void selectStyle(std::u16string_view rStyle);
+    void endTextEditForStyle(const css::uno::Reference<css::uno::XInterface>& rStyle);
     void setDocumentModified();
 
     void FillDesignPreviewControl();

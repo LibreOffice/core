@@ -307,6 +307,7 @@ void TableDesignWidget::ResetStyle()
                 xTableStyle->replaceByIndex(i, mxCellFamily->getByName(xCellStyle->getParentStyle()));
         }
 
+        endTextEditForStyle(xTableStyle);
         Reference<util::XModifiable>(xTableStyle, UNO_QUERY_THROW)->setModified(false);
 
         updateControls();
@@ -331,6 +332,8 @@ void TableDesignWidget::DeleteStyle()
 
             if (xBox->run() != RET_YES)
                 return;
+
+            endTextEditForStyle(xTableStyle);
         }
 
         Reference<XNameContainer>(mxTableFamily, UNO_QUERY_THROW)->removeByName(xTableStyle->getName());
@@ -377,6 +380,8 @@ void TableDesignWidget::EditStyle(std::string_view rCommand)
             mrBase.GetFrameWeld(), &aNewAttr, *mrBase.GetDrawView()->GetModel(), true) : nullptr);
         if (pDlg && pDlg->Execute() == RET_OK)
         {
+            endTextEditForStyle(xTableStyle);
+
             if (!bUserDefined)
             {
                 mxCellFamily->insertByName(xCellStyle->getName(), Any(xCellStyle));
@@ -446,6 +451,9 @@ void TableDesignWidget::ApplyStyle()
         {
             if( pView )
             {
+                if (pView->IsTextEdit())
+                    pView->SdrEndTextEdit();
+
                 SfxRequest aReq( SID_TABLE_STYLE, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
                 aReq.AppendItem( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
 
@@ -666,6 +674,19 @@ void TableDesignWidget::selectStyle(std::u16string_view rStyle)
         if (nIndex != -1)
             m_xValueSet->SelectItem(static_cast<sal_uInt16>(nIndex) + 1);
     }
+}
+
+void TableDesignWidget::endTextEditForStyle(const Reference<XInterface>& rStyle)
+{
+    if (!mxSelectedTable)
+        return;
+
+    Reference<XInterface> xTableStyle(mxSelectedTable->getPropertyValue("TableTemplate"), UNO_QUERY);
+    if (xTableStyle != rStyle)
+        return;
+
+    if (mrBase.GetDrawView()->IsTextEdit())
+        mrBase.GetDrawView()->SdrEndTextEdit();
 }
 
 void TableDesignWidget::addListener()
