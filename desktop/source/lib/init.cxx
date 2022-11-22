@@ -7041,22 +7041,27 @@ void setLanguageToolConfig()
 {
     const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
     const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
-    const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
-    const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
-    const char* pSSLVerification = ::getenv("LANGUAGETOOL_SSL_VERIFICATION");
+
     if (pEnabled && pBaseUrlString)
     {
+        const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
+        const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
+        const char* pSSLVerification = ::getenv("LANGUAGETOOL_SSL_VERIFICATION");
+        const char* pRestProtocol = ::getenv("LANGUAGETOOL_RESTPROTOCOL");
+
         OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
         OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
         if (aEnabled != "true")
             return;
         OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
+        OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
         try
         {
             SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
             rLanguageOpts.setBaseURL(aBaseUrl);
             rLanguageOpts.setEnabled(true);
             rLanguageOpts.setSSLVerification(aSSLVerification == "true");
+            rLanguageOpts.setRestProtocol(aRestProtocol);
             if (pUsername && pApikey)
             {
                 OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
