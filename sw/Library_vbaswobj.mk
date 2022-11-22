@@ -74,6 +74,8 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/vbacolumns \
     sw/source/ui/vba/vbacontentcontrol \
     sw/source/ui/vba/vbacontentcontrols \
+    sw/source/ui/vba/vbacontentcontrollistentry \
+    sw/source/ui/vba/vbacontentcontrollistentries \
     sw/source/ui/vba/vbaformfield \
     sw/source/ui/vba/vbaformfields \
     sw/source/ui/vba/vbaformfieldcheckbox \

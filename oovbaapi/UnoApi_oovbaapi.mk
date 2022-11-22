@@ -1060,6 +1060,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XFont \
 	XContentControl \
 	XContentControls \
+	XContentControlListEntry \
+	XContentControlListEntries \
 	XFormField \
 	XFormFields \
 	XFrame \
