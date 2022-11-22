@@ -75,7 +75,13 @@ sal_Int32 Date::GetAsNormalizedDays() const
         assert(DateToDays( GetDay(), GetMonth(), GetYear() ) == 693594);
         return 693594;
     }
-    return DateToDays( GetDay(), GetMonth(), GetYear() );
+    // Not calling comphelper::date::convertDateToDaysNormalizing() here just
+    // avoids a second check on null-date handling like above.
+    sal_uInt16 nDay = GetDay();
+    sal_uInt16 nMonth = GetMonth();
+    sal_Int16 nYear = GetYear();
+    comphelper::date::normalize( nDay, nMonth, nYear);
+    return comphelper::date::convertDateToDays( nDay, nMonth, nYear);
 }
 
 sal_Int32 Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
