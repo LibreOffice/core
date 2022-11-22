@@ -100,7 +100,10 @@ sal_Int32 convertDateToDaysNormalizing(sal_uInt16 nDay, sal_uInt16 nMonth, sal_I
     // Speed-up the common null-date 1899-12-30.
     if (nYear == 1899 && nDay == 30 && nMonth == 12)
     {
-        assert(convertDateToDays(nDay, nMonth, nYear) == 693594);
+#ifndef NDEBUG
+        static sal_Int32 nDays = convertDateToDays(nDay, nMonth, nYear);
+        assert(nDays == 693594);
+#endif
         return 693594;
     }
     normalize(nDay, nMonth, nYear);

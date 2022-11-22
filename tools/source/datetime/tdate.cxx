@@ -72,7 +72,10 @@ sal_Int32 Date::GetAsNormalizedDays() const
     // This is a very common datum we often calculate from.
     if (mnDate == 18991230) // 1899-12-30
     {
-        assert(DateToDays( GetDay(), GetMonth(), GetYear() ) == 693594);
+#ifndef NDEBUG
+        static sal_Int32 nDays = DateToDays( GetDay(), GetMonth(), GetYear());
+        assert(nDays == 693594);
+#endif
         return 693594;
     }
     // Not calling comphelper::date::convertDateToDaysNormalizing() here just
