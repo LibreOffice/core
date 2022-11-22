@@ -3433,7 +3433,7 @@ if test $_os = Darwin; then
     # XCode only ships with a single SDK for a while now, and using older SDKs alongside is not
     # really supported anymore, instead you'd use different copies of Xcode, each with their own
     # SDK, and thus xcrun will pick the SDK that matches the currently selected Xcode version
-    # also restricting the SDK version to "known good" versions doesn't seem necessary anyomre, the
+    # also restricting the SDK version to "known good" versions doesn't seem necessary anymore, the
     # problems that existed in the PPC days with target versions not being respected or random
     # failures seems to be a thing of the past or rather: limiting either the Xcode version or the
     # SDK version is enough, no need to do both...
