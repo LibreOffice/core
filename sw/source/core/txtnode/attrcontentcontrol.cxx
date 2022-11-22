@@ -231,6 +231,72 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 }
 
+bool SwContentControl::AddListItem(size_t nZIndex, const OUString& rDisplayText,
+                                   const OUString& rValue)
+{
+    SwContentControlListItem aListItem;
+    if (rValue.isEmpty())
+    {
+        if (rDisplayText.isEmpty())
+            return false;
+        aListItem.m_aValue = rDisplayText;
+    }
+    else
+    {
+        aListItem.m_aValue = rValue;
+        aListItem.m_aDisplayText = rDisplayText;
+    }
+
+    // Avoid adding duplicates
+    for (auto& rListItem : GetListItems())
+    {
+        if (rListItem == aListItem)
+            return false;
+    }
+
+    const size_t nLen = GetListItems().size();
+    nZIndex = std::min(nZIndex, nLen);
+    const std::optional<size_t> oSelected = GetSelectedListItem();
+    if (oSelected && *oSelected >= nZIndex)
+    {
+        if (*oSelected < nLen)
+            SetSelectedListItem(*oSelected + 1);
+    }
+    std::vector<SwContentControlListItem> vListItems = GetListItems();
+    vListItems.insert(vListItems.begin() + nZIndex, aListItem);
+    SetListItems(vListItems);
+    return true;
+}
+
+void SwContentControl::DeleteListItem(size_t nZIndex)
+{
+    if (nZIndex >= GetListItems().size())
+        return;
+
+    const std::optional<size_t> oSelected = GetSelectedListItem();
+    if (oSelected)
+    {
+        if (*oSelected == nZIndex)
+        {
+            SetSelectedListItem(std::nullopt);
+            //Invalidate();
+        }
+        else if (*oSelected < nZIndex)
+            SetSelectedListItem(*oSelected - 1);
+    }
+
+    std::vector<SwContentControlListItem> vListItems = GetListItems();
+    vListItems.erase(vListItems.begin() + nZIndex);
+    SetListItems(vListItems);
+    return;
+}
+
+void SwContentControl::ClearListItems()
+{
+    SetSelectedListItem(std::nullopt);
+    SetListItems(std::vector<SwContentControlListItem>());
+}
+
 OUString SwContentControl::GetDateString() const
 {
     SwDoc& rDoc = m_pTextNode->GetDoc();

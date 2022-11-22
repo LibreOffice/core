@@ -245,6 +245,10 @@ public:
         m_aListItems = rListItems;
     }
 
+    bool AddListItem(size_t nZIndex, const OUString& rDisplayText, const OUString& rValue);
+    void DeleteListItem(size_t nZIndex);
+    void ClearListItems();
+
     void SetPicture(bool bPicture) { m_bPicture = bPicture; }
 
     bool GetPicture() const { return m_bPicture; }

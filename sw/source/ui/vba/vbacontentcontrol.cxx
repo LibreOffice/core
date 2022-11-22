@@ -17,7 +17,7 @@
 #include <ndtxt.hxx>
 
 #include "vbacontentcontrol.hxx"
-//#include "vbacontentcontroldropdownlistentries.hxx"
+#include "vbacontentcontrollistentries.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -463,11 +463,11 @@ sal_Int32 SwVbaContentControl::getDateDisplayLocale()
 uno::Any SwVbaContentControl::getDropdownListEntries()
 {
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    //if (!pCC->GetDropDown() && !pCC->GetComboBox())
-    //    return uno::Any();
-    //return uno::Any(uno::Reference<XCollection>(
-    //    new SwVbaContentControlDropDownListEntries(this, mxContext, m_rCC)));
-    return uno::Any();
+    if (!pCC->GetDropDown() && !pCC->GetComboBox())
+        return uno::Any();
+
+    return uno::Any(
+        uno::Reference<XCollection>(new SwVbaContentControlListEntries(this, mxContext, m_rCC)));
 }
 
 OUString SwVbaContentControl::getID()

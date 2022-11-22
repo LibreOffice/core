@@ -1,0 +1,156 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "vbacontentcontrollistentry.hxx"
+
+using namespace ::ooo::vba;
+using namespace ::com::sun::star;
+
+SwVbaContentControlListEntry::SwVbaContentControlListEntry(
+    const uno::Reference<ooo::vba::XHelperInterface>& rParent,
+    const uno::Reference<uno::XComponentContext>& rContext, SwTextContentControl& rCC,
+    size_t nZIndex)
+    : SwVbaContentControlListEntry_BASE(rParent, rContext)
+    , m_rCC(rCC)
+    , m_nZIndex(nZIndex)
+{
+}
+
+SwVbaContentControlListEntry::~SwVbaContentControlListEntry() {}
+
+sal_Int32 SwVbaContentControlListEntry::getIndex() { return m_nZIndex + 1; }
+
+void SwVbaContentControlListEntry::setIndex(sal_Int32 nSet)
+{
+    if (nSet < 1 || static_cast<size_t>(nSet) == m_nZIndex + 1)
+        return;
+
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    // Given a one-based index to set to
+    size_t nIndex = std::min(static_cast<size_t>(nSet), pCC->GetListItems().size());
+    // change to zero-based index
+    --nIndex;
+    while (nIndex < m_nZIndex)
+        MoveUp();
+    while (m_nZIndex < nIndex)
+        MoveDown();
+}
+
+OUString SwVbaContentControlListEntry::getText()
+{
+    const std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    assert(m_nZIndex < pCC->GetListItems().size());
+    const SwContentControlListItem& rListItem = pCC->GetListItems()[m_nZIndex];
+    return rListItem.ToString();
+}
+
+void SwVbaContentControlListEntry::setText(const OUString& rSet)
+{
+    const std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    std::vector<SwContentControlListItem> vListItems = pCC->GetListItems();
+    assert(m_nZIndex < vListItems.size());
+
+    // prevent duplicates
+    for (size_t i = 0; i < vListItems.size(); ++i)
+    {
+        if (vListItems[i].ToString() == rSet)
+            return;
+    }
+    vListItems[m_nZIndex].m_aDisplayText = rSet;
+    pCC->SetListItems(vListItems);
+    //pCC->Invalidate();
+}
+
+OUString SwVbaContentControlListEntry::getValue()
+{
+    const std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    assert(m_nZIndex < pCC->GetListItems().size());
+    const SwContentControlListItem& rListItem = pCC->GetListItems()[m_nZIndex];
+
+    return rListItem.m_aValue;
+}
+
+void SwVbaContentControlListEntry::setValue(const OUString& rSet)
+{
+    const std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    assert(m_nZIndex < pCC->GetListItems().size());
+    std::vector<SwContentControlListItem> vListItems = pCC->GetListItems();
+    vListItems[m_nZIndex].m_aValue = rSet;
+    pCC->SetListItems(vListItems);
+}
+
+void SwVbaContentControlListEntry::Delete()
+{
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    pCC->DeleteListItem(m_nZIndex);
+}
+
+void SwVbaContentControlListEntry::MoveDown()
+{
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    // if already at last positin, can't move down
+    if (m_nZIndex >= pCC->GetListItems().size() - 1)
+        return;
+
+    const std::optional<size_t>& oSelected = pCC->GetSelectedListItem();
+    if (oSelected)
+    {
+        if (*oSelected == m_nZIndex)
+            pCC->SetSelectedListItem(m_nZIndex + 1);
+        else if (*oSelected == m_nZIndex + 1)
+            pCC->SetSelectedListItem(*oSelected - 1);
+    }
+    std::vector<SwContentControlListItem> vListItems = pCC->GetListItems();
+    std::swap(vListItems[m_nZIndex], vListItems[m_nZIndex + 1]);
+    pCC->SetListItems(vListItems);
+    ++m_nZIndex;
+}
+
+void SwVbaContentControlListEntry::MoveUp()
+{
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    // if already at position 0, can't move up
+    if (!m_nZIndex || m_nZIndex >= pCC->GetListItems().size())
+        return;
+
+    const std::optional<size_t>& oSelected = pCC->GetSelectedListItem();
+    if (oSelected)
+    {
+        if (*oSelected == m_nZIndex)
+            pCC->SetSelectedListItem(m_nZIndex - 1);
+        else if (*oSelected == m_nZIndex - 1)
+            pCC->SetSelectedListItem(*oSelected + 1);
+    }
+    std::vector<SwContentControlListItem> vListItems = pCC->GetListItems();
+    std::swap(vListItems[m_nZIndex], vListItems[m_nZIndex - 1]);
+    pCC->SetListItems(vListItems);
+    --m_nZIndex;
+}
+
+void SwVbaContentControlListEntry::Select()
+{
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    assert(m_nZIndex < pCC->GetListItems().size());
+    pCC->SetSelectedListItem(m_nZIndex);
+    //pCC->Invalidate();
+}
+
+// XHelperInterface
+OUString SwVbaContentControlListEntry::getServiceImplName()
+{
+    return "SwVbaContentControlListEntry";
+}
+
+uno::Sequence<OUString> SwVbaContentControlListEntry::getServiceNames()
+{
+    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.ContentControlListEntry" };
+    return aServiceNames;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
