@@ -90,8 +90,6 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->maOrigin = rLogicOrg;
     mpImplMapMode->maScaleX = rScaleX;
     mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->maScaleX.ReduceInaccurate(32);
-    mpImplMapMode->maScaleY.ReduceInaccurate(32);
     mpImplMapMode->mbSimple = false;
 }
 
@@ -111,14 +109,12 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
 void MapMode::SetScaleX( const Fraction& rScaleX )
 {
     mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->maScaleX.ReduceInaccurate(32);
     mpImplMapMode->mbSimple = false;
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
 {
     mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->maScaleY.ReduceInaccurate(32);
     mpImplMapMode->mbSimple = false;
 }
 
