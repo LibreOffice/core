@@ -109,6 +109,11 @@ void handleCommand(
     }
     else
     {
+#if defined MACOSX
+        if (auto const env = getenv("DYLD_LIBRARY_PATH")) {
+            buf.append(OString::Concat("DYLD_LIBRARY_PATH=") + env + " ");
+        }
+#endif
         auto const env = getenv("WORKDIR_FOR_BUILD");
         assert(env != nullptr);
         buf.append(env);
