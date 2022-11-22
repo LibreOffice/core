@@ -72,6 +72,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <fmtanchr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -528,6 +529,23 @@ SwXTextView::createTextRangeByPixelPosition(const awt::Point& rPixelPosition)
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPosition aPosition(*rSh.GetCurrentShellCursor().GetPoint());
     rSh.GetLayout()->GetModelPositionForViewPoint(&aPosition, aLogicPoint);
+
+    if (aPosition.nNode.GetNode().IsGrfNode())
+    {
+        // The point is closest to a graphic node, look up its format.
+        const SwFrameFormat* pGraphicFormat = aPosition.nNode.GetNode().GetFlyFormat();
+        if (pGraphicFormat)
+        {
+            // Get the anchor of this format.
+            const SwFormatAnchor& rAnchor = pGraphicFormat->GetAnchor();
+            const SwPosition* pAnchor = rAnchor.GetContentAnchor();
+            if (pAnchor)
+            {
+                aPosition = *pAnchor;
+            }
+        }
+    }
+
     uno::Reference<text::XTextRange> xRet
         = SwXTextRange::CreateXTextRange(*rSh.GetDoc(), aPosition, /*pMark=*/nullptr);
 
