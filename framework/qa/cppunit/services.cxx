@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -27,31 +26,14 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers framework/source/services/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/framework/qa/cppunit/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 /// Invokes XFrameImpl::loadComponentFromURL() on a thread.
 class TestThread : public salhelper::Thread
@@ -106,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoadComponentFromURL)
         SolarMutexGuard guard;
         uno::Reference<frame::XFrame> xFrame = mxDesktop->findFrame("_blank", /*nSearchFlags=*/0);
         uno::Reference<frame::XComponentLoader> xComponentLoader(xFrame, uno::UNO_QUERY);
-        xThread = new TestThread(xComponentLoader, getComponent());
+        xThread = new TestThread(xComponentLoader, mxComponent);
         xThread->launch();
         // If loadComponentFromURL() doesn't lock the solar mutex, the test will abort here.
         osl::Thread::wait(std::chrono::seconds(1));

@@ -21,8 +21,11 @@ $(eval $(call gb_CppunitTest_use_libraries,framework_services, \
 	cppuhelper \
 	sal \
 	salhelper \
+	subsequenttest \
 	test \
 	unotest \
+	utl \
+	tl \
 	vcl \
 ))
 
