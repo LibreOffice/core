@@ -53,6 +53,8 @@ class LanguageToolGrammarChecker
     LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;
     static void parseProofreadingJSONResponse(css::linguistic2::ProofreadingResult& rResult,
                                               std::string_view aJSONBody);
+    static std::string makeDudenHttpRequest(std::string_view aURL, HTTP_METHOD method,
+                                            const OString& aPostData, tools::Long& nStatusCode);
     static std::string makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
                                        const OString& aPostData, tools::Long& nStatusCode);
 

@@ -55,6 +55,8 @@ using namespace linguistic;
 
 #define COL_ORANGE Color(0xD1, 0x68, 0x20)
 
+constexpr OUStringLiteral sDuden = u"duden";
+
 namespace
 {
 Sequence<PropertyValue> lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
@@ -226,11 +228,28 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     }
 
     tools::Long http_code = 0;
+    std::string response_body;
     OUString langTag(aLocale.Language + "-" + aLocale.Country);
-    OString postData(OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
-                                       RTL_TEXTENCODING_UTF8));
-    const std::string response_body
-        = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+
+    if (rLanguageOpts.getRestProtocol() == sDuden)
+    {
+        std::stringstream aStream;
+        boost::property_tree::ptree aTree;
+        aTree.put("text-language", langTag.toUtf8().getStr());
+        aTree.put("text", aText.toUtf8().getStr());
+        aTree.put("hyphenation", false);
+        aTree.put("spellchecking-level", 3);
+        aTree.put("correction-proposals", true);
+        boost::property_tree::write_json(aStream, aTree);
+        response_body = makeDudenHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST,
+                                             aStream.str().c_str(), http_code);
+    }
+    else
+    {
+        OString postData(OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
+                                           RTL_TEXTENCODING_UTF8));
+        response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+    }
 
     if (http_code != 200)
     {
@@ -315,6 +334,58 @@ void LanguageToolGrammarChecker::parseProofreadingJSONResponse(ProofreadingResul
         }
     }
     rResult.aErrors = aErrors;
+}
+
+std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aURL,
+                                                             HTTP_METHOD method,
+                                                             const OString& aData,
+                                                             tools::Long& nCode)
+{
+    std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
+                                                           [](CURL* p) { curl_easy_cleanup(p); });
+    if (!curl)
+        return {}; // empty string
+
+    std::string sResponseBody;
+    struct curl_slist* pList = nullptr;
+    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    OString sAccessToken = OString::Concat("access_token: ")
+                           + OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
+
+    pList = curl_slist_append(pList, "Cache-Control: no-cache");
+    pList = curl_slist_append(pList, "Content-Type: application/json");
+    if (!sAccessToken.isEmpty())
+        pList = curl_slist_append(pList, sAccessToken.getStr());
+
+    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pList);
+    curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+    curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
+    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&sResponseBody));
+
+    // allow unknown or self-signed certificates
+    if (rLanguageOpts.getSSLVerification() == false)
+    {
+        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
+        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+    }
+
+    if (method == HTTP_METHOD::HTTP_POST)
+    {
+        curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
+        curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aData.getStr());
+    }
+
+    CURLcode cc = curl_easy_perform(curl.get());
+    if (cc != CURLE_OK)
+    {
+        SAL_WARN("languagetool",
+                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+    }
+
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nCode);
+    return sResponseBody;
 }
 
 std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
