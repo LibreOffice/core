@@ -15,10 +15,12 @@
 #include <sfx2/objsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -183,6 +185,63 @@ bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
         }
     }
     return false;
+}
+
+void LokStarMathHelper::PaintTile(VirtualDevice& rDevice, const tools::Rectangle& rTileRect)
+{
+    const tools::Rectangle aMathRect = GetBoundingBox();
+    if (rTileRect.GetIntersection(aMathRect).IsEmpty())
+        return;
+
+    vcl::Window* pWidgetWindow = GetWidgetWindow();
+    if (!pWidgetWindow)
+        return;
+
+    Point aOffset(aMathRect.Left() - rTileRect.Left(), aMathRect.Top() - rTileRect.Top());
+
+    MapMode newMode = rDevice.GetMapMode();
+    newMode.SetOrigin(aOffset);
+    rDevice.SetMapMode(newMode); // Push/Pop is done in PaintAllInPlaceOnTile
+
+    pWidgetWindow->Paint(rDevice, {}); // SmGraphicWidget::Paint does not use the passed rectangle
+}
+
+void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutputWidth,
+                                              int nOutputHeight, int nTilePosX, int nTilePosY,
+                                              tools::Long nTileWidth, tools::Long nTileHeight)
+{
+    if (comphelper::LibreOfficeKit::isTiledAnnotations())
+        return;
+
+    SfxViewShell* pCurView = SfxViewShell::Current();
+    if (!pCurView)
+        return;
+    const ViewShellDocId nDocId = pCurView->GetDocId();
+    const int nPartForCurView = pCurView->getPart();
+
+    // Resizes the virtual device to contain the entries context
+    rDevice.SetOutputSizePixel({ nOutputWidth, nOutputHeight });
+
+    rDevice.Push(vcl::PushFlags::MAPMODE);
+    MapMode aMapMode(rDevice.GetMapMode());
+
+    // Scaling. Must convert from pixels to twips. We know that VirtualDevices use a DPI of 96.
+    const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+    const Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
+    const Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
+    aMapMode.SetScaleX(scaleX);
+    aMapMode.SetScaleY(scaleY);
+    aMapMode.SetMapUnit(MapUnit::MapTwip);
+    rDevice.SetMapMode(aMapMode);
+
+    const tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell))
+        if (pViewShell->GetDocId() == nDocId && pViewShell->getPart() == nPartForCurView)
+            LokStarMathHelper(pViewShell).PaintTile(rDevice, aTileRect);
+
+    rDevice.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

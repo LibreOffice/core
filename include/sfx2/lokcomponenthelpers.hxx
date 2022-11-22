@@ -80,7 +80,13 @@ public:
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
                         double fPPTScaleX, double fPPTScaleY);
 
+    static void PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutputWidth, int nOutputHeight,
+                                      int nTilePosX, int nTilePosY, tools::Long nTileWidth,
+                                      tools::Long nTileHeight);
+
 private:
+    void PaintTile(VirtualDevice& rDevice, const tools::Rectangle& rTileRect);
+
     const SfxViewShell* mpViewShell;
     const SfxInPlaceClient* mpIPClient = nullptr; // not nullptr when the object is valid
     css::uno::Reference<css::frame::XFrame> mxFrame; // not empty when the object is valid
