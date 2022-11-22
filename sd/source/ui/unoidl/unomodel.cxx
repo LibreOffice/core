@@ -2283,6 +2283,8 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    LokStarMathHelper::PaintAllInPlaceOnTile(rDevice, nOutputWidth, nOutputHeight, nTilePosX,
+                                             nTilePosY, nTileWidth, nTileHeight);
 
     if(patchedPageWindow != nullptr)
         patchedPageWindow->unpatchPaintWindow(previousPaintWindow);
