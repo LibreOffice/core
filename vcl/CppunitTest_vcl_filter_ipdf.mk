@@ -23,13 +23,16 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filter_ipdf, \
 $(eval $(call gb_CppunitTest_use_libraries,vcl_filter_ipdf, \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     sfx \
+    subsequenttest \
     svx \
     test \
     tl \
     unotest \
     utl \
+    tl \
     vcl \
 ))
 

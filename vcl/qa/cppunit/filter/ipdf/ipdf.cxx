@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -29,23 +28,21 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/ipdf/data/";
-}
-
 /// Covers vcl/source/filter/ipdf/ fixes.
-class VclFilterIpdfTest : public test::BootstrapFixture, public unotest::MacrosTest
+class VclFilterIpdfTest : public UnoApiTest
 {
 private:
-    uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
 public:
+    VclFilterIpdfTest()
+        : UnoApiTest("/vcl/qa/cppunit/filter/ipdf/data/")
+    {
+    }
+
     void setUp() override;
     void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
     {
         return mxSecurityContext;
@@ -54,21 +51,18 @@ public:
 
 void VclFilterIpdfTest::setUp()
 {
-    test::BootstrapFixture::setUp();
+    UnoApiTest::setUp();
     MacrosTest::setUpNssGpg(m_directories, "vcl_filter_ipdf");
 
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 }
 
 void VclFilterIpdfTest::tearDown()
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
     MacrosTest::tearDownNssGpg();
-    test::BootstrapFixture::tearDown();
+
+    UnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
@@ -80,31 +74,30 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     // Given: copy the test document to a temporary file, as it'll be modified.
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    OUString aSourceURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "add-visible-signature-last-page.pdf";
+    OUString aSourceURL = createFileURL(u"add-visible-signature-last-page.pdf");
     OUString aURL = aTempFile.GetURL();
     osl::File::RC eRet = osl::File::copy(aSourceURL, aURL);
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, eRet);
 
     // Open it.
     uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
-    getComponent() = loadFromDesktop(aURL, "com.sun.star.drawing.DrawingDocument", aArgs);
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(getComponent().get());
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.drawing.DrawingDocument", aArgs);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 
     // Add a signature line to the 2nd page.
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
     xShape->setPosition(awt::Point(1000, 15000));
     xShape->setSize(awt::Size(10000, 10000));
-    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPages->getCount());
 
-    uno::Reference<frame::XModel> xModel(getComponent(), uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1), uno::UNO_QUERY);
     xController->setCurrentPage(xDrawPage);
@@ -152,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testDictArrayDict)
     // 3 0 obj <<
     //   /Key[<</InnerKey 42>>]
     // >>
-    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "dict-array-dict.pdf";
+    OUString aSourceURL = createFileURL(u"dict-array-dict.pdf");
     SvFileStream aFile(aSourceURL, StreamMode::READ);
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(aFile));
@@ -172,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testRealNumbers)
     // 4 0 obj <<
     //   /Test [.00 1.00 .00 1.00 .00 1.00]
     // >>
-    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "real-numbers.pdf";
+    OUString aSourceURL = createFileURL(u"real-numbers.pdf");
     SvFileStream aFile(aSourceURL, StreamMode::READ);
     vcl::filter::PDFDocument aDocument;
 
@@ -193,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testCommentEnd)
     // - first xref is terminated by a \r, which is not followed by a newline
     // this means that if reading doesn't stop at the end of the first xref, then we'll try to look
     // up the offset of the length object, which we don't yet have
-    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "comment-end.pdf";
+    OUString aSourceURL = createFileURL(u"comment-end.pdf");
     SvFileStream aFile(aSourceURL, StreamMode::READ);
     vcl::filter::PDFDocument aDocument;
 
