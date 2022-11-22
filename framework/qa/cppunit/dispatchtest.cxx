@@ -8,8 +8,7 @@
  */
 
 #include <cppuhelper/implbase.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -133,30 +132,14 @@ uno::Reference<frame::XDispatch> MyInterceptor::queryDispatch(const util::URL& r
 }
 
 /// Tests how InterceptionHelper invokes a registered interceptor.
-class DispatchTest : public test::BootstrapFixture, public unotest::MacrosTest
+class DispatchTest : public UnoApiTest
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    DispatchTest()
+        : UnoApiTest("/framework/qa/cppunit/data/")
+    {
+    }
 };
-
-void DispatchTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void DispatchTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
 {
@@ -180,13 +163,10 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
-
 CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
 {
     // this test doesn't work with a new document because of aURL.Main check in SfxBaseController::dispatch()
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.fodp",
-                                  "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"empty.fodp");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
