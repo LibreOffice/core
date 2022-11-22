@@ -25,7 +25,12 @@ module com {  module sun {  module star {  module text {
  */
 interface XTextViewTextRangeSupplier: com::sun::star::uno::XInterface
 {
-    /** @returns
+    /** creates the text range of the document model position at a view-dependent pixel position.
+
+        Note that in case the model position is a graphic, then the model position of its anchor is
+        returned.
+
+        @returns
                 the text range of the document position.
      */
     com::sun::star::text::XTextRange createTextRangeByPixelPosition([in] com::sun::star::awt::Point PixelPosition);
