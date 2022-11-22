@@ -150,12 +150,30 @@ private:
 struct JpegStuff
 {
     jpeg_decompress_struct cinfo;
+    jpeg_progress_mgr progress;
     ErrorManagerStruct jerr;
     JpegDecompressOwner aOwner;
     std::unique_ptr<BitmapScopedWriteAccess> pScopedAccess;
     std::vector<sal_uInt8> pScanLineBuffer;
     std::vector<sal_uInt8> pCYMKBuffer;
 };
+
+// https://github.com/libjpeg-turbo/libjpeg-turbo/issues/284
+// https://libjpeg-turbo.org/pmwiki/uploads/About/TwoIssueswiththeJPEGStandard.pdf
+#define LIMITSCANS 100
+
+void progress_monitor(j_common_ptr cinfo)
+{
+    if (cinfo->is_decompressor)
+    {
+        jpeg_decompress_struct* decompressor = reinterpret_cast<j_decompress_ptr>(cinfo);
+        if (decompressor->input_scan_number >= LIMITSCANS)
+        {
+            SAL_WARN("vcl.filter", "too many progressive scans, cancelling import after: " << decompressor->input_scan_number << " scans");
+            errorExit(cinfo);
+        }
+    }
+}
 
 }
 
@@ -176,6 +194,8 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     jpeg_create_decompress(&rContext.cinfo);
     rContext.aOwner.set(&rContext.cinfo);
     jpeg_svstream_src(&rContext.cinfo, pInputStream);
+    rContext.cinfo.progress = &rContext.progress;
+    rContext.progress.progress_monitor = progress_monitor;
     SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(rContext.cinfo.src);
     jpeg_read_header(&rContext.cinfo, TRUE);
 
