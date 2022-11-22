@@ -429,6 +429,12 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="RestProtocol" oor:type="xs:string">
+            <info>
+              <desc>LanguageTool Grammar Checker REST API protocol</desc>
+              <label>REST API protocol</label>
+            </info>
+          </prop>
       </group>
     </group>
     <group oor:name="Translation">
