@@ -63,6 +63,7 @@ class PolyPolygonColorPrimitive2D;
 class MaskPrimitive2D;
 class UnifiedTransparencePrimitive2D;
 class TransparencePrimitive2D;
+class ObjectInfoPrimitive2D;
 class StructureTagPrimitive2D;
 }
 
@@ -142,6 +143,8 @@ private:
         const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
     void processTransparencePrimitive2D(
         const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
+    void
+    processObjectInfoPrimitive2D(const primitive2d::ObjectInfoPrimitive2D& rObjectInfoPrimitive2D);
     void processStructureTagPrimitive2D(
         const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate);
 
@@ -190,6 +193,8 @@ private:
     bool mbBulletPresent;
 
     std::stack<vcl::PDFWriter::StructElement> maListElements;
+
+    primitive2d::StructureTagPrimitive2D const* mpCurrentStructureTag = nullptr;
 
 protected:
     /*  the local processor for BasePrimitive2D-Implementation based primitives,

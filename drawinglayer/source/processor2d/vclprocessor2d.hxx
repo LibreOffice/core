@@ -46,7 +46,6 @@ class PolygonStrokePrimitive2D;
 class ControlPrimitive2D;
 class PagePreviewPrimitive2D;
 class EpsPrimitive2D;
-class ObjectInfoPrimitive2D;
 class SvgLinearAtomPrimitive2D;
 class SvgRadialAtomPrimitive2D;
 }
@@ -76,9 +75,6 @@ protected:
     // PolygonStrokePrimitive2D's decompositions (normally only one)
     sal_uInt32 mnPolygonStrokePrimitive2D;
 
-    // currently used ObjectInfoPrimitive2D
-    const primitive2d::ObjectInfoPrimitive2D* mpObjectInfoPrimitive2D;
-
     // common VCL rendering support
     void RenderTextSimpleOrDecoratedPortionPrimitive2D(
         const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
@@ -105,8 +101,6 @@ protected:
     void RenderPolygonStrokePrimitive2D(
         const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
     void RenderEpsPrimitive2D(const primitive2d::EpsPrimitive2D& rEpsPrimitive2D);
-    void
-    RenderObjectInfoPrimitive2D(const primitive2d::ObjectInfoPrimitive2D& rObjectInfoPrimitive2D);
     void RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate);
     void RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate);
 
@@ -119,12 +113,6 @@ public:
     VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev,
                    basegfx::BColorModifierStack aInitStack = basegfx::BColorModifierStack());
     virtual ~VclProcessor2D() override;
-
-    // access to currently used ObjectInfoPrimitive2D
-    const primitive2d::ObjectInfoPrimitive2D* getObjectInfoPrimitive2D() const
-    {
-        return mpObjectInfoPrimitive2D;
-    }
 
 private:
     bool RenderFillGraphicPrimitive2DImpl(

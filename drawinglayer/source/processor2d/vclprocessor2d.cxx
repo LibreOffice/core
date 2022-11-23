@@ -1302,20 +1302,6 @@ void VclProcessor2D::RenderEpsPrimitive2D(const primitive2d::EpsPrimitive2D& rEp
     }
 }
 
-void VclProcessor2D::RenderObjectInfoPrimitive2D(
-    const primitive2d::ObjectInfoPrimitive2D& rObjectInfoPrimitive2D)
-{
-    // remember current ObjectInfoPrimitive2D and set new current one (build a stack - push)
-    const primitive2d::ObjectInfoPrimitive2D* pLast(getObjectInfoPrimitive2D());
-    mpObjectInfoPrimitive2D = &rObjectInfoPrimitive2D;
-
-    // process content
-    process(rObjectInfoPrimitive2D.getChildren());
-
-    // restore current ObjectInfoPrimitive2D (pop)
-    mpObjectInfoPrimitive2D = pLast;
-}
-
 void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(
     const primitive2d::SvgLinearAtomPrimitive2D& rCandidate)
 {
@@ -1521,7 +1507,6 @@ VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformati
     , mpOutputDevice(&rOutDev)
     , maBColorModifierStack(std::move(aInitStack))
     , mnPolygonStrokePrimitive2D(0)
-    , mpObjectInfoPrimitive2D(nullptr)
 {
     // set digit language, derived from SvtCTLOptions to have the correct
     // number display for arabic/hindi numerals

@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/flagguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <config_global.h>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -947,7 +948,7 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
         }
         case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D:
         {
-            RenderObjectInfoPrimitive2D(
+            processObjectInfoPrimitive2D(
                 static_cast<const primitive2d::ObjectInfoPrimitive2D&>(rCandidate));
             break;
         }
@@ -958,6 +959,51 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
             break;
         }
     }
+}
+
+void VclMetafileProcessor2D::processObjectInfoPrimitive2D(
+    primitive2d::ObjectInfoPrimitive2D const& rObjectInfoPrimitive2D)
+{
+    // currently StructureTagPrimitive2D is only used for SdrObjects - have to
+    // avoid adding Alt text if the SdrObject is not actually tagged, as it
+    // would then end up on an unrelated structure element.
+    if (mpCurrentStructureTag && mpCurrentStructureTag->isTaggedSdrObject())
+    {
+        // Create image alternative description from ObjectInfoPrimitive2D info
+        // for PDF export, for the currently active SdrObject's structure element
+        if (mpPDFExtOutDevData->GetIsExportTaggedPDF())
+        {
+            OUString aAlternateDescription;
+
+            if (!rObjectInfoPrimitive2D.getTitle().isEmpty())
+            {
+                aAlternateDescription += rObjectInfoPrimitive2D.getTitle();
+            }
+
+            if (!rObjectInfoPrimitive2D.getDesc().isEmpty())
+            {
+                if (!aAlternateDescription.isEmpty())
+                {
+                    aAlternateDescription += " - ";
+                }
+
+                aAlternateDescription += rObjectInfoPrimitive2D.getDesc();
+            }
+
+            // Use SetAlternateText to set it. This will work as long as some
+            // structure is used (see PDFWriterImpl::setAlternateText and
+            // m_nCurrentStructElement - tagged PDF export works with this in
+            // Draw/Impress/Writer, but not in Calc due to too less structure...)
+            //Z maybe add structure to Calc PDF export, may need some BeginGroup/EndGroup stuff ..?
+            if (!aAlternateDescription.isEmpty())
+            {
+                mpPDFExtOutDevData->SetAlternateText(aAlternateDescription);
+            }
+        }
+    }
+
+    // process content
+    process(rObjectInfoPrimitive2D.getChildren());
 }
 
 void VclMetafileProcessor2D::processGraphicPrimitive2D(
@@ -1049,38 +1095,6 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
         aCropRect = tools::Rectangle(
             sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),
             sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
-    }
-
-    // Create image alternative description from ObjectInfoPrimitive2D info
-    // for PDF export
-    if (mpPDFExtOutDevData->GetIsExportTaggedPDF() && nullptr != getObjectInfoPrimitive2D())
-    {
-        OUString aAlternateDescription;
-
-        if (!getObjectInfoPrimitive2D()->getTitle().isEmpty())
-        {
-            aAlternateDescription += getObjectInfoPrimitive2D()->getTitle();
-        }
-
-        if (!getObjectInfoPrimitive2D()->getDesc().isEmpty())
-        {
-            if (!aAlternateDescription.isEmpty())
-            {
-                aAlternateDescription += " - ";
-            }
-
-            aAlternateDescription += getObjectInfoPrimitive2D()->getDesc();
-        }
-
-        // Use SetAlternateText to set it. This will work as long as some
-        // structure is used (see PDFWriterImpl::setAlternateText and
-        // m_nCurrentStructElement - tagged PDF export works with this in
-        // Draw/Impress/Writer, but not in Calc due to too less structure...)
-        //Z maybe add structure to Calc PDF export, may need some BeginGroup/EndGroup stuff ..?
-        if (!aAlternateDescription.isEmpty())
-        {
-            mpPDFExtOutDevData->SetAlternateText(aAlternateDescription);
-        }
     }
 
     // #i123295# 3rd param is uncropped rect, 4th is cropped. The primitive has the cropped
@@ -2361,10 +2375,17 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate)
 {
+    ::comphelper::ValueRestorationGuard const g(mpCurrentStructureTag, &rStructureTagCandidate);
+
     // structured tag primitive
     const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
     bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
     sal_Int32 nPreviousElement(-1);
+
+    if (!rStructureTagCandidate.isTaggedSdrObject())
+    {
+        bTagUsed = false;
+    }
 
     if (mpPDFExtOutDevData && bTagUsed)
     {
@@ -2438,7 +2459,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::NonStructElement);
             // any other background object: do not tag
             else
-                bTagUsed = false;
+                assert(false);
         }
     }
 
