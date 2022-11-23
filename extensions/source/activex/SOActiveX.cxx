@@ -20,20 +20,12 @@
 // SOActiveX.cpp : Implementation of CSOActiveX
 
 #include "StdAfx2.h"
+#include <so_activex.h>
 #include "SOActiveX.h"
 #include "SOComWindowPeer.h"
 #include "SODispatchInterceptor.h"
 #include "SOActionsApproval.h"
 #include "com_uno_helper.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
-#include <so_activex.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
 
 #define STAROFFICE_WINDOWCLASS L"SOParentWindow"
 

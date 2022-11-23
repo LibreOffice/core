@@ -104,14 +104,8 @@ namespace cppu
 
 #if !defined _MSC_VER // public -> protected changes mangled names there
     protected:
-#elif defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
         ~ImplHelper11() SAL_NOEXCEPT {}
-#if defined _MSC_VER && defined __clang__
-#pragma clang diagnostic pop
-#endif
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
         css::uno::XInterface which supports weak mechanism to be held weakly

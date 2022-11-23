@@ -20,14 +20,7 @@
 #include <AccObjectManagerAgent.hxx>
 #include <AccObjectWinManager.hxx>
 
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;

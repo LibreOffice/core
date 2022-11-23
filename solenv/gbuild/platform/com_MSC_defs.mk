@@ -290,7 +290,6 @@ gb_CXXFLAGS += \
 	-Wendif-labels \
 	-Wimplicit-fallthrough \
 	-Wno-missing-braces \
-	-Wnon-virtual-dtor \
 	-Woverloaded-virtual \
 	-Wshadow \
 	-Wundef \

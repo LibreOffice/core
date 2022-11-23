@@ -34,15 +34,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
 #include "accHelper.hxx"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
 
 class AccEventListener;
 class AccObjectManagerAgent;

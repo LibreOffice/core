@@ -335,15 +335,9 @@ public:
 
 #if !defined _MSC_VER // public -> protected changes mangled names there
 protected:
-#elif defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
     ~IEventNotificationHook() {}
         // avoid warnings about virtual members and non-virtual dtor
-#if defined _MSC_VER && defined __clang__
-#pragma clang diagnostic pop
-#endif
 };
 
 
@@ -660,23 +654,11 @@ public:
 #else
 protected:
 #endif
-// Suppress warning about virtual functions but non-virtual destructor:
-#if defined _MSC_VER
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
-#endif
     /**
        You must call disposing before destruction.
      */
     ~OPropertySetHelper();
 };
-#if defined _MSC_VER
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
-#endif
 
 /**
    OPropertySetHelper plus XPropertySetOption

@@ -21,16 +21,8 @@
  * AccAction.cpp : Implementation of CAccAction
  */
 #include "stdafx.h"
-#include "AccAction.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
+#include "AccAction.h"
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;

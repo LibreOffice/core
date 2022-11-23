@@ -18,16 +18,8 @@
  */
 
 #include "stdafx.h"
-#include "AccHyperLink.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
+#include "AccHyperLink.h"
 
 #include <vcl/svapp.hxx>
 

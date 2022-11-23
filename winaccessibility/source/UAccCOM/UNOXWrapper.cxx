@@ -17,16 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "UNOXWrapper.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
+#include "UNOXWrapper.h"
 
 using namespace ::com::sun::star;
 

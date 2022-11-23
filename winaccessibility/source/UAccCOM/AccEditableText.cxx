@@ -21,16 +21,8 @@
  * AccEditableText.cpp : Implementation of CUAccCOMApp and DLL registration.
  */
 #include "stdafx.h"
-#include "AccEditableText.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
+#include "AccEditableText.h"
 
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>

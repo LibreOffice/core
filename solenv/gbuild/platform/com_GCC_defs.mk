@@ -80,7 +80,6 @@ gb_CFLAGS_COMMON := \
 gb_CXXFLAGS_COMMON := \
 	-Wall \
 	-Wno-missing-braces \
-	-Wnon-virtual-dtor \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \
@@ -184,7 +183,7 @@ gb_CXX03FLAGS := -std=gnu++98 -Werror=c++11-extensions -Wno-c++11-long-long \
     -Wno-deprecated-declarations
 else
 gb_CXX03FLAGS := -std=gnu++98 -Wno-long-long \
-    -Wno-variadic-macros -Wno-non-virtual-dtor -Wno-deprecated-declarations
+    -Wno-variadic-macros -Wno-deprecated-declarations
 endif
 
 # On Windows MSVC only supports C90 so force gnu89 (especially in clang) to

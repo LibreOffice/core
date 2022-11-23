@@ -67,10 +67,6 @@ namespace cppu {
 
    @since UDK 3.2.1
 */
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 class CPPUHELPER_DLLPUBLIC PropertySetMixinImpl:
     public css::beans::XPropertySet,
     public css::beans::XFastPropertySet,
@@ -412,9 +408,6 @@ private:
     PropertySetMixin( const PropertySetMixin&) SAL_DELETED_FUNCTION;
     void operator=( const PropertySetMixin&) SAL_DELETED_FUNCTION;
 };
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
 
 }
 

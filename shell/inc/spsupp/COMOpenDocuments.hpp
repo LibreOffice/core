@@ -10,14 +10,7 @@
 #ifndef INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
 #define INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
 
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include <spsupp_h.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
 #include "COMRefCounted.hpp"
 #include <Objsafe.h>
 #include <assert.h>

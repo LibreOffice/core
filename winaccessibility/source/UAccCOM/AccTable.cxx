@@ -21,16 +21,8 @@
  * AccTable.cpp : Implementation of CAccTable.
  */
 #include "stdafx.h"
-#include "AccTable.h"
-
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#endif
 #include  <UAccCOM.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
+#include "AccTable.h"
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>

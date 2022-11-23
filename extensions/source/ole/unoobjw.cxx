@@ -41,7 +41,6 @@
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma clang diagnostic ignored "-Wmicrosoft"
 #pragma clang diagnostic ignored "-Wnon-pod-varargs"
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #pragma clang diagnostic ignored "-Wnonportable-include-path"
 #pragma clang diagnostic ignored "-Wsequence-point"
 #pragma clang diagnostic ignored "-Wtypename-missing"
