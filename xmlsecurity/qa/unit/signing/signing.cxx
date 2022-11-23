@@ -314,15 +314,13 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    OUString aURL = maTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(createFileURL(u"partial.docx"), aURL));
+    createTempCopy(u"partial.docx");
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
-        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
-                                                                embed::ElementModes::READWRITE);
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -350,12 +348,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    OUString aURL = maTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(createFileURL(u"multi.docx"), aURL));
+    createTempCopy(u"multi.docx");
     uno::Reference<embed::XStorage> xStorage
-        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
-                                                                embed::ElementModes::READWRITE);
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -380,15 +376,13 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    OUString aURL = maTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(createFileURL(u"partial.docx"), aURL));
+    createTempCopy(u"partial.docx");
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
-        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
-                                                                embed::ElementModes::READWRITE);
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -728,14 +722,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     if (!IsDefaultDPI())
         return;
     // Given: copy the test document to a temporary file, as it'll be modified.
-    OUString aSourceURL = createFileURL(u"add-visible-signature.pdf");
-    OUString aURL = maTempFile.GetURL();
-    osl::File::RC eRet = osl::File::copy(aSourceURL, aURL);
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, eRet);
+    createTempCopy(u"add-visible-signature.pdf");
 
     // Open it.
     uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.drawing.DrawingDocument", aArgs);
+    mxComponent
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.drawing.DrawingDocument", aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -841,9 +833,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 {
     // Create a working copy.
-    OUString aURL = maTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
-                         osl::File::copy(createFileURL(u"notype-xades.odt"), aURL));
+    createTempCopy(u"notype-xades.odt");
 
     // Read existing signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);

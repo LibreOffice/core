@@ -218,4 +218,11 @@ std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OStri
     return pPdfDocument;
 }
 
+void UnoApiTest::createTempCopy(std::u16string_view fileName)
+{
+    OUString url = createFileURL(fileName);
+    auto const e = osl::File::copy(url, maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

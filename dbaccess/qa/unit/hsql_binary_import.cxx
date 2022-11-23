@@ -46,8 +46,9 @@ void HsqlBinaryImportTest::testBinaryImport()
     }
 
     // the migration requires the file to be writable
-    utl::TempFileNamed const temp(createTempCopy(u"hsqldb_migration_test.odb"));
-    uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
+    createTempCopy(u"hsqldb_migration_test.odb");
+    uno::Reference<XOfficeDatabaseDocument> const xDocument
+        = getDocumentForUrl(maTempFile.GetURL());
 
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
     // at this point migration is already done

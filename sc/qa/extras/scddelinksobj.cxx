@@ -81,12 +81,10 @@ public:
 
 ScDDELinksObj::ScDDELinksObj()
     : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XDDELinks(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
+    , XDDELinks(createFileURL(u"ScDDELinksObj.ods"))
     , XElementAccess(cppu::UnoType<sheet::XDDELink>::get())
     , XIndexAccess(1)
-    , XNameAccess("soffice|"
-                  + m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
-                  + "!Sheet1.A1")
+    , XNameAccess("soffice|" + createFileURL(u"ScDDELinksObj.ods") + "!Sheet1.A1")
     , XServiceInfo("ScDDELinksObj", "com.sun.star.sheet.DDELinks")
 {
 }
@@ -99,8 +97,7 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    const OUString testdoc
-        = m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods");
+    const OUString testdoc = createFileURL(u"ScDDELinksObj.ods");
 
     xSheet->getCellByPosition(5, 5)->setFormula("=DDE(\"soffice\";\"" + testdoc
                                                 + "\";\"Sheet1.A1\")");

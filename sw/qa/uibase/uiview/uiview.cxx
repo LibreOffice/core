@@ -42,12 +42,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
 {
     // Make a temporary copy of the test document
-    utl::TempFileNamed tmp;
-    tmp.EnableKillingFile();
-    OUString sTempCopy = tmp.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::FileBase::E_None,
-        osl::File::copy(createFileURL(u"updateall-objectreplacements.odt"), sTempCopy));
+    createTempCopy(u"updateall-objectreplacements.odt");
 
     /* BASIC code that exhibits the problem:
 
@@ -71,7 +66,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
         = xFactory->createInstance("com.sun.star.frame.Desktop");
     uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", true) };
-    mxComponent = xComponentLoader->loadComponentFromURL(sTempCopy, "_default", 0, aLoadArgs);
+    mxComponent
+        = xComponentLoader->loadComponentFromURL(maTempFile.GetURL(), "_default", 0, aLoadArgs);
 
     // Perform the .uno:UpdateAll call and save
     xInterface = xFactory->createInstance("com.sun.star.frame.DispatchHelper");
@@ -87,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     // Check the contents of the updated copy and verify that ObjectReplacements are there
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xFactory),
-                                                      sTempCopy);
+                                                      maTempFile.GetURL());
 
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components_1"));

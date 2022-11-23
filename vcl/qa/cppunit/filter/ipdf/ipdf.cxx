@@ -72,16 +72,12 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     if (!IsDefaultDPI())
         return;
     // Given: copy the test document to a temporary file, as it'll be modified.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aSourceURL = createFileURL(u"add-visible-signature-last-page.pdf");
-    OUString aURL = aTempFile.GetURL();
-    osl::File::RC eRet = osl::File::copy(aSourceURL, aURL);
-    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, eRet);
+    createTempCopy(u"add-visible-signature-last-page.pdf");
 
     // Open it.
     uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.drawing.DrawingDocument", aArgs);
+    mxComponent
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.drawing.DrawingDocument", aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -120,15 +116,10 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     pObjectShell->SignDocumentContentUsingCertificate(xCert);
 
     // Then: count the # of shapes on the signature widget/annotation.
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    if (!pPdfDocument)
         return;
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
     // Last page.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

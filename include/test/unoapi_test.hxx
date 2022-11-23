@@ -46,6 +46,8 @@ public:
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
 
+    void createTempCopy(std::u16string_view fileName);
+
     void skipValidation() { mbSkipValidation = true; }
     void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
 

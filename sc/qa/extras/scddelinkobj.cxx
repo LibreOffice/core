@@ -33,33 +33,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-static utl::TempFileNamed createTempCopy(OUString const& url)
-{
-    utl::TempFileNamed tmp;
-    tmp.EnableKillingFile();
-    auto const e = osl::File::copy(url, tmp.GetURL());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        (OString("<" + OUStringToOString(url, RTL_TEXTENCODING_UTF8) + "> -> <"
-                 + OUStringToOString(tmp.GetURL(), RTL_TEXTENCODING_UTF8) + ">")
-             .getStr()),
-        osl::FileBase::E_None, e);
-    return tmp;
-}
-
-namespace
-{
-struct TempFileBase
-{
-    utl::TempFileNamed m_TempFile;
-    explicit TempFileBase(OUString const& url)
-        : m_TempFile(createTempCopy(url))
-    {
-    }
-};
-}
-
 class ScDDELinkObj : public UnoApiTest,
-                     public TempFileBase,
                      public apitest::XDDELink,
                      public apitest::XNamed,
                      public apitest::XRefreshable
@@ -89,9 +63,8 @@ public:
 
 ScDDELinkObj::ScDDELinkObj()
     : UnoApiTest("/sc/qa/extras/testdocuments")
-    , TempFileBase(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
-    , XDDELink(m_TempFile.GetURL())
-    , XNamed("soffice|" + m_TempFile.GetURL() + "!Sheet1.A1")
+    , XDDELink(maTempFile.GetURL())
+    , XNamed("soffice|" + maTempFile.GetURL() + "!Sheet1.A1")
 {
 }
 
@@ -103,7 +76,7 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
 
-    const OUString testdoc = m_TempFile.GetURL();
+    const OUString testdoc = maTempFile.GetURL();
 
     xSheet->getCellByPosition(5, 5)->setFormula("=DDE(\"soffice\";\"" + testdoc
                                                 + "\";\"Sheet1.A1\")");
@@ -124,6 +97,8 @@ void ScDDELinkObj::setUp()
     UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
+
+    createTempCopy(u"ScDDELinksObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDDELinkObj);

@@ -85,20 +85,15 @@ public:
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
 {
-    utl::TempFileNamed tmp;
-    tmp.EnableKillingFile();
-    OUString rURL = tmp.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::FileBase::E_None,
-        osl::File::copy(createFileURL(sFileName), rURL));
+    createTempCopy(sFileName);
 
-    SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
+    SfxMedium aSrcMed(maTempFile.GetURL(), StreamMode::STD_READ);
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
 
-    SwReader aReader(aSrcMed, rURL, pDoc);
+    SwReader aReader(aSrcMed, maTempFile.GetURL(), pDoc);
     Reader* pDOCXReader = SwReaderWriter::GetDOCXReader();
-    auto pGlossary = std::make_unique<SwTextBlocks>(rURL);
+    auto pGlossary = std::make_unique<SwTextBlocks>(maTempFile.GetURL());
 
     CPPUNIT_ASSERT(pDOCXReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(!bEmpty, aReader.ReadGlossaries(*pDOCXReader, *pGlossary, false));
