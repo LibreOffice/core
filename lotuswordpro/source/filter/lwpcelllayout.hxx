@@ -184,6 +184,7 @@ protected:
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow) override {return nRow + m_nRealrowspan; };
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout) override;
     virtual rtl::Reference<XFCell> ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) override;
+private:
     sal_uInt16  cnumrows;
     sal_uInt8   cnumcols;
     sal_uInt16  m_nRealrowspan;

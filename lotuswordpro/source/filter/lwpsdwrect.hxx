@@ -89,8 +89,6 @@ class SdwRectangle
 {
 private:
     bool m_bRotated;
-
-public:
     std::array<Point, 4> m_nRectCorner;
 
 public:

@@ -93,6 +93,7 @@ public:
     sal_uInt32 ReadBits(sal_uInt16 iCount, sal_uInt32& nBits);
     sal_uInt32 Decode(HuffmanTreeNode* pRoot);
 
+private:
     /**
      * @brief
      * compressed/decompressed stream

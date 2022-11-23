@@ -122,7 +122,11 @@ public:
     bool IsNumberDown() const;
     virtual bool IsTable() override { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
+
 protected:
+    void Read() override;
+
+private:
     LwpForkedNotifyList m_CPNotifyList;
 
     sal_uInt16      m_nRow, m_nColumn;
@@ -139,7 +143,6 @@ protected:
 
     LwpObjectID     m_Layout;
     LwpObjectID     m_DefaultCellStyle; // gCVirtualLayout
-    void Read() override;
 };
 
 /**

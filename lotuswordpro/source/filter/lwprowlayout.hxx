@@ -84,6 +84,7 @@ public:
     void SetRowMap();
 protected:
     void Read() override;
+private:
     sal_uInt16 crowid;
     sal_Int32 cheight;              // Minimum height if height is automatic.
     sal_uInt8 cLeaderDotCount;  // dfb - # of cells with leader dots
@@ -95,7 +96,6 @@ protected:
         RF_VALID_HAS_BORDER = 0x02,
         RF_LEADER_COUNT_VALID = 0x4
     };
-private:
     std::vector<LwpConnectedCellLayout*> m_ConnCellList;
     sal_Int32 FindMarkConnCell(sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     sal_Int32 FindNextMarkConnCell(sal_uInt16 nMarkConnCell,sal_uInt8 nEndCol);

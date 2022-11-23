@@ -187,7 +187,7 @@ public:
 
     void SetAllText(std::u16string_view sText);
 
-protected:
+private:
     sal_uInt32  m_nOrdinal; // Ordinal number of this paragraph
     LwpObjectID m_ParaStyle;    // handle of paragraph style
     LwpPoint        m_Hint;     // Paragraph hint - width & height

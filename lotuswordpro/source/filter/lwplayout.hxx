@@ -418,9 +418,6 @@ public:
 
 class LwpLayout : public LwpMiddleLayout
 {
-private:
-    bool m_bGettingShadow;
-    bool m_bGettingNumCols;
 public:
     LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpLayout() override;
@@ -430,21 +427,12 @@ public:
     XFShadow* GetXFShadow();
 protected:
     void Read() override;
-protected:
-    LwpUseWhen  m_aUseWhen;
-    LwpObjectID m_Position;
-    LwpObjectID m_LayColumns;
-    LwpObjectID m_LayGutterStuff;
-    LwpObjectID m_LayJoinStuff;
-    LwpObjectID m_LayShadow;
-    LwpObjectID m_LayExtJoinStuff;
 
 public:
     LwpUseWhen* VirtualGetUseWhen() override;
     virtual sal_uInt16 GetNumCols() override;
     virtual double GetColGap(sal_uInt16 nIndex) override;
     sal_uInt16 GetUsePage();
-public:
     enum UseWhenType
     {
         StartWithinColume,
@@ -453,7 +441,6 @@ public:
         StartOnOddPage,
         StartOnEvenPage
     };
-public:
     UseWhenType GetUseWhenType();
     virtual bool IsUseOnAllPages() override;
     virtual bool IsUseOnAllEvenPages() override;
@@ -461,6 +448,17 @@ public:
     virtual bool IsUseOnPage() override;
     LwpObjectID& GetPosition(){ return m_Position;}
     virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() override;
+
+private:
+    bool m_bGettingShadow;
+    bool m_bGettingNumCols;
+    LwpUseWhen  m_aUseWhen;
+    LwpObjectID m_Position;
+    LwpObjectID m_LayColumns;
+    LwpObjectID m_LayGutterStuff;
+    LwpObjectID m_LayJoinStuff;
+    LwpObjectID m_LayShadow;
+    LwpObjectID m_LayExtJoinStuff;
 };
 
 class LwpPlacableLayout : public LwpLayout

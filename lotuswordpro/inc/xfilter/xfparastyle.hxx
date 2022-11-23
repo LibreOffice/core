@@ -217,7 +217,7 @@ public:
     void SetNumberRight(bool bFlag){m_bNumberRight = bFlag;}
     bool GetNumberRight() const {return m_bNumberRight;}
 
-protected:
+private:
     OUString   m_strMasterPage;
     enumXFAlignType m_eAlignType;
 

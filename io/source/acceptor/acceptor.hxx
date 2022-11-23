@@ -39,6 +39,7 @@ namespace io_acceptor {
 
         void stopAccepting();
 
+    private:
         std::mutex m_mutex;
         ::osl::Pipe m_pipe;
         OUString m_sPipeName;
@@ -59,6 +60,7 @@ namespace io_acceptor {
 
         void stopAccepting();
 
+    private:
         ::osl::SocketAddr m_addr;
         ::osl::AcceptorSocket m_socket;
         OUString m_sSocketName;
