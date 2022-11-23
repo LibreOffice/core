@@ -16,7 +16,7 @@
      table->elements[idx] = FT_OFFSET( table->block, table->cursor );
      table->lengths [idx] = length;
 -    FT_MEM_COPY( table->block + table->cursor, object, length );
-+    if (table->block + table->cursor)
++    if (length != 0)
 +      FT_MEM_COPY( table->block + table->cursor, object, length );
  
      table->cursor += length;
