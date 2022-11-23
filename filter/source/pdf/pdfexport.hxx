@@ -74,6 +74,7 @@ private:
 
     OUString            msWatermark;
     Color               maWatermarkColor;
+    std::optional<sal_Int32> moWatermarkFontHeight;
     OUString            msTiledWatermark;
 
     // these variable are here only to have a location in filter/pdf to set the default

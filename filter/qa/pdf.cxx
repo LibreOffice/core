@@ -187,6 +187,51 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkColor)
     // i.e. the color was the (default) green, not red.
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xff0000), aFillColor);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
+{
+    // Given an empty Writer document:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // When exporting that as PDF with a red watermark:
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    sal_Int32 nExpectedFontSize = 100;
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Watermark", OUString("X")),
+        comphelper::makePropertyValue("WatermarkFontHeight", nExpectedFontSize),
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("OutputStream", xOutputStream),
+    };
+    xFilter->filter(aDescriptor);
+
+    // Then make sure that the watermark color is correct:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject = pPageObject->getFormObject(0);
+    sal_Int32 nFontSize = pFormObject->getFontSize();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 100
+    // - Actual  : 594
+    // i.e. the font size was automatic, could not specify an explicit size.
+    CPPUNIT_ASSERT_EQUAL(nExpectedFontSize, nFontSize);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
