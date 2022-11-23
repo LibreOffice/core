@@ -122,7 +122,7 @@ void SelectionObserver::EndObservation()
 
     aUpdateLock.Release();
     FocusManager& rFocusManager = mrSlideSorter.GetController().GetFocusManager();
-    bool bSuccess = rFocusManager.SetFocusedPageToCurrentPage();
+    bool bSuccess = rFocusManager.SetFocusedPageFromCurrentPage();
     // tdf#129346 nothing currently selected, select something, if possible
     // but (tdf#129346) only if setting focus to current page failed
     if (rSelector.GetPageCount() && rSelector.GetSelectedPageCount() == 0)

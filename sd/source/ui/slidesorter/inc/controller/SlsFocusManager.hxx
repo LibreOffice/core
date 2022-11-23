@@ -124,7 +124,10 @@ public:
     */
     void SetFocusedPage(sal_Int32 nPageIndex);
 
-    bool SetFocusedPageToCurrentPage();
+    /** Set the focused page to the one that is the current slide of the
+        Slide Manager
+    */
+    bool SetFocusedPageFromCurrentPage();
 
     /** Return <TRUE/> when the focus indicator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
