@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
         return;
     mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
-    // When exporting that as PDF with a red watermark:
+    // When exporting that as PDF with a 100pt-sized watermark:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
         xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
     };
     xFilter->filter(aDescriptor);
 
-    // Then make sure that the watermark color is correct:
+    // Then make sure that the watermark font size is correct:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
@@ -231,6 +231,51 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
     // - Actual  : 594
     // i.e. the font size was automatic, could not specify an explicit size.
     CPPUNIT_ASSERT_EQUAL(nExpectedFontSize, nFontSize);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontName)
+{
+    // Given an empty Writer document:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // When exporting that as PDF with a serif watermark:
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    OUString aExpectedFontName("Liberation Serif");
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Watermark", OUString("X")),
+        comphelper::makePropertyValue("WatermarkFontName", aExpectedFontName),
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("OutputStream", xOutputStream),
+    };
+    xFilter->filter(aDescriptor);
+
+    // Then make sure that the watermark font name is correct:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject = pPageObject->getFormObject(0);
+    OUString aFontName = pFormObject->getFontName();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Liberation Serif
+    // - Actual  : Helvetica
+    // i.e. the font name was sans, could not specify an explicit name.
+    CPPUNIT_ASSERT_EQUAL(aExpectedFontName, aFontName);
 }
 }
 
