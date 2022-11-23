@@ -79,7 +79,7 @@ enum GrabBagType
     CHAR_GRAB_BAG
 };
 
-struct RedlineParams : public virtual SvRefBase
+struct RedlineParams : public SvRefBase
 {
     OUString  m_sAuthor;
     OUString  m_sDate;
