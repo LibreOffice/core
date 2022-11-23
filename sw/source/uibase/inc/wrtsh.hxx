@@ -428,7 +428,12 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     bool GotoField( const SwFormatField& rField );
 
-    bool GotoContentControl(const SwFormatContentControl& rContentControl);
+    /** @param bOnlyRefresh:
+     *         false: run default actions (e.g. toggle checkbox, remove placeholder content)
+     *         true: do not alter the content control, just refresh the doc model
+     */
+    bool GotoContentControl(const SwFormatContentControl& rContentControl,
+                            bool bOnlyRefresh = false);
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics

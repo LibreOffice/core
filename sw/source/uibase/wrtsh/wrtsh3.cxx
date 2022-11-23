@@ -93,7 +93,8 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
     return bRet;
 }
 
-bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentControl)
+bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentControl,
+                                    bool bOnlyRefresh)
 {
     std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
     if (IsFrameSelected() && pContentControl && pContentControl->GetPicture())
@@ -124,23 +125,24 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
     (this->*m_fnKillSel)(nullptr, false);
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
+    // Assume that once the placeholder is selected, the content is no longer the placeholder.
+    if (!bOnlyRefresh && pContentControl)
+        pContentControl->SetShowingPlaceHolder(false);
+
 
     if (bRet && pContentControl && pContentControl->GetCheckbox())
     {
         // Checkbox: GotoFormatContentControl() selected the old state.
         LockView(/*bViewLocked=*/true);
-        OUString aOldState;
+        OUString aOldState = GetCursorDescr();
         OUString aNewState;
         if (pContentControl->GetChecked())
-        {
-            aOldState = pContentControl->GetCheckedState();
-            aNewState = pContentControl->GetUncheckedState();
-        }
+            aNewState = bOnlyRefresh ? pContentControl->GetCheckedState()
+                                     : pContentControl->GetUncheckedState();
         else
-        {
-            aOldState = pContentControl->GetUncheckedState();
-            aNewState = pContentControl->GetCheckedState();
-        }
+            aNewState = bOnlyRefresh ? pContentControl->GetUncheckedState()
+                                     : pContentControl->GetCheckedState();
+
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aOldState);
         aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
@@ -150,7 +152,8 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         // Toggle the state.
         pContentControl->SetReadWrite(true);
         DelLeft();
-        pContentControl->SetChecked(!pContentControl->GetChecked());
+        if (!bOnlyRefresh)
+            pContentControl->SetChecked(!pContentControl->GetChecked());
         Insert(aNewState);
         pContentControl->SetReadWrite(false);
 

@@ -883,9 +883,6 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
         sal_Int32 nEnd = *pTextContentControl->End() - 1;
         pCursor->GetMark()->nContent.Assign(pTextNode, nEnd);
 
-        // Assume that once the placeholder is selected, the content is no longer the placeholder.
-        pContentControl->SetShowingPlaceHolder(false);
-
         bRet = !pCursor->IsSelOvr();
         if (bRet)
         {

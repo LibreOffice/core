@@ -30,6 +30,7 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <doc.hxx>
+#include <wrtsh.hxx>
 
 using namespace com::sun::star;
 
@@ -273,7 +274,8 @@ void SwContentControl::DeleteListItem(size_t nZIndex)
         if (*oSelected == nZIndex)
         {
             SetSelectedListItem(std::nullopt);
-            //Invalidate();
+            if (m_bDropDown && GetTextAttr())
+                GetTextAttr()->Invalidate();
         }
         else if (*oSelected < nZIndex)
             SetSelectedListItem(*oSelected - 1);
@@ -289,6 +291,8 @@ void SwContentControl::ClearListItems()
 {
     SetSelectedListItem(std::nullopt);
     SetListItems(std::vector<SwContentControlListItem>());
+    if (m_bDropDown && GetTextAttr())
+        GetTextAttr()->Invalidate();
 }
 
 OUString SwContentControl::GetDateString() const
@@ -650,6 +654,25 @@ SwTextNode* SwTextContentControl::GetTextNode() const
 {
     auto& rFormatContentControl = static_cast<const SwFormatContentControl&>(GetAttr());
     return rFormatContentControl.GetTextNode();
+}
+
+void SwTextContentControl::Invalidate()
+{
+    SwDocShell* pDocShell = GetTextNode() ? GetTextNode()->GetDoc().GetDocShell() : nullptr;
+    if (!pDocShell || !pDocShell->GetWrtShell())
+        return;
+
+    // save the cursor
+    // NOTE: needs further testing to see if this is adequate (i.e. in auto-run macros...)
+    pDocShell->GetWrtShell()->Push();
+
+    // visit the control in the text (which makes any necessary visual changes)
+    // NOTE: simply going to a control indicates cancelling ShowingPlaceHolder, unless bOnlyRefresh
+    // NOTE: simply going to a checkbox causes a toggle, unless bOnlyRefresh
+    auto& rFormatContentControl = static_cast<SwFormatContentControl&>(GetAttr());
+    pDocShell->GetWrtShell()->GotoContentControl(rFormatContentControl, /*bOnlyRefresh=*/true);
+
+    pDocShell->GetWrtShell()->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
 
 void SwTextContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
