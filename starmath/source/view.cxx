@@ -2319,6 +2319,8 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
                 SmCursor& rCursor = GetDoc()->GetCursor();
                 OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
                 tools::Rectangle aCaret = rCursor.GetCaretRectangle(rOutDev);
+                Point aFormulaDrawPos = widget.GetFormulaDrawPos();
+                aCaret.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
                 LokStarMathHelper helper(SfxViewShell::Current());
                 tools::Rectangle aBounds = helper.GetBoundingBox();
                 aCaret.Move(aBounds.Left(), aBounds.Top());
@@ -2336,6 +2338,8 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
                 tools::Rectangle aSelection = rCursor.GetSelectionRectangle(rOutDev);
                 if (!aSelection.IsEmpty())
                 {
+                    Point aFormulaDrawPos = widget.GetFormulaDrawPos();
+                    aSelection.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
                     LokStarMathHelper helper(SfxViewShell::Current());
                     tools::Rectangle aBounds = helper.GetBoundingBox();
 
