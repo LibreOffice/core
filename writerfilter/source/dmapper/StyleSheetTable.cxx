@@ -910,7 +910,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
             if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = pEntry->pProperties.get()) )
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
-                if (pStyleSheetProperties->GetListId() > -1)
+                if (pStyleSheetProperties->props().GetListId() > -1)
                 {
                     uno::Reference< style::XStyle > xStyle;
                     xParaStyles->getByName( ConvertStyleName(pEntry->sStyleName) ) >>= xStyle;
@@ -919,8 +919,9 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                         break;
 
                     uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
-                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->GetListId() );
-                    if ( !sNumberingStyleName.isEmpty() || !pStyleSheetProperties->GetListId() )
+                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->props().GetListId() );
+                    if ( !sNumberingStyleName.isEmpty()
+                         || !pStyleSheetProperties->props().GetListId() )
                         xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::Any(sNumberingStyleName) );
 
                     // Word 2010+ (not Word 2003, and Word 2007 is completely broken)
@@ -1063,7 +1064,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
 
                             StyleSheetPropertyMap* pPropertyMap = pEntry->pProperties.get();
-                            if (pPropertyMap && pPropertyMap->GetListId() == -1)
+                            if (pPropertyMap && pPropertyMap->props().GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
                                 uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);

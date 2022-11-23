@@ -130,7 +130,7 @@ public:
 class PropertyMap;
 typedef tools::SvRef< PropertyMap > PropertyMapPtr;
 
-class PropertyMap : public virtual SvRefBase
+class PropertyMap : public SvRefBase
 {
 private:
     // Cache the property values for the GetPropertyValues() call(s).
@@ -412,7 +412,7 @@ public:
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
 
-class ParagraphProperties : public virtual SvRefBase
+class ParagraphProperties : public SvRefBase
 {
 private:
     bool                                         m_bFrameMode;
@@ -521,6 +521,16 @@ public:
 
 typedef tools::SvRef< ParagraphProperties > ParagraphPropertiesPtr;
 
+class ParagraphPropertiesPropertyMap: public PropertyMap {
+public:
+    ParagraphProperties & props() { return m_props; }
+
+    ParagraphProperties const & props() const { return m_props; }
+
+private:
+    ParagraphProperties m_props;
+};
+
 /*-------------------------------------------------------------------------
     property map of a stylesheet
   -----------------------------------------------------------------------*/
@@ -529,8 +539,7 @@ typedef tools::SvRef< ParagraphProperties > ParagraphPropertiesPtr;
 #define WW_OUTLINE_MIN  sal_Int16( 0 )
 
 class StyleSheetPropertyMap
-    : public PropertyMap
-    , public ParagraphProperties
+    : public ParagraphPropertiesPropertyMap
 {
 private:
     sal_Int16 mnListLevel;
@@ -547,8 +556,7 @@ public:
 };
 
 class ParagraphPropertyMap
-    : public PropertyMap
-    , public ParagraphProperties
+    : public ParagraphPropertiesPropertyMap
 {
 public:
     explicit ParagraphPropertyMap() {}

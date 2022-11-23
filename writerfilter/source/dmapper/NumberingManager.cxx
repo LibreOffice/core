@@ -1132,9 +1132,9 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                 const StyleSheetPropertyMap* pStyleSheetProperties =
                     pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr;
 
-                if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
+                if( pStyleSheetProperties && pStyleSheetProperties->props().GetListId() >= 0 )
                 {
-                    ListDef::Pointer pList = GetList( pStyleSheetProperties->GetListId() );
+                    ListDef::Pointer pList = GetList( pStyleSheetProperties->props().GetListId() );
                     if ( pList!=nullptr )
                         return pList->GetAbstractDefinition();
                 }
