@@ -320,7 +320,7 @@ namespace frm
         if ( pFontHeightItem )
         {
             // by definition, the item should have the unit twip
-            sal_uLong nHeight = pFontHeightItem->GetHeight();
+            sal_uInt32 nHeight = pFontHeightItem->GetHeight();
             if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
             {
                 nHeight = OutputDevice::LogicToLogic(
@@ -347,7 +347,7 @@ namespace frm
         if ( !pFontHeightItem )
             return;
 
-        sal_uLong nHeight = pFontHeightItem->GetHeight();
+        sal_uInt32 nHeight = pFontHeightItem->GetHeight();
         if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
         {
             nHeight = OutputDevice::LogicToLogic(

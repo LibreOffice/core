@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <type_traits>
 #include <swpossizetabpage.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
@@ -1696,7 +1697,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 nLBRelations = pMap[nMapPos].nLBRelations;
             }
 
-            for (sal_uLong nBit = 1; nBit < sal_uLong(LB::LAST); nBit <<= 1)
+            for (std::underlying_type_t<LB> nBit = 1; nBit < o3tl::to_underlying(LB::LAST) ; nBit <<= 1)
             {
                 if (nLBRelations & static_cast<LB>(nBit))
                 {
