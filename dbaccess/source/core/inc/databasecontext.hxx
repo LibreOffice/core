@@ -84,7 +84,6 @@ private:
     BasicDLL m_aBasicDLL;
 #endif
 
-protected:
     ::osl::Mutex                    m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >
                                     m_aContext;

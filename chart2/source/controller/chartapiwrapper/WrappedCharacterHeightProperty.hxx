@@ -45,7 +45,7 @@ protected:
     virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
     virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
 
-protected:
+private:
     ReferenceSizePropertyProvider*  m_pRefSizePropProvider;
 };
 

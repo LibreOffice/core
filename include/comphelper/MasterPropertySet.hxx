@@ -61,12 +61,12 @@ namespace comphelper
                               public css::beans::XPropertyState,
                               public css::beans::XMultiPropertySet
     {
-    protected:
         SolarMutex* const mpMutex;
         sal_uInt8 mnLastId;
         std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
         rtl::Reference< MasterPropertySetInfo >        mxInfo;
 
+    protected:
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::beans::PropertyVetoException
         /// @throws css::lang::IllegalArgumentException

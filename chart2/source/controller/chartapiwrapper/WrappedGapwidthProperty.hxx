@@ -43,7 +43,7 @@ public:
 
     void setDimensionAndAxisIndex( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-protected:
+private:
     sal_Int32 m_nDimensionIndex;
     sal_Int32 m_nAxisIndex;
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

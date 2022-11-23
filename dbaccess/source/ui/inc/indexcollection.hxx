@@ -29,7 +29,6 @@ namespace dbaui
     // OIndexCollection
     class OIndexCollection
     {
-    protected:
         css::uno::Reference< css::container::XNameAccess >
                     m_xIndexes;
 

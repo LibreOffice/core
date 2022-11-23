@@ -128,7 +128,6 @@ namespace dbaccess
     {
         OContainerMediator*     m_pMediator;
 
-    protected:
         // comes from the driver can be null
         css::uno::Reference< css::container::XNameAccess >    m_xDrvColumns;
         css::uno::WeakReference< css::uno::XInterface >       m_xParent;
@@ -139,6 +138,7 @@ namespace dbaccess
         bool                                    m_bAddColumn    : 1;
         bool                                    m_bDropColumn   : 1;
 
+    protected:
         virtual void impl_refresh() override;
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
         virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;

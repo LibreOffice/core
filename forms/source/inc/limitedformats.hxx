@@ -43,7 +43,6 @@ namespace frm
         static css::uno::Reference< css::util::XNumberFormatsSupplier >
                             s_xStandardFormats;
 
-    protected:
         sal_Int32           m_nFormatEnumPropertyHandle;
         const sal_Int16     m_nTableId;
         css::uno::Reference< css::beans::XFastPropertySet >

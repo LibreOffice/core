@@ -45,7 +45,6 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OContainerListener
     {
         friend class OContainerListenerAdapter;
-    protected:
         rtl::Reference<OContainerListenerAdapter>  m_xAdapter;
         ::osl::Mutex&                              m_rMutex;
 

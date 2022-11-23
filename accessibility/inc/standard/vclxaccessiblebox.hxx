@@ -110,7 +110,22 @@ public:
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
 
     virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+
 protected:
+    virtual ~VCLXAccessibleBox() override = default;
+
+    /** Returns true when the object is valid.
+    */
+    virtual bool IsValid() const = 0;
+
+    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) override;
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
+
+    virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
+
+    sal_Int64 implGetAccessibleChildCount();
+
+private:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.
     */
@@ -140,19 +155,6 @@ protected:
         same life time.
     */
     bool m_bHasListChild;
-
-    virtual ~VCLXAccessibleBox() override = default;
-
-    /** Returns true when the object is valid.
-    */
-    virtual bool IsValid() const = 0;
-
-    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) override;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
-
-    virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
-
-    sal_Int64 implGetAccessibleChildCount();
 };
 
 

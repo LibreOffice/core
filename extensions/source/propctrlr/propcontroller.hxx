@@ -76,10 +76,7 @@ namespace pcr
         typedef std::vector< css::uno::Reference< css::uno::XInterface > >
                                                                             InterfaceArray;
 
-    protected:
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
-    private:
         css::uno::Reference< css::frame::XFrame > m_xFrame;
         css::uno::Reference< css::awt::XWindow >  m_xView;
 

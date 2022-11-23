@@ -44,7 +44,6 @@ namespace dbaccess
     private:
         ::rtl::Reference< OContainerMediator >                m_pColumnMediator;
 
-    protected:
         css::uno::Reference< css::container::XNameAccess >    m_xColumnDefinitions;
         css::uno::Reference< css::container::XNameAccess >    m_xDriverColumns;
 
@@ -52,6 +51,7 @@ namespace dbaccess
         sal_Int32                                             m_nPrivileges;
     // </properties>
 
+    protected:
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 

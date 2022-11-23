@@ -76,7 +76,6 @@ public:
 
 class SvxScriptOrgDialog : public SfxDialogController
 {
-protected:
     weld::Window* m_pParent;
     OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;

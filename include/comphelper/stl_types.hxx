@@ -38,6 +38,7 @@ namespace comphelper
 
 struct UStringMixLess
 {
+private:
     bool m_bCaseSensitive;
 public:
     UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}

@@ -478,18 +478,20 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 
 struct MSFILTER_DLLPUBLIC EscherExContainer
 {
+private:
     sal_uInt32  nContPos;
     SvStream&   rStrm;
-
+public:
     EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0 );
     ~EscherExContainer();
 };
 
 struct MSFILTER_DLLPUBLIC EscherExAtom
 {
+private:
     sal_uInt32  nContPos;
     SvStream&   rStrm;
-
+public:
     EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0, const sal_uInt8 nVersion = 0 );
     ~EscherExAtom();
 };

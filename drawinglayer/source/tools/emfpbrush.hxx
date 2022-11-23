@@ -90,7 +90,7 @@ namespace emfplushelper
         BrushTypeLinearGradient = 0x00000004
     };
 
-    struct EMFPPath;
+    class EMFPPath;
 
     struct EMFPBrush : public EMFPObject
     {

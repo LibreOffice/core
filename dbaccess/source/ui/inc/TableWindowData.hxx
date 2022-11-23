@@ -34,7 +34,7 @@ namespace dbaui
         mutable ::osl::Mutex    m_aMutex;
 
         void listen();
-    protected:
+
         // the columns of the table
         css::uno::Reference< css::beans::XPropertySet >       m_xTable; // can either be a table or a query
         css::uno::Reference< css::container::XIndexAccess>    m_xKeys;

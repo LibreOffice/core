@@ -64,7 +64,6 @@ typedef std::deque< OTableInfo >   TableInfoList;
 // IndexDialog
 class ODbaseIndexDialog : public weld::GenericDialogController
 {
-protected:
     OUString            m_aDSN;
     TableInfoList       m_aTableInfoList;
     TableIndexList      m_aFreeIndexList;
@@ -88,6 +87,7 @@ protected:
     DECL_LINK( OKClickHdl, weld::Button&, void );
     DECL_LINK( OnListEntrySelected, weld::TreeView&, void );
 
+protected:
     void        Init();
     void        SetCtrls();
 

@@ -88,7 +88,9 @@ public:
     void makeIndexKeys(const css::lang::Locale &rLocale, std::u16string_view algorithm);
     sal_Int16 getIndexWeight(const OUString& rIndexEntry);
     OUString getIndexDescription(const OUString& rIndexEntry);
+    sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 
+private:
     IndexTable tables[MAX_TABLES];
     sal_Int16 table_count;
     IndexKey keys[MAX_KEYS];
@@ -97,7 +99,6 @@ public:
     sal_Int16 mkey_count;
     OUString skipping_chars;
     rtl::Reference<CollatorImpl> collator;
-    sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
 
 }

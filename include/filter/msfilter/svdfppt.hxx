@@ -1000,8 +1000,9 @@ struct PPTRuler final : public salhelper::SimpleReferenceObject
 
 struct PPTTextRulerInterpreter
 {
+private:
         rtl::Reference<PPTRuler>    mxImplRuler;
-
+public:
                     PPTTextRulerInterpreter();
                     PPTTextRulerInterpreter( PPTTextRulerInterpreter const & rRuler );
                     PPTTextRulerInterpreter(
@@ -1156,10 +1157,10 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
     PPTParagraphObj(PPTParagraphObj const&) = delete;
     void operator=(PPTParagraphObj const&) = delete;
 
-public:
     sal_uInt32              mnCurrentObject;
     ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
 
+public:
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
     bool                    GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, TSS_Type nInstanceInSheet );
 

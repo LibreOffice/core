@@ -88,7 +88,6 @@ namespace dbp
 
     class ODBFieldPage : public OMaybeListSelectionPage
     {
-    protected:
         std::unique_ptr<weld::Label> m_xDescription;
         std::unique_ptr<weld::RadioButton> m_xStoreYes;
         std::unique_ptr<weld::RadioButton> m_xStoreNo;

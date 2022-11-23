@@ -118,10 +118,8 @@ protected:
 
     void fireModifyEvent();
 
-protected:
-    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
-
 private:
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     sal_Int32                                             m_nDimensionCount;
     typedef std::vector< std::vector< rtl::Reference< ::chart::Axis > > > tAxisVecVecType;
     tAxisVecVecType m_aAllAxis; //outer sequence is the dimension; inner sequence is the axis index that indicates main or secondary axis

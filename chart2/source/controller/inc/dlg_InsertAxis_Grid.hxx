@@ -38,7 +38,6 @@ struct InsertAxisOrGridDialogData
 \************************************************************************/
 class SchAxisDlg : public weld::GenericDialogController
 {
-protected:
     std::unique_ptr<weld::CheckButton> m_xCbPrimaryX;
     std::unique_ptr<weld::CheckButton> m_xCbPrimaryY;
     std::unique_ptr<weld::CheckButton> m_xCbPrimaryZ;

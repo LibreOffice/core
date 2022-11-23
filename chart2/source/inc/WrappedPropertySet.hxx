@@ -103,7 +103,7 @@ protected: //methods
     const WrappedProperty*          getWrappedProperty( const OUString& rOuterName );
     const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );
 
-protected: //member
+private:
     css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
 
     std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties

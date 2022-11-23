@@ -91,7 +91,6 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC EventLogger
     {
-    protected:
         std::shared_ptr< EventLogger_Impl > m_pImpl;
 
     public:

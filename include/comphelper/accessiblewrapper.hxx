@@ -71,8 +71,6 @@ namespace comphelper
                 m_xParentAccessible;
         css::uno::WeakReference< css::accessibility::XAccessibleContext >
                 m_aContext;
-
-    protected:
         css::uno::Reference< css::accessibility::XAccessible >
                 m_xInnerAccessible;
 
