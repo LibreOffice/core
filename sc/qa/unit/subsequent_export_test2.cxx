@@ -68,6 +68,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testGroupShape();
     void testMatrixMultiplicationXLSX();
     void testTdf121260();
     void testTextDirectionXLSX();
@@ -194,6 +195,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
+    CPPUNIT_TEST(testGroupShape);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTdf121260);
     CPPUNIT_TEST(testTextDirectionXLSX);
@@ -347,6 +349,17 @@ void ScExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
+}
+
+void ScExportTest2::testGroupShape()
+{
+    ScDocShellRef xDocSh = loadDoc(u"groupShape.", FORMAT_XLSX);
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
 void ScExportTest2::testMatrixMultiplicationXLSX()
