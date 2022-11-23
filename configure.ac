@@ -3937,7 +3937,7 @@ if test "$cross_compiling" = "yes"; then
     if test "$_os" = "Emscripten"; then
         if test "$with_main_module" = "calc"; then
             ENABLE_WASM_STRIP_WRITER=TRUE
-        else
+        elif test "$with_main_module" = "writer"; then
             ENABLE_WASM_STRIP_CALC=TRUE
         fi
     fi
