@@ -65,6 +65,7 @@ namespace drawinglayer::primitive2d
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
             bool isBackground() const { return mbBackground; }
             bool isImage() const { return mbIsImage; }
+            bool isTaggedSdrObject() const;
             sal_Int32 GetAnchorStructureElementId() const { return m_nAnchorStructureElementId; }
 
             /// compare operator

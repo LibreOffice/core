@@ -59,6 +59,13 @@ namespace drawinglayer::primitive2d
             return PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D;
         }
 
+        bool StructureTagPrimitive2D::isTaggedSdrObject() const
+        {
+            // note at the moment *all* StructureTagPrimitive2D are created for
+            // SdrObjects - if that ever changes, need another condition here
+            return !isBackground() || isImage();
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
