@@ -188,6 +188,7 @@ public:
     void testTdf91286();
     void testTdf148820();
     void testEmbeddedTextInDecimal();
+    void testTotalsRowFunction();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -313,6 +314,7 @@ public:
     CPPUNIT_TEST(testTdf91286);
     CPPUNIT_TEST(testTdf148820);
     CPPUNIT_TEST(testEmbeddedTextInDecimal);
+    CPPUNIT_TEST(testTotalsRowFunction);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2822,6 +2824,29 @@ void ScExportTest2::testEmbeddedTextInDecimal()
     // save to ODS and reload
     saveAndReload("calc8");
     lcl_TestEmbeddedTextInDecimal(*getScDoc());
+}
+
+void ScExportTest2::testTotalsRowFunction()
+{
+    createScDoc("xlsx/totalsRowFunction.xlsx");
+    saveAndReload("Calc Office Open XML");
+    {
+        xmlDocUniquePtr pDocXml = parseExport("xl/tables/table1.xml");
+        CPPUNIT_ASSERT(pDocXml);
+        assertXPath(pDocXml, "/x:table/x:tableColumns/x:tableColumn[5]", "totalsRowFunction",
+                    "sum");
+    }
+    ScDocument* pDoc = getScDoc();
+    pDoc->InsertCol(ScRange(3, 0, 0, 3, pDoc->MaxRow(), 0)); // Insert col 4
+    saveAndReload("Calc Office Open XML");
+    {
+        xmlDocUniquePtr pDocXml = parseExport("xl/tables/table1.xml");
+        CPPUNIT_ASSERT(pDocXml);
+        assertXPathNoAttribute(pDocXml, "/x:table/x:tableColumns/x:tableColumn[5]",
+                               "totalsRowFunction");
+        assertXPath(pDocXml, "/x:table/x:tableColumns/x:tableColumn[6]", "totalsRowFunction",
+                    "sum");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
