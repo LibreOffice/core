@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
 
 class SwWrtShell;
@@ -56,6 +57,8 @@ class SwContentControlDlg final : public SfxDialogController
     std::unique_ptr<SwNumFormatTreeView> m_xDateFormat;
 
     std::unique_ptr<weld::Button> m_xOk;
+
+    VclPtr<VclAbstractDialog> m_xListItemDialog;
 
     DECL_LINK(InsertHdl, weld::Button&, void);
     DECL_LINK(RenameHdl, weld::Button&, void);

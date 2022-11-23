@@ -226,6 +226,11 @@ short AbstractSwRenameXNamedDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSwContentControlListItemDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractSwContentControlListItemDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -884,7 +889,7 @@ SwAbstractDialogFactory_Impl::CreateSwContentControlListItemDlg(weld::Window* pP
                                                                 SwContentControlListItem& rItem)
 {
     return VclPtr<AbstractSwContentControlListItemDlg_Impl>::Create(
-        std::make_unique<SwContentControlListItemDlg>(pParent, rItem));
+        std::make_shared<SwContentControlListItemDlg>(pParent, rItem));
 }
 
 std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)

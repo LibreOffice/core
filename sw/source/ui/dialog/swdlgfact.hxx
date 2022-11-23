@@ -445,16 +445,17 @@ public:
  */
 class AbstractSwContentControlListItemDlg_Impl : public AbstractSwContentControlListItemDlg
 {
-    std::unique_ptr<SwContentControlListItemDlg> m_xDlg;
+    std::shared_ptr<SwContentControlListItemDlg> m_xDlg;
 
 public:
     explicit AbstractSwContentControlListItemDlg_Impl(
-        std::unique_ptr<SwContentControlListItemDlg> xDlg)
+        std::shared_ptr<SwContentControlListItemDlg> xDlg)
         : m_xDlg(std::move(xDlg))
     {
     }
 
     short Execute() override;
+    bool StartExecuteAsync(VclAbstractDialog::AsyncContext &) override;
 };
 
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg

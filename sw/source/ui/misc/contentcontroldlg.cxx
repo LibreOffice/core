@@ -173,7 +173,11 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     }
 }
 
-SwContentControlDlg::~SwContentControlDlg() {}
+SwContentControlDlg::~SwContentControlDlg()
+{
+    if (m_xListItemDialog)
+        m_xListItemDialog.disposeAndClear();
+}
 
 IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
 {
@@ -291,29 +295,30 @@ IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
 
 IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
 {
-    SwContentControlListItem aItem;
+    std::shared_ptr<SwContentControlListItem> aItem = std::make_shared<SwContentControlListItem>();
     SwAbstractDialogFactory& rFact = swui::GetFactory();
-    ScopedVclPtr<VclAbstractDialog> pDlg(
-        rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), aItem));
-    if (!pDlg->Execute())
-    {
-        return;
-    }
+    m_xListItemDialog = rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), *aItem);
+    m_xListItemDialog->StartExecuteAsync([this, aItem](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            if (aItem->m_aDisplayText.isEmpty() && aItem->m_aValue.isEmpty())
+            {
+                // Maintain the invariant that value can't be empty.
+                return;
+            }
 
-    if (aItem.m_aDisplayText.isEmpty() && aItem.m_aValue.isEmpty())
-    {
-        // Maintain the invariant that value can't be empty.
-        return;
-    }
+            if (aItem->m_aValue.isEmpty())
+            {
+                aItem->m_aValue = aItem->m_aDisplayText;
+            }
 
-    if (aItem.m_aValue.isEmpty())
-    {
-        aItem.m_aValue = aItem.m_aDisplayText;
-    }
+            int nRow = m_xListItems->n_children();
+            m_xListItems->append_text(aItem->m_aDisplayText);
+            m_xListItems->set_text(nRow, aItem->m_aValue, 1);
+        }
 
-    int nRow = m_xListItems->n_children();
-    m_xListItems->append_text(aItem.m_aDisplayText);
-    m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+        m_xListItemDialog.disposeAndClear();
+    });
 }
 
 IMPL_LINK_NOARG(SwContentControlDlg, RenameHdl, weld::Button&, void)
@@ -324,30 +329,31 @@ IMPL_LINK_NOARG(SwContentControlDlg, RenameHdl, weld::Button&, void)
         return;
     }
 
-    SwContentControlListItem aItem;
-    aItem.m_aDisplayText = m_xListItems->get_text(nRow, 0);
-    aItem.m_aValue = m_xListItems->get_text(nRow, 1);
+    std::shared_ptr<SwContentControlListItem> aItem = std::make_shared<SwContentControlListItem>();
+    aItem->m_aDisplayText = m_xListItems->get_text(nRow, 0);
+    aItem->m_aValue = m_xListItems->get_text(nRow, 1);
     SwAbstractDialogFactory& rFact = swui::GetFactory();
-    ScopedVclPtr<VclAbstractDialog> pDlg(
-        rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), aItem));
-    if (!pDlg->Execute())
-    {
-        return;
-    }
+    m_xListItemDialog = rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), *aItem);
+    m_xListItemDialog->StartExecuteAsync([this, aItem, nRow](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            if (aItem->m_aDisplayText.isEmpty() && aItem->m_aValue.isEmpty())
+            {
+                // Maintain the invariant that value can't be empty.
+                return;
+            }
 
-    if (aItem.m_aDisplayText.isEmpty() && aItem.m_aValue.isEmpty())
-    {
-        // Maintain the invariant that value can't be empty.
-        return;
-    }
+            if (aItem->m_aValue.isEmpty())
+            {
+                aItem->m_aValue = aItem->m_aDisplayText;
+            }
 
-    if (aItem.m_aValue.isEmpty())
-    {
-        aItem.m_aValue = aItem.m_aDisplayText;
-    }
+            m_xListItems->set_text(nRow, aItem->m_aDisplayText, 0);
+            m_xListItems->set_text(nRow, aItem->m_aValue, 1);
+        }
 
-    m_xListItems->set_text(nRow, aItem.m_aDisplayText, 0);
-    m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+        m_xListItemDialog.disposeAndClear();
+    });
 }
 
 IMPL_LINK_NOARG(SwContentControlDlg, DeleteHdl, weld::Button&, void)
