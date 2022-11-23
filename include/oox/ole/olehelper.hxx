@@ -169,10 +169,10 @@ public:
 // implementation into the sd module itself.
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
-protected:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     ::oox::GraphicHelper maGrfHelper;
 
+protected:
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   std::u16string_view rGuidString );

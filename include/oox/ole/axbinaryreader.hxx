@@ -170,8 +170,9 @@ private:
     /** Complex property for a 32-bit value pair, e.g. point or size. */
     struct PairProperty final : public ComplexProperty
     {
+    private:
         AxPairData&         mrPairData;
-
+    public:
         explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
@@ -180,9 +181,10 @@ private:
     /** Complex property for a string value. */
     struct StringProperty final : public ComplexProperty
     {
+    private:
         OUString&    mrValue;
         sal_uInt32          mnSize;
-
+    public:
         explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
@@ -191,8 +193,10 @@ private:
     /** Complex property for an array of strings. */
     struct ArrayStringProperty final : public ComplexProperty
     {
+    private:
         AxArrayString&      mrArray;
         sal_uInt32          mnSize;
+    public:
         explicit            ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
                                 mrArray( rArray ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
@@ -201,8 +205,10 @@ private:
     /** Complex property for a GUID value. */
     struct GuidProperty final : public ComplexProperty
     {
+    private:
         OUString&    mrGuid;
 
+    public:
         explicit            GuidProperty( OUString& rGuid ) :
                                 mrGuid( rGuid ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
@@ -211,8 +217,10 @@ private:
     /** Stream property for a font structure. */
     struct FontProperty final : public ComplexProperty
     {
+    private:
         AxFontData&         mrFontData;
 
+    public:
         explicit            FontProperty( AxFontData& rFontData ) :
                                 mrFontData( rFontData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
@@ -221,8 +229,10 @@ private:
     /** Stream property for a picture or mouse icon. */
     struct PictureProperty final : public ComplexProperty
     {
+    private:
         StreamDataSequence& mrPicData;
 
+    public:
         explicit            PictureProperty( StreamDataSequence& rPicData ) :
                                 mrPicData( rPicData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;

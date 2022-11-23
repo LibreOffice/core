@@ -118,8 +118,10 @@ private:
     /** Complex property for a 32-bit value pair, e.g. point or size. */
     struct PairProperty final : public ComplexProperty
     {
+    private:
         AxPairData&         mrPairData;
 
+    public:
         explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
@@ -128,9 +130,10 @@ private:
     /** Complex property for a string value. */
     struct StringProperty final : public ComplexProperty
     {
+    private:
         OUString&    mrValue;
         sal_uInt32          mnSize;
-
+    public:
         explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;

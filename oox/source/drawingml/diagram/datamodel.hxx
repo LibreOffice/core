@@ -58,6 +58,7 @@ protected:
     void secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
     void restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
 
+private:
     // The model definition, the parts *only* available in oox. Also look for already
     // defined ModelData in svx::diagram::DiagramData
 

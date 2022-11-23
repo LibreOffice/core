@@ -117,8 +117,6 @@ public:
 #endif
 private:
     const std::vector<OUString>* mpPropNames;
-
-protected:
     std::map< sal_Int32, css::uno::Any > maProperties;
 };
 
