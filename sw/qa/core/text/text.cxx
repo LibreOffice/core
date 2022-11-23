@@ -17,7 +17,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 

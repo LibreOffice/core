@@ -7,13 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/frame/Desktop.hpp>
+#include <test/unoapi_test.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <test/unoapi_test.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>

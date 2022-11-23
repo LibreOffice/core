@@ -16,8 +16,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -32,8 +30,6 @@
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <unotools/mediadescriptor.hxx>
-#include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
 

@@ -9,7 +9,6 @@
 
 #include <vcl/filter/pdfdocument.hxx>
 #include <pdf/pdfcompat.hxx>
-#include <config_features.h>
 
 #include <map>
 #include <memory>

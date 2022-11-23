@@ -9,15 +9,14 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <test/unoapi_test.hxx>
+
+#include <string_view>
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 

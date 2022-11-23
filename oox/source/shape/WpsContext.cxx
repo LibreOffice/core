@@ -22,7 +22,6 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <svx/svdtrans.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -30,6 +29,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textbodyproperties.hxx>
+#include <tools/helpers.hxx>
 
 #include <optional>
 

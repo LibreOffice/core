@@ -36,7 +36,6 @@
 #include <editeng/memberids.h>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdogrp.hxx>
 #include <svl/itemiter.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>

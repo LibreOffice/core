@@ -4,9 +4,6 @@ excludelist:
     filter/source/graphicfilter/icgm/cgm.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
-    filter/source/graphicfilter/ieps/ieps.cxx:
-    # Needed on WIN32
-    - o3tl/char16_t2wchar_t.hxx
     filter/source/msfilter/mscodec.cxx:
     # Actually used
     - com/sun/star/beans/NamedValue.hpp

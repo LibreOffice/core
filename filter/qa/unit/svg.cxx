@@ -9,11 +9,8 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <test/unoapixml_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

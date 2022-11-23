@@ -19,7 +19,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/scheduler.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>

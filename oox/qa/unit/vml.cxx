@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -20,7 +18,6 @@
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 

@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <svx/svdpage.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
@@ -19,7 +18,6 @@
 #include <frameformats.hxx>
 #include <textboxhelper.hxx>
 
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 

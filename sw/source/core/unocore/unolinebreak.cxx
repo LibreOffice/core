@@ -20,7 +20,6 @@
 #include <unolinebreak.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <svl/listener.hxx>

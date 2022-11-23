@@ -10,12 +10,6 @@ excludelist:
     vcl/inc/headless/svpinst.hxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx
-    vcl/inc/opengl/RenderList.hxx:
-    # Don't replace with impl. details
-    - glm/glm.hpp
-    vcl/inc/opengl/VertexUtils.hxx:
-    # Don't replace with impl. details
-    - glm/gtx/norm.hpp
     vcl/inc/unx/gendata.hxx:
     # Don't propose hxx -> h change in URE libs
     - osl/socket.hxx
@@ -53,9 +47,6 @@ excludelist:
     vcl/source/filter/wmf/wmfexternal.cxx:
     # Actually these are used
     - com/sun/star/beans/PropertyValue.hpp
-    vcl/source/font/fontselect.cxx:
-    # Needed on WIN32
-    - PhysicalFontFace.hxx
     vcl/source/fontsubset/sft.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h

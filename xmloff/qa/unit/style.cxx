@@ -9,22 +9,13 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <test/unoapixml_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
-#include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <unotools/mediadescriptor.hxx>
-#include <unotools/saveopt.hxx>
-#include <unotools/tempfile.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <rtl/character.hxx>
 
 using namespace ::com::sun::star;

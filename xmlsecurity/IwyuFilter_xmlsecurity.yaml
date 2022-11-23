@@ -68,9 +68,6 @@ excludelist:
     - com/sun/star/security/XCertificate.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    xmlsecurity/source/gpg/GpgComponentFactory.cxx:
-    # Silence warning due to incorrect include path
-    - com/sun/star/lang/XSingleServiceFactory.hpp
     xmlsecurity/source/gpg/SecurityEnvironment.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XSecurityEnvironment.hpp

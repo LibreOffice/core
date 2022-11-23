@@ -9,13 +9,11 @@
 
 #include <test/unoapi_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sal/types.h>
 #include <tools/stream.hxx>
-#include <unotest/directories.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

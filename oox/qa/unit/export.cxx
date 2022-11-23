@@ -9,12 +9,6 @@
 
 #include <test/unoapixml_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-
-#include <unotools/mediadescriptor.hxx>
-#include <unotools/tempfile.hxx>
-
 using namespace ::com::sun::star;
 
 namespace

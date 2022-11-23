@@ -13,7 +13,6 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>

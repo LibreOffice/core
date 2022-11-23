@@ -18,7 +18,6 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <sal/log.hxx>
-#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 

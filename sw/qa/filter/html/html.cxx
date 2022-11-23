@@ -9,7 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <comphelper/propertyvalue.hxx>
 #include <vcl/gdimtf.hxx>
 
 #include <docsh.hxx>

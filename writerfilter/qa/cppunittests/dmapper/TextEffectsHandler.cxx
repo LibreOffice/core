@@ -10,7 +10,6 @@
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 using namespace ::com::sun::star;

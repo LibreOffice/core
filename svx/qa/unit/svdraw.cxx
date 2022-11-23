@@ -12,8 +12,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -26,7 +24,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdview.hxx>
@@ -36,7 +33,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>

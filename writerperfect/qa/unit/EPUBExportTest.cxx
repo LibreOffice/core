@@ -9,12 +9,13 @@
 
 #include <sal/config.h>
 
+#include <test/unoapixml_test.hxx>
+
 #include <string_view>
 
 #include <libepubgen/libepubgen.h>
 
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -22,7 +23,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
-#include <test/unoapixml_test.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
