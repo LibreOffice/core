@@ -864,7 +864,7 @@ void Calendar::ImplUpdate( bool bCalcNew )
     mbFormat = true;
 }
 
-void Calendar::ImplScroll( bool bPrev )
+void Calendar::ImplScrollCalendar( bool bPrev )
 {
     Date aNewFirstMonth = GetFirstMonth();
     if ( bPrev )
@@ -943,7 +943,7 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
 
         if ( bRepeat && (mbPrevIn || mbNextIn) )
         {
-            ImplScroll( mbPrevIn );
+            ImplScrollCalendar( mbPrevIn );
         }
     }
     else
@@ -992,9 +992,9 @@ void Calendar::ImplEndTracking( bool bCancel )
             Date aFirstSelDate( *mpSelectTable->begin() );
             Date aLastSelDate( *mpSelectTable->rbegin() );
             if ( aLastSelDate < GetFirstMonth() )
-                ImplScroll( true );
+                ImplScrollCalendar( true );
             else if ( GetLastMonth() < aFirstSelDate )
-                ImplScroll( false );
+                ImplScrollCalendar( false );
         }
     }
 
@@ -1026,7 +1026,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( mbPrevIn || mbNextIn )
                 {
                     mbSpinDown = true;
-                    ImplScroll( mbPrevIn );
+                    ImplScrollCalendar( mbPrevIn );
                     // it should really read BUTTONREPEAT, therefore do not
                     // change it to SCROLLREPEAT, check with TH,
                     // why it could be different (71775)
@@ -1224,7 +1224,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
             {
                 while ( nNotchDelta < 0 )
                 {
-                    ImplScroll( true );
+                    ImplScrollCalendar( true );
                     nNotchDelta++;
                 }
             }
@@ -1232,7 +1232,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
             {
                 while ( nNotchDelta > 0 )
                 {
-                    ImplScroll( false );
+                    ImplScrollCalendar( false );
                     nNotchDelta--;
                 }
             }
