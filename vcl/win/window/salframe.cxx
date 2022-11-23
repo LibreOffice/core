@@ -1045,8 +1045,10 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool WinSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    bool const ret = PostMessageW(mhWnd, SAL_MSG_USEREVENT, 0, reinterpret_cast<LPARAM>(pData.release()));
+    bool const ret = PostMessageW(mhWnd, SAL_MSG_USEREVENT, 0, reinterpret_cast<LPARAM>(pData.get()));
     SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
+    if (ret)
+        pData.release();
     return ret;
 }
 
