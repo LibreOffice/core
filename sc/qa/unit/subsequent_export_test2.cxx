@@ -64,6 +64,7 @@ protected:
 public:
     ScExportTest2();
 
+    void testGroupShape();
     void testMatrixMultiplicationXLSX();
     void testTdf121260();
     void testTextDirectionXLSX();
@@ -189,6 +190,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
+    CPPUNIT_TEST(testGroupShape);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTdf121260);
     CPPUNIT_TEST(testTextDirectionXLSX);
@@ -322,6 +324,16 @@ void ScExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
+}
+
+void ScExportTest2::testGroupShape()
+{
+    createScDoc("xlsx/groupShape.xlsx");
+    save("Calc Office Open XML");
+
+    xmlDocUniquePtr pDoc = parseExport("xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
 void ScExportTest2::testMatrixMultiplicationXLSX()
