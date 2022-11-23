@@ -676,15 +676,14 @@ void SwVbaContentControl::Cut()
     SAL_INFO("sw.vba",
              "SwVbaContentControl::Cut[" << getID() << "], but missing sending to clipboard");
 
-    Delete(uno::Any(false));
+    m_rCC.Delete(/*bSaveContents=*/false);
 }
 
 void SwVbaContentControl::Delete(const uno::Any& DeleteContents)
 {
     bool bDeleteContents = false;
     DeleteContents >>= bDeleteContents;
-    SAL_INFO("sw.vba", "SwVbaContentControl::Delete[" << DeleteContents << "] stub");
-    //m_rCC.ChgTextNode(nullptr); // works, but crashes on UI touch - probably requires invalidation
+    m_rCC.Delete(!bDeleteContents);
 }
 
 void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
