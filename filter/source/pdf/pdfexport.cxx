@@ -107,6 +107,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
 
     mbIsRedactMode              ( false ),
     maWatermarkColor            ( COL_LIGHTGREEN ),
+    maWatermarkFontName         ( "Helvetica" ),
 
     mbHideViewerToolbar         ( false ),
     mbHideViewerMenubar         ( false ),
@@ -547,6 +548,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     if (rProp.Value >>= nFontHeight)
                     {
                         moWatermarkFontHeight = nFontHeight;
+                    }
+                }
+                else if (rProp.Name == "WatermarkFontName")
+                {
+                    OUString aFontName{};
+                    if (rProp.Value >>= aFontName)
+                    {
+                        maWatermarkFontName = aFontName;
                     }
                 }
                 else if ( rProp.Name == "TiledWatermark" )
@@ -1135,7 +1144,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 
 void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
-    vcl::Font aFont( "Helvetica", Size( 0, moWatermarkFontHeight ? *moWatermarkFontHeight : 3*rPageSize.Height()/4 ) );
+    vcl::Font aFont( maWatermarkFontName, Size( 0, moWatermarkFontHeight ? *moWatermarkFontHeight : 3*rPageSize.Height()/4 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
