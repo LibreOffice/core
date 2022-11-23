@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_opencl_test, \
     scqahelper \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
@@ -72,45 +73,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_opencl_test,\
 $(eval $(call gb_CppunitTest_use_ure,sc_opencl_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_opencl_test))
 
-$(eval $(call gb_CppunitTest_use_components,sc_opencl_test,\
-    basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    embeddedobj/util/embobj \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    sc/util/sc \
-    sc/util/scfilt \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/util/svl \
-    svtools/util/svt \
-    svx/util/svx \
-    svx/util/svxcore \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-	uui/util/uui \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    vcl/vcl.common \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_opencl_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_opencl_test))
 
