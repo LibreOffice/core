@@ -138,6 +138,7 @@ public:
     void testFixedSizeBarChartVeryLongLabel();
     void testAutomaticSizeBarChartVeryLongLabel();
     void testTotalsRowIgnored();
+    void testPieChartPlotAreaMarginWithAutomaticLayout();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testFixedSizeBarChartVeryLongLabel);
     CPPUNIT_TEST(testAutomaticSizeBarChartVeryLongLabel);
     CPPUNIT_TEST(testTotalsRowIgnored);
+    CPPUNIT_TEST(testPieChartPlotAreaMarginWithAutomaticLayout);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2300,6 +2302,96 @@ void Chart2ImportTest::testTotalsRowIgnored()
 
         // Table data range is D2:D10 (9 rows) and totals row isn't the last row so it's not ignored
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(9u), xDataSeq->getData().size());
+    }
+}
+
+void Chart2ImportTest::testPieChartPlotAreaMarginWithAutomaticLayout()
+{
+    // tdf#91265
+    // Checks the margin and calculation of the plot area for the pie chart inside the chart area.
+
+    loadFromURL(u"pptx/PieChartWithAutomaticLayout_SizeAndPosition.pptx");
+
+    OUString aCheckShapeName = "CID/D=0:CS=0:CT=0:Series=0";
+    // Chart Wuse case Width == Height
+    {
+        // Load chart Chart_2_2 - 2cm x 2cm -
+        auto xDocument = getChartDocFromDrawImpressNamed(0, u"Chart_2_2");
+        CPPUNIT_ASSERT(xDocument.is());
+
+        uno::Reference<chart2::XChartDocument>xChartDocument(xDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDocument.is());
+
+        // Get the shape of the diagram / chart
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDrawPageSupplier.is());
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference<drawing::XShape> xChartDiagramShape = getShapeByName(xShapes, aCheckShapeName);
+        CPPUNIT_ASSERT(xChartDiagramShape.is());
+
+        // Size
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1300, xChartDiagramShape->getSize().Width, 5);  // calculated chart area size - 2 * margin
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1300, xChartDiagramShape->getSize().Height, 5); // calculated chart area size - 2 * margin
+        // Position
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(350, xChartDiagramShape->getPosition().X, 5); // margin
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(350, xChartDiagramShape->getPosition().Y, 5); // margin
+    }
+
+    // Chart use case - Width < Height
+    {
+        // Load chart Chart_3_4 - 3cm x 4cm
+        auto xDocument = getChartDocFromDrawImpressNamed(0, u"Chart_3_4");
+        CPPUNIT_ASSERT(xDocument.is());
+
+        uno::Reference<chart2::XChartDocument>xChartDocument(xDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDocument.is());
+
+        // Get the shape of the diagram / chart
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDrawPageSupplier.is());
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference<drawing::XShape> xChartDiagramShape = getShapeByName(xShapes, aCheckShapeName);
+        CPPUNIT_ASSERT(xChartDiagramShape.is());
+
+        // Size
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2300, xChartDiagramShape->getSize().Width, 5);  // calculated chart area size - 2 * margin
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2300, xChartDiagramShape->getSize().Height, 5); // calculated chart area size - 2 * margin
+        // Position
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(350, xChartDiagramShape->getPosition().X, 5); // margin
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(850, xChartDiagramShape->getPosition().Y, 5); // margin + calculated centering
+    }
+
+    // Chart use case - Width > Height
+    {
+        // Load chart Chart_3_2 - 3cm x 2cm
+        auto xDocument = getChartDocFromDrawImpressNamed(0, u"Chart_3_2");
+        CPPUNIT_ASSERT(xDocument.is());
+
+        uno::Reference<chart2::XChartDocument>xChartDocument(xDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDocument.is());
+
+        // Get the shape of the diagram / chart
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDocument, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDrawPageSupplier.is());
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference<drawing::XShape> xChartDiagramShape = getShapeByName(xShapes, aCheckShapeName);
+        CPPUNIT_ASSERT(xChartDiagramShape.is());
+
+        // Size
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1300, xChartDiagramShape->getSize().Width, 5);  // calculated chart area size - 2 * margin
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1300, xChartDiagramShape->getSize().Height, 5); // calculated chart area size - 2 * margin
+        // Position
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(850, xChartDiagramShape->getPosition().X, 5); // margin + calculated centering
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(350, xChartDiagramShape->getPosition().Y, 5); // margin
     }
 }
 

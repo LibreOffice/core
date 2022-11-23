@@ -122,6 +122,8 @@ public:
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( std::u16string_view pDir, const char* pName );
 
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
+    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpressNamed( sal_Int32 nPage, std::u16string_view rName);
+
 
     uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
     Sequence< OUString > getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc );
@@ -473,6 +475,42 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
 
     uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
     return xChartDoc;
+}
+
+uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpressNamed(sal_Int32 nPage, std::u16string_view rName)
+{
+    uno::Reference<chart::XChartDocument> xChart;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY);
+    if (!xPages.is())
+        return xChart;
+
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY);
+    if (!xPage.is())
+        return xChart;
+
+    for (sal_Int32 i=0; i < xPage->getCount(); ++i)
+    {
+        uno::Reference<container::XNamed> xNamedShape(xPage->getByIndex(i), uno::UNO_QUERY);
+        if (!xNamedShape.is())
+            continue;
+
+        if (xNamedShape->getName() != rName)
+            continue;
+
+        uno::Reference<beans::XPropertySet> xShapeProps(xNamedShape, uno::UNO_QUERY);
+        if (!xShapeProps.is())
+            continue;
+
+        uno::Reference<frame::XModel> xDocModel;
+        xShapeProps->getPropertyValue("Model") >>= xDocModel;
+        if (!xDocModel.is())
+            continue;
+
+        return uno::Reference<chart::XChartDocument>(xDocModel, uno::UNO_QUERY);
+    }
+
+    return xChart;
 }
 
 uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )

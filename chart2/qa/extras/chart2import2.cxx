@@ -421,8 +421,8 @@ void Chart2ImportTest2::testTdf123504()
     CPPUNIT_ASSERT_GREATER(sal_Int32(3000), aSlicePosition.X);
     CPPUNIT_ASSERT_GREATER(sal_Int32(150), aSlicePosition.Y);
     awt::Size aSliceSize = xSlice->getSize();
-    CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Height);
-    CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Width);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8300.0, aSliceSize.Height, 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8300.0, aSliceSize.Width, 10);
 }
 
 void Chart2ImportTest2::testTdf122765()
@@ -599,8 +599,8 @@ void Chart2ImportTest2::testTdf133376()
     CPPUNIT_ASSERT(xDataPointLabel.is());
     // Check the position of the 3rd data point label, which is out from the pie slice
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1082, aLabelPosition.X, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5462, aLabelPosition.Y, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1208, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5370, aLabelPosition.Y, 30);
 }
 
 void Chart2ImportTest2::testTdf134225()
@@ -630,8 +630,8 @@ void Chart2ImportTest2::testTdf134225()
     awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
 
     // Check the distance between the position of the 1st data point label and the second one
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1669, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2166, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1493, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2015, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
 #endif
 }
 
@@ -679,7 +679,7 @@ void Chart2ImportTest2::testTdf136105()
         // Check the position of the 1st data point label, which is out from the pie slice
         awt::Point aLabelPosition = xDataPointLabel->getPosition();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(7978, aLabelPosition.X, 500);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1048, aLabelPosition.Y, 500);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aLabelPosition.Y, 500);
     }
 }
 
