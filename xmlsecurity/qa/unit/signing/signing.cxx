@@ -17,9 +17,7 @@
 #include <secoid.h>
 #endif
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -64,16 +62,10 @@
 
 using namespace com::sun::star;
 
-namespace
-{
-constexpr OUStringLiteral DATA_DIRECTORY = u"/xmlsecurity/qa/unit/signing/data/";
-}
-
 /// Testsuite for the document signing feature.
-class SigningTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SigningTest : public UnoApiXmlTest
 {
 protected:
-    uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
@@ -84,8 +76,6 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 
 protected:
-    void createDoc(const OUString& rURL);
-    void createCalc(const OUString& rURL);
     uno::Reference<security::XCertificate>
     getCertificate(DocumentSignatureManager& rSignatureManager,
                    svl::crypto::SignatureMethodAlgorithm eAlgo);
@@ -96,15 +86,18 @@ protected:
 #endif
 };
 
-SigningTest::SigningTest() {}
+SigningTest::SigningTest()
+    : UnoApiXmlTest("/xmlsecurity/qa/unit/signing/data/")
+{
+}
 
 void SigningTest::setUp()
 {
-    test::BootstrapFixture::setUp();
+    UnoApiXmlTest::setUp();
+
     MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_signing");
 
     // Initialize crypto after setting up the environment variables.
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
@@ -118,32 +111,9 @@ void SigningTest::setUp()
 
 void SigningTest::tearDown()
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
     MacrosTest::tearDownNssGpg();
-    test::BootstrapFixture::tearDown();
-}
 
-void SigningTest::createDoc(const OUString& rURL)
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-    if (rURL.isEmpty())
-        mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    else
-        mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
-}
-
-void SigningTest::createCalc(const OUString& rURL)
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-    if (rURL.isEmpty())
-        mxComponent
-            = loadFromDesktop("private:factory/swriter", "com.sun.star.sheet.SpreadsheetDocument");
-    else
-        mxComponent = loadFromDesktop(rURL, "com.sun.star.sheet.SpreadsheetDocument");
+    UnoApiXmlTest::tearDown();
 }
 
 uno::Reference<security::XCertificate>
@@ -169,20 +139,15 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("writer8");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -206,20 +171,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("writer8");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -245,20 +205,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("MS Word 2007 XML");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -286,19 +241,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 {
     // Create an empty document and store it to a tempfile, finally load it as
     // a stream.
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("writer_pdf_Export");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(
-        aTempFile.GetURL(), StreamMode::READ | StreamMode::WRITE));
+        maTempFile.GetURL(), StreamMode::READ | StreamMode::WRITE));
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     CPPUNIT_ASSERT(xStream.is());
     aManager.setSignatureStream(xStream);
@@ -331,20 +281,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("MS Word 2007 XML");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -369,12 +314,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aURL = aTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::File::RC::E_None,
-        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+    OUString aURL = maTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
+                         osl::File::copy(createFileURL(u"partial.docx"), aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -408,12 +350,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aURL = aTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::File::RC::E_None,
-        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx", aURL));
+    OUString aURL = maTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
+                         osl::File::copy(createFileURL(u"multi.docx"), aURL));
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
                                                                 embed::ElementModes::READWRITE);
@@ -441,12 +380,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aURL = aTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::File::RC::E_None,
-        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
+    OUString aURL = maTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
+                         osl::File::copy(createFileURL(u"partial.docx"), aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -489,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 /// Test a typical ODF where all streams are signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.odt");
+    loadFromURL(u"good.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -504,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
 /// Test a typical broken ODF signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBroken)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.odt");
+    loadFromURL(u"bad.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -516,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBroken)
 // Document has a signature stream, but no actual signatures.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.odt");
+    loadFromURL(u"no.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -528,8 +464,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
 // document has one signed timestamp and one unsigned timestamp
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "02_doc_signed_by_trusted_person_manipulated.odt");
+    loadFromURL(u"02_doc_signed_by_trusted_person_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -554,8 +489,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "signed_with_x509certificate_chain.odt");
+    loadFromURL(u"signed_with_x509certificate_chain.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -578,8 +512,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "02_doc_signed_by_attacker_manipulated.odt");
+    loadFromURL(u"02_doc_signed_by_attacker_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -599,8 +532,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "02_doc_signed_by_attacker_manipulated_triple.odt");
+    loadFromURL(u"02_doc_signed_by_attacker_manipulated_triple.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -620,8 +552,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "02_doc_macros_signed_by_attacker_manipulated.odt");
+    loadFromURL(u"02_doc_macros_signed_by_attacker_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -641,8 +572,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "02_doc_signed_by_attacker_manipulated2.odt");
+    loadFromURL(u"02_doc_signed_by_attacker_manipulated2.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -684,7 +614,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDNCompatibility)
 /// Test a typical OOXML where a number of (but not all) streams are signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
+    loadFromURL(u"partial.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -701,7 +631,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 /// Test a typical broken OOXML signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLBroken)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.docx");
+    loadFromURL(u"bad.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -716,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLBroken)
 /// Test a typical PDF where the signature is good.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.pdf");
+    loadFromURL(u"good.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -737,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
 /// Test a typical PDF where the signature is bad.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.pdf");
+    loadFromURL(u"bad.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -754,8 +684,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFHideAndReplace)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
-              + "hide-and-replace-shadow-file-signed-2.pdf");
+    loadFromURL(u"hide-and-replace-shadow-file-signed-2.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -777,7 +706,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFHideAndReplace)
 /// Test a typical PDF which is not signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.pdf");
+    loadFromURL(u"no.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -799,10 +728,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     if (!IsDefaultDPI())
         return;
     // Given: copy the test document to a temporary file, as it'll be modified.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "add-visible-signature.pdf";
-    OUString aURL = aTempFile.GetURL();
+    OUString aSourceURL = createFileURL(u"add-visible-signature.pdf");
+    OUString aURL = maTempFile.GetURL();
     osl::File::RC eRet = osl::File::copy(aSourceURL, aURL);
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, eRet);
 
@@ -842,11 +769,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     pObjectShell->SignDocumentContentUsingCertificate(aCertificates[0]);
 
     // Then: count the # of shapes on the signature widget/annotation.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
     std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(/*nIndex=*/0);
@@ -861,7 +785,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 {
-    createCalc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.ods");
+    loadFromURL(u"tdf96097.ods");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to access document base model", pBaseModel);
 
@@ -876,30 +800,20 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    utl::TempFileNamed aTempFileSaveCopy;
-    aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
         { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("calc8")) } }));
-    xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
+    xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
 
-    try
-    {
-        // Save As
-        utl::TempFileNamed aTempFileSaveAs;
-        aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Fail to save as the document");
-    }
+    // FIXME: Error: element "document-signatures" is missing "version" attribute
+    skipValidation();
+
+    // Save As
+    save("calc8");
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.odt");
+    loadFromURL(u"tdf96097.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -913,43 +827,30 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    utl::TempFileNamed aTempFileSaveCopy;
-    aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
         { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("writer8")) } }));
-    xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
+    xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
 
-    try
-    {
-        // Save As
-        utl::TempFileNamed aTempFileSaveAs;
-        aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Fail to save as the document");
-    }
+    // FIXME: Error: element "document-signatures" is missing "version" attribute
+    skipValidation();
+
+    // Save As
+    save("writer8");
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 {
     // Create a working copy.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aURL = aTempFile.GetURL();
-    CPPUNIT_ASSERT_EQUAL(
-        osl::File::RC::E_None,
-        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "notype-xades.odt", aURL));
+    OUString aURL = maTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
+                         osl::File::copy(createFileURL(u"notype-xades.odt"), aURL));
 
     // Read existing signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -997,20 +898,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 {
     // Create an empty document, store it to a tempfile and load it as a storage.
-    createDoc(OUString());
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("writer8");
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -1055,21 +951,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 {
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
+    save("writer8");
     {
         DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
         uno::Reference<embed::XStorage> xStorage
             = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+                ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
         CPPUNIT_ASSERT(xStorage.is());
         aManager.setStore(xStorage);
         aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -1123,7 +1013,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
     Scheduler::ProcessEventsToIdle();
 
-    createDoc(aTempFile.GetURL());
+    load(maTempFile.GetURL());
 
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1134,21 +1024,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 {
-    createDoc("");
+    load("private:factory/swriter");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
+    save("MS Word 2007 XML");
     {
         DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
         uno::Reference<embed::XStorage> xStorage
             = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+                ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
         CPPUNIT_ASSERT(xStorage.is());
         aManager.setStore(xStorage);
         aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
@@ -1197,7 +1081,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 
     Scheduler::ProcessEventsToIdle();
 
-    createDoc(aTempFile.GetURL());
+    load(maTempFile.GetURL());
 
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1209,7 +1093,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 /// Works with an existing good XAdES signature.
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESGood)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-xades.odt");
+    loadFromURL(u"good-xades.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1231,8 +1115,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING,
-            m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.docx",
+            ZIP_STORAGE_FORMAT_STRING, createFileURL(u"signatureline.docx"),
             embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
 
@@ -1252,7 +1135,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.odt");
+    loadFromURL(u"signatureline.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1274,7 +1157,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 /// Test a typical ODF where all streams are GPG-signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "goodGPG.odt");
+    loadFromURL(u"goodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1289,7 +1172,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
 /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "untrustedGoodGPG.odt");
+    loadFromURL(u"untrustedGoodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1305,7 +1188,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
 /// Test a typical broken ODF signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badStreamGPG.odt");
+    loadFromURL(u"badStreamGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1317,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
 /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
 {
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badDsigGPG.odt");
+    loadFromURL(u"badDsigGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1332,36 +1215,26 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
 {
     // ODF1.2 + loext flavour
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG.odt");
+    loadFromURL(u"encryptedGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 
     // ODF1.3 flavour
-    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG_odf13.odt");
+    loadFromURL(u"encryptedGPG_odf13.odt");
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 
     // export and import again
-    utl::TempFileNamed aTempFile;
-    {
-        uno::Sequence<beans::PropertyValue> props(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        xDocStorable->storeToURL(aTempFile.GetURL(), props);
-    }
-    validate(aTempFile.GetFileName(), test::ODF);
+    saveAndReload("writer8");
 
-    createDoc(aTempFile.GetURL());
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
-
-    aTempFile.EnableKillingFile();
 }
 
 #endif
@@ -1397,104 +1270,75 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
 /// Test if a macro signature from a OTT 1.2 template is preserved for ODT 1.2
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 {
-    const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316_odt12.ott");
-    const OUString sLoadMessage = "loading failed: " + aURL;
+    const OUString aFormats[] = { "writer8", "writer8_template" };
 
-    // load the template as-is to validate signatures
-    mxComponent = loadFromDesktop(
-        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // we are a template, and have a valid document and macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::OK, SignatureState::OK,
-                   ODFVER_012_TEXT);
-
-    // create new document from template
-    mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
-                           mxComponent.is());
-
-    // we are somehow a template (?), and have just a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_012_TEXT);
-
-    // save as new ODT document
-    utl::TempFileNamed aTempFileSaveAsODT;
-    aTempFileSaveAsODT.EnableKillingFile();
-    try
+    for (OUString const& sFormat : aFormats)
     {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsODT.GetURL(), descSaveAs);
+        const OUString aURL(createFileURL(u"tdf42316_odt12.ott"));
+        const OUString sLoadMessage = "loading failed: " + aURL;
+
+        // load the template as-is to validate signatures
+        mxComponent = loadFromDesktop(
+            aURL, OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // we are a template, and have a valid document and macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::OK,
+                       SignatureState::OK, ODFVER_012_TEXT);
+
+        // create new document from template
+        load(aURL);
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                               mxComponent.is());
+
+        // we are somehow a template (?), and have just a valid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                       SignatureState::OK, ODFVER_012_TEXT);
+
+        // FIXME: Error: element "document-signatures" is missing "version" attribute
+        skipValidation();
+
+        if (sFormat == "writer8")
+            // save as new ODT document
+            saveAndReload(sFormat);
+        else
+        {
+            // save as new OTT template
+            save("writer8_template");
+
+            // load the saved OTT template as-is to validate signatures
+            mxComponent->dispose();
+            mxComponent = loadFromDesktop(
+                maTempFile.GetURL(), OUString(),
+                comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        }
+
+        // the loaded document is a OTT/ODT with a macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
+                       SignatureState::OK, ODFVER_013_TEXT);
+
+        // save as new OTT template
+        save("writer8_template");
+
+        // load the template as-is to validate signatures
+        mxComponent->dispose();
+        mxComponent = loadFromDesktop(
+            maTempFile.GetURL(), OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // the loaded document is a OTT with a valid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                       SignatureState::OK, ODFVER_013_TEXT);
+
+        mxComponent->dispose();
+        mxComponent.clear();
     }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save ODT document");
-    }
-
-    // save as new OTT template
-    utl::TempFileNamed aTempFileSaveAsOTT;
-    aTempFileSaveAsOTT.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save OTT template");
-    }
-
-    // load the saved OTT template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
-                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // the loaded document is a OTT with a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_013_TEXT);
-
-    // load saved ODT document
-    createDoc(aTempFileSaveAsODT.GetURL());
-
-    // the loaded document is a ODT with a macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_013_TEXT);
-
-    // save as new OTT template
-    utl::TempFileNamed aTempFileSaveAsODT_OTT;
-    aTempFileSaveAsODT_OTT.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsODT_OTT.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save OTT template");
-    }
-
-    // load the template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(aTempFileSaveAsODT_OTT.GetURL(), OUString(),
-                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // the loaded document is a OTT with a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_013_TEXT);
 }
 
 /// Test if a macro signature from an OTT 1.0 is dropped for ODT 1.2
 CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 {
-    const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316.ott");
+    const OUString aURL(createFileURL(u"tdf42316.ott"));
     const OUString sLoadMessage = "loading failed: " + aURL;
 
     // load the template as-is to validate signatures
@@ -1506,8 +1350,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
-    mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
+    load(aURL);
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1516,22 +1359,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    utl::TempFileNamed aTempFileSaveAs;
-    aTempFileSaveAs.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save ODT document");
-    }
-
-    // load saved document
-    createDoc(aTempFileSaveAs.GetURL());
+    saveAndReload("writer8");
 
     // the loaded document is a 1.2 ODT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
@@ -1547,24 +1375,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new OTT template
-    utl::TempFileNamed aTempFileSaveAsOTT;
-    aTempFileSaveAsOTT.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save OTT template");
-    }
+    save("writer8_template");
 
     // load the template as-is to validate signatures
     mxComponent->dispose();
     mxComponent
-        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
+        = loadFromDesktop(maTempFile.GetURL(), OUString(),
                           comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // the loaded document is a 1.2 OTT without any signatures
@@ -1587,98 +1403,67 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
     officecfg::Office::Common::Save::ODF::DefaultVersion::set(2, pBatch);
     pBatch->commit();
 
-    const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316.ott");
-    const OUString sLoadMessage = "loading failed: " + aURL;
+    const OUString aFormats[] = { "writer8", "writer8_template" };
 
-    // load the template as-is to validate signatures
-    mxComponent = loadFromDesktop(
-        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // we are a template, and have a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::NOTVALIDATED, OUString());
-
-    // create new document from template
-    mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
-                           mxComponent.is());
-
-    // we are somehow a template (?), and have just a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::NOTVALIDATED, OUString());
-
-    // save as new ODT document
-    utl::TempFileNamed aTempFileSaveAsODT;
-    aTempFileSaveAsODT.EnableKillingFile();
-    try
+    for (OUString const& sFormat : aFormats)
     {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(
-            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsODT.GetURL(), descSaveAs);
+        const OUString aURL(createFileURL(u"tdf42316.ott"));
+        const OUString sLoadMessage = "loading failed: " + aURL;
+
+        // load the template as-is to validate signatures
+        mxComponent = loadFromDesktop(
+            aURL, OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // we are a template, and have a non-invalid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        // create new document from template
+        load(aURL);
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                               mxComponent.is());
+
+        // we are somehow a template (?), and have just a valid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        // FIXME: Error: element "manifest:manifest" is missing "version" attribute
+        skipValidation();
+
+        if (sFormat == "writer8")
+            // save as new ODT document
+            saveAndReload(sFormat);
+        else
+        {
+            // save as new OTT template
+            save("writer8_template");
+
+            // load the saved OTT template as-is to validate signatures
+            mxComponent->dispose();
+            mxComponent = loadFromDesktop(
+                maTempFile.GetURL(), OUString(),
+                comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        }
+
+        assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        save("writer8_template");
+
+        // load the template as-is to validate signatures
+        mxComponent->dispose();
+        mxComponent = loadFromDesktop(
+            maTempFile.GetURL(), OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // the loaded document is a OTT with a non-invalid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        mxComponent->dispose();
+        mxComponent.clear();
     }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save ODT document");
-    }
-
-    // save as new OTT template
-    utl::TempFileNamed aTempFileSaveAsOTT;
-    aTempFileSaveAsOTT.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save OTT template");
-    }
-
-    // load the saved OTT template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
-                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // the loaded document is a OTT with a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::NOTVALIDATED, OUString());
-
-    // load saved ODT document
-    createDoc(aTempFileSaveAsODT.GetURL());
-
-    // the loaded document is a ODT with a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-                   SignatureState::NOTVALIDATED, OUString());
-
-    // save as new OTT template
-    utl::TempFileNamed aTempFileSaveAsODT_OTT;
-    aTempFileSaveAsODT_OTT.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsODT_OTT.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save OTT template");
-    }
-
-    // load the template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(aTempFileSaveAsODT_OTT.GetURL(), OUString(),
-                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
-
-    // the loaded document is a OTT with a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::NOTVALIDATED, OUString());
 }
 
 #endif
