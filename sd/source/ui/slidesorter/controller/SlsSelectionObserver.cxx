@@ -121,11 +121,17 @@ void SelectionObserver::EndObservation()
     }
 
     aUpdateLock.Release();
-    bool bSuccess = mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
+    FocusManager& rFocusManager = mrSlideSorter.GetController().GetFocusManager();
+    bool bSuccess = rFocusManager.SetFocusedPageToCurrentPage();
     // tdf#129346 nothing currently selected, select something, if possible
     // but (tdf#129346) only if setting focus to current page failed
-    if (!bSuccess && rSelector.GetPageCount() && rSelector.GetSelectedPageCount() == 0)
-        rSelector.SelectPage(0);
+    if (rSelector.GetPageCount() && rSelector.GetSelectedPageCount() == 0)
+    {
+        if (bSuccess)
+            rSelector.SelectPage(rFocusManager.GetFocusedPageDescriptor());
+        else
+            rSelector.SelectPage(0);
+    }
 }
 
 } // end of namespace ::sd::slidesorter::controller
