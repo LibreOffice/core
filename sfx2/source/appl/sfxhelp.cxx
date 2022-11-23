@@ -1122,7 +1122,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                                     static_cast<CFStringRef>(@"https://www.libreoffice.org"),
                                     nullptr),
                                 kLSRolesAll, nullptr);
-        if([static_cast<NSString*>(CFURLGetString(pBrowser)) isEqualToString:@"file:///Applications/Safari.app/"]) {
+        if([static_cast<NSString*>(CFURLGetString(pBrowser)) hasSuffix:@"/Applications/Safari.app/"]) {
             impl_showOnlineHelp(aHelpURL, pWeldWindow);
             return true;
         }
