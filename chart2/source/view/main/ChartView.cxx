@@ -924,15 +924,27 @@ namespace
 {
 
 constexpr double constPageLayoutDistancePercentage = 0.02;
+constexpr sal_Int32 constPageLayoutFixedDistance = 350;
 
 bool getAvailablePosAndSizeForDiagram(
-    CreateShapeParam2D& rParam, const awt::Size & rPageSize, const uno::Reference< beans::XPropertySet >& xProp)
+    CreateShapeParam2D& rParam, const awt::Size & rPageSize, rtl::Reference<Diagram> const& xDiagram)
 {
+    uno::Reference<beans::XPropertySet> const& xProp(xDiagram);
     rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
-    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height * constPageLayoutDistancePercentage);
-    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width * constPageLayoutDistancePercentage);
+    rtl::Reference<ChartType> xChartType(DiagramHelper::getChartTypeByIndex(xDiagram, 0));
+
+    sal_Int32 nXDistance = sal_Int32(rPageSize.Width * constPageLayoutDistancePercentage);
+    sal_Int32 nYDistance = sal_Int32(rPageSize.Height * constPageLayoutDistancePercentage);
+
+    // Only pie chart uses fixed size margins
+    if (xChartType.is() && xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_PIE)
+    {
+        nXDistance = constPageLayoutFixedDistance;
+        nYDistance = constPageLayoutFixedDistance;
+    }
+
     rParam.maRemainingSpace.X += nXDistance;
     rParam.maRemainingSpace.Width -= 2*nXDistance;
     rParam.maRemainingSpace.Y += nYDistance;

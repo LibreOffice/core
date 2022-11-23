@@ -1619,7 +1619,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
               "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[31]",
               "y")
               .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4810, nYTop - nYBottom, 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4615, nYTop - nYBottom, 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
@@ -1672,7 +1672,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
     // - Actual  : -225
     // - Delta   : 100
     // i.e. the second data label appeared inside the pie slice.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1229, nX2 - nX4, 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1117, nX2 - nX4, 100);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
