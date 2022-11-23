@@ -233,18 +233,13 @@ void SdImportTest2::testTdf93868()
 
     const SdrPage* pPage = &(GetPage(1)->TRG_GetMasterPage());
     CPPUNIT_ASSERT_EQUAL(size_t(5), pPage->GetObjCount());
-    CPPUNIT_ASSERT_EQUAL(
-        drawing::FillStyle_SOLID,
-        dynamic_cast<const XFillStyleItem&>(pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE))
-            .GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE).GetValue());
 
-    CPPUNIT_ASSERT_EQUAL(
-        drawing::FillStyle_NONE,
-        dynamic_cast<const XFillStyleItem&>(pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE))
-            .GetValue());
-    CPPUNIT_ASSERT_EQUAL(true, dynamic_cast<const XFillUseSlideBackgroundItem&>(
-                                   pPage->GetObj(1)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND))
-                                   .GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(true,
+                         pPage->GetObj(1)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND).GetValue());
 }
 
 void SdImportTest2::testTdf95932()
@@ -255,11 +250,9 @@ void SdImportTest2::testTdf95932()
     SdrObject* const pObj = pPage->GetObj(1);
     CPPUNIT_ASSERT(pObj);
 
-    const XFillStyleItem& rStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-    const XFillColorItem& rColorItem
-        = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+    const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
     CPPUNIT_ASSERT_EQUAL(Color(0x76bf3d), rColorItem.GetColorValue());
 }
 
@@ -630,27 +623,22 @@ void SdImportTest2::testTdf104015()
     CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
     // Should have a red fill color
     {
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
     }
     // Should have a blue line
     {
-        const XLineStyleItem& rStyleItem
-            = dynamic_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE));
+        const XLineStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_LINESTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
 
-        const XLineColorItem& rColorItem
-            = dynamic_cast<const XLineColorItem&>(pObj->GetMergedItem(XATTR_LINECOLOR));
+        const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x0000FF), rColorItem.GetColorValue());
     }
     // Should have some shadow
     {
-        const SdrOnOffItem& rShadowItem
-            = dynamic_cast<const SdrOnOffItem&>(pObj->GetMergedItem(SDRATTR_SHADOW));
+        const SdrOnOffItem& rShadowItem = pObj->GetMergedItem(SDRATTR_SHADOW);
         CPPUNIT_ASSERT(rShadowItem.GetValue());
     }
 }
@@ -668,22 +656,18 @@ void SdImportTest2::testTdf104201()
     {
         SdrObject* const pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
     }
     // Second shape has blue fill, but this should be overwritten by green group fill
     {
         SdrObject* const pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
     }
 }
@@ -709,13 +693,11 @@ void SdImportTest2::testTdf105150()
     loadFromURL(u"pptx/tdf105150.pptx");
     const SdrPage* pPage = GetPage(1);
     const SdrObject* pObj = pPage->GetObj(1);
-    auto& rFillStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
     // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
     // the slide didn't have an explicit background fill.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
-    auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
-        pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+    auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
     CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
 }
 
@@ -724,8 +706,7 @@ void SdImportTest2::testTdf123684()
     loadFromURL(u"pptx/tdf123684.pptx");
     const SdrPage* pPage = GetPage(1);
     const SdrObject* pObj = pPage->GetObj(0);
-    auto& rFillStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
     // 1', i.e. the shape's fill was FillStyle_SOLID, making the text of the shape unreadable.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
@@ -738,8 +719,7 @@ void SdImportTest2::testTdf105150PPT()
     const SdrObject* pObj = pPage->GetObj(1);
     // This was drawing::FillStyle_NONE, the shape's mso_fillBackground was
     // ignored when the slide didn't have an explicit background fill.
-    auto& rFillStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
 }
 
@@ -1630,11 +1610,9 @@ void SdImportTest2::testTdf127964()
     {
         const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);
-        auto& rFillStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
-        auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
-            pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+        auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
         CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     }
 
@@ -1643,11 +1621,9 @@ void SdImportTest2::testTdf127964()
     {
         const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);
-        auto& rFillStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
-        auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
-            pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+        auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
         CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     }
 }

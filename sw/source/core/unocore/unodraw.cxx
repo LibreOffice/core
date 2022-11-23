@@ -1239,7 +1239,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
                             (RndStdIds::FLY_AT_PAGE == eOldAnchorId))
                     {
-                        SwFormatAnchor aNewAnchor( dynamic_cast< const SwFormatAnchor& >( aSet.Get( RES_ANCHOR ) ) );
+                        SwFormatAnchor aNewAnchor( aSet.Get( RES_ANCHOR ) );
                         //if the fly has been anchored at page then it needs to be connected
                         //to the content position
                         SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
@@ -1283,8 +1283,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             aPam.GetPoint()->GetContentIndex(), 0 );
                         aPam.GetPoint()->AdjustContent(-1); // InsertItem moved it
                         SwFormatAnchor aNewAnchor(
-                            dynamic_cast<const SwFormatAnchor&>(
-                                aSet.Get(RES_ANCHOR)));
+                                aSet.Get(RES_ANCHOR));
                         aNewAnchor.SetAnchor( aPam.GetPoint() );
                         aSet.Put( aNewAnchor );
                     }

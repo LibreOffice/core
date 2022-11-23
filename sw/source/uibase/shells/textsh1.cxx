@@ -1369,7 +1369,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.GetCurAttr(aSet);
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
-            const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
+            const SwFormatINetFormat& rINetFormat = aSet.Get(RES_TXTATR_INETFMT);
             if( nSlot == SID_COPY_HYPERLINK_LOCATION )
             {
                 OUString hyperlinkLocation = rINetFormat.GetValue();

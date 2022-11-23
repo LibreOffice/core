@@ -901,6 +901,7 @@ bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
     {
         // casting from 'T&' to 'const T&' is redundant, so compare without the qualifiers
         qt1 = qt1->getPointeeType().getUnqualifiedType();
+        qt2 = qt2.getUnqualifiedType();
         if (qt1 == qt2)
         {
             report(

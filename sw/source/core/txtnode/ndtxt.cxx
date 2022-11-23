@@ -4022,7 +4022,7 @@ namespace {
                 {
                     lcl_ResetParAttrs(rTextNode);
                     // #i70748#
-                    if ( dynamic_cast<const SfxUInt16Item &>(rTextNode.GetAttr( RES_PARATR_OUTLINELEVEL, false )).GetValue() > 0 )
+                    if ( rTextNode.GetAttr( RES_PARATR_OUTLINELEVEL, false ).GetValue() > 0 )
                     {
                         rTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                     }
@@ -4162,7 +4162,7 @@ void SwTextNode::SetAttrOutlineLevel(int nLevel)
 
 void SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
 {
-    const SfxGrabBagItem & rGrabBagItem = dynamic_cast<const SfxGrabBagItem&>(GetAttr(RES_PARATR_GRABBAG));
+    const SfxGrabBagItem & rGrabBagItem = GetAttr(RES_PARATR_GRABBAG);
     auto it = rGrabBagItem.GetGrabBag().find("OutlineContentVisibleAttr");
     if (it != rGrabBagItem.GetGrabBag().end())
         it->second >>= bOutlineContentVisibleAttr;
@@ -4219,7 +4219,7 @@ int SwTextNode::GetAttrListLevel() const
     int nAttrListLevel = 0;
 
     const SfxInt16Item& aListLevelItem =
-        dynamic_cast<const SfxInt16Item&>(GetAttr( RES_PARATR_LIST_LEVEL ));
+        GetAttr( RES_PARATR_LIST_LEVEL );
     nAttrListLevel = static_cast<int>(aListLevelItem.GetValue());
 
     return nAttrListLevel;
@@ -4315,7 +4315,7 @@ SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue() const
             "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node." );
 
     const SfxInt16Item& aListRestartValueItem =
-        dynamic_cast<const SfxInt16Item&>(GetAttr( RES_PARATR_LIST_RESTARTVALUE ));
+        GetAttr( RES_PARATR_LIST_RESTARTVALUE );
     return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());
 }
 
@@ -4542,7 +4542,7 @@ bool SwTextNode::IsFirstOfNumRule(SwRootFrame const& rLayout) const
 void SwTextNode::SetListId(OUString const& rListId)
 {
     const SfxStringItem& rListIdItem =
-            dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
+            GetAttr( RES_PARATR_LIST_ID );
     if (rListIdItem.GetValue() != rListId)
     {
         if (rListId.isEmpty())
@@ -4560,7 +4560,7 @@ void SwTextNode::SetListId(OUString const& rListId)
 OUString SwTextNode::GetListId() const
 {
     const SfxStringItem& rListIdItem =
-                dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
+                GetAttr( RES_PARATR_LIST_ID );
     const OUString& sListId {rListIdItem.GetValue()};
 
     // As long as no explicit list id attribute is set, use the list id of

@@ -1678,7 +1678,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             //i120133: The Section width should consider section indent value.
             if (rSectionLR.GetLeft()+rSectionLR.GetRight()!=0)
             {
-                const SwFormatCol& rCol = dynamic_cast<const SwFormatCol&>(rSepInfo.pSectionFormat->GetFormatAttr(RES_COL));
+                const SwFormatCol& rCol = rSepInfo.pSectionFormat->GetFormatAttr(RES_COL);
                 SwFormatCol aCol(rCol);
                 aCol.SetAdjustValue(rSectionLR.GetLeft()+rSectionLR.GetRight());
                 aSet.Put(aCol);

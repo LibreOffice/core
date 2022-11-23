@@ -1093,11 +1093,9 @@ void SdImportTest::testFdo77027()
         CPPUNIT_ASSERT(pObj);
 
         // check that the fill style/color was actually imported
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xff6600), rColorItem.GetColorValue());
     }
 }
@@ -1136,8 +1134,7 @@ void SdImportTest::testFillStyleNone()
 
     const SdrPage* pPage = GetPage(1);
     const SdrObject* pObj = pPage->GetObj(0);
-    auto& rFillStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
     // 1', i.e. the shape's fill was FillStyle_SOLID, making the text of the shape unreadable.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
@@ -1444,11 +1441,9 @@ void SdImportTest::testBnc904423()
         SdrObject* const pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT(pObj);
 
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x00CC99), rColorItem.GetColorValue());
     }
 
@@ -1457,11 +1452,9 @@ void SdImportTest::testBnc904423()
         SdrObject* const pObj = pPage->GetObj(1);
         CPPUNIT_ASSERT(pObj);
 
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x3333CC), rColorItem.GetColorValue());
     }
 
@@ -1470,11 +1463,9 @@ void SdImportTest::testBnc904423()
         SdrObject* const pObj = pPage->GetObj(2);
         CPPUNIT_ASSERT(pObj);
 
-        const XFillStyleItem& rStyleItem
-            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
     }
 }
@@ -1491,16 +1482,13 @@ void SdImportTest::testShapeLineStyle()
         SdrObject* const pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT(pObj);
 
-        const XLineStyleItem& rStyleItem
-            = dynamic_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE));
+        const XLineStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_LINESTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
 
-        const XLineColorItem& rColorItem
-            = dynamic_cast<const XLineColorItem&>(pObj->GetMergedItem(XATTR_LINECOLOR));
+        const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
 
-        const XLineWidthItem& rWidthItem
-            = dynamic_cast<const XLineWidthItem&>(pObj->GetMergedItem(XATTR_LINEWIDTH));
+        const XLineWidthItem& rWidthItem = pObj->GetMergedItem(XATTR_LINEWIDTH);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(132), rWidthItem.GetValue());
     }
 
@@ -1509,16 +1497,13 @@ void SdImportTest::testShapeLineStyle()
         SdrObject* const pObj = pPage->GetObj(1);
         CPPUNIT_ASSERT(pObj);
 
-        const XLineStyleItem& rStyleItem
-            = dynamic_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE));
+        const XLineStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_LINESTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
 
-        const XLineColorItem& rColorItem
-            = dynamic_cast<const XLineColorItem&>(pObj->GetMergedItem(XATTR_LINECOLOR));
+        const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x3333CC), rColorItem.GetColorValue());
 
-        const XLineWidthItem& rWidthItem
-            = dynamic_cast<const XLineWidthItem&>(pObj->GetMergedItem(XATTR_LINEWIDTH));
+        const XLineWidthItem& rWidthItem = pObj->GetMergedItem(XATTR_LINEWIDTH);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(35), rWidthItem.GetValue());
     }
 
@@ -1527,16 +1512,13 @@ void SdImportTest::testShapeLineStyle()
         SdrObject* const pObj = pPage->GetObj(2);
         CPPUNIT_ASSERT(pObj);
 
-        const XLineStyleItem& rStyleItem
-            = dynamic_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE));
+        const XLineStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_LINESTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
 
-        const XLineColorItem& rColorItem
-            = dynamic_cast<const XLineColorItem&>(pObj->GetMergedItem(XATTR_LINECOLOR));
+        const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0x7030A0), rColorItem.GetColorValue());
 
-        const XLineWidthItem& rWidthItem
-            = dynamic_cast<const XLineWidthItem&>(pObj->GetMergedItem(XATTR_LINEWIDTH));
+        const XLineWidthItem& rWidthItem = pObj->GetMergedItem(XATTR_LINEWIDTH);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(176), rWidthItem.GetValue());
     }
 }

@@ -984,8 +984,7 @@ void SdOOXMLExportTest1::testLineStyle()
     SdrObject const* pShape = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
 
-    const XLineStyleItem& rStyleItem
-        = dynamic_cast<const XLineStyleItem&>(pShape->GetMergedItem(XATTR_LINESTYLE));
+    const XLineStyleItem& rStyleItem = pShape->GetMergedItem(XATTR_LINESTYLE);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style", int(drawing::LineStyle_SOLID),
                                  static_cast<int>(rStyleItem.GetValue()));
 }

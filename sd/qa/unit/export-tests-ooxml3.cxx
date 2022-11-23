@@ -1376,10 +1376,8 @@ void SdOOXMLExportTest3::testTdf126741()
     SdrObject* const pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT(pObj);
 
-    const XLineStyleItem& rStyleItem
-        = dynamic_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE));
-    const XLineDashItem& rDashItem
-        = dynamic_cast<const XLineDashItem&>(pObj->GetMergedItem(XATTR_LINEDASH));
+    const XLineStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_LINESTYLE);
+    const XLineDashItem& rDashItem = pObj->GetMergedItem(XATTR_LINEDASH);
 
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rDashItem.GetDashValue().GetDots());

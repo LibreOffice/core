@@ -547,15 +547,13 @@ void ScFiltersTest::testTdf129789()
         // Fill: None
         SdrCaptionObj* const pCaptionB2 = checkCaption(*pDoc, ScAddress(1, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemB2
-            = dynamic_cast<const XFillStyleItem&>(pCaptionB2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemB2 = pCaptionB2->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleItemB2.GetValue());
 
         SdrCaptionObj* const pCaptionB9 = checkCaption(*pDoc, ScAddress(1, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemB9
-            = dynamic_cast<const XFillStyleItem&>(pCaptionB9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemB9 = pCaptionB9->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleItemB9.GetValue());
     }
@@ -564,24 +562,20 @@ void ScFiltersTest::testTdf129789()
         // Fill: Solid
         SdrCaptionObj* const pCaptionE2 = checkCaption(*pDoc, ScAddress(4, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemE2
-            = dynamic_cast<const XFillStyleItem&>(pCaptionE2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemE2 = pCaptionE2->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItemE2.GetValue());
 
-        const XFillColorItem& rColorItem
-            = dynamic_cast<const XFillColorItem&>(pCaptionE2->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem = pCaptionE2->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem.GetColorValue());
 
         SdrCaptionObj* const pCaptionE9 = checkCaption(*pDoc, ScAddress(4, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemE9
-            = dynamic_cast<const XFillStyleItem&>(pCaptionE9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemE9 = pCaptionE9->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItemE9.GetValue());
 
-        const XFillColorItem& rColorItem2
-            = dynamic_cast<const XFillColorItem&>(pCaptionE9->GetMergedItem(XATTR_FILLCOLOR));
+        const XFillColorItem& rColorItem2 = pCaptionE9->GetMergedItem(XATTR_FILLCOLOR);
         CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem2.GetColorValue());
     }
 
@@ -589,23 +583,19 @@ void ScFiltersTest::testTdf129789()
         // Fill: Gradient
         SdrCaptionObj* const pCaptionH2 = checkCaption(*pDoc, ScAddress(7, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemH2
-            = dynamic_cast<const XFillStyleItem&>(pCaptionH2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemH2 = pCaptionH2->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
-        const XFillGradientItem& rGradientItem
-            = dynamic_cast<const XFillGradientItem&>(pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
+        const XFillGradientItem& rGradientItem = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem.GetGradientValue().GetStartColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem.GetGradientValue().GetEndColor());
 
         SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemH9
-            = dynamic_cast<const XFillStyleItem&>(pCaptionH9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemH9 = pCaptionH9->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
-        const XFillGradientItem& rGradientItem2
-            = dynamic_cast<const XFillGradientItem&>(pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
+        const XFillGradientItem& rGradientItem2 = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem2.GetGradientValue().GetStartColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem2.GetGradientValue().GetEndColor());
     }
@@ -614,22 +604,18 @@ void ScFiltersTest::testTdf129789()
         // Fill: Hatch
         SdrCaptionObj* const pCaptionK2 = checkCaption(*pDoc, ScAddress(10, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemK2
-            = dynamic_cast<const XFillStyleItem&>(pCaptionK2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemK2 = pCaptionK2->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK2.GetValue());
-        const XFillHatchItem& rHatchItem
-            = dynamic_cast<const XFillHatchItem&>(pCaptionK2->GetMergedItem(XATTR_FILLHATCH));
+        const XFillHatchItem& rHatchItem = pCaptionK2->GetMergedItem(XATTR_FILLHATCH);
         CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem.GetHatchValue().GetColor());
 
         SdrCaptionObj* const pCaptionK9 = checkCaption(*pDoc, ScAddress(10, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemK9
-            = dynamic_cast<const XFillStyleItem&>(pCaptionK9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemK9 = pCaptionK9->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK9.GetValue());
-        const XFillHatchItem& rHatchItem2
-            = dynamic_cast<const XFillHatchItem&>(pCaptionK9->GetMergedItem(XATTR_FILLHATCH));
+        const XFillHatchItem& rHatchItem2 = pCaptionK9->GetMergedItem(XATTR_FILLHATCH);
         CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem2.GetHatchValue().GetColor());
     }
 
@@ -637,15 +623,13 @@ void ScFiltersTest::testTdf129789()
         // Fill: Bitmap
         SdrCaptionObj* const pCaptionN2 = checkCaption(*pDoc, ScAddress(13, 1, 0), true);
 
-        const XFillStyleItem& rStyleItemN2
-            = dynamic_cast<const XFillStyleItem&>(pCaptionN2->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemN2 = pCaptionN2->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN2.GetValue());
 
         SdrCaptionObj* const pCaptionN9 = checkCaption(*pDoc, ScAddress(13, 8, 0), false);
 
-        const XFillStyleItem& rStyleItemN9
-            = dynamic_cast<const XFillStyleItem&>(pCaptionN9->GetMergedItem(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItemN9 = pCaptionN9->GetMergedItem(XATTR_FILLSTYLE);
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, rStyleItemN9.GetValue());
     }
