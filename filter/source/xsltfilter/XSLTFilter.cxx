@@ -366,8 +366,8 @@ namespace XSLT
                         aInput.sPublicId = aURL;
                         aInput.aInputStream = pipein;
 
-                        css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            css::xml::sax::XFastParser* >( xHandler.get() );
+                        css::uno::Reference< css::xml::sax::XFastParser > xFastParser(
+                            xHandler, css::uno::UNO_QUERY );
 
                         // transform
                         m_tcontrol->start();
