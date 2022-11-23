@@ -1645,6 +1645,12 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     if ( !nHorzScroll && !nVertScroll )
         return;
 
+    // There will be no CopyArea() call below, so invalidate the whole visible
+    // area, not only the smaller one that was just scrolled in.
+    // Do this when we have a double buffer anyway, or (tdf#152094) the device has a map mode enabled which
+    // makes the conversion to pixel inaccurate
+    const bool bCopyExistingAreaAndElideInvalidate = !SupportsDoubleBuffering() && !GetOutDev()->IsMapModeEnabled();
+
     if ( mpWindowImpl->mpCursor )
         mpWindowImpl->mpCursor->ImplSuspend();
 
@@ -1692,13 +1698,8 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     tools::Rectangle aDestRect(aRectMirror);
     aDestRect.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
     vcl::Region aWinInvalidateRegion(aRectMirror);
-    if (!SupportsDoubleBuffering())
-    {
-        // There will be no CopyArea() call below, so invalidate the
-        // whole visible area, not only the smaller one that was just
-        // scrolled in.
+    if (bCopyExistingAreaAndElideInvalidate)
         aWinInvalidateRegion.Exclude(aDestRect);
-    }
 
     aInvalidateRegion.Union(aWinInvalidateRegion);
 
@@ -1743,7 +1744,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         // The invalidation area contains the area what would be copied here,
         // so avoid copying in case of double buffering.
-        if (pGraphics && !SupportsDoubleBuffering())
+        if (pGraphics && bCopyExistingAreaAndElideInvalidate)
         {
             if( bReMirror )
             {
