@@ -675,6 +675,20 @@ void SwTextContentControl::ChgTextNode(SwTextNode* pNode)
     }
 }
 
+void SwTextContentControl::Delete(bool bSaveContents)
+{
+    if (!GetTextNode())
+        return;
+
+    if (bSaveContents)
+        GetTextNode()->RstTextAttr(GetStart(), *End() - GetStart(), RES_TXTATR_CONTENTCONTROL);
+    else
+    {
+        SwPaM aPaM(*GetTextNode(), GetStart(), *GetTextNode(), *End());
+        GetTextNode()->GetDoc().getIDocumentContentOperations().DeleteAndJoin(aPaM);
+    }
+}
+
 SwTextNode* SwTextContentControl::GetTextNode() const
 {
     auto& rFormatContentControl = static_cast<const SwFormatContentControl&>(GetAttr());
