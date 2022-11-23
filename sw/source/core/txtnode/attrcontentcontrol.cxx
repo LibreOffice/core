@@ -31,6 +31,7 @@
 #include <textcontentcontrol.hxx>
 #include <doc.hxx>
 #include <unocontentcontrol.hxx>
+#include <wrtsh.hxx>
 
 using namespace com::sun::star;
 
@@ -279,7 +280,8 @@ void SwContentControl::DeleteListItem(size_t nZIndex)
         if (*oSelected == nZIndex)
         {
             SetSelectedListItem(std::nullopt);
-            //Invalidate();
+            if (m_bDropDown && GetTextAttr())
+                GetTextAttr()->Invalidate();
         }
         else if (*oSelected < nZIndex)
             SetSelectedListItem(*oSelected - 1);
@@ -295,6 +297,8 @@ void SwContentControl::ClearListItems()
 {
     SetSelectedListItem(std::nullopt);
     SetListItems(std::vector<SwContentControlListItem>());
+    if (m_bDropDown && GetTextAttr())
+        GetTextAttr()->Invalidate();
 }
 
 OUString SwContentControl::GetDateString() const
@@ -656,6 +660,37 @@ SwTextNode* SwTextContentControl::GetTextNode() const
 {
     auto& rFormatContentControl = static_cast<const SwFormatContentControl&>(GetAttr());
     return rFormatContentControl.GetTextNode();
+}
+
+void SwTextContentControl::Invalidate(bool bKeepPlaceholderStatus)
+{
+    SwDocShell* pDocShell = GetTextNode() ? GetTextNode()->GetDoc().GetDocShell() : nullptr;
+    if (!pDocShell || !pDocShell->GetWrtShell())
+        return;
+
+    // save the cursor
+    pDocShell->GetWrtShell()->Push();
+
+    // visit the control in the text (which makes any necessary visual changes)
+    // NOTE: simply going to a control indicates cancelling m_bShowingPlaceHolder
+    auto& rFormatContentControl = static_cast<SwFormatContentControl&>(GetAttr());
+    std::shared_ptr<SwContentControl> pCC = rFormatContentControl.GetContentControl();
+    bKeepPlaceholderStatus = bKeepPlaceholderStatus && pCC && pCC->GetShowingPlaceHolder();
+
+    // NOTE: simply going to a checkbox causes a toggle
+    const bool bSaveChecked = pCC && pCC->GetChecked();
+    if (pCC && pCC->GetCheckbox())
+        pCC->SetChecked(!bSaveChecked); //do a double-toggle to keep the same value!
+
+    pDocShell->GetWrtShell()->GotoContentControl(rFormatContentControl);
+
+    assert((!pCC || !pCC->GetCheckbox() || bSaveChecked == pCC->GetChecked())
+           && "invalidation implementation changed");
+
+    if (bKeepPlaceholderStatus)
+        pCC->SetShowingPlaceHolder(true);
+
+    pDocShell->GetWrtShell()->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
 
 void SwTextContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const

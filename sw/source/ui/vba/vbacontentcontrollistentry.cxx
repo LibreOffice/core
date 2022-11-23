@@ -64,7 +64,7 @@ void SwVbaContentControlListEntry::setText(const OUString& rSet)
     }
     vListItems[m_nZIndex].m_aDisplayText = rSet;
     pCC->SetListItems(vListItems);
-    //pCC->Invalidate();
+    m_rCC.Invalidate();
 }
 
 OUString SwVbaContentControlListEntry::getValue()
@@ -138,7 +138,7 @@ void SwVbaContentControlListEntry::Select()
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     assert(m_nZIndex < pCC->GetListItems().size());
     pCC->SetSelectedListItem(m_nZIndex);
-    //pCC->Invalidate();
+    m_rCC.Invalidate(/*bKeepPlaceholderStatus=*/false);
 }
 
 // XHelperInterface

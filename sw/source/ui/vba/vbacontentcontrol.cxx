@@ -99,7 +99,7 @@ void SwVbaContentControl::setChecked(sal_Bool bSet)
     if (pCC->GetCheckbox() && pCC->GetChecked() != static_cast<bool>(bSet))
     {
         pCC->SetChecked(bSet);
-        //pCC->Invalidate();
+        m_rCC.Invalidate(/*bKeepPlaceholderStatus=*/false);
     }
 }
 
@@ -694,8 +694,9 @@ void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& 
 
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     pCC->SetCheckedState(OUString(static_cast<sal_Unicode>(Character)));
-    //if (getChecked())
-    //    pCC->Invalidate();
+
+    if (pCC->GetCheckbox() && pCC->GetChecked())
+        m_rCC.Invalidate();
 }
 
 void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
@@ -706,8 +707,9 @@ void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const uno::Any
 
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     pCC->SetUncheckedState(OUString(static_cast<sal_Unicode>(Character)));
-    //if (!getChecked())
-    //    pCC->Invalidate();
+
+    if (pCC->GetCheckbox() && !pCC->GetChecked())
+        m_rCC.Invalidate();
 }
 
 void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, const uno::Any& Range,
@@ -732,13 +734,7 @@ void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, cons
         // Remove placeholder text.
         pCC->SetPlaceholderDocPart("");
     }
-    //if (getShowingPlaceholderText())
-    //{
-    //    if (!pCC->GetCheckbox())
-    //      pCC->Invalidate();
-    //    // Ensure that invalidation doesn't turn off showing placeholder as true
-    //    pCC->SetShowingPlaceHolder(true);
-    //}
+    m_rCC.Invalidate(/*bKeepPlaceholderStatus=true*/);
 }
 
 void SwVbaContentControl::Ungroup() { SAL_INFO("sw.vba", "SwVbaContentControl::UnGroup stub"); }
