@@ -369,7 +369,7 @@ void SwXTextPortion::GetPropertyValue(
                 case MID_RUBY_ABOVE :   pToSet = &m_oRubyIsAbove;break;
                 case MID_RUBY_POSITION: pToSet = &m_oRubyPosition;break;
             }
-            if(pToSet)
+            if(pToSet && *pToSet)
                 rVal = **pToSet;
         }
         break;
