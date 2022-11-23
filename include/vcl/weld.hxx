@@ -2660,6 +2660,8 @@ public:
     virtual ~MessageDialogController() override;
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
+    void set_secondary_text(const OUString& rText) { m_xDialog->set_secondary_text(rText); }
+    OUString get_secondary_text() const { return m_xDialog->get_secondary_text(); }
     void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
 };
 

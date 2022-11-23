@@ -1452,6 +1452,9 @@
 
 #define STR_MARK_COPY NC_("STR_MARK_COPY", "%1 Copy ")
 
+#define STR_INFORODLG_FOLDED_PRIMARY            NC_("STR_INFORODLG_FOLDED_PRIMARY", "You are trying to delete folded (hidden) content.")
+#define STR_INFORODLG_FOLDED_SECONDARY          NC_("STR_INFORODLG_FOLDED_SECONDARY", "To delete this content, first unfold it so you can see what you intend to delete.")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

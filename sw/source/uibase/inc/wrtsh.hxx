@@ -508,6 +508,9 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     void MakeOutlineLevelsVisible(const int nLevel);
 
+    bool HasFoldedOutlineContentSelected();
+    void InfoReadOnlyDialog(bool bAsync = false);
+
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
 private:

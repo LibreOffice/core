@@ -404,10 +404,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (rWrtSh.HasReadonlySel() && !rWrtSh.CursorInsideInputField())
                 {
                     // Only break if there's something to do; don't nag with the dialog otherwise
-                    auto xInfo(std::make_unique<weld::GenericDialogController>(
-                        rWrtSh.GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui",
-                        "InfoReadonlyDialog"));
-                    xInfo->run();
+                    rWrtSh.InfoReadOnlyDialog();
                     break;
                 }
                 SwRewriter aRewriter;

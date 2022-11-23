@@ -332,11 +332,7 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
                 bDone = pEditView && pEditView->PostKeyEvent(rKeyEvt);
             }
             else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "modules/swriter/ui/inforeadonlydialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                xQuery->run();
-            }
+                mrDocView.GetWrtShell().InfoReadOnlyDialog();
         }
         if (bDone)
             mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );

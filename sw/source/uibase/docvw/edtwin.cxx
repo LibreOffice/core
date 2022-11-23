@@ -1928,9 +1928,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-                        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                        xInfo->run();
+                        rSh.InfoReadOnlyDialog();
                         eKeyState = SwKeyState::End;
                     }
                     break;
@@ -2084,9 +2082,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-                        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                        xInfo->run();
+                        rSh.InfoReadOnlyDialog();
                         eKeyState = SwKeyState::End;
                     }
                     break;
@@ -2367,8 +2363,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     && (   rKeyCode.GetFunction() == KeyFuncType::PASTE
                         || rKeyCode.GetFunction() == KeyFuncType::CUT))
                 {
-                    auto xInfo(std::make_shared<weld::GenericDialogController>(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog"));
-                    weld::DialogController::runAsync(xInfo, [](int) {});
+                    rSh.InfoReadOnlyDialog(true);
                     eKeyState = SwKeyState::End;
                 }
                 else if( m_rView.KeyInput( aKeyEvent ) )
@@ -2576,8 +2571,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                auto xInfo(std::make_shared<weld::GenericDialogController>(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog"));
-                weld::DialogController::runAsync(xInfo, [](int) {});
+                rSh.InfoReadOnlyDialog(true);
                 eKeyState = SwKeyState::End;
             }
         break;
@@ -5755,9 +5749,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         if (rSh.HasReadonlySel())
         {
             // Inform the user that the request has been ignored.
-            auto xInfo = std::make_shared<weld::GenericDialogController>(
-                GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog");
-            weld::DialogController::runAsync(xInfo, [](sal_Int32 /*nResult*/) {});
+            rSh.InfoReadOnlyDialog(true);
         }
     }
     break;

@@ -2631,4 +2631,57 @@ bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos)
     return bVisibleAttr;
 }
 
+bool SwWrtShell::HasFoldedOutlineContentSelected()
+{
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
+    {
+        SwPaM aPaM(*rPaM.GetMark(), *rPaM.GetPoint());
+        aPaM.Normalize();
+        SwNodeIndex aPointIdx(aPaM.GetPoint()->GetNode());
+        SwNodeIndex aMarkIdx(aPaM.GetMark()->GetNode());
+        if (aPointIdx == aMarkIdx)
+            continue;
+        // Return true if any nodes in PaM are folded outline content nodes.
+        SwOutlineNodes::size_type nPos;
+        for (SwNodeIndex aIdx = aPointIdx; aIdx <= aMarkIdx; aIdx++)
+        {
+            if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(&(aIdx.GetNode()), &nPos) &&
+                    !GetAttrOutlineContentVisible(nPos))
+                return true;
+        }
+    }
+    return false;
+}
+
+void SwWrtShell::InfoReadOnlyDialog(bool bAsync)
+{
+    if (bAsync)
+    {
+        auto xInfo = std::make_shared<weld::MessageDialogController>(
+                    GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog");
+        if (GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
+                HasFoldedOutlineContentSelected())
+        {
+            xInfo->set_primary_text(SwResId(STR_INFORODLG_FOLDED_PRIMARY));
+            xInfo->set_secondary_text(SwResId(STR_INFORODLG_FOLDED_SECONDARY));
+        }
+        weld::DialogController::runAsync(xInfo, [](int) {});
+    }
+    else
+    {
+        std::unique_ptr<weld::Builder>
+                xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(),
+                                                    "modules/swriter/ui/inforeadonlydialog.ui"));
+        std::unique_ptr<weld::MessageDialog>
+                xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+        if (GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
+                HasFoldedOutlineContentSelected())
+        {
+            xInfo->set_primary_text(SwResId(STR_INFORODLG_FOLDED_PRIMARY));
+            xInfo->set_secondary_text(SwResId(STR_INFORODLG_FOLDED_SECONDARY));
+        }
+        xInfo->run();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
