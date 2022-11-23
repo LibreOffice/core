@@ -331,6 +331,16 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_ATTR_ZOOMSLIDER
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
+    SID_BASICIDE_CURRENT_ZOOM
+    [
+        StateMethod     = GetState;
+    ]
 
     // Only, when BasicWindow up
 
@@ -657,4 +667,3 @@ shell basctl_DocShell
 {
     import BasicIDEDocument;
 }
-

@@ -40,6 +40,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/string.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
@@ -262,6 +263,10 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
         std::unique_lock g(mutex_);
         notifier_ = n;
     }
+
+    // The zoom level applied to the editor window is the zoom slider value in the shell
+    nCurrentZoomLevel = GetShell()->GetCurrentZoomSliderValue();
+
     const Sequence<OUString> aPropertyNames{"FontHeight", "FontName"};
     n->addPropertiesChangeListener(aPropertyNames, listener_);
 }
@@ -1232,6 +1237,7 @@ void EditorWindow::UpdateSyntaxHighlighting ()
 
 void EditorWindow::ImplSetFont()
 {
+    // Get default font name and height defined in the Options dialog
     OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().value_or(OUString()));
     if (sFontName.isEmpty())
     {
@@ -1240,7 +1246,12 @@ void EditorWindow::ImplSetFont()
                                                         GetDefaultFontFlags::NONE, GetOutDev()));
         sFontName = aTmpFont.GetFamilyName();
     }
-    Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
+    sal_uInt16 nDefaultFontHeight = officecfg::Office::Common::Font::SourceViewFont::FontHeight::get();
+
+    // Calculate font size considering zoom level
+    sal_uInt16 nNewFontHeight = nDefaultFontHeight * (static_cast<float>(nCurrentZoomLevel) / 100);
+    Size aFontSize(0, nNewFontHeight);
+
     vcl::Font aFont(sFontName, aFontSize);
     aFont.SetColor(rModulWindow.GetLayout().GetFontColor());
     SetPointFont(*GetOutDev(), aFont); // FIXME RenderContext
@@ -1248,6 +1259,7 @@ void EditorWindow::ImplSetFont()
 
     rModulWindow.GetBreakPointWindow().SetFont(aFont);
     rModulWindow.GetLineNumberWindow().SetFont(aFont);
+    rModulWindow.Invalidate();
 
     if (pEditEngine)
     {
@@ -1255,6 +1267,25 @@ void EditorWindow::ImplSetFont()
         pEditEngine->SetFont(aFont);
         pEditEngine->SetModified(bModified);
     }
+
+    // Update controls
+    if (SfxBindings* pBindings = GetBindingsPtr())
+    {
+        pBindings->Invalidate( SID_BASICIDE_CURRENT_ZOOM );
+        pBindings->Invalidate( SID_ATTR_ZOOMSLIDER );
+    }
+}
+
+void EditorWindow::SetEditorZoomLevel(sal_uInt16 nNewZoomLevel)
+{
+    if (nCurrentZoomLevel == nNewZoomLevel)
+        return;
+
+    if (nNewZoomLevel < MIN_ZOOM_LEVEL || nNewZoomLevel > MAX_ZOOM_LEVEL)
+        return;
+
+    nCurrentZoomLevel = nNewZoomLevel;
+    ImplSetFont();
 }
 
 void EditorWindow::DoSyntaxHighlight( sal_uInt32 nPara )
@@ -1976,10 +2007,9 @@ void ComplexEditorWindow::Resize()
 
     Size aBrkSz(nBrkWidth, aSz.Height());
 
-    Size aLnSz(aLineNumberWindow->GetWidth(), aSz.Height());
-
     if (aLineNumberWindow->IsVisible())
     {
+        Size aLnSz(aLineNumberWindow->GetWidth(), aSz.Height());
         aBrkWindow->SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
         aLineNumberWindow->SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
         Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow->GetWidth() - nSBWidth + 2, aSz.Height());

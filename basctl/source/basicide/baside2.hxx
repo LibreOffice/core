@@ -97,6 +97,7 @@ private:
 
     void            ImpDoHighlight( sal_uInt32 nLineOff );
     void            ImplSetFont();
+    sal_uInt16      nCurrentZoomLevel;
 
     bool            bHighlighting;
     bool            bDoSyntaxHighlight;
@@ -153,6 +154,9 @@ public:
 
     void            ChangeFontColor( Color aColor );
     void            UpdateSyntaxHighlighting ();
+
+    void            SetEditorZoomLevel(sal_uInt16 nNewZoomLevel);
+    sal_uInt16      GetCurrentZoom() { return nCurrentZoomLevel; }
 
     bool            GetProcedureName(std::u16string_view rLine, OUString& rProcType, OUString& rProcName) const;
 

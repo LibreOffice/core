@@ -662,6 +662,7 @@ class SvxZoomItem;
 #define SID_BASICIDE_ARG_DOCUMENT_MODEL     TypedWhichId<SfxUnoAnyItem>( SID_BASICIDE_START + 51 )
 #define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
 #define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
+#define SID_BASICIDE_CURRENT_ZOOM           ( SID_BASICIDE_START + 54 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
 // SlotIds for Apps --------------------------------------------------------

@@ -21,6 +21,8 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <basic/basmgr.hxx>
+#include <svx/zoomsliderctrl.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svx/svxids.hrc>
 #include <iderid.hxx>
 #include <strings.hrc>
@@ -43,6 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/debug.hxx>
+#include <unotools/viewoptions.hxx>
 
 #if defined(DISABLE_DYNLOADING) || ENABLE_MERGELIBS
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
@@ -74,6 +77,8 @@
 
 namespace basctl
 {
+constexpr OUStringLiteral BASIC_IDE_EDITOR_WINDOW = u"BasicIDEEditorWindow";
+constexpr OUStringLiteral BASIC_IDE_CURRENT_ZOOM = u"CurrentZoom";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -185,6 +190,7 @@ void Shell::Init()
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
+    SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER );
 
     GetViewFrame()->GetWindow().SetBackground(
         GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetWindowColor()
@@ -199,6 +205,7 @@ void Shell::Init()
     nCurKey = 100;
     InitScrollBars();
     InitTabBar();
+    InitZoomLevel();
 
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", false, false );
 
@@ -253,6 +260,10 @@ Shell::~Shell()
     pDialogLayout.disposeAndClear();
     pModulLayout.disposeAndClear();
     pTabBar.disposeAndClear();
+
+    // Remember current zoom level
+    SvtViewOptions(EViewType::Window, BASIC_IDE_EDITOR_WINDOW).SetUserItem(
+        BASIC_IDE_CURRENT_ZOOM, Any(nCurrentZoomSliderValue));
 }
 
 void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -352,6 +363,21 @@ void Shell::onDocumentModeChanged( const ScriptDocument& _rDocument )
         BaseWindow* pWin = window.second;
         if ( pWin->IsDocument( _rDocument ) && _rDocument.isDocument() )
             pWin->SetReadOnly( _rDocument.isReadOnly() );
+    }
+}
+
+void Shell::InitZoomLevel()
+{
+    nCurrentZoomSliderValue = DEFAULT_ZOOM_LEVEL;
+    SvtViewOptions aWinOpt(EViewType::Window, BASIC_IDE_EDITOR_WINDOW);
+    if (aWinOpt.Exists())
+    {
+        try
+        {
+            aWinOpt.GetUserItem(BASIC_IDE_CURRENT_ZOOM) >>= nCurrentZoomSliderValue;
+        }
+        catch(const css::container::NoSuchElementException&)
+        { TOOLS_WARN_EXCEPTION("basctl.basicide", "Zoom level not defined"); }
     }
 }
 

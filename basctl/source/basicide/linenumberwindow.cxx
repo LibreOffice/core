@@ -48,8 +48,6 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     if (!txtView)
         return;
 
-    GetParent()->Resize();
-
     int windowHeight = rRenderContext.GetOutputSize().Height();
     int nLineHeight = rRenderContext.GetTextHeight();
     if (!nLineHeight)
@@ -82,6 +80,9 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     rRenderContext.SetTextColor(m_FontColor);
     for (sal_uInt32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
         rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
+
+    // Resize the parent after calculating the new width and height values
+    GetParent()->Resize();
 }
 
 void LineNumberWindow::DataChanged(DataChangedEvent const& rDCEvt)

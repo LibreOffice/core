@@ -40,6 +40,12 @@ class StarBASIC;
 
 namespace basctl
 {
+
+// Used to control zoom level
+constexpr sal_uInt16 MIN_ZOOM_LEVEL = 50;
+constexpr sal_uInt16 DEFAULT_ZOOM_LEVEL = 100;
+constexpr sal_uInt16 MAX_ZOOM_LEVEL = 400;
+
 class Layout;
 class ModulWindow;
 class ModulWindowLayout;
@@ -68,6 +74,8 @@ private:
     OUString            m_aCurLibName;
     std::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
+    // Current value of the zoom slider
+    sal_uInt16          nCurrentZoomSliderValue;
     VclPtr<ScrollAdaptor> aHScrollBar;
     VclPtr<ScrollAdaptor> aVScrollBar;
     VclPtr<TabBar>       pTabBar;           // basctl::TabBar
@@ -92,6 +100,7 @@ private:
     void                Init();
     void                InitTabBar();
     void                InitScrollBars();
+    void                InitZoomLevel();
     void                CheckWindows();
     void                RemoveWindows( const ScriptDocument& rDocument, std::u16string_view rLibName );
     void                UpdateWindows();
@@ -162,6 +171,10 @@ public:
     SdrView*            GetCurDlgView() const;
 
     SfxUndoManager*     GetUndoManager() override;
+
+    sal_uInt16          GetCurrentZoomSliderValue() { return nCurrentZoomSliderValue; }
+    static sal_uInt16   GetMinZoom() { return MIN_ZOOM_LEVEL; }
+    static sal_uInt16   GetMaxZoom() { return MAX_ZOOM_LEVEL; }
 
     virtual css::uno::Reference< css::view::XRenderable > GetRenderable() override;
 

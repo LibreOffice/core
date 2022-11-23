@@ -1922,6 +1922,25 @@ SfxVoidItem TipOfTheDay SID_TIPOFTHEDAY
 ]
 
 
+SfxVoidItem BasicIDEZoom SID_BASICIDE_CURRENT_ZOOM
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View;
+]
+
+
 SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
 ()
 [
