@@ -28,6 +28,7 @@
 #include <string_view>
 #include <vector>
 
+namespace basic { class SfxScriptLibraryContainer; }
 namespace com::sun::star::script { class XLibraryContainer; }
 namespace com::sun::star::script { class XPersistentLibraryContainer; }
 namespace com::sun::star::script { class XStarBasicAccess; }
@@ -68,21 +69,11 @@ class BasicLibInfo;
 
 namespace basic { class ImplRepository; }
 
-// Library password handling for 5.0 documents
-class BASIC_DLLPUBLIC OldBasicPassword
-{
-public:
-    virtual void     setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) = 0;
-
-protected:
-    ~OldBasicPassword() {}
-};
-
 struct LibraryContainerInfo
 {
     css::uno::Reference< css::script::XPersistentLibraryContainer > mxScriptCont;
     css::uno::Reference< css::script::XPersistentLibraryContainer > mxDialogCont;
-    OldBasicPassword* mpOldBasicPassword;
+    basic::SfxScriptLibraryContainer* mpOldBasicPassword;
 
     LibraryContainerInfo()
         :mpOldBasicPassword( nullptr )
@@ -93,7 +84,7 @@ struct LibraryContainerInfo
     (
         css::uno::Reference< css::script::XPersistentLibraryContainer > xScriptCont,
         css::uno::Reference< css::script::XPersistentLibraryContainer > xDialogCont,
-        OldBasicPassword* pOldBasicPassword
+        basic::SfxScriptLibraryContainer* pOldBasicPassword
     )
         : mxScriptCont(std::move( xScriptCont ))
         , mxDialogCont(std::move( xDialogCont ))

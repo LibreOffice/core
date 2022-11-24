@@ -93,7 +93,6 @@ merge LotusConverterBase with LotusToSc
 merge LwpDLVListHead with LwpPropList
 merge LwpMarker with LwpStoryMarker
 merge ObservableThread with SwAsyncRetrieveInputStreamThread
-merge OldBasicPassword with basic::SfxScriptLibraryContainer
 merge PPTExBulletProvider with PPTWriter
 merge PriorityHBox with PriorityMergedHBox
 merge PropertyAccessorBase with GenericPropertyAccessor

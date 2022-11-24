@@ -41,6 +41,8 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 
+#include <scriptcont.hxx>
+
 #include <memory>
 #include <vector>
 
@@ -567,7 +569,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                     copyToLibraryContainer( pLib, maContainerInfo );
                     if (rpBasLibInfo->HasPassword())
                     {
-                        OldBasicPassword* pOldBasicPassword =
+                        basic::SfxScriptLibraryContainer* pOldBasicPassword =
                             maContainerInfo.mpOldBasicPassword;
                         if( pOldBasicPassword )
                         {

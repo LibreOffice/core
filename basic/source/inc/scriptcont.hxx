@@ -29,7 +29,7 @@ namespace basic
 {
 
 
-class SfxScriptLibraryContainer final : public SfxLibraryContainer, public OldBasicPassword
+class SfxScriptLibraryContainer final : public SfxLibraryContainer
 {
     css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
@@ -75,9 +75,6 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer, public OldBa
     virtual void onNewRootStorage() override;
 
 
-    // OldBasicPassword interface
-    virtual void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) override;
-
     virtual OUString getInfoFileName() const override;
     virtual OUString getOldInfoFileName() const override;
     virtual OUString getLibElementFileExtension() const override;
@@ -99,6 +96,9 @@ public:
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+
+    // Library password handling for 5.0 documents
+    void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword );
 };
 
 

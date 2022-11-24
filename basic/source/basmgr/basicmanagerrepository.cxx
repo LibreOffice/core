@@ -300,7 +300,7 @@ namespace basic
         // Dialog container
         rtl::Reference<SfxDialogLibraryContainer> pDialogCont = new SfxDialogLibraryContainer( Reference< XStorage >() );
 
-        LibraryContainerInfo aInfo( pBasicCont, pDialogCont, static_cast< OldBasicPassword* >( pBasicCont.get() ) );
+        LibraryContainerInfo aInfo( pBasicCont, pDialogCont, pBasicCont.get() );
         pBasicManager->SetLibraryContainerInfo( aInfo );
 
         // global constants
@@ -462,7 +462,7 @@ namespace basic
         }
 
         // knit the containers with the BasicManager
-        LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
+        LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< SfxScriptLibraryContainer* >( xBasicLibs.get() ) );
         OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
         _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
 

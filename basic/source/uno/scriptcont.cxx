@@ -87,7 +87,6 @@ OUString SfxScriptLibraryContainer::getLibrariesDir() const
     return sBasic;
 }
 
-// OldBasicPassword interface
 void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword )
 {
     try
@@ -341,7 +340,7 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
         auto pBasicManager = std::make_unique<BasicManager> ( *xStorage, aFile );
 
         // Set info
-        LibraryContainerInfo aInfo( this, nullptr, static_cast< OldBasicPassword* >( this ) );
+        LibraryContainerInfo aInfo( this, nullptr, this );
         pBasicManager->SetLibraryContainerInfo( aInfo );
     }
 }
