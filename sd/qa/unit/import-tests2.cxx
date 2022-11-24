@@ -68,6 +68,7 @@ public:
     {
     }
 
+    void testTdf152186();
     void testTdf93868();
     void testTdf95932();
     void testTdf99030();
@@ -147,6 +148,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
+    CPPUNIT_TEST(testTdf152186);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
     CPPUNIT_TEST(testTdf99030);
@@ -224,6 +226,21 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
+
+void SdImportTest2::testTdf152186()
+{
+    loadFromURL(u"pptx/tdf152186.pptx");
+    saveAndReload("Impress MS PowerPoint 2007 XML");
+
+    bool bHasShadow;
+    const SdrPage* pPage = GetPage(1);
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(i, 0));
+        xShape->getPropertyValue("Shadow") >>= bHasShadow;
+        CPPUNIT_ASSERT(!bHasShadow);
+    }
+}
 
 void SdImportTest2::testTdf93868()
 {

@@ -2035,22 +2035,10 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
       </a:lnStyleLst>\
       <a:effectStyleLst>\
         <a:effectStyle>\
-          <a:effectLst>\
-            <a:outerShdw blurRad=\"40000\" dist=\"20000\" dir=\"5400000\" rotWithShape=\"0\">\
-              <a:srgbClr val=\"000000\">\
-                <a:alpha val=\"38000\"/>\
-              </a:srgbClr>\
-            </a:outerShdw>\
-          </a:effectLst>\
+          <a:effectLst/>\
         </a:effectStyle>\
         <a:effectStyle>\
-          <a:effectLst>\
-            <a:outerShdw blurRad=\"40000\" dist=\"23000\" dir=\"5400000\" rotWithShape=\"0\">\
-              <a:srgbClr val=\"000000\">\
-                <a:alpha val=\"35000\"/>\
-              </a:srgbClr>\
-            </a:outerShdw>\
-          </a:effectLst>\
+          <a:effectLst/>\
         </a:effectStyle>\
         <a:effectStyle>\
           <a:effectLst>\
