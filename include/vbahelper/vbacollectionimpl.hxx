@@ -294,19 +294,28 @@ public:
 
     virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/) override
     {
-        if ( Index1.getValueTypeClass() != css::uno::TypeClass_STRING )
+        OUString aStringSheet;
+        if (Index1.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
+        {
+            // This is needed for ContentControls, where the unique integer ID
+            // can be passed as float to simulate a "by name" lookup.
+            double fIndex = 0;
+            Index1 >>= fIndex;
+            aStringSheet = OUString::number(fIndex);
+        }
+        else if (Index1.getValueTypeClass() != css::uno::TypeClass_STRING)
         {
             sal_Int32 nIndex = 0;
-
             if ( !( Index1 >>= nIndex ) )
             {
                 throw  css::lang::IndexOutOfBoundsException( "Couldn't convert index to Int32" );
             }
+
             return  getItemByIntIndex( nIndex );
         }
-        OUString aStringSheet;
+        else
+            Index1 >>= aStringSheet;
 
-        Index1 >>= aStringSheet;
         return getItemByStringIndex( aStringSheet );
     }
 

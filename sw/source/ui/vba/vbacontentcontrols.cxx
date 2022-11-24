@@ -65,15 +65,16 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
                 && sTitle != pControl->GetContentControl().GetContentControl()->GetAlias())
                 continue;
 
-            //OUString sID = OUString::number(static_cast<sal_uInt32>(
-            //    pControl->GetContentControl().GetContentControl()->GetId()));
-            //if (!sName.empty() && sName != sID)
-            //    continue;
+            // When treated as a name, consider the integer ID to be unsigned
+            const OUString sID = OUString::number(static_cast<sal_uInt32>(
+                pControl->GetContentControl().GetContentControl()->GetId()));
+            if (!sName.empty() && sName != sID)
+                continue;
 
-            //if (pElementNames)
-            //    vElementNames.push_back(sID);
+            if (pElementNames)
+                vElementNames.push_back(sID);
 
-            if (rIndex == nCounter /*|| !sName.empty()*/)
+            if (rIndex == nCounter || !sName.empty())
                 break;
 
             pControl = nullptr;
