@@ -428,7 +428,6 @@ bool PowerPointExport::importDocument() noexcept
 
 bool PowerPointExport::exportDocument()
 {
-    DrawingML::ResetCounters();
     DrawingML::PushExportGraphics();
     maShapeMap.clear();
 

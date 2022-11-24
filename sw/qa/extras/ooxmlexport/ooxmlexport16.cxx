@@ -1030,6 +1030,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
     CPPUNIT_ASSERT_EQUAL(4, nImageFiles);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
+{
+    loadAndReload("artistic_effects.docx");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    int nImageFiles = 0;
+    for (const auto& rElementName : aNames)
+        if (rElementName.startsWith("word/media/hdphoto"))
+            nImageFiles++;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the once WDP picture wouldn't have been saved.
+    CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

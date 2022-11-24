@@ -144,8 +144,8 @@ class OOX_DLLPUBLIC DrawingML
 
 private:
     static std::stack<sal_Int32> mnImageCounter;
-    static int mnWdpImageCounter;
-    static std::map<OUString, OUString> maWdpCache;
+    static std::stack<sal_Int32> mnWdpImageCounter;
+    static std::stack<std::map<OUString, OUString>> maWdpCache;
     static sal_Int32 mnDrawingMLCount;
     static sal_Int32 mnVmlCount;
     static std::stack<std::unordered_map<BitmapChecksum, OUString>> maExportGraphics;
@@ -348,7 +348,6 @@ public:
     static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
-    static void ResetCounters();
     static void ResetMlCounters();
 
     static void PushExportGraphics();

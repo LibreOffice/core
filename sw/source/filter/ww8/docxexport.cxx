@@ -527,7 +527,6 @@ ErrCode DocxExport::ExportDocument_Impl()
     m_pSections.reset(new MSWordSections( *this ));
 
     // Make sure images are counted from one, even when exporting multiple documents.
-    oox::drawingml::DrawingML::ResetCounters();
     oox::drawingml::DrawingML::PushExportGraphics();
 
     WriteMainText();

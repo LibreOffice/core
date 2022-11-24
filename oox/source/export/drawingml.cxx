@@ -237,8 +237,8 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
 
 // not thread safe
 std::stack<sal_Int32> DrawingML::mnImageCounter;
-int DrawingML::mnWdpImageCounter = 1;
-std::map<OUString, OUString> DrawingML::maWdpCache;
+std::stack<sal_Int32> DrawingML::mnWdpImageCounter;
+std::stack<std::map<OUString, OUString>> DrawingML::maWdpCache;
 sal_Int32 DrawingML::mnDrawingMLCount = 0;
 sal_Int32 DrawingML::mnVmlCount = 0;
 std::stack<std::unordered_map<BitmapChecksum, OUString>> DrawingML::maExportGraphics;
@@ -267,12 +267,6 @@ sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
     return css::i18n::ScriptType::LATIN;
 }
 
-void DrawingML::ResetCounters()
-{
-    mnWdpImageCounter = 1;
-    maWdpCache.clear();
-}
-
 void DrawingML::ResetMlCounters()
 {
     mnDrawingMLCount = 0;
@@ -283,12 +277,18 @@ void DrawingML::PushExportGraphics()
 {
     mnImageCounter.push(1);
     maExportGraphics.emplace();
+
+    mnWdpImageCounter.push(1);
+    maWdpCache.emplace();
 }
 
 void DrawingML::PopExportGraphics()
 {
     mnImageCounter.pop();
     maExportGraphics.pop();
+
+    mnWdpImageCounter.pop();
+    maWdpCache.pop();
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -5864,11 +5864,14 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
 
 OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal_Int8 >& rPictureData )
 {
-    std::map<OUString, OUString>::iterator aCachedItem = maWdpCache.find( rFileId );
-    if( aCachedItem != maWdpCache.end() )
-        return OUStringToOString( aCachedItem->second, RTL_TEXTENCODING_UTF8 );
+    if (!maWdpCache.empty())
+    {
+        std::map<OUString, OUString>::iterator aCachedItem = maWdpCache.top().find(rFileId);
+        if (aCachedItem != maWdpCache.top().end())
+            return OUStringToOString(aCachedItem->second, RTL_TEXTENCODING_UTF8);
+    }
 
-    OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
+    OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter.top()++ ) + ".wdp";
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( GetComponentDir() )
                                                                       .append( "/" + sFileName )
@@ -5884,7 +5887,9 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
                              .appendAscii( GetRelationCompPrefix() )
                              .append( sFileName ) );
 
-    maWdpCache[rFileId] = sId;
+    if (!maWdpCache.empty())
+        maWdpCache.top()[rFileId] = sId;
+
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
