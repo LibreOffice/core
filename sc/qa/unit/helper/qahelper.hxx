@@ -80,13 +80,6 @@ SCQAHELPER_DLLPUBLIC bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );
 
-/**
- * Convert formula token array to a formula string.
- */
-SCQAHELPER_DLLPUBLIC OUString toString(
-    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray,
-    formula::FormulaGrammar::Grammar eGram);
-
 inline std::string print(const ScAddress& rAddr)
 {
     std::ostringstream str;
@@ -195,7 +188,5 @@ private:
 
 #define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
-
-SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

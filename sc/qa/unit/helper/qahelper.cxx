@@ -409,19 +409,6 @@ ScRangeList ScModelTestBase::getChartRanges(ScDocument& rDoc, const SdrOle2Obj& 
     return aRanges;
 }
 
-ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
-{
-    ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
-    if (!pCell)
-    {
-        OUString aStr = rPos.Format(ScRefFlags::VALID);
-        cerr << aStr << " is not a formula cell." << endl;
-        return nullptr;
-    }
-
-    return pCell->GetCode();
-}
-
 bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption )
@@ -458,15 +445,6 @@ bool checkOutput(
     }
     printer.print(pCaption);
     return bResult;
-}
-
-OUString toString(
-    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
-{
-    ScCompiler aComp(rDoc, rPos, rArray, eGram);
-    OUStringBuffer aBuf;
-    aComp.CreateStringFromTokenArray(aBuf);
-    return aBuf.makeStringAndClear();
 }
 
 void ScSimpleBootstrapFixture::setUp()

@@ -1322,7 +1322,11 @@ void TestFormula::testFormulaCompiler()
         std::unique_ptr<ScTokenArray> pArray = compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram);
         CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray);
 
-        OUString aFormula = toString(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
+        ScCompiler aComp(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
+        OUStringBuffer aBuf;
+        aComp.CreateStringFromTokenArray(aBuf);
+        OUString aFormula = aBuf.makeStringAndClear();
+
         CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);
     }
 }
@@ -1837,7 +1841,8 @@ void TestFormula::testFormulaAnnotateTrimOnDoubleRefs()
         std::string aMsgStart = "TestCase#" + std::to_string(nTestIdx + 1) + " : ";
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgStart + "Incorrect formula result", rTestCase.fResult, m_pDoc->GetValue(ScAddress(4, 0, 0)));
 
-        ScTokenArray* pCode = getTokens(*m_pDoc, ScAddress(4, 0, 0));
+        ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(4, 0, 0));
+        ScTokenArray* pCode = pCell->GetCode();
         sal_Int32 nLen = pCode->GetCodeLen();
         FormulaToken** pRPNArray = pCode->GetCode();
 
