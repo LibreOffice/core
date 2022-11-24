@@ -691,7 +691,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
                                const sal_Int16 _eHoriRelOrient,
                                const sal_Int16 _eVertRelOrient,
-                               const SwPosition* _pToCharContentPos,
+                               const SwFormatAnchor* _pToCharContentPos,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
                                Point* _opRef,
@@ -993,7 +993,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     SwRect aChRect;
                     if ( _pToCharContentPos )
                     {
-                        pTextFrame->GetAutoPos( aChRect, *_pToCharContentPos );
+                        pTextFrame->GetAutoPos( aChRect, *_pToCharContentPos->GetContentAnchor() );
                     }
                     else
                     {
@@ -1007,7 +1007,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 {
                     if ( _pToCharContentPos )
                     {
-                        pTextFrame->GetTopOfLine( nTop, *_pToCharContentPos );
+                        pTextFrame->GetTopOfLine( nTop, *_pToCharContentPos->GetContentAnchor() );
                     }
                     else
                     {
@@ -1037,7 +1037,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 SwRect aChRect;
                 if ( _pToCharContentPos )
                 {
-                    pTextFrame->GetAutoPos( aChRect, *_pToCharContentPos );
+                    pTextFrame->GetAutoPos( aChRect, *_pToCharContentPos->GetContentAnchor() );
                 }
                 else
                 {

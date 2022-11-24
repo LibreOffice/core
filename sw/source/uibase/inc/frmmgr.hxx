@@ -115,7 +115,7 @@ public:
 
     // check and change metrics
     void                ValidateMetrics(SvxSwFrameValidation& rVal,
-                            const SwPosition* pToCharContentPos,
+                            const SwFormatAnchor* pToCharContentPos,
                             bool bOnlyPercentRefValue = false);
 
     void                DelAttr(sal_uInt16 nId);

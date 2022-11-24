@@ -57,7 +57,7 @@ class SwFramePage final : public SfxTabPage
 
     // OD 12.11.2003 #i22341# - keep content position of character for
     // to character anchored objects.
-    const SwPosition* mpToCharContentPos;
+    const SwFormatAnchor* mpToCharContentPos;
 
     // old alignment
     sal_Int16 m_nOldH;

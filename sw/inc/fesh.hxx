@@ -333,7 +333,7 @@ public:
                         const RndStdIds _nAnchorId,
                         const sal_Int16 _eHoriRelOrient = css::text::RelOrientation::FRAME,
                         const sal_Int16 _eVertRelOrient = css::text::RelOrientation::FRAME,
-                        const SwPosition* _pToCharContentPos = nullptr,
+                        const SwFormatAnchor* _pToCharContentPos = nullptr,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
                         Point* _opRef = nullptr,

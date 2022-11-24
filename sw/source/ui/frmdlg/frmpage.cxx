@@ -971,7 +971,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 
     // i#22341 - determine content position of character
     // Note: content position can be NULL
-    mpToCharContentPos = rAnchor.GetContentAnchor();
+    mpToCharContentPos = rAnchor.GetContentAnchor() ? &rAnchor : nullptr;
 
     // i#18732 - init checkbox value
     {

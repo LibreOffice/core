@@ -1084,10 +1084,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         const SwFormatVertOrient& aVert( aSet.Get(RES_VERT_ORIENT) );
         const bool bFollowTextFlow =
                 aSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();
-        const SwPosition* pToCharContentPos = aSet.Get(RES_ANCHOR).GetContentAnchor();
+        const SwFormatAnchor& rFormatAnchor = aSet.Get(RES_ANCHOR);
         rSh.CalcBoundRect( aBoundRect, eAnchorId,
                            text::RelOrientation::FRAME, aVert.GetRelationOrient(),
-                           pToCharContentPos, bFollowTextFlow,
+                           &rFormatAnchor, bFollowTextFlow,
                            false, &aRefPoint );
     }
     tools::Long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
@@ -6569,11 +6569,11 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
         SwFrameFormat* pFlyFormat = pStartFly->GetFlyFormat( );
         if ( pFlyFormat )
         {
-            const SwPosition* pAnchor = pFlyFormat->GetAnchor( ).GetContentAnchor( );
-            if ( pAnchor )
+            const SwNode* pAnchorNode = pFlyFormat->GetAnchor( ).GetAnchorNode( );
+            if ( pAnchorNode )
             {
-                bool bInHeader = pAnchor->GetNode( ).FindHeaderStartNode( ) != nullptr;
-                bool bInFooter = pAnchor->GetNode( ).FindFooterStartNode( ) != nullptr;
+                bool bInHeader = pAnchorNode->FindHeaderStartNode( ) != nullptr;
+                bool bInFooter = pAnchorNode->FindFooterStartNode( ) != nullptr;
 
                 bRet = bInHeader || bInFooter;
                 if ( bInHeader )

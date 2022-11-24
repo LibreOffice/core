@@ -54,9 +54,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     SwFrameFormat* pTextFrameFormat = FindFrameFormat(pTextFrameObj);
     CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), pTextFrameFormat->GetName());
     SwFrameFormat* pDrawShapeFormat = FindFrameFormat(pDrawShape);
-    SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->GetNodeIndex();
+    SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetAnchorNode()->GetIndex();
     pShell->FindAnchorPos(pTextFrameObj->GetLastBoundRect().Center(), true);
-    SwNodeOffset nNewAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->GetNodeIndex();
+    SwNodeOffset nNewAnchor = pDrawShapeFormat->GetAnchor().GetAnchorNode()->GetIndex();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 6
     // - Actual  : 9
@@ -94,13 +94,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     RndStdIds eAnchorType = RndStdIds::FLY_AT_CHAR;
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     const auto& rFrameFormats = *pDoc->GetFrameFormats();
-    const SwPosition* pContentPos = rFrameFormats[0]->GetAnchor().GetContentAnchor();
+    const SwFormatAnchor* pFormatAhchor = &rFrameFormats[0]->GetAnchor();
     sal_Int16 eHoriRelOrient = text::RelOrientation::PAGE_FRAME;
     sal_Int16 eVertRelOrient = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
     bool bFollowTextFlow = false;
     bool bMirror = false;
     Size aPercentSize;
-    pWrtShell->CalcBoundRect(aBoundRect, eAnchorType, eHoriRelOrient, eVertRelOrient, pContentPos,
+    pWrtShell->CalcBoundRect(aBoundRect, eAnchorType, eHoriRelOrient, eVertRelOrient, pFormatAhchor,
                              bFollowTextFlow, bMirror, nullptr, &aPercentSize);
 
     // Without the accompanying fix in place, this test would have failed with:

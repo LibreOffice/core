@@ -261,7 +261,7 @@ void SwFlyFrameAttrMgr::SetAbsPos( const Point& rPoint )
 
 // check metrics for correctness
 void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
-        const SwPosition* pToCharContentPos,
+        const SwFormatAnchor* pToCharContentPos,
         bool bOnlyPercentRefValue )
 {
     if (!bOnlyPercentRefValue)
