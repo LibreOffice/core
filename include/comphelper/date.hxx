@@ -22,6 +22,8 @@
 #include <sal/types.h>
 #include <comphelper/comphelperdllapi.h>
 
+#include <cassert>
+
 namespace comphelper::date
 {
 /** Days until start of year from zero, so month and day of month can be added.
@@ -32,7 +34,12 @@ namespace comphelper::date
     @param  nYear
             MUST be != 0.
  */
-COMPHELPER_DLLPUBLIC sal_Int32 YearToDays(sal_Int16 nYear);
+constexpr inline sal_Int32 YearToDays(sal_Int16 nYear)
+{
+    assert(nYear != 0);
+    auto val = [](int off, int y) { return off + y * 365 + y / 4 - y / 100 + y / 400; };
+    return nYear < 0 ? val(-366, nYear + 1) : val(0, nYear - 1);
+}
 
 /** Whether year is a leap year.
 
@@ -44,21 +51,42 @@ COMPHELPER_DLLPUBLIC sal_Int32 YearToDays(sal_Int16 nYear);
     @param  nYear
             MUST be != 0.
  */
-COMPHELPER_DLLPUBLIC bool isLeapYear(sal_Int16 nYear);
+constexpr inline bool isLeapYear(sal_Int16 nYear)
+{
+    assert(nYear != 0);
+    if (nYear < 0)
+        nYear = -nYear - 1;
+    return (((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0);
+}
 
 /** Get number of days in month of year.
 
     @param  nYear
             MUST be != 0.
  */
-COMPHELPER_DLLPUBLIC sal_uInt16 getDaysInMonth(sal_uInt16 nMonth, sal_Int16 nYear);
+constexpr inline sal_uInt16 getDaysInMonth(sal_uInt16 nMonth, sal_Int16 nYear)
+{
+    assert(1 <= nMonth && nMonth <= 12);
+    if (nMonth < 1 || 12 < nMonth)
+        return 0;
+
+    constexpr sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    sal_uInt16 n = aDaysInMonth[nMonth - 1];
+    return nMonth == 2 && isLeapYear(nYear) ? n + 1 : n;
+}
 
 /** Obtain days from zero for a given date, without normalizing.
 
     nDay, nMonth, nYear MUST form a valid proleptic Gregorian calendar date.
  */
-COMPHELPER_DLLPUBLIC sal_Int32 convertDateToDays(sal_uInt16 nDay, sal_uInt16 nMonth,
-                                                 sal_Int16 nYear);
+constexpr inline sal_Int32 convertDateToDays(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
+{
+    sal_Int32 nDays = YearToDays(nYear);
+    for (sal_uInt16 i = 1; i < nMonth; ++i)
+        nDays += getDaysInMonth(i, nYear);
+    nDays += nDay;
+    return nDays;
+}
 
 /** Obtain days from zero for a given date, with normalizing.
 

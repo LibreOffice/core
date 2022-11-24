@@ -42,70 +42,15 @@ constexpr sal_Int32 MAX_DAYS = 11967900; //  32767-12-31
 constexpr sal_Int16 kYearMax = SAL_MAX_INT16;
 constexpr sal_Int16 kYearMin = SAL_MIN_INT16;
 
-sal_Int32 YearToDays(sal_Int16 nYear)
-{
-    assert(nYear != 0);
-    sal_Int32 nOffset;
-    sal_Int32 nYr;
-    if (nYear < 0)
-    {
-        nOffset = -366;
-        nYr = nYear + 1;
-    }
-    else
-    {
-        nOffset = 0;
-        nYr = nYear - 1;
-    }
-    return nOffset + nYr * 365 + nYr / 4 - nYr / 100 + nYr / 400;
-}
-
-bool isLeapYear(sal_Int16 nYear)
-{
-    assert(nYear != 0);
-    if (nYear < 0)
-        nYear = -nYear - 1;
-    return (((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0);
-}
-
-sal_uInt16 getDaysInMonth(sal_uInt16 nMonth, sal_Int16 nYear)
-{
-    assert(1 <= nMonth && nMonth <= 12);
-    if (nMonth < 1 || 12 < nMonth)
-        return 0;
-
-    constexpr sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    if (nMonth != 2)
-        return aDaysInMonth[nMonth - 1];
-    else
-    {
-        if (isLeapYear(nYear))
-            return aDaysInMonth[nMonth - 1] + 1;
-        else
-            return aDaysInMonth[nMonth - 1];
-    }
-}
-
-sal_Int32 convertDateToDays(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
-{
-    sal_Int32 nDays = YearToDays(nYear);
-    for (sal_uInt16 i = 1; i < nMonth; ++i)
-        nDays += getDaysInMonth(i, nYear);
-    nDays += nDay;
-    return nDays;
-}
+constexpr sal_Int32 nNullDateDays = convertDateToDays(30, 12, 1899);
+static_assert(nNullDateDays == 693594);
 
 sal_Int32 convertDateToDaysNormalizing(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
 {
     // Speed-up the common null-date 1899-12-30.
-    if (nYear == 1899 && nDay == 30 && nMonth == 12)
-    {
-#ifndef NDEBUG
-        static sal_Int32 nDays = convertDateToDays(nDay, nMonth, nYear);
-        assert(nDays == 693594);
-#endif
-        return 693594;
-    }
+    if (nYear == 1899 && nMonth == 12 && nDay == 30)
+        return nNullDateDays;
+
     normalize(nDay, nMonth, nYear);
     return convertDateToDays(nDay, nMonth, nYear);
 }
