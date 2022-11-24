@@ -35,6 +35,7 @@
 #include <editeng/sizeitem.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 
 #include <uitool.hxx>
 #include <IMark.hxx>
@@ -1477,6 +1478,21 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(weld::Container* pPage, weld::Dia
     m_xDDECB->connect_toggled( LINK( this, SwInsertSectionTabPage, DDEHdl ));
     ChangeProtectHdl(*m_xProtectCB);
     m_xSubRegionED->set_entry_completion(true, true);
+
+    // Hide Link section. In general it makes no sense to insert a file from the jail,
+    // because it does not contain any usable files (documents).
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xBuilder->weld_label("label1")->hide(); // Link
+        m_xFileCB->hide();
+        m_xDDECB->hide();
+        m_xDDECommandFT->hide();
+        m_xFileNameFT->hide();
+        m_xFileNameED->hide();
+        m_xFilePB->hide();
+        m_xSubRegionFT->hide();
+        m_xSubRegionED->hide();
+    }
 }
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
