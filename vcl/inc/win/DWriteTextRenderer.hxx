@@ -65,7 +65,6 @@ private:
 
     ID2D1Factory        * mpD2DFactory;
     IDWriteFactory      * mpDWriteFactory;
-    IDWriteGdiInterop   * mpGdiInterop;
     ID2D1DCRenderTarget * mpRT;
     const D2D1_RENDER_TARGET_PROPERTIES mRTProps;
 
