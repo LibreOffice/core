@@ -18191,6 +18191,8 @@
     <resource name="CT_ParaRPr" resource="Properties">
       <element name="ins" tokenid="ooxml:CT_ParaRPr_ins"/>
       <element name="del" tokenid="ooxml:CT_ParaRPr_del"/>
+      <element name="moveFrom" tokenid="ooxml:CT_ParaRPr_moveFrom"/>
+      <element name="moveTo" tokenid="ooxml:CT_ParaRPr_moveTo"/>
       <element name="rPrChange" tokenid="ooxml:CT_ParaRPr_rPrChange"/>
     </resource>
     <resource name="CT_ParaTrackChange" resource="Properties">
