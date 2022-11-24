@@ -72,9 +72,10 @@ struct AutoFormatSwBlob
 /// Struct with version numbers of the Items
 struct ScAfVersions : public AutoFormatVersions
 {
-public:
+private:
     AutoFormatSwBlob swVersions;
 
+public:
     ScAfVersions();
 
     void Load( SvStream& rStream, sal_uInt16 nVer );

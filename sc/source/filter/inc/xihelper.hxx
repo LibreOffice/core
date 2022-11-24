@@ -319,7 +319,7 @@ public:
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
     FormulaError        GetScError() const;
 
-protected:
+private:
     typedef ::std::unique_ptr< const ScTokenArray >   ScTokenArrayPtr;
 
     OUString            maStr;      /// Cached value is a string.

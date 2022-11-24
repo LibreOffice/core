@@ -68,7 +68,7 @@ class FrameStatusListener : public css::frame::XStatusListener,
         // XFrameActionListener
         virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
 
-    protected:
+    private:
         struct Listener
         {
             Listener( css::util::URL _aURL, css::uno::Reference< css::frame::XDispatch > _xDispatch ) :

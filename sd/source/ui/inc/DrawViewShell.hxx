@@ -376,24 +376,6 @@ public:
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 protected:
-    std::unique_ptr<DrawView> mpDrawView;
-    SdPage*             mpActualPage;
-    ::tools::Rectangle           maMarkRect;
-    Point               maMousePos;
-    VclPtr<TabControl>  maTabControl;
-    EditMode            meEditMode;
-    PageKind            mePageKind;
-    // tdf#137445 at context menu popup time set if the EditHyperlink entry
-    // should be disabled and use that state if queried about it if
-    // EditHyperlink is dispatched from the menu. So ignoring where the mouse
-    // currently happens to be when the menu was dismissed.
-    std::optional<bool> moAtContextMenu_DisableEditHyperlink;
-    bool                mbZoomOnPage;
-    bool                mbIsRulerDrag;
-    sal_uLong           mnLockCount;
-    bool                mbReadOnly;
-    static bool         mbPipette;
-
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
                     DECL_DLLPRIVATE_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
@@ -414,37 +396,6 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
-    /** Prevents grabbing focus while loading - see tdf#83773 that introduced
-        the grabbing, and tdf#150773 that needs grabbing disabled on loading
-    */
-    bool mbFirstTimeActivation = true;
-
-    /** This flag controls whether the layer mode is active, i.e. the layer
-        dialog is visible.
-    */
-    bool mbIsLayerModeActive;
-
-    /** This item contains the clipboard formats of the current clipboard
-        content that are supported both by that content and by the
-        DrawViewShell.
-    */
-    ::std::unique_ptr<SvxClipboardFormatItem> mpCurrentClipboardFormats;
-
-    /** On some occasions it is necessary to make SwitchPage calls
-        asynchronously.
-    */
-    tools::AsynchronousCall maAsynchronousSwitchPageCall;
-
-    /** This flag is used to prevent nested calls to SwitchPage().
-    */
-    bool mbIsInSwitchPage;
-
-    RotateTransliteration m_aRotateCase;
-
-    /** Listen for selection changes and broadcast context changes for the sidebar.
-    */
-    ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
-
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
     /** Depending on the given request create a new page or duplicate an
@@ -458,13 +409,6 @@ private:
         const sal_Int32 nInsertPosition = -1) override;
 
     void DuplicateSelectedSlides (SfxRequest& rRequest);
-
-    css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
-    css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
-    rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
-    bool                                                  mbPastePossible;
-    bool                                                  mbMouseButtonDown;
-    bool                                                  mbMouseSelecting;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
@@ -491,11 +435,6 @@ private:
 
     using ViewShell::Notify;
 
-    ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
-    ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
-
-    std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
-
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, ConfigurationHints ) override;
 
     void ConfigureAppBackgroundColor( svtools::ColorConfig* pColorConfig = nullptr );
@@ -506,6 +445,57 @@ private:
     /// later Invalidated to reset it back to its natural value
     void EnableEditHyperlink();
 
+private:
+    std::unique_ptr<DrawView> mpDrawView;
+    SdPage*             mpActualPage;
+    ::tools::Rectangle           maMarkRect;
+    Point               maMousePos;
+    VclPtr<TabControl>  maTabControl;
+    EditMode            meEditMode;
+    PageKind            mePageKind;
+    // tdf#137445 at context menu popup time set if the EditHyperlink entry
+    // should be disabled and use that state if queried about it if
+    // EditHyperlink is dispatched from the menu. So ignoring where the mouse
+    // currently happens to be when the menu was dismissed.
+    std::optional<bool> moAtContextMenu_DisableEditHyperlink;
+    bool                mbZoomOnPage;
+    bool                mbIsRulerDrag;
+    sal_uLong           mnLockCount;
+    bool                mbReadOnly;
+    static bool         mbPipette;
+    /** Prevents grabbing focus while loading - see tdf#83773 that introduced
+        the grabbing, and tdf#150773 that needs grabbing disabled on loading
+    */
+    bool mbFirstTimeActivation = true;
+    /** This flag controls whether the layer mode is active, i.e. the layer
+        dialog is visible.
+    */
+    bool mbIsLayerModeActive;
+    /** This item contains the clipboard formats of the current clipboard
+        content that are supported both by that content and by the
+        DrawViewShell.
+    */
+    ::std::unique_ptr<SvxClipboardFormatItem> mpCurrentClipboardFormats;
+    /** On some occasions it is necessary to make SwitchPage calls
+        asynchronously.
+    */
+    tools::AsynchronousCall maAsynchronousSwitchPageCall;
+    /** This flag is used to prevent nested calls to SwitchPage().
+    */
+    bool mbIsInSwitchPage;
+    RotateTransliteration m_aRotateCase;
+    /** Listen for selection changes and broadcast context changes for the sidebar.
+    */
+    ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
+    css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
+    css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
+    rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
+    bool                                                  mbPastePossible;
+    bool                                                  mbMouseButtonDown;
+    bool                                                  mbMouseSelecting;
+    ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
+    ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
+    std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
 };

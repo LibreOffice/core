@@ -755,8 +755,6 @@ public:
  */
 class SmTextNode : public SmVisibleNode
 {
-
-protected:
     OUString   maText;
     sal_uInt16 mnFontDesc;
     /** Index within text where the selection starts

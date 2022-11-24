@@ -203,7 +203,9 @@ public:
 
     std::vector<Color> GetThemeColors() override;
 
-protected:
+private:
+    static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
+    void                    Construct(bool bClipboard);
 
     SdDrawDocument*         mpDoc;
     std::unique_ptr<SfxUndoManager> mpUndoManager;
@@ -218,11 +220,7 @@ protected:
     bool                    mbSdDataObj;
     bool                    mbInDestruction;
     bool                    mbOwnPrinter;
-
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
-    void                    Construct(bool bClipboard);
-private:
-    static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

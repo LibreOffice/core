@@ -39,9 +39,9 @@ class SdUnoSearchReplaceDescriptor;
 /** this class implements a search or replace operation on a given page or a given sdrobj */
 class SdUnoSearchReplaceShape : public css::util::XReplaceable
 {
-protected:
     css::drawing::XDrawPage* mpPage;
 
+protected:
     css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
     bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) noexcept;
     static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;

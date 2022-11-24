@@ -798,8 +798,10 @@ public:
 
     struct ModifyBlocker_Impl
     {
+    private:
         SfxObjectShell* pPersist;
         bool bWasEnabled;
+    public:
         ModifyBlocker_Impl( SfxObjectShell* pPersistP ) : pPersist( pPersistP )
         {
             bWasEnabled = pPersistP->IsEnableSetModified();

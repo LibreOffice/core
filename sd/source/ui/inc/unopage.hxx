@@ -56,13 +56,12 @@ private:
     SdrModel* mpSdrModel;
     bool      mbIsImpressDocument;
     sal_Int16 mnTempPageNumber; // for printing handouts
+    const SvxItemPropertySet*   mpPropSet;
 
     void UpdateModel();
 
 protected:
     friend class SdXImpressDocument;
-
-    const SvxItemPropertySet*   mpPropSet;
 
     /// @throws css::lang::IllegalArgumentException
     virtual void setBackground( const css::uno::Any& rValue );

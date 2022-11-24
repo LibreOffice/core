@@ -88,6 +88,9 @@ private:
     bool                    bSynchron : 1;
     bool                    bWasLastEditOK : 1;
     bool                    m_bIsConnect : 1;
+    bool                    m_bIsReadOnly;
+    css::uno::Reference<css::io::XInputStream>
+                            m_xInputStreamToLoadFrom;
 
     DECL_DLLPRIVATE_LINK( EndEditHdl, const OUString&, void );
 
@@ -98,10 +101,6 @@ protected:
 
     // Set LinkSourceName without action
     void            SetName( const OUString & rLn );
-
-    bool            m_bIsReadOnly;
-    css::uno::Reference<css::io::XInputStream>
-                    m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
                     SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType );

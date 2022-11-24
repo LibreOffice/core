@@ -45,8 +45,6 @@ struct GroupEntry
 
 class GroupTable
 {
-    protected:
-
         sal_uInt32              mnIndex;
         sal_uInt32              mnGroupsClosed;
         std::vector<GroupEntry> mvGroupEntry;

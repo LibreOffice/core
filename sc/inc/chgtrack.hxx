@@ -104,8 +104,6 @@ class ScChangeActionLinkEntry
     ScChangeActionLinkEntry( const ScChangeActionLinkEntry& ) = delete;
     ScChangeActionLinkEntry& operator=( const ScChangeActionLinkEntry& ) = delete;
 
-protected:
-
     ScChangeActionLinkEntry*    pNext;
     ScChangeActionLinkEntry**   ppPrev;
     ScChangeAction*             pAction;

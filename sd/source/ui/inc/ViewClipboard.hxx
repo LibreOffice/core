@@ -32,6 +32,8 @@ class View;
 */
 class ViewClipboard
 {
+    ::sd::View& mrView;
+
 public:
     ViewClipboard(::sd::View& rView);
     virtual ~ViewClipboard();
@@ -42,8 +44,6 @@ public:
     void HandlePageDrop(const SdTransferable& rTransferable);
 
 protected:
-    ::sd::View& mrView;
-
     /** Return the first master page of the given transferable.  When the
         bookmark list of the transferable contains at least one non-master
         page then NULL is returned.

@@ -39,7 +39,20 @@ public:
                                       const SfxItemSet& rArgSet  );
     bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
-protected:
+private:
+    void            Init            ();
+    void            FillListBoxes   ();
+    static ScSubTotalFunc  LbPosToFunc     ( sal_uInt16 nPos );
+    static sal_uInt16      FuncToLbPos     ( ScSubTotalFunc eFunc );
+    sal_uInt16          GetFieldSelPos  ( SCCOL nField );
+
+    // Handler ------------------------
+    DECL_LINK( SelectListBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( SelectTreeListBoxHdl, weld::TreeView&, void );
+    DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
+    void SelectHdl(const weld::Widget*);
+
     const OUString    aStrNone;
     const OUString    aStrColumn;
 
@@ -55,20 +68,6 @@ protected:
     std::unique_ptr<weld::TreeView> mxLbColumns;
     std::unique_ptr<weld::TreeView> mxLbFunctions;
     std::unique_ptr<weld::CheckButton> mxLbSelectAllColumns;
-
-private:
-    void            Init            ();
-    void            FillListBoxes   ();
-    static ScSubTotalFunc  LbPosToFunc     ( sal_uInt16 nPos );
-    static sal_uInt16      FuncToLbPos     ( ScSubTotalFunc eFunc );
-    sal_uInt16          GetFieldSelPos  ( SCCOL nField );
-
-    // Handler ------------------------
-    DECL_LINK( SelectListBoxHdl, weld::ComboBox&, void );
-    DECL_LINK( SelectTreeListBoxHdl, weld::TreeView&, void );
-    DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
-    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
-    void SelectHdl(const weld::Widget*);
 };
 
 class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
