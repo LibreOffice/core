@@ -149,10 +149,11 @@ public:
     bool      ObjAnchoredAtChar() const { return GetAnchorId() == RndStdIds::FLY_AT_CHAR; }
     bool      ObjAnchoredAsChar() const { return GetAnchorId() == RndStdIds::FLY_AS_CHAR; }
 
-    const SwPosition&  GetContentAnchor() const
+    const SwNode& GetAnchorNode() const
     {
-        assert( GetAnchorFormat().GetContentAnchor() );
-        return *(GetAnchorFormat().GetContentAnchor());
+        const SwNode* pNode = GetAnchorFormat().GetAnchorNode();
+        assert( pNode );
+        return *pNode;
     }
 
     /** get data collection of anchored objects, handled by with contact */

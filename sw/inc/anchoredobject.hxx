@@ -162,7 +162,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // object positioning
         friend bool sw_HideObj( const SwTextFrame& _rFrame,
                                  const RndStdIds _eAnchorType,
-                                 SwPosition const& rAnchorPos,
+                                 SwFormatAnchor const& rFormatAnchor,
                                  SwAnchoredObject* _pAnchoredObj );
     protected:
         SwAnchoredObject();

@@ -1489,8 +1489,8 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
             if (pContact && !pContact->ObjAnchoredAtPage() )
             {
-                const SwPosition& rPos = pContact->GetContentAnchor();
-                bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.GetNode() );
+                const SwNode& rAnchorNode = pContact->GetAnchorNode();
+                bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rAnchorNode );
                 if (IsHeaderFooterEdit() != bInHdrFtr)
                 {
                     bRet = false;

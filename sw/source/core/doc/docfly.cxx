@@ -771,7 +771,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == RndStdIds::FLY_AS_CHAR )
             {
-                oOldAsCharAnchorPos.emplace(pContact->GetContentAnchor());
+                oOldAsCharAnchorPos.emplace(*pContact->GetAnchorFormat().GetContentAnchor());
             }
 
             if ( _bSameOnly )

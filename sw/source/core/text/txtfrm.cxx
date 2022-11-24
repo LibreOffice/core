@@ -1485,7 +1485,7 @@ void SwTextFrame::HideFootnotes(TextFrameIndex const nStart, TextFrameIndex cons
  */
 bool sw_HideObj( const SwTextFrame& _rFrame,
                   const RndStdIds _eAnchorType,
-                  SwPosition const& rAnchorPos,
+                  SwFormatAnchor const& rFormatAnchor,
                   SwAnchoredObject* _pAnchoredObj )
 {
     bool bRet( true );
@@ -1499,9 +1499,9 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
               pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrame.IsInDocBody() && !_rFrame.FindNextCnt() )
         {
-            SwTextNode const& rNode(*rAnchorPos.GetNode().GetTextNode());
+            SwTextNode const& rNode(*rFormatAnchor.GetAnchorNode()->GetTextNode());
             assert(FrameContainsNode(_rFrame, rNode.GetIndex()));
-            sal_Int32 const nObjAnchorPos(rAnchorPos.GetContentIndex());
+            sal_Int32 const nObjAnchorPos(rFormatAnchor.GetContentAnchor()->GetContentIndex());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
                 ? rNode.GetText()[nObjAnchorPos]
                 : 0;
@@ -1560,7 +1560,7 @@ void SwTextFrame::HideAndShowObjects()
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 if ((eAnchorType != RndStdIds::FLY_AT_CHAR) ||
-                    sw_HideObj(*this, eAnchorType, pContact->GetContentAnchor(),
+                    sw_HideObj(*this, eAnchorType, pContact->GetAnchorFormat(),
                                  i ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
@@ -1594,13 +1594,13 @@ void SwTextFrame::HideAndShowObjects()
                 {
                     sal_Int32 nHiddenStart;
                     sal_Int32 nHiddenEnd;
-                    const SwPosition& rAnchor = pContact->GetContentAnchor();
+                    const SwFormatAnchor& rAnchorFormat = pContact->GetAnchorFormat();
                     SwScriptInfo::GetBoundsOfHiddenRange(
-                        *rAnchor.GetNode().GetTextNode(),
-                        rAnchor.GetContentIndex(), nHiddenStart, nHiddenEnd);
+                        *rAnchorFormat.GetAnchorNode()->GetTextNode(),
+                        rAnchorFormat.GetContentAnchor()->GetContentIndex(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
-                        sw_HideObj(*this, eAnchorType, rAnchor, i))
+                        sw_HideObj(*this, eAnchorType, rAnchorFormat, i))
                     {
                         pContact->MoveObjToInvisibleLayer( pObj );
                     }
