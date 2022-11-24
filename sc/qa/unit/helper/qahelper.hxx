@@ -32,8 +32,6 @@
 #include <memory>
 #include <tuple>
 
-namespace utl { class TempFileNamed; }
-
 enum class StringType { PureString, StringValue };
 
 #define CHECK_OPTIMAL 0x1
