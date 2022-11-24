@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/pch.patch.0 \
 	external/poppler/disable-freetype.patch.1 \
 	external/poppler/gcc7-EntityInfo.patch.1 \
+	external/poppler/char_traits.patch \
 ))
 
 ifneq ($(filter -fsanitize=%,$(CC)),)
