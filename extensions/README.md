@@ -16,6 +16,12 @@ we have reached the time when we should ask for the update.  If yes, asks for
 that, and shows the download button in the menu (if the new update is
 available).
 
+The update server will decide if there is an update available based on the user-agent
+string created by UpdateInformationProvider::getUserAgent, the data used there is
+extracted from instdir/program/versionrc and the update server takes the buildid into
+account, so to experiment with the updates from a dev version getUserAgent needs
+to return a recognized id.
+
 ## OLE Automation Bridge
 
 A bridge between "OLE automation" and UNO, so you can use UNO services

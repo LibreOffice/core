@@ -365,7 +365,9 @@ OUString UpdateInformationProvider::getUserAgent(bool bExtended)
     aUserAgent = aUserAgent.replaceAll("<PRODUCT>", product);
     aUserAgent = aUserAgent.replaceAll("<OPTIONAL_OS_HW_DATA>", aExtended);
     SAL_INFO("extensions.update", "UpdateUserAgent: " << aUserAgent);
-
+    // if you want to debug online updates from a dev version, then uncommenting this (adjust for platform)
+    // might be helpful
+    // return "LibreOffice 7.3.5.2 (184fe81b8c8c30d8b5082578aee2fed2ea847c01; Linux; X86_64; )";
     return aUserAgent;
 }
 
