@@ -577,6 +577,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         moWatermarkFontHeight = nFontHeight;
                     }
                 }
+                else if (rProp.Name == "WatermarkRotateAngle")
+                {
+                    sal_Int32 nRotateAngle{};
+                    if (rProp.Value >>= nRotateAngle)
+                    {
+                        moWatermarkRotateAngle = Degree10(nRotateAngle);
+                    }
+                }
                 else if (rProp.Name == "WatermarkFontName")
                 {
                     OUString aFontName{};
@@ -1189,6 +1197,17 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
         aFont.SetOrientation( 2700_deg10 );
     }
 
+    if (moWatermarkRotateAngle)
+    {
+        aFont.SetOrientation(*moWatermarkRotateAngle);
+        if (rPageSize.Width() < rPageSize.Height())
+        {
+            // Set text width based on the shorter side, so rotation can't push text outside the
+            // page boundaries.
+            nTextWidth = rPageSize.Width();
+        }
+    }
+
     // adjust font height for text to fit
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->Push();
@@ -1242,6 +1261,25 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
                             (rPageSize.Height()-w)/2 );
         aTextRect = tools::Rectangle( aTextPoint, Size( nTextHeight, w ) );
     }
+
+    if (moWatermarkRotateAngle)
+    {
+        // First set the text's starting point to the center of the page.
+        tools::Rectangle aPageRectangle(Point(0, 0), rPageSize);
+        aTextPoint = aPageRectangle.Center();
+        // Then adjust it so that the text remains centered, based on the rotation angle.
+        basegfx::B2DPolygon aTextPolygon
+            = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(0, -nTextHeight, w, 0));
+        basegfx::B2DHomMatrix aMatrix;
+        aMatrix.rotate(-1 * toRadians(*moWatermarkRotateAngle));
+        aTextPolygon.transform(aMatrix);
+        basegfx::B2DPoint aPolygonCenter = aTextPolygon.getB2DRange().getCenter();
+        aTextPoint.AdjustX(-aPolygonCenter.getX());
+        aTextPoint.AdjustY(-aPolygonCenter.getY());
+
+        aTextRect = aPageRectangle;
+    }
+
     rWriter.SetClipRegion();
     rWriter.BeginTransparencyGroup();
     rWriter.DrawText( aTextPoint, msWatermark );

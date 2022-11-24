@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <tools/helpers.hxx>
 
 using namespace ::com::sun::star;
 
@@ -275,6 +276,58 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontName)
     // - Actual  : Helvetica
     // i.e. the font name was sans, could not specify an explicit name.
     CPPUNIT_ASSERT_EQUAL(aExpectedFontName, aFontName);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWatermarkRotateAngle)
+{
+    // Given an empty Writer document:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // When exporting that as PDF with a rotated watermark:
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    // 45.0 degrees, counter-clockwise.
+    sal_Int32 nExpectedRotateAngle = 45;
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Watermark", OUString("X")),
+        comphelper::makePropertyValue("WatermarkRotateAngle", nExpectedRotateAngle * 10),
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("OutputStream", xOutputStream),
+    };
+    xFilter->filter(aDescriptor);
+
+    // Then make sure that the watermark rotation angle is correct:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject = pPageObject->getFormObject(0);
+    basegfx::B2DHomMatrix aMatrix = pFormObject->getMatrix();
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate{};
+    double fShearX{};
+    aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    sal_Int32 nActualRotateAngle = NormAngle360(basegfx::rad2deg<1>(fRotate));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 45
+    // - Actual  : 270
+    // i.e. the rotation angle was 270 for an A4 page, not the requested 45 degrees.
+    CPPUNIT_ASSERT_EQUAL(nExpectedRotateAngle, nActualRotateAngle);
 }
 }
 
