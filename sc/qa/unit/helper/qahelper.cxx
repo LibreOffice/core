@@ -21,7 +21,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/UnitConversion.hxx>
-#include <tools/urlobj.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <formula/errorcodes.hxx>
@@ -498,9 +497,6 @@ ScDocShellRef ScBootstrapFixture::load(
 
     return xDocShRef;
 }
-
-ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
-ScBootstrapFixture::~ScBootstrapFixture() {}
 
 void ScBootstrapFixture::setUp()
 {

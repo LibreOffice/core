@@ -22,7 +22,7 @@ void TextFunctionsTest::testTextFormulasFODS()
 }
 
 TextFunctionsTest::TextFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/text/fods/")
+    FunctionsTest()
 {
 }
 

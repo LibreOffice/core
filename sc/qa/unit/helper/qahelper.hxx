@@ -127,8 +127,6 @@ public:
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
 protected:
-    OUString m_aBaseString;
-
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
@@ -137,9 +135,6 @@ private:
     // reference to document interface that we are testing
     css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 public:
-    explicit ScBootstrapFixture( const OUString& rsBaseString );
-    virtual ~ScBootstrapFixture() override;
-
     virtual void setUp() override;
     virtual void tearDown() override;
 };

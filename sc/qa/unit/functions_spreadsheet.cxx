@@ -22,7 +22,7 @@ void SpreadsheetFunctionsTest::testSpreadsheetFormulasFODS()
 }
 
 SpreadsheetFunctionsTest::SpreadsheetFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/spreadsheet/fods/")
+    FunctionsTest()
 {
 }
 

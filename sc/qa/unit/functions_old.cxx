@@ -14,7 +14,7 @@ public:
 };
 
 FunctionsTestOld::FunctionsTestOld():
-    FunctionsTest("sc/qq/unit/data/functions/fods")
+    FunctionsTest()
 {
 }
 

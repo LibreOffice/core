@@ -22,7 +22,7 @@ void InformationFunctionsTest::testInformationFormulasFODS()
 }
 
 InformationFunctionsTest::InformationFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/information/fods/")
+    FunctionsTest()
 {
 }
 

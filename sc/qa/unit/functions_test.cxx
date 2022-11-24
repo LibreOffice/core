@@ -13,8 +13,8 @@
 
 #include <rtl/math.hxx>
 
-FunctionsTest::FunctionsTest(const OUString& rPath):
-    ScBootstrapFixture(rPath)
+FunctionsTest::FunctionsTest():
+    ScBootstrapFixture()
 {
 }
 

@@ -22,7 +22,7 @@ void StatisticalFunctionsTest::testStatisticalFormulasFODS()
 }
 
 StatisticalFunctionsTest::StatisticalFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/statistical/fods/")
+    FunctionsTest()
 {
 }
 

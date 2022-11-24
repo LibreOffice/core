@@ -22,7 +22,7 @@ void AddinFunctionsTest::testAddinFormulasFODS()
 }
 
 AddinFunctionsTest::AddinFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/addin/fods/")
+    FunctionsTest()
 {
 }
 

@@ -69,11 +69,11 @@ private:
 void ScFiltersTest::createFileURL(
     std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
 {
-    // m_aBaseString and aFileBase may contain multiple segments, so use
+    // aFileBase may contain multiple segments, so use
     // GetNewAbsURL instead of insertName for them:
     INetURLObject url(m_directories.getSrcRootURL());
     url.setFinalSlash();
-    url.GetNewAbsURL(m_aBaseString, &url);
+    url.GetNewAbsURL("sc/qa/unit/data", &url);
     url.insertName(aFileExtension, true);
     url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
     rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
@@ -155,7 +155,7 @@ void ScFiltersTest::testTooManyColsRows()
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScBootstrapFixture( "sc/qa/unit/data" )
+    : ScBootstrapFixture()
 {
 }
 

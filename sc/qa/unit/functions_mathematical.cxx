@@ -22,7 +22,7 @@ void MathematicalFunctionsTest::testMathematicalFormulasFODS()
 }
 
 MathematicalFunctionsTest::MathematicalFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/mathematical/fods/")
+    FunctionsTest()
 {
 }
 

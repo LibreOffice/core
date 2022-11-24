@@ -22,7 +22,7 @@ void LogicalFunctionsTest::testLogicalFormulasFODS()
 }
 
 LogicalFunctionsTest::LogicalFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/logical/fods/")
+    FunctionsTest()
 {
 }
 

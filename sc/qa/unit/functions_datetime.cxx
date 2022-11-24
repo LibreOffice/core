@@ -22,7 +22,7 @@ void DateTimeFunctionsTest::testDateTimeFormulasFODS()
 }
 
 DateTimeFunctionsTest::DateTimeFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/date_time/fods/")
+    FunctionsTest()
 {
 }
 

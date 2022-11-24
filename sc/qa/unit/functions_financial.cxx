@@ -22,7 +22,7 @@ void FinancialFunctionsTest::testFinancialFormulasFODS()
 }
 
 FinancialFunctionsTest::FinancialFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/financial/fods/")
+    FunctionsTest()
 {
 }
 

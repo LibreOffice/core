@@ -19,7 +19,7 @@ class SCQAHELPER_DLLPUBLIC FunctionsTest : public ScBootstrapFixture, public tes
 {
 public:
 
-    FunctionsTest(const OUString& rPath);
+    FunctionsTest();
 
     virtual bool load(
         const OUString &rFilter,

@@ -22,7 +22,7 @@ void DatabaseFunctionsTest::testDatabaseFormulasFODS()
 }
 
 DatabaseFunctionsTest::DatabaseFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/database/fods/")
+    FunctionsTest()
 {
 }
 

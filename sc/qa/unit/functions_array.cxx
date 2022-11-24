@@ -38,7 +38,7 @@ void ArrayFunctionsTest::testDubiousArrayFormulasFODS()
 }
 
 ArrayFunctionsTest::ArrayFunctionsTest():
-    FunctionsTest("sc/qa/unit/data/functions/array/fods/")
+    FunctionsTest()
 {
 }
 
