@@ -18,7 +18,6 @@
  */
 
 #include <config_wasm_strip.h>
-
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
@@ -995,14 +994,12 @@ SwStartNode::SwStartNode( SwNodes& rNodes, SwNodeOffset nPos )
 
 void SwStartNode::CheckSectionCondColl() const
 {
-//FEATURE::CONDCOLL
     SwNodeIndex aIdx( *this );
     SwNodeOffset nEndIdx = EndOfSectionIndex();
     const SwNodes& rNds = GetNodes();
     SwContentNode* pCNd;
     while( nullptr != ( pCNd = rNds.GoNext( &aIdx )) && pCNd->GetIndex() < nEndIdx )
         pCNd->ChkCondColl();
-//FEATURE::CONDCOLL
 }
 
 void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const

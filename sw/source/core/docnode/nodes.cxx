@@ -18,10 +18,8 @@
  */
 
 #include <stdlib.h>
-
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
-
 #include <node.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -41,7 +39,6 @@
 #include <tox.hxx>
 #include <fmtrfmrk.hxx>
 #include <fmtftn.hxx>
-
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
@@ -181,10 +178,8 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                 }
                 rTextNd.InvalidateNumRule();
 
-//FEATURE::CONDCOLL
                 if( RES_CONDTXTFMTCOLL == rTextNd.GetTextColl()->Which() )
                     rTextNd.ChkCondColl();
-//FEATURE::CONDCOLL
             }
             else if( rNd.IsContentNode() )
                 static_cast<SwContentNode&>(rNd).InvalidateNumRule();
@@ -336,10 +331,9 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                             }
                         }
                     }
-                    //FEATURE::CONDCOLL
+
                     if( RES_CONDTXTFMTCOLL == pTextNd->GetTextColl()->Which() )
                         pTextNd->ChkCondColl();
-                    //FEATURE::CONDCOLL
                 }
                 else
                 {

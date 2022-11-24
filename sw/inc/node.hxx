@@ -765,8 +765,6 @@ inline const SwAttrSet& SwContentNode::GetSwAttrSet() const
     return mpAttrSet ? *GetpSwAttrSet() : GetAnyFormatColl().GetAttrSet();
 }
 
-//FEATURE::CONDCOLL
-
 inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,
                                                 bool bInParents ) const
 {

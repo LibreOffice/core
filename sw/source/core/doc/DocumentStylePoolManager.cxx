@@ -657,13 +657,11 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
     {
 
-//FEATURE::CONDCOLL
         if(::IsConditionalByPoolId( nId ))
             pNewColl = new SwConditionTextFormatColl( m_rDoc.GetAttrPool(), aNm, !nParent
                                                 ? m_rDoc.GetDfltTextFormatColl()
                                                 : GetTextCollFromPool( nParent ));
         else
-//FEATURE::CONDCOLL
             pNewColl = new SwTextFormatColl( m_rDoc.GetAttrPool(), aNm, !nParent
                                             ? m_rDoc.GetDfltTextFormatColl()
                                             : GetTextCollFromPool( nParent ));

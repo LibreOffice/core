@@ -18,9 +18,7 @@
  */
 
 #include <libxml/xmlwriter.h>
-
 #include <fmtftn.hxx>
-
 #include <doc.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -568,10 +566,8 @@ void SwTextFootnote::SetUniqueSeqRefNo( SwDoc& rDoc )
 
 void SwTextFootnote::CheckCondColl()
 {
-//FEATURE::CONDCOLL
     if( GetStartNode() )
         static_cast<SwStartNode&>(GetStartNode()->GetNode()).CheckSectionCondColl();
-//FEATURE::CONDCOLL
 }
 
 void SwTextFootnote::dumpAsXml(xmlTextWriterPtr pWriter) const

@@ -918,7 +918,6 @@ SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
     return pTextFormatColl;
 }
 
-//FEATURE::CONDCOLL
 SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rFormatName,
                                                   SwTextFormatColl *pDerivedFrom,
                                                   bool bBroadcast)
@@ -942,7 +941,6 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
 
     return pFormatColl;
 }
-//FEATURE::CONDCOLL
 
 // GRF
 SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const OUString &rFormatName,
@@ -1183,7 +1181,6 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyTextColl( *static_cast<SwTextFormatColl*>(rColl.DerivedFrom()) );
 
-//FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == rColl.Which() )
     {
         pNewColl = new SwConditionTextFormatColl( GetAttrPool(), rColl.GetName(),
@@ -1197,7 +1194,6 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
                             static_cast<const SwConditionTextFormatColl&>(rColl).GetCondColls() );
     }
     else
-//FEATURE::CONDCOLL
         pNewColl = MakeTextFormatColl( rColl.GetName(), pParent );
 
     // copy the auto formats or the attributes
@@ -1345,7 +1341,6 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
 
-//FEATURE::CONDCOLL
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
             {
                 if (pDstColl->Which() != RES_CONDTXTFMTCOLL)
@@ -1359,7 +1354,6 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
                 static_cast<SwConditionTextFormatColl*>(pDstColl)->SetConditions(
                             static_cast<SwConditionTextFormatColl*>(pSrc)->GetCondColls() );
             }
-//FEATURE::CONDCOLL
         }
     }
 }

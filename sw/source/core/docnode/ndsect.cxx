@@ -18,9 +18,7 @@
  */
 
 #include <config_wasm_strip.h>
-
 #include <libxml/xmlwriter.h>
-
 #include <hintids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/linkmgr.hxx>
@@ -320,9 +318,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         }
     }
 
-//FEATURE::CONDCOLL
     pNewSectNode->CheckSectionCondColl();
-//FEATURE::CONDCOLL
 
     getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
@@ -569,7 +565,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
         // WARNING: First remove from the array and then delete,
         //          as the Section DTOR tries to delete it's format itself.
         mpSectionFormatTable->erase( itFormatPos );
-//FEATURE::CONDCOLL
+
         SwNodeOffset nCnt(0), nSttNd(0);
         if( pIdx && &GetNodes() == &pIdx->GetNodes() &&
             nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
@@ -577,7 +573,6 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             nSttNd = pSectNd->GetIndex();
             nCnt = pSectNd->EndOfSectionIndex() - nSttNd - 1;
         }
-//FEATURE::CONDCOLL
 
         delete pFormat;
 
@@ -587,13 +582,11 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             GetFootnoteIdxs().UpdateFootnote( aUpdIdx.GetNode() );
         }
 
-//FEATURE::CONDCOLL
         SwContentNode* pCNd;
         for( ; nCnt--; ++nSttNd )
             if( nullptr != (pCNd = GetNodes()[ nSttNd ]->GetContentNode() ) &&
                 RES_CONDTXTFMTCOLL == pCNd->GetFormatColl()->Which() )
                 pCNd->ChkCondColl();
-//FEATURE::CONDCOLL
     }
 
     GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);

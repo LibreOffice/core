@@ -18,9 +18,7 @@
  */
 
 #include <libxml/xmlwriter.h>
-
 #include <config_wasm_strip.h>
-
 #include <memory>
 #include <fesh.hxx>
 #include <hintids.hxx>
@@ -317,9 +315,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
         rTabBoxes.insert( rTabBoxes.begin() + nRealInsPos, pPrvBox );
 
         if( ! pTextColl->IsAssignedToListLevelOfOutlineStyle()
-//FEATURE::CONDCOLL
             && RES_CONDTXTFMTCOLL != pTextColl->Which()
-//FEATURE::CONDCOLL
         )
             new SwTextNode( *pSttNd->EndOfSectionNode(), pTextColl, pAutoAttr );
         else

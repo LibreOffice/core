@@ -19,14 +19,12 @@
 
 #include <memory>
 #include <libxml/xmlwriter.h>
-
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <svl/intitem.hxx>
-
 #include <calbck.hxx>
 #include <doc.hxx>
 #include <fmtcol.hxx>
@@ -601,7 +599,6 @@ void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCn
     }
 }
 
-// FEATURE::CONDCOLL
 void SwTextFormatColl::SetAttrOutlineLevel( int nLevel)
 {
     OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTextFormatColl: Level Out Of Range" );
