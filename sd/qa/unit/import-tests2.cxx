@@ -66,6 +66,7 @@ class SdImportTest2 : public SdModelTestBase
 public:
     virtual void setUp() override;
 
+    void testTdf152186();
     void testTdf93868();
     void testTdf95932();
     void testTdf99030();
@@ -143,6 +144,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
+    CPPUNIT_TEST(testTdf152186);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
     CPPUNIT_TEST(testTdf99030);
@@ -222,6 +224,25 @@ void SdImportTest2::setUp()
 {
     SdModelTestBase::setUp();
     mxDesktop.set(frame::Desktop::create(getComponentContext()));
+}
+
+void SdImportTest2::testTdf152186()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf152186.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    bool bHasShadow;
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(i, 0, xDocShRef));
+        xShape->getPropertyValue("Shadow") >>= bHasShadow;
+        CPPUNIT_ASSERT(!bHasShadow);
+    }
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest2::testTdf93868()
