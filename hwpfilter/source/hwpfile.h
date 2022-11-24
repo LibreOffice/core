@@ -130,6 +130,7 @@ class DLLEXPORT HWPFile
  * Reads two byte from HIODev
  */
         bool Read2b(unsigned short &out);
+        bool Read2b(char16_t &out);
 /**
  * Reads four byte from HIODev
  */

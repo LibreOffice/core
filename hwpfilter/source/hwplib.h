@@ -33,7 +33,7 @@
 /**
  * size of hunit is 4 since hwp96 version
  */
-typedef unsigned short  hchar;
+typedef char16_t  hchar;
 typedef int     hunit;
 typedef unsigned char       kchar;
 

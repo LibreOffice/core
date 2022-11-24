@@ -139,6 +139,16 @@ bool HWPFile::Read2b(unsigned short &out)
     return hiodev && hiodev->read2b(out);
 }
 
+bool HWPFile::Read2b(char16_t &out)
+{
+    unsigned short n;
+    auto const ok = Read2b(n);
+    if (ok) {
+        out = n;
+    }
+    return ok;
+}
+
 bool HWPFile::Read4b(unsigned int &out)
 {
     return hiodev && hiodev->read4b(out);

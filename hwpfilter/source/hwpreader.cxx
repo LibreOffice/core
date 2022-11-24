@@ -239,21 +239,21 @@ void HwpReader::makeMeta()
     if (hwpinfo.summary.title[0])
     {
         startEl("dc:title");
-        chars(hstr2OUString(hwpinfo.summary.title));
+        chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.title)));
         endEl("dc:title");
     }
 
     if (hwpinfo.summary.subject[0])
     {
         startEl("dc:subject");
-        chars(hstr2OUString(hwpinfo.summary.subject));
+        chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.subject)));
         endEl("dc:subject");
     }
 
     if (hwpinfo.summary.author[0])
     {
         startEl("meta:initial-creator");
-        chars(hstr2OUString(hwpinfo.summary.author));
+        chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.author)));
         endEl("meta:initial-creator");
     }
 
@@ -327,31 +327,31 @@ void HwpReader::makeMeta()
         if (hwpinfo.summary.keyword[0][0])
         {
             startEl("meta:keyword");
-            chars(hstr2OUString(hwpinfo.summary.keyword[0]));
+            chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.keyword[0])));
             endEl("meta:keyword");
         }
         if (hwpinfo.summary.keyword[1][0])
         {
             startEl("meta:keyword");
-            chars(hstr2OUString(hwpinfo.summary.keyword[1]));
+            chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.keyword[1])));
             endEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[0][0])
         {
             startEl("meta:keyword");
-            chars(hstr2OUString(hwpinfo.summary.etc[0]));
+            chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[0])));
             endEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[1][0])
         {
             startEl("meta:keyword");
-            chars(hstr2OUString(hwpinfo.summary.etc[1]));
+            chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[1])));
             endEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[2][0])
         {
             startEl("meta:keyword");
-            chars(hstr2OUString(hwpinfo.summary.etc[2]));
+            chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[2])));
             endEl("meta:keyword");
         }
         endEl("meta:keywords");
