@@ -163,10 +163,7 @@ void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent&
     SolarMutexGuard aGuard;
 
     if( rEvent.EventName == "OnPrepareViewClosing" )
-    {
         maBubbleManager.RemoveBubbleWindow();
-        maBubbleManager.RemoveMenuBarIcon();
-    }
 }
 
 void SAL_CALL UpdateCheckUI::disposing(const lang::EventObject&)

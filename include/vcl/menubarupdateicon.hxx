@@ -37,8 +37,10 @@ private:
     OUString maBubbleText;
     Image maBubbleImage;
     VclPtr<BubbleWindow> mpBubbleWin;
-    VclPtr<SystemWindow> mpIconSysWin;
-    VclPtr<MenuBar> mpIconMBar;
+    VclPtr<SystemWindow> mpActiveSysWin;
+    VclPtr<MenuBar> mpActiveMBar;
+    std::vector<VclPtr<MenuBar>> maIconMBars;
+    std::vector<sal_uInt16> maIconIDs;
 
     Link<VclWindowEvent&, void> maWindowEventHdl;
     Link<VclSimpleEvent&, void> maApplicationEventHdl;
@@ -46,8 +48,6 @@ private:
 
     Timer maTimeoutTimer;
     Idle maWaitIdle;
-
-    sal_uInt16 mnIconID;
 
     bool mbShowMenuIcon;
     bool mbShowBubble;
@@ -63,6 +63,12 @@ private:
 
     VclPtr<BubbleWindow> GetBubbleWindow();
     void SetBubbleChanged();
+
+    sal_uInt16 GetIconID(MenuBar* pMenuBar) const;
+
+    void AddMenuBarIcon(SystemWindow* pSysWin, bool bAddEventHdl);
+    void RemoveMenuBarIcon(MenuBar* pMenuBar);
+    void RemoveMenuBarIcons();
 
 public:
     MenuBarUpdateIconManager();
@@ -82,9 +88,6 @@ public:
     const OUString& GetBubbleText() const { return maBubbleText; }
 
     void RemoveBubbleWindow();
-
-    void AddMenuBarIcon(SystemWindow* pSysWin, bool bAddEventHdl);
-    void RemoveMenuBarIcon();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -218,7 +218,6 @@ void BubbleWindow::RecalcTextRects()
 MenuBarUpdateIconManager::MenuBarUpdateIconManager()
     : maTimeoutTimer("MenuBarUpdateIconManager")
     , maWaitIdle("vcl MenuBarUpdateIconManager maWaitIdle")
-    , mnIconID (0)
     , mbShowMenuIcon(false)
     , mbShowBubble(false)
     , mbBubbleChanged( false )
@@ -235,19 +234,27 @@ MenuBarUpdateIconManager::MenuBarUpdateIconManager()
     maWindowEventHdl = LINK(this, MenuBarUpdateIconManager, WindowEventHdl);
 }
 
+sal_uInt16 MenuBarUpdateIconManager::GetIconID(MenuBar* pMenuBar) const
+{
+    auto aI = std::find(maIconMBars.begin(), maIconMBars.end(), pMenuBar);
+    if (aI == maIconMBars.end())
+        return 0;
+    return maIconIDs[std::distance(maIconMBars.begin(), aI)];
+}
+
 VclPtr<BubbleWindow> MenuBarUpdateIconManager::GetBubbleWindow()
 {
-    if ( !mpIconSysWin )
+    if (!mpActiveSysWin)
         return nullptr;
 
-    tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+    tools::Rectangle aIconRect = mpActiveMBar->GetMenuBarButtonRectPixel(GetIconID(mpActiveMBar));
     if( aIconRect.IsEmpty() )
         return nullptr;
 
     auto pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
-        pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,
+        pBubbleWin = VclPtr<BubbleWindow>::Create( mpActiveSysWin, maBubbleTitle,
                                        maBubbleText, maBubbleImage );
         mbBubbleChanged = false;
     }
@@ -275,11 +282,11 @@ IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, voi
 
     if ( VclEventId::ObjectDying == nEventID )
     {
-        if ( mpIconSysWin == rEvent.GetWindow() )
+        if (mpActiveSysWin == rEvent.GetWindow())
         {
-            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
             RemoveBubbleWindow();
-            RemoveMenuBarIcon();
+            mpActiveSysWin = nullptr;
+            mpActiveMBar = nullptr;
         }
     }
     else if ( VclEventId::WindowMenubarAdded == nEventID )
@@ -297,19 +304,23 @@ IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, voi
     else if ( VclEventId::WindowMenubarRemoved == nEventID )
     {
         MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
-        if ( pMBar && ( pMBar == mpIconMBar ) )
+        if (pMBar)
         {
-            RemoveBubbleWindow();
-            RemoveMenuBarIcon();
+            if (pMBar == mpActiveMBar)
+            {
+                RemoveBubbleWindow();
+                mpActiveMBar = nullptr;
+            }
+            RemoveMenuBarIcon(pMBar);
         }
     }
     else if ( ( nEventID == VclEventId::WindowMove ) ||
               ( nEventID == VclEventId::WindowResize ) )
     {
-        if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
-             mpBubbleWin && ( mpIconMBar != nullptr ) )
+        if ( mpActiveSysWin == rEvent.GetWindow() &&
+             mpBubbleWin && mpActiveMBar )
         {
-            tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+            tools::Rectangle aIconRect = mpActiveMBar->GetMenuBarButtonRectPixel(GetIconID(mpActiveMBar));
             Point aWinPos = aIconRect.BottomCenter();
             mpBubbleWin->SetTipPosPixel( aWinPos );
             if ( mpBubbleWin->IsVisible() )
@@ -406,7 +417,13 @@ MenuBarUpdateIconManager::~MenuBarUpdateIconManager()
     Application::RemoveEventListener( maApplicationEventHdl );
 
     RemoveBubbleWindow();
-    RemoveMenuBarIcon();
+    RemoveMenuBarIcons();
+}
+
+void MenuBarUpdateIconManager::RemoveMenuBarIcons()
+{
+    while (!maIconMBars.empty())
+        RemoveMenuBarIcon(maIconMBars[0]);
 }
 
 void MenuBarUpdateIconManager::SetShowMenuIcon(bool bShowMenuIcon)
@@ -419,7 +436,7 @@ void MenuBarUpdateIconManager::SetShowMenuIcon(bool bShowMenuIcon)
         else
         {
             RemoveBubbleWindow();
-            RemoveMenuBarIcon();
+            RemoveMenuBarIcons();
         }
     }
 }
@@ -485,19 +502,17 @@ Image GetMenuBarIcon( MenuBar const * pMBar )
 
 void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEventHdl)
 {
-    if ( ! mbShowMenuIcon )
+    if (!mbShowMenuIcon)
         return;
 
     MenuBar *pActiveMBar = pSysWin->GetMenuBar();
-    if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
-    {
-        if ( bAddEventHdl && mpIconSysWin )
-            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
-
+    if (pSysWin != mpActiveSysWin || pActiveMBar != mpActiveMBar)
         RemoveBubbleWindow();
-        RemoveMenuBarIcon();
 
-        if ( pActiveMBar )
+    auto aI = std::find(maIconMBars.begin(), maIconMBars.end(), pActiveMBar);
+    if (aI == maIconMBars.end())
+    {
+        if (pActiveMBar)
         {
             OUStringBuffer aBuf;
             if( !maBubbleTitle.isEmpty() )
@@ -510,20 +525,35 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
             }
 
             Image aImage = GetMenuBarIcon( pActiveMBar );
-            mnIconID = pActiveMBar->AddMenuBarButton( aImage,
+            sal_uInt16 nIconID = pActiveMBar->AddMenuBarButton( aImage,
                                     LINK( this, MenuBarUpdateIconManager, ClickHdl ),
-                                    aBuf.makeStringAndClear()
-                                    );
-            pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
-                                    LINK( this, MenuBarUpdateIconManager, HighlightHdl ) );
+                                    aBuf.makeStringAndClear() );
+            maIconMBars.push_back(pActiveMBar);
+            maIconIDs.push_back(nIconID);
         }
-        mpIconMBar = pActiveMBar;
-        mpIconSysWin = pSysWin;
-        if ( bAddEventHdl && mpIconSysWin )
-            mpIconSysWin->AddEventListener( maWindowEventHdl );
+
+        if (bAddEventHdl && pSysWin)
+            pSysWin->AddEventListener( maWindowEventHdl );
     }
 
-    if ( mbShowBubble && pActiveMBar )
+    if (mpActiveMBar != pActiveMBar)
+    {
+        if (mpActiveMBar)
+        {
+            mpActiveMBar->SetMenuBarButtonHighlightHdl(GetIconID(mpActiveMBar),
+                Link<MenuBarButtonCallbackArg&,bool>());
+        }
+        mpActiveMBar = pActiveMBar;
+        if (mpActiveMBar)
+        {
+            mpActiveMBar->SetMenuBarButtonHighlightHdl(GetIconID(mpActiveMBar),
+                LINK(this, MenuBarUpdateIconManager, HighlightHdl));
+        }
+    }
+
+    mpActiveSysWin = pSysWin;
+
+    if (mbShowBubble && pActiveMBar)
     {
         mpBubbleWin = GetBubbleWindow();
         if ( mpBubbleWin )
@@ -535,22 +565,24 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
     }
 }
 
-void MenuBarUpdateIconManager::RemoveMenuBarIcon()
+void MenuBarUpdateIconManager::RemoveMenuBarIcon(MenuBar* pMenuBar)
 {
-    try {
-        if ( mpIconMBar && ( mnIconID != 0 ) )
-        {
-            mpIconMBar->RemoveMenuBarButton( mnIconID );
-            mpIconMBar = nullptr;
-            mnIconID = 0;
-        }
+    auto aI = std::find(maIconMBars.begin(), maIconMBars.end(), pMenuBar);
+    if (aI == maIconMBars.end())
+        return;
+
+    auto aIconI = maIconIDs.begin() + std::distance(maIconMBars.begin(), aI);
+
+    try
+    {
+        pMenuBar->RemoveMenuBarButton(*aIconI);
     }
-    catch ( ... ) {
-        mpIconMBar = nullptr;
-        mnIconID = 0;
+    catch (...)
+    {
     }
 
-    mpIconSysWin = nullptr;
+    maIconMBars.erase(aI);
+    maIconIDs.erase(aIconI);
 }
 
 void MenuBarUpdateIconManager::RemoveBubbleWindow()
