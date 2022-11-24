@@ -1,0 +1,65 @@
+From 404cb99d86c2d639b4ce2fc59f00f5e66468af34 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Wed, 23 Nov 2022 15:35:14 -0700
+Subject: [PATCH] [buffer-diff] Fix check for glyph flag equality
+
+I'm not sure if the old behavior was intentional, but it was checking
+that the glyph flags were a subset of the reference buffer's glyph
+flags.  I don't see why that is useful.  Fix that.
+
+Then make the buffer-verify code ignore flag differences when verifying
+buffers, since our unsafe-to-concat flag at least, is conservative and
+not guaranteed to be produced the same in fragments.  See:
+
+https://github.com/harfbuzz/harfbuzz/issues/3888
+---
+ src/hb-buffer-verify.cc | 5 ++---
+ src/hb-buffer.cc        | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/src/hb-buffer-verify.cc b/src/hb-buffer-verify.cc
+index 5453e1ca9..1cd52b39b 100644
+--- a/src/hb-buffer-verify.cc
++++ b/src/hb-buffer-verify.cc
+@@ -186,7 +186,7 @@ buffer_verify_unsafe_to_break (hb_buffer_t  *buffer,
+ 
+   bool ret = true;
+   hb_buffer_diff_flags_t diff = hb_buffer_diff (reconstruction, buffer, (hb_codepoint_t) -1, 0);
+-  if (diff)
++  if (diff & ~HB_BUFFER_DIFF_FLAG_GLYPH_FLAGS_MISMATCH)
+   {
+     buffer_verify_error (buffer, font, BUFFER_VERIFY_ERROR "unsafe-to-break test failed.");
+     ret = false;
+@@ -313,7 +313,6 @@ buffer_verify_unsafe_to_concat (hb_buffer_t        *buffer,
+ 
+   bool ret = true;
+   hb_buffer_diff_flags_t diff;
+-
+   /*
+    * Shape the two fragment streams.
+    */
+@@ -382,7 +381,7 @@ buffer_verify_unsafe_to_concat (hb_buffer_t        *buffer,
+    * Diff results.
+    */
+   diff = hb_buffer_diff (reconstruction, buffer, (hb_codepoint_t) -1, 0);
+-  if (diff)
++  if (diff & ~HB_BUFFER_DIFF_FLAG_GLYPH_FLAGS_MISMATCH)
+   {
+     buffer_verify_error (buffer, font, BUFFER_VERIFY_ERROR "unsafe-to-concat test failed.");
+     ret = false;
+diff --git a/src/hb-buffer.cc b/src/hb-buffer.cc
+index f1e30f241..9e67e680c 100644
+--- a/src/hb-buffer.cc
++++ b/src/hb-buffer.cc
+@@ -2095,7 +2095,7 @@ hb_buffer_diff (hb_buffer_t *buffer,
+       result |= HB_BUFFER_DIFF_FLAG_CODEPOINT_MISMATCH;
+     if (buf_info->cluster != ref_info->cluster)
+       result |= HB_BUFFER_DIFF_FLAG_CLUSTER_MISMATCH;
+-    if ((buf_info->mask & ~ref_info->mask & HB_GLYPH_FLAG_DEFINED))
++    if ((buf_info->mask ^ ref_info->mask) & HB_GLYPH_FLAG_DEFINED)
+       result |= HB_BUFFER_DIFF_FLAG_GLYPH_FLAGS_MISMATCH;
+     if (contains && ref_info->codepoint == dottedcircle_glyph)
+       result |= HB_BUFFER_DIFF_FLAG_DOTTED_CIRCLE_PRESENT;
+-- 
+2.38.1
+

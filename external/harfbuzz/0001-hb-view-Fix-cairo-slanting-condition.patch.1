@@ -1,0 +1,29 @@
+From 2e9b270a496de14d3eee9d8b7e1372293bf13888 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Wed, 23 Nov 2022 16:17:50 -0700
+Subject: [PATCH] [hb-view] Fix cairo slanting condition
+
+hb-draw already does slanting. If NOT hb-draw, we should slant
+through cairo path.  Donno why this was untested before.
+
+This was double-slanting with hb-draw, and not slanting without it.
+---
+ util/helper-cairo.hh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/helper-cairo.hh b/util/helper-cairo.hh
+index 37bde1896..fbdbbb1db 100644
+--- a/util/helper-cairo.hh
++++ b/util/helper-cairo.hh
+@@ -104,7 +104,7 @@ helper_cairo_create_scaled_font (const font_options_t *font_opts)
+   cairo_matrix_init_scale (&font_matrix,
+ 			   font_opts->font_size_x,
+ 			   font_opts->font_size_y);
+-  if (use_hb_draw)
++  if (!use_hb_draw)
+     font_matrix.xy = -font_opts->slant * font_opts->font_size_x;
+ 
+   font_options = cairo_font_options_create ();
+-- 
+2.38.1
+
