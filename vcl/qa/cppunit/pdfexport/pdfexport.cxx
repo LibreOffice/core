@@ -3277,6 +3277,108 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135638)
     CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"Description PDF Export test .odt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    int nFigure(0);
+    int nFormula(0);
+    int nDiv(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
+            if (pS && pS->GetValue() == "Figure")
+            {
+                switch (nFigure)
+                {
+                    case 0:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"QR Code - Tells how to get to Mosegaard"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                    case 1:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"Title: Arrows - Description:  Explains the "
+                                                      u"different arrow appearances"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                    case 2:
+                        CPPUNIT_ASSERT_EQUAL(
+                            OUString(u"My blue triangle - Does not need further description"),
+                            ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                    pObject->Lookup("Alt"))));
+                        break;
+                }
+                ++nFigure;
+            }
+            if (pS && pS->GetValue() == "Formula")
+            {
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString(u"Equation 1 - Now we give the full description of eq 1 here"),
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                        *dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"))));
+                ++nFormula;
+            }
+            if (pS && pS->GetValue() == "Div")
+            {
+                switch (nDiv)
+                {
+                    case 0:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"This frame has a description"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                    case 1:
+                        // no properties set on this
+                        CPPUNIT_ASSERT(!pObject->Lookup("Alt"));
+                        break;
+                    case 2:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"My textbox - Has a light background"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                    case 3:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"Hey!  There is no alternate text for Frame "
+                                                      u"// but maybe not needed?"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                }
+                ++nDiv;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(int(3), nFigure);
+    CPPUNIT_ASSERT_EQUAL(int(1), nFormula);
+    CPPUNIT_ASSERT_EQUAL(int(4), nDiv);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
 {
     loadFromURL(u"master.odm");

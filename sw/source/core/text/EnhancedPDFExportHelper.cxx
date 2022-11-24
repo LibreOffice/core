@@ -526,6 +526,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         bool bHeight = false;
         bool bBox = false;
         bool bRowSpan = false;
+        bool bAltText = false;
 
         // Check which attributes to set:
 
@@ -586,11 +587,20 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
             case vcl::PDFWriter::Formula :
             case vcl::PDFWriter::Figure :
+                bAltText =
                 bPlacement =
                 bWidth =
                 bHeight =
                 bBox = true;
                 break;
+
+            case vcl::PDFWriter::Division:
+                if (pFrame->IsFlyFrame()) // this can be something else too
+                {
+                    bAltText = true;
+                }
+                break;
+
             default :
                 break;
         }
@@ -676,9 +686,25 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             }
         }
 
-        // Formerly here bAlternateText was triggered for PDF export, but this
-        // was moved for more general use to primitives and usage in
-        // VclMetafileProcessor2D (see processGraphicPrimitive2D).
+        // ISO 14289-1:2014, Clause: 7.3
+        // ISO 14289-1:2014, Clause: 7.7
+        // For images (but not embedded objects), an ObjectInfoPrimitive2D is
+        // created, but it's not evaluated by VclMetafileProcessor2D any more;
+        // that would require producing StructureTagPrimitive2D here but that
+        // looks impossible so instead duplicate the code that sets the Alt
+        // text here again.
+        if (bAltText)
+        {
+            SwFlyFrameFormat const& rFly(*static_cast<SwFlyFrame const*>(pFrame)->GetFormat());
+            OUString const sep(
+                (rFly.GetObjTitle().isEmpty() || rFly.GetObjDescription().isEmpty())
+                ? OUString() : OUString(" - "));
+            OUString const altText(rFly.GetObjTitle() + sep + rFly.GetObjDescription());
+            if (!altText.isEmpty())
+            {
+                mpPDFExtOutDevData->SetAlternateText(altText);
+            }
+        }
 
         if ( bWidth )
         {
