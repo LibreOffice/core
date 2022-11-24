@@ -14,6 +14,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -170,6 +171,20 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
     // - Actual  : 4
     // i.e. grab-bags introduced 2 unwanted duplicates.
     assertXPath(pXmlDoc, "//w:sdt", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
+{
+    loadAndReload("crop-roundtrip.docx");
+
+    // the image has no cropping after roundtrip, because it has been physically cropped
+    // NB: this test should be fixed when the core feature to show image cropped when it
+    // has the "GraphicCrop" is set is implemented
+    auto aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Left);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Right);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Top);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Bottom);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
