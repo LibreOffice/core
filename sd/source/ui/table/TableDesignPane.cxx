@@ -303,8 +303,10 @@ void TableDesignWidget::ResetStyle()
         for (sal_Int32 i = 0; i < xTableStyle->getCount(); ++i)
         {
             Reference<XStyle> xCellStyle(xTableStyle->getByIndex(i), UNO_QUERY);
-            if (xCellStyle && xCellStyle->isUserDefined())
-                xTableStyle->replaceByIndex(i, mxCellFamily->getByName(xCellStyle->getParentStyle()));
+            while (xCellStyle && xCellStyle->isUserDefined() && !xCellStyle->getParentStyle().isEmpty())
+                xCellStyle.set(mxCellFamily->getByName(xCellStyle->getParentStyle()), UNO_QUERY);
+
+            xTableStyle->replaceByIndex(i, Any(xCellStyle));
         }
 
         endTextEditForStyle(xTableStyle);
@@ -353,17 +355,17 @@ void TableDesignWidget::EditStyle(std::string_view rCommand)
     {
         Reference<XNameReplace> xTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
         Reference<XStyle> xCellStyle(xTableStyle->getByName(OUString::fromUtf8(rCommand)), UNO_QUERY_THROW);
+        rtl::Reference xStyleSheet = static_cast<SdStyleSheet*>(xCellStyle.get());
 
-        bool bUserDefined = xCellStyle->isUserDefined();
+        bool bUserDefined = xStyleSheet->IsEditable();
         if (!bUserDefined)
         {
             Reference<XSingleServiceFactory> xFactory(mxCellFamily, UNO_QUERY_THROW);
-            Reference<XStyle> xNewStyle(xFactory->createInstance(), UNO_QUERY_THROW);
-            xNewStyle->setParentStyle(xCellStyle->getName());
-            xCellStyle = xNewStyle;
+            xCellStyle.set(xFactory->createInstance(), UNO_QUERY_THROW);
+            xCellStyle->setParentStyle(xStyleSheet->getName());
+            xStyleSheet = static_cast<SdStyleSheet*>(xCellStyle.get());
         }
 
-        rtl::Reference xStyleSheet = static_cast<SdStyleSheet*>(xCellStyle.get());
         SfxItemSet aNewAttr(xStyleSheet->GetItemSet());
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog

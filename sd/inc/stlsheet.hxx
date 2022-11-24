@@ -63,6 +63,8 @@ public:
     virtual bool        HasClearParentSupport() const override;
     virtual void        SetHelpId( const OUString& r, sal_uLong nId ) override;
 
+    bool IsEditable();
+
     void        AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems = true);
 
     SdStyleSheet* GetRealStyleSheet() const;
