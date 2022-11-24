@@ -853,7 +853,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X2 ) / 100000 );
                             if ( aFillRect.Y2 )
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
-                            rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
                             bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
                             // Negative GraphicCrop values means "crop" here.
@@ -861,12 +860,17 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                             if(bIsCustomShape && bHasCropValues && bNeedCrop)
                             {
+                                // Physically crop the image
+                                // In this case, don't set the PROP_GraphicCrop because that
+                                // would lead to applying the crop twice after roundtrip
                                 xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromFillRect(aFillRect));
                                 if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
                                     rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
                                 else
                                     rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
+                            else
+                                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
                         }
                     }
                 }
