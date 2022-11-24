@@ -542,7 +542,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
         SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
-        sal_uLong nLineNum = 0;
+        sal_Int32 nLineNum = 0;
         SwTextFrame* pTextFrame = nullptr;
         SwTextFrame* pCurrTextFrame = nullptr;
         pTextFrame = static_cast< SwTextFrame* >(pCurrPage->ContainsContent());

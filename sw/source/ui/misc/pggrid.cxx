@@ -228,7 +228,7 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
     aGridItem.SetGridType(m_xNoGridRB->get_active() ? GRID_NONE :
         m_xLinesGridRB->get_active() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
     aGridItem.SetSnapToChars(m_xSnapToCharsCB->get_active());
-    aGridItem.SetLines( static_cast< sal_uInt16 >(m_xLinesPerPageNF->get_value()) );
+    aGridItem.SetLines( static_cast< sal_Int32 >(m_xLinesPerPageNF->get_value()) );
     aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
         m_bRubyUserValue ? m_nRubyUserValue :
             m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP))) );

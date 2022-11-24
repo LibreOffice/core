@@ -1243,7 +1243,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
             ++nFindOfst;
 
         // skip lines for fields which cover more than one line
-        for ( sal_uInt16 i = 0; i < pCMS->m_pSpecialPos->nLineOfst; i++ )
+        for ( sal_Int32 i = 0; i < pCMS->m_pSpecialPos->nLineOfst; i++ )
             Next();
     }
 

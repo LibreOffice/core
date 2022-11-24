@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
     // - Expected: 6
     // - Actual  : 7
     // i.e. widow control was disabled, layout didn't match Word.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(6), pText1->GetThisLines());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), pText1->GetThisLines());
     auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
     CPPUNIT_ASSERT(pPage2);
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
     SwFrame* pCell2 = pRow2->GetLower();
     auto pText2 = dynamic_cast<SwTextFrame*>(pCell2->GetLower());
     // And then similarly this was 1, not 2.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), pText2->GetThisLines());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), pText2->GetThisLines());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)

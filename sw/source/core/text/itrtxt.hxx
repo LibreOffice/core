@@ -40,7 +40,7 @@ protected:
     SwTwips m_nRegStart;          // The register's start position (Y)
     TextFrameIndex m_nStart;          // Start in the text string, end = pCurr->GetLen()
     sal_uInt16 m_nRegDiff;            // Register's line distance
-    sal_uInt16 m_nLineNr;             // Line number
+    sal_Int32 m_nLineNr;             // Line number
     bool m_bPrev          : 1;
     bool m_bRegisterOn    : 1;    // Keep in register
     bool m_bOneBlock      : 1;    // Justified text: Dispose single words
@@ -84,7 +84,7 @@ public:
     const SwLineLayout *GetNext() const { return m_pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
     TextFrameIndex GetLength() const { return m_pCurr->GetLen(); }
-    sal_uInt16 GetLineNr() const { return m_nLineNr; }
+    sal_Int32 GetLineNr() const { return m_nLineNr; }
     TextFrameIndex GetStart() const { return m_nStart; }
     TextFrameIndex GetEnd() const { return GetStart() + GetLength(); }
     SwTwips Y() const { return m_nY; }

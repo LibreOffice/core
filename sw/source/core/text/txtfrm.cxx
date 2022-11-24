@@ -3833,9 +3833,9 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     return nHeight;
 }
 
-sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
+sal_Int32 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 {
-    sal_uInt16 nRet = 0;
+    sal_Int32 nRet = 0;
     SwTextFrame *pFrame = this;
     do
     {
@@ -3857,7 +3857,7 @@ sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 void SwTextFrame::ChgThisLines()
 {
     // not necessary to format here (GetFormatted etc.), because we have to come from there!
-    sal_uInt32 nNew = 0;
+    sal_Int32 nNew = 0;
     const SwLineNumberInfo &rInf = GetDoc().GetLineNumberInfo();
     if ( !GetText().isEmpty() && HasPara() )
     {
@@ -3917,9 +3917,9 @@ void SwTextFrame::RecalcAllLines()
     if ( IsInTab() )
         return;
 
-    const sal_uLong nOld = GetAllLines();
+    const sal_Int32 nOld = GetAllLines();
     const SwFormatLineNumber &rLineNum = GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber();
-    sal_uLong nNewNum;
+    sal_Int32 nNewNum;
     const bool bRestart = GetDoc().GetLineNumberInfo().IsRestartEachPage();
 
     if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )

@@ -856,7 +856,7 @@ public:
     bool IsOutlineMovable( SwOutlineNodes::size_type nIdx ) const;
     bool IsOutlineCopyable( SwOutlineNodes::size_type nIdx ) const;
 
-    sal_uInt16 GetLineCount();
+    sal_Int32 GetLineCount();
 
     /// Query and set footnote-text/number. Set... to current SSelection!
     bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = nullptr );

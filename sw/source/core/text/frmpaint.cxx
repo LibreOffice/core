@@ -68,7 +68,7 @@ class SwExtraPainter
     const SwLineNumberInfo &m_rLineInf;
     SwTwips m_nX;
     SwTwips m_nRedX;
-    sal_uLong m_nLineNr;
+    sal_Int32 m_nLineNr;
     sal_uInt16 m_nDivider;
     bool m_bGoLeft;
     bool IsClipChg() const { return m_aClip.IsChg(); }
@@ -86,7 +86,7 @@ public:
         assert( m_rLineInf.GetCountBy() != 0 );
         if( m_rLineInf.GetCountBy() == 0 )
             return false;
-        return !( m_nLineNr % m_rLineInf.GetCountBy() );
+        return !( m_nLineNr % static_cast<sal_Int32>(m_rLineInf.GetCountBy()) );
     }
     bool HasDivider() const {
         assert( m_rLineInf.GetDividerCountBy() != 0 );

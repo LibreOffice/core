@@ -832,7 +832,7 @@ bool SwLayAction::TurboAction_( const SwContentFrame *pCnt )
 
         if ( !pCnt->GetValidLineNumFlag() && pCnt->IsTextFrame() )
         {
-            const sal_uLong nAllLines = static_cast<const SwTextFrame*>(pCnt)->GetAllLines();
+            const sal_Int32 nAllLines = static_cast<const SwTextFrame*>(pCnt)->GetAllLines();
             const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->RecalcAllLines();
             if ( nAllLines != static_cast<const SwTextFrame*>(pCnt)->GetAllLines() )
             {
@@ -1745,7 +1745,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
 
             if ( !pContent->GetValidLineNumFlag() && pContent->IsTextFrame() )
             {
-                const sal_uLong nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
+                const sal_Int32 nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
                 const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pContent))->RecalcAllLines();
                 if ( IsPaintExtraData() && IsPaint() &&
                      nAllLines != static_cast<const SwTextFrame*>(pContent)->GetAllLines() )
@@ -1848,7 +1848,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
         {
             if ( !pContent->GetValidLineNumFlag() && pContent->IsTextFrame() )
             {
-                const sal_uLong nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
+                const sal_Int32 nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
                 const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pContent))->RecalcAllLines();
                 if ( IsPaintExtraData() && IsPaint() &&
                      nAllLines != static_cast<const SwTextFrame*>(pContent)->GetAllLines() )
@@ -1944,7 +1944,7 @@ void SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
 
         if ( !pContent->GetValidLineNumFlag() && pContent->IsTextFrame() )
         {
-            const sal_uLong nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
+            const sal_Int32 nAllLines = static_cast<const SwTextFrame*>(pContent)->GetAllLines();
             const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pContent))->RecalcAllLines();
             if ( IsPaintExtraData() && IsPaint() &&
                  nAllLines != static_cast<const SwTextFrame*>(pContent)->GetAllLines() )

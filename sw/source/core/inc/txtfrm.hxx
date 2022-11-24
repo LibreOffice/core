@@ -181,8 +181,8 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     static constexpr tools::Long nMinPrtLine = 0;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
-    sal_uInt32  mnAllLines        :24; // Line count for the Paint (including nThisLines)
-    sal_uInt32  mnThisLines       :8; // Count of Lines of the Frame
+    sal_Int32  mnAllLines        :24; // Line count for the Paint (including nThisLines)
+    sal_Int32  mnThisLines       :8; // Count of Lines of the Frame
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTextFrame::CalcBaseOfstForFly()
@@ -676,11 +676,11 @@ public:
     bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
     /// Determines the line count
-    sal_uInt16 GetLineCount(TextFrameIndex nPos);
+    sal_Int32 GetLineCount(TextFrameIndex nPos);
 
     /// For displaying the line numbers
-    sal_uLong GetAllLines()  const { return mnAllLines; }
-    sal_uLong GetThisLines() const { return mnThisLines;}
+    sal_Int32 GetAllLines()  const { return mnAllLines; }
+    sal_Int32 GetThisLines() const { return mnThisLines;}
     void RecalcAllLines();
 
     /// Stops the animations within numberings

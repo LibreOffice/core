@@ -33,7 +33,7 @@ class SW_DLLPUBLIC SwTextGridItem final : public SfxPoolItem
 {
 private:
     Color m_aColor;
-    sal_uInt16 m_nLines;
+    sal_Int32 m_nLines;
     sal_uInt16 m_nBaseHeight;
     sal_uInt16 m_nRubyHeight;
     SwTextGrid m_eGridType;
@@ -69,8 +69,8 @@ public:
     const Color& GetColor() const { return m_aColor; }
     void SetColor( const Color& rCol )  { m_aColor = rCol; }
 
-    sal_uInt16 GetLines() const { return m_nLines; }
-    void SetLines( sal_uInt16 nNew ) { m_nLines = nNew; }
+    sal_Int32 GetLines() const { return m_nLines; }
+    void SetLines( sal_Int32 nNew ) { m_nLines = nNew; }
 
     sal_uInt16 GetBaseHeight() const { return m_nBaseHeight; }
     void SetBaseHeight( sal_uInt16 nNew ) { m_nBaseHeight = nNew; }

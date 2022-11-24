@@ -606,7 +606,7 @@ TextFrameIndex SwAccessiblePortionData::FillSpecialPos(
         // (if necessary)
         size_t nRefLine = FindBreak( m_aLineBreaks, nRefPos );
         size_t nMyLine  = FindBreak( m_aLineBreaks, nPos );
-        sal_uInt16 nLineOffset = o3tl::narrowing<sal_uInt16>( nMyLine - nRefLine );
+        sal_Int32 nLineOffset = o3tl::narrowing<sal_Int32>( nMyLine - nRefLine );
         if( nLineOffset != 0 )
             nRefPos = m_aLineBreaks[ nMyLine ];
 

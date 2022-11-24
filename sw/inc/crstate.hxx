@@ -108,7 +108,7 @@ enum class SwSPExtendRange : sal_uInt8
 struct SwSpecialPos
 {
     sal_Int32 nCharOfst;
-    sal_uInt16 nLineOfst;
+    sal_Int32 nLineOfst;
     SwSPExtendRange nExtendRange;
 
     // #i27615#

@@ -852,9 +852,9 @@ void SwEditShell::SetNumberingRestart()
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetLineCount()
+sal_Int32 SwEditShell::GetLineCount()
 {
-    sal_uInt16 nRet = 0;
+    sal_Int32 nRet = 0;
     CalcLayout();
     SwPaM* pPam = GetCursor();
     SwNodeIndex aStart( pPam->GetPoint()->GetNode() );

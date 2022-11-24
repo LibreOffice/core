@@ -2399,7 +2399,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet && (nTmp >= 0) )
-                SetLines( o3tl::narrowing<sal_uInt16>(nTmp) );
+                SetLines( nTmp );
             else
                 bRet = false;
         }

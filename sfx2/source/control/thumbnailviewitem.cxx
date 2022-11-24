@@ -227,9 +227,9 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     rSeq.resize(nFinalPrimCount);
 
     // Create the text primitives
-    sal_uInt16 nLineStart = 0;
+    sal_Int32 nLineStart = 0;
     OUString aText(aOrigText);
-    for (sal_uInt16 i=0; i < aTextEngine.GetLineCount(0); ++i)
+    for (sal_Int32 i=0; i < aTextEngine.GetLineCount(0); ++i)
     {
         sal_Int32 nLineLength = aTextEngine.GetLineLen(0, i);
         double nLineWidth = aTextDev.getTextWidth (aText, nLineStart, nLineLength);

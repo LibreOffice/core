@@ -747,7 +747,7 @@ void SwTextAdjuster::CalcDropAdjust()
     OSL_ENSURE( 1<GetDropLines() && SvxAdjust::Left!=GetAdjust() && SvxAdjust::Block!=GetAdjust(),
             "CalcDropAdjust: No reason for DropAdjustment." );
 
-    const sal_uInt16 nLineNumber = GetLineNr();
+    const sal_Int32 nLineNumber = GetLineNr();
 
     // 1) Skip dummies
     Top();
@@ -780,7 +780,7 @@ void SwTextAdjuster::CalcDropAdjust()
                 const auto nDropLineStart =
                     GetLineStart() + pLeft->Width() + pDropPor->Width();
                 auto nMinLeft = nDropLineStart;
-                for( sal_uInt16 i = 1; i < GetDropLines(); ++i )
+                for( sal_Int32 i = 1; i < GetDropLines(); ++i )
                 {
                     if( NextLine() )
                     {
@@ -831,7 +831,7 @@ void SwTextAdjuster::CalcDropRepaint()
     SwRepaint &rRepaint = GetInfo().GetParaPortion()->GetRepaint();
     if( rRepaint.Top() > Y() )
         rRepaint.Top( Y() );
-    for( sal_uInt16 i = 1; i < GetDropLines(); ++i )
+    for( sal_Int32 i = 1; i < GetDropLines(); ++i )
         NextLine();
     const SwTwips nBottom = Y() + GetLineHeight() - 1;
     if( rRepaint.Bottom() < nBottom )

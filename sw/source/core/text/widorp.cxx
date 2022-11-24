@@ -514,14 +514,14 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     // could result in multiple lines for us.
     // Therefore, the CalcFollow() remains in control until the Follow got all
     // necessary lines.
-    sal_uInt16 nNeed = 1; // was: nWidLines - rLine.GetLineNr();
+    sal_Int32 nNeed = 1; // was: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
     // i#91421
     if ( !pMaster->GetIndPrev() )
     {
         pMaster->ChgThisLines();
-        sal_uLong nLines = pMaster->GetThisLines();
+        sal_Int32 nLines = pMaster->GetThisLines();
         if(nLines == 0 && pMaster->HasPara())
         {
             const SwParaPortion *pMasterPara = pMaster->GetPara();
@@ -544,7 +544,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 // This is a follow frame and our side is fixed.
                 const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
                 const SvxOrphansItem& rOrph = rSet.GetOrphans();
-                if (nLines <= rOrph.GetValue())
+                if (nLines <= static_cast<sal_Int32>(rOrph.GetValue()))
                 {
                     // If the master gives us a line as part of widow control, then its orphan
                     // control will move everything to the follow, which is worse than having no
@@ -567,7 +567,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
 
     // We expect that rLine is set to the last line
     OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
-    sal_uInt16 nLineCnt = rLine.GetLineNr();
+    sal_Int32 nLineCnt = rLine.GetLineNr();
 
     // First satisfy the Orphans-rule and the wish for initials ...
     const sal_uInt16 nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );

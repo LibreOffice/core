@@ -485,7 +485,7 @@ struct PostItField_ : public SetGetExpField
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,
-            sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
+            sal_uInt16& rVirtPgNo, sal_Int32& rLineNo );
 
     const SwPostItField* GetPostIt() const
     {
@@ -498,7 +498,7 @@ struct PostItField_ : public SetGetExpField
 sal_uInt16 PostItField_::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
     const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,
-    /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
+    /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_Int32& rLineNo )
 {
     //Problem: If a PostItField is contained in a Node that is represented
     //by more than one layout instance,
@@ -517,7 +517,7 @@ sal_uInt16 PostItField_::GetPageNo(
         sal_uInt16 nPgNo = pFrame->GetPhyPageNum();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
-            rLineNo = o3tl::narrowing<sal_uInt16>(pFrame->GetLineCount( nPos ) +
+            rLineNo = o3tl::narrowing<sal_Int32>(pFrame->GetLineCount( nPos ) +
                       pFrame->GetAllLines() - pFrame->GetThisLines());
             rVirtPgNo = pFrame->GetVirtPageNum();
             return nPgNo;
@@ -549,7 +549,7 @@ static void lcl_FormatPostIt(
     SwPaM& aPam,
     const SwPostItField* pField,
     bool bNewPage, bool bIsFirstPostIt,
-    sal_uInt16 nPageNo, sal_uInt16 nLineNo )
+    sal_uInt16 nPageNo, sal_Int32 nLineNo )
 {
     static char const sTmp[] = " : ";
 
@@ -805,7 +805,8 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     // temporary post-it document.
     // Since the array of post-it fields is sorted by page and line number we will
     // already get them in the correct order
-    sal_uInt16 nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
+    sal_uInt16 nVirtPg = 0, nLastPageNum = 0, nPhyPageNum = 0;
+    sal_Int32 nLineNo = 0;
     bool bIsFirstPostIt = true;
     for (SetGetExpFields::size_type i = 0; i < nPostItCount; ++i)
     {
