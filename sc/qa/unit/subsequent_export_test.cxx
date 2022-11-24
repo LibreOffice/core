@@ -188,7 +188,6 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTdf113646();
     void testDateStandardfilterXLSX();
-    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -296,7 +295,6 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testTdf113646);
     CPPUNIT_TEST(testDateStandardfilterXLSX);
-    CPPUNIT_TEST(testTdf90299);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4305,56 +4303,6 @@ void ScExportTest::testDateStandardfilterXLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
                 "dateTimeGrouping", "day");
-}
-
-void ScExportTest::testTdf90299()
-{
-    const OUString aTmpDirectory1URL = utl::CreateTempURL(nullptr, true);
-    const OUString aTmpDirectory2URL = utl::CreateTempURL(nullptr, true);
-
-    struct
-    {
-        void checkFormula(ScDocShell& rDocSh, OUString aExpectedFormula)
-        {
-            rDocSh.ReloadAllLinks();
-
-            ScDocument& rDoc = rDocSh.GetDocument();
-
-            ScAddress aPos(0, 0, 0);
-            ScTokenArray* pCode = getTokens(rDoc, aPos);
-            CPPUNIT_ASSERT_MESSAGE("empty token array", pCode);
-
-            OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
-
-            CPPUNIT_ASSERT_EQUAL(aExpectedFormula, aFormula);
-        }
-
-    } aCheckShell;
-
-    OUString aReferencingFileURL = aTmpDirectory1URL + "/tdf90299.xls";
-    OUString aReferencedFileURL = aTmpDirectory1URL + "/dummy.xls";
-
-    auto eError = osl::File::copy(createFileURL(u"xls/tdf90299.xls"), aReferencingFileURL);
-    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
-
-    load(aReferencingFileURL);
-    ScDocShell* pDocSh = getScDocShell();
-    aCheckShell.checkFormula(*pDocSh, "'" + aReferencedFileURL + "'#$Sheet1.A1");
-
-    save("MS Excel 97");
-
-    OUString aReferencingFileURL2 = aTmpDirectory2URL + "/tdf90299.xls";
-
-    eError = osl::File::copy(maTempFile.GetURL(), aReferencingFileURL2);
-    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
-
-    load(aReferencingFileURL2);
-    pDocSh = getScDocShell();
-
-    /* TODO: xisco
-    OUString aReferencedFileURL2 = aTmpDirectory2URL + "/dummy.xls";
-    aCheckShell.checkFormula(*pDocSh, "'" + aReferencedFileURL2 + "'#$Sheet1.A1");
-    */
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

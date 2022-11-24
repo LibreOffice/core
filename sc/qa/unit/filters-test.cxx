@@ -25,9 +25,13 @@
 #include <scopetools.hxx>
 #include <undomanager.hxx>
 
+#include <osl/file.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -50,12 +54,13 @@ public:
 
     void testContentofz9704();
     void testTooManyColsRows();
-
+    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testContentofz9704);
     CPPUNIT_TEST(testTooManyColsRows);
+    CPPUNIT_TEST(testTdf90299);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -149,6 +154,56 @@ void ScFiltersTest::testTooManyColsRows()
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf90299()
+{
+    const OUString aTmpDirectory1URL = utl::CreateTempURL(nullptr, true);
+    const OUString aTmpDirectory2URL = utl::CreateTempURL(nullptr, true);
+    const OUString aSavedFileURL = utl::CreateTempURL(&aTmpDirectory1URL);
+
+    OUString aReferencedFileURL;
+    OUString aReferencingFileURL;
+    createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
+
+    auto eError = osl::File::copy(aReferencingFileURL, aTmpDirectory1URL + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirectory1URL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory1URL + "/dummy.xls";
+
+    ScDocShellRef xShell = loadDoc(aReferencingFileURL, "MS Excel 97", OUString(), OUString(),
+            XLS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+
+    ScDocument& rDoc = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(OUString("='" + aReferencedFileURL + "'#$Sheet1.A1"), rDoc.GetFormula(0, 0, 0));
+
+    aReferencingFileURL = aSavedFileURL;
+
+    SfxMedium aStoreMedium(aReferencingFileURL, StreamMode::STD_WRITE);
+
+    auto pExportFilter = std::make_shared<SfxFilter>(
+        "MS Excel 97", OUString(), XLS_FORMAT_TYPE, SotClipboardFormatId::NONE, OUString(),
+        OUString(), OUString(), "private:factory/scalc*");
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+
+    aStoreMedium.SetFilter(pExportFilter);
+
+    xShell->DoSaveAs(aStoreMedium);
+    xShell->DoClose();
+
+    eError = osl::File::copy(aReferencingFileURL, aTmpDirectory2URL + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirectory2URL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory2URL + "/dummy.xls";
+
+    xShell = loadDoc(aReferencingFileURL, "MS Excel 97", OUString(), OUString(),
+            XLS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+    ScDocument& rDoc2 = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(OUString("='" + aReferencedFileURL + "'#$Sheet1.A1"), rDoc2.GetFormula(0, 0, 0));
+
+    xShell->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
