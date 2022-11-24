@@ -469,52 +469,6 @@ OUString toString(
     return aBuf.makeStringAndClear();
 }
 
-ScDocShellRef ScBootstrapFixture::load(
-    const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-    const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-     sal_Int32 nFilterVersion )
-{
-    auto pFilter = std::make_shared<SfxFilter>(
-        rFilter,
-        OUString(), nFilterFlags, nClipboardID, rTypeName, OUString(),
-        rUserData, "private:factory/scalc");
-    pFilter->SetVersion(nFilterVersion);
-
-    ScDocShellRef xDocShRef = new ScDocShell;
-    xDocShRef->GetDocument().EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ );
-    pSrcMed->SetFilter(pFilter);
-    pSrcMed->UseInteractionHandler(false);
-    SfxItemSet* pSet = pSrcMed->GetItemSet();
-    pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
-    SAL_INFO( "sc.qa", "about to load " << rURL );
-    if (!xDocShRef->DoLoad(pSrcMed))
-    {
-        xDocShRef->DoClose();
-        // load failed.
-        xDocShRef.clear();
-    }
-
-    return xDocShRef;
-}
-
-void ScBootstrapFixture::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent
-        = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void ScBootstrapFixture::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
-}
-
 void ScSimpleBootstrapFixture::setUp()
 {
     BootstrapFixture::setUp();

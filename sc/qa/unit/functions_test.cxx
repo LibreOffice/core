@@ -14,7 +14,7 @@
 #include <rtl/math.hxx>
 
 FunctionsTest::FunctionsTest():
-    ScBootstrapFixture()
+    ScFilterTestBase()
 {
 }
 
@@ -23,7 +23,7 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
         SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion)
 {
-    ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
+    ScDocShellRef xDocShRef = loadDoc(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );
     CPPUNIT_ASSERT(xDocShRef.is());
 

@@ -8,10 +8,8 @@
  */
 
 #include <sal/config.h>
-#include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
 
-#include "helper/qahelper.hxx"
+#include "helper/scfiltertestbase.hxx"
 
 #include <docsh.hxx>
 #include <inputopt.hxx>
@@ -37,8 +35,7 @@ using namespace ::com::sun::star::uno;
 /* Implementation of Filters test */
 
 class ScFiltersTest
-    : public test::FiltersTest
-    , public ScBootstrapFixture
+    : public ScFilterTestBase
 {
 public:
     ScFiltersTest();
@@ -84,7 +81,7 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
     SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
-    ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
+    ScDocShellRef xDocShRef = loadDoc(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );
     bool bLoaded = xDocShRef.is();
     //reference counting of ScDocShellRef is very confused.
@@ -137,7 +134,7 @@ void ScFiltersTest::testTooManyColsRows()
     // should be a warning on load.
     OUString aFileName;
     createFileURL(u"too-many-cols-rows.", u"ods", aFileName );
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, "calc8", OUString(), OUString(),
+    ScDocShellRef xDocSh = loadDoc(aFileName, "calc8", OUString(), OUString(),
             ODS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
 
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
@@ -145,7 +142,7 @@ void ScFiltersTest::testTooManyColsRows()
     xDocSh->DoClose();
 
     createFileURL(u"too-many-cols-rows.", u"xlsx", aFileName );
-    xDocSh = ScBootstrapFixture::load(
+    xDocSh = loadDoc(
             aFileName, "Calc Office Open XML", OUString(), OUString(),
             XLSX_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
 
@@ -155,7 +152,7 @@ void ScFiltersTest::testTooManyColsRows()
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScBootstrapFixture()
+    : ScFilterTestBase()
 {
 }
 
