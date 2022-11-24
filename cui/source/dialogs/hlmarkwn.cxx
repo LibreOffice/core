@@ -456,8 +456,7 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(std::u16string_view aStrMark)
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(aStrMark);
     if (!xEntry)
         return false;
-    mxLbTree->select(*xEntry);
-    mxLbTree->scroll_to_row(*xEntry);
+    mxLbTree->set_cursor(*xEntry);
     return true;
 }
 
