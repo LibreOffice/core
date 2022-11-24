@@ -1123,7 +1123,7 @@ void ScFiltersTest::testFormulaDepDeleteContentsODS()
 
 namespace
 {
-void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
+void testDBRanges_Impl(ScDocument& rDoc, bool bIsODS)
 {
     ScDBCollection* pDBCollection = rDoc.GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("no database collection", pDBCollection);
@@ -1153,7 +1153,7 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", SCROW(6), nRow1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", rDoc.MaxRow(), nRow2);
-    if (nFormat == FORMAT_ODS) //excel doesn't support named db ranges
+    if (bIsODS) //excel doesn't support named db ranges
     {
         double aValue = rDoc.GetValue(0, 10, 1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: A11: formula result is incorrect", 4.0, aValue);
@@ -1175,7 +1175,7 @@ void ScFiltersTest::testDatabaseRangesODS()
 
     ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(*pDoc, FORMAT_ODS);
+    testDBRanges_Impl(*pDoc, true);
 }
 
 void ScFiltersTest::testDatabaseRangesXLS()
@@ -1186,7 +1186,7 @@ void ScFiltersTest::testDatabaseRangesXLS()
 
     ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(*pDoc, FORMAT_XLS);
+    testDBRanges_Impl(*pDoc, false);
 }
 
 void ScFiltersTest::testDatabaseRangesXLSX()
@@ -1197,7 +1197,7 @@ void ScFiltersTest::testDatabaseRangesXLSX()
 
     ScDocument* pDoc = getScDoc();
 
-    testDBRanges_Impl(*pDoc, FORMAT_XLSX);
+    testDBRanges_Impl(*pDoc, false);
 }
 
 void ScFiltersTest::testFormatsODS()

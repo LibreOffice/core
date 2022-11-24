@@ -29,6 +29,7 @@
 
 #include <svx/svdpage.hxx>
 #include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -60,7 +61,24 @@ public:
     CPPUNIT_TEST(testTooManyColsRows);
 
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
 };
+
+void ScFiltersTest::createFileURL(
+    std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
+{
+    // m_aBaseString and aFileBase may contain multiple segments, so use
+    // GetNewAbsURL instead of insertName for them:
+    INetURLObject url(m_directories.getSrcRootURL());
+    url.setFinalSlash();
+    url.GetNewAbsURL(m_aBaseString, &url);
+    url.insertName(aFileExtension, true);
+    url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
+    rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+}
+
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
@@ -117,12 +135,20 @@ void ScFiltersTest::testTooManyColsRows()
 {
     // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
     // should be a warning on load.
-    ScDocShellRef xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_ODS, /*bCheckErrorCode*/ false);
+    OUString aFileName;
+    createFileURL(u"too-many-cols-rows.", u"ods", aFileName );
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, "calc8", OUString(), OUString(),
+            ODS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
 
-    xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_XLSX, /*bCheckErrorCode*/ false);
+    createFileURL(u"too-many-cols-rows.", u"xlsx", aFileName );
+    xDocSh = ScBootstrapFixture::load(
+            aFileName, "Calc Office Open XML", OUString(), OUString(),
+            XLSX_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();

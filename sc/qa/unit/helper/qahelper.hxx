@@ -47,20 +47,6 @@ namespace utl { class TempFileNamed; }
 #define GNUMERIC_FORMAT_TYPE (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::PREFERED )
 #define XLTX_FORMAT_TYPE     (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE |SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED)
 
-#define FORMAT_ODS      0
-#define FORMAT_XLS      1
-#define FORMAT_XLSX     2
-#define FORMAT_XLSM     3
-#define FORMAT_CSV      4
-#define FORMAT_HTML     5
-#define FORMAT_LOTUS123 6
-#define FORMAT_DIF      7
-#define FORMAT_XLS_XML  8
-#define FORMAT_XLSB     9
-#define FORMAT_FODS     10
-#define FORMAT_GNUMERIC 11
-#define FORMAT_XLTX     12
-
 enum class StringType { PureString, StringValue };
 
 #define CHECK_OPTIMAL 0x1
@@ -92,10 +78,6 @@ struct RangeNameDef
     const char* mpName;
     const char* mpExpr;
     sal_uInt16 mnIndex;
-};
-
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; SfxFilterFlags nFormatType;
 };
 
 // Printers for the calc data structures. Needed for the EQUAL assertion
@@ -144,26 +126,19 @@ public:
 
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
-    static const FileFormat aFileFormats[];
 protected:
     OUString m_aBaseString;
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-        sal_Int32 nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
-
-    ScDocShellRef loadDoc(
-        std::u16string_view rFileName, sal_Int32 nFormat, bool bCheckErrorCode = true );
-
+        sal_Int32 nFilterVersion = SOFFICE_FILEFORMAT_CURRENT );
 private:
     // reference to document interface that we are testing
     css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 public:
     explicit ScBootstrapFixture( const OUString& rsBaseString );
     virtual ~ScBootstrapFixture() override;
-
-    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
 
     virtual void setUp() override;
     virtual void tearDown() override;

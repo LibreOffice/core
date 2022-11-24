@@ -98,22 +98,6 @@ std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
     return rStrm;
 }
 
-const FileFormat ScBootstrapFixture::aFileFormats[] = {
-    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc Office Open XML" , "Office Open XML Spreadsheet", XLSX_FORMAT_TYPE },
-    { "xlsm", "Calc Office Open XML" , "Office Open XML Spreadsheet", XLSX_FORMAT_TYPE },
-    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
-    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
-    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
-    { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
-    { "xml", "MS Excel 2003 XML Orcus", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE },
-    { "xlsb", "Calc MS Excel 2007 Binary", "MS Excel 2007 Binary", XLSB_XML_FORMAT_TYPE },
-    { "fods", "OpenDocument Spreadsheet Flat XML", "calc_ODS_FlatXML", FODS_FORMAT_TYPE },
-    { "gnumeric", "Gnumeric Spreadsheet", "Gnumeric XML", GNUMERIC_FORMAT_TYPE },
-    { "xltx", "Calc Office Open XML Template", "Office Open XML Spreadsheet Template", XLTX_FORMAT_TYPE }
-};
-
 void ScModelTestBase::loadFile(const OUString& aFileName, std::string& aContent)
 {
     OString aOFileName = OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
@@ -489,7 +473,7 @@ OUString toString(
 ScDocShellRef ScBootstrapFixture::load(
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
     const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-     sal_Int32 nFilterVersion, const OUString* pPassword )
+     sal_Int32 nFilterVersion )
 {
     auto pFilter = std::make_shared<SfxFilter>(
         rFilter,
@@ -503,10 +487,6 @@ ScDocShellRef ScBootstrapFixture::load(
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
     SfxItemSet* pSet = pSrcMed->GetItemSet();
-    if (pPassword)
-    {
-        pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
-    }
     pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
     SAL_INFO( "sc.qa", "about to load " << rURL );
     if (!xDocShRef->DoLoad(pSrcMed))
@@ -519,46 +499,8 @@ ScDocShellRef ScBootstrapFixture::load(
     return xDocShRef;
 }
 
-ScDocShellRef ScBootstrapFixture::loadDoc(
-    std::u16string_view rFileName, sal_Int32 nFormat, bool bCheckErrorCode )
-{
-    OUString aFileExtension = OUString::fromUtf8(aFileFormats[nFormat].pName);
-    OUString aFileName;
-    createFileURL( rFileName, aFileExtension, aFileName );
-
-    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
-    SotClipboardFormatId nClipboardId = SotClipboardFormatId::NONE;
-    if (nFormatType != SfxFilterFlags::NONE)
-        nClipboardId = SotClipboardFormatId::STARCALC_8;
-
-    ScDocShellRef xDocShRef = load(aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
-    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocShRef.is());
-
-    if (bCheckErrorCode)
-    {
-        CPPUNIT_ASSERT(!xDocShRef->GetErrorCode());
-    }
-
-    return xDocShRef;
-}
-
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
 ScBootstrapFixture::~ScBootstrapFixture() {}
-
-void ScBootstrapFixture::createFileURL(
-    std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
-{
-    // m_aBaseString and aFileBase may contain multiple segments, so use
-    // GetNewAbsURL instead of insertName for them:
-    INetURLObject url(m_directories.getSrcRootURL());
-    url.setFinalSlash();
-    url.GetNewAbsURL(m_aBaseString, &url);
-    url.insertName(aFileExtension, true);
-    url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
-    rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-}
 
 void ScBootstrapFixture::setUp()
 {
