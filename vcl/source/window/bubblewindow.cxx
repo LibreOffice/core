@@ -266,7 +266,7 @@ VclPtr<BubbleWindow> MenuBarUpdateIconManager::GetBubbleWindow()
 
 IMPL_LINK_NOARG(MenuBarUpdateIconManager, TimeOutHdl, Timer *, void)
 {
-    RemoveBubbleWindow( false );
+    RemoveBubbleWindow();
 }
 
 IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, void)
@@ -278,7 +278,8 @@ IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, voi
         if ( mpIconSysWin == rEvent.GetWindow() )
         {
             mpIconSysWin->RemoveEventListener( maWindowEventHdl );
-            RemoveBubbleWindow( true );
+            RemoveBubbleWindow();
+            RemoveMenuBarIcon();
         }
     }
     else if ( VclEventId::WindowMenubarAdded == nEventID )
@@ -297,7 +298,10 @@ IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, voi
     {
         MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
         if ( pMBar && ( pMBar == mpIconMBar ) )
-            RemoveBubbleWindow( true );
+        {
+            RemoveBubbleWindow();
+            RemoveMenuBarIcon();
+        }
     }
     else if ( ( nEventID == VclEventId::WindowMove ) ||
               ( nEventID == VclEventId::WindowResize ) )
@@ -382,7 +386,7 @@ IMPL_LINK(MenuBarUpdateIconManager, HighlightHdl, MenuBarButtonCallbackArg&, rDa
     if ( rData.bHighlight )
         maWaitIdle.Start();
     else
-        RemoveBubbleWindow(false);
+        RemoveBubbleWindow();
 
     return false;
 }
@@ -401,7 +405,8 @@ MenuBarUpdateIconManager::~MenuBarUpdateIconManager()
 {
     Application::RemoveEventListener( maApplicationEventHdl );
 
-    RemoveBubbleWindow(true);
+    RemoveBubbleWindow();
+    RemoveMenuBarIcon();
 }
 
 void MenuBarUpdateIconManager::SetShowMenuIcon(bool bShowMenuIcon)
@@ -412,7 +417,10 @@ void MenuBarUpdateIconManager::SetShowMenuIcon(bool bShowMenuIcon)
         if ( bShowMenuIcon )
             Application::PostUserEvent(LINK(this, MenuBarUpdateIconManager, UserEventHdl));
         else
-            RemoveBubbleWindow( true );
+        {
+            RemoveBubbleWindow();
+            RemoveMenuBarIcon();
+        }
     }
 }
 
@@ -486,7 +494,8 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
         if ( bAddEventHdl && mpIconSysWin )
             mpIconSysWin->RemoveEventListener( maWindowEventHdl );
 
-        RemoveBubbleWindow( true );
+        RemoveBubbleWindow();
+        RemoveMenuBarIcon();
 
         if ( pActiveMBar )
         {
@@ -526,19 +535,8 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
     }
 }
 
-void MenuBarUpdateIconManager::RemoveBubbleWindow( bool bRemoveIcon )
+void MenuBarUpdateIconManager::RemoveMenuBarIcon()
 {
-    maWaitIdle.Stop();
-    maTimeoutTimer.Stop();
-
-    if ( mpBubbleWin )
-    {
-        mpBubbleWin.disposeAndClear();
-    }
-
-    if ( !bRemoveIcon )
-        return;
-
     try {
         if ( mpIconMBar && ( mnIconID != 0 ) )
         {
@@ -553,6 +551,13 @@ void MenuBarUpdateIconManager::RemoveBubbleWindow( bool bRemoveIcon )
     }
 
     mpIconSysWin = nullptr;
+}
+
+void MenuBarUpdateIconManager::RemoveBubbleWindow()
+{
+    maWaitIdle.Stop();
+    maTimeoutTimer.Stop();
+    mpBubbleWin.disposeAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -164,7 +164,8 @@ void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent&
 
     if( rEvent.EventName == "OnPrepareViewClosing" )
     {
-        maBubbleManager.RemoveBubbleWindow(true);
+        maBubbleManager.RemoveBubbleWindow();
+        maBubbleManager.RemoveMenuBarIcon();
     }
 }
 

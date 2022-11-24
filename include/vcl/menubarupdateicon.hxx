@@ -81,9 +81,10 @@ public:
     const OUString& GetBubbleTitle() const { return maBubbleTitle; }
     const OUString& GetBubbleText() const { return maBubbleText; }
 
-    void RemoveBubbleWindow(bool bRemoveIcon);
+    void RemoveBubbleWindow();
 
     void AddMenuBarIcon(SystemWindow* pSysWin, bool bAddEventHdl);
+    void RemoveMenuBarIcon();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
