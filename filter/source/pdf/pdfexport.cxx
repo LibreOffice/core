@@ -98,6 +98,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbUseTaggedPDF              ( false ),
     mnPDFTypeSelection          ( 0 ),
     mbExportNotes               ( true ),
+    mbExportNotesInMargin       ( false ),
     mbExportPlaceholders        ( false ),
     mbUseReferenceXObject       ( false ),
     mbExportNotesPages          ( false ),
@@ -484,6 +485,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mnPDFTypeSelection;
                 else if ( rFilterData[ nData ].Name == "ExportNotes" )
                     rFilterData[ nData ].Value >>= mbExportNotes;
+                else if ( rFilterData[ nData ].Name == "ExportNotesInMargin" )
+                    rFilterData[ nData ].Value >>= mbExportNotesInMargin;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
                 else if ( rFilterData[ nData ].Name == "ExportOnlyNotesPages" )
@@ -843,6 +846,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 std::unique_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
                 pOut->SetExtOutDevData( pPDFExtOutDevData.get() );
                 pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
+                pPDFExtOutDevData->SetIsExportNotesInMargin( mbExportNotesInMargin );
                 pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
                 pPDFExtOutDevData->SetIsExportTransitionEffects( mbUseTransitionEffects );
                 pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
@@ -853,7 +857,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 7 );
+                Sequence< PropertyValue > aRenderOptions( 8 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
                 aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice.get());
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
@@ -869,6 +873,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aRenderOptions[ 5 ].Value <<= aPageRange;
                 aRenderOptions[ 6 ].Name = "ExportPlaceholders";
                 aRenderOptions[ 6 ].Value <<= mbExportPlaceholders;
+                aRenderOptions[ 7 ].Name = "ExportNotesInMargin";
+                aRenderOptions[ 7 ].Value <<= mbExportNotesInMargin;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
                 {

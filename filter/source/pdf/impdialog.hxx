@@ -76,6 +76,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbUseTaggedPDFUserSelection;
     sal_Int32                   mnPDFTypeSelection;
     bool                        mbExportNotes;
+    bool                        mbExportNotesInMargin;
     bool                        mbViewPDF;
     bool                        mbUseReferenceXObject;
     bool                        mbExportNotesPages;
@@ -193,6 +194,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbExportBookmarks;
     std::unique_ptr<weld::CheckButton> mxCbExportHiddenSlides;
     std::unique_ptr<weld::CheckButton> mxCbExportNotes;
+    std::unique_ptr<weld::CheckButton> mxCbExportNotesInMargin;
     std::unique_ptr<weld::CheckButton> mxCbViewPDF;
     std::unique_ptr<weld::CheckButton> mxCbUseReferenceXObject;
     std::unique_ptr<weld::CheckButton> mxCbExportNotesPages;

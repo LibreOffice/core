@@ -568,6 +568,10 @@ void PDFExtOutDevData::SetIsExportNotes( const bool bExportNotes )
 {
     mbExportNotes = bExportNotes;
 }
+void PDFExtOutDevData::SetIsExportNotesInMargin( const bool bExportNotesInMargin )
+{
+    mbExportNotesInMargin = bExportNotesInMargin;
+}
 void PDFExtOutDevData::SetIsExportNotesPages( const bool bExportNotesPages )
 {
     mbExportNotesPages = bExportNotesPages;
