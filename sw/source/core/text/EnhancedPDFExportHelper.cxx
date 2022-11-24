@@ -598,6 +598,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 if (pFrame->IsFlyFrame()) // this can be something else too
                 {
                     bAltText = true;
+                    bBox = true;
                 }
                 break;
 
