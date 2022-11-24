@@ -26,7 +26,7 @@
 #include <memory>
 #include <string_view>
 
-class TestSharedFormula : public ScSimpleBootstrapFixture
+class TestSharedFormula : public ScUcalcTestBase
 {
 public:
     void testSharedFormulas();

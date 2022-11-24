@@ -21,7 +21,7 @@
 using namespace css;
 
 /** Test operation for sparklines, sparkline groups and attributes */
-class SparklineTest : public ScSimpleBootstrapFixture
+class SparklineTest : public ScUcalcTestBase
 {
 public:
     void testAddSparkline();

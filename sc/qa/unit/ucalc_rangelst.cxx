@@ -13,7 +13,7 @@
 
 #include <rangelst.hxx>
 
-class Test : public ScSimpleBootstrapFixture
+class Test : public ScUcalcTestBase
 {
 public:
     void testDeleteArea_4Ranges();

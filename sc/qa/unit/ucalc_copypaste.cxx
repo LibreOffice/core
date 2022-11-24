@@ -32,7 +32,7 @@
 
 #include <memory>
 
-class TestCopyPaste : public ScSimpleBootstrapFixture
+class TestCopyPaste : public ScUcalcTestBase
 {
 public:
     void testCopyPaste();
@@ -340,7 +340,7 @@ void TestCopyPaste::printValuesAndFormulasInRange(ScDocument* pDoc, const ScRang
 
 OUString TestCopyPaste::getRangeByName(const OUString& aRangeName)
 {
-    return ScSimpleBootstrapFixture::getRangeByName(m_pDoc, aRangeName);
+    return ScUcalcTestBase::getRangeByName(m_pDoc, aRangeName);
 }
 
 ScAddress TestCopyPaste::setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString noteText)

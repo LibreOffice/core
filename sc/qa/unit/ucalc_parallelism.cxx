@@ -21,7 +21,7 @@
 using namespace css;
 using namespace css::uno;
 
-class ScParallelismTest : public ScSimpleBootstrapFixture
+class ScParallelismTest : public ScUcalcTestBase
 {
 public:
     virtual void setUp() override;
@@ -89,7 +89,7 @@ void ScParallelismTest::setThreadingFlag( bool bSet )
 
 void ScParallelismTest::setUp()
 {
-    ScSimpleBootstrapFixture::setUp();
+    ScUcalcTestBase::setUp();
 
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
 
@@ -104,7 +104,7 @@ void ScParallelismTest::tearDown()
     if (!m_bThreadingFlagCfg)
         setThreadingFlag(false);
 
-    ScSimpleBootstrapFixture::tearDown();
+    ScUcalcTestBase::tearDown();
 }
 
 void ScParallelismTest::testSUMIFS()

@@ -195,7 +195,7 @@ struct StrStrCheck {
 
 }
 
-class TestFormula : public ScSimpleBootstrapFixture
+class TestFormula : public ScUcalcTestBase
 {
 public:
     void testFormulaCreateStringFromTokens();

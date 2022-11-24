@@ -156,7 +156,7 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
 }
 
-class TestPivottable : public ScSimpleBootstrapFixture
+class TestPivottable : public ScUcalcTestBase
 {
 public:
     /**

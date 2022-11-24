@@ -19,7 +19,7 @@
 #include <rangeutl.hxx>
 #include <refupdatecontext.hxx>
 
-class ScRangeTest : public ScSimpleBootstrapFixture
+class ScRangeTest : public ScUcalcTestBase
 {
 public:
     CPPUNIT_TEST_SUITE(ScRangeTest);

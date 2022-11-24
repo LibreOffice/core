@@ -86,7 +86,7 @@ sal_uInt32 addSingleCellCondFormat(ScDocument* pDoc, const ScAddress& rAddr, sal
 }
 
 
-class TestCondformat : public ScSimpleBootstrapFixture
+class TestCondformat : public ScUcalcTestBase
 {
 public:
     void testCondFormatINSDEL();

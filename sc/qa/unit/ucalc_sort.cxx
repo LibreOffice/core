@@ -31,7 +31,7 @@
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>
 
-class TestSort : public ScSimpleBootstrapFixture
+class TestSort : public ScUcalcTestBase
 {
 public:
     void testSort();

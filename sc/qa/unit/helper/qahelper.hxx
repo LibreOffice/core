@@ -102,7 +102,7 @@ public:
     ~FormulaGrammarSwitch();
 };
 
-class SCQAHELPER_DLLPUBLIC ScSimpleBootstrapFixture : public test::BootstrapFixture
+class SCQAHELPER_DLLPUBLIC ScUcalcTestBase : public test::BootstrapFixture
 {
 public:
     virtual void setUp() override;

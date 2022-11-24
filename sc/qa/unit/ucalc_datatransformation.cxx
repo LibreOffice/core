@@ -15,7 +15,7 @@
 #include <svl/numformat.hxx>
 #include <tools/time.hxx>
 
-class ScDataTransformationTest : public ScSimpleBootstrapFixture
+class ScDataTransformationTest : public ScUcalcTestBase
 {
 public:
 
@@ -994,7 +994,7 @@ void ScDataTransformationTest::testGetSecond()
 
 void ScDataTransformationTest::setUp()
 {
-    ScSimpleBootstrapFixture::setUp();
+    ScUcalcTestBase::setUp();
     m_pDoc->InsertTab(0, "Tab");
 }
 

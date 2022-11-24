@@ -447,7 +447,7 @@ bool checkOutput(
     return bResult;
 }
 
-void ScSimpleBootstrapFixture::setUp()
+void ScUcalcTestBase::setUp()
 {
     BootstrapFixture::setUp();
 
@@ -461,7 +461,7 @@ void ScSimpleBootstrapFixture::setUp()
     m_pDoc = &m_xDocShell->GetDocument();
 }
 
-void ScSimpleBootstrapFixture::tearDown()
+void ScUcalcTestBase::tearDown()
 {
     m_xDocShell->DoClose();
     m_xDocShell.clear();
@@ -541,7 +541,7 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     }
 }
 
-ScRange ScSimpleBootstrapFixture::insertRangeData(
+ScRange ScUcalcTestBase::insertRangeData(
     ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
 {
     if (rData.empty())
@@ -588,7 +588,7 @@ ScRange ScSimpleBootstrapFixture::insertRangeData(
     return aRange;
 }
 
-ScUndoCut* ScSimpleBootstrapFixture::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
+ScUndoCut* ScUcalcTestBase::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
 {
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
 
@@ -622,7 +622,7 @@ ScUndoCut* ScSimpleBootstrapFixture::cutToClip(ScDocShell& rDocSh, const ScRange
     return nullptr;
 }
 
-void ScSimpleBootstrapFixture::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
+void ScUcalcTestBase::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
 {
     ScClipParam aClipParam(rRange, false);
     ScMarkData aMark(pSrcDoc->GetSheetLimits());
@@ -630,14 +630,14 @@ void ScSimpleBootstrapFixture::copyToClip(ScDocument* pSrcDoc, const ScRange& rR
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 }
 
-void ScSimpleBootstrapFixture::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
+void ScUcalcTestBase::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
-ScUndoPaste* ScSimpleBootstrapFixture::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
+ScUndoPaste* ScUcalcTestBase::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
 {
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());
@@ -648,7 +648,7 @@ ScUndoPaste* ScSimpleBootstrapFixture::createUndoPaste(ScDocShell& rDocSh, const
         &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
 }
 
-void ScSimpleBootstrapFixture::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
+void ScUcalcTestBase::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
@@ -660,14 +660,14 @@ void ScSimpleBootstrapFixture::pasteOneCellFromClip(ScDocument* pDestDoc, const 
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
-void ScSimpleBootstrapFixture::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
+void ScUcalcTestBase::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
 {
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetCalcAsShown(bCalcAsShown);
     pDoc->SetDocOptions(aOpt);
 }
 
-ScDocShell* ScSimpleBootstrapFixture::findLoadedDocShellByName(std::u16string_view rName)
+ScDocShell* ScUcalcTestBase::findLoadedDocShellByName(std::u16string_view rName)
 {
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
@@ -684,7 +684,7 @@ ScDocShell* ScSimpleBootstrapFixture::findLoadedDocShellByName(std::u16string_vi
     return nullptr;
 }
 
-bool ScSimpleBootstrapFixture::insertRangeNames(
+bool ScUcalcTestBase::insertRangeNames(
     ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)
 {
     ScAddress aA1(0, 0, 0);
@@ -708,7 +708,7 @@ bool ScSimpleBootstrapFixture::insertRangeNames(
     return true;
 }
 
-OUString ScSimpleBootstrapFixture::getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
+OUString ScUcalcTestBase::getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
 {
     ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
     CPPUNIT_ASSERT(pName);
@@ -716,7 +716,7 @@ OUString ScSimpleBootstrapFixture::getRangeByName(ScDocument* pDoc, const OUStri
 }
 
 #if CALC_DEBUG_OUTPUT != 0
-void ScSimpleBootstrapFixture::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
+void ScUcalcTestBase::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
 {
     if (pCaption != nullptr)
         cout << pCaption << ", ";
@@ -725,10 +725,10 @@ void ScSimpleBootstrapFixture::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW 
 }
 #else
 // Avoid unused parameter warning
-void ScSimpleBootstrapFixture::printFormula(ScDocument*, SCCOL, SCROW, SCTAB, const char*) {}
+void ScUcalcTestBase::printFormula(ScDocument*, SCCOL, SCROW, SCTAB, const char*) {}
 #endif
 
-void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
+void ScUcalcTestBase::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
                 const bool printFormula)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
@@ -748,13 +748,13 @@ void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRang
     printer.print(pCaption);
 }
 
-void ScSimpleBootstrapFixture::printRange(ScDocument* pDoc, const ScRange& rRange, const OString& rCaption,
+void ScUcalcTestBase::printRange(ScDocument* pDoc, const ScRange& rRange, const OString& rCaption,
                 const bool printFormula)
 {
     printRange(pDoc, rRange, rCaption.getStr(), printFormula);
 }
 
-void ScSimpleBootstrapFixture::clearRange(ScDocument* pDoc, const ScRange& rRange)
+void ScUcalcTestBase::clearRange(ScDocument* pDoc, const ScRange& rRange)
 {
     ScMarkData aMarkData(pDoc->GetSheetLimits());
     aMarkData.SetMarkArea(rRange);
@@ -763,13 +763,13 @@ void ScSimpleBootstrapFixture::clearRange(ScDocument* pDoc, const ScRange& rRang
         rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, InsertDeleteFlags::CONTENTS);
 }
 
-void ScSimpleBootstrapFixture::clearSheet(ScDocument* pDoc, SCTAB nTab)
+void ScUcalcTestBase::clearSheet(ScDocument* pDoc, SCTAB nTab)
 {
     ScRange aRange(0,0,nTab,pDoc->MaxCol(),pDoc->MaxRow(),nTab);
     clearRange(pDoc, aRange);
 }
 
-bool ScSimpleBootstrapFixture::checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
+bool ScUcalcTestBase::checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 {
     OUString aStr(rPos.Format(ScRefFlags::VALID));
     const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
@@ -789,7 +789,7 @@ bool ScSimpleBootstrapFixture::checkFormulaPosition(ScDocument& rDoc, const ScAd
     return true;
 }
 
-bool ScSimpleBootstrapFixture::checkFormulaPositions(
+bool ScUcalcTestBase::checkFormulaPositions(
     ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount)
 {
     ScAddress aPos(nCol, 0, nTab);
@@ -808,7 +808,7 @@ bool ScSimpleBootstrapFixture::checkFormulaPositions(
     return true;
 }
 
-std::unique_ptr<ScTokenArray> ScSimpleBootstrapFixture::compileFormula(
+std::unique_ptr<ScTokenArray> ScUcalcTestBase::compileFormula(
     ScDocument* pDoc, const OUString& rFormula,
     formula::FormulaGrammar::Grammar eGram )
 {
@@ -817,7 +817,7 @@ std::unique_ptr<ScTokenArray> ScSimpleBootstrapFixture::compileFormula(
     return aComp.CompileString(rFormula);
 }
 
-void ScSimpleBootstrapFixture::clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
+void ScUcalcTestBase::clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
 {
     const ScAddress& s = rRange.aStart;
     const ScAddress& e = rRange.aEnd;

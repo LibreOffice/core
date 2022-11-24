@@ -79,7 +79,7 @@ struct HoriIterCheck
 
 }
 
-class Test : public ScSimpleBootstrapFixture
+class Test : public ScUcalcTestBase
 {
 public:
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
