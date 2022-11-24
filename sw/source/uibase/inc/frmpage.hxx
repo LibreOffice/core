@@ -34,7 +34,7 @@ struct FrameMap;
 // OD 12.11.2003 #i22341#
 struct SwPosition;
 
-// frame dialog
+/// This is the Position & Size tab page of the Insert -> Frame -> Frame dialog.
 class SwFramePage final : public SfxTabPage
 {
     bool            m_bAtHorzPosModified;
