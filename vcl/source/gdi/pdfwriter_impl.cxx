@@ -10934,7 +10934,9 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::Scope:
                 if (eVal == PDFWriter::Row || eVal == PDFWriter::Column || eVal == PDFWriter::Both)
                 {
-                    if (eType == PDFWriter::TableHeader)
+                    if (eType == PDFWriter::TableHeader
+                        && m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
+                        && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
                     }
