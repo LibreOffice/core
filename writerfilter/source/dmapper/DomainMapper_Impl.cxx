@@ -7535,7 +7535,6 @@ void DomainMapper_Impl::PopFieldContext()
         {
             try
             {
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
@@ -7597,30 +7596,38 @@ void DomainMapper_Impl::PopFieldContext()
                     }
                     else
                     {
+                        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
                         if (pFormControlHelper)
                         {
-                            uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
-                            assert(xCrsr.is());
-                            if (pFormControlHelper->hasFFDataHandler())
+                            // xCrsr may be empty e.g. when pContext->GetStartRange() is outside of
+                            // xTextAppend, like when a field started in a parent paragraph is being
+                            // closed inside an anchored text box. It could be possible to throw an
+                            // exception here, and abort import, but Word tolerates such invalid
+                            // input, so it makes sense to do the same (tdf#152200)
+                            if (xCrsr.is())
                             {
-                                xToInsert.set(xFormField, uno::UNO_QUERY);
-                                if (xFormField.is() && xToInsert.is())
+                                uno::Reference< text::XFormField > xFormField(pContext->GetFormField());
+                                if (pFormControlHelper->hasFFDataHandler())
                                 {
-                                    PopFieldmark(m_aTextAppendStack, xCrsr,
-                                        pContext->GetFieldId());
-                                    pFormControlHelper->processField( xFormField );
+                                    xToInsert.set(xFormField, uno::UNO_QUERY);
+                                    if (xFormField.is() && xToInsert.is())
+                                    {
+                                        PopFieldmark(m_aTextAppendStack, xCrsr,
+                                                     pContext->GetFieldId());
+                                        pFormControlHelper->processField(xFormField);
+                                    }
+                                    else
+                                    {
+                                        pFormControlHelper->insertControl(xCrsr);
+                                    }
                                 }
                                 else
                                 {
-                                    pFormControlHelper->insertControl(xCrsr);
-                                }
-                            }
-                            else
-                            {
-                                PopFieldmark(m_aTextAppendStack, xCrsr,
+                                    PopFieldmark(m_aTextAppendStack, xCrsr,
                                         pContext->GetFieldId());
-                                uno::Reference<lang::XComponent>(xFormField, uno::UNO_QUERY_THROW)->dispose(); // presumably invalid?
+                                    uno::Reference<lang::XComponent>(xFormField, uno::UNO_QUERY_THROW)->dispose(); // presumably invalid?
+                                }
                             }
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())

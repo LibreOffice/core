@@ -941,6 +941,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119039)
     // Should not crash/hang because of problematic embedded compound
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
+{
+    createSwDoc("tdf152200-bad_fldChar_end.docx");
+    // Should not crash/hang because of wrong placement of ending fldChar
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
