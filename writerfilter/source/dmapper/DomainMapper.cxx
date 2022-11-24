@@ -2604,6 +2604,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
          if (m_pImpl->hasTableManager())
             m_pImpl->getTableManager().setMoved( OUString() );
     break;
+    case NS_ooxml::LN_CT_ParaRPr_moveFrom:
+    case NS_ooxml::LN_CT_ParaRPr_moveTo:
+         m_pImpl->StartParaMarkerMove( );
+    break;
     case NS_ooxml::LN_paratrackchange:
         m_pImpl->StartParaMarkerChange( );
         [[fallthrough]];

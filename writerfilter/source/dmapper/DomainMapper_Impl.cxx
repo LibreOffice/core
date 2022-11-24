@@ -359,6 +359,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
+        m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
@@ -3439,7 +3440,7 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
             m_currentRedline.clear();
         }
     }
-    else if ( m_pParaMarkerRedlineMove )
+    else if ( m_pParaMarkerRedlineMove && m_bIsParaMarkerMove )
     {
         // terminating moveFrom/moveTo redline removes also the paragraph mark
         CreateRedline( xRange, m_pParaMarkerRedlineMove );
@@ -3447,6 +3448,7 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
     if ( m_pParaMarkerRedlineMove )
     {
         m_pParaMarkerRedlineMove.clear();
+        EndParaMarkerMove();
     }
 }
 
@@ -3491,6 +3493,16 @@ void DomainMapper_Impl::EndParaMarkerChange( )
     m_bIsParaMarkerChange = false;
     m_previousRedline = m_currentRedline;
     m_currentRedline.clear();
+}
+
+void DomainMapper_Impl::StartParaMarkerMove( )
+{
+    m_bIsParaMarkerMove = true;
+}
+
+void DomainMapper_Impl::EndParaMarkerMove( )
+{
+    m_bIsParaMarkerMove = false;
 }
 
 void DomainMapper_Impl::StartCustomFootnote(const PropertyMapPtr pContext)

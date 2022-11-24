@@ -577,6 +577,7 @@ private:
     RedlineParamsPtr                m_previousRedline;
     RedlineParamsPtr                m_pParaMarkerRedline;
     bool                            m_bIsParaMarkerChange;
+    bool                            m_bIsParaMarkerMove;
     // redline data of the terminating run, if it's a moveFrom deletion or a moveTo insertion
     RedlineParamsPtr                m_pParaMarkerRedlineMove;
     // This is for removing workaround (double ZWSPs around the anchoring point) for track
@@ -680,6 +681,8 @@ public:
 
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
+    void StartParaMarkerMove( );
+    void EndParaMarkerMove( );
     void ChainTextFrames();
 
     void PushTextBoxContent();

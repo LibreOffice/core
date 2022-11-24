@@ -635,6 +635,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
+{
+    createSwDoc("tdf151954.docx");
+    SwDoc* pDoc = getSwDoc();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+
+    // accept tracked insertion (moveTo)
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 1 (moveFrom was extended to the paragraph mark)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");
