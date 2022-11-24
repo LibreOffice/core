@@ -200,7 +200,7 @@ bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
 }
 
 #ifdef DBG_UTIL
-bool SalLayoutGlyphsImpl::isEqual(const SalLayoutGlyphsImpl* other) const
+bool SalLayoutGlyphsImpl::isLayoutEquivalent(const SalLayoutGlyphsImpl* other) const
 {
     if (!GetFont()->mxFontMetric->CompareDeviceIndependentFontAttributes(
             *other->GetFont()->mxFontMetric))
@@ -213,7 +213,7 @@ bool SalLayoutGlyphsImpl::isEqual(const SalLayoutGlyphsImpl* other) const
         return false;
     for (size_t pos = 0; pos < size(); ++pos)
     {
-        if ((*this)[pos] != (*other)[pos])
+        if (!(*this)[pos].isLayoutEquivalent((*other)[pos]))
             return false;
     }
     return true;
@@ -314,7 +314,7 @@ static void checkGlyphsEqual(const SalLayoutGlyphs& g1, const SalLayoutGlyphs& g
             assert(l1 == l2);
             break;
         }
-        assert(l1->isEqual(l2));
+        assert(l1->isLayoutEquivalent(l2));
     }
 }
 #endif

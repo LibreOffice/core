@@ -147,7 +147,7 @@ static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayout
         CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, g1->size(), g2->size());
         for( size_t i = 0; i < g1->size(); ++i )
         {
-            const bool equal = (*g1)[i] == (*g2)[i];
+            const bool equal = (*g1)[i].isLayoutEquivalent((*g2)[i]);
             CPPUNIT_ASSERT_MESSAGE(messageLevel, equal);
         }
     }

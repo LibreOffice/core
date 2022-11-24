@@ -105,15 +105,15 @@ public:
     void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
-    bool operator==(const GlyphItem& other) const
+    bool isLayoutEquivalent(const GlyphItem& other) const
     {
         return m_aLinearPos == other.m_aLinearPos && m_nOrigWidth == other.m_nOrigWidth
                && m_nCharPos == other.m_nCharPos && m_nXOffset == other.m_nXOffset
                && m_nYOffset == other.m_nYOffset && m_nNewWidth == other.m_nNewWidth
                && m_aGlyphId == other.m_aGlyphId && m_nCharCount == other.m_nCharCount
-               && m_nFlags == other.m_nFlags;
+               && (m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK)
+                      == (other.m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK);
     }
-    bool operator!=(const GlyphItem& other) const { return !(*this == other); }
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
@@ -148,7 +148,7 @@ public:
     void SetFlags(SalLayoutFlags flags) { mnFlags = flags; }
     SalLayoutFlags GetFlags() const { return mnFlags; }
 #ifdef DBG_UTIL
-    bool isEqual(const SalLayoutGlyphsImpl* other) const;
+    bool isLayoutEquivalent(const SalLayoutGlyphsImpl* other) const;
 #endif
 
 private:
