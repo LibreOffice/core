@@ -142,12 +142,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
 AboutDialog::~AboutDialog() {}
 
 bool AboutDialog::IsStringValidGitHash(std::u16string_view hash) {
-  for (size_t i = 0; i < hash.size(); i++) {
-    if (!std::isxdigit(hash[i])) {
-      return false;
-    }
-  }
-  return true;
+  return std::all_of(hash.begin(), hash.end(),
+                     [](auto &rSymbol) { return std::isxdigit(rSymbol); });
 }
 
 OUString AboutDialog::GetVersionString() {
