@@ -67,6 +67,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbUseTaggedPDF( false ),
     mbUseTaggedPDFUserSelection( false ),
     mbExportNotes( true ),
+    mbExportNotesInMargin( false ),
     mbViewPDF( false ),
     mbUseReferenceXObject( false ),
     mbExportNotesPages( false ),
@@ -191,6 +192,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
         mbExportOnlyNotesPages = maConfigItem.ReadBool( "ExportOnlyNotesPages", false );
     }
     mbExportNotes = maConfigItem.ReadBool( "ExportNotes", false );
+    if (mbIsWriter)
+        mbExportNotesInMargin = maConfigItem.ReadBool( "ExportNotesInMargin", false );
     mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
 
     mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
@@ -417,6 +420,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         maConfigItem.WriteBool( "ExportOnlyNotesPages", mbExportOnlyNotesPages );
     }
     maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
+    if (mbIsWriter)
+        maConfigItem.WriteBool( "ExportNotesInMargin", mbExportNotesInMargin );
     maConfigItem.WriteBool( "ViewPDFAfterExport", mbViewPDF );
 
     maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
@@ -518,6 +523,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxCbExportHiddenSlides(m_xBuilder->weld_check_button("hiddenpages"))
     , mxCbSinglePageSheets(m_xBuilder->weld_check_button("singlepagesheets"))
     , mxCbExportNotes(m_xBuilder->weld_check_button("comments"))
+    , mxCbExportNotesInMargin(m_xBuilder->weld_check_button("commentsinmargin"))
     , mxCbViewPDF(m_xBuilder->weld_check_button("viewpdf"))
     , mxCbUseReferenceXObject(m_xBuilder->weld_check_button("usereferencexobject"))
     , mxCbExportNotesPages(m_xBuilder->weld_check_button("notes"))
@@ -556,6 +562,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mbIsWriter = pParent->mbIsWriter;
     mbIsSpreadsheet = pParent->mbIsSpreadsheet;
 
+    mxCbExportNotesInMargin->set_sensitive( mbIsWriter );
     mxCbExportEmptyPages->set_sensitive( mbIsWriter );
     mxCbExportPlaceholders->set_sensitive( mbIsWriter );
 
@@ -618,6 +625,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbExportBookmarks->set_active( pParent->mbExportBookmarks );
 
     mxCbExportNotes->set_active( pParent->mbExportNotes );
+    mxCbExportNotesInMargin->set_active( pParent->mbExportNotesInMargin );
     mxCbViewPDF->set_active( pParent->mbViewPDF);
 
     if ( mbIsPresentation )
@@ -663,10 +671,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     {
         // tdf#54908 Make selection active if there is a selection in Writer's version
         mxRbSelection->set_active( bSelectionPresent );
+        mxCbExportNotesInMargin->set_active(pParent->mbExportNotesInMargin);
     }
     else
     {
         mxCbExportPlaceholders->set_active(false);
+        mxCbExportNotesInMargin->set_active(false);
     }
     mxCbExportEmptyPages->set_active(!pParent->mbIsSkipEmptyPages);
     mxCbExportPlaceholders->set_active(pParent->mbIsExportPlaceholders);
@@ -686,6 +696,8 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbReduceImageResolution = mxCbReduceImageResolution->get_active();
     pParent->mnMaxImageResolution = mxCoReduceImageResolution->get_active_text().toInt32();
     pParent->mbExportNotes = mxCbExportNotes->get_active();
+    if (mbIsWriter)
+        pParent->mbExportNotesInMargin = mxCbExportNotesInMargin->get_active();
     pParent->mbViewPDF = mxCbViewPDF->get_active();
     pParent->mbUseReferenceXObject = mxCbUseReferenceXObject->get_active();
     if ( mbIsPresentation )

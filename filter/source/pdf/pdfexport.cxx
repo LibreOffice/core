@@ -86,6 +86,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnPDFTypeSelection          ( 0 ),
     mbPDFUACompliance           ( false),
     mbExportNotes               ( true ),
+    mbExportNotesInMargin       ( false ),
     mbExportPlaceholders        ( false ),
     mbUseReferenceXObject       ( false ),
     mbExportNotesPages          ( false ),
@@ -518,6 +519,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= mbPDFUACompliance;
                 else if ( rProp.Name == "ExportNotes" )
                     rProp.Value >>= mbExportNotes;
+                else if ( rProp.Name == "ExportNotesInMargin" )
+                    rProp.Value >>= mbExportNotesInMargin;
                 else if ( rProp.Name == "ExportNotesPages" )
                     rProp.Value >>= mbExportNotesPages;
                 else if ( rProp.Name == "ExportOnlyNotesPages" )
@@ -935,6 +938,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 vcl::PDFExtOutDevData aPDFExtOutDevData( *pOut );
                 pOut->SetExtOutDevData( &aPDFExtOutDevData );
                 aPDFExtOutDevData.SetIsExportNotes( mbExportNotes );
+                aPDFExtOutDevData.SetIsExportNotesInMargin( mbExportNotesInMargin );
                 aPDFExtOutDevData.SetIsExportTaggedPDF( mbUseTaggedPDF );
                 aPDFExtOutDevData.SetIsExportTransitionEffects( mbUseTransitionEffects );
                 aPDFExtOutDevData.SetIsExportFormFields( mbExportFormFields );
@@ -954,7 +958,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     comphelper::makePropertyValue("IsSkipEmptyPages", mbSkipEmptyPages),
                     comphelper::makePropertyValue("PageRange", aPageRange),
                     comphelper::makePropertyValue("ExportPlaceholders", mbExportPlaceholders),
-                    comphelper::makePropertyValue("SinglePageSheets", mbSinglePageSheets)
+                    comphelper::makePropertyValue("SinglePageSheets", mbSinglePageSheets),
+                    comphelper::makePropertyValue("ExportNotesInMargin", mbExportNotesInMargin)
                 };
                 Any& rExportNotesValue = aRenderOptions.getArray()[ 1 ].Value;
 

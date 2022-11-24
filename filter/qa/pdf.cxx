@@ -37,6 +37,7 @@ public:
 
     void setUp() override;
     void tearDown() override;
+    void doTestCommentsInMargin(bool commentsInMarginEnabled);
 };
 
 void Test::setUp()
@@ -142,6 +143,44 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
     // Use some allowance (~1/2 pt) to let it pass on non-default DPI.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9437, aRange.getWidth(), 20.0);
 #endif
+}
+
+void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    loadFromURL(u"commentsInMargin.odt");
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+        "ExportNotesInMargin", commentsInMarginEnabled) };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("OutputStream", xOutputStream),
+    };
+    xFilter->filter(aDescriptor);
+
+    // Make sure the number of objects is correct
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(commentsInMarginEnabled ? 9 : 1,
+                         pPdfDocument->openPage(0)->getObjectCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
+{
+    // Test that setting/unsetting the "ExportNotesInMargin" property works correctly
+    doTestCommentsInMargin(true);
+    doTestCommentsInMargin(false);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testWatermarkColor)

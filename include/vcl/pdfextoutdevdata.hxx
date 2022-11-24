@@ -72,6 +72,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
 
     bool                        mbTaggedPDF;
     bool                        mbExportNotes;
+    bool                        mbExportNotesInMargin;
     bool                        mbExportNotesPages;
     bool                        mbTransitionEffects;
     bool                        mbUseLosslessCompression;
@@ -103,6 +104,9 @@ public:
 
     bool    GetIsExportNotes() const { return mbExportNotes;}
     void        SetIsExportNotes( const bool bExportNotes );
+
+    bool    GetIsExportNotesInMargin() const { return mbExportNotesInMargin;}
+    void        SetIsExportNotesInMargin( const bool bExportNotesInMargin );
 
     bool    GetIsExportNotesPages() const { return mbExportNotesPages;}
     void        SetIsExportNotesPages( const bool bExportNotesPages );

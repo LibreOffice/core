@@ -110,6 +110,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( "SelectPdfVersion", 0 );
         aCfgItem.ReadBool("PDFUACompliance", false);
         aCfgItem.ReadBool(  "ExportNotes", false );
+        aCfgItem.ReadBool(  "ExportNotesInMargin", false );
         aCfgItem.ReadBool( "ExportPlaceholders", false );
         aCfgItem.ReadBool(  "ExportNotesPages", false );
         aCfgItem.ReadBool(  "ExportOnlyNotesPages", false );
