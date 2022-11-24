@@ -10789,6 +10789,7 @@ void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
     if( eType == PDFWriter::Figure      ||
         eType == PDFWriter::Formula     ||
         eType == PDFWriter::Form        ||
+        eType == PDFWriter::Division    ||
         eType == PDFWriter::Table )
     {
         m_aStructure[ m_nCurrentStructElement ].m_aBBox = rRect;
