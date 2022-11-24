@@ -4191,32 +4191,16 @@ static void impl_testLegacyCellAnchoredRotatedShape(ScDocument& rDoc, const tool
 
     SdrObject* pObj = pPage->GetObj(0);
     const tools::Rectangle& aSnap = pObj->GetSnapRect();
-    printf("expected height %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n",
-           sal_Int64(aRect.GetHeight()), sal_Int64(aSnap.GetHeight()));
-    CPPUNIT_ASSERT_EQUAL(true,
-                         testEqualsWithTolerance(aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE));
-    printf("expected width %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n",
-           sal_Int64(aRect.GetWidth()), sal_Int64(aSnap.GetWidth()));
-    CPPUNIT_ASSERT_EQUAL(true,
-                         testEqualsWithTolerance(aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE));
-    printf("expected left %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Left()),
-           sal_Int64(aSnap.Left()));
-    CPPUNIT_ASSERT_EQUAL(true, testEqualsWithTolerance(aRect.Left(), aSnap.Left(), TOLERANCE));
-    printf("expected right %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Top()),
-           sal_Int64(aSnap.Top()));
-    CPPUNIT_ASSERT_EQUAL(true, testEqualsWithTolerance(aRect.Top(), aSnap.Top(), TOLERANCE));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.Left(), aSnap.Left(), TOLERANCE);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.Top(), aSnap.Top(), TOLERANCE);
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
-    printf("expected startrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n",
-           aAnchor.maStart.Row(), pData->maStart.Row());
     CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Row(), pData->maStart.Row());
-    printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col());
     CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Col(), pData->maStart.Col());
-    printf("expected endrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n", aAnchor.maEnd.Row(),
-           pData->maEnd.Row());
     CPPUNIT_ASSERT_EQUAL(aAnchor.maEnd.Row(), pData->maEnd.Row());
-    printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col());
     CPPUNIT_ASSERT_EQUAL(aAnchor.maEnd.Col(), pData->maEnd.Col());
 }
 

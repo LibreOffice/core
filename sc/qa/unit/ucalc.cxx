@@ -5466,10 +5466,10 @@ void Test::testAnchoredRotatedShape()
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, true);
 
         tools::Rectangle aSnap = pObj->GetSnapRect();
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Left(), aSnap.Left(), TOLERANCE ) );
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Top(), aSnap.Top(), TOLERANCE ) );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.Left(), aSnap.Left(), TOLERANCE );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.Top(), aSnap.Top(), TOLERANCE );
 
         ScDrawObjData aAnchor;
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj.get() );
@@ -5493,8 +5493,8 @@ void Test::testAnchoredRotatedShape()
         aSnap = pObj->GetSnapRect();
 
         // ensure that width and height have been adjusted accordingly
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE );
 
         // ensure that anchor start and end addresses haven't changed
         CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() ); // start row 0

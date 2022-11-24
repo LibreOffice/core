@@ -63,8 +63,6 @@ namespace utl { class TempFileNamed; }
 
 enum class StringType { PureString, StringValue };
 
-SCQAHELPER_DLLPUBLIC bool testEqualsWithTolerance( tools::Long nVal1, tools::Long nVal2, tools::Long nTol );
-
 #define CHECK_OPTIMAL 0x1
 
 class SdrOle2Obj;
