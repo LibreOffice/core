@@ -722,7 +722,10 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
     SfxPoolItem* pNewItem;
     if (bPassingOwnership)
     {
-        assert(!dynamic_cast<const SfxItemSet*>(&rItem) && "can't pass ownership of SfxItem, they need to be cloned to the master pool");
+#ifndef NDEBUG
+        if (auto pSetItem = dynamic_cast<const SfxSetItem*>(&rItem))
+            assert(pSetItem->GetItemSet().GetPool() == pImpl->mpMaster && "can't pass ownership of SfxSetItem, unless they have been cloned to the master pool");
+#endif
         pNewItem = const_cast<SfxPoolItem*>(&rItem);
     }
     else
