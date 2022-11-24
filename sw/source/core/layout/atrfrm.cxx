@@ -1603,6 +1603,15 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
     }
 }
 
+SwNode* SwFormatAnchor::GetAnchorNode() const
+{
+    if (!m_oContentAnchor)
+        return nullptr;
+    if (auto pCntNd = m_oContentAnchor->nContent.GetContentNode())
+        return const_cast<SwContentNode*>(pCntNd);
+    return &m_oContentAnchor->nNode.GetNode();
+}
+
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
     if (this != &rAnchor)

@@ -1866,17 +1866,17 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 // at the following frames 'virtual' drawing objects.
                 // Note: method is similar to <SwFlyFrameFormat::MakeFrames(..)>
                 sw::BroadcastingModify *pModify = nullptr;
-                if( pAnch->GetContentAnchor() )
+                if( pAnch->GetAnchorNode() )
                 {
                     if ( pAnch->GetAnchorId() == RndStdIds::FLY_AT_FLY )
                     {
-                        SwNodeIndex aIdx( pAnch->GetContentAnchor()->GetNode() );
+                        SwNodeIndex aIdx( *pAnch->GetAnchorNode() );
                         SwContentNode* pCNd = pDrawFrameFormat->GetDoc()->GetNodes().GoNext( &aIdx );
                         if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First())
                             pModify = pCNd;
                         else
                         {
-                            const SwNode& rIdx = pAnch->GetContentAnchor()->GetNode();
+                            const SwNode& rIdx = *pAnch->GetAnchorNode();
                             SwFrameFormats& rFormats = *(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats());
                             for( auto pFlyFormat : rFormats )
                             {
@@ -1891,7 +1891,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                     }
                     else
                     {
-                        pModify = pAnch->GetContentAnchor()->GetNode().GetContentNode();
+                        pModify = pAnch->GetAnchorNode()->GetContentNode();
                     }
                 }
 

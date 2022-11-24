@@ -410,7 +410,7 @@ void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
             {
                 SwFrameFormat & rFormat(pObj->GetFrameFormat());
                 SwFormatAnchor const& rAnchor(rFormat.GetAnchor());
-                if (rFirstNode.GetIndex() < rAnchor.GetContentAnchor()->GetNodeIndex())
+                if (rFirstNode.GetIndex() < rAnchor.GetAnchorNode()->GetIndex())
                 {
                     // move it to the new frame of "this"
                     rFormat.CallSwClientNotify(sw::LegacyModifyHint(&rAnchor, &rAnchor));

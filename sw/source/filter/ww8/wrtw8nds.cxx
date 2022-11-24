@@ -1671,9 +1671,9 @@ SvxFrameDirection MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFl
             pItem = nullptr;
             const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
             if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
-                pAnchor->GetContentAnchor() )
+                pAnchor->GetAnchorNode() )
             {
-                pFlyFormat = pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
+                pFlyFormat = pAnchor->GetAnchorNode()->GetFlyFormat();
             }
             else
                 pFlyFormat = nullptr;
@@ -1724,10 +1724,10 @@ std::shared_ptr<SvxBrushItem> WW8Export::TrueFrameBgBrush(const SwFrameFormat &r
             pRet = nullptr;
             const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
             if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
-                pAnchor->GetContentAnchor())
+                pAnchor->GetAnchorNode())
             {
                 pFlyFormat =
-                    pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
+                    pAnchor->GetAnchorNode()->GetFlyFormat();
             }
             else
                 pFlyFormat = nullptr;
@@ -3444,7 +3444,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
         if ( !m_rWW8Export.IsInTable() && rFormat.IsInline() )
         {
             //Test to see if this textbox contains only a single graphic/ole
-            SwTextNode* pParTextNode = rAnch.GetContentAnchor()->GetNode().GetTextNode();
+            SwTextNode* pParTextNode = rAnch.GetAnchorNode()->GetTextNode();
             if ( pParTextNode && !m_rWW8Export.m_rDoc.GetNodes()[ nStt ]->IsNoTextNode() )
                 bDone = true;
         }
@@ -3457,7 +3457,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
             if ( m_rWW8Export.m_pParentFrame )
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
-                const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->GetNode().GetTextNode();
+                const SwTextNode* pParTextNode = rAnch.GetAnchorNode()->GetTextNode();
                 const SwRect aPageRect = pParTextNode->FindPageFrameRect();
 
                 aOffset = rFrameFormat.FindLayoutRect().Pos();

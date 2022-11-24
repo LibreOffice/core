@@ -105,7 +105,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
         (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())))
         return;
 
-    rNodePos = rAnchor.GetContentAnchor()->GetNodeIndex();
+    rNodePos = rAnchor.GetAnchorNode()->GetIndex();
     sal_Int32 nContentPos = 0;
 
     if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())

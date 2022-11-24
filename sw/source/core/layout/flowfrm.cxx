@@ -395,7 +395,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                     if ( rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
                     {
                         // The index of the other one can be retrieved using the anchor attribute.
-                        SwNodeOffset nTmpIndex = rFormat.GetAnchor().GetContentAnchor()->GetNodeIndex();
+                        SwNodeOffset nTmpIndex = rFormat.GetAnchor().GetAnchorNode()->GetIndex();
                         // Now we're going to check whether the current paragraph before
                         // the anchor of the displacing object sits in the text. If this
                         // is the case, we don't try to evade it.

@@ -891,9 +891,9 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
         return;
     }
 
-    const SwPosition *pPos = rFormatA.GetContentAnchor();
-    OSL_ENSURE(pPos, "Unexpected NULL arguments");
-    if (!pPos || rIn.m_nIndex != pPos->GetNodeIndex())
+    const SwNode *pAnchorNode = rFormatA.GetAnchorNode();
+    OSL_ENSURE(pAnchorNode, "Unexpected NULL arguments");
+    if (!pAnchorNode || rIn.m_nIndex != pAnchorNode->GetIndex())
         return;
 
     tools::Long nMin, nMax;

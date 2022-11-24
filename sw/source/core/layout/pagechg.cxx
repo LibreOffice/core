@@ -405,7 +405,7 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
         {
-            if( rAnch.GetContentAnchor() )
+            if( rAnch.GetAnchorNode() )
             {
                 if (RndStdIds::FLY_AT_PAGE == rAnch.GetAnchorId())
                 {
@@ -1572,7 +1572,7 @@ void SwRootFrame::AssertFlyPages()
     for ( size_t i = 0; i < pTable->size(); ++i )
     {
         const SwFormatAnchor &rAnch = (*pTable)[i]->GetAnchor();
-        if(!rAnch.GetContentAnchor())
+        if(!rAnch.GetAnchorNode())
         {
             const sal_uInt16 nPageNum(rAnch.GetPageNum());
 

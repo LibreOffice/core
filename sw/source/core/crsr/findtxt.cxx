@@ -516,10 +516,10 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 {
                     if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
                     {
-                        const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
-                        if (!pPosition || (pLayout
-                                ? !FrameContainsNode(*pFrame, pPosition->GetNodeIndex())
-                                : pPosition->GetNodeIndex() != pNode->GetIndex()))
+                        const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                        if (!pAnchorNode || (pLayout
+                                ? !FrameContainsNode(*pFrame, pAnchorNode->GetIndex())
+                                : pAnchorNode->GetIndex() != pNode->GetIndex()))
                             pObject = nullptr;
                     }
                 }
@@ -580,11 +580,11 @@ bool FindTextImpl(SwPaM & rSearchPam,
                         {
                             if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
                             {
-                                const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
-                                if (pPosition)
+                                const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                                if (pAnchorNode)
                                 {
                                     // Set search position to the shape's anchor point.
-                                    rSearchPam.GetPoint()->Assign(pPosition->GetNode());
+                                    rSearchPam.GetPoint()->Assign(*pAnchorNode);
                                     rSearchPam.SetMark();
                                     bFound = true;
                                     break;

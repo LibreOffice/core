@@ -193,7 +193,7 @@ static void lcl_DelFormatIndices( SwFormat const * pFormat )
     if ( rFormatContent.GetContentIdx() )
         rFormatContent.SetNewContentIdx( nullptr );
     SwFormatAnchor &rFormatAnchor = const_cast<SwFormatAnchor&>(pFormat->GetAnchor());
-    if ( rFormatAnchor.GetContentAnchor() )
+    if ( rFormatAnchor.GetAnchorNode() )
         rFormatAnchor.SetAnchor( nullptr );
 }
 

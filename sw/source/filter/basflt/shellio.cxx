@@ -287,7 +287,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
                             if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
                             {
-                                if( !rAnchor.GetContentAnchor() )
+                                if( !rAnchor.GetAnchorNode() )
                                 {
                                     pFrameFormat->MakeFrames();
                                 }

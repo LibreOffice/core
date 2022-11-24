@@ -114,7 +114,7 @@ namespace
         {
             const SwFrameFormat &rEntry = rFly.GetFormat();
 
-            if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
+            if (const SwNode* pAnchor = rEntry.GetAnchor().GetAnchorNode())
             {
                 // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions

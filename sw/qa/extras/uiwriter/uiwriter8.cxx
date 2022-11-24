@@ -1002,13 +1002,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130805)
     auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
     CPPUNIT_ASSERT(pTxBxFrm);
 
-    auto pTxAnch = pTxBxFrm->GetAnchor().GetContentAnchor();
-    auto pShpAnch = pShape->GetAnchor().GetContentAnchor();
+    const SwNode* pTxAnch = pTxBxFrm->GetAnchor().GetAnchorNode();
+    const SwNode* pShpAnch = pShape->GetAnchor().GetAnchorNode();
     CPPUNIT_ASSERT(pTxAnch);
     CPPUNIT_ASSERT(pShpAnch);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->GetNodeIndex(),
-                                 pShpAnch->GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->GetIndex(),
+                                 pShpAnch->GetIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107893)
@@ -1974,7 +1974,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, AtPageTextBoxCrash)
     // unless this will lead to crash later, for example on
     // removing the paragraph where it is anchored to...
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_PAGE, pTxBxFrm->GetAnchor().GetAnchorId());
-    CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetContentAnchor());
+    CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetAnchorNode());
 
     // Remove the paragraph where the textframe should be anchored
     // before. Now with the patch it must not crash...

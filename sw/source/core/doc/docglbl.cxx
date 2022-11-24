@@ -372,13 +372,13 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             {
                                 SwFrameFormat* pFly = (*GetSpzFrameFormats())[n];
                                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
-                                SwPosition const*const pAPos =
-                                    pAnchor->GetContentAnchor();
-                                if (pAPos &&
+                                SwNode const*const pAnchorNode =
+                                    pAnchor->GetAnchorNode();
+                                if (pAnchorNode &&
                                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                                    aSIdx <= pAPos->GetNode() &&
-                                    pAPos->GetNode() < aEIdx.GetNode() )
+                                    aSIdx <= *pAnchorNode &&
+                                    *pAnchorNode < aEIdx.GetNode() )
                                 {
                                     getIDocumentLayoutAccess().DelLayoutFormat( pFly );
                                     --n;

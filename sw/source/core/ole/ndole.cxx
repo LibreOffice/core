@@ -479,10 +479,10 @@ bool SwOLENode::IsInGlobalDocSection() const
             return false;
 
         const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
-        if( !rAnchor.GetContentAnchor() )
+        if( !rAnchor.GetAnchorNode() )
             return false;
 
-        pAnchorNd = &rAnchor.GetContentAnchor()->GetNode();
+        pAnchorNd = rAnchor.GetAnchorNode();
     } while( pAnchorNd->GetIndex() < nEndExtraIdx );
 
     const SwSectionNode* pSectNd = pAnchorNd->FindSectionNode();

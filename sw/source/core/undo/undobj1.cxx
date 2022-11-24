@@ -139,7 +139,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     if (RndStdIds::FLY_AS_CHAR == m_nRndId)
     {
         // there must be at least the attribute in a TextNode
-        SwContentNode* pCNd = aAnchor.GetContentAnchor()->GetNode().GetContentNode();
+        SwContentNode* pCNd = aAnchor.GetAnchorNode()->GetContentNode();
         OSL_ENSURE( pCNd->IsTextNode(), "no Text Node at position." );
         SwFormatFlyCnt aFormat( m_pFrameFormat );
         pCNd->GetTextNode()->InsertItem(aFormat, m_nContentPos, m_nContentPos, SetAttrMode::NOHINTEXPAND);
@@ -199,7 +199,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     case RndStdIds::FLY_AT_FLY:
         {
             const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
-            m_nNodePagePos = rAnchor.GetContentAnchor()->GetNodeIndex();
+            m_nNodePagePos = rAnchor.GetAnchorNode()->GetIndex();
         }
         break;
     case RndStdIds::FLY_AT_PAGE:
@@ -612,9 +612,9 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId())
         {
-            const SwPosition* pPos = aNewAnchor.GetContentAnchor();
+            SwNode* pAnchorNode = aNewAnchor.GetAnchorNode();
             SwFormatFlyCnt aFormat( m_pFrameFormat );
-            pPos->GetNode().GetTextNode()->InsertItem( aFormat,
+            pAnchorNode->GetTextNode()->InsertItem( aFormat,
                 m_nOldContent, 0 );
         }
 
@@ -685,7 +685,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
                 [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
-                m_nNewNode = pAnchor->GetContentAnchor()->GetNodeIndex();
+                m_nNewNode = pAnchor->GetAnchorNode()->GetIndex();
                 break;
 
             default:

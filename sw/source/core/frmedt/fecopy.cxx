@@ -96,11 +96,11 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     for( const auto pFly : *rClpDoc.GetSpzFrameFormats() )
     {
         SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            aSttIdx <= pAPos->GetNode() && pAPos->GetNode() <= aEndNdIdx.GetNode() )
+            aSttIdx <= *pAnchorNode && *pAnchorNode <= aEndNdIdx.GetNode() )
         {
             rClpDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
         }
@@ -676,13 +676,13 @@ namespace {
     bool IsInTextBox(const SwFrameFormat* pFormat)
     {
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        const SwPosition* pPosition = rAnchor.GetContentAnchor();
-        if (!pPosition)
+        const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+        if (!pAnchorNode)
         {
             return false;
         }
 
-        const SwStartNode* pFlyNode = pPosition->GetNode().FindFlyStartNode();
+        const SwStartNode* pFlyNode = pAnchorNode->FindFlyStartNode();
         if (!pFlyNode)
         {
             return false;
@@ -1050,7 +1050,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // shouldn't happen here)
                     SwFormatAnchor const& rAnchor(pFlyFormat->GetAnchor());
                     if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()
-                        || rClpDoc.GetNodes().GetEndOfExtras().GetIndex() < rAnchor.GetContentAnchor()->GetNodeIndex())
+                        || rClpDoc.GetNodes().GetEndOfExtras().GetIndex() < rAnchor.GetAnchorNode()->GetIndex())
                     {
                         inserted.emplace_back(
                             lcl_PasteFlyOrDrawFormat(rPaM, pFlyFormat, *this));

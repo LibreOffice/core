@@ -62,8 +62,8 @@ static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, SwNodeOffset nMov
         const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
-            const SwPosition* pAPos = pAnchor->GetContentAnchor();
-            if( pAPos && nMovedIndex == pAPos->GetNodeIndex() )
+            const SwNode* pAnchorNode = pAnchor->GetAnchorNode();
+            if( pAnchorNode && nMovedIndex == pAnchorNode->GetIndex() )
                 pFormat->MakeFrames();
         }
     }
@@ -824,15 +824,14 @@ static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const
 
     SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
-    const SwPosition* pAPos;
     for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
         pFormat = rSpzArr[n];
         pAnchor = &pFormat->GetAnchor();
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {
-            pAPos =  pAnchor->GetContentAnchor();
-            if( pAPos && nOldIdx == pAPos->GetNodeIndex() )
+            SwNode* pAnchorNode =  pAnchor->GetAnchorNode();
+            if( pAnchorNode && nOldIdx == pAnchorNode->GetIndex() )
             {
                 SwFormatAnchor aAnch( *pAnchor );
                 aAnch.SetAnchor( &rPos );

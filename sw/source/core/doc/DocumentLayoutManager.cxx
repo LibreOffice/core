@@ -259,7 +259,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                         SwFrameFormat* pTmpFormat = (*pTable)[i];
                         const SwFormatAnchor &rAnch = pTmpFormat->GetAnchor();
                         if ( rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY &&
-                             rAnch.GetContentAnchor()->GetNodeIndex() == nNodeIdxOfFlyFormat )
+                             rAnch.GetAnchorNode()->GetIndex() == nNodeIdxOfFlyFormat )
                         {
                             aToDeleteFrameFormats.push_back( pTmpFormat );
                         }
@@ -287,7 +287,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
 
         // Delete the character for FlyFrames anchored as char (if necessary)
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetContentAnchor())
+        if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetAnchorNode())
         {
             const SwPosition* pPos = rAnchor.GetContentAnchor();
             SwTextNode *pTextNd = pPos->GetNode().GetTextNode();
@@ -335,8 +335,8 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
     bool bMayNotCopy = false;
-    const auto pCAnchor = rNewAnchor.GetContentAnchor();
-    bool bInHeaderFooter = pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->GetNode());
+    const SwNode* pCAnchor = rNewAnchor.GetAnchorNode();
+    bool bInHeaderFooter = pCAnchor && m_rDoc.IsInHeaderFooter(*pCAnchor);
     if(bDraw)
     {
         bool bCheckControlLayer = false;

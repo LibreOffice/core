@@ -806,7 +806,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 // Compare indices:
                 // The Index of the other is retrieved from the anchor attr.
-                SwNodeOffset nTmpIndex = rNewA.GetContentAnchor()->GetNodeIndex();
+                SwNodeOffset nTmpIndex = rNewA.GetAnchorNode()->GetIndex();
                 // Now check whether the current paragraph is before the anchor
                 // of the displaced object in the text, then we don't have to
                 // get out of its way.

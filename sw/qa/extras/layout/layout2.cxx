@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
 
     // Check the anchor the same and the textbox is inside the shape
     const bool bIsAnchTheSame
-        = *pShFrm->GetAnchor().GetContentAnchor() == *pShFrm->GetAnchor().GetContentAnchor();
+        = *pShFrm->GetAnchor().GetAnchorNode() == *pShFrm->GetAnchor().GetAnchorNode();
     CPPUNIT_ASSERT_MESSAGE("The anchor is different for the textbox and shape!", bIsAnchTheSame);
     CPPUNIT_ASSERT_MESSAGE("The textbox has fallen apart!", aShpRect.Contains(aTxtFrmRect));
     // Without the fix the anchor differs, and the frame outside of the shape
@@ -2322,8 +2322,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     bool bFlyInFlyFound = false;
     for (auto secondformat : *pSecondFormats)
     {
-        auto& pNd = secondformat->GetAnchor().GetContentAnchor()->GetNode();
-        if (pNd.FindFlyStartNode())
+        const SwNode* pNd = secondformat->GetAnchor().GetAnchorNode();
+        if (pNd->FindFlyStartNode())
         {
             // So there is a fly inside another -> problem.
             bFlyInFlyFound = true;

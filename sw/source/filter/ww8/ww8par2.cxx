@@ -2389,9 +2389,9 @@ void WW8TabDesc::CreateSwTable()
         ? m_pIo->m_xFormatOfJustInsertedApo->GetFormat() : nullptr;
     if (pFormat)
     {
-        const SwPosition* pAPos =
-            pFormat->GetAnchor().GetContentAnchor();
-        if (pAPos && pAPos->GetNode() == pPoint->GetNode())
+        const SwNode* pAnchorNode =
+            pFormat->GetAnchor().GetAnchorNode();
+        if (pAnchorNode && *pAnchorNode == pPoint->GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;

@@ -278,8 +278,8 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
     pWrtShell->EnterSelFrameMode();
     const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
     const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
-    const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-    SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
+    SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
+    SwTextNode* pTextNode = pAnchorNode->GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl

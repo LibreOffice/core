@@ -2423,8 +2423,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // left or right adjusted table without width mustn't be adjusted in width
             // as they would only shrink but never grow
             m_xLayoutInfo->SetMustNotRecalc( true );
-            if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
-                ->GetNode().FindTableNode() )
+            if( m_pContext->GetFrameFormat()->GetAnchor().GetAnchorNode()
+                ->FindTableNode() )
             {
                 sal_uInt32 nMax = m_xLayoutInfo->GetMax();
                 if( nMax > USHRT_MAX )
@@ -4917,13 +4917,13 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
     {
         SwFrameFormat *pFormat = rTable[--i];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        SwPosition const*const pAPos = rAnch.GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = rAnch.GetAnchorNode();
+        if (pAnchorNode &&
             ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
              (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
-            ( rMkNdIdx < pAPos->GetNode() && pAPos->GetNode() <= rPtNdIdx.GetNode() ))
+            ( rMkNdIdx < *pAnchorNode && *pAnchorNode <= rPtNdIdx.GetNode() ))
         {
-            if( rPtNdIdx != pAPos->GetNode() )
+            if( rPtNdIdx != *pAnchorNode )
             {
                 // If the Fly is deleted, all Flys in its content have to be deleted too.
                 const SwFormatContent &rContent = pFormat->GetContent();

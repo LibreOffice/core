@@ -1816,10 +1816,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const SwFormatAnchor &rAnch = pFrameFormat->GetAnchor();
                         if (RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
-                            const SwPosition* pPosition = rAnch.GetContentAnchor();
-                            if ( pPosition && pDoc->IsInHeaderFooter( pPosition->GetNode() ) )
+                            const SwNode* pAnchorNode = rAnch.GetAnchorNode();
+                            if ( pAnchorNode && pDoc->IsInHeaderFooter( *pAnchorNode ) )
                             {
-                                const SwTextNode* pTNd = pPosition->GetNode().GetTextNode();
+                                const SwTextNode* pTNd = pAnchorNode->GetTextNode();
                                 if ( pTNd )
                                     MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern, formatName);
                             }

@@ -70,6 +70,8 @@ public:
     // #i28701#
     sal_uInt32 GetOrder() const { return m_nOrder;}
 
+    SwNode* GetAnchorNode() const;
+
     void SetType( RndStdIds nRndId ) { m_eAnchorId = nRndId; }
     void SetPageNum( sal_uInt16 nNew ) { m_nPageNumber = nNew; }
     void SetAnchor( const SwPosition *pPos );

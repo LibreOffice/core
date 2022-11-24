@@ -214,7 +214,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
         switch( rAnch.GetAnchorId() )
         {
         case RndStdIds::FLY_AS_CHAR:
-            if( pFlyFormat && rAnch.GetContentAnchor() )
+            if( pFlyFormat && rAnch.GetAnchorNode() )
             {
                 const SwFrame* pOld = static_cast<const SwFlyFrameFormat*>(pFlyFormat)->GetFrame( &aRet );
                 if( pOld )
@@ -224,7 +224,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
 
         case RndStdIds::FLY_AT_PARA:
         case RndStdIds::FLY_AT_CHAR: // LAYER_IMPL
-            if( rAnch.GetContentAnchor() )
+            if( rAnch.GetAnchorNode() )
             {
                 const SwPosition *pPos = rAnch.GetContentAnchor();
                 const SwContentNode* pNd = pPos->GetNode().GetContentNode();
@@ -236,10 +236,10 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             break;
 
         case RndStdIds::FLY_AT_FLY: // LAYER_IMPL
-            if( rAnch.GetContentAnchor() )
+            if( rAnch.GetAnchorNode() )
             {
-                const SwFlyFrameFormat* pFormat = static_cast<SwFlyFrameFormat*>(rAnch.GetContentAnchor()->
-                                                GetNode().GetFlyFormat());
+                const SwFlyFrameFormat* pFormat = static_cast<SwFlyFrameFormat*>(rAnch.GetAnchorNode()->
+                                                GetFlyFormat());
                 const SwFrame* pOld = pFormat ? pFormat->GetFrame( &aRet ) : nullptr;
                 if( pOld )
                     aRet = pOld->getFrameArea().Pos();
@@ -281,7 +281,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
     RndStdIds nNew = aNewAnch.GetAnchorId();
 
     // Is the new anchor valid?
-    if( !aNewAnch.GetContentAnchor() && (RndStdIds::FLY_AT_FLY == nNew ||
+    if( !aNewAnch.GetAnchorNode() && (RndStdIds::FLY_AT_FLY == nNew ||
         (RndStdIds::FLY_AT_PARA == nNew) || (RndStdIds::FLY_AS_CHAR == nNew) ||
         (RndStdIds::FLY_AT_CHAR == nNew) ))
     {
@@ -1050,9 +1050,9 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
         if ( (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA) &&
              (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_CHAR) )
             continue;
-        if ( nullptr == rAnchor.GetContentAnchor() )
+        if ( nullptr == rAnchor.GetAnchorNode() )
             continue;
-        SwNodeOffset nTstSttNd = rAnchor.GetContentAnchor()->GetNodeIndex();
+        SwNodeOffset nTstSttNd = rAnchor.GetAnchorNode()->GetIndex();
         if( nFlySttNd <= nTstSttNd && nTstSttNd < nFlySttNd + SwNodeOffset(2) )
         {
             return SwChainRet::NOT_EMPTY;
@@ -1072,14 +1072,14 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     if ( RndStdIds::FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {
         if ( (RndStdIds::FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
-            ( rDstAnchor.GetContentAnchor() &&
-              rDstAnchor.GetContentAnchor()->GetNodeIndex() > nEndOfExtras ))
+            ( rDstAnchor.GetAnchorNode() &&
+              rDstAnchor.GetAnchorNode()->GetIndex() > nEndOfExtras ))
             bAllowed = true;
     }
-    else if( rSrcAnchor.GetContentAnchor() && rDstAnchor.GetContentAnchor() )
+    else if( rSrcAnchor.GetAnchorNode() && rDstAnchor.GetAnchorNode() )
     {
-        const SwNode &rSrcNd = rSrcAnchor.GetContentAnchor()->GetNode(),
-                     &rDstNd = rDstAnchor.GetContentAnchor()->GetNode();
+        const SwNode &rSrcNd = *rSrcAnchor.GetAnchorNode(),
+                     &rDstNd = *rDstAnchor.GetAnchorNode();
         const SwStartNode* pSttNd = nullptr;
         if( rSrcNd == rDstNd ||
             ( !pSttNd &&

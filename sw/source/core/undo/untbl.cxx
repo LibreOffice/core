@@ -432,12 +432,12 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     {
         SwFrameFormat* pFormat = rFrameFormatTable[ n ];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId())) &&
-            nTableStt <= pAPos->GetNodeIndex() &&
-            pAPos->GetNodeIndex() < nTableEnd )
+            nTableStt <= pAnchorNode->GetIndex() &&
+            pAnchorNode->GetIndex() < nTableEnd )
         {
             m_pHistory->AddChangeFlyAnchor(*pFormat);
         }

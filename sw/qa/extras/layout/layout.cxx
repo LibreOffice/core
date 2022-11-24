@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -585,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -817,7 +817,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -940,7 +940,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -1069,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -1343,7 +1343,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -1527,7 +1527,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -1708,7 +1708,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor.GetContentAnchor());
+            SwPosition pos(*anchor.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor.SetAnchor(&pos);
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -2167,12 +2167,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor1.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor1.GetContentAnchor());
+            SwPosition pos(*anchor1.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor1.SetAnchor(&pos);
             pDoc->SetAttr(anchor1, *const_cast<SwFrameFormat*>(pFly1));
             anchor2.SetType(RndStdIds::FLY_AT_PARA);
-            pos.nNode = anchor2.GetContentAnchor()->nNode;
+            pos.nNode = *anchor2.GetAnchorNode();
             anchor2.SetAnchor(&pos);
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }
@@ -2363,12 +2363,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor1.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor1.GetContentAnchor());
+            SwPosition pos(*anchor1.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor1.SetAnchor(&pos);
             pDoc->SetAttr(anchor1, *const_cast<SwFrameFormat*>(pFly1));
             anchor2.SetType(RndStdIds::FLY_AT_PARA);
-            pos.nNode = anchor2.GetContentAnchor()->nNode;
+            pos.nNode = *anchor2.GetAnchorNode();
             anchor2.SetAnchor(&pos);
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }
@@ -2537,12 +2537,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         if (i == 1) // secondly, try with different anchor type
         {
             anchor1.SetType(RndStdIds::FLY_AT_PARA);
-            SwPosition pos(*anchor1.GetContentAnchor());
+            SwPosition pos(*anchor1.GetAnchorNode());
             pos.nContent.Assign(nullptr, 0);
             anchor1.SetAnchor(&pos);
             pDoc->SetAttr(anchor1, *const_cast<SwFrameFormat*>(pFly1));
             anchor2.SetType(RndStdIds::FLY_AT_PARA);
-            pos.nNode = anchor2.GetContentAnchor()->nNode;
+            pos.nNode = *anchor2.GetAnchorNode();
             anchor2.SetAnchor(&pos);
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }

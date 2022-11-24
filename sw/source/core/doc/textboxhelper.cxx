@@ -1028,8 +1028,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
     const bool bInlineAnchored = rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
     const bool bLayoutInCell = rShape.GetFollowTextFlow().GetValue()
-                               && rShape.GetAnchor().GetContentAnchor()
-                               && rShape.GetAnchor().GetContentAnchor()->GetNode().FindTableNode();
+                               && rShape.GetAnchor().GetAnchorNode()
+                               && rShape.GetAnchor().GetAnchorNode()->FindTableNode();
     SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 
     SfxItemIter aIter(rSet);
@@ -1448,17 +1448,14 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             }
 
             // Other special case: shape is inside a table or floating table following the text flow
-            if (pShape->GetFollowTextFlow().GetValue() && pShape->GetAnchor().GetContentAnchor()
-                && pShape->GetAnchor().GetContentAnchor()->GetNode().FindTableNode())
+            if (pShape->GetFollowTextFlow().GetValue() && pShape->GetAnchor().GetAnchorNode()
+                && pShape->GetAnchor().GetAnchorNode()->FindTableNode())
             {
                 // Table position
                 Point nTableOffset;
                 // Floating table
-                if (auto pFly = pShape->GetAnchor()
-                                    .GetContentAnchor()
-                                    ->GetNode()
-                                    .FindTableNode()
-                                    ->FindFlyStartNode())
+                if (auto pFly
+                    = pShape->GetAnchor().GetAnchorNode()->FindTableNode()->FindFlyStartNode())
                 {
                     if (auto pFlyFormat = pFly->GetFlyFormat())
                     {
@@ -1469,8 +1466,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 else
                 // Normal table
                 {
-                    auto pTableNode
-                        = pShape->GetAnchor().GetContentAnchor()->GetNode().FindTableNode();
+                    auto pTableNode = pShape->GetAnchor().GetAnchorNode()->FindTableNode();
                     if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
                     {
                         nTableOffset.setX(pTableFormat->GetHoriOrient().GetPos());
@@ -1644,7 +1640,7 @@ bool SwTextBoxHelper::isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFr
 
         if (rShapeAnchor.GetAnchorId() == rFrameAnchor.GetAnchorId())
         {
-            if (rShapeAnchor.GetContentAnchor() && rFrameAnchor.GetContentAnchor())
+            if (rShapeAnchor.GetAnchorNode() && rFrameAnchor.GetAnchorNode())
             {
                 if (*rShapeAnchor.GetContentAnchor() != *rFrameAnchor.GetContentAnchor())
                     return true;
@@ -1667,7 +1663,7 @@ bool SwTextBoxHelper::isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFr
         if (rShapeAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
             && rFrameAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
-            if (rShapeAnchor.GetContentAnchor() && rFrameAnchor.GetContentAnchor())
+            if (rShapeAnchor.GetAnchorNode() && rFrameAnchor.GetAnchorNode())
             {
                 if (*rShapeAnchor.GetContentAnchor() != *rFrameAnchor.GetContentAnchor())
                     return true;

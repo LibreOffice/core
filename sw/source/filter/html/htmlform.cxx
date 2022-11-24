@@ -515,9 +515,9 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
             SwFrameFormat *pFrameFormat = pSwShape->GetFrameFormat();
 
             const SwDoc *pDoc = pFrameFormat->GetDoc();
-            const SwPosition* pAPos = pFrameFormat->GetAnchor().GetContentAnchor();
+            SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
             SwTableNode *pTableNd;
-            if (pAPos && nullptr != (pTableNd = pAPos->GetNode().FindTableNode()))
+            if (pAnchorNode && nullptr != (pTableNd = pAnchorNode->FindTableNode()))
             {
                 const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                 SwHTMLTableLayout *pLayout =

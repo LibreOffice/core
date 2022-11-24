@@ -228,7 +228,7 @@ bool sw_ChkAndSetNewAnchor(
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !(nNew == RndStdIds::FLY_AT_PAGE &&
         (RndStdIds::FLY_AT_PARA==nOld || RndStdIds::FLY_AT_CHAR==nOld || RndStdIds::FLY_AS_CHAR==nOld ) &&
-        pDoc->IsInHeaderFooter( rOldAnch.GetContentAnchor()->GetNode() )),
+        pDoc->IsInHeaderFooter( *rOldAnch.GetAnchorNode() )),
             "forbidden anchor change in Head/Foot." );
 #endif
 
@@ -859,13 +859,13 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                 case RndStdIds::FLY_AT_PARA:
                 case RndStdIds::FLY_AT_CHAR: // LAYER_IMPL
                 case RndStdIds::FLY_AS_CHAR:
-                    if( !pAnchor->GetContentAnchor() )
+                    if( !pAnchor->GetAnchorNode() )
                     {
                         pAnchor->SetAnchor( pCursor->GetPoint() );
                     }
                     break;
                 case RndStdIds::FLY_AT_FLY:
-                    if( !pAnchor->GetContentAnchor() )
+                    if( !pAnchor->GetAnchorNode() )
                     {
                         lcl_SetNewFlyPos( pCursor->GetPointNode(),
                                 *pAnchor, GetCursorDocPos() );

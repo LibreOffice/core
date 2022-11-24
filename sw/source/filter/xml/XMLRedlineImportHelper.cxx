@@ -597,7 +597,7 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
                 }
                 else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
                 {   // anchor is on a start node, avoid skipping it:
-                    pStartNode = rAnchor.GetContentAnchor()->GetNode().GetStartNode();
+                    pStartNode = rAnchor.GetAnchorNode()->GetStartNode();
                     assert(pStartNode);
                     // pass the next node to recursive call - it will call
                     // call StartOfSectionNode on it and go back to pStartNode
@@ -606,7 +606,7 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
                 }
                 else
                 {
-                    return RecursiveContains(rRedlineSection, rAnchor.GetContentAnchor()->GetNode());
+                    return RecursiveContains(rRedlineSection, *rAnchor.GetAnchorNode());
                 }
             }
             break;

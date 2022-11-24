@@ -1327,8 +1327,8 @@ void SwHTMLWriter::GetControls()
             continue;
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        const SwPosition *pPos = rAnchor.GetContentAnchor();
-        if ((RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pPos)
+        const SwNode *pAnchorNode = rAnchor.GetAnchorNode();
+        if ((RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pAnchorNode)
             continue;
 
         const SdrObject *pSdrObj =
@@ -1336,7 +1336,7 @@ void SwHTMLWriter::GetControls()
         if( !pSdrObj )
             continue;
 
-        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->GetNodeIndex() );
+        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pAnchorNode->GetIndex() );
     }
 }
 

@@ -474,11 +474,10 @@ bool SwNode::IsProtect() const
         if (pFlyFormat->GetProtect().IsContentProtected())
             return true;
         const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
-        const SwPosition* pAnchorPos = rAnchor.GetContentAnchor();
-        if (!pAnchorPos)
+        const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+        if (!pAnchorNode)
             return false;
-        const SwNode& rAnchorNd = pAnchorPos->GetNode();
-        return &rAnchorNd != this && rAnchorNd.IsProtect();
+        return pAnchorNode != this && pAnchorNode->IsProtect();
     }
 
     pSttNd = FindFootnoteStartNode();
@@ -567,9 +566,9 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
             {
                 const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
                 if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
-                    pAnchor->GetContentAnchor() )
+                    pAnchor->GetAnchorNode() )
                 {
-                    pNd = &pAnchor->GetContentAnchor()->GetNode();
+                    pNd = pAnchor->GetAnchorNode();
                     const SwNode* pFlyNd = pNd->FindFlyStartNode();
                     while( pFlyNd )
                     {
@@ -590,14 +589,13 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
                                 }
                                 pAnchor = &pFrameFormat->GetAnchor();
                                 if ((RndStdIds::FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
-                                    !pAnchor->GetContentAnchor() )
+                                    !pAnchor->GetAnchorNode() )
                                 {
                                     pFlyNd = nullptr;
                                     break;
                                 }
 
-                                pFlyNd = pAnchor->GetContentAnchor()->
-                                        GetNode().FindFlyStartNode();
+                                pFlyNd = pAnchor->GetAnchorNode()->FindFlyStartNode();
                                 break;
                             }
                         }
@@ -2182,7 +2180,7 @@ bool SwNode::IsInRedlines() const
 void SwNode::AddAnchoredFly(SwFrameFormat *const pFlyFormat)
 {
     assert(pFlyFormat);
-    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->GetNode() == this);
+    assert(pFlyFormat->GetAnchor(false).GetAnchorNode() == this);
     // check node type, cf. SwFormatAnchor::SetAnchor()
     assert(IsTextNode() || IsStartNode() || IsTableNode());
     m_aAnchoredFlys.push_back(pFlyFormat);

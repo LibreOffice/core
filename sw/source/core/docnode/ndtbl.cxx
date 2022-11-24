@@ -1670,12 +1670,12 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     {
         SwFrameFormat *const pFormat = pFly;
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-            nStt <= pAPos->GetNodeIndex() &&
-            pAPos->GetNodeIndex() < nEnd )
+            nStt <= pAnchorNode->GetIndex() &&
+            pAnchorNode->GetIndex() < nEnd )
         {
             pFormat->MakeFrames();
         }

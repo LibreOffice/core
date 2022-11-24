@@ -2176,7 +2176,7 @@ bool SwFEShell::ImpEndCreate()
         if( bCharBound )
         {
             OSL_ENSURE( aAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR, "wrong AnchorType" );
-            SwTextNode *pNd = aAnch.GetContentAnchor()->GetNode().GetTextNode();
+            SwTextNode *pNd = aAnch.GetAnchorNode()->GetTextNode();
             SwFormatFlyCnt aFormat( pFormat );
             pNd->InsertItem(aFormat,
                             aAnch.GetContentAnchor()->GetContentIndex(), 0 );

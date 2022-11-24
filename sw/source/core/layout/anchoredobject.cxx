@@ -216,7 +216,7 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
 
     const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
     if ( !((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) &&
-         rAnch.GetContentAnchor()) )
+         rAnch.GetAnchorNode()) )
         return;
 
     // --> if requested, assure that anchor frame,

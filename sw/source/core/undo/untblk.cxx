@@ -46,9 +46,9 @@ GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode)
     {
         SwFrameFormat *const pFormat = (*rDoc.GetSpzFrameFormats())[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if (pAPos
-             && nSttNode == pAPos->GetNodeIndex()
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if (pAnchorNode
+             && nSttNode == pAnchorNode->GetIndex()
              && ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
                  || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
         {
@@ -178,12 +178,12 @@ bool SwUndoInserts::IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
 
     // check all at-char flys at the start/end nodes:
     // ExcludeFlyAtStartEnd will exclude them!
-    SwPosition const*const pAnchorPos = rAnchor.GetContentAnchor();
-    return pAnchorPos != nullptr
+    SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+    return pAnchorNode != nullptr
         && (   rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
             || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-        && (   nStartNode == pAnchorPos->GetNodeIndex()
-            || nEndNode == pAnchorPos->GetNodeIndex());
+        && (   nStartNode == pAnchorNode->GetIndex()
+            || nEndNode == pAnchorNode->GetIndex());
 }
 
 void SwUndoInserts::dumpAsXml(xmlTextWriterPtr pWriter) const

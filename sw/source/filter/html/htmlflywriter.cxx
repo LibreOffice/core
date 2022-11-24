@@ -297,7 +297,7 @@ void SwHTMLWriter::CollectFlyFrames()
     {
         const SwFrameFormat& rFrameFormat = rItem.GetFormat();
         const SdrObject *pSdrObj = nullptr;
-        const SwPosition *pAPos;
+        const SwNode *pAnchorNode;
         const SwContentNode *pACNd;
         SwHTMLFrameType eType = static_cast<SwHTMLFrameType>(GuessFrameType( rFrameFormat, pSdrObj ));
 
@@ -316,8 +316,8 @@ void SwHTMLWriter::CollectFlyFrames()
             // before the paragraph, if the paragraph has a
             // spacing.
             if( text::RelOrientation::FRAME == eHoriRel &&
-                (pAPos = rAnchor.GetContentAnchor()) != nullptr &&
-                (pACNd = pAPos->GetNode().GetContentNode()) != nullptr )
+                (pAnchorNode = rAnchor.GetAnchorNode()) != nullptr &&
+                (pACNd = pAnchorNode->GetContentNode()) != nullptr )
             {
                 const SvxLRSpaceItem& rLRItem =
                     pACNd->GetAttr(RES_LR_SPACE);

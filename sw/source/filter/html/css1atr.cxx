@@ -2136,23 +2136,22 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
     // If the frame is not linked to a page, we use the background of the anchor.
     const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
     RndStdIds eAnchorId = rAnchor.GetAnchorId();
-    const SwPosition *pAnchorPos = rAnchor.GetContentAnchor();
-    if (RndStdIds::FLY_AT_PAGE != eAnchorId && pAnchorPos)
+    const SwNode *pAnchorNode = rAnchor.GetAnchorNode();
+    if (RndStdIds::FLY_AT_PAGE != eAnchorId && pAnchorNode)
     {
-        const SwNode& rNode = pAnchorPos->GetNode();
-        if( rNode.IsContentNode() )
+        if( pAnchorNode->IsContentNode() )
         {
             // If the frame is linked to a content-node,
             // we take the background of the content-node, if it has one.
             if( OutCSS1_FrameFormatBrush( *this,
-                    rNode.GetContentNode()->GetSwAttrSet().GetBackground()) )
+                    pAnchorNode->GetContentNode()->GetSwAttrSet().GetBackground()) )
                 return;
 
             // Otherwise we also could be in a table
-            const SwTableNode *pTableNd = rNode.FindTableNode();
+            const SwTableNode *pTableNd = pAnchorNode->FindTableNode();
             if( pTableNd )
             {
-                const SwStartNode *pBoxSttNd = rNode.FindTableBoxStartNode();
+                const SwStartNode *pBoxSttNd = pAnchorNode->FindTableBoxStartNode();
                 const SwTableBox *pBox =
                     pTableNd->GetTable().GetTableBox( pBoxSttNd->GetIndex() );
 
@@ -2181,7 +2180,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
         }
 
         // If the anchor is again in a Fly-Frame, use the background of the Fly-Frame.
-        const SwFrameFormat *pFrameFormat = rNode.GetFlyFormat();
+        const SwFrameFormat *pFrameFormat = pAnchorNode->GetFlyFormat();
         if( pFrameFormat )
         {
             OutCSS1_FrameFormatBackground( *pFrameFormat );

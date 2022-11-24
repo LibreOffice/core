@@ -1405,7 +1405,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 // OD 26.06.2003 - allow drawing objects in header/footer.
                 // But don't allow control objects in header/footer
                 if( RES_DRAWFRMFMT == pFormat->Which() &&
-                    pDoc->IsInHeaderFooter( pFormat->GetAnchor().GetContentAnchor()->GetNode() ) )
+                    pDoc->IsInHeaderFooter( *pFormat->GetAnchor().GetAnchorNode() ) )
                 {
                     bool bCheckControlLayer = false;
                     pFormat->CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));

@@ -66,11 +66,11 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc, SwNode const &rIdx)
             RES_DRAWFRMFMT != pFrameFormat->Which() )
                 continue;
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-            rIdx == pAPos->GetNode() )
+            rIdx == *pAnchorNode )
         {
             bRet=true;
             break;

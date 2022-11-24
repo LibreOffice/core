@@ -192,9 +192,9 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 // If the graphic is anchored in a table, we need to recalculate
                 // the table rows
                 const SwDoc& rDoc = pGrfNd->GetDoc();
-                const SwPosition* pAPos = pFormat->GetAnchor().GetContentAnchor();
+                SwNode* pAnchorNode = pFormat->GetAnchor().GetAnchorNode();
                 SwTableNode *pTableNd;
-                if (pAPos && nullptr != (pTableNd = pAPos->GetNode().FindTableNode()))
+                if (pAnchorNode && nullptr != (pTableNd = pAnchorNode->FindTableNode()))
                 {
                     const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
@@ -283,14 +283,14 @@ const SwNode* SwBaseLink::GetAnchor() const
         if (pFormat)
         {
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-            SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-            if (pAPos &&
+            SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+            if (pAnchorNode &&
                 ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())))
             {
-                    return &pAPos->GetNode();
+                    return pAnchorNode;
             }
             return nullptr;
         }

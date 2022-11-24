@@ -361,7 +361,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
 
     const SwFormatAnchor& rAnchor =
         m_oOldSet->Get( RES_ANCHOR, false );
-    if( !rAnchor.GetContentAnchor() )
+    if( !rAnchor.GetAnchorNode() )
         return;
 
     sal_Int32 nContent = 0;
@@ -372,7 +372,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
         [[fallthrough]];
     case RndStdIds::FLY_AT_PARA:
     case RndStdIds::FLY_AT_FLY:
-        m_nNodeIndex = rAnchor.GetContentAnchor()->GetNodeIndex();
+        m_nNodeIndex = rAnchor.GetAnchorNode()->GetIndex();
         break;
     default:
         return;

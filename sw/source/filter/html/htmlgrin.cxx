@@ -1461,11 +1461,11 @@ void SwHTMLParser::StripTrailingPara()
             for( auto pFormat : rFrameFormatTable )
             {
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-                SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-                if (pAPos &&
+                SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+                if (pAnchorNode &&
                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                    pAPos->GetNodeIndex() == nNodeIdx )
+                    pAnchorNode->GetIndex() == nNodeIdx )
 
                     return;     // we can't delete the node
             }

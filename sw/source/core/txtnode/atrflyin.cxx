@@ -143,9 +143,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
 
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
-    SwNode *const pOldNode(aAnchor.GetContentAnchor()
-            ? &aAnchor.GetContentAnchor()->GetNode()
-            : nullptr);
+    SwNode *const pOldNode(aAnchor.GetAnchorNode());
 
     std::optional<SwPosition> oPos;
     if (!pOldNode || !pOldNode->GetNodes().IsDocNodes() ||

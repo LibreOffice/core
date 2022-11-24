@@ -353,7 +353,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
 
             const SwFormatAnchor* pAnchorItem;
             if( pSrcDoc != pDstDoc && (pAnchorItem = GetItemIfSet( RES_ANCHOR, false ))
-                && pAnchorItem->GetContentAnchor() != nullptr )
+                && pAnchorItem->GetAnchorNode() != nullptr )
             {
                 if( !tmpSet )
                     tmpSet.emplace( *this );

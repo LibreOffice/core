@@ -289,10 +289,10 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     for ( const auto *pFormat : *GetSpzFrameFormats() )
     {
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
 
-        if (pAPos && (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) &&
-            pStart->GetNode() <= pAPos->GetNode() && pAPos->GetNode() <= pEnd->GetNode() )
+        if (pAnchorNode && (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) &&
+            pStart->GetNode() <= *pAnchorNode && *pAnchorNode <= pEnd->GetNode() )
             return false;
     }
 

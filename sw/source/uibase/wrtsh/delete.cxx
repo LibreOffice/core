@@ -443,7 +443,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                         eAnchorId = pFormat->GetAnchor().GetAnchorId();
                     }
                     if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR)
-                        && pFormat->GetAnchor().GetContentAnchor())
+                        && pFormat->GetAnchor().GetAnchorNode())
                     {
                         oAnchor.emplace(*pFormat->GetAnchor().GetContentAnchor());
                         // set cursor before the anchor point
