@@ -473,9 +473,9 @@ uno::Any SwVbaContentControl::getDropdownListEntries()
 
 OUString SwVbaContentControl::getID()
 {
-    //const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    //return OUString::number(static_cast<sal_uInt32>(pCC->GetId()));
-    return OUString();
+    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
+    // This signed integer is treated in VBA as if it was an unsigned int.
+    return OUString::number(static_cast<sal_uInt32>(pCC->GetId()));
 }
 
 sal_Int32 SwVbaContentControl::getLevel()
