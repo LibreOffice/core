@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/0001-hb-view-Fix-cairo-slanting-condition.patch.1 \
     external/harfbuzz/0001-font-Respect-subfont-slant-setting-in-hb-draw.patch.1 \
     external/harfbuzz/0001-buffer-diff-Fix-check-for-glyph-flag-equality.patch.1 \
+    external/harfbuzz/0001-PairPos-Another-attempt-at-fixing-unsafe-to-break-wi.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
