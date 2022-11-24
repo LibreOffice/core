@@ -2043,6 +2043,11 @@
                 <desc>End of page</desc>
               </info>
             </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>In margins</desc>
+              </info>
+            </enumeration>
           </constraints>
           <value>0</value>
         </prop>
