@@ -213,6 +213,12 @@ bool SwpHints::Check(bool bPortionsMerged) const
         }
     }
 
+    // --- cross checks ---
+    // same pointers in both arrays
+    auto tmpHintsByEnd = m_HintsByEnd;
+    std::sort(tmpHintsByEnd.begin(), tmpHintsByEnd.end(), CompareSwpHtStart);
+    CHECK_ERR( tmpHintsByEnd == m_HintsByStart, "HintsCheck: the two arrays do not contain the same set of pointers" );
+
     for( size_t i = 0; i < Count(); ++i )
     {
         // --- check Starts ---
@@ -248,18 +254,6 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         nLastEnd = nIdx;
         pLastEnd = pHtEnd;
-
-        // --- cross checks ---
-
-        // 5) same pointers in both arrays
-        if (std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart) == m_HintsByStart.end())
-            nIdx = COMPLETE_STRING;
-
-        CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
-
-        // 6) same pointers in both arrays
-        if (std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd()) == m_HintsByEnd.end())
-            nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
 
