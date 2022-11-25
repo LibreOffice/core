@@ -31,6 +31,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 
@@ -365,6 +366,19 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
                                [](const auto& rSeqPair) { return jsonToUnoAny(rSeqPair.second); });
                 aValue.Value <<= aSeq;
             }
+        }
+        else if (rType == "[][]com.sun.star.beans.PropertyValue")
+        {
+            aNodeValue = rPair.second.get_child("value", aNodeNull);
+            std::vector<uno::Sequence<beans::PropertyValue>> aSeqs;
+            for (const auto& rItem : aNodeValue)
+            {
+                std::stringstream s;
+                boost::property_tree::write_json(s, rItem.second);
+                std::vector<beans::PropertyValue> aPropertyValues = JsonToPropertyValues(s.str().c_str());
+                aSeqs.push_back(comphelper::containerToSequence(aPropertyValues));
+            }
+            aValue.Value <<= comphelper::containerToSequence(aSeqs);
         }
         else
             SAL_WARN("comphelper", "JsonToPropertyValues: unhandled type '" << rType << "'");
