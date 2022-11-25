@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <passwdomdlg.hxx>
 #include <strings.hrc>
@@ -133,6 +134,14 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     m_xOptionsExpander->set_sensitive(bIsPasswordToModify);
     if (!bIsPasswordToModify)
         m_xOptionsExpander->hide();
+    else if (SfxObjectShell* pSh = SfxObjectShell::Current())
+    {
+        if (pSh->IsLoadReadonly())
+        {
+            m_xOpenReadonlyCB->set_active(true);
+            m_xOptionsExpander->set_expanded(true);
+        }
+    }
 
     m_xOpenReadonlyCB->connect_toggled(LINK(this, PasswordToOpenModifyDialog, ReadonlyOnOffHdl));
     ReadonlyOnOffHdl(*m_xOpenReadonlyCB);
