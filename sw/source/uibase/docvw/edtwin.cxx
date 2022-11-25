@@ -1553,14 +1553,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // See if the fly frame's anchor is in a content control. If so,
         // try to interact with it.
         const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
-        const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-        if (pAnchorPos)
+        SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
+        if (pAnchorNode)
         {
-            SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
+            SwTextNode* pTextNode = pAnchorNode->GetTextNode();
             if (pTextNode)
             {
+                sal_Int32 nContentIdx = rFormatAnchor.GetContentAnchor()->GetContentIndex();
                 SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                    pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
+                    nContentIdx, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
                 if (pAttr)
                 {
                     SwTextContentControl* pTextContentControl
@@ -4813,14 +4814,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             // See if the fly frame's anchor is in a content control. If so,
                             // interact with it.
                             const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
-                            const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-                            if (pAnchorPos)
+                            SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
+                            if (pAnchorNode)
                             {
-                                SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
+                                SwTextNode* pTextNode = pAnchorNode->GetTextNode();
                                 if (pTextNode)
                                 {
                                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                                        pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL,
+                                        rFormatAnchor.GetContentAnchor()->GetContentIndex(), RES_TXTATR_CONTENTCONTROL,
                                         ::sw::GetTextAttrMode::Parent);
                                     if (pAttr)
                                     {

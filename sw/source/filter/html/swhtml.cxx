@@ -3012,8 +3012,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Only At-Para flys need special handling" );
-        const SwPosition *pFlyPos = rAnchor.GetContentAnchor();
-        SwNodeOffset nFlyParaIdx = pFlyPos->GetNodeIndex();
+        SwNodeOffset nFlyParaIdx = rAnchor.GetAnchorNode()->GetIndex();
         bool bMoveFly;
         if( bChkEnd )
         {
@@ -3031,7 +3030,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         if( bMoveFly )
         {
             pFrameFormat->DelFrames();
-            *aAttrPam.GetPoint() = *pFlyPos;
+            *aAttrPam.GetPoint() = *rAnchor.GetContentAnchor();
             aAttrPam.GetPoint()->SetContent( m_aMoveFlyCnts[n] );
             SwFormatAnchor aAnchor( rAnchor );
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
@@ -4561,11 +4560,11 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
         //   - every paragraph-bound frame counts, or
         //   - (only frames without wrapping count and) the frame doesn't have
         //     a wrapping
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            pAPos->GetNode() == rNode )
+            *pAnchorNode == rNode )
         {
             if( !(bNoSurroundOnly || bSurroundOnly) )
             {

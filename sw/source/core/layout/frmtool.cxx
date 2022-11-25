@@ -960,12 +960,12 @@ void SwContentNotify::ImplDestroy()
                 SwFrameFormat *pFormat = (*pTable)[i];
                 const SwFormatAnchor &rAnch = pFormat->GetAnchor();
                 if ( RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId() ||
-                     rAnch.GetContentAnchor() == nullptr )
+                     rAnch.GetAnchorNode() == nullptr )
                 {
                     continue;
                 }
 
-                if (FrameContainsNode(*pCnt, rAnch.GetContentAnchor()->GetNodeIndex()))
+                if (FrameContainsNode(*pCnt, rAnch.GetAnchorNode()->GetIndex()))
                 {
                     OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position." );
                     if ( !pPage )
@@ -1102,8 +1102,8 @@ static bool IsShown(SwNodeOffset const nIndex,
     SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {
     assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
-    SwPosition const& rAnchor(*rAnch.GetContentAnchor());
-    if (rAnchor.GetNodeIndex() != nIndex)
+    SwNode* pAnchorNode = rAnch.GetAnchorNode();
+    if (pAnchorNode->GetIndex() != nIndex)
     {
         return false;
     }
@@ -1111,7 +1111,7 @@ static bool IsShown(SwNodeOffset const nIndex,
     {
         return pIter == nullptr // not merged
             || pIter != pEnd    // at least one char visible in node
-            || !IsSelectFrameAnchoredAtPara(rAnchor,
+            || !IsSelectFrameAnchoredAtPara(*rAnch.GetContentAnchor(),
                     SwPosition(*pFirstNode, 0),
                     SwPosition(*pLastNode, pLastNode->Len()));
     }
@@ -1126,7 +1126,7 @@ static bool IsShown(SwNodeOffset const nIndex,
         {
             assert(iter->nStart != iter->nEnd); // TODO possible?
             assert(iter->pNode->GetIndex() == nIndex);
-            if (rAnchor.GetContentIndex() < iter->nStart)
+            if (rAnch.GetContentAnchor()->GetContentIndex() < iter->nStart)
             {
                 return false;
             }
@@ -1144,7 +1144,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                 // the interesting corner cases are on the edge of the extent!
                 // no need to check for > the last extent because those
                 // are never visible.
-                if (rAnchor.GetContentIndex() <= iter->nEnd)
+                if (rAnch.GetContentAnchor()->GetContentIndex() <= iter->nEnd)
                 {
                     if (iter->nStart == 0)
                     {
@@ -1162,7 +1162,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                                     : pFirstNode->Len() // previous node; simplification but should get right result
                                 : (iter-1)->nEnd); // previous extent
                         SwPosition const end(*iter->pNode, iter->nStart);
-                        return !IsDestroyFrameAnchoredAtChar(rAnchor, start, end);
+                        return !IsDestroyFrameAnchoredAtChar(*rAnch.GetContentAnchor(), start, end);
                     }
                 }
                 else if (iter == *pEnd - 1) // special case: after last extent
@@ -1179,7 +1179,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                             iter->pNode == pLastNode
                                 ? iter->pNode->Len()
                                 : 0);
-                        return !IsDestroyFrameAnchoredAtChar(rAnchor, start, end);
+                        return !IsDestroyFrameAnchoredAtChar(*rAnch.GetContentAnchor(), start, end);
                     }
                 }
             }
@@ -1187,7 +1187,7 @@ static bool IsShown(SwNodeOffset const nIndex,
             {
                 assert(rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
                 // for AS_CHAR obviously must be <
-                if (rAnchor.GetContentIndex() < iter->nEnd)
+                if (rAnch.GetContentAnchor()->GetContentIndex() < iter->nEnd)
                 {
                     return true;
                 }
@@ -1213,7 +1213,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
             || rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            assert(rAnchor.GetContentAnchor()->GetNodeIndex() == rNode.GetIndex());
+            assert(rAnchor.GetAnchorNode()->GetIndex() == rNode.GetIndex());
             if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd, pFirstNode, pLastNode))
             {
                 pFrameFormat->DelFrames();
@@ -1234,7 +1234,7 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, SwNodeOffset const nInd
     {
         SwFrameFormat *pFormat = (*pTable)[i];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
+        if ( rAnch.GetAnchorNode() &&
             IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
         {
             checkFormats.push_back( pFormat );
@@ -1250,7 +1250,7 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, SwNodeOffset const nInd
     {
         SwFrameFormat *const pFormat = rFlys[it];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
+        if ( rAnch.GetAnchorNode() &&
             IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -1329,18 +1329,18 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
     if (auto const pMergedPara = rFrame.GetMergedPara())
     {
         ret = false;
-        auto const pAnchor(rAnchor.GetContentAnchor());
+        SwNode* pAnchorNode(rAnchor.GetAnchorNode());
         auto iterFirst(pMergedPara->extents.cbegin());
         if (iterFirst == pMergedPara->extents.end()
             && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                 || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR))
         {
-            ret = (&pAnchor->GetNode() == pMergedPara->pFirstNode
+            ret = (pAnchorNode == pMergedPara->pFirstNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                        || pAnchor->GetContentIndex() == 0))
-                || (&pAnchor->GetNode() == pMergedPara->pLastNode
+                        || rAnchor.GetContentAnchor()->GetContentIndex() == 0))
+                || (pAnchorNode == pMergedPara->pLastNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                        || pAnchor->GetContentIndex() == pMergedPara->pLastNode->Len()));
+                        || rAnchor.GetContentAnchor()->GetContentIndex() == pMergedPara->pLastNode->Len()));
         }
         auto iter(iterFirst);
         SwTextNode const* pNode(pMergedPara->pFirstNode);
@@ -1350,7 +1350,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                 || iter->pNode != pNode)
             {
                 assert(pNode->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
-                if (pNode == &pAnchor->GetNode())
+                if (pNode == pAnchorNode)
                 {
                     ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter,
                             pMergedPara->pFirstNode, pMergedPara->pLastNode);
@@ -1361,7 +1361,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                     break;
                 }
                 pNode = iter->pNode;
-                if (pAnchor->GetNodeIndex() < pNode->GetIndex())
+                if (pAnchorNode->GetIndex() < pNode->GetIndex())
                 {
                     break;
                 }
@@ -1385,9 +1385,9 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         // frames nor objects which are anchored to character bounds.
         if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && (rAnch.GetAnchorId() != RndStdIds::FLY_AS_CHAR))
         {
-            const SwPosition* pContentAnchor = rAnch.GetContentAnchor();
+            const SwNode* pAnchorNode = rAnch.GetAnchorNode();
             // formats in header/footer have no dependencies
-            if(pContentAnchor && pFormat->GetDoc()->IsInHeaderFooter(pContentAnchor->GetNode()))
+            if(pAnchorNode && pFormat->GetDoc()->IsInHeaderFooter(*pAnchorNode))
                 pFormat->MakeFrames();
             else
                 vFormatsToConnect.push_back(pFormat);

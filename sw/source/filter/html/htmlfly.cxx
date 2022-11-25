@@ -47,8 +47,8 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
 
     // Output of auto-bound frames will be a character farther back,
     // because then the position aligns with Netscape.
-    OSL_ENSURE( rAnchor.GetContentAnchor(), "No anchor position?" );
-    if( !rAnchor.GetContentAnchor() )
+    OSL_ENSURE( rAnchor.GetAnchorNode(), "No anchor position?" );
+    if( !rAnchor.GetAnchorNode() )
         return;
 
     m_nContentIndex = rAnchor.GetContentAnchor()->GetContentIndex();

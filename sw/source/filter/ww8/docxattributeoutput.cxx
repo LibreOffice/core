@@ -372,12 +372,12 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
     {
         const SwFrameFormat* pFrameFormat = (*rExport.m_rDoc.GetSpzFrameFormats())[ --nCnt ];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        const SwPosition* pPosition = rAnchor.GetContentAnchor();
+        const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
 
-        if (!pPosition || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
+        if (!pAnchorNode || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
-        if (pPosition->GetNode() != *rExport.m_pCurPam->GetPointNode().GetTextNode())
+        if (*pAnchorNode != *rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
         const SwNodeIndex* pStartNode = pFrameFormat->GetContent().GetContentIdx();
@@ -412,7 +412,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
             continue;
 
         // write table to docx
-        ww8::Frame aFrame(*pFrameFormat,*pPosition);
+        ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
         rDocxAttributeOutput.WriteFloatingTable(&aFrame);
     }
 }
@@ -6697,11 +6697,11 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     //If we have a formula with inline anchor...
                     if(SotExchange::IsMath(xObj->getClassID()) && rFrame.IsInline())
                     {
-                        SwPosition const* const aAPos = rFrameFormat.GetAnchor().GetContentAnchor();
-                        if(aAPos)
+                        SwNode const* const pAnchorNode = rFrameFormat.GetAnchor().GetAnchorNode();
+                        if(pAnchorNode)
                         {
                             //Get the text node what the formula anchored to
-                            const SwTextNode* pTextNode = aAPos->GetNode().GetTextNode();
+                            const SwTextNode* pTextNode = pAnchorNode->GetTextNode();
                             if(pTextNode && pTextNode->Len() == 1)
                             {
                                 //Get the paragraph alignment
