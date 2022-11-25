@@ -107,14 +107,14 @@ namespace
         {
             SwFrameFormat const*const  pFormat = rFrameFormatTable[n];
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-            SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-            if (pAPos &&
+            SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+            if (pAnchorNode &&
                 ((RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId()) ||
                  (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
                  (RndStdIds::FLY_AT_FLY  == pAnchor->GetAnchorId()) ||
                  (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId())) &&
-                nSttNd <= pAPos->GetNodeIndex() &&
-                pAPos->GetNodeIndex() < nEndNd )
+                nSttNd <= pAnchorNode->GetIndex() &&
+                pAnchorNode->GetIndex() < nEndNd )
             {
                 const SwFormatContent& rContent = pFormat->GetContent();
                 SwStartNode* pSNd;
@@ -2286,14 +2286,14 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             {
                 SwFrameFormat* pFly = (*m_rDoc.GetSpzFrameFormats())[n];
                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
-                SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-                if (pAPos &&
+                SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+                if (pAnchorNode &&
                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     // note: here use <= not < like in
                     // IsDestroyFrameAnchoredAtChar() because of the increment
                     // of rPam in the bDoesUndo path above!
-                    aRg.aStart <= pAPos->GetNode() && pAPos->GetNode() <= aRg.aEnd.GetNode() )
+                    aRg.aStart <= *pAnchorNode && *pAnchorNode <= aRg.aEnd.GetNode() )
                 {
                     m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
                     --n;
@@ -3188,7 +3188,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     }
     else if( pAnchor == nullptr
              || ( bIsAtContent
-                  && pAnchor->GetContentAnchor() == nullptr ) )
+                  && pAnchor->GetAnchorNode() == nullptr ) )
     {
         // apply anchor format
         SwFormatAnchor aAnch( pAnchor != nullptr ? *pAnchor : pFormat->GetAnchor() );
@@ -3217,10 +3217,10 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     {
         bool bAnchorAtPageAsFallback = true;
         const SwFormatAnchor& rDrawObjAnchorFormat = pFormat->GetAnchor();
-        if ( rDrawObjAnchorFormat.GetContentAnchor() != nullptr )
+        if ( rDrawObjAnchorFormat.GetAnchorNode() != nullptr )
         {
             SwTextNode* pAnchorTextNode =
-                    rDrawObjAnchorFormat.GetContentAnchor()->GetNode().GetTextNode();
+                    rDrawObjAnchorFormat.GetAnchorNode()->GetTextNode();
             if ( pAnchorTextNode != nullptr )
             {
                 const sal_Int32 nStt = rDrawObjAnchorFormat.GetContentAnchor()->GetContentIndex();
@@ -3798,11 +3798,11 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     {
         SwFrameFormat* pFormat = (*m_rDoc.GetSpzFrameFormats())[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if ( !pAPos )
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if ( !pAnchorNode )
             continue;
         bool bAdd = false;
-        SwNodeOffset nSkipAfter = pAPos->GetNodeIndex();
+        SwNodeOffset nSkipAfter = pAnchorNode->GetIndex();
         SwNodeOffset nStart = rRg.aStart.GetIndex();
         switch ( pAnchor->GetAnchorId() )
         {
@@ -3814,7 +3814,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             break;
             case RndStdIds::FLY_AT_PARA:
                 {
-                    bAdd = IsSelectFrameAnchoredAtPara(*pAPos,
+                    bAdd = IsSelectFrameAnchoredAtPara(*pAnchor->GetContentAnchor(),
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
                         pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
                         (flags & SwCopyFlags::IsMoveToFly)
@@ -3824,7 +3824,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
-                    bAdd = IsDestroyFrameAnchoredAtChar(*pAPos,
+                    bAdd = IsDestroyFrameAnchoredAtChar(*pAnchor->GetContentAnchor(),
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
                         pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
                         (flags & SwCopyFlags::IsMoveToFly)
@@ -3839,14 +3839,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         {
             if (nStart > nSkipAfter)
                 continue;
-            if (pAPos->GetNode() > rRg.aEnd.GetNode())
+            if (*pAnchorNode > rRg.aEnd.GetNode())
                 continue;
             //frames at the last source node are not always copied:
             //- if the node is empty and is the last node of the document or a table cell
             //  or a text frame then they have to be copied
             //- if the content index in this node is > 0 then paragraph and frame bound objects are copied
             //- to-character bound objects are copied if their index is <= nEndContentIndex
-            if (pAPos->GetNode() < rRg.aEnd.GetNode())
+            if (*pAnchorNode < rRg.aEnd.GetNode())
                 bAdd = true;
             if (!bAdd && !m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()) // fdo#40599: not for redline move
             {
@@ -3897,7 +3897,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 if ( aIdx.GetNode().IsTextNode() )
                 {
                     ++nAnchorTextNdNumInRange;
-                    bAnchorTextNdFound = aAnchor.GetContentAnchor()->GetNode() == aIdx.GetNode();
+                    bAnchorTextNdFound = *aAnchor.GetAnchorNode() == aIdx.GetNode();
                 }
 
                 ++aIdx;
@@ -3952,7 +3952,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
              newPos.GetNode().IsTextNode() )
         {
             // only if pCopiedPaM: care about partially selected start node
-            sal_Int32 const nContent = pCopiedPaM && pCopiedPaM->Start()->GetNode() == aAnchor.GetContentAnchor()->GetNode()
+            sal_Int32 const nContent = pCopiedPaM && pCopiedPaM->Start()->GetNode() == *aAnchor.GetAnchorNode()
                 ? newPos.GetContentIndex() - pCopiedPaM->Start()->GetContentIndex()
                 : newPos.GetContentIndex();
             newPos.SetContent(nContent);

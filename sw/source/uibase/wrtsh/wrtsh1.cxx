@@ -2261,7 +2261,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
                 if (pFormat)
                 {
                     RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
-                    if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR) && pFormat->GetAnchor().GetContentAnchor())
+                    if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR) && pFormat->GetAnchor().GetAnchorNode())
                     {
                         oAnchor.emplace(*pFormat->GetAnchor().GetContentAnchor());
                     }

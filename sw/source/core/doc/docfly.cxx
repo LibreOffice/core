@@ -226,8 +226,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
         case RndStdIds::FLY_AT_CHAR: // LAYER_IMPL
             if( rAnch.GetAnchorNode() )
             {
-                const SwPosition *pPos = rAnch.GetContentAnchor();
-                const SwContentNode* pNd = pPos->GetNode().GetContentNode();
+                const SwContentNode* pNd = rAnch.GetAnchorNode()->GetContentNode();
                 std::pair<Point, bool> const tmp(aRet, false);
                 const SwFrame* pOld = pNd ? pNd->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
                 if( pOld )
@@ -305,10 +304,10 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
         // The TextAttribut needs to be destroyed which, unfortunately, also
         // destroys the format. To avoid that, we disconnect the format from
         // the attribute.
-        const SwPosition *pPos = rOldAnch.GetContentAnchor();
-        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
+        SwNode *pAnchorNode = rOldAnch.GetAnchorNode();
+        SwTextNode *pTextNode = pAnchorNode->GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->GetContentIndex();
+        const sal_Int32 nIdx = rOldAnch.GetContentAnchor()->GetContentIndex();
         SwTextAttr * const  pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,

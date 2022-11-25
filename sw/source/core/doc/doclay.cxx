@@ -199,9 +199,9 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     // content anchor set.
     if ( !pAnchor ||
          ( RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId() &&
-           !pAnchor->GetContentAnchor() ) ||
+           !pAnchor->GetAnchorNode() ) ||
          ( RndStdIds::FLY_AT_PAGE == pAnchor->GetAnchorId() &&
-           !pAnchor->GetContentAnchor() &&
+           !pAnchor->GetAnchorNode() &&
            pAnchor->GetPageNum() == 0 ) )
     {
         // set it again, needed for Undo
@@ -460,23 +460,22 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
  * frames at character - o.k. if the PaM starts at least at the same position
  *                      as the frame
  */
-static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
-                        RndStdIds nAnchorId )
+static bool lcl_TstFlyRange( const SwPaM* pPam, const SwFormatAnchor& rFlyFormatAnchor )
 {
     bool bOk = false;
     const SwPaM* pTmp = pPam;
     do {
-        const SwNodeOffset nFlyIndex = pFlyPos->GetNodeIndex();
+        const SwNodeOffset nFlyIndex = rFlyFormatAnchor.GetAnchorNode()->GetIndex();
         auto [pPaMStart, pPaMEnd] = pTmp->StartEnd(); // SwPosition*
         const SwNodeOffset nPamStartIndex = pPaMStart->GetNodeIndex();
         const SwNodeOffset nPamEndIndex = pPaMEnd->GetNodeIndex();
-        if (RndStdIds::FLY_AT_PARA == nAnchorId)
+        if (RndStdIds::FLY_AT_PARA == rFlyFormatAnchor.GetAnchorId())
             bOk = (nPamStartIndex < nFlyIndex && nPamEndIndex > nFlyIndex) ||
                (((nPamStartIndex == nFlyIndex) && (pPaMStart->GetContentIndex() == 0)) &&
                (nPamEndIndex > nFlyIndex));
         else
         {
-            const sal_Int32 nFlyContentIndex = pFlyPos->GetContentIndex();
+            const sal_Int32 nFlyContentIndex = rFlyFormatAnchor.GetContentAnchor()->GetContentIndex();
             const sal_Int32 nPamEndContentIndex = pPaMEnd->GetContentIndex();
             bOk = (nPamStartIndex < nFlyIndex &&
                 (( nPamEndIndex > nFlyIndex )||
@@ -509,17 +508,16 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
         if( bFlyFormat || bDrawFormat )
         {
             const SwFormatAnchor& rAnchor = pFly->GetAnchor();
-            SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-            if (pAPos &&
+            SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+            if (pAnchorNode &&
                 ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
                  ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
             {
-                if( pCmpRange &&
-                    !lcl_TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
+                if( pCmpRange && !lcl_TstFlyRange( pCmpRange, rAnchor ))
                         continue;       // not a valid FlyFrame
-                aRetval.insert(SwPosFlyFrame(pAPos->GetNode(), pFly, aRetval.size()));
+                aRetval.insert(SwPosFlyFrame(*pAnchorNode, pFly, aRetval.size()));
             }
         }
     }
@@ -787,10 +785,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 const SwFormatAnchor& rAnchor = pNewFormat->GetAnchor();
                 if ( RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId() )
                 {
-                    const SwPosition *pPos = rAnchor.GetContentAnchor();
-                    SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
+                    SwTextNode *pTextNode = rAnchor.GetAnchorNode()->GetTextNode();
                     OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-                    const sal_Int32 nIdx = pPos->GetContentIndex();
+                    const sal_Int32 nIdx = rAnchor.GetContentAnchor()->GetContentIndex();
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
@@ -1106,10 +1103,9 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     const SwFormatAnchor& rAnchor = pNewFormat->GetAnchor();
     if ( RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId() )
     {
-        const SwPosition *pPos = rAnchor.GetContentAnchor();
-        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
+        SwTextNode *pTextNode = rAnchor.GetAnchorNode()->GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->GetContentIndex();
+        const sal_Int32 nIdx = rAnchor.GetContentAnchor()->GetContentIndex();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 
@@ -1519,7 +1515,7 @@ void SwDoc::SetAllUniqueFlyNames()
         {
             const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
             if ( (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
-                 rAnchor.GetContentAnchor() )
+                 rAnchor.GetAnchorNode() )
             {
                 bContainsAtPageObjWithContentAnchor = true;
             }
@@ -1604,12 +1600,12 @@ bool SwDoc::IsInHeaderFooter( const SwNode& rIdx ) const
 #endif
                 const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                 if ((RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()) ||
-                    !rAnchor.GetContentAnchor() )
+                    !rAnchor.GetAnchorNode() )
                 {
                     return false;
                 }
 
-                pNd = &rAnchor.GetContentAnchor()->GetNode();
+                pNd = rAnchor.GetAnchorNode();
                 pFlyNd = pNd->FindFlyStartNode();
                 bFound = true;
                 break;
@@ -1653,9 +1649,9 @@ SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
                     pItem = nullptr;
                     const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
                     if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
-                        pAnchor->GetContentAnchor())
+                        pAnchor->GetAnchorNode())
                     {
-                        pFlyFormat = pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
+                        pFlyFormat = pAnchor->GetAnchorNode()->GetFlyFormat();
                     }
                     else
                         pFlyFormat = nullptr;

@@ -444,10 +444,9 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // Unfortunately, this not only destroys the Frames but also the format.
         // To prevent that, first detach the connection between attribute and
         // format.
-        const SwPosition *pPos = rOldAnch.GetContentAnchor();
-        SwTextNode *pTextNode = static_cast<SwTextNode*>(&pPos->GetNode());
+        SwTextNode *pTextNode = static_cast<SwTextNode*>(rOldAnch.GetAnchorNode());
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->GetContentIndex();
+        const sal_Int32 nIdx = rOldAnch.GetContentAnchor()->GetContentIndex();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         assert(pHint && "Missing Hint.");
@@ -488,11 +487,10 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     }
 
     if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
-        const SwPosition* pPos = aNewAnchor.GetContentAnchor();
-        SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
+        SwTextNode* pTextNd = aNewAnchor.GetAnchorNode()->GetTextNode();
         OSL_ENSURE( pTextNd, "no Text Node at position." );
         SwFormatFlyCnt aFormat( pFrameFormat );
-        pTextNd->InsertItem( aFormat, pPos->GetContentIndex(), 0 );
+        pTextNd->InsertItem( aFormat, aNewAnchor.GetContentAnchor()->GetContentIndex(), 0 );
     }
 
     if (RES_DRAWFRMFMT != pFrameFormat->Which())

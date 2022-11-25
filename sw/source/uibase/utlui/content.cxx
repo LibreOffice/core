@@ -298,9 +298,9 @@ sal_Int32 getYPos(const SwNode& rNode)
         if (const auto pFlyFormat = rNode.GetFlyFormat())
         {
             // Get node index of anchor
-            if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
+            if (SwNode* pAnchorNode = pFlyFormat->GetAnchor().GetAnchorNode())
             {
-                return getYPos(pSwPosition->GetNode());
+                return getYPos(*pAnchorNode);
             }
         }
     }

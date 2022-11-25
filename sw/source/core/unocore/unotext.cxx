@@ -1718,8 +1718,8 @@ SwXText::convertToTextFrame(
         // added nodes
         if (!isGraphicNode(pFrameFormat)
             && (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()
-                    && (    oAnchorCheckPam->Start()->GetNode() == rAnchor.GetContentAnchor()->GetNode()
-                        ||  oAnchorCheckPam->End()->GetNode() == rAnchor.GetContentAnchor()->GetNode()))
+                    && (    oAnchorCheckPam->Start()->GetNode() == *rAnchor.GetAnchorNode()
+                        ||  oAnchorCheckPam->End()->GetNode() == *rAnchor.GetAnchorNode()))
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
                     && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
                         ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))
@@ -1794,8 +1794,8 @@ SwXText::convertToTextFrame(
                                     && rShapeAnchor.GetContentAnchor() && pFrameFormat->GetAnchor().GetContentAnchor()
                                     && pStartPam->ContainsPosition(*pFrameFormat->GetAnchor().GetContentAnchor()))
                                 {
-                                    const auto& rAnchorNode
-                                        = pFrameFormat->GetAnchor().GetContentAnchor()->GetNode();
+                                    const SwNode& rAnchorNode
+                                        = *pFrameFormat->GetAnchor().GetAnchorNode();
                                     if (!(rAnchorNode.FindFooterStartNode() || rAnchorNode.FindHeaderStartNode()))
                                     {
                                         SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());

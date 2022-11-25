@@ -1533,12 +1533,12 @@ void SwTextNode::Update(
             {
                 SwFrameFormat const*const pFormat = rFlys[i];
                 const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
-                if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
+                const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+                if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pAnchorNode)
                 {
                     // The fly is at-char anchored and has an anchor position.
-                    SwContentIndex& rEndIdx = const_cast<SwContentIndex&>(pContentAnchor->nContent);
-                    if (pContentAnchor->GetNode() == *this && rEndIdx.GetIndex() == rPos.GetIndex())
+                    SwContentIndex& rEndIdx = const_cast<SwContentIndex&>(rAnchor.GetContentAnchor()->nContent);
+                    if (*pAnchorNode == *this && rEndIdx.GetIndex() == rPos.GetIndex())
                     {
                         // The anchor position is exactly our insert position.
                         rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());

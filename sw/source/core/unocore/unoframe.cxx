@@ -2699,7 +2699,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
     // return an anchor for non-page bound frames
     // and for page bound frames that have a page no == NULL and a content position
     if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
-        (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
+        (rAnchor.GetAnchorNode() && !rAnchor.GetPageNum()))
     {
         const SwPosition &rPos = *(rAnchor.GetContentAnchor());
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)

@@ -1177,7 +1177,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     continue;
                 }
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                const SwPosition *pPos = rAnchor.GetContentAnchor();
+                const SwNode *pAnchorNode = rAnchor.GetAnchorNode();
 
                 if(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                 {
@@ -1189,18 +1189,18 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     continue;
                 }
 
-                if( !pPos )
+                if( !pAnchorNode )
                 {
                     ++aIter;
                     continue;
                 }
-                if( pPos->GetNode().GetTextNode() )
+                if( pAnchorNode->GetTextNode() )
                 {
-                    int nIndex = pPos->GetContentIndex();
+                    int nIndex = rAnchor.GetContentAnchor()->GetContentIndex();
                     bool bMarked = false;
                     if( pCursor != nullptr )
                     {
-                        const SwTextNode* pNode = pPos->GetNode().GetTextNode();
+                        const SwTextNode* pNode = pAnchorNode->GetTextNode();
                         SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pVSh->GetLayout())));
                         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
                         SwNodeOffset nLastNode;
@@ -1249,7 +1249,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         uno::Reference<XAccessible> const xAcc((*aIter).second);
                                         if (xAcc.is())
                                         {
-                                            if (IsSelectFrameAnchoredAtPara(*pPos, *pStart, *pEnd))
+                                            if (IsSelectFrameAnchoredAtPara(*rAnchor.GetContentAnchor(), *pStart, *pEnd))
                                             {
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->SetState( AccessibleStateType::SELECTED );
                                             }
@@ -1264,7 +1264,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         uno::Reference<XAccessible> const xAcc((*aIter).second);
                                         if (xAcc.is())
                                         {
-                                            if (IsDestroyFrameAnchoredAtChar(*pPos, *pStart, *pEnd))
+                                            if (IsDestroyFrameAnchoredAtChar(*rAnchor.GetContentAnchor(), *pStart, *pEnd))
                                             {
                                                 static_cast<::accessibility::AccessibleShape*>(xAcc.get())->SetState( AccessibleStateType::SELECTED );
                                             }
