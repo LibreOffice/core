@@ -62,6 +62,10 @@ protected:
      */
     int           getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::string_view rChildName);
     /**
+     * Get the number of the nodes returned by the rXPath.
+     */
+    int           countXPathNodes(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath);
+    /**
      * Assert that rXPath exists, and returns exactly one node.
      */
     void          assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath);
