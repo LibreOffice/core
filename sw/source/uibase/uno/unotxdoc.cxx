@@ -162,6 +162,7 @@
 #include <tools/UnitConversion.hxx>
 
 #include <svx/svdpage.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
@@ -3504,6 +3505,100 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         pNumberFormatter->IsNumberFormat(aSelectedDate, nFormat, dCurrentDate);
         pContentControl->SetSelectedDate(dCurrentDate);
         pWrtShell->GotoContentControl(rFormatContentControl);
+    }
+}
+
+namespace
+{
+/// Implements getCommandValues(".uno:TextFormFields").
+///
+/// Parameters:
+///
+/// - type: e.g. ODF_UNHANDLED
+/// - commandPrefix: field comment prefix not not return all fieldmarks
+void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                       const std::map<OUString, OUString>& rArguments)
+{
+    OUString aType;
+    OUString aCommandPrefix;
+    {
+        auto it = rArguments.find("type");
+        if (it != rArguments.end())
+        {
+            aType = it->second;
+        }
+
+        it = rArguments.find("commandPrefix");
+        if (it != rArguments.end())
+        {
+            aCommandPrefix = it->second;
+        }
+    }
+
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    tools::ScopedJsonWriterArray aFields = rJsonWriter.startArray("fields");
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+        assert(pFieldmark);
+        if (pFieldmark->GetFieldname() != aType)
+        {
+            continue;
+        }
+
+        auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+        if (itParam == pFieldmark->GetParameters()->end())
+        {
+            continue;
+        }
+
+        OUString aCommand;
+        itParam->second >>= aCommand;
+        if (!aCommand.startsWith(aCommandPrefix))
+        {
+            continue;
+        }
+
+        tools::ScopedJsonWriterStruct aField = rJsonWriter.startStruct();
+        rJsonWriter.put("type", aType);
+        rJsonWriter.put("command", aCommand);
+    }
+}
+}
+
+void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    std::map<OUString, OUString> aMap;
+
+    static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
+
+    if (o3tl::starts_with(rCommand, aTextFormFields))
+    {
+        if (rCommand.size() > o3tl::make_unsigned(aTextFormFields.getLength()))
+        {
+            std::string_view aArguments = rCommand.substr(aTextFormFields.getLength() + 1);
+            sal_Int32 nParamIndex = 0;
+            do
+            {
+                std::string_view aParamToken = o3tl::getToken(aArguments, 0, '&', nParamIndex);
+                sal_Int32 nIndex = 0;
+                OUString aKey;
+                OUString aValue;
+                do
+                {
+                    std::string_view aToken = o3tl::getToken(aParamToken, 0, '=', nIndex);
+                    if (aKey.isEmpty())
+                        aKey = OUString::fromUtf8(aToken);
+                    else
+                        aValue = OUString::fromUtf8(aToken);
+                } while (nIndex >= 0);
+                OUString aDecodedValue
+                    = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
+                aMap[aKey] = aDecodedValue;
+            } while (nParamIndex >= 0);
+        }
+        GetTextFormFields(rJsonWriter, m_pDocShell, aMap);
     }
 }
 

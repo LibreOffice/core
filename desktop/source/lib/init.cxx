@@ -5702,6 +5702,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static constexpr OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
     static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
     static constexpr OStringLiteral aFontSubset(".uno:FontSubset&name=");
+    static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
@@ -5877,6 +5878,19 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (o3tl::starts_with(aCommand, aFontSubset))
     {
         return getFontSubset(aCommand.substr(aFontSubset.getLength()));
+    }
+    else if (o3tl::starts_with(aCommand, aTextFormFields))
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            return nullptr;
+        }
+
+        tools::JsonWriter aJsonWriter;
+        pDoc->getCommandValues(aJsonWriter, aCommand);
+        return aJsonWriter.extractData();
     }
     else
     {

@@ -459,6 +459,9 @@ public:
     /// @see vcl::ITiledRenderable::executeContentControlEvent().
     void executeContentControlEvent(const StringMap& aArguments) override;
 
+    /// @see vcl::ITiledRenderable::getCommandValues().
+    void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();

@@ -368,6 +368,11 @@ public:
      *  Allow / disable drawing current text edit (used in Impress for slide previews)
      */
     virtual void setPaintTextEdit(bool) {}
+
+    /// Returns a json mapping of the possible values for the given command.
+    virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, std::string_view /*rCommand*/)
+    {
+    }
 };
 } // namespace vcl
 
