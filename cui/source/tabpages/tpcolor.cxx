@@ -36,6 +36,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
@@ -150,6 +151,12 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     maPaletteManager.ReloadRecentColorSet(*m_xValSetRecentList);
     aSize = m_xValSetRecentList->layoutAllVisible(maPaletteManager.GetRecentColorCount());
     m_xValSetRecentList->set_size_request(aSize.Width(), aSize.Height());
+
+    // it is not possible to install color palette extensions in Online or mobile apps
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xMoreColors->hide();
+    }
 }
 
 SvxColorTabPage::~SvxColorTabPage()
