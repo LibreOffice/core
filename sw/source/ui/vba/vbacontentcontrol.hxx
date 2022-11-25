@@ -64,7 +64,7 @@ public:
 
     css::uno::Any SAL_CALL getDropdownListEntries() override;
 
-    // This is an integer used as a unique indentifier string
+    // This is an integer used as a unique identifier string
     OUString SAL_CALL getID() override;
 
     sal_Int32 SAL_CALL getLevel() override;
@@ -107,7 +107,7 @@ public:
     // XContentControl Methods
 
     // Copies the content control from the active document to the Clipboard.
-    // Retreive from the clipboard using the Paste method of the Selection object
+    // Retrieve from the clipboard using the Paste method of the Selection object
     // or of the Range object, or use the Paste function from within Microsoft Word.
     void SAL_CALL Copy() override;
 
