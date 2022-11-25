@@ -340,6 +340,22 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if(!bDone)
         {
+            static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+            if (bFuzzing)
+            {
+                const basegfx::B2DRange aRange(basegfx::utils::getRange(aFillPolyPolygon));
+                if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
+                    || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
+                {
+                    SAL_WARN("vcl.gdi", "drawLine, skipping suspicious range of: "
+                                            << aRange << " for fuzzing performance");
+                    bDone = true;
+                }
+            }
+        }
+
+        if(!bDone)
+        {
             for(auto const& rB2DPolygon : std::as_const(aFillPolyPolygon))
             {
                 tools::Polygon aPolygon(rB2DPolygon);
