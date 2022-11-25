@@ -189,6 +189,7 @@ public:
     void testTdf148820();
     void testEmbeddedTextInDecimal();
     void testTotalsRowFunction();
+    void testAutofilterHiddenButton();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -315,6 +316,7 @@ public:
     CPPUNIT_TEST(testTdf148820);
     CPPUNIT_TEST(testEmbeddedTextInDecimal);
     CPPUNIT_TEST(testTotalsRowFunction);
+    CPPUNIT_TEST(testAutofilterHiddenButton);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2846,6 +2848,19 @@ void ScExportTest2::testTotalsRowFunction()
                                "totalsRowFunction");
         assertXPath(pDocXml, "/x:table/x:tableColumns/x:tableColumn[6]", "totalsRowFunction",
                     "sum");
+    }
+}
+
+void ScExportTest2::testAutofilterHiddenButton()
+{
+    createScDoc("xlsx/hiddenButton.xlsx");
+    saveAndReload("Calc Office Open XML");
+    xmlDocUniquePtr pDocXml = parseExport("xl/tables/table1.xml");
+    CPPUNIT_ASSERT(pDocXml);
+    for (int i = 1; i <= 5; i++)
+    {
+        auto sPath = "/x:table/x:autoFilter/x:filterColumn[" + std::to_string(i) + "]";
+        assertXPath(pDocXml, sPath.c_str(), "hiddenButton", "1");
     }
 }
 

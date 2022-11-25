@@ -656,6 +656,11 @@ ApiFilterSettings FilterColumn::finalizeImport()
     return aSettings;
 }
 
+bool FilterColumn::isButtonHidden()
+{
+    return (mbShowButton == false) || (mbHiddenButton == true);
+}
+
 // SortCondition
 
 SortCondition::SortCondition( const WorkbookHelper& rHelper ) :
@@ -743,12 +748,24 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         '(A1 and B1) or (B2 and C1)'. */
     bool bHasOrConnection = false;
 
+    ScDocument& rDoc = getScDocument();
+    SCCOL nCol = maRange.aStart.Col();
+    SCROW nRow = maRange.aStart.Row();
+    SCTAB nTab = maRange.aStart.Tab();
+
     // process all filter column objects, exit when 'or' connection exists
     for( const auto& rxFilterColumn : maFilterColumns )
     {
         // the filter settings object creates a list of filter fields
         ApiFilterSettings aSettings = rxFilterColumn->finalizeImport();
         ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
+
+        if (rxFilterColumn->isButtonHidden())
+        {
+            auto nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG)->GetValue();
+            rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag & ~ScMF::Auto));
+        }
+        nCol++;
 
         /*  Check whether mode for regular expressions is compatible with
             the global mode in obNeedsRegExp. If either one is still in
@@ -838,7 +855,6 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         aParam.maKeyState[0].nField += nStartPos;
     }
 
-    ScDocument& rDoc = getScDocument();
     ScDBData* pDBData = rDoc.GetDBAtArea(
         nSheet,
         maRange.aStart.Col(), maRange.aStart.Row(),
