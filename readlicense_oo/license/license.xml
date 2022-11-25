@@ -3990,6 +3990,16 @@
         <p>The following software may be included in this product: Thai spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+        <h3>Hyphenation patterns</h3>
+        <p>The following software may be included in this product: Thai hyphenation patterns. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__LPPL">Jump to LPPL</a></p>
+        <p>Origin:</p>
+        <p>These Thai hyphenation patterns are based on word list from LibThai project,
+        manually hyphenated to be processed with patgen, plus additional processing,
+        by tex-hyphen project, and then converted for libhyphen using its
+        substrings.pl script.</p>
+        <p>Author: Theppitak Karoonboonyanan &lt;theppitak@gmail.com&gt;</p>
         <h2>Tibetan</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Classical Tibetan syllable spellchecker for
