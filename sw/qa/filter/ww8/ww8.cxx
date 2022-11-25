@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
 CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
 {
     // Given a document with a plain text content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
 CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
 {
     // Given a document with a combo box content control around a text portion:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
 {
     // Given a document with a hyperlink at char positions 0 -> 6 and a shape with text anchored at
     // char position 6:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
 {
     // Given a document with a dropdown content control, the only list item has no display text
     // (only a value):
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);

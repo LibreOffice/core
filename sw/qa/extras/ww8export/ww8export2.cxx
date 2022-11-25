@@ -1082,7 +1082,7 @@ DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
 CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
 {
     // Given a document with a (rich text) content control:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();

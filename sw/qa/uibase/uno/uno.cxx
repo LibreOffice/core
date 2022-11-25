@@ -39,7 +39,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testLockControllers)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     {
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
         xModel->lockControllers();

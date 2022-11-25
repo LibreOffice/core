@@ -1018,7 +1018,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo85179)
 CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
 {
     // Create a new document.
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     {
         // Set some direct formatting on the first paragraph, but leave paragraph adjust at its
         // default (left).

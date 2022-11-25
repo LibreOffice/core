@@ -109,7 +109,7 @@ DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
 {
     // Given a document with a clearing break:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
