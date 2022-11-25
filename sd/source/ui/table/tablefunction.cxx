@@ -66,7 +66,8 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const
     if( !(pModel && pObj) )
         return;
 
-    Reference< XNameAccess > xPool( dynamic_cast< XNameAccess* >( pModel->GetStyleSheetPool() ) );
+    Reference< XNameAccess > xPool(
+        static_cast< cppu::OWeakObject* >( pModel->GetStyleSheetPool() ), css::uno::UNO_QUERY );
     if( !xPool.is() )
         return;
 

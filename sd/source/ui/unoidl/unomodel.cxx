@@ -1454,7 +1454,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess > xStyles( dynamic_cast< container::XNameAccess* >( mpDoc->GetStyleSheetPool()) );
+    uno::Reference< container::XNameAccess > xStyles( static_cast< OWeakObject* >( mpDoc->GetStyleSheetPool() ), css::uno::UNO_QUERY );
     return xStyles;
 }
 
