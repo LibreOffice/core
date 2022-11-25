@@ -142,6 +142,9 @@ void MacroChooser::StoreMacroDescription()
 
 void MacroChooser::RestoreMacroDescription()
 {
+    // The following call is a workaround to ensure the last used macro is scrolled to in kf5
+    m_xDialog->resize_to_request();
+
     EntryDescriptor aDesc;
     if (Shell* pShell = GetShell())
     {
