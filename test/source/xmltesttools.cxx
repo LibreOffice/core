@@ -88,11 +88,7 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& r
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
-    if (rAttribute.isEmpty())
-    {
-        xmlXPathFreeObject(pXmlObj);
-        return OUString();
-    }
+    CPPUNIT_ASSERT(!rAttribute.isEmpty());
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
     OString sAttAbsent = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath
