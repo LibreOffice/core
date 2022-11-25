@@ -66,10 +66,6 @@ protected:
      */
     int           countXPathNodes(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath);
     /**
-     * Assert that rXPath exists, and returns exactly one node.
-     */
-    void          assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath);
-    /**
      * Assert that rXPath exists, returns exactly one node, and the rXPath's attribute's value
      * equals to the rExpected value.
      */
@@ -78,10 +74,10 @@ protected:
     void          assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
                           const std::vector<std::pair<OString, OUString>>& aPairVector);
     /**
-     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
-     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes (1 by default).
+     * Also useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
      */
-    void          assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfNodes);
+    void          assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfNodes = 1);
     /**
      * Assert that rXPath exists, and its content equals rContent.
      */
