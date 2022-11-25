@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sdext_pdfimport))
 
 $(eval $(call gb_CppunitTest_set_include,sdext_pdfimport,\
     -I$(SRCDIR)/sdext/source/pdfimport/inc \
+    -I$(SRCDIR)/sdext/source/pdfimport/test \
     $$(INCLUDE) \
 ))
 
@@ -38,7 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
 $(eval $(call gb_CppunitTest_use_library_objects,sdext_pdfimport,pdfimport))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
-    sdext/source/pdfimport/test/tests \
+    sdext/qa/unit/pdfimport \
 ))
 
 $(eval $(call gb_CppunitTest_use_executable,sdext_pdfimport,xpdfimport))

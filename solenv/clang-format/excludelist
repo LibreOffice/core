@@ -10097,6 +10097,7 @@ sd/source/ui/view/viewshe3.cxx
 sd/source/ui/view/viewshel.cxx
 sd/workben/custompanel/ctp_panel.cxx
 sd/workben/custompanel/ctp_panel.hxx
+sdext/qa/unit/pdfimport.cxx
 sdext/source/minimizer/configurationaccess.cxx
 sdext/source/minimizer/configurationaccess.hxx
 sdext/source/minimizer/fileopendialog.cxx
@@ -10147,7 +10148,6 @@ sdext/source/pdfimport/sax/saxattrlist.hxx
 sdext/source/pdfimport/test/outputwrap.hxx
 sdext/source/pdfimport/test/pdf2xml.cxx
 sdext/source/pdfimport/test/pdfunzip.cxx
-sdext/source/pdfimport/test/tests.cxx
 sdext/source/pdfimport/tree/drawtreevisiting.cxx
 sdext/source/pdfimport/tree/drawtreevisiting.hxx
 sdext/source/pdfimport/tree/genericelements.cxx

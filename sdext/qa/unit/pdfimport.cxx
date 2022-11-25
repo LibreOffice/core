@@ -19,12 +19,12 @@
 
 #include <config_features.h>
 
-#include "outputwrap.hxx"
+#include <outputwrap.hxx>
 #include <contentsink.hxx>
 #include <pdfihelper.hxx>
 #include <wrapper.hxx>
 #include <pdfparse.hxx>
-#include "../pdfiadaptor.hxx"
+#include <../pdfiadaptor.hxx>
 
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
@@ -565,7 +565,7 @@ namespace
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testTdf141709_chinesechar.pdf"),
+                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/qa/unit/data/testTdf141709_chinesechar.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr));
             xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
@@ -588,7 +588,7 @@ namespace
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
                 xAdaptor->odfConvert( m_directories.getURLFromSrc(
-                    u"/sdext/source/pdfimport/test/testdocs/tdf78427-testFontFeatures.pdf"),
+                    u"/sdext/qa/unit/data/tdf78427-testFontFeatures.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr ));
             // Un-comment the following debug line to see the content of generated XML content in
@@ -720,7 +720,7 @@ namespace
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
                 xAdaptor->odfConvert( m_directories.getURLFromSrc(
-                    u"/sdext/source/pdfimport/test/testdocs/tdf78427-MyraidPro-Semibold-Light.pdf"),
+                    u"/sdext/qa/unit/data/tdf78427-MyraidPro-Semibold-Light.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr ));
             //std::cout << aOutput << std::endl;
@@ -754,7 +754,7 @@ namespace
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
-                                   xAdaptor->odfConvert( m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testTdf143959.pdf"),
+                                   xAdaptor->odfConvert( m_directories.getURLFromSrc(u"/sdext/qa/unit/data/testTdf143959.pdf"),
                                                         new OutputWrapString(aOutput),
                                                         nullptr ));
 
@@ -789,7 +789,7 @@ namespace
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
-                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/tdf104597_textrun.pdf"),
+                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/qa/unit/data/tdf104597_textrun.pdf"),
                     new OutputWrapString(aOutput),
                     nullptr));
 
@@ -826,7 +826,7 @@ namespace
             // Test pdf text run in the Writer PDF import filter
             xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
             OString aOutput2;
-            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/tdf104597_textrun.pdf"),
+            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/qa/unit/data/tdf104597_textrun.pdf"),
                     new OutputWrapString(aOutput2),
                     nullptr);
             xmlDocUniquePtr pXmlDoc2(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput2.getStr())));
@@ -849,7 +849,7 @@ namespace
             xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
 
             OString aOutput;
-            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testSpace.pdf"),
+            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/qa/unit/data/testSpace.pdf"),
                     new OutputWrapString(aOutput),
                     nullptr);
             xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
