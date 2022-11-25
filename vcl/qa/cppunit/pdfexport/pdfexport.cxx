@@ -839,6 +839,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
             }
         }
     }
+
+    // tdf#67866 check that Catalog contains Lang
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto pLang = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+        pCatalogDictionary->LookupElement("Lang"));
+    CPPUNIT_ASSERT(pLang);
+    CPPUNIT_ASSERT_EQUAL(OString("en-US"), pLang->GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)

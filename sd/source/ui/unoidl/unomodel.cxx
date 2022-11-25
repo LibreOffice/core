@@ -1867,6 +1867,12 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         !(pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
         return;
 
+    if (pPDFExtOutDevData)
+    {
+        css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        pPDFExtOutDevData->SetDocumentLocale(docLocale);
+    }
+
     ::sd::ClientView aView( mpDocShell, pOut );
     ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
     vcl::Region                       aRegion( aVisArea );

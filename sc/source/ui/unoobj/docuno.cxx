@@ -2225,6 +2225,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
     {
+        if (pPDFData)
+        {
+            css::lang::Locale const docLocale(LanguageTag(ScGlobal::GetEditDefaultLanguage()).getLocale());
+            pPDFData->SetDocumentLocale(docLocale);
+        }
+
         // first page of a sheet: add outline item for the sheet name
 
         if ( pPDFData && pPDFData->GetIsExportBookmarks() )
