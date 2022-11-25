@@ -1035,7 +1035,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             additional boolean stating if the cells are already moved. */
         /*  tdf #152081 Do not change hidden objects. That would produce zero height
             or width and loss of caption.*/
-        if (pObj->IsVisible() && bUpdateNoteCaptionPos)
+        if (bUpdateNoteCaptionPos && pObj->IsVisible())
         {
             /*  When inside an undo action, there may be pending note captions
                 where cell note is already deleted (thus document cannot find

@@ -61,6 +61,7 @@ public:
     void testLoadVerticalFlip();
     void testTdf117948_CollapseBeforeShape();
     void testTdf137355_UndoHideRows();
+    void testTdf152081_UndoHideColsWithNotes();
     void testTdf115655_HideDetail();
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testLoadVerticalFlip);
     CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
     CPPUNIT_TEST(testTdf137355_UndoHideRows);
+    CPPUNIT_TEST(testTdf152081_UndoHideColsWithNotes);
     CPPUNIT_TEST(testTdf115655_HideDetail);
     CPPUNIT_TEST(testFitToCellSize);
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
@@ -943,6 +945,35 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     tools::Rectangle aSnapRectUndo(pObj->GetSnapRect());
     lcl_AssertRectEqualWithTolerance("Undo: Object geometry should not change", aSnapRectOrig,
                                      aSnapRectUndo, 1);
+}
+
+void ScShapeTest::testTdf152081_UndoHideColsWithNotes()
+{
+    createScDoc("tdf152081_UndoHideColsWithNotes.ods");
+
+    // Get document and shape
+    ScDocument* pDoc = getScDoc();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Load: Note object should be visible", pObj->IsVisible());
+
+    // Hide B column
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$B$2:$B$2")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    ScTabViewShell* pViewShell = getViewShell();
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
+
+    // Check object is invisible
+    CPPUNIT_ASSERT_MESSAGE("Hide: Note object should be invisible", !pObj->IsVisible());
+
+    // Undo
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_UNDO);
+
+    // Check object is visible
+    CPPUNIT_ASSERT_MESSAGE("Undo: Note object should exist", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Undo: Note object should be visible", pObj->IsVisible());
 }
 
 void ScShapeTest::testTdf115655_HideDetail()
