@@ -187,6 +187,31 @@ CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Bottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
+{
+    // Given a document with a fly anchored after a FORMTEXT in the end of the paragraph:
+    createSwDoc("tdf152200-field+textbox.docx");
+
+    // When exporting that back to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure that fldChar with type 'end' goes prior to the at-char anchored fly.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    const int nRunsBeforeFldCharEnd = countXPathNodes(pXmlDoc, "//w:fldChar[@w:fldCharType='end']/preceding::w:r");
+    CPPUNIT_ASSERT(nRunsBeforeFldCharEnd);
+    const int nRunsBeforeAlternateContent = countXPathNodes(pXmlDoc, "//mc:AlternateContent/preceding::w:r");
+    CPPUNIT_ASSERT(nRunsBeforeAlternateContent);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 6
+    // - Actual  : 5
+    CPPUNIT_ASSERT_GREATER(nRunsBeforeFldCharEnd, nRunsBeforeAlternateContent);
+    // Make sure we only have one paragraph in body, and only three field characters overal,
+    // located directly in runs of this paragraph
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:fldChar", 3);
+    assertXPath(pXmlDoc, "//w:fldChar", 3); // no field characters elsewhere
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

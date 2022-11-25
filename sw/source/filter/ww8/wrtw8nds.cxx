@@ -2640,6 +2640,14 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     bPostponeWritingText = false ;
                     AttrOutput().RunText( aSnippet, eChrSet );
                 }
+
+                if (ofs == 1 && nNextAttr == nEnd)
+                {
+                    // tdf#152200: There could be flys anchored after the last position; make sure
+                    // to provide a separate run after field character to write them
+                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
+                    AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+                }
             }
 
             if ( aAttrIter.IsDropCap( nNextAttr ) )
