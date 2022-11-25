@@ -1800,48 +1800,48 @@ static void lcl_SetWrong( SwTextFrame& rFrame, SwTextNode const& rNode,
 {
     if ( !rFrame.IsFollow() )
     {
-        SwTextNode* pTextNode = const_cast<SwTextNode*>(&rNode);
-        sw::GrammarContact* pGrammarContact = sw::getGrammarContactFor(*pTextNode);
+        SwTextNode& rTextNode = const_cast<SwTextNode&>(rNode);
+        sw::GrammarContact* pGrammarContact = sw::getGrammarContactFor(rTextNode);
         SwGrammarMarkUp* pWrongGrammar = pGrammarContact ?
-            pGrammarContact->getGrammarCheck( *pTextNode, false ) :
-            pTextNode->GetGrammarCheck();
-        bool bGrammarProxy = pWrongGrammar != pTextNode->GetGrammarCheck();
+            pGrammarContact->getGrammarCheck( rTextNode, false ) :
+            rTextNode.GetGrammarCheck();
+        bool bGrammarProxy = pWrongGrammar != rTextNode.GetGrammarCheck();
         if( bMove )
         {
-            if( pTextNode->GetWrong() )
-                pTextNode->GetWrong()->Move( nPos, nCnt );
+            if( rTextNode.GetWrong() )
+                rTextNode.GetWrong()->Move( nPos, nCnt );
             if( pWrongGrammar )
                 pWrongGrammar->MoveGrammar( nPos, nCnt );
-            if( bGrammarProxy && pTextNode->GetGrammarCheck() )
-                pTextNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
-            if( pTextNode->GetSmartTags() )
-                pTextNode->GetSmartTags()->Move( nPos, nCnt );
+            if( bGrammarProxy && rTextNode.GetGrammarCheck() )
+                rTextNode.GetGrammarCheck()->MoveGrammar( nPos, nCnt );
+            if( rTextNode.GetSmartTags() )
+                rTextNode.GetSmartTags()->Move( nPos, nCnt );
         }
         else
         {
-            if( pTextNode->GetWrong() )
-                pTextNode->GetWrong()->Invalidate( nPos, nCnt );
+            if( rTextNode.GetWrong() )
+                rTextNode.GetWrong()->Invalidate( nPos, nCnt );
             if( pWrongGrammar )
                 pWrongGrammar->Invalidate( nPos, nCnt );
-            if( pTextNode->GetSmartTags() )
-                pTextNode->GetSmartTags()->Invalidate( nPos, nCnt );
+            if( rTextNode.GetSmartTags() )
+                rTextNode.GetSmartTags()->Invalidate( nPos, nCnt );
         }
         const sal_Int32 nEnd = nPos + (nCnt > 0 ? nCnt : 1 );
-        if ( !pTextNode->GetWrong() && !pTextNode->IsWrongDirty() )
+        if ( !rTextNode.GetWrong() && !rTextNode.IsWrongDirty() )
         {
-            pTextNode->SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
-            pTextNode->GetWrong()->SetInvalid( nPos, nEnd );
+            rTextNode.SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
+            rTextNode.GetWrong()->SetInvalid( nPos, nEnd );
         }
-        if ( !pTextNode->GetSmartTags() && !pTextNode->IsSmartTagDirty() )
+        if ( !rTextNode.GetSmartTags() && !rTextNode.IsSmartTagDirty() )
         {
-            pTextNode->SetSmartTags( std::make_unique<SwWrongList>( WRONGLIST_SMARTTAG ) );
-            pTextNode->GetSmartTags()->SetInvalid( nPos, nEnd );
+            rTextNode.SetSmartTags( std::make_unique<SwWrongList>( WRONGLIST_SMARTTAG ) );
+            rTextNode.GetSmartTags()->SetInvalid( nPos, nEnd );
         }
-        pTextNode->SetWrongDirty(sw::WrongState::TODO);
-        pTextNode->SetGrammarCheckDirty( true );
-        pTextNode->SetWordCountDirty( true );
-        pTextNode->SetAutoCompleteWordDirty( true );
-        pTextNode->SetSmartTagDirty( true );
+        rTextNode.SetWrongDirty(sw::WrongState::TODO);
+        rTextNode.SetGrammarCheckDirty( true );
+        rTextNode.SetWordCountDirty( true );
+        rTextNode.SetAutoCompleteWordDirty( true );
+        rTextNode.SetSmartTagDirty( true );
     }
 
     SwRootFrame *pRootFrame = rFrame.getRootFrame();
