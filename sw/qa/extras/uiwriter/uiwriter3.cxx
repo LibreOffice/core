@@ -401,35 +401,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     for (auto nFly = 1; nFly < 8; ++nFly)
     {
         const auto nFlyLeft = getXPath(pLayoutXML1,
-                                       OString::Concat("/root/page/body/txt[2]/anchored/fly[")
-                                           + OString::Concat(OString::number(nFly))
-                                           + OString::Concat("]/infos/bounds"),
+                                       "/root/page/body/txt[2]/anchored/fly["
+                                           + OString::number(nFly) + "]/infos/bounds",
                                        "left")
                                   .toInt64();
         const auto nFlyRight = getXPath(pLayoutXML1,
-                                        OString::Concat("/root/page/body/txt[2]/anchored/fly[")
-                                            + OString::Concat(OString::number(nFly))
-                                            + OString::Concat("]/infos/bounds"),
+                                        "/root/page/body/txt[2]/anchored/fly["
+                                            + OString::number(nFly) + "]/infos/bounds",
                                         "width")
                                    .toInt64();
         const auto nFlyTop = getXPath(pLayoutXML1,
-                                      OString::Concat("/root/page/body/txt[2]/anchored/fly[")
-                                          + OString::Concat(OString::number(nFly))
-                                          + OString::Concat("]/infos/bounds"),
+                                      "/root/page/body/txt[2]/anchored/fly[" + OString::number(nFly)
+                                          + "]/infos/bounds",
                                       "top")
                                  .toInt64();
         const auto nFlyBottom = getXPath(pLayoutXML1,
-                                         OString::Concat("/root/page/body/txt[2]/anchored/fly[")
-                                             + OString::Concat(OString::number(nFly))
-                                             + OString::Concat("]/infos/bounds"),
+                                         "/root/page/body/txt[2]/anchored/fly["
+                                             + OString::number(nFly) + "]/infos/bounds",
                                          "height")
                                     .toInt64();
 
         const auto sDrawRect = getXPath(
             pLayoutXML1,
-            OString::Concat("/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/SdrObjGroup/"
-                            "SdrObjList/SdrObject[")
-                + OString::Concat(OString::number(nFly)) + OString::Concat("]"),
+            "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject["
+                + OString::number(nFly) + "]",
             "aOutRect");
 
         const auto nComaPos1 = sDrawRect.indexOf(',', 0);
@@ -465,35 +460,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     for (auto nFly = 1; nFly < 8; ++nFly)
     {
         const auto nFlyLeft = getXPath(pLayoutXML2,
-                                       OString::Concat("/root/page/body/txt[6]/anchored/fly[")
-                                           + OString::Concat(OString::number(nFly))
-                                           + OString::Concat("]/infos/bounds"),
+                                       "/root/page/body/txt[6]/anchored/fly["
+                                           + OString::number(nFly) + "]/infos/bounds",
                                        "left")
                                   .toInt64();
         const auto nFlyRight = getXPath(pLayoutXML2,
-                                        OString::Concat("/root/page/body/txt[6]/anchored/fly[")
-                                            + OString::Concat(OString::number(nFly))
-                                            + OString::Concat("]/infos/bounds"),
+                                        "/root/page/body/txt[6]/anchored/fly["
+                                            + OString::number(nFly) + "]/infos/bounds",
                                         "width")
                                    .toInt64();
         const auto nFlyTop = getXPath(pLayoutXML2,
-                                      OString::Concat("/root/page/body/txt[6]/anchored/fly[")
-                                          + OString::Concat(OString::number(nFly))
-                                          + OString::Concat("]/infos/bounds"),
+                                      "/root/page/body/txt[6]/anchored/fly[" + OString::number(nFly)
+                                          + "]/infos/bounds",
                                       "top")
                                  .toInt64();
         const auto nFlyBottom = getXPath(pLayoutXML2,
-                                         OString::Concat("/root/page/body/txt[6]/anchored/fly[")
-                                             + OString::Concat(OString::number(nFly))
-                                             + OString::Concat("]/infos/bounds"),
+                                         "/root/page/body/txt[6]/anchored/fly["
+                                             + OString::number(nFly) + "]/infos/bounds",
                                          "height")
                                     .toInt64();
 
         const auto sDrawRect = getXPath(
             pLayoutXML2,
-            OString::Concat("/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/SdrObjGroup/"
-                            "SdrObjList/SdrObject[")
-                + OString::Concat(OString::number(nFly)) + OString::Concat("]"),
+            "/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject["
+                + OString::number(nFly) + "]",
             "aOutRect");
 
         const auto nComaPos1 = sDrawRect.indexOf(',', 0);

@@ -72,8 +72,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
         {
             const OString xPath = "/metafile/push[1]/push[1]/push[" + OString::number(i)
                                   + "]/polyline/point[" + OString::number(j) + "]";
-            const sal_Int32 nX = getXPath(pXmlDoc, xPath.getStr(), "x").toInt32();
-            const sal_Int32 nY = getXPath(pXmlDoc, xPath.getStr(), "y").toInt32();
+            const sal_Int32 nX = getXPath(pXmlDoc, xPath, "x").toInt32();
+            const sal_Int32 nY = getXPath(pXmlDoc, xPath, "y").toInt32();
 
             // Without the fix in place, this test would have failed with
             // - Expected greater or equal than: 5000
