@@ -19,7 +19,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--with-pic \
-			--without-zlib \
+			--with-zlib \
 			--without-brotli \
 			--without-bzip2 \
 			--without-harfbuzz \
