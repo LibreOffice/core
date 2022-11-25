@@ -1162,9 +1162,8 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_aStylesInfo.init(aModuleName, xModel);
     m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
-    // The hide/show commands below are a workaround to make scroll_to_row work as expected in kf5/x11
-    m_xDialog->hide();
-    m_xDialog->show();
+    // The following call is a workaround to make scroll_to_row work as expected in kf5/x11
+    m_xDialog->resize_to_request();
 
     LoadLastUsedMacro();
     UpdateUI();
