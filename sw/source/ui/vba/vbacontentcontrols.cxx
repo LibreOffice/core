@@ -217,8 +217,6 @@ SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(
               new ContentControlCollectionHelper(xParent, xContext, xTextDocument, rTag, rTitle)))
-    , m_sTag(rTag)
-    , m_sTitle(rTitle)
 {
 }
 
