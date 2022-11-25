@@ -1260,8 +1260,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         return;
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    [NSAppearance setCurrentAppearance: mpNSView.effectiveAppearance];
 
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     bool bUseDarkMode(false);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

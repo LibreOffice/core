@@ -79,6 +79,9 @@
     {
         [NSWindow setAllowsAutomaticWindowTabbing:NO];
     }
+
+    // listen to dark mode change
+    [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options: 0 context: nil];
 }
 
 -(void)sendEvent:(NSEvent*)pEvent
@@ -325,6 +328,15 @@
     }
 
     return aReply;
+}
+
+-(void)observeValueForKeyPath: (NSString*) keyPath ofObject:(id)object
+                               change: (NSDictionary<NSKeyValueChangeKey, id>*)change
+                               context: (void*)context
+{
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    if ([keyPath isEqualToString:@"effectiveAppearance"])
+        [self systemColorsChanged: nil];
 }
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
