@@ -197,6 +197,7 @@ public:
     /** Returns converted UNO API filter settings representing all filter
         settings of this column. */
     ApiFilterSettings   finalizeImport();
+    bool                isButtonHidden();
 
 private:
     std::shared_ptr< FilterSettingsBase >

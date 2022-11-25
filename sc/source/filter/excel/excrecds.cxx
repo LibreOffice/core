@@ -48,6 +48,8 @@
 
 #include <xcl97rec.hxx>
 #include <tabprotection.hxx>
+#include <scitems.hxx>
+#include <attrib.hxx>
 
 using namespace ::oox;
 
@@ -604,11 +606,12 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
     }
 }
 
-XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
+XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC, bool bIsEmpty ) :
     XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
     XclExpRoot( rRoot ),
-    meType(FilterCondition),
+    meType(bIsEmpty ? Empty : FilterCondition),
     nCol( nC ),
+    bIsButtonHidden( false ),
     nFlags( 0 ),
     bHasBlankValue( false )
 {
@@ -819,10 +822,13 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
+    std::optional<OString> sHiddenButtonValue;
+    if (bIsButtonHidden)
+        sHiddenButtonValue = "1";
+
     rWorksheet->startElement( XML_filterColumn,
-            XML_colId, OString::number(nCol)
-            // OOXTODO: XML_hiddenButton,   AutoFilter12 fHideArrow?
-            // OOXTODO: XML_showButton
+            XML_colId, OString::number(nCol),
+            XML_hiddenButton, sHiddenButtonValue
     );
 
     switch (meType)
@@ -912,6 +918,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             rWorksheet->endElement(XML_filters);
         }
         break;
+        // Used for constructing an empty filterColumn element for exporting the XML_hiddenButton attribute
+        case Empty: break;
     }
     rWorksheet->endElement( XML_filterColumn );
 }
@@ -972,6 +980,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
         bool    bContLoop   = true;
         bool        bHasOr      = false;
         SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
+        ScDocument& rDoc = rRoot.GetDoc();
+        SCROW nRow = aRange.aStart.Row();
 
         // create AUTOFILTER records for filtered columns
         for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
@@ -981,7 +991,11 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
             bContLoop = rEntry.bDoQuery;
             if( bContLoop )
             {
-                XclExpAutofilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
+                SCCOL nCol = static_cast<SCCOL>( rEntry.nField ) - aRange.aStart.Col();
+                auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+                bool bIsButtonHidden = !( nFlag & ScMF::Auto );
+                XclExpAutofilter* pFilter = GetByCol( nCol );
+                pFilter->SetButtonHidden( bIsButtonHidden );
 
                 if( nEntry > 0 )
                     bHasOr |= (rEntry.eConnect == SC_OR);
@@ -992,6 +1006,34 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                                 (nFirstField != rEntry.nField);
                 if( !bConflict )
                     bConflict = pFilter->AddEntry( rEntry );
+            }
+        }
+
+        sal_uInt16 nColId = 0;
+        for ( auto nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); nCol++, nColId++ )
+        {
+            auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+            bool bIsButtonHidden = !( nFlag & ScMF::Auto );
+            if ( bIsButtonHidden )
+            {
+                // Create filter column with hiddenButton=1 attribute if it doesn't exist
+                XclExpAutofilterRef xFilter;
+                bool bFilterFound = false;
+                for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
+                {
+                    xFilter = maFilterList.GetRecord( nPos );
+                    if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
+                    {
+                        bFilterFound = true;
+                        break;
+                    }
+                }
+                if ( !bFilterFound )
+                {
+                    xFilter = new XclExpAutofilter( GetRoot(), nColId, /*bIsEmpty*/true );
+                    xFilter->SetButtonHidden( true );
+                    maFilterList.AppendRecord( xFilter );
+                }
             }
         }
 

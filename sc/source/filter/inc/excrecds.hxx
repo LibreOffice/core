@@ -361,6 +361,7 @@ class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 private:
     enum FilterType
     {
+        Empty,
         FilterCondition,
         MultiValue,
         BlankValue,
@@ -368,6 +369,7 @@ private:
     };
     FilterType              meType;
     sal_uInt16              nCol;
+    bool                    bIsButtonHidden;
     sal_uInt16              nFlags;
     bool                    bHasBlankValue;
     ExcFilterCondition      aCond[ 2 ];
@@ -380,7 +382,7 @@ private:
     virtual void            WriteBody( XclExpStream& rStrm ) override;
 
 public:
-                            XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
+                            XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC, bool bIsEmpty = false );
 
     sal_uInt16       GetCol() const          { return nCol; }
     bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
@@ -388,6 +390,7 @@ public:
     bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );
     void                    AddMultiValueEntry( const ScQueryEntry& rEntry );
+    void                    SetButtonHidden(bool bValue) { bIsButtonHidden = bValue; }
     void AddColorEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
