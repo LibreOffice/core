@@ -259,6 +259,7 @@ bool LogicalFontInstance::NeedsArtificialItalic() const
     return m_aFontSelData.GetItalic() != ITALIC_NONE && m_pFontFace->GetItalic() == ITALIC_NONE;
 }
 
+#if HB_VERSION_ATLEAST(4, 0, 0)
 namespace
 {
 void move_to_func(hb_draw_funcs_t*, void* /*pDrawData*/, hb_draw_state_t*, float to_x, float to_y,
@@ -293,6 +294,7 @@ void close_path_func(hb_draw_funcs_t*, void* pDrawData, hb_draw_state_t*, void* 
     pPoly->clear();
 }
 }
+#endif
 
 bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
                                                        basegfx::B2DPolyPolygon& rPolyPoly) const
