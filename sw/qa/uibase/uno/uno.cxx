@@ -9,11 +9,16 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/text/XTextViewTextRangeSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <vcl/scheduler.hxx>
+#include <tools/json_writer.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <docsh.hxx>
 #include <edtwin.hxx>
@@ -22,6 +27,7 @@
 #include <wrtsh.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uno/data/";
+#include <unotxdoc.hxx>
 
 /// Covers sw/source/uibase/uno/ fixes.
 class SwUibaseUnoTest : public SwModelTestBase
@@ -88,6 +94,50 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPosition)
     // i.e. the returned text range pointed before the first character, not between the first and
     // the second character.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
+{
+    // Given a document with 3 fieldmarks: 2 zotero items and a zotero
+    // bibliography:
+    createSwDoc();
+    for (int i = 0; i < 2; ++i)
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldCommand",
+                                          uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
+            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+        };
+        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    }
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldCommand",
+                                          uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
+            comphelper::makePropertyValue("FieldResult",
+                                          uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+        };
+        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    }
+
+    // When getting the zotero items:
+    tools::JsonWriter aJsonWriter;
+    OString aCommand(".uno:TextFormFields?type=vnd.oasis.opendocument.field.UNHANDLED&"
+                     "commandPrefix=ADDIN%20ZOTERO_ITEM");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the 2 items and ignore the bibliography:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the needed PixelToLogic() call in place, this test would have failed with:
+    // - No such node (fields)
+    // i.e. the returned JSON was just empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("fields").count(""));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
