@@ -91,7 +91,7 @@ public:
 }
 
 /**
- * DropDownLists and ComboBoxes contain a list of name/value pairs to chose from.
+ * DropDownLists and ComboBoxes contain a list of name/value pairs to choose from.
  * Use of DropDownListEntries from any other control is invalid.
  */
 SwVbaContentControlListEntries::SwVbaContentControlListEntries(
