@@ -196,18 +196,19 @@ bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont
         double nBSize = nSize * 2.;
         double n2Size = nBSize / 3.;
 
-        mnUnderlineSize = round(nSize * fScale);
-        mnUnderlineOffset = round(nOffset * fScale);
+        mnUnderlineSize = std::ceil(nSize * fScale);
+        mnUnderlineOffset = std::ceil(nOffset * fScale);
 
-        mnBUnderlineSize = round(nBSize * fScale);
-        mnBUnderlineOffset = round((nOffset - nSize2) * fScale);
 
-        mnDUnderlineSize = round(n2Size * fScale);
+        mnBUnderlineSize = std::ceil(nBSize * fScale);
+        mnBUnderlineOffset = std::ceil((nOffset - nSize2) * fScale);
+
+        mnDUnderlineSize = std::ceil(n2Size * fScale);
         mnDUnderlineOffset1 = mnBUnderlineOffset;
-        mnDUnderlineOffset2 = round((nOffset - nSize2 - n2Size + nBSize) * fScale);
+        mnDUnderlineOffset2 = mnBUnderlineOffset + mnDUnderlineSize * 2;
 
         mnWUnderlineSize = mnBUnderlineSize;
-        mnWUnderlineOffset = round((nOffset + nSize) * fScale);
+        mnWUnderlineOffset = std::ceil((nOffset + nSize) * fScale);
 
         nOffset = -nStrikeoutOffset;
         nSize = nStrikeoutSize;
@@ -215,15 +216,15 @@ bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont
         nBSize = nSize * 2.;
         n2Size = nBSize / 3.;
 
-        mnStrikeoutSize = round(nSize * fScale);
-        mnStrikeoutOffset = round(nOffset * fScale);
+        mnStrikeoutSize = std::ceil(nSize * fScale);
+        mnStrikeoutOffset = std::ceil(nOffset * fScale);
 
-        mnBStrikeoutSize = round(nBSize * fScale);
-        mnBStrikeoutOffset = round((nOffset - nSize2) * fScale);
+        mnBStrikeoutSize = std::ceil(nBSize * fScale);
+        mnBStrikeoutOffset = std::round((nOffset - nSize2) * fScale);
 
-        mnDStrikeoutSize = round(n2Size * fScale);
+        mnDStrikeoutSize = std::ceil(n2Size * fScale);
         mnDStrikeoutOffset1 = mnBStrikeoutOffset;
-        mnDStrikeoutOffset2 = round((nOffset - nSize2 - n2Size + nBSize) * fScale);
+        mnDStrikeoutOffset2 = mnBStrikeoutOffset + mnDStrikeoutSize * 2;
 
         return true;
     }
