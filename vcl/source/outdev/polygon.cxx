@@ -17,19 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <memory>
 #include <tools/poly.hxx>
-#include <vcl/gdimtf.hxx>
+
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
+
+#include <cassert>
+#include <memory>
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
 

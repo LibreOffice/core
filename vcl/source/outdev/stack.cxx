@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/rendercontext/State.hxx>
 #include <vcl/virdev.hxx>

@@ -19,12 +19,10 @@
 
 #include <sal/config.h>
 #include <osl/diagnose.h>
-
 #include <tools/debug.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/outdev.hxx>
 
 #include <salgdi.hxx>
 

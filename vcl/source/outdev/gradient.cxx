@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <cassert>
-
 #include <tools/poly.hxx>
-#include <vcl/gdimtf.hxx>
+
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
 #include <salgdi.hxx>
+
+#include <cassert>
+#include <memory>
 
 #define GRADIENT_DEFAULT_STEPCOUNT  0
 

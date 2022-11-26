@@ -17,17 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
-
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
+
+#include <cassert>
 
 void OutputDevice::DrawBorder(tools::Rectangle aBorderRect)
 {

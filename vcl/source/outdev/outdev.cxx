@@ -18,19 +18,18 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
+#include <sal/log.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <vcl/gdimtf.hxx>
+
 #include <vcl/graph.hxx>
+#include <vcl/lazydelete.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/lazydelete.hxx>
-#include <comphelper/processfactory.hxx>
+#include <vcl/virdev.hxx>
 
 #include <ImplOutDevData.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>

@@ -17,26 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
-#include <vcl/gdimtf.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/WaveLine.hxx>
+#include <tools/helpers.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
+
+#include <vcl/lazydelete.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/lazydelete.hxx>
-
-#include <tools/helpers.hxx>
 
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 #include <impglyphitem.hxx>
 
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/WaveLine.hxx>
-#include <o3tl/hash_combine.hxx>
-#include <o3tl/lru_map.hxx>
+#include <cassert>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X

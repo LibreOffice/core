@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
-#include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <drawmode.hxx>
 #include <salgdi.hxx>
+
+#include <cassert>
 
 Color OutputDevice::GetPixel(const Point& rPoint) const
 {

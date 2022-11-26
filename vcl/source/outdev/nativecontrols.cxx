@@ -17,18 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
+#include <sal/log.hxx>
 
-#include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <sal/log.hxx>
-#include <toolbarvalue.hxx>
-
-#include <vcl/salnativewidgets.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 
 #include <salgdi.hxx>
+#include <toolbarvalue.hxx>
+
+#include <cassert>
 
 ImplControlValue::~ImplControlValue()
 {
