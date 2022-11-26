@@ -138,6 +138,8 @@ class SwContentArr
 
 namespace
 {
+    std::map<OUString, std::map<void*, bool>> lcl_DocOutLineExpandStateMap;
+
     bool lcl_IsContent(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView)
     {
         return weld::fromId<const SwTypeNumber*>(rTreeView.get_id(rEntry))->GetTypeId() == CTYPE_CNT;
@@ -1108,12 +1110,26 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
         m_aContextStrings[i] = SwResId(STR_CONTEXT_ARY[i]);
     }
     m_nActiveBlock = m_pConfig->GetActiveBlock();
+
+    // Restore outline headings expand state (same session persistence only)
+    if (SwView* pView = GetActiveView(); pView && pView->GetDocShell())
+    {
+        OUString sDocTitle = pView->GetDocShell()->GetTitle();
+        if (lcl_DocOutLineExpandStateMap.find(sDocTitle) != lcl_DocOutLineExpandStateMap.end())
+            mOutLineNodeMap = lcl_DocOutLineExpandStateMap[sDocTitle];
+    }
+
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
     m_aUpdTimer.SetTimeout(1000);
 }
 
 SwContentTree::~SwContentTree()
 {
+    if (SwView* pView = GetActiveView(); pView && pView->GetDocShell())
+    {
+        OUString sDocTitle = pView->GetDocShell()->GetTitle();
+        lcl_DocOutLineExpandStateMap[sDocTitle] = mOutLineNodeMap;
+    }
     clear(); // If applicable erase content types previously.
     m_aUpdTimer.Stop();
     SetActiveShell(nullptr);
