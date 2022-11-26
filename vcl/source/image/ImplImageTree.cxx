@@ -75,8 +75,9 @@ bool ImageRequestParameters::convertToDarkTheme()
 sal_Int32 ImageRequestParameters::scalePercentage()
 {
     sal_Int32 aScalePercentage = 100;
-    if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
-        aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor) && pDevice != nullptr)
+        aScalePercentage = pDevice->GetDPIScalePercentage();
     else if (mnScalePercentage > 0)
         aScalePercentage = mnScalePercentage;
     return aScalePercentage;

@@ -1165,7 +1165,15 @@ vcl::Window* Application::GetFocusWindow()
 
 OutputDevice* Application::GetDefaultDevice()
 {
-    return ImplGetDefaultWindow()->GetOutDev();
+    vcl::Window* pWindow = ImplGetDefaultWindow();
+    if (pWindow != nullptr)
+    {
+        return pWindow->GetOutDev();
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 basegfx::SystemDependentDataManager& Application::GetSystemDependentDataManager()
