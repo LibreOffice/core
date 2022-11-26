@@ -94,7 +94,7 @@ void SwVbaContentControlListEntry::Delete()
 void SwVbaContentControlListEntry::MoveDown()
 {
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    // if already at last positin, can't move down
+    // if already at last position, can't move down
     if (m_nZIndex >= pCC->GetListItems().size() - 1)
         return;
 
