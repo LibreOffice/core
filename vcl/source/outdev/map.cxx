@@ -37,16 +37,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/UnitConversion.hxx>
 
-/*
-Reduces accuracy until it is a fraction (should become
-ctor fraction once); we could also do this with BigInts
-*/
-
-static Fraction ImplMakeFraction( tools::Long nN1, tools::Long nN2, tools::Long nD1, tools::Long nD2 )
-{
-    return Fraction::MakeFraction(nN1, nN2, nD1, nD2);
-}
-
 static auto setMapRes(ImplMapRes& rMapRes, const o3tl::Length eUnit)
 {
     const auto [nNum, nDen] = o3tl::getConversionMulDiv(eUnit, o3tl::Length::in);
@@ -178,11 +168,11 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
-    Fraction aTempX = ImplMakeFraction( rMapRes.mnMapScNumX,
+    Fraction aTempX = Fraction::MakeFraction( rMapRes.mnMapScNumX,
                                         aScaleX.GetNumerator(),
                                         rMapRes.mnMapScDenomX,
                                         aScaleX.GetDenominator() );
-    Fraction aTempY = ImplMakeFraction( rMapRes.mnMapScNumY,
+    Fraction aTempY = Fraction::MakeFraction( rMapRes.mnMapScNumY,
                                         aScaleY.GetNumerator(),
                                         rMapRes.mnMapScDenomY,
                                         aScaleY.GetDenominator() );
@@ -699,24 +689,22 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     }
 
     // set new MapMode
-    if ( bRelMap )
+    if (bRelMap)
     {
-        Point aOrigin( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
-        // aScale? = maMapMode.GetScale?() * rNewMapMode.GetScale?()
-        Fraction aScaleX = ImplMakeFraction( maMapMode.GetScaleX().GetNumerator(),
-                                             rNewMapMode.GetScaleX().GetNumerator(),
-                                             maMapMode.GetScaleX().GetDenominator(),
-                                             rNewMapMode.GetScaleX().GetDenominator() );
-        Fraction aScaleY = ImplMakeFraction( maMapMode.GetScaleY().GetNumerator(),
-                                             rNewMapMode.GetScaleY().GetNumerator(),
-                                             maMapMode.GetScaleY().GetDenominator(),
-                                             rNewMapMode.GetScaleY().GetDenominator() );
-        maMapMode.SetOrigin( aOrigin );
-        maMapMode.SetScaleX( aScaleX );
-        maMapMode.SetScaleY( aScaleY );
+        maMapMode.SetScaleX(Fraction::MakeFraction(
+            maMapMode.GetScaleX().GetNumerator(), rNewMapMode.GetScaleX().GetNumerator(),
+            maMapMode.GetScaleX().GetDenominator(), rNewMapMode.GetScaleX().GetDenominator()));
+
+        maMapMode.SetScaleY(Fraction::MakeFraction(
+            maMapMode.GetScaleY().GetNumerator(), rNewMapMode.GetScaleY().GetNumerator(),
+            maMapMode.GetScaleY().GetDenominator(), rNewMapMode.GetScaleY().GetDenominator()));
+
+        maMapMode.SetOrigin(Point(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY));
     }
     else
+    {
         maMapMode = rNewMapMode;
+    }
 
     // create new objects (clip region are not re-scaled)
     mbNewFont   = true;
@@ -753,11 +741,11 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     MapUnit eNew = rNewMapMode.GetMapUnit();
 
     // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    Fraction aXF = ImplMakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
+    Fraction aXF = Fraction::MakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
                                      maMapMode.GetScaleX().GetDenominator(),
                                      rNewMapMode.GetScaleX().GetDenominator(),
                                      maMapMode.GetScaleX().GetNumerator() );
-    Fraction aYF = ImplMakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
+    Fraction aYF = Fraction::MakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
                                      maMapMode.GetScaleY().GetDenominator(),
                                      rNewMapMode.GetScaleY().GetDenominator(),
                                      maMapMode.GetScaleY().GetNumerator() );
@@ -781,9 +769,9 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
             Fraction aF(div, mul);
 
             // a?F =  a?F * aF
-            aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
+            aXF = Fraction::MakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
                                     aXF.GetDenominator(), aF.GetDenominator() );
-            aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
+            aYF = Fraction::MakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
                                     aYF.GetDenominator(), aF.GetDenominator() );
             if ( eOld == MapUnit::MapPixel )
             {
