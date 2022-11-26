@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     // - Expected greater than: 6
     // - Actual  : 5
     CPPUNIT_ASSERT_GREATER(nRunsBeforeFldCharEnd, nRunsBeforeAlternateContent);
-    // Make sure we only have one paragraph in body, and only three field characters overal,
+    // Make sure we only have one paragraph in body, and only three field characters overall,
     // located directly in runs of this paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:fldChar", 3);
