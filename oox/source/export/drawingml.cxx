@@ -1928,12 +1928,15 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
         Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), UNO_SET_THROW);
         // in this case, the size of the first slide is enough, because all slides are the same size
         Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(0), UNO_QUERY);
-        css::uno::Reference<css::beans::XPropertySet> mXPagePropSet(xDrawPage, UNO_QUERY);
-        double nPageWidth, nPageHeight;
-        mXPagePropSet->getPropertyValue("Width") >>= nPageWidth;
-        mXPagePropSet->getPropertyValue("Height") >>= nPageHeight;
-        nSizeX = nPageWidth / aOriginalSize.Width() * std::abs(nSizeX);
-        nSizeY = nPageHeight / aOriginalSize.Height() * std::abs(nSizeY);
+        css::uno::Reference<css::beans::XPropertySet> xPagePropSet(xDrawPage, UNO_QUERY);
+        if (xPagePropSet)
+        {
+            double nPageWidth, nPageHeight;
+            xPagePropSet->getPropertyValue("Width") >>= nPageWidth;
+            xPagePropSet->getPropertyValue("Height") >>= nPageHeight;
+            nSizeX = nPageWidth / aOriginalSize.Width() * std::abs(nSizeX);
+            nSizeY = nPageHeight / aOriginalSize.Height() * std::abs(nSizeY);
+        }
     }
 
     OUString sRectanglePoint;
