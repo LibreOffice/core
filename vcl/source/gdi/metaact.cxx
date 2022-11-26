@@ -76,6 +76,8 @@ void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScaleY )
 
 } //anonymous namespace
 
+static bool AllowRect(const tools::Rectangle& rRect);
+
 MetaAction::MetaAction() :
     mnType( MetaActionType::NONE )
 {
@@ -725,8 +727,25 @@ MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
     mnStyle     ( nStyle )
 {}
 
+static bool AllowRect(const tools::Rectangle& rRect)
+{
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+    {
+        if (rRect.Top() > 0x20000000 || rRect.Top() < -0x20000000)
+        {
+            SAL_WARN("vcl", "skipping huge rect top: " << rRect.Top());
+            return false;
+        }
+    }
+    return true;
+}
+
 void MetaTextRectAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(maRect))
+        return;
+
     pOut->DrawText( maRect, maStr, mnStyle );
 }
 
@@ -839,7 +858,8 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
 
 static bool AllowScale(const Size& rSource, const Size& rDest)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
     {
         constexpr int nMaxScaleWhenFuzzing = 512;
 
