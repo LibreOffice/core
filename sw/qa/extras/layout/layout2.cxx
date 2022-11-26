@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 
 #include <comphelper/scopeguard.hxx>
@@ -2483,6 +2484,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150642)
     // There used to be negative values that made the cell frame invisible.
     assertXPath(pDump, "//bounds[@left<0]", 0);
     assertXPath(pDump, "//bounds[@right<0]", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152085)
+{
+    createSwDoc("tdf152085-section-tblr.odt");
+    auto pDump = parseLayoutDump();
+    sal_Int32 nSectionHeight
+        = getXPath(pDump, "//section/infos/bounds", "bottom").toInt32(); // was 8391
+    sal_Int32 nColumnHeight
+        = getXPath(pDump, "(//column/infos/bounds)[2]", "bottom").toInt32(); // was 16216
+    CPPUNIT_ASSERT_MESSAGE("The column in a TBRL page should be shorter than the section.",
+                           nColumnHeight <= nSectionHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152031)
+{
+    createSwDoc("tdf152031-stair.odt");
+
+    // reproduce the bug by shrinking the table width.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Shrink table width from 5" to 4"
+    sal_Int32 nWidth = getProperty<sal_Int32>(xTable, "Width") * 4 / 5;
+
+    uno::Reference<beans::XPropertySet> xSet(xTable, uno::UNO_QUERY);
+    xSet->setPropertyValue("Width", uno::Any(nWidth));
+
+    auto pDump = parseLayoutDump();
+    // There was a stair effect after change the table size.
+    sal_Int32 nLeft_Row1 = getXPath(pDump, "(//row/infos/bounds)[1]", "left").toInt32();
+    sal_Int32 nLeft_Row2 = getXPath(pDump, "(//row/infos/bounds)[2]", "left").toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("left values of SwRowFrames should be consistent.", nLeft_Row1,
+                                 nLeft_Row2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
