@@ -295,10 +295,8 @@ IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, voi
         if ( pWindow )
         {
             SystemWindow *pSysWin = pWindow->GetSystemWindow();
-            if ( pSysWin )
-            {
-                AddMenuBarIcon( pSysWin, false );
-            }
+            if (pSysWin)
+                AddMenuBarIcon(*pSysWin, false);
         }
     }
     else if ( VclEventId::WindowMenubarRemoved == nEventID )
@@ -343,9 +341,7 @@ IMPL_LINK(MenuBarUpdateIconManager, ApplicationEventHdl, VclSimpleEvent&, rEvent
                 SystemWindow *pSysWin = pWindow->GetSystemWindow();
                 MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
                 if (pMBar)
-                {
-                    AddMenuBarIcon( pSysWin, true );
-                }
+                    AddMenuBarIcon(*pSysWin, true);
             }
             break;
         }
@@ -378,7 +374,7 @@ IMPL_LINK_NOARG(MenuBarUpdateIconManager, UserEventHdl, void*, void)
     }
 
     if ( pActiveSysWin )
-        AddMenuBarIcon( pActiveSysWin, true );
+        AddMenuBarIcon(*pActiveSysWin, true);
 }
 
 IMPL_LINK_NOARG(MenuBarUpdateIconManager, ClickHdl, MenuBarButtonCallbackArg&, bool)
@@ -500,13 +496,13 @@ Image GetMenuBarIcon( MenuBar const * pMBar )
 }
 }
 
-void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEventHdl)
+void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow& rSysWin, bool bAddEventHdl)
 {
     if (!mbShowMenuIcon)
         return;
 
-    MenuBar *pActiveMBar = pSysWin->GetMenuBar();
-    if (pSysWin != mpActiveSysWin || pActiveMBar != mpActiveMBar)
+    MenuBar *pActiveMBar = rSysWin.GetMenuBar();
+    if (&rSysWin != mpActiveSysWin || pActiveMBar != mpActiveMBar)
         RemoveBubbleWindow();
 
     auto aI = std::find(maIconMBars.begin(), maIconMBars.end(), pActiveMBar);
@@ -532,8 +528,8 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
             maIconIDs.push_back(nIconID);
         }
 
-        if (bAddEventHdl && pSysWin)
-            pSysWin->AddEventListener( maWindowEventHdl );
+        if (bAddEventHdl)
+            rSysWin.AddEventListener( maWindowEventHdl );
     }
 
     if (mpActiveMBar != pActiveMBar)
@@ -551,7 +547,7 @@ void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEv
         }
     }
 
-    mpActiveSysWin = pSysWin;
+    mpActiveSysWin = &rSysWin;
 
     if (mbShowBubble && pActiveMBar)
     {

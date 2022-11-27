@@ -66,7 +66,7 @@ private:
 
     sal_uInt16 GetIconID(MenuBar* pMenuBar) const;
 
-    void AddMenuBarIcon(SystemWindow* pSysWin, bool bAddEventHdl);
+    void AddMenuBarIcon(SystemWindow& rSysWin, bool bAddEventHdl);
     void RemoveMenuBarIcon(MenuBar* pMenuBar);
     void RemoveMenuBarIcons();
 
