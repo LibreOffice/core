@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/macitem.hxx>
@@ -176,6 +177,117 @@ IMPL_LINK(SwGlossaryDlg, TextFilterHdl, OUString&, rTest, bool)
     return true;
 }
 
+class SwGlossaryDropTarget : public DropTargetHelper
+{
+private:
+    weld::TreeView& m_rTreeView;
+    SwGlossaryHdl* m_pGlosHdl;
+
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override
+    {
+        weld::TreeView* pSource = m_rTreeView.get_drag_source();
+        if (!pSource || pSource != &m_rTreeView)
+            return DND_ACTION_NONE;
+
+        std::unique_ptr<weld::TreeIter> xSelected(pSource->make_iterator());
+        bool bSelected = pSource->get_selected(xSelected.get());
+        if (!bSelected)
+            return DND_ACTION_NONE;
+
+        while (pSource->get_iter_depth(*xSelected))
+            (void)pSource->iter_parent(*xSelected);
+
+        GroupUserData* pSrcRootData = weld::fromId<GroupUserData*>(pSource->get_id(*xSelected));
+        GroupUserData* pDestRootData = nullptr;
+
+        std::unique_ptr<weld::TreeIter> xDestEntry(m_rTreeView.make_iterator());
+        bool bEntry = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xDestEntry.get(), true);
+        if (bEntry)
+        {
+            while (m_rTreeView.get_iter_depth(*xDestEntry))
+                (void)m_rTreeView.iter_parent(*xDestEntry);
+            pDestRootData = weld::fromId<GroupUserData*>(m_rTreeView.get_id(*xDestEntry));
+        }
+        if (pDestRootData == pSrcRootData)
+            return DND_ACTION_NONE;
+        sal_uInt8 nRet = DND_ACTION_COPY;
+        const bool bCheckForMove = rEvt.mnAction & DND_ACTION_MOVE;
+        if (bCheckForMove && !pSrcRootData->bReadonly)
+            nRet |= DND_ACTION_MOVE;
+        return nRet;
+    }
+
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override
+    {
+        weld::TreeView* pSource = m_rTreeView.get_drag_source();
+        if (!pSource)
+            return DND_ACTION_NONE;
+
+        std::unique_ptr<weld::TreeIter> xDestEntry(m_rTreeView.make_iterator());
+        bool bEntry = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xDestEntry.get(), true);
+        if (!bEntry)
+            return DND_ACTION_NONE;
+
+        std::unique_ptr<weld::TreeIter> xSelected(pSource->make_iterator());
+        bool bSelected = pSource->get_selected(xSelected.get());
+        if (!bSelected)
+            return DND_ACTION_NONE;
+
+        std::unique_ptr<weld::TreeIter> xSrcParent(pSource->make_iterator(xSelected.get()));
+        while (pSource->get_iter_depth(*xSrcParent))
+            (void)pSource->iter_parent(*xSrcParent);
+
+        std::unique_ptr<weld::TreeIter> xDestParent(pSource->make_iterator(xDestEntry.get()));
+        while (pSource->get_iter_depth(*xDestParent))
+            (void)pSource->iter_parent(*xDestParent);
+
+        GroupUserData* pSrcParent = weld::fromId<GroupUserData*>(pSource->get_id(*xSrcParent));
+        GroupUserData* pDestParent = weld::fromId<GroupUserData*>(m_rTreeView.get_id(*xDestParent));
+
+        if (pDestParent != pSrcParent)
+        {
+            weld::WaitObject aBusy(&m_rTreeView);
+
+            OUString sSourceGroup = pSrcParent->sGroupName
+                + OUStringChar(GLOS_DELIM)
+                + OUString::number(pSrcParent->nPathIdx);
+
+            m_pGlosHdl->SetCurGroup(sSourceGroup);
+            OUString sTitle(pSource->get_text(*xSelected));
+            OUString sShortName(pSource->get_id(*xSelected));
+
+            OUString sDestName = pDestParent->sGroupName
+                + OUStringChar(GLOS_DELIM)
+                + OUString::number(pDestParent->nPathIdx);
+
+            bool bIsMove = rEvt.mnAction & DND_ACTION_MOVE;
+
+            const bool bRet = m_pGlosHdl->CopyOrMove(sSourceGroup, sShortName,
+                            sDestName, sTitle, bIsMove);
+
+            if(bRet)
+            {
+                m_rTreeView.insert(xDestParent.get(), -1, &sTitle, &sShortName,
+                                       nullptr, nullptr, false, nullptr);
+                if (bIsMove)
+                {
+                    pSource->remove(*xSelected);
+                }
+            }
+        }
+
+        return DND_ACTION_NONE;
+    }
+
+public:
+    SwGlossaryDropTarget(weld::TreeView& rTreeView, SwGlossaryHdl* pGlosHdl)
+        : DropTargetHelper(rTreeView.get_drop_target())
+        , m_rTreeView(rTreeView)
+        , m_pGlosHdl(pGlosHdl)
+    {
+    }
+};
+
 SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
                              SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
     : SfxDialogController(pViewFrame->GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
@@ -221,6 +333,11 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
     m_xCategoryBox->connect_row_activated(LINK(this, SwGlossaryDlg, NameDoubleClick));
     m_xCategoryBox->connect_changed(LINK(this, SwGlossaryDlg, GrpSelect));
     m_xCategoryBox->connect_key_press(LINK(this, SwGlossaryDlg, KeyInputHdl));
+
+    m_xDropTarget.reset(new SwGlossaryDropTarget(*m_xCategoryBox, pGlosHdl));
+    rtl::Reference<TransferDataContainer> xHelper(new TransferDataContainer);
+    m_xCategoryBox->enable_drag_source(xHelper, DND_ACTION_COPYMOVE);
+
     m_xBibBtn->connect_clicked(LINK(this,SwGlossaryDlg,BibHdl));
 
     m_xInsertBtn->connect_clicked(LINK(this,SwGlossaryDlg,InsertHdl));

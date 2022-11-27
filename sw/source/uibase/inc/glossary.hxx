@@ -39,6 +39,8 @@ class SwOneExampleFrame;
 
 const short RET_EDIT = 100;
 
+class SwGlossaryDropTarget;
+
 class SwGlossaryDlg final : public SfxDialogController
 {
     friend class SwNewGlosNameDlg;
@@ -76,6 +78,7 @@ class SwGlossaryDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xPathBtn;
     std::unique_ptr<SwOneExampleFrame> m_xExampleFrame;
     std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
+    std::unique_ptr<SwGlossaryDropTarget> m_xDropTarget;
 
     void EnableShortName(bool bOn = true);
     void ShowPreview();

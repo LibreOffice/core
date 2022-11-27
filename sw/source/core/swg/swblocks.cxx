@@ -346,6 +346,16 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
     m_pImp->Touch();
 }
 
+ErrCode const & SwTextBlocks::CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
+                                const OUString& rLong )
+{
+    if (m_pImp->m_bInPutMuchBlocks)
+        m_nErr = ERR_SWG_INTERNAL_ERROR;
+    else
+        m_nErr = m_pImp->CopyBlock(*rSource.m_pImp, rSrcShort, rLong);
+    return m_nErr;
+}
+
 bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
 {
     if( m_pImp && !m_pImp->m_bInPutMuchBlocks )

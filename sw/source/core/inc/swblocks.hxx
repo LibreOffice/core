@@ -106,6 +106,7 @@ public:
 
     virtual ErrCode Delete( sal_uInt16 ) = 0;
     virtual ErrCode Rename( sal_uInt16, const OUString& ) = 0;
+    virtual ErrCode CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) = 0;
     virtual ErrCode GetDoc( sal_uInt16 ) = 0;
     virtual ErrCode BeginPutDoc( const OUString&, const OUString& ) = 0;
     virtual ErrCode PutDoc() = 0;

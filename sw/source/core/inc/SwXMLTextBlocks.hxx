@@ -61,6 +61,7 @@ public:
     virtual ~SwXMLTextBlocks() override;
     virtual ErrCode Delete( sal_uInt16 ) override;
     virtual ErrCode Rename( sal_uInt16, const OUString& ) override;
+    virtual ErrCode CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) override;
     virtual void  ClearDoc() override;
     virtual ErrCode GetDoc( sal_uInt16 ) override;
     virtual ErrCode BeginPutDoc( const OUString&, const OUString& ) override;
