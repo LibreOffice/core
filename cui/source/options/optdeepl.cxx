@@ -22,7 +22,7 @@
 
 OptDeeplTabPage::OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,
                                  const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/deepltabpage.ui", "OptDeeplPage", &rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optdeeplpage.ui", "OptDeeplPage", &rSet)
     , m_xAPIUrl(m_xBuilder->weld_entry("apiurl"))
     , m_xAuthKey(m_xBuilder->weld_entry("authkey"))
 {

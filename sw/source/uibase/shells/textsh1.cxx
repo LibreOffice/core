@@ -1993,6 +1993,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
                 break;
 
+            case SID_FM_TRANSLATE:
+                {
+                    const SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
+                    if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                }
+                break;
+
             case SID_HYPERLINK_DIALOG:
                 if( GetView().GetDocShell()->IsReadOnly()
                     || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)

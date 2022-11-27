@@ -18,7 +18,7 @@
             <property name="halign">start</property>
             <property name="xpad">5</property>
             <property name="ypad">5</property>
-            <property name="label" translatable="yes" context="deepltabpage|label1">DeepL API Options</property>
+            <property name="label" translatable="yes" context="optdeeplpage|label1">DeepL API Options</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">grid1</property>
             <attributes>
@@ -32,7 +32,7 @@
         </child>
         <child>
           <object class="GtkLinkButton" id="privacy">
-            <property name="label" translatable="yes" context="deepltabpage|privacy">Please read the privacy policy</property>
+            <property name="label" translatable="yes" context="optdeeplpage|privacy">Please read the privacy policy</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -60,8 +60,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_start">5</property>
-                <property name="label" translatable="yes" context="deepltabpage|privacy">API URL:</property>
+                <property name="label" translatable="yes" context="optdeeplpage|privacy">API URL:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">apiurl</property>
               </object>
@@ -76,7 +75,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin_end">5</property>
-                <property name="label" translatable="yes" context="deepltabpage|label3">Authentication key:</property>
+                <property name="label" translatable="yes" context="optdeeplpage|label3">Authentication key:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">authkey</property>
               </object>
