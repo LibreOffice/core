@@ -142,6 +142,13 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
         {
             SwDoc* pGDoc = rBlock.GetDoc();
 
+            // tdf#53023 - remove the last empty paragraph (check SwXMLTextBlockParContext dtor)
+            if (mbInsOnlyTextGlssry)
+            {
+                SwPaM aPaM(*pGDoc->GetNodes()[pGDoc->GetNodes().GetEndOfContent().GetIndex() - 1]);
+                pGDoc->getIDocumentContentOperations().DelFullPara(aPaM);
+            }
+
             // Update all fixed fields, with the right DocInfo.
             // FIXME: UGLY: Because we cannot limit the range in which to do
             // field updates, we must update the fixed fields at the glossary
