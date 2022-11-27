@@ -1750,7 +1750,9 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         if (!(rProperty.Value >>= visible))
             return false;
 
-        mpPointerSymbol->setVisible(visible);
+        if (!mbShowPaused)
+            mpPointerSymbol->setVisible(visible);
+
         return true;
     }
 
@@ -1760,7 +1762,9 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         if (! (rProperty.Value >>= pos))
             return false;
 
-        mpPointerSymbol->viewsChanged(pos);
+        if (!mbShowPaused)
+            mpPointerSymbol->viewsChanged(pos);
+
         return true;
     }
 
