@@ -435,15 +435,14 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>HRK</CurrencyID>
       <CurrencySymbol>kn</CurrencySymbol>
       <BankSymbol>HRK</BankSymbol>
       <CurrencyName>Hrvatska Kuna</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <!-- TODO: switch defaults before 2023-01-01 -->
-    <Currency default="false" usedInCompatibleFormatCodes="false">
+    <Currency default="true" usedInCompatibleFormatCodes="false">
       <CurrencyID>EUR</CurrencyID>
       <CurrencySymbol>€</CurrencySymbol>
       <BankSymbol>EUR</BankSymbol>
