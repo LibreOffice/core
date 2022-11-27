@@ -821,7 +821,8 @@ namespace sw::mark
             aList.insert(aList.begin() + nNewPos, rText);
         else
         {
-            *pIndex = nLen;
+            if (pIndex)
+                *pIndex = nLen;
             aList.push_back(rText);
         }
 
