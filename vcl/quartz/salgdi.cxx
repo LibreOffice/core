@@ -111,11 +111,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
 
             rPattern.maSearchName = rAttr.GetFamilyName();
 
-            rPattern.SetWeight(rAttr.GetWeight());
-            rPattern.SetItalic(rAttr.GetItalic());
-            rPattern.SetPitch(rAttr.GetPitch());
-            rPattern.SetWidthType(rAttr.GetWidthType());
-
             CFRelease(pFallback);
             CFRelease(pDesc);
         }
