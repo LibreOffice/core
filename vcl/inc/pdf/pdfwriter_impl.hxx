@@ -615,6 +615,7 @@ struct PDFGlyph
 {
     DevicePoint const m_aPos;
     const GlyphItem* m_pGlyph;
+    const LogicalFontInstance* m_pFont;
     sal_Int32 const   m_nNativeWidth;
     sal_Int32 const   m_nMappedFontId;
     sal_uInt8 const   m_nMappedGlyphId;
@@ -622,11 +623,12 @@ struct PDFGlyph
 
     PDFGlyph( const DevicePoint& rPos,
               const GlyphItem* pGlyph,
+              const LogicalFontInstance* pFont,
               sal_Int32 nNativeWidth,
               sal_Int32 nFontId,
               sal_uInt8 nMappedGlyphId,
               int nCharPos )
-    : m_aPos( rPos ), m_pGlyph(pGlyph), m_nNativeWidth( nNativeWidth ),
+    : m_aPos( rPos ), m_pGlyph(pGlyph), m_pFont(pFont), m_nNativeWidth( nNativeWidth ),
       m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
       m_nCharPos(nCharPos)
     {}
@@ -861,8 +863,8 @@ i12626
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
-    void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight );
-    void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, bool bFirst, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
+    void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, sal_Int32 nFontHeight );
+    void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, bool bFirst, double fAngle, double fXScale, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
     void drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );

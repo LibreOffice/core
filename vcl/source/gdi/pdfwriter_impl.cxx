@@ -6315,7 +6315,6 @@ void PDFWriterImpl::drawVerticalGlyphs(
         const Matrix3& rRotScale,
         double fAngle,
         double fXScale,
-        double fSkew,
         sal_Int32 nFontHeight)
 {
     double nXOffset = 0;
@@ -6327,6 +6326,12 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fDeltaAngle = 0.0;
         double fYScale = 1.0;
         double fTempXScale = fXScale;
+
+        // perform artificial italics if necessary
+        double fSkew = 0.0;
+        if (rGlyphs[i].m_pFont->NeedsArtificialItalic())
+            fSkew = ARTIFICIAL_ITALIC_SKEW;
+
         double fSkewB = fSkew;
         double fSkewA = 0.0;
 
@@ -6381,7 +6386,6 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         bool bFirst,
         double fAngle,
         double fXScale,
-        double fSkew,
         sal_Int32 nFontHeight,
         sal_Int32 nPixelFontHeight)
 {
@@ -6395,6 +6399,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     for( size_t i = 1; i < rGlyphs.size(); i++ )
     {
         if( rGlyphs[i].m_nMappedFontId != rGlyphs[i-1].m_nMappedFontId ||
+            rGlyphs[i].m_pFont != rGlyphs[i-1].m_pFont ||
             rGlyphs[i].m_aPos.getY() != rGlyphs[i-1].m_aPos.getY() )
         {
             aRunEnds.push_back(i);
@@ -6410,6 +6415,12 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         // setup text matrix back transformed to current coordinate system
         Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos));
         aCurPos += rAlignOffset;
+
+        // perform artificial italics if necessary
+        double fSkew = 0.0;
+        if (rGlyphs[nBeginRun].m_pFont->NeedsArtificialItalic())
+            fSkew = ARTIFICIAL_ITALIC_SKEW;
+
         // the first run can be set with "Td" operator
         // subsequent use of that operator would move
         // the textline matrix relative to what was set before
@@ -6498,7 +6509,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nIndex = 0;
     double fXScale = 1.0;
-    double fSkew = 0.0;
     sal_Int32 nPixelFontHeight = GetFontInstance()->GetFontSelectPattern().mnHeight;
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
 
@@ -6517,10 +6527,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 static_cast<double>(aMetric.GetAverageFontWidth());
         }
     }
-
-    // perform artificial italics if necessary
-    if (GetFontInstance()->NeedsArtificialItalic())
-        fSkew = ARTIFICIAL_ITALIC_SKEW;
 
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
@@ -6674,6 +6680,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
+                             pGlyphFont,
                              XUnits(pFace->UnitsPerEm(), nGlyphWidth),
                              nMappedFontObject,
                              nMappedGlyph,
@@ -6763,9 +6770,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             }
 
             if (bVertical)
-                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight);
+                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, nFontHeight);
             else
-                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight);
+                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, nFontHeight, nPixelFontHeight);
 
             if (nCharPos >= 0 && nCharCount)
                 aLine.append( "EMC\n" );
