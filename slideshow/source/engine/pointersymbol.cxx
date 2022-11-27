@@ -96,8 +96,8 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) c
     const geometry::IntegerSize2D realTranslationOffset ( rView->getTranslationOffset() );
 
     return basegfx::B2DPoint(
-        realTranslationOffset.Width + ((aViewArea.Width - aViewArea.X) - 2 * realTranslationOffset.Width) * maPos.X,
-        realTranslationOffset.Height + ((aViewArea.Height - aViewArea.Y) - 2 * realTranslationOffset.Height) * maPos.Y);
+        realTranslationOffset.Width + (aViewArea.Width * maPos.X),
+        realTranslationOffset.Height + (aViewArea.Height * maPos.Y));
 }
 
 void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
