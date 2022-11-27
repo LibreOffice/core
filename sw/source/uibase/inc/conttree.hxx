@@ -103,7 +103,7 @@ class SwContentTree final : public SfxListener
 
     std::map< void*, bool > mOutLineNodeMap;
 
-    sal_Int32           m_nActiveBlock;
+    sal_Int32           m_nActiveBlock; // used to restore content types/categories expand state
     sal_Int32           m_nHiddenBlock;
     size_t              m_nEntryCount;
     ContentTypeId       m_nRootType;
