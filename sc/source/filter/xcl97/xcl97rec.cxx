@@ -241,12 +241,17 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
         else
             --nSkipObj;
 
+        XclObjAny* pObj = nullptr;
         if (rxObj->GetObjType() == 0) // group (it can be a subgroup)
+            pObj = dynamic_cast<XclObjAny*>(rxObj.get());
+        if (pObj)
         {
-            XclObjAny* pObj = dynamic_cast<XclObjAny*>(rxObj.get());
-            css::uno::Reference<css::drawing::XShapes> mXShapes(pObj->GetShape(), UNO_QUERY);
-            // skip (also) the objects of this group
-            nSkipObj += mXShapes->getCount();
+            css::uno::Reference<css::drawing::XShapes> xShapes(pObj->GetShape(), UNO_QUERY);
+            if (xShapes)
+            {
+                // skip (also) the objects of this group
+                nSkipObj += xShapes->getCount();
+            }
         }
     }
 
