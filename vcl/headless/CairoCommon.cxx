@@ -630,8 +630,8 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
         {
             SAL_WARN("vcl.gdi", "drawPolyLine, skipping suspicious range of: "
                                     << aRange << " for fuzzing performance");
+            return true;
         }
-        return true;
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
