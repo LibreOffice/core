@@ -465,17 +465,19 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             // There is either only one screen or the full screen
             // presentation spans all available screens.  The presenter
             // screen is shown only when a special flag in the configuration
-            // is set.
+            // is set or when the presenter screen will be shown as
+            // non-full screen window
             Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
                 "/org.openoffice.Office.PresenterScreen/",
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
+            bool bPresenterScreenFullScreen = isPresenterScreenFullScreen(xContext);
             if (aConfiguration.GetConfigurationNode(
                 "Presenter/StartAlways") >>= bStartAlways)
             {
-                if (bStartAlways)
+                if (bStartAlways || !bPresenterScreenFullScreen)
                     return GetPresenterScreenFromScreen(nScreenNumber);
             }
             return -1;
