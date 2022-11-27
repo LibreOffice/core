@@ -41,10 +41,10 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
     SwTextContentControl* pControl = nullptr;
     std::vector<OUString> vElementNames;
     SwContentControlManager& rManager = pDoc->GetContentControlManager();
-    size_t i = static_cast<size_t>(rIndex);
     const size_t nLen = rManager.GetCount();
     if (!pElementNames && rIndex > 0 && sName.empty() && sTag.empty() && sTitle.empty())
     {
+        size_t i = static_cast<size_t>(rIndex);
         // This is the normal get-by-index/getCount mode - no need for fancy filtering.
         if (i < nLen)
             pControl = rManager.Get(i);
@@ -55,7 +55,7 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
     {
         // loop through everything collecting names, filtering by Tag/Title
         sal_Int32 nCounter = 0;
-        for (i = 0; i < nLen; ++i)
+        for (size_t i = 0; i < nLen; ++i)
         {
             pControl = rManager.Get(i);
             if (!sTag.empty()
