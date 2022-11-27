@@ -706,7 +706,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     )
                 {
                     pCur->updateGeometryWith( pNext );
-                    if (pPara->bRtl)
+                    if (pPara && pPara->bRtl)
                     {
                         // Tdf#152083: If RTL, reverse the text in pNext so that its correct order is
                         // restored when the combined text is reversed in DrawXmlEmitter::visit.
