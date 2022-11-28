@@ -1370,14 +1370,19 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     Color aAlternateSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow ));
     aStyleSettings.SetWindowColor(aWindowBackgroundColor);
     aStyleSettings.SetListBoxWindowBackgroundColor(aWindowBackgroundColor);
+
+    aStyleSettings.SetDialogTextColor(aControlTextColor);
     aStyleSettings.SetButtonTextColor(aControlTextColor);
-    aStyleSettings.SetLabelTextColor(aControlTextColor);
+    aStyleSettings.SetActionButtonTextColor(aControlTextColor);
     aStyleSettings.SetRadioCheckTextColor(aControlTextColor);
+    aStyleSettings.SetGroupTextColor(aControlTextColor);
+    aStyleSettings.SetLabelTextColor(aControlTextColor);
+    aStyleSettings.SetWindowTextColor(aControlTextColor);
     aStyleSettings.SetFieldTextColor(aControlTextColor);
+
     aStyleSettings.SetFieldRolloverTextColor(aControlTextColor);
     aStyleSettings.SetFieldColor(aControlBackgroundColor);
     aStyleSettings.SetDefaultActionButtonTextColor(aAlternateSelectedControlTextColor);
-    aStyleSettings.SetActionButtonTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
     aStyleSettings.SetDefaultButtonRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetButtonRolloverTextColor(aControlTextColor);
@@ -1401,7 +1406,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     aStyleSettings.SetWorkspaceColor(aUnderPageBackgroundColor);
-    aStyleSettings.SetDialogTextColor(aControlTextColor);
 
     aStyleSettings.SetHelpColor(aControlBackgroundColor);
     aStyleSettings.SetHelpTextColor(aControlTextColor);
