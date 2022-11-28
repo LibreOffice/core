@@ -310,6 +310,8 @@ class SwUINumRuleItem;
 #define FN_PROTECT_FIELDS               (FN_INSERT2 + 26)
 #define FN_PROTECT_BOOKMARKS            (FN_INSERT2 + 27)
 
+#define FN_UPDATE_TEXT_FORMFIELDS       (FN_INSERT2 + 28)
+
 // clipboard table content
 #define FN_PASTE_NESTED_TABLE       (FN_INSERT2 + 30)  /* instead of the cell-by-cell copy between source and target tables */
 #define FN_TABLE_PASTE_ROW_BEFORE   (FN_INSERT2 + 31)  /* paste table as new table rows */

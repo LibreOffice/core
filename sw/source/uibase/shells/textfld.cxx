@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <AnnotationWin.hxx>
 #include <comphelper/lok.hxx>
 #include <hintids.hxx>
@@ -60,6 +61,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <IMark.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
@@ -831,6 +833,77 @@ FIELD_INSERT:
 
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
         rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+    }
+    break;
+    case FN_UPDATE_TEXT_FORMFIELDS:
+    {
+        OUString aFieldType;
+        const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pFieldType)
+        {
+            aFieldType = pFieldType->GetValue();
+        }
+        OUString aFieldCommandPrefix;
+        const SfxStringItem* pFieldCommandPrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        if (pFieldCommandPrefix)
+        {
+            aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
+        }
+        uno::Sequence<beans::PropertyValues> aFields;
+        const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+        if (pFields)
+        {
+            pFields->GetValue() >>= aFields;
+        }
+
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.StartAction();
+
+        IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+        sal_Int32 nFieldIndex = 0;
+        for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+        {
+            auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+            assert(pFieldmark);
+            if (pFieldmark->GetFieldname() != aFieldType)
+            {
+                continue;
+            }
+
+            auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+            if (itParam == pFieldmark->GetParameters()->end())
+            {
+                continue;
+            }
+
+            OUString aCommand;
+            itParam->second >>= aCommand;
+            if (!aCommand.startsWith(aFieldCommandPrefix))
+            {
+                continue;
+            }
+
+            if (aFields.getLength() <= nFieldIndex)
+            {
+                continue;
+            }
+
+            comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
+            itParam->second = aMap["FieldCommand"];
+            SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
+            aPaM.Normalize();
+            // Skip field start & separator.
+            aPaM.GetPoint()->AdjustContent(2);
+            // Skip field end.
+            aPaM.GetMark()->AdjustContent(-1);
+            rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
+            OUString aFieldResult;
+            aMap["FieldResult"] >>= aFieldResult;
+            SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
+        }
+
+        rSh.EndAction();
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
     }
     break;
         default:

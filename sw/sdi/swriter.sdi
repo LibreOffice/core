@@ -8255,6 +8255,24 @@ SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
+(SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxVoidItem CheckBoxFormField FN_INSERT_CHECKBOX_FORMFIELD
 
 [
