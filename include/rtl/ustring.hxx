@@ -577,8 +577,6 @@ public:
     OUString & operator=( OUString && str ) noexcept
     {
         std::swap(pData, str.pData);
-        // rtl_uString_new will release any existing data before assigning empty
-        rtl_uString_new( &str.pData );
         return *this;
     }
 #endif
