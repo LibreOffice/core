@@ -1559,7 +1559,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             SwTextNode* pTextNode = pAnchorNode->GetTextNode();
             if (pTextNode)
             {
-                sal_Int32 nContentIdx = rFormatAnchor.GetContentAnchor()->GetContentIndex();
+                sal_Int32 nContentIdx = rFormatAnchor.GetAnchorContentOffset();
                 SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
                     nContentIdx, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
                 if (pAttr)
@@ -4821,7 +4821,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if (pTextNode)
                                 {
                                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                                        rFormatAnchor.GetContentAnchor()->GetContentIndex(), RES_TXTATR_CONTENTCONTROL,
+                                        rFormatAnchor.GetAnchorContentOffset(), RES_TXTATR_CONTENTCONTROL,
                                         ::sw::GetTextAttrMode::Parent);
                                     if (pAttr)
                                     {

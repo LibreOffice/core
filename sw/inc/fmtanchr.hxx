@@ -72,6 +72,8 @@ public:
 
     SwNode* GetAnchorNode() const;
     const SwPosition* GetContentAnchor() const { return m_oContentAnchor ? &*m_oContentAnchor : nullptr; }
+    SwContentNode* GetAnchorContentNode() const;
+    sal_Int32 GetAnchorContentOffset() const;
     void SetAnchor( const SwPosition *pPos );
 
     // #i28701#

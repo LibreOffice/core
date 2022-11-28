@@ -51,7 +51,7 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
     if( !rAnchor.GetAnchorNode() )
         return;
 
-    m_nContentIndex = rAnchor.GetContentAnchor()->GetContentIndex();
+    m_nContentIndex = rAnchor.GetAnchorContentOffset();
     sal_Int16 eHoriRel = rPosFly.GetFormat().GetHoriOrient().
                                         GetRelationOrient();
     if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )

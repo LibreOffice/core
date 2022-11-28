@@ -1869,8 +1869,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aSet.Get(pEntry->nWID));
                 if(aAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
                 {
-                    const ::SwPosition* pPosition = aAnchor.GetContentAnchor();
-                    SwFrameFormat* pFlyFormat = pPosition ? pPosition->GetNode().GetFlyFormat() : nullptr;
+                    const ::SwNode* pAnchorNode = aAnchor.GetAnchorNode();
+                    SwFrameFormat* pFlyFormat = pAnchorNode ? pAnchorNode->GetFlyFormat() : nullptr;
                     if(!pFlyFormat || pFlyFormat->Which() == RES_DRAWFRMFMT)
                     {
                         lang::IllegalArgumentException aExcept;
@@ -1879,14 +1879,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     }
                     else
                     {
-                        SwPosition aPos = *pPosition;
+                        SwPosition aPos = *aAnchor.GetContentAnchor();
                         aPos.Assign( *pFlyFormat->GetContent().GetContentIdx() );
                         aAnchor.SetAnchor(&aPos);
                         aSet.Put(aAnchor);
                     }
                 }
                 else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) &&
-                         !aAnchor.GetContentAnchor())
+                         !aAnchor.GetAnchorNode())
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
                     SwPaM aPam(rNode);
@@ -2281,10 +2281,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             if (!m_xParentText.is())
             {
-                const SwPosition* pContentAnchor = pFormat->GetAnchor().GetContentAnchor();
-                if (pContentAnchor)
+                const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
+                if (rFormatAnchor.GetAnchorNode())
                 {
-                    m_xParentText = sw::CreateParentXText(*pFormat->GetDoc(), *pContentAnchor);
+                    m_xParentText = sw::CreateParentXText(*pFormat->GetDoc(), *rFormatAnchor.GetContentAnchor());
                 }
             }
             aAny <<= m_xParentText;
@@ -2674,11 +2674,11 @@ void SwXFrame::dispose()
            ( pObj->GetUserCall() &&
              !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
     {
-        if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
+        if (rFormatAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-            SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
-            const sal_Int32 nIdx = rPos.GetContentIndex();
+            SwTextNode *pTextNode = rFormatAnchor.GetAnchorNode()->GetTextNode();
+            const sal_Int32 nIdx = rFormatAnchor.GetAnchorContentOffset();
             pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
         }
         else
@@ -2701,14 +2701,13 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
     if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
         (rAnchor.GetAnchorNode() && !rAnchor.GetPageNum()))
     {
-        const SwPosition &rPos = *(rAnchor.GetContentAnchor());
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {   // ensure that SwXTextRange has SwContentIndex
-            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(rPos.GetNode()), nullptr);
+            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(*rAnchor.GetAnchorNode()), nullptr);
         }
         else
         {
-            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
+            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), *rAnchor.GetContentAnchor(), nullptr);
         }
     }
 

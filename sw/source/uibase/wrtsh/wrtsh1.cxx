@@ -1115,8 +1115,8 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             {
                 SwCursor* pCursor = getShellCursor(true);
                 pCursor->DeleteMark();
-                const SwPosition* pAnchor = pFrameFormat->GetAnchor().GetContentAnchor();
-                pCursor->GetPoint()->Assign( *pAnchor->GetContentNode(), pAnchor->GetContentIndex() + 1);
+                const SwFormatAnchor& rFormatAnchor = pFrameFormat->GetAnchor();
+                pCursor->GetPoint()->Assign( *rFormatAnchor.GetAnchorContentNode(), rFormatAnchor.GetAnchorContentOffset() + 1);
             }
 
             // Select before the anchor position.

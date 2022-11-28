@@ -1270,11 +1270,10 @@ static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 
 
         auto& rFormat = *const_cast<SwFrameFormat*>(pFrame);
         const SwFormatAnchor& rAnchor = rFormat.GetAnchor();
-        const SwPosition* pPosition = rAnchor.GetContentAnchor();
-        if (!pPosition)
+        if (!rAnchor.GetAnchorNode())
             continue;
 
-        rFramePositions.insert(pPosition->GetContentIndex());
+        rFramePositions.insert(rAnchor.GetAnchorContentOffset());
     }
 }
 

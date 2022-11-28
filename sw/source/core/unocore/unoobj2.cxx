@@ -124,8 +124,7 @@ struct FrameClientSortListLess
                 continue;
             if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
             {
-                const auto nIdx =
-                    rFormat.GetAnchor().GetContentAnchor()->GetContentIndex();
+                const sal_Int32 nIdx = rFormat.GetAnchor().GetAnchorContentOffset();
                 const auto nOrder = rFormat.GetAnchor().GetOrder();
                 rFrames.emplace_back(nIdx, nOrder, std::make_unique<sw::FrameClient>(&rFormat));
             }
@@ -162,15 +161,15 @@ void CollectFrameAtNode( const SwNode& rNd,
         {
             const SwFrameFormat* pFormat = rFormats[ i ];
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-            const SwPosition* pAnchorPos;
+            const SwNode* pAnchorNode;
             if( rAnchor.GetAnchorId() == nChkType &&
-                nullptr != (pAnchorPos = rAnchor.GetContentAnchor()) &&
-                    pAnchorPos->GetNode() == rNd )
+                nullptr != (pAnchorNode = rAnchor.GetAnchorNode()) &&
+                    *pAnchorNode == rNd )
             {
 
                 // OD 2004-05-07 #i28701# - determine insert position for
                 // sorted <rFrameArr>
-                const sal_Int32 nIndex = pAnchorPos->GetContentIndex();
+                const sal_Int32 nIndex = rAnchor.GetAnchorContentOffset();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
                 rFrames.emplace_back(nIndex, nOrder, std::make_unique<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));

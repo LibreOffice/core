@@ -1064,10 +1064,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     //With AnchorAsCharacter the current TextAttribute has to be deleted.
                     //Tbis removes the frame format too.
                     //To prevent this the connection between format and attribute has to be broken before.
-                    const SwPosition *pPos = aAnchor.GetContentAnchor();
-                    SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
+                    SwTextNode *pTextNode = aAnchor.GetAnchorNode()->GetTextNode();
                     SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                    const sal_Int32 nIdx = pPos->GetContentIndex();
+                    const sal_Int32 nIdx = aAnchor.GetAnchorContentOffset();
                     SwTextAttr * const pHint =
                             pTextNode->GetTextAttrForCharAt(
                             nIdx, RES_TXTATR_FLYCNT );
@@ -1218,10 +1217,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         //With AnchorAsCharacter the current TextAttribute has to be deleted.
                         //Tbis removes the frame format too.
                         //To prevent this the connection between format and attribute has to be broken before.
-                        const SwPosition *pPos = rOldAnchor.GetContentAnchor();
-                        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
+                        SwTextNode *pTextNode = rOldAnchor.GetAnchorNode()->GetTextNode();
                         SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                        const sal_Int32 nIdx = pPos->GetContentIndex();
+                        const sal_Int32 nIdx = rOldAnchor.GetAnchorContentOffset();
                         SwTextAttr * const pHint =
                             pTextNode->GetTextAttrForCharAt(
                                 nIdx, RES_TXTATR_FLYCNT );
@@ -1459,7 +1457,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     }
                     else
                     {
-                        if ( aAnchor.GetContentAnchor() )
+                        if ( aAnchor.GetAnchorNode() )
                         {
                             const rtl::Reference<SwXTextRange> xTextRange
                                 = SwXTextRange::CreateXTextRange(
@@ -2051,16 +2049,16 @@ uno::Reference< text::XTextRange > SwXShape::getAnchor()
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
         if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
-            (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
+            (rAnchor.GetAnchorNode() && !rAnchor.GetPageNum()))
         {
-            const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
             if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
             {   // ensure that SwXTextRange has SwContentIndex
-                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(rPos.GetNode()), nullptr);
+                const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(*pAnchorNode), nullptr);
             }
             else
             {
-                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
+                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), *rAnchor.GetContentAnchor(), nullptr);
             }
         }
     }
@@ -2096,11 +2094,11 @@ void SwXShape::dispose()
              !pObj->getParentSdrObjectFromSdrObject() &&
              pObj->IsInserted() )
         {
-            if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+            const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
+            if (rFormatAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
-                const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-                SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
-                const sal_Int32 nIdx = rPos.GetContentIndex();
+                SwTextNode *pTextNode = rFormatAnchor.GetAnchorNode()->GetTextNode();
+                const sal_Int32 nIdx = rFormatAnchor.GetAnchorContentOffset();
                 pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }
             else

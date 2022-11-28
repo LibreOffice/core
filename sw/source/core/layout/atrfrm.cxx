@@ -1612,6 +1612,23 @@ SwNode* SwFormatAnchor::GetAnchorNode() const
     return &m_oContentAnchor->nNode.GetNode();
 }
 
+SwContentNode* SwFormatAnchor::GetAnchorContentNode() const
+{
+    SwNode* pAnchorNode = GetAnchorNode();
+    if (pAnchorNode)
+        return pAnchorNode->GetContentNode();
+    return nullptr;
+}
+
+sal_Int32 SwFormatAnchor::GetAnchorContentOffset() const
+{
+    if (!m_oContentAnchor)
+        return 0;
+    if (m_oContentAnchor->nContent.GetContentNode())
+        return m_oContentAnchor->nContent.GetIndex();
+    return 0;
+}
+
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
     if (this != &rAnchor)
