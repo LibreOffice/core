@@ -26,6 +26,7 @@
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
 #include <utility>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -1098,6 +1099,17 @@ bool AddressMultiLineEdit::KeyInput(const KeyEvent& rKEvt)
     if (rKEvt.GetCharCode())
         return true; // handled
     return WeldEditView::KeyInput(rKEvt);
+}
+
+bool AddressMultiLineEdit::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() == CommandEventId::StartExtTextInput ||
+        rCEvt.GetCommand() == CommandEventId::EndExtTextInput ||
+        rCEvt.GetCommand() == CommandEventId::ExtTextInput)
+    {
+        return true;
+    }
+    return WeldEditView::Command(rCEvt);
 }
 
 bool AddressMultiLineEdit::MouseButtonDown(const MouseEvent& rMEvt)
