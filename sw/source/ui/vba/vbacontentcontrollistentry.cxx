@@ -63,19 +63,17 @@ void SwVbaContentControlListEntry::setText(const OUString& rSet)
             return;
     }
 
-    bool bNeedsInvalidation = false;
-    if (!pCC->GetShowingPlaceHolder())
-    {
-        // TODO: implement bCheckDocModel
-        std::optional<size_t> oSel(pCC->GetSelectedListItem(/*bCheckDocModel=true*/));
-        bNeedsInvalidation = oSel && *oSel == m_nZIndex;
-    }
+    const std::optional<size_t> oSel(pCC->GetSelectedListItem(/*bCheckDocModel=*/true));
+    const bool bNeedsInvalidation = pCC->GetDropDown() && oSel && *oSel == m_nZIndex;
 
     vListItems[m_nZIndex].m_aDisplayText = rSet;
     pCC->SetListItems(vListItems);
 
     if (bNeedsInvalidation)
+    {
+        pCC->SetSelectedListItem(m_nZIndex);
         m_rCC.Invalidate();
+    }
 }
 
 OUString SwVbaContentControlListEntry::getValue()
@@ -114,7 +112,7 @@ void SwVbaContentControlListEntry::MoveDown()
     if (m_nZIndex >= pCC->GetListItems().size() - 1)
         return;
 
-    const std::optional<size_t>& oSelected = pCC->GetSelectedListItem();
+    const std::optional<size_t> oSelected = pCC->GetSelectedListItem(/*bCheckDocModel=*/false);
     if (oSelected)
     {
         if (*oSelected == m_nZIndex)
@@ -135,7 +133,7 @@ void SwVbaContentControlListEntry::MoveUp()
     if (!m_nZIndex || m_nZIndex >= pCC->GetListItems().size())
         return;
 
-    const std::optional<size_t>& oSelected = pCC->GetSelectedListItem();
+    const std::optional<size_t> oSelected = pCC->GetSelectedListItem(/*bCheckDocModel=*/false);
     if (oSelected)
     {
         if (*oSelected == m_nZIndex)
