@@ -103,6 +103,48 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
+{
+    std::vector<OUString> aExpected
+        = { u"Ωφέλιμο", u"Επικίνδυνο", u"Απόσταση", u"Μάσκα", u"Εμβόλιο" };
+
+    loadFromURL(u"ods/tdf151091.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
+    uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aSeriesList.getLength());
+
+    for (size_t i = 0; i < 5; ++i)
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], aSeriesList[i]);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToObject", OUString("Object 1")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // create a new writer document
+    load("private:factory/swriter");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    aSeriesList = getWriterChartColumnDescriptions(mxComponent);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aSeriesList.getLength());
+
+    for (size_t i = 0; i < 5; ++i)
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], aSeriesList[i]);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
