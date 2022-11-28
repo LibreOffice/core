@@ -144,6 +144,7 @@ class AddressMultiLineEdit : public WeldEditView
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
 public:
