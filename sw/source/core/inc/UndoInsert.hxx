@@ -136,6 +136,7 @@ private:
     std::unique_ptr<Impl> m_pImpl;
 };
 
+/// Handles the undo/redo of the 'Replace...' context menu item for an image.
 class SwUndoReRead final : public SwUndo
 {
     std::optional<Graphic> moGraphic;
