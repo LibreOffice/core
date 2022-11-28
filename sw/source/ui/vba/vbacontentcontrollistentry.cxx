@@ -81,6 +81,11 @@ void SwVbaContentControlListEntry::setValue(const OUString& rSet)
     const std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     assert(m_nZIndex < pCC->GetListItems().size());
     std::vector<SwContentControlListItem> vListItems = pCC->GetListItems();
+
+    // LO may pull the display text from Value. Ensure changing Value doesn't alter display text.
+    if (vListItems[m_nZIndex].m_aDisplayText.isEmpty())
+        vListItems[m_nZIndex].m_aDisplayText = vListItems[m_nZIndex].ToString();
+
     vListItems[m_nZIndex].m_aValue = rSet;
     pCC->SetListItems(vListItems);
 }
