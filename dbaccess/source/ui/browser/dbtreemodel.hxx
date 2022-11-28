@@ -29,9 +29,6 @@
 //   tables                     holds the nameaccess for the tables
 //     table                    holds the table
 
-#define CONTAINER_QUERIES       sal_uLong( 0 )
-#define CONTAINER_TABLES        sal_uLong( 1 )
-
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace dbaui
