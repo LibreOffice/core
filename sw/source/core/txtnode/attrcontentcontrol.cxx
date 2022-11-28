@@ -232,6 +232,25 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 }
 
+std::optional<size_t> SwContentControl::GetSelectedListItem(bool bCheckDocModel) const
+{
+    if (!bCheckDocModel || m_oSelectedListItem)
+        return m_oSelectedListItem;
+
+    const size_t nLen = GetListItems().size();
+    if (GetShowingPlaceHolder() || !nLen || !GetTextAttr())
+        return std::nullopt;
+
+    const OUString& rText = GetTextAttr()->ToString();
+    for (size_t i = 0; i < nLen; ++i)
+    {
+        if (GetTextAttr()[i].ToString() == rText)
+            return i;
+    }
+    assert(!GetDropDown() && "DropDowns must always have an associated list item");
+    return std::nullopt;
+}
+
 bool SwContentControl::AddListItem(size_t nZIndex, const OUString& rDisplayText,
                                    const OUString& rValue)
 {
@@ -660,6 +679,20 @@ SwTextNode* SwTextContentControl::GetTextNode() const
 {
     auto& rFormatContentControl = static_cast<const SwFormatContentControl&>(GetAttr());
     return rFormatContentControl.GetTextNode();
+}
+
+OUString SwTextContentControl::ToString() const
+{
+    if (!GetTextNode())
+        return OUString();
+
+    // Don't select the text attribute itself at the start.
+    sal_Int32 nStart = GetStart() + 1;
+    // Don't select the CH_TXTATR_BREAKWORD itself at the end.
+    sal_Int32 nEnd = *End() - 1;
+
+    SwPaM aPaM(*GetTextNode(), nStart, *GetTextNode(), nEnd);
+    return aPaM.GetText();
 }
 
 void SwTextContentControl::Invalidate()

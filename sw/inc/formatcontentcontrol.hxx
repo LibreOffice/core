@@ -306,6 +306,10 @@ public:
 
     const std::optional<size_t>& GetSelectedListItem() const { return m_oSelectedListItem; }
 
+    /// Get a copy of selected list item's index,
+    /// potentially even if the selection is already written out to text (i.e. validated).
+    std::optional<size_t> GetSelectedListItem(bool bCheckDocModel) const;
+
     void SetSelectedDate(std::optional<double> oSelectedDate) { m_oSelectedDate = oSelectedDate; }
 
     const std::optional<double>& GetSelectedDate() const { return m_oSelectedDate; }
