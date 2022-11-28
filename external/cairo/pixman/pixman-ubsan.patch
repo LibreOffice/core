@@ -1,6 +1,6 @@
-diff -ru pixman-0.40.0.orig/pixman/pixman-bits-image.c pixman-0.40.0/pixman/pixman-bits-image.c
---- misc/pixman-0.40.0.orig/pixman/pixman-bits-image.c	2021-08-29 20:02:33.714515016 +0100
-+++ misc/build/pixman-0.40.0/pixman/pixman-bits-image.c	2021-08-29 20:05:43.304930185 +0100
+diff -ru pixman-0.42.2.orig/pixman/pixman-bits-image.c pixman-0.42.2/pixman/pixman-bits-image.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-bits-image.c	2022-11-03 02:25:48.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-bits-image.c	2022-11-28 21:35:25.896969126 +0900
 @@ -351,8 +351,8 @@
       * positioned relative to a particular phase (and not relative to whatever
       * exact fraction we happen to get here).
@@ -12,9 +12,9 @@ diff -ru pixman-0.40.0.orig/pixman/pixman-bits-image.c pixman-0.40.0/pixman/pixm
  
      px = (x & 0xffff) >> x_phase_shift;
      py = (y & 0xffff) >> y_phase_shift;
-diff -ru pixman-0.40.0.orig/pixman/pixman-combine32.c pixman-0.40.0/pixman/pixman-combine32.c
---- misc/pixman-0.40.0.orig/pixman/pixman-combine32.c	2021-08-29 20:02:33.715514970 +0100
-+++ misc/build/pixman-0.40.0/pixman/pixman-combine32.c	2021-08-29 20:05:43.304930185 +0100
+diff -ru pixman-0.42.2.orig/pixman/pixman-combine32.c pixman-0.42.2/pixman/pixman-combine32.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-combine32.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-combine32.c	2022-11-28 21:38:48.226968594 +0900
 @@ -589,7 +589,7 @@
  	    rg = DIV_ONE_UN8 (rg);					\
  	    rb = DIV_ONE_UN8 (rb);					\
@@ -24,9 +24,9 @@ diff -ru pixman-0.40.0.orig/pixman/pixman-combine32.c pixman-0.40.0/pixman/pixma
  	}								\
      }									\
      									\
-diff -ru pixman-0.40.0.orig/pixman/pixman-fast-path.c pixman-0.40.0/pixman/pixman-fast-path.c
---- misc/pixman-0.40.0.orig/pixman/pixman-fast-path.c	2021-08-29 20:02:33.716514925 +0100
-+++ misc/build/pixman-0.40.0/pixman/pixman-fast-path.c	2021-08-29 20:05:43.303930231 +0100
+diff -ru pixman-0.42.2.orig/pixman/pixman-fast-path.c pixman-0.42.2/pixman/pixman-fast-path.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-fast-path.c	2022-10-18 02:47:42.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-fast-path.c	2022-11-28 21:53:12.596963317 +0900
 @@ -2758,8 +2758,8 @@
  	 * positioned relative to a particular phase (and not relative to whatever
  	 * exact fraction we happen to get here).
@@ -38,19 +38,22 @@ diff -ru pixman-0.40.0.orig/pixman/pixman-fast-path.c pixman-0.40.0/pixman/pixma
  
  	px = (x & 0xffff) >> x_phase_shift;
  	py = (y & 0xffff) >> y_phase_shift;
-@@ -2836,7 +2836,7 @@
- 	sgtot = CLIP (sgtot, 0, 0xff);
+@@ -2837,9 +2837,9 @@
  	sbtot = CLIP (sbtot, 0, 0xff);
  
+ #ifdef WORDS_BIGENDIAN
+-	buffer[k] = (satot << 0) | (srtot << 8) | (sgtot << 16) | (sbtot << 24);
++	buffer[k] = (satot << 0) | (srtot << 8) | (sgtot << 16) | ((uint32_t)sbtot << 24);
+ #else
 -	buffer[k] = (satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
 +	buffer[k] = ((uint32_t)satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
+ #endif
  
      next:
- 	vx += ux;
-diff -ru pixman-0.40.0.orig/pixman/pixman-sse2.c pixman-0.40.0/pixman/pixman-sse2.c
---- misc/pixman-0.40.0.orig/pixman/pixman-sse2.c	2021-08-29 20:02:33.716514925 +0100
-+++ misc/build/pixman-0.40.0/pixman/pixman-sse2.c	2021-08-29 20:05:43.306930095 +0100
-@@ -3344,7 +3344,7 @@
+diff -ru pixman-0.42.2.orig/pixman/pixman-sse2.c pixman-0.42.2/pixman/pixman-sse2.c
+--- misc/pixman-0.42.2/pixman/pixman-sse2.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-sse2.c   2022-11-28 22:11:19.276969466 +0900
+@@ -3345,7 +3345,7 @@
  
  	b = filler & 0xff;
  	w = (b << 8) | b;
@@ -59,9 +62,9 @@ diff -ru pixman-0.40.0.orig/pixman/pixman-sse2.c pixman-0.40.0/pixman/pixman-sse
      }
      else if (bpp == 16)
      {
-diff -ru pixman-0.40.0.orig/pixman/pixman-utils.c pixman-0.40.0/pixman/pixman-utils.c
---- misc/pixman-0.40.0.orig/pixman/pixman-utils.c	2021-08-29 20:02:33.715514970 +0100
-+++ misc/build/pixman-0.40.0/pixman/pixman-utils.c	2021-08-29 20:05:43.306930095 +0100
+diff -ru pixman-0.42.2.orig/pixman/pixman-utils.c pixman-0.42.2/pixman/pixman-utils.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-utils.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-utils.c	2022-11-28 21:55:44.196964912 +0900
 @@ -213,7 +213,7 @@
  	g = float_to_unorm (src[i].g, 8);
  	b = float_to_unorm (src[i].b, 8);
