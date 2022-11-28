@@ -39,9 +39,6 @@ namespace sdr::properties
             void ImpRemoveStyleSheet();
 
         protected:
-            // the StyleSheet of this object
-            SfxStyleSheet*                                  mpStyleSheet;
-
             // create a new itemset
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 
@@ -86,6 +83,9 @@ namespace sdr::properties
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
             virtual bool isUsedByModel() const override;
+        private:
+            // the StyleSheet of this object
+            SfxStyleSheet*                                  mpStyleSheet;
         };
 
 } // end of namespace sdr::properties

@@ -74,6 +74,16 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetContro
 {
 private:
     SvxTabPage* m_pPage;
+    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
+    sal_uInt16 nBorderWidth;
+    Point aPtLT, aPtMT, aPtRT;
+    Point aPtLM, aPtMM, aPtRM;
+    Point aPtLB, aPtMB, aPtRB;
+    Point aPtNew;
+    RectPoint eRP, eDefRP;
+    std::unique_ptr<BitmapEx> pBitmap;
+    CTL_STATE m_nState;
+    bool mbCompleteDisable : 1;
 
     SVX_DLLPRIVATE static void      InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
@@ -84,18 +94,6 @@ private:
     SvxRectCtl& operator=(const SvxRectCtl&) = delete;
 
 protected:
-    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
-    sal_uInt16 nBorderWidth;
-    Point aPtLT, aPtMT, aPtRT;
-    Point aPtLM, aPtMM, aPtRM;
-    Point aPtLB, aPtMB, aPtRB;
-    Point aPtNew;
-    RectPoint eRP, eDefRP;
-    std::unique_ptr<BitmapEx> pBitmap;
-    CTL_STATE m_nState;
-
-    bool mbCompleteDisable : 1;
-
     RectPoint           GetRPFromPoint( Point, bool bRTL = false ) const;
     const Point&        GetPointFromRP( RectPoint ) const;
     Point               SetActualRPWithoutInvalidate( RectPoint eNewRP );  // returns the last point

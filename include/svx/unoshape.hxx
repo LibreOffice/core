@@ -101,31 +101,11 @@ class SVXCORE_DLLPUBLIC SvxShape :
                  public SvxShape_UnoImplHelper,
                  public SfxListener
 {
-private:
-    css::awt::Size maSize;
-    css::awt::Point maPosition;
-    OUString maShapeType;
-    OUString maShapeName;
-
-    /** these members are used to optimize XMultiProperty calls */
-    std::unique_ptr<SvxShapeImpl> mpImpl;
-    bool mbIsMultiPropertyCall;
-
-    css::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
-
 protected:
     friend class SvxDrawPage;
     friend class SvxShapeConnector;
     friend class SdXShape;
 
-    const SvxItemPropertySet* mpPropSet;
-    SvxItemPropertySetUsrAnys maUrsAnys;
-    o3tl::span<const SfxItemPropertyMapEntry> maPropMapEntries;
-
-private:
-    rtl::Reference< SdrObject > mxSdrObject;
-
-protected:
     // translations for writer, which works in TWIPS
     void ForceMetricToItemPoolMetric(Pair& rPoint) const noexcept;
     void ForceMetricToItemPoolMetric(Point& rPoint) const noexcept { ForceMetricToItemPoolMetric(rPoint.toPair()); }
@@ -151,9 +131,6 @@ protected:
 
     /** called from the XActionLockable interface methods on final unlock */
     virtual void unlock();
-
-    /** used from the XActionLockable interface */
-    sal_uInt16 mnLockCount;
 
     o3tl::span<const SfxItemPropertyMapEntry> getPropertyMapEntries() const { return maPropMapEntries; }
 
@@ -334,6 +311,22 @@ private:
     SVX_DLLPRIVATE void impl_initFromSdrObject();
     /// CTOR-Impl
     SVX_DLLPRIVATE void impl_construct();
+
+    css::awt::Size maSize;
+    css::awt::Point maPosition;
+    OUString maShapeType;
+    OUString maShapeName;
+    /** these members are used to optimize XMultiProperty calls */
+    std::unique_ptr<SvxShapeImpl> mpImpl;
+    bool mbIsMultiPropertyCall;
+
+    css::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
+    const SvxItemPropertySet* mpPropSet;
+    SvxItemPropertySetUsrAnys maUrsAnys;
+    o3tl::span<const SfxItemPropertyMapEntry> maPropMapEntries;
+    rtl::Reference< SdrObject > mxSdrObject;
+    /** used from the XActionLockable interface */
+    sal_uInt16 mnLockCount;
 };
 
 class SVXCORE_DLLPUBLIC SvxShapeText : public SvxShape, public SvxUnoTextBase

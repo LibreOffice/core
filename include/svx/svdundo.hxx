@@ -149,7 +149,6 @@ protected:
 
 class SVXCORE_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
 {
-protected:
     std::optional<SfxItemSet> moUndoSet;
     std::optional<SfxItemSet> moRedoSet;
 
@@ -168,6 +167,7 @@ protected:
     // If we have a group object:
     std::unique_ptr<SdrUndoGroup> pUndoGroup;
 
+protected:
     // Helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
     static void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
 
@@ -420,7 +420,6 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
-protected:
     std::optional<OutlinerParaObject>
                                 pOldText;
     std::optional<OutlinerParaObject>

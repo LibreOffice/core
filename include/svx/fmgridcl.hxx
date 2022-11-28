@@ -36,15 +36,11 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmGridHeader
             :public ::svt::EditBrowserHeader
             ,public DropTargetHelper
 {
-protected:
-    std::unique_ptr<FmGridHeaderData>       m_pImpl;
-
 public:
     FmGridHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );
     virtual ~FmGridHeader() override;
     virtual void dispose() override;
 
-public:
     // trigger context menu execution
     void    triggerColumnContextMenu( const ::Point& _rPreferredPos );
 
@@ -83,6 +79,8 @@ protected:
     void notifyColumnSelect(sal_uInt16 nColumnId);
 private:
     DECL_DLLPRIVATE_LINK( OnAsyncExecuteDrop, void*, void );
+
+    std::unique_ptr<FmGridHeaderData>       m_pImpl;
 };
 
 

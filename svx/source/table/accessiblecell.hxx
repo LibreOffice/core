@@ -107,7 +107,8 @@ public:
 
     //Get the parent table
     AccessibleTableShape* GetParentTable() { return pAccTable; }
-protected:
+
+private:
     /// Bundle of information passed to all shapes in a document tree.
     AccessibleShapeTreeInfo maShapeTreeInfo;
 

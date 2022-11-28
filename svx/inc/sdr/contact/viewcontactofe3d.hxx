@@ -59,12 +59,6 @@ public:
 
     // primitive stuff
 
-    // Primitive3DContainer of the ViewContact. This contains all necessary information
-    // for the graphical visualisation and needs to be supported by all 3D VCs which
-    // can be visualized. It does NOT contain the object transformation to be able to
-    // buffer for all possible usages
-    drawinglayer::primitive3d::Primitive3DContainer mxViewIndependentPrimitive3DContainer;
-
 protected:
     // This method is responsible for creating the graphical visualisation data which is
     // stored in mxViewIndependentPrimitive3DContainer, but without object transformation
@@ -87,6 +81,13 @@ public:
     // use getVIP3DSWithoutObjectTransform and embed to 3d transform primitive when object's
     // local 3d transform is used
     drawinglayer::primitive3d::Primitive3DContainer getViewIndependentPrimitive3DContainer() const;
+
+private:
+    // Primitive3DContainer of the ViewContact. This contains all necessary information
+    // for the graphical visualisation and needs to be supported by all 3D VCs which
+    // can be visualized. It does NOT contain the object transformation to be able to
+    // buffer for all possible usages
+    drawinglayer::primitive3d::Primitive3DContainer mxViewIndependentPrimitive3DContainer;
 };
 }
 

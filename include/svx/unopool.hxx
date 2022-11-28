@@ -88,7 +88,7 @@ protected:
     /// @throws css::uno::RuntimeException
     virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const css::uno::Any& rValue );
 
-protected:
+private:
     SdrModel* mpModel;
     rtl::Reference<SfxItemPool> mpDefaultsPool;
 };

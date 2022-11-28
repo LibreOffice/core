@@ -170,11 +170,7 @@ class BulletsTypeMgr final : public NBOTypeMgrBase
 
 class NumberingTypeMgr final : public NBOTypeMgrBase
 {
-    private:
         NumberingTypeMgr(const NumberingTypeMgr&) = delete;
-    public:
-        NumberSettingsArr_Impl      maNumberSettingsArr;
-        NumberSettingsArr_Impl      maDefaultNumberSettingsArr;
     public:
         NumberingTypeMgr();
         virtual ~NumberingTypeMgr() override;
@@ -185,15 +181,14 @@ class NumberingTypeMgr final : public NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static NumberingTypeMgr& GetInstance();
+    private:
+        NumberSettingsArr_Impl      maNumberSettingsArr;
+        NumberSettingsArr_Impl      maDefaultNumberSettingsArr;
 };
 
 class OutlineTypeMgr final : public NBOTypeMgrBase
 {
-    private:
         OutlineTypeMgr(const OutlineTypeMgr&) = delete;
-    public:
-        OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
-        OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
     public:
         OutlineTypeMgr();
         virtual void Init() override;
@@ -203,6 +198,9 @@ class OutlineTypeMgr final : public NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static OutlineTypeMgr& GetInstance();
+    private:
+        OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
+        OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
 };
 }
 #endif
