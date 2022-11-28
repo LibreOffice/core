@@ -289,20 +289,19 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
         if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetAnchorNode())
         {
-            const SwPosition* pPos = rAnchor.GetContentAnchor();
-            SwTextNode *pTextNd = pPos->GetNode().GetTextNode();
+            SwTextNode *pTextNd = rAnchor.GetAnchorNode()->GetTextNode();
 
             // attribute is still in text node, delete it
             if ( pTextNd )
             {
                 SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
-                    pTextNd->GetTextAttrForCharAt( pPos->GetContentIndex(),
+                    pTextNd->GetTextAttrForCharAt( rAnchor.GetAnchorContentOffset(),
                         RES_TXTATR_FLYCNT ));
                 if ( pAttr && (pAttr->GetFlyCnt().GetFrameFormat() == pFormat) )
                 {
                     // don't delete, set pointer to 0
                     const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-                    pTextNd->EraseText( *pPos, 1 );
+                    pTextNd->EraseText( *rAnchor.GetContentAnchor(), 1 );
                 }
             }
         }
@@ -453,10 +452,10 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
     if (bSetTextFlyAtt && (RndStdIds::FLY_AS_CHAR == rNewAnchor.GetAnchorId()))
     {
-        const SwPosition* pPos = rNewAnchor.GetContentAnchor();
+        SwNode* pAnchorNode = rNewAnchor.GetAnchorNode();
         SwFormatFlyCnt aFormat( pDest );
-        pPos->GetNode().GetTextNode()->InsertItem(
-            aFormat, pPos->GetContentIndex(), 0 );
+        pAnchorNode->GetTextNode()->InsertItem(
+            aFormat, rNewAnchor.GetAnchorContentOffset(), 0 );
     }
 
     if( bMakeFrames )

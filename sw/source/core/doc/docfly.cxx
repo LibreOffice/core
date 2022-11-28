@@ -307,7 +307,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
         SwNode *pAnchorNode = rOldAnch.GetAnchorNode();
         SwTextNode *pTextNode = pAnchorNode->GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = rOldAnch.GetContentAnchor()->GetContentIndex();
+        const sal_Int32 nIdx = rOldAnch.GetAnchorContentOffset();
         SwTextAttr * const  pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
@@ -332,12 +332,12 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             // If no position attributes are received, we have to make sure
             // that no forbidden automatic alignment is left.
         {
-            const SwPosition *pPos = aNewAnch.GetContentAnchor();
-            SwTextNode *pNd = pPos->GetNode().GetTextNode();
+            SwNode *pAnchorNode = aNewAnch.GetAnchorNode();
+            SwTextNode *pNd = pAnchorNode->GetTextNode();
             OSL_ENSURE( pNd, "Cursor does not point to TextNode." );
 
             SwFormatFlyCnt aFormat( static_cast<SwFlyFrameFormat*>(&rFormat) );
-            pNd->InsertItem( aFormat, pPos->GetContentIndex(), 0 );
+            pNd->InsertItem( aFormat, aNewAnch.GetAnchorContentOffset(), 0 );
         }
 
         if( SfxItemState::SET != rSet.GetItemState( RES_VERT_ORIENT, false ))
@@ -766,7 +766,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // anchored object the complete <SwPosition> is kept, because the
             // anchor index position could be moved, if the object again is
             // anchored as character.
-            std::optional<const SwPosition> oOldAsCharAnchorPos;
+            std::optional<SwPosition> oOldAsCharAnchorPos;
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == RndStdIds::FLY_AS_CHAR )
             {

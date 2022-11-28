@@ -1126,7 +1126,7 @@ static bool IsShown(SwNodeOffset const nIndex,
         {
             assert(iter->nStart != iter->nEnd); // TODO possible?
             assert(iter->pNode->GetIndex() == nIndex);
-            if (rAnch.GetContentAnchor()->GetContentIndex() < iter->nStart)
+            if (rAnch.GetAnchorContentOffset() < iter->nStart)
             {
                 return false;
             }
@@ -1144,7 +1144,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                 // the interesting corner cases are on the edge of the extent!
                 // no need to check for > the last extent because those
                 // are never visible.
-                if (rAnch.GetContentAnchor()->GetContentIndex() <= iter->nEnd)
+                if (rAnch.GetAnchorContentOffset() <= iter->nEnd)
                 {
                     if (iter->nStart == 0)
                     {
@@ -1180,14 +1180,14 @@ static bool IsShown(SwNodeOffset const nIndex,
                                 ? iter->pNode->Len()
                                 : 0);
                         return !IsDestroyFrameAnchoredAtChar(*rAnch.GetContentAnchor(), start, end);
-                    }
+                   }
                 }
             }
             else
             {
                 assert(rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
                 // for AS_CHAR obviously must be <
-                if (rAnch.GetContentAnchor()->GetContentIndex() < iter->nEnd)
+                if (rAnch.GetAnchorContentOffset() < iter->nEnd)
                 {
                     return true;
                 }
@@ -1337,10 +1337,10 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
         {
             ret = (pAnchorNode == pMergedPara->pFirstNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                        || rAnchor.GetContentAnchor()->GetContentIndex() == 0))
+                        || rAnchor.GetAnchorContentOffset() == 0))
                 || (pAnchorNode == pMergedPara->pLastNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                        || rAnchor.GetContentAnchor()->GetContentIndex() == pMergedPara->pLastNode->Len()));
+                        || rAnchor.GetAnchorContentOffset() == pMergedPara->pLastNode->Len()));
         }
         auto iter(iterFirst);
         SwTextNode const* pNode(pMergedPara->pFirstNode);

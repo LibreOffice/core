@@ -255,13 +255,11 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
 
     sal_Int32 const nIndex(isExported() ? 4 : 3);
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
-    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
-                         rFlys[0]->GetAnchor().GetContentAnchor()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), rFlys[0]->GetAnchor().GetAnchorNode()->GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetAnchorContentOffset());
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[1]->GetAnchor().GetAnchorId());
-    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
-                         rFlys[1]->GetAnchor().GetContentAnchor()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), rFlys[1]->GetAnchor().GetAnchorNode()->GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetAnchorContentOffset());
 }
 
 DECLARE_RTFEXPORT_TEST(testRedlineInsdel, "redline-insdel.rtf")

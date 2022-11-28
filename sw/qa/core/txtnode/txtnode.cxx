@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwDoc* pDoc = pShell->GetDoc();
     const SwFrameFormats& rSpz = *pDoc->GetSpzFrameFormats();
-    sal_Int32 nExpected = rSpz[0]->GetAnchor().GetContentAnchor()->GetContentIndex();
+    sal_Int32 nExpected = rSpz[0]->GetAnchor().GetAnchorContentOffset();
 
     // When deleting that last character and undoing it:
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
     pWrtShell->Undo();
 
     // Then make sure the anchor position after the undo is the same as the original:
-    sal_Int32 nActual = rSpz[0]->GetAnchor().GetContentAnchor()->GetContentIndex();
+    sal_Int32 nActual = rSpz[0]->GetAnchor().GetAnchorContentOffset();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3
     // - Actual  : 2
@@ -289,10 +289,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPictureContentControlKeyboard)
     // When checking if enter should trigger the file picker:
     const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
     const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
-    const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-    SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
-    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-        pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
+    SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
+    SwTextNode* pTextNode = pAnchorNode->GetTextNode();
+    SwTextAttr* pAttr
+        = pTextNode->GetTextAttrAt(rFormatAnchor.GetAnchorContentOffset(),
+                                   RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());

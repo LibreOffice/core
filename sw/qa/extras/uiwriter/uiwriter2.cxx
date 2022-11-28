@@ -1144,7 +1144,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->UnSelectFrame();
     pWrtShell->SttEndDoc(/*bStart=*/false);
@@ -1157,26 +1157,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
     // the problem was that the fly was deleted from the layout
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
     // check that the anchor was moved outside the redline
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Undo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
     // check that the anchor was restored
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Redo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Undo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetAnchorContentOffset());
 
     // now again in the other direction:
 
@@ -1189,25 +1189,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     // the problem was that the fly was deleted from the layout
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Undo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Redo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetAnchorContentOffset());
 
     pWrtShell->Undo(2);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetAnchorContentOffset());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
