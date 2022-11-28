@@ -1260,7 +1260,12 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         return;
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // "'setCurrentAppearance:' is deprecated: first deprecated in macOS 12.0 - Use
+        // -performAsCurrentDrawingAppearance: to temporarily set the drawing appearance, or
+        // +currentDrawingAppearance to access the currently drawing appearance."
     [NSAppearance setCurrentAppearance: mpNSView.effectiveAppearance];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
