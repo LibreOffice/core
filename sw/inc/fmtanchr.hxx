@@ -65,16 +65,17 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     RndStdIds GetAnchorId() const { return m_eAnchorId; }
+    void SetType( RndStdIds nRndId ) { m_eAnchorId = nRndId; }
+
     sal_uInt16 GetPageNum() const { return m_nPageNumber; }
-    const SwPosition* GetContentAnchor() const { return m_oContentAnchor ? &*m_oContentAnchor : nullptr; }
-    // #i28701#
-    sal_uInt32 GetOrder() const { return m_nOrder;}
+    void SetPageNum( sal_uInt16 nNew ) { m_nPageNumber = nNew; }
 
     SwNode* GetAnchorNode() const;
-
-    void SetType( RndStdIds nRndId ) { m_eAnchorId = nRndId; }
-    void SetPageNum( sal_uInt16 nNew ) { m_nPageNumber = nNew; }
+    const SwPosition* GetContentAnchor() const { return m_oContentAnchor ? &*m_oContentAnchor : nullptr; }
     void SetAnchor( const SwPosition *pPos );
+
+    // #i28701#
+    sal_uInt32 GetOrder() const { return m_nOrder;}
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
