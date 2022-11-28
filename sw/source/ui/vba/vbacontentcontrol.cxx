@@ -99,7 +99,8 @@ void SwVbaContentControl::setChecked(sal_Bool bSet)
     if (pCC->GetCheckbox() && pCC->GetChecked() != static_cast<bool>(bSet))
     {
         pCC->SetChecked(bSet);
-        m_rCC.Invalidate(/*bKeepPlaceholderStatus=*/false);
+        pCC->SetShowingPlaceHolder(false);
+        m_rCC.Invalidate();
     }
 }
 
@@ -734,7 +735,7 @@ void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, cons
         // Remove placeholder text.
         pCC->SetPlaceholderDocPart("");
     }
-    m_rCC.Invalidate(/*bKeepPlaceholderStatus=true*/);
+    m_rCC.Invalidate();
 }
 
 void SwVbaContentControl::Ungroup() { SAL_INFO("sw.vba", "SwVbaContentControl::UnGroup stub"); }

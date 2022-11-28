@@ -662,33 +662,21 @@ SwTextNode* SwTextContentControl::GetTextNode() const
     return rFormatContentControl.GetTextNode();
 }
 
-void SwTextContentControl::Invalidate(bool bKeepPlaceholderStatus)
+void SwTextContentControl::Invalidate()
 {
     SwDocShell* pDocShell = GetTextNode() ? GetTextNode()->GetDoc().GetDocShell() : nullptr;
     if (!pDocShell || !pDocShell->GetWrtShell())
         return;
 
     // save the cursor
+    // NOTE: needs further testing to see if this is adequate (i.e. in auto-run macros...)
     pDocShell->GetWrtShell()->Push();
 
     // visit the control in the text (which makes any necessary visual changes)
-    // NOTE: simply going to a control indicates cancelling m_bShowingPlaceHolder
+    // NOTE: simply going to a control indicates cancelling ShowingPlaceHolder, unless bOnlyRefresh
+    // NOTE: simply going to a checkbox causes a toggle, unless bOnlyRefresh
     auto& rFormatContentControl = static_cast<SwFormatContentControl&>(GetAttr());
-    std::shared_ptr<SwContentControl> pCC = rFormatContentControl.GetContentControl();
-    bKeepPlaceholderStatus = bKeepPlaceholderStatus && pCC && pCC->GetShowingPlaceHolder();
-
-    // NOTE: simply going to a checkbox causes a toggle
-    const bool bSaveChecked = pCC && pCC->GetChecked();
-    if (pCC && pCC->GetCheckbox())
-        pCC->SetChecked(!bSaveChecked); //do a double-toggle to keep the same value!
-
-    pDocShell->GetWrtShell()->GotoContentControl(rFormatContentControl);
-
-    assert((!pCC || !pCC->GetCheckbox() || bSaveChecked == pCC->GetChecked())
-           && "invalidation implementation changed");
-
-    if (bKeepPlaceholderStatus)
-        pCC->SetShowingPlaceHolder(true);
+    pDocShell->GetWrtShell()->GotoContentControl(rFormatContentControl, /*bOnlyRefresh=*/true);
 
     pDocShell->GetWrtShell()->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }

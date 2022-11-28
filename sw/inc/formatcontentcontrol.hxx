@@ -180,9 +180,11 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     sal_Int32 m_nId = 0;
 
     /// Stores a list item index, in case the doc model is not yet updated.
+    // i.e. temporarily store the selected item until the text is inserted by GotoContentControl.
     std::optional<size_t> m_oSelectedListItem;
 
     /// Stores a date timestamp, in case the doc model is not yet updated.
+    // i.e. temporarily store the date until the text is inserted by GotoContentControl.
     std::optional<double> m_oSelectedDate;
 
     /**

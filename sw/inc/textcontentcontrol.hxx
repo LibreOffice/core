@@ -42,7 +42,7 @@ public:
     void ChgTextNode(SwTextNode* pNode);
 
     SwTextNode* GetTextNode() const;
-    void Invalidate(bool bKeepPlaceholderStatus = true);
+    void Invalidate();
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
