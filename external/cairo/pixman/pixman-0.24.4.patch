@@ -1,6 +1,6 @@
 --- misc/pixman-0.24.4/Makefile.in	2011-11-06 22:11:25.000000000 +0100
 +++ misc/build/pixman-0.24.4/Makefile.in	2011-12-16 09:06:45.317211035 +0100
-@@ -272,7 +272,7 @@
+@@ -385,7 +385,7 @@
  top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
