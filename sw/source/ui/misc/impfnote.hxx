@@ -28,12 +28,12 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    OUString aNumDoc;
-    OUString aNumPage;
-    OUString aNumChapter;
-    SwWrtShell *pSh;
-    bool    bPosDoc;
-    bool    bEndNote;
+    OUString m_aNumDoc;
+    OUString m_aNumPage;
+    OUString m_aNumChapter;
+    SwWrtShell *m_pSh;
+    bool    m_bPosDoc;
+    bool    m_bEndNote;
 
     std::unique_ptr<SwNumberingTypeListBox> m_xNumViewBox;
     std::unique_ptr<weld::Label> m_xOffsetLbl;

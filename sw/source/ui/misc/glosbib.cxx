@@ -45,7 +45,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
     : SfxDialogController(pParent, "modules/swriter/ui/editcategories.ui",
                           "EditCategoriesDialog")
     , m_pParent(pParent)
-    , pGlosHdl(pHdl)
+    , m_pGlosHdl(pHdl)
     , m_xNameED(m_xBuilder->weld_entry("name"))
     , m_xPathLB(m_xBuilder->weld_combo_box("pathlb"))
     , m_xGroupTLB(m_xBuilder->weld_tree_view("group"))
@@ -148,7 +148,7 @@ void SwGlossaryGroupDlg::Apply()
             if (m_xGroupTLB->n_children())
             {
                 GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(0));
-                pGlosHdl->SetCurGroup(pUserData->sGroupName);
+                m_pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
         const OUString sMsg(SwResId(STR_QUERY_DELETE_GROUP1)
@@ -159,7 +159,7 @@ void SwGlossaryGroupDlg::Apply()
                                                        VclMessageType::Question, VclButtonsType::YesNo, sMsg));
         xQueryBox->set_default_response(RET_NO);
         if (RET_YES == xQueryBox->run())
-            pGlosHdl->DelGroup( sDelGroup );
+            m_pGlosHdl->DelGroup( sDelGroup );
     }
 
     //don't rename before there was one
@@ -169,10 +169,10 @@ void SwGlossaryGroupDlg::Apply()
         OUString const sOld(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
         OUString sNew(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
         OUString const sTitle(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
-        pGlosHdl->RenameGroup(sOld, sNew, sTitle);
+        m_pGlosHdl->RenameGroup(sOld, sNew, sTitle);
         if (it == m_RenamedArr.begin())
         {
-            sCreatedGroup = sNew;
+            m_sCreatedGroup = sNew;
         }
     }
     for (auto& sNewGroup : m_InsertedArr)
@@ -180,9 +180,9 @@ void SwGlossaryGroupDlg::Apply()
         OUString sNewTitle = sNewGroup.getToken(0, GLOS_DELIM);
         if( sNewGroup != aActGroup )
         {
-            pGlosHdl->NewGroup(sNewGroup, sNewTitle);
-            if(sCreatedGroup.isEmpty())
-                sCreatedGroup = sNewGroup;
+            m_pGlosHdl->NewGroup(sNewGroup, sNewTitle);
+            if(m_sCreatedGroup.isEmpty())
+                m_sCreatedGroup = sNewGroup;
         }
     }
 }
@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, weld::Button&, void)
     OUString sGroup = m_xNameED->get_text()
         + OUStringChar(GLOS_DELIM)
         + OUString::number(m_xPathLB->get_active());
-    OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
+    OSL_ENSURE(!m_pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
     GlosBibUserData* pData = new GlosBibUserData;
     pData->sPath = m_xPathLB->get_active_text();
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, weld::Button&, void)
     OUString sNewName = sNewTitle
         + OUStringChar(GLOS_DELIM)
         + OUString::number(m_xPathLB->get_active());
-    OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
+    OSL_ENSURE(!m_pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // if the name to be renamed is among the new ones - replace
     bool bDone = false;
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, weld::Entry&, void)
 
 bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 {
-    bool bDel = !pGlosHdl->IsReadOnly(&rGroup);
+    bool bDel = !m_pGlosHdl->IsReadOnly(&rGroup);
 
     // OM: if the name is among the new region name, it is deletable
     // as well! Because for non existing region names ReadOnly issues

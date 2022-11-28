@@ -1165,7 +1165,7 @@ static OUString lcl_FindColumnEntry(const uno::Sequence<beans::PropertyValue>& r
     return OUString();
 }
 
-bool SwAuthorMarkPane::bIsFromComponent = true;
+bool SwAuthorMarkPane::s_bIsFromComponent = true;
 
 SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builder& rBuilder, bool bNewDlg)
     : m_rDialog(rDialog)
@@ -1186,8 +1186,8 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
     m_xActionBT->show();
     m_xFromComponentRB->set_visible(m_bNewEntry);
     m_xFromDocContentRB->set_visible(m_bNewEntry);
-    m_xFromComponentRB->set_active(bIsFromComponent);
-    m_xFromDocContentRB->set_active(!bIsFromComponent);
+    m_xFromComponentRB->set_active(s_bIsFromComponent);
+    m_xFromDocContentRB->set_active(!s_bIsFromComponent);
 
     m_xActionBT->connect_clicked(LINK(this,SwAuthorMarkPane, InsertHdl));
     m_xCloseBT->connect_clicked(LINK(this,SwAuthorMarkPane, CloseHdl));
@@ -1230,7 +1230,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl, weld::Button&, void)
 IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
 {
     const OUString sEntry(rBox.get_active_text());
-    if(bIsFromComponent)
+    if(s_bIsFromComponent)
     {
         if(m_xBibAccess.is() && !sEntry.isEmpty())
         {
@@ -1378,10 +1378,10 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
 IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
 {
     bool bFromComp = m_xFromComponentRB->get_active();
-    bIsFromComponent = bFromComp;
-    m_xCreateEntryPB->set_sensitive(!bIsFromComponent);
+    s_bIsFromComponent = bFromComp;
+    m_xCreateEntryPB->set_sensitive(!s_bIsFromComponent);
     m_xEntryLB->clear();
-    if(bIsFromComponent)
+    if(s_bIsFromComponent)
     {
         if(!m_bBibAccessInitialized)
         {
@@ -1452,7 +1452,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, weld::Entry&, rEdit, bool)
     {
         if (m_xEntryLB->find_text(sEntry) != -1)
             return false;
-        else if(bIsFromComponent)
+        else if(s_bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                         m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
@@ -1474,7 +1474,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEditAllowedHdl, weld::Entry&, rEdit, bool)
     {
         if (m_xEntryLB->find_text(sEntry) != -1)
             return false;
-        else if(bIsFromComponent)
+        else if(s_bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                         m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));

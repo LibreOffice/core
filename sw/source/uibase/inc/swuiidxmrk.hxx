@@ -162,7 +162,7 @@ class SwAuthorMarkPane
 {
     weld::DialogController& m_rDialog;
 
-    static bool     bIsFromComponent;
+    static bool     s_bIsFromComponent;
 
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;

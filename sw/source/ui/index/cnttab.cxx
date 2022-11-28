@@ -1435,14 +1435,14 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OString&, rIdent, void)
 class SwTOXWidget
 {
 protected:
-    Link<SwTOXWidget&,void> aGetFocusLink;
+    Link<SwTOXWidget&,void> m_aGetFocusLink;
 public:
     virtual WindowType GetType() const = 0;
     virtual void GrabFocus() = 0;
     virtual void Hide() = 0;
     virtual void set_grid_left_attach(int nPos) = 0;
     virtual void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) = 0;
-    void SetGetFocusHdl(const Link<SwTOXWidget&,void>& rLink) { aGetFocusLink = rLink; }
+    void SetGetFocusHdl(const Link<SwTOXWidget&,void>& rLink) { m_aGetFocusLink = rLink; }
     virtual ~SwTOXWidget() {}
 };
 
@@ -1600,7 +1600,7 @@ IMPL_LINK(SwTOXEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 IMPL_LINK_NOARG(SwTOXEdit, FocusInHdl, weld::Widget&, void)
 {
-    aGetFocusLink.Call(*this);
+    m_aGetFocusLink.Call(*this);
 }
 
 void SwTOXEdit::AdjustSize()
@@ -1792,7 +1792,7 @@ IMPL_LINK(SwTOXButton, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 IMPL_LINK_NOARG(SwTOXButton, FocusInHdl, weld::Widget&, void)
 {
-    aGetFocusLink.Call(*this);
+    m_aGetFocusLink.Call(*this);
 }
 
 namespace
