@@ -1501,7 +1501,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
         {
             SwTextNode const& rNode(*rFormatAnchor.GetAnchorNode()->GetTextNode());
             assert(FrameContainsNode(_rFrame, rNode.GetIndex()));
-            sal_Int32 const nObjAnchorPos(rFormatAnchor.GetContentAnchor()->GetContentIndex());
+            sal_Int32 const nObjAnchorPos(rFormatAnchor.GetAnchorContentOffset());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
                 ? rNode.GetText()[nObjAnchorPos]
                 : 0;
@@ -1597,7 +1597,7 @@ void SwTextFrame::HideAndShowObjects()
                     const SwFormatAnchor& rAnchorFormat = pContact->GetAnchorFormat();
                     SwScriptInfo::GetBoundsOfHiddenRange(
                         *rAnchorFormat.GetAnchorNode()->GetTextNode(),
-                        rAnchorFormat.GetContentAnchor()->GetContentIndex(), nHiddenStart, nHiddenEnd);
+                        rAnchorFormat.GetAnchorContentOffset(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
                         sw_HideObj(*this, eAnchorType, rAnchorFormat, i))

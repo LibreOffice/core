@@ -927,7 +927,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat )
     , m_rFormat( rFormat )
     , m_nOldNodeIndex( rFormat.GetAnchor().GetAnchorNode()->GetIndex() )
     , m_nOldContentIndex( (RndStdIds::FLY_AT_CHAR == rFormat.GetAnchor().GetAnchorId())
-            ?   rFormat.GetAnchor().GetContentAnchor()->GetContentIndex()
+            ?   rFormat.GetAnchor().GetAnchorContentOffset()
             :   COMPLETE_STRING )
 {
 }

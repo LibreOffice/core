@@ -122,12 +122,12 @@ struct ObjAnchorOrder
 
         // Both objects aren't anchor to page or to fly
         // Thus, compare content anchor nodes, if existing.
-        const SwPosition* pContentAnchorListed = pAnchorListed->GetContentAnchor();
-        const SwPosition* pContentAnchorNew = pAnchorNew->GetContentAnchor();
+        const SwNode* pContentAnchorListed = pAnchorListed->GetAnchorNode();
+        const SwNode* pContentAnchorNew = pAnchorNew->GetAnchorNode();
         if ( pContentAnchorListed && pContentAnchorNew &&
-             pContentAnchorListed->GetNode() != pContentAnchorNew->GetNode() )
+             *pContentAnchorListed != *pContentAnchorNew )
         {
-            return pContentAnchorListed->GetNode() < pContentAnchorNew->GetNode();
+            return *pContentAnchorListed < *pContentAnchorNew;
         }
 
         // objects anchored at the same content.
@@ -137,9 +137,9 @@ struct ObjAnchorOrder
         if (pContentAnchorListed && pContentAnchorNew)
         {
             sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
-                pContentAnchorListed->GetContentIndex() : 0;
+                pAnchorListed->GetAnchorContentOffset() : 0;
             sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
-                pContentAnchorNew->GetContentIndex() : 0;
+                pAnchorNew->GetAnchorContentOffset() : 0;
             if (nListedIndex != nNewIndex)
             {
                 return nListedIndex < nNewIndex;
