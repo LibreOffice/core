@@ -2777,7 +2777,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
         "Delete line break (empty line)"
     };
 
-    // Check redlining (strikeout and underline) over the paragraph and line break symbols
+    // Check redlining (strike out and underline) over the paragraph and line break symbols
     for (int nLine = 0; nLine < 8; ++nLine)
     {
         bool bHasRedlineColor = false;
@@ -2790,7 +2790,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
                 Color aColor2(pAccess->GetPixel(nY+1, j));
                 Color aColor3(pAccess->GetPixel(nY, j+1));
                 Color aColor4(pAccess->GetPixel(nY+1, j+1));
-                // 4-pixel same color square sign strikeout or underline of redlining
+                // 4-pixel same color square sign strike out or underline of redlining
                 // if its color is not white, black or non-printing character color
                 if ( aColor == aColor2 && aColor == aColor3 && aColor == aColor4 &&
                         aColor != COL_WHITE && aColor != COL_BLACK &&
@@ -2806,6 +2806,48 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
     }
 
     comphelper::dispatchCommand(".uno:ControlCodes", {});
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
+{
+    // Load a document where the tracked text moving is visible with
+    // double underline and strike out character formatting
+    SwXTextDocument* pXTextDocument = createDoc("double-underline_and_strike-out.fodt");
+
+    // Render a larger area, and then get the color of the bottom right corner of our tile.
+    size_t nCanvasWidth = 700;
+    size_t nCanvasHeight = 350;
+    size_t nTileSize = 350;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
+            Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    bool bGreenLine = false;
+    size_t nGreenLine = 0;
+    // count green horizontal lines by tracking a column of pixels counting the
+    // separated continuous green pixel sequences.
+    for (size_t nLine = 0; nLine < nTileSize; ++nLine)
+    {
+        Color aColor(pAccess->GetPixel(nLine, 100));
+        if ( aColor == COL_GREEN )
+        {
+            if ( bGreenLine == false )
+            {
+                ++nGreenLine;
+                bGreenLine = true;
+            }
+        }
+        else
+            bGreenLine = false;
+    }
+    // tdf#152214 this was 0 (missing double underline and double strike out)
+    CPPUNIT_ASSERT_EQUAL(size_t(4), nGreenLine);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
