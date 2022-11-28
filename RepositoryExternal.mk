@@ -1213,8 +1213,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs/libcairo.a \
-	$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs/libpixman-1.a \
+	$(if $(filter EMSCRIPTEN,$(OS)), \
+		$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs/libcairo.a \
+		$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs/libpixman-1.a, \
+		-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
+		-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1) \
 )
 
 endef
