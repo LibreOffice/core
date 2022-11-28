@@ -58,7 +58,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-SfxPoolItem* SfxUnoAnyItem::CreateDefault() { SAL_WARN( "sfx", "No SfxUnoAnyItem factory available"); return nullptr; }
+SfxPoolItem* SfxUnoAnyItem::CreateDefault()
+{
+    return new SfxUnoAnyItem(0, uno::Any());
+}
 
 SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 {
