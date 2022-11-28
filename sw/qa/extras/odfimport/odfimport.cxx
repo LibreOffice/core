@@ -1103,6 +1103,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120677)
     // The document used to hang the layout, consuming memory until OOM
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152015)
+{
+    // it hangs at import time
+    createSwDoc("tdf152015.odt");
+
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf123829)
 {
     createSwDoc("tdf123829.odt");
