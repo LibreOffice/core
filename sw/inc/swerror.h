@@ -28,7 +28,6 @@
 #define ERR_WW8_NO_WW8_FILE_ERR         ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 14)
 #define ERR_FORMAT_FILE_ROWCOL          ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 15)
 #define ERR_SWG_WRITE_ERROR             ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 30 )
-#define ERR_SWG_OLD_GLOSSARY            ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 31 )
 #define ERR_WRITE_ERROR_FILE            ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 35 )
 #define ERR_SWG_INTERNAL_ERROR          ErrCode(ErrCodeArea::Sw, 50 )
 #define ERR_TXTBLOCK_NEWFILE_ERROR      ErrCode(ErrCodeArea::Sw, ErrCodeClass::Locking, 55 )

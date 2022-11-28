@@ -41,7 +41,6 @@ const ErrMsgCode RID_SW_ERRHDL[] =
     { NC_("RID_SW_ERRHDL", "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."), ERR_FORMAT_FILE_ROWCOL },
     // Export-Errors
     { NC_("RID_SW_ERRHDL", "Error writing file.") , ERR_SWG_WRITE_ERROR },
-    { NC_("RID_SW_ERRHDL", "Wrong AutoText document version.") , ERR_SWG_OLD_GLOSSARY },
     { NC_("RID_SW_ERRHDL", "Error in writing sub-document $(ARG1)."), ERR_WRITE_ERROR_FILE },
     // Import-/Export-Errors
     { NC_("RID_SW_ERRHDL", "Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ErrCodeClass::Read , ERR_SWG_INTERNAL_ERROR ) },
