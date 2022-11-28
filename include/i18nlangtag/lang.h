@@ -774,6 +774,7 @@ namespace o3tl
 #define LANGUAGE_USER_INTERSLAVIC_LATIN     LanguageType(0x06AD)
 #define LANGUAGE_USER_INTERSLAVIC_CYRILLIC  LanguageType(0x06AE)
 #define LANGUAGE_USER_PENNSYLVANIA_DUTCH    LanguageType(0x06AF)
+#define LANGUAGE_USER_PORTUGUESE_MOZAMBIQUE LanguageType(0x8416)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_PORTUGUESE)) */
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

@@ -142,8 +142,9 @@ const struct {
     { "nb_NO",  lcl_DATA_EURO },
     { "nds_DE", lcl_DATA_EURO },
     { "pl_PL",  lcl_DATA_EURO },
-    { "pt_BR",  lcl_DATA_EURO },
     { "pt_PT",  lcl_DATA_EURO },
+    { "pt_BR",  lcl_DATA_EURO },  // needs to be in EURO because inherits from pt_PT
+    { "pt_MZ",  lcl_DATA_EURO },  // needs to be in EURO because inherits from pt_PT
     { "ru_RU",  lcl_DATA_EURO },
     { "tr_TR",  lcl_DATA_EURO },
     { "tt_RU",  lcl_DATA_EURO },
