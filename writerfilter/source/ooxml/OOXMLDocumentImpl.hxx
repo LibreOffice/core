@@ -44,7 +44,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
-    css::uno::Sequence < css::uno::Sequence< css::uno::Any > > mxGlossaryDomList;
+    css::uno::Sequence < css::uno::Sequence< css::beans::NamedValue > > mxGlossaryDomList;
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
     std::stack< rtl::Reference<oox::shape::ShapeContextHandler> > maShapeContexts;
     css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
@@ -141,7 +141,7 @@ public:
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() override;
-    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() override;
+    virtual css::uno::Sequence<css::uno::Sequence< css::beans::NamedValue> >  getGlossaryDomList() override;
     virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() override;
 
     void incrementProgress();

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -219,7 +220,7 @@ public:
     virtual void popShapeContext() = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom( ) = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom( ) = 0;
-    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> > getGlossaryDomList() = 0;
+    virtual css::uno::Sequence<css::uno::Sequence< css::beans::NamedValue> > getGlossaryDomList() = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList( ) = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList( ) = 0;
     virtual css::uno::Sequence<css::beans::PropertyValue > getEmbeddingsList() = 0;
