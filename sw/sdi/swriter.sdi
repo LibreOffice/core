@@ -8267,9 +8267,6 @@ SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Controls;
 ]
 
