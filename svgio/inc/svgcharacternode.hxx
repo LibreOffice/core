@@ -123,7 +123,7 @@ namespace svgio::svgreader
             OUString           maText;
 
             /// local helpers
-            rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> createSimpleTextPrimitive(
+            rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> createSimpleTextPrimitive(
                 SvgTextPosition& rSvgTextPosition,
                 const SvgStyleAttributes& rSvgStyleAttributes) const;
             void decomposeTextWithStyle(

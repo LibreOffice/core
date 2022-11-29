@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <utility>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
@@ -208,12 +209,12 @@ namespace svgio::svgreader
             }
         }
 
-        rtl::Reference<TextSimplePortionPrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
+        rtl::Reference<BasePrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            rtl::Reference<TextSimplePortionPrimitive2D> pRetval;
+            rtl::Reference<BasePrimitive2D> pRetval;
             sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
@@ -412,6 +413,13 @@ namespace svgio::svgreader
                 if(rSvgStyleAttributes.getFill())
                     aFill = *rSvgStyleAttributes.getFill();
 
+                // get fill opacity
+                double fFillOpacity = 1.0;
+                if (rSvgStyleAttributes.getFillOpacity().isSet())
+                {
+                    fFillOpacity = rSvgStyleAttributes.getFillOpacity().getNumber();
+                }
+
                 // prepare TextTransformation
                 basegfx::B2DHomMatrix aTextTransform;
 
@@ -485,6 +493,13 @@ namespace svgio::svgreader
                         aFontAttribute,
                         aLocale,
                         aFill);
+                }
+
+                if (fFillOpacity != 1.0)
+                {
+                    pRetval = new UnifiedTransparencePrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DContainer{ pRetval },
+                        1.0 - fFillOpacity);
                 }
 
                 // advance current TextPosition

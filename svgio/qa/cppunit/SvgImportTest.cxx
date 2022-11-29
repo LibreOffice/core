@@ -84,6 +84,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf97663();
     void testTdf149880();
     void testCssClassRedefinition();
+    void testTspanFillOpacity();
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
 
@@ -134,6 +135,7 @@ public:
     CPPUNIT_TEST(testTdf97663);
     CPPUNIT_TEST(testTdf149880);
     CPPUNIT_TEST(testCssClassRedefinition);
+    CPPUNIT_TEST(testTspanFillOpacity);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1125,6 +1127,28 @@ void Test::testCssClassRedefinition()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
     assertXPath(
         pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Open Symbol");
+}
+
+void Test::testTspanFillOpacity()
+{
+    // Given an SVG file with <tspan fill-opacity="0.30">:
+    std::u16string_view aPath = u"/svgio/qa/cppunit/data/tspan-fill-opacity.svg";
+
+    // When rendering that SVG:
+    Primitive2DSequence aSequence = parseSvg(aPath);
+
+    // Then make sure that the text portion is wrapped in a transparency primitive with the correct
+    // transparency value:
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(Primitive2DContainer(aSequence));
+    sal_Int32 nTransparence = getXPath(pDocument, "//textsimpleportion[@text='hello']/parent::unifiedtransparence", "transparence").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//textsimpleportion[@text='hello']/parent::unifiedtransparence' number of nodes is incorrect
+    // i.e. the relevant <textsimpleportion> had no <unifiedtransparence> parent, the text was not
+    // semi-transparent.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(70), nTransparence);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
