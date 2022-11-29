@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
 namespace svgio::svgreader
 {
@@ -219,12 +220,12 @@ namespace svgio::svgreader
             }
         }
 
-        drawinglayer::primitive2d::TextSimplePortionPrimitive2D* SvgCharacterNode::createSimpleTextPrimitive(
+        drawinglayer::primitive2d::BasePrimitive2D* SvgCharacterNode::createSimpleTextPrimitive(
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = nullptr;
+            drawinglayer::primitive2d::BasePrimitive2D* pRetval = nullptr;
             sal_uInt32 nIndex(0);
             sal_uInt32 nLength(getText().getLength());
 
@@ -423,6 +424,13 @@ namespace svgio::svgreader
                     ? *rSvgStyleAttributes.getFill()
                     : basegfx::BColor(0.0, 0.0, 0.0));
 
+                // get fill opacity
+                double fFillOpacity = 1.0;
+                if (rSvgStyleAttributes.getFillOpacity().isSet())
+                {
+                    fFillOpacity = rSvgStyleAttributes.getFillOpacity().getNumber();
+                }
+
                 // prepare TextTransformation
                 basegfx::B2DHomMatrix aTextTransform;
 
@@ -479,6 +487,13 @@ namespace svgio::svgreader
                         aFontAttribute,
                         aLocale,
                         aFill);
+                }
+
+                if (fFillOpacity != 1.0)
+                {
+                    pRetval = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DContainer{ pRetval },
+                        1.0 - fFillOpacity);
                 }
 
                 // advance current TextPosition

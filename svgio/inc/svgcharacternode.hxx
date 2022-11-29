@@ -135,7 +135,7 @@ namespace svgio
             OUString           maText;
 
             /// local helpers
-            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* createSimpleTextPrimitive(
+            drawinglayer::primitive2d::BasePrimitive2D* createSimpleTextPrimitive(
                 SvgTextPosition& rSvgTextPosition,
                 const SvgStyleAttributes& rSvgStyleAttributes) const;
             void decomposeTextWithStyle(
