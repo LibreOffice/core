@@ -13,10 +13,6 @@
 #include <test/unoapixml_test.hxx>
 
 #include <sal/macros.h>
-#include <unotools/mediadescriptor.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <comphelper/processfactory.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

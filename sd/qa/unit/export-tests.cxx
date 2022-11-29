@@ -9,12 +9,11 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
@@ -23,7 +22,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -36,7 +34,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>

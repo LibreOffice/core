@@ -13,12 +13,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
-
 #include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -27,14 +22,12 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <vcl/scheduler.hxx>
-#include <osl/thread.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdpagv.hxx>
@@ -45,7 +38,6 @@
 #include <editeng/editobj.hxx>
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
-#include <chrono>
 #include <sdpage.hxx>
 #include <comphelper/base64.hxx>
 #include <LayerTabBar.hxx>
@@ -57,7 +49,6 @@
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
 #include <unomodel.hxx>
-#include <unotools/fcm.hxx>
 
 using namespace ::com::sun::star;
 

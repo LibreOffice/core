@@ -10,15 +10,12 @@
 #include <test/unoapixml_test.hxx>
 
 #include <app.hrc>
-#include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>

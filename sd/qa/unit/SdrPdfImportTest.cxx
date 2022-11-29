@@ -14,7 +14,6 @@
 
 #include <unotools/tempfile.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <tools/stream.hxx>
 #include <svx/svdograf.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -25,8 +24,6 @@
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
-
-#include <com/sun/star/frame/Desktop.hpp>
 
 using namespace css;
 

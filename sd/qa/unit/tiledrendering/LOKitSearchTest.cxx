@@ -13,7 +13,6 @@
 #include <test/helper/transferable.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/srchitem.hxx>
@@ -27,8 +26,6 @@
 #include <sdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
-
-#include <com/sun/star/frame/Desktop.hpp>
 
 using namespace css;
 

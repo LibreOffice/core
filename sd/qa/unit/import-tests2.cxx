@@ -20,7 +20,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xflbckit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdooitm.hxx>
@@ -48,7 +47,6 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>

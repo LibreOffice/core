@@ -28,10 +28,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdmetitm.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
