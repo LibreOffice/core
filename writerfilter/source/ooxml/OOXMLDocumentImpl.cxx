@@ -37,6 +37,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -599,17 +600,32 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     mxCustomXmlDomPropsList = comphelper::containerToSequence(aCustomXmlDomPropsList);
 }
 
+namespace
+{
+const char sSettingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
+const char sStylesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
+const char sFonttableType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
+const char sWebSettings[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
+const char sSettingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
+const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
+const char sFonttableTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
+const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
+
+constexpr OUStringLiteral sId = u"Id";
+constexpr OUStringLiteral sType = u"Type";
+constexpr OUStringLiteral sTarget = u"Target";
+constexpr OUStringLiteral sTargetMode = u"TargetMode";
+constexpr OUStringLiteral sContentType = u"_contentType";
+constexpr OUStringLiteral sRelDom = u"_relDom";
+constexpr OUStringLiteral sSettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
+constexpr OUStringLiteral sStylesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
+constexpr OUStringLiteral sWebsettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
+constexpr OUStringLiteral sFonttableContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
+}
+
+// See DocxExport::WriteGlossary
 void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 {
-    static const char sSettingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
-    static const char sStylesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
-    static const char sFonttableType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
-    static const char sWebSettings[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
-    static const char sSettingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
-    static const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
-    static const char sFonttableTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
-    static const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
-
     OOXMLStream::Pointer_t pStream;
     try
     {
@@ -628,80 +644,63 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
 
     const uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-    std::vector< uno::Sequence<uno::Any> > aGlossaryDomList;
+    std::vector< uno::Sequence<beans::NamedValue> > aGlossaryDomList;
     for (const uno::Sequence< beans::StringPair >& aSeq : aSeqs)
     {
-          OOXMLStream::Pointer_t gStream;
-          //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
-          if (aSeq.getLength() < 3)
-          {
-              SAL_WARN("writerfilter.ooxml", "too short sequence");
-              continue;
-          }
+        comphelper::NamedValueCollection aRelDefinition;
+        for (const auto& [name, value] : aSeq)
+            aRelDefinition.put(name, value);
 
-          OUString gId(aSeq[0].Second);
-          OUString gType(aSeq[1].Second);
-          OUString gTarget(aSeq[2].Second);
-          OUString contentType;
+        const OUString gType = aRelDefinition.getOrDefault(sType, OUString{});
+        OOXMLStream::StreamType_t nType(OOXMLStream::UNKNOWN);
+        if (gType == sSettingsType || gType == sSettingsTypeStrict)
+        {
+            nType = OOXMLStream::SETTINGS;
+            aRelDefinition.put(sContentType, sSettingsContentType);
+        }
+        else if (gType == sStylesType || gType == sStylesTypeStrict)
+        {
+            nType = OOXMLStream::STYLES;
+            aRelDefinition.put(sContentType, sStylesContentType);
+        }
+        else if (gType == sWebSettings || gType == sWebSettingsStrict)
+        {
+            nType = OOXMLStream::WEBSETTINGS;
+            aRelDefinition.put(sContentType, sWebsettingsContentType);
+        }
+        else if (gType == sFonttableType || gType == sFonttableTypeStrict)
+        {
+            nType = OOXMLStream::FONTTABLE;
+            aRelDefinition.put(sContentType, sFonttableContentType);
+        }
+        else if (aRelDefinition.getOrDefault(sTargetMode, OUString{}) != "External")
+        {
+            // Some internal relation, but we don't create a DOM for it here yet?
+            SAL_WARN("writerfilter.ooxml", "Unknown type of glossary internal relation: "
+                "Id=\"" + aRelDefinition.getOrDefault<OUString>(sId, {}) + "\" "
+                "Type=\"" + gType + "\" "
+                "Target=\"" + aRelDefinition.getOrDefault<OUString>(sTarget, {}) + "\"");
+            continue;
+        }
 
-          OOXMLStream::StreamType_t nType(OOXMLStream::UNKNOWN);
-          bool bFound = true;
-          if(gType == sSettingsType ||
-                  gType == sSettingsTypeStrict)
-          {
-              nType = OOXMLStream::SETTINGS;
-              contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
-          }
-          else if(gType == sStylesType ||
-                  gType == sStylesTypeStrict)
-          {
-              nType = OOXMLStream::STYLES;
-              contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
-          }
-          else if(gType == sWebSettings ||
-                  gType == sWebSettingsStrict)
-          {
-              nType = OOXMLStream::WEBSETTINGS;
-              contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
-          }
-          else if(gType == sFonttableType ||
-                  gType == sFonttableTypeStrict)
-          {
-              nType = OOXMLStream::FONTTABLE;
-              contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
-          }
-          else
-          {
-              bFound = false;
-              //"Unhandled content-type while grab bagging Glossary Folder");
-          }
-
-          if (bFound)
-          {
-              uno::Reference<xml::dom::XDocument> xDom;
-              try
-              {
-                  gStream = OOXMLDocumentFactory::createStream(pStream, nType);
-                  uno::Reference<io::XInputStream> xInputStream = gStream->getDocumentStream();
-                  uno::Reference<uno::XComponentContext> xContext(pStream->getContext());
-                  uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
-                  xDom = xDomBuilder->parse(xInputStream);
-              }
-              catch (uno::Exception const&)
-              {
-                  TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
-                             "parsing stream of Type" << nType);
-                  return;
-              }
-
-              if (xDom.is())
-              {
-                  uno::Sequence< uno::Any > glossaryTuple{ uno::Any(xDom), uno::Any(gId),
-                                                           uno::Any(gType), uno::Any(gTarget),
-                                                           uno::Any(contentType) };
-                  aGlossaryDomList.push_back(glossaryTuple);
-              }
-          }
+        if (nType != OOXMLStream::UNKNOWN)
+        {
+            try
+            {
+                auto gStream = OOXMLDocumentFactory::createStream(pStream, nType);
+                uno::Reference xInputStream = gStream->getDocumentStream();
+                uno::Reference xContext(pStream->getContext());
+                uno::Reference xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
+                uno::Reference xDom = xDomBuilder->parse(xInputStream);
+                aRelDefinition.put(sRelDom, xDom);
+            }
+            catch (uno::Exception const&)
+            {
+                TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
+                    "parsing stream of Type" << nType);
+            }
+        }
+        aGlossaryDomList.push_back(aRelDefinition.getNamedValues());
     }
     mxGlossaryDomList = comphelper::containerToSequence(aGlossaryDomList);
 }
@@ -796,7 +795,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getGlossaryDocDom( )
     return mxGlossaryDocDom;
 }
 
-uno::Sequence<uno::Sequence< uno::Any> > OOXMLDocumentImpl::getGlossaryDomList()
+uno::Sequence<uno::Sequence< beans::NamedValue> > OOXMLDocumentImpl::getGlossaryDomList()
 {
     return mxGlossaryDomList;
 }

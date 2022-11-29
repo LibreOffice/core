@@ -84,6 +84,8 @@ template<typename T1, typename T2>
 Any::Any(rtl::OUStringConcat<T1, T2> && value):
     Any(rtl::OUString(std::move(value)))
 {}
+template <std::size_t N>
+Any::Any(const rtl::OUStringLiteral<N>& value): Any(rtl::OUString(value)) {}
 #endif
 
 inline Any::Any( const Any & rAny )

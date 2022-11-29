@@ -1004,6 +1004,17 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossary)
     assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
+{
+    // tdf#152289
+    loadAndSave("glossaryWithEmail.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/glossary/_rels/document.xml.rels");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId4' "
+        "and @Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink' "
+        "and @Target='mailto:emailgoeshere@example.com' "
+        "and @TargetMode='External']");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
 {
     // crashtest
