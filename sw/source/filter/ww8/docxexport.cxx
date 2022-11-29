@@ -1484,6 +1484,7 @@ void DocxExport::WriteTheme()
         uno::Sequence< beans::StringPair >() );
 }
 
+// See OOXMLDocumentImpl::resolveGlossaryStream
 void DocxExport::WriteGlossary()
 {
     uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
@@ -1494,7 +1495,7 @@ void DocxExport::WriteGlossary()
         return;
 
     uno::Reference<xml::dom::XDocument> glossaryDocDom;
-    uno::Sequence< uno::Sequence< uno::Any> > glossaryDomList;
+    uno::Sequence< uno::Sequence<beans::NamedValue> > glossaryDomList;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
@@ -1532,20 +1533,43 @@ void DocxExport::WriteGlossary()
     serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
         uno::Sequence< beans::StringPair >() );
 
-    for ( const uno::Sequence< uno::Any>& glossaryElement : std::as_const(glossaryDomList))
+    for (const uno::Sequence<beans::NamedValue>& glossaryElement : glossaryDomList)
     {
-        OUString gTarget, gType, gId, contentType;
+        OUString gTarget, gType, gId, contentType, targetMode;
         uno::Reference<xml::dom::XDocument> xDom;
-        glossaryElement[0] >>= xDom;
-        glossaryElement[1] >>= gId;
-        glossaryElement[2] >>= gType;
-        glossaryElement[3] >>= gTarget;
-        glossaryElement[4] >>= contentType;
+        for (const auto& [name, value] : glossaryElement)
+        {
+            if (name == "Id")
+                value >>= gId;
+            else if (name == "Type")
+                value >>= gType;
+            else if (name == "Target")
+                value >>= gTarget;
+            else if (name == "TargetMode")
+                value >>= targetMode;
+            else if (name == "_contentType")
+                value >>= contentType;
+            else if (name == "_relDom")
+                value >>= xDom;
+        }
+        if (gId.isEmpty() || gType.isEmpty() || gTarget.isEmpty())
+            continue;
+        const bool bExternal = targetMode == "External";
+        if (!bExternal && !xDom)
+        {
+            // Some internal relation, but we didn't create a DOM for it
+            // in OOXMLDocumentImpl::resolveGlossaryStream?
+            SAL_WARN("sw.ww8", "Glossary internal relation without DOM: Id=\"" + gId
+                                   + "\" Type=\"" + gType + "\" Target=\"" + gTarget + "\"");
+            continue;
+        }
         gId = gId.copy(3); //"rId" only save the numeric value
 
         PropertySet aProps(xOutputStream);
         aProps.setAnyProperty( PROP_RelId, uno::Any( gId.toInt32() ));
-        m_rFilter.addRelation( xOutputStream, gType, gTarget);
+        m_rFilter.addRelation(xOutputStream, gType, gTarget, bExternal);
+        if (!xDom)
+            continue; // External relation, no stream to write
         uno::Reference< xml::sax::XSAXSerializable > gserializer( xDom, uno::UNO_QUERY );
         writer->setOutputStream(GetFilter().openFragmentStream( "word/glossary/" + gTarget, contentType ) );
         gserializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
