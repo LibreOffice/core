@@ -62,6 +62,7 @@ public:
     void testFdo84043();
     void testTdf97630();
     void testImpressPasswordExport();
+    void testDrawPasswordExport();
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
     void testBnc480256();
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testTdf97630);
     CPPUNIT_TEST(testImpressPasswordExport);
+    CPPUNIT_TEST(testDrawPasswordExport);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
     CPPUNIT_TEST(testBnc480256);
@@ -524,6 +526,13 @@ void SdExportTest::testImpressPasswordExport()
 
         saveAndReload(vFormat[i], /*pPassword*/ "test");
     }
+}
+
+void SdExportTest::testDrawPasswordExport()
+{
+    createSdDrawDoc();
+
+    saveAndReload("draw8", /*pPassword*/ "test");
 }
 
 void SdExportTest::testSwappedOutImageExport()
