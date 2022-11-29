@@ -19,9 +19,11 @@ $(eval $(call gb_Module_add_targets,sal,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
+ifneq (EMSCRIPTEN,$(OS))
 $(eval $(call gb_Module_add_targets,sal,\
 	Executable_osl_process_child \
 ))
+endif
 
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
