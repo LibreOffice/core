@@ -2227,7 +2227,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         if (pPDFData)
         {
-            css::lang::Locale const docLocale(LanguageTag(ScGlobal::GetEditDefaultLanguage()).getLocale());
+            css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
             pPDFData->SetDocumentLocale(docLocale);
         }
 
