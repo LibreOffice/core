@@ -1156,7 +1156,7 @@ emscripten)
     # API currently just exists in headers, not code
     usable_dlapi=no
     using_freetype_fontconfig=yes
-    using_x11=no
+    using_x11=yes
     test_openldap=no
     test_qt5=yes
     test_split_debug=yes
@@ -5429,7 +5429,7 @@ if test "$with_x" = "no"; then
     USING_X11=
 fi
 
-if test -z "$USING_X11" -a "$DISABLE_DYNLOADING" = TRUE -a "$enable_gen" = "yes"; then
+if test -z "$USING_X11" -a "$enable_qt5" = "yes" -a "$enable_gen" = "yes"; then
     AC_MSG_ERROR([Can't select gen VCL plugin, if --without-x is used!])
 fi
 
