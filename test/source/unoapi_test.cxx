@@ -152,7 +152,8 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 
     if (pPassword)
     {
-        if (rFilter != "Office Open XML Text" && rFilter != "Calc Office Open XML")
+        if (rFilter != "Office Open XML Text" && rFilter != "Calc Office Open XML"
+            && rFilter != "Impress Office Open XML")
         {
             aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
         }

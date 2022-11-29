@@ -61,6 +61,7 @@ public:
     void testFillBitmapUnused();
     void testFdo84043();
     void testTdf97630();
+    void testImpressPasswordExport();
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
     void testBnc480256();
@@ -111,6 +112,7 @@ public:
     CPPUNIT_TEST(testFillBitmapUnused);
     CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testTdf97630);
+    CPPUNIT_TEST(testImpressPasswordExport);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
     CPPUNIT_TEST(testBnc480256);
@@ -510,6 +512,18 @@ void SdExportTest::testTdf97630()
                 "style:graphic-properties[@draw:fit-to-size='true' and "
                 "@style:shrink-to-fit='false']",
                 1);
+}
+
+void SdExportTest::testImpressPasswordExport()
+{
+    std::vector<OUString> vFormat{ "impress8", "Impress Office Open XML" };
+
+    for (size_t i = 0; i < vFormat.size(); i++)
+    {
+        createSdImpressDoc();
+
+        saveAndReload(vFormat[i], /*pPassword*/ "test");
+    }
 }
 
 void SdExportTest::testSwappedOutImageExport()
