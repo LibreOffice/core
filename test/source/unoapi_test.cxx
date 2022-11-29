@@ -152,7 +152,7 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 
     if (pPassword)
     {
-        if (rFilter != "Office Open XML Text")
+        if (rFilter != "Office Open XML Text" && rFilter != "Calc Office Open XML")
         {
             aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
         }
@@ -164,6 +164,9 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
                 { "OOXPassword", uno::Any(sPassword) }
             };
             aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
+
+            // validation fails with "zip END header not found"
+            skipValidation();
         }
     }
 

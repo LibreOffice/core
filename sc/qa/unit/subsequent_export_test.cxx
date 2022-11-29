@@ -77,7 +77,7 @@ public:
     void testExtCondFormatXLSX();
     void testTdf90104();
     void testTdf111876();
-    void testPasswordExportODS();
+    void testPasswordExport();
     void testTdf134332();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
@@ -198,7 +198,7 @@ public:
     CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testTdf90104);
     CPPUNIT_TEST(testTdf111876);
-    CPPUNIT_TEST(testPasswordExportODS);
+    CPPUNIT_TEST(testPasswordExport);
     CPPUNIT_TEST(testTdf134332);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testCondFormatExportCellIs);
@@ -473,19 +473,24 @@ void ScExportTest::testTdf111876()
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
 }
 
-void ScExportTest::testPasswordExportODS()
+void ScExportTest::testPasswordExport()
 {
-    createScDoc();
+    std::vector<OUString> aFilterNames{ "calc8", "MS Excel 97", "Calc Office Open XML" };
 
-    ScDocument* pDoc = getScDoc();
+    for (size_t i = 0; i < aFilterNames.size(); ++i)
+    {
+        createScDoc();
 
-    pDoc->SetValue(0, 0, 0, 1.0);
+        ScDocument* pDoc = getScDoc();
 
-    saveAndReload("calc8", /*pPassword*/ "test");
+        pDoc->SetValue(0, 0, 0, 1.0);
 
-    pDoc = getScDoc();
-    double aVal = pDoc->GetValue(0, 0, 0);
-    ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+        saveAndReload(aFilterNames[i], /*pPassword*/ "test");
+
+        pDoc = getScDoc();
+        double aVal = pDoc->GetValue(0, 0, 0);
+        ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    }
 }
 
 void ScExportTest::testTdf134332()
