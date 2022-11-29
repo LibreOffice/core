@@ -374,14 +374,14 @@ public:
     // An object may have a user-set Name (Get/SetName()), e.g SdrGrafObj, SdrObjGroup
     // or SdrOle2Obj.
     // It may also have a Title and a Description for accessibility purposes.
-    void SetName(const OUString& rStr, const bool bSetChanged = true);
-    const OUString & GetName() const;
+    virtual void SetName(const OUString& rStr, const bool bSetChanged = true);
+    virtual const OUString & GetName() const;
     void MakeNameUnique();
     void MakeNameUnique(std::unordered_set<OUString>& rNameSet);
-    void SetTitle(const OUString& rStr);
-    OUString GetTitle() const;
-    void SetDescription(const OUString& rStr);
-    OUString GetDescription() const;
+    virtual void SetTitle(const OUString& rStr);
+    virtual OUString GetTitle() const;
+    virtual void SetDescription(const OUString& rStr);
+    virtual OUString GetDescription() const;
 
     // for group objects
     bool IsGroupObject() const;

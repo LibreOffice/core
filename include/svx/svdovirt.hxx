@@ -62,6 +62,12 @@ public:
     virtual SdrInventor GetObjInventor() const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjList* GetSubList() const override;
+    virtual void SetName(const OUString& rStr, const bool bSetChanged = true) override;
+    virtual const OUString& GetName() const override;
+    virtual void SetTitle(const OUString& rStr) override;
+    virtual OUString GetTitle() const override;
+    virtual void SetDescription(const OUString& rStr) override;
+    virtual OUString GetDescription() const override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;

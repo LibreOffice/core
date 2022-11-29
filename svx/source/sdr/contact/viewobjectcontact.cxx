@@ -392,6 +392,10 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         const SdrObjKind nIdentifier(pSdrObj->GetObjIdentifier());
         const bool bIsTextObj(nullptr != DynCastSdrTextObj(pSdrObj));
 
+        // Note: SwFlyDrawObj/SwVirtFlyDrawObj have SdrInventor::Swg - these
+        // are *not* handled here because not all of them are painted
+        // completely with primitives, so a tag here does not encapsulate them.
+        // The tag must be created by SwTaggedPDFHelper until this is fixed.
         if ( nInventor == SdrInventor::Default )
         {
             if ( nIdentifier == SdrObjKind::Group )

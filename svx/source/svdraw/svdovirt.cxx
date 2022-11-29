@@ -111,6 +111,36 @@ SdrObjList* SdrVirtObj::GetSubList() const
     return mxRefObj->GetSubList();
 }
 
+void SdrVirtObj::SetName(const OUString& rStr, const bool bSetChanged)
+{
+    return mxRefObj->SetName(rStr, bSetChanged);
+}
+
+const OUString & SdrVirtObj::GetName() const
+{
+    return mxRefObj->GetName();
+}
+
+void SdrVirtObj::SetTitle(const OUString& rStr)
+{
+    return mxRefObj->SetTitle(rStr);
+}
+
+OUString SdrVirtObj::GetTitle() const
+{
+    return mxRefObj->GetTitle();
+}
+
+void SdrVirtObj::SetDescription(const OUString& rStr)
+{
+    return mxRefObj->SetDescription(rStr);
+}
+
+OUString SdrVirtObj::GetDescription() const
+{
+    return mxRefObj->GetDescription();
+}
+
 const tools::Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
     auto aRectangle = mxRefObj->GetCurrentBoundRect(); // TODO: Optimize this.
