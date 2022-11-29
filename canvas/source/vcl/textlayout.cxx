@@ -31,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -117,8 +118,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
-        setupTextOffsets(aOffsets.data(), maLogicalAdvancements, aViewState, aRenderState);
+        KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
@@ -165,8 +165,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::unique_ptr< sal_Int32 []> aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
-        setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
+        KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
 
         std::vector< ::tools::Rectangle > aMetricVector;
         uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
@@ -335,8 +334,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.hasElements() )
         {
             // TODO(P2): cache that
-            std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
-            setupTextOffsets( aOffsets.data(), maLogicalAdvancements, viewState, renderState );
+            KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
 
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
@@ -389,14 +387,11 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
+    KernArray TextLayout::setupTextOffsets(
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_OR_THROW( outputOffsets!=nullptr,
-                          "TextLayout::setupTextOffsets offsets NULL" );
-
         ::basegfx::B2DHomMatrix aMatrix;
 
         ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
@@ -404,10 +399,11 @@ namespace vclcanvas
                                                      renderState);
 
         // fill integer offsets
-        std::transform( inputOffsets.begin(),
-                          inputOffsets.end(),
-                          outputOffsets,
-                          OffsetTransformer( aMatrix ) );
+        KernArray outputOffsets;
+        OffsetTransformer aTransform(aMatrix);
+        std::for_each(inputOffsets.begin(), inputOffsets.end(),
+                      [&outputOffsets, &aTransform](double n) {outputOffsets.push_back(aTransform(n)); } );
+        return outputOffsets;
     }
 
     OUString SAL_CALL TextLayout::getImplementationName()

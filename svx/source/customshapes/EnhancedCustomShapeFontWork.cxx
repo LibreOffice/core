@@ -21,6 +21,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdopath.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdtfsitm.hxx>
@@ -363,7 +364,7 @@ static void GetTextAreaOutline(
             }
             else
             {
-                std::vector<sal_Int32> aDXArry;
+                KernArray aDXArry;
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
                     pVirDev->GetTextArray( rText, &aDXArry);

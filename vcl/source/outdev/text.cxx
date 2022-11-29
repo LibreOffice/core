@@ -921,7 +921,7 @@ float OutputDevice::approximate_digit_width() const
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                  o3tl::span<const sal_Int32> pDXAry,
+                                  KernArraySpan pDXAry,
                                   o3tl::span<const sal_Bool> pKashidaAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
@@ -955,7 +955,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, flags );
 }
 
-tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
                                  sal_Int32 nIndex, sal_Int32 nLen, bool bCaret,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
@@ -967,6 +967,8 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     {
         nLen = rStr.getLength() - nIndex;
     }
+
+    std::vector<sal_Int32>* pDXAry = pKernArray ? &pKernArray->get_subunit_array() : nullptr;
 
     // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
@@ -1035,13 +1037,23 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
             (*pDXAry)[ i ] += (*pDXAry)[ i-1 ];
 
     // convert from font units to logical units
-    if( mbMap )
+    if (pDXAry)
     {
-        if( pDXAry )
-            for( int i = 0; i < nLen; ++i )
-                (*pDXAry)[i] = ImplDevicePixelToLogicWidth( (*pDXAry)[i] );
-        nWidth = ImplDevicePixelToLogicWidth( nWidth );
+        int nSubPixelFactor = pKernArray->get_factor();
+        if (mbMap)
+        {
+            for (int i = 0; i < nLen; ++i)
+                (*pDXAry)[i] = ImplDevicePixelToLogicWidth( (*pDXAry)[i] * nSubPixelFactor );
+        }
+        else if (nSubPixelFactor)
+        {
+            for (int i = 0; i < nLen; ++i)
+                (*pDXAry)[i] *= nSubPixelFactor;
+        }
     }
+
+    if (mbMap)
+        nWidth = ImplDevicePixelToLogicWidth( nWidth );
 
     return nWidth;
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
@@ -1290,7 +1302,7 @@ OutputDevice::FontMappingUseData OutputDevice::FinishTrackingFontMappingUse()
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
-                                    o3tl::span<const sal_Int32> pDXArray,
+                                    KernArraySpan pDXArray,
                                     o3tl::span<const sal_Bool> pKashidaArray,
                                     SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
@@ -1360,13 +1372,14 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         {
             // convert from logical units to font units without rounding,
             // keeping accuracy for lower levels
+            int nSubPixels = pDXArray.get_factor();
             for (int i = 0; i < nLen; ++i)
-                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
+                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels;
         }
         else
         {
             for(int i = 0; i < nLen; ++i)
-                xNaturalDXPixelArray[i] = pDXArray[i];
+                xNaturalDXPixelArray[i] = pDXArray.get(i);
         }
 
         aLayoutArgs.SetNaturalDXArray(xNaturalDXPixelArray.get());
@@ -2310,7 +2323,7 @@ tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayou
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXAry,
+                                         sal_uLong nLayoutWidth, KernArraySpan pDXAry,
                                          o3tl::span<const sal_Bool> pKashidaAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
@@ -2361,7 +2374,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth,
-                                        o3tl::span<const sal_Int32> pDXArray,
+                                        KernArraySpan pDXArray,
                                         o3tl::span<const sal_Bool> pKashidaArray ) const
 {
     if (!InitFont())
@@ -2442,7 +2455,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray,
+                                        sal_uLong nLayoutWidth, KernArraySpan pDXArray,
                                         o3tl::span<const sal_Bool> pKashidaArray ) const
 {
     rResultVector.clear();

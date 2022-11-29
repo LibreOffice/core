@@ -2573,7 +2573,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     o3tl::span<const sal_Int32> pDXArray, tools::Long nWidth )
+                                     KernArraySpan pDXArray, tools::Long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -2664,7 +2664,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     o3tl::span<const sal_Int32> pDXArray, tools::Long nWidth,
+                                     KernArraySpan pDXArray, tools::Long nWidth,
                                      Color aTextColor )
 {
     sal_Int32                               nLen = rText.getLength();
@@ -2681,18 +2681,17 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     ImplMap( rPos, aPos );
 
-    std::vector<sal_Int32> aTmpArray(nLen);
+    KernArray aTmpArray;
     // get text sizes
     if( !pDXArray.empty() )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        memcpy(aTmpArray.data(), pDXArray.data(), nLen * sizeof(sal_Int32));
+        aTmpArray.assign(pDXArray);
     }
     else
     {
         aNormSize = Size( mpVDev->GetTextArray( rText, &aTmpArray ), 0 );
     }
-    sal_Int32* pDX = aTmpArray.data();
 
     // if text is rotated, set transform matrix at new g element
     if( rFont.GetOrientation() )
@@ -2740,7 +2739,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         if( nLen > 1 )
         {
-            aNormSize.setWidth( pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) ) );
+            aNormSize.setWidth( aTmpArray[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -2748,7 +2747,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( i = 0; i < ( nLen - 1 ); i++ )
-                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
+                    aTmpArray.set(i, FRound(aTmpArray[i] * fFactor));
             }
             else
             {
@@ -2784,7 +2783,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                         if( bCont )
                         {
                             // #118796# do NOT access pDXArray, it may be zero (!)
-                            sal_Int32 nDXWidth = pDX[ nCurPos - 1 ];
+                            sal_Int32 nDXWidth = aTmpArray[ nCurPos - 1 ];
                             nDXWidth = ImplMap( nDXWidth );
                             nX = aPos.X() + nDXWidth;
                         }

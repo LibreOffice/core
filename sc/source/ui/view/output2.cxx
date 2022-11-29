@@ -47,6 +47,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -1522,7 +1523,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     // before processing the cell value.
     std::vector<std::unique_ptr<ScPatternAttr> > aAltPatterns;
 
-    std::vector<sal_Int32> aDX;
+    KernArray aDX;
     tools::Long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2107,7 +2108,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 {
                                     double fMul = GetStretch();
                                     for (size_t i = 0; i < nLen; ++i)
-                                        aDX[i] = static_cast<sal_Int32>(aDX[i] / fMul + 0.5);
+                                        aDX.set(i, static_cast<sal_Int32>(aDX[i] / fMul + 0.5));
                                 }
 
                                 if (bPaint)

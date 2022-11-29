@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <sal/types.h>
+#include <vcl/kernarray.hxx>
 #include <swfont.hxx>
 #include "justify.hxx"
 
@@ -73,7 +74,7 @@ tools::Long lcl_OffsetFromGridEdge(tools::Long nMinWidth, tools::Long nCharWidth
 
 namespace sw::Justify
 {
-sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nX)
+sal_Int32 GetModelPosition(const KernArray& rKernArray, sal_Int32 nLen, tools::Long nX)
 {
     tools::Long nLeft = 0, nRight = 0;
     sal_Int32 nLast = 0, nIdx = 0;
@@ -97,9 +98,8 @@ sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 n
     return nIdx;
 }
 
-void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
-                       sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern,
-                       bool bNoHalfSpace)
+void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText, sal_Int32 nStt,
+                       sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern, bool bNoHalfSpace)
 {
     assert(nStt + nLen <= sal_Int32(aText.size()));
     assert(nLen <= sal_Int32(rKernArray.size()));
@@ -152,26 +152,29 @@ void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16string_view a
         }
 
         cChPrev = nCh;
-        rKernArray[nPrevIdx] += nKernSum + nSpaceSum;
+        rKernArray.adjust(nPrevIdx, nKernSum + nSpaceSum);
         // In word line mode and for Arabic, we disabled the half space trick. If a portion
         // ends with a blank, the full nSpaceAdd value has been added to the character in
         // front of the blank. This leads to painting artifacts, therefore we remove the
         // nSpaceAdd value again:
         if (bNoHalfSpace && i + 1 == nLen && nCh == CH_BLANK)
-            rKernArray[nPrevIdx] = rKernArray[nPrevIdx] - nSpaceAdd;
+            rKernArray.adjust(nPrevIdx, -nSpaceAdd);
 
         // Advance nPrevIdx and assign kern values to previous cluster.
         for (tools::Long nValue = rKernArray[nPrevIdx++]; nPrevIdx < i; ++nPrevIdx)
-            rKernArray[nPrevIdx] = nValue;
+            rKernArray.set(nPrevIdx, nValue);
     }
 
     // the layout engine requires the total width of the output
     while (nPrevIdx < nLen)
-        rKernArray[nPrevIdx++] += nKernSum + nSpaceSum;
+    {
+        rKernArray.adjust(nPrevIdx, nKernSum + nSpaceSum);
+        ++nPrevIdx;
+    }
 }
 
-tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
-                       sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth, bool bForceLeft)
+tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view aText, sal_Int32 nStt,
+                       sal_Int32 nLen, tools::Long nGridWidth, bool bForceLeft)
 {
     assert(nStt + nLen <= sal_Int32(aText.size()));
     assert(nLen <= sal_Int32(rKernArray.size()));
@@ -195,16 +198,22 @@ tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16string_view a
         nEdge += nMinWidth;
 
         while (nLast < i)
-            rKernArray[nLast++] = nX;
+        {
+            rKernArray.set(nLast, nX);
+            ++nLast;
+        }
     }
 
     while (nLast < nLen)
-        rKernArray[nLast++] = nEdge;
+    {
+        rKernArray.set(nLast, nEdge);
+        ++nLast;
+    }
 
     return nDelta;
 }
 
-void SnapToGridEdge(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
+void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
                     tools::Long nSpace, tools::Long nKern)
 {
     assert(nLen <= sal_Int32(rKernArray.size()));
@@ -222,13 +231,19 @@ void SnapToGridEdge(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::L
         nCharWidth = rKernArray[i] - rKernArray[nLast];
         tools::Long nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth + nKern);
         while (nLast < i)
-            rKernArray[nLast++] = nEdge;
+        {
+            rKernArray.set(nLast, nEdge);
+            ++nLast;
+        }
 
         nEdge += nMinWidth + nSpace;
     }
 
     while (nLast < nLen)
-        rKernArray[nLast++] = nEdge;
+    {
+        rKernArray.set(nLast, nEdge);
+        ++nLast;
+    }
 }
 }
 

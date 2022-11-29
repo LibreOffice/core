@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
@@ -231,12 +232,11 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
     {
         OSL_ENSURE(nDXArrayCount == nTextLength,
                    "DXArray size does not correspond to text portion size (!)");
-        std::vector<sal_Int32> aIntegerDXArray(nDXArrayCount);
 
+        KernArray aIntegerDXArray;
+        aIntegerDXArray.reserve(nDXArrayCount);
         for (sal_uInt32 a(0); a < nDXArrayCount; a++)
-        {
-            aIntegerDXArray[a] = basegfx::fround(rDXArray[a]);
-        }
+            aIntegerDXArray.push_back(basegfx::fround(rDXArray[a]));
 
         mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0,
                                  aIntegerDXArray, rKashidaArray);
@@ -307,10 +307,11 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
 
     if (nTextLength)
     {
-        aRetval.reserve(nTextLength);
-        std::vector<sal_Int32> aArray;
+        KernArray aArray;
         mrDevice.GetTextArray(rText, &aArray, nIndex, nTextLength);
-        aRetval.assign(aArray.begin(), aArray.end());
+        aRetval.reserve(aArray.size());
+        for (size_t i = 0, nEnd = aArray.size(); i < nEnd; ++i)
+            aRetval.push_back(aArray[i]);
     }
 
     return aRetval;

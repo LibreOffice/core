@@ -29,6 +29,7 @@
 #include <utility>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -282,7 +283,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             }
 
             // create integer DXArray
-            std::vector<sal_Int32> aDXArray;
+            KernArray aDXArray;
 
             if (!rTextCandidate.getDXArray().empty())
             {
@@ -335,7 +336,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                     sal_Int32 nDX = aDXArray[0];
                     aDXArray.resize(nLen);
                     for (sal_Int32 i = 1; i < nLen; ++i)
-                        aDXArray[i] = aDXArray[i - 1] + nDX;
+                        aDXArray.set(i, aDXArray[i - 1] + nDX);
                 }
             }
 

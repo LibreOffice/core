@@ -25,11 +25,10 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-
-
 
 VCLXFont::VCLXFont()
 {
@@ -156,10 +155,12 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
     {
         vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        std::vector<sal_Int32> aDXA;
+        KernArray aDXA;
         nRet = pOutDev->GetTextArray( str, &aDXA );
-        // I don't know if size of aDXA is guaranteed same as length of str, so use arrayToSequence
-        rDXArray = comphelper::arrayToSequence<sal_Int32>(aDXA.data(), str.getLength());
+        rDXArray.realloc(aDXA.size());
+        sal_Int32* pArray = rDXArray.getArray();
+        for (size_t i = 0, nLen = aDXA.size(); i < nLen; ++i)
+            pArray[i] = aDXA[i];
         pOutDev->SetFont( aOldFont );
     }
     return nRet;

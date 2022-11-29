@@ -1797,7 +1797,7 @@ namespace wmfemfhelper
                     {
                         // prepare DXArray (if used)
                         std::vector< double > aDXArray;
-                        const std::vector<sal_Int32> & rDXArray = pA->GetDXArray();
+                        const KernArray& rDXArray = pA->GetDXArray();
                         std::vector< sal_Bool > aKashidaArray = pA->GetKashidaArray();
 
                         if(!rDXArray.empty())

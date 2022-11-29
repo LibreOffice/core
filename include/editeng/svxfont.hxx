@@ -30,6 +30,7 @@
 // See i#1526# for full explanation
 #define SMALL_CAPS_PERCENTAGE 80
 
+class KernArray;
 class SvxDoCapitals;
 class OutputDevice;
 class Printer;
@@ -95,7 +96,7 @@ public:
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,
-                           std::vector<sal_Int32>* pDXArray = nullptr ) const;
+                           KernArray* pDXArray = nullptr ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,

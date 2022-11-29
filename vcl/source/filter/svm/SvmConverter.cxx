@@ -251,7 +251,7 @@ namespace
     }
 
     void ClampRange(std::u16string_view rStr, sal_Int32& rIndex, sal_Int32& rLength,
-                        std::vector<sal_Int32>* pDXAry = nullptr)
+                        KernArray* pDXAry = nullptr)
     {
         const sal_Int32 nStrLength = rStr.size();
 
@@ -738,7 +738,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                    std::vector<sal_Int32> aDXAry;
+                    KernArray aDXAry;
                     if (nAryLen > 0)
                     {
                         const size_t nMinRecordSize = sizeof(sal_Int32);
@@ -770,7 +770,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
                             {
                                 rIStm.ReadInt32( nTmp );
-                                aDXAry[ j ] = nTmp;
+                                aDXAry.set(j, nTmp);
                             }
 
                             // #106172# Add last DX array elem, if missing
@@ -778,7 +778,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if (nAryLen+1 == nStrLen && nIndex >= 0)
                                 {
-                                    std::vector<sal_Int32> aTmpAry;
+                                    KernArray aTmpAry;
 
                                     aFontVDev->GetTextArray( aStr, &aTmpAry, nIndex, nLen );
 
@@ -794,9 +794,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                         // difference to last elem and store
                                         // in very last.
                                         if( nStrLen > 1 )
-                                            aDXAry[ nStrLen-1 ] = aDXAry[ nStrLen-2 ] + aTmpAry[ nStrLen-1 ] - aTmpAry[ nStrLen-2 ];
+                                            aDXAry.set(nStrLen-1, aDXAry[ nStrLen-2 ] + aTmpAry[ nStrLen-1 ] - aTmpAry[ nStrLen-2 ]);
                                         else
-                                            aDXAry[ nStrLen-1 ] = aTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+                                            aDXAry.set(nStrLen-1, aTmpAry[ nStrLen-1 ]); // len=1: 0th position taken to be 0
                                     }
                                 }
 #ifdef DBG_UTIL

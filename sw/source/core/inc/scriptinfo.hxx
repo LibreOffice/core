@@ -272,7 +272,7 @@ public:
     // HIDDEN TEXT STUFF END
 
     // modifies the kerning array according to a given compress value
-    tools::Long Compress( sal_Int32* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+    tools::Long Compress( KernArray& rKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    const bool bCentered,
                    Point* pPoint = nullptr ) const;
@@ -291,7 +291,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Bool* pKashidaArray,
+    sal_Int32 KashidaJustify( KernArray* pKernArray, sal_Bool* pKashidaArray,
           TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
@@ -362,7 +362,7 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static TextFrameIndex ThaiJustify( std::u16string_view aText, sal_Int32* pKernArray,
+    static TextFrameIndex ThaiJustify( std::u16string_view aText, KernArray* pKernArray,
                                   TextFrameIndex nIdx,
                                   TextFrameIndex nLen,
                                   TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),
@@ -371,7 +371,7 @@ public:
     static TextFrameIndex CountCJKCharacters(const OUString &rText,
             TextFrameIndex nPos, TextFrameIndex nEnd, LanguageType aLang);
 
-    static void CJKJustify( const OUString& rText, sal_Int32* pKernArray,
+    static void CJKJustify( const OUString& rText, KernArray& rKernArray,
                                   TextFrameIndex nStt,
                                   TextFrameIndex nLen, LanguageType aLang,
                                   tools::Long nSpaceAdd, bool bIsSpaceStop );

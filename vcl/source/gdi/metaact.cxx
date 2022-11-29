@@ -609,7 +609,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
-                                          std::vector<sal_Int32> aDXAry,
+                                          KernArray aDXAry,
                                           std::vector<sal_Bool> aKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
@@ -625,18 +625,18 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
-                                          o3tl::span<const sal_Int32> pDXAry,
+                                          KernArraySpan pDXAry,
                                           o3tl::span<const sal_Bool> pKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
     maStr       (std::move( aStr )),
-    maDXAry     ( pDXAry.begin(), pDXAry.end() ),
     maKashidaAry( pKashidaAry.begin(), pKashidaAry.end() ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
+    maDXAry.assign(pDXAry);
 }
 
 MetaTextArrayAction::~MetaTextArrayAction()
@@ -665,11 +665,11 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     if ( !maDXAry.empty() && mnLen )
     {
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
-            maDXAry[ i ] = FRound( maDXAry[ i ] * fabs(fScaleX) );
+            maDXAry.set(i, FRound(maDXAry[i] * fabs(fScaleX)));
     }
 }
 
-void MetaTextArrayAction::SetDXArray(std::vector<sal_Int32> aArray)
+void MetaTextArrayAction::SetDXArray(KernArray aArray)
 {
     maDXAry = std::move(aArray);
 }

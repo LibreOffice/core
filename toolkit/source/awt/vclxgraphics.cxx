@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/metric.hxx>
 #include <tools/debug.hxx>
@@ -463,12 +464,11 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
-        std::vector<sal_Int32> aDXA(rText.getLength());
-        for(int i = 0; i < rText.getLength(); i++)
-        {
-            aDXA[i] = rLongs[i];
-        }
-        mpOutputDevice->DrawTextArray( Point( x, y ), rText, aDXA , {}, 0, rText.getLength());
+        KernArray aDXA;
+        aDXA.reserve(rText.getLength());
+        for(int i = 0; i < rText.getLength(); ++i)
+            aDXA.push_back(rLongs[i]);
+        mpOutputDevice->DrawTextArray( Point( x, y ), rText, aDXA, {}, 0, rText.getLength());
     }
 }
 

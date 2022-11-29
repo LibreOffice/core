@@ -29,7 +29,6 @@
 #include "canvasfont.hxx"
 #include "impltools.hxx"
 
-
 /* Definition of TextLayout class */
 
 namespace vclcanvas
@@ -85,7 +84,7 @@ namespace vclcanvas
                    const css::rendering::RenderState&              renderState ) const;
 
     private:
-        void setupTextOffsets( sal_Int32* outputOffsets,
+        KernArray setupTextOffsets(
                                const css::uno::Sequence< double >& inputOffsets,
                                const css::rendering::ViewState&    viewState,
                                const css::rendering::RenderState&  renderState     ) const;

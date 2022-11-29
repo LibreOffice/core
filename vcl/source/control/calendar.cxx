@@ -20,6 +20,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
@@ -707,7 +708,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
             Point aStartPos(nDayX, nDeltaY);
             rRenderContext.DrawLine(aStartPos, Point(nDayX + (7 * mnDayWidth), nDeltaY));
-            std::vector<sal_Int32> aTmp;
+            KernArray aTmp;
             for (int k=0; k<7; ++k)
                 aTmp.push_back(mnDayOfWeekAry[k+1]);
             rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, aTmp, {}, 0, aTmp.size());

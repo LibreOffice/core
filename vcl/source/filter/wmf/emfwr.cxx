@@ -861,7 +861,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 
@@ -869,8 +869,8 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o
         return;
 
     sal_uInt32  nNormWidth;
-    std::vector<sal_Int32> aOwnArray;
-    o3tl::span<const sal_Int32> pDX;
+    KernArray aOwnArray;
+    KernArraySpan pDX;
 
     // get text sizes
     if( !pDXArray.empty() )
@@ -892,13 +892,13 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o
         {
             if (!pDXArray.empty())
             {
-                aOwnArray.insert(aOwnArray.begin(), pDXArray.begin(), pDXArray.end());
+                aOwnArray.assign(pDXArray);
                 pDX = aOwnArray;
             }
             const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
             for( i = 0; i < ( nLen - 1 ); i++ )
-                aOwnArray[ i ] = FRound( aOwnArray[ i ] * fFactor );
+                aOwnArray.set(i, FRound(aOwnArray[i] * fFactor));
         }
     }
 

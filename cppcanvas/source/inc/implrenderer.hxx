@@ -194,7 +194,7 @@ namespace cppcanvas::internal
                                    const OUString&                rString,
                                    int                            nIndex,
                                    int                            nLength,
-                                   o3tl::span<const sal_Int32>    pCharWidths,
+                                   KernArraySpan                pCharWidths,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 

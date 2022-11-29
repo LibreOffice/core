@@ -838,7 +838,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
-    std::vector<sal_Int32> aCharPositionArray(pNode->Len());
+    KernArray aCharPositionArray;
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1127,7 +1127,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
-                        std::vector<sal_Int32> aTmpDXArray;
+                        KernArray aTmpDXArray;
                         pPortion->SetSize(aTmpFont.QuickGetTextSize(GetRefDevice(),
                             aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray));
 
@@ -1256,7 +1256,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // => Always simply quick inserts.
                 size_t nPos = nTmpPos - pLine->GetStart();
                 EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                rArray.insert( rArray.begin() + nPos, aCharPositionArray.data(), aCharPositionArray.data() + nPortionLen);
+                assert(aCharPositionArray.get_factor() == 1);
+                std::vector<sal_Int32>& rKernArray = aCharPositionArray.get_subunit_array();
+                rArray.insert( rArray.begin() + nPos, rKernArray.data(), rKernArray.data() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
@@ -3462,7 +3464,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 sal_Int32 nTextLen = 0;
                                 o3tl::span<const sal_Int32> pDXArray;
                                 o3tl::span<const sal_Bool> pKashidaArray;
-                                std::vector<sal_Int32> aTmpDXArray;
+                                KernArray aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
                                 {
@@ -3604,7 +3606,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen,
                                         &aTmpDXArray );
-                                    pDXArray = aTmpDXArray;
+                                    assert(aTmpDXArray.get_factor() == 1);
+                                    std::vector<sal_Int32>& rKernArray = aTmpDXArray.get_subunit_array();
+                                    pDXArray = rKernArray;
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3631,7 +3635,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(),
                                         &aTmpDXArray );
-                                    pDXArray = aTmpDXArray;
+                                    assert(aTmpDXArray.get_factor() == 1);
+                                    std::vector<sal_Int32>& rKernArray = aTmpDXArray.get_subunit_array();
+                                    pDXArray = rKernArray;
                                 }
 
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();

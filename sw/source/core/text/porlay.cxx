@@ -65,6 +65,7 @@
 #include <docsh.hxx>
 #include <unobookmark.hxx>
 #include <unocrsrhelper.hxx>
+#include <vcl/kernarray.hxx>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -2195,7 +2196,7 @@ size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const n
     return SAL_MAX_SIZE;
 }
 
-tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              bool bCenter,
                              Point* pPoint ) const
@@ -2231,7 +2232,7 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
         return 0;
 
     tools::Long nSub = 0;
-    tools::Long nLast = nI ? pKernArray[ nI - 1 ] : 0;
+    tools::Long nLast = nI ? rKernArray[ nI - 1 ] : 0;
     do
     {
         const CompType nType = GetCompType( nCompIdx );
@@ -2243,7 +2244,7 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
             nCompLen = nLen;
 
         // are we allowed to compress the character?
-        if ( pKernArray[ nI ] - nLast < nMinWidth )
+        if ( rKernArray[ nI ] - nLast < nMinWidth )
         {
             nIdx++; nI++;
         }
@@ -2254,7 +2255,7 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
                 SAL_WARN_IF( SwScriptInfo::NONE == nType, "sw.core", "None compression?!" );
 
                 // nLast is width of current character
-                nLast -= pKernArray[ nI ];
+                nLast -= rKernArray[ nI ];
 
                 nLast *= nCompress;
                 tools::Long nMove = 0;
@@ -2277,10 +2278,11 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
                 else
                     nLast /= 100000;
                 nSub -= nLast;
-                nLast = pKernArray[ nI ];
+                nLast = rKernArray[ nI ];
                 if( nI && nMove )
-                    pKernArray[ nI - 1 ] += nMove;
-                pKernArray[ nI++ ] -= nSub;
+                    rKernArray.adjust(nI - 1, nMove);
+                rKernArray.adjust(nI, -nSub);
+                ++nI;
                 ++nIdx;
             }
         }
@@ -2299,8 +2301,9 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
 
         while( nIdx < nTmpChg )
         {
-            nLast = pKernArray[ nI ];
-            pKernArray[ nI++ ] -= nSub;
+            nLast = rKernArray[ nI ];
+            rKernArray.adjust(nI, -nSub);
+            ++nI;
             ++nIdx;
         }
     } while( nIdx < nLen );
@@ -2312,7 +2315,7 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the m_KashidaInvalid set.
 
-sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+sal_Int32 SwScriptInfo::KashidaJustify( KernArray* pKernArray,
                                         sal_Bool* pKashidaArray,
                                         TextFrameIndex const nStt,
                                         TextFrameIndex const nLen,
@@ -2387,7 +2390,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
 
             while ( nArrayPos < nArrayEnd )
             {
-                pKernArray[ sal_Int32(nArrayPos) ] += nKashAdd;
+                pKernArray->adjust(sal_Int32(nArrayPos), nKashAdd);
                 ++nArrayPos;
             }
             nKashAdd += nSpaceAdd;
@@ -2574,7 +2577,7 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
     }
 }
 
-TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, sal_Int32* pKernArray,
+TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, KernArray* pKernArray,
                                      TextFrameIndex const nStt,
                                      TextFrameIndex const nLen,
                                      TextFrameIndex nNumberOfBlanks,
@@ -2606,7 +2609,8 @@ TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, sal_Int32* 
             ++nCnt;
         }
 
-        if ( pKernArray ) pKernArray[ nI ] += nSpaceSum;
+        if (pKernArray)
+            pKernArray->adjust(nI, nSpaceSum);
     }
 
     return nCnt;
@@ -2901,12 +2905,12 @@ TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
     return nCount;
 }
 
-void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
+void SwScriptInfo::CJKJustify( const OUString& rText, KernArray& rKernArray,
                                      TextFrameIndex const nStt,
                                      TextFrameIndex const nLen, LanguageType aLang,
                                      tools::Long nSpaceAdd, bool bIsSpaceStop )
 {
-    assert( pKernArray != nullptr && sal_Int32(nStt) >= 0 );
+    assert( sal_Int32(nStt) >= 0 );
     if (sal_Int32(nLen) <= 0)
         return;
 
@@ -2924,7 +2928,7 @@ void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
             if (nNext < sal_Int32(nStt + nLen) || !bIsSpaceStop)
                 nSpaceSum += nSpaceAdd;
         }
-        pKernArray[ nI ] += nSpaceSum;
+        rKernArray.adjust(nI, nSpaceSum);
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

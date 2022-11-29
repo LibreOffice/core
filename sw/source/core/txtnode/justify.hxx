@@ -16,7 +16,7 @@ namespace sw::Justify
 /// @param rKernArray text positions from OutDev::GetTextArray().
 /// @param nLen number of elements to process in rKernArray.
 /// @param nX the visual position
-SW_DLLPUBLIC sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 nLen,
+SW_DLLPUBLIC sal_Int32 GetModelPosition(const KernArray& rKernArray, sal_Int32 nLen,
                                         tools::Long nX);
 /// Distribute space between words and letters.
 /// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
@@ -28,7 +28,7 @@ SW_DLLPUBLIC sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray
 /// @param bNoHalfSpace whether to split the space into two halves.
 ///        Split spaces are inserted before and after CH_BLANK.
 ///        Set to true in word line mode and for Arabic text to avoid splitting.
-SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
+SW_DLLPUBLIC void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd,
                                     tools::Long nKern, bool bNoHalfSpace);
 
@@ -47,7 +47,7 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16
 /// @param bForceLeft for align to the left edge of the grid disregard of the punctuation type.
 /// This is useful for calculate text width, line break, and conversion model position.
 /// @return the delta offset of first glyph so text origin can be updated accordingly.
-SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
+SW_DLLPUBLIC tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view aText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth,
                                     bool bForceLeft);
 
@@ -58,8 +58,8 @@ SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16
 /// @param nGridWidth width of a text grid
 /// @param nSpace amount of space distributed under justify text alignment mode.
 /// @param nKern letter spacing.
-SW_DLLPUBLIC void SnapToGridEdge(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen,
-                                 tools::Long nGridWidth, tools::Long nSpace, tools::Long nKern);
+SW_DLLPUBLIC void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
+                                 tools::Long nSpace, tools::Long nKern);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

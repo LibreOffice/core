@@ -442,7 +442,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, o3tl::span<const sal_Int32> pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, KernArraySpan pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -547,7 +547,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
                                       std::u16string_view rString,
-                                      o3tl::span<const sal_Int32> pDXAry )
+                                      KernArraySpan pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.size();
 
@@ -562,7 +562,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point& rPoint, std::u16string_view rString,
-                                const OString& rByteString, o3tl::span<const sal_Int32> pDXAry )
+                                const OString& rByteString, KernArraySpan pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -1197,7 +1197,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 pVirDev->SetFont( aSrcFont );
                 const sal_Int32 nLen = aTemp.getLength();
-                std::vector<sal_Int32> aDXAry;
+                KernArray aDXAry;
                 const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, nLen ? &aDXAry : nullptr );
                 if (nLen && nNormSize == 0)
                 {
@@ -1206,7 +1206,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 else
                 {
                     for ( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
-                        aDXAry[ i ] = aDXAry[ i ] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize;
+                        aDXAry.set(i, aDXAry[i] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize);
                     if ( ( nLen <= 1 ) || ( static_cast<sal_Int32>(pA->GetWidth()) == nNormSize ) )
                         aDXAry.clear();
                     aSrcLineInfo = LineInfo();

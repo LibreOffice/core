@@ -964,7 +964,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
             if(bStrippingPortions)
             {
                 const vcl::Font& aSvxFont(rOutDev.GetFont());
-                std::vector<sal_Int32> aBuf;
+                KernArray aBuf;
                 rOutDev.GetTextArray( pPara->GetText(), &aBuf );
 
                 if(bSymbol)
@@ -974,7 +974,8 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
+                assert(aBuf.get_factor() == 1);
+                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf.get_subunit_array(), {},
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             }
             else

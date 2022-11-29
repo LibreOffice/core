@@ -631,7 +631,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
 {
     rtl::Reference<MetaTextArrayAction> pAction(new MetaTextArrayAction);
 
-    std::vector<sal_Int32> aArray;
+    KernArray aArray;
 
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
@@ -670,17 +670,16 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         {
             try
             {
-                aArray.resize(nTmpLen);
                 sal_Int32 i;
                 sal_Int32 val(0);
                 for (i = 0; i < nAryLen; i++)
                 {
                     mrStream.ReadInt32(val);
-                    aArray[i] = val;
+                    aArray.push_back(val);
                 }
                 // #106172# setup remainder
                 for (; i < nTmpLen; i++)
-                    aArray[i] = 0;
+                    aArray.push_back(0);
             }
             catch (std::bad_alloc&)
             {

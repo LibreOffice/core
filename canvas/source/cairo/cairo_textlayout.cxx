@@ -29,9 +29,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
-
 
 #include "cairo_textlayout.hxx"
 
@@ -265,8 +265,7 @@ namespace cairocanvas
 
         if (maLogicalAdvancements.hasElements())
         {
-            std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
-            setupTextOffsets( aOffsets.data(), maLogicalAdvancements, viewState, renderState );
+            KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
 
             rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, {},
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
@@ -312,14 +311,11 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
+    KernArray TextLayout::setupTextOffsets(
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_OR_THROW( outputOffsets!=nullptr,
-                          "TextLayout::setupTextOffsets offsets NULL" );
-
         ::basegfx::B2DHomMatrix aMatrix;
 
         ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
@@ -327,10 +323,11 @@ namespace cairocanvas
                                                      renderState);
 
         // fill integer offsets
-        std::transform( inputOffsets.begin(),
-                          inputOffsets.end(),
-                          outputOffsets,
-                          OffsetTransformer( aMatrix ) );
+        KernArray outputOffsets;
+        OffsetTransformer aTransform(aMatrix);
+        std::for_each(inputOffsets.begin(), inputOffsets.end(),
+                      [&outputOffsets, &aTransform](double n) {outputOffsets.push_back(aTransform(n)); } );
+        return outputOffsets;
     }
 
     OUString SAL_CALL TextLayout::getImplementationName()

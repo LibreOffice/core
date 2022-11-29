@@ -47,6 +47,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/BitmapEmbossGreyFilter.hxx>
@@ -633,7 +634,7 @@ public:
                 }
 
                 // DX array rendering
-                std::vector<sal_Int32> aItems;
+                KernArray aItems;
                 rDev.GetTextArray(aText, &aItems);
                 for (tools::Long j = 0; j < aText.getLength(); ++j)
                 {

@@ -158,7 +158,7 @@ namespace cppcanvas::internal
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
-            uno::Sequence< double > setupDXArray( o3tl::span<const sal_Int32> rCharWidths,
+            uno::Sequence< double > setupDXArray( KernArraySpan    rCharWidths,
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
@@ -170,11 +170,10 @@ namespace cppcanvas::internal
                 // array, by circumventing integer-based
                 // OutDev-mapping
                 const double nScale( rState.mapModeTransform.get(0,0) );
-                sal_Int32 const * pCharWidths = rCharWidths.data();
                 for( int i = 0; i < nLen; ++i )
                 {
                     // TODO(F2): use correct scale direction
-                    *pOutputWidths++ = *pCharWidths++ * nScale;
+                    *pOutputWidths++ = rCharWidths[i] * nScale;
                 }
 
                 return aCharWidthSeq;
@@ -188,7 +187,7 @@ namespace cppcanvas::internal
             {
                 // no external DX array given, create one from given
                 // string
-                std::vector<sal_Int32> aCharWidths;
+                KernArray aCharWidths;
 
                 rVDev.GetTextArray( rText, &aCharWidths, nStartPos, nLen );
 
@@ -1967,7 +1966,7 @@ namespace cppcanvas::internal
                                            const OUString&                  rText,
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
-                                           o3tl::span<const sal_Int32>      pDXArray,
+                                           KernArraySpan                    pDXArray,
                                            VirtualDevice&                   rVDev,
                                            const CanvasSharedPtr&           rCanvas,
                                            const OutDevState&               rState,
@@ -2097,7 +2096,7 @@ namespace cppcanvas::internal
                                                              const OUString&                rText,
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
-                                                             o3tl::span<const sal_Int32>    pDXArray,
+                                                             KernArraySpan                  pDXArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,

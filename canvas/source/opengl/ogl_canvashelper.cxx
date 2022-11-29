@@ -22,6 +22,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/font.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -729,9 +730,10 @@ namespace oglcanvas
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    std::vector<sal_Int32> aDXArray(nLen);
+                    KernArray aDXArray;
+                    aDXArray.resize(nLen);
                     for( sal_Int32 i=0; i<nLen; ++i )
-                        aDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
+                        aDXArray.set(i, basegfx::fround(aLogicalAdvancements[i]));
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,

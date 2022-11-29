@@ -23,11 +23,11 @@ class SwCoreJustifyTest : public SwModelTestBase
 class CharWidthArray
 {
 public:
-    std::vector<sal_Int32> maArray;
-    template <typename... Args>
-    CharWidthArray(Args&&... args)
-        : maArray{ std::forward<Args>(args)... }
+    KernArray maArray;
+    template <typename... Args> CharWidthArray(Args&&... args)
     {
+        for (auto arg : { args... })
+            maArray.push_back(arg);
     }
     template <typename Function> void InvokeWithKernArray(Function f);
     void ConvertToKernArray();
@@ -41,7 +41,7 @@ inline bool operator==(const CharWidthArray& lhs, const CharWidthArray& rhs)
 
 std::ostream& operator<<(std::ostream& rStrm, const CharWidthArray& rCharWidthArray)
 {
-    const std::vector<sal_Int32>& rArray(rCharWidthArray.maArray);
+    const KernArray& rArray(rCharWidthArray.maArray);
     sal_Int32 nLen = rArray.size();
     rStrm << "{ ";
     for (sal_Int32 i = 0; i < nLen; ++i)
@@ -56,13 +56,13 @@ std::ostream& operator<<(std::ostream& rStrm, const CharWidthArray& rCharWidthAr
 void CharWidthArray::ConvertToKernArray()
 {
     for (std::size_t i = 1; i < maArray.size(); ++i)
-        maArray[i] += maArray[i - 1];
+        maArray.adjust(i, maArray[i - 1]);
 }
 
 void CharWidthArray::ConvertToCharWidths()
 {
     for (sal_Int32 i = maArray.size() - 1; i > 0; --i)
-        maArray[i] -= maArray[i - 1];
+        maArray.adjust(i, -maArray[i - 1]);
 }
 
 /// Convert maArray to kern array values, then invoke the function, and convert it back.

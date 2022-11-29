@@ -32,6 +32,7 @@
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -956,7 +957,7 @@ public:
     */
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
                                                   o3tl::span<const sal_Bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
@@ -968,20 +969,20 @@ public:
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                 sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
                                                  o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                 sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
                                                  o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, tools::Long nMaxWidth,
                                                    DrawTextFlags nStyle = DrawTextFlags::EndEllipsis ) const;
 
-    tools::Long                        GetCtrlTextWidth( const OUString& rStr,
+    tools::Long                 GetCtrlTextWidth( const OUString& rStr,
                                                   const SalLayoutGlyphs* pLayoutCache = nullptr ) const;
 
     /** Generate MetaTextActions for the text rect
@@ -1035,13 +1036,13 @@ public:
     float                       approximate_digit_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               o3tl::span<const sal_Int32> pDXAry,
+                                               KernArraySpan aKernArray,
                                                o3tl::span<const sal_Bool> pKashidaAry,
                                                sal_Int32 nIndex,
                                                sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
-    tools::Long                        GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+    tools::Long                        GetTextArray( const OUString& rStr, KernArray* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1, bool bCaret = false,
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
@@ -1224,7 +1225,7 @@ public:
     std::unique_ptr<SalLayout>
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
-                                            o3tl::span<const sal_Int32> pLogicDXArray={},
+                                            KernArraySpan aKernArray = KernArraySpan(),
                                             o3tl::span<const sal_Bool> pKashidaArray={},
                                             SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,

@@ -34,6 +34,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -207,9 +208,10 @@ namespace dxcanvas
             {
                 // create the DXArray
                 const sal_Int32 nLen( rLogicalAdvancements.getLength() );
-                std::vector<sal_Int32> DXArray( nLen );
+                KernArray DXArray;
+                DXArray.reserve(nLen);
                 for( sal_Int32 i=0; i<nLen; ++i )
-                    DXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
+                    DXArray.push_back(basegfx::fround(rLogicalAdvancements[i]));
 
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,

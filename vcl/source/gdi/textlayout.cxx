@@ -18,6 +18,7 @@
  */
 
 #include <vcl/ctrl.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
 
 #include <textlayout.hxx>
@@ -86,7 +87,7 @@ namespace vcl
         tools::Rectangle   GetTextRect( const tools::Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize );
 
     private:
-        tools::Long        GetTextArray( const OUString& _rText, std::vector<sal_Int32>* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
+        tools::Long        GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
 
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
@@ -159,7 +160,7 @@ namespace vcl
         }
     }
 
-    tools::Long ReferenceDeviceTextLayout::GetTextArray( const OUString& _rText, std::vector<sal_Int32>* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
+    tools::Long ReferenceDeviceTextLayout::GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
@@ -207,7 +208,7 @@ namespace vcl
             return;
         }
 
-        std::vector<sal_Int32> aCharWidths;
+        KernArray aCharWidths;
         tools::Long nTextWidth = GetTextArray( _rText, &aCharWidths, _nStartIndex, _nLength );
         m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, aCharWidths, {}, _nStartIndex, _nLength );
 

@@ -726,7 +726,7 @@ namespace emfio
                             IntersectClipRect( aRect );
                         }
                         SAL_INFO( "emfio", "\t\t\t Text : " << aText );
-                        std::vector<sal_Int32> aDXAry;
+                        KernArray aDXAry;
                         std::unique_ptr<tools::Long[]> pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
@@ -773,7 +773,7 @@ namespace emfio
                                     }
                                 }
 
-                                aDXAry[ i ] = nDx;
+                                aDXAry.set(i, nDx);
                                 if ( nOptions & ETO_PDY )
                                 {
                                     pDYAry[i] = nDy;
@@ -1201,7 +1201,7 @@ namespace emfio
                                                 {
                                                     Point  aPt;
                                                     sal_uInt32  nStringLen, nDXCount;
-                                                    std::vector<sal_Int32> aDXAry;
+                                                    KernArray aDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                     aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -1224,7 +1224,7 @@ namespace emfio
                                                         {
                                                             sal_Int32 val;
                                                             aMemoryStream.ReadInt32( val);
-                                                            aDXAry[ i ] = val;
+                                                            aDXAry.set(i, val);
                                                         }
                                                         aMemoryStream.ReadUInt32(mnSkipActions);
                                                         DrawText( aPt, aString, aDXAry.empty() ? nullptr : &aDXAry );

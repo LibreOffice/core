@@ -1644,7 +1644,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<sal_Int32>* pDXArry, tools::Long* pDYArry, bool bRecordPath, GraphicsMode nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, KernArray* pDXArry, tools::Long* pDYArry, bool bRecordPath, GraphicsMode nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1661,8 +1661,7 @@ namespace emfio
                 // #i121382# Map DXArray using WorldTransform
                 const Size aSizeX(ImplMap(Size(nSumX, 0)));
                 const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
-                (*pDXArry)[i] = basegfx::fround(aVectorX.getLength());
-                (*pDXArry)[i] *= (nSumX >= 0 ? 1 : -1);
+                pDXArry->set(i, basegfx::fround(aVectorX.getLength()) * (nSumX >= 0 ? 1 : -1));
 
                 if (pDYArry)
                 {
@@ -1828,18 +1827,18 @@ namespace emfio
                 {
                     Point aCharDisplacement( i ? (*pDXArry)[i-1] : 0, i ? pDYArry[i-1] : 0 );
                     Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
-                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const sal_Int32>{}, {}, 0, 1 ) );
+                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), KernArraySpan(), {}, 0, 1 ) );
                 }
             }
             else
             {
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
-                o3tl::span<const sal_Int32> pDX;
-                std::vector<sal_Int32> aMyDXArray;
+                KernArraySpan pDX;
+                KernArray aMyDXArray;
                 if (pDXArry)
                 {
-                    pDX = { pDXArry->data(), pDXArry->size() };
+                    pDX = *pDXArry;
                     // only useful when we have an imported DXArray
                     if(!rText.isEmpty())
                     {

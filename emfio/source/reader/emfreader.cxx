@@ -1817,7 +1817,7 @@ namespace emfio
                                 SAL_INFO("emfio", "\t\tText: " << aText);
                                 SAL_INFO("emfio", "\t\tDxBuffer:");
 
-                                std::vector<sal_Int32> aDXAry;
+                                KernArray aDXAry;
                                 std::unique_ptr<tools::Long[]> pDYAry;
 
                                 sal_Int32 nDxSize;
@@ -1857,7 +1857,7 @@ namespace emfio
                                             }
                                         }
 
-                                        aDXAry[i] = 0;
+                                        aDXAry.set(i, 0);
                                         if (nOptions & ETO_PDY)
                                         {
                                             pDYAry[i] = 0;
@@ -1867,7 +1867,7 @@ namespace emfio
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            aDXAry[i] = o3tl::saturating_add(aDXAry[i], nDxTmp);
+                                            aDXAry.set(i, o3tl::saturating_add(aDXAry[i], nDxTmp));
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;

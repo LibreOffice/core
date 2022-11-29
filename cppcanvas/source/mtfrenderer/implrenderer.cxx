@@ -846,7 +846,7 @@ namespace cppcanvas::internal
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             o3tl::span<const sal_Int32>    pCharWidths,
+                                             KernArraySpan                pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -984,16 +984,16 @@ namespace cppcanvas::internal
                 {
                     ::tools::Long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    std::vector<sal_Int32> aStrikeoutCharWidths(nLen);
+                    KernArray aStrikeoutCharWidths;
 
                     for ( int i = 0;i<nLen; i++)
                     {
-                        aStrikeoutCharWidths[i] = nStrikeoutWidth;
+                        aStrikeoutCharWidths.push_back(nStrikeoutWidth);
                     }
 
                     for ( int i = 1;i< nLen; i++ )
                     {
-                        aStrikeoutCharWidths[ i ] += aStrikeoutCharWidths[ i-1 ];
+                        aStrikeoutCharWidths.adjust(i, aStrikeoutCharWidths[i - 1]);
                     }
 
                     pStrikeoutTextAction =
@@ -2554,7 +2554,7 @@ namespace cppcanvas::internal
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        std::vector<sal_Int32> aDXArray;
+                        KernArray aDXArray;
 
                         rVDev.GetTextArray( pAct->GetText(), &aDXArray,
                                             pAct->GetIndex(), pAct->GetLen() );
@@ -2562,7 +2562,6 @@ namespace cppcanvas::internal
                         const sal_Int32 nWidthDifference( pAct->GetWidth() - aDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        sal_Int32* p = aDXArray.data();
                         for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
@@ -2571,7 +2570,7 @@ namespace cppcanvas::internal
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += i * nWidthDifference / nLen;
+                            aDXArray.adjust(i - 1, i * nWidthDifference / nLen);
                         }
 
                         createTextAction(

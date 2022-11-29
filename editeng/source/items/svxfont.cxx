@@ -32,7 +32,7 @@
 #include <sal/log.hxx>
 #include <limits>
 
-static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, KernArray* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen )
 
 {
@@ -441,7 +441,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     if( IsFixKerning() && ( nLen > 1 ) )
     {
         auto nKern = GetFixKerning();
-        std::vector<sal_Int32> aDXArray;
+        KernArray aDXArray(nLen);
         GetTextArray(pOut, rTxt, &aDXArray, nIdx, nLen);
         tools::Long nOldValue = aDXArray[0];
         sal_Int32 nSpaceCount = 0;
@@ -475,13 +475,13 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, KernArray* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsFixKerning() )
         return Size( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen ),
                      pOut->GetTextHeight() );
 
-    std::vector<sal_Int32>  aDXArray;
+    KernArray aDXArray;
 
     // We always need pDXArray to count the number of kern spaces
     if (!pDXArray && IsFixKerning() && nLen > 1)
@@ -503,7 +503,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
         auto nKern = GetFixKerning();
         tools::Long nOldValue = (*pDXArray)[0];
         tools::Long nSpaceSum = nKern;
-        (*pDXArray)[0] += nSpaceSum;
+        pDXArray->adjust(0, nSpaceSum);
 
         for ( sal_Int32 i = 1; i < nLen; i++ )
         {
@@ -512,14 +512,14 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                 nOldValue = (*pDXArray)[i];
                 nSpaceSum += nKern;
             }
-            (*pDXArray)[i] += nSpaceSum;
+            pDXArray->adjust(i, nSpaceSum);
         }
 
         // The last one is a nKern too big:
         nOldValue = (*pDXArray)[nLen - 1];
         tools::Long nNewValue = nOldValue - nKern;
         for ( sal_Int32 i = nLen - 1; i >= 0 && (*pDXArray)[i] == nOldValue; --i)
-            (*pDXArray)[i] = nNewValue;
+            pDXArray->set(i, nNewValue);
 
         aTxtSize.AdjustWidth(nSpaceSum - nKern);
     }
