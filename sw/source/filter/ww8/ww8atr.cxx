@@ -1136,7 +1136,7 @@ void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     m_rWW8Export.m_pO->clear();
 }
 
-void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet )
+void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet, const OUString& /*rSymbolFont*/ )
 {
     RawText(rText, eCharSet);
 }

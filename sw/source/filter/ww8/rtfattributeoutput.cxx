@@ -515,7 +515,8 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
     return aBuf.makeStringAndClear();
 }
 
-void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
+void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/,
+                                 const OUString& /*rSymbolFont*/)
 {
     SAL_INFO("sw.rtf", __func__ << ", rText: " << rText);
     RawText(rText, m_rExport.GetCurrentEncoding());
