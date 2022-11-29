@@ -11542,7 +11542,12 @@ if test "$_os" = "SunOS" -o "$_os" = "Darwin"; then
     if $GNUPATCH --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([yes])
     else
-        AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
+        if $GNUPATCH --version | grep "2\.0-.*-Apple" >/dev/null 2>/dev/null; then
+            AC_MSG_RESULT([no, but accepted (Apple patch)])
+            add_warning "patch utility is not GNU patch. Apple's patch should work OK, but it might experience issues where GNU patch doesn't."
+        else
+            AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
+        fi
     fi
 else
     GNUPATCH=$PATCH
