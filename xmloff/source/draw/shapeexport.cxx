@@ -261,7 +261,8 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
 }
 
 // This method collects all automatic styles for the given XShape
-void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape )
+void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape,
+        const css::uno::Sequence<OUString>& rAutoStylePropNames )
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
@@ -529,7 +530,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         uno::Reference< drawing::XShapes > xShapes( xCollection, uno::UNO_QUERY );
         if( xShapes.is() )
         {
-            collectShapesAutoStyles( xShapes );
+            collectShapesAutoStyles( xShapes,rAutoStylePropNames );
         }
     }
 }
@@ -955,7 +956,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 }
 
 // This method collects all automatic styles for the shapes inside the given XShapes collection
-void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XShapes >& xShapes )
+void XMLShapeExport::collectShapesAutoStyles(
+        const uno::Reference < drawing::XShapes >& xShapes,
+        const css::uno::Sequence<OUString>& rAutoStylePropNames)
 {
     ShapesInfos::iterator aOldCurrentShapesIter = maCurrentShapesIter;
     seekShapes( xShapes );
@@ -969,7 +972,7 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
         if(!xShape.is())
             continue;
 
-        collectShapeAutoStyles( xShape );
+        collectShapeAutoStyles( xShape, rAutoStylePropNames );
     }
 
     maCurrentShapesIter = aOldCurrentShapesIter;

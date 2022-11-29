@@ -20,6 +20,7 @@
 #include <memory>
 #include <algorithm>
 
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/solar.h>
@@ -441,6 +442,18 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 
     rNames.realloc( aNames.size() );
     std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
+}
+
+/// retrieve the names of the properties used in the styles
+uno::Sequence<OUString> SvXMLAutoStylePoolP_Impl::GetPropertyNames()
+{
+    o3tl::sorted_vector<OUString> aNames;
+    // iterate over families
+    for (XMLAutoStyleFamily const & rFamily : m_FamilySet)
+    {
+        rFamily.mxMapper->GetEntryAPINames(aNames);
+    }
+    return comphelper::containerToSequence(aNames);
 }
 
 // Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) to list

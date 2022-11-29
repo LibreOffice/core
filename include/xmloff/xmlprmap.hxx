@@ -26,6 +26,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
+#include <o3tl/sorted_vector.hxx>
 
 namespace rtl { template <class reference_type> class Reference; }
 
@@ -121,6 +122,8 @@ public:
 
     /** Remove an entry */
     void RemoveEntry( sal_Int32 nIndex );
+
+    void GetEntryAPINames(o3tl::sorted_vector<OUString>& rNames) const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLPRMAP_HXX

@@ -3047,7 +3047,8 @@ void XMLTextParagraphExport::exportAnyTextFrame(
         case FrameType::Shape:
             {
                 Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
-                GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
+                css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool().GetPropertyNames();
+                GetExport().GetShapeExport()->collectShapeAutoStyles( xShape, aAutoStylePropNames );
             }
             break;
         default:

@@ -171,7 +171,8 @@ public:
             vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
             const rtl::Reference< XMLPropertySetMapper >& maPropMapper,
-            const bool bDefault);
+            const bool bDefault,
+            const uno::Sequence<OUString>* pOnlyTheseProps);
     sal_uInt32 GetPropertyCount() const { return aPropInfos.size(); }
 };
 
@@ -250,18 +251,22 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         vector< XMLPropertyState >& rPropStates,
         const Reference< XPropertySet >& rPropSet,
         const rtl::Reference< XMLPropertySetMapper >& rPropMapper,
-        const bool bDefault )
+        const bool bDefault,
+        const uno::Sequence<OUString>* pOnlyTheseProps )
 {
+
     XMLPropertyStates_Impl aPropStates;
 
-    const uno::Sequence<OUString>& rApiNames = GetApiNames();
+    const uno::Sequence<OUString>* pApiNames = pOnlyTheseProps;
+    if (!pApiNames)
+        pApiNames = &GetApiNames();
 
     Reference < XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
     if (xTolPropSet.is())
     {
         if (!bDefault)
         {
-            Sequence < beans::GetDirectPropertyTolerantResult > aResults(xTolPropSet->getDirectPropertyValuesTolerant(rApiNames));
+            Sequence < beans::GetDirectPropertyTolerantResult > aResults(xTolPropSet->getDirectPropertyValuesTolerant(*pApiNames));
             sal_Int32 nResultCount(aResults.getLength());
             if (nResultCount > 0)
             {
@@ -289,8 +294,8 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         }
         else
         {
-            const Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(rApiNames));
-            OSL_ENSURE( rApiNames.getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
+            const Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(*pApiNames));
+            OSL_ENSURE( pApiNames->getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
             FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
             XMLPropertyState aNewProperty( -1 );
             OSL_ENSURE( aPropInfos.size() == static_cast<sal_uInt32>(aResults.getLength()), "wrong implemented XTolerantMultiPropertySet??" );
@@ -319,7 +324,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
         if( xPropState.is() )
         {
-            aStates = xPropState->getPropertyStates( rApiNames );
+            aStates = xPropState->getPropertyStates( *pApiNames );
             pStates = aStates.getConstArray();
         }
 
@@ -389,7 +394,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
             }
             else
             {
-                aValues = xMultiPropSet->getPropertyValues( rApiNames );
+                aValues = xMultiPropSet->getPropertyValues( *pApiNames );
                 const Any *pValues = aValues.getConstArray();
 
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
@@ -514,21 +519,24 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
 
 std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter(
     SvXMLExport const& rExport,
-    const uno::Reference<beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily ) const
+    const uno::Reference<beans::XPropertySet>& rPropSet,
+    bool bEnableFoFontFamily,
+    const uno::Sequence<OUString>* pOnlyTheseProps ) const
 {
-    return Filter_(rExport, rPropSet, false, bEnableFoFontFamily);
+    return Filter_(rExport, rPropSet, false, bEnableFoFontFamily, pOnlyTheseProps);
 }
 
 std::vector<XMLPropertyState> SvXMLExportPropertyMapper::FilterDefaults(
     SvXMLExport const& rExport,
     const uno::Reference<beans::XPropertySet>& rPropSet ) const
 {
-    return Filter_(rExport, rPropSet, true, false/*bEnableFoFontFamily*/);
+    return Filter_(rExport, rPropSet, true, false/*bEnableFoFontFamily*/, nullptr);
 }
 
 vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
     SvXMLExport const& rExport,
-    const Reference<XPropertySet>& xPropSet, bool bDefault, bool bEnableFoFontFamily ) const
+    const Reference<XPropertySet>& xPropSet, bool bDefault, bool bEnableFoFontFamily,
+    const uno::Sequence<OUString>* pOnlyTheseProps ) const
 {
     vector< XMLPropertyState > aPropStateArray;
 
@@ -641,7 +649,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
         try
         {
             pFilterInfo->FillPropertyStateArray(
-                aPropStateArray, xPropSet, mpImpl->mxPropMapper, bDefault);
+                aPropStateArray, xPropSet, mpImpl->mxPropMapper, bDefault, pOnlyTheseProps);
         }
         catch( UnknownPropertyException& )
         {
@@ -1126,6 +1134,11 @@ void SvXMLExportPropertyMapper::SetStyleName( const OUString& rStyleName )
 const OUString& SvXMLExportPropertyMapper::GetStyleName() const
 {
     return mpImpl->maStyleName;
+}
+
+void SvXMLExportPropertyMapper::GetEntryAPINames(o3tl::sorted_vector<OUString>& rNames) const
+{
+    mpImpl->mxPropMapper->GetEntryAPINames(rNames);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

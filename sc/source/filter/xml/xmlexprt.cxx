@@ -581,6 +581,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
     }
     if (pSharedData->HasDrawPage())
     {
+        css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool()->GetPropertyNames();
         for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
         {
             uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
@@ -599,7 +600,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
                 {
                     for (const auto& rxShape : (*pTableShapes)[nTable])
                     {
-                        GetShapeExport()->collectShapeAutoStyles(rxShape);
+                        GetShapeExport()->collectShapeAutoStyles(rxShape, aAutoStylePropNames);
                         IncrementProgressBar(false);
                     }
                 }
@@ -608,7 +609,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
                     ScMyShapeList::const_iterator aEndItr(pShapeList->end());
                     while ( aShapeItr != aEndItr && ( aShapeItr->aAddress.Tab() == nTable ) )
                     {
-                        GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape);
+                        GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape, aAutoStylePropNames);
                         IncrementProgressBar(false);
                         ++aShapeItr;
                     }
@@ -619,7 +620,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
                     for (const auto& rNoteShape : rNoteShapes)
                     {
                         if ( rNoteShape.aPos.Tab() == nTable )
-                            GetShapeExport()->collectShapeAutoStyles(rNoteShape.xShape);
+                            GetShapeExport()->collectShapeAutoStyles(rNoteShape.xShape, aAutoStylePropNames);
                     }
                 }
             }

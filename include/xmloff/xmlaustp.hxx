@@ -110,6 +110,9 @@ public:
         css::uno::Sequence<sal_Int32> const & aFamilies,
         css::uno::Sequence<OUString> const & aNames );
 
+    /// retrieve the names of the properties used in the styles
+    css::uno::Sequence<OUString> GetPropertyNames();
+
     /// Add an item set to the pool and return its generated name.
     OUString Add( XmlStyleFamily nFamily, ::std::vector< XMLPropertyState >&& rProperties );
     OUString Add( XmlStyleFamily nFamily, const OUString& rParent, ::std::vector< XMLPropertyState >&& rProperties, bool bDontSeek = false );
