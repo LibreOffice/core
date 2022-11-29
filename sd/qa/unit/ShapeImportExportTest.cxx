@@ -63,7 +63,7 @@ SdrObject* searchObject(SdrPage const* pPage, std::u16string_view rName)
 /* Test text distances (insets) */
 void ShapeImportExportTest::testTextDistancesOOXML()
 {
-    loadFromURL(u"TextDistancesInsets1.pptx");
+    createSdImpressDoc("TextDistancesInsets1.pptx");
 
     SdrPage const* pPage = GetPage(1);
     // Bottom Margin = 4cm
@@ -172,7 +172,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 /* Test text distances (insets) variants where top+bottom margin > text area*/
 void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase()
 {
-    loadFromURL(u"TextDistancesInsets2.pptx");
+    createSdImpressDoc("TextDistancesInsets2.pptx");
 
     SdrPage const* pPage = GetPage(1);
 
@@ -260,7 +260,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 /* Test export of text distances (insets) - conversion back of special case */
 void ShapeImportExportTest::testTextDistancesOOXML_Export()
 {
-    loadFromURL(u"TextDistancesInsets3.pptx");
+    createSdImpressDoc("TextDistancesInsets3.pptx");
 
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -373,7 +373,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
 
 void ShapeImportExportTest::testTextDistancesODP_OOXML_Export()
 {
-    loadFromURL(u"odp/tdf150966_hugeInset.odp");
+    createSdImpressDoc("odp/tdf150966_hugeInset.odp");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDoc);

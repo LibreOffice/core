@@ -9,7 +9,8 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#include <test/unoapixml_test.hxx>
+#include "sdmodeltestbase.hxx"
+
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -61,11 +62,11 @@
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
-class SdMiscTest : public UnoApiXmlTest
+class SdMiscTest : public SdModelTestBase
 {
 public:
     SdMiscTest()
-        : UnoApiXmlTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 
@@ -120,7 +121,7 @@ public:
 void SdMiscTest::testTdf99396()
 {
     // Load the document and select the table.
-    loadFromURL(u"tdf99396.odp");
+    createSdImpressDoc("tdf99396.odp");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -150,7 +151,7 @@ void SdMiscTest::testTableObjectUndoTest()
     // See tdf#99396 for the issue
 
     // Load the document and select the table.
-    loadFromURL(u"tdf99396.odp");
+    createSdImpressDoc("tdf99396.odp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -263,7 +264,7 @@ void SdMiscTest::testTableObjectUndoTest()
 
 void SdMiscTest::testFillGradient()
 {
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     // Insert a new page.
@@ -300,7 +301,7 @@ void SdMiscTest::testFillGradient()
 
 void SdMiscTest::testTdf44774()
 {
-    mxComponent = loadFromDesktop("private:factory/sdraw");
+    createSdDrawDoc();
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
@@ -333,7 +334,7 @@ void SdMiscTest::testTdf44774()
 
 void SdMiscTest::testTdf38225()
 {
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    createSdImpressDoc();
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
@@ -372,7 +373,7 @@ void SdMiscTest::testTdf38225()
 
 void SdMiscTest::testTdf120527()
 {
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    createSdImpressDoc();
 
     // Load a bitmap into the bitmap table.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -410,7 +411,7 @@ void SdMiscTest::testTdf120527()
 // Testing document model part of editengine-columns
 void SdMiscTest::testTextColumns()
 {
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     // Insert a new page.
@@ -466,7 +467,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // only in the ODF attributes draw:display and draw:protected. The resaved document
     // should still have the ODF attributes and in addition the config items in settings.xml.
     // "Load" is needed for to handle layers, simple "loadURL" does not work.
-    loadFromURL(u"tdf101242_ODF.odg");
+    createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving including items in settings.xml
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -520,7 +521,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     // Loads a document, which has the visible/printable/locked information for layers
     // only in the ODF attributes draw:display and draw:protected. The resave document
     // should have only the ODF attributes and no config items in settings.xml.
-    loadFromURL(u"tdf101242_ODF.odg");
+    createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving without items in settings.xml
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -566,7 +567,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have the ODF attributes draw:display and draw:protected
     // and should still have these config items in settings.xml.
-    loadFromURL(u"tdf101242_settings.odg");
+    createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving including items in settings.xml
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -621,7 +622,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have only the ODF attributes draw:display and draw:protected
     // and should have no config items in settings.xml.
-    loadFromURL(u"tdf101242_settings.odg");
+    createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving without config items in settings.xml
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -671,7 +672,7 @@ void SdMiscTest::testTdf119392()
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
     batch->commit();
 
-    loadFromURL(u"tdf119392_InsertLayer.odg");
+    createSdDrawDoc("tdf119392_InsertLayer.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     // Insert layer "-P-", not visible, printable, not locked
@@ -722,7 +723,7 @@ void SdMiscTest::testTdf67248()
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
     // On opening the user layer must still exists. The error was, that it was merged into the standard
     // layer "background".
-    loadFromURL(u"tdf67248.odg");
+    createSdDrawDoc("tdf67248.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
@@ -732,7 +733,7 @@ void SdMiscTest::testTdf67248()
 
 void SdMiscTest::testTdf119956()
 {
-    loadFromURL(u"tdf119956.odg");
+    createSdDrawDoc("tdf119956.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -775,7 +776,7 @@ void SdMiscTest::testTdf119956()
 void SdMiscTest::testTdf98839_ShearVFlipH()
 {
     // Loads a document with a sheared shape and mirrors it
-    loadFromURL(u"tdf98839_ShearVFlipH.odg");
+    createSdDrawDoc("tdf98839_ShearVFlipH.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -798,7 +799,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
 
 void SdMiscTest::testTdf130988()
 {
-    loadFromURL(u"tdf130988_3D_create_lathe.odg");
+    createSdDrawDoc("tdf130988_3D_create_lathe.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
 
@@ -820,7 +821,7 @@ void SdMiscTest::testTdf130988()
 
 void SdMiscTest::testTdf131033()
 {
-    loadFromURL(u"tdf131033_3D_SceneSizeIn2d.odg");
+    createSdDrawDoc("tdf131033_3D_SceneSizeIn2d.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
 
@@ -846,7 +847,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 {
     // Versions LO 6.2 to 6.4 have produced files, where the layer DrawnInSlideshow has
     // got visible=false and printable=false attributes. Those files should be repaired now.
-    loadFromURL(u"tdf129898_faulty_DrawnInSlideshow.odp");
+    createSdImpressDoc("tdf129898_faulty_DrawnInSlideshow.odp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
@@ -868,7 +869,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 
 void SdMiscTest::testTdf136956()
 {
-    loadFromURL(u"odp/cellspan.odp");
+    createSdImpressDoc("odp/cellspan.odp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
 

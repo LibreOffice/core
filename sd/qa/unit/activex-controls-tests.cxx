@@ -68,7 +68,7 @@ public:
 void SdActiveXControlsTest::testBackgroundColor()
 {
     // Check whether all system colors are imported correctly
-    loadFromURL(u"pptx/control_background_color.pptx");
+    createSdImpressDoc("pptx/control_background_color.pptx");
 
     const std::vector<Color> vBackgroundColors =
     {
@@ -114,7 +114,7 @@ void SdActiveXControlsTest::testBackgroundColor()
 
 void SdActiveXControlsTest::testLabelProperties()
 {
-    loadFromURL(u"pptx/activex_label.pptx");
+    createSdImpressDoc("pptx/activex_label.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -192,7 +192,7 @@ void SdActiveXControlsTest::testLabelProperties()
 
 void SdActiveXControlsTest::testTextBoxProperties()
 {
-    loadFromURL(u"pptx/activex_textbox.pptx");
+    createSdImpressDoc("pptx/activex_textbox.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -327,7 +327,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
 
 void SdActiveXControlsTest::testSpinButtonProperties()
 {
-    loadFromURL(u"pptx/activex_spinbutton.pptx");
+    createSdImpressDoc("pptx/activex_spinbutton.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -417,7 +417,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
 
 void SdActiveXControlsTest::testCommandButtonProperties()
 {
-    loadFromURL(u"pptx/activex_commandbutton.pptx");
+    createSdImpressDoc("pptx/activex_commandbutton.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -486,7 +486,7 @@ void SdActiveXControlsTest::testCommandButtonProperties()
 
 void SdActiveXControlsTest::testScrollBarProperties()
 {
-    loadFromURL(u"pptx/activex_scrollbar.pptx");
+    createSdImpressDoc("pptx/activex_scrollbar.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -592,7 +592,7 @@ void SdActiveXControlsTest::testScrollBarProperties()
 
 void SdActiveXControlsTest::testCheckBoxProperties()
 {
-    loadFromURL(u"pptx/activex_checkbox.pptx");
+    createSdImpressDoc("pptx/activex_checkbox.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -683,7 +683,7 @@ void SdActiveXControlsTest::testCheckBoxProperties()
 
 void SdActiveXControlsTest::testOptionButtonProperties()
 {
-    loadFromURL(u"pptx/activex_optionbutton.pptx");
+    createSdImpressDoc("pptx/activex_optionbutton.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -764,7 +764,7 @@ void SdActiveXControlsTest::testOptionButtonProperties()
 
 void SdActiveXControlsTest::testComboBoxProperties()
 {
-    loadFromURL(u"pptx/activex_combobox.pptx");
+    createSdImpressDoc("pptx/activex_combobox.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -876,7 +876,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
 
 void SdActiveXControlsTest::testListBoxProperties()
 {
-    loadFromURL(u"pptx/activex_listbox.pptx");
+    createSdImpressDoc("pptx/activex_listbox.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -962,7 +962,7 @@ void SdActiveXControlsTest::testListBoxProperties()
 
 void SdActiveXControlsTest::testToggleButtonProperties()
 {
-    loadFromURL(u"pptx/activex_togglebutton.pptx");
+    createSdImpressDoc("pptx/activex_togglebutton.pptx");
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -1044,7 +1044,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
 
 void SdActiveXControlsTest::testPictureProperties()
 {
-    loadFromURL(u"pptx/activex_picture.pptx");
+    createSdImpressDoc("pptx/activex_picture.pptx");
 
     // Different controls has different image positioning
 
@@ -1112,7 +1112,7 @@ void SdActiveXControlsTest::testPictureProperties()
 
 void SdActiveXControlsTest::testFontProperties()
 {
-    loadFromURL(u"pptx/activex_fontproperties.pptx");
+    createSdImpressDoc("pptx/activex_fontproperties.pptx");
 
     // Different controls has different font properties
 

@@ -233,7 +233,7 @@ public:
 
 void SdOOXMLExportTest3::testTdf92222()
 {
-    loadFromURL(u"pptx/tdf92222.pptx");
+    createSdImpressDoc("pptx/tdf92222.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocTheme = parseExport("ppt/theme/theme1.xml");
@@ -247,7 +247,7 @@ void SdOOXMLExportTest3::testTdf92222()
 
 void SdOOXMLExportTest3::testTdf129430()
 {
-    loadFromURL(u"odp/tdf129430.odp");
+    createSdImpressDoc("odp/tdf129430.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
@@ -257,7 +257,7 @@ void SdOOXMLExportTest3::testTdf129430()
 
 void SdOOXMLExportTest3::testTdf114848()
 {
-    loadFromURL(u"pptx/tdf114848.pptx");
+    createSdImpressDoc("pptx/tdf114848.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocTheme1 = parseExport("ppt/theme/theme1.xml");
@@ -271,7 +271,7 @@ void SdOOXMLExportTest3::testTdf114848()
 
 void SdOOXMLExportTest3::testTdf147586()
 {
-    loadFromURL(u"pptx/tdf147586.pptx");
+    createSdImpressDoc("pptx/tdf147586.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -288,7 +288,7 @@ void SdOOXMLExportTest3::testTdf147586()
 
 void SdOOXMLExportTest3::testTdf68759()
 {
-    loadFromURL(u"odp/tdf68759.odp");
+    createSdImpressDoc("odp/tdf68759.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -311,7 +311,7 @@ void SdOOXMLExportTest3::testTdf68759()
 
 void SdOOXMLExportTest3::testTdf127901()
 {
-    loadFromURL(u"odp/tdf127901.odp");
+    createSdImpressDoc("odp/tdf127901.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
@@ -330,7 +330,7 @@ void SdOOXMLExportTest3::testTdf127901()
 
 void SdOOXMLExportTest3::testTdf48735()
 {
-    loadFromURL(u"odp/tdf48735.odp");
+    createSdImpressDoc("odp/tdf48735.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
@@ -342,7 +342,7 @@ void SdOOXMLExportTest3::testTdf48735()
 
 void SdOOXMLExportTest3::testTdf90626()
 {
-    loadFromURL(u"odp/tdf90626.odp");
+    createSdImpressDoc("odp/tdf90626.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -358,7 +358,7 @@ void SdOOXMLExportTest3::testTdf90626()
 
 void SdOOXMLExportTest3::testTdf107608()
 {
-    loadFromURL(u"pptx/tdf107608.pptx");
+    createSdImpressDoc("pptx/tdf107608.pptx");
     save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -381,7 +381,7 @@ void SdOOXMLExportTest3::testTdf111786()
 {
     // Export line transparency with the color
 
-    loadFromURL(u"pptx/tdf111786.pptx");
+    createSdImpressDoc("pptx/tdf111786.pptx");
     save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -398,7 +398,7 @@ void SdOOXMLExportTest3::testTdf111786()
 
 void SdOOXMLExportTest3::testFontScale()
 {
-    loadFromURL(u"pptx/font-scale.pptx");
+    createSdImpressDoc("pptx/font-scale.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
 
@@ -410,7 +410,7 @@ void SdOOXMLExportTest3::testFontScale()
 
 void SdOOXMLExportTest3::testShapeAutofitPPTX()
 {
-    loadFromURL(u"pptx/testShapeAutofit.pptx");
+    createSdImpressDoc("pptx/testShapeAutofit.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDocContent);
@@ -423,7 +423,7 @@ void SdOOXMLExportTest3::testShapeAutofitPPTX()
 
 void SdOOXMLExportTest3::testLegacyShapeAutofitPPTX()
 {
-    loadFromURL(u"odp/testLegacyShapeAutofit.odp");
+    createSdImpressDoc("odp/testLegacyShapeAutofit.odp");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDocContent);
@@ -438,7 +438,7 @@ void SdOOXMLExportTest3::testLegacyShapeAutofitPPTX()
 
 void SdOOXMLExportTest3::testTdf115394()
 {
-    loadFromURL(u"pptx/tdf115394.pptx");
+    createSdImpressDoc("pptx/tdf115394.pptx");
     save("Impress Office Open XML");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -474,7 +474,7 @@ void SdOOXMLExportTest3::testTdf115394()
 
 void SdOOXMLExportTest3::testTdf115394Zero()
 {
-    loadFromURL(u"pptx/tdf115394-zero.pptx");
+    createSdImpressDoc("pptx/tdf115394-zero.pptx");
     save("Impress Office Open XML");
     double fTransitionDuration;
 
@@ -488,7 +488,7 @@ void SdOOXMLExportTest3::testTdf115394Zero()
 
 void SdOOXMLExportTest3::testTdf115005()
 {
-    loadFromURL(u"odp/tdf115005.odp");
+    createSdImpressDoc("odp/tdf115005.odp");
     save("impress8");
 
     // additional checks of the output file
@@ -508,7 +508,7 @@ void SdOOXMLExportTest3::testTdf115005()
 
 int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages)
 {
-    loadFromURL(u"odp/tdf115005_no_fallback_images.odp");
+    createSdImpressDoc("odp/tdf115005_no_fallback_images.odp");
 
     // check if fallback images were not created if AddReplacementImages=true/false
     // set AddReplacementImages
@@ -559,7 +559,7 @@ void SdOOXMLExportTest3::testTdf115005_FallBack_Images_Off()
 
 void SdOOXMLExportTest3::testTdf118806()
 {
-    loadFromURL(u"odp/tdf118806.odp");
+    createSdImpressDoc("odp/tdf118806.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -568,7 +568,7 @@ void SdOOXMLExportTest3::testTdf118806()
 
 void SdOOXMLExportTest3::testTdf130058()
 {
-    loadFromURL(u"pptx/tdf130058.pptx");
+    createSdImpressDoc("pptx/tdf130058.pptx");
     save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -598,7 +598,7 @@ void SdOOXMLExportTest3::testTdf111789()
 {
     // Shadow properties were not exported for text shapes.
 
-    loadFromURL(u"pptx/tdf111789.pptx");
+    createSdImpressDoc("pptx/tdf111789.pptx");
     save("Impress Office Open XML");
 
     // First text shape has some shadow
@@ -637,7 +637,7 @@ void SdOOXMLExportTest3::testTdf111789()
 
 void SdOOXMLExportTest3::testTdf145162()
 {
-    loadFromURL(u"pptx/tdf145162.pptx");
+    createSdImpressDoc("pptx/tdf145162.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
 
@@ -649,7 +649,7 @@ void SdOOXMLExportTest3::testZeroIndentExport()
 {
     // Load the bugdoc and save to pptx then.
 
-    loadFromURL(u"odp/testZeroIndent.odp");
+    createSdImpressDoc("odp/testZeroIndent.odp");
     save("Impress Office Open XML");
     // There are 3 slides, get them
     xmlDocUniquePtr pSlide1 = parseExport("ppt/slides/slide1.xml");
@@ -680,7 +680,7 @@ void SdOOXMLExportTest3::testZeroIndentExport()
 
 void SdOOXMLExportTest3::testTdf100348_convert_Fontwork2TextWarp()
 {
-    loadFromURL(u"odp/tdf100348_Fontwork2TextWarp.odp");
+    createSdImpressDoc("odp/tdf100348_Fontwork2TextWarp.odp");
     save("Impress Office Open XML");
 
     // Resulting pptx has to contain the TextWarp shape
@@ -732,7 +732,7 @@ void SdOOXMLExportTest3::testTdf100348_convert_Fontwork2TextWarp()
 
 void SdOOXMLExportTest3::testTdf125573_FontWorkScaleX()
 {
-    loadFromURL(u"pptx/tdf125573_FontWorkScaleX.pptx");
+    createSdImpressDoc("pptx/tdf125573_FontWorkScaleX.pptx");
     save("Impress Office Open XML");
 
     // Error was, that attribute 'fromWordArt' was ignored
@@ -764,7 +764,7 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
     // slide 1 ARC -> arc, slide 2 CUT -> chord, slide 3 SECTION -> pie
     // Adjustment values need to exist and their values need to correspond to the
     // original angles. Shape 'arc' needs to be unfilled.
-    loadFromURL(u"odp/tdf99497_CircleKind.odp");
+    createSdImpressDoc("odp/tdf99497_CircleKind.odp");
     save("Impress Office Open XML");
 
     // slide 1 45° -> adj1 = 20493903, 270° -> adj2 = 5400000, <a:noFill/> exists
@@ -795,7 +795,7 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
 
 void SdOOXMLExportTest3::testTdf104792()
 {
-    loadFromURL(u"pptx/tdf104792-smart-art-animation.pptx");
+    createSdImpressDoc("pptx/tdf104792-smart-art-animation.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -808,7 +808,7 @@ void SdOOXMLExportTest3::testTdf104792()
 
 void SdOOXMLExportTest3::testTdf90627()
 {
-    loadFromURL(u"odp/tdf90627.odp");
+    createSdImpressDoc("odp/tdf90627.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -822,7 +822,7 @@ void SdOOXMLExportTest3::testTdf90627()
 
 void SdOOXMLExportTest3::testTdf104786()
 {
-    loadFromURL(u"pptx/tdf104786.pptx");
+    createSdImpressDoc("pptx/tdf104786.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide2.xml");
@@ -836,7 +836,7 @@ void SdOOXMLExportTest3::testTdf104786()
 
 void SdOOXMLExportTest3::testTdf118783()
 {
-    loadFromURL(u"odp/tdf118783.odp");
+    createSdImpressDoc("odp/tdf118783.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -847,7 +847,7 @@ void SdOOXMLExportTest3::testTdf118783()
 
 void SdOOXMLExportTest3::testTdf104789()
 {
-    loadFromURL(u"pptx/tdf104789.pptx");
+    createSdImpressDoc("pptx/tdf104789.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -860,7 +860,7 @@ void SdOOXMLExportTest3::testTdf104789()
 
 void SdOOXMLExportTest3::testOpenDocumentAsReadOnly()
 {
-    loadFromURL(u"pptx/open-as-read-only.pptx");
+    createSdImpressDoc("pptx/open-as-read-only.pptx");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
@@ -874,7 +874,7 @@ void SdOOXMLExportTest3::testOpenDocumentAsReadOnly()
 
 void SdOOXMLExportTest3::testTdf118835()
 {
-    loadFromURL(u"odp/tdf118835.odp");
+    createSdImpressDoc("odp/tdf118835.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -899,7 +899,7 @@ void SdOOXMLExportTest3::testTdf118835()
 
 void SdOOXMLExportTest3::testTdf118768()
 {
-    loadFromURL(u"odp/tdf118768-brake.odp");
+    createSdImpressDoc("odp/tdf118768-brake.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -916,7 +916,7 @@ void SdOOXMLExportTest3::testTdf118768()
 
 void SdOOXMLExportTest3::testTdf118836()
 {
-    loadFromURL(u"odp/tdf118836.odp");
+    createSdImpressDoc("odp/tdf118836.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -979,7 +979,7 @@ static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
 
 void SdOOXMLExportTest3::testTdf116350TextEffects()
 {
-    loadFromURL(u"pptx/tdf116350-texteffects.pptx");
+    createSdImpressDoc("pptx/tdf116350-texteffects.pptx");
 
     // Default angle for ArchUp
     uno::Reference<beans::XPropertySet> xShape0(getShapeFromPage(0, 0));
@@ -1016,7 +1016,7 @@ void SdOOXMLExportTest3::testTdf116350TextEffects()
 
 void SdOOXMLExportTest3::testTdf128096()
 {
-    loadFromURL(u"odp/tdf128096.odp");
+    createSdImpressDoc("odp/tdf128096.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
@@ -1032,7 +1032,7 @@ void SdOOXMLExportTest3::testTdf128096()
 }
 void SdOOXMLExportTest3::testTdf120573()
 {
-    loadFromURL(u"pptx/tdf120573.pptx");
+    createSdImpressDoc("pptx/tdf120573.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1052,7 +1052,7 @@ void SdOOXMLExportTest3::testTdf120573()
 
 void SdOOXMLExportTest3::testTdf119118()
 {
-    loadFromURL(u"pptx/tdf119118.pptx");
+    createSdImpressDoc("pptx/tdf119118.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:iterate", "type", "lt");
@@ -1061,7 +1061,7 @@ void SdOOXMLExportTest3::testTdf119118()
 
 void SdOOXMLExportTest3::testTdf99213()
 {
-    loadFromURL(u"odp/tdf99213-target-missing.odp");
+    createSdImpressDoc("odp/tdf99213-target-missing.odp");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     // Number of nodes with p:attrNameLst was 3, including one that missed tgtEl
@@ -1073,7 +1073,7 @@ void SdOOXMLExportTest3::testTdf99213()
 void SdOOXMLExportTest3::testPotxExport()
 {
     // Create new document
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    createSdImpressDoc();
 
     // Export as a POTM template
     save("Impress Office Open XML Template");
@@ -1089,7 +1089,7 @@ void SdOOXMLExportTest3::testPotxExport()
 
 void SdOOXMLExportTest3::testTdf44223()
 {
-    loadFromURL(u"pptx/tdf44223.pptx");
+    createSdImpressDoc("pptx/tdf44223.pptx");
     save("Impress Office Open XML");
 
     std::unique_ptr<SvStream> const pStream1(
@@ -1127,7 +1127,7 @@ void SdOOXMLExportTest3::testTdf44223()
 
 void SdOOXMLExportTest3::testTdf135843()
 {
-    loadFromURL(u"pptx/tdf135843_export.pptx");
+    createSdImpressDoc("pptx/tdf135843_export.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1150,7 +1150,7 @@ void SdOOXMLExportTest3::testTdf135843()
 
 void SdOOXMLExportTest3::testSmartArtPreserve()
 {
-    loadFromURL(u"pptx/smartart-preserve.pptx");
+    createSdImpressDoc("pptx/smartart-preserve.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1203,7 +1203,7 @@ void SdOOXMLExportTest3::testTdf125346()
 {
     // There are two themes in the test document, make sure we use the right theme
 
-    loadFromURL(u"pptx/tdf125346.pptx");
+    createSdImpressDoc("pptx/tdf125346.pptx");
     save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1223,7 +1223,7 @@ void SdOOXMLExportTest3::testTdf125346_2()
     // There are two themes in the test document, make sure we use the right theme
     // Test more slides with different themes
 
-    loadFromURL(u"pptx/tdf125346_2.pptx");
+    createSdImpressDoc("pptx/tdf125346_2.pptx");
     save("Impress Office Open XML");
 
     {
@@ -1271,7 +1271,7 @@ void SdOOXMLExportTest3::testTdf125360()
     // Check whether the changed fill transparency is exported correctly.
     // Color is defined by shape style
 
-    loadFromURL(u"pptx/tdf125360.pptx");
+    createSdImpressDoc("pptx/tdf125360.pptx");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1291,7 +1291,7 @@ void SdOOXMLExportTest3::testTdf125360_1()
     // Check whether the changed fill transparency is exported correctly.
     // Color is defined by color scheme
 
-    loadFromURL(u"pptx/tdf125360_1.pptx");
+    createSdImpressDoc("pptx/tdf125360_1.pptx");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1311,7 +1311,7 @@ void SdOOXMLExportTest3::testTdf125360_2()
     // Check whether the changed fill transparency is exported correctly.
     // Color is defined by color scheme with a transparency
 
-    loadFromURL(u"pptx/tdf125360_2.pptx");
+    createSdImpressDoc("pptx/tdf125360_2.pptx");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1332,7 +1332,7 @@ void SdOOXMLExportTest3::testTdf125360_2()
 
 void SdOOXMLExportTest3::testTdf125551()
 {
-    loadFromURL(u"pptx/tdf125551.pptx");
+    createSdImpressDoc("pptx/tdf125551.pptx");
     save("Impress Office Open XML");
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1346,7 +1346,7 @@ void SdOOXMLExportTest3::testTdf125551()
 
 void SdOOXMLExportTest3::testTdf136830()
 {
-    loadFromURL(u"pptx/tdf136830.pptx");
+    createSdImpressDoc("pptx/tdf136830.pptx");
     save("Impress Office Open XML");
 
     // Without the fix in place, the X position of the shapes would have been 0
@@ -1367,7 +1367,7 @@ void SdOOXMLExportTest3::testTdf136830()
 
 void SdOOXMLExportTest3::testTdf126234()
 {
-    loadFromURL(u"pptx/tdf126234.pptx");
+    createSdImpressDoc("pptx/tdf126234.pptx");
     save("Impress Office Open XML");
 
     // check relative size of the bullet, 400% is a legitimate value for MS Office document
@@ -1383,7 +1383,7 @@ void SdOOXMLExportTest3::testTdf126234()
 
 void SdOOXMLExportTest3::testTdf126741()
 {
-    loadFromURL(u"pptx/tdf126741.pptx");
+    createSdImpressDoc("pptx/tdf126741.pptx");
     save("Impress Office Open XML");
 
     // dash dot dot line style import fix
@@ -1406,7 +1406,7 @@ void SdOOXMLExportTest3::testTdf126741()
 
 void SdOOXMLExportTest3::testTdf127372()
 {
-    loadFromURL(u"odp/tdf127372.odp");
+    createSdImpressDoc("odp/tdf127372.odp");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     awt::Gradient aTransparenceGradient;
@@ -1417,7 +1417,7 @@ void SdOOXMLExportTest3::testTdf127372()
 
 void SdOOXMLExportTest3::testTdf127379()
 {
-    loadFromURL(u"odp/tdf127379.odp");
+    createSdImpressDoc("odp/tdf127379.odp");
     saveAndReload("Impress Office Open XML");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDoc->getDrawPages()->getCount());
@@ -1442,7 +1442,7 @@ void SdOOXMLExportTest3::testTdf127379()
 
 void SdOOXMLExportTest3::testTdf98603()
 {
-    loadFromURL(u"pptx/tdf98603.pptx");
+    createSdImpressDoc("pptx/tdf98603.pptx");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
@@ -1456,7 +1456,7 @@ void SdOOXMLExportTest3::testTdf98603()
 
 void SdOOXMLExportTest3::testTdf128213()
 {
-    loadFromURL(u"pptx/tdf128213.pptx");
+    createSdImpressDoc("pptx/tdf128213.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -1465,7 +1465,7 @@ void SdOOXMLExportTest3::testTdf128213()
 
 void SdOOXMLExportTest3::testTdf79082()
 {
-    loadFromURL(u"pptx/tdf79082.pptx");
+    createSdImpressDoc("pptx/tdf79082.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
@@ -1506,7 +1506,7 @@ void SdOOXMLExportTest3::testTdf129372()
 {
     //Without the fix in place, it would crash at import time
 
-    loadFromURL(u"pptx/tdf129372.pptx");
+    createSdImpressDoc("pptx/tdf129372.pptx");
     saveAndReload("Impress Office Open XML");
     const SdrPage* pPage = GetPage(1);
 
@@ -1517,7 +1517,7 @@ void SdOOXMLExportTest3::testTdf129372()
 
 void SdOOXMLExportTest3::testShapeGlowEffect()
 {
-    loadFromURL(u"pptx/shape-glow-effect.pptx");
+    createSdImpressDoc("pptx/shape-glow-effect.pptx");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     sal_Int32 nRadius = -1;
@@ -1533,7 +1533,7 @@ void SdOOXMLExportTest3::testShapeGlowEffect()
 
 void SdOOXMLExportTest3::testUnderline()
 {
-    loadFromURL(u"underline.fodp");
+    createSdImpressDoc("underline.fodp");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
@@ -1570,7 +1570,7 @@ void SdOOXMLExportTest3::testUnderline()
 
 void SdOOXMLExportTest3::testTdf119087()
 {
-    loadFromURL(u"pptx/tdf119087.pptx");
+    createSdImpressDoc("pptx/tdf119087.pptx");
     saveAndReload("Impress Office Open XML");
     // This would fail both on export validation, and reloading the saved pptx file.
 
@@ -1588,7 +1588,7 @@ void SdOOXMLExportTest3::testTdf119087()
 
 void SdOOXMLExportTest3::testTdf131554()
 {
-    loadFromURL(u"pptx/tdf131554.pptx");
+    createSdImpressDoc("pptx/tdf131554.pptx");
     saveAndReload("Impress Office Open XML");
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
@@ -1597,7 +1597,7 @@ void SdOOXMLExportTest3::testTdf131554()
 
 void SdOOXMLExportTest3::testTdf132282()
 {
-    loadFromURL(u"pptx/tdf132282.pptx");
+    createSdImpressDoc("pptx/tdf132282.pptx");
     saveAndReload("Impress Office Open XML");
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     // Without the fix in place, the position would be 0,0, height = 1 and width = 1
@@ -1609,7 +1609,7 @@ void SdOOXMLExportTest3::testTdf132282()
 
 void SdOOXMLExportTest3::testTdf132201EffectOrder()
 {
-    loadFromURL(u"pptx/effectOrder.pptx");
+    createSdImpressDoc("pptx/effectOrder.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst", 2);
@@ -1624,7 +1624,7 @@ void SdOOXMLExportTest3::testTdf132201EffectOrder()
 
 void SdOOXMLExportTest3::testShapeSoftEdgeEffect()
 {
-    loadFromURL(u"pptx/shape-soft-edges.pptx");
+    createSdImpressDoc("pptx/shape-soft-edges.pptx");
     saveAndReload("Impress Office Open XML");
     auto xShapeProps(getShapeFromPage(0, 0));
     sal_Int32 nRadius = -1;
@@ -1634,7 +1634,7 @@ void SdOOXMLExportTest3::testShapeSoftEdgeEffect()
 
 void SdOOXMLExportTest3::testShapeShadowBlurEffect()
 {
-    loadFromURL(u"pptx/shape-blur-effect.pptx");
+    createSdImpressDoc("pptx/shape-blur-effect.pptx");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     bool bHasShadow = false;
@@ -1647,7 +1647,7 @@ void SdOOXMLExportTest3::testShapeShadowBlurEffect()
 
 void SdOOXMLExportTest3::testTdf119223()
 {
-    loadFromURL(u"odp/tdf119223.odp");
+    createSdImpressDoc("odp/tdf119223.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
@@ -1668,7 +1668,7 @@ void SdOOXMLExportTest3::testTdf119223()
 
 void SdOOXMLExportTest3::testTdf128213ShapeRot()
 {
-    loadFromURL(u"pptx/tdf128213-shaperot.pptx");
+    createSdImpressDoc("pptx/tdf128213-shaperot.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
@@ -1681,7 +1681,7 @@ void SdOOXMLExportTest3::testTdf128213ShapeRot()
 
 void SdOOXMLExportTest3::testTdf125560_textDeflate()
 {
-    loadFromURL(u"pptx/ShapePlusImage.pptx");
+    createSdImpressDoc("pptx/ShapePlusImage.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
     save("impress8");
@@ -1695,7 +1695,7 @@ void SdOOXMLExportTest3::testTdf125560_textDeflate()
 
 void SdOOXMLExportTest3::testTdf125560_textInflateTop()
 {
-    loadFromURL(u"pptx/ShapeTextInflateTop.pptx");
+    createSdImpressDoc("pptx/ShapeTextInflateTop.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
     save("impress8");
@@ -1709,7 +1709,7 @@ void SdOOXMLExportTest3::testTdf125560_textInflateTop()
 
 void SdOOXMLExportTest3::testTdf142235_TestPlaceholderTextAlignment()
 {
-    loadFromURL(u"odp/placeholder-box-textalignment.odp");
+    createSdImpressDoc("odp/placeholder-box-textalignment.odp");
 
     save("Impress Office Open XML");
 
@@ -1724,7 +1724,7 @@ void SdOOXMLExportTest3::testTdf142235_TestPlaceholderTextAlignment()
 
 void SdOOXMLExportTest3::testTdf96061_textHighlight()
 {
-    loadFromURL(u"pptx/tdf96061.pptx");
+    createSdImpressDoc("pptx/tdf96061.pptx");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph1(getParagraphFromShape(0, xShape));
@@ -1761,7 +1761,7 @@ void SdOOXMLExportTest3::testTdf143222_embeddedWorksheet()
 {
     // Check import of embedded worksheet in slide.
 
-    loadFromURL(u"pptx/tdf143222.pptx");
+    createSdImpressDoc("pptx/tdf143222.pptx");
 
     const SdrPage* pPage = GetPage(1);
     const SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(pPage->GetObj(0));
@@ -1784,7 +1784,7 @@ void SdOOXMLExportTest3::testTdf143222_embeddedWorksheet()
 
 void SdOOXMLExportTest3::testTdf143315()
 {
-    loadFromURL(u"ppt/tdf143315-WordartWithoutBullet.ppt");
+    createSdImpressDoc("ppt/tdf143315-WordartWithoutBullet.ppt");
 
     save("Impress Office Open XML");
 
@@ -1806,7 +1806,7 @@ void SdOOXMLExportTest3::testTdf143315()
 void SdOOXMLExportTest3::testTdf147121()
 {
     // Get the bugdoc
-    loadFromURL(u"pptx/tdf147121.pptx");
+    createSdImpressDoc("pptx/tdf147121.pptx");
 
     // Get the second line props of the placeholder
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -1836,7 +1836,7 @@ void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
     if (!IsDefaultDPI())
         return;
 
-    loadFromURL(u"pptx/tdfpictureplaceholder.pptx");
+    createSdImpressDoc("pptx/tdfpictureplaceholder.pptx");
 
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
     bool bTextContourFrame = true;
@@ -1850,7 +1850,7 @@ void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
 
 void SdOOXMLExportTest3::testEnhancedPathViewBox()
 {
-    loadFromURL(u"odp/tdf147978_enhancedPath_viewBox.odp");
+    createSdImpressDoc("odp/tdf147978_enhancedPath_viewBox.odp");
     saveAndReload("Impress Office Open XML");
     auto xShapeProps(getShapeFromPage(0, 0));
     awt::Rectangle aBoundRectangle;
@@ -1862,7 +1862,7 @@ void SdOOXMLExportTest3::testEnhancedPathViewBox()
 
 void SdOOXMLExportTest3::testTdf74670()
 {
-    loadFromURL(u"odp/tdf74670.odp");
+    createSdImpressDoc("odp/tdf74670.odp");
     save("Impress Office Open XML");
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -1887,7 +1887,7 @@ void SdOOXMLExportTest3::testTdf109169_OctagonBevel()
     // facets with 4 points each, total 8+8*4=40 points. Without the patch it was exported as
     // rectangle and thus had 4 points.
 
-    loadFromURL(u"odp/tdf109169_Octagon.odp");
+    createSdImpressDoc("odp/tdf109169_Octagon.odp");
     saveAndReload("Impress Office Open XML");
 
     auto xPropSet(getShapeFromPage(0, 0));
@@ -1907,7 +1907,7 @@ void SdOOXMLExportTest3::testTdf109169_DiamondBevel()
     // facets with 4 points each, total 4+4*4=20 points. Without the patch it was exported as
     // rectangle and thus had 4 points.
 
-    loadFromURL(u"odp/tdf109169_Diamond.odp");
+    createSdImpressDoc("odp/tdf109169_Diamond.odp");
     saveAndReload("Impress Office Open XML");
 
     auto xPropSet(getShapeFromPage(0, 0));
@@ -1926,7 +1926,7 @@ void SdOOXMLExportTest3::testTdf144092_emptyShapeTextProps()
     // Document contains one shape and one table. Both without any text but with
     // text properties contained inside endParaRPr - The import and export
     // of endParaRPr for empty cells and shapes are tested here
-    loadFromURL(u"pptx/tdf144092-emptyShapeTextProps.pptx");
+    createSdImpressDoc("pptx/tdf144092-emptyShapeTextProps.pptx");
     saveAndReload("Impress Office Open XML");
 
     Color aColor;
@@ -1960,7 +1960,7 @@ void SdOOXMLExportTest3::testTdf149551_tbrl90()
     // The document contains a shape with writing mode TB_RL90. That is the same as vert="vert" in
     // OOXML. Without the patch it was not possible to use this writing mode at all.
 
-    loadFromURL(u"odp/tdf149551_tbrl90.odp");
+    createSdImpressDoc("odp/tdf149551_tbrl90.odp");
 
     // Test, that the shape has writing mode TB_RL90.
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
@@ -1992,7 +1992,7 @@ void SdOOXMLExportTest3::testTdf149551_btlr()
     // The document contains a shape with writing mode BT_LR. That is the same as vert="vert270" in
     // OOXML. Without the patch it was not possible to use this writing mode at all for shapes.
 
-    loadFromURL(u"odp/tdf149551_btlr.odp");
+    createSdImpressDoc("odp/tdf149551_btlr.odp");
 
     // Test, that the shape has writing mode BT_LR.
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
@@ -2028,7 +2028,7 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
     // - Third page: Page background light, automatic colored text on a dark colored fill
     //   and another automatic colored text on a light colored fill
 
-    loadFromURL(u"odp/tdf94122_autocolor.odp");
+    createSdImpressDoc("odp/tdf94122_autocolor.odp");
 
     save("Impress Office Open XML");
 
@@ -2061,7 +2061,7 @@ void SdOOXMLExportTest3::testTdf124333()
 {
     // Document contains one rectangle and one embedded OLE object.
 
-    loadFromURL(u"pptx/ole.pptx");
+    createSdImpressDoc("pptx/ole.pptx");
 
     // Without the fix in place, the number of shapes was 3.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect", sal_Int32(2),
@@ -2076,7 +2076,7 @@ void SdOOXMLExportTest3::testTdf124333()
 
 void SdOOXMLExportTest3::testAutofittedTextboxIndent()
 {
-    loadFromURL(u"odp/autofitted-textbox-indent.odp");
+    createSdImpressDoc("odp/autofitted-textbox-indent.odp");
 
     save("Impress Office Open XML");
 
@@ -2093,7 +2093,7 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
 
 void SdOOXMLExportTest3::testTdf151622_oleIcon()
 {
-    loadFromURL(u"odp/ole_icon.odp");
+    createSdImpressDoc("odp/ole_icon.odp");
 
     save("Impress Office Open XML");
 

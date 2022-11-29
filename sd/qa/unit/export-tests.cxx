@@ -194,7 +194,7 @@ void SdExportTest::testBackgroundImage()
     // Check if Slide background image is imported from PPTX and exported to PPTX, PPT and ODP correctly
 
     OUString bgImageName;
-    loadFromURL(u"pptx/n821567.pptx");
+    createSdImpressDoc("pptx/n821567.pptx");
 
     // Check that imported background image from PPTX exists
     {
@@ -294,7 +294,7 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 
 void SdExportTest::testTransparentBackground()
 {
-    loadFromURL(u"odp/transparent_background.odp");
+    createSdImpressDoc("odp/transparent_background.odp");
     saveAndReload("impress8");
 
     const SdrPage* pPage = GetPage(1);
@@ -308,7 +308,7 @@ void SdExportTest::testTransparentBackground()
 
 void SdExportTest::testTdf142716()
 {
-    loadFromURL(u"pptx/tdf142716.pptx");
+    createSdImpressDoc("pptx/tdf142716.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -322,7 +322,7 @@ void SdExportTest::testTdf142716()
 
 void SdExportTest::testMediaEmbedding()
 {
-    loadFromURL(u"media_embedding.odp");
+    createSdImpressDoc("media_embedding.odp");
 
     const SdrPage* pPage = GetPage(1);
 
@@ -337,7 +337,7 @@ void SdExportTest::testMediaEmbedding()
 
 void SdExportTest::testFillBitmapUnused()
 {
-    loadFromURL(u"odp/fillbitmap2.odp");
+    createSdImpressDoc("odp/fillbitmap2.odp");
     save("impress8");
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
@@ -414,7 +414,7 @@ void SdExportTest::testFillBitmapUnused()
 
 void SdExportTest::testFdo84043()
 {
-    loadFromURL(u"fdo84043.odp");
+    createSdImpressDoc("fdo84043.odp");
     saveAndReload("impress8");
 
     // the bug was duplicate attributes, causing crash in a build with asserts
@@ -425,7 +425,7 @@ void SdExportTest::testFdo84043()
 
 void SdExportTest::testTdf97630()
 {
-    loadFromURL(u"fit-to-size.fodp");
+    createSdImpressDoc("fit-to-size.fodp");
     {
         uno::Reference<drawing::XDrawPage> xDP(getPage(0));
 
@@ -527,7 +527,7 @@ void SdExportTest::testSwappedOutImageExport()
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file with one image
-        loadFromURL(u"odp/document_with_two_images.odp");
+        createSdImpressDoc("odp/document_with_two_images.odp");
         const OString sFailedMessage = "Failed on filter: " + vFormat[i].toUtf8();
 
         // Export the document and import again for a check
@@ -583,7 +583,7 @@ void SdExportTest::testSwappedOutImageExport()
 
 void SdExportTest::testOOoXMLAnimations()
 {
-    loadFromURL(u"sxi/ooo41061-1.sxi");
+    createSdImpressDoc("sxi/ooo41061-1.sxi");
 
     // FIXME: Error: unexpected attribute "presentation:preset-property"
     skipValidation();
@@ -600,7 +600,7 @@ void SdExportTest::testOOoXMLAnimations()
 
 void SdExportTest::testBnc480256()
 {
-    loadFromURL(u"pptx/bnc480256.pptx");
+    createSdImpressDoc("pptx/bnc480256.pptx");
     // In the document, there are two tables with table background properties.
     // Make sure colors are set properly for individual cells.
 
@@ -653,7 +653,7 @@ void SdExportTest::testBnc480256()
 
 void SdExportTest::testUnknownAttributes()
 {
-    loadFromURL(u"unknown-attribute.fodp");
+    createSdImpressDoc("unknown-attribute.fodp");
 
     // FIXME: Error: unexpected attribute "foo:non-existent-att"
     skipValidation();
@@ -672,7 +672,7 @@ void SdExportTest::testUnknownAttributes()
 
 void SdExportTest::testTdf80020()
 {
-    loadFromURL(u"odp/tdf80020.odp");
+    createSdImpressDoc("odp/tdf80020.odp");
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY);
@@ -696,7 +696,7 @@ void SdExportTest::testTdf80020()
 
 void SdExportTest::testTdf128985()
 {
-    loadFromURL(u"odp/tdf128985.odp");
+    createSdImpressDoc("odp/tdf128985.odp");
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY);
@@ -740,7 +740,7 @@ void SdExportTest::testLinkedGraphicRT()
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file with one image
-        loadFromURL(u"odp/document_with_linked_graphic.odp");
+        createSdImpressDoc("odp/document_with_linked_graphic.odp");
 
         // Check if the graphic has been imported correctly (before doing the export/import run)
         {
@@ -792,7 +792,7 @@ void SdExportTest::testLinkedGraphicRT()
 
 void SdExportTest::testTdf79082()
 {
-    loadFromURL(u"ppt/tdf79082.ppt");
+    createSdImpressDoc("ppt/tdf79082.ppt");
     save("impress8");
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
@@ -840,7 +840,7 @@ void SdExportTest::testImageWithSpecialID()
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file
-        loadFromURL(u"odp/images_with_special_IDs.odp");
+        createSdImpressDoc("odp/images_with_special_IDs.odp");
         const OString sFailedMessage = "Failed on filter: " + vFormat[i].toUtf8();
         saveAndReload(vFormat[i]);
 
@@ -894,7 +894,7 @@ void SdExportTest::testImageWithSpecialID()
 
 void SdExportTest::testTdf62176()
 {
-    loadFromURL(u"odp/Tdf62176.odp");
+    createSdImpressDoc("odp/Tdf62176.odp");
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
     //there should be only *one* shape
@@ -943,7 +943,7 @@ void SdExportTest::testEmbeddedPdf()
         return;
     }
 
-    loadFromURL(u"odp/embedded-pdf.odp");
+    createSdImpressDoc("odp/embedded-pdf.odp");
     saveAndReload("impress8");
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
@@ -954,7 +954,7 @@ void SdExportTest::testEmbeddedPdf()
 
 void SdExportTest::testEmbeddedText()
 {
-    loadFromURL(u"objectwithtext.fodg");
+    createSdDrawDoc("objectwithtext.fodg");
     saveAndReload("draw8");
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
@@ -982,7 +982,7 @@ void SdExportTest::testEmbeddedText()
 
 void SdExportTest::testTransparenText()
 {
-    loadFromURL(u"transparent-text.fodg");
+    createSdDrawDoc("transparent-text.fodg");
     saveAndReload("draw8");
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
@@ -999,7 +999,7 @@ void SdExportTest::testTransparenText()
 
 void SdExportTest::testDefaultSubscripts()
 {
-    loadFromURL(u"tdf80194_defaultSubscripts.fodg");
+    createSdDrawDoc("tdf80194_defaultSubscripts.fodg");
     saveAndReload("draw8");
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
@@ -1011,7 +1011,7 @@ void SdExportTest::testDefaultSubscripts()
 
 void SdExportTest::testTdf98477()
 {
-    loadFromURL(u"pptx/tdf98477grow.pptx");
+    createSdImpressDoc("pptx/tdf98477grow.pptx");
     save("impress8");
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
@@ -1020,7 +1020,7 @@ void SdExportTest::testTdf98477()
 
 void SdExportTest::testAuthorField()
 {
-    loadFromURL(u"odp/author_fixed.odp");
+    createSdImpressDoc("odp/author_fixed.odp");
 
     saveAndReload("impress8");
 
@@ -1035,7 +1035,7 @@ void SdExportTest::testAuthorField()
 
 void SdExportTest::testTdf50499()
 {
-    loadFromURL(u"pptx/tdf50499.pptx");
+    createSdImpressDoc("pptx/tdf50499.pptx");
 
     save("impress8");
 
@@ -1047,7 +1047,7 @@ void SdExportTest::testTdf50499()
 
 void SdExportTest::testTdf100926()
 {
-    loadFromURL(u"pptx/tdf100926_ODP.pptx");
+    createSdImpressDoc("pptx/tdf100926_ODP.pptx");
 
     saveAndReload("impress8");
 
@@ -1075,7 +1075,7 @@ void SdExportTest::testTdf100926()
 
 void SdExportTest::testPageWithTransparentBackground()
 {
-    loadFromURL(u"odp/page_transparent_background.odp");
+    createSdImpressDoc("odp/page_transparent_background.odp");
 
     saveAndReload("impress8");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -1118,7 +1118,7 @@ void SdExportTest::testTextRotation()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
 
-        loadFromURL(u"pptx/shape-text-rotate.pptx");
+        createSdImpressDoc("pptx/shape-text-rotate.pptx");
         saveAndReload("impress8");
 
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -1135,7 +1135,7 @@ void SdExportTest::testTextRotation()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        loadFromURL(u"pptx/shape-text-rotate.pptx");
+        createSdImpressDoc("pptx/shape-text-rotate.pptx");
         saveAndReload("impress8");
 
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -1155,7 +1155,7 @@ void SdExportTest::testTextRotation()
 
 void SdExportTest::testTdf115394PPT()
 {
-    loadFromURL(u"ppt/tdf115394.ppt");
+    createSdImpressDoc("ppt/tdf115394.ppt");
 
     // Export the document and import again for a check
     saveAndReload("MS PowerPoint 97");
@@ -1187,7 +1187,7 @@ void SdExportTest::testBulletsAsImage()
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         OUString sExportFormat = vFormat[i];
-        loadFromURL(u"odp/BulletsAsImage.odp");
+        createSdImpressDoc("odp/BulletsAsImage.odp");
         const OString sFailedMessageBase = "Failed on filter " + sExportFormat.toUtf8();
         saveAndReload(sExportFormat);
 
@@ -1268,7 +1268,7 @@ void SdExportTest::testBulletsAsImage()
 
 void SdExportTest::testTdf113822()
 {
-    loadFromURL(u"pptx/tdf113822underline.pptx");
+    createSdImpressDoc("pptx/tdf113822underline.pptx");
 
     // Was unable to export iterate container (tdf#99213).
     saveAndReload("Impress Office Open XML");
@@ -1288,7 +1288,7 @@ void SdExportTest::testTdf113822()
 
 void SdExportTest::testTdf113818()
 {
-    loadFromURL(u"pptx/tdf113818-swivel.pptx");
+    createSdImpressDoc("pptx/tdf113818-swivel.pptx");
     saveAndReload("MS PowerPoint 97");
     saveAndReload("Impress Office Open XML");
     save("impress8");
@@ -1300,7 +1300,7 @@ void SdExportTest::testTdf113818()
 
 void SdExportTest::testTdf119629()
 {
-    loadFromURL(u"ppt/tdf119629.ppt");
+    createSdImpressDoc("ppt/tdf119629.ppt");
     saveAndReload("MS PowerPoint 97");
     save("impress8");
 
@@ -1321,7 +1321,7 @@ void SdExportTest::testTdf119629()
 
 void SdExportTest::testTdf141269()
 {
-    loadFromURL(u"odp/tdf141269.odp");
+    createSdImpressDoc("odp/tdf141269.odp");
     saveAndReload("MS PowerPoint 97");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1347,7 +1347,7 @@ void SdExportTest::testTdf141269()
 
 void SdExportTest::testTdf123557()
 {
-    loadFromURL(u"pptx/trigger.pptx");
+    createSdImpressDoc("pptx/trigger.pptx");
     saveAndReload("Impress Office Open XML");
     save("impress8");
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
@@ -1370,7 +1370,7 @@ void SdExportTest::testTdf123557()
 
 void SdExportTest::testTdf126761()
 {
-    loadFromURL(u"ppt/tdf126761.ppt");
+    createSdImpressDoc("ppt/tdf126761.ppt");
     saveAndReload("impress8");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1389,7 +1389,7 @@ void SdExportTest::testTdf126761()
 
 void SdExportTest::testGlow()
 {
-    loadFromURL(u"odg/glow.odg");
+    createSdDrawDoc("odg/glow.odg");
     saveAndReload("draw8");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1427,7 +1427,7 @@ void SdExportTest::testGlow()
 
 void SdExportTest::testSoftEdges()
 {
-    loadFromURL(u"odg/softedges.odg");
+    createSdDrawDoc("odg/softedges.odg");
     saveAndReload("draw8");
     auto xShapeProps(getShapeFromPage(0, 0));
 
@@ -1451,7 +1451,7 @@ void SdExportTest::testSoftEdges()
 
 void SdExportTest::testShadowBlur()
 {
-    loadFromURL(u"odg/shadow-blur.odg");
+    createSdImpressDoc("odp/shadow-blur.odp");
     saveAndReload("draw8");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
@@ -1472,20 +1472,20 @@ void SdExportTest::testShadowBlur()
 void SdExportTest::testRhbz1870501()
 {
     //Without the fix in place, it would crash at export time
-    loadFromURL(u"odg/rhbz1870501.odg");
+    createSdDrawDoc("odg/rhbz1870501.odg");
     saveAndReload("draw8");
 }
 
 void SdExportTest::testTdf91060()
 {
     //Without the fix in place, it would crash at import time
-    loadFromURL(u"pptx/tdf91060.pptx");
+    createSdImpressDoc("pptx/tdf91060.pptx");
     saveAndReload("Impress Office Open XML");
 }
 
 void SdExportTest::testTdf128550()
 {
-    loadFromURL(u"pptx/tdf128550.pptx");
+    createSdImpressDoc("pptx/tdf128550.pptx");
     save("impress8");
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='background']", 1);
@@ -1496,7 +1496,7 @@ void SdExportTest::testTdf140714()
 {
     //Without the fix in place, shape will be imported as GraphicObjectShape instead of CustomShape.
 
-    loadFromURL(u"pptx/tdf140714.pptx");
+    createSdImpressDoc("pptx/tdf140714.pptx");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1505,7 +1505,7 @@ void SdExportTest::testTdf140714()
 
 void SdExportTest::testMasterPageBackgroundFullSize()
 {
-    loadFromURL(u"odp/background.odp");
+    createSdImpressDoc("odp/background.odp");
 
     // BackgroundFullSize exists on master pages only
     // (note: this document can't be created with the UI because UI keeps
@@ -1692,7 +1692,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
 
 void SdExportTest::testColumnsODG()
 {
-    loadFromURL(u"odg/two_columns.odg");
+    createSdDrawDoc("odg/two_columns.odg");
 
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
@@ -1753,7 +1753,7 @@ void SdExportTest::testColumnsODG()
 
 void SdExportTest::testTdf112126()
 {
-    loadFromURL(u"tdf112126.odg");
+    createSdDrawDoc("tdf112126.odg");
     saveAndReload("draw8");
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
@@ -1774,7 +1774,7 @@ void SdExportTest::testCellProperties()
     // Looks like an oversight in the schema, as the docs claim this attribute is deprecated.
     skipValidation();
 
-    loadFromURL(u"odg/tablestyles.fodg");
+    createSdDrawDoc("odg/tablestyles.fodg");
     saveAndReload("draw8");
 
     const SdrPage* pPage = GetPage(1);
@@ -1806,7 +1806,7 @@ void SdExportTest::testUserTableStyles()
     // Looks like an oversight in the schema, as the docs claim this attribute is deprecated.
     skipValidation();
 
-    loadFromURL(u"odg/tablestyles.fodg");
+    createSdDrawDoc("odg/tablestyles.fodg");
     saveAndReload("draw8");
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,

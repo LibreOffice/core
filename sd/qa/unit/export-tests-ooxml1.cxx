@@ -229,7 +229,7 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 
 void SdOOXMLExportTest1::testTdf149803()
 {
-    loadFromURL(u"pptx/tdf149803.pptx");
+    createSdImpressDoc("pptx/tdf149803.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -238,7 +238,7 @@ void SdOOXMLExportTest1::testTdf149803()
 
 void SdOOXMLExportTest1::testTdf149311()
 {
-    loadFromURL(u"odp/tdf149311.odp");
+    createSdImpressDoc("odp/tdf149311.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pRelsDoc = parseExport("ppt/slides/_rels/slide1.xml.rels");
@@ -249,7 +249,7 @@ void SdOOXMLExportTest1::testTdf149311()
 
 void SdOOXMLExportTest1::testTdf149128()
 {
-    loadFromURL(u"odp/tdf149128.odp");
+    createSdImpressDoc("odp/tdf149128.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -265,7 +265,7 @@ void SdOOXMLExportTest1::testTdf149128()
 
 void SdOOXMLExportTest1::testTdf66228()
 {
-    loadFromURL(u"odp/tdf66228.odp");
+    createSdImpressDoc("odp/tdf66228.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -275,7 +275,7 @@ void SdOOXMLExportTest1::testTdf66228()
 
 void SdOOXMLExportTest1::testTdf147919()
 {
-    loadFromURL(u"odp/tdf147919.odp");
+    createSdImpressDoc("odp/tdf147919.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -344,7 +344,7 @@ void SdOOXMLExportTest1::testTdf147919()
 
 void SdOOXMLExportTest1::testTdf130165()
 {
-    loadFromURL(u"pptx/tdf146223.pptx");
+    createSdImpressDoc("pptx/tdf146223.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -353,7 +353,7 @@ void SdOOXMLExportTest1::testTdf130165()
 
 void SdOOXMLExportTest1::testTdf124781()
 {
-    loadFromURL(u"odp/tdf124781.odp");
+    createSdImpressDoc("odp/tdf124781.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
@@ -367,7 +367,7 @@ void SdOOXMLExportTest1::testTdf124781()
 
 void SdOOXMLExportTest1::testTdf144914()
 {
-    loadFromURL(u"pptx/tdf144616.pptx");
+    createSdImpressDoc("pptx/tdf144616.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
@@ -407,7 +407,7 @@ void SdOOXMLExportTest1::testTdf144914()
 
 void SdOOXMLExportTest1::testTdf124232()
 {
-    loadFromURL(u"pptx/tdf141704.pptx");
+    createSdImpressDoc("pptx/tdf141704.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
@@ -447,7 +447,7 @@ void SdOOXMLExportTest1::testTdf124232()
 
 void SdOOXMLExportTest1::testTdf143624()
 {
-    loadFromURL(u"pptx/tdf143624.pptx");
+    createSdImpressDoc("pptx/tdf143624.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/presProps.xml");
@@ -459,7 +459,7 @@ void SdOOXMLExportTest1::testTdf143624()
 
 void SdOOXMLExportTest1::testTdf142648()
 {
-    loadFromURL(u"pptx/tdf142648.pptx");
+    createSdImpressDoc("pptx/tdf142648.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
@@ -478,7 +478,7 @@ void SdOOXMLExportTest1::testTdf142648()
 
 void SdOOXMLExportTest1::testTdf47365()
 {
-    loadFromURL(u"pptx/loopNoPause.pptx");
+    createSdImpressDoc("pptx/loopNoPause.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/presProps.xml");
@@ -490,7 +490,7 @@ void SdOOXMLExportTest1::testTdf47365()
 
 void SdOOXMLExportTest1::testTdf125071()
 {
-    loadFromURL(u"pptx/tdf125071.pptx");
+    createSdImpressDoc("pptx/tdf125071.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/presentation.xml");
@@ -501,7 +501,7 @@ void SdOOXMLExportTest1::testTdf125071()
 
 void SdOOXMLExportTest1::testTdf54037()
 {
-    loadFromURL(u"pptx/tdf54037.pptx");
+    createSdImpressDoc("pptx/tdf54037.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -519,7 +519,7 @@ void SdOOXMLExportTest1::testTdf54037()
 
 void SdOOXMLExportTest1::testTdf127237()
 {
-    loadFromURL(u"pptx/tdf127237.pptx");
+    createSdImpressDoc("pptx/tdf127237.pptx");
     saveAndReload("impress8");
 
     const SdrPage* pPage = GetPage(1);
@@ -538,7 +538,7 @@ void SdOOXMLExportTest1::testTdf127237()
 
 void SdOOXMLExportTest1::testBnc887230()
 {
-    loadFromURL(u"pptx/bnc887230.pptx");
+    createSdImpressDoc("pptx/bnc887230.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -552,7 +552,7 @@ void SdOOXMLExportTest1::testBnc887230()
 
 void SdOOXMLExportTest1::testBnc870233_1()
 {
-    loadFromURL(u"pptx/bnc870233_1.pptx");
+    createSdImpressDoc("pptx/bnc870233_1.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -576,7 +576,7 @@ void SdOOXMLExportTest1::testBnc870233_1()
 
 void SdOOXMLExportTest1::testBnc870233_2()
 {
-    loadFromURL(u"pptx/bnc870233_2.pptx");
+    createSdImpressDoc("pptx/bnc870233_2.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -611,7 +611,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
 void SdOOXMLExportTest1::testN828390_4()
 {
     bool bPassed = false;
-    loadFromURL(u"n828390_4.odp");
+    createSdImpressDoc("n828390_4.odp");
 
     saveAndReload("Impress Office Open XML");
 
@@ -649,7 +649,7 @@ void SdOOXMLExportTest1::testN828390_4()
 
 void SdOOXMLExportTest1::testN828390_5()
 {
-    loadFromURL(u"n828390_5.odp");
+    createSdImpressDoc("n828390_5.odp");
 
     saveAndReload("Impress Office Open XML");
 
@@ -667,7 +667,7 @@ void SdOOXMLExportTest1::testN828390_5()
 
 void SdOOXMLExportTest1::testLostPlaceholders()
 {
-    loadFromURL(u"pptx/LostPlaceholder.odp");
+    createSdImpressDoc("pptx/LostPlaceholder.odp");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -697,7 +697,7 @@ void SdOOXMLExportTest1::testLostPlaceholders()
 
 void SdOOXMLExportTest1::testPlaceholderFillAndOutlineExport()
 {
-    loadFromURL(u"pptx/LostPlaceholderFill.odp");
+    createSdImpressDoc("pptx/LostPlaceholderFill.odp");
 
     uno::Any aFillStyle;
     uno::Any aFillColor;
@@ -756,7 +756,7 @@ void SdOOXMLExportTest1::testPlaceholderFillAndOutlineExport()
 
 void SdOOXMLExportTest1::testFdo71961()
 {
-    loadFromURL(u"fdo71961.odp");
+    createSdImpressDoc("fdo71961.odp");
 
     saveAndReload("Impress Office Open XML");
     const SdrPage* pPage = GetPage(1);
@@ -785,7 +785,7 @@ void SdOOXMLExportTest1::testFdo71961()
 void SdOOXMLExportTest1::testN828390()
 {
     bool bPassed = false;
-    loadFromURL(u"pptx/n828390.pptx");
+    createSdImpressDoc("pptx/n828390.pptx");
 
     saveAndReload("Impress Office Open XML");
 
@@ -809,7 +809,7 @@ void SdOOXMLExportTest1::testN828390()
 
 void SdOOXMLExportTest1::testBnc880763()
 {
-    loadFromURL(u"pptx/bnc880763.pptx");
+    createSdImpressDoc("pptx/bnc880763.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -834,7 +834,7 @@ void SdOOXMLExportTest1::testBnc880763()
 
 void SdOOXMLExportTest1::testBnc862510_5()
 {
-    loadFromURL(u"pptx/bnc862510_5.pptx");
+    createSdImpressDoc("pptx/bnc862510_5.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -855,7 +855,7 @@ void SdOOXMLExportTest1::testBnc862510_5()
 // not written into the file.
 void SdOOXMLExportTest1::testBnc822347_EmptyBullet()
 {
-    loadFromURL(u"bnc822347_EmptyBullet.odp");
+    createSdImpressDoc("bnc822347_EmptyBullet.odp");
     saveAndReload("Impress Office Open XML");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -885,7 +885,7 @@ void SdOOXMLExportTest1::testBnc822347_EmptyBullet()
 //Bullets not having  any text following them are not getting exported to pptx correctly.
 void SdOOXMLExportTest1::testFdo90607()
 {
-    loadFromURL(u"fdo90607.pptx");
+    createSdImpressDoc("fdo90607.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -898,7 +898,7 @@ void SdOOXMLExportTest1::testFdo90607()
 
 void SdOOXMLExportTest1::testFdo83751()
 {
-    loadFromURL(u"pptx/fdo83751.pptx");
+    createSdImpressDoc("pptx/fdo83751.pptx");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
@@ -914,7 +914,7 @@ void SdOOXMLExportTest1::testFdo83751()
 
 void SdOOXMLExportTest1::testFdo79731()
 {
-    loadFromURL(u"fdo79731.odp");
+    createSdImpressDoc("fdo79731.odp");
     saveAndReload("Impress Office Open XML");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -930,7 +930,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     batch->commit();
 
     // Load the original file
-    loadFromURL(u"odp/Table_with_Cell_Fill.odp");
+    createSdImpressDoc("odp/Table_with_Cell_Fill.odp");
 
     // Export the document and import again for a check
     saveAndReload("Impress Office Open XML");
@@ -962,7 +962,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
 
 void SdOOXMLExportTest1::testBulletStartNumber()
 {
-    loadFromURL(u"pptx/n90255.pptx");
+    createSdImpressDoc("pptx/n90255.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -977,7 +977,7 @@ void SdOOXMLExportTest1::testBulletStartNumber()
 
 void SdOOXMLExportTest1::testLineStyle()
 {
-    loadFromURL(u"pptx/lineStyle.pptx");
+    createSdImpressDoc("pptx/lineStyle.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -991,7 +991,7 @@ void SdOOXMLExportTest1::testLineStyle()
 
 void SdOOXMLExportTest1::testRightToLeftParaghraph()
 {
-    loadFromURL(u"pptx/rightToLeftParagraph.pptx");
+    createSdImpressDoc("pptx/rightToLeftParagraph.pptx");
 
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1008,7 +1008,7 @@ void SdOOXMLExportTest1::testRightToLeftParaghraph()
 
 void SdOOXMLExportTest1::testTextboxWithHyperlink()
 {
-    loadFromURL(u"pptx/hyperlinktest.pptx");
+    createSdImpressDoc("pptx/hyperlinktest.pptx");
 
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1032,7 +1032,7 @@ void SdOOXMLExportTest1::testTextboxWithHyperlink()
 
 void SdOOXMLExportTest1::testTdf136911()
 {
-    loadFromURL(u"ppt/tdf136911.ppt");
+    createSdImpressDoc("ppt/tdf136911.ppt");
 
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1056,7 +1056,7 @@ void SdOOXMLExportTest1::testTdf136911()
 
 void SdOOXMLExportTest1::testBulletColor()
 {
-    loadFromURL(u"pptx/bulletColor.pptx");
+    createSdImpressDoc("pptx/bulletColor.pptx");
 
     saveAndReload("Impress Office Open XML");
 
@@ -1074,7 +1074,7 @@ void SdOOXMLExportTest1::testBulletColor()
 
 void SdOOXMLExportTest1::testBulletCharAndFont()
 {
-    loadFromURL(u"odp/bulletCharAndFont.odp");
+    createSdImpressDoc("odp/bulletCharAndFont.odp");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1103,7 +1103,7 @@ void SdOOXMLExportTest1::testBulletCharAndFont()
 
 void SdOOXMLExportTest1::testBulletMarginAndIndentation()
 {
-    loadFromURL(u"pptx/bulletMarginAndIndent.pptx");
+    createSdImpressDoc("pptx/bulletMarginAndIndent.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -1124,7 +1124,7 @@ void SdOOXMLExportTest1::testBulletMarginAndIndentation()
 
 void SdOOXMLExportTest1::testParaMarginAndindentation()
 {
-    loadFromURL(u"pptx/paraMarginAndIndentation.pptx");
+    createSdImpressDoc("pptx/paraMarginAndIndentation.pptx");
 
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1144,7 +1144,7 @@ void SdOOXMLExportTest1::testParaMarginAndindentation()
 
 void SdOOXMLExportTest1::testCellLeftAndRightMargin()
 {
-    loadFromURL(u"pptx/n90223.pptx");
+    createSdImpressDoc("pptx/n90223.pptx");
     saveAndReload("Impress Office Open XML");
     sal_Int32 nLeftMargin, nRightMargin;
 
@@ -1174,7 +1174,7 @@ void SdOOXMLExportTest1::testCellLeftAndRightMargin()
 
 void SdOOXMLExportTest1::testMergedCells()
 {
-    loadFromURL(u"odp/cellspan.odp");
+    createSdImpressDoc("odp/cellspan.odp");
     saveAndReload("Impress Office Open XML");
     const SdrPage* pPage = GetPage(1);
 
@@ -1191,7 +1191,7 @@ void SdOOXMLExportTest1::testMergedCells()
 
 void SdOOXMLExportTest1::testTableCellBorder()
 {
-    loadFromURL(u"pptx/n90190.pptx");
+    createSdImpressDoc("pptx/n90190.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -1235,7 +1235,7 @@ void SdOOXMLExportTest1::testTableCellBorder()
 
 void SdOOXMLExportTest1::testTdf111884()
 {
-    loadFromURL(u"pptx/tdf111884.pptx");
+    createSdImpressDoc("pptx/tdf111884.pptx");
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
@@ -1249,7 +1249,7 @@ void SdOOXMLExportTest1::testTdf111884()
 void SdOOXMLExportTest1::testTdf112633()
 {
     // Load document and export it to a temporary file
-    loadFromURL(u"pptx/tdf112633.pptx");
+    createSdImpressDoc("pptx/tdf112633.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1279,7 +1279,7 @@ void SdOOXMLExportTest1::testTdf112633()
 
 void SdOOXMLExportTest1::testTdf128952()
 {
-    loadFromURL(u"pptx/tdf128952.pptx");
+    createSdImpressDoc("pptx/tdf128952.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1292,7 +1292,7 @@ void SdOOXMLExportTest1::testTdf128952()
 
 void SdOOXMLExportTest1::testTdf127090()
 {
-    loadFromURL(u"pptx/tdf127090.odp");
+    createSdImpressDoc("pptx/tdf127090.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1303,7 +1303,7 @@ void SdOOXMLExportTest1::testTdf127090()
 void SdOOXMLExportTest1::testCustomXml()
 {
     // Load document and export it to a temporary file
-    loadFromURL(u"pptx/customxml.pptx");
+    createSdImpressDoc("pptx/customxml.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("customXml/item1.xml");
@@ -1323,7 +1323,7 @@ void SdOOXMLExportTest1::testCustomXml()
 void SdOOXMLExportTest1::testTdf94238()
 {
     // Load document and export it to a temporary file.
-    loadFromURL(u"pptx/tdf94238.pptx");
+    createSdImpressDoc("pptx/tdf94238.pptx");
     save("Impress Office Open XML");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -1356,7 +1356,7 @@ void SdOOXMLExportTest1::testTdf94238()
 void SdOOXMLExportTest1::testPictureTransparency()
 {
     // Load document and export it to a temporary file.
-    loadFromURL(u"odp/image_transparency.odp");
+    createSdImpressDoc("odp/image_transparency.odp");
     save("Impress Office Open XML");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -1374,7 +1374,7 @@ void SdOOXMLExportTest1::testPictureTransparency()
 
 void SdOOXMLExportTest1::testTdf125554()
 {
-    loadFromURL(u"pptx/tdf125554.pptx");
+    createSdImpressDoc("pptx/tdf125554.pptx");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape = getShapeFromPage(0, 0);
@@ -1389,7 +1389,7 @@ void SdOOXMLExportTest1::testTdf125554()
 void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
 {
     // Load odp document and read the LineDash values.
-    loadFromURL(u"odp/LineStylesOwn.odp");
+    createSdImpressDoc("odp/LineStylesOwn.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDocodp(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocodp.is());
     uno::Reference<drawing::XDrawPage> xPageodp(xDocodp->getDrawPages()->getByIndex(0),
@@ -1430,7 +1430,7 @@ void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
 void SdOOXMLExportTest1::testRoundtripPrstDash()
 {
     // load and save document, compare prstDash values in saved document with original.
-    loadFromURL(u"pptx/presetDashDot.pptx");
+    createSdImpressDoc("pptx/presetDashDot.pptx");
     save("Impress Office Open XML");
 
     const OUString sOriginal[]
@@ -1467,7 +1467,7 @@ void SdOOXMLExportTest1::testRoundtripPrstDash()
 void SdOOXMLExportTest1::testDashOnHairline()
 {
     // load and save document, make sure the custDash has 11 child elements.
-    loadFromURL(u"odp/tdf127267DashOnHairline.odp");
+    createSdImpressDoc("odp/tdf127267DashOnHairline.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1476,7 +1476,7 @@ void SdOOXMLExportTest1::testDashOnHairline()
 
 void SdOOXMLExportTest1::testNarrationNonMediaShape()
 {
-    loadFromURL(u"pptx/narration-non-media-shape.pptx");
+    createSdImpressDoc("pptx/narration-non-media-shape.pptx");
     // Without the accompanying fix in place, this test would have failed,
     // beans::UnknownPropertyException was thrown.
     saveAndReload("Impress Office Open XML");
@@ -1484,7 +1484,7 @@ void SdOOXMLExportTest1::testNarrationNonMediaShape()
 
 void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
 {
-    loadFromURL(u"pptx/customshape-bitmapfill-srcrect.pptx");
+    createSdImpressDoc("pptx/customshape-bitmapfill-srcrect.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1515,7 +1515,7 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
 
 void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
 {
-    loadFromURL(u"odp/tdf100348_FontworkBitmapFill.odp");
+    createSdImpressDoc("odp/tdf100348_FontworkBitmapFill.odp");
     save("Impress Office Open XML");
 
     // Make sure the fontwork shape has a blip bitmap fill and a colored outline.
@@ -1528,7 +1528,7 @@ void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
 
 void SdOOXMLExportTest1::testTdf100348FontworkGradientGlow()
 {
-    loadFromURL(u"odp/tdf100348_FontworkGradientGlow.odp");
+    createSdImpressDoc("odp/tdf100348_FontworkGradientGlow.odp");
     save("Impress Office Open XML");
 
     // Make sure the fontwork shape has a gradient fill and a colored glow.
@@ -1542,7 +1542,7 @@ void SdOOXMLExportTest1::testTdf100348FontworkGradientGlow()
 
 void SdOOXMLExportTest1::testTdf128345FullTransparentGradient()
 {
-    loadFromURL(u"odp/tdf128345_FullTransparentGradient.odp");
+    createSdImpressDoc("odp/tdf128345_FullTransparentGradient.odp");
     save("Impress Office Open XML");
 
     // Make sure the shape has no fill. Without the patch, fill was solid red.
@@ -1552,7 +1552,7 @@ void SdOOXMLExportTest1::testTdf128345FullTransparentGradient()
 
 void SdOOXMLExportTest1::testTdf128345GradientLinear()
 {
-    loadFromURL(u"odp/tdf128345_GradientLinear.odp");
+    createSdImpressDoc("odp/tdf128345_GradientLinear.odp");
     save("Impress Office Open XML");
 
     // Make sure the shape has a lin fill. Without the patch, fill was solid red.
@@ -1570,7 +1570,7 @@ void SdOOXMLExportTest1::testTdf128345GradientLinear()
 
 void SdOOXMLExportTest1::testTdf128345GradientRadial()
 {
-    loadFromURL(u"odp/tdf128345_GradientRadial.odp");
+    createSdImpressDoc("odp/tdf128345_GradientRadial.odp");
     save("Impress Office Open XML");
 
     // Make sure the shape has transparency. In OOXML alpha means 'opacity' with default
@@ -1588,7 +1588,7 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
 {
     // Without the patch, symmetric linear gradient with full transparence outside and
     // full opak in the middle were imported as full transparent.
-    loadFromURL(u"odp/tdf128345_GradientAxial.odp");
+    createSdImpressDoc("odp/tdf128345_GradientAxial.odp");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShapePropSet(getShapeFromPage(0, 0));
 
@@ -1601,7 +1601,7 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
 
 void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
 {
-    loadFromURL(u"odp/tdf134969_TransparencyOnColorGradient.odp");
+    createSdImpressDoc("odp/tdf134969_TransparencyOnColorGradient.odp");
     save("Impress Office Open XML");
 
     // Make sure the shape has a transparency in gradient stops.
@@ -1614,7 +1614,7 @@ void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
 
 void SdOOXMLExportTest1::testArcTo()
 {
-    loadFromURL(u"pptx/arc-validiert.pptx");
+    createSdImpressDoc("pptx/arc-validiert.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1627,7 +1627,7 @@ void SdOOXMLExportTest1::testArcTo()
 
 void SdOOXMLExportTest1::testNarrationMimeType()
 {
-    loadFromURL(u"pptx/narration.pptx");
+    createSdImpressDoc("pptx/narration.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
     // Without the accompanying fix in place, this test would have failed with:
@@ -1689,7 +1689,7 @@ void SdOOXMLExportTest1::testNarrationMimeType()
 
 void SdOOXMLExportTest1::testTdf140865Wordart3D()
 {
-    loadFromURL(u"pptx/tdf140865Wordart3D.pptx");
+    createSdImpressDoc("pptx/tdf140865Wordart3D.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
 
@@ -1707,7 +1707,7 @@ void SdOOXMLExportTest1::testTdf140865Wordart3D()
 
 void SdOOXMLExportTest1::testTdf124457()
 {
-    loadFromURL(u"pptx/tdf124457.pptx");
+    createSdImpressDoc("pptx/tdf124457.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1725,7 +1725,7 @@ void SdOOXMLExportTest1::testTdf124457()
 
 void SdOOXMLExportTest1::testTdf143126()
 {
-    loadFromURL(u"pptx/tdf143126.pptx");
+    createSdImpressDoc("pptx/tdf143126.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/presProps.xml");
@@ -1737,7 +1737,7 @@ void SdOOXMLExportTest1::testTdf143126()
 
 void SdOOXMLExportTest1::testTdf143129()
 {
-    loadFromURL(u"pptx/tdf143129.pptx");
+    createSdImpressDoc("pptx/tdf143129.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/presProps.xml");
@@ -1748,7 +1748,7 @@ void SdOOXMLExportTest1::testTdf143129()
 
 void SdOOXMLExportTest1::testTdf118045()
 {
-    loadFromURL(u"odp/tdf118045.odp");
+    createSdImpressDoc("odp/tdf118045.odp");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
@@ -1758,7 +1758,7 @@ void SdOOXMLExportTest1::testTdf118045()
 
 void SdOOXMLExportTest1::testTdf137675()
 {
-    loadFromURL(u"pptx/tdf137675.pptx");
+    createSdImpressDoc("pptx/tdf137675.pptx");
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");

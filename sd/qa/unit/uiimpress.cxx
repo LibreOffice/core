@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include "sdmodeltestbase.hxx"
+
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -60,11 +61,11 @@
 using namespace ::com::sun::star;
 
 /// Impress UI tests.
-class SdUiImpressTest : public UnoApiTest
+class SdUiImpressTest : public SdModelTestBase
 {
 public:
     SdUiImpressTest()
-        : UnoApiTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 
@@ -168,7 +169,7 @@ static void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwa
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
 {
     // Load the document and create two new windows.
-    loadFromURL(u"tdf111522.odp");
+    createSdImpressDoc("tdf111522.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
@@ -231,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
 {
     // Load the document and create two new windows.
-    loadFromURL(u"tdf126197.odp");
+    createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
@@ -262,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
 {
-    loadFromURL(u"tdf124708.ppt");
+    createSdImpressDoc("tdf124708.ppt");
 
     dispatchCommand(mxComponent, ".uno:NextPage", {});
     Scheduler::ProcessEventsToIdle();
@@ -291,8 +292,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
 {
     // Copying/pasting slide referring to a non-default master with a text duplicated the master
 
-    loadFromURL(u"odp/tdf96206.odp");
+    createSdImpressDoc("odp/tdf96206.odp");
 
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
 {
-    loadFromURL(u"odp/tdf96708.odp");
+    createSdImpressDoc("odp/tdf96708.odp");
 
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -376,8 +376,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -410,7 +409,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     // Error was, that undo and redo changes size of the shape. Affected actions were e.g.
     // extrusion on/off, shadow on/off, changes on line or fill attributes.
     // All these actions do not change the snap rectangle.
-    loadFromURL(u"tdf128651_CustomShapeUndo.odp");
+    createSdImpressDoc("tdf128651_CustomShapeUndo.odp");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -442,8 +441,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
@@ -487,8 +485,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
@@ -511,8 +508,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     dispatchCommand(mxComponent, ".uno:DiaMode", {});
     Scheduler::ProcessEventsToIdle();
@@ -529,8 +525,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -591,8 +586,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
@@ -671,8 +665,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
@@ -725,8 +718,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -761,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 {
     // Load the document and create two new windows.
-    loadFromURL(u"tdf126197.odp");
+    createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
 
@@ -787,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 {
     // Load the document and create two new windows.
-    loadFromURL(u"tdf126197.odp");
+    createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
 
@@ -818,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
 {
     // Error was, that dashes and dots were longer than in MS Office.
-    loadFromURL(u"pptx/tdf134053_dashdot.pptx");
+    createSdImpressDoc("pptx/tdf134053_dashdot.pptx");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -844,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
 {
-    loadFromURL(u"empty.fodp");
+    createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
 
@@ -861,8 +853,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
 
@@ -889,8 +880,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
 
@@ -915,8 +905,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
 {
     // To check if selecting unfilled rectangle produces unfilled rectangle
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
 
@@ -952,7 +941,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSearchAllInDocumentAndNotes)
     // "find all" produces a crash when the search string exists in notes
     // and the document
 
-    loadFromURL(u"odp/search-all-notes.odp");
+    createSdImpressDoc("odp/search-all-notes.odp");
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -965,7 +954,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSearchAllInDocumentAndNotes)
 // for some reason, the search for "second" (or "Second") didn't return page 2 in WIN and MACOS
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123658_SearchAfterSlideChange)
 {
-    loadFromURL(u"odp/tdf123658_SearchAfterSlideChange.odp");
+    createSdImpressDoc("odp/tdf123658_SearchAfterSlideChange.odp");
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
@@ -983,8 +972,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123658_SearchAfterSlideChange)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
@@ -999,8 +987,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
 {
     // Given an Impress document with a shape, with its text selected:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY);
@@ -1059,8 +1046,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
 {
     // Given an Impress document with a selected shape:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY);
@@ -1105,8 +1091,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
 {
     // Given an empty Impress document:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
@@ -1119,8 +1104,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
 {
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
 
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
@@ -1161,8 +1145,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
 {
     // Given a document with a theme, accent1 color is set to 0x000004:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    createSdImpressDoc();
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

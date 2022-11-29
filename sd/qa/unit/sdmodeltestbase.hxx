@@ -46,6 +46,29 @@ public:
     {
     }
 
+    void createSdImpressDoc(const char* pName = nullptr, const char* pPassword = nullptr)
+    {
+        if (!pName)
+            load("private:factory/simpress");
+        else
+            loadFromURL(OUString::createFromAscii(pName), pPassword);
+
+        uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(
+            xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+    }
+
+    void createSdDrawDoc(const char* pName = nullptr, const char* pPassword = nullptr)
+    {
+        if (!pName)
+            load("private:factory/sdraw");
+        else
+            loadFromURL(OUString::createFromAscii(pName), pPassword);
+
+        uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"));
+    }
+
     uno::Reference<drawing::XDrawPage> getPage(int nPage)
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
