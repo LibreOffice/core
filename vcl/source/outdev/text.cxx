@@ -169,7 +169,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
-    const tools::Long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
+    const tools::Long nWidth = rSalLayout.GetTextWidth();
     const DevicePoint aBase = rSalLayout.DrawBase();
     const tools::Long nX = aBase.getX();
     const tools::Long nY = aBase.getY();
@@ -995,7 +995,6 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     }
     std::vector<DeviceCoordinate>* pDXPixelArray = xDXPixelArray.get();
     DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
-    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
@@ -1016,17 +1015,6 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         }
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
     }
-    if( nWidthFactor > 1 )
-    {
-        if( pDXPixelArray )
-        {
-            for( int i = 0; i < nLen; ++i )
-            {
-                (*pDXPixelArray)[i] /= nWidthFactor;
-            }
-        }
-        nWidth /= nWidthFactor;
-    }
     if(pDXAry)
     {
         pDXAry->resize(nLen);
@@ -1040,7 +1028,6 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
 #else /* ! VCL_FLOAT_DEVICE_PIXEL */
 
     tools::Long nWidth = pSalLayout->FillDXArray( pDXAry, bCaret ? rStr : OUString() );
-    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
     if( pDXAry )
@@ -1056,13 +1043,6 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
     }
 
-    if( nWidthFactor > 1 )
-    {
-        if( pDXAry )
-            for( int i = 0; i < nLen; ++i )
-                (*pDXAry)[i] /= nWidthFactor;
-        nWidth /= nWidthFactor;
-    }
     return nWidth;
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
@@ -1086,7 +1066,6 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
         return;
     }
 
-    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
     tools::Long nWidth = pSalLayout->GetTextWidth();
 
@@ -1116,12 +1095,6 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     {
         for( i = 0; i < 2*nLen; ++i )
             pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
-    }
-
-    if( nWidthFactor != 1 )
-    {
-        for( i = 0; i < 2*nLen; ++i )
-            pCaretXArray[i] /= nWidthFactor;
     }
 }
 
@@ -1449,7 +1422,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         else if( nPixelWidth )
             nRTLOffset = nPixelWidth;
         else
-            nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
+            nRTLOffset = pSalLayout->GetTextWidth();
         pSalLayout->DrawOffset().setX( 1 - nRTLOffset );
     }
 
@@ -1491,14 +1464,13 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // NOTE: be very careful to avoid rounding errors for nCharExtra case
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
-        tools::Long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        tools::Long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
-        nTextWidth *= nWidthFactor * nSubPixelFactor;
+        tools::Long nSubPixelFactor = 64;
+        nTextWidth *= nSubPixelFactor;
         DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
         DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
-            nCharExtra *= nWidthFactor * nSubPixelFactor;
+            nCharExtra *= nSubPixelFactor;
             nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
@@ -1525,15 +1497,14 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // NOTE: be very careful to avoid rounding errors for nCharExtra case
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
-        tools::Long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        tools::Long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
+        tools::Long nSubPixelFactor = 64;
 
-        nTextWidth *= nWidthFactor * nSubPixelFactor;
+        nTextWidth *= nSubPixelFactor;
         DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
         DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
-            nCharExtra *= nWidthFactor * nSubPixelFactor;
+            nCharExtra *= nSubPixelFactor;
             nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
 
@@ -2358,7 +2329,6 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
-            nXOffset /= pSalLayout->GetUnitsPerPixel();
             // TODO: fix offset calculation for Bidi case
             if( nBase < nIndex)
                 nXOffset = -nXOffset;
@@ -2374,21 +2344,6 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 
         if( bRet )
         {
-            int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-
-            if( nWidthFactor > 1 )
-            {
-                double fFactor = 1.0 / nWidthFactor;
-                aPixelRect.SetLeft(
-                    static_cast< tools::Long >(aPixelRect.Left() * fFactor) );
-                aPixelRect.SetRight(
-                    static_cast< tools::Long >(aPixelRect.Right() * fFactor) );
-                aPixelRect.SetTop(
-                    static_cast< tools::Long >(aPixelRect.Top() * fFactor) );
-                aPixelRect.SetBottom(
-                    static_cast< tools::Long >(aPixelRect.Bottom() * fFactor) );
-            }
-
             Point aRotatedOfs( mnTextOffX, mnTextOffY );
             DevicePoint aPos = pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
             aRotatedOfs -= Point(aPos.getX(), aPos.getY());
@@ -2457,18 +2412,11 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             // transform polygon to pixel units
             basegfx::B2DHomMatrix aMatrix;
 
-            int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
-                DevicePoint aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
+                DevicePoint aRotatedOfs(mnTextOffX, mnTextOffY);
                 aRotatedOfs -= pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
                 aMatrix.translate( aRotatedOfs.getX(), aRotatedOfs.getY() );
-            }
-
-            if( nWidthFactor > 1 )
-            {
-                double fFactor = 1.0 / nWidthFactor;
-                aMatrix.scale( fFactor, fFactor );
             }
 
             if( !aMatrix.isIdentity() )

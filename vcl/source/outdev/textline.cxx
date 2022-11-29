@@ -672,7 +672,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     std::unique_ptr<SalLayout> pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
-        nStrikeoutWidth = pLayout->GetTextWidth() / (nTestStrLen * pLayout->GetUnitsPerPixel());
+        nStrikeoutWidth = pLayout->GetTextWidth() / nTestStrLen;
     }
     if( nStrikeoutWidth <= 0 ) // sanity check
         return;
@@ -861,7 +861,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     {
         DevicePoint aStartPt = rSalLayout.GetDrawPosition();
         ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), 0,
-                          rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel(),
+                          rSalLayout.GetTextWidth(),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
