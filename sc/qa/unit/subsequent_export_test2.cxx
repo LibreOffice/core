@@ -204,6 +204,7 @@ public:
     void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
     void testTdf144642_RowHeightRounding();
     void testTdf145129_DefaultRowHeightRounding();
+    void testTdf151755_stylesLostOnXLSXExport();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
@@ -322,6 +323,7 @@ public:
     CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
     CPPUNIT_TEST(testTdf144642_RowHeightRounding);
     CPPUNIT_TEST(testTdf145129_DefaultRowHeightRounding);
+    CPPUNIT_TEST(testTdf151755_stylesLostOnXLSXExport);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
@@ -2603,6 +2605,27 @@ void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc.GetRowHeight(0, 0));
     CPPUNIT_ASSERT_EQUAL(tools::Long(555 * 52), rDoc.GetRowHeight(0, 51, 0, true));
     xShell->DoClose();
+}
+
+void ScExportTest2::testTdf151755_stylesLostOnXLSXExport()
+{
+    // Check if empty cells with custom sytle are exported, even if
+    // there is other empty cells with default style, left of it.
+    ScDocShellRef pShell = loadDoc(u"tdf151755_stylesLostOnXLSXExport.", FORMAT_XLSX);
+
+    // Resave the xlsx file without any modification.
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*pShell, FORMAT_XLSX);
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // Check if all the 3 empty cells with styles are saved, and have the same style id.
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c", 4);
+    OUString aCellStyleId = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]", "s");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]", "s", aCellStyleId);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[3]", "s", aCellStyleId);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[4]", "s", aCellStyleId);
+    pShell->DoClose();
 }
 
 void ScExportTest2::testTdf140431()

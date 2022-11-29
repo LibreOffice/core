@@ -1310,12 +1310,14 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes,
 sal_uInt16 XclExpMultiCellBase::GetStartColAllDefaultCell() const
 {
     sal_uInt16 col = GetXclCol();
+    sal_uInt16 nMaxNonDefCol = col;
     for( const auto& rXFId : maXFIds )
     {
-        if( rXFId.mnXFIndex != EXC_XF_DEFAULTCELL )
-            col += rXFId.mnCount;
+        col += rXFId.mnCount;
+        if (rXFId.mnXFIndex != EXC_XF_DEFAULTCELL)
+            nMaxNonDefCol = col;
     }
-    return col;
+    return nMaxNonDefCol;
 }
 
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
