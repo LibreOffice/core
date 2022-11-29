@@ -262,7 +262,10 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             // Disable private CAIRO_ROUND_GLYPH_POS_ON by merging with font options known to have
             // CAIRO_ROUND_GLYPH_POS_OFF
             if (bResolutionIndependentLayoutEnabled)
+            {
                 cairo_font_options_merge(pOptions, mpRoundGlyphPosOffOptions);
+                cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
+            }
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
