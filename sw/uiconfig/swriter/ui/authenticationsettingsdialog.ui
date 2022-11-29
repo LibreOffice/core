@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">65535</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkDialog" id="AuthenticationSettingsDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="authenticationsettingsdialog|AuthenticationSettingsDialog">Server Authentication</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -45,8 +45,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -59,8 +59,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -74,27 +74,27 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=13 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="authentication">
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|authentication">The outgoing mail server (SMTP) requires au_thentication</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="authentication-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|authentication">Enables the authentication that is required to send email by SMTP.</property>
@@ -102,21 +102,21 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="separateauthentication">
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|separateauthentication">The outgoing mail server (SMTP) requires _separate authentication</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
                 <property name="margin-start">12</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="separateauthentication-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separateauthentication">Select if your SMTP server requires a user name and password.</property>
@@ -124,32 +124,32 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label1">Outgoing mail server:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-                <property name="width">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="username">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">40</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">40</property>
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="username-atkobject">
@@ -158,35 +158,35 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="username_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|username_label">_User name:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">username</property>
-                <property name="xalign">1</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">username</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="outpassword">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="visibility">False</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">40</property>
-                <property name="input_purpose">password</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">40</property>
                 <property name="truncate-multiline">True</property>
+                <property name="input-purpose">password</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="outpassword-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|outpassword">Enter the password for the user name.</property>
@@ -194,34 +194,34 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="outpassword_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|outpassword_label">_Password:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">outpassword</property>
-                <property name="xalign">1</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">outpassword</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="smtpafterpop">
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|smtpafterpop">The outgoing mail server uses the same authentication as the _incoming mail server</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
                 <property name="margin-start">12</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">separateauthentication</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="smtpafterpop-atkobject">
@@ -230,32 +230,32 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-                <property name="width">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label2">Incoming mail server:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-                <property name="width">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="server">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">40</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">40</property>
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="server-atkobject">
@@ -264,33 +264,34 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="server_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|server_label">Server _name:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">server</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">server</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="port">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">3</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="can-focus">True</property>
+                <property name="halign">start</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">3</property>
                 <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="port-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|port">Enter the port on the POP3 or IMAP server.</property>
@@ -298,46 +299,34 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="port_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="authenticationsettingsdialog|port_label">P_ort:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">port</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label3">Type:</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">9</property>
+                <property name="height">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="pop3">
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|pop3">_POP3</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pop3-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pop3">Specifies that the incoming mail server uses POP 3.</property>
@@ -345,18 +334,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">8</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="imap">
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|imap">_IMAP</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">pop3</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="imap-atkobject">
@@ -365,17 +354,17 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">9</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="inusername">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">40</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">40</property>
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="inusername-atkobject">
@@ -384,20 +373,20 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">10</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="inpassword">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="visibility">False</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">40</property>
-                <property name="input_purpose">password</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">40</property>
                 <property name="truncate-multiline">True</property>
+                <property name="input-purpose">password</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="inpassword-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inpassword">Enter the password.</property>
@@ -405,78 +394,54 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">11</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">12</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="inusername_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|inusername_label">Us_er name:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">inusername</property>
-                <property name="xalign">1</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">inusername</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="inpassword_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|inpassword_label">Pass_word:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">inpassword</property>
-                <property name="xalign">1</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">inpassword</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">12</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkLabel" id="port_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">24</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|port_label">P_ort:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">port</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -492,8 +457,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
