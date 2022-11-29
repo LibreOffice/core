@@ -50,7 +50,7 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     mxFTDistance(m_xBuilder->weld_label("distance")),
     mxFTTransparency(m_xBuilder->weld_label("transparency_label")),
     mxFTBlur(m_xBuilder->weld_label("blur_label")),
-    mxFTColor(m_xBuilder->weld_label("color")),
+    mxFTColor(m_xBuilder->weld_label("shadowcolorlabel")),
     mxShadowTransSlider(m_xBuilder->weld_scale("transparency_slider")),
     mxShadowTransMetric(m_xBuilder->weld_metric_spin_button("FIELD_TRANSPARENCY", FieldUnit::PERCENT)),
     mxShadowBlurMetric(m_xBuilder->weld_metric_spin_button("LB_SHADOW_BLUR", FieldUnit::POINT))
