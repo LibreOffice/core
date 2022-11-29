@@ -476,7 +476,7 @@ void ScModelTestBase::createScDoc(const char* pName, const char* pPassword)
     else
         loadFromURL(OUString::createFromAscii(pName), pPassword);
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
 }
 

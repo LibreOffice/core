@@ -555,7 +555,7 @@ void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
     else
         load(pName, pPassword);
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
 }
 
@@ -566,7 +566,7 @@ void SwModelTestBase::createSwWebDoc(const char* pName)
     else
         load(pName);
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.WebDocument"));
 }
 
@@ -577,7 +577,7 @@ void SwModelTestBase::createSwGlobalDoc(const char* pName)
     else
         load(pName);
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
 }
 
