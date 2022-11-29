@@ -2571,6 +2571,26 @@ void ScChart2DataSequence::BuildDataCache()
                     m_pDocument->InitColumnBlockPosition( hint, nTab, nCol );
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
+                        if (nRow == aRange.aEnd.Row())
+                        {
+                            // Excel behavior: if the last row is the totals row, the data
+                            // is not added to the chart. If it's not the last row, the data
+                            // is added like normal.
+                            const auto* rData = m_pDocument->GetDBAtCursor(
+                                nCol, nRow, nTab,
+                                ScDBDataPortion::AREA
+                            );
+                            if (rData && rData->HasTotals())
+                            {
+                                ScRange aTempRange;
+                                rData->GetArea(aTempRange);
+                                if (aTempRange.aEnd.Row() == nRow)
+                                {
+                                    // Current row is totals row, skip
+                                    break;
+                                }
+                            }
+                        }
                         bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nullptr, &nLastCol);
                         bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nullptr, &nLastRow);
 

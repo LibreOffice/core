@@ -137,6 +137,7 @@ public:
     void testTdf121205();
     void testFixedSizeBarChartVeryLongLabel();
     void testAutomaticSizeBarChartVeryLongLabel();
+    void testTotalsRowIgnored();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -223,6 +224,7 @@ public:
     CPPUNIT_TEST(testTdf121205);
     CPPUNIT_TEST(testFixedSizeBarChartVeryLongLabel);
     CPPUNIT_TEST(testAutomaticSizeBarChartVeryLongLabel);
+    CPPUNIT_TEST(testTotalsRowIgnored);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2272,6 +2274,33 @@ void Chart2ImportTest::testAutomaticSizeBarChartVeryLongLabel()
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5320, xXAxis->getSize().Width, 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1192, xXAxis->getSize().Height, 100);
+}
+
+void Chart2ImportTest::testTotalsRowIgnored()
+{
+    loadFromURL(u"xlsx/barchart_totalsrow.xlsx");
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::data::XDataSequence> xDataSeq =
+            getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+        CPPUNIT_ASSERT(xDataSeq.is());
+
+        // Table data range is D2:D9 (8 rows) but because last row is totals row it is ignored
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(7u), xDataSeq->getData().size());
+    }
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(1, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::data::XDataSequence> xDataSeq =
+            getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+        CPPUNIT_ASSERT(xDataSeq.is());
+
+        // Table data range is D2:D10 (9 rows) and totals row isn't the last row so it's not ignored
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(9u), xDataSeq->getData().size());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
