@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
-#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

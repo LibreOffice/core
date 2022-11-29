@@ -1,18 +1,6 @@
 ---
 assumeFilename: dbaccess/source/ui/querydesign/QueryDesignView.cxx
 excludelist:
-    dbaccess/source/inc/dbu_reghelper.hxx:
-    # Needed for registrationhelper.hxx
-    - com/sun/star/lang/XSingleServiceFactory.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - rtl/ustring.hxx
-    - cppuhelper/factory.hxx
-    dbaccess/source/inc/flt_reghelper.hxx:
-    # Needed for registrationhelper.hxx
-    - com/sun/star/lang/XSingleServiceFactory.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - rtl/ustring.hxx
-    - cppuhelper/factory.hxx
     dbaccess/inc/strings.hrc:
     # Needed for TranslateId macro to work
     - unotools/resmgr.hxx
@@ -68,12 +56,6 @@ excludelist:
     dbaccess/source/filter/xml/xmlExport.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    dbaccess/source/shared/flt_reghelper.cxx:
-    # Needed for weird included cxx file
-    - comphelper/sequence.hxx
-    dbaccess/source/shared/dbu_reghelper.cxx:
-    # Needed for weird included cxx file
-    - comphelper/sequence.hxx
     dbaccess/source/ui/app/AppDetailPageHelper.cxx:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp

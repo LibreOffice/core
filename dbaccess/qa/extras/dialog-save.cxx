@@ -10,16 +10,12 @@
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

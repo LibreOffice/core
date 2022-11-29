@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
