@@ -2241,6 +2241,23 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
     return pList.size() > 2 && NeedSectionBreak( rNd );
 }
 
+OUString lcl_GetSymbolFont(SwAttrPool& rPool, const SwTextNode* pTextNode, int nStart, int nEnd)
+{
+    SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( rPool );
+    if ( pTextNode && pTextNode->GetParaAttr(aSet, nStart, nEnd) )
+    {
+        SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_FONT);
+        if (pPoolItem)
+        {
+            const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pPoolItem);
+            if (pFontItem->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
+                return pFontItem->GetFamilyName();
+        }
+    }
+
+    return OUString();
+}
+
 void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 {
     SAL_INFO( "sw.ww8", "<OutWW8_SwTextNode>" );
@@ -2460,6 +2477,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
             nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nCurrentPos );
 
+            OUString aSymbolFont;
             sal_Int32 nLen = nNextAttr - nCurrentPos;
             if ( !bTextAtr && nLen )
             {
@@ -2626,12 +2644,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 assert(0 <= nLen);
 
                 OUString aSnippet( aAttrIter.GetSnippet( aStr, nCurrentPos + ofs, nLen ) );
+                const SwTextNode* pTextNode( rNode.GetTextNode() );
                 if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nCurrentPos == 0 && nLen > 0 )
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                     sal_Int32 nFirstLineIndent=0;
                     SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aSet( m_rDoc.GetAttrPool() );
-                    const SwTextNode* pTextNode( rNode.GetTextNode() );
+
                     if ( pTextNode && pTextNode->GetAttr(aSet) )
                     {
                         const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
@@ -2645,6 +2664,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     m_bAddFootnoteTab = false;
                 }
 
+                aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), pTextNode, nCurrentPos + ofs, nCurrentPos + ofs + nLen);
+
                 if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
                 {
                     aSavedSnippet = aSnippet ;
@@ -2652,7 +2673,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 else
                 {
                     bPostponeWritingText = false ;
-                    AttrOutput().RunText( aSnippet, eChrSet );
+                    AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
                 }
 
                 if (ofs == 1 && nNextAttr == nEnd)
@@ -2776,6 +2797,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
+            aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), &rNode, nCurrentPos, nCurrentPos + nLen);
+
             if (bPostponeWritingText
                 && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
             {
@@ -2790,13 +2813,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     aAttrIter.OutAttr( nCurrentPos, false );
                     AttrOutput().EndRunProperties( pRedlineData );
                 }
-                AttrOutput().RunText( aSavedSnippet, eChrSet );
+                AttrOutput().RunText( aSavedSnippet, eChrSet, aSymbolFont );
                 AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
             }
             else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
             {
                 //write the postponed text run
-                AttrOutput().RunText( aSavedSnippet, eChrSet );
+                AttrOutput().RunText( aSavedSnippet, eChrSet, aSymbolFont );
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }
             else

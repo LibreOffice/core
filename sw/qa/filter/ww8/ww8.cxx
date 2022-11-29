@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <docsh.hxx>
@@ -113,6 +114,36 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
     save("Office Open XML Text", maTempFile);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
+{
+    // Create document with symbol character and font Wingdings
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    xText->insertString(xCursor, u"", true);
+
+    uno::Reference<text::XTextRange> xRange = xCursor;
+    uno::Reference<beans::XPropertySet> xTextProps(xRange, uno::UNO_QUERY);
+    xTextProps->setPropertyValue("CharFontName", uno::Any(OUString("Wingdings")));
+    xTextProps->setPropertyValue("CharFontNameAsian", uno::Any(OUString("Wingdings")));
+    xTextProps->setPropertyValue("CharFontNameComplex", uno::Any(OUString("Wingdings")));
+    xTextProps->setPropertyValue("CharFontCharSet", uno::Any(awt::CharSet::SYMBOL));
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym", 1);
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "font", "Wingdings");
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "char", "f0e0");
 }
 }
 
