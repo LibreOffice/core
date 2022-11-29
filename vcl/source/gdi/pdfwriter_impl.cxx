@@ -6495,7 +6495,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         else
         {
             DevicePoint aStartPt = rLayout.GetDrawPosition();
-            int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
+            int nWidth = rLayout.GetTextWidth();
             drawTextLine( PixelToLogic(Point(aStartPt.getX(), aStartPt.getY()) ),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );

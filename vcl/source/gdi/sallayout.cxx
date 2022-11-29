@@ -133,7 +133,6 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
     mnEndCharPos( -1 ),
-    mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
     maDrawOffset( 0, 0 ),
     mbTextRenderModeForResolutionIndependentLayout(false)
@@ -298,7 +297,6 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
 
 void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
 {
-    nNewWidth *= mnUnitsPerPixel;
     DeviceCoordinate nOldWidth = GetTextWidth();
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
@@ -547,8 +545,6 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     // calculate absolute position in pixel units
     DevicePoint aRelativePos = pGlyphIter->linearPos();
 
-    aRelativePos.setX( aRelativePos.getX() / mnUnitsPerPixel );
-    aRelativePos.setY( aRelativePos.getY() / mnUnitsPerPixel );
     rPos = GetDrawPosition( aRelativePos );
 
     return true;
@@ -616,7 +612,6 @@ MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
     assert(dynamic_cast<GenericSalLayout*>(pBaseLayout.get()));
 
     mpLayouts[ 0 ].reset(static_cast<GenericSalLayout*>(pBaseLayout.release()));
-    mnUnitsPerPixel = mpLayouts[ 0 ]->GetUnitsPerPixel();
 }
 
 std::unique_ptr<SalLayout> MultiSalLayout::ReleaseBaseLayout()
@@ -666,7 +661,6 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
         DeviceCoordinate nTargetWidth = aMultiArgs.mnLayoutWidth;
-        nTargetWidth *= mnUnitsPerPixel; // convert target width to base font units
         aMultiArgs.mnLayoutWidth = 0;
 
         // we need to get the original unmodified layouts ready
@@ -708,18 +702,6 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             }
             if( nWidthSum != nTargetWidth )
                 aJustificationArray[ nCharCount-1 ] = nTargetWidth;
-
-            // the justification array is still in base level units
-            // => convert it to pixel units
-            if( mnUnitsPerPixel > 1 )
-            {
-                for( int i = 0; i < nCharCount; ++i )
-                {
-                    DeviceCoordinate nVal = aJustificationArray[ i ];
-                    nVal += (mnUnitsPerPixel + 1) / 2;
-                    aJustificationArray[ i ] = nVal / mnUnitsPerPixel;
-                }
-            }
 
             // change the mpDXArray temporarily (just for the justification)
             aMultiArgs.mpDXArray = aJustificationArray.data();
@@ -801,7 +783,6 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
 
     // prepare merge the fallback levels
     tools::Long nXPos = 0;
-    double fUnitMul = 1.0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
 
@@ -836,15 +817,11 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         if( n < nLevel )
         {
             // use base(n==0) or fallback(n>=1) level
-            fUnitMul = mnUnitsPerPixel;
-            fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-            tools::Long nNewPos = static_cast<tools::Long>(nXPos/fUnitMul + 0.5);
-            mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
+            mpLayouts[n]->MoveGlyph( nStartOld[n], nXPos );
         }
         else
         {
             n = 0;  // keep NotDef in base level
-            fUnitMul = 1.0;
         }
 
         if( n > 0 )
@@ -967,19 +944,9 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
             }
             nLastRunEndChar = nRunVisibleEndChar;
             nRunVisibleEndChar = pGlyphs[nFirstValid]->charPos();
-            // the requested width is still in pixel units
-            // => convert it to base level font units
-            nRunAdvance *= mnUnitsPerPixel;
-        }
-        else
-        {
-            // the measured width is still in fallback font units
-            // => convert it to base level font units
-            if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
-                nRunAdvance = static_cast<tools::Long>(nRunAdvance*fUnitMul + 0.5);
         }
 
-        // calculate new x position (in base level units)
+        // calculate new x position
         nXPos += nRunAdvance;
 
         // prepare for next fallback run
@@ -1045,17 +1012,9 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     {
         SalLayout& rLayout = *mpLayouts[ n ];
         rLayout.FillDXArray( &aFallbackCharWidths );
-        double fUnitMul = mnUnitsPerPixel;
-        fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
-        {
             if( aCharWidths[ i ] == 0 )
-            {
-                DeviceCoordinate w = aFallbackCharWidths[i];
-                w = static_cast<DeviceCoordinate>(w * fUnitMul + 0.5);
-                aCharWidths[ i ] = w;
-            }
-        }
+                aCharWidths[i] = aFallbackCharWidths[i];
     }
 
     DeviceCoordinate nWidth = 0;
@@ -1090,9 +1049,6 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
         if( !nTextWidth )
             continue;
         // merge results from current level
-        double fUnitMul = mnUnitsPerPixel;
-        fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-        nTextWidth = static_cast<DeviceCoordinate>(nTextWidth * fUnitMul + 0.5);
         if( nMaxWidth < nTextWidth )
             nMaxWidth = nTextWidth;
         if( !pCharWidths )
@@ -1107,7 +1063,6 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
             DeviceCoordinate nCharWidth = aTempWidths[i];
             if( !nCharWidth )
                 continue;
-            nCharWidth = static_cast<DeviceCoordinate>(nCharWidth * fUnitMul + 0.5);
             (*pCharWidths)[i] = nCharWidth;
         }
     }
@@ -1127,15 +1082,9 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
     for( int n = 1; n < mnLevel; ++n )
     {
         mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
-        double fUnitMul = mnUnitsPerPixel;
-        fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
         for( int i = 0; i < nMaxIndex; ++i )
             if( pTempPos[i] >= 0 )
-            {
-                sal_Int32 w = pTempPos[i];
-                w = static_cast<sal_Int32>(w*fUnitMul + 0.5);
-                pCaretXArray[i] = w;
-            }
+                pCaretXArray[i] = pTempPos[i];
     }
 }
 

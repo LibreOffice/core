@@ -79,7 +79,6 @@ public:
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
 
-    int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     Degree10        GetOrientation() const                  { return mnOrientation; }
 
     void            SetTextRenderModeForResolutionIndependentLayout(bool bTextRenderModeForResolutionIndependentLayout)
@@ -115,7 +114,6 @@ protected:
     int             mnMinCharPos;
     int             mnEndCharPos;
 
-    int             mnUnitsPerPixel;
     Degree10        mnOrientation;
 
     mutable Point   maDrawOffset;
