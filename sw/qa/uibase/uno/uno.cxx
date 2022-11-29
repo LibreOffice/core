@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XTextViewTextRangeSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <vcl/scheduler.hxx>
 #include <tools/json_writer.hxx>
@@ -195,10 +196,44 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     std::stringstream aStream(pJSON.get());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
-    // Without the needed PixelToLogic() call in place, this test would have failed with:
+    // Without the accompanying fix in place, this test would have failed with:
     // - No such node (fields)
     // i.e. the returned JSON was just empty.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("fields").count(""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
+{
+    // Given a document with 3 custom properties: 2 zotero ones and an other one:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(),
+                                                               uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDP = xDPS->getDocumentProperties();
+    uno::Reference<beans::XPropertyContainer> xUDP = xDP->getUserDefinedProperties();
+    xUDP->addProperty("ZOTERO_PREF_1", beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(OUString("foo")));
+    xUDP->addProperty("ZOTERO_PREF_2", beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(OUString("bar")));
+    xUDP->addProperty("OTHER", beans::PropertyAttribute::REMOVABLE, uno::Any(OUString("baz")));
+
+    // When getting the zotero properties:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:SetDocumentProperties?namePrefix=ZOTERO_PREF_");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the 2 properties and ignore the other one:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (userDefinedProperties)
+    // i.e. the returned JSON was just empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                         aTree.get_child("userDefinedProperties").count(""));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
