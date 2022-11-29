@@ -5725,7 +5725,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static constexpr OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
     static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
     static constexpr OStringLiteral aFontSubset(".uno:FontSubset&name=");
-    static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
+    static const std::initializer_list<std::u16string_view> vForward = {
+        u"TextFormFields",
+        u"SetDocumentProperties"
+    };
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
@@ -5902,7 +5905,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getFontSubset(std::string_view(pCommand + aFontSubset.getLength()));
     }
-    else if (aCommand.startsWith(aTextFormFields))
+    else if (std::find(vForward.begin(), vForward.end(),
+                       INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath())
+             != vForward.end())
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)

@@ -85,6 +85,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -164,6 +165,7 @@
 
 #include <svx/svdpage.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
@@ -3567,6 +3569,48 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
         rJsonWriter.put("command", aCommand);
     }
 }
+
+/// Implements getCommandValues(".uno:SetDocumentProperties").
+///
+/// Parameters:
+///
+/// - namePrefix: field name prefix not not return all user-defined properties
+void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                       const std::map<OUString, OUString>& rArguments)
+{
+    OUString aNamePrefix;
+    auto it = rArguments.find("namePrefix");
+    if (it != rArguments.end())
+    {
+        aNamePrefix = it->second;
+    }
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDP = xDPS->getDocumentProperties();
+    uno::Reference<beans::XPropertyAccess> xUDP(xDP->getUserDefinedProperties(), uno::UNO_QUERY);
+    auto aUDPs = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(xUDP->getPropertyValues());
+    tools::ScopedJsonWriterArray aProperties = rJsonWriter.startArray("userDefinedProperties");
+    for (const auto& rUDP : aUDPs)
+    {
+        if (!rUDP.Name.startsWith(aNamePrefix))
+        {
+            continue;
+        }
+
+        if (rUDP.Value.getValueTypeClass() != TypeClass_STRING)
+        {
+            continue;
+        }
+
+        OUString aValue;
+        rUDP.Value >>= aValue;
+
+        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        rJsonWriter.put("name", rUDP.Name);
+        rJsonWriter.put("type", "string");
+        rJsonWriter.put("value", aValue);
+    }
+}
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, const OString& rCommand)
@@ -3574,33 +3618,37 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, const OSt
     std::map<OUString, OUString> aMap;
 
     static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
+    static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
+
+    INetURLObject aParser(OUString::fromUtf8(rCommand));
+    OUString aArguments = aParser.GetParam();
+    sal_Int32 nParamIndex = 0;
+    do
+    {
+        OUString aParam = aArguments.getToken( 0, '&', nParamIndex );
+        sal_Int32 nIndex = 0;
+        OUString aKey;
+        OUString aValue;
+        do
+        {
+            OUString aToken = aParam.getToken( 0, '=', nIndex );
+            if (aKey.isEmpty())
+                aKey = aToken;
+            else
+                aValue = aToken;
+        } while (nIndex >= 0);
+        OUString aDecodedValue
+            = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
+        aMap[aKey] = aDecodedValue;
+    } while (nParamIndex >= 0);
 
     if (o3tl::starts_with(rCommand, aTextFormFields))
     {
-        if (rCommand.getLength() > aTextFormFields.getLength())
-        {
-            OString aArguments = rCommand.copy(aTextFormFields.getLength() + 1);
-            sal_Int32 nParamIndex = 0;
-            do
-            {
-                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
-                sal_Int32 nIndex = 0;
-                OUString aKey;
-                OUString aValue;
-                do
-                {
-                    OString aToken = aParamToken.getToken(0, '=', nIndex);
-                    if (aKey.isEmpty())
-                        aKey = OUString::fromUtf8(aToken);
-                    else
-                        aValue = OUString::fromUtf8(aToken);
-                } while (nIndex >= 0);
-                OUString aDecodedValue
-                    = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
-                aMap[aKey] = aDecodedValue;
-            } while (nParamIndex >= 0);
-        }
         GetTextFormFields(rJsonWriter, m_pDocShell, aMap);
+    }
+    if (o3tl::starts_with(rCommand, aSetDocumentProperties))
+    {
+        GetDocumentProperties(rJsonWriter, m_pDocShell, aMap);
     }
 }
 
