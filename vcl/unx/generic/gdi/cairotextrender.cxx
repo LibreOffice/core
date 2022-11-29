@@ -23,6 +23,7 @@
 
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
+#include <headless/CairoCommon.hxx>
 #include <vcl/svapp.hxx>
 #include <sallayout.hxx>
 #include <salinst.hxx>
@@ -167,12 +168,30 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
 
+    /*
+     * It might be ideal to cache surface and cairo context between calls and
+     * only destroy it when the drawable changes, but to do that we need to at
+     * least change the SalFrame etc impls to dtor the SalGraphics *before* the
+     * destruction of the windows they reference
+    */
+    cairo_t *cr = syncCairoContext(getCairoContext());
+    if (!cr)
+    {
+        SAL_WARN("vcl", "no cairo context for text");
+        return;
+    }
+
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
 
+    double nSnapToSubPixelDiff = 0.0;
+    double nXScale, nYScale;
+    dl_cairo_surface_get_device_scale(cairo_get_target(cr), &nXScale, &nYScale);
+
     DevicePoint aPos;
     const GlyphItem* pGlyph;
+    const GlyphItem* pPrevGlyph = nullptr;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
@@ -184,13 +203,30 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         const bool bVertical = pGlyph->IsVertical();
         glyph_extrarotation.push_back(bVertical ? 1 : 0);
 
-        // tdf#150507 like skia even when subpixel rendering pixel snap y
         if (bResolutionIndependentLayoutEnabled)
         {
+            // tdf#150507 like skia, even when subpixel rendering pixel, snap y
             if (!bVertical)
                 aGlyph.y = std::floor(aGlyph.y + 0.5);
             else
                 aGlyph.x = std::floor(aGlyph.x + 0.5);
+
+            // tdf#152094 snap to 1/4 of a pixel after a run of whitespace,
+            // probably a little dubious, but maybe worth a shot for lodpi
+            double& rGlyphDimension = !bVertical ? aGlyph.x : aGlyph.y;
+            const int nSubPixels = 4 * (!bVertical ? nXScale : nYScale);
+            if (pGlyph->IsSpacing())
+                nSnapToSubPixelDiff = 0;
+            else if (pPrevGlyph && pPrevGlyph->IsSpacing())
+            {
+                double nSnapToSubPixel = std::floor(rGlyphDimension * nSubPixels) / nSubPixels;
+                nSnapToSubPixelDiff = rGlyphDimension - nSnapToSubPixel;
+                rGlyphDimension = nSnapToSubPixel;
+            }
+            else
+                rGlyphDimension -= nSnapToSubPixelDiff;
+
+            pPrevGlyph = pGlyph;
         }
 
         cairo_glyphs.push_back(aGlyph);
@@ -219,19 +255,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     {
         // as seen with freetype 2.12.1, so cairo surface status is "fail"
         SAL_WARN("vcl", "rendering text would fail with stretch of: " << nRatio / 10.0);
-        return;
-    }
-
-    /*
-     * It might be ideal to cache surface and cairo context between calls and
-     * only destroy it when the drawable changes, but to do that we need to at
-     * least change the SalFrame etc impls to dtor the SalGraphics *before* the
-     * destruction of the windows they reference
-    */
-    cairo_t *cr = syncCairoContext(getCairoContext());
-    if (!cr)
-    {
-        SAL_WARN("vcl", "no cairo context for text");
         return;
     }
 
