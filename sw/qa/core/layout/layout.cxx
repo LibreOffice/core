@@ -23,6 +23,12 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
+#include <itabenum.hxx>
+#include <fmtanchr.hxx>
+#include <fmtsrnd.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <fmtfsize.hxx>
+#include <fmtfollowtextflow.hxx>
 
 /// Covers sw/source/core/layout/ fixes.
 class SwCoreLayoutTest : public SwModelTestBase
@@ -836,6 +842,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
     // 934.
     assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "y", "899");
     assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]", "y", "899");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
+{
+    // Given a document with a table, and a graphic inside that table -- anchored, wrap set to
+    // through and follow-text-flow set to true:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 1, 1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SfxItemSet aGrfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
+    aFrameSet.Put(aAnchor);
+    SwFormatSurround aSurround(text::WrapTextMode_THROUGH);
+    aFrameSet.Put(aSurround);
+    SwFormatFrameSize aSize(SwFrameSize::Fixed, 1000, 1000);
+    aFrameSet.Put(aSize);
+    SwFormatFollowTextFlow aFlow(true);
+    aFrameSet.Put(aFlow);
+    GraphicObject aGrf;
+    rIDCO.InsertGraphicObject(*pWrtShell->GetCursor(), aGrf, &aFrameSet, &aGrfSet);
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the cell height grows to have space for the graphic, given that
+    // background=true is not specified.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nCellHeight = getXPath(pXmlDoc, "//cell[1]/infos/bounds", "height").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1000
+    // - Actual  : 396
+    // i.e. the image was larger than the containing cell.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1000), nCellHeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

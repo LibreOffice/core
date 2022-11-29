@@ -4111,7 +4111,8 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                         bIsFarAway &&
                         bFollowTextFlow && bIsAnchoredToTmpFrm;
                     bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
-                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough)
+                    bool bInBackground = !rFrameFormat.GetOpaque().GetValue();
+                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bInBackground)
                     {
                         // Ignore wrap-through objects when determining the cell height.
                         // Normally FollowTextFlow requires a resize of the cell, but not in case of
