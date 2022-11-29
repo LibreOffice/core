@@ -34,7 +34,7 @@ namespace sw {
     class RepeatContext;
 }
 
-class IDocumentUndoRedo
+class SAL_LOPLUGIN_ANNOTATE("crosscast") IDocumentUndoRedo
 {
 public:
 

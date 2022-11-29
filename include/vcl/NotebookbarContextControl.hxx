@@ -12,7 +12,7 @@
 
 #include <vcl/EnumContext.hxx>
 
-class NotebookbarContextControl
+class SAL_LOPLUGIN_ANNOTATE("crosscast") NotebookbarContextControl
 {
 public:
     virtual ~NotebookbarContextControl() {}

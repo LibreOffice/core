@@ -63,7 +63,7 @@ createXmlIdRegistry(const bool i_DocIsClipboard);
             previous hooks</li></ul>
     </p>
  */
-class SFX2_DLLPUBLIC Metadatable
+class SFX2_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") Metadatable
 {
 public:
     Metadatable() : m_pReg(nullptr) {}

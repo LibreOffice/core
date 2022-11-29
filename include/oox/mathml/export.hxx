@@ -23,7 +23,7 @@ namespace oox
  Interface class, StarMath will implement writeFormula*() to write out markup
  representing the formula.
  */
-class OOX_DLLPUBLIC FormulaExportBase
+class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") FormulaExportBase
 {
 public:
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,

@@ -73,7 +73,7 @@ enum class TitleButton
 //dispose before the Window dispose; so a Dialog::dispose() method would
 //finish: disposeBuilder(); SystemWindow::dispose() to capture this ordering.
 
-class VCL_DLLPUBLIC VclBuilderContainer
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") VclBuilderContainer
 {
 public:
                     VclBuilderContainer();

@@ -682,6 +682,18 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 /// @endcond
 
+#if defined LIBO_INTERNAL_ONLY
+// An annotation mechanism used by some loplugins.  The id argument must be an ordinary string
+// literal.  For Clang, this expands to a clang::annotate attribute with an annotation consisting of
+// the concatenation of a "loplugin:" prefix and the given id suffix.  For non-Clang, this expands
+// to nothing to avoid e.g. -Wattributes from GCC's -Wall.
+#if defined __clang__
+#define SAL_LOPLUGIN_ANNOTATE(id) [[clang::annotate("loplugin:" id)]]
+#else
+#define SAL_LOPLUGIN_ANNOTATE(id)
+#endif
+#endif
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

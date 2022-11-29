@@ -60,7 +60,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
 class OReportPage;
 class OPropertyMediator;
 
-class REPORTDESIGN_DLLPUBLIC OObjectBase
+class REPORTDESIGN_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") OObjectBase
 {
 protected:
     mutable rtl::Reference<OPropertyMediator>                         m_xMediator;

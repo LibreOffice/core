@@ -35,7 +35,7 @@ namespace sdr::table {
 class SdrTableObj;
 
 /** base class for each object implementing an XCellRange */
-class ICellRange
+class SAL_LOPLUGIN_ANNOTATE("crosscast") ICellRange
 {
 public:
     virtual sal_Int32 getLeft() = 0;

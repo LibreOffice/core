@@ -34,7 +34,7 @@ namespace vclcanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class RepaintTarget
+    class SAL_LOPLUGIN_ANNOTATE("crosscast") RepaintTarget
     {
     public:
         virtual ~RepaintTarget() {}

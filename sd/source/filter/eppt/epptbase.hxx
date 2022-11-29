@@ -118,7 +118,7 @@ class PropValue
 };
 
 class EscherGraphicProvider;
-class PPTExBulletProvider
+class SAL_LOPLUGIN_ANNOTATE("crosscast") PPTExBulletProvider
 {
     friend struct PPTExParaSheet;
 

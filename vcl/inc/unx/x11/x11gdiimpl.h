@@ -14,7 +14,7 @@
 
 class ControlCacheKey;
 
-class X11GraphicsImpl
+class SAL_LOPLUGIN_ANNOTATE("crosscast") X11GraphicsImpl
 {
 public:
     virtual ~X11GraphicsImpl(){};

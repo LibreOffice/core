@@ -17,7 +17,7 @@
 namespace vcl
 {
 
-class VCL_DLLPUBLIC IPrioritable
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") IPrioritable
 {
 protected:
     IPrioritable() : m_nPriority(VCL_PRIORITY_DEFAULT)

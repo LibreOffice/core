@@ -22,7 +22,7 @@ template <typename> class Reference;
 
 namespace sfx2::sidebar
 {
-class SFX2_DLLPUBLIC SidebarModelUpdate
+class SFX2_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SidebarModelUpdate
 {
 public:
     virtual ~SidebarModelUpdate();

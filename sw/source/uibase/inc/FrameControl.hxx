@@ -20,7 +20,7 @@ class SwFrame;
 class Point;
 
 /// Abstract interface to be implemented by writer FrameControls
-class ISwFrameControl
+class SAL_LOPLUGIN_ANNOTATE("crosscast") ISwFrameControl
 {
 public:
     virtual ~ISwFrameControl();

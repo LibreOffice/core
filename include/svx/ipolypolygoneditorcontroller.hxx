@@ -47,7 +47,7 @@ enum class SdrObjClosedKind
     Closed // closed object (polygon, ...)
 };
 
-class SAL_DLLPUBLIC_RTTI IPolyPolygonEditorController
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") IPolyPolygonEditorController
 {
 public:
     virtual void DeleteMarkedPoints() = 0;

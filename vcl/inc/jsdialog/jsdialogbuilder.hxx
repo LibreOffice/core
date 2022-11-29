@@ -318,7 +318,7 @@ private:
     VclPtr<vcl::Window>& GetNotifierWindow();
 };
 
-class BaseJSWidget
+class SAL_LOPLUGIN_ANNOTATE("crosscast") BaseJSWidget
 {
 public:
     virtual ~BaseJSWidget() = default;

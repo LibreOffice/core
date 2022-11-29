@@ -33,7 +33,7 @@ namespace slideshow::internal
             Classes implementing this interface interact with the
             View, arbitrating access to the mouse cursor shape.
          */
-        class CursorManager
+        class SAL_LOPLUGIN_ANNOTATE("crosscast") CursorManager
         {
         public:
             virtual ~CursorManager() {}

@@ -79,7 +79,7 @@ namespace drawinglayer::primitive2d
         /*  helper for linear and radial gradient, both get derived from this
             to share common definitions and functionality
          **/
-        class SvgGradientHelper
+        class SAL_LOPLUGIN_ANNOTATE("crosscast") SvgGradientHelper
         {
         private:
             /// the extra gradient transform

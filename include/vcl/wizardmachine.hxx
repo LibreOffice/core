@@ -49,7 +49,7 @@ namespace vcl
         };
     };
 
-    class SAL_NO_VTABLE IWizardPageController
+    class SAL_NO_VTABLE SAL_LOPLUGIN_ANNOTATE("crosscast") IWizardPageController
     {
     public:
 

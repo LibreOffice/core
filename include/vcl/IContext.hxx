@@ -16,7 +16,7 @@
 
 namespace vcl
 {
-class VCL_DLLPUBLIC IContext
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") IContext
 {
 protected:
     IContext() { maContext.push_back(vcl::EnumContext::Context::Any); }

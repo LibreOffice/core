@@ -20,7 +20,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.
-class SAL_DLLPUBLIC_RTTI DocumentSettingsSerializer {
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") DocumentSettingsSerializer {
 public:
   // Import objects and update properties (eliding URLs)
   virtual css::uno::Sequence<css::beans::PropertyValue>

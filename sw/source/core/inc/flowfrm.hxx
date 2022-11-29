@@ -56,7 +56,7 @@ class SwNodeIndex;
     FlowFrame can work with the reference to the SwFrame instead of working with
     its own this-pointer.
  */
-class SwFlowFrame
+class SAL_LOPLUGIN_ANNOTATE("crosscast") SwFlowFrame
 {
     // PrepareMake is allowed to lock/unlock (robustness)
     friend inline void PrepareLock  ( SwFlowFrame * );

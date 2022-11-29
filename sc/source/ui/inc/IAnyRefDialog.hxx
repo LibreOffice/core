@@ -28,7 +28,8 @@ namespace formula
 class RefEdit;
 class RefButton;
 }
-class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
+class SAL_NO_VTABLE SAL_LOPLUGIN_ANNOTATE("crosscast") IAnyRefDialog
+    : public formula::IControlReferenceHandler
 {
 public:
     virtual ~IAnyRefDialog() COVERITY_NOEXCEPT_FALSE {}

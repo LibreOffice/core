@@ -90,7 +90,7 @@ public:
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
 };
 
-class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") NumericFormatter : public FormatterBase
 {
 public:
     virtual                 ~NumericFormatter() override;

@@ -84,7 +84,7 @@ namespace sw::mark
             IBookmark &operator =(IBookmark const&) = delete;
     };
 
-    class SW_DLLPUBLIC IFieldmark
+    class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") IFieldmark
         : virtual public IMark
     {
         protected:

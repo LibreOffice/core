@@ -24,7 +24,7 @@
 
 namespace sfx2::sidebar
 {
-class SFX2_DLLPUBLIC ILayoutableWindow
+class SFX2_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ILayoutableWindow
 {
 public:
     virtual ~ILayoutableWindow();

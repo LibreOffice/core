@@ -27,7 +27,7 @@ class BuilderPage;
 
 namespace chart
 {
-class TabPageNotifiable
+class SAL_LOPLUGIN_ANNOTATE("crosscast") TabPageNotifiable
 {
 public:
     virtual void setInvalidPage(BuilderPage* pTabPage) = 0;

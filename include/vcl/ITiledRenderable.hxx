@@ -42,7 +42,7 @@ namespace vcl
     extern const std::map <PointerStyle, OString> gaLOKPointerMap;
 
 
-class VCL_DLLPUBLIC ITiledRenderable
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ITiledRenderable
 {
 public:
 

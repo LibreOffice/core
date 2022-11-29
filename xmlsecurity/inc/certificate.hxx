@@ -24,7 +24,7 @@ enum class SignatureMethodAlgorithm;
 namespace xmlsecurity
 {
 /// Extension of css::security::XCertificate for module-internal purposes.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI Certificate
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") Certificate
 {
 public:
     /// Returns the SHA-256 thumbprint.

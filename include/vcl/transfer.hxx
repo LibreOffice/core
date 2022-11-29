@@ -373,7 +373,7 @@ public:
                                              const css::datatransfer::DataFlavor& rRequestFlavor );
 };
 
-class VCL_DLLPUBLIC DragSourceHelper
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") DragSourceHelper
 {
 private:
 
@@ -419,7 +419,7 @@ public:
     virtual             ~DragSourceHelper();
 };
 
-class VCL_DLLPUBLIC DropTargetHelper
+class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") DropTargetHelper
 {
 private:
 

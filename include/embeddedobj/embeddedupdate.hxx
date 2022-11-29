@@ -24,7 +24,7 @@ namespace embed
 
     @since LibreOffice 7.4
  */
-class EMBOBJ_DLLPUBLIC EmbeddedUpdate
+class EMBOBJ_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") EmbeddedUpdate
 {
     /** By "Refresh all" is used to perform an OLE update and a link update.
         In the case of a link update, the class OCommonEmbeddedObject is

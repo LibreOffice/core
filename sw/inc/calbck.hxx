@@ -223,7 +223,9 @@ namespace sw
     // Still: in the long run the SwClient/SwModify interface should not be
     // used anymore, in which case a BroadcasterMixin should be enough instead
     // then.
-    class SW_DLLPUBLIC BroadcastingModify : public SwModify, public BroadcasterMixin {
+    class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") BroadcastingModify :
+        public SwModify, public BroadcasterMixin
+    {
         public:
             virtual void CallSwClientNotify(const SfxHint& rHint) const override;
     };

@@ -16,7 +16,7 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 namespace sfx2
 {
 /// Implemented by objects that can be dumped to xml for debugging purposes.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI XmlDump
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") XmlDump
 {
 public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;

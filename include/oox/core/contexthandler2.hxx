@@ -69,7 +69,7 @@ struct ElementInfo;
     and implEndRecord() functions of this helper. Again, this is implemented
     already in the classes ContextHandler2 and FragmentHandler2.
  */
-class OOX_DLLPUBLIC ContextHandler2Helper
+class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ContextHandler2Helper
 {
 public:
     explicit            ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter );

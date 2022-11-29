@@ -295,6 +295,9 @@ uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
     if(!pObj)
         return nullptr;
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+    // TODO see comment at
+    // <https://gerrit.libreoffice.org/c/core/+/78734/4#message-5ee4e724a8073c5c475f07da0b5d79bc34e61de5>
+    // "make page bookkeep the SwXShapes" [-loplugin:crosscast]:
     SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
     if(!pPage || pPage->m_vShapes.empty())
         return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);

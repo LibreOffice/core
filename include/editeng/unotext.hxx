@@ -235,7 +235,8 @@ namespace accessibility
 }
 
 
-class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public css::text::XTextRange,
+class EDITENG_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvxUnoTextRangeBase :
+                            public css::text::XTextRange,
                             public css::beans::XPropertySet,
                             public css::beans::XMultiPropertySet,
                             public css::beans::XMultiPropertyStates,

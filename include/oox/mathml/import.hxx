@@ -26,7 +26,7 @@ class XmlStream;
  representing the formula and getFormulaSize() to provide the size of the resulting
  formula.
  */
-class OOX_DLLPUBLIC FormulaImportBase
+class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") FormulaImportBase
 {
 public:
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) = 0;

@@ -32,7 +32,7 @@ typedef o3tl::strong_int<int, struct ViewShellDocIdTag> ViewShellDocId;
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
-class SVL_DLLPUBLIC SfxRepeatTarget
+class SVL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SfxRepeatTarget
 {
 public:
     virtual             ~SfxRepeatTarget() = 0;

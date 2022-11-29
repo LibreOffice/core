@@ -27,7 +27,7 @@ class EnumContext;
 
 namespace sfx2::sidebar
 {
-class SFX2_DLLPUBLIC IContextChangeReceiver
+class SFX2_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") IContextChangeReceiver
 {
 public:
     virtual ~IContextChangeReceiver();

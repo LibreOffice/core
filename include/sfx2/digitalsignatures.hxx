@@ -19,7 +19,7 @@
 namespace sfx2
 {
 /// Extension of css::security::XDocumentDigitalSignatures for internal purposes.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI DigitalSignatures
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") DigitalSignatures
 {
 public:
     /// Same as signDocumentWithCertificate(), but passes the xModel as well.

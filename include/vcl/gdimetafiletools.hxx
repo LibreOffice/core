@@ -43,7 +43,7 @@ bool usesClipActions(const GDIMetaFile& rSource);
 // hook to access metafile members in classes of modules above vcl. Currently
 // used in MetafilePrimitive2D to be able to access the local Metafile member
 // e.g. from vcl module
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetafileAccessor
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") MetafileAccessor
 {
 public:
     virtual void accessMetafile(GDIMetaFile& rTargetMetafile) const = 0;

@@ -22,7 +22,7 @@ namespace svl
   a SfxStyleSheet (and listen on it). It can be queried by the stylesheet
   to determine if it is really used.
   */
-class SAL_DLLPUBLIC_RTTI StyleSheetUser
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") StyleSheetUser
 {
 public:
     /** Test whether this object is used.

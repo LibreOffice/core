@@ -113,7 +113,7 @@ public:
 SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwContentIndex& index);
 
 /// Helper base class for SwContentNode to manage the list of attached SwContentIndex
-class SAL_WARN_UNUSED SwContentIndexReg
+class SAL_WARN_UNUSED SAL_LOPLUGIN_ANNOTATE("crosscast") SwContentIndexReg
 {
     friend class SwContentIndex;
 
