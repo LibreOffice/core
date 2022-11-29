@@ -3478,7 +3478,8 @@ bool DocxAttributeOutput::FootnoteEndnoteRefTag()
     the switch in DocxAttributeOutput::RunText() nicer ;-)
  */
 static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextToken,
-        const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true )
+        const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true,
+        const OUString& rSymbolFont = OUString() )
 {
     const sal_Unicode *pBegin = rBegin;
 
@@ -3489,22 +3490,34 @@ static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextT
     if ( pBegin >= pEnd )
         return false; // we want to write at least one character
 
-    // we have to add 'preserve' when starting/ending with space
-    if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
+    bool bIsSymbol = !rSymbolFont.isEmpty();
+
+    std::u16string_view aView( pBegin, pEnd - pBegin );
+    if (bIsSymbol)
     {
-        pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
+        for (char16_t aChar : aView)
+        {
+            pSerializer->singleElementNS(XML_w, XML_sym,
+                FSNS(XML_w, XML_font), rSymbolFont,
+                FSNS(XML_w, XML_char), OString::number(aChar, 16));
+        }
     }
     else
-        pSerializer->startElementNS(XML_w, nTextToken);
+    {
+        // we have to add 'preserve' when starting/ending with space
+        if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
+            pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
+        else
+            pSerializer->startElementNS(XML_w, nTextToken);
 
-    pSerializer->writeEscaped( std::u16string_view( pBegin, pEnd - pBegin ) );
-
-    pSerializer->endElementNS( XML_w, nTextToken );
+        pSerializer->writeEscaped( aView );
+        pSerializer->endElementNS( XML_w, nTextToken );
+    }
 
     return true;
 }
 
-void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
+void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/, const OUString& rSymbolFont )
 {
     if( m_closeHyperlinkInThisRun )
     {
@@ -3569,7 +3582,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
         }
     }
 
-    impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false );
+    impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false, rSymbolFont );
 }
 
 void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
