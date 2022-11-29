@@ -342,8 +342,8 @@ void SdImportTest::testConnectors()
 {
     createSdImpressDoc("pptx/connectors.pptx");
 
-    sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476,  1356, -1357, 1604,  -1540,
-                               607,   1296,  -1638, -1060, -522, 1578,  -1291, 333 };
+    sal_Int32 aEdgeValue[] = { -1123, -1123, -1547, 1432,  1356, -1357, 1604,  -1540,
+                               599,   1288,  -1629, -1052, -513, 1569,  -1283, 333 };
 
     sal_Int32 nCount = 0;
     for (size_t i = 0; i < 18; i++)

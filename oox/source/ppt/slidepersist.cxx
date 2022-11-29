@@ -371,10 +371,24 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
     SdrObject* pStartObj = xStartSp.is() ? SdrObject::getSdrObjectFromXShape(xStartSp) : nullptr;
     SdrObject* pEndObj = xEndSp.is() ? SdrObject::getSdrObjectFromXShape(xEndSp) : nullptr;
 
+    sal_Int32 nStartSpLineW = 0;
     if (pStartObj)
+    {
         aStartRect = pStartObj->GetSnapRect();
+        uno::Reference<beans::XPropertySet> xPropxStartSp(xStartSp, uno::UNO_QUERY);
+        xPropxStartSp->getPropertyValue("LineWidth") >>= nStartSpLineW;
+        if (nStartSpLineW)
+            nStartSpLineW = nStartSpLineW / 2;
+    }
+    sal_Int32 nEndSpLineW = 0;
     if (pEndObj)
+    {
         aEndRect = pEndObj->GetSnapRect();
+        uno::Reference<beans::XPropertySet> xPropxEndSp(xEndSp, uno::UNO_QUERY);
+        xPropxEndSp->getPropertyValue("LineWidth") >>= nEndSpLineW;
+        if (nEndSpLineW)
+            nEndSpLineW = nEndSpLineW / 2;
+    }
 
     const OUString sConnectorName = rShapePtr->getConnectorName();
     if (sConnectorName == "bentConnector2")
@@ -385,20 +399,24 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
             if (aConnSize.Height < aConnSize.Width)
             {
                 if (xStartSp.is())
-                    nEdge -= (aStartPt.Y > aEndPt.Y) ? (aStartRect.Top() - aEndPt.Y)
-                                                     : (aStartRect.Bottom() - aEndPt.Y);
+                    nEdge = (aStartPt.Y > aEndPt.Y)
+                                ? (nStartSpLineW - (aStartRect.Top() - aEndPt.Y))
+                                : ((aEndPt.Y - aStartRect.Bottom()) - nStartSpLineW);
                 else
-                    nEdge -= (aStartPt.Y > aEndPt.Y) ? (aEndRect.Bottom() - aStartPt.Y)
-                                                     : (aEndRect.Top() - aStartPt.Y);
+                    nEdge = (aStartPt.Y > aEndPt.Y)
+                                ? ((aStartPt.Y - aEndRect.Bottom()) - nEndSpLineW)
+                                : (nEndSpLineW - (aEndRect.Top() - aStartPt.Y));
             }
             else
             {
                 if (xStartSp.is())
-                    nEdge -= (aStartPt.X > aEndPt.X) ? (aStartRect.Left() - aEndPt.X)
-                                                     : (aStartRect.Right() - aEndPt.X);
+                    nEdge = (aStartPt.X > aEndPt.X)
+                                ? (nStartSpLineW - (aStartRect.Left() - aEndPt.X))
+                                : ((aEndPt.X - aStartRect.Right()) - nStartSpLineW);
                 else
-                    nEdge -= (aStartPt.X > aEndPt.X) ? (aEndRect.Right() - aStartPt.X)
-                                                     : (aEndRect.Left() - aStartPt.X);
+                    nEdge = (aStartPt.X > aEndPt.X)
+                                ? ((aStartPt.X - aEndRect.Right()) - nEndSpLineW)
+                                : (nEndSpLineW - (aEndRect.Left() - aStartPt.X));
             }
         }
         else
