@@ -284,6 +284,41 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
     gtk_widget_destroy(pUnoCmdDialog);
 }
 
+void commandValuesDebugger(GtkWidget* pButton, gpointer /* pItem */)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    GtkWidget* pUnoCmdDialog = gtk_dialog_new_with_buttons ("Get command values",
+                                                            GTK_WINDOW (window),
+                                                            GTK_DIALOG_MODAL,
+                                                            "Execute",
+                                                            GTK_RESPONSE_OK,
+                                                            nullptr);
+    g_object_set(G_OBJECT(pUnoCmdDialog), "resizable", FALSE, nullptr);
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pUnoCmdDialog));
+    GtkWidget* pUnoCmdAreaBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoCmdAreaBox, true, true, 2);
+
+    GtkWidget* pUnoCmdLabel = gtk_label_new("Enter UNO command");
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdLabel, true, true, 2);
+
+    GtkWidget* pUnoCmdEntry = gtk_entry_new ();
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdEntry, true, true, 2);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(pUnoCmdEntry), "e.g. .uno:Undo");
+
+    gtk_widget_show_all(pUnoCmdDialog);
+
+    gint res = gtk_dialog_run (GTK_DIALOG(pUnoCmdDialog));
+    if (res == GTK_RESPONSE_OK)
+    {
+        const gchar* pUnoCmd = gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry));
+        gchar* pValues = lok_doc_view_get_command_values(LOK_DOC_VIEW(window->lokdocview), pUnoCmd);
+        g_info("lok::Document::getCommandValues(%s) : %s", pUnoCmd, pValues);
+        g_free(pValues);
+    }
+
+    gtk_widget_destroy(pUnoCmdDialog);
+}
+
 void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));

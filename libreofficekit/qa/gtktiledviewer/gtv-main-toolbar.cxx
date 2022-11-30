@@ -129,6 +129,7 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder.get(), "getRulerState", G_CALLBACK(getRulerState));
     gtk_builder_add_callback_symbol(builder.get(), "recentUnoChanged", G_CALLBACK(recentUnoChanged));
     gtk_builder_add_callback_symbol(builder.get(), "unoCommandDebugger", G_CALLBACK(unoCommandDebugger));
+    gtk_builder_add_callback_symbol(builder.get(), "commandValuesDebugger", G_CALLBACK(commandValuesDebugger));
     gtk_builder_add_callback_symbol(builder.get(), "toggleEditing", G_CALLBACK(toggleEditing));
     gtk_builder_add_callback_symbol(builder.get(), "changePartMode", G_CALLBACK(changePartMode));
     gtk_builder_add_callback_symbol(builder.get(), "changePart", G_CALLBACK(changePart));
