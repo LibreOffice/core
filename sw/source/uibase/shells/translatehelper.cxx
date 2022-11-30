@@ -45,7 +45,7 @@ OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag)
     SolarMutexGuard gMutex;
     OString aResult;
     WriterRef xWrt;
-    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter", OUString(), xWrt);
+    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,NoPrettyPrint", OUString(), xWrt);
     if (pCursor != nullptr)
     {
         SvMemoryStream aMemoryStream;
@@ -63,6 +63,13 @@ OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag)
             aResult = aResult.replaceAll("<p", "<span");
             aResult = aResult.replaceAll("</p>", "</span>");
         }
+
+        // HTML has for that <br> and <p> also does new line
+        aResult = aResult.replaceAll("<ul>", "");
+        aResult = aResult.replaceAll("</ul>", "");
+        aResult = aResult.replaceAll("<ol>", "");
+        aResult = aResult.replaceAll("</ol>", "");
+        aResult = aResult.replaceAll("\n", "").trim();
         return aResult;
     }
     return {};
