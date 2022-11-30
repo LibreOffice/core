@@ -14,6 +14,7 @@
 #include <test/unoapixml_test.hxx>
 
 #include <osl/thread.h>
+#include <sfx2/docfile.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
@@ -187,6 +188,7 @@ public:
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
+    void testTooManyColsRows();
     void testTdf83671_SmartArt_import();
     void testTdf83671_SmartArt_import2();
     void testTdf151818_SmartArtFontColor();
@@ -306,6 +308,7 @@ public:
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
+    CPPUNIT_TEST(testTooManyColsRows);
     CPPUNIT_TEST(testTdf83671_SmartArt_import);
     CPPUNIT_TEST(testTdf83671_SmartArt_import2);
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
@@ -2871,6 +2874,27 @@ void ScFiltersTest2::testInvalidBareBiff5()
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));
+}
+
+void ScFiltersTest2::testTooManyColsRows()
+{
+    // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
+    // should be a warning on load.
+    createScDoc("ods/too-many-cols-rows.ods");
+
+    ScDocShell* pDocSh = getScDocShell();
+    SfxMedium* pMedium = pDocSh->GetMedium();
+
+    CPPUNIT_ASSERT(pMedium->GetWarningError() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || pMedium->GetWarningError() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+
+    createScDoc("xlsx/too-many-cols-rows.xlsx");
+
+    pDocSh = getScDocShell();
+    pMedium = pDocSh->GetMedium();
+
+    CPPUNIT_ASSERT(pMedium->GetWarningError() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || pMedium->GetWarningError() == SCWARN_IMPORT_COLUMN_OVERFLOW);
 }
 
 void ScFiltersTest2::testTdf83671_SmartArt_import()

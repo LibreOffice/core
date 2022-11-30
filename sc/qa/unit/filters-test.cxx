@@ -53,13 +53,11 @@ public:
     void testCVEs();
 
     void testContentofz9704();
-    void testTooManyColsRows();
     void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testContentofz9704);
-    CPPUNIT_TEST(testTooManyColsRows);
     CPPUNIT_TEST(testTdf90299);
 
     CPPUNIT_TEST_SUITE_END();
@@ -131,29 +129,6 @@ void ScFiltersTest::testContentofz9704()
     createFileURL(u"ofz9704.", u"123", aFileName);
     SvFileStream aFileStream(aFileName, StreamMode::READ);
     TestImportWKS(aFileStream);
-}
-
-void ScFiltersTest::testTooManyColsRows()
-{
-    // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
-    // should be a warning on load.
-    OUString aFileName;
-    createFileURL(u"too-many-cols-rows.", u"ods", aFileName );
-    ScDocShellRef xDocSh = loadDoc(aFileName, "calc8", OUString(), OUString(),
-            ODS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
-
-    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
-                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
-    xDocSh->DoClose();
-
-    createFileURL(u"too-many-cols-rows.", u"xlsx", aFileName );
-    xDocSh = loadDoc(
-            aFileName, "Calc Office Open XML", OUString(), OUString(),
-            XLSX_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
-
-    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
-                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf90299()

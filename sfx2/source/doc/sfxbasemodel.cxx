@@ -2802,6 +2802,8 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
             "SfxBaseModel::handleLoadError: 0x" + nError.toString(),
             Reference< XInterface >(), sal_uInt32(nError));
     }
+    else
+        pMedium->SetWarningError(nError);
 
     return pMedium;
 }

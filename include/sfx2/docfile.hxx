@@ -146,9 +146,11 @@ public:
     ErrCode             GetErrorCode() const;
     ErrCode             GetError() const
                         { return GetErrorCode().IgnoreWarning(); }
+    ErrCode             GetWarningError() const;
     ErrCode const &     GetLastStorageCreationState() const;
 
     void                SetError(ErrCode nError);
+    void                SetWarningError(ErrCode nWarningError);
 
     void                CloseInStream();
     void                CloseOutStream();

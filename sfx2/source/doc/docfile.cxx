@@ -348,6 +348,7 @@ class SfxMedium_Impl
 public:
     StreamMode m_nStorOpenMode;
     ErrCode    m_eError;
+    ErrCode    m_eWarningError;
 
     ::ucbhelper::Content aContent;
     bool bUpdatePickList:1;
@@ -437,6 +438,7 @@ public:
 SfxMedium_Impl::SfxMedium_Impl() :
     m_nStorOpenMode(SFX_STREAM_READWRITE),
     m_eError(ERRCODE_NONE),
+    m_eWarningError(ERRCODE_NONE),
     bUpdatePickList(true),
     bIsTemp( false ),
     bDownloadDone( true ),
@@ -487,6 +489,11 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
+ErrCode SfxMedium::GetWarningError() const
+{
+    return pImpl->m_eWarningError;
+}
+
 ErrCode const & SfxMedium::GetLastStorageCreationState() const
 {
     return pImpl->nLastStorageError;
@@ -495,6 +502,11 @@ ErrCode const & SfxMedium::GetLastStorageCreationState() const
 void SfxMedium::SetError(ErrCode nError)
 {
     pImpl->m_eError = nError;
+}
+
+void SfxMedium::SetWarningError(ErrCode nWarningError)
+{
+    pImpl->m_eWarningError = nWarningError;
 }
 
 ErrCode SfxMedium::GetErrorCode() const
