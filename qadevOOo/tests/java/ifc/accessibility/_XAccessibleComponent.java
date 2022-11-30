@@ -337,6 +337,9 @@ public class _XAccessibleComponent extends MultiMethodTest {
                         if (MightBeCovered) {
                             log.println("... Child is covered by another - OK");
                         } else {
+                            log.println(
+                                "(xAccCh==null: " + (xAccCh == null) + "; expIndex: " + expIndex
+                                + "; gotIndex: " + gotIndex + ")");
                             log.println("... FAILED");
                             result = false;
                         }
