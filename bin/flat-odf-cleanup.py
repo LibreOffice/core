@@ -39,8 +39,8 @@ def get_used_p_styles(root):
         if p.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}class-names"):
             for style in p.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}class-names").split(" "):
                 usedpstyles.add(style)
-    for shape in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:draw:1.0}text-style-name]"):
-        usedpstyles.add(shape.get("{urn:oasis:names:tc:opendocument:xmlns:draw:1.0}text-style-name"))
+    for shape in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}text-style-name]"):
+        usedpstyles.add(shape.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}text-style-name"))
     for tabletemplate in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:table:1.0}paragraph-style-name]"):
         usedpstyles.add(tabletemplate.get("{urn:oasis:names:tc:opendocument:xmlns:table:1.0}paragraph-style-name"))
     for page in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}register-truth-ref-style-name]"):
@@ -105,8 +105,8 @@ def remove_unused(root):
             usedmasterpages.add(tstyle.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}master-page-name"))
     for node in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:text:1.0}master-page-name]"):
         usedmasterpages.add(node.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}master-page-name"))
-    for node in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:draw:1.0}master-page-name]"):
-        usedmasterpages.add(node.get("{urn:oasis:names:tc:opendocument:xmlns:draw:1.0}master-page-name"))
+    for node in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}master-page-name]"):
+        usedmasterpages.add(node.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}master-page-name"))
     print(usedmasterpages)
     # iterate parent/next until no more masterpage is added
     size = -1
@@ -211,7 +211,48 @@ def remove_unused(root):
     sectionstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='section']")
     remove_unused_styles(root, usedsectionstyles, sectionstyles, "section style")
 
-    # TODO 6 other styles
+    # 7) presentation styles
+    usedpresentationstyles = set()
+
+    collect_all_attribute(usedpresentationstyles, "{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}style-name")
+    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}class-names]"):
+        for style in element.get("{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}class-names").split(" "):
+            usedpresentationstyles.add(style)
+
+    presentationstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='presentation']")
+    add_parent_styles(usedpresentationstyles, presentationstyles)
+    remove_unused_styles(root, usedpresentationstyles, presentationstyles, "presentation style")
+
+    # 8) graphic styles
+    pages = {
+        "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}page",
+        "{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}notes",
+        "{urn:oasis:names:tc:opendocument:xmlns:style:1.0}handout-master",
+        "{urn:oasis:names:tc:opendocument:xmlns:style:1.0}master-page",
+    }
+    usedgraphicstyles = set()
+    useddrawingpagestyles = set()
+    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}style-name]"):
+        style = element.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}style-name")
+        if element.tag in pages:
+            useddrawingpagestyles.add(style)
+        else:
+            usedgraphicstyles.add(style)
+    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}class-names]"):
+        for style in element.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}class-names").split(" "):
+            usedgraphicstyles.add(style)
+
+    graphicstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='graphic']")
+    add_parent_styles(usedgraphicstyles, graphicstyles)
+    remove_unused_styles(root, usedgraphicstyles, graphicstyles, "graphic style")
+
+    # 9) drawing-page styles
+    drawingpagestyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='drawing-page']")
+    add_parent_styles(useddrawingpagestyles, drawingpagestyles)
+    remove_unused_styles(root, useddrawingpagestyles, drawingpagestyles, "drawing-page style")
+
+
+    # TODO 3 other styles
 
     # 13) unused font-face-decls
     usedfonts = set()
@@ -271,11 +312,6 @@ if __name__ == "__main__":
     -> table-row
     db:default-cell-style-name
     -> cell
-    draw:style-name
-    -> graphic
-    -> drawing-page (only draw:page, presentation:notes, style:handout-master, style:master-page)
-    presentation:style-name
-    -> presentation
     style:data-style-name
     -> data style
     presentation:presentation-page-layout-name
@@ -287,10 +323,6 @@ if __name__ == "__main__":
     table:default-cell-style-name
     -> cell
 
-    draw:class-names
-    -> graphic
-    presentation:class-names
-    -> presentation
     draw:stroke-dash-names
     -> draw:stroke-dash
 
