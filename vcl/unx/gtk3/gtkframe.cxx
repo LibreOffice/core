@@ -5981,7 +5981,7 @@ void GtkSalFrame::startDrag(const css::datatransfer::dnd::DragGestureEvent& rEve
 
     aFakeEvent.button.device = gtk_get_current_event_device();
     // if no current event to determine device, or (tdf#140272) the device will be unsuitable then find an
-    // appropiate device to use.
+    // appropriate device to use.
     if (!aFakeEvent.button.device || !gdk_device_get_window_at_position(aFakeEvent.button.device, nullptr, nullptr))
     {
         GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
