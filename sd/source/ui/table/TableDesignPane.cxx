@@ -97,6 +97,8 @@ const std::string_view gPropNames[CB_COUNT] =
     "UseBandingColumnStyle"
 };
 
+constexpr std::u16string_view aTableStyleBaseName = u"table";
+
 TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBase)
     : mrBase(rBase)
     , m_xMenu(rBuilder.weld_menu("menu"))
@@ -207,15 +209,14 @@ IMPL_LINK(TableDesignWidget, implContextMenuHandler, const Point*, pPoint, void)
 
 namespace
 {
-    OUString getNewValidTableStyleName(const Reference<XNameContainer>& rTableFamily)
+    OUString getNewStyleName(const Reference<XNameContainer>& rFamily, std::u16string_view rBaseName)
     {
-        OUString aName;
+        OUString aName(rBaseName);
         sal_Int32 nIndex = 1;
-        do
+        while(rFamily->hasByName(aName))
         {
-            aName = "table" + OUString::number(nIndex++);
+            aName = rBaseName + OUString::number(nIndex++);
         }
-        while(rTableFamily->hasByName(aName));
 
         return aName;
     }
@@ -228,7 +229,7 @@ void TableDesignWidget::InsertStyle()
         Reference<XSingleServiceFactory> xFactory(mxTableFamily, UNO_QUERY_THROW);
         Reference<XNameContainer> xTableFamily(mxTableFamily, UNO_QUERY_THROW);
         Reference<XNameReplace> xTableStyle(xFactory->createInstance(), UNO_QUERY_THROW);
-        const OUString aName(getNewValidTableStyleName(xTableFamily));
+        const OUString aName(getNewStyleName(xTableFamily, aTableStyleBaseName));
         xTableFamily->insertByName(aName, Any(xTableStyle));
 
         Reference<XStyle> xCellStyle(mxCellFamily->getByName("default"), UNO_QUERY_THROW);
@@ -255,33 +256,35 @@ void TableDesignWidget::CloneStyle()
 {
     try
     {
-        Reference<XIndexAccess> xSrcTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
+        Reference<XNameAccess> xSrcTableStyle(mxTableFamily->getByIndex(m_xValueSet->GetSelectedItemId() - 1), UNO_QUERY_THROW);
 
         Reference<XSingleServiceFactory> xFactory(mxTableFamily, UNO_QUERY_THROW);
         Reference<XNameContainer> xTableFamily(mxTableFamily, UNO_QUERY_THROW);
-        Reference<XIndexReplace> xDestTableStyle(xFactory->createInstance(), UNO_QUERY_THROW);
-        const OUString aName(getNewValidTableStyleName(xTableFamily));
+        Reference<XNameReplace> xDestTableStyle(xFactory->createInstance(), UNO_QUERY_THROW);
+        const OUString aName(getNewStyleName(xTableFamily, aTableStyleBaseName));
         xTableFamily->insertByName(aName, Any(xDestTableStyle));
 
-        for (sal_Int32 i = 0; i < xDestTableStyle->getCount(); ++i)
+        auto aNames(xSrcTableStyle->getElementNames());
+        for (const auto& name : aNames)
         {
-            Reference<XStyle> xSrcCellStyle(xSrcTableStyle->getByIndex(i), UNO_QUERY);
+            Reference<XStyle> xSrcCellStyle(xSrcTableStyle->getByName(name), UNO_QUERY);
             if (xSrcCellStyle && xSrcCellStyle->isUserDefined())
             {
                 Reference<XSingleServiceFactory> xCellFactory(mxCellFamily, UNO_QUERY_THROW);
                 Reference<XStyle> xDestCellStyle(xCellFactory->createInstance(), UNO_QUERY_THROW);
                 xDestCellStyle->setParentStyle(xSrcCellStyle->getParentStyle());
-                mxCellFamily->insertByName(xDestCellStyle->getName(), Any(xDestCellStyle));
+                const OUString aStyleName(getNewStyleName(mxCellFamily, Concat2View(aName + "-" + name)));
+                mxCellFamily->insertByName(aStyleName, Any(xDestCellStyle));
 
                 rtl::Reference xSrcStyleSheet = static_cast<SdStyleSheet*>(xSrcCellStyle.get());
                 rtl::Reference xDestStyleSheet = static_cast<SdStyleSheet*>(xDestCellStyle.get());
 
                 xDestStyleSheet->GetItemSet().Put(xSrcStyleSheet->GetItemSet());
 
-                xDestTableStyle->replaceByIndex(i, Any(xDestCellStyle));
+                xDestTableStyle->replaceByName(name, Any(xDestCellStyle));
             }
             else
-                xDestTableStyle->replaceByIndex(i, Any(xSrcCellStyle));
+                xDestTableStyle->replaceByName(name, Any(xSrcCellStyle));
         }
 
         updateControls();
@@ -386,7 +389,9 @@ void TableDesignWidget::EditStyle(std::string_view rCommand)
 
             if (!bUserDefined)
             {
-                mxCellFamily->insertByName(xCellStyle->getName(), Any(xCellStyle));
+                Reference<XNamed> xNamed(xTableStyle, UNO_QUERY_THROW);
+                const OUString aStyleName(getNewStyleName(mxCellFamily, Concat2View(xNamed->getName() + "-" + OUString::fromUtf8(rCommand))));
+                mxCellFamily->insertByName(aStyleName, Any(xCellStyle));
                 xTableStyle->replaceByName(OUString::fromUtf8(rCommand), Any(xCellStyle));
             }
 
