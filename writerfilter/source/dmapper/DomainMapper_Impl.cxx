@@ -2481,7 +2481,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
 
                 // table style precedence and not hidden shapes anchored to hidden empty table paragraphs
-                if (xParaProps && (m_nTableDepth > 0 || !m_aAnchoredObjectAnchors.empty()) )
+                if (xParaProps && !m_bIsInComments
+                    && (m_nTableDepth > 0 || !m_aAnchoredObjectAnchors.empty()))
                 {
                     // table style has got bigger precedence than docDefault style
                     // collect these pending paragraph properties to process in endTable()
@@ -2596,7 +2597,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
 
                 // fix table paragraph properties
-                if ( xTextRange.is() && xParaProps && m_nTableDepth > 0 )
+                if (xTextRange.is() && xParaProps && m_nTableDepth > 0 && !m_bIsInComments)
                 {
                     // tdf#128959 table paragraphs haven't got window and orphan controls
                     uno::Any aAny(static_cast<sal_Int8>(0));
@@ -2665,7 +2666,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     // don't overwrite m_bFirstParagraphInCell in table separator nodes
     // and in text boxes anchored to the first paragraph of table cells
-    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && !IsInShape())
+    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && !IsInShape() && !m_bIsInComments)
         m_bFirstParagraphInCell = false;
 
     m_bParaAutoBefore = false;
