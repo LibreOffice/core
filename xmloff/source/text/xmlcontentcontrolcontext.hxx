@@ -53,6 +53,7 @@ class XMLContentControlContext : public SvXMLImportContext
     bool m_bDropDown = false;
     OUString m_aAlias;
     OUString m_aTag;
+    OUString m_aLock;
 
 public:
     XMLContentControlContext(SvXMLImport& rImport, sal_Int32 nElement, XMLHints_Impl& rHints,

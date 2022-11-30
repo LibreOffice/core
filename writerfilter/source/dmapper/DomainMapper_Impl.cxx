@@ -968,6 +968,11 @@ void DomainMapper_Impl::PopSdt()
         xContentControlProps->setPropertyValue("Id", uno::Any(m_pSdtHelper->GetId()));
     }
 
+    if (!m_pSdtHelper->GetLock().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("Lock", uno::Any(m_pSdtHelper->GetLock()));
+    }
+
     if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
     {
         xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));

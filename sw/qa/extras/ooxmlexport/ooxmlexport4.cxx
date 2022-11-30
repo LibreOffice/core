@@ -1016,6 +1016,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtPr/w:text", 1);
     assertXPath(pXmlDoc, "//*/w:sdt/w:sdtPr/w:id", 5);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[2]/w:sdtPr/w:group", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:citation", 1);

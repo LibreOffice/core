@@ -425,6 +425,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue("Appearance", uno::Any(OUString("hidden")));
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
+    xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtLocked")));
+
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -448,6 +450,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:appearance", "val", "hidden");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", "myalias");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", "val", "mytag");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", "sdtLocked");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
