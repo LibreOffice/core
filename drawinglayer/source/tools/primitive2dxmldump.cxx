@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
@@ -943,6 +944,19 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("objectinfo");
 
                 decomposeAndWrite(rObjectInfoPrimitive2D.getChildren(), rWriter);
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D:
+            {
+                const StructureTagPrimitive2D& rStructureTagPrimitive2D
+                    = dynamic_cast<const StructureTagPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("structuretag");
+                rWriter.attribute("structureelement",
+                                  rStructureTagPrimitive2D.getStructureElement());
+
+                decomposeAndWrite(rStructureTagPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
             break;
