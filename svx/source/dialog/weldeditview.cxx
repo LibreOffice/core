@@ -1559,6 +1559,7 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
 
     m_xEditView->SetBackgroundColor(aBgColor);
+    m_xEditEngine->SetBackgroundColor(aBgColor);
     m_xEditEngine->InsertView(m_xEditView.get());
 
     pDrawingArea->set_cursor(PointerStyle::Text);
