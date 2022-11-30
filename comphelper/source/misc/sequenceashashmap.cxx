@@ -367,6 +367,14 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
                 aValue.Value <<= aSeq;
             }
         }
+        else if (rType == "[]com.sun.star.beans.PropertyValue")
+        {
+            aNodeValue = rPair.second.get_child("value", aNodeNull);
+            std::stringstream s;
+            boost::property_tree::write_json(s, aNodeValue);
+            std::vector<beans::PropertyValue> aPropertyValues = JsonToPropertyValues(s.str().c_str());
+            aValue.Value <<= comphelper::containerToSequence(aPropertyValues);
+        }
         else if (rType == "[][]com.sun.star.beans.PropertyValue")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
