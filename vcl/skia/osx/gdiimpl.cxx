@@ -38,7 +38,7 @@ using namespace SkiaHelper;
 AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
                                                  AquaSharedAttributes& rShared)
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
-    , AquaGraphicsBackendBase(rShared)
+    , AquaGraphicsBackendBase(rShared, this)
 {
     Init(); // mac code doesn't call Init()
 }

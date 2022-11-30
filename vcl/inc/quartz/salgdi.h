@@ -272,15 +272,10 @@ struct AquaSharedAttributes
 class AquaGraphicsBackendBase
 {
 public:
-    AquaGraphicsBackendBase(AquaSharedAttributes& rShared)
-        : mrShared( rShared )
-    {}
     virtual ~AquaGraphicsBackendBase() = 0;
     AquaSharedAttributes& GetShared() { return mrShared; }
     SalGraphicsImpl* GetImpl()
     {
-        if(mpImpl == nullptr)
-            mpImpl = dynamic_cast<SalGraphicsImpl*>(this);
         return mpImpl;
     }
     virtual void UpdateGeometryProvider(SalGeometryProvider*) {};
@@ -293,6 +288,9 @@ public:
     virtual void Flush() {}
     virtual void Flush( const tools::Rectangle& ) {}
 protected:
+    AquaGraphicsBackendBase(AquaSharedAttributes& rShared, SalGraphicsImpl * impl)
+        : mrShared( rShared ), mpImpl(impl)
+    {}
     static bool performDrawNativeControl(ControlType nType,
                                          ControlPart nPart,
                                          const tools::Rectangle &rControlRegion,
@@ -302,7 +300,7 @@ protected:
                                          AquaSalFrame* mpFrame);
     AquaSharedAttributes& mrShared;
 private:
-    SalGraphicsImpl* mpImpl = nullptr;
+    SalGraphicsImpl* mpImpl;
 };
 
 inline AquaGraphicsBackendBase::~AquaGraphicsBackendBase() {}
