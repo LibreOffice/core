@@ -469,7 +469,7 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_editmode">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Turn on/off edit mode</property>
+        <property name="tooltip_text">Turn on/off edit mode</property>
         <property name="use_underline">True</property>
         <property name="icon_name">insert-text-symbolic</property>
         <signal name="clicked" handler="toggleEditing" swapped="no"/>
@@ -492,6 +492,7 @@
     <child>
       <object class="GtkToolItem" id="recentunoselectortoolitem">
         <property name="visible">True</property>
+        <property name="tooltip_text">Recent UNO command selector</property>
         <property name="can_focus">False</property>
         <child>
           <object class="GtkComboBoxText" id="combo_recentunoselector">
@@ -513,10 +514,23 @@
     <child>
       <object class="GtkToolButton" id="btn_unodebugger">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Uno Command Debugger</property>
+        <property name="tooltip_text">Uno Command Debugger</property>
+        <property name="use_underline">True</property>
+        <property name="icon_name">dialog-information-symbolic</property>
+        <signal name="clicked" handler="unoCommandDebugger" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="btn_commandvaluesdebugger">
+        <property name="visible">True</property>
+        <property name="tooltip_text">Command values Debugger</property>
         <property name="use_underline">True</property>
         <property name="icon_name">dialog-question-symbolic</property>
-        <signal name="clicked" handler="unoCommandDebugger" swapped="no"/>
+        <signal name="clicked" handler="commandValuesDebugger" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>

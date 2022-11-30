@@ -26,6 +26,8 @@ void recentUnoChanged(GtkWidget* pSelector, gpointer /* pItem */);
 
 void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */);
 
+void commandValuesDebugger(GtkWidget* pButton, gpointer /* pItem */);
+
 void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/);
 
 void changePartMode(GtkWidget* pSelector, gpointer /* pItem */);
