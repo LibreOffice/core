@@ -2000,11 +2000,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case SID_FM_TRANSLATE:
                 {
+#if !ENABLE_WASM_STRIP_EXTRA
                     const SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
                     if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
                     {
                         rSet.DisableItem(nWhich);
                     }
+#endif
                 }
                 break;
 
