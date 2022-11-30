@@ -1789,6 +1789,16 @@ void VclMetafileProcessor2D::processPolyPolygonGraphicPrimitive2D(
     // need to handle PolyPolygonGraphicPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rBitmapCandidate.getB2DPolyPolygon());
 
+    if (!rBitmapCandidate.getDefinitionRange().isEmpty()
+        && aLocalPolyPolygon.getB2DRange() != rBitmapCandidate.getDefinitionRange())
+    {
+        // The range which defines the bitmap fill is defined and different from the
+        // range of the defining geometry (e.g. used for FillStyle UseSlideBackground).
+        // This cannot be done calling vcl, thus use decomposition here directly
+        process(rBitmapCandidate);
+        return;
+    }
+
     fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
     std::unique_ptr<SvtGraphicFill> pSvtGraphicFill;
