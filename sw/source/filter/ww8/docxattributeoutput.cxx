@@ -617,6 +617,8 @@ void SdtBlockHelper::DeleteAndResetTheLists()
         m_aAlias.clear();
     if (!m_aTag.isEmpty())
         m_aTag.clear();
+    if (!m_aLock.isEmpty())
+        m_aLock.clear();
     if (!m_aPlaceHolderDocPart.isEmpty())
         m_aPlaceHolderDocPart.clear();
     if (!m_aColor.isEmpty())
@@ -724,6 +726,9 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
 
     if (!m_aTag.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val), m_aTag);
+
+    if (!m_aLock.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_lock, FSNS(XML_w, XML_val), m_aLock);
 }
 
 void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -837,6 +842,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         {
             if (!(aPropertyValue.Value >>= m_aTag))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt tag value");
+        }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_lock" && m_aLock.isEmpty())
+        {
+            if (!(aPropertyValue.Value >>= m_aLock))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt lock value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
             m_bHasId = true;
@@ -2396,6 +2406,12 @@ void DocxAttributeOutput::WriteContentControlStart()
     {
         m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
                                        OString::number(m_pContentControl->GetId()));
+    }
+
+    if (!m_pContentControl->GetLock().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_lock, FSNS(XML_w, XML_val),
+                                       m_pContentControl->GetLock());
     }
 
     if (m_pContentControl->GetShowingPlaceHolder())

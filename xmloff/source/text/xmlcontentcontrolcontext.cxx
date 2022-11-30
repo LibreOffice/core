@@ -151,6 +151,11 @@ void XMLContentControlContext::startFastElement(
                 m_aTag = rIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_LOCK):
+            {
+                m_aLock = rIter.toString();
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -260,6 +265,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (!m_aTag.isEmpty())
     {
         xPropertySet->setPropertyValue("Tag", uno::Any(m_aTag));
+    }
+
+    if (!m_aLock.isEmpty())
+    {
+        xPropertySet->setPropertyValue("Lock", uno::Any(m_aLock));
     }
 }
 

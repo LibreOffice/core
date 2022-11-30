@@ -179,6 +179,7 @@ public:
     OUString m_aAlias;
     OUString m_aTag;
     sal_Int32 m_nId;
+    OUString m_aLock;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          uno::Reference<text::XText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
@@ -493,6 +494,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetAlias(m_pImpl->m_aAlias);
     pContentControl->SetTag(m_pImpl->m_aTag);
     pContentControl->SetId(m_pImpl->m_nId);
+    pContentControl->SetLock(m_pImpl->m_aLock);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -983,6 +985,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_LOCK)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aLock = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetLock(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -1243,6 +1260,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetId();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_LOCK)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aLock;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetLock();
         }
     }
     else

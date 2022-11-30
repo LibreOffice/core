@@ -71,6 +71,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
     xContentControlProps->getPropertyValue("Tag") >>= aTag;
     // This was empty.
     CPPUNIT_ASSERT_EQUAL(OUString("mytag"), aTag);
+    OUString aLock;
+    xContentControlProps->getPropertyValue("Lock") >>= aLock;
+    // This was empty.
+    CPPUNIT_ASSERT_EQUAL(OUString("contentLocked"), aLock);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)

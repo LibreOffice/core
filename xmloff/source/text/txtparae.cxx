@@ -4066,6 +4066,13 @@ void XMLTextParagraphExport::ExportContentControl(
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAG, aTag);
         }
+
+        OUString aLock;
+        xPropertySet->getPropertyValue("Lock") >>= aLock;
+        if (!aLock.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_LOCK, aLock);
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,

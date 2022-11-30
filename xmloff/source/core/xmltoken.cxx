@@ -1234,6 +1234,7 @@ namespace xmloff::token {
         TOKEN( "list-style",                      XML_LIST_STYLE ),
         TOKEN( "list-style-name",                 XML_LIST_STYLE_NAME ),
         TOKEN( "ln",                              XML_LN ),
+        TOKEN( "lock",                            XML_LOCK ),
         TOKEN( "locked",                          XML_LOCKED ),
         TOKEN( "log",                             XML_LOG ),
         TOKEN( "logarithmic",                     XML_LOGARITHMIC ),

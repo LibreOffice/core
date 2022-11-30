@@ -1134,6 +1134,7 @@ list-name
 list-style
 list-style-name
 ln
+lock
 locked
 log
 logarithmic

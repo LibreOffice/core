@@ -445,6 +445,42 @@ bool SwContentControl::ShouldOpenPopup(const vcl::KeyCode& rKeyCode)
     return false;
 }
 
+// NOTE: call SetReadWrite separately to implement true (un)locking.
+// This is mostly a theoretical function; the lock state is mainly kept for round-tripping purposes.
+// It is implemented here primarily for pointless VBA control, but with the intention that it
+// could be made functionally useful as well for checkboxes/dropdowns/pictures.
+// Returns whether the content (bControl=false) cannot be modified,
+// or if the control cannot be deleted.
+std::optional<bool> SwContentControl::GetLock(bool bControl) const
+{
+    std::optional<bool> oLock;
+    if (m_aLock.isEmpty())
+        return oLock;
+    else if (m_aLock.equalsIgnoreAsciiCase("sdtContentLocked"))
+        oLock = true;
+    else if (m_aLock.equalsIgnoreAsciiCase("unlocked"))
+        oLock = false;
+    else if (m_aLock.equalsIgnoreAsciiCase("sdtLocked"))
+        oLock = bControl;
+    else if (m_aLock.equalsIgnoreAsciiCase("contentLocked"))
+        oLock = !bControl;
+
+    assert(oLock && "invalid or unknown lock state");
+    return oLock;
+}
+
+void SwContentControl::SetLock(bool bLockContent, bool bLockControl)
+{
+    if (!bLockContent && !bLockControl)
+        m_aLock = "unlocked";
+    else if (bLockContent && bLockControl)
+        m_aLock = "sdtContentLocked";
+    else if (bLockContent)
+        m_aLock = "contentLocked";
+    else
+        m_aLock = "sdtLocked";
+}
+
 SwContentControlType SwContentControl::GetType() const
 {
     if (m_bCheckbox)
@@ -526,6 +562,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("tag"), BAD_CAST(m_aTag.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"),
                                       BAD_CAST(OString::number(m_nId).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lock"),
+                                      BAD_CAST(m_aLock.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

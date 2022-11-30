@@ -145,6 +145,7 @@ public:
     bool m_bShowingPlaceHolder;
     OUString m_aAlias;
     OUString m_aTag;
+    OUString m_aLock;
     sal_Int32 m_nSdtPrToken;
 
     void DeleteAndResetTheLists();

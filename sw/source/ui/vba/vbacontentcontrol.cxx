@@ -95,6 +95,13 @@ sal_Bool SwVbaContentControl::getChecked()
 
 void SwVbaContentControl::setChecked(sal_Bool bSet)
 {
+    // Word 2010: if locked, then the checked status is changed, but not the underlying text.
+    // Do we really want to do that? That is pretty bizarre behaviour...
+    // For now, just implement what seems to be a more logical response.
+    // TODO: test with modern versions.
+    if (getLockContents())
+        return;
+
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     if (pCC->GetCheckbox() && pCC->GetChecked() != static_cast<bool>(bSet))
     {
@@ -487,21 +494,27 @@ sal_Int32 SwVbaContentControl::getLevel()
 
 sal_Bool SwVbaContentControl::getLockContentControl()
 {
-    SAL_INFO("sw.vba", "SwVbaContentControl::getLockContentControl stub");
-    // returns whether the user can delete a content control from the active document.
-    return true;
+    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
+    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/true);
+    return oLock && *oLock;
 }
 
-void SwVbaContentControl::setLockContentControl(sal_Bool /*bSet*/)
+void SwVbaContentControl::setLockContentControl(sal_Bool bSet)
 {
-    SAL_INFO("sw.vba", "SwVbaContentControl::setLockContentControl stub");
+    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/false);
+    pCC->SetLock(/*bContents=*/oLock && *oLock, /*bControl=*/bSet);
 }
 
 sal_Bool SwVbaContentControl::getLockContents()
 {
-    // Pseudo-implementation - the need for locking in a form would be very rare.
-    // LO uses this for internal purposes. Only expose it to VBA when safe.
     const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
+    // If the theoretical design model says it is locked, then report as locked.
+    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/false);
+    if (oLock && *oLock)
+        return true;
+
+    // Now check the real implementation.
     // Checkbox/DropDown/Picture are normally locked - but not in this sense. Report as unlocked.
     if (pCC->GetType() == SwContentControlType::CHECKBOX
         || pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
@@ -516,6 +529,10 @@ sal_Bool SwVbaContentControl::getLockContents()
 void SwVbaContentControl::setLockContents(sal_Bool bSet)
 {
     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
+    // Set the lock both theoretically and actually.
+    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/true);
+    pCC->SetLock(/*bContents=*/bSet, /*bControl=*/oLock && *oLock);
+
     // Checkbox/DropDown/Picture are normally locked in LO implementation - don't unlock them.
     if (pCC->GetType() == SwContentControlType::CHECKBOX
         || pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
@@ -673,17 +690,24 @@ void SwVbaContentControl::Copy()
 
 void SwVbaContentControl::Cut()
 {
+    if (getLockContentControl())
+        return;
+
     SAL_INFO("sw.vba",
              "SwVbaContentControl::Cut[" << getID() << "], but missing sending to clipboard");
 
-    m_rCC.Delete(/*bSaveContents=*/false);
+    m_rCC.Delete(/*bSaveContents=*/getLockContents());
 }
 
 void SwVbaContentControl::Delete(const uno::Any& DeleteContents)
 {
+    if (getLockContentControl())
+        return;
+
     bool bDeleteContents = false;
     DeleteContents >>= bDeleteContents;
-    m_rCC.Delete(!bDeleteContents);
+
+    m_rCC.Delete(/*bSaveContents=*/!bDeleteContents || getLockContents());
 }
 
 void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& Font)

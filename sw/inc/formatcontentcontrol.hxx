@@ -179,6 +179,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The id: just remembered.
     sal_Int32 m_nId = 0;
 
+    /// The control and content locks: mostly just remembered.
+    OUString m_aLock;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     // i.e. temporarily store the selected item until the text is inserted by GotoContentControl.
     std::optional<size_t> m_oSelectedListItem;
@@ -359,8 +362,17 @@ public:
 
     sal_Int32 GetId() const { return m_nId; }
 
+    // At the design level, define how the control should be locked. No effect at implementation lvl
+    void SetLock(bool bLockContent, bool bLockControl);
+    void SetLock(const OUString& rLock) { m_aLock = rLock; }
+
+    // At the design level, get how the control is locked. Does not reflect actual implementation.
+    std::optional<bool> GetLock(bool bControl) const;
+    const OUString& GetLock() const { return m_aLock; }
+
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 
+    // At the implementation level, define whether the user can directly modify the contents.
     bool GetReadWrite() const { return m_bReadWrite; }
 
     SwContentControlType GetType() const;

@@ -2848,6 +2848,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
     case NS_ooxml::LN_CT_SdtPr_color:
     case NS_ooxml::LN_CT_SdtPr_tag:
+    case NS_ooxml::LN_CT_SdtPr_lock:
     {
         if (!m_pImpl->GetSdtStarts().empty())
         {
@@ -2882,6 +2883,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_id)
             {
                 m_pImpl->m_pSdtHelper->SetId(nIntValue);
+                break;
+            }
+
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_lock)
+            {
+                m_pImpl->m_pSdtHelper->SetLock(sStringValue);
                 break;
             }
 
@@ -2932,6 +2939,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
             case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
             case NS_ooxml::LN_CT_SdtPr_tag:         sName = "ooxml:CT_SdtPr_tag"; break;
+            case NS_ooxml::LN_CT_SdtPr_lock:        sName = "ooxml:CT_SdtPr_lock"; break;
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
             case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
             case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
@@ -2953,8 +2961,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (pProperties)
             pProperties->resolve(*this);
 
-        if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias || nSprmId == NS_ooxml::LN_CT_SdtPr_tag)
+        if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias || nSprmId == NS_ooxml::LN_CT_SdtPr_tag
+            || nSprmId == NS_ooxml::LN_CT_SdtPr_lock)
         {
+            // Grabbag string values
             beans::PropertyValue aValue;
             aValue.Name = sName;
             aValue.Value <<= sStringValue;

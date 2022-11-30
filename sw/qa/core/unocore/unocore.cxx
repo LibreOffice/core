@@ -633,6 +633,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
+    xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtContentLocked")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -658,6 +659,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
     CPPUNIT_ASSERT_EQUAL(OUString("myalias"), pContentControl->GetAlias());
     CPPUNIT_ASSERT_EQUAL(OUString("mytag"), pContentControl->GetTag());
+    CPPUNIT_ASSERT_EQUAL(OUString("sdtContentLocked"), pContentControl->GetLock());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)

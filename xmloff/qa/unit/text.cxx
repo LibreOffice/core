@@ -781,6 +781,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("my alias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("my tag")));
+    xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("unlocked")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -794,6 +795,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     // i.e. alias was lost on export.
     assertXPath(pXmlDoc, "//loext:content-control", "alias", "my alias");
     assertXPath(pXmlDoc, "//loext:content-control", "tag", "my tag");
+    assertXPath(pXmlDoc, "//loext:content-control", "lock", "unlocked");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlImport)
@@ -853,6 +855,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlImport)
     OUString aTag;
     xContentControlProps->getPropertyValue("Tag") >>= aTag;
     CPPUNIT_ASSERT_EQUAL(OUString("my tag"), aTag);
+    OUString aLock;
+    xContentControlProps->getPropertyValue("Lock") >>= aLock;
+    CPPUNIT_ASSERT_EQUAL(OUString("sdtContentLocked"), aLock);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)

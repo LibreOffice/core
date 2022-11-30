@@ -3008,6 +3008,11 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
           <rng:ref name="string"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:lock">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
       <rng:zeroOrMore>
         <rng:element name="loext:list-item">
           <rng:attribute name="loext:display-text">

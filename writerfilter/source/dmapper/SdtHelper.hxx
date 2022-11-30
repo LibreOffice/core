@@ -135,6 +135,9 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:sdtPr>'s <w:id w:val="...">.
     sal_Int32 m_nId = 0;
 
+    /// <w:sdtPr>'s <w:lock w:val="...">.
+    OUString m_aLock;
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        css::uno::Reference<css::uno::XComponentContext> xContext);
@@ -222,6 +225,9 @@ public:
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() const;
+
+    void SetLock(const OUString& rLock);
+    const OUString& GetLock() const;
 
     std::optional<OUString> getValueFromDataBinding();
 };
