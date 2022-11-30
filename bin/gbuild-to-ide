@@ -549,7 +549,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
                 entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                 entries.append(entry)
             global_list.extend(entries)
-        with open('compile_commands.json', 'w') as export_file:
+        with open(os.path.join(self.gbuildparser.builddir, 'compile_commands.json'), 'w') as export_file:
             json.dump(global_list, export_file)
 
     def generateCommand(self, lib, file):
