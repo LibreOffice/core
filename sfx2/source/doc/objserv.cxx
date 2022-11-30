@@ -24,6 +24,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -466,6 +467,56 @@ static void sendErrorToLOK(ErrCode error)
     SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
 }
 
+namespace
+{
+void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
+                      const uno::Sequence<beans::PropertyValue>& rUpdatedProperties)
+{
+    comphelper::SequenceAsHashMap aMap(rUpdatedProperties);
+    OUString aNamePrefix;
+    auto it = aMap.find("NamePrefix");
+    if (it != aMap.end())
+    {
+        it->second >>= aNamePrefix;
+    }
+
+    uno::Sequence<beans::PropertyValue> aUserDefinedProperties;
+    it = aMap.find("UserDefinedProperties");
+    if (it != aMap.end())
+    {
+        it->second >>= aUserDefinedProperties;
+    }
+
+    uno::Reference<beans::XPropertyContainer> xUDP = xDP->getUserDefinedProperties();
+    if (!aNamePrefix.isEmpty())
+    {
+        uno::Reference<beans::XPropertySet> xSet(xUDP, UNO_QUERY);
+        uno::Reference<beans::XPropertySetInfo> xSetInfo = xSet->getPropertySetInfo();
+        const uno::Sequence<beans::Property> aProperties = xSetInfo->getProperties();
+        for (const auto& rProperty : aProperties)
+        {
+            if (!rProperty.Name.startsWith(aNamePrefix))
+            {
+                continue;
+            }
+
+            if (!(rProperty.Attributes & beans::PropertyAttribute::REMOVABLE))
+            {
+                continue;
+            }
+
+            xUDP->removeProperty(rProperty.Name);
+        }
+    }
+
+    for (const auto& rUserDefinedProperty : aUserDefinedProperties)
+    {
+        xUDP->addProperty(rUserDefinedProperty.Name, beans::PropertyAttribute::REMOVABLE,
+                          rUserDefinedProperty.Value);
+    }
+}
+}
+
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
@@ -569,6 +620,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pDocInfItem->UpdateDocumentInfo(getDocProperties(), true);
                 SetUseUserData( pDocInfItem->IsUseUserData() );
                 SetUseThumbnailSave( pDocInfItem->IsUseThumbnailSave() );
+            }
+            else if (const SfxUnoAnyItem* pItem = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_1))
+            {
+                uno::Sequence<beans::PropertyValue> aUpdatedProperties;
+                pItem->GetValue() >>= aUpdatedProperties;
+                SetDocProperties(getDocProperties(), aUpdatedProperties);
             }
             else
             {

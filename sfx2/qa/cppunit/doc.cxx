@@ -13,11 +13,16 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <osl/file.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 
@@ -102,6 +107,61 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
     // because we first tried to create a temp file next to test.odt in a directory named
     // "test%25C3%25Bf" instead of a directory named "test%C3%Bf".
     pBaseModel->storeToURL(aPdfTarget, aPdfArgs);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
+{
+    // Given a document with 3 custom props, 2 Zotero ones and an other:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(getComponent().get());
+    CPPUNIT_ASSERT(pBaseModel);
+    uno::Reference<document::XDocumentProperties> xDP = pBaseModel->getDocumentProperties();
+    uno::Reference<beans::XPropertyContainer> xUDP = xDP->getUserDefinedProperties();
+    xUDP->addProperty("ZOTERO_PREF_1", beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(OUString("foo")));
+    xUDP->addProperty("ZOTERO_PREF_2", beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(OUString("bar")));
+    xUDP->addProperty("OTHER", beans::PropertyAttribute::REMOVABLE, uno::Any(OUString("baz")));
+
+    // When updating the Zotero ones (1 update, 1 removal):
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "UpdatedProperties": {
+        "type": "[]com.sun.star.beans.PropertyValue",
+        "value": {
+            "NamePrefix": {
+                "type": "string",
+                "value": "ZOTERO_PREF_"
+            },
+            "UserDefinedProperties": {
+                "type": "[]com.sun.star.beans.PropertyValue",
+                "value": {
+                    "ZOTERO_PREF_1": {
+                        "type": "string",
+                        "value": "test"
+                    }
+                }
+            }
+        }
+    }
+}
+)json");
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(getComponent(), ".uno:SetDocumentProperties", aArgs);
+
+    // Then make sure that OTHER is still there and that ZOTERO_PREF_1 + ZOTERO_PREF_2 gets updated
+    // to the new value of a single ZOTERO_PREF_1:
+    uno::Reference<beans::XPropertyAccess> xUDPAccess(xUDP, uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap(xUDPAccess->getPropertyValues());
+    auto it = aMap.find("ZOTERO_PREF_1");
+    CPPUNIT_ASSERT(it != aMap.end());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: test
+    // - Actual  : foo
+    // i.e. ZOTERO_PREF_1 was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), it->second.get<OUString>());
+    CPPUNIT_ASSERT(bool(aMap.find("ZOTERO_PREF_2") == aMap.end()));
+    CPPUNIT_ASSERT(aMap.find("OTHER") != aMap.end());
 }
 }
 

@@ -3325,7 +3325,7 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
 
 
 SfxVoidItem SetDocumentProperties SID_DOCINFO
-(SfxDocumentInfoItem Properties SID_DOCINFO)
+(SfxDocumentInfoItem Properties SID_DOCINFO, SfxUnoAnyItem UpdatedProperties FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
