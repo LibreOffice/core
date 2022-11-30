@@ -35,8 +35,7 @@
 		"files.associations": {
 			"*.patch.[0-9]": "diff"
 		},
-		// FIXME: arguably the generator should place it in the builddir, not srcdir
-		"C_Cpp.default.compileCommands": "${workspaceFolder:srcdir}/compile_commands.json",
+		"C_Cpp.default.compileCommands": "@BUILDDIR@/compile_commands.json",
 		// only used if the file doesn't match anything in the compile_commands.json - aka externals
 		// libxml includes just added as example/for reference
 		"C_Cpp.default.includePath": [
