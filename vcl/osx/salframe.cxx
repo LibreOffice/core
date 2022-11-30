@@ -1289,6 +1289,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.BatchSetBackgrounds( aWindowBackgroundColor, false );
     aStyleSettings.SetLightBorderColor( aWindowBackgroundColor );
 
+    aStyleSettings.SetActiveTabColor(aWindowBackgroundColor);
     Color aInactiveTabColor( aWindowBackgroundColor );
     aInactiveTabColor.DecreaseLuminance( 32 );
     aStyleSettings.SetInactiveTabColor( aInactiveTabColor );
