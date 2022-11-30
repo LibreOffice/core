@@ -3461,7 +3461,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)
                                                     auto pS3 = dynamic_cast<
                                                         vcl::filter::PDFNameElement*>(
                                                         pObject3->Lookup("S"));
-                                                    if (pS3 && pS3->GetValue() == "TD")
+                                                    if (nTR == 0 && pS3 && pS3->GetValue() == "TH")
+                                                    {
+                                                        int nOTable(0);
+                                                        auto pAttrs = dynamic_cast<
+                                                            vcl::filter::PDFArrayElement*>(
+                                                            pObject3->Lookup("A"));
+                                                        CPPUNIT_ASSERT(pAttrs != nullptr);
+                                                        for (const auto& rAttrRef :
+                                                             pAttrs->GetElements())
+                                                        {
+                                                            auto pARef = dynamic_cast<
+                                                                vcl::filter::PDFReferenceElement*>(
+                                                                rAttrRef);
+                                                            CPPUNIT_ASSERT(pARef != nullptr);
+                                                            auto pAttr = pARef->LookupObject();
+                                                            CPPUNIT_ASSERT(pAttr != nullptr);
+                                                            auto pAttrDict = pAttr->GetDictionary();
+                                                            CPPUNIT_ASSERT(pAttrDict != nullptr);
+                                                            auto pOwner = dynamic_cast<
+                                                                vcl::filter::PDFNameElement*>(
+                                                                pAttrDict->LookupElement("O"));
+                                                            CPPUNIT_ASSERT(pOwner != nullptr);
+                                                            if (pOwner->GetValue() == "Table")
+                                                            {
+                                                                auto pScope = dynamic_cast<
+                                                                    vcl::filter::PDFNameElement*>(
+                                                                    pAttrDict->LookupElement(
+                                                                        "Scope"));
+                                                                CPPUNIT_ASSERT(pScope != nullptr);
+                                                                CPPUNIT_ASSERT_EQUAL(
+                                                                    OString("Column"),
+                                                                    pScope->GetValue());
+                                                                ++nOTable;
+                                                            }
+                                                        }
+                                                        CPPUNIT_ASSERT_EQUAL(int(1), nOTable);
+                                                        ++nTD;
+                                                    }
+                                                    else if (nTR != 0 && pS3
+                                                             && pS3->GetValue() == "TD")
                                                     {
                                                         ++nTD;
                                                     }

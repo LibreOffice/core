@@ -354,9 +354,15 @@ namespace sdr::contact
                             }
                             if (pPage)
                             {
+                                // heuristic: if there's a special formatting on
+                                // first row, assume that it's a header row
+                                auto const eType(
+                                   aCellPos.mnRow == 0 && rTableObj.getTableStyleSettings().mbUseFirstRow
+                                       ? vcl::PDFWriter::TableHeader
+                                       : vcl::PDFWriter::TableData);
                                 cell = drawinglayer::primitive2d::Primitive2DContainer {
                                     new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                                        vcl::PDFWriter::TableData,
+                                        eType,
                                         pPage->IsMasterPage(),
                                         false,
                                         std::move(cell)) };

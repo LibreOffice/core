@@ -2460,6 +2460,11 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 default:
                     break;
             }
+            if (rTagElement == vcl::PDFWriter::TableHeader)
+            {
+                mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope,
+                                                          vcl::PDFWriter::Column);
+            }
         }
         // background object
         else
