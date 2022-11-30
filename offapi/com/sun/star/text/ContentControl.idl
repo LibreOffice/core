@@ -127,6 +127,12 @@ service ContentControl
         @since LibreOffice 7.5
     */
     [optional, property] long Id;
+
+    /** Describes whether the control itself and/or its data can be modified or deleted by the user.
+
+        @since LibreOffice 7.6
+    */
+    [optional, property] string Lock;
 };
 
 

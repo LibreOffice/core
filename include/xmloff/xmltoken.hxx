@@ -1218,6 +1218,7 @@ namespace xmloff::token {
         XML_LIST_STYLE,
         XML_LIST_STYLE_NAME,
         XML_LN,
+        XML_LOCK,
         XML_LOCKED,
         XML_LOG,
         XML_LOGARITHMIC,

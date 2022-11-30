@@ -300,6 +300,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
+    xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtLocked")));
+
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -323,6 +325,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color", "val", "008000");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", "myalias");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", "val", "mytag");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", "sdtLocked");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
