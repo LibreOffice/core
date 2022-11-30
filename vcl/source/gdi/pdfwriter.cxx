@@ -91,7 +91,7 @@ void PDFWriter::DrawTextArray(
 
 void PDFWriter::DrawStretchText(
                                 const Point& rStartPt,
-                                sal_uLong nWidth,
+                                sal_Int32 nWidth,
                                 const OUString& rStr,
                                 sal_Int32 nIndex,
                                 sal_Int32 nLen )

@@ -6990,7 +6990,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, Ker
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen )
+void PDFWriterImpl::drawStretchText( const Point& rPos, sal_Int32 nWidth, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen )
 {
     MARK( "drawStretchText" );
 
