@@ -861,13 +861,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
     Scheduler::ProcessEventsToIdle();
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 
     typeString(pImpressDocument, u"°");
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     // Without the fix in place, this test would have failed with:
     // - Expected: °
@@ -912,13 +911,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
     Scheduler::ProcessEventsToIdle();
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
-
-    int getShapes = xDraws->getCount();
-    CPPUNIT_ASSERT_EQUAL(1, getShapes);
-
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 
     for (int i = 0; i < 3; i++)
     {
