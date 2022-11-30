@@ -400,6 +400,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         {
             if ( nIdentifier == SdrObjKind::Group )
                 eElement = vcl::PDFWriter::Section;
+            else if (nIdentifier == SdrObjKind::Table)
+                eElement = vcl::PDFWriter::Table;
             else if ( nIdentifier == SdrObjKind::TitleText )
                 eElement = vcl::PDFWriter::Heading;
             else if ( nIdentifier == SdrObjKind::OutlineText )

@@ -3389,6 +3389,101 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
     CPPUNIT_ASSERT_EQUAL(int(4), nDiv);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"tdf135192-1.fodp");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    int nTable(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject1)
+            continue;
+        auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"));
+        if (pType1 && pType1->GetValue() == "StructElem")
+        {
+            auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"));
+            if (pS1 && pS1->GetValue() == "Table")
+            {
+                int nTR(0);
+                auto pKids1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1->Lookup("K"));
+                CPPUNIT_ASSERT(pKids1);
+                // there can be additional children, such as MCID ref
+                for (auto pKid1 : pKids1->GetElements())
+                {
+                    auto pRefKid1 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid1);
+                    if (pRefKid1)
+                    {
+                        auto pObject2 = pRefKid1->LookupObject();
+                        if (pObject2)
+                        {
+                            auto pType2 = dynamic_cast<vcl::filter::PDFNameElement*>(
+                                pObject2->Lookup("Type"));
+                            if (pType2 && pType2->GetValue() == "StructElem")
+                            {
+                                auto pS2 = dynamic_cast<vcl::filter::PDFNameElement*>(
+                                    pObject2->Lookup("S"));
+                                if (pS2 && pS2->GetValue() == "TR")
+                                {
+                                    int nTD(0);
+                                    auto pKids2 = dynamic_cast<vcl::filter::PDFArrayElement*>(
+                                        pObject2->Lookup("K"));
+                                    CPPUNIT_ASSERT(pKids2);
+                                    for (auto pKid2 : pKids2->GetElements())
+                                    {
+                                        auto pRefKid2
+                                            = dynamic_cast<vcl::filter::PDFReferenceElement*>(
+                                                pKid2);
+                                        if (pRefKid2)
+                                        {
+                                            auto pObject3 = pRefKid2->LookupObject();
+                                            if (pObject3)
+                                            {
+                                                auto pType3
+                                                    = dynamic_cast<vcl::filter::PDFNameElement*>(
+                                                        pObject3->Lookup("Type"));
+                                                if (pType3 && pType3->GetValue() == "StructElem")
+                                                {
+                                                    auto pS3 = dynamic_cast<
+                                                        vcl::filter::PDFNameElement*>(
+                                                        pObject3->Lookup("S"));
+                                                    if (pS3 && pS3->GetValue() == "TD")
+                                                    {
+                                                        ++nTD;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    CPPUNIT_ASSERT_EQUAL(int(3), nTD);
+                                    ++nTR;
+                                }
+                            }
+                        }
+                    }
+                }
+                CPPUNIT_ASSERT_EQUAL(int(2), nTR);
+                ++nTable;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(int(1), nTable);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
 {
     loadFromURL(u"master.odm");

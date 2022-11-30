@@ -33,8 +33,10 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
 #include <svx/sdooitm.hxx>
@@ -217,6 +219,7 @@ namespace sdr::contact
                 const sal_Int32 nRowCount(xTable->getRowCount());
                 const sal_Int32 nColCount(xTable->getColumnCount());
                 const sal_Int32 nAllCount(nRowCount * nColCount);
+                SdrPage const*const pPage(rTableObj.getSdrPageFromSdrObject());
 
                 if(nAllCount)
                 {
@@ -230,7 +233,7 @@ namespace sdr::contact
                     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
                     const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(rTableObj.GetGeoRect());
 
-                    // To create the CellBorderPrimitives, use the tolling from svx::frame::Array
+                    // To create the CellBorderPrimitives, use the tooling from svx::frame::Array
                     // which is capable of creating the needed visualization. Fill it during the
                     // anyways needed run over the table.
                     svx::frame::Array aArray;
@@ -241,11 +244,13 @@ namespace sdr::contact
                     // create single primitives per cell
                     for(aCellPos.mnRow = 0; aCellPos.mnRow < nRowCount; aCellPos.mnRow++)
                     {
+                        drawinglayer::primitive2d::Primitive2DContainer row;
                         // add RowHeight to CellBorderArray for primitive creation
                         aArray.SetRowHeight(aCellPos.mnRow, rTableLayouter.getRowHeight(aCellPos.mnRow));
 
                         for(aCellPos.mnCol = 0; aCellPos.mnCol < nColCount; aCellPos.mnCol++)
                         {
+                            drawinglayer::primitive2d::Primitive2DContainer cell;
                             // add ColWidth to CellBorderArray for primitive creation, only
                             // needs to be done in the 1st run
                             if(0 == aCellPos.mnRow)
@@ -324,7 +329,7 @@ namespace sdr::contact
                                         const drawinglayer::primitive2d::Primitive2DReference xCellReference(
                                             new drawinglayer::primitive2d::SdrCellPrimitive2D(
                                                 aCellMatrix, aAttribute));
-                                        aRetval.append(xCellReference);
+                                        cell.append(xCellReference);
                                     }
 
                                     // Create cell primitive without text.
@@ -347,7 +352,28 @@ namespace sdr::contact
                                     aRetvalForShadow.append(xCellReference);
                                 }
                             }
+                            if (pPage)
+                            {
+                                cell = drawinglayer::primitive2d::Primitive2DContainer {
+                                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                                        vcl::PDFWriter::TableData,
+                                        pPage->IsMasterPage(),
+                                        false,
+                                        std::move(cell)) };
+                            }
+                            row.append(cell);
                         }
+
+                        if (pPage)
+                        {
+                            row = drawinglayer::primitive2d::Primitive2DContainer {
+                                new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                                    vcl::PDFWriter::TableRow,
+                                    pPage->IsMasterPage(),
+                                    false,
+                                    std::move(row)) };
+                        }
+                        aRetval.append(row);
                     }
 
                     // now create all CellBorderPrimitives
