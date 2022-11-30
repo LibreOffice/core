@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_mailmerge2, \
     tl \
     unotest \
     utl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_mailmerge2, \

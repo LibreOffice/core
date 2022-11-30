@@ -14,7 +14,10 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/MailMergeType.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -23,8 +26,12 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -453,6 +460,69 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-
         // Record 5 has non-empty "Title" field => section is shown
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsVisible"));
     }
+}
+
+DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt", "5-with-blanks.ods",
+                            "names")
+{
+    executeMailMerge();
+
+    uno::Reference<css::frame::XModel> xModel(mxMMComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+
+    uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    CPPUNIT_ASSERT(xController.is());
+
+    uno::Reference<css::text::XTextViewCursorSupplier> xSupplier(xController, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSupplier.is());
+
+    uno::Reference<css::text::XPageCursor> xPageCursor(xSupplier->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPageCursor.is());
+
+    xPageCursor->jumpToFirstPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xPageCursor->getPage());
+
+    uno::Reference<css::frame::XFrame> xFrame(xController->getFrame());
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDispatchProvider.is());
+
+    util::URL aURL;
+    aURL.Complete = ".uno:ExportDirectToPDF";
+    {
+        uno::Reference<css::util::XURLTransformer> xParser(css::util::URLTransformer::create(
+                                                           comphelper::getProcessComponentContext()));
+        CPPUNIT_ASSERT(xParser.is());
+        xParser->parseStrict(aURL);
+    }
+
+    uno::Reference<css::frame::XDispatch> xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
+    CPPUNIT_ASSERT(xDispatch.is());
+
+    const OUString sExportTo(msMailMergeOutputURL + "/ExportDirectToPDF.pdf");
+    uno::Sequence <css::beans::PropertyValue> aArgs {
+        comphelper::makePropertyValue("SynchronMode", true),
+        comphelper::makePropertyValue("URL", sExportTo)
+    };
+
+    xDispatch->dispatch(aURL, aArgs);
+    CPPUNIT_ASSERT(comphelper::DirectoryHelper::fileExists(sExportTo));
+
+    SvFileStream aPDFFile(sExportTo, StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aPDFFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    CPPUNIT_ASSERT(pPDFium);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(5, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(4, pPdfPage->getObjectCount());
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabelle1")
