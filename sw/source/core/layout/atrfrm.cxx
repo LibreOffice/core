@@ -2800,7 +2800,14 @@ SdrObject* SwFrameFormat::FindRealSdrObject()
         std::pair<Point, bool> const tmp(aNullPt, false);
         SwFlyFrame* pFly = static_cast<SwFlyFrame*>(::GetFrameOfModify( nullptr, *this, SwFrameType::Fly,
                                                     nullptr, &tmp));
-        return pFly ? pFly->GetVirtDrawObj() : nullptr;
+        if( pFly )
+            return pFly->GetVirtDrawObj();
+
+        if( !GetDoc() || !GetDoc()->GetDocShell() ||
+            GetDoc()->GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+            return nullptr;
+
+        // tdf#126477 fix lost charts in embedded documents
     }
     return FindSdrObject();
 }

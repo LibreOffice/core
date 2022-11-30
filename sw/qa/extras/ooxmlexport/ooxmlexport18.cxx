@@ -12,6 +12,7 @@
 #include <queue>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -210,6 +211,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:fldChar", 3);
     assertXPath(pXmlDoc, "//w:fldChar", 3); // no field characters elsewhere
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
+{
+    loadAndReload("embedded_chart.odt");
+
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
+    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+
+    // Check number of embedded objects.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
+
+    uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName(aSeq[0]),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier2(xObj, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xAccess2(xTEOSupplier2->getEmbeddedObjects());
+    uno::Sequence<OUString> aSeq2(xAccess2->getElementNames());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the chart lost in the embedded document.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq2.getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
