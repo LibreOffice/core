@@ -8517,6 +8517,21 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             return;
         }
 
+        double aOrigin[2] = { 0.0, 0.0 };
+        if (auto* pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("MediaBox")))
+        {
+            const auto& rElements = pArray->GetElements();
+            if (rElements.size() >= 4)
+            {
+                // get x1, y1 of the rectangle.
+                for (sal_Int32 nIdx = 0; nIdx < 2; ++nIdx)
+                {
+                    if (const auto* pNumElement = dynamic_cast<filter::PDFNumberElement*>(rElements[nIdx]))
+                        aOrigin[nIdx] = pNumElement->GetValue();
+                }
+            }
+        }
+
         std::vector<filter::PDFObjectElement*> aContentStreams;
         if (filter::PDFObjectElement* pContentStream = pPage->LookupObject("Contents"))
             aContentStreams.push_back(pContentStream);
@@ -8618,7 +8633,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             // Now transform the object: rotate around the center and make sure that the rotation
             // doesn't affect the aspect ratio.
             basegfx::B2DHomMatrix aMat;
-            aMat.translate(-0.5 * aBBox.getWidth(), -0.5 * aBBox.getHeight());
+            aMat.translate(-0.5 * aBBox.getWidth() - aOrigin[0], -0.5 * aBBox.getHeight() - aOrigin[1]);
             aMat.rotate(basegfx::deg2rad(nAngle));
             aMat.translate(0.5 * nWidth, 0.5 * nHeight);
 
@@ -8641,10 +8656,14 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         auto & rResources = rExternalPDFStream.getCopiedResources();
         aCopier.copyPageResources(pPage, aLine, rResources);
 
-        aLine.append(" /BBox [ 0 0 ");
-        aLine.append(aBBox.getWidth());
-        aLine.append(" ");
-        aLine.append(aBBox.getHeight());
+        aLine.append(" /BBox [ ");
+        aLine.append(aOrigin[0]);
+        aLine.append(' ');
+        aLine.append(aOrigin[1]);
+        aLine.append(' ');
+        aLine.append(aBBox.getWidth() + aOrigin[0]);
+        aLine.append(' ');
+        aLine.append(aBBox.getHeight() + aOrigin[1]);
         aLine.append(" ]");
 
         if (!g_bDebugDisableCompression)

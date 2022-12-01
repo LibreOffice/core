@@ -3439,6 +3439,61 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im10 that contains the rectangle drawings in page 2.
+    auto pInnerIm = aDocument.LookupObject(10);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    auto pMatrix = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("Matrix"));
+    CPPUNIT_ASSERT(pMatrix);
+    const auto& rElements = pMatrix->GetElements();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), rElements.size());
+    sal_Int32 aMatTranslate[2] = { 600, -400 };
+    for (sal_Int32 nIdx = 4; nIdx < 6; ++nIdx)
+    {
+        const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[nIdx]);
+        CPPUNIT_ASSERT(pNumElement);
+        CPPUNIT_ASSERT_EQUAL(aMatTranslate[nIdx - 4],
+                             static_cast<sal_Int32>(pNumElement->GetValue()));
+    }
+
+    auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("BBox"));
+    CPPUNIT_ASSERT(pBBox);
+    const auto& rElements2 = pBBox->GetElements();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements2.size());
+    sal_Int32 aBBox[2] = { -800, -600 };
+    for (sal_Int32 nIdx = 0; nIdx < 2; ++nIdx)
+    {
+        const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements2[nIdx]);
+        CPPUNIT_ASSERT(pNumElement);
+        CPPUNIT_ASSERT_EQUAL(aBBox[nIdx], static_cast<sal_Int32>(pNumElement->GetValue()));
+    }
+
+#endif
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
