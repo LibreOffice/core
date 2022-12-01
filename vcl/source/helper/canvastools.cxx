@@ -38,6 +38,7 @@
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <vcl/bitmapex.hxx>
 
@@ -174,7 +175,8 @@ namespace vcl::unotools
                 return ::BitmapEx();
 
             // tunnel directly for known implementation
-            VclCanvasBitmap* pImplBitmap = dynamic_cast<VclCanvasBitmap*>(xInputBitmap.get());
+            VclCanvasBitmap* pImplBitmap
+                = comphelper::getFromUnoTunnel<VclCanvasBitmap>(xInputBitmap);
             if( pImplBitmap )
                 return pImplBitmap->getBitmapEx();
 
