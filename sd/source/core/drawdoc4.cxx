@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
@@ -604,6 +605,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
 void SdDrawDocument::CreateDefaultCellStyles()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return;
+
     Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<css::document::XImporter> xImporter(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         "com.sun.star.comp.Draw.XMLOasisStylesImporter",
