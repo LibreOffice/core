@@ -221,48 +221,9 @@ MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
     return MapUnit::Map100thMM;
 }
 
-static rtl::Reference<SfxItemPool> g_Pool1, g_Pool2, g_Pool3;
-
-/** If we let the libc runtime clean us up, we trigger a crash */
-namespace
+rtl::Reference<SfxItemPool> ChartItemPool::CreateChartItemPool()
 {
-class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
-{
-    void SAL_CALL queryTermination( const css::lang::EventObject& ) override
-    {}
-    void SAL_CALL notifyTermination( const css::lang::EventObject& ) override
-    {
-        g_Pool1.clear();
-        g_Pool2.clear();
-        g_Pool3.clear();
-    }
-    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
-    {}
-};
-};
-
-SfxItemPool& ChartItemPool::GetGlobalChartItemPool()
-{
-    if (!g_Pool1)
-    {
-        // similar logic to SdrModel's pool, but with our chart pool tagged on the end
-        g_Pool1 = new SdrItemPool(nullptr);
-        g_Pool2 = EditEngine::CreatePool();
-        g_Pool3 = new ChartItemPool();
-        g_Pool1->SetSecondaryPool(g_Pool2.get());
-
-        g_Pool1->SetDefaultMetric(MapUnit::Map100thMM);
-        g_Pool1->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
-        g_Pool1->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
-
-        g_Pool2->SetSecondaryPool(g_Pool3.get());
-        g_Pool1->FreezeIdRanges();
-
-        css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-        css::uno::Reference< css::frame::XTerminateListener > xListener( new TerminateListener );
-        xDesktop->addTerminateListener( xListener );
-    }
-    return *g_Pool1;
+    return new ChartItemPool();
 }
 
 } //  namespace chart
