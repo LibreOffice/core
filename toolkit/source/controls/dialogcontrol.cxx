@@ -792,7 +792,7 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
     TabPage* pPage = pXPage ? pXPage->getTabPage() : nullptr;
     if ( xTabCntrl.is() && pPage )
     {
-        VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );
+        VCLXMultiPage* pXTab = comphelper::getFromUnoTunnel< VCLXMultiPage >( xTabCntrl );
         if ( pXTab )
         {
             OUString sTitle;

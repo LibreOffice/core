@@ -2398,6 +2398,17 @@ void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 VCLXMultiPage::~VCLXMultiPage()
 {
 }
+
+sal_Int64 VCLXMultiPage::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(
+        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
+}
+
+css::uno::Sequence<sal_Int8> const & VCLXMultiPage::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
+}
+
 void SAL_CALL VCLXMultiPage::dispose()
 {
     SolarMutexGuard aGuard;

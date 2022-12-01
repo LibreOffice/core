@@ -177,6 +177,9 @@ public:
     VCLXMultiPage();
     virtual ~VCLXMultiPage() override;
 
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
+
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;
 
