@@ -9,9 +9,7 @@
 
 #include <sal/config.h>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -29,78 +27,31 @@
 
 using namespace css;
 
-namespace
-{
-constexpr OUStringLiteral DATA_DIRECTORY = u"/xmlsecurity/qa/unit/signing/data/";
-}
-
 /// Testsuite for the document signing feature.
-class SigningTest2 : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SigningTest2 : public UnoApiXmlTest
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
-    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
-
 public:
     SigningTest2();
-    virtual void setUp() override;
-    virtual void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
 
-SigningTest2::SigningTest2() {}
-
-void SigningTest2::setUp()
+SigningTest2::SigningTest2()
+    : UnoApiXmlTest("/xmlsecurity/qa/unit/signing/data/")
 {
-    test::BootstrapFixture::setUp();
-
-    // Initialize crypto after setting up the environment variables.
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void SigningTest2::tearDown()
-{
-    if (mxComponent.is())
-    {
-        css::uno::Reference<css::util::XCloseable> closer(mxComponent, css::uno::UNO_QUERY);
-        if (closer.is())
-        {
-            closer->close(true);
-        }
-        mxComponent->dispose();
-    }
-
-    test::BootstrapFixture::tearDown();
 }
 
 /// Test if a macro signature from a ODF Database is preserved when saving
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
 {
-    const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "odb_signed_macros.odb");
-
-    // load the file
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
+    loadFromURL(u"odb_signed_macros.odb");
 
     // save as ODB
-    utl::TempFileNamed aTempFileSaveAsODB;
-    aTempFileSaveAsODB.EnableKillingFile();
-    try
-    {
-        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(OUString("StarOffice XML (Base)")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAsODB.GetURL(), descSaveAs);
-    }
-    catch (...)
-    {
-        CPPUNIT_FAIL("Failed to save ODB file");
-    }
+    save("StarOffice XML (Base)");
 
     // Parse the resulting XML.
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, aTempFileSaveAsODB.GetURL(), embed::ElementModes::READ);
+            ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
     uno::Reference<embed::XStorage> xMetaInf
         = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
@@ -123,5 +74,7 @@ void SigningTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.w3.org/2000/09/xmldsig#"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xd"), BAD_CAST("http://uri.etsi.org/01903/v1.3.2#"));
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
