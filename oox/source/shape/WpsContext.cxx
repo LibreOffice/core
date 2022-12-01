@@ -220,7 +220,10 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                                     {
                                         uno::Reference<beans::XPropertySet> xRunPropSet(
                                             xRun, uno::UNO_QUERY);
-                                        xRunPropSet->setPropertyValue("CharColor", xCharColor);
+                                        Color aRunColor = COL_AUTO;
+                                        xRunPropSet->getPropertyValue("CharColor") >>= aRunColor;
+                                        if (aRunColor == COL_AUTO)
+                                            xRunPropSet->setPropertyValue("CharColor", xCharColor);
                                     }
                                 }
                             }
