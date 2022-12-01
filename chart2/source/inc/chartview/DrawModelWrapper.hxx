@@ -40,7 +40,7 @@ class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper final : private SdrModel
 private:
     rtl::Reference<SvxDrawPage> m_xMainDrawPage;
     rtl::Reference<SvxDrawPage> m_xHiddenDrawPage;
-
+    rtl::Reference<SfxItemPool> m_xChartItemPool;
     VclPtr<OutputDevice> m_pRefDevice;
 
 public:
