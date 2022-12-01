@@ -2650,6 +2650,16 @@ VCLXTabPage::~VCLXTabPage()
 {
 }
 
+sal_Int64 VCLXTabPage::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(
+        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
+}
+
+css::uno::Sequence<sal_Int8> const & VCLXTabPage::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
+}
+
 // css::awt::XView
 void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 {
