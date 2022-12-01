@@ -3386,6 +3386,59 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportRefToKids)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im5 that contains the rectangle drawings.
+    auto pInnerIm = aDocument.LookupObject(5);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    auto pFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pInnerIm->Lookup("Filter"));
+    CPPUNIT_ASSERT(pFilter);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Filter must be FlateDecode", OString("FlateDecode"),
+                                 pFilter->GetValue());
+
+    vcl::filter::PDFStreamElement* pStream = pInnerIm->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Without the fix, the stream is doubly compressed,
+    // hence one decompression will not yield the "re" expressions.
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    OString aImage = "100 0 30 50 re B*\n70 67 50 30 re B*\n";
+    auto it = std::search(pStart, pEnd, aImage.getStr(), aImage.getStr() + aImage.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+#endif
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
