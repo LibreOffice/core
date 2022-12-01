@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weak.hxx>
 
 #include <svl/numuno.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -131,9 +130,10 @@ public:
 
 //  class VCLXCheckBox
 
-class TOOLKIT_DLLPUBLIC VCLXCheckBox final : public css::awt::XCheckBox,
-                        public css::awt::XButton,
-                        public VCLXGraphicControl
+class TOOLKIT_DLLPUBLIC VCLXCheckBox final : public cppu::ImplInheritanceHelper<
+                        VCLXGraphicControl,
+                        css::awt::XCheckBox,
+                        css::awt::XButton>
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -145,15 +145,6 @@ private:
 
 public:
                     VCLXCheckBox();
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
 
     // css::lang::XComponent
@@ -188,9 +179,10 @@ public:
 
 //  class VCLXRadioButton
 
-class TOOLKIT_DLLPUBLIC VCLXRadioButton final : public css::awt::XRadioButton,
-                        public css::awt::XButton,
-                        public VCLXGraphicControl
+class TOOLKIT_DLLPUBLIC VCLXRadioButton final : public cppu::ImplInheritanceHelper<
+                        VCLXGraphicControl,
+                        css::awt::XRadioButton,
+                        css::awt::XButton>
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -203,15 +195,6 @@ private:
 
 public:
                     VCLXRadioButton();
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;
@@ -244,8 +227,7 @@ public:
 
 //  class VCLXFixedHyperlink
 class VCLXFixedHyperlink final :
-    public css::awt::XFixedHyperlink,
-    public VCLXWindow
+    public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XFixedHyperlink>
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -259,17 +241,8 @@ public:
     VCLXFixedHyperlink();
     virtual ~VCLXFixedHyperlink() override;
 
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XFixedHyperlink
     void SAL_CALL setText( const OUString& Text ) override;
@@ -297,23 +270,13 @@ public:
 
 //  class VCLXFixedText
 
-class VCLXFixedText final : public css::awt::XFixedText,
-                        public VCLXWindow
+class VCLXFixedText final : public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XFixedText>
 {
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                         VCLXFixedText();
                         virtual ~VCLXFixedText() override;
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XFixedText
     void SAL_CALL setText( const OUString& Text ) override;
@@ -333,8 +296,8 @@ public:
 
 //  class VCLXScrollBar
 
-class TOOLKIT_DLLPUBLIC VCLXScrollBar final : public css::awt::XScrollBar,
-                        public VCLXWindow
+class TOOLKIT_DLLPUBLIC VCLXScrollBar final :
+                        public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XScrollBar>
 {
 private:
     AdjustmentListenerMultiplexer maAdjustmentListeners;
@@ -344,14 +307,6 @@ private:
 
 public:
                     VCLXScrollBar();
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
 
     // css::lang::XComponent
@@ -396,10 +351,11 @@ public:
 
 //  class VCLXEdit
 
-class SAL_DLLPUBLIC_RTTI VCLXEdit :  public css::awt::XTextComponent,
-                    public css::awt::XTextEditField,
-                    public css::awt::XTextLayoutConstrains,
-                    public VCLXWindow
+class SAL_DLLPUBLIC_RTTI VCLXEdit :  public cppu::ImplInheritanceHelper<
+                    VCLXWindow,
+                    css::awt::XTextComponent,
+                    css::awt::XTextEditField,
+                    css::awt::XTextLayoutConstrains>
 {
 private:
     TextListenerMultiplexer maTextListeners;
@@ -413,15 +369,6 @@ public:
                     VCLXEdit();
 
     TextListenerMultiplexer&    GetTextListeners() { return maTextListeners; }
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
 
     // css::lang::XComponent
@@ -463,7 +410,7 @@ public:
 
 
 //  class VCLXSpinField
-class VCLXSpinField : public css::awt::XSpinField, public VCLXEdit
+class VCLXSpinField : public cppu::ImplInheritanceHelper<VCLXEdit, css::awt::XSpinField>
 {
 private:
     SpinListenerMultiplexer maSpinListeners;
@@ -473,15 +420,6 @@ protected:
 
 public:
                     VCLXSpinField();
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
 
     // css::awt::XSpinField
@@ -542,20 +480,11 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class TOOLKIT_DLLPUBLIC SVTXNumericField final : public css::awt::XNumericField, public SVTXFormattedField
+class TOOLKIT_DLLPUBLIC SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
 {
 public:
                     SVTXNumericField();
                     virtual ~SVTXNumericField() override;
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                           SAL_CALL acquire() noexcept override  { SVTXFormattedField::acquire(); }
-    void                           SAL_CALL release() noexcept override  { SVTXFormattedField::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XNumericField
     void SAL_CALL setValue( double Value ) override;

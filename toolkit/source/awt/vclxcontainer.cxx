@@ -18,10 +18,7 @@
  */
 
 #include <awt/vclxcontainer.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
 #include <vcl/svapp.hxx>
@@ -42,29 +39,6 @@ VCLXContainer::VCLXContainer()
 
 VCLXContainer::~VCLXContainer()
 {
-}
-
-// css::uno::XInterface
-css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        static_cast< css::awt::XVclContainer* >(this),
-                                        static_cast< css::awt::XVclContainerPeer* >(this) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-IMPL_IMPLEMENTATION_ID( VCLXContainer )
-
-// css::lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > VCLXContainer::getTypes()
-{
-    static const ::cppu::OTypeCollection aTypeList(
-        cppu::UnoType<css::lang::XTypeProvider>::get(),
-        cppu::UnoType<css::awt::XVclContainer>::get(),
-        cppu::UnoType<css::awt::XVclContainerPeer>::get(),
-        VCLXWindow::getTypes()
-    );
-    return aTypeList.getTypes();
 }
 
 

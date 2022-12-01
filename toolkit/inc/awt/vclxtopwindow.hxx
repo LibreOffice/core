@@ -22,33 +22,20 @@
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
-#include <cppuhelper/weak.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <awt/vclxcontainer.hxx>
 
 namespace com::sun::star::awt { class XMenuBar; }
 
-typedef ::cppu::ImplHelper2 <   css::awt::XTopWindow2, css::awt::XSystemDependentWindowPeer
-                            >   VCLXTopWindow_XBase;
 
-
-class VCLXTopWindow: public VCLXTopWindow_XBase,
-                     public VCLXContainer
+class VCLXTopWindow: public cppu::ImplInheritanceHelper<
+                        VCLXContainer, css::awt::XTopWindow2, css::awt::XSystemDependentWindowPeer >
 {
 public:
     VCLXTopWindow();
     virtual ~VCLXTopWindow() override;
-
-    // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XSystemDependentWindowPeer
     css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;

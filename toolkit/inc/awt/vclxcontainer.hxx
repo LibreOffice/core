@@ -21,26 +21,17 @@
 
 #include <com/sun/star/awt/XVclContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-class VCLXContainer : public css::awt::XVclContainer,
-                        public css::awt::XVclContainerPeer,
-                        public VCLXWindow
+class VCLXContainer : public cppu::ImplInheritanceHelper<VCLXWindow,
+                        css::awt::XVclContainer,
+                        css::awt::XVclContainerPeer>
 {
 public:
                     VCLXContainer();
                     virtual ~VCLXContainer() override;
-
-    // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId() override;
 
     // css::awt::XVclContainer
     void SAL_CALL addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;

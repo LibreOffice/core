@@ -21,25 +21,16 @@
 
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-class VCLXSystemDependentWindow final : public css::awt::XSystemDependentWindowPeer,
-                                                    public VCLXWindow
+class VCLXSystemDependentWindow final :
+    public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XSystemDependentWindowPeer>
 {
 public:
     VCLXSystemDependentWindow();
     virtual ~VCLXSystemDependentWindow() override;
-
-    // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XSystemDependentWindowPeer
     css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;

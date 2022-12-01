@@ -30,7 +30,6 @@
 #endif
 
 #include <vcl/sysdata.hxx>
-#include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 
 #include <awt/vclxtopwindow.hxx>
@@ -225,29 +224,6 @@ VCLXTopWindow::VCLXTopWindow()
 
 VCLXTopWindow::~VCLXTopWindow()
 {
-}
-
-// css::uno::XInterface
-css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
-
-    if (!aRet.hasValue())
-        aRet = VCLXTopWindow_XBase::queryInterface( rType );
-    if ( !aRet.hasValue() )
-        aRet = VCLXContainer::queryInterface( rType );
-
-    return aRet;
-}
-
-css::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-css::uno::Sequence< css::uno::Type > VCLXTopWindow::getTypes()
-{
-    return ::comphelper::concatSequences( VCLXTopWindow_XBase::getTypes(), VCLXContainer::getTypes() );
 }
 
 

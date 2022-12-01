@@ -24,9 +24,6 @@
 #endif
 
 #include <awt/vclxsystemdependentwindow.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 #ifdef MACOSX
 #include <premac.h>
@@ -46,27 +43,6 @@ VCLXSystemDependentWindow::VCLXSystemDependentWindow()
 
 VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 {
-}
-
-// css::uno::XInterface
-css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        static_cast< css::awt::XSystemDependentWindowPeer* >(this) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-IMPL_IMPLEMENTATION_ID( VCLXSystemDependentWindow )
-
-// css::lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > VCLXSystemDependentWindow::getTypes()
-{
-    static const ::cppu::OTypeCollection aTypeList(
-        cppu::UnoType<css::lang::XTypeProvider>::get(),
-        cppu::UnoType<css::awt::XSystemDependentWindowPeer>::get(),
-        VCLXWindow::getTypes()
-    );
-    return aTypeList.getTypes();
 }
 
 css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
