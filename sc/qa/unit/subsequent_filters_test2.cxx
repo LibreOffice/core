@@ -11,8 +11,6 @@
 
 #include <memory>
 
-#include <test/unoapixml_test.hxx>
-
 #include <osl/thread.h>
 #include <sfx2/docfile.hxx>
 #include <svl/numformat.hxx>

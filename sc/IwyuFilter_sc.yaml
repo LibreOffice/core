@@ -378,9 +378,6 @@ excludelist:
     sc/qa/unit/screenshots/screenshots.cxx:
     # Needed for template
     - sfx2/sfxdlg.hxx
-    sc/qa/unit/subsequent_filters-test.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sc/qa/unit/subsequent_export_test.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -396,9 +393,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XResultListener.hpp
-    sc/source/core/inc/arraysumfunctor.hxx:
-    # Needed for uintptr_t
-    - cstdint
     sc/source/core/opencl/formulagroupcl.cxx:
     # Needed for implicit dtor in inverseMatrix()
     - scmatrix.hxx
@@ -573,9 +567,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/ui/XUIElementFactory.hpp
-    sc/source/ui/vba/service.hxx:
-    # Used in extern declaration
-    - namespace comphelper::service_decl { class ServiceDecl; } }
     sc/source/ui/vba/vbaassistant.hxx:
     # base class has to be a complete type
     - ooo/vba/XAssistant.hpp

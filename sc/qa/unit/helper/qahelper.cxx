@@ -11,9 +11,7 @@
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
 #include <stlsheet.hxx>
@@ -23,22 +21,13 @@
 #include <tools/UnitConversion.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <formula/errorcodes.hxx>
 #include <clipcontext.hxx>
 #include <clipparam.hxx>
-#include <cppunit/Asserter.h>
-#include <cppunit/AdditionalMessage.h>
 #include <refundo.hxx>
 #include <sal/log.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/gridprinter.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/frame.hxx>
 #include <undoblk.hxx>
-#include <unotools/tempfile.hxx>
 #include <scdll.hxx>
 #include <scitems.hxx>
 #include <stringutil.hxx>
@@ -51,10 +40,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
-
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;

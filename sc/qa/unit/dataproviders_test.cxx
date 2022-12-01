@@ -13,7 +13,6 @@
 #include <address.hxx>
 #include <dbdata.hxx>
 #include <datamapper.hxx>
-#include <scdll.hxx>
 #include <vcl/scheduler.hxx>
 #include <orcusxml.hxx>
 

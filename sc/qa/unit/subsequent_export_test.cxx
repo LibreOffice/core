@@ -11,10 +11,8 @@
 #include <config_fonts.h>
 
 #include "helper/debughelper.hxx"
-#include <sfx2/sfxmodelfactory.hxx>
 
 #include "helper/qahelper.hxx"
-#include <test/unoapixml_test.hxx>
 #include "helper/shared_test_impl.hxx"
 
 #include <userdat.hxx>
@@ -44,9 +42,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
-#include <osl/file.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>

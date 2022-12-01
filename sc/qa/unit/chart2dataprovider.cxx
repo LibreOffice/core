@@ -11,7 +11,6 @@
 
 #include <comphelper/propertyvalue.hxx>
 
-#include <docsh.hxx>
 #include <chart2uno.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

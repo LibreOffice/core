@@ -12,23 +12,12 @@
 #include "helper/scfiltertestbase.hxx"
 
 #include <docsh.hxx>
-#include <inputopt.hxx>
-#include <postit.hxx>
 #include <document.hxx>
-#include <drwlayer.hxx>
-#include <userdat.hxx>
-#include <formulacell.hxx>
 #include <testlotus.hxx>
-#include <dbdata.hxx>
-#include <sortparam.hxx>
-#include <scerrors.hxx>
-#include <scopetools.hxx>
-#include <undomanager.hxx>
 
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/svdpage.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>

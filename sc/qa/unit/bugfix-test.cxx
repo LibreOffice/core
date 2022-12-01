@@ -15,11 +15,8 @@
 #include <postit.hxx>
 #include <validat.hxx>
 #include <tabvwsh.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include "helper/qahelper.hxx"
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
