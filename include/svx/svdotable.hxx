@@ -267,6 +267,8 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
+    const TableLayouter& getTableLayouter() const;
+
 private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
@@ -278,11 +280,6 @@ private:
     virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
     SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;
-
-    // For the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
-    // TableLayouter for position and attribute information
-    friend class sdr::contact::ViewContactOfTableObj;
-    const TableLayouter& getTableLayouter() const;
 
     tools::Rectangle   maLogicRect;
     rtl::Reference<SdrTableObjImpl> mpImpl;
