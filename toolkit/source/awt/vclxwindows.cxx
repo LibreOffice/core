@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 
 #include <awt/vclxwindows.hxx>
@@ -2221,6 +2222,16 @@ VCLXDialog::VCLXDialog()
 VCLXDialog::~VCLXDialog()
 {
     SAL_INFO("toolkit", __FUNCTION__);
+}
+
+sal_Int64 VCLXDialog::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(
+        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
+}
+
+css::uno::Sequence<sal_Int8> const & VCLXDialog::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )

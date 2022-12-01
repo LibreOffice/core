@@ -121,6 +121,9 @@ public:
                         VCLXDialog();
                         virtual ~VCLXDialog() override;
 
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
+
     // css::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) override;
     virtual void SAL_CALL setHelpId( const OUString& Id ) override;

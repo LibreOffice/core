@@ -139,6 +139,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <helper/msgbox.hxx>
 #include <helper/scrollabledialog.hxx>
@@ -1545,7 +1546,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 // which creates a component object.
                 css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( false );
                 if ( xWinPeer.is() )
-                    *ppNewComp = dynamic_cast< VCLXDialog* >( xWinPeer.get() );
+                    *ppNewComp = comphelper::getFromUnoTunnel< VCLXDialog >( xWinPeer );
                 else
                     *ppNewComp = new VCLXDialog;
             }
