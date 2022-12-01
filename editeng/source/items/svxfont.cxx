@@ -441,7 +441,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     if( IsFixKerning() && ( nLen > 1 ) )
     {
         auto nKern = GetFixKerning();
-        std::vector<sal_Int32> aDXArray(nLen);
+        std::vector<sal_Int32> aDXArray;
         GetTextArray(pOut, rTxt, &aDXArray, nIdx, nLen);
         tools::Long nOldValue = aDXArray[0];
         sal_Int32 nSpaceCount = 0;
