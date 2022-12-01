@@ -331,6 +331,11 @@ protected:
     SwDoc* getSwDoc();
 
     /**
+     * Gets SwDocShell from loaded component
+     */
+    SwDocShell* getSwDocShell();
+
+    /**
      * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
      * parse it.
      */

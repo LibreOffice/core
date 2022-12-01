@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -447,6 +448,8 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
 
     UnoApiXmlTest::load(rURL, pPassword);
 
+    CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
+
     discardDumpedLayout();
     if (pName && mustCalcLayoutOf(pName))
         calcLayout();
@@ -581,12 +584,14 @@ void SwModelTestBase::createSwGlobalDoc(const char* pName)
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
 }
 
-SwDoc* SwModelTestBase::getSwDoc()
+SwDoc* SwModelTestBase::getSwDoc() { return getSwDocShell()->GetDoc(); }
+
+SwDocShell* SwModelTestBase::getSwDocShell()
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    return pTextDoc->GetDocShell()->GetDoc();
+    return pTextDoc->GetDocShell();
 }
 
 void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
