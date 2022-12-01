@@ -603,4 +603,11 @@ void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
     rStream.Seek(0);
 }
 
+void SwModelTestBase::WrapFromTempFile(SvMemoryStream& rStream)
+{
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    rStream.WriteStream(aFileStream);
+    rStream.Seek(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

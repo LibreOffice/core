@@ -341,6 +341,8 @@ protected:
      */
     void WrapReqifFromTempFile(SvMemoryStream& rStream);
 
+    void WrapFromTempFile(SvMemoryStream& rStream);
+
     bool isExported(){ return mbExported; }
 
 private:
