@@ -3346,6 +3346,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportRefToKids)
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+
+    auto pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+
+    // Without the fix LookupObject for all /Im's will fail.
+    for (auto const& rPair : pXObjects->GetItems())
+    {
+        if (rPair.first.startsWith("Im"))
+            CPPUNIT_ASSERT(pXObjects->LookupObject(rPair.first));
+    }
+
+#endif
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
