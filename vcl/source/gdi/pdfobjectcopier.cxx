@@ -283,6 +283,14 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
         SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
         auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
+        auto pFilterArray = dynamic_cast<filter::PDFArrayElement*>(pContent->Lookup("Filter"));
+        if (!pFilter && pFilterArray)
+        {
+            auto& aElements = pFilterArray->GetElements();
+            if (!aElements.empty())
+                pFilter = dynamic_cast<filter::PDFNameElement*>(aElements[0]);
+        }
+
         if (pFilter)
         {
             if (pFilter->GetValue() != "FlateDecode")
