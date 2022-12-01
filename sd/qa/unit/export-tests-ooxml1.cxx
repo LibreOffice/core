@@ -51,6 +51,7 @@ public:
     {
     }
 
+    void testTdf152335();
     void testTdf149803();
     void testTdf149311();
     void testTdf149128();
@@ -125,6 +126,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf152335);
     CPPUNIT_TEST(testTdf149803);
     CPPUNIT_TEST(testTdf149311);
     CPPUNIT_TEST(testTdf149128);
@@ -223,6 +225,16 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
         }
     }
 }
+}
+
+void SdOOXMLExportTest1::testTdf152335()
+{
+    createSdImpressDoc("pptx/tdf152335.pptx");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDocTheme = parseExport("ppt/theme/theme1.xml");
+    assertXPathChildren(
+        pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:effectStyleLst/a:effectStyle[3]", 1);
 }
 
 void SdOOXMLExportTest1::testTdf149803()
