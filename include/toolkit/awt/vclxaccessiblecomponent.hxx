@@ -22,7 +22,8 @@
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
@@ -42,8 +43,8 @@ class AccessibleRelationSetHelper;
 
 
 
-typedef ::cppu::ImplHelper1<
-    css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
+typedef ::cppu::ImplHelper2<
+    css::lang::XServiceInfo, css::lang::XUnoTunnel > VCLXAccessibleComponent_BASE;
 
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public comphelper::OAccessibleExtendedComponentHelper
@@ -88,6 +89,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     // css::accessibility::XAccessibleContext
     sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

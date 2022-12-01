@@ -58,8 +58,10 @@ namespace accessibility
             dispose();
         }
     }
-    IMPLEMENT_FORWARD_XINTERFACE2(AccessibleListBox, VCLXAccessibleComponent, ImplHelper2)
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleListBox, VCLXAccessibleComponent, ImplHelper2)
+    IMPLEMENT_FORWARD_XINTERFACE2(
+        AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_Base);
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2(
+        AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_Base);
 
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {

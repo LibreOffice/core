@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -105,6 +106,15 @@ uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames()
     return aNames;
 }
 
+sal_Int64 VCLXAccessibleComponent::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & VCLXAccessibleComponent::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
+}
+
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     /* Ignore VclEventId::WindowEndPopupMode, because the UNO accessibility wrapper
@@ -169,7 +179,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
                 uno::Reference<XAccessibleContext> xChildContext = xAcc->getAccessibleContext();
                 if (xChildContext.is())
                 {
-                    VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
+                    VCLXAccessibleComponent* pChildComponent = comphelper::getFromUnoTunnel<VCLXAccessibleComponent>(xChildContext);
                     if (pChildComponent)
                     {
                         css::uno::Any aNewStateValue;
@@ -190,7 +200,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
                 uno::Reference<XAccessibleContext> xChildContext = xAcc->getAccessibleContext();
                 if (xChildContext.is())
                 {
-                    VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
+                    VCLXAccessibleComponent* pChildComponent = comphelper::getFromUnoTunnel<VCLXAccessibleComponent>(xChildContext);
                     if (pChildComponent)
                     {
                         css::uno::Any aOldStateValue;
