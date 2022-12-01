@@ -22,7 +22,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
@@ -77,7 +79,8 @@ private:
     Reference< XTreeNode > mxRootNode;
 };
 
-class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XServiceInfo >
+class MutableTreeNode:
+    public ::cppu::WeakAggImplHelper3< XMutableTreeNode, XServiceInfo, css::lang::XUnoTunnel >
 {
     friend class MutableTreeDataModel;
 
@@ -117,6 +120,9 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 private:
     TreeNodeVector  maChildren;
@@ -177,12 +183,13 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
 
     if( mxRootNode.is() )
     {
-        rtl::Reference< MutableTreeNode > xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
+        rtl::Reference< MutableTreeNode > xOldImpl( comphelper::getFromUnoTunnel< MutableTreeNode >( mxRootNode ) );
         if( xOldImpl.is() )
             xOldImpl->mbIsInserted = false;
     }
 
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl(
+        comphelper::getFromUnoTunnel< MutableTreeNode >( xNode ) );
     if( !xImpl.is() || xImpl->mbIsInserted )
         throw IllegalArgumentException();
 
@@ -302,7 +309,8 @@ void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue )
 void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
 {
     std::unique_lock aGuard( maMutex );
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl(
+        comphelper::getFromUnoTunnel< MutableTreeNode >( xChildNode ) );
 
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
@@ -321,7 +329,8 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) > maChildren.size()) )
         throw IndexOutOfBoundsException();
 
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl(
+        comphelper::getFromUnoTunnel< MutableTreeNode >( xChildNode ) );
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
 
@@ -451,7 +460,8 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 {
     std::scoped_lock aGuard( maMutex );
 
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl(
+        comphelper::getFromUnoTunnel< MutableTreeNode >( xNode ) );
     if( xImpl.is() )
     {
         sal_Int32 nChildCount = maChildren.size();
@@ -509,6 +519,15 @@ Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  )
 {
     Sequence<OUString> aSeq { "com.sun.star.awt.tree.MutableTreeNode" };
     return aSeq;
+}
+
+sal_Int64 MutableTreeNode::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & MutableTreeNode::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 }
