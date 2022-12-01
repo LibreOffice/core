@@ -165,7 +165,6 @@ typedef int(*YieldFunc)(int fd, void* data);
 
 class SalXLib
 {
-protected:
     timeval         m_aTimeout;
     sal_uLong       m_nTimeoutMS;
     int             m_pTimeoutFDS[2];

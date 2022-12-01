@@ -417,7 +417,6 @@ public:
 
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
 {
-protected:
     VclPtr<vcl::Window> m_xContainer;
 
 public:

@@ -45,6 +45,8 @@ class FreetypeFont;
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;
+    SvpCairoTextRender                  m_aTextRenderImpl;
+    std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
@@ -55,8 +57,6 @@ public:
     }
 
 protected:
-    SvpCairoTextRender                  m_aTextRenderImpl;
-    std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
     cairo_t* createTmpCompatibleCairoContext() const;
 

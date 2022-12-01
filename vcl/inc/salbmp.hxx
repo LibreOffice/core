@@ -112,10 +112,6 @@ public:
     }
 
 protected:
-    BitmapChecksum mnChecksum;
-    bool           mbChecksumValid;
-
-protected:
     void updateChecksum() const;
     // helper function to convert data in 1,2,4 bpp formats to a 8/24/32bpp format
     enum class BitConvert
@@ -161,6 +157,11 @@ public:
 
         return r;
     }
+
+private:
+    BitmapChecksum mnChecksum;
+    bool           mbChecksumValid;
+
 };
 
 #endif

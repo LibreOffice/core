@@ -67,10 +67,6 @@ public:
     SAL_DLLPRIVATE bool IsLowerEnabled() const { return mbLowerEnabled; }
 
 protected:
-    tools::Rectangle       maUpperRect;
-    tools::Rectangle       maLowerRect;
-    tools::Rectangle       maDropDownRect; // not yet attached ...
-
     using Window::ImplInit;
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
 
@@ -85,6 +81,10 @@ private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
     SAL_DLLPRIVATE void   ImplInitSpinFieldData();
     SAL_DLLPRIVATE void   ImplCalcButtonAreas( const OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea, tools::Rectangle& rSpinUpArea, tools::Rectangle& rSpinDownArea );
+
+    tools::Rectangle       maUpperRect;
+    tools::Rectangle       maLowerRect;
+    tools::Rectangle       maDropDownRect; // not yet attached ...
 
     VclPtr<Edit>    mpEdit;
     AutoTimer       maRepeatTimer;

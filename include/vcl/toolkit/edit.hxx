@@ -85,6 +85,7 @@ private:
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
+    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
@@ -123,8 +124,6 @@ protected:
     SAL_DLLPRIVATE tools::Long        ImplGetExtraXOffset() const;
     SAL_DLLPRIVATE tools::Long        ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
-
-    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
     // DragAndDropClient
     using vcl::unohelper::DragAndDropClient::dragEnter;

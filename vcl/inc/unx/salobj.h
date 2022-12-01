@@ -55,7 +55,6 @@ private:
 
 class X11SalObject final : public SalObject
 {
-public:
     SystemEnvData maSystemChildData;
     SalFrame*       mpParent;
     ::Window        maParentWin;
@@ -65,6 +64,7 @@ public:
     SalClipRegion   maClipRegion;
     bool            mbVisible;
 
+public:
     static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
     static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow );
 

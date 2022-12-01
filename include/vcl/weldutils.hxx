@@ -435,8 +435,9 @@ public:
 */
 class VCL_DLLPUBLIC ReorderingDropTarget : public DropTargetHelper
 {
-protected:
     weld::TreeView& m_rTreeView;
+
+protected:
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
     virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 

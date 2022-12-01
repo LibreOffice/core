@@ -355,9 +355,9 @@ public:
 
 class VCL_DLLPUBLIC Container : virtual public Widget
 {
-protected:
     Link<Container&, void> m_aContainerFocusChangedHdl;
 
+protected:
     void signal_container_focus_changed() { m_aContainerFocusChangedHdl.Call(*this); }
 
 public:
@@ -397,10 +397,10 @@ public:
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
 {
-protected:
     Link<ScrolledWindow&, void> m_aVChangeHdl;
     Link<ScrolledWindow&, void> m_aHChangeHdl;
 
+protected:
     void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
     void signal_hadjustment_changed() { m_aHChangeHdl.Call(*this); }
 
@@ -629,9 +629,9 @@ public:
 
 class VCL_DLLPUBLIC Assistant : virtual public Dialog
 {
-protected:
     Link<const OString&, bool> m_aJumpPageHdl;
 
+protected:
     bool signal_jump_page(const OString& rIdent) { return m_aJumpPageHdl.Call(rIdent); }
 
 public:
@@ -1566,9 +1566,9 @@ struct VCL_DLLPUBLIC TriStateEnabled
 
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
-protected:
     Link<const OString&, void> m_aSelectHdl;
 
+protected:
     void signal_selected(const OString& rIdent) { m_aSelectHdl.Call(rIdent); }
 
 public:
@@ -1631,9 +1631,9 @@ class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
 
 class VCL_DLLPUBLIC LinkButton : virtual public Widget
 {
-protected:
     Link<LinkButton&, bool> m_aActivateLinkHdl;
 
+protected:
     bool signal_activate_link() { return m_aActivateLinkHdl.Call(*this); }
 
 public:
@@ -1647,9 +1647,9 @@ public:
 
 class VCL_DLLPUBLIC Scale : virtual public Widget
 {
-protected:
     Link<Scale&, void> m_aValueChangedHdl;
 
+protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
 public:
@@ -1755,11 +1755,11 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
 {
     friend class ::LOKTrigger;
 
-protected:
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<SpinButton&, void> m_aOutputHdl;
     Link<int*, bool> m_aInputHdl;
 
+protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
     bool signal_output()
@@ -1829,9 +1829,9 @@ class EntryFormatter;
 // are managed by a more complex Formatter which can support doubles.
 class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
 {
-protected:
     Link<FormattedSpinButton&, void> m_aValueChangedHdl;
 
+protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
 public:
@@ -1862,10 +1862,10 @@ public:
 
 class VCL_DLLPUBLIC Calendar : virtual public Widget
 {
-protected:
     Link<Calendar&, void> m_aSelectedHdl;
     Link<Calendar&, void> m_aActivatedHdl;
 
+protected:
     void signal_selected() { m_aSelectedHdl.Call(*this); }
     void signal_activated() { m_aActivatedHdl.Call(*this); }
 
@@ -2245,9 +2245,9 @@ public:
 
 class VCL_DLLPUBLIC Expander : virtual public Widget
 {
-protected:
     Link<Expander&, void> m_aExpandedHdl;
 
+protected:
     void signal_expanded() { m_aExpandedHdl.Call(*this); }
 
 public:
@@ -2352,9 +2352,9 @@ enum class Placement
 
 class VCL_DLLPUBLIC Menu
 {
-protected:
     Link<const OString&, void> m_aActivateHdl;
 
+protected:
     void signal_activate(const OString& rIdent) { m_aActivateHdl.Call(rIdent); }
 
 public:
@@ -2437,10 +2437,10 @@ public:
 
 class VCL_DLLPUBLIC Toolbar : virtual public Widget
 {
-protected:
     Link<const OString&, void> m_aClickHdl;
     Link<const OString&, void> m_aToggleMenuHdl;
 
+protected:
     friend class ::LOKTrigger;
 
     void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
@@ -2498,9 +2498,9 @@ public:
 
 class VCL_DLLPUBLIC Scrollbar : virtual public Widget
 {
-protected:
     Link<Scrollbar&, void> m_aChangeHdl;
 
+protected:
     void signal_adjustment_changed() { m_aChangeHdl.Call(*this); }
 
 public:

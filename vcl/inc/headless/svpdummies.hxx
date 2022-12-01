@@ -28,9 +28,9 @@ class SalGraphics;
 
 class SvpSalObject final : public SalObject
 {
-public:
     SystemEnvData m_aSystemChildData;
 
+public:
     virtual ~SvpSalObject() override;
 
     // override all pure virtual methods
