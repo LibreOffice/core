@@ -324,7 +324,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart();
 
     std::optional<bool> oAtLeastOneNumbered;
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    if (!rInfo.IsNumbered())
     {
         oAtLeastOneNumbered = false;
         SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
@@ -354,18 +354,15 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         }
     }
 
-    if (rWrt.mbXHTML)
+    // The list is numbered if the previous text node is numbered or any other previous text
+    // node is numbered.
+    bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
+    // XHTML </li> for the list item content, if there is an open <li>.
+    if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
     {
-        // The list is numbered if the previous text node is numbered or any other previous text
-        // node is numbered.
-        bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
-        // XHTML </li> for the list item content, if there is an open <li>.
-        if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
-        {
-            HTMLOutFuncs::Out_AsciiTag(
-                rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
-                false);
-        }
+        HTMLOutFuncs::Out_AsciiTag(
+            rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
+            false);
     }
 
     if (!bListEnd)

@@ -208,6 +208,13 @@ public:
         rStream.Seek(0);
     }
 
+    static void wrapHTMLFragment(const utl::TempFile& rTempFile, SvMemoryStream& rStream)
+    {
+        SvFileStream aFileStream(rTempFile.GetURL(), StreamMode::READ);
+        rStream.WriteStream(aFileStream);
+        rStream.Seek(0);
+    }
+
     /// Wraps an RTF fragment into a complete RTF file, so an RTF parser can handle it.
     static void wrapRtfFragment(const OUString& rURL, SvMemoryStream& rStream)
     {
@@ -284,6 +291,8 @@ public:
     void ExportToReqif();
     /// Import using the C++ HTML import filter, with xhtmlns=reqif-xhtml.
     void ImportFromReqif(const OUString& rUrl);
+    /// Export using the C++ HTML export filter
+    void ExportToHTML();
 };
 
 OUString SwHtmlDomExportTest::GetOlePath()
@@ -334,6 +343,15 @@ void SwHtmlDomExportTest::ExportToReqif()
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+}
+
+void SwHtmlDomExportTest::ExportToHTML()
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
     };
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 }
@@ -1533,6 +1551,49 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
     // the second para was not numbered.
     assertXPath(pXmlDoc,
                 "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedListHTML)
+{
+    // Given a document with a list, first para is numbered, second is not:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("list header");
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+    SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+    }
+    pWrtShell->Insert2("numbered");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert2("not numbered");
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        rTextNode.SetCountedInList(false);
+    }
+
+    // When exporting to HTML:
+    ExportToHTML();
+
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapHTMLFragment(maTempFile, aStream);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc); // if we have missing closing marks - parse error
+
+    // Without the accompanying fix in place, this test would have failed:
+    // - expected: <li><p>...</p><p>...</p></li>
+    // - actual  : <li><p>...</p><p>...</p>
+    // because a <li> without a matching </li> is not well-formed, and the </li> was omitted because
+    // the second para was not numbered.
+
+    assertXPath(pXmlDoc, "/html/body/ol/li/p", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
