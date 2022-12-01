@@ -25,6 +25,7 @@
 #include <svl/itempool.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svx3ditems.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/unolingu.hxx>
@@ -43,12 +44,22 @@ namespace chart
 {
 
 DrawModelWrapper::DrawModelWrapper()
-:   SdrModel(&ChartItemPool::GetGlobalChartItemPool())
+:   SdrModel()
 {
+    m_xChartItemPool = ChartItemPool::CreateChartItemPool();
+
     SetScaleUnit(MapUnit::Map100thMM);
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
+    SfxItemPool* pMasterPool = &GetItemPool();
+    pMasterPool->SetDefaultMetric(MapUnit::Map100thMM);
+    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
+    pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
+
+    // append chart pool to end of pool chain
+    pMasterPool->GetLastPoolInChain()->SetSecondaryPool(m_xChartItemPool.get());
+    pMasterPool->FreezeIdRanges();
     SetTextDefaults();
 
     //this factory needs to be created before first use of 3D scenes once upon an office runtime
@@ -92,6 +103,22 @@ DrawModelWrapper::DrawModelWrapper()
 
 DrawModelWrapper::~DrawModelWrapper()
 {
+    //remove m_pChartItemPool from pool chain
+    if(m_xChartItemPool)
+    {
+        SfxItemPool* pPool = &GetItemPool();
+        for (;;)
+        {
+            SfxItemPool* pSecondary = pPool->GetSecondaryPool();
+            if(pSecondary == m_xChartItemPool.get())
+            {
+                pPool->SetSecondaryPool (nullptr);
+                break;
+            }
+            pPool = pSecondary;
+        }
+        m_xChartItemPool.clear();
+    }
     m_pRefDevice.disposeAndClear();
 }
 
