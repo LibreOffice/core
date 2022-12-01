@@ -229,7 +229,7 @@ public:
 
 void SdImportTest2::testTdf152186()
 {
-    loadFromURL(u"pptx/tdf152186.pptx");
+    createSdImpressDoc("pptx/tdf152186.pptx");
     saveAndReload("Impress MS PowerPoint 2007 XML");
 
     bool bHasShadow;

@@ -56,6 +56,8 @@ public:
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(
             xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+
+        CPPUNIT_ASSERT(!getSdDocShell()->GetMedium()->GetWarningError());
     }
 
     void createSdDrawDoc(const char* pName = nullptr, const char* pPassword = nullptr)
@@ -67,6 +69,15 @@ public:
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"));
+
+        CPPUNIT_ASSERT(!getSdDocShell()->GetMedium()->GetWarningError());
+    }
+
+    sd::DrawDocShell* getSdDocShell()
+    {
+        SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pImpressDocument);
+        return pImpressDocument->GetDocShell();
     }
 
     uno::Reference<drawing::XDrawPage> getPage(int nPage)
