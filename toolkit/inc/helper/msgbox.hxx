@@ -53,10 +53,9 @@ class MessBox : public ButtonDialog
     Image maImage;
     bool mbHelpBtn;
     MessBoxStyle mnMessBoxStyle;
-
-protected:
     OUString maMessText;
 
+protected:
     void ImplInitButtons();
     void ImplPosControls();
 

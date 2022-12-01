@@ -48,7 +48,6 @@ typedef ::cppu::WeakImplHelper< css::io::XTempFile
 
 class OTempFileService : public OTempFileBase
 {
-protected:
     std::optional<utl::TempFileNamed> mpTempFile;
     std::mutex maMutex;
     SvStream* mpStream;
@@ -56,6 +55,7 @@ protected:
     bool mbInClosed;
     bool mbOutClosed;
 
+protected:
     void checkError () const;
     void checkConnected ();
 

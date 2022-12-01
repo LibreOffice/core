@@ -437,11 +437,9 @@ public:
 
 class SVTXFormattedField : public VCLXSpinField
 {
-protected:
     rtl::Reference<SvNumberFormatsSupplierObj> m_xCurrentSupplier;
     bool                    bIsStandardSupplier;
-
-    sal_Int32                   nKeyToSetDelayed;
+    sal_Int32               nKeyToSetDelayed;
 
 public:
     SVTXFormattedField();

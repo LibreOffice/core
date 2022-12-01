@@ -40,11 +40,9 @@ namespace utl
     {
         friend class OEventListenerImpl;
 
-    private:
         OEventListenerAdapter( const OEventListenerAdapter& _rSource ) = delete;
         const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource ) = delete;
 
-    protected:
         std::unique_ptr<OEventListenerAdapterImpl>  m_pImpl;
 
     protected:

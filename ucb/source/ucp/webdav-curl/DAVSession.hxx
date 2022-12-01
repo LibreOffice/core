@@ -177,14 +177,13 @@ public:
     virtual void abort() = 0;
 
 protected:
-    rtl::Reference< DAVSessionFactory > m_xFactory;
-
     explicit DAVSession( rtl::Reference< DAVSessionFactory > xFactory )
         : m_xFactory(std::move( xFactory )), m_nRefCount( 0 ) {}
 
     virtual ~DAVSession() {}
 
 private:
+    rtl::Reference< DAVSessionFactory > m_xFactory;
     DAVSessionFactory::Map::iterator m_aContainerIt;
     oslInterlockedCount m_nRefCount;
 

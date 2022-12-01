@@ -149,7 +149,6 @@ class DynamicResultSetWrapperListener
                 : public cppu::OWeakObject
                 , public css::ucb::XDynamicResultSetListener
 {
-protected:
     DynamicResultSetWrapper*    m_pOwner;
     osl::Mutex                  m_aMutex;
 
