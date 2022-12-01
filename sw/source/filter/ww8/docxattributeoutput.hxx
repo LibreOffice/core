@@ -723,15 +723,6 @@ protected:
     /// Writes a clearing line break at the end of run properties, if there are any.
     void WriteLineBreak();
 
-    /// Reference to the export, where to get the data from
-    DocxExport &m_rExport;
-
-    /// Fast serializer to output the data
-    ::sax_fastparser::FSHelperPtr m_pSerializer;
-
-    /// DrawingML access
-    oox::drawingml::DrawingML &m_rDrawingML;
-
 private:
 
     void DoWriteBookmarkTagStart(std::u16string_view bookmarkName);
@@ -774,6 +765,15 @@ private:
     void CmdEndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteRun );
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
     void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteCombChars = false );
+
+    /// Reference to the export, where to get the data from
+    DocxExport &m_rExport;
+
+    /// Fast serializer to output the data
+    ::sax_fastparser::FSHelperPtr m_pSerializer;
+
+    /// DrawingML access
+    oox::drawingml::DrawingML &m_rDrawingML;
 
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFontsAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;

@@ -52,12 +52,10 @@ class SwXContentControl
                                   css::container::XEnumerationAccess, css::text::XTextContent,
                                   css::text::XText, css::beans::XPropertySet>
 {
-public:
     class Impl;
-
-protected:
     sw::UnoImplPtr<Impl> m_pImpl;
 
+protected:
     void AttachImpl(const css::uno::Reference<css::text::XTextRange>& xTextRange,
                     sal_uInt16 nWhich);
 

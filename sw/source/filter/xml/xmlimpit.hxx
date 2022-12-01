@@ -31,7 +31,6 @@ class SvXMLAttrContainerItem;
 
 class SvXMLImportItemMapper
 {
-protected:
     SvXMLItemMapEntriesRef mrMapEntries;
 
 public:

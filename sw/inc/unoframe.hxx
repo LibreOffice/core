@@ -76,11 +76,12 @@ private:
     sal_Int64                       m_nVisibleAreaWidth;
     sal_Int64                       m_nVisibleAreaHeight;
     css::uno::Reference<css::text::XText> m_xParentText;
+    css::uno::Reference< css::beans::XPropertySet > mxStyleData;
+    css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
+
     void DisposeInternal();
 
 protected:
-    css::uno::Reference< css::beans::XPropertySet > mxStyleData;
-    css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
     virtual void Notify(const SfxHint&) override;
 
     virtual ~SwXFrame() override;

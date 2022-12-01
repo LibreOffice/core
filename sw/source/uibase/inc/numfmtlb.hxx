@@ -27,7 +27,6 @@ class SwView;
 
 class SW_DLLPUBLIC SwNumFormatBase
 {
-protected:
     sal_Int32           m_nStdEntry;
     sal_uInt32          m_nDefFormat;
     SvNumFormatType     m_nCurrFormatType;

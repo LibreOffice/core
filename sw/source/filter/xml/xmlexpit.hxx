@@ -33,9 +33,9 @@ class SvXMLExport;
 
 class SvXMLExportItemMapper
 {
-protected:
     SvXMLItemMapEntriesRef mrMapEntries;
 
+protected:
     /** fills the given attribute list with the items in the given set */
     void exportXML( const SvXMLExport& rExport,
                     SvXMLAttributeList& rAttrList,

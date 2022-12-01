@@ -257,13 +257,12 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
     SwNodeOffset m_nDeleteTextNodes;
-
-protected:
     SwNodeOffset m_nNodeDiff;
     /// start of Content in UndoNodes for Redo
     std::optional<SwNodeIndex> m_oUndoNodeIndex;
     sal_uInt16 m_nSetPos;                 // Start in the history list.
 
+protected:
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
     virtual ~SwUndoInserts() override;

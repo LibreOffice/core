@@ -118,6 +118,7 @@ public:
  */
 struct CSS1Expression
 {
+private:
     sal_Unicode cOp; // type of the link with its predecessor
     CSS1Token eType; // type of the expression
     OUString aValue; // value as string

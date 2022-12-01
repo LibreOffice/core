@@ -194,6 +194,7 @@ class SW_DLLPUBLIC SwXTextTableCursor final
 {
     SwFrameFormat* m_pFrameFormat;
     const SfxItemPropertySet* m_pPropSet;
+    sw::UnoCursorPointer m_pUnoCursor;
 
 public:
     SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const* pBox);
@@ -237,7 +238,6 @@ public:
 
     const SwUnoCursor&            GetCursor() const;
     SwUnoCursor&                  GetCursor();
-    sw::UnoCursorPointer m_pUnoCursor;
     SwFrameFormat* GetFrameFormat() const { return m_pFrameFormat; }
 };
 

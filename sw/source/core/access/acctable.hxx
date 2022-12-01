@@ -46,6 +46,11 @@ class SwAccessibleTable :
 {
     std::unique_ptr<SwAccessibleTableData_Impl> mpTableData;    // the table's data, protected by SolarMutex
     OUString m_sDesc;
+    typedef std::vector< std::pair<SwAccessibleContext*,
+        css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
+    Cells_t m_vecCellAdd;
+    Cells_t m_vecCellRemove;
+
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
@@ -213,10 +218,7 @@ public:
 
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground() override;
-    typedef std::vector< std::pair<SwAccessibleContext*,
-        css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
-    Cells_t m_vecCellAdd;
-    Cells_t m_vecCellRemove;
+
     void FireSelectionEvent( );
     void AddSelectionCell(SwAccessibleContext*, bool bAddOrRemove);
 };

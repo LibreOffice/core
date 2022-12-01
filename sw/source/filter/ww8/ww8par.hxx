@@ -894,9 +894,9 @@ public:
 
 class TextNodeListener : public SwClient
 {
-protected:
     SwTextNode *m_pTextNode;
 
+protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:

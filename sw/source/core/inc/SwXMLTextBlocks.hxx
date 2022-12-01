@@ -44,6 +44,8 @@ class SwXMLTextBlocks final : public SwImpBlocks
     SwXmlFlags              m_nFlags;
     OUString                m_aPackageName;
     tools::SvRef<SfxMedium> m_xMedium;
+    css::uno::Reference < css::embed::XStorage > m_xBlkRoot;
+    css::uno::Reference < css::embed::XStorage > m_xRoot;
 
     void ReadInfo();
     void WriteInfo();
@@ -51,8 +53,6 @@ class SwXMLTextBlocks final : public SwImpBlocks
     void ResetBlockMode();
 
 public:
-    css::uno::Reference < css::embed::XStorage > m_xBlkRoot;
-    css::uno::Reference < css::embed::XStorage > m_xRoot;
     SwXMLTextBlocks( const OUString& rFile );
     SwXMLTextBlocks( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText );
