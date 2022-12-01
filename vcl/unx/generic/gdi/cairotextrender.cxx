@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
+#include <comphelper/scopeguard.hxx>
 #include <unx/cairotextrender.hxx>
-
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
 #include <headless/CairoCommon.hxx>
@@ -180,6 +180,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         SAL_WARN("vcl", "no cairo context for text");
         return;
     }
+    comphelper::ScopeGuard releaseContext([this, cr]() { releaseCairoContext(cr); });
 
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
@@ -392,8 +393,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
         aI = aNext;
     }
-
-    releaseCairoContext(cr);
 
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     if (__lsan_enable)
