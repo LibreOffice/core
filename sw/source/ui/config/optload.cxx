@@ -375,10 +375,12 @@ SwCaptionPreview::SwCaptionPreview()
 
 void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    Wallpaper aBack(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Wallpaper aBack(rSettings.GetWindowColor());
     rRenderContext.SetBackground(aBack);
     rRenderContext.SetFillColor(aBack.GetColor());
     rRenderContext.SetLineColor(aBack.GetColor());
+    rRenderContext.SetTextColor(rSettings.GetWindowTextColor());
 
     if (!mbFontInitialized)
     {
