@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -251,7 +252,7 @@ namespace basegfx::unotools
         ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
             ::basegfx::unotools::UnoPolyPolygon* pPolyImpl =
-                dynamic_cast< ::basegfx::unotools::UnoPolyPolygon* >( xPoly.get() );
+                comphelper::getFromUnoTunnel< ::basegfx::unotools::UnoPolyPolygon >( xPoly );
 
             if( pPolyImpl )
             {
