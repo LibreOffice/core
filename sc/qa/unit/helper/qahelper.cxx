@@ -469,7 +469,7 @@ void ScUcalcTestBase::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void ScModelTestBase::createScDoc(const char* pName, const char* pPassword)
+void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool bCheckWarningError)
 {
     if (!pName)
         load("private:factory/scalc");
@@ -478,6 +478,9 @@ void ScModelTestBase::createScDoc(const char* pName, const char* pPassword)
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
+
+    if (bCheckWarningError)
+        CPPUNIT_ASSERT(!getScDocShell()->GetMedium()->GetWarningError());
 }
 
 ScDocument* ScModelTestBase::getScDoc()

@@ -2880,7 +2880,7 @@ void ScFiltersTest2::testTooManyColsRows()
 {
     // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
     // should be a warning on load.
-    createScDoc("ods/too-many-cols-rows.ods");
+    createScDoc("ods/too-many-cols-rows.ods", /*pPassword*/ nullptr, /*bCheckWarningError*/ false);
 
     ScDocShell* pDocSh = getScDocShell();
     SfxMedium* pMedium = pDocSh->GetMedium();
@@ -2888,7 +2888,8 @@ void ScFiltersTest2::testTooManyColsRows()
     CPPUNIT_ASSERT(pMedium->GetWarningError() == SCWARN_IMPORT_ROW_OVERFLOW
                    || pMedium->GetWarningError() == SCWARN_IMPORT_COLUMN_OVERFLOW);
 
-    createScDoc("xlsx/too-many-cols-rows.xlsx");
+    createScDoc("xlsx/too-many-cols-rows.xlsx", /*pPassword*/ nullptr,
+                /*bCheckWarningError*/ false);
 
     pDocSh = getScDocShell();
     pMedium = pDocSh->GetMedium();

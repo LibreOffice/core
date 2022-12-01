@@ -154,7 +154,7 @@ public:
     {
     }
 
-    void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr);
+    void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr, bool bCheckErrorCode = true);
     ScDocument* getScDoc();
     ScDocShell* getScDocShell();
     ScTabViewShell* getViewShell();
