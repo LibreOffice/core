@@ -592,8 +592,7 @@ CompatibleDC::CompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int 
         return;
     }
 
-    mpImpl = dynamic_cast<WinSalGraphicsImplBase*>(rWinGraphics.GetImpl());
-    assert(mpImpl != nullptr);
+    mpImpl = rWinGraphics.getWinSalGraphicsImplBase();
     mhCompatibleDC = CreateCompatibleDC(rWinGraphics.getHDC());
 
     // move the origin so that we always paint at 0,0 - to keep the bitmap
@@ -642,10 +641,18 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
 {
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled() && !mbPrinter)
-        mpImpl.reset(new WinSkiaSalGraphicsImpl(*this, pProvider));
+    {
+        auto const impl = new WinSkiaSalGraphicsImpl(*this, pProvider);
+        mpImpl.reset(impl);
+        mWinSalGraphicsImplBase = impl;
+    }
     else
 #endif
-        mpImpl.reset(new WinSalGraphicsImpl(*this));
+    {
+        auto const impl = new WinSalGraphicsImpl(*this);
+        mpImpl.reset(impl);
+        mWinSalGraphicsImplBase = impl;
+    }
 }
 
 WinSalGraphics::~WinSalGraphics()
@@ -799,8 +806,7 @@ tools::Long WinSalGraphics::GetGraphicsWidth() const
 
 void WinSalGraphics::Flush()
 {
-    if(WinSalGraphicsImplBase* impl = dynamic_cast<WinSalGraphicsImplBase*>(GetImpl()))
-        impl->Flush();
+    mWinSalGraphicsImplBase->Flush();
 }
 
 void WinSalGraphics::ResetClipRegion()

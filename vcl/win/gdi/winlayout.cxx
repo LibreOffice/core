@@ -214,9 +214,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bo
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
-    if (!mbPrinter && pImpl->DrawTextLayout(rLayout))
-        return; // handled by pImpl
+    if (!mbPrinter && mWinSalGraphicsImplBase->DrawTextLayout(rLayout))
+        return; // handled by mWinSalGraphicsImplBase
 
     HDC hDC = getHDC();
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());

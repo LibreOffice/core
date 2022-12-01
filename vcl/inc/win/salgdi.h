@@ -144,6 +144,7 @@ class WinSalGraphics : public SalGraphics
 
 protected:
     std::unique_ptr<SalGraphicsImpl> mpImpl;
+    WinSalGraphicsImplBase * mWinSalGraphicsImplBase;
 
 private:
     HDC                     mhLocalDC;              // HDC
@@ -210,6 +211,7 @@ public:
     virtual ~WinSalGraphics() override;
 
     SalGraphicsImpl* GetImpl() const override;
+    WinSalGraphicsImplBase * getWinSalGraphicsImplBase() const { return mWinSalGraphicsImplBase; }
     bool isPrinter() const;
     bool isVirtualDevice() const;
     bool isWindow() const;

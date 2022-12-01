@@ -1152,9 +1152,7 @@ void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCol
 
 void WinSalGraphics::ClearDevFontCache()
 {
-    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(GetImpl());
-    assert(pImpl != nullptr);
-    pImpl->ClearDevFontCache();
+    mWinSalGraphicsImplBase->ClearDevFontCache();
     ImplReleaseTempFonts(*GetSalData(), false);
 }
 
