@@ -862,6 +862,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104348_contextMargin, "tdf104348_contextMargin.d
     CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf152310, "ColorOverwritten.docx")
+{
+    uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000),
+                         getProperty<Color>(getParagraphOfText(1, xShape), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b050),
+                         getProperty<Color>(getParagraphOfText(2, xShape), "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
