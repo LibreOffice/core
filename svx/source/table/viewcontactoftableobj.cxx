@@ -36,6 +36,8 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
@@ -153,6 +155,21 @@ namespace drawinglayer::primitive2d
 
 namespace sdr::contact
 {
+
+    namespace {
+        class ViewObjectContactOfTableObj : public ViewObjectContactOfSdrObj
+        {
+            public:
+                ViewObjectContactOfTableObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
+                    : ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
+                {
+                }
+
+            protected:
+                virtual void createPrimitive2DSequence(DisplayInfo const& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
+        };
+    } // namespace
+
         static svx::frame::Style impGetLineStyle(
             const sdr::table::TableLayouter& rLayouter,
             sal_Int32 nX,
@@ -204,9 +221,11 @@ namespace sdr::contact
             return svx::frame::Style();
         }
 
-        void ViewContactOfTableObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
+        static void createPrimitive2DSequenceImpl(
+                sdr::table::SdrTableObj const& rTableObj,
+                bool const isTaggedPDF,
+                drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
         {
-            const sdr::table::SdrTableObj& rTableObj = static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
             const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();
 
             if(xTable.is())
@@ -352,7 +371,7 @@ namespace sdr::contact
                                     aRetvalForShadow.append(xCellReference);
                                 }
                             }
-                            if (pPage)
+                            if (isTaggedPDF && pPage)
                             {
                                 // heuristic: if there's a special formatting on
                                 // first row, assume that it's a header row
@@ -370,7 +389,7 @@ namespace sdr::contact
                             row.append(cell);
                         }
 
-                        if (pPage)
+                        if (isTaggedPDF && pPage)
                         {
                             row = drawinglayer::primitive2d::Primitive2DContainer {
                                 new drawinglayer::primitive2d::StructureTagPrimitive2D(
@@ -482,6 +501,38 @@ namespace sdr::contact
 
                 rVisitor.visit(xReference);
             }
+        }
+
+        void ViewObjectContactOfTableObj::createPrimitive2DSequence(
+                DisplayInfo const& rDisplayInfo,
+                drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
+        {
+            bool const isTaggedPDF(GetObjectContact().isExportTaggedPDF());
+            if (isTaggedPDF)
+            {
+                // this will be unbuffered and contain structure tags
+                const sdr::table::SdrTableObj& rTableObj =
+                    static_cast<const sdr::table::SdrTableObj&>(*GetViewContact().TryToGetSdrObject());
+                return createPrimitive2DSequenceImpl(rTableObj, true, rVisitor);
+            }
+            else
+            {
+                // call it via the base class - this is supposed to be buffered
+                return sdr::contact::ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo, rVisitor);
+            }
+        }
+
+        void ViewContactOfTableObj::createViewIndependentPrimitive2DSequence(
+                drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
+        {
+            const sdr::table::SdrTableObj& rTableObj =
+                static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
+            return createPrimitive2DSequenceImpl(rTableObj, false, rVisitor);
+        }
+
+        ViewObjectContact& ViewContactOfTableObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            return *new ViewObjectContactOfTableObj(rObjectContact, *this);
         }
 
         ViewContactOfTableObj::ViewContactOfTableObj(sdr::table::SdrTableObj& rTableObj)
