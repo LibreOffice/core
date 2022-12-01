@@ -39,6 +39,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -54,6 +55,7 @@
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
 
@@ -176,7 +178,7 @@ namespace canvas::tools
 
         namespace
         {
-            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
+            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace, css::lang::XUnoTunnel >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;
@@ -327,7 +329,7 @@ namespace canvas::tools
                 virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                      const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
-                    if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
+                    if( comphelper::getFromUnoTunnel<StandardColorSpace>(targetColorSpace) )
                     {
                         const sal_Int8* pIn( deviceColor.getConstArray() );
                         const std::size_t  nLen( deviceColor.getLength() );
@@ -358,7 +360,7 @@ namespace canvas::tools
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                          const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override
                 {
-                    if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
+                    if( comphelper::getFromUnoTunnel<StandardColorSpace>(targetColorSpace) )
                     {
                         // it's us, so simply pass-through the data
                         return deviceColor;
@@ -509,9 +511,20 @@ namespace canvas::tools
                     pBitCounts[2] =
                     pBitCounts[3] = 8;
                 }
+
+                sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
+                    override
+                {
+                    return comphelper::getSomethingImpl(aIdentifier, this);
+                }
+
+                static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
+                    static comphelper::UnoIdInit const id;
+                    return id.getSeq();
+                }
             };
 
-            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
+            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace, css::lang::XUnoTunnel >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;
@@ -661,7 +674,7 @@ namespace canvas::tools
                 virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                      const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
-                    if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
+                    if( comphelper::getFromUnoTunnel<StandardNoAlphaColorSpace>(targetColorSpace) )
                     {
                         const sal_Int8* pIn( deviceColor.getConstArray() );
                         const std::size_t  nLen( deviceColor.getLength() );
@@ -692,7 +705,7 @@ namespace canvas::tools
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                          const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override
                 {
-                    if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
+                    if( comphelper::getFromUnoTunnel<StandardNoAlphaColorSpace>(targetColorSpace) )
                     {
                         // it's us, so simply pass-through the data
                         return deviceColor;
@@ -839,6 +852,17 @@ namespace canvas::tools
                     pBitCounts[0] =
                     pBitCounts[1] =
                     pBitCounts[2] = 8;
+                }
+
+                sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
+                    override
+                {
+                    return comphelper::getSomethingImpl(aIdentifier, this);
+                }
+
+                static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
+                    static comphelper::UnoIdInit const id;
+                    return id.getSeq();
                 }
             };
 
