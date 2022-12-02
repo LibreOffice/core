@@ -51,7 +51,8 @@ Color SmTmpDevice::GetTextColor(const Color& rTextColor)
     if (rTextColor == COL_AUTO)
     {
         Color aConfigFontColor = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-        return rOutDev.GetReadableFontColor(aConfigFontColor, rOutDev.GetBackgroundColor());
+        Color aConfigDocColor = SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        return rOutDev.GetReadableFontColor(aConfigFontColor, aConfigDocColor);
     }
 
     return rTextColor;
