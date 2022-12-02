@@ -179,56 +179,59 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
 bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont)
 {
     auto* pHbFont = pFont->GetHbFont();
+
+    hb_position_t nUnderlineSize;
+    if (!hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &nUnderlineSize))
+        return false;
+    hb_position_t nUnderlineOffset;
+    if (!hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &nUnderlineOffset))
+        return false;
+    hb_position_t nStrikeoutSize;
+    if (!hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &nStrikeoutSize))
+        return false;
+    hb_position_t nStrikeoutOffset;
+    if (!hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &nStrikeoutOffset))
+        return false;
+
     double fScale = 0;
     pFont->GetScale(nullptr, &fScale);
 
-    hb_position_t nUnderlineSize, nUnderlineOffset, nStrikeoutSize, nStrikeoutOffset;
-    if (hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &nUnderlineSize)
-        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_OFFSET,
-                                      &nUnderlineOffset)
-        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &nStrikeoutSize)
-        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET,
-                                      &nStrikeoutOffset))
-    {
-        double nOffset = -nUnderlineOffset;
-        double nSize = nUnderlineSize;
-        double nSize2 = nSize / 2.;
-        double nBSize = nSize * 2.;
-        double n2Size = nBSize / 3.;
+    double nOffset = -nUnderlineOffset * fScale;
+    double nSize = nUnderlineSize * fScale;
+    double nSize2 = nSize / 2.;
+    double nBSize = nSize * 2.;
+    double n2Size = nBSize / 3.;
 
-        mnUnderlineSize = std::ceil(nSize * fScale);
-        mnUnderlineOffset = std::ceil(nOffset * fScale);
+    mnUnderlineSize = std::ceil(nSize);
+    mnUnderlineOffset = std::ceil(nOffset);
 
+    mnBUnderlineSize = std::ceil(nBSize);
+    mnBUnderlineOffset = std::ceil(nOffset - nSize2);
 
-        mnBUnderlineSize = std::ceil(nBSize * fScale);
-        mnBUnderlineOffset = std::ceil((nOffset - nSize2) * fScale);
+    mnDUnderlineSize = std::ceil(n2Size);
+    mnDUnderlineOffset1 = mnBUnderlineOffset;
+    mnDUnderlineOffset2 = mnBUnderlineOffset + mnDUnderlineSize * 2;
 
-        mnDUnderlineSize = std::ceil(n2Size * fScale);
-        mnDUnderlineOffset1 = mnBUnderlineOffset;
-        mnDUnderlineOffset2 = mnBUnderlineOffset + mnDUnderlineSize * 2;
+    mnWUnderlineSize = mnBUnderlineSize;
+    mnWUnderlineOffset = std::ceil(nOffset + nSize);
 
-        mnWUnderlineSize = mnBUnderlineSize;
-        mnWUnderlineOffset = std::ceil((nOffset + nSize) * fScale);
+    nOffset = -nStrikeoutOffset * fScale;
+    nSize = nStrikeoutSize * fScale;
+    nSize2 = nSize / 2.;
+    nBSize = nSize * 2.;
+    n2Size = nBSize / 3.;
 
-        nOffset = -nStrikeoutOffset;
-        nSize = nStrikeoutSize;
-        nSize2 = nSize / 2.;
-        nBSize = nSize * 2.;
-        n2Size = nBSize / 3.;
+    mnStrikeoutSize = std::ceil(nSize);
+    mnStrikeoutOffset = std::ceil(nOffset);
 
-        mnStrikeoutSize = std::ceil(nSize * fScale);
-        mnStrikeoutOffset = std::ceil(nOffset * fScale);
+    mnBStrikeoutSize = std::ceil(nBSize);
+    mnBStrikeoutOffset = std::round(nOffset - nSize2);
 
-        mnBStrikeoutSize = std::ceil(nBSize * fScale);
-        mnBStrikeoutOffset = std::round((nOffset - nSize2) * fScale);
+    mnDStrikeoutSize = std::ceil(n2Size);
+    mnDStrikeoutOffset1 = mnBStrikeoutOffset;
+    mnDStrikeoutOffset2 = mnBStrikeoutOffset + mnDStrikeoutSize * 2;
 
-        mnDStrikeoutSize = std::ceil(n2Size * fScale);
-        mnDStrikeoutOffset1 = mnBStrikeoutOffset;
-        mnDStrikeoutOffset2 = mnBStrikeoutOffset + mnDStrikeoutSize * 2;
-
-        return true;
-    }
-    return false;
+    return true;
 }
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
