@@ -1188,6 +1188,9 @@ MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Siz
 
 void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(tools::Rectangle(maDstPt, maDstSz)))
+        return;
+
     pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor, MetaActionType::MASKSCALE );
 }
 
