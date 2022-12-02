@@ -2196,7 +2196,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_CLANG := $(true)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
-$(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(or $(gb_CLANG_LTOFLAGS),$(gb_LTOFLAGS))
+$(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(if $(LO_CLANG_CXX),$(gb_CLANG_LTOFLAGS),$(gb_LTOFLAGS))
 endef
 
 # call gb_LinkTarget_use_vclmain,linktarget
