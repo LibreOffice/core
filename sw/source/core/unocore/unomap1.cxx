@@ -1048,6 +1048,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlProper
         { u"" UNO_NAME_ALIAS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_TAG, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_ID, 0, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_TAB_INDEX, 0, cppu::UnoType<sal_uInt32>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_LOCK, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATE_STRING, 0, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }

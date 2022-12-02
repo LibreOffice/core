@@ -131,6 +131,7 @@ public:
         : m_bHasId(false)
         , m_bStartedSdt(false)
         , m_bShowingPlaceHolder(false)
+        , m_nTabIndex(0)
         , m_nSdtPrToken(0)
     {}
 
@@ -145,6 +146,7 @@ public:
     bool m_bShowingPlaceHolder;
     OUString m_aAlias;
     OUString m_aTag;
+    sal_Int32 m_nTabIndex;
     OUString m_aLock;
     sal_Int32 m_nSdtPrToken;
 

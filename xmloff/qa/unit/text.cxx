@@ -849,6 +849,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("my alias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("my tag")));
+    xContentControlProps->setPropertyValue("TabIndex", uno::Any(sal_uInt32(3)));
     xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("unlocked")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -871,6 +872,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     // i.e. alias was lost on export.
     assertXPath(pXmlDoc, "//loext:content-control", "alias", "my alias");
     assertXPath(pXmlDoc, "//loext:content-control", "tag", "my tag");
+    assertXPath(pXmlDoc, "//loext:content-control", "tab-index", "3");
     assertXPath(pXmlDoc, "//loext:content-control", "lock", "unlocked");
 }
 
@@ -937,6 +939,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlImport)
     OUString aTag;
     xContentControlProps->getPropertyValue("Tag") >>= aTag;
     CPPUNIT_ASSERT_EQUAL(OUString("my tag"), aTag);
+    sal_uInt32 nTabIndex;
+    xContentControlProps->getPropertyValue("TabIndex") >>= nTabIndex;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(4), nTabIndex);
     OUString aLock;
     xContentControlProps->getPropertyValue("Lock") >>= aLock;
     CPPUNIT_ASSERT_EQUAL(OUString("sdtContentLocked"), aLock);
