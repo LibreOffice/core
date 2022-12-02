@@ -33,7 +33,10 @@ public:
     size_t size() const { return m_DXArray.size(); }
     bool empty() const { return m_DXArray.empty(); }
     sal_Int32 operator[](size_t nIndex) const { return get(nIndex); }
-    sal_Int32 get(size_t nIndex) const { return std::round(m_DXArray[nIndex] / m_nSubUnitFactor); }
+    sal_Int32 get(size_t nIndex) const
+    {
+        return std::round(static_cast<double>(m_DXArray[nIndex]) / m_nSubUnitFactor);
+    }
 
     int get_factor() const { return m_nSubUnitFactor; }
     sal_Int32 get_subunit(size_t nIndex) const { return m_DXArray[nIndex]; }
@@ -52,7 +55,10 @@ public:
     }
 
     sal_Int32 operator[](size_t nIndex) const { return get(nIndex); }
-    sal_Int32 get(size_t nIndex) const { return std::round(m_aDXArray[nIndex] / m_nSubUnitFactor); }
+    sal_Int32 get(size_t nIndex) const
+    {
+        return std::round(static_cast<double>(m_aDXArray[nIndex]) / m_nSubUnitFactor);
+    }
 
     int get_factor() const { return m_nSubUnitFactor; }
     sal_Int32 get_subunit(size_t nIndex) const { return m_aDXArray[nIndex]; }
