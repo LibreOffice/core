@@ -679,11 +679,7 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     // clear sdt status
     m_nSdtPrToken = 0;
-    m_pTokenChildren.clear();
-    m_pDataBindingAttrs.clear();
-    m_pTextAttrs.clear();
-    m_aAlias.clear();
-    m_bHasId = false;
+    DeleteAndResetTheLists();
 }
 
 void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -1085,7 +1081,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_aParagraphSdt.m_nSdtPrToken = 0;
-        m_aParagraphSdt.m_bHasId = false;
         m_aParagraphSdt.DeleteAndResetTheLists();
     }
 
