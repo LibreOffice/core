@@ -2655,6 +2655,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         GetThemeColor(hTheme, 0, 0, TMT_TEXTCOLOR, &color);
         aStyleSettings.SetWindowTextColor( ImplWinColorToSal( color ) );
         aStyleSettings.SetToolTextColor( ImplWinColorToSal( color ) );
+        GetThemeColor(hTheme, 0, 0, TMT_SHADOWCOLOR, &color);
+        aStyleSettings.SetShadowColor( ImplWinColorToSal( color ) );
+        GetThemeColor(hTheme, 0, 0, TMT_DKSHADOW3D, &color);
+        aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( color ) );
         CloseThemeData(hTheme);
 
         hTheme = OpenThemeData(mhWnd, L"Button");
@@ -2683,6 +2687,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
         aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
         aStyleSettings.SetToolTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+        aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+        aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
         aControlTextColor = ImplWinColorToSal(GetSysColor(COLOR_BTNTEXT));
         aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
@@ -2702,8 +2708,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
     aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
-    aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
-    aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
 
