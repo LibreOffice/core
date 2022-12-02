@@ -134,6 +134,26 @@ __TURTLE__ = "turtle"
 __ACTUAL__ = "actual"
 __BASEFONTFAMILY__ = "Linux Biolinum G"
 __LineStyle_DOTTED__ = 2
+# LABEL supports font features with the simplified syntax <FEATURE>text</FEATURE>, e.g.
+#   LABEL "Small caps: <smcp>text</smcp>"
+# prints "Small caps: TEXT", where TEXT is small capital, if that feature is supported by the font
+# See https://en.wikipedia.org/wiki/List_of_typographic_features
+__match_fontfeatures__ = re.compile( r"(</?)("
+ # OpenType
+ "abvf|abvm|abvs|blwf|blwm|blws|pref|pres|psts|pstf|dist|akhn|haln|half|nukt|rkrf|rphf|vatu|cjct|cfar|"
+ "smpl|trad|tnam|expt|hojo|nlck|jp78|jp83|jp90|jp04|hngl|ljmo|tjmo|vjmo|fwid|hwid|halt|twid|qwid|pwid|palt|pkna|ruby|hkna|vkna|cpct|"
+ "curs|jalt|mset|rclt|rlig|isol|init|medi|med2|fina|fin2|fin3|falt|stch|"
+ "lnum|onum|pnum|tnum|frac|afrc|dnom|numr|sinf|zero|mgrk|flac|dtls|ssty|"
+ "smcp|c2sc|pcap|c2pc|unic|cpsp|case|ital|ordn|"
+ "valt|vhal|vpal|vert|vrt2|vrtr|vkrn|ltra|ltrm|rtla|rtlm"
+ "aalt|swsh|cswh|calt|hist|locl|rand|nalt|cv[0-9][0-9]|salt|ss[01][0-9]|ss20|subs|sups|titl|rvrn|clig|dlig|hlig|liga"
+ "ccmp|kern|mark|mkmk|opbd|lfbd|rtbd|"
+ # Linux Libertine G
+ "size|ornm|ingl|algn|arti|caps|circ|dash|dbls|foot|frsp|grkn|hang|itlc|ligc|minu|nfsp|para|quot|texm|thou|vari)((=.*)?>)", re.IGNORECASE )
+# LABEL localized color tags, e.g. <red>text in red</red>
+__match_localized_colors__ = {}
+# LABEL not localized tags (localized translated to these):
+__match_tags__ = [re.compile(i, re.IGNORECASE) for i in [r'<(b|strong)>', r'</(b|strong)>', r'<(i|em)>', r'</(i|em)>', '<u>', '</u>', r'<(s|del)>', r'</(s|del)>', '<sup>', '</sup>', '<sub>', '</sub>', r'<(fontcolor) ([^<>]*)>', r'</(fontcolor)>', r'<(fillcolor) ([^<>]*)>', r'</(fillcolor)>', r'<(fontfamily) ([^<>]*)>', r'</(fontfamily)>', r'<(fontfeature) ([^<>]*)>', r'</(fontfeature) ?([^<>]*)>', r'<(fontheight) ([^<>]*)>', r'</(fontheight)>']]
 
 class __Doc__:
     def __init__(self, doc):
@@ -204,6 +224,7 @@ from com.sun.star.drawing.CircleKind import ARC as __ARC__
 from com.sun.star.awt.FontSlant import NONE as __Slant_NONE__
 from com.sun.star.awt.FontSlant import ITALIC as __Slant_ITALIC__
 from com.sun.star.awt.FontUnderline import SINGLE as __Underline_SINGLE__
+from com.sun.star.awt.FontStrikeout import SINGLE as __Strikeout_SINGLE__
 from com.sun.star.awt import Size as __Size__
 from com.sun.star.awt import WindowDescriptor as __WinDesc__
 from com.sun.star.awt.WindowClass import MODALTOP as __MODALTOP__
@@ -1275,51 +1296,113 @@ def __get_HTML_format__(orig_st):
   "Process HTML-like tags, and return with text and formatting vector"
   st = orig_st.replace('&lt;', '\uE000')
   if not ('<' in st and '>' in st):
-      return st.replace('\uE000', '<'), None
+      return st.replace('\uE000', '<'), None, None
+
+  # convert localized bold, and italic values to <B> and <I> tags
+  for i in ('BOLD', 'ITALIC'):
+      st = re.sub(r'(</?)(' + __l12n__(_.lng)[i] + r')>', r'\1%s>' % i[0], st, flags=re.I)
+
+  for i in ('FONTCOLOR', 'FILLCOLOR', 'FONTFAMILY', 'FONTHEIGHT'):
+      st = re.sub(r'<(' + __l12n__(_.lng)[i] + r')(  *[^<> ][^<>]*)>', r'<%s\2>' % i.lower(), st, flags=re.I)
+      st = re.sub(r'</(' + __l12n__(_.lng)[i] + r')>', r'</%s>' % i.lower(), st, flags=re.I)
+
+  # expand localized color names
+  if _.lng not in __match_localized_colors__:
+      __match_localized_colors__[_.lng] = re.compile(r'<(/?)(' + '|'.join(__colors__[_.lng].keys()) + ')>', re.IGNORECASE)
+  # replacement lambda function: if it's an opening tag, return with the argument, too
+  get_fontcolor_tag = lambda m: "<fontcolor %s>" % m.group(2) if len(m.group(1)) == 0 else "</fontcolor>"
+  st = re.sub(__match_localized_colors__[_.lng], get_fontcolor_tag, st)
+
+  # expand abbreviated forms of font features
+  # <smcp>small caps</smcp> -> <fontfeature smcp>small caps</fontfeature smcp>
+  st = re.sub(__match_fontfeatures__, r'\1fontfeature \2\3', st)
+
   tex = "" # characters without HTML tags
   pat = [] # bit vectors of the previous characters
-  # 1st bit: bold
-  # 2nd bit: italic
-  # 3rd bit: underline
+  extra_pat = [] # extra data of the previous characters
+  # 0th bit: bold
+  # 1st bit: italic
+  # 2nd bit: underline
+  # 3rd bit: strikethrough
+  # 4th bit: superscript
+  # 5th bit: subscript
+  # 6th bit: color
+  # 7th bit: background color
+  # 8th bit: font family
+  # 9th bit: font feature (Graphite or OpenType)
+  # 10th bit: font size
   f = 0
-  tags = ['<b>', '</b>', '<i>', '</i>', '<u>', '</u>']
   # store embedding level of the same element to disable it
   # only at the most outer closing tag, e.g. <i>a <i>double</i> italic here, too</i>
-  bit_level = {0: 0, 1: 0, 2: 0}
+  # bit_level = {0: 0, ...,  10: 0}
+  bit_level = { i: 0 for i in range(11) }
+
+  extra_data = {}
   i = 0
   while i < len(st):
       is_tag = False
-      for j in range(len(tags)):
-          if st[i:i + 4].lower().startswith(tags[j]):
+
+      if st[i] == '<':
+        for j in range(len(__match_tags__)):
+          m = __match_tags__[j].match(st[i:])
+          if m:
+              tag = ""
               bit = j // 2
+              if bit > 5:
+                  tag = m.group(1).lower()
               # opening tag
               if j % 2 == 0:
                   f |= (1 << bit)
                   bit_level[bit] += 1
+                  # extra data (color bit and over)
+                  if bit > 5:
+                      if tag in extra_data:
+                          extra_data[tag] = extra_data[tag] + [m.group(2)]
+                      else:
+                          extra_data[tag] = [m.group(2)]
               else:
                   if bit_level[bit] > 0:
                       bit_level[bit] -= 1
                   if bit_level[bit] == 0:
                       f &= ~(1 << bit)
-              i += len(tags[j]) - 1
+                  # extra data for font feature
+                  # fontfeature has a special closing tag, remove that from the extra_data
+                  # (allowing to use overlapping elements)
+                  if bit > 5 and (tag in extra_data):
+                      if bit == 9 and len(m.group(2)) > 0:
+                          # create a new list to keep the extra data of the previous characters,
+                          # and remove the last occurance of the feature
+                          z = list(extra_data[tag])
+                          for j in reversed(range(len(z))):
+                              if z[j].startswith(m.group(2)):
+                                  z.pop(j)
+                                  extra_data[tag] = z
+                                  break
+                      # extra data
+                      else:
+                          extra_data[tag] = extra_data[tag][:-1]
+
+              i += len(m.group(0)) - 1
               is_tag = True
               break
 
       if not is_tag:
           tex = tex + st[i]
           pat.append(f)
+          extra_pat.append(dict(extra_data))
       i += 1
 
   # no tags
   if len(st) == len(tex):
       pat = None
+      extra_pat = None
 
-  return tex.replace('\uE000', '<'), pat
+  return tex.replace('\uE000', '<'), pat, extra_pat
 
 def text(shape, orig_st):
     if shape:
         # analyse HTML
-        st, formatting = __get_HTML_format__(orig_st)
+        st, formatting, extra_data = __get_HTML_format__(orig_st)
         shape.setString(__string__(st, _.decimal))
         c = shape.createTextCursor()
         c.gotoStart(False)
@@ -1329,14 +1412,16 @@ def text(shape, orig_st):
         c.CharWeight = __fontweight__(_.fontweight)
         c.CharPosture = __fontstyle__(_.fontstyle)
         c.CharFontName = _.fontfamily
+
         # has HTML-like formatting
         if formatting != None:
             prev_format = 0
+            prev_extra_data = extra_data[0]
             c.collapseToStart()
             n = 0 # length of the previous text span
             formatting.append(0) # add terminating 0 to process last span
             for i in formatting:
-                if i != prev_format:
+                if i != prev_format or (len(extra_data) > 0 and extra_data[0] != prev_extra_data):
                     do_formatting = prev_format != 0
                     c.goRight(n, do_formatting) # move cursor with optional selection
                     if do_formatting:
@@ -1346,10 +1431,35 @@ def text(shape, orig_st):
                             c.CharPosture = __Slant_ITALIC__
                         if prev_format & (1 << 2):
                             c.CharUnderline = __Underline_SINGLE__
+                        if prev_format & (1 << 3):
+                            c.CharStrikeout = __Strikeout_SINGLE__
+                        if prev_format & (1 << 4):
+                            c.CharEscapement = 14000 # magic number for default superscript, see DFLT_ESC_AUTO_SUPER
+                            c.CharEscapementHeight = 58
+                        if prev_format & (1 << 5):
+                            c.CharEscapement = -14000 # magic number for default subscript, see DFLT_ESC_AUTO_SUB
+                            c.CharEscapementHeight = 58
+                        if prev_format & (1 << 6):
+                            c.CharColor, c.CharTransparence = __splitcolor__(__color__(prev_extra_data['fontcolor'][-1]))
+                        if prev_format & (1 << 7):
+                            c.CharBackColor = __color__(prev_extra_data['fillcolor'][-1])
+                        if prev_format & (1 << 8):
+                            c.CharFontName = prev_extra_data['fontfamily'][-1]
+                        if prev_format & (1 << 9):
+                            # font features uses the following syntax: font_name:feat1&feat2&feat3=value&etc.
+                            if ":" in c.CharFontName:
+                                c.CharFontName = c.CharFontName + "&" + "&".join(prev_extra_data['fontfeature'])
+                            else:
+                                c.CharFontName = c.CharFontName + ":" + "&".join(prev_extra_data['fontfeature'])
+                        if prev_format & (1 << 10):
+                            c.CharHeight = prev_extra_data['fontheight'][-1]
+
                     c.collapseToEnd()
                     n = 0
                 n += 1
                 prev_format = i
+                if len(extra_data) > 0:
+                    prev_extra_data = extra_data.pop(0)
 
 def sleep(t):
     _.time = _.time + t
@@ -1401,11 +1511,13 @@ def __color__(c):
             for i in range(0, 3):
                 newcol[i] = 255 * (rgray + (newcol[i]/255.0 - rgray) * rdark)
             return __color__(newcol)
-        if c[0:1] == '~':
+        elif c[0:1] == '~':
             c = __componentcolor__(__colors__[_.lng][c[1:].lower()])
             for i in range(3):
                 c[i] = max(min(c[i] + int(random.random() * 64) - 32, 255), 0)
             return __color__(c)
+        elif c[0].isdigit():
+            return int(c, 0) # recognize hex and decimal numbers as strings
         return __colors__[_.lng][c.lower()]
     if type(c) == list:
         if len(c) == 1: # color index
