@@ -260,7 +260,7 @@ void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OString
 {
     rLine.append(" /Resources <<");
     static const std::initializer_list<OString> aKeys
-        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading" };
+        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading", "Pattern" };
     for (const auto& rKey : aKeys)
     {
         rLine.append(copyExternalResources(*pPage, rKey, rCopiedResources));
