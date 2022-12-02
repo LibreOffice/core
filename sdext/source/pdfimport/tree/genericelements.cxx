@@ -22,7 +22,8 @@
 #include <pdfiprocessor.hxx>
 #include <pdfihelper.hxx>
 
-
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <sal/log.hxx>
@@ -430,6 +431,18 @@ void DocumentElement::visitedBy( ElementTreeVisitor&                          rV
     rVisitor.visit(*this, rParentIt);
 }
 
+bool isComplex(const uno::Reference<i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem) {
+    OUString str(pTextElem->Text.toString());
+    for(int i=0; i< str.getLength(); i++)
+    {
+        sal_Int16 nType = rBreakIterator->getScriptType(str, i);
+        if (nType == i18n::ScriptType::COMPLEX)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 }
 

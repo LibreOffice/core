@@ -682,17 +682,10 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
         if( pCur )
         {
             TextElement* pNext = (*next)->dynCastAsTextElement();
-            bool isComplex = false;
-            OUString str(pCur->Text.toString());
-            for(int i=0; i< str.getLength(); i++)
-            {
-                sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
-                if (nType == css::i18n::ScriptType::COMPLEX)
-                    isComplex = true;
-            }
+            OUString str;
             bool bPara = strspn("ParagraphElement", typeid(rParent).name());
             ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(&rParent);
-            if (bPara && pPara && isComplex)
+            if (bPara && pPara && isComplex(GetBreakIterator(), pCur))
                 pPara->bRtl = true;
             if( pNext )
             {
@@ -756,14 +749,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                         pCur->Text.append( pNext->Text );
                     }
 
-                    str = pCur->Text.toString();
-                    for(int i=0; i< str.getLength(); i++)
-                    {
-                        sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
-                        if (nType == css::i18n::ScriptType::COMPLEX)
-                            isComplex = true;
-                    }
-                    if (bPara && pPara && isComplex)
+                    if (bPara && pPara && isComplex(GetBreakIterator(), pCur))
                         pPara->bRtl = true;
                     // append eventual children to current element
                     // and clear children (else the children just

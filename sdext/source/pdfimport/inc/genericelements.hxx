@@ -25,11 +25,14 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <list>
+
+using namespace com::sun::star;
 
 namespace pdfi
 {
@@ -309,6 +312,8 @@ namespace pdfi
         static std::shared_ptr<DocumentElement> createDocumentElement()
         { return std::make_shared<DocumentElement>(); }
     };
+
+    bool isComplex(const uno::Reference<i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem);
 }
 
 #endif
