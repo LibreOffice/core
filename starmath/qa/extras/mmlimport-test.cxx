@@ -40,6 +40,7 @@ public:
     void testTdf103430();
     void testTdf103500();
     void testTdf137008();
+    void testTdf151842();
     void testMathmlEntities();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testTdf103430);
     CPPUNIT_TEST(testTdf103500);
     CPPUNIT_TEST(testTdf137008);
+    CPPUNIT_TEST(testTdf151842);
     CPPUNIT_TEST(testMathmlEntities);
     CPPUNIT_TEST_SUITE_END();
 
@@ -177,6 +179,20 @@ void Test::testTdf137008()
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf137008.mml"));
     CPPUNIT_ASSERT_EQUAL(OUString("matrix{ { } # ## # }"), mxDocShell->GetText());
 }
+
+void Test::testTdf151842()
+{
+    // Without the fix in place, this test would have crashed
+    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf151842.odf"));
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), mxDocShell->GetText());
+    SmFormat aFormat = mxDocShell->GetFormat();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4233
+    // - Actual  : 423
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4233), aFormat.GetBaseSize().Height());
+}
+
 void Test::testMathmlEntities()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/mthmlentities.mml"));

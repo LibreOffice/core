@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include "smdllapi.hxx"
 
 #include <comphelper/lok.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -41,7 +42,7 @@ SmViewShell * SmGetActiveView();
 bool    IsItalic( const vcl::Font &rFont );
 bool    IsBold( const vcl::Font &rFont );
 
-class SmFace final : public vcl::Font
+class SM_DLLPUBLIC SmFace final : public vcl::Font
 {
     tools::Long    nBorderWidth;
 

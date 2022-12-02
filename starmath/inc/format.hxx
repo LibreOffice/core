@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "smdllapi.hxx"
 #include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "utility.hxx"
@@ -87,7 +88,7 @@ enum class SmHorAlign {
     Right
 };
 
-class SmFormat final : public SfxBroadcaster
+class SM_DLLPUBLIC SmFormat final : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
     bool        bDefaultFont[FNT_END + 1];
