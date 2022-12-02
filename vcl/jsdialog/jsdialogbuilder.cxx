@@ -1175,11 +1175,15 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
 
         std::string sWindowId = std::to_string(xMessageDialog->GetLOKWindowId());
         InsertWindowToMap(sWindowId);
+        xMessageDialog->SetLOKTunnelingState(false);
+
+        return new JSMessageDialog(xMessageDialog, nullptr, true);
     }
+    else
+        SAL_WARN("vcl", "No notifier in JSInstanceBuilder::CreateMessageDialog");
 
-    xMessageDialog->SetLOKTunnelingState(false);
-
-    return new JSMessageDialog(xMessageDialog, nullptr, true);
+    // fallback
+    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
