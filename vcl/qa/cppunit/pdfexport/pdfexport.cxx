@@ -4247,6 +4247,52 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im10 that has reference to Font in page 2.
+    auto pInnerIm = aDocument.LookupObject(10);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    auto pResources
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerIm->Lookup("Resources"));
+    CPPUNIT_ASSERT(pResources);
+    auto pFontsReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pResources->LookupElement("Font"));
+    CPPUNIT_ASSERT(pFontsReference);
+
+    auto pFontsObject = pFontsReference->LookupObject();
+    CPPUNIT_ASSERT(pFontsObject);
+
+    auto pFontDict
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pFontsObject->Lookup("FF132"));
+    CPPUNIT_ASSERT(pFontDict);
+
+    auto pFontDescriptor = pFontDict->LookupObject("FontDescriptor");
+    CPPUNIT_ASSERT(pFontDescriptor);
+
+    auto pFontWidths = pFontDict->LookupObject("Widths");
+    CPPUNIT_ASSERT(pFontWidths);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
