@@ -49,6 +49,7 @@ void XMLContentControlContext::startFastElement(
     for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
         bool bTmp = false;
+        sal_Int32 nTmp = 0;
 
         switch (rIter.getToken())
         {
@@ -149,6 +150,14 @@ void XMLContentControlContext::startFastElement(
             case XML_ELEMENT(LO_EXT, XML_TAG):
             {
                 m_aTag = rIter.toString();
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_TAB_INDEX):
+            {
+                if (sax::Converter::convertNumber(nTmp, rIter.toView()))
+                {
+                    m_nTabIndex = nTmp;
+                }
                 break;
             }
             case XML_ELEMENT(LO_EXT, XML_LOCK):
@@ -265,6 +274,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (!m_aTag.isEmpty())
     {
         xPropertySet->setPropertyValue("Tag", uno::Any(m_aTag));
+    }
+
+    if (m_nTabIndex)
+    {
+        xPropertySet->setPropertyValue("TabIndex", uno::Any(m_nTabIndex));
     }
 
     if (!m_aLock.isEmpty())

@@ -2880,6 +2880,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_color:
     case NS_ooxml::LN_CT_SdtPr_appearance:
     case NS_ooxml::LN_CT_SdtPr_tag:
+    case NS_ooxml::LN_CT_SdtPr_tabIndex:
     case NS_ooxml::LN_CT_SdtPr_lock:
     {
         if (!m_pImpl->GetSdtStarts().empty())
@@ -2925,6 +2926,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_id)
             {
                 m_pImpl->m_pSdtHelper->SetId(nIntValue);
+                break;
+            }
+
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_tabIndex)
+            {
+                m_pImpl->m_pSdtHelper->SetTabIndex(nIntValue);
                 break;
             }
 
@@ -2981,6 +2988,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
             case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
             case NS_ooxml::LN_CT_SdtPr_tag:         sName = "ooxml:CT_SdtPr_tag"; break;
+            case NS_ooxml::LN_CT_SdtPr_tabIndex:    sName = "ooxml:CT_SdtPr_tabIndex"; break;
             case NS_ooxml::LN_CT_SdtPr_lock:        sName = "ooxml:CT_SdtPr_lock"; break;
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
             case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
@@ -3018,6 +3026,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             beans::PropertyValue aValue;
             aValue.Name = sName;
             aValue.Value <<= bool(nIntValue);
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
+        }
+        else if (nSprmId == NS_ooxml::LN_CT_SdtPr_tabIndex)
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = sName;
+            aValue.Value <<= nIntValue;
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
         }
         else

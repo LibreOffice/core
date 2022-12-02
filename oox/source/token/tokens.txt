@@ -5124,6 +5124,7 @@ tOff
 tR
 tab
 tabColor
+tabIndex
 tabLst
 tabRatio
 tabSelected
