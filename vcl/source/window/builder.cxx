@@ -208,8 +208,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                      bool /*bMobile*/)
+                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage)
 {
     if (comphelper::LibreOfficeKit::isActive())
         return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);

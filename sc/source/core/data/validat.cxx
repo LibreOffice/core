@@ -367,6 +367,11 @@ void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
         DoMacro( pCell->aPos, OUString(), pCell, nullptr );
 }
 
+IMPL_STATIC_LINK_NOARG(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return SfxViewShell::Current();
+}
+
     // true -> abort
 
 bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
@@ -400,12 +405,10 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
             break;
     }
 
-    bool bIsMobile = comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current()
-                        && SfxViewShell::Current()->isLOKMobilePhone();
-
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
-                                              eStyle, aMessage, bIsMobile));
+                                              eStyle, aMessage));
     xBox->set_title(aTitle);
+    xBox->SetInstallLOKNotifierHdl(LINK(nullptr, ScValidationData, InstallLOKNotifierHdl));
 
     switch (eErrorStyle)
     {

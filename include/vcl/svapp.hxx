@@ -1329,8 +1329,7 @@ public:
     static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                    bool bMobile = false);
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 

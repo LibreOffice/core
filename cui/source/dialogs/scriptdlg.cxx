@@ -1327,8 +1327,7 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
             xData->pParent,
             VclMessageType::Warning,
             VclButtonsType::Ok,
-            message,
-            comphelper::LibreOfficeKit::isActive()));
+            message));
 
     xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
 
