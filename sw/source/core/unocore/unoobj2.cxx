@@ -781,7 +781,8 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
     m_pImpl->Invalidate();
     IDocumentMarkAccess* const pMA = m_pImpl->m_rDoc.getIDocumentMarkAccess();
     auto pMark = pMA->makeMark(rPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK, sw::mark::InsertMode::New);
-    m_pImpl->SetMark(*pMark);
+    if (pMark)
+        m_pImpl->SetMark(*pMark);
 }
 
 static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
