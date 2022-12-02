@@ -105,12 +105,14 @@ service ContentControl
     [optional, property] boolean DropDown;
 
     /** The alias: kind of a human-readable title / description, show up on the UI.
+                   -also used by VBA to group controls into a smaller, indexed collection
 
         @since LibreOffice 7.5
     */
     [optional, property] string Alias;
 
     /** The tag: similar to Alias, but is meant to be machine-readable.
+                 -also used by VBA to group controls into a smaller, indexed collection
 
         @since LibreOffice 7.5
     */
