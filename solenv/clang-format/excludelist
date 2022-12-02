@@ -14525,6 +14525,7 @@ vcl/inc/wizdlg.hxx
 vcl/ios/dummies.cxx
 vcl/ios/iosinst.cxx
 vcl/ios/salios.cxx
+vcl/jsdialog/enabled.cxx
 vcl/null/printerinfomanager.cxx
 vcl/osx/DataFlavorMapping.cxx
 vcl/osx/DataFlavorMapping.hxx
