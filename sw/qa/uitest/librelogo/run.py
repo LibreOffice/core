@@ -100,7 +100,10 @@ x 3 ; draw only a few levels
             # new shape + previous two ones = 3
             self.assertEqual(document.DrawPage.getCount(), 3)
 
-   def test_LABEL(self):
+   def check_label(self, hasCustomLock):
+        sLock = "CLEARSCREEN "
+        if hasCustomLock:
+            sLock = sLock + "SLEEP -1 "
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -109,7 +112,7 @@ x 3 ; draw only a few levels
 
             #1 run a program with basic LABEL command
 
-            type_text(xWriterEdit, "LABEL 'Hello, World!'")
+            type_text(xWriterEdit, sLock + "LABEL 'Hello, World!'")
             self.logo("run")
             # wait for LibreLogo program termination
             while xIsAlive.invoke((), (), ())[0]:
@@ -123,7 +126,7 @@ x 3 ; draw only a few levels
 
             #2 check italic, bold, underline + red and blue formatting
 
-            document.Text.String = "CLEARSCREEN LABEL '<i><red>Hello</red>, <bold><blue>W<u>orld</blue></bold>!</i></u>'"
+            document.Text.String = sLock + "LABEL '<i><red>Hello</red>, <bold><blue>W<u>orld</blue></bold>!</i></u>'"
             self.logo("run")
             # wait for LibreLogo program termination
             while xIsAlive.invoke((), (), ())[0]:
@@ -170,7 +173,7 @@ x 3 ; draw only a few levels
             #2 check strike out, sub, sup, font name and font size formatting
 
             document.Text.String = (
-                "CLEARSCREEN FONTFAMILY 'Linux Biolinum G' FONTSIZE 12 " +
+                sLock + "FONTFAMILY 'Linux Biolinum G' FONTSIZE 12 " +
                 "LABEL '<s>x</s>, <sub>x</sub>, <sup>x</sup>, " +
                     "<FONTFAMILY Liberation Sans>x</FONTFAMILY>, " +
                     "<FONTHEIGHT 20>x</FONTHEIGHT>...'" )
@@ -223,8 +226,7 @@ x 3 ; draw only a few levels
 
             #3 check colors
 
-            document.Text.String = (
-                "CLEARSCREEN " +
+            document.Text.String = ( sLock +
                 "LABEL '<red>x</red>, <BLUE>x</BLUE>, " +  # check ignoring case
                     "<FONTCOLOR GREEN>x</FONTCOLOR>, " +   # check with command
                     "<FONTCOLOR 0x0000FF>x, " +            # check with hexa code
@@ -279,7 +281,7 @@ x 3 ; draw only a few levels
             #4 check font features
 
             document.Text.String = (
-                "CLEARSCREEN FONTFAMILY 'Linux Biolinum G' " +
+                sLock + "FONTFAMILY 'Linux Biolinum G' " +
                 "LABEL 'a <smcp>smcp <pnum>1<onum>1</pnum> 1</onum>1</smcp>...'" )
 
             self.logo("run")
@@ -310,5 +312,11 @@ x 3 ; draw only a few levels
             self.assertEqual(c.CharFontName, "Linux Biolinum G:smcp&onum")
             c.goRight(1, False)
             self.assertEqual(c.CharFontName, "Linux Biolinum G:smcp")
+
+   def test_LABEL(self):
+        self.check_label(False)
+
+   def test_custom_lock(self):
+        self.check_label(True)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

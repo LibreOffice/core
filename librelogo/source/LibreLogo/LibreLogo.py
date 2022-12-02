@@ -479,6 +479,9 @@ def __translate__(arg = None):
         selection.getStart().BreakType = 4
     __dispatcher__(".uno:ZoomPage")
 
+def __get_time__():
+    return __time__.process_time() - _.start_time
+
 class LogoProgram(threading.Thread):
     def __init__(self, code):
         self.code = code
@@ -535,7 +538,10 @@ class LogoProgram(threading.Thread):
                 parent = _.doc.CurrentController.Frame.ContainerWindow
                 MessageBox(parent, "Document objects with%s script events" % [" possible", ""][secid-1], "LibreLogo program can't start", "errorbox")
             else:
+                _.start_time = __time__.process_time()
                 exec(self.code)
+                while _.doc.hasControllersLocked():
+                    _.doc.unlockControllers()
             if _.origcursor[0] and _.origcursor[1]:
                 __dispatcher__(".uno:Escape")
                 try:
@@ -544,6 +550,8 @@ class LogoProgram(threading.Thread):
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0].getStart(), False)
         except Exception as e:
             try:
+              while _.doc.hasControllersLocked():
+                  _.doc.unlockControllers()
               TRACEPATTERN = '"<string>", line '
               message = traceback.format_exc()
               l = re.findall(TRACEPATTERN + '[0-9]+', message)
@@ -834,6 +842,8 @@ def stop(arg=None):
     global __halt__
     with __lock__:
         __halt__ = True
+    while _.doc.hasControllersLocked():
+        _.doc.unlockControllers()
     return None
 
 def home(arg=None):
@@ -1401,6 +1411,7 @@ def __get_HTML_format__(orig_st):
 
 def text(shape, orig_st):
     if shape:
+        _.doc.lockControllers()
         # analyse HTML
         st, formatting, extra_data = __get_HTML_format__(orig_st)
         shape.setString(__string__(st, _.decimal))
@@ -1460,8 +1471,17 @@ def text(shape, orig_st):
                 prev_format = i
                 if len(extra_data) > 0:
                     prev_extra_data = extra_data.pop(0)
+        _.doc.unlockControllers()
 
 def sleep(t):
+    if t < 0:
+        # lock shape repaint, if SLEEP argument is negative
+        _.doc.lockControllers()
+        return
+    else:
+        # otherwise unlock one level
+        if _.doc.hasControllersLocked():
+            _.doc.unlockControllers()
     _.time = _.time + t
     __removeshape__(__ACTUAL__)
     for i in range(int(t/__SLEEP_SLICE_IN_MILLISECONDS__)):
