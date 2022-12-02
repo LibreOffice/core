@@ -864,7 +864,10 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
 
     // #i124409# use the given Item to get the correct UI unit and initialize it
     // and the Fields using it
-    meDlgUnit = GetCurrentUnit(eState,pState);
+    FieldUnit eDlgUnit = GetCurrentUnit(eState, pState);
+    if (eDlgUnit == meDlgUnit)
+        return;
+    meDlgUnit = eDlgUnit;
 
     if (mxMtrPosX->get_text().isEmpty())
         bPosXBlank = true;
