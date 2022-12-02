@@ -1294,17 +1294,14 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aInactiveTabColor.DecreaseLuminance( 32 );
     aStyleSettings.SetInactiveTabColor( aInactiveTabColor );
 
-    Color aShadowColor( aStyleSettings.GetShadowColor() );
-    aShadowColor.IncreaseLuminance( 32 );
-
-    aShadowColor = getColor( [NSColor systemGrayColor ],
-                                      aShadowColor, mpNSWindow );
-
+    Color aShadowColor = getColor( [NSColor systemGrayColor ],
+                                      aStyleSettings.GetShadowColor(), mpNSWindow );
     aStyleSettings.SetShadowColor( aShadowColor );
 
-    Color aDarkShadowColor = getColor( [[NSColor systemGrayColor] shadowWithLevel: 0.5 ],
-                                      aStyleSettings.GetDarkShadowColor(), mpNSWindow );
-
+    // tdf#152284 for DarkMode brighten it, while darken for BrightMode
+    NSColor* pDarkColor = bUseDarkMode ? [[NSColor systemGrayColor] highlightWithLevel: 0.5]
+                                       : [[NSColor systemGrayColor] shadowWithLevel: 0.5];
+    Color aDarkShadowColor = getColor( pDarkColor, aStyleSettings.GetDarkShadowColor(), mpNSWindow );
     aStyleSettings.SetDarkShadowColor(aDarkShadowColor);
 
     // get the system font settings
