@@ -65,6 +65,7 @@
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
@@ -950,21 +951,21 @@ void PropertySetMixinImpl::dispose() {
 css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
 {
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
-         && type == css::beans::XPropertySet::static_type())
+         && type == cppu::UnoType<css::beans::XPropertySet>::get())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XPropertySet * >(this));
         return css::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
-               && type == css::beans::XFastPropertySet::static_type())
+               && type == cppu::UnoType<css::beans::XFastPropertySet>::get())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XFastPropertySet * >(this));
         return css::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
-               && type == css::beans::XPropertyAccess::static_type())
+               && type == cppu::UnoType<css::beans::XPropertyAccess>::get())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XPropertyAccess * >(this));

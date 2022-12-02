@@ -32,6 +32,7 @@
 #include "vbavariables.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <cppu/unotype.hxx>
 
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -701,7 +702,7 @@ TypeAndIID SAL_CALL
 SwVbaDocument::GetConnectionPoint()
 {
     TypeAndIID aResult =
-        { word::XDocumentOutgoing::static_type(),
+        { cppu::UnoType<word::XDocumentOutgoing>::get(),
           "{82154429-0FBF-11D4-8313-005004526AB4}"
         };
 

@@ -45,6 +45,7 @@
 #include <ooo/vba/word/XBookmarks.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <cppu/unotype.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <swdll.hxx>
 #include <swmodule.hxx>
@@ -457,7 +458,7 @@ TypeAndIID SAL_CALL
 SwVbaApplication::GetConnectionPoint()
 {
     TypeAndIID aResult =
-        { word::XApplicationOutgoing::static_type(),
+        { cppu::UnoType<word::XApplicationOutgoing>::get(),
           "{82154422-0FBF-11D4-8313-005004526AB4}"
         };
 

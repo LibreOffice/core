@@ -73,6 +73,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppu/unotype.hxx>
 
 #include <convuno.hxx>
 #include <cellsuno.hxx>
@@ -1492,7 +1493,7 @@ TypeAndIID SAL_CALL
 ScVbaApplication::GetConnectionPoint()
 {
     TypeAndIID aResult =
-        { excel::XApplicationOutgoing::static_type(),
+        { cppu::UnoType<excel::XApplicationOutgoing>::get(),
           "{82154427-0FBF-11D4-8313-005004526AB4}"
         };
 
