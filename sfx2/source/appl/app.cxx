@@ -413,8 +413,7 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
                            pViewFrame ? pViewFrame->GetFrameWeld() : nullptr,
                            VclMessageType::Error,
                            VclButtonsType::Ok,
-                           aError,
-                           true));
+                           aError));
 
             xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
         }

@@ -30,6 +30,8 @@ struct RefUpdateContext;
 
 }
 
+namespace vcl { class ILibreOfficeKitNotifier; }
+
 class ScPatternAttr;
 class ScTokenArray;
 class ScTypedStrData;
@@ -79,6 +81,8 @@ private:
                                 ScFormulaCell* pCell, weld::Window* pParent ) const;
 
     using ScConditionEntry::operator==;
+
+    DECL_STATIC_LINK(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
 public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
