@@ -917,6 +917,7 @@ inline constexpr OUStringLiteral UNO_NAME_COLOR = u"Color";
 inline constexpr OUStringLiteral UNO_NAME_ALIAS = u"Alias";
 inline constexpr OUStringLiteral UNO_NAME_TAG = u"Tag";
 inline constexpr OUStringLiteral UNO_NAME_ID = u"Id";
+inline constexpr OUStringLiteral UNO_NAME_TAB_INDEX = u"TabIndex";
 inline constexpr OUStringLiteral UNO_NAME_LOCK = u"Lock";
 inline constexpr OUStringLiteral UNO_NAME_DATE_STRING = u"DateString";
 #endif

@@ -128,6 +128,12 @@ service ContentControl
     */
     [optional, property] long Id;
 
+    /** Describes the order in which keyboard navigation moves between controls
+
+        @since LibreOffice 7.6
+    */
+    [optional, property] unsigned long TabIndex;
+
     /** Describes whether the control itself and/or its data can be modified or deleted by the user.
 
         @since LibreOffice 7.6

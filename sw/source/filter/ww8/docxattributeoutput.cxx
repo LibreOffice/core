@@ -624,6 +624,7 @@ void SdtBlockHelper::DeleteAndResetTheLists()
     if (!m_aColor.isEmpty())
         m_aColor.clear();
     m_bShowingPlaceHolder = false;
+    m_nTabIndex = 0;
     m_bHasId = false;
 }
 
@@ -726,6 +727,10 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
 
     if (!m_aTag.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val), m_aTag);
+
+    if (m_nTabIndex)
+        pSerializer->singleElementNS(XML_w, XML_tabIndex, FSNS(XML_w, XML_val),
+                                     OString::number(m_nTabIndex));
 
     if (!m_aLock.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_lock, FSNS(XML_w, XML_val), m_aLock);
@@ -842,6 +847,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         {
             if (!(aPropertyValue.Value >>= m_aTag))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt tag value");
+        }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_tabIndex" && !m_nTabIndex)
+        {
+            if (!(aPropertyValue.Value >>= m_nTabIndex))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt tabIndex value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_lock" && m_aLock.isEmpty())
         {
@@ -2406,6 +2416,12 @@ void DocxAttributeOutput::WriteContentControlStart()
     {
         m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
                                        OString::number(m_pContentControl->GetId()));
+    }
+
+    if (m_pContentControl->GetTabIndex())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_tabIndex, FSNS(XML_w, XML_val),
+                                       OString::number(m_pContentControl->GetTabIndex()));
     }
 
     if (!m_pContentControl->GetLock().isEmpty())

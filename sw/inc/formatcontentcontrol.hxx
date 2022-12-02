@@ -179,6 +179,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The id: just remembered.
     sal_Int32 m_nId = 0;
 
+    /// The tabIndex: just remembered.
+    sal_uInt32 m_nTabIndex = 0;
+
     /// The control and content locks: mostly just remembered.
     OUString m_aLock;
 
@@ -361,6 +364,10 @@ public:
     void SetId(sal_Int32 nId) { m_nId = nId; }
 
     sal_Int32 GetId() const { return m_nId; }
+
+    void SetTabIndex(sal_uInt32 nTabIndex) { m_nTabIndex = nTabIndex; }
+
+    sal_uInt32 GetTabIndex() const { return m_nTabIndex; }
 
     // At the design level, define how the control should be locked. No effect at implementation lvl
     void SetLock(bool bLockContent, bool bLockControl);

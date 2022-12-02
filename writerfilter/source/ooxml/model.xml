@@ -13998,6 +13998,9 @@
           <element name="id">
             <ref name="CT_DecimalNumber"/>
           </element>
+          <element name="tabIndex">
+            <ref name="CT_DecimalNumber"/>
+          </element>
           <element name="tag">
             <ref name="CT_String"/>
           </element>
@@ -18298,6 +18301,7 @@
       <element name="dataBinding" tokenid="ooxml:CT_SdtPr_dataBinding"/>
       <element name="temporary" tokenid="ooxml:CT_SdtPr_temporary"/>
       <element name="id" tokenid="ooxml:CT_SdtPr_id"/>
+      <element name="tabIndex" tokenid="ooxml:CT_SdtPr_tabIndex"/>
       <element name="tag" tokenid="ooxml:CT_SdtPr_tag"/>
       <element name="equation" tokenid="ooxml:CT_SdtPr_equation"/>
       <element name="comboBox" tokenid="ooxml:CT_SdtPr_comboBox"/>

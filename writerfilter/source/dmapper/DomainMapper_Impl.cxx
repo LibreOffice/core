@@ -957,6 +957,11 @@ void DomainMapper_Impl::PopSdt()
         xContentControlProps->setPropertyValue("Id", uno::Any(m_pSdtHelper->GetId()));
     }
 
+    if (m_pSdtHelper->GetTabIndex())
+    {
+        xContentControlProps->setPropertyValue("TabIndex", uno::Any(m_pSdtHelper->GetTabIndex()));
+    }
+
     if (!m_pSdtHelper->GetLock().isEmpty())
     {
         xContentControlProps->setPropertyValue("Lock", uno::Any(m_pSdtHelper->GetLock()));

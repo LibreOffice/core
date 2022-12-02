@@ -521,6 +521,7 @@ void SdtHelper::clear()
     m_aAlias.clear();
     m_aTag.clear();
     m_nId = 0;
+    m_nTabIndex = 0;
     m_aLock.clear();
 }
 
@@ -546,6 +547,10 @@ const OUString& SdtHelper::GetTag() const { return m_aTag; }
 void SdtHelper::SetId(sal_Int32 nId) { m_nId = nId; }
 
 sal_Int32 SdtHelper::GetId() const { return m_nId; }
+
+void SdtHelper::SetTabIndex(sal_uInt32 nTabIndex) { m_nTabIndex = nTabIndex; }
+
+sal_uInt32 SdtHelper::GetTabIndex() const { return m_nTabIndex; }
 
 void SdtHelper::SetLock(const OUString& rLock) { m_aLock = rLock; }
 

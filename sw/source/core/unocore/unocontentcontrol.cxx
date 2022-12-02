@@ -179,6 +179,7 @@ public:
     OUString m_aAlias;
     OUString m_aTag;
     sal_Int32 m_nId;
+    sal_uInt32 m_nTabIndex;
     OUString m_aLock;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
@@ -198,6 +199,7 @@ public:
         , m_bComboBox(false)
         , m_bDropDown(false)
         , m_nId(0)
+        , m_nTabIndex(0)
     {
         if (m_pContentControl)
         {
@@ -494,6 +496,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetAlias(m_pImpl->m_aAlias);
     pContentControl->SetTag(m_pImpl->m_aTag);
     pContentControl->SetId(m_pImpl->m_nId);
+    pContentControl->SetTabIndex(m_pImpl->m_nTabIndex);
     pContentControl->SetLock(m_pImpl->m_aLock);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
@@ -985,6 +988,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_TAB_INDEX)
+    {
+        sal_uInt32 nValue = 0;
+        if (rValue >>= nValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_nTabIndex = nValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetTabIndex(nValue);
+            }
+        }
+    }
     else if (rPropertyName == UNO_NAME_LOCK)
     {
         OUString aValue;
@@ -1260,6 +1278,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetId();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_TAB_INDEX)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_nTabIndex;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetTabIndex();
         }
     }
     else if (rPropertyName == UNO_NAME_LOCK)

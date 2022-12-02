@@ -4067,6 +4067,14 @@ void XMLTextParagraphExport::ExportContentControl(
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAG, aTag);
         }
 
+        sal_uInt32 nTabIndex;
+        xPropertySet->getPropertyValue("TabIndex") >>= nTabIndex;
+        if (nTabIndex)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAB_INDEX,
+                                     OUString::number(nTabIndex));
+        }
+
         OUString aLock;
         xPropertySet->getPropertyValue("Lock") >>= aLock;
         if (!aLock.isEmpty())

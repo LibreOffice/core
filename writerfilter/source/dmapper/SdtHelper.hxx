@@ -135,6 +135,9 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:sdtPr>'s <w:id w:val="...">.
     sal_Int32 m_nId = 0;
 
+    /// <w:sdtPr>'s <w:tabIndex w:val="...">.
+    sal_uInt32 m_nTabIndex = 0;
+
     /// <w:sdtPr>'s <w:lock w:val="...">.
     OUString m_aLock;
 
@@ -225,6 +228,9 @@ public:
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() const;
+
+    void SetTabIndex(sal_uInt32 nTabIndex);
+    sal_uInt32 GetTabIndex() const;
 
     void SetLock(const OUString& rLock);
     const OUString& GetLock() const;

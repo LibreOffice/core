@@ -423,6 +423,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
+    xContentControlProps->setPropertyValue("TabIndex", uno::Any(sal_uInt32(2)));
     xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtLocked")));
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
@@ -447,6 +448,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color", "val", "008000");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", "myalias");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", "val", "mytag");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tabIndex", "val", "2");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", "sdtLocked");
 }
 
