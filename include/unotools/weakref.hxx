@@ -42,7 +42,9 @@ namespace unotools
     behind it *is* thread-safe, so multiple threads can have their own
     WeakReferences to the same XWeak object.
 
-    @tparam interface_type type of interface
+    @tparam interface_type Must be a C++ implementation class type, not a UNO interface type.  (See
+    the C++20 requires-clause on the get member.  That clause is not put on the class as a whole to
+    avoid overly tight requirements on when interface_type needs to be complete.)
 */
 template <class interface_type>
 class SAL_WARN_UNUSED WeakReference : public com::sun::star::uno::WeakReferenceHelper
@@ -113,6 +115,9 @@ public:
          @return hard reference or null, if the weakly referenced interface has gone
     */
     rtl::Reference<interface_type> SAL_CALL get() const
+#if __cplusplus >= 202002L
+        requires(!cppu::detail::isUnoInterfaceType<interface_type>)
+#endif
     {
         css::uno::Reference<css::uno::XInterface> xInterface = WeakReferenceHelper::get();
         // If XInterface is an ambiguous base of interface_type, we have to use dynamic_cast,

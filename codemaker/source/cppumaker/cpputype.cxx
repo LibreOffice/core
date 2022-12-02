@@ -1184,7 +1184,7 @@ void InterfaceType::dumpHppFile(
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
-    out << "\n";
+    out << "\n#if defined LIBO_INTERNAL_ONLY\n#include <type_traits>\n#endif\n\n";
     dumpGetCppuType(out);
     out << "\n::css::uno::Type const & "
         << codemaker::cpp::scopedCppName(u2b(name_))
@@ -1194,7 +1194,15 @@ void InterfaceType::dumpHppFile(
     dumpType(out, name_, false, false, true);
     out << " >::get();\n";
     dec();
-    out << "}\n\n#endif // "<< headerDefine << "\n";
+    out << "}\n\n#if defined LIBO_INTERNAL_ONLY\nnamespace cppu::detail {\n";
+    if (name_ == "com.sun.star.uno.XInterface") {
+        out << "template<typename> struct IsUnoInterfaceType: ::std::false_type {};\n"
+               "template<typename T> inline constexpr auto isUnoInterfaceType ="
+                   " IsUnoInterfaceType<T>::value;\n";
+    }
+    out << "template<> struct IsUnoInterfaceType<";
+    dumpType(out, name_, false, false, true);
+    out << ">: ::std::true_type {};\n}\n#endif\n\n#endif // "<< headerDefine << "\n";
 }
 
 void InterfaceType::dumpAttributes(FileStream & out) const
