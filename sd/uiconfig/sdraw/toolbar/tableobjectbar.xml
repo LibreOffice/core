@@ -46,6 +46,5 @@
  <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TableDesign"/>
  <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
 </toolbar:toolbar>

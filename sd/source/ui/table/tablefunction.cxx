@@ -235,7 +235,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     {
         // First make sure that the sidebar is visible
         GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-        ::sfx2::sidebar::Sidebar::ShowPanel(
+        ::sfx2::sidebar::Sidebar::TogglePanel(
             u"SdTableDesignPanel",
             GetViewFrame()->GetFrame().GetFrameInterface());
 
