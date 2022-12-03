@@ -13,16 +13,26 @@
 
 #include <string_view>
 
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdoashp.hxx>
+#include <tools/color.hxx>
 
 using namespace ::com::sun::star;
 
@@ -310,6 +320,183 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
         pChange->commit();
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
+{
+    loadFromURL(u"tdf125885_WordArt.docx");
+    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
+    // This test covers some basic properties.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Is it a Fontwork?
+    bool bTextBox;
+    xShapeProps->getPropertyValue(u"TextBox") >>= bTextBox;
+    CPPUNIT_ASSERT(!bTextBox);
+
+    uno::Reference<css::text::XTextFrame> xTextFrame;
+    xShapeProps->getPropertyValue(u"TextBoxContent") >>= xTextFrame;
+    CPPUNIT_ASSERT(!xTextFrame.is());
+
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry") >>= aGeoPropSeq;
+    CPPUNIT_ASSERT(aGeoPropSeq.getLength() > 0);
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+
+    uno::Sequence<beans::PropertyValue> aTextPathSeq;
+    aGeoPropMap.getValue(u"TextPath") >>= aTextPathSeq;
+    CPPUNIT_ASSERT(aTextPathSeq.getLength() > 0);
+
+    comphelper::SequenceAsHashMap aTextPathPropMap(aTextPathSeq);
+    bool bTextPathOn;
+    aTextPathPropMap.getValue(u"TextPath") >>= bTextPathOn;
+    CPPUNIT_ASSERT(bTextPathOn);
+
+    // Is it the correct kind of Fontwork?
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    aGeoPropMap.getValue(u"AdjustmentValues") >>= aAdjustmentSeq;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAdjustmentSeq.getLength());
+
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aHandleSeq;
+    aGeoPropMap.getValue(u"Handles") >>= aHandleSeq;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aHandleSeq.getLength());
+
+    awt::Rectangle aViewBox;
+    aGeoPropMap.getValue(u"ViewBox") >>= aViewBox;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Height);
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"textDoubleWave1")),
+                         aGeoPropMap.getValue(u"PresetTextWarp"));
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"mso-spt158")), aGeoPropMap.getValue(u"Type"));
+
+    // Are properties correctly copied to shape?
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0, 0, 255)), xShapeProps->getPropertyValue(u"FillColor"));
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_SOLID),
+                         xShapeProps->getPropertyValue(u"FillStyle"));
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"Courier New")),
+                         xShapeProps->getPropertyValue(u"CharFontName"));
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(float(awt::FontWeight::BOLD)),
+                         xShapeProps->getPropertyValue("CharWeight"));
+
+    lang::Locale aCharLocale;
+    xShapeProps->getPropertyValue(u"CharLocale") >>= aCharLocale;
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), aCharLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), aCharLocale.Country);
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::TextHorizontalAdjust_RIGHT),
+                         xShapeProps->getPropertyValue(u"TextHorizontalAdjust"));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
+{
+    loadFromURL(u"tdf125885_WordArt2.docx");
+    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
+    // This test covers whether theme color properties are correctly converted on import.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Fill
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(4000)),
+                         xShapeProps->getPropertyValue(u"FillColorLumMod"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(6000)),
+                         xShapeProps->getPropertyValue(u"FillColorLumOff"));
+    // ID "6" for the theme "accent3" is not yet in API, but defined in enum PredefinedClrSchemeID
+    // in drawingml/clrscheme.hxx.
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(6)), xShapeProps->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(215, 228, 189)),
+                         xShapeProps->getPropertyValue(u"FillColor"));
+
+    // Stroke
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineCap_ROUND),
+                         xShapeProps->getPropertyValue(u"LineCap"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_DASH),
+                         xShapeProps->getPropertyValue(u"LineStyle"));
+    // Stroke has only the resulted color, but no reference to the used theme color "accent2".
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(149, 55, 53)), xShapeProps->getPropertyValue(u"LineColor"));
+    drawing::LineDash aLineDash;
+    xShapeProps->getPropertyValue(u"LineDash") >>= aLineDash;
+    CPPUNIT_ASSERT_EQUAL(drawing::DashStyle_ROUNDRELATIVE, aLineDash.Style);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aLineDash.Dots);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aLineDash.DotLen);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aLineDash.Dashes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLineDash.DashLen);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(199), aLineDash.Distance);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(635)), xShapeProps->getPropertyValue(u"LineWidth"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(20)),
+                         xShapeProps->getPropertyValue(u"LineTransparence"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineJoint_BEVEL),
+                         xShapeProps->getPropertyValue(u"LineJoint"));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
+{
+    loadFromURL(u"tdf125885_WordArt3.docx");
+    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
+    // This test covers some aspects of import of gradient fill.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // linear gradient, MSO UI 21deg
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(690), aGradient.Angle);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(255), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16225862), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.YOffset);
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+    }
+
+    // radial gradient, centered
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(255), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16225862), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
+    }
+
+    // rectangular gradient, focus right, bottom
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(255), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16225862), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.YOffset);
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
     }
 }
 

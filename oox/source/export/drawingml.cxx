@@ -3784,7 +3784,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             // TextShape's automatic word wrapping, then we need to set
             // wrapping to square.
             uno::Reference<lang::XServiceInfo> xServiceInfo(rXIface, uno::UNO_QUERY);
-            if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
+            if ((xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
+                || bIsFontworkShape)
                 pWrap = "square";
         }
 

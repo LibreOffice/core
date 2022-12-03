@@ -23,6 +23,7 @@
 #include <drawingml/customshapeproperties.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <drawingml/fillproperties.hxx>
+#include <drawingml/fontworkhelpers.hxx>
 #include <drawingml/graphicproperties.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
@@ -529,24 +530,6 @@ void Shape::addChildren(
     }
 }
 
-static void lcl_resetPropertyValue( std::vector<beans::PropertyValue>& rPropVec, const OUString& rName )
-{
-    auto aIterator = std::find_if( rPropVec.begin(), rPropVec.end(),
-        [rName]( const beans::PropertyValue& rValue ) { return rValue.Name == rName; } );
-
-    if (aIterator != rPropVec.end())
-        rPropVec.erase( aIterator );
-}
-
-static void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPropVec,
-                           const OUString& rName,
-                           const beans::PropertyValue& rPropertyValue )
-{
-    lcl_resetPropertyValue( rPropVec, rName );
-
-    rPropVec.push_back( rPropertyValue );
-}
-
 static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
 {
     if (eAdjust == ParagraphAdjust_LEFT)
@@ -556,134 +539,6 @@ static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
     else if (eAdjust == ParagraphAdjust_CENTER)
         return SDRTEXTHORZADJUST_CENTER;
     return SDRTEXTHORZADJUST_LEFT;
-}
-
-static void
-lcl_putCustomShapeIntoTextPathMode(const uno::Reference<drawing::XShape>& xShape,
-                                   const CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
-                                   const TextBodyPtr& pTextBody)
-{
-    if (!xShape.is() || !pCustomShapePropertiesPtr || !pTextBody)
-        return;
-
-    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-    if (!xDefaulter.is())
-        return;
-
-    Reference<XPropertySet> xSet(xShape, UNO_QUERY);
-    if (!xSet.is())
-        return;
-
-    const OUString sMSPresetType = pTextBody->getTextProperties().msPrst;
-    const OUString sFontworkType = PresetGeometryTypeNames::GetFontworkType(sMSPresetType);
-
-    // The DrawingML shapes from the presetTextWarpDefinitions are mapped to the definitions
-    // in svx/../EnhancedCustomShapeGeometry.cxx, which are used for WordArt shapes from
-    // binary MS Office. Therefore all adjustment values need to be adapted.
-    auto aAdjGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
-    Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
-        !aAdjGdList.empty() ? aAdjGdList.size() : 1);
-    auto pAdjustment = aAdjustment.getArray();
-    int nIndex = 0;
-    for (const auto& aEntry : aAdjGdList)
-    {
-        double fValue = aEntry.maFormula.toDouble();
-        // then: polar-handle, else: XY-handle
-        // There exist only 8 polar-handles at all in presetTextWarp.
-        if ((sFontworkType == "fontwork-arch-down-curve")
-            || (sFontworkType == "fontwork-arch-down-pour" && aEntry.maName == "adj1")
-            || (sFontworkType == "fontwork-arch-up-curve")
-            || (sFontworkType == "fontwork-arch-up-pour" && aEntry.maName == "adj1")
-            || (sFontworkType == "fontwork-open-circle-curve")
-            || (sFontworkType == "fontwork-open-circle-pour" && aEntry.maName == "adj1")
-            || (sFontworkType == "fontwork-circle-curve")
-            || (sFontworkType == "fontwork-circle-pour" && aEntry.maName == "adj1"))
-        {
-            // DrawingML has 1/60000 degree unit, but WordArt simple degree. Range [0..360[
-            // or range ]-180..180] doesn't matter, because only cos(angle) and
-            // sin(angle) are used.
-            fValue = NormAngle360(fValue / 60000.0);
-        }
-        else
-        {
-            // DrawingML writes adjustment guides as relative value with 100% = 100000,
-            // but WordArt definitions use values absolute in viewBox 0 0 21600 21600,
-            // so scale with 21600/100000 = 0.216, with two exceptions:
-            // X-handles of waves describe increase/decrease relative to horizontal center.
-            // The gdRefR of pour-shapes is not relative to viewBox but to radius.
-            if ((sFontworkType == "mso-spt158" && aEntry.maName == "adj2") // textDoubleWave1
-                || (sFontworkType == "fontwork-wave" && aEntry.maName == "adj2") // textWave1
-                || (sFontworkType == "mso-spt157" && aEntry.maName == "adj2") // textWave2
-                || (sFontworkType == "mso-spt159" && aEntry.maName == "adj2")) // textWave4
-            {
-                fValue = (fValue + 50000.0) * 0.216;
-            }
-            else if ((sFontworkType == "fontwork-arch-down-pour" && aEntry.maName == "adj2")
-                     || (sFontworkType == "fontwork-arch-up-pour" && aEntry.maName == "adj2")
-                     || (sFontworkType == "fontwork-open-circle-pour" && aEntry.maName == "adj2")
-                     || (sFontworkType == "fontwork-circle-pour" && aEntry.maName == "adj2"))
-            {
-                fValue *= 0.108;
-            }
-            else
-            {
-                fValue *= 0.216;
-            }
-        }
-
-        pAdjustment[nIndex].Value <<= fValue;
-        pAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
-    }
-
-    // Set attributes in CustomShapeGeometry
-    xDefaulter->createCustomShapeDefaults(sFontworkType);
-
-    auto aGeomPropSeq
-        = xSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
-    auto aGeomPropVec
-        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
-
-    // Reset old properties
-    static const OUStringLiteral sTextPath(u"TextPath");
-    static const OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
-    static const OUStringLiteral sPresetTextWarp(u"PresetTextWarp");
-
-    lcl_resetPropertyValue(aGeomPropVec, "CoordinateSize");
-    lcl_resetPropertyValue(aGeomPropVec, "Equations");
-    lcl_resetPropertyValue(aGeomPropVec, "Path");
-    lcl_resetPropertyValue(aGeomPropVec, sAdjustmentValues);
-
-    bool bFromWordArt(false);
-    pTextBody->getTextProperties().maPropertyMap.getProperty(PROP_FromWordArt) >>= bFromWordArt;
-
-    bool bScaleX(false);
-    if (!bFromWordArt
-        && (sMSPresetType == "textArchDown" || sMSPresetType == "textArchUp"
-            || sMSPresetType == "textCircle" || sMSPresetType == "textButton"))
-    {
-        bScaleX = true;
-    }
-
-    // Apply new properties
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        { { sTextPath, uno::Any(true) },
-          { "TextPathMode", uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
-          { "ScaleX", uno::Any(bScaleX) } }));
-
-    lcl_setPropertyValue(aGeomPropVec, sTextPath,
-                         comphelper::makePropertyValue(sTextPath, aPropertyValues));
-
-    lcl_setPropertyValue(aGeomPropVec, sPresetTextWarp,
-                         comphelper::makePropertyValue(sPresetTextWarp, sMSPresetType));
-
-    if (!aAdjGdList.empty())
-    {
-        lcl_setPropertyValue(aGeomPropVec, sAdjustmentValues,
-                             comphelper::makePropertyValue(sAdjustmentValues, aAdjustment));
-    }
-
-    xSet->setPropertyValue("CustomShapeGeometry",
-                           uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 }
 
 // LO does not interpret properties in styles belonging to the text content of a FontWork shape,
@@ -1914,7 +1769,12 @@ Reference< XShape > const & Shape::createAndInsert(
             if (mpTextBody && !mpTextBody->getTextProperties().msPrst.isEmpty()
                 && mpTextBody->getTextProperties().msPrst != u"textNoShape")
             {
-                lcl_putCustomShapeIntoTextPathMode(mxShape, mpCustomShapePropertiesPtr, mpTextBody);
+                bool bFromWordArt(aShapeProps.hasProperty(PROP_FromWordArt)
+                                      ? aShapeProps.getProperty(PROP_FromWordArt).get<bool>()
+                                      : false);
+                FontworkHelpers::putCustomShapeIntoTextPathMode(
+                    mxShape, mpCustomShapePropertiesPtr, mpTextBody->getTextProperties().msPrst,
+                    bFromWordArt);
             }
         }
         else if( getTextBody() )
