@@ -630,6 +630,10 @@ void LineParser::readFont()
                 aResult.familyName = aResult.familyName.copy(7, aResult.familyName.getLength() - 7);
                 parseFontFamilyName(aResult);
             }
+            if (aResult.familyName.endsWithIgnoreAsciiCase("-VKana"))
+            {
+                parseFontFamilyName(aResult);
+            }
 
             // Font weight
             if (aFontReadResult.GetWeight() == WEIGHT_THIN)
