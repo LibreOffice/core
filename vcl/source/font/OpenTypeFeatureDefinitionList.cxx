@@ -125,49 +125,18 @@ void OpenTypeFeatureDefinitionListPrivate::init()
     });
 }
 
-namespace
+FeatureDefinition OpenTypeFeatureDefinitionListPrivate::getDefinition(vcl::font::Feature& rFeature)
 {
-OUString getNumericLowerPart(vcl::font::Feature& rFeature)
-{
-    auto nFeatureCode = rFeature.m_nCode;
-    char cChar1((sal_uInt32(nFeatureCode) >> 8) & 0xFF);
-    char cChar2((sal_uInt32(nFeatureCode) >> 0) & 0xFF);
-
-    if (rtl::isAsciiDigit(static_cast<unsigned char>(cChar1))
-        && rtl::isAsciiDigit(static_cast<unsigned char>(cChar2)))
+    if (rFeature.isCharacterVariant() || rFeature.isStylisticSet())
     {
-        return OUStringChar(cChar1) + OUStringChar(cChar2);
-    }
-    return OUString();
-}
-
-} // end anonymous namespace
-
-bool OpenTypeFeatureDefinitionListPrivate::isSpecialFeature(vcl::font::Feature& rFeature)
-{
-    return rFeature.isCharacterVariant() || rFeature.isStylisticSet();
-}
-
-FeatureDefinition
-OpenTypeFeatureDefinitionListPrivate::handleSpecialFeature(vcl::font::Feature& rFeature)
-{
-    FeatureDefinition aFeatureDefinition;
-    OUString sNumericPart = getNumericLowerPart(rFeature);
-    if (!sNumericPart.isEmpty())
-    {
+        FeatureDefinition aFeatureDefinition;
+        OUString sNumericPart = OUStringChar(char((rFeature.m_nCode >> 8) & 0xFF))
+                                + OUStringChar(char((rFeature.m_nCode >> 0) & 0xFF));
         if (rFeature.isCharacterVariant())
             aFeatureDefinition = { rFeature.m_nCode, STR_FONT_FEATURE_ID_CVXX, sNumericPart };
         else if (rFeature.isStylisticSet())
             aFeatureDefinition = { rFeature.m_nCode, STR_FONT_FEATURE_ID_SSXX, sNumericPart };
-    }
-    return aFeatureDefinition;
-}
-
-FeatureDefinition OpenTypeFeatureDefinitionListPrivate::getDefinition(vcl::font::Feature& rFeature)
-{
-    if (isSpecialFeature(rFeature))
-    {
-        return handleSpecialFeature(rFeature);
+        return aFeatureDefinition;
     }
 
     auto nFeatureCode = rFeature.m_nCode;

@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_FONT_FEATURE_HXX
 
 #include <vcl/dllapi.h>
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
 #include <vector>
@@ -92,12 +93,16 @@ struct Feature
 
     bool isCharacterVariant() const
     {
-        return ((m_nCode >> 24) & 0xFF) == 'c' && ((m_nCode >> 16) & 0xFF) == 'v';
+        return ((m_nCode >> 24) & 0xFF) == 'c' && ((m_nCode >> 16) & 0xFF) == 'v'
+               && rtl::isAsciiDigit((m_nCode >> 8) & 0xFF)
+               && rtl::isAsciiDigit((m_nCode >> 0) & 0xFF);
     }
 
     bool isStylisticSet() const
     {
-        return ((m_nCode >> 24) & 0xFF) == 's' && ((m_nCode >> 16) & 0xFF) == 's';
+        return ((m_nCode >> 24) & 0xFF) == 's' && ((m_nCode >> 16) & 0xFF) == 's'
+               && rtl::isAsciiDigit((m_nCode >> 8) & 0xFF)
+               && rtl::isAsciiDigit((m_nCode >> 0) & 0xFF);
     }
 
     uint32_t m_nCode;

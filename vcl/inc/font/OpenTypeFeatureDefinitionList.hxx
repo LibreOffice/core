@@ -25,9 +25,6 @@ private:
 
     void init();
 
-    static bool isSpecialFeature(vcl::font::Feature& rFeature);
-    static FeatureDefinition handleSpecialFeature(vcl::font::Feature& rFeature);
-
 public:
     OpenTypeFeatureDefinitionListPrivate();
     FeatureDefinition getDefinition(vcl::font::Feature& rFeature);
