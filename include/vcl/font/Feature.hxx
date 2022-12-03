@@ -90,6 +90,16 @@ struct Feature
     Feature();
     Feature(uint32_t const nCode, FeatureType eType);
 
+    bool isCharacterVariant() const
+    {
+        return ((m_nCode >> 24) & 0xFF) == 'c' && ((m_nCode >> 16) & 0xFF) == 'v';
+    }
+
+    bool isStylisticSet() const
+    {
+        return ((m_nCode >> 24) & 0xFF) == 's' && ((m_nCode >> 16) & 0xFF) == 's';
+    }
+
     uint32_t m_nCode;
     FeatureType m_eType;
     FeatureDefinition m_aDefinition;

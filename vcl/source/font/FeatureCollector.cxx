@@ -102,7 +102,7 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
         rFeature.m_nCode = aFeatureTag;
 
-        FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
+        FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(rFeature);
         std::vector<vcl::font::FeatureParameter> aParameters{
             { 0, VclResId(STR_FONT_FEATURE_PARAM_NONE) }
         };

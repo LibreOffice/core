@@ -87,21 +87,6 @@ void FontFeaturesDialog::initialize()
     updateFontPreview();
 }
 
-namespace
-{
-bool isCharacterVariantCode(sal_uInt32 nFeatureCode)
-{
-    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
-           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
-}
-
-bool isStylisticSetCode(sal_uInt32 nFeatureCode)
-{
-    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
-           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
-}
-}
-
 int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
 {
     int nRowHeight(0);
@@ -120,13 +105,13 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         if (!aDefinition)
             aDefinition = { nFontFeatureCode, "" };
 
-        if (isStylisticSetCode(nFontFeatureCode))
+        if (rFontFeature.isStylisticSet())
         {
             n = j++;
             m_xStylisticSetsBox->set_visible(true);
             m_aFeatureItems.emplace_back(m_xStylisticSetsGrid.get());
         }
-        else if (isCharacterVariantCode(nFontFeatureCode))
+        else if (rFontFeature.isCharacterVariant())
         {
             n = k++;
             m_xCharacterVariantsBox->set_visible(true);
