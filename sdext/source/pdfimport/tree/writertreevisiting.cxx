@@ -43,6 +43,15 @@ using namespace ::com::sun::star::uno;
 namespace pdfi
 {
 
+const Reference<XBreakIterator>& WriterXmlOptimizer::GetBreakIterator()
+{
+    if (!mxBreakIter.is())
+    {
+        mxBreakIter = BreakIterator::create(m_rProcessor.m_xContext);
+    }
+    return mxBreakIter;
+}
+
 const Reference< XCharacterClassification >& WriterXmlEmitter::GetCharacterClassification()
 {
     if ( !mxCharClass.is() )
@@ -815,6 +824,11 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
         if( pCur )
         {
             TextElement* pNext = dynamic_cast<TextElement*>(next->get());
+            OUString str;
+            bool bPara = strspn("ParagraphElement", typeid(rParent).name());
+            ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(&rParent);
+            if (bPara && pPara && isComplex(GetBreakIterator(), pCur))
+                pPara->bRtl = true;
             if( pNext )
             {
                 const GraphicsContext& rCurGC = m_rProcessor.getGraphicsContext( pCur->GCId );
@@ -872,8 +886,52 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     )
                 {
                     pCur->updateGeometryWith( pNext );
-                    // append text to current element
-                    pCur->Text.append( pNext->Text );
+                    if (pPara && pPara->bRtl)
+                    {
+                        // Tdf#152083: If RTL, reverse the text in pNext so that its correct order is
+                        // restored when the combined text is reversed in WriterXmlEmitter::visit.
+                        OUString tempStr;
+                        bool bNeedReverse=false;
+                        str = pNext->Text.toString();
+                        for (sal_Int32 i=0; i < str.getLength(); i++)
+                        {
+                            if (str[i] == u' ')
+                            {   // Space char (e.g. the space as in " م") needs special treatment.
+                                //   First, append the space char to pCur.
+                                pCur->Text.append(OUStringChar(str[i]));
+                                //   Then, check whether the tmpStr needs reverse, if so then reverse and append.
+                                if (bNeedReverse)
+                                {
+                                    tempStr = ::comphelper::string::reverseCodePoints(tempStr);
+                                    pCur->Text.append(tempStr);
+                                    tempStr = u"";
+                                }
+                                bNeedReverse = false;
+                            }
+                            else
+                            {
+                                tempStr += OUStringChar(str[i]);
+                                bNeedReverse = true;
+                            }
+                        }
+                        // Do the last append
+                        if (bNeedReverse)
+                        {
+                            tempStr = ::comphelper::string::reverseCodePoints(tempStr);
+                            pCur->Text.append(tempStr);
+                        }
+                        else
+                        {
+                            pCur->Text.append(tempStr);
+                        }
+                    }
+                    else
+                    {
+                        // append text to current element directly without reverse
+                        pCur->Text.append(pNext->Text);
+                    }
+                    if (bPara && pPara && isComplex(GetBreakIterator(), pCur))
+                        pPara->bRtl = true;
                     // append eventual children to current element
                     // and clear children (else the children just
                     // appended to pCur would be destroyed)

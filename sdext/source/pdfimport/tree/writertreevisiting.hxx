@@ -24,6 +24,7 @@
 
 #include <pdfihelper.hxx>
 
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 namespace pdfi
@@ -34,10 +35,12 @@ namespace pdfi
     {
     private:
         PDFIProcessor& m_rProcessor;
+        css::uno::Reference<css::i18n::XBreakIterator> mxBreakIter;
         void optimizeTextElements(Element& rParent);
         void checkHeaderAndFooter( PageElement& rElem );
 
     public:
+        const css::uno::Reference<css::i18n::XBreakIterator>& GetBreakIterator();
         explicit WriterXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}

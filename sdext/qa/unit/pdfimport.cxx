@@ -832,10 +832,10 @@ namespace
             xmlDocUniquePtr pXmlDoc2(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput2.getStr())));
             xpath = "string(//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"ٱلَّسَل"), sContent);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"ٱلسََّل"), sContent);
             xpath = "string(//draw:frame[@draw:z-index='2'][1]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL(true, sContent.match(u"اُم َعَلْيَك"));
+            CPPUNIT_ASSERT_EQUAL(OUString(u"امُ عَلَيَْك"), sContent);
             xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"中文测试，中文"), sContent);
