@@ -85,9 +85,9 @@ bool resolvePathnameUrl(OUString * url)
     return false;
 }
 
-enum LookupMode {
-    LOOKUP_MODE_NORMAL, LOOKUP_MODE_URE_BOOTSTRAP,
-    LOOKUP_MODE_URE_BOOTSTRAP_EXPANSION };
+enum class LookupMode {
+    NORMAL, URE_BOOTSTRAP,
+    URE_BOOTSTRAP_EXPANSION };
 
 struct ExpandRequestLink {
     ExpandRequestLink const * next;
@@ -401,7 +401,7 @@ struct FundamentalIniData
         OUString uri;
         ini =
             (get_static_bootstrap_handle()->getValue(
-                "URE_BOOTSTRAP", &uri.pData, nullptr, LOOKUP_MODE_NORMAL, false,
+                "URE_BOOTSTRAP", &uri.pData, nullptr, LookupMode::NORMAL, false,
                 nullptr)
              && resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : nullptr;
@@ -426,8 +426,8 @@ bool Bootstrap_Impl::getValue(
     LookupMode mode, bool override, ExpandRequestLink const * requestStack)
     const
 {
-    if (mode == LOOKUP_MODE_NORMAL && key == "URE_BOOTSTRAP")
-        mode = LOOKUP_MODE_URE_BOOTSTRAP;
+    if (mode == LookupMode::NORMAL && key == "URE_BOOTSTRAP")
+        mode =  LookupMode::URE_BOOTSTRAP;
 
     if (override && getDirectValue(key, value, mode, requestStack))
         return true;
@@ -518,7 +518,7 @@ bool Bootstrap_Impl::getValue(
     if (!override && getDirectValue(key, value, mode, requestStack))
         return true;
 
-    if (mode == LOOKUP_MODE_NORMAL)
+    if (mode == LookupMode::NORMAL)
     {
         FundamentalIniData const & d = FundamentalIni();
         Bootstrap_Impl const * b = static_cast<Bootstrap_Impl const *>(d.ini);
@@ -579,12 +579,12 @@ void Bootstrap_Impl::expandValue(
 {
     rtl_uString_assign(
         value,
-        (mode == LOOKUP_MODE_URE_BOOTSTRAP && isPathnameUrl(text) ?
+        (mode ==  LookupMode::URE_BOOTSTRAP && isPathnameUrl(text) ?
          text :
          recursivelyExpandMacros(
              this, text,
-             (mode == LOOKUP_MODE_URE_BOOTSTRAP ?
-              LOOKUP_MODE_URE_BOOTSTRAP_EXPANSION : mode),
+             (mode ==  LookupMode::URE_BOOTSTRAP ?
+               LookupMode::URE_BOOTSTRAP_EXPANSION : mode),
              requestFile, requestKey, requestStack)).pData);
 }
 
@@ -698,7 +698,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
             handle = get_static_bootstrap_handle();
 
         found = static_cast< Bootstrap_Impl * >(handle)->getValue(
-            pName, ppValue, pDefault, LOOKUP_MODE_NORMAL, false, nullptr );
+            pName, ppValue, pDefault,  LookupMode::NORMAL, false, nullptr );
     }
 
     return found;
@@ -775,7 +775,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
 
     OUString expanded(expandMacros(static_cast< Bootstrap_Impl * >(handle),
                                    OUString::unacquired(macro),
-                                   LOOKUP_MODE_NORMAL, nullptr));
+                                    LookupMode::NORMAL, nullptr));
     rtl_uString_assign(macro, expanded.pData);
 }
 
