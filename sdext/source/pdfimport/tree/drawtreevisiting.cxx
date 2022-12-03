@@ -878,7 +878,7 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
     // TODO: tdf#143095: use system font name rather than PSName
     SAL_INFO("sdext.pdfimport", "The font used in xml is: " << rFont.familyName);
     aFontProps[ "fo:font-family" ] = rFont.familyName;
-    aFontProps[ "style:font-family-asia" ] = rFont.familyName;
+    aFontProps[ "style:font-family-asian" ] = rFont.familyName;
     aFontProps[ "style:font-family-complex" ] = rFont.familyName;
 
     // bold
