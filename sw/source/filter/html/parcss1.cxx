@@ -374,8 +374,8 @@ CSS1Token CSS1Parser::GetNextToken()
                         // save current position
                         sal_Int32 nInPosOld = m_nInPos;
                         sal_Unicode cNextChOld = m_cNextCh;
-                        sal_uLong nlLineNrOld  = m_nlLineNr;
-                        sal_uLong nlLinePosOld = m_nlLinePos;
+                        sal_uInt32 nlLineNrOld  = m_nlLineNr;
+                        sal_uInt32 nlLinePosOld = m_nlLinePos;
                         bool bEOFOld = m_bEOF;
 
                         // parse the next identifier
@@ -525,8 +525,8 @@ CSS1Token CSS1Parser::GetNextToken()
                 // save current position
                 sal_Int32 nInPosSave = m_nInPos;
                 sal_Unicode cNextChSave = m_cNextCh;
-                sal_uLong nlLineNrSave = m_nlLineNr;
-                sal_uLong nlLinePosSave = m_nlLinePos;
+                sal_uInt32 nlLineNrSave = m_nlLineNr;
+                sal_uInt32 nlLinePosSave = m_nlLinePos;
                 bool bEOFSave = m_bEOF;
 
                 // first try to parse a hex digit

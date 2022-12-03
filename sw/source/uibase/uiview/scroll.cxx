@@ -40,9 +40,8 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 {
     m_aDocSz = rSize;
     SetRange( Range( 0, m_bHori ? rSize.Width() : rSize.Height()) );
-    const sal_uLong nVisSize = GetVisibleSize();
     SetLineSize( SCROLL_LINE_SIZE );
-    SetPageSize( nVisSize * 77 / 100 );
+    SetPageSize( GetVisibleSize() * 77 / 100 );
 }
 
 // Will be called after a change of the visible view section.
