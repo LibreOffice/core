@@ -135,7 +135,7 @@ public:
 
 private:
     // for glyph+font+script fallback
-    void            MoveGlyph(int nStart, tools::Long nNewXPos);
+    void            MoveGlyph(int nStart, double nNewXPos);
     void            DropGlyph(int nStart);
     void            Simplify(bool bIsBase);
 
