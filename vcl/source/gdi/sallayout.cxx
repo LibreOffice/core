@@ -539,7 +539,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     return true;
 }
 
-void GenericSalLayout::MoveGlyph( int nStart, DeviceCoordinate nNewXPos )
+void GenericSalLayout::MoveGlyph(int nStart, double nNewXPos)
 {
     if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return;
