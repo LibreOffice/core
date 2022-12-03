@@ -265,12 +265,20 @@ static AquaSalFrame* getMouseContainerFrame()
         mpFrame->CallCallback( SalEvent::GetFocus, nullptr );
         mpFrame->SendPaintEvent(); // repaint controls as active
     }
+
+    // Prevent the same native input method popup that was cancelled in a
+    // previous call to [self windowDidResignKey:] from reappearing
+    [self endExtTextInput];
 }
 
 -(void)windowDidResignKey: (NSNotification*)pNotification
 {
     (void)pNotification;
     SolarMutexGuard aGuard;
+
+    // Commit any uncommitted text and cancel the native input method session
+    // whenever a window loses focus like in Safari, Firefox, and Excel
+    [self endExtTextInput];
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -348,7 +356,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // #i84461# end possible input
-        mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+        [self endExtTextInput];
         if( AquaSalFrame::isAlive( mpFrame ) )
         {
             mpFrame->CallCallback( SalEvent::Close, nullptr );
@@ -437,6 +445,18 @@ static AquaSalFrame* getMouseContainerFrame()
     mDraggingDestinationHandler = nil;
 }
 
+-(void)endExtTextInput
+{
+    [self endExtTextInput:EndExtTextInputFlags::Complete];
+}
+
+-(void)endExtTextInput:(EndExtTextInputFlags)nFlags
+{
+    SalFrameView *pView = static_cast<SalFrameView*>([self firstResponder]);
+    if (pView && [pView isKindOfClass:[SalFrameView class]])
+        [pView endExtTextInput:nFlags];
+}
+
 @end
 
 @implementation SalFrameView
@@ -452,15 +472,28 @@ static AquaSalFrame* getMouseContainerFrame()
     {
         mDraggingDestinationHandler = nil;
         mpFrame = pFrame;
+        mpLastEvent = nil;
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
         mpReferenceWrapper = nil;
         mpMouseEventListener = nil;
         mpLastSuperEvent = nil;
+        mfLastMagnifyTime = 0.0;
+
+        mbInEndExtTextInput = NO;
+        mbInCommitMarkedText = NO;
+        mpLastMarkedText = nil;
     }
 
-    mfLastMagnifyTime = 0.0;
     return self;
+}
+
+-(void)dealloc
+{
+    [self clearLastEvent];
+    [self clearLastMarkedText];
+
+    [super dealloc];
 }
 
 -(AquaSalFrame*)getSalFrame
@@ -922,7 +955,11 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpLastEvent = pEvent;
+        // Retain the event as it will be released sometime before a key up
+        // event is dispatched
+        [self clearLastEvent];
+        mpLastEvent = [pEvent retain];
+
         mbInKeyInput = true;
         mbNeedSpecialKeyHandle = false;
         mbKeyHandled = false;
@@ -978,10 +1015,20 @@ static AquaSalFrame* getMouseContainerFrame()
 
     SolarMutexGuard aGuard;
 
+    // Ignore duplicate events that are sometimes posted during cancellation
+    // of the native input method session. This usually happens when
+    // [self endExtTextInput] is called from [self windowDidBecomeKey:] and,
+    // if the native input method popup, that was cancelled in a
+    // previous call to [self windowDidResignKey:], has reappeared. In such
+    // cases, the native input context posts the reappearing popup's
+    // uncommitted text.
+    if (mbInEndExtTextInput && !mbInCommitMarkedText)
+        return;
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         NSString* pInsert = nil;
-        if( [aString isMemberOfClass: [NSAttributedString class]] )
+        if( [aString isKindOfClass: [NSAttributedString class]] )
             pInsert = [aString string];
         else
             pInsert = aString;
@@ -1527,9 +1574,14 @@ static AquaSalFrame* getMouseContainerFrame()
     // of the keyboard viewer. For unknown reasons having no marked range
     // in this case causes a crash. So we say we have a marked range anyway
     // This is a hack, since it is not understood what a) causes that crash
-    // and b) why we should have a marked range at this point.
+    // and b) why we should have a marked range at this point. Stop the native
+    // input method popup from appearing in the bottom left corner of the
+    // screen by returning the marked range if is valid when called outside of
+    // mbInKeyInput. If a zero length range is returned, macOS won't call
+    // [self firstRectForCharacterRange:actualRange:] for any newly appended
+    // uncommitted text.
     if( ! mbInKeyInput )
-        return NSMakeRange( 0, 0 );
+        return mMarkedRange.location != NSNotFound ? mMarkedRange : NSMakeRange( 0, 0 );
 
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
@@ -1547,26 +1599,49 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
-    NSRange rangeToReplace = [self hasMarkedText] ? [self markedRange] : [self selectedRange];
-    if( rangeToReplace.location == NSNotFound )
-    {
-        mMarkedRange = NSMakeRange( selRange.location, [aString length] );
-        mSelectedRange = NSMakeRange( selRange.location, selRange.length );
-    }
-    else
-    {
-        mMarkedRange = NSMakeRange( rangeToReplace.location, [aString length] );
-        mSelectedRange = NSMakeRange( rangeToReplace.location + selRange.location, selRange.length );
-    }
+
+    // Reset cached state
+    [self unmarkText];
 
     int len = [aString length];
     SalExtTextInputEvent aInputEvent;
     if( len > 0 ) {
+        // Set the marked and selected ranges to the marked text and selected
+        // range parameters
+        mMarkedRange = NSMakeRange( 0, [aString length] );
+        if (selRange.location == NSNotFound || selRange.location >= mMarkedRange.length)
+             mSelectedRange = NSMakeRange( NSNotFound, 0 );
+        else
+             mSelectedRange = NSMakeRange( selRange.location, selRange.location + selRange.length > mMarkedRange.length ? mMarkedRange.length - selRange.location : selRange.length );
+
+        // If we are going to post uncommitted text, cache the string paramater
+        // as is needed in both [self endExtTextInput] and
+        // [self attributedSubstringForProposedRange:actualRange:]
+        mpLastMarkedText = [aString retain];
+
         NSString *pString = [aString string];
         OUString aInsertString( GetOUString( pString ) );
         std::vector<ExtTextInputAttr> aInputFlags( std::max( 1, len ), ExtTextInputAttr::NONE );
+        int nSelectionStart = (mSelectedRange.location == NSNotFound ? len : mSelectedRange.location);
+        int nSelectionEnd = (mSelectedRange.location == NSNotFound ? len : mSelectedRange.location + selRange.length);
         for ( int i = 0; i < len; i++ )
         {
+            // Highlight all characters in the selected range. Normally
+            // uncommitted text is underlined but when an item is selected in
+            // the native input method popup or selecting a subblock of
+            // uncommitted text using the left or right arrow keys, the
+            // selection range is set and the selected range is either
+            // highlighted like in Excel or is bold underlined like in
+            // Safari. Highlighting the selected range was chosen because
+            // using bold and double underlines can get clipped making the
+            // selection range indistinguishable from the rest of the
+            // uncommitted text.
+            if (i >= nSelectionStart && i < nSelectionEnd)
+            {
+                aInputFlags[i] = ExtTextInputAttr::Highlight;
+                continue;
+            }
+
             unsigned int nUnderlineValue;
             NSRange effectiveRange;
 
@@ -1590,7 +1665,7 @@ static AquaSalFrame* getMouseContainerFrame()
         }
 
         aInputEvent.maText = aInsertString;
-        aInputEvent.mnCursorPos = selRange.location;
+        aInputEvent.mnCursorPos = nSelectionStart;
         aInputEvent.mpTextAttr = aInputFlags.data();
         mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
     } else {
@@ -1606,6 +1681,8 @@ static AquaSalFrame* getMouseContainerFrame()
 
 - (void)unmarkText
 {
+    [self clearLastMarkedText];
+
     mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
 }
 
@@ -1650,7 +1727,20 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)clearLastEvent
 {
-    mpLastEvent = nil;
+    if (mpLastEvent)
+    {
+        [mpLastEvent release];
+        mpLastEvent = nil;
+    }
+}
+
+-(void)clearLastMarkedText
+{
+    if (mpLastMarkedText)
+    {
+        [mpLastMarkedText release];
+        mpLastMarkedText = nil;
+    }
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
@@ -1750,6 +1840,62 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     (void)theHandler;
     mDraggingDestinationHandler = nil;
+}
+
+-(void)endExtTextInput
+{
+    [self endExtTextInput:EndExtTextInputFlags::Complete];
+}
+
+-(void)endExtTextInput:(EndExtTextInputFlags)nFlags
+{
+    // Prevent recursion from any additional [self insertText:] calls that
+    // may be called when cancelling the native input method session
+    if (mbInEndExtTextInput)
+        return;
+
+    mbInEndExtTextInput = YES;
+
+    SolarMutexGuard aGuard;
+
+    NSTextInputContext *pInputContext = [NSTextInputContext currentInputContext];
+    if (pInputContext)
+    {
+        // Cancel the native input method session
+        [pInputContext discardMarkedText];
+
+        // Commit any uncommitted text. Note: when the delete key is used to
+        // remove all uncommitted characters, the marked range will be zero
+        // length but a SalEvent::EndExtTextInput must still be dispatched.
+        if (mpLastMarkedText && [mpLastMarkedText length] && mMarkedRange.location != NSNotFound && mpFrame && AquaSalFrame::isAlive(mpFrame))
+        {
+            // If there is any marked text, SalEvent::EndExtTextInput may leave
+            // the cursor hidden so commit the marked text to force the cursor
+            // to be visible.
+            mbInCommitMarkedText = YES;
+            if (nFlags & EndExtTextInputFlags::Complete)
+                [self insertText:mpLastMarkedText replacementRange:NSMakeRange(0, [mpLastMarkedText length])];
+            else
+                [self insertText:[NSString string] replacementRange:NSMakeRange(0, 0)];
+            mbInCommitMarkedText = NO;
+        }
+
+        [self unmarkText];
+
+        // If a different view is the input context's client, commit that
+        // view's uncommitted text as well
+        id<NSTextInputClient> pClient = [pInputContext client];
+        if (pClient != self)
+        {
+            SalFrameView *pView = static_cast<SalFrameView*>(pClient);
+            if ([pView isKindOfClass:[SalFrameView class]])
+                [pView endExtTextInput];
+            else
+                [pClient unmarkText];
+        }
+    }
+
+    mbInEndExtTextInput = NO;
 }
 
 @end

@@ -1012,8 +1012,16 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
         return;
 }
 
-void AquaSalFrame::EndExtTextInput( EndExtTextInputFlags )
+void AquaSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
+    // tdf#82115 Commit uncommitted text when a popup menu is opened
+    // The Windows implementation of this method commits or discards the native
+    // input method session. It appears that very few, if any, macOS
+    // applications discard the uncommitted text when cancelling a session so
+    // always commit the uncommitted text.
+    SalFrameWindow *pWindow = static_cast<SalFrameWindow*>(mpNSWindow);
+    if (pWindow && [pWindow isKindOfClass:[SalFrameWindow class]])
+        [pWindow endExtTextInput:nFlags];
 }
 
 OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
