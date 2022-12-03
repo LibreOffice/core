@@ -539,7 +539,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     return true;
 }
 
-void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
+void GenericSalLayout::MoveGlyph( int nStart, DeviceCoordinate nNewXPos )
 {
     if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return;
@@ -553,7 +553,7 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     if( pGlyphIter->IsRTLGlyph() )
         nNewXPos += pGlyphIter->newWidth() - pGlyphIter->origWidth();
     // calculate the x-offset to the old position
-    tools::Long nXDelta = nNewXPos - pGlyphIter->linearPos().getX() + pGlyphIter->xOffset();
+    DeviceCoordinate nXDelta = nNewXPos - pGlyphIter->linearPos().getX() + pGlyphIter->xOffset();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
@@ -771,7 +771,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
     mnLevel = nLevel;
 
     // prepare merge the fallback levels
-    tools::Long nXPos = 0;
+    DeviceCoordinate nXPos = 0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
 
