@@ -259,6 +259,7 @@ private:
     VclPtr<LineNumberWindow> aLineNumberWindow;
     VclPtr<EditorWindow>     aEdtWindow;
     VclPtr<ScrollAdaptor>    aEWVScrollBar;
+    VclPtr<ScrollAdaptor>    aEWHScrollBar;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) override;
 
@@ -273,6 +274,7 @@ public:
     LineNumberWindow&   GetLineNumberWindow() { return *aLineNumberWindow; }
     EditorWindow&       GetEdtWindow()      { return *aEdtWindow; }
     ScrollAdaptor&      GetEWVScrollBar()   { return *aEWVScrollBar; }
+    ScrollAdaptor&      GetEWHScrollBar()   { return *aEWHScrollBar; }
 
     void SetLineNumberDisplay(bool b);
 };
@@ -366,6 +368,7 @@ public:
     BreakPointWindow&   GetBreakPointWindow()   { return m_aXEditorWindow->GetBrkWindow(); }
     LineNumberWindow&   GetLineNumberWindow()   { return m_aXEditorWindow->GetLineNumberWindow(); }
     ScrollAdaptor&      GetEditVScrollBar()     { return m_aXEditorWindow->GetEWVScrollBar(); }
+    ScrollAdaptor&      GetEditHScrollBar()     { return m_aXEditorWindow->GetEWHScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     TextView*           GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }

@@ -255,9 +255,6 @@ void ModulWindow::GetFocus()
 
 void ModulWindow::DoInit()
 {
-    if (GetVScrollBar())
-        GetVScrollBar()->Hide();
-    GetHScrollBar()->Show();
     GetEditorWindow().InitScrollBars();
 }
 

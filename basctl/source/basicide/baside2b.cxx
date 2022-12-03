@@ -499,7 +499,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
          ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
          ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
     {
-        HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
+        HandleScrollCommand( rCEvt, &rModulWindow.GetEditHScrollBar(), &rModulWindow.GetEditVScrollBar() );
     } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
         SfxDispatcher* pDispatcher = GetDispatcher();
         if ( pDispatcher )
@@ -1082,9 +1082,8 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     TextHint const& rTextHint = *pTextHint;
     if( rTextHint.GetId() == SfxHintId::TextViewScrolled )
     {
-        if ( rModulWindow.GetHScrollBar() )
-            rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
         rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
+        rModulWindow.GetEditHScrollBar().SetThumbPos( pEditView->GetStartDocPos().X() );
         rModulWindow.GetBreakPointWindow().DoScroll
             ( rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         rModulWindow.GetLineNumberWindow().DoScroll
@@ -1106,15 +1105,13 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if( rTextHint.GetId() == SfxHintId::TextFormatted )
     {
-        if ( rModulWindow.GetHScrollBar() )
+
+        const tools::Long nWidth = pEditEngine->CalcTextWidth();
+        if ( nWidth != nCurTextWidth )
         {
-            const tools::Long nWidth = pEditEngine->CalcTextWidth();
-            if ( nWidth != nCurTextWidth )
-            {
-                nCurTextWidth = nWidth;
-                rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1) );
-                rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
-            }
+            nCurTextWidth = nWidth;
+            rModulWindow.GetEditHScrollBar().SetRange( Range( 0, nCurTextWidth-1) );
+            rModulWindow.GetEditHScrollBar().SetThumbPos( pEditView->GetStartDocPos().X() );
         }
         tools::Long nPrevTextWidth = nCurTextWidth;
         nCurTextWidth = pEditEngine->CalcTextWidth();
@@ -1169,10 +1166,8 @@ void EditorWindow::SetScrollBarRanges()
     if ( !pEditEngine )
         return;
 
-    if ( rModulWindow.GetHScrollBar() )
-        rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1 ) );
-
     rModulWindow.GetEditVScrollBar().SetRange( Range( 0, pEditEngine->GetTextHeight()-1 ) );
+    rModulWindow.GetEditHScrollBar().SetRange( Range( 0, nCurTextWidth-1 ) );
 }
 
 void EditorWindow::InitScrollBars()
@@ -1188,14 +1183,11 @@ void EditorWindow::InitScrollBars()
     rModulWindow.GetEditVScrollBar().SetThumbPos(pEditView->GetStartDocPos().Y());
     rModulWindow.GetEditVScrollBar().Show();
 
-    if (rModulWindow.GetHScrollBar())
-    {
-        rModulWindow.GetHScrollBar()->SetVisibleSize(aOutSz.Width());
-        rModulWindow.GetHScrollBar()->SetPageSize(aOutSz.Width() * 8 / 10);
-        rModulWindow.GetHScrollBar()->SetLineSize(GetTextWidth( "x" ) );
-        rModulWindow.GetHScrollBar()->SetThumbPos(pEditView->GetStartDocPos().X());
-        rModulWindow.GetHScrollBar()->Show();
-    }
+    rModulWindow.GetEditHScrollBar().SetVisibleSize(aOutSz.Width());
+    rModulWindow.GetEditHScrollBar().SetPageSize(aOutSz.Width() * 8 / 10);
+    rModulWindow.GetEditHScrollBar().SetLineSize(GetTextWidth( "x" ));
+    rModulWindow.GetEditHScrollBar().SetThumbPos(pEditView->GetStartDocPos().X());
+    rModulWindow.GetEditHScrollBar().Show();
 }
 
 void EditorWindow::ImpDoHighlight( sal_uInt32 nLine )
@@ -1971,7 +1963,8 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aBrkWindow(VclPtr<BreakPointWindow>::Create(this, pParent)),
     aLineNumberWindow(VclPtr<LineNumberWindow>::Create(this, pParent)),
     aEdtWindow(VclPtr<EditorWindow>::Create(this, pParent)),
-    aEWVScrollBar( VclPtr<ScrollAdaptor>::Create(this, false) )
+    aEWVScrollBar(VclPtr<ScrollAdaptor>::Create(this, false)),
+    aEWHScrollBar(VclPtr<ScrollAdaptor>::Create(this, true))
 {
     aEdtWindow->Show();
     aBrkWindow->Show();
@@ -1980,6 +1973,11 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aEWVScrollBar->SetPageSize(nScrollPage);
     aEWVScrollBar->SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
     aEWVScrollBar->Show();
+
+    aEWHScrollBar->SetLineSize(nScrollLine);
+    aEWHScrollBar->SetPageSize(nScrollPage);
+    aEWHScrollBar->SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
+    aEWHScrollBar->Show();
 }
 
 ComplexEditorWindow::~ComplexEditorWindow()
@@ -1993,6 +1991,7 @@ void ComplexEditorWindow::dispose()
     aLineNumberWindow.disposeAndClear();
     aEdtWindow.disposeAndClear();
     aEWVScrollBar.disposeAndClear();
+    aEWHScrollBar.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -2004,35 +2003,40 @@ void ComplexEditorWindow::Resize()
     aSz.AdjustHeight( -(2*DWBORDER) );
     tools::Long nBrkWidth = 20;
     tools::Long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
+    tools::Long nSBHeight = aEWHScrollBar->GetSizePixel().Height();
 
-    Size aBrkSz(nBrkWidth, aSz.Height());
+    Size aBrkSz(nBrkWidth, aSz.Height() - nSBHeight);
 
     if (aLineNumberWindow->IsVisible())
     {
-        Size aLnSz(aLineNumberWindow->GetWidth(), aSz.Height());
-        aBrkWindow->SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
-        aLineNumberWindow->SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
-        Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow->GetWidth() - nSBWidth + 2, aSz.Height());
-        aEdtWindow->SetPosSizePixel( Point( DWBORDER + aBrkSz.Width() + aLnSz.Width() - 1, DWBORDER ), aEWSz );
+        Size aLnSz(aLineNumberWindow->GetWidth(), aSz.Height() - nSBHeight);
+        Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow->GetWidth() - nSBWidth, aSz.Height() - nSBHeight);
+        aBrkWindow->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBrkSz);
+        aLineNumberWindow->SetPosSizePixel(Point(DWBORDER + nBrkWidth, DWBORDER), aLnSz);
+        aEdtWindow->SetPosSizePixel(Point(DWBORDER + nBrkWidth + aLnSz.Width(), DWBORDER), aEWSz);
     }
     else
     {
+        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth, aSz.Height() - nSBHeight);
         aBrkWindow->SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
-        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height());
-        aEdtWindow->SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
+        aEdtWindow->SetPosSizePixel(Point(DWBORDER + nBrkWidth, DWBORDER), aEWSz);
     }
 
-    aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
+    aEWVScrollBar->SetPosSizePixel(Point(aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER),
+                                   Size(nSBWidth, aSz.Height() - nSBHeight));
+    aEWHScrollBar->SetPosSizePixel(Point(DWBORDER, aOutSz.Height() - DWBORDER - nSBHeight),
+                                   Size(aSz.Width() - nSBWidth, nSBHeight));
 }
 
 IMPL_LINK_NOARG(ComplexEditorWindow, ScrollHdl, weld::Scrollbar&, void)
 {
     if (aEdtWindow->GetEditView())
     {
-        tools::Long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - aEWVScrollBar->GetThumbPos();
-        aEdtWindow->GetEditView()->Scroll( 0, nDiff );
-        aBrkWindow->DoScroll( nDiff );
-        aLineNumberWindow->DoScroll( nDiff );
+        tools::Long nXDiff = aEdtWindow->GetEditView()->GetStartDocPos().X() - aEWHScrollBar->GetThumbPos();
+        tools::Long nYDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - aEWVScrollBar->GetThumbPos();
+        aEdtWindow->GetEditView()->Scroll(nXDiff, nYDiff);
+        aBrkWindow->DoScroll( nYDiff );
+        aLineNumberWindow->DoScroll( nYDiff );
         aEdtWindow->GetEditView()->ShowCursor(false);
         aEWVScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }

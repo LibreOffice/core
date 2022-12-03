@@ -147,6 +147,36 @@ bool BaseWindow::EventNotify( NotifyEvent& rNEvt )
     return bDone || Window::EventNotify( rNEvt );
 }
 
+void BaseWindow::ShowShellScrollBars(bool bVisible)
+{
+    if (bVisible)
+    {
+        if (pShellHScrollBar)
+        {
+            pShellHScrollBar->Enable();
+            pShellHScrollBar->Show();
+        }
+        if (pShellVScrollBar)
+        {
+            pShellVScrollBar->Enable();
+            pShellVScrollBar->Show();
+        }
+    }
+    else
+    {
+        if (pShellHScrollBar)
+        {
+            pShellHScrollBar->Disable();
+            pShellHScrollBar->Hide();
+        }
+        if (pShellVScrollBar)
+        {
+            pShellVScrollBar->Disable();
+            pShellVScrollBar->Hide();
+        }
+    }
+}
+
 void BaseWindow::DoScroll( Scrollable* )
 {
 }

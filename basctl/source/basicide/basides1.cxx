@@ -1250,7 +1250,6 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
     SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : nullptr );
     InvalidateBasicIDESlots();
     InvalidateControlSlots();
-    EnableScrollbars(pCurWin != nullptr);
 
     if ( m_pCurLocalizationMgr )
         m_pCurLocalizationMgr->handleTranslationbar();
@@ -1408,17 +1407,29 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 
     Size aSz( rSize );
     auto nScrollBarSz(Application::GetSettings().GetStyleSettings().GetScrollBarSize());
-    aSz.AdjustHeight(-nScrollBarSz);
     aSz.AdjustHeight(-aTabBarSize.Height());
 
     Size aOutSz( aSz );
     aSz.AdjustWidth(-nScrollBarSz);
+    aSz.AdjustHeight(-nScrollBarSz);
     aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( nScrollBarSz, aSz.Height() ) );
     aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aOutSz.Width(), nScrollBarSz ) );
     pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y() + nScrollBarSz + aSz.Height()), aTabBarSize );
 
+    // The size to be applied depends on whether it is a DialogWindow or a ModulWindow
     if (pLayout)
-        pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin.get()) ? aSz : aOutSz);
+    {
+        if (dynamic_cast<DialogWindow*>(pCurWin.get()))
+        {
+            pCurWin->ShowShellScrollBars();
+            pLayout->SetPosSizePixel(rPos, aSz);
+        }
+        else
+        {
+            pCurWin->ShowShellScrollBars(false);
+            pLayout->SetPosSizePixel(rPos, aOutSz);
+        }
+    }
 }
 
 Reference< XModel > Shell::GetCurrentDocument() const

@@ -434,10 +434,6 @@ void Shell::InitScrollBars()
     aVScrollBar->SetPageSize( 2000 );
     aHScrollBar->SetLineSize( 300 );
     aHScrollBar->SetPageSize( 2000 );
-    aHScrollBar->Enable();
-    aVScrollBar->Enable();
-    aVScrollBar->Show();
-    aHScrollBar->Show();
 }
 
 void Shell::InitTabBar()
@@ -909,12 +905,6 @@ void Shell::InvalidateControlSlots()
     pBindings->Invalidate( SID_INSERT_HYPERLINKCONTROL );
     pBindings->Invalidate( SID_INSERT_TREECONTROL );
     pBindings->Invalidate( SID_CHOOSE_CONTROLS );
-}
-
-void Shell::EnableScrollbars( bool bEnable )
-{
-    aHScrollBar->Enable(bEnable);
-    aVScrollBar->Enable(bEnable);
 }
 
 void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )

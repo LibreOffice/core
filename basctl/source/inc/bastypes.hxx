@@ -184,8 +184,9 @@ public:
     virtual void    Deactivating () = 0;
     void            GrabScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll);
 
-    ScrollAdaptor*  GetHScrollBar() const { return pShellHScrollBar; }
-    ScrollAdaptor*  GetVScrollBar() const { return pShellVScrollBar; }
+    ScrollAdaptor*  GetHScrollBar() const { return pShellHScrollBar.get(); }
+    ScrollAdaptor*  GetVScrollBar() const { return pShellVScrollBar.get(); }
+    void            ShowShellScrollBars(bool bVisible = true);
 
     virtual void    ExecuteCommand (SfxRequest&);
     virtual void    ExecuteGlobal (SfxRequest&);

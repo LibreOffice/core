@@ -107,7 +107,6 @@ private:
     static void         InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
-    void                EnableScrollbars( bool bEnable );
     void                SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows = true , bool bCheck = true );
     void                SetCurLibForLocalization( const ScriptDocument& rDocument, const OUString& aLibName );
 

@@ -232,8 +232,6 @@ void DialogWindow::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> )
 
 void DialogWindow::DoInit()
 {
-    GetHScrollBar()->Show();
-    GetVScrollBar()->Show();
     m_pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
 }
 
