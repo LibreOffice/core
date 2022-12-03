@@ -17,8 +17,6 @@
 #include <cstring>
 #include <sstream>
 
-#include <stdio.h>
-#include <string.h>
 #include <fstream>
 
 #include <config_global.h>
