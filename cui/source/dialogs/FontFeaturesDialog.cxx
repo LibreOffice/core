@@ -23,7 +23,12 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName
     : GenericDialogController(pParent, "cui/ui/fontfeaturesdialog.ui", "FontFeaturesDialog")
     , m_sFontName(std::move(aFontName))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
+    , m_xContentBox(m_xBuilder->weld_container("contentBox"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
+    , m_xStylisticSetsBox(m_xBuilder->weld_container("stylisticSetsBox"))
+    , m_xStylisticSetsGrid(m_xBuilder->weld_container("stylisticSetsGrid"))
+    , m_xCharacterVariantsBox(m_xBuilder->weld_container("characterVariantsBox"))
+    , m_xCharacterVariantsGrid(m_xBuilder->weld_container("characterVariantsGrid"))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWindow))
 {
     initialize();
@@ -66,9 +71,11 @@ void FontFeaturesDialog::initialize()
 
     int nRowHeight = fillGrid(rFilteredFontFeatures);
 
+    auto nFeaturesHeight = m_xContentBox->get_preferred_size().Height()
+                           + m_xStylisticSetsBox->get_preferred_size().Height()
+                           + m_xCharacterVariantsBox->get_preferred_size().Height();
     m_xContentWindow->set_size_request(
-        -1, std::min(std::max(m_xContentWindow->get_preferred_size().Height(),
-                              m_xContentGrid->get_preferred_size().Height()),
+        -1, std::min(std::max(m_xContentWindow->get_preferred_size().Height(), nFeaturesHeight),
                      static_cast<tools::Long>(300L)));
 
     if (nRowHeight)
@@ -80,6 +87,21 @@ void FontFeaturesDialog::initialize()
     updateFontPreview();
 }
 
+namespace
+{
+bool isCharacterVariantCode(sal_uInt32 nFeatureCode)
+{
+    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
+           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
+}
+
+bool isStylisticSetCode(sal_uInt32 nFeatureCode)
+{
+    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
+           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
+}
+}
+
 int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
 {
     int nRowHeight(0);
@@ -87,7 +109,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
     vcl::font::FeatureParser aParser(m_sFontName);
     auto aExistingFeatures = aParser.getFeaturesMap();
 
-    sal_Int32 i = 0;
+    sal_Int32 i = 0, j = 0, k = 0, n = 0;
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
         sal_uInt32 nFontFeatureCode = rFontFeature.m_nCode;
@@ -98,7 +120,24 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         if (!aDefinition)
             aDefinition = { nFontFeatureCode, "" };
 
-        m_aFeatureItems.emplace_back(m_xContentGrid.get());
+        if (isStylisticSetCode(nFontFeatureCode))
+        {
+            n = j++;
+            m_xStylisticSetsBox->set_visible(true);
+            m_aFeatureItems.emplace_back(m_xStylisticSetsGrid.get());
+        }
+        else if (isCharacterVariantCode(nFontFeatureCode))
+        {
+            n = k++;
+            m_xCharacterVariantsBox->set_visible(true);
+            m_aFeatureItems.emplace_back(m_xCharacterVariantsGrid.get());
+        }
+        else
+        {
+            n = i++;
+            m_xContentBox->set_visible(true);
+            m_aFeatureItems.emplace_back(m_xContentGrid.get());
+        }
 
         int32_t nValue = 0;
         if (aExistingFeatures.find(nFontFeatureCode) != aExistingFeatures.end())
@@ -110,8 +149,8 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         aCurrentItem.m_aFeatureCode = nFontFeatureCode;
         aCurrentItem.m_nDefault = aDefinition.getDefault();
 
-        sal_Int32 nGridPositionX = (i % 2) * 2;
-        sal_Int32 nGridPositionY = i / 2;
+        sal_Int32 nGridPositionX = (n % 2) * 2;
+        sal_Int32 nGridPositionY = n / 2;
         aCurrentItem.m_xContainer->set_grid_left_attach(nGridPositionX);
         aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
 
@@ -144,8 +183,6 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 
         nRowHeight
             = std::max<int>(nRowHeight, aCurrentItem.m_xContainer->get_preferred_size().Height());
-
-        i++;
     }
 
     return nRowHeight;
