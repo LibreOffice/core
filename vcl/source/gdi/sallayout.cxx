@@ -771,7 +771,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
     mnLevel = nLevel;
 
     // prepare merge the fallback levels
-    DeviceCoordinate nXPos = 0;
+    double nXPos = 0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
 
