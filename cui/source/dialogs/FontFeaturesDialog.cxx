@@ -94,7 +94,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
     vcl::font::FeatureParser aParser(m_sFontName);
     auto aExistingFeatures = aParser.getFeaturesMap();
 
-    sal_Int32 i = 0, j = 0, k = 0, n = 0;
+    sal_Int32 nIdx, nStylisticSets(0), nCharacterVariants(0), nOtherFeatures(0);
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
         sal_uInt32 nFontFeatureCode = rFontFeature.m_nCode;
@@ -107,19 +107,19 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 
         if (rFontFeature.isStylisticSet())
         {
-            n = j++;
+            nIdx = nStylisticSets++;
             m_xStylisticSetsBox->set_visible(true);
             m_aFeatureItems.emplace_back(m_xStylisticSetsGrid.get());
         }
         else if (rFontFeature.isCharacterVariant())
         {
-            n = k++;
+            nIdx = nCharacterVariants++;
             m_xCharacterVariantsBox->set_visible(true);
             m_aFeatureItems.emplace_back(m_xCharacterVariantsGrid.get());
         }
         else
         {
-            n = i++;
+            nIdx = nOtherFeatures++;
             m_xContentBox->set_visible(true);
             m_aFeatureItems.emplace_back(m_xContentGrid.get());
         }
@@ -134,8 +134,8 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         aCurrentItem.m_aFeatureCode = nFontFeatureCode;
         aCurrentItem.m_nDefault = aDefinition.getDefault();
 
-        sal_Int32 nGridPositionX = (n % 2) * 2;
-        sal_Int32 nGridPositionY = n / 2;
+        sal_Int32 nGridPositionX = (nIdx % 2) * 2;
+        sal_Int32 nGridPositionY = nIdx / 2;
         aCurrentItem.m_xContainer->set_grid_left_attach(nGridPositionX);
         aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
 
