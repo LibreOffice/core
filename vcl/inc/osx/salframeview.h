@@ -59,6 +59,9 @@ enum class SalEvent;
 
 -(void)registerDraggingDestinationHandler:(id)theHandler;
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
+
+-(void)endExtTextInput;
+-(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
 @end
 
 @interface SalFrameView : AquaA11yWrapper <NSTextInputClient>
@@ -79,9 +82,14 @@ enum class SalEvent;
     // #i102807# used by magnify event handler
     NSTimeInterval  mfLastMagnifyTime;
     float           mfMagnifyDeltaSum;
+
+    BOOL            mbInEndExtTextInput;
+    BOOL            mbInCommitMarkedText;
+    NSAttributedString* mpLastMarkedText;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(void)dealloc;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)acceptsFirstResponder;
 -(BOOL)acceptsFirstMouse: (NSEvent *)pEvent;
@@ -112,6 +120,7 @@ enum class SalEvent;
 -(BOOL)sendSingleCharacter:(NSEvent*)pEvent;
 -(BOOL)handleKeyDownException:(NSEvent*)pEvent;
 -(void)clearLastEvent;
+-(void)clearLastMarkedText;
 /*
     text action methods
 */
@@ -205,6 +214,9 @@ enum class SalEvent;
 
 -(void)registerDraggingDestinationHandler:(id)theHandler;
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
+
+-(void)endExtTextInput;
+-(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
 
 @end
 

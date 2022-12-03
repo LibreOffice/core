@@ -25,6 +25,7 @@
 #include <osx/salinst.h>
 #include <osx/saldata.hxx>
 #include <osx/salframe.h>
+#include <osx/salframeview.h>
 #include <osx/salmenu.h>
 #include <osx/salnsmenu.h>
 
@@ -94,6 +95,19 @@
 {
     (void)aSender;
     SolarMutexGuard aGuard;
+
+    // Commit uncommitted text before dispatching the selecting menu item. In
+    // certain cases such as selecting the Insert > Comment menu item in a
+    // Writer document while there is uncommitted text will call
+    // AquaSalFrame::EndExtTextInput() which will dispatch a
+    // SalEvent::EndExtTextInput event. Writer's handler for that event will
+    // delete the uncommitted text and then insert the committed text but
+    // LibreOffice will crash when deleting the uncommitted text because
+    // deletion of the text also removes and deletes the newly inserted
+    // comment.
+    NSWindow* pKeyWin = [NSApp keyWindow];
+    if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
+        [static_cast<SalFrameWindow*>(pKeyWin) endExtTextInput];
 
     // tdf#49853 Keyboard shortcuts are also handled by the menu bar, but at least some of them
     // must still end up in the view. This is necessary to handle common edit actions in docked
