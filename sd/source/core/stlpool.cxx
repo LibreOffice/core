@@ -553,7 +553,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
 
         const OUString sName(Reference<XStyle>(xSourceTableStyle, UNO_QUERY_THROW)->getName());
         if( xTarget->hasByName( sName ) )
-            xTarget->replaceByName( sName, Any( xNewTableStyle ) );
+            Reference<XComponent>(xNewTableStyle, UNO_QUERY_THROW)->dispose();
         else
             xTarget->insertByName( sName, Any( xNewTableStyle ) );
     }
