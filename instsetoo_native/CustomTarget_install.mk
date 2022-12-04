@@ -109,7 +109,9 @@ else # LIBO_TEST_INSTALL
 					$(foreach lang,$(gb_HELP_LANGS), \
 						"ooohelppack:$(lang)::-helppack:$(pkgformat):nostrip" )) \
 			, \
-				":en-US:::$(pkgformat):$(if $(filter-out archive,$(pkgformat)),strip,nostrip)" \
+				$(if $(filter MACOSX,$(OS)), \
+					":$(subst $(WHITESPACE),$(COMMA),$(strip $(instsetoo_native_WITH_LANG))):::$(pkgformat):$(if $(filter-out archive,$(pkgformat)),strip,nostrip)", \
+					":en-US:::$(pkgformat):$(if $(filter-out archive,$(pkgformat)),strip,nostrip)") \
 				$(if $(filter ODK,$(BUILD_TYPE)), \
 					":en-US:_SDK::$(pkgformat):nostrip") \
 				$(if $(and $(filter HELP,$(BUILD_TYPE)), $(filter-out MACOSX,$(OS))), \
