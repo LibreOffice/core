@@ -328,6 +328,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
                 const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+                assert(pName && pRed && pGreen && pBlue && "must be present");
 
                 XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                 ::tools::Long          nCounts        = pGradientList->Count ();
@@ -398,6 +399,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
                 const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+                assert(pName && pRed && pGreen && pBlue && "must be present");
 
                 XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                 ::tools::Long       nCounts     = pHatchList->Count ();
@@ -465,6 +467,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pDashes = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHES);
                 const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
                 const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
+                assert(pName && pStyle && pDots && pDotLen && pDashes && pDashLen && pDistance && "must be present");
 
                 if (CHECK_RANGE (sal_Int32(css::drawing::DashStyle_RECT), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::DashStyle_ROUNDRELATIVE)))
                 {
@@ -519,6 +522,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
                 const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
                 const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
+                assert(pName && pStyle && pAngle && pBorder && pCenterX && pCenterY && pStart && pEnd && "must be present");
 
                 if (CHECK_RANGE (sal_Int32(css::awt::GradientStyle_LINEAR), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::awt::GradientStyle_RECT)) &&
                     CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360) &&
@@ -601,6 +605,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
                 const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
                 const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
+                assert(pName && pStyle && pDistance && pAngle && "must be present");
 
                 if (CHECK_RANGE (sal_Int32(css::drawing::HatchStyle_SINGLE), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::HatchStyle_TRIPLE)) &&
                     CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360))
@@ -662,9 +667,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             break;
 
         case SID_SELECTGRADIENT :
-            if (pArgs && (pArgs->Count () == 1))
+            if (pArgs && (pArgs->Count() == 1))
             {
                 const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                assert(pName && "must be present");
 
                 XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                 ::tools::Long           nCounts        = pGradientList->Count ();
@@ -699,9 +705,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             break;
 
         case SID_SELECTHATCH :
-            if (pArgs && pArgs->Count () == 1)
+            if (pArgs && pArgs->Count() == 1)
             {
                 const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                assert(pName && "must be present");
 
                 XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                 ::tools::Long       nCounts     = pHatchList->Count ();
