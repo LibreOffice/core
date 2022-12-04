@@ -1333,6 +1333,11 @@ static bool AllowRect(const tools::Rectangle& rRect)
             SAL_WARN("vcl", "skipping huge rect top: " << rRect.Top());
             return false;
         }
+        if (rRect.Bottom() > 0x20000000 || rRect.Bottom() < -0x20000000)
+        {
+            SAL_WARN("vcl", "skipping huge rect bottom: " << rRect.Bottom());
+            return false;
+        }
     }
     return true;
 }
