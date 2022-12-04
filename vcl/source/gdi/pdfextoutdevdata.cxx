@@ -521,6 +521,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mrOutDev                ( rOutDev ),
     mbTaggedPDF             ( false ),
     mbExportNotes           ( true ),
+    mbExportNotesInMargin   ( false ),
     mbExportNotesPages      ( false ),
     mbTransitionEffects     ( true ),
     mbUseLosslessCompression( true ),
