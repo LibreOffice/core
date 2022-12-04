@@ -138,25 +138,11 @@
                     "dest-filename": "@FONT_LINLIBERTINEG_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@FONT_SOURCECODE_TARBALL@",
-                    "sha256": "@FONT_SOURCECODE_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@FONT_SOURCECODE_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@FONT_SOURCESANS_TARBALL@",
                     "sha256": "@FONT_SOURCESANS_SHA256SUM@",
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "@FONT_SOURCESANS_TARBALL@"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/@FONT_SOURCESERIF_TARBALL@",
-                    "sha256": "@FONT_SOURCESERIF_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@FONT_SOURCESERIF_TARBALL@"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/@BOOST_TARBALL@",
