@@ -2204,8 +2204,8 @@ SwXTextCursor::getPropertySetInfo()
     {
         static SfxItemPropertyMapEntry const aCursorExtMap_Impl[] =
         {
-            { u"" UNO_NAME_IS_SKIP_HIDDEN_TEXT, FN_SKIP_HIDDEN_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
-            { u"" UNO_NAME_IS_SKIP_PROTECTED_TEXT, FN_SKIP_PROTECTED_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+            { UNO_NAME_IS_SKIP_HIDDEN_TEXT, FN_SKIP_HIDDEN_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+            { UNO_NAME_IS_SKIP_PROTECTED_TEXT, FN_SKIP_PROTECTED_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
             m_rPropSet.getPropertySetInfo();
