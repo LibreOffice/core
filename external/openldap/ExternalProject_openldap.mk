@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,openldap))
 
-$(eval $(call gb_ExternalProject_use_externals,openldap,nss3))
+$(eval $(call gb_ExternalProject_use_externals,openldap,openssl))
 
 $(eval $(call gb_ExternalProject_register_targets,openldap,\
 	build \
@@ -25,12 +25,10 @@ openldap_CFLAGS = -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_BSD_SOURCE
 endif
 
 openldap_LDFLAGS = $(call gb_ExternalProject_get_link_flags,openldap)
-ifeq ($(SYSTEM_NSS),)
-openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib
+ifeq ($(SYSTEM_OPENSSL),)
+openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,openssl)
 endif
-# Help openldap's configure determine that it needs -lpthread even if libasan.so
-# contains a pthread_create override:
-ifneq ($(filter -fsanitize=address,$(CC)),)
+ifeq ($(OS),LINUX)
 openldap_LDFLAGS += -pthread
 endif
 
@@ -40,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-slapd \
 			--with-pic \
-			--with-tls=moznss \
+			--with-tls=openssl \
 			--without-cyrus-sasl \
 			--disable-shared \
 			--enable-static \
@@ -49,11 +47,11 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				--with-yielding_select=yes \
 				ac_cv_func_memcmp_working=yes \
 			) \
-			$(if $(SYSTEM_NSS), \
-				CPPFLAGS="$(CPPFLAGS) $(NSS_CFLAGS)" CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(NSS_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap)" LDFLAGS="$(LDFLAGS) $(NSS_LIBS)" \
+			$(if $(SYSTEM_OPENSSL), \
+				CPPFLAGS="$(CPPFLAGS) $(OPENSSL_CFLAGS)" CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(OPENSSL_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap)" LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS) $(OPENSSL_LIBS)" \
 				, \
-				CPPFLAGS="$(CPPFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
-				CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				CPPFLAGS="$(CPPFLAGS) -I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
+				CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap) -I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
 			) \
 			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \

@@ -10653,14 +10653,14 @@ dnl ===================================================================
 
 if test "$test_openldap" = yes; then
     AC_MSG_CHECKING([whether to enable LDAP support])
-    if test "$enable_ldap" = yes -a \( "$ENABLE_NSS" = TRUE -o "$with_system_openldap" = yes \); then
+    if test "$enable_ldap" = yes -a \( "$enable_openssl" = yes -o "$with_system_openldap" = yes \); then
         AC_MSG_RESULT([yes])
         ENABLE_LDAP=TRUE
     else
         if test "$enable_ldap" != "yes"; then
             AC_MSG_RESULT([no])
         else
-            AC_MSG_RESULT([no (needs NSS or system openldap)])
+            AC_MSG_RESULT([no (needs OPENSSL or system openldap)])
         fi
     fi
 
