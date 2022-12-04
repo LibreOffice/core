@@ -418,8 +418,8 @@ OFFICEOTRON_JAR := 8249374c274932a21846fa7629c2aa9b-officeotron-0.7.4-master.jar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENLDAP_SHA256SUM := 99f37d6747d88206c470067eda624d5e48c1011e943ec0ab217bae8712e22f34
-OPENLDAP_TARBALL := openldap-2.4.59.tgz
+OPENLDAP_SHA256SUM := d51704e50178430c06cf3d8aa174da66badf559747a47d920bb54b2d4aa40991
+OPENLDAP_TARBALL := openldap-2.6.4.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
