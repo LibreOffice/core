@@ -526,47 +526,36 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
     Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
     Reference< XSingleServiceFactory > xFactory( mxTableFamily, UNO_QUERY );
 
-    if( !(xSource.is() && xFactory.is() && mxTableFamily.is()) )
+    if( !xSource || !xFactory )
         return;
 
     for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
     {
-        Reference< XStyle > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY );
-        if( xSourceTableStyle.is() )
+        Reference< XNameAccess > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY_THROW );
+        Reference< XNameReplace > xNewTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
+
+        const Sequence< OUString > aStyleNames( xSourceTableStyle->getElementNames() );
+        for( const OUString& aName : aStyleNames )
         {
-            Reference< XStyle > xNewTableStyle( xFactory->createInstance(), UNO_QUERY );
-            if( xNewTableStyle.is() )
+            Reference< XStyle > xSourceStyle( xSourceTableStyle->getByName( aName ), UNO_QUERY );
+            Reference< XStyle > xTargetStyle;
+            if( xSourceStyle.is() ) try
             {
-                Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
-
-                const Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
-
-                Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
-
-                for( const OUString& aName : aStyleNames )
-                {
-                    Reference< XStyle > xSourceStyle( xSourceNames->getByName( aName ), UNO_QUERY );
-                    Reference< XStyle > xTargetStyle;
-                    if( xSourceStyle.is() ) try
-                    {
-                        mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
-                    }
-                    catch( Exception& )
-                    {
-                        TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()" );
-                    }
-
-                    if( xTargetStyle.is() )
-                        xTargetNames->replaceByName( aName, Any( xTargetStyle ) );
-                }
+                mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
+            }
+            catch( Exception& )
+            {
+                TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()" );
             }
 
-            OUString sName( xSourceTableStyle->getName() );
-            if( xTarget->hasByName( sName ) )
-                xTarget->replaceByName( sName, Any( xNewTableStyle ) );
-            else
-                xTarget->insertByName( sName, Any( xNewTableStyle ) );
+            xNewTableStyle->replaceByName( aName, Any( xTargetStyle ) );
         }
+
+        const OUString sName(Reference<XStyle>(xSourceTableStyle, UNO_QUERY_THROW)->getName());
+        if( xTarget->hasByName( sName ) )
+            xTarget->replaceByName( sName, Any( xNewTableStyle ) );
+        else
+            xTarget->insertByName( sName, Any( xNewTableStyle ) );
     }
     catch( Exception& )
     {
