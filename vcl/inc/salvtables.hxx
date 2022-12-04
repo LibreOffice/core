@@ -1716,8 +1716,8 @@ public:
 
     SvTabListBox& getTreeView();
 
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult,
-                                     bool bDnDMode) override;
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode,
+                                     bool bAutoScroll = true) override;
 
     virtual void unset_drag_dest_row() override;
 

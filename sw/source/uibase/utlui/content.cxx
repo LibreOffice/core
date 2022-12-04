@@ -102,6 +102,12 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 
+#include <txtfrm.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlayobject.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpaintwindow.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -1066,6 +1072,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_pDialog(pDialog)
     , m_sSpace(OUString("                    "))
     , m_aUpdTimer("SwContentTree m_aUpdTimer")
+    , m_aOverlayObjectDelayTimer("SwContentTree m_aOverlayObjectDelayTimer")
     , m_sInvisible(SwResId(STR_INVISIBLE))
     , m_pHiddenShell(nullptr)
     , m_pActiveShell(nullptr)
@@ -1082,6 +1089,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_bIsLastReadOnly(false)
     , m_bIsOutlineMoveable(true)
     , m_bViewHasChanged(false)
+    , m_xOverlayCompareEntry(m_xTreeView->make_iterator())
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
                                   m_xTreeView->get_text_height() * 14);
@@ -1097,6 +1105,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_popup_menu(LINK(this, SwContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, SwContentTree, QueryTooltipHdl));
     m_xTreeView->connect_drag_begin(LINK(this, SwContentTree, DragBeginHdl));
+    m_xTreeView->connect_mouse_move(LINK(this, SwContentTree, MouseMoveHdl));
 
     for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
@@ -1121,6 +1130,8 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
 
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
     m_aUpdTimer.SetTimeout(1000);
+    m_aOverlayObjectDelayTimer.SetInvokeHandler(LINK(this, SwContentTree, m_aOverlayObjectDelayTimerHdl));
+    m_aOverlayObjectDelayTimer.SetTimeout(500);
 }
 
 SwContentTree::~SwContentTree()
@@ -1133,6 +1144,74 @@ SwContentTree::~SwContentTree()
     clear(); // If applicable erase content types previously.
     m_aUpdTimer.Stop();
     SetActiveShell(nullptr);
+}
+
+IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
+{
+    if (rMEvt.IsEnterWindow())
+    {
+        m_xTreeView->get_iter_first(*m_xOverlayCompareEntry);
+        return false;
+    }
+    bool bRemoveOverlayObject = false;
+    if (rMEvt.IsLeaveWindow())
+    {
+        bRemoveOverlayObject = true;
+    }
+    else if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+            m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
+    {
+        if (lcl_IsContent(*xEntry, *m_xTreeView)) // content entry
+        {
+            SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
+            const ContentTypeId nType = pCnt->GetParent()->GetType();
+            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK;
+            if (!bRemoveOverlayObject &&
+                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+            {
+                m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
+                if (nType == ContentTypeId::BOOKMARK)
+                {
+                    BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
+                }
+            }
+        }
+        else // content type entry
+        {
+            const ContentTypeId nType =
+                    weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
+            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK;
+            if (!bRemoveOverlayObject &&
+                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+            {
+                m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
+                if (nType == ContentTypeId::BOOKMARK)
+                {
+                    Reference<frame::XModel> xModel =
+                            m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                    Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
+                    Reference<container::XNameAccess> xNames = xBkms->getBookmarks();
+                    if (xNames.is())
+                    {
+                        auto aNames(comphelper::sequenceToContainer<std::vector<OUString>>(
+                                        xNames->getElementNames()));
+                        BringBookmarksToAttention(aNames);
+                    }
+                }
+            }
+        }
+    }
+    if (bRemoveOverlayObject)
+    {
+        m_aOverlayObjectDelayTimer.Stop();
+        if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        {
+            m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+            m_xOverlayObject.reset();
+        }
+        m_xTreeView->get_iter_first(*m_xOverlayCompareEntry);
+    }
+    return false;
 }
 
 // Drag&Drop methods
@@ -4836,6 +4915,23 @@ void SwContentTree::ShowActualView()
     GetParentWindow()->UpdateListBox();
 }
 
+IMPL_LINK_NOARG(SwContentTree, m_aOverlayObjectDelayTimerHdl, Timer *, void)
+{
+    m_aOverlayObjectDelayTimer.Stop();
+    if (m_xOverlayObject)
+    {
+        if (SdrView* pView = m_pActiveShell->GetDrawView())
+        {
+            if (SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(0))
+            {
+                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager =
+                        pPaintWindow->GetOverlayManager();
+                xOverlayManager->add(*m_xOverlayObject);
+            }
+        }
+    }
+}
+
 IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
 {
     if (m_pConfig->IsNavigateOnSelect())
@@ -5405,6 +5501,80 @@ void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
             break;
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));
+}
+
+void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rNames)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+    for (const auto& rName : rNames)
+    {
+        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
+        if (ppBkmk != pMarkAccess->getBookmarksEnd())
+        {
+            SwPosition aMarkStart = (*ppBkmk)->GetMarkStart();
+            if (const SwTextNode* pMarkStartTextNode = aMarkStart.GetNode().GetTextNode())
+            {
+                if (const SwTextFrame* pMarkStartFrame = static_cast<const SwTextFrame*>(
+                            pMarkStartTextNode->getLayoutFrame(m_pActiveShell->GetLayout())))
+                {
+                    SwPosition aMarkEnd = (*ppBkmk)->GetMarkEnd();
+                    if (const SwTextNode* pMarkEndTextNode = aMarkEnd.GetNode().GetTextNode())
+                    {
+                        if (const SwTextFrame* pMarkEndFrame = static_cast<const SwTextFrame*>(
+                                    pMarkEndTextNode->getLayoutFrame(
+                                        m_pActiveShell->GetLayout())))
+                        {
+                            // adjust span when mark start equals mark end
+                            if (aMarkStart == aMarkEnd)
+                            {
+                                if (aMarkEnd.GetContentIndex() < pMarkEndTextNode->Len() - 1)
+                                    aMarkEnd.AdjustContent(+1);
+                                else if (aMarkStart.GetContentIndex() > 0)
+                                    aMarkStart.AdjustContent(-1);
+                            }
+                            SwRect aStartCharRect;
+                            pMarkStartFrame->GetCharRect(aStartCharRect, aMarkStart);
+                            SwRect aEndCharRect;
+                            pMarkEndFrame->GetCharRect(aEndCharRect, aMarkEnd);
+                            if (aStartCharRect.Top() == aEndCharRect.Top())
+                            {
+                                // single line range
+                                aRanges.emplace_back(aStartCharRect.Left(),
+                                                     aStartCharRect.Top(),
+                                                     aEndCharRect.Right() + 1,
+                                                     aEndCharRect.Bottom() + 1);
+                            }
+                            else
+                            {
+                                // multi line range
+                                SwRect aMarkStartFrameRect = pMarkStartFrame->getFrameArea();
+                                aRanges.emplace_back(aStartCharRect.Left(),
+                                                     aStartCharRect.Top(),
+                                                     aMarkStartFrameRect.Right(),
+                                                     aStartCharRect.Bottom() + 1);
+                                if (aStartCharRect.Bottom() + 1 != aEndCharRect.Top())
+                                    aRanges.emplace_back(aMarkStartFrameRect.Left(),
+                                                         aStartCharRect.Bottom() + 1,
+                                                         aMarkStartFrameRect.Right(),
+                                                         aEndCharRect.Top() + 1);
+                                aRanges.emplace_back(aMarkStartFrameRect.Left(),
+                                                     aEndCharRect.Top() + 1,
+                                                     aEndCharRect.Right() + 1,
+                                                     aEndCharRect.Bottom() + 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

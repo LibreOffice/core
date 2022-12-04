@@ -32,6 +32,8 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <svx/sdr/overlay/overlayobject.hxx>
+
 class SwWrtShell;
 class SwContentType;
 class SwNavigationPI;
@@ -91,6 +93,7 @@ class SwContentTree final : public SfxListener
     SwNavigationPI*     m_pDialog;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
+    AutoTimer m_aOverlayObjectDelayTimer;
 
     o3tl::enumarray<ContentTypeId,std::unique_ptr<SwContentType>>  m_aActiveContentArr;
     o3tl::enumarray<ContentTypeId,std::unique_ptr<SwContentType>>  m_aHiddenContentArr;
@@ -128,6 +131,11 @@ class SwContentTree final : public SfxListener
 
     bool m_bDocHasChanged = true;
     bool m_bIgnoreDocChange = false; // used to prevent tracking update
+
+    std::unique_ptr<weld::TreeIter> m_xOverlayCompareEntry;
+    std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
+
+    void BringBookmarksToAttention(const std::vector<OUString>& rNames);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.
@@ -183,6 +191,8 @@ class SwContentTree final : public SfxListener
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(TimerUpdate, Timer *, void);
+    DECL_LINK(m_aOverlayObjectDelayTimerHdl, Timer *, void);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
 
 public:
     SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);

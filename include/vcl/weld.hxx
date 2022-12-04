@@ -1352,7 +1352,9 @@ public:
      *    after the row
      * b) dnd highlight the dest row
      */
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode) = 0;
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode,
+                                     bool bAutoScroll = true)
+        = 0;
     virtual void unset_drag_dest_row() = 0;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const = 0;
     // for dragging and dropping between TreeViews, return the active source

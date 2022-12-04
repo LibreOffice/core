@@ -121,26 +121,29 @@ public:
         m_aModelChangedHdl.Call(this);
     }
 
-    SvTreeListEntry* GetTargetAtPoint(const Point& rPos, bool bHighLightTarget)
+    SvTreeListEntry* GetTargetAtPoint(const Point& rPos, bool bHighLightTarget, bool bScroll = true)
     {
         SvTreeListEntry* pOldTargetEntry = pTargetEntry;
         pTargetEntry = PosOverBody(rPos) ? pImpl->GetEntry(rPos) : nullptr;
         if (pOldTargetEntry != pTargetEntry)
             ImplShowTargetEmphasis(pOldTargetEntry, false);
 
-        // scroll
-        if (rPos.Y() < 12)
+        if (bScroll)
         {
-            ImplShowTargetEmphasis(pTargetEntry, false);
-            ScrollOutputArea(+1);
-        }
-        else
-        {
-            Size aSize(pImpl->GetOutputSize());
-            if (rPos.Y() > aSize.Height() - 12)
+            // scroll
+            if (rPos.Y() < 12)
             {
                 ImplShowTargetEmphasis(pTargetEntry, false);
-                ScrollOutputArea(-1);
+                ScrollOutputArea(+1);
+            }
+            else
+            {
+                Size aSize(pImpl->GetOutputSize());
+                if (rPos.Y() > aSize.Height() - 12)
+                {
+                    ImplShowTargetEmphasis(pTargetEntry, false);
+                    ScrollOutputArea(-1);
+                }
             }
         }
 

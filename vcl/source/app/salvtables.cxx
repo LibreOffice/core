@@ -5154,12 +5154,12 @@ void SalInstanceTreeView::set_sort_column(int nColumn)
 SvTabListBox& SalInstanceTreeView::getTreeView() { return *m_xTreeView; }
 
 bool SalInstanceTreeView::get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult,
-                                              bool bDnDMode)
+                                              bool bDnDMode, bool bAutoScroll)
 {
     LclTabListBox* pTreeView
         = !bDnDMode ? dynamic_cast<LclTabListBox*>(m_xTreeView.get()) : nullptr;
-    SvTreeListEntry* pTarget
-        = pTreeView ? pTreeView->GetTargetAtPoint(rPos, false) : m_xTreeView->GetDropTarget(rPos);
+    SvTreeListEntry* pTarget = pTreeView ? pTreeView->GetTargetAtPoint(rPos, false, bAutoScroll)
+                                         : m_xTreeView->GetDropTarget(rPos);
 
     if (pTarget && pResult)
     {

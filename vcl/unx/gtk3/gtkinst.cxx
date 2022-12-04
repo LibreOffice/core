@@ -16240,7 +16240,7 @@ public:
         weld::TreeView::connect_popup_menu(rLink);
     }
 
-    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode) override
+    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode, bool bAutoScroll) override
     {
         if (rPos.X() < 0 || rPos.Y() < 0)
         {
@@ -16311,27 +16311,30 @@ public:
         gtk_tree_path_free(path);
         gtk_tree_path_free(lastpath);
 
-        // auto scroll if we're close to the edges
-        GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
-        double fStep = gtk_adjustment_get_step_increment(pVAdjustment);
-        if (rPos.Y() < fStep)
+        if (bAutoScroll)
         {
-            double fValue = gtk_adjustment_get_value(pVAdjustment) - fStep;
-            if (fValue < 0)
-                fValue = 0.0;
-            gtk_adjustment_set_value(pVAdjustment, fValue);
-        }
-        else
-        {
-            GdkRectangle aRect;
-            gtk_tree_view_get_visible_rect(m_pTreeView, &aRect);
-            if (rPos.Y() > aRect.height - fStep)
+            // auto scroll if we're close to the edges
+            GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
+            double fStep = gtk_adjustment_get_step_increment(pVAdjustment);
+            if (rPos.Y() < fStep)
             {
-                double fValue = gtk_adjustment_get_value(pVAdjustment) + fStep;
-                double fMax = gtk_adjustment_get_upper(pVAdjustment);
-                if (fValue > fMax)
-                    fValue = fMax;
+                double fValue = gtk_adjustment_get_value(pVAdjustment) - fStep;
+                if (fValue < 0)
+                    fValue = 0.0;
                 gtk_adjustment_set_value(pVAdjustment, fValue);
+            }
+            else
+            {
+                GdkRectangle aRect;
+                gtk_tree_view_get_visible_rect(m_pTreeView, &aRect);
+                if (rPos.Y() > aRect.height - fStep)
+                {
+                    double fValue = gtk_adjustment_get_value(pVAdjustment) + fStep;
+                    double fMax = gtk_adjustment_get_upper(pVAdjustment);
+                    if (fValue > fMax)
+                        fValue = fMax;
+                    gtk_adjustment_set_value(pVAdjustment, fValue);
+                }
             }
         }
 
