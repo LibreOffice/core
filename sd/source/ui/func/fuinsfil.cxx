@@ -237,12 +237,10 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     else
     {
         const SfxStringItem* pFileName = rReq.GetArg<SfxStringItem>(ID_VAL_DUMMY0);
-        const SfxStringItem* pFilterName = rReq.GetArg<SfxStringItem>(ID_VAL_DUMMY1);
-
-        aFile = pFileName->GetValue ();
-
-        if( pFilterName )
-            aFilterName = pFilterName->GetValue ();
+        assert(pFileName && "must be present");
+        aFile = pFileName->GetValue();
+        if (const SfxStringItem* pFilterName = rReq.GetArg<SfxStringItem>(ID_VAL_DUMMY1))
+            aFilterName = pFilterName->GetValue();
     }
 
     mpDocSh->SetWaitCursor( true );
