@@ -231,6 +231,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         const SfxUInt32Item* pLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
         const SfxBoolItem* pIsPageBack = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEBACK);
         const SfxBoolItem* pIsPageObj = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEOBJ);
+        assert(pPageName && pLayout && pIsPageBack && pIsPageObj && "must be present");
 
         if (CHECK_RANGE (AUTOLAYOUT_START, static_cast<AutoLayout>(pLayout->GetValue ()), AUTOLAYOUT_END))
         {
