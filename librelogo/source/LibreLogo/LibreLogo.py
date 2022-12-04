@@ -2211,8 +2211,14 @@ def __compil__(s):
             # atom: other tokens (variable names, numbers and function names)
             atom = {key: value for (key, value) in [j.span() for j in list(atoms.finditer(i))]}
             par = {"pos": 0, "out": "", "sub": sub, "op": op, "atom": atom, "names": names}
-            __l2p__(i, par, False, False)
-            i = par["out"]
+            if i.startswith(')') and '(' in i:
+                # replace ")forward(" etc. with spaces temporarily
+                len_name = i.index('(') + 1
+                __l2p__(' ' * len_name + i[len_name:], par, False, False)
+                i = i[:len_name] + par["out"].lstrip()
+            else:
+                __l2p__(i, par, False, False)
+                i = par["out"]
         # starting program block
         if i[0:1] == '[':
             i = i[1:]
