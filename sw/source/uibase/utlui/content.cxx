@@ -1165,7 +1165,8 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
             const ContentTypeId nType = pCnt->GetParent()->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK;
+            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK &&
+                    nType != ContentTypeId::URLFIELD;
             if (!bRemoveOverlayObject &&
                     m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
             {
@@ -1174,13 +1175,19 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 {
                     BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
                 }
+                else if (nType == ContentTypeId::URLFIELD)
+                {
+                    BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
+                                        *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr())});
+                }
             }
         }
         else // content type entry
         {
             const ContentTypeId nType =
                     weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK;
+            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK &&
+                    nType != ContentTypeId::URLFIELD;
             if (!bRemoveOverlayObject &&
                     m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
             {
@@ -1197,6 +1204,12 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                                         xNames->getElementNames()));
                         BringBookmarksToAttention(aNames);
                     }
+                }
+                else if (nType == ContentTypeId::URLFIELD)
+                {
+                    SwGetINetAttrs aINetAttrsArr;
+                    m_pActiveShell->GetINetAttrs(aINetAttrsArr, false);
+                    BringURLFieldsToAttention(aINetAttrsArr);
                 }
             }
         }
@@ -5566,6 +5579,48 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
                         }
                     }
                 }
+            }
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
+}
+
+void SwContentTree::BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const auto& r : rINetAttrsArr)
+    {
+        if (SwTextFrame* pFrame = static_cast<SwTextFrame*>(
+                    r.rINetAttr.GetTextNode().getLayoutFrame(m_pActiveShell->GetLayout())))
+        {
+            SwRect aStartCharRect;
+            SwPosition aStartPos(r.rINetAttr.GetTextNode(), r.rINetAttr.GetStart());
+            pFrame->GetCharRect(aStartCharRect, aStartPos);
+            SwRect aEndCharRect;
+            SwPosition aEndPos(r.rINetAttr.GetTextNode(), r.rINetAttr.GetAnyEnd());
+            pFrame->GetCharRect(aEndCharRect, aEndPos);
+            if (aStartCharRect.Top() == aEndCharRect.Top())
+            {
+                // single line range
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+            }
+            else
+            {
+                // multi line range
+                SwRect aFrameRect = pFrame->getFrameArea();
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aFrameRect.Right(), aStartCharRect.Bottom() + 1);
+                if (aStartCharRect.Bottom() + 1 != aEndCharRect.Top())
+                    aRanges.emplace_back(aFrameRect.Left(), aStartCharRect.Bottom() + 1,
+                                         aFrameRect.Right(), aEndCharRect.Top() + 1);
+                aRanges.emplace_back(aFrameRect.Left(), aEndCharRect.Top() + 1,
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
             }
         }
     }

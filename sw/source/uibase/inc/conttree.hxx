@@ -33,6 +33,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <editsh.hxx>
 
 class SwWrtShell;
 class SwContentType;
@@ -136,6 +137,7 @@ class SwContentTree final : public SfxListener
     std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
 
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
+    void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.
