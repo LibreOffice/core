@@ -495,13 +495,6 @@
                     "dest-filename": "@FONT_SCHEHERAZADE_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@FONT_KACST_TARBALL@",
-                    "sha256": "@FONT_KACST_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@FONT_KACST_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@BSH_TARBALL@",
                     "sha256": "@BSH_SHA256SUM@",
                     "type": "file",

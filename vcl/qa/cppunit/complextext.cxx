@@ -183,7 +183,7 @@ void VclComplexTextTest::testCaching()
     // Just something basic, no font fallback.
     testCachedGlyphs( "test", "Dejavu Sans" );
     // This font does not have latin characters, will need fallback.
-    testCachedGlyphs( "test", "KacstBook" );
+    testCachedGlyphs( "test", "Noto Kufi Arabic" );
 }
 
 static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aFontName, bool rtl )

@@ -552,7 +552,7 @@ void VclTextTest::testImplLayoutArgsRightAlign()
 void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
 {
     // this font has no Cyrillic characters and thus needs fallback
-    const vcl::Font aFont("KacstBook", Size(0, 36));
+    const vcl::Font aFont("Amiri", Size(0, 36));
 
     ScopedVclPtrInstance<VirtualDevice> pVirDev;
     pVirDev->SetFont(aFont);

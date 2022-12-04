@@ -1040,7 +1040,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		$(if $(MPL_SUBSET),,fonts_culmus) \
 		fonts_dejavu \
 		fonts_gentium \
-		$(if $(MPL_SUBSET),,fonts_kacst) \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \
