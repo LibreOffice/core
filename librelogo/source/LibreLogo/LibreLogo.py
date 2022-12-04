@@ -167,6 +167,7 @@ class __Doc__:
         self.shapecount = itertools.count()
         self.time = 0
         self.zoomvalue = 0
+        self.lockturtle = False
         self.initialize()
 
     def initialize(self):
@@ -540,8 +541,7 @@ class LogoProgram(threading.Thread):
             else:
                 _.start_time = __time__.process_time()
                 exec(self.code)
-                while _.doc.hasControllersLocked():
-                    _.doc.unlockControllers()
+                __unlock__(all_levels = True)
             if _.origcursor[0] and _.origcursor[1]:
                 __dispatcher__(".uno:Escape")
                 try:
@@ -550,8 +550,7 @@ class LogoProgram(threading.Thread):
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0].getStart(), False)
         except Exception as e:
             try:
-              while _.doc.hasControllersLocked():
-                  _.doc.unlockControllers()
+              __unlock__(all_levels = True)
               TRACEPATTERN = '"<string>", line '
               message = traceback.format_exc()
               l = re.findall(TRACEPATTERN + '[0-9]+', message)
@@ -706,6 +705,9 @@ def hideturtle():
         __visible__(turtle, False)
         turtle.LineTransparence, turtle.FillTransparence = 100, 100 # for saved files
         turtle.setPosition(z)
+    else:
+        # HIDETURTLE during locking, no need SHOWTURTLE at the end of locking
+        _.lockturtle = False
     __dispatcher__(".uno:Escape")
 
 def showturtle():
@@ -838,12 +840,24 @@ def run(arg=None, arg2 = -1):
         __trace__()
     return None
 
+def __unlock__(all_levels):
+    while _.doc.hasControllersLocked():
+        # show turtle which was hidden by locking
+        if _.lockturtle:
+            showturtle()
+        _.doc.unlockControllers()
+        if not all_levels:
+            break
+    if not _.doc.hasControllersLocked() and _.lockturtle:
+        _.lockturtle = False
+    elif _.doc.hasControllersLocked() and _.lockturtle:
+        hideturtle()
+
 def stop(arg=None):
     global __halt__
     with __lock__:
         __halt__ = True
-    while _.doc.hasControllersLocked():
-        _.doc.unlockControllers()
+    __unlock__(all_levels = True)
     return None
 
 def home(arg=None):
@@ -1474,14 +1488,18 @@ def text(shape, orig_st):
         _.doc.unlockControllers()
 
 def sleep(t):
+    # lock shape repaint, if SLEEP argument is negative
     if t < 0:
-        # lock shape repaint, if SLEEP argument is negative
         _.doc.lockControllers()
+        # hide turtle during locking
+        turtle = __getshape__(__TURTLE__)
+        if turtle and turtle.Visible:
+            hideturtle()
+            _.lockturtle = True
         return
     else:
         # otherwise unlock one level
-        if _.doc.hasControllersLocked():
-            _.doc.unlockControllers()
+        __unlock__(all_levels = False)
     _.time = _.time + t
     __removeshape__(__ACTUAL__)
     for i in range(int(t/__SLEEP_SLICE_IN_MILLISECONDS__)):
