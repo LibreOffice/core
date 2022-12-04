@@ -4869,85 +4869,12 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     }
 }
 
-namespace
-{
-    class IndexInRange
-    {
-    private:
-        SwNodeIndex maStart;
-        SwNodeIndex maEnd;
-    public:
-        explicit IndexInRange(const SwNodeIndex& rStart, const SwNodeIndex& rEnd)
-            : maStart(rStart)
-            , maEnd(rEnd)
-        {
-        }
-        bool operator()(const SwHTMLTextFootnote& rTextFootnote) const
-        {
-            const SwNodeIndex aTextIdx(rTextFootnote.pTextFootnote->GetTextNode());
-            return aTextIdx >= maStart && aTextIdx <= maEnd;
-        }
-    };
-}
-
-void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const SwNodeIndex& rPtNdIdx)
-{
-    //similarly for footnotes
-    if (m_pFootEndNoteImpl)
-    {
-        m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
-            m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(rMkNdIdx, rPtNdIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
-        if (m_pFootEndNoteImpl->aTextFootnotes.empty())
-        {
-            m_pFootEndNoteImpl.reset();
-        }
-    }
-
-    //follow DelFlyInRange pattern here
-    assert(rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex());
-
-    SwDoc& rDoc = rMkNdIdx.GetNode().GetDoc();
-
-    //ofz#9733 drop bookmarks in this range
-    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    pMarkAccess->deleteMarks(rMkNdIdx.GetNode(), SwNodeIndex(rPtNdIdx, 1).GetNode(), nullptr, std::nullopt, std::nullopt);
-
-    SwFrameFormats& rTable = *rDoc.GetSpzFrameFormats();
-    for ( auto i = rTable.size(); i; )
-    {
-        SwFrameFormat *pFormat = rTable[--i];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        SwNode const*const pAnchorNode = rAnch.GetAnchorNode();
-        if (pAnchorNode &&
-            ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
-             (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
-            ( rMkNdIdx < *pAnchorNode && *pAnchorNode <= rPtNdIdx.GetNode() ))
-        {
-            if( rPtNdIdx != *pAnchorNode )
-            {
-                // If the Fly is deleted, all Flys in its content have to be deleted too.
-                const SwFormatContent &rContent = pFormat->GetContent();
-                // But only fly formats own their content, not draw formats.
-                if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
-                {
-                    ClearFootnotesMarksInRange(*rContent.GetContentIdx(),
-                                          SwNodeIndex(*rContent.GetContentIdx()->GetNode().EndOfSectionNode()));
-                }
-            }
-        }
-    }
-}
-
 void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
 {
     //if section to be deleted contains a pending m_pMarquee, it will be deleted
     //so clear m_pMarquee pointer if that's the case
     SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee.get()) : nullptr;
     FrameDeleteWatch aWatch(pObjectFormat);
-
-    //similarly for footnotes
-    SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
-    ClearFootnotesMarksInRange(aSttIdx, aEndIdx);
 
     m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
 

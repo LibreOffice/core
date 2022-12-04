@@ -659,8 +659,6 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     // tags realized via character styles
     void NewCharFormat( HtmlTokenId nToken );
 
-    void ClearFootnotesMarksInRange(const SwNodeIndex& rSttIdx, const SwNodeIndex& rEndIdx);
-
     void DeleteSection(SwStartNode* pSttNd);
 
     // <SDFIELD>
