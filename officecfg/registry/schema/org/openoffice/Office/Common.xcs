@@ -2814,6 +2814,131 @@
             <desc>List with trusted authors.</desc>
           </info>
         </set>
+        <group oor:name="WindowsSecurityZone">
+          <info>
+            <desc>Contains security settings regarding Basic scripts.</desc>
+          </info>
+          <prop oor:name="ZoneLocal" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Action needed for opening document with macro with Windows zone 
+              identifier URLZONE_LOCAL_MACHINE (0, local machine).</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>Ask</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Allow</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Deny</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+          <prop oor:name="ZoneIntranet" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Action needed for opening document with macro with Windows zone 
+              identifier URLZONE_INTRANET (1, local machine).</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>Ask</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Allow</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Deny</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+          <prop oor:name="ZoneTrusted" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Action needed for opening document with macro with Windows zone 
+              identifier URLZONE_TRUSTED (2, trusted).</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>Ask</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Allow</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Deny</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+          <prop oor:name="ZoneInternet" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Action needed for opening document with macro with Windows zone 
+              identifier URLZONE_INTERNET (3, internet).</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>Ask</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Allow</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Deny</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+          <prop oor:name="ZoneUntrusted" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Action needed for opening document with macro with Windows zone 
+              identifier URLZONE_UNTRUSTED (3, untrusted source).</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>Ask</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Allow</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Deny</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+        </group>
       </group>
     </group>
     <group oor:name="View">

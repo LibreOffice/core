@@ -38,6 +38,10 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 
+#if defined(_WIN32)
+#include <systools/win32/comtools.hxx>
+#include <urlmon.h>
+#endif
 
 namespace sfx2
 {
@@ -284,6 +288,59 @@ namespace sfx2
             }
         }
 
+#if defined(_WIN32)
+        // Windows specific: try to decide macros loading depending on Windows Security Zones
+        // (is the file local, or it was downloaded from internet, etc?)
+        OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
+        OUString sFilePath;
+        osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
+        sal::systools::COMReference<IZoneIdentifier> pZoneId;
+        pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
+        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
+        DWORD dwZone;
+        if (!SUCCEEDED(pPersist->Load(reinterpret_cast<LPCOLESTR>(sFilePath.getStr()), STGM_READ)) ||
+            !SUCCEEDED(pZoneId->GetId(&dwZone)))
+        {
+            // no Security Zone info found -> assume a local file, not
+            // from the internet
+            dwZone = 0;
+        }
+
+        // determine action from zone and settings
+        sal_Int32 nAction = 0;
+        switch (dwZone) {
+            case 0:
+                nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal::get();
+                break;
+            case 1:
+                nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet::get();
+                break;
+            case 2:
+                nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted::get();
+                break;
+            case 3:
+                nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet::get();
+                break;
+            case 4:
+                nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted::get();
+                break;
+            default:
+                // unknown zone, let's ask the user
+                nAction = 0;
+                break;
+        }
+
+        // act on result
+        switch (nAction)
+        {
+            case 0: // Ask
+                break;
+            case 1: // Allow
+                return allowMacroExecution();
+            case 2: // Deny
+                return disallowMacroExecution();
+        }
+#endif
         // confirmation is required
         bool bSecure = false;
 
