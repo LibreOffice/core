@@ -522,6 +522,12 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
 
 void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
 {
+    XStyleVector aTmpSheets;
+    CopyTableStyles(rSourcePool, aTmpSheets);
+}
+
+void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XStyleVector& rCreatedSheets)
+{
     Reference< XIndexAccess > xSource( rSourcePool.mxTableFamily, UNO_QUERY );
     Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
     Reference< XSingleServiceFactory > xFactory( mxTableFamily, UNO_QUERY );
@@ -555,7 +561,10 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
         if( xTarget->hasByName( sName ) )
             Reference<XComponent>(xNewTableStyle, UNO_QUERY_THROW)->dispose();
         else
+        {
+            rCreatedSheets.emplace_back(xNewTableStyle, UNO_QUERY_THROW);
             xTarget->insertByName( sName, Any( xNewTableStyle ) );
+        }
     }
     catch( Exception& )
     {

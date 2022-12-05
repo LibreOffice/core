@@ -75,6 +75,7 @@ public:
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
     void                CopyTableStyles(SdStyleSheetPool const & rSourcePool);
+    void                CopyTableStyles(SdStyleSheetPool const & rSourcePool, XStyleVector& rCreatedSheets);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets);
     void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix);
 

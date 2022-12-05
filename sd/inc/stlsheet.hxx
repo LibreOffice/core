@@ -165,6 +165,7 @@ private:
 };
 
 typedef std::vector< rtl::Reference< SdStyleSheet > > SdStyleSheetVector;
+typedef std::vector< css::uno::Reference< css::style::XStyle > > XStyleVector;
 
 struct StyleSheetCopyResult
 {

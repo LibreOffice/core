@@ -345,6 +345,21 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetC
     rStyles = aUsedStyles;
 }
 
+void
+lcl_removeUnusedTableStyles(SdStyleSheetPool* const pStyleSheetPool, XStyleVector const & rStyles)
+{
+    css::uno::Reference<css::container::XNameContainer> xTableFamily(
+        pStyleSheetPool->getByName("table"), css::uno::UNO_QUERY);
+    if (!xTableFamily)
+        return;
+
+    for (const auto& a : rStyles)
+    {
+        if (!a->isInUse())
+            xTableFamily->removeByName(a->getName());
+    }
+}
+
 SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, std::u16string_view aStyleName)
 {
     for (const auto& a : rStyles)
@@ -524,7 +539,8 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, aNewCellStyles);
 
     // TODO handle undo of table styles too
-    rStyleSheetPool.CopyTableStyles(rBookmarkStyleSheetPool);
+    XStyleVector aNewTableStyles;
+    rStyleSheetPool.CopyTableStyles(rBookmarkStyleSheetPool, aNewTableStyles);
 
     // Insert document
 
@@ -934,9 +950,8 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewGraphicStyles);
     if (!aNewGraphicStyles.empty() && pUndoMgr)
         pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewGraphicStyles, true));
+    lcl_removeUnusedTableStyles(static_cast<SdStyleSheetPool*>(GetStyleSheetPool()), aNewTableStyles);
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewCellStyles);
-    if (!aNewCellStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewCellStyles, true));
 
     if( bUndo )
         EndUndo();
