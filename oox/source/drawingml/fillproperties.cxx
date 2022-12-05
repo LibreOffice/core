@@ -831,10 +831,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             sal_Int32 nFillBmpSizeY = getLimitedValue< sal_Int32, double >( aOriginalSize.Height * fScaleY, 1, SAL_MAX_INT32 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapSizeY, nFillBmpSizeY );
 
+                            awt::Size aBmpSize(nFillBmpSizeX, nFillBmpSizeY);
                             // offset of the first bitmap tile (given as EMUs), convert to percent
-                            sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >(std::round(maBlipProps.moTileOffsetX.value_or( 0 ) / 3.6 / aOriginalSize.Width), 0, 100 );
+                            sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >(std::round(maBlipProps.moTileOffsetX.value_or( 0 ) / 3.6 / aBmpSize.Width), 0, 100 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapOffsetX, nTileOffsetX );
-                            sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >(std::round(maBlipProps.moTileOffsetY.value_or( 0 ) / 3.6 / aOriginalSize.Height), 0, 100 );
+                            sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >(std::round(maBlipProps.moTileOffsetY.value_or( 0 ) / 3.6 / aBmpSize.Height), 0, 100 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapOffsetY, nTileOffsetY );
                         }
                     }
