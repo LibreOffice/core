@@ -124,6 +124,14 @@ PageBackground::PageBackground( const PageBackground & rOther ) :
 PageBackground::~PageBackground()
 {}
 
+// ____ XTypeProvider ____
+uno::Sequence< css::uno::Type > SAL_CALL PageBackground::getTypes()
+{
+    return ::comphelper::concatSequences(
+        impl::PageBackground_Base::getTypes(),
+        ::property::OPropertySet::getTypes());
+}
+
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
 {

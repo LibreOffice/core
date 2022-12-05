@@ -53,6 +53,9 @@ public:
 private:
     explicit StockBar( const StockBar & rOther );
 
+    // ____ XTypeProvider ____
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
