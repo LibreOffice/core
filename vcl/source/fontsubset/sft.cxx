@@ -1809,9 +1809,61 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     return res;
 }
 
-static void FillFontSubsetInfo(AbstractTrueTypeFont*, FontSubsetInfo&);
-static bool CreateCFFfontSubset(const unsigned char*, int, std::vector<sal_uInt8>&,
-                                const sal_GlyphId*, const sal_uInt8*, int, FontSubsetInfo&);
+namespace
+{
+void FillFontSubsetInfo(AbstractTrueTypeFont* ttf, FontSubsetInfo& rInfo)
+{
+    TTGlobalFontInfo aTTInfo;
+    GetTTGlobalFontInfo(ttf, &aTTInfo);
+
+    rInfo.m_aPSName = OUString::fromUtf8(aTTInfo.psname);
+    rInfo.m_nFontType = FontType::SFNT_TTF;
+    rInfo.m_aFontBBox
+        = tools::Rectangle(Point(aTTInfo.xMin, aTTInfo.yMin), Point(aTTInfo.xMax, aTTInfo.yMax));
+    rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
+    rInfo.m_nAscent = aTTInfo.winAscent;
+    rInfo.m_nDescent = aTTInfo.winDescent;
+
+    // mac fonts usually do not have an OS2-table
+    // => get valid ascent/descent values from other tables
+    if (!rInfo.m_nAscent)
+        rInfo.m_nAscent = +aTTInfo.typoAscender;
+    if (!rInfo.m_nAscent)
+        rInfo.m_nAscent = +aTTInfo.ascender;
+    if (!rInfo.m_nDescent)
+        rInfo.m_nDescent = +aTTInfo.typoDescender;
+    if (!rInfo.m_nDescent)
+        rInfo.m_nDescent = -aTTInfo.descender;
+
+    rInfo.m_bFilled = true;
+}
+
+bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
+                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
+{
+    utl::TempFileFast aTempFile;
+    SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
+
+    rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
+    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, nullptr, pGlyphIds, pEncoding,
+                                       nGlyphCount);
+
+    if (bRet)
+    {
+        rOutBuffer.resize(pStream->TellEnd());
+        pStream->Seek(0);
+        auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
+        if (nRead != rOutBuffer.size())
+        {
+            rOutBuffer.clear();
+            return false;
+        }
+    }
+
+    return bRet;
+}
+}
 
 bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>& rOutBuffer,
                          const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
@@ -1879,32 +1931,6 @@ bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>
     // write subset into destination file
     return (CreateTTFromTTGlyphs(&rTTF, rOutBuffer, aShortIDs, aTempEncs, nGlyphCount)
             == vcl::SFErrCodes::Ok);
-}
-
-static bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                                std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
-                                const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
-{
-    utl::TempFileFast aTempFile;
-    SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
-
-    rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
-    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, nullptr, pGlyphIds, pEncoding,
-                                       nGlyphCount);
-
-    if (bRet)
-    {
-        rOutBuffer.resize(pStream->TellEnd());
-        pStream->Seek(0);
-        auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
-        if (nRead != rOutBuffer.size())
-        {
-            rOutBuffer.clear();
-            return false;
-        }
-    }
-
-    return bRet;
 }
 
 GlyphOffsets::GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
@@ -2257,33 +2283,6 @@ void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
         info->descender = XUnits(UPEm, GetInt16(table, HHEA_descender_offset));
         info->linegap   = XUnits(UPEm, GetInt16(table, HHEA_lineGap_offset));
     }
-}
-
-static void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
-{
-    TTGlobalFontInfo aTTInfo;
-    GetTTGlobalFontInfo(ttf, &aTTInfo);
-
-    rInfo.m_aPSName = OUString::fromUtf8(aTTInfo.psname);
-    rInfo.m_nFontType = FontType::SFNT_TTF;
-    rInfo.m_aFontBBox
-        = tools::Rectangle(Point(aTTInfo.xMin, aTTInfo.yMin), Point(aTTInfo.xMax, aTTInfo.yMax));
-    rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
-    rInfo.m_nAscent = aTTInfo.winAscent;
-    rInfo.m_nDescent = aTTInfo.winDescent;
-
-    // mac fonts usually do not have an OS2-table
-    // => get valid ascent/descent values from other tables
-    if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +aTTInfo.typoAscender;
-    if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +aTTInfo.ascender;
-    if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = +aTTInfo.typoDescender;
-    if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = -aTTInfo.descender;
-
-    rInfo.m_bFilled = true;
 }
 
 std::unique_ptr<GlyphData> GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
