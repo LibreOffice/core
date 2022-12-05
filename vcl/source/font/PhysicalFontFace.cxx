@@ -358,13 +358,6 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                         const int nGlyphCount, FontSubsetInfo& rInfo) const
 {
-    // Shortcut for CFF-subsetting.
-    auto aData = GetRawFontData(T_CFF);
-    if (!aData.empty())
-        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer,
-                                   GetName(NAME_ID_POSTSCRIPT_NAME), pGlyphIds, pEncoding,
-                                   nGlyphCount, rInfo);
-
     // Prepare data for font subsetter.
     TrueTypeFace aSftFont(RawFace(GetHbFace()), GetFontCharMap());
     if (aSftFont.initialize() != SFErrCodes::Ok)
@@ -372,6 +365,12 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
 
     // Get details about the subset font.
     FillFontSubsetInfo(&aSftFont, rInfo);
+
+    // Shortcut for CFF-subsetting.
+    auto aData = GetRawFontData(T_CFF);
+    if (!aData.empty())
+        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer, pGlyphIds, pEncoding,
+                                   nGlyphCount, rInfo);
 
     // write subset into destination file
     return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount);

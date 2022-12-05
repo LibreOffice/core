@@ -2361,9 +2361,22 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         rEmitter.emitValVector( "/FontMatrix [", "]readonly def\n", maFontMatrix);
     else // emit default FontMatrix if needed
         rEmitter.maBuffer.append( "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
+
     // emit FontBBox
+    ValType fXFactor = 1.0;
+    ValType fYFactor = 1.0;
+    if( maFontMatrix.size() >= 4) {
+        fXFactor = 1000.0F * maFontMatrix[0];
+        fYFactor = 1000.0F * maFontMatrix[3];
+    }
+
     auto aFontBBox = maFontBBox;
-    if (aFontBBox.size() != 4)
+    if (rFSInfo.m_bFilled)
+        aFontBBox = {
+            rFSInfo.m_aFontBBox.Left() / fXFactor, rFSInfo.m_aFontBBox.Top() / fYFactor,
+            rFSInfo.m_aFontBBox.Right() / fXFactor, (rFSInfo.m_aFontBBox.Bottom() + 1) / fYFactor
+        };
+    else if (aFontBBox.size() != 4)
         aFontBBox = { 0, 0, 999, 999 }; // emit default FontBBox if needed
     rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", aFontBBox);
     // emit FONTINFO into TOPDICT
@@ -2572,12 +2585,12 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // provide details to the subset requesters, TODO: move into own method?
     // note: Top and Bottom are flipped between Type1 and VCL
     // note: the rest of VCL expects the details below to be scaled like for an emUnits==1000 font
-    ValType fXFactor = 1.0;
-    ValType fYFactor = 1.0;
-    if( maFontMatrix.size() >= 4) {
-        fXFactor = 1000.0F * maFontMatrix[0];
-        fYFactor = 1000.0F * maFontMatrix[3];
-    }
+
+    rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontType::TYPE1_PFB : FontType::TYPE1_PFA;
+
+    if (rFSInfo.m_bFilled)
+        return;
+
     rFSInfo.m_aFontBBox = { Point(static_cast<sal_Int32>(aFontBBox[0] * fXFactor),
                                   static_cast<sal_Int32>(aFontBBox[1] * fYFactor)),
                             Point(static_cast<sal_Int32>(aFontBBox[2] * fXFactor),
@@ -2588,7 +2601,6 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();    // for all letters
     rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
 
-    rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontType::TYPE1_PFB : FontType::TYPE1_PFA;
     rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
 }
 

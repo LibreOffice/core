@@ -70,6 +70,7 @@ public: // TODO: make subsetter results private and provide accessor methods ins
     int                     m_nCapHeight;
     tools::Rectangle               m_aFontBBox;
     FontType                m_nFontType;        ///< font-type of subset result
+    bool                    m_bFilled;
 
 private:
     // input-font-specific details

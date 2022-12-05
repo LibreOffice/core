@@ -1868,16 +1868,15 @@ bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>
 }
 
 bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         std::vector<sal_uInt8>& rOutBuffer, const OUString& rPSName,
-                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding, int nGlyphCount,
-                         FontSubsetInfo& rInfo)
+                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
+                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
 {
     utl::TempFileFast aTempFile;
     SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
 
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
-    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, rPSName.toUtf8().getStr(),
-                                       pGlyphIds, pEncoding, nGlyphCount);
+    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, nullptr, pGlyphIds, pEncoding,
+                                       nGlyphCount);
 
     if (bRet)
     {
@@ -2269,6 +2268,8 @@ void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
         rInfo.m_nDescent = +aTTInfo.typoDescender;
     if (!rInfo.m_nDescent)
         rInfo.m_nDescent = -aTTInfo.descender;
+
+    rInfo.m_bFilled = true;
 }
 
 std::unique_ptr<GlyphData> GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
