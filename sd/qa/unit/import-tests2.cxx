@@ -237,7 +237,7 @@ void SdImportTest2::testTdf152186()
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
         uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(i, 0));
-        xShape->getPropertyValue("Shadow") >>= bHasShadow;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("Shadow") >>= bHasShadow);
         CPPUNIT_ASSERT(!bHasShadow);
     }
 }
