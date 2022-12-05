@@ -136,7 +136,7 @@ static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
     return nTmpLevel;
 }
 
-sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
+sal_uInt16 SwOutlineTabDialog::s_nNumLevel = 1;
 
 SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)

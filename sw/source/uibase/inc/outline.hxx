@@ -32,7 +32,7 @@ class SwChapterNumRules;
 
 class SwOutlineTabDialog final : public SfxTabDialogController
 {
-    static     sal_uInt16    nNumLevel;
+    static     sal_uInt16    s_nNumLevel;
 
     OUString            m_aCollNames[MAXLEVEL];
 
@@ -59,8 +59,8 @@ public:
     sal_uInt16          GetLevel(std::u16string_view rFormatName) const;
     OUString*           GetCollNames() {return m_aCollNames;}
 
-    static sal_uInt16   GetActNumLevel() {return nNumLevel;}
-    static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
+    static sal_uInt16   GetActNumLevel() {return s_nNumLevel;}
+    static void         SetActNumLevel(sal_uInt16 nSet) {s_nNumLevel = nSet;}
 };
 
 class SwOutlineSettingsTabPage final : public SfxTabPage
