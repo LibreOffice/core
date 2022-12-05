@@ -221,7 +221,7 @@ void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, 
     if (nThemeIndex >= 0)
     {
         Color aColor = rColorSet.getColor(nThemeIndex);
-        aColor.ApplyTintOrShade(aColorItem.GetTintOrShade());
+        aColor.ApplyTintOrShade(aColorItem.GetThemeColor().GetTintOrShade());
         aColorItem.SetValue(aColor);
         pCollection->SetFormatAttr(aColorItem);
     }
