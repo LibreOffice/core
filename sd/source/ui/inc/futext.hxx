@@ -20,9 +20,9 @@
 #pragma once
 
 #include "fuconstr.hxx"
+#include <svx/svdotext.hxx>
 #include <unotools/weakref.hxx>
 
-class SdrTextObj;
 class FontList;
 class OutlinerView;
 

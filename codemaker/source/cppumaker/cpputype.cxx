@@ -1198,7 +1198,7 @@ void InterfaceType::dumpHppFile(
     if (name_ == "com.sun.star.uno.XInterface") {
         out << "template<typename> struct IsUnoInterfaceType: ::std::false_type {};\n"
                "template<typename T> inline constexpr auto isUnoInterfaceType ="
-                   " IsUnoInterfaceType<T>::value;\n";
+                   " sizeof (T) && IsUnoInterfaceType<T>::value;\n";
     }
     out << "template<> struct IsUnoInterfaceType<";
     dumpType(out, name_, false, false, true);
