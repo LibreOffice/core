@@ -119,6 +119,14 @@ Wall::Wall( const Wall & rOther ) :
 Wall::~Wall()
 {}
 
+// ____ XTypeProvider ____
+uno::Sequence< css::uno::Type > SAL_CALL Wall::getTypes()
+{
+    return ::comphelper::concatSequences(
+        impl::Wall_Base::getTypes(),
+        ::property::OPropertySet::getTypes());
+}
+
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 {

@@ -131,6 +131,14 @@ StockBar::StockBar( const StockBar & rOther ) :
 StockBar::~StockBar()
 {}
 
+// ____ XTypeProvider ____
+uno::Sequence< css::uno::Type > SAL_CALL StockBar::getTypes()
+{
+    return ::comphelper::concatSequences(
+        impl::StockBar_Base::getTypes(),
+        ::property::OPropertySet::getTypes());
+}
+
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 {
