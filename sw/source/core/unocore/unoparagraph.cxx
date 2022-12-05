@@ -421,6 +421,10 @@ void SAL_CALL SwXParagraph::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
 {
+    if (rPropertyNames.getLength() != rValues.getLength())
+        throw lang::IllegalArgumentException("lengths do not match",
+                                             static_cast<cppu::OWeakObject*>(this), -1);
+
     SolarMutexGuard aGuard;
 
     // workaround for bad designed API

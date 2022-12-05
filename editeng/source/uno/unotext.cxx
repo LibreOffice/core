@@ -746,6 +746,10 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< OUStr
 
 void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara )
 {
+    if (aPropertyNames.getLength() != aValues.getLength())
+        throw lang::IllegalArgumentException("lengths do not match",
+                                             static_cast<css::beans::XPropertySet*>(this), -1);
+
     SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;

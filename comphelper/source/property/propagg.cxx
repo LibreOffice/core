@@ -589,6 +589,9 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         OPropertySetHelper::setPropertyValues(_rPropertyNames, _rValues);
     else if (_rPropertyNames.getLength() == 1) // use the more efficient way
     {
+        if (_rValues.getLength() != 1)
+            throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this),
+                                           -1);
         try
         {
             setPropertyValue( _rPropertyNames[0], _rValues[0] );
@@ -631,6 +634,9 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         // mixed
         else
         {
+            if (_rValues.getLength() != nLen)
+                throw IllegalArgumentException("lengths do not match",
+                                               static_cast<XPropertySet*>(this), -1);
             const  css::uno::Any* pValues = _rValues.getConstArray();
 
             // dividing the Names and _rValues

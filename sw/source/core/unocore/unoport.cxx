@@ -424,6 +424,10 @@ void SwXTextPortion::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
 {
+    if (rPropertyNames.getLength() != rValues.getLength())
+        throw lang::IllegalArgumentException("lengths do not match",
+                                             static_cast<cppu::OWeakObject*>(this), -1);
+
     SwUnoCursor& rUnoCursor = GetCursor();
 
     {

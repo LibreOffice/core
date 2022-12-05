@@ -25,6 +25,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <memory>
 #include <sal/log.hxx>
 
@@ -867,6 +868,9 @@ void OPropertySetHelper::setPropertyValues(
     const Sequence<Any>& rValues )
 {
         sal_Int32   nSeqLen = rPropertyNames.getLength();
+        if (nSeqLen != rValues.getLength())
+            throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this),
+                                           -1);
         std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
         // get the map table
         IPropertyArrayHelper & rPH = getInfoHelper();

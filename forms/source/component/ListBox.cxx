@@ -473,6 +473,10 @@ namespace frm
         );
         if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && aStringItemListExists )
         {
+            if (_rPropertyNames.getLength() != _rValues.getLength())
+                throw css::lang::IllegalArgumentException("lengths do not match",
+                                                          static_cast<cppu::OWeakObject*>(this), -1);
+
             // both properties are present
             // -> remember the value for the select sequence
             pSelectSequenceValue = _rValues.getConstArray() + ( pSelectedItemsPos - _rPropertyNames.begin() );

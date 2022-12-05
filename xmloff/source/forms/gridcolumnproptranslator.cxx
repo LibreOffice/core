@@ -254,6 +254,9 @@ namespace xmloff
         sal_Int32 nParaAlignPos = findStringElement( aTranslatedNames, getParaAlignProperty() );
         if ( nParaAlignPos != -1 )
         {
+            if (aTranslatedNames.getLength() != aTranslatedValues.getLength())
+                    throw css::lang::IllegalArgumentException(
+                        "lengths do not match", static_cast<cppu::OWeakObject*>(this), -1);
             aTranslatedNames.getArray()[ nParaAlignPos ] = getAlignProperty();
             valueParaAdjustToAlign( aTranslatedValues.getArray()[ nParaAlignPos ] );
         }

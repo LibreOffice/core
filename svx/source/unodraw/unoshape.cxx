@@ -1679,8 +1679,11 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
     ::SolarMutexGuard aSolarGuard;
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-    const OUString* pNames = aPropertyNames.getConstArray();
+    if (nCount != aValues.getLength())
+        throw css::lang::IllegalArgumentException("lengths do not match",
+                                                  static_cast<cppu::OWeakObject*>(this), -1);
 
+    const OUString* pNames = aPropertyNames.getConstArray();
     const uno::Any* pValues = aValues.getConstArray();
 
     // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
