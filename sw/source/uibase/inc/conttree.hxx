@@ -138,6 +138,8 @@ class SwContentTree final : public SfxListener
 
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
+    void BringReferencesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
+    void BringTextFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.
