@@ -32,8 +32,6 @@
 
 #include <list>
 
-using namespace com::sun::star;
-
 namespace pdfi
 {
     class XmlEmitter;
@@ -313,7 +311,7 @@ namespace pdfi
         { return std::make_shared<DocumentElement>(); }
     };
 
-    bool isComplex(const uno::Reference<i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem);
+    bool isComplex(const css::uno::Reference<css::i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem);
 }
 
 #endif
