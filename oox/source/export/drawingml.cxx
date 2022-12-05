@@ -1887,19 +1887,18 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
     if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
                                                                       MapMode(MapUnit::Map100thMM));
-    sal_Int32 nOffsetX = 0;
-    if (GetProperty(rXPropSet, "FillBitmapPositionOffsetX"))
-        nOffsetX = (*o3tl::doAccess<sal_Int32>(mAny)) * aOriginalSize.Width() * 3.6;
-
-    sal_Int32 nOffsetY = 0;
-    if (GetProperty(rXPropSet, "FillBitmapPositionOffsetY"))
-        nOffsetY = (*o3tl::doAccess<sal_Int32>(mAny)) * aOriginalSize.Height() * 3.6;
-
-    // convert the X size of bitmap to a percentage
     sal_Int32 nSizeX = 0;
+    sal_Int32 nOffsetX = 0;
     if (GetProperty(rXPropSet, "FillBitmapSizeX"))
     {
         mAny >>= nSizeX;
+        if (GetProperty(rXPropSet, "FillBitmapPositionOffsetX"))
+        {
+            sal_Int32 nX = (nSizeX != 0) ? nSizeX : aOriginalSize.Width();
+            nOffsetX = (*o3tl::doAccess<sal_Int32>(mAny)) * nX * 3.6;
+        }
+
+        // convert the X size of bitmap to a percentage
         if (nSizeX > 0)
             nSizeX = double(nSizeX) / aOriginalSize.Width() * 100000;
         else if (nSizeX < 0)
@@ -1908,11 +1907,18 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
             nSizeX = 100000;
     }
 
-    // convert the Y size of bitmap to a percentage
     sal_Int32 nSizeY = 0;
+    sal_Int32 nOffsetY = 0;
     if (GetProperty(rXPropSet, "FillBitmapSizeY"))
     {
         mAny >>= nSizeY;
+        if (GetProperty(rXPropSet, "FillBitmapPositionOffsetY"))
+        {
+            sal_Int32 nY = (nSizeY != 0) ? nSizeY : aOriginalSize.Height();
+            nOffsetY = (*o3tl::doAccess<sal_Int32>(mAny)) * nY * 3.6;
+        }
+
+        // convert the Y size of bitmap to a percentage
         if (nSizeY > 0)
             nSizeY = double(nSizeY) / aOriginalSize.Height() * 100000;
         else if (nSizeY < 0)
