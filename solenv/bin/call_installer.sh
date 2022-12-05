@@ -20,21 +20,10 @@ if [ "${VERBOSITY}" = "-verbose" ] ; then
     set -x
 fi
 
-# populate MSI template dirs for Windows
-if [ -n "${MSITEMPL}" ]; then
-    TEMPLATE_DIR="${WORKDIR}/CustomTarget/instsetoo_native/install/msi_templates"
-    rm -rf "${TEMPLATE_DIR}" && \
-    mkdir -p "${TEMPLATE_DIR}/Binary" && \
-    for I in "${SRCDIR}/instsetoo_native/inc_${MSITEMPL}/windows/msi_templates/"*.* ; do \
-        "${GREP}" -v '^#' "$I" > "${TEMPLATE_DIR}/$(basename "$I")" || true ; \
-    done && \
-    "${GNUCOPY}" "${SRCDIR}/instsetoo_native/inc_common/windows/msi_templates/Binary/"*.* "${TEMPLATE_DIR}/Binary" || exit 1
-fi
-
 # add extra params for Windows
 EXTRA_PARAMS=
-if [ "${OS}" = "WNT" ] ; then
-    EXTRA_PARAMS="${EXTRA_PARAMS} -msitemplate ${WORKDIR}/CustomTarget/instsetoo_native/install/msi_templates"
+if [ "${OS}" = "WNT" ] && [ -n "${MSITEMPL}" ]; then
+    EXTRA_PARAMS="${EXTRA_PARAMS} -msitemplate ${WORKDIR}/CustomTarget/instsetoo_native/install/msi_templates/${MSITEMPL}"
     EXTRA_PARAMS="${EXTRA_PARAMS} -msilanguage ${WORKDIR}/CustomTarget/instsetoo_native/install/win_ulffiles"
 fi
 
