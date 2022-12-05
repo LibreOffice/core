@@ -142,14 +142,13 @@ struct StaticDataTableInfo : public rtl::StaticAggregate<uno::Reference<beans::X
 namespace chart
 {
 DataTable::DataTable()
-    : ::property::OPropertySet(m_aMutex)
-    , m_xModifyEventForwarder(new ModifyEventForwarder())
+    : m_xModifyEventForwarder(new ModifyEventForwarder())
 {
 }
 
 DataTable::DataTable(const DataTable& rOther)
     : DataTable_Base(rOther)
-    , ::property::OPropertySet(rOther, m_aMutex)
+    , ::property::OPropertySet(rOther)
     , m_xModifyEventForwarder(new ModifyEventForwarder())
 {
 }

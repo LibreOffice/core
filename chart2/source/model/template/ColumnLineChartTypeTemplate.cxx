@@ -102,7 +102,6 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
     StackMode eStackMode,
     sal_Int32 nNumberOfLines ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode )
 {
     setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));

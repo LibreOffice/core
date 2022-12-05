@@ -230,7 +230,6 @@ namespace chart
 {
 
 Diagram::Diagram( uno::Reference< uno::XComponentContext > xContext ) :
-        ::property::OPropertySet( m_aMutex ),
         m_xContext(std::move( xContext )),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
@@ -245,7 +244,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > xContext ) :
 
 Diagram::Diagram( const Diagram & rOther ) :
         impl::Diagram_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {

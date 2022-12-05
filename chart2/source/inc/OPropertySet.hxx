@@ -19,6 +19,7 @@
 #pragma once
 
 // helper classes
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 // interfaces and types
@@ -34,6 +35,7 @@ namespace property
 {
 
 class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
+    protected cppu::BaseMutex,
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,
@@ -45,11 +47,11 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public css::style::XStyleSupplier
 {
 public:
-    OPropertySet( ::osl::Mutex & rMutex );
+    OPropertySet();
     virtual ~OPropertySet();
 
 protected:
-    explicit OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex );
+    explicit OPropertySet( const OPropertySet & rOther );
 
     void SetNewValuesExplicitlyEvenIfTheyEqualDefault();
 
@@ -220,9 +222,6 @@ private:
                                    const css::uno::Any & rValue );
 
     bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
-
-    /// reference to mutex of class deriving from here
-    ::osl::Mutex &   m_rMutex;
 
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
     typedef std::map< sal_Int32, css::uno::Any > tPropertyMap;

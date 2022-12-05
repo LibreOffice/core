@@ -40,14 +40,13 @@ namespace chart
 {
 
 ChartType::ChartType() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_bNotifyChanges( true )
 {}
 
 ChartType::ChartType( const ChartType & rOther ) :
         impl::ChartType_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_bNotifyChanges( true )
 {

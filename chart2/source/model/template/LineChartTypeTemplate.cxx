@@ -121,7 +121,6 @@ LineChartTypeTemplate::LineChartTypeTemplate(
     bool bHasLines /* = true */,
     sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode ),
         m_bHasSymbols( bSymbols ),
         m_bHasLines( bHasLines ),

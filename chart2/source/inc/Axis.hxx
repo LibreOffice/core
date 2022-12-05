@@ -19,7 +19,6 @@
 #pragma once
 
 #include "OPropertySet.hxx"
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -46,7 +45,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class OOO_DLLPUBLIC_CHARTTOOLS Axis final :
-    public cppu::BaseMutex,
     public impl::Axis_Base,
     public ::property::OPropertySet
 {

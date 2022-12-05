@@ -185,14 +185,13 @@ namespace chart
 {
 
 Legend::Legend() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
 }
 
 Legend::Legend( const Legend & rOther ) :
         impl::Legend_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
 }

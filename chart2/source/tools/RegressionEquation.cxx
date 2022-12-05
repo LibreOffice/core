@@ -164,13 +164,12 @@ namespace chart
 {
 
 RegressionEquation::RegressionEquation() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder())
 {}
 
 RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         impl::RegressionEquation_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder())
 {}
 

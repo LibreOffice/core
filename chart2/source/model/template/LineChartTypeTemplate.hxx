@@ -20,7 +20,6 @@
 
 #include <ChartTypeTemplate.hxx>
 #include <OPropertySet.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <StackMode.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -28,7 +27,6 @@ namespace chart
 {
 
 class LineChartTypeTemplate :
-        public cppu::BaseMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

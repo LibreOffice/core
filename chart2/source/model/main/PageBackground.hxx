@@ -21,7 +21,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <OPropertySet.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -40,7 +39,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class PageBackground final :
-    public cppu::BaseMutex,
     public impl::PageBackground_Base,
     public ::property::OPropertySet
 {

@@ -127,14 +127,13 @@ namespace chart
 {
 
 DataSeries::DataSeries() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
 }
 
 DataSeries::DataSeries( const DataSeries & rOther ) :
         impl::DataSeries_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     if( ! rOther.m_aDataSequences.empty())

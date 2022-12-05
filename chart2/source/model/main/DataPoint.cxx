@@ -86,7 +86,6 @@ namespace chart
 {
 
 DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
-        ::property::OPropertySet( m_aMutex ),
         m_xParentProperties( rParentProperties ),
         m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_bNoParentPropAllowed( false )
@@ -96,7 +95,7 @@ DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentPrope
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
         impl::DataPoint_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
         m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_bNoParentPropAllowed( true )
 {

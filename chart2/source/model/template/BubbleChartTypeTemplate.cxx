@@ -99,8 +99,7 @@ BubbleChartTypeTemplate::BubbleChartTypeTemplate(
     Reference<
         uno::XComponentContext > const & xContext,
     const OUString & rServiceName ) :
-        ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex )
+        ChartTypeTemplate( xContext, rServiceName )
 {
 }
 

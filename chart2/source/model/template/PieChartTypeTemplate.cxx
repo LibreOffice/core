@@ -125,8 +125,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     chart2::PieChartOffsetMode eMode,
     bool bRings            /* = false */,
     sal_Int32 nDim         /* = 2 */    ) :
-        ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex )
+        ChartTypeTemplate( xContext, rServiceName )
 {
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::Any( eMode ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));

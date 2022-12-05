@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,7 +40,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class GridProperties final :
-        public cppu::BaseMutex,
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {

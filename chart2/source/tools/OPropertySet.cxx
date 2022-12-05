@@ -40,23 +40,25 @@ using ::cppu::OPropertySetHelper;
 namespace property
 {
 
-OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
-        OBroadcastHelper( par_rMutex ),
+OPropertySet::OPropertySet( ) :
+        OBroadcastHelper( m_aMutex ),
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
-        m_rMutex( par_rMutex ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
 }
 
-OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMutex ) :
-        OBroadcastHelper( par_rMutex ),
+OPropertySet::OPropertySet( const OPropertySet & rOther ) :
+        OBroadcastHelper( m_aMutex ),
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
-        m_rMutex( par_rMutex ),
+        css::lang::XTypeProvider(),
+        css::beans::XPropertyState(),
+        css::beans::XMultiPropertyStates(),
+        css::style::XStyleSupplier(),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
-    MutexGuard aGuard( m_rMutex );
+    MutexGuard aGuard( m_aMutex );
 
     m_aProperties = rOther.m_aProperties;
 

@@ -135,7 +135,6 @@ BarChartTypeTemplate::BarChartTypeTemplate(
     BarDirection eDirection,
     sal_Int32 nDim         /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode ),
         m_eBarDirection( eDirection ),
         m_nDim( nDim )

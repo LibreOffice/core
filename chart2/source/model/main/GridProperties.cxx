@@ -126,13 +126,12 @@ namespace chart
 {
 
 GridProperties::GridProperties() :
-        ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 GridProperties::GridProperties( const GridProperties & rOther ) :
         impl::GridProperties_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
 }

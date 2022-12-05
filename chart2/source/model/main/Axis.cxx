@@ -322,7 +322,6 @@ namespace chart
 {
 
 Axis::Axis() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_aScaleData( AxisHelper::createDefaultScale() ),
         m_xGrid( new GridProperties() )
@@ -342,7 +341,7 @@ Axis::Axis() :
 
 Axis::Axis( const Axis & rOther ) :
         impl::Axis_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_aScaleData( rOther.m_aScaleData )
 {

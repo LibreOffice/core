@@ -19,7 +19,6 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -42,7 +41,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class FormattedString final :
-    public cppu::BaseMutex,
     public impl::FormattedString_Base,
     public ::property::OPropertySet
 {

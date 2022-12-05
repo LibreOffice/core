@@ -20,7 +20,6 @@
 
 #include "OPropertySet.hxx"
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <sal/types.h>
@@ -48,7 +47,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class SAL_DLLPUBLIC_RTTI RegressionCurveModel :
-        public cppu::BaseMutex,
         public impl::RegressionCurveModel_Base,
         public ::property::OPropertySet
 {

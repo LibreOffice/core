@@ -10,7 +10,6 @@
 #pragma once
 
 #include "OPropertySet.hxx"
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -28,8 +27,7 @@ typedef cppu::WeakImplHelper<css::chart2::XDataTable, css::lang::XServiceInfo,
     DataTable_Base;
 
 /** Data table implementation */
-class OOO_DLLPUBLIC_CHARTTOOLS DataTable final : public cppu::BaseMutex,
-                                                 public DataTable_Base,
+class OOO_DLLPUBLIC_CHARTTOOLS DataTable final : public DataTable_Base,
                                                  public ::property::OPropertySet
 {
 public:

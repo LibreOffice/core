@@ -95,7 +95,6 @@ namespace chart
 {
 
 FormattedString::FormattedString() :
-        ::property::OPropertySet( m_aMutex ),
     m_aType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT),
     m_bDataLabelsRange(false),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -103,7 +102,7 @@ FormattedString::FormattedString() :
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
         impl::FormattedString_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_aString( rOther.m_aString ),
     m_aType(rOther.m_aType),
     m_aGuid(rOther.m_aGuid),

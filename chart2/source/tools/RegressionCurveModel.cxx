@@ -138,7 +138,6 @@ namespace chart
 {
 
 RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
-    ::property::OPropertySet( m_aMutex ),
     m_eRegressionCurveType( eCurveType ),
     m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_xEquationProperties( new RegressionEquation )
@@ -152,7 +151,7 @@ RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
 
 RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther ) :
     impl::RegressionCurveModel_Base(rOther),
-    ::property::OPropertySet( rOther, m_aMutex ),
+    ::property::OPropertySet( rOther ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {

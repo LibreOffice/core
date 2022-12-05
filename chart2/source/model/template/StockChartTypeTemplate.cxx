@@ -129,7 +129,6 @@ StockChartTypeTemplate::StockChartTypeTemplate(
     StockVariant eVariant,
     bool bJapaneseStyle ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex ),
     m_eStockVariant( eVariant )
 {
     setFastPropertyValue_NoBroadcast(

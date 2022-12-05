@@ -106,13 +106,12 @@ namespace chart
 {
 
 Wall::Wall() :
-        ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 Wall::Wall( const Wall & rOther ) :
         impl::Wall_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 

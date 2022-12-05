@@ -19,7 +19,6 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <ChartTypeTemplate.hxx>
@@ -29,7 +28,6 @@ namespace chart
 {
 
 class PieChartTypeTemplate :
-        public cppu::BaseMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

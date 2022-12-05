@@ -227,13 +227,12 @@ namespace chart
 {
 
 Title::Title() :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 Title::Title( const Title & rOther ) :
         impl::Title_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     CloneHelper::CloneRefSequence<chart2::XFormattedString>(

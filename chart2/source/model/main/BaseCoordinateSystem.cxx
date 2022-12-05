@@ -117,7 +117,6 @@ namespace chart
 
 BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Int32 nDimensionCount /* = 2 */ ) :
-        ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_nDimensionCount( nDimensionCount )
  {
@@ -152,7 +151,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
 BaseCoordinateSystem::BaseCoordinateSystem(
     const BaseCoordinateSystem & rSource ) :
         impl::BaseCoordinateSystem_Base(rSource),
-        ::property::OPropertySet( rSource, m_aMutex ),
+        ::property::OPropertySet( rSource ),
     m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_nDimensionCount( rSource.m_nDimensionCount )
 {

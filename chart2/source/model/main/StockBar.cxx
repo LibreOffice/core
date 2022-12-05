@@ -108,7 +108,6 @@ namespace chart
 {
 
 StockBar::StockBar( bool bRisingCourse ) :
-        ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     if( ! bRisingCourse )
@@ -124,7 +123,7 @@ StockBar::StockBar( bool bRisingCourse ) :
 
 StockBar::StockBar( const StockBar & rOther ) :
         impl::StockBar_Base(rOther),
-        ::property::OPropertySet( rOther, m_aMutex ),
+        ::property::OPropertySet( rOther ),
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 

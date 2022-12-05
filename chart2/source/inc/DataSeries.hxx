@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 // helper classes
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include "ModifyListenerHelper.hxx"
@@ -61,7 +60,6 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataSeries final :
-    public cppu::BaseMutex,
     public impl::DataSeries_Base,
     public ::property::OPropertySet
 {
