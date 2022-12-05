@@ -363,17 +363,8 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     if (aSftFont.initialize() != SFErrCodes::Ok)
         return false;
 
-    // Get details about the subset font.
-    FillFontSubsetInfo(&aSftFont, rInfo);
-
-    // Shortcut for CFF-subsetting.
-    auto aData = GetRawFontData(T_CFF);
-    if (!aData.empty())
-        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer, pGlyphIds, pEncoding,
-                                   nGlyphCount, rInfo);
-
     // write subset into destination file
-    return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount);
+    return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount, rInfo);
 }
 
 bool PhysicalFontFace::HasColorLayers() const

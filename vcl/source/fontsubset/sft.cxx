@@ -1809,10 +1809,24 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     return res;
 }
 
+static void FillFontSubsetInfo(AbstractTrueTypeFont*, FontSubsetInfo&);
+static bool CreateCFFfontSubset(const unsigned char*, int, std::vector<sal_uInt8>&,
+                                const sal_GlyphId*, const sal_uInt8*, int, FontSubsetInfo&);
+
 bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>& rOutBuffer,
                          const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                         const int nOrigGlyphCount)
+                         const int nOrigGlyphCount, FontSubsetInfo& rInfo)
 {
+    // Get details about the subset font.
+    FillFontSubsetInfo(&rTTF, rInfo);
+
+    // Shortcut for CFF-subsetting.
+    sal_uInt32 nCFF;
+    const sal_uInt8* pCFF = rTTF.table(O_CFF, nCFF);
+    if (nCFF)
+        return CreateCFFfontSubset(pCFF, nCFF, rOutBuffer, pGlyphIds, pEncoding,
+                                   nOrigGlyphCount, rInfo);
+
     // Multiple questions:
     // - Why is there a glyph limit?
     //   MacOS used to handle 257 glyphs...
@@ -1867,9 +1881,9 @@ bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>
             == vcl::SFErrCodes::Ok);
 }
 
-bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
-                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
+static bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+                                std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
+                                const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
 {
     utl::TempFileFast aTempFile;
     SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
@@ -2245,7 +2259,7 @@ void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 }
 
-void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
+static void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
 {
     TTGlobalFontInfo aTTInfo;
     GetTTGlobalFontInfo(ttf, &aTTInfo);

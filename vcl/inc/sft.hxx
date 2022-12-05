@@ -611,17 +611,7 @@ class TrueTypeFont;
                               std::vector<sal_uInt8>& rOutBuffer,
                               const sal_GlyphId* pGlyphIds,
                               const sal_uInt8* pEncoding,
-                              int nGlyphCount);
-
-    VCL_DLLPUBLIC bool CreateCFFfontSubset(const unsigned char* pFontBytes,
-                              int nByteLength,
-                              std::vector<sal_uInt8>& rOutBuffer,
-                              const sal_GlyphId* pGlyphIds,
-                              const sal_uInt8* pEncoding,
                               int nGlyphCount, FontSubsetInfo& rInfo);
-
-    VCL_DLLPUBLIC void FillFontSubsetInfo(AbstractTrueTypeFont *ttf,
-                              FontSubsetInfo& rInfo);
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
