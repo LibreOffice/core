@@ -96,8 +96,6 @@ bool FontSubsetInfo::CreateFontSubset(
     case FontType::TYPE1_PFA:
     case FontType::TYPE1_PFB:
     case FontType::ANY_TYPE1:
-        bOK = CreateFontSubsetFromType1();
-        break;
     case FontType::NO_FONT:
     default:
         OSL_FAIL( "unhandled type in CreateFontSubset()");
@@ -149,14 +147,6 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt()
     }
 
     return (nSFTErr != vcl::SFErrCodes::Ok);
-}
-
-// TODO: replace dummy implementation
-bool FontSubsetInfo::CreateFontSubsetFromType1()
-{
-    SAL_WARN("vcl.fonts",
-            "CreateFontSubsetFromType1: replace dummy implementation.");
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

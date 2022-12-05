@@ -88,7 +88,6 @@ private:
 
     bool    CreateFontSubsetFromCff();
     bool    CreateFontSubsetFromSfnt();
-    static bool CreateFontSubsetFromType1();
 };
 
 int VCL_DLLPUBLIC TestFontSubset(const void* data, sal_uInt32 size);
