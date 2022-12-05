@@ -1347,29 +1347,20 @@ sal_Bool SAL_CALL UIConfigurationManager::isReadOnly()
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    comphelper::OInterfaceIteratorHelper4 pIterator( aGuard, m_aConfigListeners );
-    while ( pIterator.hasMoreElements() )
-    {
-        try
+    m_aConfigListeners.forEach(aGuard, [&eOp, &aEvent](const css::uno::Reference<XUIConfigurationListener>& l) {
+        switch ( eOp )
         {
-            switch ( eOp )
-            {
-                case NotifyOp_Replace:
-                    pIterator.next()->elementReplaced( aEvent );
-                    break;
-                case NotifyOp_Insert:
-                    pIterator.next()->elementInserted( aEvent );
-                    break;
-                case NotifyOp_Remove:
-                    pIterator.next()->elementRemoved( aEvent );
-                    break;
-            }
+            case NotifyOp_Replace:
+                l->elementReplaced( aEvent );
+                break;
+            case NotifyOp_Insert:
+                l->elementInserted( aEvent );
+                break;
+            case NotifyOp_Remove:
+                l->elementRemoved( aEvent );
+                break;
         }
-        catch( const css::uno::RuntimeException& )
-        {
-            pIterator.remove(aGuard);
-        }
-    }
+    });
 }
 
 }
