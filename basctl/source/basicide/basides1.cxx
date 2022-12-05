@@ -770,23 +770,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
 
-            if ( pArgs && pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) == SfxItemState::SET )
-            {
-                nCurrentZoomSliderValue = static_cast<const SvxZoomSliderItem*>(pItem)->GetValue();
-                // Apply zoom to all open windows
-                for (auto const& window : aWindowTable)
-                {
-                    ModulWindow* pModuleWindow = dynamic_cast<ModulWindow*>(window.second.get());
-                    if (pModuleWindow)
-                    {
-                        EditorWindow& pEditorWindow = pModuleWindow->GetEditorWindow();
-                        pEditorWindow.SetEditorZoomLevel(nCurrentZoomSliderValue);
-                    }
-                }
-
-                if (SfxBindings* pBindings = GetBindingsPtr())
-                    pBindings->Invalidate( SID_BASICIDE_CURRENT_ZOOM );
-            }
+            if (pArgs && pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) == SfxItemState::SET)
+                SetGlobalEditorZoomLevel(static_cast<const SvxZoomSliderItem*>(pItem)->GetValue());
         }
         break;
 
@@ -1046,7 +1031,7 @@ void Shell::GetState(SfxItemSet &rSet)
                 if (pModuleWindow)
                 {
                     OUString sZoom;
-                    sZoom = OUString::number(nCurrentZoomSliderValue) + "%";
+                    sZoom = OUString::number(m_nCurrentZoomSliderValue) + "%";
                     SfxStringItem aItem( SID_BASICIDE_CURRENT_ZOOM, sZoom );
                     rSet.Put( aItem );
                 }

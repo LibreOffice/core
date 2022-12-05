@@ -40,6 +40,7 @@ $(eval $(call gb_Library_set_precompiled_header,basctl,basctl/inc/pch/precompile
 $(eval $(call gb_Library_use_sdk_api,basctl))
 
 $(eval $(call gb_Library_use_libraries,basctl,\
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \

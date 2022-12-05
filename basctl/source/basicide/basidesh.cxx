@@ -263,7 +263,7 @@ Shell::~Shell()
 
     // Remember current zoom level
     SvtViewOptions(EViewType::Window, BASIC_IDE_EDITOR_WINDOW).SetUserItem(
-        BASIC_IDE_CURRENT_ZOOM, Any(nCurrentZoomSliderValue));
+        BASIC_IDE_CURRENT_ZOOM, Any(m_nCurrentZoomSliderValue));
 }
 
 void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -368,16 +368,39 @@ void Shell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 
 void Shell::InitZoomLevel()
 {
-    nCurrentZoomSliderValue = DEFAULT_ZOOM_LEVEL;
+    m_nCurrentZoomSliderValue = DEFAULT_ZOOM_LEVEL;
     SvtViewOptions aWinOpt(EViewType::Window, BASIC_IDE_EDITOR_WINDOW);
     if (aWinOpt.Exists())
     {
         try
         {
-            aWinOpt.GetUserItem(BASIC_IDE_CURRENT_ZOOM) >>= nCurrentZoomSliderValue;
+            aWinOpt.GetUserItem(BASIC_IDE_CURRENT_ZOOM) >>= m_nCurrentZoomSliderValue;
         }
         catch(const css::container::NoSuchElementException&)
         { TOOLS_WARN_EXCEPTION("basctl.basicide", "Zoom level not defined"); }
+    }
+}
+
+// Applies the new zoom level to all open editor windows
+void Shell::SetGlobalEditorZoomLevel(sal_uInt16 nNewZoomLevel)
+{
+    for (auto const& window : aWindowTable)
+    {
+        ModulWindow* pModuleWindow = dynamic_cast<ModulWindow*>(window.second.get());
+        if (pModuleWindow)
+        {
+            EditorWindow& pEditorWindow = pModuleWindow->GetEditorWindow();
+            pEditorWindow.SetEditorZoomLevel(nNewZoomLevel);
+        }
+    }
+
+    // Update the zoom slider value based on the new global zoom level
+    m_nCurrentZoomSliderValue = nNewZoomLevel;
+
+    if (SfxBindings* pBindings = GetBindingsPtr())
+    {
+        pBindings->Invalidate( SID_BASICIDE_CURRENT_ZOOM );
+        pBindings->Invalidate( SID_ATTR_ZOOMSLIDER );
     }
 }
 

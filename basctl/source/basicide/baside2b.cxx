@@ -71,6 +71,7 @@
 #include <o3tl/string_view.hxx>
 #include "textwindowpeer.hxx"
 #include "uiobject.hxx"
+#include <basegfx/utils/zoomtools.hxx>
 
 namespace basctl
 {
@@ -499,8 +500,25 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
          ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
          ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
     {
-        HandleScrollCommand( rCEvt, &rModulWindow.GetEditHScrollBar(), &rModulWindow.GetEditVScrollBar() );
-    } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
+        const CommandWheelData* pData = rCEvt.GetWheelData();
+
+        // Check if it is a Ctrl+Wheel zoom command
+        if (pData->IsMod1())
+        {
+            const sal_uInt16 nOldZoom = GetCurrentZoom();
+            sal_uInt16 nNewZoom;
+            if( pData->GetDelta() < 0 )
+                nNewZoom = std::max<sal_uInt16>(basctl::Shell::GetMinZoom(),
+                                                basegfx::zoomtools::zoomOut(nOldZoom));
+            else
+                nNewZoom = std::min<sal_uInt16>(basctl::Shell::GetMaxZoom(),
+                                                basegfx::zoomtools::zoomIn(nOldZoom));
+            GetShell()->SetGlobalEditorZoomLevel(nNewZoom);
+        }
+        else
+            HandleScrollCommand(rCEvt, &rModulWindow.GetEditHScrollBar(), &rModulWindow.GetEditVScrollBar());
+    }
+    else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
         SfxDispatcher* pDispatcher = GetDispatcher();
         if ( pDispatcher )
         {

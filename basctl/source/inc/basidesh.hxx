@@ -75,7 +75,7 @@ private:
     std::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
     // Current value of the zoom slider
-    sal_uInt16          nCurrentZoomSliderValue;
+    sal_uInt16            m_nCurrentZoomSliderValue;
     VclPtr<ScrollAdaptor> aHScrollBar;
     VclPtr<ScrollAdaptor> aVScrollBar;
     VclPtr<TabBar>       pTabBar;           // basctl::TabBar
@@ -171,7 +171,8 @@ public:
 
     SfxUndoManager*     GetUndoManager() override;
 
-    sal_uInt16          GetCurrentZoomSliderValue() { return nCurrentZoomSliderValue; }
+    void                SetGlobalEditorZoomLevel(sal_uInt16 nNewZoomLevel);
+    sal_uInt16          GetCurrentZoomSliderValue() { return m_nCurrentZoomSliderValue; }
     static sal_uInt16   GetMinZoom() { return MIN_ZOOM_LEVEL; }
     static sal_uInt16   GetMaxZoom() { return MAX_ZOOM_LEVEL; }
 
