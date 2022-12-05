@@ -268,7 +268,7 @@ std::vector<FontSet> initFontSets()
         aFontSet.maName = "Source Sans Family";
         aFontSet.msHeadingFont = "Source Sans Pro";
         aFontSet.msBaseFont = "Source Sans Pro";
-        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSet.msMonoFont = "Source Code Pro";
         aFontSets.push_back(aFontSet);
     }
     {
@@ -276,7 +276,7 @@ std::vector<FontSet> initFontSets()
         aFontSet.maName = "Source Sans Family 2";
         aFontSet.msHeadingFont = "Source Sans Pro";
         aFontSet.msBaseFont = "Source Sans Pro Light";
-        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSet.msMonoFont = "Source Code Pro";
         aFontSets.push_back(aFontSet);
     }
     {

@@ -153,11 +153,6 @@ FONT_LINLIBERTINEG_TARBALL := e7a384790b13c29113e22e596ade9687-LinLibertineG-201
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_SOURCESANS_SHA256SUM := e7bc9a1fec787a529e49f5a26b93dcdcf41506449dfc70f92cdef6d17eb6fb61
-FONT_SOURCESANS_TARBALL := edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 FONT_NOTO_SHA256SUM := 29acc15a4c4d6b51201ba5d60f303dfbc2e5acbfdb70413c9ae1ed34fa259994
 FONT_NOTO_TARBALL := noto-fonts-20171024.tar.gz
 # three static lines

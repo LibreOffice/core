@@ -21,7 +21,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
 	ExternalPackage_libre_hebrew \
-	ExternalPackage_sourcesans \
 	ExternalPackage_noto \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
@@ -36,7 +35,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
 	UnpackedTarball_libre_hebrew \
-	UnpackedTarball_sourcesans \
 	UnpackedTarball_noto \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
