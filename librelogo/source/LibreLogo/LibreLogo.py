@@ -168,6 +168,7 @@ class __Doc__:
         self.time = 0
         self.zoomvalue = 0
         self.lockturtle = False
+        self.fixSVG = False
         self.initialize()
 
     def initialize(self):
@@ -539,6 +540,7 @@ class LogoProgram(threading.Thread):
                 parent = _.doc.CurrentController.Frame.ContainerWindow
                 MessageBox(parent, "Document objects with%s script events" % [" possible", ""][secid-1], "LibreLogo program can't start", "errorbox")
             else:
+                _.fixSVG = False
                 _.start_time = __time__.process_time()
                 exec(self.code)
                 __unlock__(all_levels = True)
@@ -1440,6 +1442,7 @@ def text(shape, orig_st):
 
         # has HTML-like formatting
         if formatting != None:
+            _.fixSVG = True
             prev_format = 0
             prev_extra_data = extra_data[0]
             c.collapseToStart()
@@ -1811,6 +1814,9 @@ def __groupend__(name = ""):
         __time__.sleep(0.1)
       __dispatcher__(".uno:Paste", (), draw)
       __dispatcher__(".uno:FormatGroup", (), draw)
+      # fix bad or non-portable SVG export by converting text to curve
+      if _.fixSVG:
+          __dispatcher__(".uno:ChangeBezier", (), draw)
       pic = drawpage.getByIndex(0)
       pic.setPosition(__Point__((g.BoundRect.Width - g.Size.Width)//2, (g.BoundRect.Height - g.Size.Height)//2))
       drawpage.Height, drawpage.Width = g.BoundRect.Height, g.BoundRect.Width
@@ -1856,6 +1862,8 @@ def fontweight(n = -1):
 def fontfamily(s = -1):
     if s != -1:
         _.fontfamily = s
+        if ':' in s:
+            _.fixSVG = True
     else:
         return _.fontfamily
 
