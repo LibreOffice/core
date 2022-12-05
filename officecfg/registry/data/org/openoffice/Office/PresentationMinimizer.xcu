@@ -22,91 +22,14 @@
         <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
             <value xml:lang="en-US">Presentation Minimizer</value>
         </prop>
-        <prop oor:name="STR_STEPS">
-            <value xml:lang="en-US">Steps</value>
-        </prop>
-        <prop oor:name="STR_BACK">
-            <value xml:lang="en-US">&lt; ~Back</value>
-        </prop>
-        <prop oor:name="STR_NEXT">
-            <value xml:lang="en-US">~Next &gt;</value>
-        </prop>
-        <prop oor:name="STR_FINISH">
-            <value xml:lang="en-US">~Finish</value>
-        </prop>
-        <prop oor:name="STR_CANCEL">
-            <value xml:lang="en-US">Cancel</value>
-        </prop>
         <prop oor:name="STR_INTRODUCTION">
             <value xml:lang="en-US">Introduction</value>
-        </prop>
-        <prop oor:name="STR_INTRODUCTION_T">
-            <value xml:lang="en-US">The Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
-
-        At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
-        </prop>
-        <prop oor:name="STR_CHOSE_SETTINGS">
-            <value xml:lang="en-US">~Choose settings for Presentation Minimizer</value>
-        </prop>
-        <prop oor:name="STR_REMOVE">
-            <value xml:lang="en-US">~Delete</value>
-        </prop>
-        <prop oor:name="STR_GRAPHIC_OPTIMIZATION">
-            <value xml:lang="en-US">Choose settings for optimizing images</value>
         </prop>
         <prop oor:name="STR_IMAGE_OPTIMIZATION">
             <value xml:lang="en-US">Images</value>
         </prop>
-        <prop oor:name="STR_LOSSLESS_COMPRESSION">
-            <value xml:lang="en-US">~Lossless compression</value>
-        </prop>
-        <prop oor:name="STR_JPEG_COMPRESSION">
-            <value xml:lang="en-US">~JPEG compression</value>
-        </prop>
-        <prop oor:name="STR_QUALITY">
-            <value xml:lang="en-US">~Quality in %</value>
-        </prop>
-        <prop oor:name="STR_REMOVE_CROP_AREA">
-            <value xml:lang="en-US">~Delete cropped image areas</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION">
-            <value xml:lang="en-US">Reduce ~image resolution</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_0">
-            <value xml:lang="en-US">0;&lt;no change&gt;</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_1">
-            <value xml:lang="en-US">96;96 DPI (screen resolution)</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_2">
-            <value xml:lang="en-US">150;150 DPI (projector resolution)</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_3">
-            <value xml:lang="en-US">250;250 DPI (print resolution)</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_4">
-            <value xml:lang="en-US">300;300 DPI (print resolution)</value>
-        </prop>
-        <prop oor:name="STR_IMAGE_RESOLUTION_5">
-            <value xml:lang="en-US">600;600 DPI (print resolution)</value>
-        </prop>
-        <prop oor:name="STR_EMBED_LINKED_GRAPHICS">
-            <value xml:lang="en-US">~Embed external images</value>
-        </prop>
         <prop oor:name="STR_OLE_OBJECTS">
             <value xml:lang="en-US">OLE Objects</value>
-        </prop>
-        <prop oor:name="STR_OLE_OPTIMIZATION">
-            <value xml:lang="en-US">Choose settings for replacing OLE objects</value>
-        </prop>
-        <prop oor:name="STR_OLE_REPLACE">
-            <value xml:lang="en-US">Create static replacement images for OLE objects</value>
-        </prop>
-        <prop oor:name="STR_ALL_OLE_OBJECTS">
-            <value xml:lang="en-US">For ~all OLE objects</value>
-        </prop>
-        <prop oor:name="STR_ALIEN_OLE_OBJECTS_ONLY">
-            <value xml:lang="en-US">~For OLE objects not based on OpenDocument format</value>
         </prop>
         <prop oor:name="STR_OLE_OBJECTS_DESC">
             <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
@@ -121,38 +44,11 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_SLIDES">
             <value xml:lang="en-US">Slides</value>
         </prop>
-        <prop oor:name="STR_CHOOSE_SLIDES">
-            <value xml:lang="en-US">Choose which slides to delete</value>
-        </prop>
-        <prop oor:name="STR_DELETE_MASTER_PAGES">
-            <value xml:lang="en-US">Delete unused ~master slides</value>
-        </prop>
-        <prop oor:name="STR_DELETE_NOTES_PAGES">
-            <value xml:lang="en-US">~Clear notes</value>
-        </prop>
-        <prop oor:name="STR_DELETE_HIDDEN_SLIDES">
-            <value xml:lang="en-US">Delete hidden ~slides</value>
-        </prop>
-        <prop oor:name="STR_CUSTOM_SHOW">
-            <value xml:lang="en-US">Delete slides that are not used for the ~custom slide show</value>
-        </prop>
         <prop oor:name="STR_SUMMARY">
             <value xml:lang="en-US">Summary</value>
         </prop>
-        <prop oor:name="STR_SUMMARY_TITLE">
-            <value xml:lang="en-US">Choose where to apply the following changes</value>
-        </prop>
-        <prop oor:name="STR_APPLY_TO_CURRENT">
-            <value xml:lang="en-US">~Apply changes to current presentation</value>
-        </prop>
         <prop oor:name="STR_AUTOMATICALLY_OPEN">
             <value xml:lang="en-US">~Open newly created presentation</value>
-        </prop>
-        <prop oor:name="STR_SAVE_SETTINGS">
-            <value xml:lang="en-US">~Save settings as</value>
-        </prop>
-        <prop oor:name="STR_SAVE_AS">
-            <value xml:lang="en-US">~Duplicate presentation before applying changes</value>
         </prop>
         <prop oor:name="STR_DELETE_SLIDES">
             <value xml:lang="en-US">Delete %SLIDES slides.</value>
@@ -162,12 +58,6 @@ The current presentation contains no OLE objects.</value>
         </prop>
         <prop oor:name="STR_CREATE_REPLACEMENT">
             <value xml:lang="en-US">Create replacement images for %OLE objects.</value>
-        </prop>
-        <prop oor:name="STR_CURRENT_FILESIZE">
-            <value xml:lang="en-US">Current file size:</value>
-        </prop>
-        <prop oor:name="STR_ESTIMATED_FILESIZE">
-            <value xml:lang="en-US">Estimated new file size:</value>
         </prop>
         <prop oor:name="MY_SETTINGS">
             <value xml:lang="en-US">My Settings </value>

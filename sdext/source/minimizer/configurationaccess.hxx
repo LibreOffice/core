@@ -96,13 +96,13 @@ class ConfigurationAccess
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };
         std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const OUString& rName );
 
-    private:
+    protected:
+        css::uno::Reference< css::uno::XComponentContext > mxContext;
 
+    private:
         std::map < PPPOptimizerTokenEnum, OUString > maStrings;
 
         std::vector< OptimizerSettings > maSettings;
-
-        css::uno::Reference< css::uno::XComponentContext > mxContext;
 
         void LoadStrings();
         void LoadConfiguration();

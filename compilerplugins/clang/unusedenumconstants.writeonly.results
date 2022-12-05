@@ -3936,94 +3936,30 @@ sdext/source/minimizer/pppoptimizertoken.hxx:79
     enum PPPOptimizerTokenEnum TK_Pages
 sdext/source/minimizer/pppoptimizertoken.hxx:81
     enum PPPOptimizerTokenEnum STR_SUN_OPTIMIZATION_WIZARD2
-sdext/source/minimizer/pppoptimizertoken.hxx:82
-    enum PPPOptimizerTokenEnum STR_STEPS
-sdext/source/minimizer/pppoptimizertoken.hxx:83
-    enum PPPOptimizerTokenEnum STR_BACK
-sdext/source/minimizer/pppoptimizertoken.hxx:84
-    enum PPPOptimizerTokenEnum STR_NEXT
-sdext/source/minimizer/pppoptimizertoken.hxx:85
-    enum PPPOptimizerTokenEnum STR_FINISH
-sdext/source/minimizer/pppoptimizertoken.hxx:86
-    enum PPPOptimizerTokenEnum STR_CANCEL
 sdext/source/minimizer/pppoptimizertoken.hxx:87
     enum PPPOptimizerTokenEnum STR_INTRODUCTION
-sdext/source/minimizer/pppoptimizertoken.hxx:88
-    enum PPPOptimizerTokenEnum STR_INTRODUCTION_T
-sdext/source/minimizer/pppoptimizertoken.hxx:89
-    enum PPPOptimizerTokenEnum STR_CHOSE_SETTINGS
-sdext/source/minimizer/pppoptimizertoken.hxx:90
-    enum PPPOptimizerTokenEnum STR_REMOVE
-sdext/source/minimizer/pppoptimizertoken.hxx:91
-    enum PPPOptimizerTokenEnum STR_GRAPHIC_OPTIMIZATION
 sdext/source/minimizer/pppoptimizertoken.hxx:92
     enum PPPOptimizerTokenEnum STR_IMAGE_OPTIMIZATION
-sdext/source/minimizer/pppoptimizertoken.hxx:93
-    enum PPPOptimizerTokenEnum STR_LOSSLESS_COMPRESSION
-sdext/source/minimizer/pppoptimizertoken.hxx:94
-    enum PPPOptimizerTokenEnum STR_JPEG_COMPRESSION
-sdext/source/minimizer/pppoptimizertoken.hxx:95
-    enum PPPOptimizerTokenEnum STR_QUALITY
-sdext/source/minimizer/pppoptimizertoken.hxx:96
-    enum PPPOptimizerTokenEnum STR_REMOVE_CROP_AREA
-sdext/source/minimizer/pppoptimizertoken.hxx:97
-    enum PPPOptimizerTokenEnum STR_IMAGE_RESOLUTION
-sdext/source/minimizer/pppoptimizertoken.hxx:98
-    enum PPPOptimizerTokenEnum STR_IMAGE_RESOLUTION_0
-sdext/source/minimizer/pppoptimizertoken.hxx:99
-    enum PPPOptimizerTokenEnum STR_IMAGE_RESOLUTION_1
-sdext/source/minimizer/pppoptimizertoken.hxx:100
-    enum PPPOptimizerTokenEnum STR_IMAGE_RESOLUTION_2
-sdext/source/minimizer/pppoptimizertoken.hxx:102
-    enum PPPOptimizerTokenEnum STR_EMBED_LINKED_GRAPHICS
 sdext/source/minimizer/pppoptimizertoken.hxx:103
     enum PPPOptimizerTokenEnum STR_OLE_OBJECTS
-sdext/source/minimizer/pppoptimizertoken.hxx:104
-    enum PPPOptimizerTokenEnum STR_OLE_OPTIMIZATION
 sdext/source/minimizer/pppoptimizertoken.hxx:105
     enum PPPOptimizerTokenEnum STR_OLE_REPLACE
-sdext/source/minimizer/pppoptimizertoken.hxx:106
-    enum PPPOptimizerTokenEnum STR_ALL_OLE_OBJECTS
-sdext/source/minimizer/pppoptimizertoken.hxx:107
-    enum PPPOptimizerTokenEnum STR_ALIEN_OLE_OBJECTS_ONLY
 sdext/source/minimizer/pppoptimizertoken.hxx:108
     enum PPPOptimizerTokenEnum STR_OLE_OBJECTS_DESC
 sdext/source/minimizer/pppoptimizertoken.hxx:109
     enum PPPOptimizerTokenEnum STR_NO_OLE_OBJECTS_DESC
 sdext/source/minimizer/pppoptimizertoken.hxx:110
     enum PPPOptimizerTokenEnum STR_SLIDES
-sdext/source/minimizer/pppoptimizertoken.hxx:111
-    enum PPPOptimizerTokenEnum STR_CHOOSE_SLIDES
-sdext/source/minimizer/pppoptimizertoken.hxx:112
-    enum PPPOptimizerTokenEnum STR_DELETE_MASTER_PAGES
-sdext/source/minimizer/pppoptimizertoken.hxx:113
-    enum PPPOptimizerTokenEnum STR_DELETE_NOTES_PAGES
-sdext/source/minimizer/pppoptimizertoken.hxx:114
-    enum PPPOptimizerTokenEnum STR_DELETE_HIDDEN_SLIDES
-sdext/source/minimizer/pppoptimizertoken.hxx:115
-    enum PPPOptimizerTokenEnum STR_CUSTOM_SHOW
 sdext/source/minimizer/pppoptimizertoken.hxx:116
     enum PPPOptimizerTokenEnum STR_SUMMARY
-sdext/source/minimizer/pppoptimizertoken.hxx:117
-    enum PPPOptimizerTokenEnum STR_SUMMARY_TITLE
-sdext/source/minimizer/pppoptimizertoken.hxx:118
-    enum PPPOptimizerTokenEnum STR_APPLY_TO_CURRENT
 sdext/source/minimizer/pppoptimizertoken.hxx:119
     enum PPPOptimizerTokenEnum STR_AUTOMATICALLY_OPEN
-sdext/source/minimizer/pppoptimizertoken.hxx:120
-    enum PPPOptimizerTokenEnum STR_SAVE_SETTINGS
-sdext/source/minimizer/pppoptimizertoken.hxx:121
-    enum PPPOptimizerTokenEnum STR_SAVE_AS
 sdext/source/minimizer/pppoptimizertoken.hxx:122
     enum PPPOptimizerTokenEnum STR_DELETE_SLIDES
 sdext/source/minimizer/pppoptimizertoken.hxx:123
     enum PPPOptimizerTokenEnum STR_OPTIMIZE_IMAGES
 sdext/source/minimizer/pppoptimizertoken.hxx:124
     enum PPPOptimizerTokenEnum STR_CREATE_REPLACEMENT
-sdext/source/minimizer/pppoptimizertoken.hxx:125
-    enum PPPOptimizerTokenEnum STR_CURRENT_FILESIZE
-sdext/source/minimizer/pppoptimizertoken.hxx:126
-    enum PPPOptimizerTokenEnum STR_ESTIMATED_FILESIZE
 sdext/source/minimizer/pppoptimizertoken.hxx:127
     enum PPPOptimizerTokenEnum STR_MY_SETTINGS
 sdext/source/minimizer/pppoptimizertoken.hxx:128

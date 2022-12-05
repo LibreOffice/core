@@ -129,119 +129,17 @@
 		<info><desc>String STR_SUN_OPTIMIZATION_WIZARD2</desc></info>
 				<value>Presentation Minimizer</value>
 			</prop>
-			<prop oor:name="STR_STEPS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_STEPS.</desc></info>
-				<value>Steps</value>
-			</prop>
-			<prop oor:name="STR_BACK" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_BACK.</desc></info>
-				<value>&lt; ~Back</value>
-			</prop>
-			<prop oor:name="STR_NEXT" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_NEXT.</desc></info>
-				<value>~Next &gt;</value>
-			</prop>
-			<prop oor:name="STR_FINISH" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_FINISH.</desc></info>
-				<value>~Finish</value>
-			</prop>
-			<prop oor:name="STR_CANCEL" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_CANCEL.</desc></info>
-				<value>Cancel</value>
-			</prop>
 			<prop oor:name="STR_INTRODUCTION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_INTRODUCTION.</desc></info>
 				<value>Introduction</value>
-			</prop>
-			<prop oor:name="STR_INTRODUCTION_T" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_INTRODUCTION_T.</desc></info>
-				<value>The Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
-
-          At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
-			</prop>
-			<prop oor:name="STR_CHOSE_SETTINGS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_CHOSE_SETTINGS.</desc></info>
-				<value>~Choose settings for the Presentation Minimization Wizard</value>
-			</prop>
-			<prop oor:name="STR_REMOVE" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_REMOVE.</desc></info>
-				<value>~Delete</value>
-			</prop>
-			<prop oor:name="STR_GRAPHIC_OPTIMIZATION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_GRAPHIC_OPTIMIZATION.</desc></info>
-				<value>Choose settings for optimizing images</value>
 			</prop>
 			<prop oor:name="STR_IMAGE_OPTIMIZATION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_IMAGE_OPTIMIZATION.</desc></info>
 				<value>Images</value>
 			</prop>
-			<prop oor:name="STR_LOSSLESS_COMPRESSION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_LOSSLESS_COMPRESSION.</desc></info>
-				<value>~Lossless compression</value>
-			</prop>
-			<prop oor:name="STR_JPEG_COMPRESSION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_JPEG_COMPRESSION.</desc></info>
-				<value>~JPEG compression</value>
-			</prop>
-			<prop oor:name="STR_QUALITY" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_QUALITY.</desc></info>
-				<value>~Quality</value>
-			</prop>
-			<prop oor:name="STR_REMOVE_CROP_AREA" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_REMOVE_CROP_AREA.</desc></info>
-				<value>~Delete cropped image areas</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION.</desc></info>
-				<value>~Image Resolution</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_0" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_0.</desc></info>
-				<value>0;&lt;no change&gt;</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_1" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_1.</desc></info>
-				<value>96;96 DPI (screen resolution)</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_2" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_2.</desc></info>
-				<value>150;150 DPI (projector resolution)</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_3" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_3.</desc></info>
-				<value>250;250 DPI</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_4" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_4.</desc></info>
-				<value>300;300 DPI (print resolution)</value>
-			</prop>
-			<prop oor:name="STR_IMAGE_RESOLUTION_5" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_IMAGE_RESOLUTION_5.</desc></info>
-				<value>600;600 DPI</value>
-			</prop>
-			<prop oor:name="STR_EMBED_LINKED_GRAPHICS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_EMBED_LINKED_GRAPHICS.</desc></info>
-				<value>~Embed external images</value>
-			</prop>
 			<prop oor:name="STR_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OLE_OBJECTS.</desc></info>
 				<value>OLE Objects</value>
-			</prop>
-			<prop oor:name="STR_OLE_OPTIMIZATION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_OLE_OPTIMIZATION.</desc></info>
-				<value>Choose settings for replacing OLE objects</value>
-			</prop>
-			<prop oor:name="STR_OLE_REPLACE" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_OLE_REPLACE.</desc></info>
-				<value>Create static replacement images for OLE objects</value>
-			</prop>
-			<prop oor:name="STR_ALL_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_ALL_OLE_OBJECTS.</desc></info>
-				<value>For ~all OLE objects</value>
-			</prop>
-			<prop oor:name="STR_ALIEN_OLE_OBJECTS_ONLY" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_ALIEN_OLE_OBJECTS_ONLY.</desc></info>
-				<value>~For OLE objects not based on OpenDocument format</value>
 			</prop>
 			<prop oor:name="STR_OLE_OBJECTS_DESC" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OLE_OBJECTS_DESC.</desc></info>
@@ -259,49 +157,13 @@ The current presentation contains no OLE objects.</value>
 		<info><desc>String STR_SLIDES.</desc></info>
 				<value>Slides</value>
 			</prop>
-			<prop oor:name="STR_CHOOSE_SLIDES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_CHOOSE_SLIDES.</desc></info>
-				<value>Choose which slides to delete</value>
-			</prop>
-			<prop oor:name="STR_DELETE_MASTER_PAGES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_DELETE_MASTER_PAGES.</desc></info>
-				<value>Delete unused ~master pages</value>
-			</prop>
-			<prop oor:name="STR_DELETE_NOTES_PAGES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_DELETE_NOTES_PAGES.</desc></info>
-				<value>~Clear notes</value>
-			</prop>
-			<prop oor:name="STR_DELETE_HIDDEN_SLIDES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_DELETE_HIDDEN_SLIDES.</desc></info>
-				<value>Delete hidden ~slides</value>
-			</prop>
-			<prop oor:name="STR_CUSTOM_SHOW" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_CUSTOM_SHOW.</desc></info>
-				<value>Delete slides that are not used for the ~custom slide show</value>
-			</prop>
 			<prop oor:name="STR_SUMMARY" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_SUMMARY.</desc></info>
 				<value>Summary</value>
 			</prop>
-			<prop oor:name="STR_SUMMARY_TITLE" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_SUMMARY_TITLE.</desc></info>
-				<value>Choose where to apply the following changes</value>
-			</prop>
-			<prop oor:name="STR_APPLY_TO_CURRENT" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_APPLY_TO_CURRENT.</desc></info>
-				<value>~Apply changes to current presentation</value>
-			</prop>
 			<prop oor:name="STR_AUTOMATICALLY_OPEN" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_AUTOMATICALLY_OPEN.</desc></info>
 				<value>~Open newly created presentation</value>
-			</prop>
-			<prop oor:name="STR_SAVE_SETTINGS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_SAVE_SETTINGS.</desc></info>
-				<value>~Save settings as</value>
-			</prop>
-			<prop oor:name="STR_SAVE_AS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_SAVE_AS.</desc></info>
-				<value>~Duplicate presentation before applying changes</value>
 			</prop>
 			<prop oor:name="STR_DELETE_SLIDES" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_DELETE_SLIDES.</desc></info>
@@ -316,14 +178,6 @@ The current presentation contains no OLE objects.</value>
 			<prop oor:name="STR_CREATE_REPLACEMENT" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_CREATE_REPLACEMENT.</desc></info>
 				<value>Create replacement images for %OLE objects.</value>
-			</prop>
-			<prop oor:name="STR_CURRENT_FILESIZE" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_CURRENT_FILESIZE.</desc></info>
-				<value>Current file size:</value>
-			</prop>
-			<prop oor:name="STR_ESTIMATED_FILESIZE" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_ESTIMATED_FILESIZE.</desc></info>
-				<value>Estimated new file size:</value>
 			</prop>
 			<prop oor:name="MY_SETTINGS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String MY_SETTINGS.</desc></info>

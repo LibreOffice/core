@@ -17,19 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
+#pragma once
+
 #include <vector>
 #include "unodialog.hxx"
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
-#include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/awt/XSpinListener.hpp>
-#include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/roadmapwizard.hxx>
 
 #define MAX_STEP        4
 #define OD_DIALOG_WIDTH 330
@@ -48,35 +46,166 @@
 #define ITEM_ID_OLE_OPTIMIZATION        3
 #define ITEM_ID_SUMMARY                 4
 
-class OptimizerDialog : public UnoDialog, public ConfigurationAccess
+class OptimizerDialog;
+
+class IntroPage : public vcl::OWizardPage
+{
+private:
+    OptimizerDialog& mrOptimizerDialog;
+    std::unique_ptr<weld::ComboBox> mxComboBox;
+    std::unique_ptr<weld::Button> mxButton;
+
+    DECL_LINK(ComboBoxActionPerformed, weld::ComboBox&, void);
+    DECL_LINK(ButtonActionPerformed, weld::Button&, void);
+
+public:
+    IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
+    void UpdateControlStates(const std::vector<OUString>& rItemList, int nSelectedItem, bool bRemoveButtonEnabled);
+    OUString Get_TK_Name() const
+    {
+        return mxComboBox->get_active_text();
+    }
+};
+
+class SlidesPage : public vcl::OWizardPage
+{
+private:
+    OptimizerDialog& mrOptimizerDialog;
+    std::unique_ptr<weld::CheckButton> mxMasterSlides;
+    std::unique_ptr<weld::CheckButton> mxHiddenSlides;
+    std::unique_ptr<weld::CheckButton> mxUnusedSlides;
+    std::unique_ptr<weld::ComboBox> mxComboBox;
+    std::unique_ptr<weld::CheckButton> mxClearNodes;
+
+    DECL_LINK(UnusedMasterPagesActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(UnusedHiddenSlidesActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(UnusedSlidesActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(DeleteNotesActionPerformed, weld::Toggleable&, void);
+
+public:
+    SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
+    void Init(const css::uno::Sequence<OUString>& rCustomShowList);
+    void UpdateControlStates(bool bDeleteUnusedMasterPages, bool bDeleteHiddenSlides, bool bDeleteNotesPages);
+    OUString Get_TK_CustomShowName() const
+    {
+        if (!mxUnusedSlides->get_sensitive())
+            return OUString();
+        return mxComboBox->get_active_text();
+    }
+};
+
+class ImagesPage : public vcl::OWizardPage
+{
+private:
+    OptimizerDialog& mrOptimizerDialog;
+    std::unique_ptr<weld::RadioButton> m_xLossLessCompression;
+    std::unique_ptr<weld::Label> m_xQualityLabel;
+    std::unique_ptr<weld::SpinButton> m_xQuality;
+    std::unique_ptr<weld::RadioButton> m_xJpegCompression;
+    std::unique_ptr<weld::ComboBox> m_xResolution;
+    std::unique_ptr<weld::CheckButton> m_xRemoveCropArea;
+    std::unique_ptr<weld::CheckButton> m_xEmbedLinkedGraphics;
+
+    DECL_LINK(EmbedLinkedGraphicsActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(RemoveCropAreaActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(ComboBoxActionPerformed, weld::ComboBox&, void);
+    DECL_LINK(CompressionActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(SpinButtonActionPerformed, weld::SpinButton&, void);
+
+public:
+    ImagesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
+
+    void UpdateControlStates(bool bJPEGCompression, int nJPEGQuality, bool bRemoveCropArea,
+                             int nResolution, bool bEmbedLinkedGraphics);
+};
+
+class ObjectsPage : public vcl::OWizardPage
+{
+private:
+    OptimizerDialog& mrOptimizerDialog;
+    std::unique_ptr<weld::CheckButton> m_xCreateStaticImage;
+    std::unique_ptr<weld::RadioButton> m_xAllOLEObjects;
+    std::unique_ptr<weld::RadioButton> m_xForeignOLEObjects;
+    std::unique_ptr<weld::Label> m_xLabel;
+
+    DECL_LINK(OLEOptimizationActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(OLEActionPerformed, weld::Toggleable&, void);
+
+public:
+    ObjectsPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
+
+    void Init(const OUString& rDesc);
+
+    void UpdateControlStates(bool bConvertOLEObjects, int nOLEOptimizationType);
+};
+
+class SummaryPage : public vcl::OWizardPage
+{
+private:
+    OptimizerDialog& mrOptimizerDialog;
+    std::unique_ptr<weld::Label> m_xLabel1;
+    std::unique_ptr<weld::Label> m_xLabel2;
+    std::unique_ptr<weld::Label> m_xLabel3;
+    std::unique_ptr<weld::Label> m_xCurrentSize;
+    std::unique_ptr<weld::Label> m_xEstimatedSize;
+    std::unique_ptr<weld::Label> m_xStatus;
+    std::unique_ptr<weld::ProgressBar> m_xProgress;
+    std::unique_ptr<weld::RadioButton> m_xApplyToCurrent;
+    std::unique_ptr<weld::RadioButton> m_xSaveToNew;
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
+    std::unique_ptr<weld::CheckButton> m_xSaveSettings;
+
+    DECL_LINK(SaveSettingsActionPerformed, weld::Toggleable&, void);
+    DECL_LINK(SaveAsNewActionPerformed, weld::Toggleable&, void);
+
+public:
+    SummaryPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
+
+    void Init(const OUString& rSettingsName, bool bIsReadonly);
+
+    void UpdateControlStates(bool bSaveAs, bool bSaveSettingsEnabled,
+                             const std::vector<OUString>& rItemList,
+                             const std::vector<OUString>& rSummaryStrings,
+                             const OUString& rCurrentFileSize,
+                             const OUString& rEstimatedFileSize);
+
+    void UpdateStatusLabel(const OUString& rStatus);
+    void UpdateProgressValue(int nProgress);
+
+    bool GetSaveAsNew() const { return m_xSaveToNew->get_active(); }
+    bool GetSaveSettings() const { return m_xSaveSettings->get_active(); }
+    OUString GetSettingsName() const { return m_xComboBox->get_active_text(); }
+};
+
+class OptimizerDialog : public vcl::RoadmapWizardMachine, public ConfigurationAccess
 {
 public:
 
     OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame > const & rxFrame,
         css::uno::Reference< css::frame::XDispatch > const & rxStatusDispatcher );
+    std::unique_ptr<BuilderPage> createPage(vcl::WizardTypes::WizardState nState) override;
     ~OptimizerDialog();
 
     void                execute();
 
-    sal_Int16               mnCurrentStep;
-    sal_Int16               mnTabIndex;
+    sal_Int16           mnCurrentStep;
+    sal_Int16           mnTabIndex;
+    short               mnEndStatus;
     bool                mbIsReadonly;
 
 private:
     css::uno::Reference< css::frame::XFrame >         mxFrame;
+    css::uno::Reference< css::frame::XController >    mxController;
 
-    css::uno::Reference< css::uno::XInterface >       mxRoadmapControl;
-    css::uno::Reference< css::uno::XInterface >       mxRoadmapControlModel;
-
-    css::uno::Reference< css::awt::XItemListener >    mxItemListener;
-    css::uno::Reference< css::awt::XActionListener >  mxActionListener;
-    css::uno::Reference< css::awt::XActionListener >  mxActionListenerListBox0Pg0;
-    css::uno::Reference< css::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
-    css::uno::Reference< css::awt::XTextListener >    mxTextListenerComboBox0Pg1;
-    css::uno::Reference< css::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
     css::uno::Reference< css::frame::XDispatch >      mxStatusDispatcher;
 
     std::vector< std::vector< OUString > > maControlPages;
+
+    IntroPage* mpPage0;
+    SlidesPage* mpPage1;
+    ImagesPage* mpPage2;
+    ObjectsPage* mpPage3;
+    SummaryPage* mpPage4;
 
     void InitDialog();
     void InitRoadmap();
@@ -92,9 +221,9 @@ private:
     void UpdateControlStatesPage3();
     void UpdateControlStatesPage4();
 
-    void ActivatePage( sal_Int16 nStep );
-    void DeactivatePage( sal_Int16 nStep );
-    void InsertRoadmapItem( const sal_Int32 nIndex, const OUString& rLabel, const sal_Int32 nItemID );
+    virtual OUString getStateDisplayName(vcl::WizardTypes::WizardState nState) const override;
+
+    virtual bool onFinish() override;
 
 public:
 
@@ -105,99 +234,10 @@ public:
     // the ConfigurationAccess is updated to actual control settings
     void UpdateConfiguration();
 
-    void EnablePage( sal_Int16 nStep );
-    void DisablePage( sal_Int16 nStep );
-
-    void SwitchPage( sal_Int16 nNewStep );
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
-    OUString GetSelectedString( OUString const & token );
     css::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
-    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() const { return UnoDialog::mxContext; };
 };
-
-
-class ItemListener : public ::cppu::WeakImplHelper< css::awt::XItemListener >
-{
-public:
-    explicit ItemListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL itemStateChanged( const css::awt::ItemEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-
-class ActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
-{
-public:
-    explicit ActionListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-
-class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper< css::awt::XActionListener >
-{
-public:
-    explicit ActionListenerListBox0Pg0( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-
-class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
-{
-public:
-    explicit TextListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL textChanged( const css::awt::TextEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-
-class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
-{
-public:
-    explicit TextListenerComboBox0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL textChanged( const css::awt::TextEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-
-class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XSpinListener >
-{
-public:
-    explicit SpinListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){}
-
-    virtual void SAL_CALL up( const css::awt::SpinEvent& Event ) override;
-    virtual void SAL_CALL down( const css::awt::SpinEvent& Event ) override;
-    virtual void SAL_CALL first( const css::awt::SpinEvent& Event ) override;
-    virtual void SAL_CALL last( const css::awt::SpinEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    OptimizerDialog& mrOptimizerDialog;
-};
-
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -125,6 +125,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     }
     else if ( rURL.Path == "statusupdate" )
     {
+        fprintf(stderr, "statusupdate\n");
         if ( mpOptimizerDialog )
             mpOptimizerDialog->UpdateStatus( rArguments );
     }

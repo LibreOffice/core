@@ -140,9 +140,7 @@ bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings 
         && ( rOptimizerSettings.mbDeleteUnusedMasterPages == mbDeleteUnusedMasterPages )
         && ( rOptimizerSettings.mbDeleteHiddenSlides == mbDeleteHiddenSlides )
         && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages );
-//      && ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
 }
-
 
 ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext ) :
     mxContext( rxContext )
