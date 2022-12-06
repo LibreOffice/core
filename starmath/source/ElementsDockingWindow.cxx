@@ -493,6 +493,37 @@ Color SmElementsControl::GetControlBackground()
     return rStyleSettings.GetFieldColor();
 }
 
+namespace
+{
+    // SmTmpDevice::GetTextColor assumes a fg/bg of svtools::FONTCOLOR/svtools::DOCCOLOR
+    // here replace COL_AUTO with the desired fg color, alternatively could add something
+    // to SmTmpDevice to override its defaults
+    class AutoColorVisitor : public SmDefaultingVisitor
+    {
+    private:
+        Color m_aAutoColor;
+    public:
+        AutoColorVisitor(SmNode* pNode, Color aAutoColor)
+            : m_aAutoColor(aAutoColor)
+        {
+            DefaultVisit(pNode);
+        }
+        virtual void DefaultVisit(SmNode* pNode) override
+        {
+            if (pNode->GetFont().GetColor() == COL_AUTO)
+                pNode->GetFont().SetColor(m_aAutoColor);
+            size_t nNodes = pNode->GetNumSubNodes();
+            for (size_t i = 0; i < nNodes; ++i)
+            {
+                SmNode* pChild = pNode->GetSubNode(i);
+                if (!pChild)
+                    continue;
+                DefaultVisit(pChild);
+            }
+        }
+    };
+}
+
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
     std::unique_ptr<SmNode> pNode = maParser->ParseExpression(aElementVisual);
@@ -508,6 +539,8 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));
     pNode->Arrange(*pDevice, maFormat);
+
+    AutoColorVisitor(pNode.get(), GetTextColor());
 
     Size aSize = pDevice->LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()));
     aSize.extendBy(10, 0); // Add 5 pixels from both sides to accommodate extending parts of italics
