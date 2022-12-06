@@ -44,6 +44,7 @@ public:
     virtual             ~ThemeFragmentHandler() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    void onStartElement(const AttributeList& rAttribs) override;
 
 private:
     Theme&              mrTheme;

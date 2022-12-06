@@ -22,6 +22,7 @@
 #include <dmapper/resourcemodel.hxx>
 
 #include "OOXMLFastContextHandler.hxx"
+#include "OOXMLFastContextHandlerTheme.hxx"
 
 namespace writerfilter::ooxml {
 
@@ -50,6 +51,7 @@ enum class ResourceType {
     HpsMeasure,
     MeasurementOrPercent,
     CommentEx,
+    Theme,
 };
 
 struct AttributeInfo

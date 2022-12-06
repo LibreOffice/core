@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <oox/shape/ShapeContextHandler.hxx>
+#include <oox/drawingml/theme.hxx>
 
 /**
    @file OOXMLDocument.hxx
@@ -214,6 +215,8 @@ public:
     virtual const OUString & getTarget() const = 0;
     virtual rtl::Reference<oox::shape::ShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext ) = 0;
+    virtual const oox::drawingml::ThemePtr & getTheme() const = 0;
+
     /// Push context of drawingML shapes, so nested shapes are handled separately.
     virtual void pushShapeContext() = 0;
     /// Pop context of a previously pushed drawingML shape.

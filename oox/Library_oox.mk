@@ -219,6 +219,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/themeelementscontext \
     oox/source/drawingml/themefragmenthandler \
     oox/source/drawingml/ThemeOverrideFragmentHandler \
+    oox/source/drawingml/ThemeFilterBase \
     oox/source/drawingml/transform2dcontext \
     oox/source/dump/dffdumper \
     oox/source/dump/dumperbase \
