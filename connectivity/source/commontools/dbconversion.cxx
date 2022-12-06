@@ -151,6 +151,22 @@ namespace dbtools
 
     static sal_Int32 implRelativeToAbsoluteNull(const css::util::Date& _rDate)
     {
+        if (_rDate.Day == 0 && _rDate.Month == 0 && _rDate.Year == 0)
+        {
+            // 0000-00-00 is *NOT* a valid date and passing it to the date
+            // conversion even when normalizing rightly asserts. Whatever we
+            // return here, it will be wrong. The old before commit
+            // 52ff16771ac160d27fd7beb78a4cfba22ad84f06 wrong implementation
+            // calculated -365 for that, effectively that would be a date of
+            // -0001-01-01 now but it was likely assumed that would be
+            // 0000-00-01 or even 0000-00-00 instead. Try if we get away with 0
+            // for -0001-12-31, the same that
+            // comphelper::date::convertDateToDaysNormalizing()
+            // would return if comphelper::date::normalize() wouldn't ignore
+            // such "empty" date.
+
+            return 0;
+        }
         return comphelper::date::convertDateToDaysNormalizing( _rDate.Day, _rDate.Month, _rDate.Year);
     }
 
