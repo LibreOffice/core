@@ -377,6 +377,37 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarks)
     CPPUNIT_ASSERT_EQUAL(OUString("new result 1new result 2"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
+{
+    // Given an empty document:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // When inserting a bookmark with text:
+    OUString aExpectedBookmarkName("ZOTERO_BREF_GiQ7DAWQYWLy");
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("Bookmark", uno::Any(aExpectedBookmarkName)),
+        comphelper::makePropertyValue("BookmarkText", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+
+    // Then make sure that we create a bookmark that covers that text:
+    IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rIDMA.getBookmarksCount());
+    for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
+    {
+        sw::mark::IMark* pMark = *it;
+        CPPUNIT_ASSERT_EQUAL(aExpectedBookmarkName, pMark->GetName());
+        SwPaM aPam(pMark->GetMarkStart(), pMark->GetMarkEnd());
+        OUString aActualResult = aPam.GetText();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: aaa\nbbb
+        // - Actual  :
+        // i.e. no text was inserted, the bookmark was collapsed.
+        CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
