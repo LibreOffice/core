@@ -228,6 +228,11 @@ namespace vcl
         m_xRoadmapImpl->pRoadmap->SetHelpId( _rId );
     }
 
+    void RoadmapWizard::SetRoadmapBitmap(const BitmapEx& rBmp)
+    {
+        m_xRoadmapImpl->pRoadmap->SetRoadmapBitmap(rBmp);
+    }
+
     void RoadmapWizardMachine::SetRoadmapHelpId(const OString& rId)
     {
         m_xAssistant->set_page_side_help_id(rId);

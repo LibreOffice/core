@@ -7735,6 +7735,11 @@ public:
         return pButton;
     }
 
+    virtual void set_page_side_image(const OUString& /*rImage*/) override
+    {
+        // Since GTK+ 3.2, sidebar images are not shown anymore
+    }
+
     virtual ~GtkInstanceAssistant() override
     {
         if (m_nButtonPressSignalId)

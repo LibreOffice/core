@@ -2157,6 +2157,11 @@ public:
         m_xWizard->SetRoadmapHelpId(rHelpId);
     }
 
+    virtual void set_page_side_image(const OUString& rImage) override
+    {
+        m_xWizard->SetRoadmapBitmap(createImage(rImage).GetBitmapEx());
+    }
+
     weld::Button* weld_widget_for_response(int nResponse) override;
 
     virtual ~SalInstanceAssistant() override

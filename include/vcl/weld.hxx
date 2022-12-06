@@ -650,6 +650,8 @@ public:
 
     virtual void set_page_side_help_id(const OString& rHelpId) = 0;
 
+    virtual void set_page_side_image(const OUString& rImage) = 0;
+
     void connect_jump_page(const Link<const OString&, bool>& rLink) { m_aJumpPageHdl = rLink; }
 };
 

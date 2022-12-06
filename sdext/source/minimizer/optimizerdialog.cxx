@@ -242,9 +242,7 @@ void OptimizerDialog::InitRoadmap()
          ITEM_ID_SUMMARY}
     );
 
-#if 0
-    xPropertySet->setPropertyValue( "ImageURL", Any( OUString("private:graphicrepository/" BMP_PRESENTATION_MINIMIZER) ) );
-#endif
+    m_xAssistant->set_page_side_image(BMP_PRESENTATION_MINIMIZER);
 }
 
 void OptimizerDialog::UpdateConfiguration()
