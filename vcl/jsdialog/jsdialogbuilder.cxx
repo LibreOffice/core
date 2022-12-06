@@ -1315,6 +1315,20 @@ void JSComboBox::set_active(int pos)
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
 
+IMPL_LINK(JSNotebook, LeaveHdl, const OString&, rPage, bool)
+{
+    m_aLeavePageOverridenHdl.Call(rPage);
+    sendFullUpdate();
+    return true;
+}
+
+IMPL_LINK(JSNotebook, EnterHdl, const OString&, rPage, bool)
+{
+    m_aEnterPageOverridenHdl.Call(rPage);
+    sendFullUpdate();
+    return true;
+}
+
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceNotebook, ::TabControl>(pSender, pControl, pBuilder, bTakeOwnership)
