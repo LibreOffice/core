@@ -715,11 +715,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestNestedTableMoveFwd)
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // the row with the nested table should not be split but be the first row on page 2
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[last()]/cell[1]/txt[1]/SwParaPortion",
-                "portion", "Tabelle 1");
-    assertXPath(pXmlDoc,
-                "/root/page[2]/body/tab[1]/row[1]/cell[1]/tab[1]/row[1]/cell[1]/txt/SwParaPortion",
-                "portion", "Tabelle 2");
+    assertXPathContent(pXmlDoc, "/root/page[1]/body/tab[1]/row[last()]/cell[1]/txt[1]",
+                       "Tabelle 1");
+    assertXPathContent(
+        pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/tab[1]/row[1]/cell[1]/txt", "Tabelle 2");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
@@ -827,19 +826,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]", "type",
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout", "type",
                     "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]", "length", "0");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "length",
+                    "0");
         assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/merged", "paraPropsNodeIndex", "6");
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion[1]", "type",
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[1]", "type",
                     "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion[1]", "portion", "foaz");
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                    "foaz");
         assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/merged",
                     "paraPropsNodeIndex", "11");
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion[1]",
-                    "type", "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion[1]",
-                    "portion", "ahi");
+        assertXPath(
+            pXmlDoc,
+            "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout[1]",
+            "type", "PortionType::Para");
+        assertXPath(
+            pXmlDoc,
+            "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout[1]",
+            "portion", "ahi");
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -853,9 +858,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]", "type",
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "type",
                     "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]", "length", "0");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "length",
+                    "0");
         assertXPath(pXmlDoc,
                     "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
                     "type", "PortionType::Text");
@@ -3495,7 +3501,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
     // - Actual  : 14
     // i.e. there were multiple portions in the first paragraph of the A1 cell, which means that the
     // rotated text was broken into multiple lines without a good reason.
-    assertXPath(pXmlDoc, "//tab/row/cell[1]/txt/SwParaPortion", "portion", "Abcd efghijkl");
+    assertXPathContent(pXmlDoc, "//tab/row/cell[1]/txt", "Abcd efghijkl");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)

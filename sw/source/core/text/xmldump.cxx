@@ -362,7 +362,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                 (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
                 TextFrameIndex nOffset(0);
                 const OUString& rText = pTextFrame->GetText();
-                pPara->dumpAsXmlAttributes(writer, rText, nOffset);
+                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pPara);
                 const SwLineLayout* pLine = pPara;
                 if (pTextFrame->IsFollow())
                 {

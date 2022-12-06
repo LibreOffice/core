@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak)
 
     //Page style change here must not be lost. This SHOULD be on page 4, but sadly it is not.
     assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[6]/body/txt[1]").startsWith("Lorem ipsum"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
@@ -695,7 +695,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
     xmlDocUniquePtr pDump = parseLayoutDump();
 
     //Sanity check to ensure the correct page is being tested. This SHOULD be on page 3, but sadly it is not.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt[1]").startsWith("Lorem ipsum"));
     //Prior to this fix, the original alternation between portrait and landscape was completely lost.
     assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");  //landscape
 }
@@ -724,7 +724,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3B)
 
     //page::breakAfter must not be lost.
     //Prior to this bug fix, the Lorem ipsum paragraph was in the middle of a portrait page, with no switch to landscape occurring.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[3]/body/txt[1]").startsWith("Lorem ipsum"));
     assertXPath(pDump, "//page[3]/infos/bounds", "width", "8391");  //landscape
 }
 
