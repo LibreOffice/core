@@ -334,7 +334,7 @@ std::unique_ptr<BuilderPage> OptimizerDialog::createPage(vcl::WizardTypes::Wizar
             xRet.reset(new SummaryPage(pPageContainer, *this));
             mpPage4 = static_cast<SummaryPage*>(xRet.get());
             break;
-    };
+    }
 
     m_xAssistant->set_page_title(sIdent, getStateDisplayName(nState));
 
