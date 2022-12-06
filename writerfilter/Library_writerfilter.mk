@@ -112,7 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 	writerfilter/source/dmapper/TagLogger \
     writerfilter/source/dmapper/TextEffectsHandler \
     writerfilter/source/dmapper/TblStylePrHandler \
-    writerfilter/source/dmapper/ThemeTable \
+    writerfilter/source/dmapper/ThemeHandler \
     writerfilter/source/dmapper/WrapPolygonHandler \
 	writerfilter/source/dmapper/WriteProtection \
     writerfilter/source/dmapper/util \
@@ -123,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLDocumentImpl \
     writerfilter/source/ooxml/OOXMLFactory \
     writerfilter/source/ooxml/OOXMLFastContextHandler \
+    writerfilter/source/ooxml/OOXMLFastContextHandlerTheme \
     writerfilter/source/ooxml/OOXMLFastDocumentHandler \
     writerfilter/source/ooxml/OOXMLParserState \
     writerfilter/source/ooxml/OOXMLPropertySet \

@@ -375,36 +375,36 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
                 // note: overwrite Fonts_ascii with Fonts_asciiTheme *even if*
                 // theme font is empty - this is apparently what Word 2013 does
-                uno::Any aPropValue = uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue = uno::makeAny( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_ASCII, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_ASCII, uno::makeAny( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_ASCII, uno::makeAny( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
             break;
         case NS_ooxml::LN_CT_Fonts_hAnsi:
             break;//unsupported
         case NS_ooxml::LN_CT_Fonts_hAnsiTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "hAnsiTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "hAnsiTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_H_ANSI, uno::makeAny( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_H_ANSI, uno::makeAny( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsiaTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsiaTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
-                uno::Any aPropValue = uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue = uno::makeAny( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_EAST_ASIA, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_EAST_ASIA, uno::makeAny( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_EAST_ASIA, uno::makeAny( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
             break;
         case NS_ooxml::LN_CT_Fonts_cs:
@@ -412,13 +412,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_cstheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "cstheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "cstheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
-                uno::Any aPropValue = uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue = uno::makeAny( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_CS, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_CS, uno::makeAny( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_CS, uno::makeAny( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
         break;
         case NS_ooxml::LN_CT_Spacing_before:
@@ -4140,11 +4140,6 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
             m_pImpl->SetNumberingImport(false);
         }
         break;
-    case NS_ooxml::LN_THEMETABLE:
-        m_pImpl->GetThemeTable()->setThemeFontLangProperties(
-                m_pImpl->GetSettingsTable()->GetThemeFontLangProperties() );
-        ref->resolve ( *m_pImpl->GetThemeTable() );
-    break;
     case NS_ooxml::LN_settings_settings:
         ref->resolve ( *m_pImpl->GetSettingsTable() );
         m_pImpl->ApplySettingsTable();

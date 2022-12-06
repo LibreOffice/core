@@ -33,6 +33,8 @@
 #include <vector>
 #include <optional>
 
+#include <ooxml/OOXMLDocument.hxx>
+
 #include <dmapper/CommentProperties.hxx>
 
 #include "DomainMapper.hxx"
@@ -43,7 +45,7 @@
 #include "NumberingManager.hxx"
 #include "StyleSheetTable.hxx"
 #include "SettingsTable.hxx"
-#include "ThemeTable.hxx"
+#include "ThemeHandler.hxx"
 #include "GraphicImport.hxx"
 #include "OLEHandler.hxx"
 #include "FFDataHandler.hxx"
@@ -524,10 +526,10 @@ private:
     ListsManager::Pointer   m_pListTable;
     std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
     StyleSheetTablePtr      m_pStyleSheetTable;
-    ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
     GraphicImportPtr        m_pGraphicImport;
 
+    std::unique_ptr<ThemeHandler> m_pThemeHandler;
 
     PropertyMapPtr                  m_pTopContext;
     PropertyMapPtr           m_pLastSectionContext;
@@ -787,11 +789,14 @@ public:
     }
     OUString GetListStyleName(sal_Int32 nListId);
     ListsManager::Pointer const & GetListTable();
-    ThemeTablePtr const & GetThemeTable()
+
+    std::unique_ptr<ThemeHandler> const& getThemeHandler()
     {
-        if(!m_pThemeTable)
-            m_pThemeTable = new ThemeTable;
-        return m_pThemeTable;
+        if (!m_pThemeHandler && m_pOOXMLDocument && getDocumentReference()->getTheme())
+        {
+            m_pThemeHandler = std::make_unique<ThemeHandler>(getDocumentReference()->getTheme(), GetSettingsTable()->GetThemeFontLangProperties());
+        }
+        return m_pThemeHandler;
     }
 
     SettingsTablePtr const & GetSettingsTable()
@@ -1180,6 +1185,8 @@ public:
     void HandleLineBreak(const PropertyMapPtr& pPropertyMap);
 
     void commentProps(const OUString& sId, const CommentProperties& rProps);
+
+    OUString getFontNameForTheme(const Id id);
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
