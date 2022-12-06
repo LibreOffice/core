@@ -171,7 +171,18 @@ tools::Long ScColumn::GetNeededSize(
     if (aCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = aCell.getFormula();
-        bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
+        bCellIsValue = pFCell->IsRunning();
+        if (!bCellIsValue)
+        {
+            bCellIsValue = pFCell->IsValue();
+            if (bCellIsValue)
+            {
+                // the pattern may change in IsValue()
+                pPattern = pAttrArray->GetPattern( nRow );
+                if (ppPatternChange)
+                    *ppPatternChange = pPattern;
+            }
+        }
     }
 
     // #i111387#, tdf#121040: disable automatic line breaks for all number formats
