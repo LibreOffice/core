@@ -37,6 +37,7 @@
 #include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
+#include <algorithm>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
@@ -51,6 +52,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <editeng/unoipset.hxx>
 #include <svl/listener.hxx>
@@ -388,32 +390,25 @@ void SwXParagraph::Impl::SetPropertyValues_Impl(
 
     SwPosition aPos( rTextNode );
     SwCursor aCursor( aPos, nullptr );
-    const OUString* pPropertyNames = rPropertyNames.getConstArray();
-    const uno::Any* pValues = rValues.getConstArray();
-    const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     SwParaSelection aParaSel( aCursor );
 
     uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
-    auto aValuesRange = asNonConstRange(aValues);
-    for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
-    {
-        SfxItemPropertyMapEntry const*const pEntry =
-            rMap.getByName( pPropertyNames[nProp] );
-        if (!pEntry)
+    std::transform(
+        rPropertyNames.begin(), rPropertyNames.end(), rValues.begin(), aValues.getArray(),
+        [&rMap = m_rPropSet.getPropertyMap(), this](const OUString& name, const uno::Any& value)
         {
-            throw beans::UnknownPropertyException(
-                "Unknown property: " + pPropertyNames[nProp],
-                static_cast< cppu::OWeakObject * >(&m_rThis));
-        }
-        if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        {
-            throw beans::PropertyVetoException(
-                "Property is read-only: " + pPropertyNames[nProp],
-                static_cast< cppu::OWeakObject * >(&m_rThis));
-        }
-        aValuesRange[nProp].Name = pPropertyNames[nProp];
-        aValuesRange[nProp].Value = pValues[nProp];
-    }
+            if (SfxItemPropertyMapEntry const* const pEntry = rMap.getByName(name); !pEntry)
+            {
+                throw beans::UnknownPropertyException("Unknown property: " + name,
+                                                      static_cast<cppu::OWeakObject*>(&m_rThis));
+            }
+            else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            {
+                throw beans::PropertyVetoException("Property is read-only: " + name,
+                                                   static_cast<cppu::OWeakObject*>(&m_rThis));
+            }
+            return comphelper::makePropertyValue(name, value);
+        });
     SwUnoCursorHelper::SetPropertyValues(aCursor, m_rPropSet, aValues);
 }
 
