@@ -54,6 +54,7 @@ using namespace psp;
 #include <cstdio>
 
 #include <unotools/configmgr.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <osl/process.h>
 
@@ -442,13 +443,9 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern const * pPattern,
                 ++k;
             }
 
-            //possible to-do, sort by UILocale instead of process locale
             if (!m_pLanguageTag)
-            {
-                rtl_Locale* pLoc = nullptr;
-                osl_getProcessLocale(&pLoc);
-                m_pLanguageTag.reset( new LanguageTag(*pLoc) );
-            }
+                m_pLanguageTag.reset(new LanguageTag(SvtSysLocaleOptions().GetRealUILanguageTag()));
+
             *element = bestname(lang_and_elements, *m_pLanguageTag);
 
             //if this element is a fontname, map the other names to this best-name
