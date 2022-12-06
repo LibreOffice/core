@@ -465,6 +465,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
                 break;
         }
     }
+//    DeduplicateItems(aRangeItems);
 
     /*
      For #i24291# we need to explicitly remove any properties from the

@@ -1362,6 +1362,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     const SfxPoolItem* pItem = nullptr;
     // Did we already produce a <w:sz> element?
     bool bFontSizeWritten = false;
+    bool bBoldWritten = false;
     while (nWhichId)
     {
         if (aIter.GetItemState(true, &pItem) == SfxItemState::SET && nWhichId != RES_CHRATR_GRABBAG)
@@ -1370,10 +1371,13 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
             {
                 // Will this item produce a <w:sz> element?
                 bool bFontSizeItem = nWhichId == RES_CHRATR_FONTSIZE || nWhichId == RES_CHRATR_CJK_FONTSIZE;
-                if (!bFontSizeWritten || !bFontSizeItem)
+                bool bBoldItem = nWhichId == RES_CHRATR_WEIGHT || nWhichId == RES_CHRATR_CJK_WEIGHT;
+                if (!(bFontSizeWritten && bFontSizeItem) && !(bBoldWritten && bBoldItem))
                     rAttributeOutput.OutputItem(*pItem);
                 if (bFontSizeItem)
                     bFontSizeWritten = true;
+                if (bBoldItem)
+                    bBoldWritten = true;
             }
             else if (nWhichId == RES_TXTATR_AUTOFMT)
             {

@@ -401,6 +401,18 @@ namespace sw
                     while ((pItem = aIter.NextItem()));
                 }
             }
+//            DeduplicateItems(rItems);
+        }
+
+        void DeduplicateItems(ww8::PoolItems & rItems)
+        {
+            if (rItems.find(RES_CHRATR_WEIGHT) != rItems.end()
+                && rItems.find(RES_CHRATR_CJK_WEIGHT) != rItems.end())
+            {
+                // avoid duplicate w:b element (DOC and DOCX map Western and
+                // CJK the same - inconsistently RTF maps CJK and CTL the same?)
+                rItems.erase(rItems.find(RES_CHRATR_CJK_WEIGHT));
+            }
         }
 
         const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,

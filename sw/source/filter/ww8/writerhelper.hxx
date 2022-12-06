@@ -317,6 +317,8 @@ namespace sw
         */
         void GetPoolItems(const SfxItemSet &rSet, ww8::PoolItems &rItems, bool bExportParentItemSet );
 
+        void DeduplicateItems(ww8::PoolItems &rItems);
+
         const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,
             sal_uInt16 eType);
 
