@@ -94,7 +94,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/%/Bin
 	rm -rf $@ && mkdir -p $@ && cd $@ && cp $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* ./
 
 # with all languages the logfile name would be too long when building the windows installation set,
-# that's the reason for the subsitution to multilang below in case more than just en-US is packaged
+# that's the reason for the substitution to multilang below in case more than just en-US is packaged
 $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
         $(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
         $(if $(filter-out WNT,$(OS)),\
