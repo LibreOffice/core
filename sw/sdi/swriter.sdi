@@ -2537,7 +2537,7 @@ SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
 ]
 
 SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
-(SfxStringItem Bookmark FN_INSERT_BOOKMARK)
+(SfxStringItem Bookmark FN_INSERT_BOOKMARK, SfxStringItem BookmarkText FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

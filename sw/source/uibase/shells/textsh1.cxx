@@ -106,6 +106,7 @@
 #include <translatelangselect.hxx>
 #include <svtools/deeplcfg.hxx>
 #include <translatehelper.hxx>
+#include <IDocumentContentOperations.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -693,10 +694,52 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_INSERT_BOOKMARK:
         {
+            const SfxStringItem* pBookmarkText = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
             if ( pItem )
             {
+                rWrtSh.StartAction();
                 OUString sName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+                if (pBookmarkText)
+                {
+                    OUString aBookmarkText = pBookmarkText->GetValue();
+                    // Split node to remember where the start position is.
+                    bool bSuccess = rWrtSh.GetDoc()->getIDocumentContentOperations().SplitNode(
+                        *pCursorPos->GetPoint(), /*bChkTableStart=*/false);
+                    if (bSuccess)
+                    {
+                        SwPaM aBookmarkPam(*pCursorPos->GetPoint());
+                        aBookmarkPam.Move(fnMoveBackward, GoInContent);
+
+                        // Paste HTML content.
+                        SwTranslateHelper::PasteHTMLToPaM(
+                            rWrtSh, pCursorPos, aBookmarkText.toUtf8(), /*bSetSelection=*/true);
+                        if (pCursorPos->GetPoint()->nContent == 0)
+                        {
+                            // The paste created a last empty text node, remove it.
+                            SwPaM aPam(*pCursorPos->GetPoint());
+                            aPam.SetMark();
+                            aPam.Move(fnMoveBackward, GoInContent);
+                            rWrtSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPam);
+                        }
+
+                        // Undo the above SplitNode().
+                        aBookmarkPam.SetMark();
+                        aBookmarkPam.Move(fnMoveForward, GoInContent);
+                        rWrtSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(
+                            aBookmarkPam);
+                        *aBookmarkPam.GetMark() = *pCursorPos->GetPoint();
+                        *pCursorPos = aBookmarkPam;
+                    }
+                }
+
                 rWrtSh.SetBookmark( vcl::KeyCode(), sName );
+                if (pBookmarkText)
+                {
+                    pCursorPos->DeleteMark();
+                }
+                rWrtSh.EndAction();
             }
             else
             {
