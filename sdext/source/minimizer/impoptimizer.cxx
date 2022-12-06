@@ -569,7 +569,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         switch( TKGet( rArgument.Name ) )
         {
             case TK_StatusDispatcher : rArgument.Value >>= mxStatusDispatcher; break;
-            case TK_InformationDialog: rArgument.Value >>= mxInformationDialog; break;
+            case TK_DocumentFrame: rArgument.Value >>= mxDocumentFrame; break;
             case TK_Settings :
             {
                 css::uno::Sequence< css::beans::PropertyValue > aSettings;
@@ -655,7 +655,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         mxModel->unlockControllers();
 
         // clearing undo stack:
-        Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
+        Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxDocumentFrame );
         if ( xFrame.is() )
         {
             DispatchURL(mxContext, ".uno:ClearUndoStack", xFrame);
@@ -671,9 +671,9 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         }
     }
 
-    if ( mxInformationDialog.is() )
+    if ( mxDocumentFrame.is() )
     {
-        InformationDialog aInformationDialog( mxContext, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
+        InformationDialog aInformationDialog( mxContext, mxDocumentFrame, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
         aInformationDialog.execute();
         SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
         DispatchStatus();

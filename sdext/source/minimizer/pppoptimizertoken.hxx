@@ -31,7 +31,7 @@ enum PPPOptimizerTokenEnum
     TK_FileSizeSource,
     TK_FilterName,
     TK_Flags,
-    TK_InformationDialog,
+    TK_DocumentFrame,
     TK_Name,
     TK_Progress,
     TK_Settings,

@@ -51,7 +51,7 @@ private:
     OUString    maFilterName;
     bool        mbOpenNewDocument;
 
-    css::uno::Reference< css::frame::XFrame > mxInformationDialog;
+    css::uno::Reference< css::frame::XFrame > mxDocumentFrame;
 
     void Optimize();
 

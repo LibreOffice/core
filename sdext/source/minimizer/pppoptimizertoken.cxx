@@ -52,7 +52,7 @@ const TokenTable pTokenTableArray[] =
     { "FileSizeSource",     TK_FileSizeSource },
     { "FilterName",         TK_FilterName },
     { "Flags",              TK_Flags },
-    { "InformationDialog",  TK_InformationDialog },
+    { "DocumentFrame",      TK_DocumentFrame },
     { "Name",               TK_Name },
     { "Progress",           TK_Progress },
     { "Settings",           TK_Settings },
