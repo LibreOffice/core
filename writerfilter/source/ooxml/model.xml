@@ -208,7 +208,7 @@
         </element>
       </define>
     </grammar>
-    <resource name="CT_OfficeStyleSheet" resource="Table" tokenid="ooxml:THEMETABLE"/>
+    <resource name="CT_OfficeStyleSheet" resource="Theme" tokenid="ooxml:THEMETABLE"/>
     <resource name="CT_Hyperlink" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Hyperlink_r_id"/>
     </resource>

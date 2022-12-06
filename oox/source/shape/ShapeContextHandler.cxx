@@ -285,6 +285,10 @@ void SAL_CALL ShapeContextHandler::startFastElement
                 mxShapeFilterBase->setCurrentTheme(mpThemePtr);
             }
         }
+        else if (mpThemePtr && !mxShapeFilterBase->getCurrentTheme())
+        {
+            mxShapeFilterBase->setCurrentTheme(mpThemePtr);
+        }
 
         createFastChildContext(Element, Attribs);
     }

@@ -15259,7 +15259,6 @@ writerfilter/source/dmapper/TagLogger.hxx
 writerfilter/source/dmapper/TblStylePrHandler.cxx
 writerfilter/source/dmapper/TblStylePrHandler.hxx
 writerfilter/source/dmapper/TextEffectsHandler.cxx
-writerfilter/source/dmapper/ThemeTable.cxx
 writerfilter/source/dmapper/TrackChangesHandler.cxx
 writerfilter/source/dmapper/WrapPolygonHandler.cxx
 writerfilter/source/ooxml/Handler.cxx

@@ -8861,6 +8861,14 @@ bool DomainMapper_Impl::handlePreviousParagraphBorderInBetween() const
     return true;
 }
 
+OUString DomainMapper_Impl::getFontNameForTheme(const Id id)
+{
+    auto const& pHandler = getThemeHandler();
+    if (pHandler)
+        return pHandler->getFontNameForTheme(id);
+    return OUString();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
