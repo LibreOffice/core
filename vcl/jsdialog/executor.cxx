@@ -91,7 +91,10 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 {
                     sal_Int32 page = o3tl::toInt32(rData["data"]);
 
+                    OString aCurrentPage = pNotebook->get_current_page_ident();
+                    LOKTrigger::leave_page(*pNotebook, aCurrentPage);
                     pNotebook->set_current_page(page);
+                    LOKTrigger::enter_page(*pNotebook, pNotebook->get_page_ident(page));
 
                     return true;
                 }

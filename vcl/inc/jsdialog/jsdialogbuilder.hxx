@@ -534,6 +534,12 @@ public:
 
 class JSNotebook final : public JSWidget<SalInstanceNotebook, ::TabControl>
 {
+    Link<const OString&, bool> m_aLeavePageOverridenHdl;
+    Link<const OString&, void> m_aEnterPageOverridenHdl;
+
+    DECL_LINK(LeaveHdl, const OString&, bool);
+    DECL_LINK(EnterHdl, const OString&, bool);
+
 public:
     JSNotebook(JSDialogSender* pSender, ::TabControl* pControl, SalInstanceBuilder* pBuilder,
                bool bTakeOwnership);
@@ -545,6 +551,17 @@ public:
     virtual void remove_page(const OString& rIdent) override;
 
     virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
+
+    void connect_leave_page(const Link<const OString&, bool>& rLink)
+    {
+        m_aLeavePageHdl = LINK(this, JSNotebook, LeaveHdl);
+        m_aLeavePageOverridenHdl = rLink;
+    }
+    void connect_enter_page(const Link<const OString&, void>& rLink)
+    {
+        m_aLeavePageHdl = LINK(this, JSNotebook, EnterHdl);
+        m_aEnterPageOverridenHdl = rLink;
+    }
 };
 
 class JSSpinButton final : public JSWidget<SalInstanceSpinButton, ::FormattedField>

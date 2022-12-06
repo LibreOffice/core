@@ -463,6 +463,8 @@ public:
 
 class VCL_DLLPUBLIC Notebook : virtual public Widget
 {
+    friend class ::LOKTrigger;
+
 protected:
     Link<const OString&, bool> m_aLeavePageHdl;
     Link<const OString&, void> m_aEnterPageHdl;
