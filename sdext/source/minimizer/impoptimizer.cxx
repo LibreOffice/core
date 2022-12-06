@@ -570,6 +570,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         {
             case TK_StatusDispatcher : rArgument.Value >>= mxStatusDispatcher; break;
             case TK_DocumentFrame: rArgument.Value >>= mxDocumentFrame; break;
+            case TK_DialogParentWindow: rArgument.Value >>= mxDialogParentWindow; break;
             case TK_Settings :
             {
                 css::uno::Sequence< css::beans::PropertyValue > aSettings;
@@ -673,7 +674,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 
     if ( mxDocumentFrame.is() )
     {
-        InformationDialog aInformationDialog( mxContext, mxDocumentFrame, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
+        InformationDialog aInformationDialog( mxContext, mxDialogParentWindow, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
         aInformationDialog.execute();
         SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
         DispatchStatus();

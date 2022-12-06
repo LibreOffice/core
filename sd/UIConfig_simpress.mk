@@ -151,6 +151,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/pagesfieldbox \
 	sd/uiconfig/simpress/ui/photoalbum \
 	sd/uiconfig/simpress/ui/pmimagespage \
+	sd/uiconfig/simpress/ui/pminfodialog \
 	sd/uiconfig/simpress/ui/pmintropage \
 	sd/uiconfig/simpress/ui/pmobjectspage \
 	sd/uiconfig/simpress/ui/pmslidespage \

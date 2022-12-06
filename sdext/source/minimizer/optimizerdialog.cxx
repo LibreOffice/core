@@ -586,7 +586,8 @@ bool OptimizerDialog::onFinish()
         Sequence< PropertyValue > lArguments{
             comphelper::makePropertyValue("Settings", GetConfigurationSequence()),
             comphelper::makePropertyValue("StatusDispatcher", GetStatusDispatcher()),
-            comphelper::makePropertyValue("DocumentFrame", GetFrame())
+            comphelper::makePropertyValue("DocumentFrame", GetFrame()),
+            comphelper::makePropertyValue("DialogParentWindow", m_xAssistant->GetXWindow())
         };
 
         ErrCode errorCode;

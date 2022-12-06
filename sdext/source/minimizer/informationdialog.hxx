@@ -17,35 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
+#pragma once
 
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"
-#include <com/sun/star/awt/XItemListener.hpp>
+#include <vcl/weld.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-OUString InsertFixedText( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
-                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex );
-
-OUString InsertImage( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
-    sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight, bool bScale );
-
-OUString InsertCheckBox( UnoDialog& rInformationDialog, const OUString& rControlName,
-    const css::uno::Reference< css::awt::XItemListener >& rItemListener, const OUString& rLabel,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex );
-
-OUString InsertButton( UnoDialog& rInformationDialog, const OUString& rControlName,
-    css::uno::Reference< css::awt::XActionListener > const & xActionListener, sal_Int32 nXPos, sal_Int32 nYPos,
-    sal_Int32 nWidth, sal_Int16 nTabIndex, const OUString& rText );
-
-class InformationDialog : public UnoDialog, public ConfigurationAccess
+class InformationDialog : public weld::MessageDialogController, public ConfigurationAccess
 {
 public:
 
     InformationDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                       css::uno::Reference< css::frame::XFrame > const & rxFrame, const OUString& rSaveAsURL,
+                       const css::uno::Reference<css::awt::XWindow>& rxDialogParent, const OUString& rSaveAsURL,
                        bool& bOpenNewDocument, sal_Int64 nSourceSize, sal_Int64 nDestSize, sal_Int64 nApproxDest );
     ~InformationDialog();
 
@@ -53,9 +38,9 @@ public:
 
 private:
 
-    css::uno::Reference< css::awt::XActionListener >  mxActionListener;
-
     void InitDialog();
+
+    std::unique_ptr<weld::CheckButton> mxCheckBox;
 
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
@@ -63,19 +48,5 @@ private:
     bool& mrbOpenNewDocument;
     const OUString& maSaveAsURL;
 };
-
-class OKActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
-{
-public:
-    explicit OKActionListener( UnoDialog& rDialog ) : mrDialog( rDialog ){}
-
-    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-private:
-
-    UnoDialog& mrDialog;
-};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

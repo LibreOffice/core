@@ -3952,8 +3952,6 @@ sdext/source/minimizer/pppoptimizertoken.hxx:110
     enum PPPOptimizerTokenEnum STR_SLIDES
 sdext/source/minimizer/pppoptimizertoken.hxx:116
     enum PPPOptimizerTokenEnum STR_SUMMARY
-sdext/source/minimizer/pppoptimizertoken.hxx:119
-    enum PPPOptimizerTokenEnum STR_AUTOMATICALLY_OPEN
 sdext/source/minimizer/pppoptimizertoken.hxx:122
     enum PPPOptimizerTokenEnum STR_DELETE_SLIDES
 sdext/source/minimizer/pppoptimizertoken.hxx:123

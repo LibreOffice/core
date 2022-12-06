@@ -35,6 +35,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::frame::XModel >             mxModel;
     css::uno::Reference< css::frame::XDispatch >          mxStatusDispatcher;
+    css::uno::Reference<css::frame::XFrame>               mxDocumentFrame;
+    css::uno::Reference<css::awt::XWindow>                mxDialogParentWindow;
 
     bool        mbJPEGCompression;
     sal_Int32   mnJPEGQuality;
@@ -50,8 +52,6 @@ private:
     OUString    maSaveAsURL;
     OUString    maFilterName;
     bool        mbOpenNewDocument;
-
-    css::uno::Reference< css::frame::XFrame > mxDocumentFrame;
 
     void Optimize();
 

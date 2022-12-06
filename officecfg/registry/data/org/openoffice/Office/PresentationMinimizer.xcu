@@ -47,9 +47,6 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_SUMMARY">
             <value xml:lang="en-US">Summary</value>
         </prop>
-        <prop oor:name="STR_AUTOMATICALLY_OPEN">
-            <value xml:lang="en-US">~Open newly created presentation</value>
-        </prop>
         <prop oor:name="STR_DELETE_SLIDES">
             <value xml:lang="en-US">Delete %SLIDES slides.</value>
         </prop>
@@ -65,17 +62,20 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_OK">
             <value xml:lang="en-US">OK</value>
         </prop>
-        <prop oor:name="STR_INFO_1">
-            <value xml:lang="en-US">The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
+        <prop oor:name="STR_INFO_PRIMARY">
+            <value xml:lang="en-US">Successfully updated the presentation '%TITLE'.</value>
         </prop>
-        <prop oor:name="STR_INFO_2">
-            <value xml:lang="en-US">The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
+        <prop oor:name="STR_INFO_SECONDARY_1">
+            <value xml:lang="en-US">The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
         </prop>
-        <prop oor:name="STR_INFO_3">
-            <value xml:lang="en-US">The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed to %NEWFILESIZE MB.</value>
+        <prop oor:name="STR_INFO_SECONDARY_2">
+            <value xml:lang="en-US">The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
         </prop>
-        <prop oor:name="STR_INFO_4">
-            <value xml:lang="en-US">The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed to approximated %NEWFILESIZE MB.</value>
+        <prop oor:name="STR_INFO_SECONDARY_3">
+            <value xml:lang="en-US">The file size has changed to %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_INFO_SECONDARY_4">
+            <value xml:lang="en-US">The file size has changed to approximated %NEWFILESIZE MB.</value>
         </prop>
         <prop oor:name="STR_DUPLICATING_PRESENTATION">
             <value xml:lang="en-US">Duplicating presentation...</value>
