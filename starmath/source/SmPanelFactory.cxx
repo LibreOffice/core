@@ -88,7 +88,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
         css::ui::LayoutSize aLayoutSize{ -1, -1, -1 };
         if (ResourceURL.endsWith("/MathPropertiesPanel"))
         {
-            pPanel = sm::sidebar::SmPropertiesPanel::Create(*pParent);
+            pPanel = sm::sidebar::SmPropertiesPanel::Create(*pParent, xFrame);
         }
         else if (ResourceURL.endsWith("/MathElementsPanel"))
         {

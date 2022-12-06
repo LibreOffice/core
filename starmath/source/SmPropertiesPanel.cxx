@@ -32,13 +32,17 @@
 namespace sm::sidebar
 {
 // static
-std::unique_ptr<PanelLayout> SmPropertiesPanel::Create(weld::Widget& rParent)
+std::unique_ptr<PanelLayout>
+SmPropertiesPanel::Create(weld::Widget& rParent,
+                          const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
-    return std::make_unique<SmPropertiesPanel>(rParent);
+    return std::make_unique<SmPropertiesPanel>(rParent, xFrame);
 }
 
-SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent)
+SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
+                                     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : PanelLayout(&rParent, "MathPropertiesPanel", "modules/smath/ui/sidebarproperties_math.ui")
+    , mxFrame(xFrame)
     , mpFormatFontsButton(m_xBuilder->weld_button("btnFormatFonts"))
     , mpFormatFontSizeButton(m_xBuilder->weld_button("btnFormatFontSize"))
     , mpFormatSpacingButton(m_xBuilder->weld_button("btnFormatSpacing"))
@@ -80,7 +84,7 @@ SmPropertiesPanel::~SmPropertiesPanel()
 IMPL_LINK(SmPropertiesPanel, ButtonClickHandler, weld::Button&, rButton, void)
 {
     if (OUString command = maButtonCommands[&rButton]; !command.isEmpty())
-        comphelper::dispatchCommand(command, {});
+        comphelper::dispatchCommand(command, mxFrame, {});
 }
 
 } // end of namespace sm::sidebar
