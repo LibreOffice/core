@@ -72,6 +72,16 @@ public:
     {
         rArea.m_aCommandHdl.Call(rCmd);
     }
+
+    static void enter_page(weld::Notebook& rNotebook, const OString& rPage)
+    {
+        rNotebook.m_aEnterPageHdl.Call(rPage);
+    }
+
+    static void leave_page(weld::Notebook& rNotebook, const OString& rPage)
+    {
+        rNotebook.m_aLeavePageHdl.Call(rPage);
+    }
 };
 
 namespace jsdialog
