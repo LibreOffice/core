@@ -42,6 +42,7 @@ forums = {
     'mso-en': ["https://www.msofficeforums.com", True, 0],
     'mso-en2': ["https://www.excelguru.ca/forums", False, 0],
     'mso-en3': ["http://www.vbaexpress.com/forum", True, 5100],
+    'mso-en4': ["https://www.excelforum.com", True, 5100],
     # lang : [url, doLogin, startIndex]
 }
 
