@@ -188,6 +188,19 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
     testCopyPasteToNewSheet(xChartDoc2, "Object 2", 3, 9);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
+{
+    loadFromURL(u"ods/tdf62057.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 7
+    // - Incorrect number of columns in destination file
+    testCopyPasteToNewSheet(xChartDoc, "Object 1", 2, 6);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
