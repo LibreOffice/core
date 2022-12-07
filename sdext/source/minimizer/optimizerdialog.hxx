@@ -197,8 +197,6 @@ private:
 
     css::uno::Reference< css::frame::XDispatch >      mxStatusDispatcher;
 
-    std::vector< std::vector< OUString > > maControlPages;
-
     IntroPage* mpPage0;
     SlidesPage* mpPage1;
     ImagesPage* mpPage2;

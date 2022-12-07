@@ -46,7 +46,7 @@ bridges/source/jni_uno/jni_java2uno.cxx:153
     jni_uno::(anonymous namespace)::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:154
     jni_uno::(anonymous namespace)::largest a uno_Any
-chart2/source/model/main/DataPoint.hxx:106
+chart2/source/model/main/DataPoint.hxx:104
     chart::DataPoint m_bNoParentPropAllowed _Bool
 codemaker/source/javamaker/classfile.cxx:508
     (unnamed union at /home/noel/libo/codemaker/source/javamaker/classfile.cxx:508:5) uint32Bytes sal_uInt32
@@ -96,7 +96,7 @@ connectivity/source/inc/TConnection.hxx:54
     connectivity::OMetaConnection m_aResources SharedResources
 connectivity/source/inc/writer/WTable.hxx:43
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:1636
+cppcanvas/source/mtfrenderer/textaction.cxx:1635
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:36
     (anonymous namespace)::Mapping m_from uno::Environment
@@ -316,7 +316,7 @@ include/filter/msfilter/svdfppt.hxx:891
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize size_t
-include/oox/ole/axbinarywriter.hxx:150
+include/oox/ole/axbinarywriter.hxx:153
     oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
 include/sfx2/lokhelper.hxx:35
     LokMouseEventData maLogicPosition std::optional<Point>
@@ -520,9 +520,9 @@ sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/core/CustomAnimationCloner.cxx:71
     sd::(anonymous namespace)::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
-sd/source/ui/inc/unopage.hxx:164
+sd/source/ui/inc/unopage.hxx:163
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
-sd/source/ui/inc/unopage.hxx:224
+sd/source/ui/inc/unopage.hxx:223
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/sidebar/MasterPageContainer.cxx:141
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated Image
@@ -652,8 +652,6 @@ sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:80
     SwInsertField_Data m_aDBDataSource css::uno::Any
-sw/source/uibase/inc/frmpage.hxx:281
-    SwFrameAddPage m_xDescriptionED std::unique_ptr<weld::TextView>
 toolkit/source/awt/vclxtoolkit.cxx:435
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 toolkit/source/controls/table/gridtablerenderer.cxx:71
@@ -754,7 +752,7 @@ vcl/inc/svdata.hxx:330
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:109
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
-vcl/inc/unx/saldisp.hxx:282
+vcl/inc/unx/saldisp.hxx:281
     SalDisplay m_aInvalidScreenData ScreenData
 vcl/inc/widgetdraw/WidgetDefinition.hxx:225
     vcl::WidgetDefinitionStyle maDefaultButtonTextColor Color
@@ -812,9 +810,9 @@ vcl/source/control/tabctrl.cxx:82
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
 vcl/source/filter/eps/eps.cxx:116
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<VirtualDevice>
-vcl/source/filter/idxf/dxf2mtf.hxx:54
+vcl/source/filter/idxf/dxf2mtf.hxx:53
     DXF2GDIMetaFile aDefaultLineInfo const LineInfo
-vcl/source/filter/idxf/dxfreprd.hxx:75
+vcl/source/filter/idxf/dxfreprd.hxx:74
     DXFRepresentation aPalette DXFPalette
 vcl/source/filter/iras/iras.cxx:56
     (anonymous namespace)::RASReader mnRepCount sal_uInt8

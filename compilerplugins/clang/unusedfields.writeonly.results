@@ -1,6 +1,6 @@
 basctl/source/basicide/moduldlg.hxx:134
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
-basctl/source/inc/basidesh.hxx:86
+basctl/source/inc/basidesh.hxx:94
     basctl::Shell m_aNotifier DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:182
     basctl::SbTreeListBox m_aNotifier DocumentEventNotifier
@@ -78,11 +78,11 @@ canvas/source/cairo/cairo_spritedevicehelper.hxx:73
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
 canvas/source/cairo/cairo_spritehelper.hxx:98
     cairocanvas::SpriteHelper mbTextureDirty _Bool
-chart2/inc/ChartModel.hxx:149
+chart2/inc/ChartModel.hxx:150
     chart::ChartModel m_aGraphicObjectVector std::vector<GraphicObject>
-chart2/inc/ChartModel.hxx:480
-    chart::ChartModel mnStart sal_Int32
 chart2/inc/ChartModel.hxx:481
+    chart::ChartModel mnStart sal_Int32
+chart2/inc/ChartModel.hxx:482
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/dialogs/DialogModel.cxx:179
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt tContainerType *
@@ -270,7 +270,7 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:83
     dbaccess::OSingleSelectQueryComposer m_aColumnsCollection std::vector<std::unique_ptr<OPrivateColumns> >
 dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:85
     dbaccess::OSingleSelectQueryComposer m_aTablesCollection std::vector<std::unique_ptr<OPrivateTables> >
-dbaccess/source/core/inc/TableDeco.hxx:65
+dbaccess/source/core/inc/TableDeco.hxx:64
     dbaccess::ODBTableDecorator m_xColumnMediator css::uno::Reference<css::container::XContainerListener>
 dbaccess/source/filter/xml/dbloader2.cxx:201
     dbaxml::(anonymous namespace)::DBContentLoader m_xMySelf Reference<XFrameLoader>
@@ -368,7 +368,7 @@ i18nutil/source/utility/paper.cxx:318
     paperword string char *
 include/basegfx/DrawCommands.hxx:82
     gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
-include/basic/basmgr.hxx:58
+include/basic/basmgr.hxx:59
     BasicError nReason BasicErrorReason
 include/basic/sbxvar.hxx:75
     SbxValues::(anonymous union at /home/noel/libo/include/basic/sbxvar.hxx:43:5) pData void *
@@ -390,9 +390,9 @@ include/editeng/outlobj.hxx:44
     OutlinerParaObjData mbIsEditDoc _Bool
 include/editeng/splwrap.hxx:52
     SvxSpellWrapper xWait std::unique_ptr<weld::WaitObject>
-include/editeng/unotext.hxx:421
+include/editeng/unotext.hxx:422
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
-include/editeng/unotext.hxx:590
+include/editeng/unotext.hxx:591
     SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/framework/addonsoptions.hxx:75
     framework::MergeNotebookBarInstruction aMergePoint OUString
@@ -536,7 +536,7 @@ include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
-include/vcl/pdfextoutdevdata.hxx:82
+include/vcl/pdfextoutdevdata.hxx:83
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
 include/vcl/salnativewidgets.hxx:510
     PushButtonValue mbSingleLine _Bool
@@ -566,7 +566,7 @@ io/source/stm/odata.cxx:551
     (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:551:5) f float
 io/source/stm/odata.cxx:558
     (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:558:5) d double
-jvmfwk/inc/vendorbase.hxx:175
+jvmfwk/inc/vendorbase.hxx:181
     jfw_plugin::VendorBase m_sArch OUString
 l10ntools/inc/common.hxx:32
     common::HandledArgs m_bUTF8BOM _Bool
@@ -732,15 +732,15 @@ sc/source/ui/vba/vbachartobject.hxx:43
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
 sd/inc/sdmod.hxx:145
     SdModule mpErrorHdl std::unique_ptr<SfxErrorHandler>
-sd/qa/unit/tiledrendering/tiledrendering.cxx:206
+sd/qa/unit/tiledrendering/tiledrendering.cxx:203
     SdTiledRenderingTest m_bFound _Bool
-sd/qa/unit/tiledrendering/tiledrendering.cxx:207
+sd/qa/unit/tiledrendering/tiledrendering.cxx:204
     SdTiledRenderingTest m_nPart sal_Int32
-sd/qa/unit/tiledrendering/tiledrendering.cxx:209
+sd/qa/unit/tiledrendering/tiledrendering.cxx:206
     SdTiledRenderingTest m_aSearchResultPart std::vector<int>
-sd/qa/unit/tiledrendering/tiledrendering.cxx:210
+sd/qa/unit/tiledrendering/tiledrendering.cxx:207
     SdTiledRenderingTest m_nSelectionBeforeSearchResult int
-sd/qa/unit/tiledrendering/tiledrendering.cxx:211
+sd/qa/unit/tiledrendering/tiledrendering.cxx:208
     SdTiledRenderingTest m_nSelectionAfterSearchResult int
 sd/source/ui/dlg/RemoteDialogClientBox.hxx:66
     sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
@@ -758,7 +758,7 @@ sd/source/ui/inc/navigatr.hxx:144
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:72
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
-sd/source/ui/inc/unopage.hxx:277
+sd/source/ui/inc/unopage.hxx:276
     SdPageLinkTargets mxPage css::uno::Reference<css::drawing::XDrawPage>
 sd/source/ui/inc/ViewShellImplementation.hxx:78
     sd::ViewShell::Implementation::ToolBarManagerLock mpLock ::std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
@@ -982,8 +982,6 @@ svx/source/tbxctrls/tbcontrl.cxx:340
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
-sw/inc/OnlineAccessibilityCheck.hxx:51
-    sw::OnlineAccessibilityCheck m_pPreviousNode SwNode *
 sw/inc/OnlineAccessibilityCheck.hxx:56
     sw::OnlineAccessibilityCheck m_pDocumentAccessibilityIssues std::unique_ptr<sfx::AccessibilityIssueCollection>
 sw/inc/swmodule.hxx:95
@@ -994,7 +992,7 @@ sw/inc/swwait.hxx:45
     SwWait mpLockedDispatchers o3tl::sorted_vector<SfxDispatcher *>
 sw/inc/textboxhelper.hxx:211
     SwTextBoxNode m_bIsCloningInProgress _Bool
-sw/inc/unoframe.hxx:313
+sw/inc/unoframe.hxx:314
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:195
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
@@ -1024,8 +1022,6 @@ sw/source/core/table/swtable.cxx:2820
     SwTableCellInfo::Impl m_HandledTableBoxes TableBoxes_t
 sw/source/core/text/porfld.hxx:66
     SwFieldPortion m_nAttrFieldType sal_uInt16
-sw/source/core/text/xmldump.cxx:165
-    (anonymous namespace)::XmlPortionDumper m_Ofs TextFrameIndex
 sw/source/filter/html/swhtml.hxx:385
     SwHTMLParser m_aOrphanedTableBoxes std::vector<std::unique_ptr<SwTableBox> >
 sw/source/filter/inc/rtf.hxx:29
@@ -1036,8 +1032,10 @@ sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous union)::(unnamed struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(unnamed union at /home/noel/libo/sw/source/filter/inc/rtf.hxx:26:5) Flags struct (unnamed struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
-sw/source/uibase/inc/glossary.hxx:63
+sw/source/uibase/inc/glossary.hxx:65
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
+sw/source/uibase/inc/glossary.hxx:81
+    SwGlossaryDlg m_xDropTarget std::unique_ptr<SwGlossaryDropTarget>
 sw/source/uibase/inc/maildispatcher.hxx:143
     MailDispatcher m_aListenerVector std::vector< ::rtl::Reference<IMailDispatcherListener> >
 sw/source/uibase/inc/maildispatcher.hxx:149
@@ -1164,11 +1162,11 @@ vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints input_mode tools::Long
 vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
-vcl/unx/generic/gdi/cairotextrender.cxx:49
+vcl/unx/generic/gdi/cairotextrender.cxx:50
     (anonymous namespace)::CairoFontsCache::CacheId maFace FT_Face
-vcl/unx/generic/gdi/cairotextrender.cxx:51
-    (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:52
+    (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
+vcl/unx/generic/gdi/cairotextrender.cxx:53
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
 vcl/unx/gtk3/a11y/atkwrapper.hxx:51
     AtkObjectWrapper aParent GtkWidgetAccessible
@@ -1176,13 +1174,13 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:82
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:20623
+vcl/unx/gtk3/gtkinst.cxx:20631
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
 vcl/unx/gtk3/hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1739
+vcl/workben/vcldemo.cxx:1740
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DocumentProtection.hxx:50
     writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey OUString

@@ -74,9 +74,9 @@ connectivity/source/inc/flat/EResultSet.hxx:39
     connectivity::flat::OFlatResultSet m_bBookmarkable _Bool
 connectivity/source/inc/java/lang/Object.hxx:37
     connectivity::SDBThreadAttach m_aGuard jvmaccess::class VirtualMachine::AttachGuard
-cppcanvas/source/mtfrenderer/textaction.cxx:807
+cppcanvas/source/mtfrenderer/textaction.cxx:806
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextLineInfo const tools::TextLineInfo
-cppcanvas/source/mtfrenderer/textaction.cxx:1628
+cppcanvas/source/mtfrenderer/textaction.cxx:1627
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextLineInfo const tools::TextLineInfo
 cppu/source/threadpool/threadpool.cxx:353
     _uno_ThreadPool dummy sal_Int32
@@ -124,11 +124,11 @@ cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
 cui/source/dialogs/colorpicker.cxx:749
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1230
+cui/source/factory/dlgfact.cxx:1240
     (anonymous namespace)::SvxMacroAssignDialog_Impl m_aItems SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion OUString
-cui/source/inc/AdditionsDialog.hxx:84
+cui/source/inc/AdditionsDialog.hxx:83
     AdditionsDialog m_sTag OUString
 cui/source/inc/cfgutil.hxx:240
     SvxScriptSelectorDialog m_aStylesInfo SfxStylesInfo_Impl
@@ -218,7 +218,7 @@ filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxY2 sal_Int16
 helpcompiler/inc/HelpCompiler.hxx:202
     HelpCompiler lang const std::string
-include/basic/basmgr.hxx:58
+include/basic/basmgr.hxx:59
     BasicError nReason BasicErrorReason
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:64
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard SolarMutexGuard
@@ -554,9 +554,9 @@ sc/inc/token.hxx:402
     SingleDoubleRefModifier aDub ScComplexRefData
 sc/qa/unit/tiledrendering/tiledrendering.cxx:584
     (anonymous namespace)::ViewCallback m_callbackWrapper TestLokCallbackWrapper
-sc/source/core/data/document.cxx:1245
-    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1246
+    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
+sc/source/core/data/document.cxx:1247
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk ScBulkBroadcast
 sc/source/core/data/table2.cxx:811
     (anonymous namespace)::TransClipHandler mnEndRow size_t
@@ -650,6 +650,12 @@ sd/source/ui/view/viewshel.cxx:1182
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1183
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
+sdext/source/minimizer/optimizerdialog.hxx:191
+    OptimizerDialog mnCurrentStep sal_Int16
+sdext/source/minimizer/optimizerdialog.hxx:192
+    OptimizerDialog mnTabIndex sal_Int16
+sdext/source/minimizer/optimizerdialog.hxx:202
+    OptimizerDialog maControlPages std::vector<std::vector<OUString> >
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
@@ -828,7 +834,7 @@ sw/source/uibase/docvw/romenu.hxx:50
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:297
+sw/source/uibase/inc/conttree.hxx:307
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:77
     SwSpellPopup m_aBuilder VclBuilder
@@ -864,9 +870,9 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
-vcl/inc/salvtables.hxx:565
+vcl/inc/salvtables.hxx:564
     SalInstanceEntry m_aTextFilter WeldTextFilter
-vcl/inc/salvtables.hxx:952
+vcl/inc/salvtables.hxx:951
     SalInstanceComboBoxWithEdit m_aTextFilter WeldTextFilter
 vcl/inc/sft.hxx:177
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
@@ -896,7 +902,7 @@ vcl/source/gdi/jobset.cxx:39
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char[32]
 vcl/source/gdi/jobset.cxx:40
     (anonymous namespace)::ImplOldJobSetupData cPortName char[32]
-vcl/source/pdf/PDFiumLibrary.cxx:428
+vcl/source/pdf/PDFiumLibrary.cxx:429
     vcl::pdf::(anonymous namespace)::PDFiumDocumentImpl m_aFormCallbacks FPDF_FORMFILLINFO
 vcl/unx/gtk3/a11y/atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
@@ -914,13 +920,13 @@ vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtkinst.cxx:7330
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:10975
+vcl/unx/gtk3/gtkinst.cxx:10980
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:10977
+vcl/unx/gtk3/gtkinst.cxx:10982
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:20612
+vcl/unx/gtk3/gtkinst.cxx:20620
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:20618
+vcl/unx/gtk3/gtkinst.cxx:20626
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
