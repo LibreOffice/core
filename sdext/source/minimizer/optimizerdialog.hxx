@@ -20,7 +20,6 @@
 #pragma once
 
 #include <vector>
-#include "unodialog.hxx"
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
 #include <com/sun/star/uno/Sequence.h>

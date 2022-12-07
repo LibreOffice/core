@@ -225,49 +225,6 @@ void FreetypeFontInfo::ReleaseFaceFT()
     assert(mnRefCount >= 0 && "how did this go negative\n");
 }
 
-static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-
-const sal_uInt32 T_true = 0x74727565;        /* 'true' */
-const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
-const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
-
-const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
-{
-    const unsigned char* pBuffer = mpFontFile->GetBuffer();
-    int nFileSize = mpFontFile->GetFileSize();
-    if( !pBuffer || nFileSize<1024 )
-        return nullptr;
-
-    // we currently handle TTF, TTC and OTF headers
-    unsigned nFormat = GetUInt( pBuffer );
-
-    const unsigned char* p = pBuffer + 12;
-    if( nFormat == ::T_ttcf )         // TTC_MAGIC
-        p += GetUInt( p + 4 * mnFaceNum );
-    else if( nFormat != 0x00010000 && nFormat != ::T_true && nFormat != ::T_otto) // TTF_MAGIC and Apple TTF Magic and PS-OpenType font
-        return nullptr;
-
-    // walk table directory until match
-    int nTables = GetUShort( p - 8 );
-    if( nTables >= 64 )  // something fishy?
-        return nullptr;
-    for( int i = 0; i < nTables; ++i, p+=16 )
-    {
-        if( p[0]==pTag[0] && p[1]==pTag[1] && p[2]==pTag[2] && p[3]==pTag[3] )
-        {
-            sal_uLong nLength = GetUInt( p + 12 );
-            if( pLength != nullptr )
-                *pLength = nLength;
-            const unsigned char* pTable = pBuffer + GetUInt( p + 8 );
-            if( (pTable + nLength) <= (mpFontFile->GetBuffer() + nFileSize) )
-                return pTable;
-        }
-    }
-
-    return nullptr;
-}
-
 void FreetypeFontInfo::AnnounceFont( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     rtl::Reference<FreetypeFontFace> pFD(new FreetypeFontFace( this, maDevFontAttributes ));

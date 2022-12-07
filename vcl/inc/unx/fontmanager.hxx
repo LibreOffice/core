@@ -202,20 +202,6 @@ public:
     // get a specific fonts PSName name
     OUString getPSName( fontID nFontID );
 
-    // get a specific fonts italic type
-    FontItalic getFontItalic( fontID nFontID ) const
-    {
-        const PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eItalic : ITALIC_DONTKNOW;
-    }
-
-    // get a specific fonts weight type
-    FontWeight getFontWeight( fontID nFontID ) const
-    {
-        const PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
-    }
-
     // get a specific fonts system dependent filename
     OString getFontFileSysPath( fontID nFontID ) const
     {

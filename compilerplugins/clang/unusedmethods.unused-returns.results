@@ -4,7 +4,7 @@ connectivity/source/inc/odbc/OConnection.hxx:74
     short connectivity::odbc::OConnection::Construct(const rtl::OUString &,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:113
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const rtl::OUString &)
-cui/source/inc/iconcdlg.hxx:71
+cui/source/inc/iconcdlg.hxx:56
     _Bool IconChoicePage::FillItemSet(SfxItemSet *)
 dbaccess/source/ui/app/AppSwapWindow.hxx:84
     _Bool dbaui::OApplicationSwapWindow::onContainerSelected(enum dbaui::ElementType)
@@ -124,11 +124,11 @@ include/sax/fshelper.hxx:143
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:65
     _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
-include/sfx2/lnkbase.hxx:112
+include/sfx2/lnkbase.hxx:111
     sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
 include/svl/macitem.hxx:89
     SvStream & SvxMacroTableDtor::Write(SvStream &) const
-include/svtools/ctrlbox.hxx:378
+include/svtools/ctrlbox.hxx:367
     _Bool FontNameBox::get_entry_selection_bounds(int &,int &)
 include/svx/autoformathelper.hxx:212
     _Bool AutoFormatBase::LoadBlockA(SvStream &,const struct AutoFormatVersions &,unsigned short)
@@ -138,7 +138,7 @@ include/svx/autoformathelper.hxx:215
     _Bool AutoFormatBase::SaveBlockA(SvStream &,unsigned short) const
 include/svx/autoformathelper.hxx:216
     _Bool AutoFormatBase::SaveBlockB(SvStream &,unsigned short) const
-include/svx/dlgctrl.hxx:101
+include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:159
     svx::frame::Style & svx::frame::Style::MirrorSelf()
@@ -150,12 +150,8 @@ include/test/a11y/AccessibilityTools.hxx:62
     rtl::OUString AccessibilityTools::getStateName(const short)
 include/test/helper/shape.hxx:41
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
-include/test/sheet/xdocumentauditing.hxx:28
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
 include/test/sheet/xnamedrange.hxx:22
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XNamedRange::init()
-include/test/sheet/xspreadsheets2.hxx:41
-    com::sun::star::uno::Reference<com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
 include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:94
@@ -186,7 +182,7 @@ include/vcl/menu.hxx:388
     _Bool Menu::HandleMenuDeActivateEvent(Menu *) const
 include/vcl/texteng.hxx:271
     _Bool TextEngine::Read(SvStream &,const TextSelection *)
-include/vcl/window.hxx:1401
+include/vcl/window.hxx:1394
     _Bool vcl::Window::set_font_attribute(const rtl::OString &,std::basic_string_view<char16_t>)
 include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
     _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
@@ -272,7 +268,7 @@ sd/source/ui/remotecontrol/IBluetoothSocket.hxx:36
     int sd::IBluetoothSocket::write(const void *,unsigned int)
 sdext/source/pdfimport/tree/style.hxx:155
     int pdfi::StyleContainer::getStandardStyleId(std::basic_string_view<char>)
-sfx2/inc/autoredactdialog.hxx:140
+sfx2/inc/autoredactdialog.hxx:139
     _Bool SfxAutoRedactDialog::getTargets(std::vector<struct std::pair<struct RedactionTarget, rtl::OUString> > &)
 slideshow/source/engine/animationnodes/animationbasenode.hxx:62
     _Bool slideshow::internal::AnimationBaseNode::enqueueActivity() const
@@ -294,12 +290,10 @@ sw/inc/IDocumentUndoRedo.hxx:100
     _Bool IDocumentUndoRedo::Undo()
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
-sw/inc/node.hxx:418
+sw/inc/node.hxx:438
     _Bool SwContentNode::GoNext(struct SwPosition *,enum SwCursorSkipMode) const
 sw/inc/tblafmt.hxx:267
     _Bool SwTableAutoFormatTable::Load(SvStream &)
-sw/qa/inc/swmodeltestbase.hxx:394
-    SwDoc * SwModelTestBase::createSwWebDoc(std::basic_string_view<char16_t>,const char *)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
 sw/source/core/inc/scriptinfo.hxx:239
@@ -312,19 +306,19 @@ sw/source/uibase/inc/fldmgr.hxx:118
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
-sw/source/uibase/inc/wrtsh.hxx:431
-    _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &)
+sw/source/uibase/inc/wrtsh.hxx:435
+    _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &,_Bool)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
     _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
 vcl/inc/font/FeatureCollector.hxx:45
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/impgraph.hxx:186
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1299
+vcl/inc/pdf/pdfwriter_impl.hxx:1307
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1300
+vcl/inc/pdf/pdfwriter_impl.hxx:1308
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1301
+vcl/inc/pdf/pdfwriter_impl.hxx:1309
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::tr(const char *,const char *,int)
@@ -368,7 +362,7 @@ vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:113
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1625
+vcl/inc/salvtables.hxx:1624
     _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
 vcl/inc/unx/gtk/gtkdata.hxx:335
     int GtkSalDisplay::CaptureMouse(SalFrame *)
@@ -376,7 +370,7 @@ vcl/inc/unx/salframe.h:168
     _Bool X11SalFrame::Dispatch(union _XEvent *)
 vcl/source/fontsubset/sft.cxx:122
     _Bool vcl::(anonymous namespace)::HexFmt::Flush()
-vcl/source/fontsubset/ttcr.hxx:111
+vcl/source/fontsubset/ttcr.hxx:106
     int vcl::TrueTypeTable::GetRawData(struct vcl::TableEntry *)
 workdir/../vcl/inc/qt5/QtWidget.hxx:36
     QString QtWidget::tr(const char *,const char *,int)

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "unodialog.hxx"
 #include "configurationaccess.hxx"
 #include <vcl/weld.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

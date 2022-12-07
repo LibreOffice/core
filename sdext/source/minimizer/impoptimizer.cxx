@@ -41,6 +41,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -372,7 +373,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                 Reference< XGraphic > xGraphic;
                 if ( rGraphic.maUser[ 0 ].mbFillBitmap && rGraphic.maUser[ 0 ].mxPropertySet.is() )
                 {
-                    Reference< XBitmap > xFillBitmap;
+                    Reference< rendering::XBitmap > xFillBitmap;
                     if ( rGraphic.maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
                         xGraphic.set( xFillBitmap, UNO_QUERY_THROW );
                 }
@@ -413,7 +414,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                             }
                             else if ( rGraphicUser.mxPropertySet.is() )
                             {
-                                Reference< XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
+                                Reference< rendering::XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
                                 if ( xFillBitmap.is() )
                                 {
                                     awt::Size aSize;
