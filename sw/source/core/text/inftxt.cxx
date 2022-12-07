@@ -1678,7 +1678,6 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
 
         case CHAR_SOFTHYPHEN:
         case CHAR_HARDHYPHEN:
-        case CHAR_NNBSP:
         case CHAR_HARDBLANK:
         case CH_TAB:
         case CH_BREAK:
