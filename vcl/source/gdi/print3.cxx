@@ -538,6 +538,16 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         {
         }
     }
+#ifdef MACOSX
+    else
+    {
+        // The PrintDialog updates the printer list in its constructor so do
+        // the same for printers that bring up their own dialog since. Not
+        // sure if this is needed or not on Windows or X11, so limit only to
+        // macOS for now.
+        Printer::updatePrinters();
+    }
+#endif
 
     xController->pushPropertiesToPrinter();
     return true;

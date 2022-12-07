@@ -60,6 +60,7 @@
 #include <osx/runinmain.hxx>
 
 #include <print.h>
+#include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
 
@@ -123,6 +124,20 @@ public:
     }
 };
 
+}
+
+static OUString& getFallbackPrinterName()
+{
+    static OUString aFallbackPrinter;
+
+    if ( aFallbackPrinter.isEmpty() )
+    {
+        aFallbackPrinter = VclResId( SV_PRINT_DEFPRT_TXT );
+        if ( aFallbackPrinter.isEmpty() )
+            aFallbackPrinter = "Printer";
+    }
+
+    return aFallbackPrinter;
 }
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
@@ -765,6 +780,20 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             pList->Add( std::move(pInfo) );
         }
     }
+
+    // tdf#151700 Prevent the non-native LibreOffice PrintDialog from
+    // displaying by creating a fake printer if there are no printers. This
+    // will allow the LibreOffice printing code to proceed with native
+    // NSPrintOperation which will display the native print panel.
+    if ( !nNameCount )
+    {
+        std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
+        pInfo->maPrinterName    = getFallbackPrinterName();
+        pInfo->mnStatus         = PrintQueueFlags::NONE;
+        pInfo->mnJobs           = 0;
+
+        pList->Add( std::move(pInfo) );
+    }
 }
 
 void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
@@ -776,7 +805,9 @@ OUString AquaSalInstance::GetDefaultPrinter()
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( maDefaultPrinter.isEmpty() )
+    // WinSalInstance::GetDefaultPrinter() fetches current default printer
+    // on every call so do the same here
+    OUString aDefaultPrinter;
     {
         NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
         SAL_WARN_IF( !pPI, "vcl", "no print info" );
@@ -786,13 +817,20 @@ OUString AquaSalInstance::GetDefaultPrinter()
             SAL_WARN_IF( !pPr, "vcl", "no printer in default info" );
             if( pPr )
             {
+                // Related: tdf#151700 Return the name of the fake printer if
+                // there are no printers so that the LibreOffice printing code
+                // will be able to find the the fake printer returned by
+                // AquaSalInstance::GetPrinterQueueInfo()
                 NSString* pDefName = [pPr name];
                 SAL_WARN_IF( !pDefName, "vcl", "printer has no name" );
-                maDefaultPrinter = GetOUString( pDefName );
+                if ( pDefName && [pDefName length])
+                    aDefaultPrinter = GetOUString( pDefName );
+                else
+                    aDefaultPrinter = getFallbackPrinterName();
             }
         }
     }
-    return maDefaultPrinter;
+    return aDefaultPrinter;
 }
 
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
