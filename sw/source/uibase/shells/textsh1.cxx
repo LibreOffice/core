@@ -107,8 +107,8 @@
 #if !ENABLE_WASM_STRIP_EXTRA
 #include <translatelangselect.hxx>
 #include <svtools/deeplcfg.hxx>
-#include <translatehelper.hxx>
 #endif // ENABLE_WASM_STRIP_EXTRA
+#include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
 
 using namespace ::com::sun::star;
