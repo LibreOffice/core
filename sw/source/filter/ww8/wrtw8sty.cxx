@@ -30,6 +30,8 @@
 #include <svx/svdouno.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <rtl/character.hxx>
+
 #include <doc.hxx>
 #include "wrtww8.hxx"
 #include <docary.hxx>
@@ -324,13 +326,11 @@ OString MSWordStyles::CreateStyleId(std::u16string_view aName)
     for (size_t i = 0; i < aName.size(); ++i)
     {
         sal_Unicode nChar = aName[i];
-        if (('0' <= nChar && nChar <= '9') ||
-            ('a' <= nChar && nChar <= 'z') ||
-            ('A' <= nChar && nChar <= 'Z'))
+        if (rtl::isAsciiAlphanumeric(nChar) || nChar == '-')
         {
             // first letter should be uppercase
-            if (aStyleIdBuf.isEmpty() && 'a' <= nChar && nChar <= 'z')
-                aStyleIdBuf.append(char(nChar - ('a' - 'A')));
+            if (aStyleIdBuf.isEmpty())
+                aStyleIdBuf.append(char(rtl::toAsciiUpperCase(nChar)));
             else
                 aStyleIdBuf.append(char(nChar));
         }
