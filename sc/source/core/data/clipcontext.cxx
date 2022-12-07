@@ -253,12 +253,8 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 // Turn this into a string or edit cell.
                 if (rSrcCell.getFormula()->IsMultilineResult())
                 {
-                    // TODO : Add shared string support to the edit engine to
-                    // make this process simpler.
-                    ScFieldEditEngine& rEngine = mrDestDoc.GetEditEngine();
-                    rEngine.SetTextCurrentDefaults(rSrcCell.getFormula()->GetString().getString());
-                    std::unique_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
-                    pObj->NormalizeString(mrDestDoc.GetSharedStringPool());
+                    std::unique_ptr<EditTextObject> pObj(mrDestDoc.CreateSharedStringTextObject(
+                                rSrcCell.getFormula()->GetString()));
                     rSrcCell.set(*pObj);
                 }
                 else

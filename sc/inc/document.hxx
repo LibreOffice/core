@@ -2510,6 +2510,8 @@ public:
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 
+    std::unique_ptr<EditTextObject> CreateSharedStringTextObject( const svl::SharedString& rSS );
+
     std::unique_ptr<ScRefreshTimerControl> const & GetRefreshTimerControlAddress() const
                                        { return pRefreshTimerControl; }
 

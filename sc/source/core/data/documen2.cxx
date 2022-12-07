@@ -511,6 +511,17 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     return *mpNoteEngine;
 }
 
+std::unique_ptr<EditTextObject> ScDocument::CreateSharedStringTextObject( const svl::SharedString& rSS )
+{
+    /* TODO: Add shared string support to the edit engine to make this process
+     * simpler. */
+    ScFieldEditEngine& rEngine = GetEditEngine();
+    rEngine.SetTextCurrentDefaults( rSS.getString());
+    std::unique_ptr<EditTextObject> pObj( rEngine.CreateTextObject());
+    pObj->NormalizeString( GetSharedStringPool());
+    return pObj;
+}
+
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
     if (bIsClip)

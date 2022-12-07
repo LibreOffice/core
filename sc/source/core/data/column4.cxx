@@ -501,10 +501,7 @@ public:
             case sc::FormulaResultValue::String:
                 if (aRes.mbMultiLine)
                 {
-                    ScFieldEditEngine& rEngine = mrDoc.GetEditEngine();
-                    rEngine.SetTextCurrentDefaults(aRes.maString.getString());
-                    std::unique_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
-                    pObj->NormalizeString(mrDoc.GetSharedStringPool());
+                    std::unique_ptr<EditTextObject> pObj(mrDoc.CreateSharedStringTextObject(aRes.maString));
                     maResValues.setValue(nRow, std::move(pObj));
                 }
                 else
