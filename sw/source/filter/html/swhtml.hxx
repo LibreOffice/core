@@ -28,8 +28,11 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <deletelistener.hxx>
+#include <fmtftn.hxx>
 #include <fltshell.hxx>
 #include <swtypes.hxx>
+#include <txtftn.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1026,14 +1029,30 @@ inline bool SwHTMLParser::HasStyleOptions( std::u16string_view rStyle,
 
 class SwTextFootnote;
 
-struct SwHTMLTextFootnote
+class SwHTMLTextFootnote
 {
+private:
     OUString sName;
+public:
     SwTextFootnote* pTextFootnote;
+private:
+    std::unique_ptr<SvtDeleteListener> xDeleteListener;
+public:
     SwHTMLTextFootnote(const OUString &rName, SwTextFootnote* pInTextFootnote)
         : sName(rName)
         , pTextFootnote(pInTextFootnote)
+        , xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr()).GetNotifier()))
     {
+    }
+    const OUString& GetName() const
+    {
+        return sName;
+    }
+    SwNodeIndex* GetStartNode() const
+    {
+        if (xDeleteListener->WasDeleted())
+            return nullptr;
+        return pTextFootnote->GetStartNode();
     }
 };
 
