@@ -678,6 +678,12 @@ void ImpEditEngine::Clear()
         EditView* pView = aEditViews[--nView];
         pView->pImpEditView->SetEditSelection( aSel );
     }
+
+    // Related: tdf#82115 Fix crash when handling input method events.
+    // The nodes in mpIMEInfos may be deleted in ImpEditEngine::Clear() which
+    // causes a crash in the CommandEventId::ExtTextInput and
+    // CommandEventId::EndExtTextInput event handlers.
+    mpIMEInfos.reset();
 }
 
 EditPaM ImpEditEngine::RemoveText()
