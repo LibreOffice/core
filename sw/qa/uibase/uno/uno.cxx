@@ -174,6 +174,46 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
                          aTree.get_child("userDefinedProperties").count(""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
+{
+    // Given a document with 3 bookmarks: 2 zotero references and a zotero bibliography:
+    createSwDoc();
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_1"))),
+        };
+        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+    }
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_2"))),
+        };
+        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+    }
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BIBL"))),
+        };
+        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+    }
+
+    // When getting the reference bookmarks:
+    tools::JsonWriter aJsonWriter;
+    OString aCommand(".uno:Bookmarks?namePrefix=ZOTERO_BREF_");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we get the 2 references but not the bibliography:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (bookmarks)
+    // i.e. the returned JSON was just empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("bookmarks").count(""));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
