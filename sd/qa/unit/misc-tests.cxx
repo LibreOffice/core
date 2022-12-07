@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
@@ -80,6 +81,7 @@ public:
     void testTdf131033();
     void testTdf129898LayerDrawnInSlideshow();
     void testTdf136956();
+    void testEncodedTableStyles();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -101,6 +103,7 @@ public:
     CPPUNIT_TEST(testTdf131033);
     CPPUNIT_TEST(testTdf129898LayerDrawnInSlideshow);
     CPPUNIT_TEST(testTdf136956);
+    CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -889,6 +892,55 @@ void SdMiscTest::testTdf136956()
     // 4x3 Table after undo. Undo crashed before.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getColumnCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRowCount());
+}
+
+void SdMiscTest::testEncodedTableStyles()
+{
+    // Silence unrelated failure:
+    // Error: element "table:table-template" is missing "first-row-start-column" attribute
+    skipValidation();
+
+    createSdDrawDoc();
+
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                             uno::UNO_QUERY_THROW);
+        uno::Reference<css::lang::XSingleServiceFactory> xTableStyleFamily(
+            xStyleFamiliesSupplier->getStyleFamilies()->getByName("table"), uno::UNO_QUERY_THROW);
+        uno::Reference<css::lang::XSingleServiceFactory> xCellStyleFamily(
+            xStyleFamiliesSupplier->getStyleFamilies()->getByName("cell"), uno::UNO_QUERY_THROW);
+
+        uno::Reference<style::XStyle> xTableStyle(xTableStyleFamily->createInstance(),
+                                                  uno::UNO_QUERY_THROW);
+        uno::Reference<style::XStyle> xCellStyle(xCellStyleFamily->createInstance(),
+                                                 uno::UNO_QUERY_THROW);
+
+        uno::Reference<container::XNameContainer>(xTableStyleFamily, uno::UNO_QUERY_THROW)
+            ->insertByName("table_1", uno::Any(xTableStyle));
+        uno::Reference<container::XNameContainer>(xCellStyleFamily, uno::UNO_QUERY_THROW)
+            ->insertByName("table-body_1", uno::Any(xCellStyle));
+        uno::Reference<container::XNameReplace>(xTableStyle, uno::UNO_QUERY_THROW)
+            ->replaceByName("body", uno::Any(xCellStyle));
+    }
+
+    saveAndReload("draw8");
+
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                             uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xTableStyleFamily(
+            xStyleFamiliesSupplier->getStyleFamilies()->getByName("table"), uno::UNO_QUERY_THROW);
+        // Such style used to be exported as "table_5f_1" instead.
+        CPPUNIT_ASSERT(xTableStyleFamily->hasByName("table_1"));
+
+        uno::Reference<container::XNameAccess> xTableStyle(xTableStyleFamily->getByName("table_1"),
+                                                           uno::UNO_QUERY_THROW);
+        uno::Reference<style::XStyle> xCellStyle(xTableStyle->getByName("body"), uno::UNO_QUERY);
+        // Such style used to not be found by the table style, as it was
+        // searching for "table-body_5f_1" instead of "table-body_1".
+        CPPUNIT_ASSERT(xCellStyle.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("table-body_1"), xCellStyle->getName());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

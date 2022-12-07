@@ -376,7 +376,7 @@ void XMLTableImport::finishStyles()
             for( const auto& rStyle : *xT ) try
             {
                 const OUString sPropName( rStyle.first );
-                const OUString sStyleName( rStyle.second );
+                const OUString sStyleName( mrImport.GetStyleDisplayName(XmlStyleFamily::TABLE_CELL, rStyle.second) );
                 xTemplate->replaceByName( sPropName, xCellFamily->getByName( sStyleName ) );
             }
             catch( Exception& )
