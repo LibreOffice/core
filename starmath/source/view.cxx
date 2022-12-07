@@ -795,8 +795,35 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
                     mrGraphicWindow.SetZoom(nTmpZoom);
                     bCallBase = false;
                 }
+                break;
             }
-            break;
+            case CommandEventId::GestureZoom:
+            {
+                const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
+                if (pData)
+                {
+                    if (pData->meEventType == GestureEventZoomType::Begin)
+                    {
+                        mfLastZoomScale = pData->mfScaleDelta;
+                    }
+                    else if (pData->meEventType == GestureEventZoomType::Update)
+                    {
+                        double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
+                        mfLastZoomScale = pData->mfScaleDelta;
+
+                        // Accumulate fractional zoom to avoid small zoom changes from being ignored
+                        mfAccumulatedZoom += deltaBetweenEvents;
+                        int nZoomChangePercent = mfAccumulatedZoom * 100;
+                        mfAccumulatedZoom -= nZoomChangePercent / 100.0;
+
+                        sal_uInt16 nZoom = mrGraphicWindow.GetZoom();
+                        nZoom += nZoomChangePercent;
+                        mrGraphicWindow.SetZoom(nZoom);
+                    }
+                    bCallBase = false;
+                }
+                break;
+            }
 
             default: break;
         }
