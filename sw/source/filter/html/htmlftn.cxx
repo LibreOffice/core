@@ -228,9 +228,9 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
         size_t nCount = m_pFootEndNoteImpl->aTextFootnotes.size();
         for(size_t i = 0; i < nCount; ++i)
         {
-            if (m_pFootEndNoteImpl->aTextFootnotes[i].sName == aName)
+            if (m_pFootEndNoteImpl->aTextFootnotes[i].GetName() == aName)
             {
-                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i].pTextFootnote->GetStartNode();
+                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i].GetStartNode();
                 m_pFootEndNoteImpl->aTextFootnotes.erase( m_pFootEndNoteImpl->aTextFootnotes.begin() + i );
                 if (m_pFootEndNoteImpl->aTextFootnotes.empty())
                 {
