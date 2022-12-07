@@ -159,6 +159,8 @@ private:
     AutoTimer aCaretBlinkTimer;
     rtl::Reference<SmGraphicAccessible> mxAccessible;
     SmViewShell& mrViewShell;
+    double mfLastZoomScale = 0;
+    double mfAccumulatedZoom = 0;
 };
 
 class SmGraphicController final : public SfxControllerItem
