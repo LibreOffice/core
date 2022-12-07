@@ -3035,6 +3035,15 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             Window::Command(rCEvt);
         return;
     }
+
+    if (nCmd == CommandEventId::GestureZoom)
+    {
+        bool bDone = mrViewData.GetView()->GestureZoomCommand(rCEvt);
+        if (!bDone)
+            Window::Command(rCEvt);
+        return;
+    }
+
     // #i7560# FormulaMode check is below scrolling - scrolling is allowed during formula input
     bool bDisable = pScMod->IsFormulaMode() ||
                     pScMod->IsModalMode(mrViewData.GetSfxDocShell());
