@@ -1000,6 +1000,10 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
         "and @Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink' "
         "and @Target='mailto:emailgoeshere@example.com' "
         "and @TargetMode='External']");
+
+    // preserve the ShowingPlaceholder setting on both block SDTs.
+    pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")

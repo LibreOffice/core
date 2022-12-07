@@ -130,6 +130,7 @@ public:
     SdtBlockHelper()
         : m_bHasId(false)
         , m_bStartedSdt(false)
+        , m_bShowingPlaceHolder(false)
         , m_nSdtPrToken(0)
     {}
 
@@ -141,6 +142,7 @@ public:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pDataBindingAttrs;
     OUString m_aColor;
     OUString m_aPlaceHolderDocPart;
+    bool m_bShowingPlaceHolder;
     OUString m_aAlias;
     sal_Int32 m_nSdtPrToken;
 
