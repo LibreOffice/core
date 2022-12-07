@@ -252,4 +252,22 @@ class autofilter(UITestCase):
             xCancel = xFloatWindow.getChild("cancel")
             xCancel.executeAction("CLICK", tuple())
 
+        #tdf152082
+   def test_tdf152082(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf152082.ods")):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(4, len(xTreeList.getChildren()))
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('1'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('3'))['IsChecked'])
+            xCancelBtn = xFloatWindow.getChild("cancel")
+            xCancelBtn.executeAction("CLICK", tuple())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
