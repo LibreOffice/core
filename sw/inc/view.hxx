@@ -235,6 +235,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SvxSearchCmd        m_eLastSearchCommand;
 
     bool m_bWheelScrollInProgress;
+    double          m_fLastZoomScale = 0;
+    double          m_fAccumulatedZoom = 0;
 
     bool            m_bCenterCursor : 1,
                     m_bTopCursor : 1,
@@ -470,6 +472,7 @@ public:
     static void     SetActMark(sal_Int32 nSet);
 
     bool            HandleWheelCommands( const CommandEvent& );
+    bool            HandleGestureZoomCommand(const CommandEvent&);
 
     // insert frames
     void            InsFrameMode(sal_uInt16 nCols);
