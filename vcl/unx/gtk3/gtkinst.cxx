@@ -18089,6 +18089,7 @@ private:
     gulong m_nPopupMenu;
     gulong m_nScrollEvent;
 #endif
+    GtkGesture *m_pZoomGesture;
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void signalDraw(GtkDrawingArea*, cairo_t *cr, int /*width*/, int /*height*/, gpointer widget)
@@ -18214,6 +18215,38 @@ private:
     }
 #endif
 
+    bool handleSignalZoom(GtkGesture* gesture, GdkEventSequence* sequence,
+                          GestureEventZoomType eEventType)
+    {
+        gdouble x = 0;
+        gdouble y = 0;
+        gtk_gesture_get_point(gesture, sequence, &x, &y);
+
+        double fScaleDelta = gtk_gesture_zoom_get_scale_delta(GTK_GESTURE_ZOOM(gesture));
+
+        CommandGestureZoomData aGestureData(x, y, eEventType, fScaleDelta);
+        CommandEvent aCEvt(Point(x, y), CommandEventId::GestureZoom, true, &aGestureData);
+        return m_aCommandHdl.Call(aCEvt);
+    }
+
+    static bool signalZoomBegin(GtkGesture* gesture, GdkEventSequence* sequence, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->handleSignalZoom(gesture, sequence, GestureEventZoomType::Begin);
+    }
+
+    static bool signalZoomUpdate(GtkGesture* gesture, GdkEventSequence* sequence, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->handleSignalZoom(gesture, sequence, GestureEventZoomType::Update);
+    }
+
+    static bool signalZoomEnd(GtkGesture* gesture, GdkEventSequence* sequence, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->handleSignalZoom(gesture, sequence, GestureEventZoomType::End);
+    }
+
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void signalResize(GtkDrawingArea*, int nWidth, int nHeight, gpointer widget)
     {
@@ -18244,7 +18277,19 @@ public:
         gtk_drawing_area_set_draw_func(m_pDrawingArea, signalDraw, this, nullptr);
 #else
         m_nDrawSignalId = g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this);
+        gtk_widget_add_events(GTK_WIDGET(pDrawingArea), GDK_TOUCHPAD_GESTURE_MASK);
 #endif
+
+        ensureMouseEventWidget();
+        m_pZoomGesture = gtk_gesture_zoom_new(m_pMouseEventBox);
+        gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pZoomGesture),
+                                                   GTK_PHASE_TARGET);
+        // Note that the default zoom gesture signal handler needs to run first to setup correct
+        // scale delta. Otherwise the first "begin" event will always contain scale delta of infinity.
+        g_signal_connect_after(m_pZoomGesture, "begin", G_CALLBACK(signalZoomBegin), this);
+        g_signal_connect_after(m_pZoomGesture, "update", G_CALLBACK(signalZoomUpdate), this);
+        g_signal_connect_after(m_pZoomGesture, "end", G_CALLBACK(signalZoomEnd), this);
+
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
@@ -18433,6 +18478,8 @@ public:
 
     virtual ~GtkInstanceDrawingArea() override
     {
+        g_clear_object(&m_pZoomGesture);
+
         ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
 
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
