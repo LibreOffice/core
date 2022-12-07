@@ -2794,11 +2794,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         m_pImpl->disableInteropGrabBag();
     }
     break;
-    case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
-    {
-        m_pImpl->m_pSdtHelper->SetShowingPlcHdr();
-    }
-    break;
     case NS_ooxml::LN_CT_SdtPr_dataBinding:
     case NS_ooxml::LN_CT_SdtPr_equation:
     case NS_ooxml::LN_CT_SdtPr_checkbox:
@@ -2810,12 +2805,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_id:
     case NS_ooxml::LN_CT_SdtPr_alias:
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
+    case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
     case NS_ooxml::LN_CT_SdtPr_color:
     case NS_ooxml::LN_CT_SdtPr_tag:
     case NS_ooxml::LN_CT_SdtPr_lock:
     {
         if (!m_pImpl->GetSdtStarts().empty())
         {
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_showingPlcHdr)
+            {
+                if (nIntValue)
+                    m_pImpl->m_pSdtHelper->SetShowingPlcHdr();
+            }
+
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -2899,6 +2901,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_tag:         sName = "ooxml:CT_SdtPr_tag"; break;
             case NS_ooxml::LN_CT_SdtPr_lock:        sName = "ooxml:CT_SdtPr_lock"; break;
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
+            case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
             case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
             default: assert(false);
         };
@@ -2925,6 +2928,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             beans::PropertyValue aValue;
             aValue.Name = sName;
             aValue.Value <<= sStringValue;
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
+        }
+        else if (nSprmId == NS_ooxml::LN_CT_SdtPr_showingPlcHdr)
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = sName;
+            aValue.Value <<= bool(nIntValue);
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
         }
         else
