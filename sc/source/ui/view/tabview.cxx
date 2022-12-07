@@ -935,6 +935,23 @@ Point ScTabView::GetGridOffset() const
 
 // ---  Scroll-Bars  --------------------------------------------------------
 
+void ScTabView::SetZoomPercentFromCommand(sal_uInt16 nZoomPercent)
+{
+    // scroll wheel doesn't set the AppOptions default
+
+    bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+    SetZoomType(SvxZoomType::PERCENT, bSyncZoom);
+    Fraction aFract(nZoomPercent, 100);
+    SetZoom(aFract, aFract, bSyncZoom);
+    PaintGrid();
+    PaintTop();
+    PaintLeft();
+    aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM);
+    aViewData.GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER);
+    aViewData.GetBindings().Invalidate( SID_ZOOM_IN);
+    aViewData.GetBindings().Invalidate( SID_ZOOM_OUT);
+}
+
 bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 {
     HideNoteMarker();
@@ -957,19 +974,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
                 nNew = std::min( MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
             if ( nNew != nOld )
             {
-                // scroll wheel doesn't set the AppOptions default
-
-                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
-                SetZoomType( SvxZoomType::PERCENT, bSyncZoom );
-                Fraction aFract( nNew, 100 );
-                SetZoom( aFract, aFract, bSyncZoom );
-                PaintGrid();
-                PaintTop();
-                PaintLeft();
-                aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
-                aViewData.GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
-                aViewData.GetBindings().Invalidate( SID_ZOOM_IN);
-                aViewData.GetBindings().Invalidate( SID_ZOOM_OUT);
+                SetZoomPercentFromCommand(nNew);
             }
 
             bDone = true;

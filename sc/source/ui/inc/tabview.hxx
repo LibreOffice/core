@@ -254,6 +254,8 @@ private:
 
     void            PaintRangeFinderEntry (const ScRangeFindData* pData, SCTAB nTab);
 
+    void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
+
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
                                         const SCROW* pPosY = nullptr );
