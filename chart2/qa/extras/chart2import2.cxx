@@ -264,7 +264,7 @@ void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries,
 void Chart2ImportTest2::testDeletedDataLabel()
 {
     loadFromURL(u"xlsx/deleted_data_labels.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                      UNO_QUERY_THROW);
     Reference<chart2::XDataSeries> xDataSeries0 = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries0.is());
@@ -296,7 +296,7 @@ void Chart2ImportTest2::testDataPointInheritedColorDOCX()
 void Chart2ImportTest2::testExternalStrRefsXLSX()
 {
     loadFromURL(u"xlsx/external_str_ref.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                      UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -310,7 +310,7 @@ void Chart2ImportTest2::testExternalStrRefsXLSX()
 void Chart2ImportTest2::testSourceNumberFormatComplexCategoriesXLS()
 {
     loadFromURL(u"xls/source_number_format_axis.xls");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                      UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
 

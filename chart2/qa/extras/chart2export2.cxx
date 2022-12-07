@@ -1343,7 +1343,7 @@ void Chart2ExportTest2::testDataLabelPlacementPieChart()
 {
     loadFromURL(u"xlsx/tdf134978.xlsx");
     saveAndReload("calc8");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     UNO_QUERY_THROW);
     // test the placement of the manually positioned label
     Reference<beans::XPropertySet> xDataPointPropSet(

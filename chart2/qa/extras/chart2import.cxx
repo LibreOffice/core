@@ -379,7 +379,7 @@ static uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< ch
 void Chart2ImportTest::testODSChartSeries()
 {
     loadFromURL(u"ods/chart.ods");
-    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions( xChart1Doc);
     CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
@@ -390,7 +390,7 @@ void Chart2ImportTest::testODSChartSeries()
 void Chart2ImportTest::testXLSXChartSeries()
 {
     loadFromURL(u"xlsx/chart.xlsx");
-    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
     CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
@@ -401,7 +401,7 @@ void Chart2ImportTest::testXLSXChartSeries()
 void Chart2ImportTest::testXLSChartSeries()
 {
     loadFromURL(u"xls/chart.xls");
-    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
     CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Col 2"), seriesList[1]);
@@ -679,7 +679,7 @@ void Chart2ImportTest::testPPTXPercentageNumberFormats()
 void Chart2ImportTest::testPieChartLabelsNumFormat()
 {
     loadFromURL(u"xlsx/tdfPieNumFormat.xlsx");
-    uno::Reference< chart::XChartDocument > xChartDoc(getChartCompFromSheet(0, mxComponent), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChartDoc(getChartCompFromSheet(0, 0, mxComponent), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     // test data point labels format
     Reference<beans::XPropertySet> xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(0, 0), uno::UNO_SET_THROW);
@@ -977,7 +977,7 @@ void Chart2ImportTest::testTdf108021()
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
     bool bTextBreak = false;
-    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     mxDiagram.set(xChartDoc->getDiagram());
     CPPUNIT_ASSERT(mxDiagram.is());
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
@@ -1208,7 +1208,7 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
     bool bTextCanOverlap = false;
-    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     mxDiagram.set(xChartDoc->getDiagram());
     CPPUNIT_ASSERT(mxDiagram.is());
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
@@ -1227,7 +1227,7 @@ void Chart2ImportTest::testTextBreakXLSX()
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
     bool textBreak = false;
-    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     mxDiagram.set(xChartDoc->getDiagram());
     CPPUNIT_ASSERT(mxDiagram.is());
@@ -1530,7 +1530,7 @@ void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
 void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
 {
     loadFromURL(u"xlsx/plotVisOnly.xlsx");
-    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("IncludeHiddenCells");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1542,7 +1542,7 @@ void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
 void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
 {
     loadFromURL(u"xlsx/rAngAx.xlsx");
-    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("RightAngledAxes");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1786,7 +1786,7 @@ void Chart2ImportTest::testInternalDataProvider() {
 void Chart2ImportTest::testTdf90510()
 {
     loadFromURL(u"xls/piechart_outside.xls");
-    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
     uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
@@ -1798,7 +1798,7 @@ void Chart2ImportTest::testTdf90510()
 void Chart2ImportTest::testTdf109858()
 {
     loadFromURL(u"xlsx/piechart_outside.xlsx");
-    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
 
     // test data point labels position
     Reference<beans::XPropertySet> xDataPointPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
@@ -1834,7 +1834,7 @@ void Chart2ImportTest::testTdf130105()
 void Chart2ImportTest::testTdf111173()
 {
     loadFromURL(u"xlsx/tdf111173.xlsx");
-    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
 }
 
 void Chart2ImportTest::testTdf122226()

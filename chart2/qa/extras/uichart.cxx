@@ -26,7 +26,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 {
     loadFromURL(u"ods/tdf120348.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
         = { u"Ωφέλιμο", u"Επικίνδυνο", u"Απόσταση", u"Μάσκα", u"Εμβόλιο" };
 
     loadFromURL(u"ods/tdf151091.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
