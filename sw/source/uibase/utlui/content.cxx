@@ -1164,9 +1164,12 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
             const ContentTypeId nType = pCnt->GetParent()->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::OUTLINE &&
-                    nType != ContentTypeId::BOOKMARK && nType != ContentTypeId::URLFIELD  &&
-                    nType != ContentTypeId::REFERENCE && nType != ContentTypeId::TEXTFIELD;
+            bRemoveOverlayObject =
+                    nType != ContentTypeId::OUTLINE && nType != ContentTypeId::TABLE &&
+                    nType != ContentTypeId::FRAME && nType != ContentTypeId::GRAPHIC &&
+                    nType != ContentTypeId::OLE && nType != ContentTypeId::BOOKMARK &&
+                    nType != ContentTypeId::URLFIELD && nType != ContentTypeId::REFERENCE &&
+                    nType != ContentTypeId::TEXTFIELD;
             if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
                                 m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
             {
@@ -1176,6 +1179,26 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                     aOutlineNodes.insert(m_pActiveShell->GetNodes().
                             GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]);
                     BringHeadingsToAttention(aOutlineNodes);
+                }
+                else if (nType == ContentTypeId::TABLE)
+                {
+                   if (const SwFrameFormats* pFrameFormats =
+                            m_pActiveShell->GetDoc()->GetTableFrameFormats())
+                        if (const SwFrameFormat* pFrameFormat =
+                                pFrameFormats->FindFormatByName(pCnt->GetName()))
+                            BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
+                }
+                else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
+                         nType == ContentTypeId::OLE)
+                {
+                    SwNodeType eNodeType = SwNodeType::Text;
+                    if(nType == ContentTypeId::GRAPHIC)
+                        eNodeType = SwNodeType::Grf;
+                    else if(nType == ContentTypeId::OLE)
+                        eNodeType = SwNodeType::Ole;
+                    if (const SwFrameFormat* pFrameFormat =
+                            m_pActiveShell->GetDoc()->FindFlyByName(pCnt->GetName(), eNodeType))
+                        BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
                 }
                 else if (nType == ContentTypeId::BOOKMARK)
                 {
@@ -1210,15 +1233,50 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             const ContentTypeId nType =
                     weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::OUTLINE &&
-                    nType != ContentTypeId::BOOKMARK && nType != ContentTypeId::URLFIELD  &&
-                    nType != ContentTypeId::REFERENCE && nType != ContentTypeId::TEXTFIELD;
+            bRemoveOverlayObject =
+                    nType != ContentTypeId::OUTLINE && nType != ContentTypeId::TABLE &&
+                    nType != ContentTypeId::FRAME && nType != ContentTypeId::GRAPHIC &&
+                    nType != ContentTypeId::OLE && nType != ContentTypeId::BOOKMARK &&
+                    nType != ContentTypeId::URLFIELD && nType != ContentTypeId::REFERENCE &&
+                    nType != ContentTypeId::TEXTFIELD;
             if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
                                 m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
                     BringHeadingsToAttention(m_pActiveShell->GetNodes().GetOutLineNds());
+                }
+                else if (nType == ContentTypeId::TABLE)
+                {
+                    std::vector<const SwFrameFormat*> aTableFormatsArr;
+                    const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(true);
+                    const SwFrameFormats* pFrameFormats =
+                            m_pActiveShell->GetDoc()->GetTableFrameFormats();
+                    SwAutoFormatGetDocNode aGetHt(&m_pActiveShell->GetNodes());
+                    for(size_t n = 0, i = 0; i < nCount + n; ++i)
+                    {
+                        if (const SwTableFormat* pTableFormat =
+                                static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
+                        {
+                            if (pTableFormat->GetInfo(aGetHt))  // skip deleted tables
+                            {
+                                n++;
+                                continue;
+                            }
+                            aTableFormatsArr.push_back(pTableFormat);
+                        }
+                    }
+                    BringFramesToAttention(aTableFormatsArr);
+                }
+                else if (nType == ContentTypeId::FRAME ||  nType == ContentTypeId::GRAPHIC ||
+                         nType == ContentTypeId::OLE)
+                {
+                        FlyCntType eType = FLYCNTTYPE_FRM;
+                        if(nType == ContentTypeId::GRAPHIC)
+                            eType = FLYCNTTYPE_GRF;
+                        else if(nType == ContentTypeId::OLE)
+                            eType = FLYCNTTYPE_OLE;
+                        BringFramesToAttention(m_pActiveShell->GetFlyFrameFormats(eType, true));
                 }
                 else if (nType == ContentTypeId::BOOKMARK)
                 {
@@ -5614,6 +5672,23 @@ void SwContentTree::BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodes
                                      aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
             }
         }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
+}
+
+void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const SwFrameFormat* pFrameFormat : rFrameFormats)
+    {
+        SwRect aFrameRect = pFrameFormat->FindLayoutRect();
+        aRanges.emplace_back(aFrameRect.Left(), aFrameRect.Top(),
+                             aFrameRect.Right(), aFrameRect.Bottom());
     }
     if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
         m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
