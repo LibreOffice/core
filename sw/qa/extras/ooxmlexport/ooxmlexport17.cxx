@@ -830,6 +830,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
 
     // No more fields
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
+
+    if (!isExported())
+        return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // ShowingPlaceholder should be off for 0, false and "on". (This was 21 before the fix)
+    assertXPath(pXmlDoc,"//w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 12);
 }
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
