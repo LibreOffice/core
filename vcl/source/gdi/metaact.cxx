@@ -1590,7 +1590,7 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowScale(maBmp.GetSizePixel(), maSz))
+    if (!AllowScale(maBmp.GetSizePixel(), pOut->LogicToPixel(maSz)))
         return;
 
     pOut->DrawBitmap( maPt, maSz, maBmp );
@@ -1775,7 +1775,7 @@ MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowScale(maBmpEx.GetSizePixel(), maSz))
+    if (!AllowScale(maBmpEx.GetSizePixel(), pOut->LogicToPixel(maSz)))
         return;
 
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
