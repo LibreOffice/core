@@ -776,7 +776,12 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     ::tools::Long nNewZoom;
                     Point aOldMousePos = GetActiveWindow()->PixelToLogic(rCEvt.GetMousePosPixel());
 
-                    nNewZoom = nOldZoom + deltaBetweenEvents * 100;
+                    // Accumulate fractional zoom to avoid small zoom changes from being ignored
+                    mfAccumulatedZoom += deltaBetweenEvents;
+                    int nZoomChangePercent = mfAccumulatedZoom * 100;
+                    mfAccumulatedZoom -= nZoomChangePercent / 100.0;
+
+                    nNewZoom = nOldZoom + nZoomChangePercent;
                     nNewZoom = std::max<::tools::Long>(pWin->GetMinZoom(), nNewZoom);
                     nNewZoom = std::min<::tools::Long>(pWin->GetMaxZoom(), nNewZoom);
 

@@ -456,6 +456,7 @@ protected:
     rtl::Reference<FuPoor>   mxOldFunction;
     std::unique_ptr<ZoomList> mpZoomList;
     double mfLastZoomScale;
+    double mfAccumulatedZoom = 0;
 
     Point       maViewPos;
     Size        maViewSize;
