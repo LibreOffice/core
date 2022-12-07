@@ -21,24 +21,30 @@ public:
         : ChartTest("/chart2/qa/extras/data/")
     {
     }
+
+    void testCopyPasteToNewSheet(uno::Reference<chart::XChartDocument> xChartDoc,
+                                 OUString aObjectName, sal_Int32 nColumns, sal_Int32 nRows);
 };
 
-CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
+void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocument> xChartDoc,
+                                                OUString aObjectName, sal_Int32 nColumns,
+                                                sal_Int32 nRows)
 {
-    loadFromURL(u"ods/tdf120348.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aExpectedSeriesList = xChartData->getColumnDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aExpectedSeriesList.getLength());
+    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file", nColumns,
+                                 aExpectedColumnDescriptions.getLength());
+
+    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file", nRows,
+                                 aExpectedRowDescriptions.getLength());
 
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(158), aExpectedData.getLength());
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToObject", OUString("Object 2")),
+        comphelper::makePropertyValue("ToObject", aObjectName),
     };
     dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -57,17 +63,31 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 
     uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
                                                       UNO_QUERY_THROW);
+
     Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aColumnDesc.getLength());
-    for (size_t i = 0; i < 4; ++i)
-        CPPUNIT_ASSERT_EQUAL(aExpectedSeriesList[i], aColumnDesc[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in destination file", nColumns,
+                                 aColumnDesc.getLength());
+    for (sal_Int32 i = 0; i < nColumns; ++i)
+    {
+        OString sMessage("Incorrect description in column: " + OString::number(i));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpectedColumnDescriptions[i],
+                                     aColumnDesc[i]);
+    }
+
+    Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in destination file", nRows,
+                                 aRowDesc.getLength());
+    for (sal_Int32 i = 0; i < nRows; ++i)
+    {
+        OString sMessage("Incorrect description in row: " + OString::number(i));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpectedRowDescriptions[i], aRowDesc[i]);
+    }
 
     Sequence<Sequence<double>> aData = xDataArray->getData();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(158), aData.getLength());
 
-    for (sal_Int32 nRowIdx = 0; nRowIdx < 158; ++nRowIdx)
+    for (sal_Int32 nRowIdx = 0; nRowIdx < nRows; ++nRowIdx)
     {
-        for (sal_Int32 nColIdx = 0; nColIdx < 4; ++nColIdx)
+        for (sal_Int32 nColIdx = 0; nColIdx < nColumns; ++nColIdx)
         {
             double nValue = aData[nRowIdx][nColIdx];
             double nExpected = aExpectedData[nRowIdx][nColIdx];
@@ -81,14 +101,23 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
             }
             else
             {
-                // Without the fix in place, this test would have failed with
-                // - Expected: 0
-                // - Actual  : 3.33625955201419
-                // - Incorrect value in Col: 2 Row: 51
                 CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), nExpected, nValue, 1e-1);
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
+{
+    loadFromURL(u"ods/tdf120348.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 3.33625955201419
+    // - Incorrect value in Col: 2 Row: 51
+    testCopyPasteToNewSheet(xChartDoc, "Object 2", 4, 158);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
@@ -138,135 +167,25 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
     loadFromURL(u"ods/tdf107097.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getPivotChartDocFromSheet(1, mxComponent),
                                                     uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChartDoc.is());
-    uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
-
-    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aExpectedColumnDescriptions.getLength());
-
-    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aExpectedRowDescriptions.getLength());
-
-    Sequence<Sequence<double>> aExpectedData = xChartData->getData();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aExpectedData.getLength());
-
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToObject", OUString("Object 1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
-
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    Scheduler::ProcessEventsToIdle();
-
-    // create a new document
-    load("private:factory/scalc");
-
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
-
-    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
-    CPPUNIT_ASSERT(xChartDoc2.is());
-
-    uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
-                                                      UNO_QUERY_THROW);
-    Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aColumnDesc.getLength());
-    for (size_t i = 0; i < 4; ++i)
-        CPPUNIT_ASSERT_EQUAL(aExpectedColumnDescriptions[i], aColumnDesc[i]);
-
-    Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aRowDesc.getLength());
-    for (size_t i = 0; i < 12; ++i)
-        CPPUNIT_ASSERT_EQUAL(aExpectedRowDescriptions[i], aRowDesc[i]);
-
-    Sequence<Sequence<double>> aData = xDataArray->getData();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aData.getLength());
-
-    for (sal_Int32 nRowIdx = 0; nRowIdx < 12; ++nRowIdx)
-    {
-        for (sal_Int32 nColIdx = 0; nColIdx < 4; ++nColIdx)
-        {
-            double nValue = aData[nRowIdx][nColIdx];
-            double nExpected = aExpectedData[nRowIdx][nColIdx];
-            OString sMessage("Incorrect value in Col: " + OString::number(nColIdx)
-                             + " Row: " + OString::number(nRowIdx));
-
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), nExpected, nValue, 1e-1);
-        }
-    }
+    testCopyPasteToNewSheet(xChartDoc, "Object 1", 4, 12);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
 {
-    for (sal_Int32 nChart = 0; nChart < 2; ++nChart)
-    {
-        loadFromURL(u"ods/tdf136011.ods");
-        uno::Reference<chart::XChartDocument> xChartDoc(
-            getChartCompFromSheet(0, nChart, mxComponent), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(),
-                                                          uno::UNO_QUERY_THROW);
+    loadFromURL(u"ods/tdf136011.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+    testCopyPasteToNewSheet(xChartDoc, "Object 1", 3, 9);
 
-        uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aExpectedColumnDescriptions.getLength());
+    loadFromURL(u"ods/tdf136011.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1, mxComponent),
+                                                     uno::UNO_QUERY_THROW);
 
-        uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aExpectedRowDescriptions.getLength());
-
-        Sequence<Sequence<double>> aExpectedData = xChartData->getData();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aExpectedData.getLength());
-
-        uno::Sequence<beans::PropertyValue> aPropertyValues = {
-            comphelper::makePropertyValue("ToObject", "Object " + OUString::number(nChart + 1)),
-        };
-        dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
-        Scheduler::ProcessEventsToIdle();
-
-        dispatchCommand(mxComponent, ".uno:Copy", {});
-        Scheduler::ProcessEventsToIdle();
-
-        // create a new document
-        load("private:factory/scalc");
-
-        dispatchCommand(mxComponent, ".uno:Paste", {});
-        Scheduler::ProcessEventsToIdle();
-
-        uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
-        CPPUNIT_ASSERT(xChartDoc2.is());
-
-        uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
-                                                          UNO_QUERY_THROW);
-        Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aColumnDesc.getLength());
-        for (size_t i = 0; i < 3; ++i)
-            CPPUNIT_ASSERT_EQUAL(aExpectedColumnDescriptions[i], aColumnDesc[i]);
-
-        Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aRowDesc.getLength());
-
-        // Without the fix in place, this test would have failed with
-        // - Expected: Test 1 1
-        // - Actual  : Test 1
-        for (size_t i = 0; i < 9; ++i)
-            CPPUNIT_ASSERT_EQUAL(aExpectedRowDescriptions[i], aRowDesc[i]);
-
-        Sequence<Sequence<double>> aData = xDataArray->getData();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aData.getLength());
-
-        for (sal_Int32 nRowIdx = 0; nRowIdx < 9; ++nRowIdx)
-        {
-            for (sal_Int32 nColIdx = 0; nColIdx < 3; ++nColIdx)
-            {
-                double nValue = aData[nRowIdx][nColIdx];
-                double nExpected = aExpectedData[nRowIdx][nColIdx];
-                OString sMessage("Incorrect value in Col: " + OString::number(nColIdx)
-                                 + " Row: " + OString::number(nRowIdx));
-
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), nExpected, nValue, 1e-1);
-            }
-        }
-    }
+    // Without the fix in place, this test would have failed with
+    // - Expected: Test 1 1
+    // - Actual  : Test 1
+    // - Incorrect description in row: 0
+    testCopyPasteToNewSheet(xChartDoc2, "Object 2", 3, 9);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
