@@ -4227,7 +4227,9 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     createColorWindow();
 }
 
-ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelParentFunction aTopLevelParentFunction)
+ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
+                           TopLevelParentFunction aTopLevelParentFunction,
+                           int* pWidthRequestCache)
     : m_xButton(std::move(pControl))
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
@@ -4237,7 +4239,12 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelP
 {
     m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
     m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(GetAutoColor(m_nSlotId));
-    LockWidthRequest();
+    int nWidthRequest = pWidthRequestCache ? *pWidthRequestCache : -1;
+    if (nWidthRequest == -1)
+        nWidthRequest = CalcBestWidthRequest();
+    LockWidthRequest(nWidthRequest);
+    if (pWidthRequestCache)
+        *pWidthRequestCache = nWidthRequest;
     ShowPreview(m_aSelectedColor.ToNamedColor());
 }
 
@@ -4319,7 +4326,7 @@ void ColorListBox::Selected(const svx::NamedThemedColor& rColor)
 //to avoid the box resizing every time the color is changed to
 //the optimal size of the individual color, get the longest
 //standard color and stick with that as the size for all
-void ColorListBox::LockWidthRequest()
+int ColorListBox::CalcBestWidthRequest()
 {
     NamedColor aLongestColor;
     tools::Long nMaxStandardColorTextWidth = 0;
@@ -4335,7 +4342,12 @@ void ColorListBox::LockWidthRequest()
         }
     }
     ShowPreview(aLongestColor);
-    m_xButton->set_size_request(m_xButton->get_preferred_size().Width(), -1);
+    return m_xButton->get_preferred_size().Width();
+}
+
+void ColorListBox::LockWidthRequest(int nWidth)
+{
+    m_xButton->set_size_request(nWidth, -1);
 }
 
 void ColorListBox::ShowPreview(const NamedColor &rColor)

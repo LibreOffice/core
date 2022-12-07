@@ -45,7 +45,8 @@ private:
 
     void Selected(const svx::NamedThemedColor& rNamedColor);
     void createColorWindow();
-    void LockWidthRequest();
+    void LockWidthRequest(int nWidthRequest);
+    int CalcBestWidthRequest();
     ColorWindow* getColorWindow() const;
 
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
@@ -53,7 +54,7 @@ private:
 public:
     // rTopLevelParentFunction will be used to get parent for any color picker dialog created
     ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
-                 TopLevelParentFunction aTopLevelParentFunction);
+                 TopLevelParentFunction aTopLevelParentFunction, int* pWidthRequestCache = nullptr);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink) { m_aSelectedLink = rLink; }

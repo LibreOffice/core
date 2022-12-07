@@ -212,7 +212,7 @@ private:
     {
     public:
         Entry(weld::Window* pTopLevel, weld::Builder& rBuilder, const char* pTextWidget, const char* pColorWidget,
-              const Color& rColor, int nCheckBoxLabelOffset, bool bCheckBox, bool bShow);
+              const Color& rColor, int nCheckBoxLabelOffset, int* pColorWidthRequest, bool bCheckBox, bool bShow);
     public:
         void SetText(const OUString& rLabel) { dynamic_cast<weld::Label&>(*m_xText).set_label(rLabel); }
         int get_height_request() const
@@ -284,9 +284,10 @@ ColorConfigWindow_Impl::Chapter::Chapter(weld::Builder& rBuilder, const char* pL
 // ColorConfigWindow_Impl::Entry
 ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBuilder,
                                      const char* pTextWidget, const char* pColorWidget,
-                                     const Color& rColor,
-                                     int nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
-    : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget), [pTopLevel]{ return pTopLevel; }))
+                                     const Color& rColor, int nCheckBoxLabelOffset,
+                                     int* pColorWidthRequestCache, bool bCheckBox, bool bShow)
+    : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget),
+                                    [pTopLevel]{ return pTopLevel; }, pColorWidthRequestCache))
     , m_aDefaultColor(rColor)
 {
     if (bCheckBox)
@@ -404,6 +405,8 @@ void ColorConfigWindow_Impl::CreateEntries()
         m_nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
+    int nColorWidthRequestCache = -1;
+
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
     for (size_t i = 0; i < std::size(vEntryInfo); ++i)
@@ -411,7 +414,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *m_xBuilder,
             vEntryInfo[i].pText, vEntryInfo[i].pColor,
             ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i)),
-            m_nCheckBoxLabelOffset,
+            m_nCheckBoxLabelOffset, &nColorWidthRequestCache,
             vEntryInfo[i].bCheckBox,
             aModulesInstalled[vEntryInfo[i].eGroup]));
     }
@@ -445,7 +448,7 @@ void ColorConfigWindow_Impl::CreateEntries()
                 aExtConfig.GetComponentColorConfigValue(sComponentName, i);
             vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *vExtBuilders.back(),
                 "label", "button", aColorEntry.getDefaultColor(),
-                m_nCheckBoxLabelOffset, false, true));
+                m_nCheckBoxLabelOffset, &nColorWidthRequestCache, false, true));
             vEntries.back()->SetText(aColorEntry.getDisplayName());
         }
     }
