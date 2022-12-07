@@ -99,7 +99,7 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 ///
 /// Parameters:
 ///
-/// - namePrefix: field name prefix not not return all user-defined properties
+/// - namePrefix: field name prefix to not return all user-defined properties
 void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
                            const std::map<OUString, OUString>& rArguments)
 {
@@ -138,6 +138,38 @@ void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
         rJsonWriter.put("value", aValue);
     }
 }
+
+/// Implements getCommandValues(".uno:Bookmarks").
+///
+/// Parameters:
+///
+/// - namePrefix: bookmark name prefix to not return all bookmarks
+void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                  const std::map<OUString, OUString>& rArguments)
+{
+    OUString aNamePrefix;
+    {
+        auto it = rArguments.find("namePrefix");
+        if (it != rArguments.end())
+        {
+            aNamePrefix = it->second;
+        }
+    }
+
+    IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
+    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("bookmarks");
+    for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
+    {
+        sw::mark::IMark* pMark = *it;
+        if (!pMark->GetName().startsWith(aNamePrefix))
+        {
+            continue;
+        }
+
+        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        rJsonWriter.put("name", pMark->GetName());
+    }
+}
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
@@ -146,6 +178,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
 
     static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
     static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
+    static constexpr OStringLiteral aBookmarks(".uno:Bookmarks");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -173,9 +206,13 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     {
         GetTextFormFields(rJsonWriter, m_pDocShell, aMap);
     }
-    if (o3tl::starts_with(rCommand, aSetDocumentProperties))
+    else if (o3tl::starts_with(rCommand, aSetDocumentProperties))
     {
         GetDocumentProperties(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aBookmarks))
+    {
+        GetBookmarks(rJsonWriter, m_pDocShell, aMap);
     }
 }
 

@@ -5704,7 +5704,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static constexpr OStringLiteral aFontSubset(".uno:FontSubset&name=");
     static const std::initializer_list<std::u16string_view> vForward = {
         u"TextFormFields",
-        u"SetDocumentProperties"
+        u"SetDocumentProperties",
+        u"Bookmarks"
     };
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
