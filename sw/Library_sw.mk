@@ -759,6 +759,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/uno/unomod \
     sw/source/uibase/uno/unomodule \
     sw/source/uibase/uno/unotxdoc \
+    sw/source/uibase/uno/loktxdoc \
     sw/source/uibase/uno/unotxvw \
     sw/source/uibase/utlui/attrdesc \
     sw/source/uibase/utlui/bookctrl \
