@@ -422,6 +422,8 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
     if (maQueryItems.empty())
     {
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        if (IsXMLToken(sOperator, XML_EMPTY))
+            return;
         if (IsXMLToken(sDataType, XML_NUMBER))
         {
             rItem.mfVal = sConditionValue.toDouble();
