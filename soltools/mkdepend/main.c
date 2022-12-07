@@ -77,6 +77,7 @@ typedef _W64 int   ssize_t;
 #endif
 
 #include <stdarg.h>
+#include <stdlib.h>
 
 #ifdef MINIX
 #define USE_CHMOD   1
@@ -194,6 +195,9 @@ int main(int argc, char    **argv)
             fatalerr("cannot open \"%s\"\n", argv[1]+1);
         (void)fstat(afd, &ast);
         args = (char *)malloc(ast.st_size + 1);
+        if (args == NULL) {
+            abort();
+        }
         if ((ast.st_size = read(afd, args, (size_t) ast.st_size)) < 0)
             fatalerr("failed to read %s\n", argv[1]+1);
         args[ast.st_size] = '\0';
