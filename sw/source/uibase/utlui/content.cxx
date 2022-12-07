@@ -1149,11 +1149,9 @@ SwContentTree::~SwContentTree()
 
 IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    if (rMEvt.IsEnterWindow())
-    {
-        m_xTreeView->get_iter_first(*m_xOverlayCompareEntry);
-        return false;
-    }
+    // initialize the compare entry iterator with the first tree entry iterator
+    if (!m_xOverlayCompareEntry && !m_xTreeView->get_iter_first(*m_xOverlayCompareEntry))
+       return false;
     bool bRemoveOverlayObject = false;
     if (rMEvt.IsLeaveWindow())
     {
@@ -1166,14 +1164,20 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
             const ContentTypeId nType = pCnt->GetParent()->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK &&
-                    nType != ContentTypeId::URLFIELD  && nType != ContentTypeId::REFERENCE &&
-                    nType != ContentTypeId::TEXTFIELD;
-            if (!bRemoveOverlayObject &&
-                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+            bRemoveOverlayObject = nType != ContentTypeId::OUTLINE &&
+                    nType != ContentTypeId::BOOKMARK && nType != ContentTypeId::URLFIELD  &&
+                    nType != ContentTypeId::REFERENCE && nType != ContentTypeId::TEXTFIELD;
+            if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
+                                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
             {
-                m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
-                if (nType == ContentTypeId::BOOKMARK)
+                if (nType == ContentTypeId::OUTLINE)
+                {
+                    SwOutlineNodes aOutlineNodes;
+                    aOutlineNodes.insert(m_pActiveShell->GetNodes().
+                            GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]);
+                    BringHeadingsToAttention(aOutlineNodes);
+                }
+                else if (nType == ContentTypeId::BOOKMARK)
                 {
                     BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
                 }
@@ -1206,14 +1210,17 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             const ContentTypeId nType =
                     weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
-            bRemoveOverlayObject = nType != ContentTypeId::BOOKMARK &&
-                    nType != ContentTypeId::URLFIELD  && nType != ContentTypeId::REFERENCE &&
-                    nType != ContentTypeId::TEXTFIELD;
-            if (!bRemoveOverlayObject &&
-                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+            bRemoveOverlayObject = nType != ContentTypeId::OUTLINE &&
+                    nType != ContentTypeId::BOOKMARK && nType != ContentTypeId::URLFIELD  &&
+                    nType != ContentTypeId::REFERENCE && nType != ContentTypeId::TEXTFIELD;
+            if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
+                                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
             {
-                m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
-                if (nType == ContentTypeId::BOOKMARK)
+                if (nType == ContentTypeId::OUTLINE)
+                {
+                    BringHeadingsToAttention(m_pActiveShell->GetNodes().GetOutLineNds());
+                }
+                else if (nType == ContentTypeId::BOOKMARK)
                 {
                     Reference<frame::XModel> xModel =
                             m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
@@ -1266,6 +1273,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 }
             }
         }
+        m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
     }
     if (bRemoveOverlayObject)
     {
@@ -1275,7 +1283,6 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
             m_xOverlayObject.reset();
         }
-        m_xTreeView->get_iter_first(*m_xOverlayCompareEntry);
     }
     return false;
 }
@@ -5567,6 +5574,53 @@ void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
             break;
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));
+}
+
+void SwContentTree::BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const SwNode* p : rOutlineNodesArr)
+    {
+        if (!p || !p->GetTextNode())
+            continue;
+        if (const SwTextFrame* pFrame = static_cast<const SwTextFrame*>(
+                    p->GetTextNode()->getLayoutFrame(m_pActiveShell->GetLayout())))
+        {
+            SwRect aStartCharRect;
+            SwPosition aStartPos(*p->GetTextNode());
+            pFrame->GetCharRect(aStartCharRect, aStartPos);
+            SwRect aEndCharRect;
+            SwContentIndex nIndex(p->GetTextNode());
+            if (!p->GetTextNode()->GetText().isEmpty())
+                nIndex = p->GetTextNode()->GetText().getLength();
+            SwPosition aEndPos(*p->GetTextNode(), nIndex);
+            pFrame->GetCharRect(aEndCharRect, aEndPos);
+            if (aStartCharRect.Top() == aEndCharRect.Top())
+            {
+                // single line range
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+            }
+            else
+            {
+                // multi line range
+                SwRect aFrameRect = pFrame->getFrameArea();
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aFrameRect.Right(), aStartCharRect.Bottom() + 1);
+                if (aStartCharRect.Bottom() + 1 != aEndCharRect.Top())
+                    aRanges.emplace_back(aFrameRect.Left(), aStartCharRect.Bottom() + 1,
+                                         aFrameRect.Right(), aEndCharRect.Top() + 1);
+                aRanges.emplace_back(aFrameRect.Left(), aEndCharRect.Top() + 1,
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+            }
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
 }
 
 void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rNames)

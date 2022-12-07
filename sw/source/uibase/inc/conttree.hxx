@@ -136,6 +136,7 @@ class SwContentTree final : public SfxListener
     std::unique_ptr<weld::TreeIter> m_xOverlayCompareEntry;
     std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
 
+    void BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr);
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
     void BringReferencesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
