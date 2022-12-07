@@ -1230,4 +1230,34 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
+bool SwView::HandleGestureZoomCommand(const CommandEvent& rCEvt)
+{
+    const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
+
+    if (pData->meEventType == GestureEventZoomType::Begin)
+    {
+        m_fLastZoomScale = pData->mfScaleDelta;
+        return true;
+    }
+
+    if (pData->meEventType == GestureEventZoomType::Update)
+    {
+        double deltaBetweenEvents = (pData->mfScaleDelta - m_fLastZoomScale) / m_fLastZoomScale;
+        m_fLastZoomScale = pData->mfScaleDelta;
+
+        // Accumulate fractional zoom to avoid small zoom changes from being ignored
+        m_fAccumulatedZoom += deltaBetweenEvents;
+        int nZoomChangePercent = m_fAccumulatedZoom * 100;
+        m_fAccumulatedZoom -= nZoomChangePercent / 100.0;
+
+        sal_uInt16 nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+        nFact += nZoomChangePercent;
+        nFact = std::clamp<sal_uInt16>(nFact, MIN_ZOOM_PERCENT, MAX_ZOOM_PERCENT);
+        SetZoom(SvxZoomType::PERCENT, nFact);
+
+        return true;
+    }
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
