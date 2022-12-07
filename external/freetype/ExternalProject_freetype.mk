@@ -23,7 +23,6 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-brotli \
 			--without-bzip2 \
 			--without-harfbuzz \
-			--without-png \
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			CFLAGS="$(CFLAGS) $(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
