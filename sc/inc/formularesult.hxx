@@ -35,12 +35,13 @@ struct FormulaResultValue
 
     double mfValue;
     svl::SharedString maString;
+    bool mbMultiLine = false;
     Type meType;
     FormulaError mnError;
 
     FormulaResultValue();
     FormulaResultValue( double fValue );
-    FormulaResultValue( svl::SharedString aStr );
+    FormulaResultValue( svl::SharedString aStr, bool bMultiLine );
     FormulaResultValue( FormulaError nErr );
 };
 

@@ -15,6 +15,7 @@
 
 class ScColumn;
 class ScFormulaCell;
+class EditTextObject;
 
 namespace svl
 {
@@ -69,6 +70,8 @@ public:
     void reset(size_t nSize);
     void setValue(size_t nRow, double fVal);
     void setValue(size_t nRow, const svl::SharedString& rStr);
+    /// Takes ownership of pEditText.
+    void setValue(size_t nRow, std::unique_ptr<EditTextObject> pEditText);
 
     void swap(CellValues& r);
 

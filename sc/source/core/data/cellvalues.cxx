@@ -11,6 +11,7 @@
 #include <cellvalues.hxx>
 #include <column.hxx>
 #include <formulacell.hxx>
+#include <editeng/editobj.hxx>
 
 #include <cassert>
 
@@ -144,6 +145,12 @@ void CellValues::setValue( size_t nRow, double fVal )
 void CellValues::setValue( size_t nRow, const svl::SharedString& rStr )
 {
     mpImpl->miCellPos = mpImpl->maCells.set(mpImpl->miCellPos, nRow, rStr);
+    mpImpl->miAttrPos = mpImpl->maCellTextAttrs.set(mpImpl->miAttrPos, nRow, sc::CellTextAttr());
+}
+
+void CellValues::setValue( size_t nRow, std::unique_ptr<EditTextObject> pEditText )
+{
+    mpImpl->miCellPos = mpImpl->maCells.set(mpImpl->miCellPos, nRow, pEditText.release());
     mpImpl->miAttrPos = mpImpl->maCellTextAttrs.set(mpImpl->miAttrPos, nRow, sc::CellTextAttr());
 }
 

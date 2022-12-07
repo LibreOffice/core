@@ -30,6 +30,7 @@
 #include <compiler.hxx>
 #include <recursionhelper.hxx>
 #include <docsh.hxx>
+#include <editutil.hxx>
 
 #include <SparklineGroup.hxx>
 
@@ -478,13 +479,15 @@ namespace {
 class ConvertFormulaToValueHandler
 {
     sc::CellValues maResValues;
+    ScDocument& mrDoc;
     bool mbModified;
 
 public:
-    ConvertFormulaToValueHandler(ScSheetLimits const & rSheetLimits) :
+    ConvertFormulaToValueHandler(ScDocument& rDoc) :
+        mrDoc(rDoc),
         mbModified(false)
     {
-        maResValues.reset(rSheetLimits.GetMaxRowCount());
+        maResValues.reset(mrDoc.GetSheetLimits().GetMaxRowCount());
     }
 
     void operator() ( size_t nRow, const ScFormulaCell* pCell )
@@ -496,7 +499,18 @@ public:
                 maResValues.setValue(nRow, aRes.mfValue);
             break;
             case sc::FormulaResultValue::String:
-                maResValues.setValue(nRow, aRes.maString);
+                if (aRes.mbMultiLine)
+                {
+                    ScFieldEditEngine& rEngine = mrDoc.GetEditEngine();
+                    rEngine.SetTextCurrentDefaults(aRes.maString.getString());
+                    std::unique_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
+                    pObj->NormalizeString(mrDoc.GetSharedStringPool());
+                    maResValues.setValue(nRow, std::move(pObj));
+                }
+                else
+                {
+                    maResValues.setValue(nRow, aRes.maString);
+                }
             break;
             case sc::FormulaResultValue::Error:
             case sc::FormulaResultValue::Invalid:
@@ -528,7 +542,7 @@ void ScColumn::ConvertFormulaToValue(
     sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 
     // Parse all formulas within the range and store their results into temporary storage.
-    ConvertFormulaToValueHandler aFunc(GetDoc().GetSheetLimits());
+    ConvertFormulaToValueHandler aFunc(GetDoc());
     sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     if (!aFunc.isModified())
         // No formula cells encountered.
