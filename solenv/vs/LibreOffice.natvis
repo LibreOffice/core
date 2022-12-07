@@ -10,21 +10,31 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="rtl::OUString">
     <DisplayString>{*pData}</DisplayString>
-    <StringView>*pData,su</StringView>
+    <StringView>*pData</StringView>
   </Type>
   <Type Name="rtl::OString">
     <DisplayString>{*pData}</DisplayString>
-    <StringView>*pData,s</StringView>
+    <StringView>*pData</StringView>
   </Type>
   <Type Name="_rtl_uString">
     <DisplayString Condition="length == 0">empty</DisplayString>
-    <DisplayString>u"{buffer,[length]sub}"</DisplayString>
-    <StringView>buffer,[length]sub</StringView>
+    <DisplayString>{buffer,[length]na}</DisplayString>
+    <StringView>buffer,[length]na</StringView>
+    <Expand HideRawView="true">
+      <Item Name="refCount">refCount</Item>
+      <Item Name="length">length</Item>
+      <Item Name="buffer">buffer,[length+1]</Item>
+	</Expand>
   </Type>
   <Type Name="_rtl_String">
     <DisplayString Condition="length == 0">empty</DisplayString>
-    <DisplayString>{buffer,[length]s}</DisplayString>
-    <StringView>buffer,[length]s</StringView>
+    <DisplayString>{buffer,[length]na}</DisplayString>
+    <StringView>buffer,[length]na</StringView>
+    <Expand HideRawView="true">
+      <Item Name="refCount">refCount</Item>
+      <Item Name="length">length</Item>
+      <Item Name="buffer">buffer,[length+1]</Item>
+	</Expand>
   </Type>
   <Type Name="rtl::OUStringLiteral &lt; * &gt;">
     <DisplayString>{str}</DisplayString>
