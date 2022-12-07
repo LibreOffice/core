@@ -464,7 +464,7 @@ class AquaSalGraphics : public SalGraphicsAutoDelegateToImpl
     rtl::Reference<CoreTextStyle>           mpTextStyle[MAX_FALLBACK];
 
 public:
-                            AquaSalGraphics();
+                            AquaSalGraphics(bool bPrinter = false);
     virtual                 ~AquaSalGraphics() override;
 
     void                    SetVirDevGraphics(SalVirtualDevice* pVirDev,CGLayerHolder const &rLayer, CGContextRef, int nBitDepth = 0);
