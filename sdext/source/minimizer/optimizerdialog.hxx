@@ -188,8 +188,6 @@ public:
 
     void                execute();
 
-    sal_Int16           mnCurrentStep;
-    sal_Int16           mnTabIndex;
     short               mnEndStatus;
     bool                mbIsReadonly;
 

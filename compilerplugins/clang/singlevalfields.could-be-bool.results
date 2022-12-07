@@ -1,11 +1,32 @@
+/Xlib.h:187
+    XGCValues line_style
+    int
+/Xlib.h:303
+    XSetWindowAttributes override_redirect
+    int
+canvas/inc/spriteredrawmanager.hxx:170
+    canvas::SpriteRedrawManager::SpriteChangeRecord meChangeType
+    ChangeType
+configmgr/source/components.hxx:159
+    configmgr::Components modificationTarget_
+    ModificationTarget
 connectivity/source/inc/dbase/dindexnode.hxx:119
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:234
+cppu/source/AffineBridge/AffineBridge.cxx:46
+    (anonymous namespace)::AffineBridge m_message
+    Msg
+cui/source/inc/cfg.hxx:236
     SvxConfigEntry nId
     sal_uInt16
-desktop/source/app/main.c:29
-    /home/noel/libo2/desktop/source/app/main.c g_Exiting
+dbaccess/source/core/api/query.hxx:67
+    dbaccess::OQuery m_eDoingCurrently
+    AggregateAction
+dbaccess/source/core/inc/querycontainer.hxx:65
+    dbaccess::OQueryContainer m_eDoingCurrently
+    AggregateAction
+desktop/source/app/main.c:30
+    /home/noel/libo/desktop/source/app/main.c g_Exiting
     int
 editeng/source/misc/hangulhanja.cxx:78
     editeng::HangulHanjaConversion_Impl m_eConvType
@@ -13,9 +34,66 @@ editeng/source/misc/hangulhanja.cxx:78
 editeng/source/misc/svxacorr.cxx:233
     GetIgnoreTranslWrapper bIsInit
     int
+emfio/inc/mtftools.hxx:406
+    emfio::WinMtfFillStyle aType
+    WinMtfFillStyleType
+filter/source/graphicfilter/icgm/elements.hxx:43
+    CGMElements eScalingMode
+    ScalingMode
+filter/source/graphicfilter/icgm/elements.hxx:46
+    CGMElements eVDCType
+    VDCType
+filter/source/graphicfilter/icgm/elements.hxx:48
+    CGMElements eVDCRealPrecision
+    RealPrecision
+filter/source/graphicfilter/icgm/elements.hxx:55
+    CGMElements eDeviceViewPortMap
+    DeviceViewPortMap
+filter/source/graphicfilter/icgm/elements.hxx:62
+    CGMElements eClipIndicator
+    ClipIndicator
+filter/source/graphicfilter/icgm/elements.hxx:65
+    CGMElements eColorSelectionMode
+    ColorSelectionMode
+filter/source/graphicfilter/icgm/elements.hxx:80
+    CGMElements eLineWidthSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:87
+    CGMElements eMarkerSizeSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:92
+    CGMElements eEdgeVisibility
+    EdgeVisibility
+filter/source/graphicfilter/icgm/elements.hxx:93
+    CGMElements eEdgeWidthSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:119
+    CGMElements eTransparency
+    Transparency
+filter/source/xmlfilteradaptor/XmlFilterAdaptor.hxx:57
+    XmlFilterAdaptor meType
+    FilterType
+forms/source/richtext/rtattributehandler.hxx:147
+    frm::ParagraphDirectionHandler m_eParagraphDirection
+    SvxFrameDirection
+forms/source/richtext/rtattributehandler.hxx:148
+    frm::ParagraphDirectionHandler m_eDefaultAdjustment
+    SvxAdjust
+forms/source/richtext/rtattributehandler.hxx:149
+    frm::ParagraphDirectionHandler m_eOppositeDefaultAdjustment
+    SvxAdjust
+fpicker/source/office/iodlgimp.hxx:138
+    SvtExpFileDlg_Impl m_eDlgType
+    SvtFileDlgType
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
+include/svtools/brwbox.hxx:313
+    BrowseBox bHideCursor
+    TriState
+include/svtools/ruler.hxx:524
+    RulerIndent nStyle
+    RulerIndentStyle
 include/svtools/ruler.hxx:621
     Ruler mnBorderWidth
     tools::Long
@@ -34,84 +112,153 @@ include/vcl/headbar.hxx:209
 include/vcl/toolkit/dialog.hxx:54
     Dialog mnMousePositioned
     tools::Long
-jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:199
+include/vcl/weldutils.hxx:327
+    weld::TimeFormatter m_eTimeFormat
+    TimeFormat
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:195
     (anonymous) g_bInGetJavaVM
     sig_atomic_t
-libreofficekit/source/gtk/tilebuffer.hxx:232
+jvmfwk/source/fwkbase.cxx:385
+    jfw::getMode g_mode
+    JFW_MODE
+libreofficekit/source/gtk/tilebuffer.hxx:230
     LOEvent m_nSetGraphicSelectionType
     int
+oox/inc/drawingml/textspacing.hxx:62
+    oox::drawingml::TextSpacing nUnit
+    Unit
 sal/rtl/cipher.cxx:113
     (anonymous namespace)::Cipher_Impl m_algorithm
     rtlCipherAlgorithm
+sc/source/filter/inc/drawingbase.hxx:122
+    oox::xls::ShapeAnchor meCellAnchorType
+    CellAnchorType
+sc/source/filter/inc/orcusinterface.hxx:437
+    ScOrcusStyles::xf meHorAlignMethod
+    SvxCellJustifyMethod
+sc/source/filter/inc/orcusinterface.hxx:438
+    ScOrcusStyles::xf meVerAlignMethod
+    SvxCellJustifyMethod
 sc/source/filter/inc/stylesbuffer.hxx:288
     oox::xls::ApiAlignmentData mnHorJustifyMethod
     sal_Int32
 sc/source/filter/inc/stylesbuffer.hxx:290
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
+sc/source/filter/inc/xlroot.hxx:76
+    XclRootData meOutput
+    XclOutput
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1083
     (anonymous namespace)::ScPagePreviewCountData nHeaders
     tools::Long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1085
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
     (anonymous namespace)::ScPagePreviewCountData nTables
     tools::Long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1087
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1086
     (anonymous namespace)::ScPagePreviewCountData nFooters
     tools::Long
+sc/source/ui/inc/AnalysisOfVarianceDialog.hxx:33
+    ScAnalysisOfVarianceDialog meFactor
+    AnovaFactor
+sc/source/ui/inc/gridwin.hxx:153
+    ScGridWindow eHWhich
+    ScHSplitPos
+sc/source/ui/inc/gridwin.hxx:154
+    ScGridWindow eVWhich
+    ScVSplitPos
+sc/source/ui/inc/StatisticsInputOutputDialog.hxx:63
+    ScStatisticsInputOutputDialog mGroupedBy
+    GroupedBy
+sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:65
+    ScStatisticsTwoVariableDialog mGroupedBy
+    GroupedBy
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     tools::Long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:854
+sd/qa/unit/tiledrendering/tiledrendering.cxx:895
     (anonymous namespace)::ViewCallback m_nPart
     int
-soltools/cpp/_tokens.c:35
-    /home/noel/libo2/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
-    int
-soltools/cpp/_tokens.c:36
-    /home/noel/libo2/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
-    int
+sd/source/filter/html/htmlex.hxx:142
+    HtmlExport meScript
+    PublishingScript
+sd/source/filter/html/HtmlOptionsDialog.cxx:54
+    (anonymous namespace)::SdHtmlOptionsDialog meDocType
+    DocumentType
+sd/source/ui/slideshow/slideshowimpl.hxx:304
+    sd::SlideshowImpl meAnimationMode
+    AnimationMode
+sd/source/ui/slideshow/slideshowviewimpl.hxx:65
+    sd::WrappedMouseMotionEvent meType
+    EventType
+sdext/source/pdfimport/inc/genericelements.hxx:207
+    pdfi::ParagraphElement Type
+    ParagraphType
 soltools/cpp/cpp.h:121
     includelist always
     char
-svx/source/inc/cell.hxx:202
+svx/source/inc/cell.hxx:200
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
-svx/source/table/tablertfimporter.cxx:57
+svx/source/table/tablertfimporter.cxx:58
     sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
-sw/source/filter/ww8/docxexport.hxx:98
+sw/source/filter/html/parcss1.hxx:195
+    CSS1Parser m_eState
+    CSS1ParserState
+sw/source/filter/ww8/docxexport.hxx:107
     DocxExport m_nHeadersFootersInSection
     sal_Int32
-sw/source/filter/ww8/ww8scan.hxx:57
+sw/source/filter/ww8/ww8scan.hxx:58
     SprmInfo nVari
     unsigned int
+sw/source/uibase/inc/edtwin.hxx:100
+    SwEditWin m_aActHitType
+    SdrHitKind
 sw/source/uibase/inc/tautofmt.hxx:48
     SwAutoFormatDlg m_nDfltStylePos
     sal_uInt8
+toolkit/inc/controls/table/tablecontrolinterface.hxx:89
+    svt::table::TableCell eArea
+    TableCellArea
+ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:321
+    (anonymous namespace)::WebDAVResponseParser maLockScope
+    ucb::LockScope
+unotools/source/config/configvaluecontainer.cxx:52
+    utl::NodeValueAccessor eLocationType
+    LocationType
 vcl/inc/unx/i18n_ic.hxx:32
     SalI18N_InputContext mbUseable
     int
-vcl/inc/unx/salframe.h:125
+vcl/inc/unx/printergfx.hxx:53
+    psp::PrinterColor meColorspace
+    ColorSpace
+vcl/inc/unx/salframe.h:129
     X11SalFrame mbInputFocus
     int
-vcl/source/filter/eps/eps.cxx:141
-    (anonymous namespace)::PSWriter nNextChrSetId
-    sal_uInt8
-vcl/unx/generic/app/saldata.cxx:449
+vcl/skia/SkiaHelper.cxx:353
+    SkiaHelper methodToUse
+    RenderMethod
+vcl/source/filter/graphicfilter.cxx:525
+    (anonymous namespace)::GraphicImportContext m_nImportFlags
+    GraphicFilterImportFlags
+vcl/unx/generic/app/saldata.cxx:445
     EmitFontpathWarning bOnce
     int
-vcl/unx/generic/app/saldata.cxx:502
+vcl/unx/generic/app/saldata.cxx:498
     X11SalData::XError bOnce
     int
 vcl/unx/generic/app/sm.cxx:184
-    /home/noel/libo2/vcl/unx/generic/app/sm.cxx nSmDel
+    /home/noel/libo/vcl/unx/generic/app/sm.cxx nSmDel
     int
-vcl/workben/icontest.cxx:145
+vcl/workben/icontest.cxx:143
     (anonymous namespace)::IconTestApp nRet
     int
-workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
-    /home/noel/libo2/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
-    int
+vcl/workben/vcldemo.cxx:97
+    (anonymous namespace)::DemoRenderer::RenderContext meStyle
+    RenderStyle
 writerfilter/source/dmapper/PageBordersHandler.hxx:47
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
     class SectionPropertyMap::BorderOffsetFrom
+xmlsecurity/source/helper/ooxmlsecparser.cxx:965
+    OOXMLSecParser::DsSignaturePropertyContext m_Property
+    SignatureProperty

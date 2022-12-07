@@ -587,7 +587,6 @@ NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox
                                        uno::Reference<frame::XFrame> xFrame)
     : m_xComboBox(std::move(xComboBox))
     ,m_xFrame(std::move(xFrame))
-    ,m_bRelease(true)
 {
     m_xComboBox->set_size_request(150, -1);
 
@@ -612,12 +611,6 @@ NavElementBox_Impl::NavElementBox_Impl(vcl::Window* pParent,
 
 void NavElementBox_Base::ReleaseFocus_Impl()
 {
-    if ( !m_bRelease )
-    {
-        m_bRelease = true;
-        return;
-    }
-
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
         m_xFrame->getContainerWindow()->setFocus();
 }

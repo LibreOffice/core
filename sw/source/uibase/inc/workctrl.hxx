@@ -117,7 +117,6 @@ public:
 protected:
     std::unique_ptr<weld::ComboBox> m_xComboBox;
     uno::Reference< frame::XFrame > m_xFrame;
-    bool m_bRelease;
 
     virtual bool DoKeyInput(const KeyEvent& /*rKEvt*/);
 

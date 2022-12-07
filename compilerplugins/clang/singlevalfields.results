@@ -1,16 +1,154 @@
-avmedia/inc/mediacontrol.hxx:64
-    avmedia::MediaControl maIdle
-    avmedia MediaControl Idle
-avmedia/inc/mediacontrol.hxx:65
-    avmedia::MediaControl maChangeTimeIdle
-    avmedia MediaControl Change Time Idle
+-1.0/atk/atkobject.h:477
+    _AtkPropertyValues property_name
+    accessible-table-column-header
+-1.0/atk/atkobject.h:531
+    _AtkObject layer
+    0
+/certt.h:760
+    CERTVerifyLogStr count
+    0
+/certt.h:762
+    CERTVerifyLogStr tail
+    0
+/certt.h:1171
+    CERTRevocationTests number_of_defined_methods
+    2
+/certt.h:1195
+    CERTRevocationTests number_of_preferred_methods
+    0
+/certt.h:1204
+    CERTRevocationTests preferred_methods
+    0
+/certt.h:1211
+    CERTRevocationTests cert_rev_method_independent_flags
+    1
+/certt.h:1221
+    CERTValParamInValueStr::(unnamed union at /usr/include/nss/certt.h:1220:5) b
+    1
+/certt.h:1259
+    CERTValParamOutValueStr::(unnamed union at /usr/include/nss/certt.h:1255:5) cert
+    0
+/cmst.h:488
+    NSSCMSAttributeStr encoded
+    1
+/extensions/Xrender.h:68
+    _XRenderPictureAttributes repeat
+    1
+/extensions/Xrender.h:74
+    _XRenderPictureAttributes clip_mask
+    0
+/secoidt.h:523
+    SECOidDataStr offset
+    0
+/secoidt.h:525
+    SECOidDataStr mechanism
+    544
+/secoidt.h:526
+    SECOidDataStr supportedExtension
+    1
+/SM/SMlib.h:137
+    (anonymous struct)::(unnamed struct at /usr/include/X11/SM/SMlib.h:135:5) client_data
+    0
+/SM/SMlib.h:142
+    (anonymous struct)::(unnamed struct at /usr/include/X11/SM/SMlib.h:140:5) client_data
+    0
+/SM/SMlib.h:147
+    (anonymous struct)::(unnamed struct at /usr/include/X11/SM/SMlib.h:145:5) client_data
+    0
+/SM/SMlib.h:152
+    (anonymous struct)::(unnamed struct at /usr/include/X11/SM/SMlib.h:150:5) client_data
+    0
+/Xlib.h:186
+    XGCValues line_width
+    1
+/Xlib.h:193
+    XGCValues fill_rule
+    0
+/Xlib.h:200
+    XGCValues subwindow_mode
+    0
+/Xlib.h:201
+    XGCValues graphics_exposures
+    0
+/Xlib.h:228
+    Visual ext_data
+    0
+/Xlib.h:291
+    XSetWindowAttributes background_pixmap
+    0
+/Xlib.h:292
+    XSetWindowAttributes background_pixel
+    0
+/Xlib.h:294
+    XSetWindowAttributes border_pixel
+    0
+/Xlib.h:300
+    XSetWindowAttributes save_under
+    1
+/Xlib.h:313
+    XWindowAttributes visual
+    0
+/Xlib.h:333
+    XWindowAttributes screen
+    0
+/Xlib.h:362
+    _XImage xoffset
+    0
+/Xlib.h:363
+    _XImage format
+    2
+/Xlib.h:375
+    _XImage obdata
+    0
+/Xlib.h:404
+    XWindowChanges stack_mode
+    0
+/Xlib.h:413
+    XColor flags
+    7
+/Xlib.h:576
+    XButtonEvent type
+    5
+/Xlib.h:588
+    XButtonEvent same_screen
+    1
+/Xlib.h:637
+    XFocusChangeEvent send_event
+    1
+/Xlib.h:873
+    XSelectionEvent send_event
+    1
+/Xlib.h:898
+    XClientMessageEvent type
+    33
+/Xutil.h:166
+    XTextProperty format
+    8
+/Xutil.h:300
+    XVisualInfo colormap_size
+    0
+/Xutil.h:301
+    XVisualInfo bits_per_rgb
+    8
+a-11-openjdk-amd64/include/jawt.h:247
+    jawt version
+    65539
+a-11-openjdk-amd64/include/jni.h:1880
+    JavaVMInitArgs version
+    65538
+a-11-openjdk-amd64/include/jni.h:1884
+    JavaVMInitArgs ignoreUnrecognized
+    1
 avmedia/source/framework/soundhandler.hxx:114
     avmedia::SoundHandler m_aUpdateIdle
     avmedia SoundHandler Update
-basctl/source/basicide/baside2.hxx:84
+b.h:89
+    z_stream_s total_in
+    0
+basctl/source/basicide/baside2.hxx:86
     basctl::EditorWindow aHighlighter
     0
-basctl/source/inc/dlged.hxx:132
+basctl/source/inc/dlged.hxx:131
     basctl::DlgEditor aMarkIdle
     basctl DlgEditor Mark
 binaryurp/source/proxy.hxx:80
@@ -37,40 +175,31 @@ bridges/inc/unointerfaceproxy.hxx:83
 bridges/source/jni_uno/jni_bridge.h:52
     jni_uno::Bridge m_ref
     1
-bridges/source/jni_uno/jni_uno2java.cxx:391
+bridges/source/jni_uno/jni_uno2java.cxx:390
     jni_uno::(anonymous namespace)::UNO_proxy m_ref
     1
-canvas/inc/rendering/irendermodule.hxx:35
+canvas/inc/rendering/irendermodule.hxx:36
     canvas::Vertex b
     1\10
-canvas/inc/rendering/irendermodule.hxx:35
+canvas/inc/rendering/irendermodule.hxx:36
     canvas::Vertex g
     1\10
-canvas/inc/rendering/irendermodule.hxx:35
+canvas/inc/rendering/irendermodule.hxx:36
     canvas::Vertex r
     1\10
-canvas/inc/rendering/irendermodule.hxx:37
+canvas/inc/rendering/irendermodule.hxx:38
     canvas::Vertex z
     0\10
-chart2/source/controller/dialogs/DataBrowser.cxx:201
-    chart::impl::SeriesHeader m_aUpdateDataTimer
-    UpdateDataTimer
-chart2/source/controller/inc/ChartController.hxx:377
+chart2/source/controller/inc/ChartController.hxx:385
     chart::ChartController m_aLifeTimeManager
     0
-chart2/source/controller/inc/TitleDialogData.hxx:33
-    chart::TitleDialogData aPossibilityList
-    7
-chart2/source/controller/inc/TitleDialogData.hxx:34
-    chart::TitleDialogData aExistenceList
-    7
-chart2/source/controller/inc/TitleDialogData.hxx:35
+chart2/source/controller/inc/TitleDialogData.hxx:37
     chart::TitleDialogData aTextList
     7
-chart2/source/model/main/DataPoint.hxx:107
+chart2/source/model/main/DataPoint.hxx:104
     chart::DataPoint m_bNoParentPropAllowed
     0
-comphelper/source/misc/threadpool.cxx:37
+comphelper/source/misc/threadpool.cxx:39
     comphelper gbIsWorkerThread
     1
 connectivity/source/inc/dbase/DIndexIter.hxx:33
@@ -79,28 +208,28 @@ connectivity/source/inc/dbase/DIndexIter.hxx:33
 connectivity/source/inc/dbase/DIndexIter.hxx:34
     connectivity::dbase::OIndexIterator m_pOperand
     0
-connectivity/source/inc/OColumn.hxx:40
+connectivity/source/inc/OColumn.hxx:41
     connectivity::OColumn m_AutoIncrement
     0
-connectivity/source/inc/OColumn.hxx:41
+connectivity/source/inc/OColumn.hxx:42
     connectivity::OColumn m_CaseSensitive
     0
-connectivity/source/inc/OColumn.hxx:42
+connectivity/source/inc/OColumn.hxx:43
     connectivity::OColumn m_Searchable
     1
-connectivity/source/inc/OColumn.hxx:43
+connectivity/source/inc/OColumn.hxx:44
     connectivity::OColumn m_Currency
     0
-connectivity/source/inc/OColumn.hxx:44
+connectivity/source/inc/OColumn.hxx:45
     connectivity::OColumn m_Signed
     0
-connectivity/source/inc/OColumn.hxx:45
+connectivity/source/inc/OColumn.hxx:46
     connectivity::OColumn m_ReadOnly
     1
-connectivity/source/inc/OColumn.hxx:46
+connectivity/source/inc/OColumn.hxx:47
     connectivity::OColumn m_Writable
     0
-connectivity/source/inc/OColumn.hxx:47
+connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable
     0
 connectivity/source/inc/writer/WTable.hxx:43
@@ -109,115 +238,166 @@ connectivity/source/inc/writer/WTable.hxx:43
 cppu/source/uno/copy.hxx:38
     cppu::(anonymous namespace)::SequencePrefix nRefCount
     1
-cui/source/inc/acccfg.hxx:100
-    SfxAcceleratorConfigPage m_aUpdateDataTimer
-    UpdateDataTimer
-cui/source/inc/AdditionsDialog.hxx:59
-    AdditionsDialog m_aSearchDataTimer
-    SearchDataTimer
-cui/source/inc/cfg.hxx:372
-    SvxConfigPage m_aUpdateDataTimer
-    UpdateDataTimer
-cui/source/inc/linkdlg.hxx:45
-    SvBaseLinksDlg aUpdateIdle
-    cui SvBaseLinksDlg UpdateIdle
-cui/source/inc/thesdlg.hxx:31
+cui/source/inc/thesdlg.hxx:33
     SvxThesaurusDialog m_aModifyIdle
     cui SvxThesaurusDialog LookUp Modify
-cui/source/options/optgdlg.cxx:1010
-    LanguageConfig_Impl aLanguageOptions
+cui/source/options/optgdlg.cxx:988
+    LanguageConfig_Impl aCTLLanguageOptions
     0
 cui/source/options/optjava.hxx:59
     SvxJavaOptionsPage m_aResetIdle
     cui options SvxJavaOptionsPage Reset
-dbaccess/source/ui/inc/sqledit.hxx:42
+db.h:567
+    addrinfo ai_flags
+    2
+db.h:569
+    addrinfo ai_socktype
+    1
+db.h:570
+    addrinfo ai_protocol
+    6
+dbaccess/source/ui/inc/QueryTextView.hxx:35
+    dbaui::OQueryTextView m_timerUndoActionCreation
+    dbaccess OQueryTextView m_timerUndoActionCreation
+dbaccess/source/ui/inc/QueryTextView.hxx:37
+    dbaui::OQueryTextView m_timerInvalidate
+    dbaccess OQueryTextView m_timerInvalidate
+dbaccess/source/ui/inc/sqledit.hxx:43
     dbaui::SQLEditView m_aHighlighter
     1
-desktop/source/app/app.cxx:480
+dbaccess/source/ui/querydesign/SelectionBrowseBox.hxx:57
+    dbaui::OSelectionBrowseBox m_timerInvalidate
+    dbaccess OSelectionBrowseBox m_timerInvalidate
+dbaccess/source/ui/tabledesign/TEditControl.hxx:70
+    dbaui::OTableEditorCtrl::ClipboardInvalidator m_aInvalidateTimer
+    dbaccess ClipboardInvalidator
+desktop/inc/lib/init.hxx:224
+    desktop::CallbackFlushHandler::PerViewIdData set
+    0
+desktop/source/app/app.cxx:493
     desktop::Desktop::Init bTryHardOfficeconfigBroken
     0
-desktop/source/app/cmdlineargs.hxx:136
+desktop/source/app/cmdlineargs.hxx:135
     desktop::CommandLineArgs m_quickstart
     0
-drawinglayer/source/primitive2d/sceneprimitive2d.cxx:373
+desktop/source/deployment/gui/license_dialog.cxx:44
+    dp_gui::(anonymous namespace)::LicenseDialogImpl m_aResized
+    desktop LicenseDialogImpl m_aResized
+desktop/source/deployment/gui/license_dialog.cxx:45
+    dp_gui::(anonymous namespace)::LicenseDialogImpl m_aRepeat
+    LicenseDialogImpl m_aRepeat
+drawinglayer/source/primitive2d/glowprimitive2d.cxx:209
+    drawinglayer::primitive2d::GlowPrimitive2D::create2DDecomposition bDoSaveForVisualControl
+    0
+drawinglayer/source/primitive2d/sceneprimitive2d.cxx:371
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bMultithreadAllowed
     0
-drawinglayer/source/primitive2d/sceneprimitive2d.cxx:481
+drawinglayer/source/primitive2d/sceneprimitive2d.cxx:479
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bAddOutlineToCreated3DSceneRepresentation
     0
-drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:333
+drawinglayer/source/primitive2d/shadowprimitive2d.cxx:256
+    drawinglayer::primitive2d::ShadowPrimitive2D::create2DDecomposition bDoSaveForVisualControl
+    0
+drawinglayer/source/primitive2d/softedgeprimitive2d.cxx:199
+    drawinglayer::primitive2d::SoftEdgePrimitive2D::create2DDecomposition bDoSaveForVisualControl
+    0
+drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:460
     drawinglayer::impBufferDevice::paint bDoSaveForVisualControl
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:950
+drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:539
+    drawinglayer::impBufferDevice::paint bUseNew
+    0
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1014
     drawinglayer::processor2d::VclMetafileProcessor2D::processGraphicPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1298
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1331
     drawinglayer::processor2d::VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2057
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2167
     drawinglayer::processor2d::VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D bForceToMetafile
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2158
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2268
     drawinglayer::processor2d::VclMetafileProcessor2D::processTransparencePrimitive2D bForceToBigTransparentVDev
     0
-drawinglayer/source/tools/converters.cxx:91
+drawinglayer/source/tools/converters.cxx:225
     drawinglayer::convertToBitmapEx bDoSaveForVisualControl
     0
-editeng/source/editeng/impedit.hxx:530
+editeng/source/editeng/impedit.hxx:538
     ImpEditEngine nBigTextObjectStart
     20
 emfio/qa/cppunit/wmf/wmfimporttest.cxx:34
     WmfTest maDataUrl
     /emfio/qa/cppunit/wmf/data/
-emfio/source/reader/emfreader.cxx:1596
+emfio/source/reader/emfreader.cxx:1505
     emfio::EmfReader::ReadEnhWMF bDoSaveForVisualControl
     0
-extensions/source/bibliography/bibcont.hxx:67
-    BibBookContainer aIdle
-    extensions BibBookContainer Split Idle
-filter/source/msfilter/msdffimp.cxx:2637
+etype2/freetype/ftcolor.h:347
+    FT_LayerIterator_ p
+    0
+etype2/freetype/ftimage.h:266
+    FT_Bitmap_ num_grays
+    256
+etype2/freetype/ftimage.h:665
+    FT_Outline_Funcs_ shift
+    0
+etype2/freetype/ftimage.h:666
+    FT_Outline_Funcs_ delta
+    0
+extensions/source/bibliography/toolbar.hxx:145
+    BibToolBar aIdle
+    BibToolBar
+external/bluez_bluetooth/inc/bluetooth/rfcomm.h:43
+    sockaddr_rc rc_family
+    31
+external/bluez_bluetooth/inc/bluetooth/rfcomm.h:45
+    sockaddr_rc rc_channel
+    5
+external/sane/inc/sane/sane.h:170
+    SANE_Parameters format
+    5
+filter/source/msfilter/msdffimp.cxx:2694
     DffPropertyReader::ApplyAttributes bCheckShadow
     0
 filter/source/msfilter/viscache.hxx:29
     Impl_OlePres nFormat
     3
-framework/source/services/autorecovery.cxx:398
-    (anonymous namespace)::AutoRecovery m_aTimer
-    Auto save timer
-framework/source/uiconfiguration/imagemanagerimpl.hxx:172
+framework/source/uiconfiguration/imagemanagerimpl.hxx:173
     framework::ImageManagerImpl m_aResourceString
     private:resource/images/moduleimages
-helpcompiler/inc/BasCodeTagger.hxx:28
+go-1.0/pango/pango-attributes.h:309
+    _PangoAttribute start_index
+    0
+go-1.0/pango/pango-attributes.h:310
+    _PangoAttribute end_index
+    2147483647
+helpcompiler/inc/BasCodeTagger.hxx:27
     BasicCodeTagger m_Highlighter
     0
-i18npool/source/localedata/localedata.cxx:50
-    /home/noel/libo2/i18npool/source/localedata/localedata.cxx lcl_DATA_EN
-    localedata_en
-i18npool/source/localedata/localedata.cxx:51
-    /home/noel/libo2/i18npool/source/localedata/localedata.cxx lcl_DATA_ES
-    localedata_es
 i18npool/source/localedata/localedata.cxx:52
-    /home/noel/libo2/i18npool/source/localedata/localedata.cxx lcl_DATA_EURO
-    localedata_euro
+    /home/noel/libo/i18npool/source/localedata/localedata.cxx lcl_DATA_EN
+    localedata_en
 i18npool/source/localedata/localedata.cxx:53
-    /home/noel/libo2/i18npool/source/localedata/localedata.cxx lcl_DATA_OTHERS
+    /home/noel/libo/i18npool/source/localedata/localedata.cxx lcl_DATA_ES
+    localedata_es
+i18npool/source/localedata/localedata.cxx:54
+    /home/noel/libo/i18npool/source/localedata/localedata.cxx lcl_DATA_EURO
+    localedata_euro
+i18npool/source/localedata/localedata.cxx:55
+    /home/noel/libo/i18npool/source/localedata/localedata.cxx lcl_DATA_OTHERS
     localedata_others
-idlc/source/idlccompile.cxx:51
-    /home/noel/libo2/idlc/source/idlccompile.cxx yydebug
-    0
 include/basegfx/pixel/bpixel.hxx:41
-    basegfx::BPixel::(anonymous union)::(anonymous) mnValue
+    basegfx::BPixel::(anonymous union)::(unnamed struct at /home/noel/libo/include/basegfx/pixel/bpixel.hxx:39:13) mnValue
     0
 include/basegfx/pixel/bpixel.hxx:42
-    basegfx::BPixel::(anonymous) maCombinedRGBA
+    basegfx::BPixel::(unnamed union at /home/noel/libo/include/basegfx/pixel/bpixel.hxx:29:9) maCombinedRGBA
     0
 include/basic/sbxvar.hxx:75
-    SbxValues::(anonymous) pData
+    SbxValues::(anonymous union at /home/noel/libo/include/basic/sbxvar.hxx:43:5) pData
     0
 include/comphelper/parallelsort.hxx:88
     comphelper::(anonymous namespace)::ProfileZone mbDummy
     1
-include/editeng/swafopt.hxx:58
+include/editeng/swafopt.hxx:59
     editeng::SortedAutoCompleteStrings owning_
     1
 include/filter/msfilter/dffpropset.hxx:33
@@ -229,16 +409,16 @@ include/filter/msfilter/dffpropset.hxx:34
 include/filter/msfilter/dffpropset.hxx:35
     DffPropFlags bBlip
     1
-include/i18nutil/casefolding.hxx:58
+include/i18nutil/casefolding.hxx:59
     i18nutil::Mapping nmap
     0
-include/o3tl/cow_wrapper.hxx:203
+include/o3tl/cow_wrapper.hxx:200
     o3tl::cow_wrapper::impl_t m_ref_count
     1
-include/o3tl/vector_pool.hxx:93
+include/o3tl/vector_pool.hxx:94
     o3tl::detail::struct_from_value::type nextFree
     -1
-include/oox/core/contexthandler2.hxx:216
+include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize
     0
 include/oox/dump/dumperbase.hxx:1680
@@ -265,22 +445,16 @@ include/sfx2/msg.hxx:200
 include/sfx2/msg.hxx:201
     SfxSlot nArgDefCount
     0
-include/sfx2/templatedlg.hxx:131
-    SfxTemplateManagerDlg m_aUpdateDataTimer
-    UpdateDataTimer
-include/svtools/ctrlbox.hxx:339
+include/svtools/ctrlbox.hxx:330
     FontNameBox maUpdateIdle
     FontNameBox Preview Update
-include/svtools/filechangedchecker.hxx:31
-    FileChangedChecker mTimer
-    SVTools FileChangedChecker Timer
 include/svtools/svparser.hxx:55
     SvParser pImplData
     0
-include/svtools/svparser.hxx:73
+include/svtools/svparser.hxx:72
     SvParser::TokenStackType nTokenValue
     0
-include/svtools/svparser.hxx:74
+include/svtools/svparser.hxx:73
     SvParser::TokenStackType bTokenHasValue
     0
 include/svtools/tabbar.hxx:323
@@ -313,23 +487,29 @@ include/svx/deflt3d.hxx:54
 include/svx/deflt3d.hxx:55
     E3dDefaultAttributes bDefaultExtrudeSmoothFrontBack
     0
+include/svx/diagram/IDiagramHelper.hxx:72
+    svx::diagram::IDiagramHelper mbUseDiagramThemeData
+    0
+include/svx/diagram/IDiagramHelper.hxx:77
+    svx::diagram::IDiagramHelper mbUseDiagramModelData
+    1
+include/svx/diagram/IDiagramHelper.hxx:81
+    svx::diagram::IDiagramHelper mbForceThemePtrRecreation
+    0
 include/svx/fontwork.hxx:77
     SvxFontWorkDialog aInputIdle
     SvxFontWorkDialog Input
 include/svx/graphctl.hxx:53
     GraphCtrl aUpdateIdle
     svx GraphCtrl Update
-include/svx/numvset.hxx:92
-    SvxBmpNumValueSet aFormatIdle
-    SvxBmpNumValueSet FormatIdle
-include/svx/srchdlg.hxx:141
+include/svx/srchdlg.hxx:142
     SvxSearchDialog m_aPresentIdle
     Bring SvxSearchDialog to Foreground
 include/svx/svdcrtv.hxx:50
-    SdrCreateView nAutoCloseDistPix
+    SdrCreateView mnAutoCloseDistPix
     5
 include/svx/svdcrtv.hxx:51
-    SdrCreateView nFreeHandMinDistPix
+    SdrCreateView mnFreeHandMinDistPix
     10
 include/svx/svdmark.hxx:144
     SdrMarkList mbPointNameOk
@@ -337,28 +517,43 @@ include/svx/svdmark.hxx:144
 include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
-include/vcl/settings.hxx:143
+include/vcl/animate/Animation.hxx:105
+    Animation maTimer
+    vcl::Animation
+include/vcl/menubarupdateicon.hxx:49
+    MenuBarUpdateIconManager maTimeoutTimer
+    MenuBarUpdateIconManager
+include/vcl/settings.hxx:142
     DialogStyle content_area_border
     2
-include/vcl/settings.hxx:144
+include/vcl/settings.hxx:143
     DialogStyle button_spacing
     6
-include/vcl/settings.hxx:145
+include/vcl/settings.hxx:144
     DialogStyle action_area_border
     5
-include/vcl/toolkit/treelistbox.hxx:212
+include/vcl/toolkit/treelistbox.hxx:208
     SvTreeListBox nIndent
     20
+include/vcl/weldutils.hxx:410
+    weld::ButtonPressRepeater m_aRepeat
+    vcl ButtonPressRepeater m_aRepeat
+inet/in.h:247
+    sockaddr_in sin_family
+    2
 io/qa/textinputstream.cxx:97
     (anonymous namespace)::Input open_
     1
-libreofficekit/source/gtk/lokdocview.cxx:85
+libreofficekit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
     0
+lingucomponent/source/spellcheck/languagetool/languagetoolimp.hxx:51
+    LanguageToolGrammarChecker mCachedResults
+    10
 lotuswordpro/source/filter/lwppara.hxx:213
     LwpPara m_AllText
     
-oox/source/core/contexthandler2.cxx:36
+oox/source/core/contexthandler2.cxx:40
     oox::core::ElementInfo maChars
     0
 opencl/source/opencl_device.cxx:54
@@ -367,10 +562,10 @@ opencl/source/opencl_device.cxx:54
 opencl/source/opencl_device.cxx:55
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO outputSize
     15360
-package/inc/ZipFile.hxx:61
+package/inc/ZipFile.hxx:56
     ZipFile aInflater
     1
-package/source/zipapi/XUnbufferedStream.hxx:57
+package/source/zipapi/XUnbufferedStream.hxx:55
     XUnbufferedStream maInflater
     1
 pyuno/source/module/pyuno_gc.cxx:30
@@ -379,21 +574,24 @@ pyuno/source/module/pyuno_gc.cxx:30
 pyuno/source/module/pyuno_impl.hxx:226
     pyuno::RuntimeCargo valid
     1
-reportdesign/source/ui/inc/DesignView.hxx:62
-    rptui::ODesignView m_aMarkIdle
-    reportdesign ODesignView Mark Idle
-sal/osl/unx/signal.cxx:81
+ro/cairo.h:194
+    _cairo_matrix yy
+    1
+sal/osl/unx/signal.cxx:59
     (anonymous namespace)::SignalAction Action
     1
 sal/osl/unx/sockimpl.hxx:39
     oslSocketImpl m_bIsInShutdown
     1
 sal/qa/osl/condition/osl_Condition_Const.h:41
-    /home/noel/libo2/sal/qa/osl/condition/osl_Condition.cxx aTestCon
+    /home/noel/libo/sal/qa/osl/condition/osl_Condition.cxx aTestCon
     testcondition
 sal/qa/osl/file/osl_File_Const.h:118
     extern aPreURL
     file:///
+sal/qa/osl/file/osl_File_Const.h:119
+    extern aRootURL
+    file:////
 sal/qa/osl/file/osl_File_Const.h:131
     extern aCanURL3
     ca@#;+.,$//tmp/678nonical//name
@@ -461,7 +659,7 @@ sal/qa/rtl/process/rtl_Process_Const.h:32
     extern suParam3
     -process
 sal/qa/rtl/strings/test_ostring_stringliterals.cxx:22
-    /home/noel/libo2/sal/qa/rtl/strings/test_ostring_stringliterals.cxx rtl_string_unittest_non_const_literal_function
+    /home/noel/libo/sal/qa/rtl/strings/test_ostring_stringliterals.cxx rtl_string_unittest_non_const_literal_function
     0
 sal/qa/rtl/strings/test_strings_replace.cxx:24
     (anonymous) s_bar
@@ -484,53 +682,59 @@ sal/qa/rtl/strings/test_strings_replace.cxx:29
 sax/source/tools/fastserializer.hxx:232
     sax_fastparser::FastSaxSerializer mbXescape
     1
-sc/inc/compiler.hxx:112
-    ScRawToken::(anonymous union)::(anonymous) eInForceArray
+sc/inc/cellvalue.hxx:111
+    ScRefCellValue 
+    0\10
+sc/inc/cellvalue.hxx:112
+    ScRefCellValue::(anonymous union at /home/noel/libo/sc/inc/cellvalue.hxx:111:5) mfValue
+    0\10
+sc/inc/compiler.hxx:117
+    ScRawToken::(anonymous union)::(unnamed struct at /home/noel/libo/sc/inc/compiler.hxx:115:9) eInForceArray
     0
-sc/inc/document.hxx:437
-    ScDocument aTrackIdle
-    sc ScDocument Track Idle
-sc/inc/drwlayer.hxx:230
-    /home/noel/libo2/sc/source/core/data/drwlayer.cxx bDrawIsInUndo
+sc/inc/drwlayer.hxx:231
+    /home/noel/libo/sc/source/core/data/drwlayer.cxx bDrawIsInUndo
     0
-sc/inc/global.hxx:910
-    /home/noel/libo2/sc/source/core/data/global.cxx pScActiveViewShell
+sc/inc/global.hxx:924
+    /home/noel/libo/sc/source/core/data/global.cxx pScActiveViewShell
     0
-sc/inc/global.hxx:911
-    /home/noel/libo2/sc/source/core/data/global.cxx nScClickMouseModifier
+sc/inc/global.hxx:925
+    /home/noel/libo/sc/source/core/data/global.cxx nScClickMouseModifier
     0
-sc/inc/global.hxx:912
-    /home/noel/libo2/sc/source/core/data/global.cxx nScFillModeMouseModifier
+sc/inc/global.hxx:926
+    /home/noel/libo/sc/source/core/data/global.cxx nScFillModeMouseModifier
     0
-sc/inc/markmulti.hxx:80
+sc/inc/markmulti.hxx:81
     ScMultiSelIter aMarkArrayIter
     0
 sc/inc/refdata.hxx:38
-    ScSingleRefData::(anonymous) mnFlagValue
+    ScSingleRefData::(anonymous union at /home/noel/libo/sc/inc/refdata.hxx:36:5) mnFlagValue
     0
-sc/inc/scmod.hxx:81
-    ScModule m_aIdleTimer
-    sc ScModule IdleTimer
-sc/inc/table.hxx:180
+sc/inc/table.hxx:190
     ScTable mpRowHeights
     0
-sc/qa/extras/check_data_pilot_field.cxx:63
+sc/qa/extras/sccheck_data_pilot_field.cxx:59
     sc_apitest::CheckDataPilotField mMaxFieldIndex
     6
+sc/qa/unit/helper/qahelper.hxx:65
+    RangeNameDef mnIndex
+    1
 sc/qa/unit/screenshots/screenshots.cxx:40
     ScScreenshotTest mCsv
     some, strings, here, separated, by, commas
-sc/qa/unit/ucalc.hxx:42
-    Test::RangeNameDef mnIndex
-    1
+sc/source/core/data/queryiter.cxx:1151
+    ScQueryCellIteratorAccessSpecific<ScQueryCellIteratorAccess::SortedCache>::SortedCacheIndexer mLowIndex
+    0
 sc/source/core/inc/parclass.hxx:93
     ScParameterClassification::RunData bHasForceArray
     1
-sc/source/core/tool/scmatrix.cxx:344
-    /home/noel/libo2/sc/source/core/tool/scmatrix.cxx bElementsMaxFetched
+sc/source/core/inc/sharedstringpoolpurge.hxx:42
+    sc::SharedStringPoolPurge mTimer
+    SharedStringPoolPurge
+sc/source/core/tool/scmatrix.cxx:346
+    /home/noel/libo/sc/source/core/tool/scmatrix.cxx bElementsMaxFetched
     1
 sc/source/filter/inc/extlstcontext.hxx:19
-    /home/noel/libo2/sc/source/filter/oox/condformatbuffer.cxx rStyleIdx
+    /home/noel/libo/sc/source/filter/oox/condformatbuffer.cxx rStyleIdx
     0
 sc/source/filter/inc/orcusinterface.hxx:186
     ScOrcusConditionalFormat meEntryType
@@ -538,61 +742,34 @@ sc/source/filter/inc/orcusinterface.hxx:186
 sc/source/filter/inc/xltracer.hxx:81
     XclTracer mbEnabled
     0
-sc/source/ui/inc/acredlin.hxx:50
-    ScAcceptChgDlg aSelectionIdle
-    ScAcceptChgDlg SelectionIdle
-sc/source/ui/inc/acredlin.hxx:51
-    ScAcceptChgDlg aReOpenIdle
-    ScAcceptChgDlg ReOpenIdle
-sc/source/ui/inc/autostyl.hxx:58
-    ScAutoStyleList aTimer
-    ScAutoStyleList Timer
-sc/source/ui/inc/autostyl.hxx:59
-    ScAutoStyleList aInitIdle
-    ScAutoStyleList InitIdle
-sc/source/ui/inc/conflictsdlg.hxx:119
-    ScConflictsDlg maSelectionIdle
-    ScConflictsDlg SelectionIdle
-sc/source/ui/inc/hdrcont.hxx:38
-    ScHeaderControl aShowHelpTimer
-    sc HeaderControl Popover Timer
 sc/source/ui/inc/viewdata.hxx:288
     ScViewData aLogicMode
     0
-sc/source/ui/inc/viewfunc.hxx:377
-    /home/noel/libo2/sc/source/ui/view/viewfun7.cxx bPasteIsMove
+sc/source/ui/inc/viewfunc.hxx:382
+    /home/noel/libo/sc/source/ui/view/viewfun7.cxx bPasteIsMove
     0
-sc/source/ui/view/output2.cxx:119
-    ScDrawStringsVars mCachedGlyphs
-    1000
 sccomp/source/solver/SwarmSolver.cxx:124
     (anonymous namespace)::SwarmSolver mfResultValue
     0\10
-sd/inc/sdpptwrp.hxx:43
-    SdPPTFilter pBas
-    0
-sd/source/filter/html/htmlex.hxx:116
+sd/source/filter/html/htmlex.hxx:117
     HtmlExport mbAutoSlide
     1
-sd/source/ui/framework/module/ShellStackGuard.hxx:83
-    sd::framework::ShellStackGuard maPrinterPollingIdle
-    sd ShellStackGuard PrinterPollingIdle
-sd/source/ui/inc/CustomAnimationPane.hxx:143
+sd/source/ui/inc/CustomAnimationPane.hxx:144
     sd::CustomAnimationPane maIdle
     sd idle treeview select
 sd/source/ui/inc/pubdlg.hxx:157
     SdPublishingDlg aAssistentFunc
     6
-sd/source/ui/inc/View.hxx:262
+sd/source/ui/inc/View.hxx:271
     sd::View maDropErrorIdle
     sd View DropError
-sd/source/ui/inc/View.hxx:263
+sd/source/ui/inc/View.hxx:272
     sd::View maDropInsertFileIdle
     sd View DropInsertFile
 sd/source/ui/inc/WindowUpdater.hxx:97
     sd::WindowUpdater maCTLOptions
     0
-sd/source/ui/presenter/SlideRenderer.hxx:81
+sd/source/ui/presenter/SlideRenderer.hxx:78
     sd::presenter::SlideRenderer maPreviewRenderer
     1
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:41
@@ -601,19 +778,25 @@ sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:41
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:91
     sd::slidesorter::controller::Animator maIdle
     sd slidesorter controller Animator
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
+sdext/source/minimizer/optimizerdialog.hxx:191
+    OptimizerDialog mnCurrentStep
+    0
+sdext/source/minimizer/optimizerdialog.hxx:192
+    OptimizerDialog mnTabIndex
+    0
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:61
     (anonymous namespace)::StringEmitContext m_aBuf
     256
-sfx2/inc/autoredactdialog.hxx:97
+sfx2/inc/autoredactdialog.hxx:102
     SfxAutoRedactDialog m_bIsValidState
     1
-sfx2/source/appl/lnkbase2.cxx:79
+sfx2/source/appl/lnkbase2.cxx:61
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
-sfx2/source/appl/lnkbase2.cxx:84
-    sfx2::ImplBaseLinkData::(anonymous) DDEType
+sfx2/source/appl/lnkbase2.cxx:66
+    sfx2::ImplBaseLinkData::(anonymous union at /home/noel/libo/sfx2/source/appl/lnkbase2.cxx:64:5) DDEType
     0
-sfx2/source/appl/lnkbase2.cxx:103
+sfx2/source/appl/lnkbase2.cxx:85
     sfx2::(anonymous namespace)::ImplDdeItem bIsInDTOR
     1
 sfx2/source/appl/newhelp.hxx:94
@@ -622,25 +805,25 @@ sfx2/source/appl/newhelp.hxx:94
 sfx2/source/appl/newhelp.hxx:95
     IndexTabPage_Impl aAutoCompleteIdle
     sfx2 appl IndexTabPage_Impl AutoComplete
-sfx2/source/appl/newhelp.hxx:227
+sfx2/source/appl/newhelp.hxx:228
     SfxHelpIndexWindow_Impl aIdle
     sfx2 appl SfxHelpIndexWindow_Impl
-sfx2/source/appl/newhelp.hxx:347
+sfx2/source/appl/newhelp.hxx:348
     SfxHelpTextWindow_Impl aSelectIdle
     sfx2 appl SfxHelpTextWindow_Impl Select
-sfx2/source/control/itemdel.cxx:31
-    SfxItemDisruptor_Impl m_Idle
-    sfx SfxItemDisruptor_Impl::Delete
-slideshow/source/engine/slideshowimpl.cxx:473
+slideshow/source/engine/slideshowimpl.cxx:476
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02\10
+solenv/lockfile/dotlockfile.c:44
+    /home/noel/libo/solenv/lockfile/dotlockfile.c quiet
+    1
 soltools/cpp/_cpp.c:31
-    /home/noel/libo2/soltools/cpp/_cpp.c nerrs
+    /home/noel/libo/soltools/cpp/_cpp.c nerrs
     1
 soltools/cpp/_eval.c:742
     tokval cvlen
     20
-soltools/cpp/_macro.c:168
+soltools/cpp/_macro.c:172
     doadefine onestr
     1
 soltools/cpp/cpp.h:120
@@ -653,51 +836,42 @@ soltools/mkdepend/def.h:118
     inclist i_searched
     1
 soltools/mkdepend/def.h:185
-    /home/noel/libo2/soltools/mkdepend/main.c printed
-    0
-soltools/mkdepend/def.h:185
-    /home/noel/libo2/soltools/mkdepend/pr.c printed
+    /home/noel/libo/soltools/mkdepend/pr.c printed
     1
+soltools/mkdepend/def.h:185
+    /home/noel/libo/soltools/mkdepend/main.c printed
+    0
 soltools/mkdepend/def.h:189
-    /home/noel/libo2/soltools/mkdepend/main.c show_where_not
+    /home/noel/libo/soltools/mkdepend/main.c show_where_not
     0
 starmath/inc/cfgitem.hxx:105
     SmMathConfig vFontPickList
     5
-starmath/inc/edit.hxx:55
-    SmEditWindow aModifyIdle
-    SmEditWindow ModifyIdle
 stoc/source/corereflection/lrucache.hxx:52
     LRU_Cache _pBlock
     0
-stoc/source/inspect/introspection.cxx:1506
+stoc/source/inspect/introspection.cxx:1509
     (anonymous namespace)::Cache::Data hits
     1
-stoc/source/security/access_controller.cxx:65
+stoc/source/security/access_controller.cxx:67
     (anonymous) s_envType
     gcc3
-stoc/source/security/access_controller.cxx:304
+stoc/source/security/access_controller.cxx:302
     (anonymous namespace)::AccessController m_rec
     0
 stoc/source/security/lru_cache.h:54
     stoc_sec::lru_cache m_block
     0
-svgio/source/svgreader/svgdocumenthandler.cxx:82
-    (anonymous namespace)::whiteSpaceHandling bNoGapsForBaselineShift
-    1
-svl/source/crypto/cryptosign.cxx:151
+svl/source/crypto/cryptosign.cxx:139
     (anonymous namespace)::TimeStampReq extensions
     0
-svx/inc/sdr/overlay/overlaymanagerbuffered.hxx:42
-    sdr::overlay::OverlayManagerBuffered maBufferIdle
-    sdr overlay OverlayManagerBuffered Idle
-svx/source/dialog/contimp.hxx:70
-    SvxSuperContourDlg aUpdateIdle
-    SvxSuperContourDlg UpdateIdle
-svx/source/dialog/contimp.hxx:71
-    SvxSuperContourDlg aCreateIdle
-    SvxSuperContourDlg CreateIdle
-svx/source/inc/StylesPreviewWindow.hxx:61
+svx/source/dialog/imapimp.hxx:33
+    IMapOwnData aIdle
+    svx IMapOwnData
+svx/source/inc/fmtextcontrolshell.hxx:109
+    svx::FmTextControlShell m_aClipboardInvalidation
+    svx FmTextControlShell m_aClipboardInvalidation
+svx/source/inc/StylesPreviewWindow.hxx:60
     StyleItemController m_eStyleFamily
     2
 svx/source/sdr/contact/viewcontactofsdrpage.cxx:104
@@ -706,31 +880,31 @@ svx/source/sdr/contact/viewcontactofsdrpage.cxx:104
 svx/source/sidebar/media/MediaPlaybackPanel.hxx:58
     svx::sidebar::MediaPlaybackPanel maIdle
     MediaPlaybackPanel
-svx/source/tbxctrls/lboxctrl.cxx:49
+svx/source/tbxctrls/lboxctrl.cxx:51
     SvxPopupWindowListBox m_nVisRows
     10
-svx/source/unodraw/recoveryui.cxx:63
+svx/source/unodraw/recoveryui.cxx:64
     (anonymous namespace)::RecoveryUI m_pParentWindow
     0
-sw/inc/authfld.hxx:156
+sw/inc/authfld.hxx:157
     SwAuthorityField m_nTempSequencePos
     -1
-sw/inc/authfld.hxx:157
+sw/inc/authfld.hxx:158
     SwAuthorityField m_nTempSequencePosRLHidden
     -1
 sw/inc/checkit.hxx:38
-    /home/noel/libo2/sw/source/core/bastyp/init.cxx pCheckIt
+    /home/noel/libo/sw/source/core/bastyp/init.cxx pCheckIt
     0
 sw/inc/dbgoutsw.hxx:51
-    /home/noel/libo2/sw/source/core/doc/dbgoutsw.cxx bDbgOutStdErr
+    /home/noel/libo/sw/source/core/doc/dbgoutsw.cxx bDbgOutStdErr
     0
 sw/inc/dbgoutsw.hxx:52
-    /home/noel/libo2/sw/source/core/doc/dbgoutsw.cxx bDbgOutPrintAttrSet
+    /home/noel/libo/sw/source/core/doc/dbgoutsw.cxx bDbgOutPrintAttrSet
     0
 sw/inc/ftninfo.hxx:46
     SwEndNoteInfo m_aFormat
     4
-sw/inc/hints.hxx:272
+sw/inc/hints.hxx:308
     SwAttrSetChg m_bDelSet
     0
 sw/inc/modcfg.hxx:210
@@ -739,193 +913,193 @@ sw/inc/modcfg.hxx:210
 sw/inc/modcfg.hxx:213
     SwModuleOptions m_aWebTableConfig
     1
-sw/inc/swmodule.hxx:265
-    /home/noel/libo2/sw/source/core/frmedt/feshview.cxx g_bNoInterrupt
+sw/inc/swmodule.hxx:266
+    /home/noel/libo/sw/source/core/frmedt/feshview.cxx g_bNoInterrupt
     0
-sw/inc/swmodule.hxx:265
-    /home/noel/libo2/sw/source/uibase/app/swmodule.cxx g_bNoInterrupt
+sw/inc/swmodule.hxx:266
+    /home/noel/libo/sw/source/uibase/app/swmodule.cxx g_bNoInterrupt
     0
-sw/inc/swmodule.hxx:265
-    /home/noel/libo2/sw/source/uibase/docvw/edtdd.cxx g_bNoInterrupt
+sw/inc/swmodule.hxx:266
+    /home/noel/libo/sw/source/uibase/docvw/edtdd.cxx g_bNoInterrupt
     0
-sw/inc/swmodule.hxx:265
-    /home/noel/libo2/sw/source/uibase/ribbar/conform.cxx g_bNoInterrupt
+sw/inc/swmodule.hxx:266
+    /home/noel/libo/sw/source/uibase/ribbar/conform.cxx g_bNoInterrupt
     1
-sw/inc/view.hxx:201
-    SwView m_pHScrollbar
+sw/inc/textboxhelper.hxx:211
+    SwTextBoxNode m_bIsCloningInProgress
     0
 sw/inc/view.hxx:202
+    SwView m_pHScrollbar
+    0
+sw/inc/view.hxx:203
     SwView m_pVScrollbar
     0
-sw/inc/view.hxx:719
-    /home/noel/libo2/sw/source/uibase/uiview/view.cxx bDocSzUpdated
-    1
-sw/inc/view.hxx:719
-    /home/noel/libo2/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
+sw/inc/view.hxx:724
+    /home/noel/libo/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
     0
-sw/inc/viewopt.hxx:195
+sw/inc/view.hxx:724
+    /home/noel/libo/sw/source/uibase/uiview/view.cxx bDocSzUpdated
+    1
+sw/inc/viewopt.hxx:50
+    ViewOptFlags1 bRef
+    1
+sw/inc/viewopt.hxx:263
     SwViewOption m_bTest10
     0
-sw/source/core/bastyp/calc.cxx:99
+sw/qa/extras/tiledrendering/tiledrendering.cxx:406
+    testGetTextSelectionLineLimit::TestBody sExpectedHtml
+    Estonian employs the <a href="https://en.wikipedia.org/wiki/Latin_script">Latin script</a> as the basis for <a href="https://en.wikipedia.org/wiki/Estonian_alphabet">its alphabet</a>, which adds the letters <a href="https://en.wikipedia.org/wiki/%C3%84"><i>\-61\-92</i></a>, <a href="https://en.wikipedia.org/wiki/%C3%96"><i>\-61\-74</i></a>, <a href="https://en.wikipedia.org/wiki/%C3%9C"><i>\-61\-68</i></a>, and <a href="https://en.wikipedia.org/wiki/%C3%95"><i>\-61\-75</i></a>, plus the later additions <a href="https://en.wikipedia.org/wiki/%C5%A0"><i>\-59\-95</i></a> and <a href="https://en.wikipedia.org/wiki/%C5%BD"><i>\-59\-66</i></a>. The letters <i>c</i>, <i>q</i>, <i>w</i>, <i>x</i> and <i>y</i> are limited to <a href="https://en.wikipedia.org/wiki/Proper_names">proper names</a> of foreign origin, and <i>f</i>, <i>z</i>, <i>\-59\-95</i>, and <i>\-59\-66</i> appear in loanwords and foreign names only. <i>\-61\-106</i> and <i>\-61\-100</i> are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, <i>\-61\-124</i> is pronounced [\-61\-90], as in English <i>mat</i>. The vowels \-61\-124, \-61\-106 and \-61\-100 are clearly separate <a href="https://en.wikipedia.org/wiki/Phonemes">phonemes</a> and inherent in Estonian, although the letter shapes come from German. The letter <a href="https://en.wikipedia.org/wiki/%C3%95"><i>\-61\-75</i></a> denotes /\-55\-92/, unrounded /o/, or a <a href="https://en.wikipedia.org/wiki/Close-mid_back_unrounded_vowel">close-mid back unrounded vowel</a>. It is almost identical to the <a href="https://en.wikipedia.org/wiki/Bulgarian_language">Bulgarian</a> <a href="https://en.wikipedia.org/wiki/%D0%AA">\-47\-118</a> /\-55\-92\-52\-98/ and the <a href="https://en.wikipedia.org/wiki/Vietnamese_language">Vietnamese</a> <a href="https://en.wikipedia.org/wiki/%C6%A0">\-58\-95</a>, and is also used to transcribe the Russian <a href="https://en.wikipedia.org/wiki/%D0%AB">\-47\-117</a>.
+sw/source/core/bastyp/calc.cxx:101
     CalcOp eOp
     0
-sw/source/core/doc/docredln.cxx:67
+sw/source/core/doc/docredln.cxx:73
     sw_DebugRedline nWatch
     0
-sw/source/core/docnode/threadmanager.hxx:125
-    ThreadManager maStartNewThreadIdle
-    SW ThreadManager StartNewThreadIdle
-sw/source/core/inc/DocumentTimerManager.hxx:75
-    sw::DocumentTimerManager m_aFireIdleJobsTimer
-    sw::DocumentTimerManager m_aFireIdleJobsTimer
-sw/source/core/inc/fntcache.hxx:60
-    /home/noel/libo2/sw/source/core/txtnode/fntcache.cxx pFntCache
+sw/source/core/inc/fntcache.hxx:57
+    /home/noel/libo/sw/source/core/txtnode/fntcache.cxx pFntCache
     0
-sw/source/core/inc/fntcache.hxx:61
-    /home/noel/libo2/sw/source/core/txtnode/fntcache.cxx pLastFont
+sw/source/core/inc/fntcache.hxx:58
+    /home/noel/libo/sw/source/core/txtnode/fntcache.cxx pLastFont
     0
 sw/source/core/inc/frmtool.hxx:154
-    /home/noel/libo2/sw/source/core/layout/frmtool.cxx bDontCreateObjects
-    0
-sw/source/core/inc/frmtool.hxx:157
-    /home/noel/libo2/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
+    /home/noel/libo/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
     0
 sw/source/core/inc/noteurl.hxx:28
-    /home/noel/libo2/sw/source/core/text/noteurl.cxx pNoteURL
+    /home/noel/libo/sw/source/core/text/noteurl.cxx pNoteURL
     0
 sw/source/core/inc/swfntcch.hxx:43
-    /home/noel/libo2/sw/source/core/txtnode/swfntcch.cxx pSwFontCache
+    /home/noel/libo/sw/source/core/txtnode/swfntcch.cxx pSwFontCache
     0
-sw/source/core/inc/txtfly.hxx:44
-    /home/noel/libo2/sw/source/core/text/txtinit.cxx pContourCache
+sw/source/core/inc/txtfly.hxx:46
+    /home/noel/libo/sw/source/core/text/txtinit.cxx pContourCache
     0
-sw/source/core/inc/UndoSort.hxx:38
-    SwSortUndoElement::(anonymous union)::(anonymous) nID
+sw/source/core/inc/UndoSort.hxx:39
+    SwSortUndoElement::(anonymous union)::(unnamed struct at /home/noel/libo/sw/source/core/inc/UndoSort.hxx:38:9) nID
     4294967295
 sw/source/core/inc/UndoSplitMove.hxx:57
     SwUndoMove m_bJoinNext
     0
-sw/source/core/layout/flylay.cxx:306
+sw/source/core/layout/flylay.cxx:304
     SwFlyFreeFrame::supportsAutoContour bOverrideHandleContourToAlwaysOff
     1
-sw/source/core/ole/ndole.cxx:1089
+sw/source/core/ole/ndole.cxx:1131
     SwOLEObj::tryToGetChartContentAsPrimitive2DSequence bAsynchronousLoadingAllowed
     0
 sw/source/core/text/pordrop.hxx:32
-    /home/noel/libo2/sw/source/core/text/txtinit.cxx pDropCapCache
+    /home/noel/libo/sw/source/core/text/txtinit.cxx pDropCapCache
     0
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous union)::(anonymous) nJunk
+    RTFSurround::(anonymous union)::(unnamed struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9) nJunk
     0
-sw/source/filter/ww8/ww8par3.cxx:340
+sw/source/filter/ww8/ww8par3.cxx:342
     (anonymous namespace)::WW8LST bSimpleList
     1
-sw/source/filter/ww8/ww8par3.cxx:341
+sw/source/filter/ww8/ww8par3.cxx:343
     (anonymous namespace)::WW8LST bRestartHdn
     1
-sw/source/filter/ww8/ww8par3.cxx:375
+sw/source/filter/ww8/ww8par3.cxx:377
     (anonymous namespace)::WW8LVL bV6Prev
     1
-sw/source/filter/ww8/ww8par3.cxx:376
+sw/source/filter/ww8/ww8par3.cxx:378
     (anonymous namespace)::WW8LVL bV6PrSp
     1
-sw/source/filter/ww8/ww8par3.cxx:377
+sw/source/filter/ww8/ww8par3.cxx:379
     (anonymous namespace)::WW8LVL bV6
     1
-sw/source/filter/ww8/ww8par5.cxx:1566
+sw/source/filter/ww8/ww8par5.cxx:1600
     SwWW8ImplReader::Read_F_DocInfo aName10
     \15
-sw/source/filter/ww8/ww8par5.cxx:1567
+sw/source/filter/ww8/ww8par5.cxx:1601
     SwWW8ImplReader::Read_F_DocInfo aName11
     TITEL
-sw/source/filter/ww8/ww8par5.cxx:1569
+sw/source/filter/ww8/ww8par5.cxx:1603
     SwWW8ImplReader::Read_F_DocInfo aName12
     TITRE
-sw/source/filter/ww8/ww8par5.cxx:1571
+sw/source/filter/ww8/ww8par5.cxx:1605
     SwWW8ImplReader::Read_F_DocInfo aName13
     TITLE
-sw/source/filter/ww8/ww8par5.cxx:1573
+sw/source/filter/ww8/ww8par5.cxx:1607
     SwWW8ImplReader::Read_F_DocInfo aName14
     TITRO
-sw/source/filter/ww8/ww8par5.cxx:1575
+sw/source/filter/ww8/ww8par5.cxx:1609
     SwWW8ImplReader::Read_F_DocInfo aName20
     \21
-sw/source/filter/ww8/ww8par5.cxx:1576
+sw/source/filter/ww8/ww8par5.cxx:1610
     SwWW8ImplReader::Read_F_DocInfo aName21
     ERSTELLDATUM
-sw/source/filter/ww8/ww8par5.cxx:1578
+sw/source/filter/ww8/ww8par5.cxx:1612
     SwWW8ImplReader::Read_F_DocInfo aName22
     CR\-55\-55
-sw/source/filter/ww8/ww8par5.cxx:1580
+sw/source/filter/ww8/ww8par5.cxx:1614
     SwWW8ImplReader::Read_F_DocInfo aName23
     CREATED
-sw/source/filter/ww8/ww8par5.cxx:1582
+sw/source/filter/ww8/ww8par5.cxx:1616
     SwWW8ImplReader::Read_F_DocInfo aName24
     CREADO
-sw/source/filter/ww8/ww8par5.cxx:1584
+sw/source/filter/ww8/ww8par5.cxx:1618
     SwWW8ImplReader::Read_F_DocInfo aName30
     \22
-sw/source/filter/ww8/ww8par5.cxx:1585
+sw/source/filter/ww8/ww8par5.cxx:1619
     SwWW8ImplReader::Read_F_DocInfo aName31
     ZULETZTGESPEICHERTZEIT
-sw/source/filter/ww8/ww8par5.cxx:1587
+sw/source/filter/ww8/ww8par5.cxx:1621
     SwWW8ImplReader::Read_F_DocInfo aName32
     DERNIERENREGISTREMENT
-sw/source/filter/ww8/ww8par5.cxx:1589
+sw/source/filter/ww8/ww8par5.cxx:1623
     SwWW8ImplReader::Read_F_DocInfo aName33
     SAVED
-sw/source/filter/ww8/ww8par5.cxx:1591
+sw/source/filter/ww8/ww8par5.cxx:1625
     SwWW8ImplReader::Read_F_DocInfo aName34
     MODIFICADO
-sw/source/filter/ww8/ww8par5.cxx:1593
+sw/source/filter/ww8/ww8par5.cxx:1627
     SwWW8ImplReader::Read_F_DocInfo aName40
     \23
-sw/source/filter/ww8/ww8par5.cxx:1594
+sw/source/filter/ww8/ww8par5.cxx:1628
     SwWW8ImplReader::Read_F_DocInfo aName41
     ZULETZTGEDRUCKT
-sw/source/filter/ww8/ww8par5.cxx:1596
+sw/source/filter/ww8/ww8par5.cxx:1630
     SwWW8ImplReader::Read_F_DocInfo aName42
     DERNI\-56REIMPRESSION
-sw/source/filter/ww8/ww8par5.cxx:1598
+sw/source/filter/ww8/ww8par5.cxx:1632
     SwWW8ImplReader::Read_F_DocInfo aName43
     LASTPRINTED
-sw/source/filter/ww8/ww8par5.cxx:1600
+sw/source/filter/ww8/ww8par5.cxx:1634
     SwWW8ImplReader::Read_F_DocInfo aName44
     HUPS PUPS
-sw/source/filter/ww8/ww8par5.cxx:1602
+sw/source/filter/ww8/ww8par5.cxx:1636
     SwWW8ImplReader::Read_F_DocInfo aName50
     \24
-sw/source/filter/ww8/ww8par5.cxx:1603
+sw/source/filter/ww8/ww8par5.cxx:1637
     SwWW8ImplReader::Read_F_DocInfo aName51
     \-36BERARBEITUNGSNUMMER
-sw/source/filter/ww8/ww8par5.cxx:1605
+sw/source/filter/ww8/ww8par5.cxx:1639
     SwWW8ImplReader::Read_F_DocInfo aName52
     NUM\-55RODEREVISION
-sw/source/filter/ww8/ww8par5.cxx:1607
+sw/source/filter/ww8/ww8par5.cxx:1641
     SwWW8ImplReader::Read_F_DocInfo aName53
     REVISIONNUMBER
-sw/source/filter/ww8/ww8par5.cxx:1609
+sw/source/filter/ww8/ww8par5.cxx:1643
     SwWW8ImplReader::Read_F_DocInfo aName54
     SNUBBEL BUBBEL
-sw/source/filter/ww8/ww8par.hxx:669
+sw/source/filter/ww8/ww8par.hxx:659
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:676
+sw/source/filter/ww8/ww8par.hxx:666
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/filter/ww8/ww8par.hxx:1035
+sw/source/filter/ww8/ww8par.hxx:1062
     WW8TabBandDesc bCantSplit90
     0
-sw/source/filter/ww8/ww8scan.hxx:1165
+sw/source/filter/ww8/ww8scan.hxx:1166
     WW8Fib m_fObfuscated
     0
-sw/source/filter/ww8/ww8scan.hxx:1511
+sw/source/filter/ww8/ww8scan.hxx:1512
     WW8Fib m_fcPlcffactoid
     0
-sw/source/filter/ww8/ww8scan.hxx:1513
+sw/source/filter/ww8/ww8scan.hxx:1514
     WW8Fib m_lcbPlcffactoid
     0
-sw/source/filter/ww8/ww8scan.hxx:1518
+sw/source/filter/ww8/ww8scan.hxx:1519
     WW8Fib m_lcbHplxsdr
     0
 sw/source/filter/ww8/ww8struc.hxx:542
@@ -934,25 +1108,28 @@ sw/source/filter/ww8/ww8struc.hxx:542
 sw/source/filter/ww8/ww8struc.hxx:899
     WW8_TablePos nSp37
     2
-sw/source/ui/envelp/labfmt.hxx:68
-    SwLabFormatPage aPreviewIdle
+sw/source/ui/envelp/labfmt.hxx:67
+    SwLabFormatPage m_aPreviewIdle
     SwLabFormatPage Preview
 sw/source/uibase/inc/edtdd.hxx:15
-    /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
+    /home/noel/libo/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
+    0
+sw/source/uibase/inc/edtwin.hxx:76
+    SwEditWin m_aTimer
+    SwEditWin
+sw/source/uibase/inc/edtwin.hxx:298
+    /home/noel/libo/sw/source/uibase/docvw/edtdd.cxx g_bFrameDrag
+    0
+sw/source/uibase/inc/edtwin.hxx:299
+    /home/noel/libo/sw/source/uibase/docvw/edtwin.cxx g_bDDTimerStarted
     0
 sw/source/uibase/inc/edtwin.hxx:300
-    /home/noel/libo2/sw/source/uibase/docvw/edtdd.cxx g_bFrameDrag
-    0
-sw/source/uibase/inc/edtwin.hxx:301
-    /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bDDTimerStarted
-    0
-sw/source/uibase/inc/edtwin.hxx:303
-    /home/noel/libo2/sw/source/uibase/dochdl/swdtflvr.cxx g_bDDINetAttr
+    /home/noel/libo/sw/source/uibase/dochdl/swdtflvr.cxx g_bDDINetAttr
     1
-sw/source/uibase/inc/edtwin.hxx:303
-    /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bDDINetAttr
+sw/source/uibase/inc/edtwin.hxx:300
+    /home/noel/libo/sw/source/uibase/docvw/edtwin.cxx g_bDDINetAttr
     0
-sw/source/uibase/inc/instable.hxx:44
+sw/source/uibase/inc/instable.hxx:45
     SwInsTableDlg minTableIndexInLb
     1
 sw/source/uibase/inc/pview.hxx:178
@@ -961,58 +1138,64 @@ sw/source/uibase/inc/pview.hxx:178
 sw/source/uibase/inc/pview.hxx:179
     SwPagePreview m_pVScrollbar
     0
-sw/source/uibase/inc/srcedtw.hxx:84
+sw/source/uibase/inc/srcedtw.hxx:85
     SwSrcEditWindow m_aSyntaxIdle
     sw uibase SwSrcEditWindow Syntax
-sw/source/uibase/inc/unotools.hxx:46
+sw/source/uibase/inc/unotools.hxx:50
     SwOneExampleFrame m_aLoadedIdle
     sw uibase SwOneExampleFrame Loaded
-unotools/source/config/saveopt.cxx:82
-    (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave
-    0
-vcl/headless/svpgdi.cxx:598
-    (anonymous) nMinimalSquareSizeToBuffer
-    4096
-vcl/headless/svpgdi.cxx:1641
-    SvpSalGraphics::drawPolyLine bDoDirectCairoStroke
+sw/source/uibase/inc/workctrl.hxx:120
+    NavElementBox_Base m_bRelease
     1
-vcl/inc/canvasbitmap.hxx:53
-    vcl::unotools::VclCanvasBitmap m_nEndianness
+tconfig/fontconfig.h:261
+    _FcValue type
+    3
+ucb/source/ucp/webdav-curl/DAVResourceAccess.hxx:55
+    http_dav_ucp::DAVResourceAccess m_nRedirectLimit
+    5
+ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:322
+    (anonymous namespace)::WebDAVResponseParser maLockType
     0
-vcl/inc/graphic/Manager.hxx:41
-    vcl::graphic::Manager maSwapOutTimer
-    graphic::Manager maSwapOutTimer
+unotest/source/cpp/macros_test.cxx:181
+    unotest::(anonymous namespace)::Valid now
+    0
 vcl/inc/impfontcache.hxx:75
     ImplFontCache m_aBoundRectCache
     3000
-vcl/inc/printdlg.hxx:209
-    vcl::PrintDialog maUpdatePreviewIdle
-    Print Dialog Update Preview Idle
-vcl/inc/printdlg.hxx:211
-    vcl::PrintDialog maUpdatePreviewNoCacheIdle
-    Print Dialog Update Preview (no cache) Idle
-vcl/inc/qt5/Qt5Instance.hxx:67
-    Qt5Instance m_aUpdateStyleTimer
-    vcl::qt5 m_aUpdateStyleTimer
+vcl/inc/pdf/pdfwriter_impl.hxx:816
+    vcl::PDFWriterImpl m_DocDigest
+    0
+vcl/inc/salinst.hxx:83
+    SalInstance m_bSupportsBitmap32
+    0
 vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mnStatus
     0
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mnJobs
     4294967295
-vcl/inc/salwtype.hxx:164
+vcl/inc/salwtype.hxx:171
     SalWheelMouseEvent mbDeltaIsPixel
     0
-vcl/inc/svdata.hxx:316
+vcl/inc/sft.hxx:177
+    vcl::TTGlobalFontInfo_ fsSelection
+    0
+vcl/inc/svdata.hxx:323
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
-vcl/qa/cppunit/png/PngFilterTest.cxx:35
+vcl/inc/svdata.hxx:330
+    ImplSVNWFData mbNoFrameJunctionForPopups
+    0
+vcl/qa/cppunit/png/PngFilterTest.cxx:157
     PngFilterTest maDataUrl
     /vcl/qa/cppunit/png/data/
-vcl/qa/cppunit/svm/svmtest.cxx:33
+vcl/qa/cppunit/svm/svmtest.cxx:42
     SvmTest maDataUrl
     /vcl/qa/cppunit/svm/data/
-vcl/source/bitmap/bitmap.cxx:159
+vcl/source/app/salvtables.cxx:248
+    SalFlashAttention m_aFlashTimer
+    SalFlashAttention
+vcl/source/bitmap/bitmap.cxx:163
     Bitmap::~Bitmap save
     0
 vcl/source/bitmap/dibtools.cxx:52
@@ -1025,102 +1208,84 @@ vcl/source/bitmap/dibtools.cxx:54
     (anonymous namespace)::CIEXYZ aXyzZ
     0
 vcl/source/bitmap/dibtools.cxx:107
-    (anonymous namespace)::DIBV5Header nV5RedMask
-    0
-vcl/source/bitmap/dibtools.cxx:108
-    (anonymous namespace)::DIBV5Header nV5GreenMask
-    0
-vcl/source/bitmap/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header nV5BlueMask
-    0
-vcl/source/bitmap/dibtools.cxx:110
     (anonymous namespace)::DIBV5Header nV5AlphaMask
     0
-vcl/source/bitmap/dibtools.cxx:113
+vcl/source/bitmap/dibtools.cxx:110
     (anonymous namespace)::DIBV5Header nV5GammaRed
     0
-vcl/source/bitmap/dibtools.cxx:114
+vcl/source/bitmap/dibtools.cxx:111
     (anonymous namespace)::DIBV5Header nV5GammaGreen
     0
-vcl/source/bitmap/dibtools.cxx:115
+vcl/source/bitmap/dibtools.cxx:112
     (anonymous namespace)::DIBV5Header nV5GammaBlue
     0
-vcl/source/bitmap/dibtools.cxx:117
+vcl/source/bitmap/dibtools.cxx:114
     (anonymous namespace)::DIBV5Header nV5ProfileData
     0
-vcl/source/bitmap/dibtools.cxx:118
+vcl/source/bitmap/dibtools.cxx:115
     (anonymous namespace)::DIBV5Header nV5ProfileSize
     0
-vcl/source/bitmap/dibtools.cxx:119
+vcl/source/bitmap/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/control/imivctl.hxx:123
-    SvxIconChoiceCtrl_Impl aAutoArrangeIdle
-    svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
-vcl/source/control/imivctl.hxx:124
-    SvxIconChoiceCtrl_Impl aDocRectChangedIdle
-    svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged
-vcl/source/control/imivctl.hxx:125
-    SvxIconChoiceCtrl_Impl aVisRectChangedIdle
-    svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged
-vcl/source/control/imivctl.hxx:126
-    SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
-    svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
+vcl/source/control/quickselectionengine.cxx:38
+    vcl::QuickSelectionEngine_Data aSearchTimeout
+    vcl::QuickSelectionEngine_Data aSearchTimeout
 vcl/source/control/roadmapwizard.cxx:60
     vcl::RoadmapWizardImpl pRoadmap
     0
 vcl/source/filter/jpeg/transupp.h:128
-    (anonymous) perfect
+    jpeg_transform_info perfect
     0
 vcl/source/filter/jpeg/transupp.h:129
-    (anonymous) trim
+    jpeg_transform_info trim
     0
 vcl/source/filter/jpeg/transupp.h:130
-    (anonymous) force_grayscale
+    jpeg_transform_info force_grayscale
     0
 vcl/source/filter/jpeg/transupp.h:131
-    (anonymous) crop
+    jpeg_transform_info crop
     0
 vcl/source/filter/jpeg/transupp.h:147
-    (anonymous) crop_xoffset
+    jpeg_transform_info crop_xoffset
     0
 vcl/source/filter/jpeg/transupp.h:149
-    (anonymous) crop_yoffset
+    jpeg_transform_info crop_yoffset
     0
-vcl/source/font/font.cxx:697
+vcl/source/font/font.cxx:773
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/fontsubset/ttcr.cxx:350
-    vcl::(anonymous namespace)::tdata_post ptr
-    0
-vcl/source/gdi/pdfwriter_impl.hxx:766
-    vcl::PDFWriterImpl m_DocDigest
-    0
-vcl/unx/gtk3/a11y/gtk3atkutil.cxx:629
+vcl/source/outdev/textline.cxx:97
+    (anonymous namespace)::WavyLineCache m_aItems
+    10
+vcl/unx/generic/fontmanager/fontconfig.cxx:127
+    (anonymous namespace)::CachedFontConfigFontOptions lru_options_cache
+    10
+vcl/unx/gtk3/a11y/atkutil.cxx:619
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:16767
+vcl/unx/gtk3/gtkinst.cxx:23204
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:16795
+vcl/unx/gtk3/gtkinst.cxx:23232
     (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
-    /home/noel/libo2/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
-    0
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:159
+writerfilter/source/dmapper/DomainMapper_Impl.hxx:169
     writerfilter::dmapper::FieldParagraph m_bRemove
     0
-writerfilter/source/dmapper/SettingsTable.cxx:271
+writerfilter/source/dmapper/SettingsTable.cxx:99
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:876
+writerfilter/source/rtftok/rtfcharsets.hxx:21
+    writerfilter::rtftok nRTFEncodings
+    31
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:889
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:877
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:890
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:880
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:893
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
 writerfilter/source/rtftok/rtftokenizer.hxx:60
@@ -1129,6 +1294,18 @@ writerfilter/source/rtftok/rtftokenizer.hxx:60
 writerfilter/source/rtftok/rtftokenizer.hxx:63
     writerfilter::rtftok::RTFTokenizer s_bMathControlWordsSorted
     1
+xml2/libxml/parser.h:263
+    _xmlParserCtxt recovery
+    1
+xml2/libxml/parser.h:749
+    _xmlSAXHandler initialized
+    3740122799
+xmloff/source/style/prstylei.cxx:271
+    XMLPropStyleContext::CreateAndInsert s_FillStyle
+    FillStyle
 xmloff/source/text/XMLIndexTemplateContext.hxx:56
-    /home/noel/libo2/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
+    /home/noel/libo/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
     0
+xslt/xsltInternals.h:1704
+    _xsltTransformContext state
+    2

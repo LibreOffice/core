@@ -22,10 +22,12 @@ with io.open("workdir/loplugin.singlevalfields.log", "r", buffering=1024*1024) a
             parentClass = normalizeTypeParams(tokens[1])
             fieldName = normalizeTypeParams(tokens[2])
             fieldType = normalizeTypeParams(tokens[3])
-            sourceLocation = tokens[4]
-            fieldInfo = (parentClass, fieldName)
-            definitionToSourceLocationMap[fieldInfo] = sourceLocation
-            definitionToTypeMap[fieldInfo] = fieldType
+            srcLoc = tokens[4]
+            # ignore some external stuff that is somehow sneaking through
+            if not(srcLoc.startswith("workdir/") or srcLoc.startswith("-3.0/") or srcLoc.startswith("_64-linux-gnu/")):
+                fieldInfo = (parentClass, fieldName)
+                definitionToSourceLocationMap[fieldInfo] = srcLoc
+                definitionToTypeMap[fieldInfo] = fieldType
         elif tokens[0] == "asgn:":
             parentClass = normalizeTypeParams(tokens[1])
             fieldName = normalizeTypeParams(tokens[2])
@@ -86,6 +88,10 @@ for fieldInfo, assignValues in fieldAssignDict.items():
             fieldType = definitionToTypeMap[fieldInfo]
             if not "_Bool" in fieldType and not "enum " in fieldType and not "boolean" in fieldType:
                 tmp2list.append((v0,v1,v2,fieldType))
+    elif len(assignValues) == 1:
+        # ignore timers/idles
+        if not("Idle" in v1 or "Timer" in v1):
+            tmp1list.append((v0,v1,v2))
     else:
         tmp1list.append((v0,v1,v2))
 
