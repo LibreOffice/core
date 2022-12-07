@@ -992,6 +992,48 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     return bDone;
 }
 
+bool ScTabView::GestureZoomCommand(const CommandEvent& rCEvt)
+{
+    HideNoteMarker();
+
+    const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
+    if (!pData)
+        return false;
+
+    if (aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace())
+        return false;
+
+    if (pData->meEventType == GestureEventZoomType::Begin)
+    {
+        mfLastZoomScale = pData->mfScaleDelta;
+        return true;
+    }
+
+    if (pData->meEventType == GestureEventZoomType::Update)
+    {
+        double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
+        mfLastZoomScale = pData->mfScaleDelta;
+
+        // Accumulate fractional zoom to avoid small zoom changes from being ignored
+        mfAccumulatedZoom += deltaBetweenEvents;
+        int nZoomChangePercent = mfAccumulatedZoom * 100;
+        mfAccumulatedZoom -= nZoomChangePercent / 100.0;
+
+        const Fraction& rOldY = aViewData.GetZoomY();
+        sal_uInt16 nOld = static_cast<tools::Long>(rOldY * 100);
+        sal_uInt16 nNew = nOld + nZoomChangePercent;
+        nNew = std::clamp<sal_uInt16>(nNew, MINZOOM, MAXZOOM);
+
+        if (nNew != nOld)
+        {
+            SetZoomPercentFromCommand(nNew);
+        }
+
+        return true;
+    }
+    return true;
+}
+
 IMPL_LINK_NOARG(ScTabView, HScrollLeftHdl, weld::Scrollbar&, void)
 {
     ScrollHdl(aHScrollLeft.get());

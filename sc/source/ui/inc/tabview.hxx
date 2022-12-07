@@ -214,6 +214,9 @@ private:
     bool                bBlockRows:1;             // are whole rows selected?
     bool                mbInlineWithScrollbar:1;  // should inline with scrollbar?
 
+    double              mfLastZoomScale = 0;
+    double              mfAccumulatedZoom = 0;
+
     void            Init();
 
     void            DoAddWin( ScGridWindow* pWin );
@@ -458,6 +461,7 @@ public:
     SC_DLLPUBLIC void           ScrollLines( tools::Long nDeltaX, tools::Long nDeltaY );              // active
 
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
+    bool            GestureZoomCommand(const CommandEvent& rCEvt);
 
     void            ScrollToObject( const SdrObject* pDrawObj );
     void            MakeVisible( const tools::Rectangle& rHMMRect );
