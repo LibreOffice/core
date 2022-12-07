@@ -75,7 +75,7 @@ instsetoo_installer_targets := $(foreach pkgformat,$(PKGFORMAT),\
 endif
 
 instsetoo_wipe:
-	$(call gb_Output_announce,wiping installation output dir,$(true),WIPE,6)
+	$(call gb_Output_announce,wiping installation output dir,$(true),WPE,6)
 	rm -rf $(instsetoo_OUT)
 
 # list both as prerequisites so that make won't treat the $(template) one as intermediate /
@@ -103,7 +103,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
                 bin/find-requires-x11.sh) \
         ,instsetoo_msi_templates) \
         $(call gb_Postprocess_get_target,AllModulesButInstsetNative) | instsetoo_wipe
-	$(call gb_Output_announce,$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@),$(true),INST,1)
+	$(call gb_Output_announce,$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@),$(true),INS,1)
 	$(call gb_Trace_StartRange,$@,INSTALLER)
 	$(call gb_Helper_print_on_error, \
 	    $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(subst ‧,:,$@),\
