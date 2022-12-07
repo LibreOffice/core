@@ -601,6 +601,7 @@ $(eval $(call gb_Library_add_libs,pdfium,\
 endif
 
 $(eval $(call gb_Library_use_external,pdfium,freetype))
+$(eval $(call gb_Library_use_external,pdfium,libpng))
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DDEFINE_PS_TABLES_DATA \
 ))
