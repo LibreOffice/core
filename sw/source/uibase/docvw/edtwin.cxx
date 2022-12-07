@@ -5632,6 +5632,18 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 
+    case CommandEventId::GestureZoom:
+    {
+        if (m_pSavedOutlineFrame && rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        {
+            GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            m_pSavedOutlineFrame = nullptr;
+        }
+        m_pShadCursor.reset();
+        bCallBase = !m_rView.HandleGestureZoomCommand(rCEvt);
+        break;
+    }
+
     case CommandEventId::GestureLongPress:
     case CommandEventId::GestureSwipe: //nothing yet
             break;
