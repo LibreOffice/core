@@ -5076,24 +5076,27 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                     OSL_ENSURE( pTableStNd == m_pPam->GetPointNode().FindTableNode(),
                             "Are we in the wrong table?" );
 
-                    SwNode* pNd;
-                    if( bTop )
-                        pNd = pTableStNd;
-                    else
-                        pNd = pTableStNd->EndOfSectionNode();
-                    SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
-
-                    m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx.GetNode(),
-                        SwMoveFlags::DEFAULT );
-
-                    // If the caption was added before the table, a page style on that table
-                    // needs to be moved to the first paragraph of the header.
-                    // Additionally, all remembered indices that point to the table node
-                    // need to be moved
-                    if( bTop )
+                    if (pTableStNd)
                     {
-                        MovePageDescAttrs( pTableStNd, aSrcRg.aStart.GetIndex(),
-                                           false );
+                        SwNode* pNd;
+                        if( bTop )
+                            pNd = pTableStNd;
+                        else
+                            pNd = pTableStNd->EndOfSectionNode();
+                        SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
+
+                        m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx.GetNode(),
+                            SwMoveFlags::DEFAULT );
+
+                        // If the caption was added before the table, a page style on that table
+                        // needs to be moved to the first paragraph of the header.
+                        // Additionally, all remembered indices that point to the table node
+                        // need to be moved
+                        if( bTop )
+                        {
+                            MovePageDescAttrs( pTableStNd, aSrcRg.aStart.GetIndex(),
+                                               false );
+                        }
                     }
                 }
 
