@@ -268,6 +268,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     int m_nMaxOutlineLevelShown = 10;
 
+    static constexpr sal_uInt16 MAX_ZOOM_PERCENT = 600;
+    static constexpr sal_uInt16 MIN_ZOOM_PERCENT = 20;
+
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi);
