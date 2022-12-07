@@ -208,20 +208,18 @@ private:
 
     // Entry -- a color config entry:
     // text (checkbox) + color list box
-    class Entry
+    struct Entry
     {
-    public:
         Entry(weld::Window* pTopLevel, weld::Builder& rBuilder, const char* pTextWidget, const char* pColorWidget,
-              const Color& rColor, int nCheckBoxLabelOffset, int* pColorWidthRequest, bool bCheckBox, bool bShow);
-    public:
+              const Color& rColor, int nCheckBoxLabelOffset, const ColorListBox* pCache, bool bCheckBox, bool bShow);
         void SetText(const OUString& rLabel) { dynamic_cast<weld::Label&>(*m_xText).set_label(rLabel); }
         int get_height_request() const
         {
             return std::max(m_xText->get_preferred_size().Height(),
                             m_xColorList->get_widget().get_preferred_size().Height());
         }
-        void Hide ();
-    public:
+        void Hide();
+
         void SetLinks(Link<weld::Toggleable&,void> const&,
                       Link<ColorListBox&,void> const&,
                       Link<weld::Widget&,void> const&);
@@ -229,10 +227,10 @@ private:
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
-    public:
+
         bool Is(const weld::Toggleable* pBox) const { return m_xText.get() == pBox; }
         bool Is(const ColorListBox* pBox) const { return m_xColorList.get() == pBox; }
-    private:
+
         // checkbox (CheckBox) or simple text (FixedText)
         std::unique_ptr<weld::Widget> m_xText;
         // color list box
@@ -285,9 +283,9 @@ ColorConfigWindow_Impl::Chapter::Chapter(weld::Builder& rBuilder, const char* pL
 ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBuilder,
                                      const char* pTextWidget, const char* pColorWidget,
                                      const Color& rColor, int nCheckBoxLabelOffset,
-                                     int* pColorWidthRequestCache, bool bCheckBox, bool bShow)
+                                     const ColorListBox* pCache, bool bCheckBox, bool bShow)
     : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget),
-                                    [pTopLevel]{ return pTopLevel; }, pColorWidthRequestCache))
+                                    [pTopLevel]{ return pTopLevel; }, pCache))
     , m_aDefaultColor(rColor)
 {
     if (bCheckBox)
@@ -405,7 +403,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         m_nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
-    int nColorWidthRequestCache = -1;
+    const ColorListBox* pCache = nullptr;
 
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
@@ -414,9 +412,11 @@ void ColorConfigWindow_Impl::CreateEntries()
         vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *m_xBuilder,
             vEntryInfo[i].pText, vEntryInfo[i].pColor,
             ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i)),
-            m_nCheckBoxLabelOffset, &nColorWidthRequestCache,
+            m_nCheckBoxLabelOffset, pCache,
             vEntryInfo[i].bCheckBox,
             aModulesInstalled[vEntryInfo[i].eGroup]));
+        if (!pCache)
+            pCache = vEntries.back()->m_xColorList.get();
     }
 
     // extended entries
@@ -448,7 +448,7 @@ void ColorConfigWindow_Impl::CreateEntries()
                 aExtConfig.GetComponentColorConfigValue(sComponentName, i);
             vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *vExtBuilders.back(),
                 "label", "button", aColorEntry.getDefaultColor(),
-                m_nCheckBoxLabelOffset, &nColorWidthRequestCache, false, true));
+                m_nCheckBoxLabelOffset, pCache, false, true));
             vEntries.back()->SetText(aColorEntry.getDisplayName());
         }
     }

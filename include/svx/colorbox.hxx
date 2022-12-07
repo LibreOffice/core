@@ -54,7 +54,8 @@ private:
 public:
     // rTopLevelParentFunction will be used to get parent for any color picker dialog created
     ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
-                 TopLevelParentFunction aTopLevelParentFunction, int* pWidthRequestCache = nullptr);
+                 TopLevelParentFunction aTopLevelParentFunction,
+                 const ColorListBox* pCache = nullptr);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink) { m_aSelectedLink = rLink; }

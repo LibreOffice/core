@@ -52,7 +52,10 @@ typedef std::function<void(const OUString&, const svx::NamedThemedColor&)> Color
 
 class Palette
 {
+protected:
+    Palette(const Palette&) = default;
 public:
+    Palette() = default;
     virtual ~Palette();
 
     virtual const OUString&     GetName() = 0;
@@ -60,6 +63,8 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) = 0;
 
     virtual bool                IsValid() = 0;
+
+    virtual Palette*            Clone() const = 0;
 };
 
 #endif // INCLUDED_SVX_PALETTE_HXX

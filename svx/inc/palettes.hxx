@@ -37,6 +37,7 @@ class PaletteASE final : public Palette
     ColorList   maColors;
 
     void        LoadPalette();
+    PaletteASE(const PaletteASE&) = default;
 public:
     PaletteASE( OUString aFPath, OUString aFName );
     virtual ~PaletteASE() override;
@@ -46,6 +47,8 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
+
+    virtual Palette*            Clone() const override;
 };
 
 // GPL - this is *not* GNU Public License, but is the Gimp PaLette
@@ -62,6 +65,7 @@ class PaletteGPL final : public Palette
     bool        ReadPaletteHeader(SvFileStream& rFileStream);
     void        LoadPaletteHeader();
     void        LoadPalette();
+    PaletteGPL(const PaletteGPL&) = default;
 public:
     PaletteGPL( OUString aFPath, OUString aFName );
     virtual ~PaletteGPL() override;
@@ -71,6 +75,8 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
+
+    virtual Palette*            Clone() const override;
 };
 
 // SOC - Star Office Color-table
@@ -81,6 +87,7 @@ class PaletteSOC final : public Palette
     OUString        maFPath;
     OUString        maSOCPaletteName;
     XColorListRef   mpColorList;
+    PaletteSOC(const PaletteSOC&) = default;
 public:
     PaletteSOC( OUString aFPath, OUString aFName );
     virtual ~PaletteSOC() override;
@@ -90,6 +97,8 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
+
+    virtual Palette*            Clone() const override;
 };
 
 #endif // INCLUDED_SVX_INC_PALETTE_HXX

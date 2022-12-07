@@ -77,6 +77,25 @@ PaletteManager::PaletteManager() :
 
 }
 
+PaletteManager::PaletteManager(const PaletteManager* pClone)
+    : mnMaxRecentColors(pClone->mnMaxRecentColors)
+    , mnNumOfPalettes(pClone->mnNumOfPalettes)
+    , mnCurrentPalette(pClone->mnCurrentPalette)
+    , mnColorCount(pClone->mnColorCount)
+    , mpBtnUpdater(nullptr)
+    , pColorList(pClone->pColorList)
+    , maRecentColors(pClone->maRecentColors)
+    , maColorSelectFunction(PaletteManager::DispatchColorCommand)
+{
+    for (const auto& a : pClone->m_Palettes)
+        m_Palettes.emplace_back(a->Clone());
+}
+
+PaletteManager* PaletteManager::Clone() const
+{
+    return new PaletteManager(this);
+}
+
 PaletteManager::~PaletteManager()
 {
 }
