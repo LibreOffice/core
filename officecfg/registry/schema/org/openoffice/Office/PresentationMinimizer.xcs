@@ -193,7 +193,7 @@ The current presentation contains no OLE objects.</value>
            </prop>
             <prop oor:name="STR_INFO_SECONDARY_2" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_INFO_SECONDARY_2.</desc></info>
-                <value>The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
+                <value>The file size has changed from %OLDFILESIZE MB to approximately %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_INFO_SECONDARY_3" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_INFO_SECONDARY_3.</desc></info>
@@ -201,7 +201,7 @@ The current presentation contains no OLE objects.</value>
            </prop>
             <prop oor:name="STR_INFO_SECONDARY_4" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_INFO_SECONDARY_4.</desc></info>
-                <value>The file size has changed to approximated %NEWFILESIZE MB.</value>
+                <value>The file size has changed to approximately %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_DUPLICATING_PRESENTATION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_DUPLICATING_PRESENTATION.</desc></info>
