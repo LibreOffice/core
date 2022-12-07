@@ -640,9 +640,9 @@ void XMLTableExport::exportTableTemplates()
                     // tdf#106780 historically this wrong attribute was used
                     // for the name; write it if extended because LO < 5.3 can
                     // read only text:style-name, not the correct table:name
-                    mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+                    mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, xTableStyle->getName());
                 }
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName(xTableStyle->getName()));
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, xTableStyle->getName());
             }
 
             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
