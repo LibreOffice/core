@@ -71,7 +71,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
         [mpPrintInfo setOrientation: NSPaperOrientationPortrait];
     }
 
-    mpGraphics = new AquaSalGraphics();
+    mpGraphics = new AquaSalGraphics(true);
 
     const int nWidth = 100, nHeight = 100;
     mpContextMemory.reset(new (std::nothrow) sal_uInt8[nWidth * 4 * nHeight]);

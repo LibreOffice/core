@@ -137,14 +137,21 @@ sal_IntPtr CoreTextFontFace::GetFontId() const
     return reinterpret_cast<sal_IntPtr>(mxFontDescriptor);
 }
 
-AquaSalGraphics::AquaSalGraphics()
+AquaSalGraphics::AquaSalGraphics(bool bPrinter)
     : mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
 
 #if HAVE_FEATURE_SKIA
-    if(SkiaHelper::isVCLSkiaEnabled())
+    // tdf#146842 Do not use Skia for printing
+    // Skia does not work with a native print graphics contexts. I am not sure
+    // why but from what I can see, the Skia implementation drawing to a bitmap
+    // buffer. However, in an NSPrintOperation, the print view's backing buffer
+    // is CGPDFContext so even if this bug could be solved by blitting the
+    // Skia bitmap buffer, the printed PDF would not have selectable text so
+    // always disable Skia for print graphics contexts.
+    if(!bPrinter && SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
 #else
     if(false)
