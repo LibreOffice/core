@@ -1,0 +1,12 @@
+--- core/src/Generator.h
++++ core/src/Generator.h
+@@ -6,7 +6,9 @@
+ #pragma once
+ 
+ #ifdef __cpp_impl_coroutine
++#include <concepts>
+ #include <coroutine>
++#include <iterator>
+ #include <optional>
+ 
+ // this code is based on https://en.cppreference.com/w/cpp/coroutine/coroutine_handle#Example

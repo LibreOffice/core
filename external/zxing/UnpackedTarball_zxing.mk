@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/assume.__cpp_lib_string_view.patch.0 \
 	external/zxing/android_include.patch.0 \
+	external/zxing/missing-include.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
