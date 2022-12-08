@@ -110,113 +110,121 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 
     // Remember this list block.
     mrTxtImport.GetTextListHelper().PushListContext( this );
-
-    mxNumRules = XMLTextListsHelper::MakeNumRule(GetImport(), mxNumRules,
-        sParentListStyleName, msListStyleName,
-        mnLevel, &mbRestartNumbering, &mbSetDefaults );
-    if( !mxNumRules.is() )
-        return;
-
-    if ( mnLevel != 0 ) // root <list> element
-        return;
-
-    XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
-    // Inconsistent behavior regarding lists (#i92811#)
-    OUString sListStyleDefaultListId;
+    try
     {
-        uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
-        if ( xNumRuleProps.is() )
+        mxNumRules = XMLTextListsHelper::MakeNumRule(GetImport(), mxNumRules,
+            sParentListStyleName, msListStyleName,
+            mnLevel, &mbRestartNumbering, &mbSetDefaults );
+        if( !mxNumRules.is() )
+            return;
+
+        if ( mnLevel != 0 ) // root <list> element
+            return;
+
+        XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
+        // Inconsistent behavior regarding lists (#i92811#)
+        OUString sListStyleDefaultListId;
         {
-            uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
-                                        xNumRuleProps->getPropertySetInfo());
-            if (xNumRulePropSetInfo.is() &&
-                xNumRulePropSetInfo->hasPropertyByName(
-                     s_PropNameDefaultListId))
+            uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
+            if ( xNumRuleProps.is() )
             {
-                xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
-                    >>= sListStyleDefaultListId;
-                SAL_WARN_IF( sListStyleDefaultListId.isEmpty(), "xmloff",
-                            "no default list id found at numbering rules instance. Serious defect." );
-            }
-        }
-    }
-    if ( msListId.isEmpty() )  // no text:id property found
-    {
-        sal_Int32 nUPD( 0 );
-        sal_Int32 nBuild( 0 );
-        const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
-        if ( rImport.IsTextDocInOOoFileFormat() ||
-             ( bBuildIdFound && nUPD == 680 ) )
-        {
-            /* handling former documents written by OpenOffice.org:
-               use default list id of numbering rules instance, if existing
-               (#i92811#)
-            */
-            if ( !sListStyleDefaultListId.isEmpty() )
-            {
-                msListId = sListStyleDefaultListId;
-                if ( !bIsContinueNumberingAttributePresent &&
-                     !mbRestartNumbering &&
-                     rTextListsHelper.IsListProcessed( msListId ) )
+                uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
+                                            xNumRuleProps->getPropertySetInfo());
+                if (xNumRulePropSetInfo.is() &&
+                    xNumRulePropSetInfo->hasPropertyByName(
+                         s_PropNameDefaultListId))
                 {
-                    mbRestartNumbering = true;
+                    xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
+                        >>= sListStyleDefaultListId;
+                    SAL_WARN_IF( sListStyleDefaultListId.isEmpty(), "xmloff",
+                                "no default list id found at numbering rules instance. Serious defect." );
                 }
             }
         }
-        if ( msListId.isEmpty() )
+        if ( msListId.isEmpty() )  // no text:id property found
         {
-            // generate a new list id for the list
-            msListId = rTextListsHelper.GenerateNewListId();
-        }
-    }
-
-    if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
-         msContinueListId.isEmpty() )
-    {
-        const OUString& Last( rTextListsHelper.GetLastProcessedListId() );
-        if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
-             && Last != msListId )
-        {
-            msContinueListId = Last;
-        }
-    }
-
-    bool bContinueNumbering = bIsContinueNumberingAttributePresent && !mbRestartNumbering;
-    if (msContinueListId.isEmpty() && bContinueNumbering && GetImport().IsMSO())
-    {
-        // No "continue list" id, but continue numbering was requested. Connect to the last list of
-        // the same list style in the Word case, even if there was a different list in the meantime.
-        msContinueListId = rTextListsHelper.GetLastIdOfStyleName(msListStyleName);
-    }
-
-    if ( !msContinueListId.isEmpty() )
-    {
-        if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
-        {
-            msContinueListId.clear();
-        }
-        else
-        {
-            // search continue list chain for master list and
-            // continue the master list.
-            OUString sTmpStr =
-                rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
-            while ( !sTmpStr.isEmpty() )
+            sal_Int32 nUPD( 0 );
+            sal_Int32 nBuild( 0 );
+            const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+            if ( rImport.IsTextDocInOOoFileFormat() ||
+                 ( bBuildIdFound && nUPD == 680 ) )
             {
-                msContinueListId = sTmpStr;
-
-                sTmpStr =
-                    rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
+                /* handling former documents written by OpenOffice.org:
+                   use default list id of numbering rules instance, if existing
+                   (#i92811#)
+                */
+                if ( !sListStyleDefaultListId.isEmpty() )
+                {
+                    msListId = sListStyleDefaultListId;
+                    if ( !bIsContinueNumberingAttributePresent &&
+                         !mbRestartNumbering &&
+                         rTextListsHelper.IsListProcessed( msListId ) )
+                    {
+                        mbRestartNumbering = true;
+                    }
+                }
+            }
+            if ( msListId.isEmpty() )
+            {
+                // generate a new list id for the list
+                msListId = rTextListsHelper.GenerateNewListId();
             }
         }
-    }
 
-    if ( !rTextListsHelper.IsListProcessed( msListId ) )
+        if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
+             msContinueListId.isEmpty() )
+        {
+            const OUString& Last( rTextListsHelper.GetLastProcessedListId() );
+            if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
+                 && Last != msListId )
+            {
+                msContinueListId = Last;
+            }
+        }
+
+        bool bContinueNumbering = bIsContinueNumberingAttributePresent && !mbRestartNumbering;
+        if (msContinueListId.isEmpty() && bContinueNumbering && GetImport().IsMSO())
+        {
+            // No "continue list" id, but continue numbering was requested. Connect to the last list of
+            // the same list style in the Word case, even if there was a different list in the meantime.
+            msContinueListId = rTextListsHelper.GetLastIdOfStyleName(msListStyleName);
+        }
+
+        if ( !msContinueListId.isEmpty() )
+        {
+            if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
+            {
+                msContinueListId.clear();
+            }
+            else
+            {
+                // search continue list chain for master list and
+                // continue the master list.
+                OUString sTmpStr =
+                    rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
+                while ( !sTmpStr.isEmpty() )
+                {
+                    msContinueListId = sTmpStr;
+
+                    sTmpStr =
+                        rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
+                }
+            }
+        }
+
+        if ( !rTextListsHelper.IsListProcessed( msListId ) )
+        {
+            // Inconsistent behavior regarding lists (#i92811#)
+            rTextListsHelper.KeepListAsProcessed(
+                msListId, msListStyleName, msContinueListId,
+                sListStyleDefaultListId );
+        }
+    }
+    catch (uno::Exception&)
     {
-        // Inconsistent behavior regarding lists (#i92811#)
-        rTextListsHelper.KeepListAsProcessed(
-            msListId, msListStyleName, msContinueListId,
-            sListStyleDefaultListId );
+        // pop ourselves if anything goes wrong to avoid use-after-free
+        rTxtImp.GetTextListHelper().PopListContext();
+        throw;
     }
 }
 

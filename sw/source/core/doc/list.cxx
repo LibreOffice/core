@@ -33,8 +33,18 @@ SwList::SwList( OUString sListId,
 {
     // create empty list trees for the document ranges
     const SwNode* pNode = rNodes[SwNodeOffset(0)];
+    std::vector<bool> aVisited(static_cast<sal_Int32>(rNodes.Count()), false);
     do
     {
+        SwNodeOffset nIndex = pNode->GetIndex();
+        if (aVisited[static_cast<sal_Int32>(nIndex)])
+        {
+            // crashtesting ooo84576-1.odt, which manages to trigger a broken document structure
+            // in our code. This is just a workaround to prevent an infinite loop leading to OOM.
+            SAL_WARN("sw.core", "corrupt document structure, bailing out of infinite loop");
+            throw css::uno::RuntimeException("corrupt document structure, bailing out of infinite loop");
+        }
+        aVisited[static_cast<sal_Int32>(nIndex)] = true;
         SwPaM aPam( *pNode, *pNode->EndOfSectionNode() );
 
         maListTrees.emplace_back(
@@ -46,7 +56,7 @@ SwList::SwList( OUString sListId,
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
         {
-            SwNodeOffset nIndex = pNode->GetIndex();
+            nIndex = pNode->GetIndex();
             nIndex++;
             pNode = rNodes[nIndex];
         }
