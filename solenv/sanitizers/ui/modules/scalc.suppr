@@ -47,7 +47,6 @@ sc/uiconfig/scalc/ui/definename.ui://GtkLabel[@id='label'] orphan-label
 sc/uiconfig/scalc/ui/doubledialog.ui://GtkEntry[@id='value'] no-labelled-by
 sc/uiconfig/scalc/ui/externaldata.ui://GtkLabel[@id='secondsft'] orphan-label
 sc/uiconfig/scalc/ui/fourieranalysisdialog.ui://GtkLabel[@id='error-message'] orphan-label
-sc/uiconfig/scalc/ui/functionpanel.ui://GtkLabel[@id='funcdesc'] orphan-label
 sc/uiconfig/scalc/ui/groupbynumber.ui://GtkEntry[@id='edit_by'] no-labelled-by
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelFT_H_CUSTOM'] orphan-label
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelFT_F_CUSTOM'] orphan-label
