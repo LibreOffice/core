@@ -24,6 +24,7 @@
 
 namespace ww
 {
+    // When changing, make sure to update GetStiNames in sw/source/filter/ww8/styles.cxx accordingly
     enum sti : sal_uInt16
     {
         stiNormal = 0,                  // 0x0000

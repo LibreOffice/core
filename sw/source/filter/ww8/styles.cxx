@@ -25,102 +25,103 @@ namespace
 {
     const char **GetStiNames() noexcept
     {
+        // Matches enum ww::sti in sw/source/filter/inc/wwstyles.hxx
         static const char *stiName[] =
         {
-            "Normal",
-            "Heading 1",
-            "Heading 2",
-            "Heading 3",
-            "Heading 4",
-            "Heading 5",
-            "Heading 6",
-            "Heading 7",
-            "Heading 8",
-            "Heading 9",
-            "Index 1",
-            "Index 2",
-            "Index 3",
-            "Index 4",
-            "Index 5",
-            "Index 6",
-            "Index 7",
-            "Index 8",
-            "Index 9",
-            "TOC 1",
-            "TOC 2",
-            "TOC 3",
-            "TOC 4",
-            "TOC 5",
-            "TOC 6",
-            "TOC 7",
-            "TOC 8",
-            "TOC 9",
-            "Normal Indent",
-            "Footnote Text",
-            "Annotation Text",
-            "Header",
-            "Footer",
-            "Index Heading",
-            "Caption",
-            "Table of Figures",
-            "Envelope Address",
-            "Envelope Return",
-            "Footnote Reference",
-            "Annotation Reference",
-            "Line Number",
-            "Page Number",
-            "Endnote Reference",
-            "Endnote Text",
-            "Table of Authorities",
-            "Macro Text",
-            "TOC Heading",
-            "List",
-            "List 2",
-            "List 3",
-            "List 4",
-            "List 5",
-            "List Bullet",
-            "List Bullet 2",
-            "List Bullet 3",
-            "List Bullet 4",
-            "List Bullet 5",
-            "List Number",
-            "List Number 2",
-            "List Number 3",
-            "List Number 4",
-            "List Number 5",
-            "Title",
-            "Closing",
-            "Signature",
-            "Default Paragraph Font",
-            "Body Text",
-            "Body Text Indent",
-            "List Continue",
-            "List Continue 2",
-            "List Continue 3",
-            "List Continue 4",
-            "List Continue 5",
-            "Message Header",
-            "Subtitle",
-            "Salutation",
-            "Date",
-            "Body Text First Indent",
-            "Body Text First Indent 2",
-            "Note Heading",
-            "Body Text 2",
-            "Body Text 3",
-            "Body Text Indent 2",
-            "Body Text Indent 3",
-            "Block Text",
-            "Hyperlink",
-            "FollowedHyperlink",
-            "Strong",
-            "Emphasis",
-            "Document Map",
-            "Plain Text"
+            "Normal",                   // stiNormal
+            "Heading 1",                // stiLev1
+            "Heading 2",                // stiLev2
+            "Heading 3",                // stiLev3
+            "Heading 4",                // stiLev4
+            "Heading 5",                // stiLev5
+            "Heading 6",                // stiLev6
+            "Heading 7",                // stiLev7
+            "Heading 8",                // stiLev8
+            "Heading 9",                // stiLev9
+            "Index 1",                  // stiIndex1
+            "Index 2",                  // stiIndex2
+            "Index 3",                  // stiIndex3
+            "Index 4",                  // stiIndex4
+            "Index 5",                  // stiIndex5
+            "Index 6",                  // stiIndex6
+            "Index 7",                  // stiIndex7
+            "Index 8",                  // stiIndex8
+            "Index 9",                  // stiIndex9
+            "TOC 1",                    // stiToc1
+            "TOC 2",                    // stiToc2
+            "TOC 3",                    // stiToc3
+            "TOC 4",                    // stiToc4
+            "TOC 5",                    // stiToc5
+            "TOC 6",                    // stiToc6
+            "TOC 7",                    // stiToc7
+            "TOC 8",                    // stiToc8
+            "TOC 9",                    // stiToc9
+            "Normal Indent",            // stiNormIndent
+            "Footnote Text",            // stiFootnoteText
+            "Annotation Text",          // stiAtnText
+            "Header",                   // stiHeader
+            "Footer",                   // stiFooter
+            "Index Heading",            // stiIndexHeading
+            "Caption",                  // stiCaption
+            "Table of Figures",         // stiToCaption
+            "Envelope Address",         // stiEnvAddr
+            "Envelope Return",          // stiEnvRet
+            "Footnote Reference",       // stiFootnoteRef
+            "Annotation Reference",     // stiAtnRef
+            "Line Number",              // stiLnn
+            "Page Number",              // stiPgn
+            "Endnote Reference",        // stiEdnRef
+            "Endnote Text",             // stiEdnText
+            "Table of Authorities",     // stiToa
+            "Macro Text",               // stiMacro
+            "TOC Heading",              // stiToaHeading - tdf143726
+            "List",                     // stiList
+            "List Bullet",              // stiListBullet
+            "List Number",              // stiListNumber
+            "List 2",                   // stiList2
+            "List 3",                   // stiList3
+            "List 4",                   // stiList4
+            "List 5",                   // stiList5
+            "List Bullet 2",            // stiListBullet2
+            "List Bullet 3",            // stiListBullet3
+            "List Bullet 4",            // stiListBullet4
+            "List Bullet 5",            // stiListBullet5
+            "List Number 2",            // stiListNumber2
+            "List Number 3",            // stiListNumber3
+            "List Number 4",            // stiListNumber4
+            "List Number 5",            // stiListNumber5
+            "Title",                    // stiTitle
+            "Closing",                  // stiClosing
+            "Signature",                // stiSignature
+            "Default Paragraph Font",   // stiNormalChar
+            "Body Text",                // stiBodyText
+            "Body Text Indent",         // stiBodyTextInd1
+            "List Continue",            // stiListCont
+            "List Continue 2",          // stiListCont2
+            "List Continue 3",          // stiListCont3
+            "List Continue 4",          // stiListCont4
+            "List Continue 5",          // stiListCont5
+            "Message Header",           // stiMsgHeader
+            "Subtitle",                 // stiSubtitle
+            "Salutation",               // stiSalutation
+            "Date",                     // stiDate
+            "Body Text First Indent",   // stiBodyText1I
+            "Body Text First Indent 2", // stiBodyText1I2
+            "Note Heading",             // stiNoteHeading
+            "Body Text 2",              // stiBodyText2
+            "Body Text 3",              // stiBodyText3
+            "Body Text Indent 2",       // stiBodyTextInd2
+            "Body Text Indent 3",       // stiBodyTextInd3
+            "Block Text",               // stiBlockQuote
+            "Hyperlink",                // stiHyperlink
+            "FollowedHyperlink",        // stiHyperlinkFollowed
+            "Strong",                   // stiStrong
+            "Emphasis",                 // stiEmphasis
+            "Document Map",             // stiNavPane
+            "Plain Text",               // stiPlainText
         };
 
-        OSL_ENSURE( SAL_N_ELEMENTS(stiName) == ww::stiMax, "WrongSizeOfArray" );
+        static_assert(SAL_N_ELEMENTS(stiName) == ww::stiMax, "WrongSizeOfArray");
 
         return stiName;
     }
