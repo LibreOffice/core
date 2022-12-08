@@ -313,6 +313,9 @@ public:
     /// Receives end mark for glossary document entry.
     virtual void endGlossaryEntry() = 0;
 
+    /// Receives identifier for node entry.
+    virtual void checkId(const sal_Int32 nId) = 0;
+
     virtual void commentProps(const OUString& /*sId*/, const CommentProperties& /*rProps*/) {}
 
 protected:

@@ -316,6 +316,20 @@ void LoggedStream::endGlossaryEntry()
 #endif
 }
 
+void LoggedStream::checkId(const sal_Int32 nId)
+{
+#ifdef DBG_UTIL
+    mHelper.startElement("checkId");
+    LoggedResourcesHelper::chars(OUString::number(nId));
+#endif
+
+    lcl_checkId(nId);
+
+#ifdef DBG_UTIL
+    LoggedResourcesHelper::endElement();
+#endif
+}
+
 LoggedProperties::LoggedProperties(
 #ifdef DBG_UTIL
     const std::string& sPrefix)

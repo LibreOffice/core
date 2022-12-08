@@ -197,6 +197,9 @@ DomainMapper::~DomainMapper()
 {
     try
     {
+        // Remove temporary footnotes and endnotes
+        m_pImpl->RemoveTemporaryFootOrEndnotes();
+
         uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
         sal_Int32 nIndexes = 0;
         if( xIndexesSupplier.is() )
@@ -3737,6 +3740,17 @@ void DomainMapper::lcl_align(const OUString& rText, bool bVertical)
 void DomainMapper::lcl_positivePercentage(const OUString& rText)
 {
     m_pImpl->m_aPositivePercentages.push(rText);
+}
+
+void DomainMapper::lcl_checkId(const sal_Int32 nId)
+{
+    if (m_pImpl->IsInFootnote())
+    {
+        if (m_pImpl->GetFootnoteCount() > -1)
+            m_pImpl->m_aFootnoteIds.push_back(nId);
+    }
+    else if (m_pImpl->GetEndnoteCount() > -1)
+        m_pImpl->m_aEndnoteIds.push_back(nId);
 }
 
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)

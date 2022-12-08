@@ -162,6 +162,7 @@ private:
                                ::writerfilter::Reference<Stream>::Pointer_t ref) override;
     virtual void lcl_startGlossaryEntry() override;
     virtual void lcl_endGlossaryEntry() override;
+    virtual void lcl_checkId(const sal_Int32 nId) override;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
