@@ -206,7 +206,6 @@ public:
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void CreateAndInsert( bool bOverwrite ) override;
 protected:
     virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
@@ -234,21 +233,21 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::creat
 
 XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrImport( rImport )
+, mbWriter( false )
 {
-    bool bWriter = false;
     // check if called by Writer
     Reference<XMultiServiceFactory> xFac(rImport.GetModel(), UNO_QUERY);
     if (xFac.is()) try
     {
         Sequence<OUString> sSNS = xFac->getAvailableServiceNames();
-        bWriter = comphelper::findValue(sSNS, "com.sun.star.style.TableStyle") != -1;
+        mbWriter = comphelper::findValue(sSNS, "com.sun.star.style.TableStyle") != -1;
     }
     catch(const Exception&)
     {
         SAL_WARN("xmloff.table", "Error while checking available service names");
     }
 
-    if (bWriter)
+    if (mbWriter)
     {
         mxCellImportPropertySetMapper = XMLTextImportHelper::CreateTableCellExtPropMapper(rImport);
     }
@@ -288,69 +287,6 @@ void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemp
     maTableTemplates.emplace_back(rsStyleName, xPtr);
 }
 
-void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOverwrite)
-{
-    // FIXME: All templates will be inserted eventually, but
-    // instead of simply iterating them, like in finishStyles(),
-    // we search here by name again and again.
-    auto it = std::find_if(maTableTemplates.begin(), maTableTemplates.end(),
-        [&rsStyleName](const auto& item) { return rsStyleName == item.first; });
-    if (it == maTableTemplates.end())
-        return;
-
-    try
-    {
-        Reference<XStyleFamiliesSupplier> xFamiliesSupp(mrImport.GetModel(), UNO_QUERY_THROW);
-        Reference<XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
-
-        Reference<XNameContainer> xTableFamily(xFamilies->getByName("TableStyles"), UNO_QUERY_THROW);
-        Reference<XIndexAccess> xCellFamily(xFamilies->getByName("CellStyles"), UNO_QUERY_THROW);
-
-        const OUString sTemplateName(it->first);
-        Reference<XMultiServiceFactory> xFactory(mrImport.GetModel(), UNO_QUERY_THROW);
-        Reference<XNameReplace> xTemplate(xFactory->createInstance("com.sun.star.style.TableStyle"), UNO_QUERY_THROW);
-
-        std::shared_ptr<XMLTableTemplate> xT(it->second);
-
-        for (const auto& rStyle : *xT) try
-        {
-            const OUString sPropName(rStyle.first);
-            const OUString sStyleName(rStyle.second);
-            // Internally unassigned cell styles are stored by display name.
-            // However table-template elements reference cell styles by its encoded name.
-            // This loop is looking for cell style by their encoded names.
-            sal_Int32 nCount = xCellFamily->getCount();
-            for (sal_Int32 i=0; i < nCount; ++i)
-            {
-                Any xCellStyle = xCellFamily->getByIndex(i);
-                OUString sEncodedStyleName = mrImport.GetMM100UnitConverter().encodeStyleName(
-                    xCellStyle.get<Reference<XStyle>>()->getName());
-                if (sEncodedStyleName == sStyleName)
-                {
-                    xTemplate->replaceByName(sPropName, xCellStyle);
-                    break;
-                }
-            }
-        }
-        catch (Exception const &)
-        {
-            TOOLS_WARN_EXCEPTION("xmloff.table", "XMLTableImport::insertTabletemplate()");
-        }
-
-        if (xTemplate.is())
-        {
-            if (xTableFamily->hasByName(sTemplateName) && bOverwrite)
-               xTableFamily->replaceByName(sTemplateName, Any(xTemplate));
-            else
-               xTableFamily->insertByName(sTemplateName, Any(xTemplate));
-        }
-    }
-    catch (Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("xmloff.table", "XMLTableImport::insertTabletemplate()");
-    }
-}
-
 void XMLTableImport::finishStyles()
 {
     if( maTableTemplates.empty() )
@@ -361,15 +297,20 @@ void XMLTableImport::finishStyles()
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrImport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
 
-        Reference< XNameContainer > xTableFamily( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xCellFamily( xFamilies->getByName( "cell" ), UNO_QUERY_THROW );
+        const OUString aTableFamily(mbWriter ? u"TableStyles" : u"table");
+        const OUString aCellFamily(mbWriter ? u"CellStyles" : u"cell");
+        Reference< XNameContainer > xTableFamily( xFamilies->getByName( aTableFamily ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xCellFamily( xFamilies->getByName( aCellFamily ), UNO_QUERY_THROW );
 
-        Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
+        Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY );
+        assert(xFactory.is() != mbWriter);
+        Reference< XMultiServiceFactory > xMultiFactory( mrImport.GetModel(), UNO_QUERY_THROW );
 
         for( const auto& rTemplate : maTableTemplates ) try
         {
             const OUString sTemplateName( rTemplate.first );
-            Reference< XNameReplace > xTemplate( xFactory->createInstance(), UNO_QUERY_THROW );
+            Reference< XNameReplace > xTemplate(xFactory ? xFactory->createInstance() :
+                xMultiFactory->createInstance("com.sun.star.style.TableStyle"), UNO_QUERY_THROW);
 
             std::shared_ptr< XMLTableTemplate > xT( rTemplate.second );
 
@@ -788,13 +729,6 @@ void XMLTableTemplateContext::endFastElement(sal_Int32 )
     rtl::Reference< XMLTableImport > xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
     if( xTableImport.is() )
         xTableImport->addTableTemplate( msTemplateStyleName, maTableTemplate );
-}
-
-void XMLTableTemplateContext::CreateAndInsert(bool bOverwrite)
-{
-    rtl::Reference<XMLTableImport> xTableImport(GetImport().GetShapeImport()->GetShapeTableImport());
-    if(xTableImport.is())
-       xTableImport->insertTabletemplate(msTemplateStyleName, bOverwrite);
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContext::createFastChildContext(

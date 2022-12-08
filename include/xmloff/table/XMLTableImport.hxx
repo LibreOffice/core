@@ -58,13 +58,12 @@ public:
     const rtl::Reference< SvXMLImportPropertyMapper >& GetColumnImportPropertySetMapper() const { return mxColumnImportPropertySetMapper; }
 
     void addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate );
-    /// Inserts to the doc template with given name.
-    void insertTabletemplate( const OUString& rsStyleName, bool bOverwrite);
     /// Inserts all table templates.
     void finishStyles();
 
 private:
     SvXMLImport&                                 mrImport;
+    bool                                        mbWriter;
     rtl::Reference< SvXMLImportPropertyMapper > mxCellImportPropertySetMapper;
     rtl::Reference< SvXMLImportPropertyMapper > mxRowImportPropertySetMapper;
     rtl::Reference< SvXMLImportPropertyMapper > mxColumnImportPropertySetMapper;

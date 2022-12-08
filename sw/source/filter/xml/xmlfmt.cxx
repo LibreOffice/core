@@ -919,6 +919,8 @@ OUString SwXMLStylesContext_Impl::GetServiceName( XmlStyleFamily nFamily ) const
 void SwXMLStylesContext_Impl::endFastElement(sal_Int32 )
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
+    if (!IsAutomaticStyle())
+        GetImport().GetShapeImport()->GetShapeTableImport()->finishStyles();
 }
 
 namespace {
