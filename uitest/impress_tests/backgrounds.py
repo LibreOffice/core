@@ -75,9 +75,9 @@ class ImpressBackgrounds(UITestCase):
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillBitmapLogicalSize, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeX, 0)
+              document.DrawPages.getByIndex(0).Background.FillBitmapSizeX, 2540)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeY, 0)
+              document.DrawPages.getByIndex(0).Background.FillBitmapSizeY, 2540)
             self.assertEqual(document.DrawPages.getByIndex(0).Background.FillBitmapName, 'Painted White')
         elif btn == 'btnpattern':
             self.assertEqual(
