@@ -258,6 +258,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq2.getLength());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
+{
+    loadAndReload("tdf152425.docx");
+
+    // Check that "List Number" and "List 5" styles don't get merged
+    const OUString Para3Style = getProperty<OUString>(getParagraph(3), "ParaStyleName");
+    CPPUNIT_ASSERT_EQUAL(OUString("List Number"), Para3Style);
+    const OUString Para4Style = getProperty<OUString>(getParagraph(4), "ParaStyleName");
+    // Eventually, we need to check this:
+    // CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para4Style);
+    // But for now, just make sure that the style names differ
+    CPPUNIT_ASSERT(Para4Style != Para3Style);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
