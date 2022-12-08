@@ -1345,7 +1345,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
     }
 
     if (nVisMemCount)
-        mpChecks->select(0);
+        mpChecks->set_cursor(0);
 
     return nVisMemCount;
 }
