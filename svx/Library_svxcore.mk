@@ -29,6 +29,7 @@ $(eval $(call gb_Library_add_sdi_headers,svxcore,svx/sdi/svxslots))
 
 $(eval $(call gb_Library_use_custom_headers,svxcore,\
 	officecfg/registry \
+	oox/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,svxcore))

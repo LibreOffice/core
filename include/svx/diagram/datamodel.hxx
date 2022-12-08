@@ -30,23 +30,24 @@
 
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <oox/token/tokens.hxx>
 
 namespace svx::diagram {
 
 enum TypeConstant {
     XML_none = 0,
-    XML_type = 395,
-    XML_asst = 680,
-    XML_doc = 1924,
-    XML_node = 3596,
-    XML_norm = 3609,
-    XML_parOf = 3878,
-    XML_parTrans = 3879,
-    XML_pres = 4085,
-    XML_presOf = 4090,
-    XML_presParOf = 4091,
-    XML_rel = 4298,
-    XML_sibTrans = 4746,
+    XML_type = oox::XML_Type,
+    XML_asst = oox::XML_asst,
+    XML_doc = oox::XML_doc,
+    XML_node = oox::XML_node,
+    XML_norm = oox::XML_norm,
+    XML_parOf = oox::XML_parOf,
+    XML_parTrans = oox::XML_parTrans,
+    XML_pres = oox::XML_pres,
+    XML_presOf = oox::XML_presOf,
+    XML_presParOf = oox::XML_presParOf,
+    XML_rel = oox::XML_rel,
+    XML_sibTrans = oox::XML_sibTrans,
 };
 
 /** A Connection
