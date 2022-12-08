@@ -102,8 +102,6 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     const OUString& rXmlEventName,
     const OUString& rLanguage)
 {
-    rImport.NotifyMacroEventRead();
-
     SvXMLImportContext* pContext = nullptr;
 
     // translate event name from xml to api

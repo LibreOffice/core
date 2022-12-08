@@ -53,6 +53,9 @@ SvXMLImportContext* XMLScriptContextFactory::CreateContext(
         // else: ignore
     }
 
+    if (!sURLVal.isEmpty())
+        rImport.NotifyMacroEventRead();
+
     Sequence<PropertyValue> aValues{ comphelper::makePropertyValue(gsEventType, OUString(gsScript)),
                                      comphelper::makePropertyValue(gsURL, sURLVal) };
 
