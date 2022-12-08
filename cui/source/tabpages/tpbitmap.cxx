@@ -316,15 +316,9 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     if(rAttrs->GetItemState(XATTR_FILLBMP_SIZELOG) != SfxItemState::DONTCARE)
     {
         if (rAttrs->Get( XATTR_FILLBMP_SIZELOG ).GetValue())
-        {
             m_xTsbScale->set_state(TRISTATE_FALSE);
-            m_bLogicalSize = true;
-        }
         else
-        {
             m_xTsbScale->set_state(TRISTATE_TRUE);
-            m_bLogicalSize = false;
-        }
     }
     else
         m_xTsbScale->set_state(TRISTATE_INDET);
@@ -337,6 +331,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
             nWidth = rBitmapSize.Width();
         else if(nWidth < 0)
         {
+            m_bLogicalSize = true;
             eRelative = TRISTATE_TRUE;
             nWidth = std::abs(nWidth);
         }
@@ -349,6 +344,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
             nHeight = rBitmapSize.Height();
         else if(nHeight < 0)
         {
+            m_bLogicalSize = true;
             eRelative = TRISTATE_TRUE;
             nHeight = std::abs(nHeight);
         }
