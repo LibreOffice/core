@@ -142,6 +142,7 @@ public:
     OUString m_aColor;
     OUString m_aPlaceHolderDocPart;
     OUString m_aAlias;
+    OUString m_aTag;
     sal_Int32 m_nSdtPrToken;
 
     void DeleteAndResetTheLists();
