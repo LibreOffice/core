@@ -490,6 +490,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
 {
     // Don't assert with 'pFieldMark' failed when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    if (!isExported())
+        return;
+    // Preserve tag on SDT blocks. (Before the fix, these were all lost)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")

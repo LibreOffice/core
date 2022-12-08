@@ -2910,14 +2910,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 break;
             }
         }
-        else
-        {
-            if (nSprmId == NS_ooxml::LN_CT_SdtPr_tag)
-            {
-                // Tag is only handled here in case of inline SDT.
-                break;
-            }
-        }
 
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName;
@@ -2933,6 +2925,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_group:       sName = "ooxml:CT_SdtPr_group"; break;
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
             case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
+            case NS_ooxml::LN_CT_SdtPr_tag:         sName = "ooxml:CT_SdtPr_tag"; break;
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
             case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
             case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
@@ -2954,7 +2947,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (pProperties)
             pProperties->resolve(*this);
 
-        if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
+        if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias || nSprmId == NS_ooxml::LN_CT_SdtPr_tag)
         {
             beans::PropertyValue aValue;
             aValue.Name = sName;
