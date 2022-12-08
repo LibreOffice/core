@@ -1408,6 +1408,7 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
 void OOXMLFastContextHandlerXNote::checkId(const OOXMLValue::Pointer_t& pValue)
 {
     mnMyXNoteId = sal_Int32(pValue->getInt());
+    mpStream->checkId(mnMyXNoteId);
 }
 
 void OOXMLFastContextHandlerXNote::checkType(const OOXMLValue::Pointer_t& pValue)

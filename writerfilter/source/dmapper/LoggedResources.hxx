@@ -73,6 +73,7 @@ public:
     void info(const std::string& info) override;
     void startGlossaryEntry() override;
     void endGlossaryEntry() override;
+    void checkId(const sal_Int32 nId) override;
 
     virtual void setDocumentReference(writerfilter::ooxml::OOXMLDocument* /*pDocument*/) override{};
 
@@ -98,6 +99,7 @@ protected:
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
     virtual void lcl_startGlossaryEntry() {}
     virtual void lcl_endGlossaryEntry() {}
+    virtual void lcl_checkId(const sal_Int32) {}
 
 #ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
