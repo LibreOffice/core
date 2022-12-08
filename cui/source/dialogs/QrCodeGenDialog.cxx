@@ -156,7 +156,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
                                  bool bEditExisting)
     : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
     , m_xModel(std::move(xModel))
-    , m_xEdittext(m_xBuilder->weld_entry("edit_text"))
+    , m_xEdittext(m_xBuilder->weld_text_view("edit_text"))
     , m_xECC{ m_xBuilder->weld_radio_button("button_low"),
               m_xBuilder->weld_radio_button("button_medium"),
               m_xBuilder->weld_radio_button("button_quartile"),
@@ -167,16 +167,22 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     , mpParent(pParent)
 #endif
 {
+    m_xEdittext->set_size_request(m_xEdittext->get_approximate_digit_width() * 28,
+                                  m_xEdittext->get_height_rows(6));
     if (!bEditExisting)
     {
+        OUString sSelection;
         // TODO: This only works in Writer doc. Should also work in shapes
         Reference<XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
         if (xSelections.is())
         {
             Reference<XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
             if (xSelection.is())
-                m_xEdittext->set_text(xSelection->getString());
+                sSelection = xSelection->getString();
         }
+        if (!sSelection.isEmpty())
+            m_xEdittext->set_text(sSelection);
+        m_xEdittext->select_region(0, -1);
         return;
     }
 

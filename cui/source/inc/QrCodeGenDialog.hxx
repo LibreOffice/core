@@ -30,7 +30,7 @@ protected:
 
 private:
     css::uno::Reference<css::frame::XModel> m_xModel;
-    std::unique_ptr<weld::Entry> m_xEdittext;
+    std::unique_ptr<weld::TextView> m_xEdittext;
     std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
     std::unique_ptr<weld::ComboBox> m_xComboType;
