@@ -221,7 +221,10 @@ void SfxMacroTabPage::Reset( const SfxItemSet* rSet )
     weld::TreeView& rListBox = mpImpl->m_xEventLB->GetListBox();
     std::unique_ptr<weld::TreeIter> xIter(rListBox.make_iterator());
     if (rListBox.get_iter_first(*xIter))
+    {
         rListBox.set_cursor(*xIter);
+        EnableButtons();
+    }
 }
 
 bool SfxMacroTabPage::IsReadOnly() const
