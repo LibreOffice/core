@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/sprintf.hxx>
 #include <rtl/math.hxx>
@@ -1075,6 +1076,15 @@ Calendar_gregorian::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(cCalendar) };
     return aRet;
+}
+
+sal_Int64 Calendar_gregorian::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & Calendar_gregorian::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 }

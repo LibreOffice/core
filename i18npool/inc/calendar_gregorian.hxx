@@ -21,7 +21,9 @@
 #include "calendarImpl.hxx"
 
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <unicode/calendar.h>
 #include <rtl/ref.hxx>
 
@@ -44,7 +46,7 @@ struct Era {
 
 const sal_Int16 FIELD_INDEX_COUNT = css::i18n::CalendarFieldIndex::FIELD_COUNT2;
 
-class Calendar_gregorian : public CalendarImpl
+class Calendar_gregorian : public cppu::ImplInheritanceHelper<CalendarImpl, css::lang::XUnoTunnel>
 {
 public:
 
@@ -97,6 +99,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 protected:
     const Era *eraArray;
