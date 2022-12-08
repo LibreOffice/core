@@ -156,6 +156,7 @@ public:
     void            UpdateSyntaxHighlighting ();
 
     void            SetEditorZoomLevel(sal_uInt16 nNewZoomLevel);
+    sal_uInt16      GetCurrentZoom() { return nCurrentZoomLevel; }
 
     bool            GetProcedureName(std::u16string_view rLine, OUString& rProcType, OUString& rProcName) const;
 
