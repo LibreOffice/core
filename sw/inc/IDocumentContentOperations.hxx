@@ -186,11 +186,6 @@ public:
         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet,
         SwFrameFormat*) = 0;
 
-    virtual SwFlyFrameFormat* InsertGraphicObject(
-        const SwPaM& rRg, const GraphicObject& rGrfObj,
-        const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet) = 0;
-
     /** Transpose graphic (with undo)
      */
     virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic) = 0;

@@ -865,8 +865,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     aFrameSet.Put(aSize);
     SwFormatFollowTextFlow aFlow(true);
     aFrameSet.Put(aFlow);
-    GraphicObject aGrf;
-    rIDCO.InsertGraphicObject(*pWrtShell->GetCursor(), aGrf, &aFrameSet, &aGrfSet);
+    Graphic aGrf;
+    rIDCO.InsertGraphic(*pWrtShell->GetCursor(), OUString(), OUString(), &aGrf, &aFrameSet,
+                        &aGrfSet, nullptr);
 
     // When laying out that document:
     calcLayout();

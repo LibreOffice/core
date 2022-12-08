@@ -3071,20 +3071,6 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphic(
     return pSwFlyFrameFormat;
 }
 
-SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphicObject(
-        const SwPaM &rRg, const GraphicObject& rGrfObj,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet )
-{
-    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
-    SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
-                            m_rDoc.GetNodes().GetEndOfAutotext(),
-                            rGrfObj, m_rDoc.GetDfltGrfFormatColl() );
-    SwFlyFrameFormat* pSwFlyFrameFormat = InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrameFormat );
-    return pSwFlyFrameFormat;
-}
-
 SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
         const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                         SfxItemSet* pFlyAttrSet)

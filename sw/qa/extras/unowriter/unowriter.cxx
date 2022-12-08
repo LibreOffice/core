@@ -695,8 +695,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     frameSet.Put(anchor);
-    GraphicObject grf;
-    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pWrtShell->GetCursor(), grf, &frameSet, &grfSet));
+    Graphic grf;
+    CPPUNIT_ASSERT(rIDCO.InsertGraphic(*pWrtShell->GetCursor(), OUString(), OUString(), &grf,
+                                       &frameSet, &grfSet, nullptr));
 
     // check fly
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

@@ -58,8 +58,9 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     SfxItemSet aGrfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
     aFrameSet.Put(aAnchor);
-    GraphicObject aGrf;
-    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), aGrf, &aFrameSet, &aGrfSet));
+    Graphic aGrf;
+    CPPUNIT_ASSERT(rIDCO.InsertGraphic(*pShell->GetCursor(), OUString(), OUString(), &aGrf,
+                                       &aFrameSet, &aGrfSet, nullptr));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     SwView* pView = pDoc->GetDocShell()->GetView();
