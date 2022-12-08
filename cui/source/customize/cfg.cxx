@@ -1009,9 +1009,11 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xMoveUpButton(m_xBuilder->weld_button("up"))
     , m_xMoveDownButton(m_xBuilder->weld_button("down"))
     , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
+    , m_xCustomizeBox(m_xBuilder->weld_widget("customizebox"))
     , m_xInsertBtn(m_xBuilder->weld_menu_button("insert"))
     , m_xModifyBtn(m_xBuilder->weld_menu_button("modify"))
     , m_xResetBtn(m_xBuilder->weld_button("defaultsbtn"))
+    , m_xCommandButtons(m_xBuilder->weld_widget("arrowgrid"))
     , m_xAddCommandButton(m_xBuilder->weld_button("add"))
     , m_xRemoveCommandButton(m_xBuilder->weld_button("remove"))
 {

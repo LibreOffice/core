@@ -107,14 +107,11 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
     m_xDescriptionField->set_visible(false);
     m_xMoveUpButton->set_visible(false);
     m_xMoveDownButton->set_visible(false);
-    m_xAddCommandButton->set_visible(false);
-    m_xRemoveCommandButton->set_visible(false);
+    m_xCommandButtons->set_visible(false);
     m_xLeftFunctionLabel->set_visible(false);
     m_xSearchLabel->set_visible(false);
     m_xCategoryLabel->set_visible(false);
-    m_xInsertBtn->set_visible(false);
-    m_xModifyBtn->set_visible(false);
-    m_xResetBtn->set_visible(false);
+    m_xCustomizeBox->set_visible(false);
     m_xCustomizeLabel->set_visible(false);
 
     weld::TreeView& rCommandCategoryBox = m_xFunctions->get_widget();

@@ -411,12 +411,14 @@ protected:
 
     std::unique_ptr<weld::ComboBox>            m_xSaveInListBox;
 
+    std::unique_ptr<weld::Widget>              m_xCustomizeBox;
     std::unique_ptr<weld::MenuButton>          m_xInsertBtn;
     std::unique_ptr<weld::MenuButton>          m_xModifyBtn;
     // Used to reset the selected toolbar/menu/context menu
     std::unique_ptr<weld::Button>              m_xResetBtn;
 
     // Middle buttons
+    std::unique_ptr<weld::Widget>              m_xCommandButtons;
     std::unique_ptr<weld::Button>              m_xAddCommandButton;
     std::unique_ptr<weld::Button>              m_xRemoveCommandButton;
 
