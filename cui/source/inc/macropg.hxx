@@ -55,6 +55,7 @@ class SvxMacroTabPage_ : public SfxTabPage
     DECL_LINK( SelectEvent_Impl, weld::TreeView&, void );
     DECL_LINK( AssignDeleteHdl_Impl, weld::Button&, void );
     DECL_LINK( DoubleClickHdl_Impl, weld::TreeView&, bool );
+    DECL_LINK( DeleteAllHdl_Impl, weld::Button&, void );
 
     void GenericHandler_Impl(const weld::Button* pBtn);
     const EventPair* LookupEvent(const OUString& rEventName);
@@ -66,6 +67,7 @@ protected:
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
+    int m_nAssignedEvents;
     bool bDocModified, bAppEvents, bInitialized;
     std::vector< EventDisplayName > aDisplayNames;
 

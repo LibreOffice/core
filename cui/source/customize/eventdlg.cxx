@@ -44,6 +44,7 @@ SvxEventConfigPage::SvxEventConfigPage(weld::Container* pPage, weld::DialogContr
     mpImpl->xEventLB = m_xBuilder->weld_tree_view("events");
     mpImpl->xAssignPB = m_xBuilder->weld_button("macro");
     mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
+    mpImpl->xDeleteAllPB = m_xBuilder->weld_button("deleteall");
     mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
 
     mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
