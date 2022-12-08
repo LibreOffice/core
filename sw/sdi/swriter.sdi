@@ -1730,6 +1730,20 @@ SfxVoidItem GotoNextInputField FN_GOTO_NEXT_INPUTFLD
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxVoidItem GotoMark FN_GOTO_MARK
+(SfxStringItem GotoMark FN_GOTO_MARK)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxVoidItem GotoNextObject FN_GOTO_NEXT_OBJ
 ()
 [

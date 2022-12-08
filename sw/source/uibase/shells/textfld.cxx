@@ -198,6 +198,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
 
+        case FN_GOTO_MARK:
+        {
+            const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(FN_GOTO_MARK);
+            if (pName)
+            {
+                rSh.GotoMark(pName->GetValue());
+            }
+        }
+        break;
         default:
             bMore = true;
     }

@@ -408,6 +408,33 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testGotoMark)
+{
+    // Given a document with 2 paragraphs, a bookmark on the second one:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SplitNode();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->SetBookmark(vcl::KeyCode(), "mybookmark");
+    SwNodeOffset nExpected = pWrtShell->GetCursor()->GetPointNode().GetIndex();
+
+    // When jumping to that mark from the doc start:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("GotoMark", uno::Any(OUString("mybookmark"))),
+    };
+    dispatchCommand(mxComponent, ".uno:GotoMark", aArgs);
+
+    // Then make sure that the final cursor position is at the bookmark:
+    SwNodeOffset nActual = pWrtShell->GetCursor()->GetPointNode().GetIndex();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10 (bookmark)
+    // - Actual  : 9 (doc start)
+    // i.e. the actual jump didn't happen.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -106,6 +106,7 @@ class SwUINumRuleItem;
 
 #define FN_GOTO_NEXT_INPUTFLD   (FN_EDIT + 47)  /* go to next inputfield */
 #define FN_GOTO_PREV_INPUTFLD   (FN_EDIT + 48)  /* go to previous inputfield    */
+#define FN_GOTO_MARK            (FN_EDIT + 49)  /* go to bookmark by name */
 
 #define FN_REPEAT_SEARCH        (FN_EDIT + 50)  /* Search again */
 

@@ -971,6 +971,11 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = NoState ;
     ]
+    FN_GOTO_MARK // status(final|play)
+    [
+        ExecMethod = ExecField ;
+        StateMethod = NoState ;
+    ]
     FN_EXECUTE_MACROFIELD // status()
     [
         ExecMethod = ExecField ;
