@@ -27,6 +27,7 @@ $(eval $(call gb_Library_add_defs,cui,\
 
 $(eval $(call gb_Library_use_custom_headers,cui,\
 	officecfg/registry \
+	oox/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,cui))
