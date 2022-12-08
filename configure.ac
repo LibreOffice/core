@@ -3997,11 +3997,9 @@ vs_versions_to_check()
     fi
 }
 
-win_get_env_from_vsvars32bat()
+win_get_env_from_vsdevcmdbat()
 {
     local WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
-    # Also seems to be located in another directory under the same name: vsvars32.bat
-    # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
     printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
     printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
@@ -4033,9 +4031,9 @@ find_ucrt()
         ide_env_dir="$VC_PRODUCT_DIR/../Common7/Tools/"
         ide_env_file="${ide_env_dir}VsDevCmd.bat"
         if test -f "$ide_env_file"; then
-            PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
+            PathFormat "$(win_get_env_from_vsdevcmdbat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
-            UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
+            UCRTVERSION=$(win_get_env_from_vsdevcmdbat UCRTVersion)
             dnl Hack needed at least by tml:
             if test "$UCRTVERSION" = 10.0.15063.0 \
                 -a ! -f "${UCRTSDKDIR}Include/10.0.15063.0/um/sqlext.h" \
