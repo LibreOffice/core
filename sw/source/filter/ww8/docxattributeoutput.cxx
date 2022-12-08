@@ -7023,7 +7023,7 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
 }
 
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
-        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nLink, sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate )
+        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nLink, sal_uInt16 nWwId, sal_uInt16 nSlot, bool bAutoUpdate )
 {
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aRsid, aUiPriority;
@@ -7031,12 +7031,12 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
     {
-        const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nId);
+        const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nSlot);
         pFormat->GetGrabBagItem(aAny);
     }
     else
     {
-        const SwNumRule* pRule = m_rExport.m_pStyles->GetSwNumRule(nId);
+        const SwNumRule* pRule = m_rExport.m_pStyles->GetSwNumRule(nSlot);
         pRule->GetGrabBagItem(aAny);
     }
     const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
@@ -7081,7 +7081,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         case STYLE_TYPE_LIST: pType = "numbering"; break;
     }
     pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
-    pStyleAttributeList->add(FSNS(XML_w, XML_styleId), m_rExport.m_pStyles->GetStyleId(nId));
+    pStyleAttributeList->add(FSNS(XML_w, XML_styleId), m_rExport.m_pStyles->GetStyleId(nSlot));
     if (bDefault)
         pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
     if (bCustomStyle)
@@ -7096,7 +7096,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nBase) );
     }
 
-    if ( nNext != nId && eType != STYLE_TYPE_LIST)
+    if ( nNext != nSlot && eType != STYLE_TYPE_LIST)
     {
         m_pSerializer->singleElementNS( XML_w, XML_next,
                 FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nNext) );

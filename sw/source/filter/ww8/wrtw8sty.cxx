@@ -121,14 +121,15 @@ public:
 
 //  Styles
 
-#define WW8_RESERVED_SLOTS 15
+// Immediately after reserved slots, character styles begin
+#define WW8_RESERVED_SLOTS 10
 
 // GetId( SwCharFormat ) for use in text -> zero is not allowed,
 // use "Default Char Style" instead
 sal_uInt16 MSWordExportBase::GetId( const SwCharFormat* pFormat ) const
 {
     sal_uInt16 nRet = m_pStyles->GetSlot( pFormat );
-    return ( nRet != 0x0fff ) ? nRet : 10;      // Default Char Style
+    return ( nRet != 0x0fff ) ? nRet : WW8_RESERVED_SLOTS;      // Default Char Style
 }
 
 // GetId( SwTextFormatColl ) for use in TextNodes -> zero is not allowed,
@@ -153,13 +154,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
         m_rExport.m_rDoc.GetFootnoteInfo().GetAnchorCharFormat( m_rExport.m_rDoc );
         m_rExport.m_rDoc.GetFootnoteInfo().GetCharFormat( m_rExport.m_rDoc );
     }
-    sal_uInt32 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_rDoc.GetCharFormats()->size() - 1 +
-                                         m_rExport.m_rDoc.GetTextFormatColls()->size() - 1 +
-                                         (bListStyles ? m_rExport.m_rDoc.GetNumRuleTable().size() - 1 : 0);
-    nAlloc = std::min<sal_uInt32>(nAlloc, MSWORD_MAX_STYLES_LIMIT);
 
-    // somewhat generous ( free for up to 15 )
-    m_aFormatA.resize(nAlloc, nullptr);
     memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
@@ -173,21 +168,19 @@ MSWordStyles::~MSWordStyles()
 // Sty_SetWWSlot() dependencies for the styles -> zero is allowed
 sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 {
-    sal_uInt16 n;
-    for ( n = 0; n < m_nUsedSlots; n++ )
-        if ( m_aFormatA[n] == pFormat )
-            return n;
+    for (size_t slot = 0; slot < m_aStyles.size(); ++slot)
+        if (m_aStyles[slot].format == pFormat)
+            return slot;
     return 0xfff;                   // 0xfff: WW: zero
 }
 
-sal_uInt16 MSWordStyles::BuildGetSlot( const SwFormat& rFormat )
+/// Get reserved slot number during building the style table.
+static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
 {
-    sal_uInt16 nRet = rFormat.GetPoolFormatId();
-    switch ( nRet )
+    switch (sal_uInt16 nRet = rFormat.GetPoolFormatId())
     {
         case RES_POOLCOLL_STANDARD:
-            nRet = 0;
-            break;
+            return 0;
 
         case RES_POOLCOLL_HEADLINE1:
         case RES_POOLCOLL_HEADLINE2:
@@ -199,13 +192,10 @@ sal_uInt16 MSWordStyles::BuildGetSlot( const SwFormat& rFormat )
         case RES_POOLCOLL_HEADLINE8:
         case RES_POOLCOLL_HEADLINE9:
             nRet -= RES_POOLCOLL_HEADLINE1-1;
-            break;
-
-        default:
-            nRet = m_nUsedSlots++;
-            break;
+            assert(nRet < WW8_RESERVED_SLOTS);
+            return nRet;
     }
-    return nRet;
+    return 0xfff;
 }
 
 
@@ -281,28 +271,38 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
 
 void MSWordStyles::BuildStylesTable()
 {
-    m_nUsedSlots = WW8_RESERVED_SLOTS;  // reserved slots for standard, headingX, and others
+    assert(m_aStyles.empty());
+    // Put reserved slots first, then character styles, then paragraph styles
+    m_aStyles.resize(WW8_RESERVED_SLOTS);
 
     const SwCharFormats& rArr = *m_rExport.m_rDoc.GetCharFormats();       // first CharFormat
     // the default character style ( 0 ) will not be outputted !
-    for (size_t n = 1; n < rArr.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++n)
-    {
-        SwCharFormat* pFormat = rArr[n];
-        m_aFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
-    }
+    for (size_t n = 1; n < rArr.size() && m_aStyles.size() < MSWORD_MAX_STYLES_LIMIT; ++n)
+        m_aStyles.emplace_back(rArr[n]);
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_rDoc.GetTextFormatColls();   // then TextFormatColls
-    // the default character style ( 0 ) will not be outputted !
-    for (size_t n = 1; n < rArr2.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++n)
+    // the default paragraph style ( 0 ) will not be outputted !
+    for (size_t n = 1; n < rArr2.size(); ++n)
     {
         SwTextFormatColl* pFormat = rArr2[n];
-        sal_uInt16 nId = BuildGetSlot( *pFormat ) ;
-        m_aFormatA[ nId ] = pFormat;
+
+        sal_uInt16 nSlot = BuildGetSlot(*pFormat);
+        if (nSlot != 0xfff)
+        {
+            m_aStyles[nSlot].format = pFormat;
+        }
+        else
+        {
+            if (m_aStyles.size() >= MSWORD_MAX_STYLES_LIMIT)
+                continue;
+            m_aStyles.emplace_back(pFormat);
+            nSlot = m_aStyles.size() - 1;
+        }
         if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
         {
             int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
             if (nLvl >= 0 && nLvl < MAXLEVEL)
-                m_aHeadingParagraphStyles[nLvl] = nId ;
+                m_aHeadingParagraphStyles[nLvl] = nSlot;
         }
     }
 
@@ -310,13 +310,12 @@ void MSWordStyles::BuildStylesTable()
         return;
 
     const SwNumRuleTable& rNumRuleTable = m_rExport.m_rDoc.GetNumRuleTable();
-    for (size_t i = 0; i < rNumRuleTable.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++i)
+    for (size_t i = 0; i < rNumRuleTable.size() && m_aStyles.size() < MSWORD_MAX_STYLES_LIMIT; ++i)
     {
         const SwNumRule* pNumRule = rNumRuleTable[i];
         if (pNumRule->IsAutoRule() || pNumRule->GetName().startsWith("WWNum"))
             continue;
-        sal_uInt16 nSlot = BuildGetSlot(*pNumRule);
-        m_aNumRules[nSlot] = pNumRule;
+        m_aStyles.emplace_back(pNumRule);
     }
 }
 
@@ -342,18 +341,23 @@ void MSWordStyles::BuildStyleIds()
 {
     std::unordered_set<OString> aUsed;
 
-    m_aStyleIds.emplace_back("Normal");
+    assert(!m_aStyles.empty());
+    m_aStyles[0].style_id = "Normal";
     aUsed.insert("normal");
 
-    for (sal_uInt16 n = 1; n < m_nUsedSlots; ++n)
+    for (auto& entry : m_aStyles)
     {
-        OUString aName;
-        if (m_aFormatA[n])
-            aName = m_aFormatA[n]->GetName();
-        else if (m_aNumRules.find(n) != m_aNumRules.end())
-            aName = m_aNumRules[n]->GetName();
+        if (!entry.style_id.isEmpty())
+            continue; // "Normal" is already added
 
-        OString aStyleId = CreateStyleId(aName);
+        assert(entry.style_id.isEmpty());
+        OUString name;
+        if (entry.format)
+            name = entry.format->GetName();
+        else if (entry.num_rule)
+            name = entry.num_rule->GetName();
+
+        OString aStyleId = CreateStyleId(name);
 
         if (aStyleId.isEmpty())
             aStyleId = "Style";
@@ -361,24 +365,22 @@ void MSWordStyles::BuildStyleIds()
         OString aLower(aStyleId.toAsciiLowerCase());
 
         // check for uniqueness & construct something unique if we have to
-        if (aUsed.insert(aLower).second)
-        {
-            m_aStyleIds.push_back(aStyleId);
-        }
-        else
+        if (!aUsed.insert(aLower).second)
         {
             int nFree = 1;
             while (!aUsed.insert(aLower + OString::number(nFree)).second)
                 ++nFree;
 
-            m_aStyleIds.emplace_back(aStyleId + OString::number(nFree));
+            aStyleId += OString::number(nFree);
         }
+        entry.style_id = aStyleId;
     }
 }
 
-OString const & MSWordStyles::GetStyleId(sal_uInt16 nId) const
+OString const & MSWordStyles::GetStyleId(sal_uInt16 nSlot) const
 {
-    return m_aStyleIds[nId];
+    assert(!m_aStyles[nSlot].style_id.isEmpty());
+    return m_aStyles[nSlot].style_id;
 }
 
 /// For WW8 only - extend pO so that the size of pTableStrm is even.
@@ -403,7 +405,7 @@ void WW8AttributeOutput::EndStyle()
 }
 
 void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal_uInt16 nWwBase,
-    sal_uInt16 nWwNext, sal_uInt16 /*nWwLink*/, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
+    sal_uInt16 nWwNext, sal_uInt16 /*nWwLink*/, sal_uInt16 nWwId, sal_uInt16 /*nSlot*/, bool bAutoUpdate )
 {
     sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ] = {};
     sal_uInt8* pData = aWW8_STD;
@@ -549,7 +551,7 @@ void WW8AttributeOutput::EndStyleProperties( bool /*bParProp*/ )
     ShortToSVBT16( nLen, pUpxLen );                 // add default length
 }
 
-void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext, sal_uInt16& nLink )
+void MSWordStyles::GetStyleData( const SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext, sal_uInt16& nLink )
 {
     bFormatColl = pFormat->Which() == RES_TXTFMTCOLL || pFormat->Which() == RES_CONDTXTFMTCOLL;
 
@@ -560,18 +562,18 @@ void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt1
     if ( !pFormat->IsDefault() )
         nBase = GetSlot( pFormat->DerivedFrom() );
 
-    SwFormat* pNext;
+    const SwFormat* pNext;
     const SwFormat* pLink = nullptr;
     if ( bFormatColl )
     {
-        auto pFormatColl = static_cast<SwTextFormatColl*>(pFormat);
+        auto pFormatColl = static_cast<const SwTextFormatColl*>(pFormat);
         pNext = &pFormatColl->GetNextTextFormatColl();
         pLink = pFormatColl->GetLinkedCharFormat();
     }
     else
     {
         pNext = pFormat; // CharFormat: next CharFormat == self
-        auto pCharFormat = static_cast<SwCharFormat*>(pFormat);
+        auto pCharFormat = static_cast<const SwCharFormat*>(pFormat);
         pLink = pCharFormat->GetLinkedParaFormat();
     }
 
@@ -588,17 +590,17 @@ void WW8AttributeOutput::DefaultStyle()
     m_rWW8Export.m_pTableStrm->WriteUInt16(0);   // empty Style
 }
 
-void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nPos)
+void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nSlot)
 {
     m_rExport.AttrOutput().StartStyle( pNumRule->GetName(), STYLE_TYPE_LIST,
-            /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWwLink =*/ 0, /*nWWId =*/ 0, nPos,
+            /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWwLink =*/ 0, /*nWWId =*/ 0, nSlot,
             /*bAutoUpdateFormat =*/ false );
 
     m_rExport.AttrOutput().EndStyle();
 }
 
 // OutputStyle applies for TextFormatColls and CharFormats
-void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
+void MSWordStyles::OutputStyle( const SwFormat* pFormat, sal_uInt16 nSlot)
 {
     if ( !pFormat )
         m_rExport.AttrOutput().DefaultStyle();
@@ -614,7 +616,7 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
         // We want to map LO's default style to Word's "Normal" style.
         // Word looks for this specific style name when reading docx files.
         // (It must be the English word regardless of language settings)
-        if ( nPos == 0 )
+        if (nSlot == 0)
         {
             assert( pFormat->GetPoolFormatId() == RES_POOLCOLL_STANDARD );
             aName = "Normal";
@@ -626,35 +628,30 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
             aName = aBaseName;
             // Check if we still have a clash, in which case we add a suffix
             for ( int nSuffix = 0; ; ++nSuffix ) {
-                bool clash=false;
-                for ( sal_uInt16 n = 1; n < m_nUsedSlots; ++n )
-                    if ( m_aFormatA[n] &&
-                         m_aFormatA[n]->GetName().equalsIgnoreAsciiCase(aName) )
-                    {
-                        clash = true;
-                        break;
-                    }
-                if (!clash)
-                    break;
-                // TODO: verify if we really need to increment nSuffix in 2 places
-                aName = aBaseName + OUString::number(++nSuffix);
+                if (std::none_of(m_aStyles.begin() + 1, m_aStyles.end(),
+                                 [&aName](const auto& entry) {
+                                     return entry.format
+                                            && entry.format->GetName().equalsIgnoreAsciiCase(aName);
+                                 }))
+                    break; // Found a unique name
+                aName = aBaseName + OUString::number(nSuffix);
             }
         }
         else if (!bFormatColl && m_rExport.GetExportFormat() == MSWordExportBase::DOCX &&
-                        m_rExport.m_pStyles->GetStyleId(nPos).startsWith("ListLabel"))
+                        m_rExport.m_pStyles->GetStyleId(nSlot).startsWith("ListLabel"))
         {
             // tdf#92335 don't export redundant DOCX import style "ListLabel"
             return;
         }
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
-                nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nPos,
+                nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nSlot,
                 pFormat->IsAutoUpdateFormat() );
 
         if ( bFormatColl )
-            WriteProperties( pFormat, true, nPos, nBase==0xfff );           // UPX.papx
+            WriteProperties( pFormat, true, nSlot, nBase==0xfff );           // UPX.papx
 
-        WriteProperties( pFormat, false, nPos, bFormatColl && nBase==0xfff );  // UPX.chpx
+        WriteProperties( pFormat, false, nSlot, bFormatColl && nBase==0xfff );  // UPX.chpx
 
         m_rExport.AttrOutput().EndStyle();
     }
@@ -696,33 +693,23 @@ void MSWordStyles::OutputStylesTable()
 
     m_rExport.AttrOutput().StartStyles();
 
-    sal_uInt16 n;
     // HACK
     // Ms Office seems to have an internal limitation of 4091 styles
     // and refuses to load .docx with more, even though the spec seems to allow that;
     // so simply if there are more styles, don't export those
     // Implementing check for all exports DOCX, DOC, RTF
-    sal_uInt16 const nLimit = MSWORD_MAX_STYLES_LIMIT;
-    m_nUsedSlots = std::min(nLimit, m_nUsedSlots);
-
-    for ( n = 0; n < m_nUsedSlots; n++ )
+    assert(m_aStyles.size() <= MSWORD_MAX_STYLES_LIMIT);
+    for (size_t slot = 0; slot < m_aStyles.size(); ++slot)
     {
-        if (m_aNumRules.find(n) != m_aNumRules.end())
-            OutputStyle(m_aNumRules[n], n);
+        if (m_aStyles[slot].num_rule)
+            OutputStyle(m_aStyles[slot].num_rule, slot);
         else
-            OutputStyle(m_aFormatA[n], n);
+            OutputStyle(m_aStyles[slot].format, slot);
     }
 
-    m_rExport.AttrOutput().EndStyles( m_nUsedSlots );
+    m_rExport.AttrOutput().EndStyles(m_aStyles.size());
 
     m_rExport.m_bStyDef = false;
-}
-
-const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
-{
-    std::map<sal_uInt16, const SwNumRule*>::const_iterator it = m_aNumRules.find(nId);
-    assert(it != m_aNumRules.end());
-    return it->second;
 }
 
 //          Fonts

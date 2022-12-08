@@ -1175,7 +1175,7 @@ void RtfAttributeOutput::DefaultStyle() { /* noop, the default style is always 0
 
 void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_uInt16 nBase,
                                     sal_uInt16 nNext, sal_uInt16 /*nLink*/, sal_uInt16 /*nWwId*/,
-                                    sal_uInt16 nId, bool bAutoUpdate)
+                                    sal_uInt16 nSlot, bool bAutoUpdate)
 {
     SAL_INFO("sw.rtf", __func__ << ", rName = '" << rName << "'");
 
@@ -1184,7 +1184,7 @@ void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_
         m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_S);
     else
         m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
-    m_aStylesheet.append(static_cast<sal_Int32>(nId));
+    m_aStylesheet.append(static_cast<sal_Int32>(nSlot));
 
     if (nBase != 0x0FFF)
     {
@@ -1199,7 +1199,7 @@ void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_
         m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_SAUTOUPD);
 
     m_rStyleName = rName;
-    m_nStyleId = nId;
+    m_nStyleId = nSlot;
 }
 
 void RtfAttributeOutput::EndStyle()

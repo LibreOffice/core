@@ -1581,26 +1581,29 @@ class MSWordStyles
 {
     MSWordExportBase& m_rExport;
     sal_uInt16 m_aHeadingParagraphStyles[MAXLEVEL];
-    std::vector<SwFormat*> m_aFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
-    sal_uInt16 m_nUsedSlots;
-    bool m_bListStyles; ///< If list styles are requested to be exported as well.
-    std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.
 
-    /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.
-    std::vector<OString> m_aStyleIds;
+    struct MapEntry
+    {
+        const SwFormat* format = nullptr;
+        const SwNumRule* num_rule = nullptr;
+        /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.
+        OString style_id;
+
+        MapEntry() = default;
+        MapEntry(const SwFormat* f) : format(f) {}
+        MapEntry(const SwNumRule* r) : num_rule(r) {}
+    };
+    std::vector<MapEntry> m_aStyles; ///< Slot <-> Character/paragraph/list style array.
+    bool m_bListStyles; ///< If list styles are requested to be exported as well.
 
     /// Create the style table, called from the constructor.
     void BuildStylesTable();
 
-    /// Based on pFormatA, fill in m_aStyleIds with unique, MS-like names.
+    /// Based on style names, fill in unique, MS-like names.
     void BuildStyleIds();
 
-    /// Get slot number during building the style table.
-    sal_uInt16 BuildGetSlot( const SwFormat& rFormat );
-    sal_uInt16 BuildGetSlot( const SwNumRule& /*rNumRule*/ ) { return m_nUsedSlots++;}
-
     /// Return information about one style.
-    void GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext, sal_uInt16& nLink );
+    void GetStyleData( const SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext, sal_uInt16& nLink );
 
     /// Outputs attributes of one style.
     void WriteProperties( const SwFormat* pFormat, bool bPap, sal_uInt16 nPos, bool bInsDefCharSiz );
@@ -1610,8 +1613,8 @@ class MSWordStyles
     void SetStyleDefaults( const SwFormat& rFormat, bool bPap );
 
     /// Outputs one style - called (in a loop) from OutputStylesTable().
-    void OutputStyle( SwFormat* pFormat, sal_uInt16 nPos );
-    void OutputStyle( const SwNumRule* pNumRule, sal_uInt16 nPos );
+    void OutputStyle( const SwFormat* pFormat, sal_uInt16 nSlot );
+    void OutputStyle( const SwNumRule* pNumRule, sal_uInt16 nSlot);
 
     MSWordStyles( const MSWordStyles& ) = delete;
     MSWordStyles& operator=( const MSWordStyles& ) = delete;
@@ -1623,18 +1626,18 @@ public:
     /// Output the styles table.
     void OutputStylesTable();
 
-    /// Get id of the style (rFormat).
+    /// Get slot of the style (rFormat).
     sal_uInt16 GetSlot( const SwFormat* pFormat ) const;
 
     /// create style id using only ASCII characters of the style name
     static OString CreateStyleId(std::u16string_view aName);
 
-    /// Get styleId of the nId-th style (nId is its position in pFormatA).
-    OString const & GetStyleId(sal_uInt16 nId) const;
+    /// Get styleId of the nSlot-th style (nSlot is its position in m_aStyles).
+    OString const & GetStyleId(sal_uInt16 nSlot) const;
 
-    const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_aFormatA[nId]; }
-    /// Get numbering rule of the nId-th style
-    const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
+    const SwFormat* GetSwFormat(sal_uInt16 nSlot) const { return m_aStyles[nSlot].format; }
+    /// Get numbering rule of the nSlot-th style
+    const SwNumRule* GetSwNumRule(sal_uInt16 nSlot) const { return m_aStyles[nSlot].num_rule; }
     sal_uInt16 GetHeadingParagraphStyleId(sal_uInt16 nLevel) const { return m_aHeadingParagraphStyles[ nLevel ]; }
 };
 
