@@ -337,6 +337,7 @@
     { UNO_NAME_LAYOUT_SIZE, WID_LAYOUT_SIZE, cppu::UnoType<css::awt::Size>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 }, \
     { UNO_NAME_LINE_STYLE, RES_BOX, cppu::UnoType<css::drawing::LineStyle>::get(),  0, LINE_STYLE }, \
     { UNO_NAME_LINE_WIDTH, RES_BOX, cppu::UnoType<sal_Int32>::get(),  0, LINE_WIDTH |CONVERT_TWIPS }, \
+    { u"Decorative", RES_DECORATIVE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 }, \
     { UNO_NAME_TEXT_VERT_ADJUST, RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
 
 #define COMMON_TEXT_CONTENT_PROPERTIES \

@@ -404,6 +404,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_TEXT_VERT_ADJUST
     { 0, true },                           // RES_BACKGROUND_FULL_SIZE
     { 0, true },                           // RES_RTL_GUTTER
+    { 0, true },                           // RES_DECORATIVE
 
     { 0, true },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, true },          // RES_GRFATR_CROPGRF
@@ -416,7 +417,6 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_GRFATR_GAMMA,
     { 0, true },                           // RES_GRFATR_INVERT,
     { 0, true },                           // RES_GRFATR_TRANSPARENCY,
-    { 0, true },                           // RES_GRFATR_DUMMY1,
     { 0, true },                           // RES_GRFATR_DUMMY2,
     { 0, true },                           // RES_GRFATR_DUMMY3,
     { 0, true },                           // RES_GRFATR_DUMMY4,
@@ -609,6 +609,7 @@ void InitCore()
     aAttrTab[ RES_TEXT_VERT_ADJUST - POOLATTR_BEGIN ] = new SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP,RES_TEXT_VERT_ADJUST);
     aAttrTab[ RES_BACKGROUND_FULL_SIZE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true);
     aAttrTab[ RES_RTL_GUTTER - POOLATTR_BEGIN ] = new SfxBoolItem(RES_RTL_GUTTER, false);
+    aAttrTab[ RES_DECORATIVE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_DECORATIVE, false);
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;
@@ -624,7 +625,6 @@ void InitCore()
     aAttrTab[ RES_GRFATR_DRAWMODE - POOLATTR_BEGIN ] =      new SwDrawModeGrf;
 
 // GraphicAttr - Dummies
-    aAttrTab[ RES_GRFATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY1 );
     aAttrTab[ RES_GRFATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY2 );
     aAttrTab[ RES_GRFATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY3 );
     aAttrTab[ RES_GRFATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY4 );

@@ -146,6 +146,26 @@
                 <property name="top-attach">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="decorative">
+                <property name="label" translatable="yes" context="frmaddpage|decorative">Decorative</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="decorative-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|decorative">The item is purely decorative, not part of the document content, and may be ignored by assistive technologies.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="label">

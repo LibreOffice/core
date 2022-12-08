@@ -3005,6 +3005,12 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
 
+    if (xPropSetInfo->hasPropertyByName("Decorative")
+        && rPropSet->getPropertyValue("Decorative").get<bool>())
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DECORATIVE, XML_TRUE);
+    }
+
     return nShapeFeatures;
 }
 

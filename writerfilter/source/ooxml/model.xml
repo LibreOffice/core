@@ -18,6 +18,7 @@
 -->
 <model
   xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+  xmlns:adec="http://schemas.microsoft.com/office/drawing/2017/decorative"
   xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
   xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
   xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"
@@ -2622,10 +2623,24 @@
   <namespace name="dml-baseTypes">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <include href="shared-relationshipReference"/>
-      <define name="CT_OfficeArtExtension">
-        <element>
-          <ref name="BUILT_IN_ANY_TYPE"/>
+      <define name="adec_decorative_val">
+        <attribute name="val">
+          <data type="boolean"/>
+        </attribute>
+      </define>
+      <define name="adec_decorative">
+        <element name="adec:decorative">
+          <ref name="adec_decorative_val"/>
         </element>
+      </define>
+      <define name="CT_OfficeArtExtension">
+        <choice>
+          <!-- add implemented extensions here so they can be processed -->
+          <ref name="adec_decorative"/>
+          <element>
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+        </choice>
         <attribute name="uri">
           <data type="token"/>
         </attribute>
@@ -3474,6 +3489,14 @@
         <data type="unsignedInt"/>
       </define>
     </grammar>
+    <resource name="CT_OfficeArtExtension" resource="Stream">
+      <element name="adec:decorative" tokenid="ooxml:CT_OfficeArtExtension_Decorative"/>
+    </resource>
+    <!-- this is not ideal, but unlike more obivous variants it appears to work -->
+    <resource name="adec_decorative" resource="Stream"/>
+    <resource name="adec_decorative_val" resource="Properties">
+      <attribute name="val" tokenid="ooxml:OfficeArtExtension_Decorative_val"/>
+    </resource>
     <resource name="ST_Coordinate" resource="Integer"/>
     <resource name="ST_PositiveCoordinate" resource="Integer"/>
     <resource name="ST_Angle" resource="Integer"/>
@@ -3977,6 +4000,9 @@
       <attribute name="noChangeAspect" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noChangeAspect"/>
       <attribute name="noMove" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noMove"/>
       <attribute name="noResize" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noResize"/>
+    </resource>
+    <resource name="CT_OfficeArtExtensionList" resource="Properties">
+      <element name="ext" tokenid="ooxml:CT_OfficeArtExtension"/>
     </resource>
     <resource name="CT_NonVisualDrawingProps" resource="Properties">
       <element name="a:hlinkClick" tokenid="ooxml:CT_NonVisualDrawingProps_a_hlinkClick"/>

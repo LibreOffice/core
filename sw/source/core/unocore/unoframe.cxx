@@ -949,6 +949,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
 
+    const ::uno::Any* pDecorative = nullptr;
+    GetProperty(RES_DECORATIVE, 0, pDecorative);
+    if (pDecorative)
+    {
+        SfxBoolItem item(RES_DECORATIVE);
+        bRet &= item.PutValue(*pDecorative, 0);
+        rToSet.Put(item);
+    }
+
     return bRet;
 }
 

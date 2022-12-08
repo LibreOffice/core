@@ -15,7 +15,10 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/zcodec.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotxdoc.hxx>
@@ -1225,6 +1228,104 @@ void Test::testBulletAsImage()
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
+{
+    createSwDoc("tdf143311-1.docx");
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    // check DOCX filters
+    saveAndReload("Office Open XML Text");
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    // check ODF filters
+    saveAndReload("writer8");
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+
+    // check PDF export
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Artifact,
+        Tagged
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nTagged(0);
+    auto nArtifacts(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n";
+            if (line == "/Artifact BMC")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Artifact;
+                ++nArtifacts;
+            }
+            else if (o3tl::starts_with(line, "/Standard<</MCID") && o3tl::ends_with(line, ">>BDC"))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Tagged;
+                ++nTagged;
+            }
+            else if (line == "EMC")
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected end", state != Default);
+                state = Default;
+            }
+            else if (nLine > 1) // first line is expected "0.1 w"
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected content outside MCS", state != Default);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(25), nTagged); // text in body
+    // 1 decorative image + 1 pre-existing rectangle border or something
+    CPPUNIT_ASSERT(nArtifacts >= 2);
 }
 
 void Test::testTextFormField()
