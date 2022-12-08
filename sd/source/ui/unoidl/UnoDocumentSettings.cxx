@@ -69,9 +69,10 @@ namespace sd
 {
     namespace {
 
-    class DocumentSettings : public WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >,
-                             public comphelper::PropertySetHelper,
-                             public DocumentSettingsSerializer
+    class DocumentSettings : public ImplInheritanceHelper<
+                                 DocumentSettingsSerializer, XPropertySet, XMultiPropertySet,
+                                 XServiceInfo >,
+                             public comphelper::PropertySetHelper
     {
     public:
         explicit DocumentSettings( SdXImpressDocument* pModel );
@@ -1336,17 +1337,17 @@ DocumentSettings::_getPropertyValues(
 // XInterface
 Any SAL_CALL DocumentSettings::queryInterface( const Type& aType )
 {
-    return WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::queryInterface( aType );
+    return ImplInheritanceHelper::queryInterface( aType );
 }
 
 void SAL_CALL DocumentSettings::acquire(  ) noexcept
 {
-    WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::acquire();
+    ImplInheritanceHelper::acquire();
 }
 
 void SAL_CALL DocumentSettings::release(  ) noexcept
 {
-    WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::release();
+    ImplInheritanceHelper::release();
 }
 
 // XPropertySet

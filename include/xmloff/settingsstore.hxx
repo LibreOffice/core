@@ -12,7 +12,10 @@
 #ifndef INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 #define INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <xmloff/dllapi.h>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
@@ -20,7 +23,9 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.
-class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") DocumentSettingsSerializer {
+class XMLOFF_DLLPUBLIC DocumentSettingsSerializer:
+    public cppu::WeakImplHelper<css::lang::XUnoTunnel>
+{
 public:
   // Import objects and update properties (eliding URLs)
   virtual css::uno::Sequence<css::beans::PropertyValue>
@@ -34,8 +39,11 @@ public:
         const css::uno::Reference< css::embed::XStorage > &xStorage,
         const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
 
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
+
 protected:
-    ~DocumentSettingsSerializer() {}
+    ~DocumentSettingsSerializer() override;
 };
 
 #endif // INCLUDED_XMLOFF_SETTINGSSTORE_HXX
