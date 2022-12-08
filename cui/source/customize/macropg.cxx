@@ -61,21 +61,20 @@ MacroEventListBox::MacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView)
 //     and it is not read only
 void SvxMacroTabPage_::EnableButtons()
 {
+    mpImpl->xDeleteAllPB->set_sensitive(m_nAssignedEvents != 0);
     int nEvent = mpImpl->xEventLB->get_selected_index();
-    if (nEvent != -1)
-    {
-        const EventPair* pEventPair = LookupEvent(mpImpl->xEventLB->get_id(nEvent));
-        const bool bAssigned = pEventPair && !pEventPair->second.isEmpty();
-        mpImpl->xDeletePB->set_sensitive(!mpImpl->bReadOnly && bAssigned);
-        mpImpl->xAssignPB->set_sensitive( !mpImpl->bReadOnly );
-        if( mpImpl->xAssignComponentPB )
-            mpImpl->xAssignComponentPB->set_sensitive( !mpImpl->bReadOnly );
-    }
+    const EventPair* pEventPair = nEvent == -1 ? nullptr : LookupEvent(mpImpl->xEventLB->get_id(nEvent));
+    const bool bAssigned = pEventPair && !pEventPair->second.isEmpty();
+    mpImpl->xDeletePB->set_sensitive(!mpImpl->bReadOnly && bAssigned);
+    mpImpl->xAssignPB->set_sensitive(!mpImpl->bReadOnly);
+    if (mpImpl->xAssignComponentPB)
+        mpImpl->xAssignComponentPB->set_sensitive( !mpImpl->bReadOnly );
 }
 
 SvxMacroTabPage_::SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
     const OString& rID, const SfxItemSet& rAttrSet)
     : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rAttrSet)
+    , m_nAssignedEvents(0)
     , bDocModified(false)
     , bAppEvents(false)
     , bInitialized(false)
@@ -308,6 +307,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
 
     mpImpl->xEventLB->freeze();
     mpImpl->xEventLB->clear();
+    m_nAssignedEvents = 0;
     EventsHash* eventsHash;
     Reference< container::XNameReplace> nameReplace;
     if(bAppEvents)
@@ -348,6 +348,9 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         mpImpl->xEventLB->append(sEventName, displayName);
         mpImpl->xEventLB->set_image(nRow, GetEventDisplayImage(eventURL), 1);
         mpImpl->xEventLB->set_text(nRow, OUString(GetEventDisplayText(eventURL)), 2);
+
+        if (!eventURL.isEmpty())
+            ++m_nAssignedEvents;
     }
 
     mpImpl->xEventLB->thaw();
@@ -427,6 +430,9 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
         sEventURL = pEventPair->second;
     }
 
+    if (!sEventURL.isEmpty())
+        --m_nAssignedEvents;
+
     bool bDoubleClick = (pBtn == nullptr);
     bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
     if (pBtn == mpImpl->xDeletePB.get())
@@ -484,11 +490,49 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
         h_it->second.second = sEventURL;
     }
 
+    if (!sEventURL.isEmpty())
+        ++m_nAssignedEvents;
+
     rListBox.set_image(nEntry, GetEventDisplayImage(sEventURL), 1);
     rListBox.set_text(nEntry, OUString(GetEventDisplayText(sEventURL)), 2);
 
     rListBox.select(nEntry );
     rListBox.scroll_to_row(nEntry);
+
+    EnableButtons();
+}
+
+IMPL_LINK_NOARG(SvxMacroTabPage_, DeleteAllHdl_Impl, weld::Button&, void)
+{
+    OUString sEventType =  "Script" ;
+    OUString sEmptyString;
+
+    mpImpl->xEventLB->all_foreach([this, &sEventType, &sEmptyString](weld::TreeIter& rEntry) {
+        weld::TreeView& rListBox = *mpImpl->xEventLB;
+        OUString sEventName = rListBox.get_id(rEntry);
+        // update the hashes
+        if (bAppEvents)
+        {
+            EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
+            h_it->second.first = sEventType;
+            h_it->second.second = sEmptyString;
+        }
+        else
+        {
+            EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
+            h_it->second.first = sEventType;
+            h_it->second.second = sEmptyString;
+        }
+
+        rListBox.set_image(rEntry, sEmptyString, 1);
+        rListBox.set_text(rEntry, sEmptyString, 2);
+        return false;
+    });
+
+    if (!bAppEvents)
+        bDocModified = true;
+
+    m_nAssignedEvents = 0;
 
     EnableButtons();
 }
@@ -503,6 +547,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     Link<weld::Button&,void>     aLnk(LINK(this, SvxMacroTabPage_, AssignDeleteHdl_Impl ));
     mpImpl->xDeletePB->connect_clicked(aLnk);
     mpImpl->xAssignPB->connect_clicked(aLnk);
+    mpImpl->xDeleteAllPB->connect_clicked(LINK(this, SvxMacroTabPage_, DeleteAllHdl_Impl));
     if( mpImpl->xAssignComponentPB )
         mpImpl->xAssignComponentPB->connect_clicked( aLnk );
     mpImpl->xEventLB->connect_row_activated( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
@@ -596,6 +641,7 @@ SvxMacroTabPage::SvxMacroTabPage(weld::Container* pPage, weld::DialogController*
                                        mpImpl->xEventLB->get_height_rows(9));
     mpImpl->xAssignPB = m_xBuilder->weld_button("assign");
     mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
+    mpImpl->xDeleteAllPB = m_xBuilder->weld_button("deleteall");
     mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
 
     SetFrame( _rxDocumentFrame );

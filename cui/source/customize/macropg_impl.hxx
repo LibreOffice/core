@@ -30,6 +30,7 @@ public:
     std::unique_ptr<weld::Button> xAssignPB;
     std::unique_ptr<weld::Button> xAssignComponentPB;
     std::unique_ptr<weld::Button> xDeletePB;
+    std::unique_ptr<weld::Button> xDeleteAllPB;
     std::unique_ptr<weld::TreeView> xEventLB;
     bool                        bReadOnly;
     bool                        bIDEDialogMode;
