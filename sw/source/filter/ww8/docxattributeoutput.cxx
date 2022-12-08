@@ -615,6 +615,8 @@ void SdtBlockHelper::DeleteAndResetTheLists()
         m_pTextAttrs.clear();
     if (!m_aAlias.isEmpty())
         m_aAlias.clear();
+    if (!m_aTag.isEmpty())
+        m_aTag.clear();
     if (!m_aPlaceHolderDocPart.isEmpty())
         m_aPlaceHolderDocPart.clear();
     if (!m_aColor.isEmpty())
@@ -719,6 +721,9 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
 
     if (!m_aAlias.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val), m_aAlias);
+
+    if (!m_aTag.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val), m_aTag);
 }
 
 void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -827,6 +832,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         {
             if (!(aPropertyValue.Value >>= m_aAlias))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt alias value");
+        }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_tag" && m_aTag.isEmpty())
+        {
+            if (!(aPropertyValue.Value >>= m_aTag))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt tag value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
             m_bHasId = true;

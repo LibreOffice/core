@@ -144,6 +144,7 @@ public:
     OUString m_aPlaceHolderDocPart;
     bool m_bShowingPlaceHolder;
     OUString m_aAlias;
+    OUString m_aTag;
     sal_Int32 m_nSdtPrToken;
 
     void DeleteAndResetTheLists();
