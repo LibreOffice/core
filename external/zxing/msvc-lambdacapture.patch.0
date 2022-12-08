@@ -1,0 +1,11 @@
+--- core/src/qrcode/QRDetector.cpp
++++ core/src/qrcode/QRDetector.cpp
+@@ -418,7 +418,7 @@
+ 
+ 	auto srcQuad = Rectangle(7, 7, 0.5);
+ 
+-	constexpr PointI FORMAT_INFO_COORDS[] = {{0, 8}, {1, 8}, {2, 8}, {3, 8}, {4, 8}, {5, 8}, {6, 8}, {7, 8}, {8, 8},
++	static constexpr PointI FORMAT_INFO_COORDS[] = {{0, 8}, {1, 8}, {2, 8}, {3, 8}, {4, 8}, {5, 8}, {6, 8}, {7, 8}, {8, 8},
+ 											 {8, 7}, {8, 6}, {8, 5}, {8, 4}, {8, 3}, {8, 2}, {8, 1}, {8, 0}};
+ 
+ 	FormatInformation bestFI;
