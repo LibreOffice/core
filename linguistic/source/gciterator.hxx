@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
@@ -78,7 +79,8 @@ class GrammarCheckingIterator:
         css::linguistic2::XLinguServiceEventListener,
         css::linguistic2::XLinguServiceEventBroadcaster,
         css::lang::XComponent,
-        css::lang::XServiceInfo
+        css::lang::XServiceInfo,
+        css::lang::XUnoTunnel
     >,
     public LinguDispatcher
 {
@@ -179,6 +181,9 @@ public:
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 };
 
 
