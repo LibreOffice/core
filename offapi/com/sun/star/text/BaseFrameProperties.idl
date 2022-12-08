@@ -363,6 +363,16 @@ published service BaseFrameProperties
         @since LibreOffice 7.4
     */
     [optional, property] string Tooltip;
+
+    /** Determines if the frame is purely decorative.
+
+        If `TRUE`, it is considered not part of the document content,
+        and may be ignored by assistive technologies.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property] boolean Decorative;
+
 };
 
 

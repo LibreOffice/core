@@ -254,6 +254,7 @@ public:
     bool            bSizeProtected;
     bool            bPositionProtected;
     bool            bHidden;
+    bool            bDecorative = false;
 
     sal_Int32       nShapeOptionType;
 
@@ -627,6 +628,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
     sal_Int32 nIntValue = rValue.getInt();
     switch( nName )
     {
+        case NS_ooxml::LN_OfficeArtExtension_Decorative_val:
+            m_pImpl->bDecorative = true;
+        break;
         case NS_ooxml::LN_CT_Hyperlink_URL://90682;
             m_pImpl->sHyperlinkURL = rValue.getString();
         break;
@@ -1517,6 +1521,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
         case NS_ooxml::LN_EG_WrapType_wrapThrough:
         case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_extLst:
         case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
         case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
         case NS_ooxml::LN_CT_WrapPath_start: // 90924;
@@ -1789,6 +1794,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             sal_Int32 nWidth = - m_pImpl->nLeftPosition;
             if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
+                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->bDecorative));
                 //adjust margins
                 if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
                     (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||

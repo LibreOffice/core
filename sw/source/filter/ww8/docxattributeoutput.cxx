@@ -5693,6 +5693,21 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
                 FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
                 FSNS( XML_r, XML_id ), sRelId);
         }
+
+        if (xShapePropSet->getPropertyValue("Decorative").get<bool>())
+        {
+            m_pSerializer->startElementNS(XML_a, XML_extLst,
+                FSNS(XML_xmlns, XML_a), GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
+            m_pSerializer->startElementNS(XML_a, XML_ext,
+                // Word uses this "URI" which is obviously not a URI
+                XML_uri, "{C183D7F6-B498-43B3-948B-1728B52AA6E4}");
+            rtl::Reference<::sax_fastparser::FastAttributeList> pAttrs(FastSerializerHelper::createAttrList());
+            m_pSerializer->singleElementNS(XML_adec, XML_decorative,
+                FSNS(XML_xmlns, XML_adec), "http://schemas.microsoft.com/office/drawing/2017/decorative",
+                XML_val, "1");
+            m_pSerializer->endElementNS(XML_a, XML_ext);
+            m_pSerializer->endElementNS(XML_a, XML_extLst);
+        }
     }
 
     m_pSerializer->endElementNS( XML_wp, XML_docPr );

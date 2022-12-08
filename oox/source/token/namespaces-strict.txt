@@ -92,6 +92,8 @@ xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/r
 
 # extlst namespaces
 
+adec                    http://schemas.microsoft.com/office/drawing/2017/decorative
+
 # xls14Lst for features introduced by excel 2010
 xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
 

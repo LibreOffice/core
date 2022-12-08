@@ -1341,6 +1341,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 pParaContext->props().SetParaId(sStringValue);
             }
             break;
+        case NS_ooxml::LN_OfficeArtExtension_Decorative_val:
+            m_pImpl->GetGraphicImport(IMPORT_AS_DETECTED_ANCHOR)->attribute(nName, val);
+            break;
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
     }

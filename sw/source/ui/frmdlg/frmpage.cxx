@@ -2792,6 +2792,7 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     , m_xAltNameFT(m_xBuilder->weld_label("altname_label"))
     , m_xAltNameED(m_xBuilder->weld_entry("altname"))
     , m_xDescriptionED(m_xBuilder->weld_text_view("description"))
+    , m_xDecorativeCB(m_xBuilder->weld_check_button("decorative"))
     , m_xSequenceFrame(m_xBuilder->weld_widget("frmSequence"))
     , m_xPrevLB(m_xBuilder->weld_combo_box("prev"))
     , m_xNextLB(m_xBuilder->weld_combo_box("next"))
@@ -2978,6 +2979,10 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     m_xPrintFrameCB->set_active(rPrt.GetValue());
     m_xPrintFrameCB->save_state();
 
+    SfxBoolItem const& rDecorative = rSet->Get(RES_DECORATIVE);
+    m_xDecorativeCB->set_active(rDecorative.GetValue());
+    m_xDecorativeCB->save_state();
+
     // textflow
     if( (!m_bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
         && m_sDlgType != "PictureDialog" && m_sDlgType != "ObjectDialog"
@@ -3042,6 +3047,11 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
 
     if ( m_xPrintFrameCB->get_state_changed_from_saved() )
         bRet |= nullptr != rSet->Put( SvxPrintItem( RES_PRINT, m_xPrintFrameCB->get_active()));
+
+    if (m_xDecorativeCB->get_state_changed_from_saved())
+    {
+        bRet |= nullptr != rSet->Put(SfxBoolItem(RES_DECORATIVE, m_xDecorativeCB->get_active()));
+    }
 
     // textflow
     if (m_xTextFlowLB->get_visible() && m_xTextFlowLB->get_value_changed_from_saved())

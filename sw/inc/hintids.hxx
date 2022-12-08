@@ -368,24 +368,24 @@ constexpr TypedWhichId<SfxGrabBagItem> RES_FRMATR_GRABBAG(129);
 constexpr TypedWhichId<SdrTextVertAdjustItem> RES_TEXT_VERT_ADJUST(130);
 constexpr TypedWhichId<SfxBoolItem> RES_BACKGROUND_FULL_SIZE(131);
 constexpr TypedWhichId<SfxBoolItem> RES_RTL_GUTTER(132);
-constexpr sal_uInt16 RES_FRMATR_END(133);
+constexpr TypedWhichId<SfxBoolItem> RES_DECORATIVE(133);
+constexpr sal_uInt16 RES_FRMATR_END(134);
 
 constexpr sal_uInt16 RES_GRFATR_BEGIN(RES_FRMATR_END);
-constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF(RES_GRFATR_BEGIN); // 133
-constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF(134);
+constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF(RES_GRFATR_BEGIN);
+constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF(135);
 
-constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION(135);
-constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE(136);
-constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST(137);
-constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR(138);
-constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG(139);
-constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB(140);
-constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(141);
-constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(142);
-constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(143);
-constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(144);
+constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION(136);
+constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE(137);
+constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST(138);
+constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR(139);
+constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG(140);
+constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB(141);
+constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(142);
+constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(143);
+constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(144);
+constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(145);
 
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY1(145);
 constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY2(146);
 constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY3(147);
 constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4(148);

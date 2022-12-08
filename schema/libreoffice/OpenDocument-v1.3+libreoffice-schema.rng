@@ -3304,4 +3304,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:value>folHlink</rng:value>
     </rng:choice>
   </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="draw-frame-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:decorative">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>

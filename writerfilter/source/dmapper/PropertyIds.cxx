@@ -364,6 +364,7 @@ OUString getPropertyName( PropertyIds eId )
             break;
         case PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF: sName = "CursorNotIgnoreTables"; break;
         case PROP_PARA_CONNECT_BORDERS: sName= "ParaIsConnectBorder"; break;
+        case PROP_DECORATIVE: sName = "Decorative"; break;
     }
     assert(sName.getLength()>0);
     return sName;
