@@ -633,6 +633,8 @@ private:
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
     css::uno::Reference<css::text::XTextRange> m_xAltChunkStartingRange;
+    std::deque<sal_Int32> m_aFootnoteIds;
+    std::deque<sal_Int32> m_aEndnoteIds;
 
     bool m_bIsInTextBox;
 private:
@@ -884,6 +886,7 @@ public:
     void IncrementFootnoteCount() { ++m_nFootnotes; }
     sal_Int32 GetEndnoteCount() const { return m_nEndnotes; }
     void IncrementEndnoteCount() { ++m_nEndnotes; }
+    void RemoveTemporaryFootOrEndnotes();
 
     void PushAnnotation();
     void PopAnnotation();

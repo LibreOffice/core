@@ -3617,12 +3617,49 @@ static void lcl_PasteRedlines(
     }
 }
 
+void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
+{
+    uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
+    uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
+    uno::Reference< text::XFootnote > xNote;
+    if  (GetFootnoteCount() > 0)
+    {
+        auto xFootnotes = xFootnotesSupplier->getFootnotes();
+        for (sal_Int32 i = GetFootnoteCount(); i > 0; --i)
+        {
+            xFootnotes->getByIndex(i) >>= xNote;
+            xNote->getAnchor()->setString("");
+        }
+    }
+    if  (GetEndnoteCount() > 0)
+    {
+        auto xEndnotes = xEndnotesSupplier->getEndnotes();
+        for (sal_Int32 i = GetEndnoteCount(); i > 0; --i)
+        {
+            xEndnotes->getByIndex(i) >>= xNote;
+            xNote->getAnchor()->setString("");
+        }
+    }
+}
+
+static void lcl_convertToNoteIndices(std::deque<sal_Int32>& rNoteIds)
+{
+    // convert arbitrary footnote identifiers to 0, 1, 2...
+    // indices, keeping their possible random order
+    std::deque<sal_Int32> aSortedIds = rNoteIds;
+    std::sort(aSortedIds.begin(), aSortedIds.end());
+    std::map<sal_Int32, size_t> aMapIds;
+    for (size_t i = 0; i < aSortedIds.size(); ++i)
+        aMapIds[aSortedIds[i]] = i;
+    for (size_t i = 0; i < rNoteIds.size(); ++i)
+        rNoteIds[i] = aMapIds[rNoteIds[i]];
+}
+
 void DomainMapper_Impl::PopFootOrEndnote()
 {
     // content of the footnotes were inserted after the first footnote in temporary footnotes,
     // restore the content of the actual footnote by copying its content from the first
     // (remaining) temporary footnote and remove the temporary footnote.
-    // FIXME: add footnote IDs to handle possible differences in footnote serialization
     uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
     uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
     bool bCopied = false;
@@ -3638,11 +3675,31 @@ void DomainMapper_Impl::PopFootOrEndnote()
                        ( xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xFootnoteLast ) )
              ) && xFootnoteLast->getLabel().isEmpty() )
         {
-            // copy content of the first remaining temporary footnote
-            if ( IsInFootnote() )
-                xFootnotes->getByIndex(1) >>= xFootnoteFirst;
-            else
-                xEndnotes->getByIndex(1) >>= xFootnoteFirst;
+            // copy content of the next temporary footnote
+            try
+            {
+                if ( IsInFootnote() && !m_aFootnoteIds.empty() )
+                {
+                    if ( m_aFootnoteIds.size() == sal::static_int_cast<size_t>(GetFootnoteCount()) )
+                        lcl_convertToNoteIndices(m_aFootnoteIds);
+                    xFootnotes->getByIndex(m_aFootnoteIds.front() + 1) >>= xFootnoteFirst;
+                    m_aFootnoteIds.pop_front();
+                }
+                else if ( !IsInFootnote() && !m_aEndnoteIds.empty() )
+                {
+                    if ( m_aEndnoteIds.size() == sal::static_int_cast<size_t>(GetEndnoteCount()) )
+                        lcl_convertToNoteIndices(m_aEndnoteIds);
+                    xEndnotes->getByIndex(m_aEndnoteIds.front() + 1) >>= xFootnoteFirst;
+                    m_aEndnoteIds.pop_front();
+                }
+                else
+                    m_bSaxError = true;
+            }
+            catch (uno::Exception const&)
+            {
+                TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Cannot insert footnote/endnote");
+                m_bSaxError = true;
+            }
             if (!m_bSaxError && xFootnoteFirst != xFootnoteLast)
             {
                 uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
@@ -3663,8 +3720,6 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
                     m_aStoredRedlines[eType].pop_front();
 
-                // remove temporary footnote
-                xFootnoteFirst->getAnchor()->setString("");
                 bCopied = true;
             }
         }
