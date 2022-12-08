@@ -1614,7 +1614,7 @@ static AquaSalFrame* getMouseContainerFrame()
         else
              mSelectedRange = NSMakeRange( selRange.location, selRange.location + selRange.length > mMarkedRange.length ? mMarkedRange.length - selRange.location : selRange.length );
 
-        // If we are going to post uncommitted text, cache the string paramater
+        // If we are going to post uncommitted text, cache the string parameter
         // as is needed in both [self endExtTextInput] and
         // [self attributedSubstringForProposedRange:actualRange:]
         mpLastMarkedText = [aString retain];
