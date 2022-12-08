@@ -81,6 +81,9 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         sMacroNameVal = sMacroNameVal.copy( rDoc.getLength()+1 );
     }
 
+    if (!sMacroNameVal.isEmpty())
+        rImport.NotifyMacroEventRead();
+
     Sequence<PropertyValue> aValues
     {
         comphelper::makePropertyValue(gsEventType, OUString(gsStarBasic)),
