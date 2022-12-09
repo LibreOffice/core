@@ -30,7 +30,8 @@
 #include <unordered_map>
 #include <vector>
 
-typedef std::unordered_map< OUString, std::pair< OUString, OUString > > EventsHash;
+typedef std::pair<OUString, OUString> EventPair;
+typedef std::unordered_map<OUString, EventPair> EventsHash;
 
 struct EventDisplayName
 {
@@ -56,6 +57,7 @@ class SvxMacroTabPage_ : public SfxTabPage
     DECL_LINK( DoubleClickHdl_Impl, weld::TreeView&, bool );
 
     void GenericHandler_Impl(const weld::Button* pBtn);
+    const EventPair* LookupEvent(const OUString& rEventName);
 
     css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
 protected:
@@ -71,7 +73,7 @@ protected:
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    static std::pair< OUString, OUString > GetPairFromAny( const css::uno::Any& aAny );
+    static EventPair GetPairFromAny(const css::uno::Any& aAny);
 
 public:
 

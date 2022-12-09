@@ -64,7 +64,9 @@ void SvxMacroTabPage_::EnableButtons()
     int nEvent = mpImpl->xEventLB->get_selected_index();
     if (nEvent != -1)
     {
-        mpImpl->xDeletePB->set_sensitive( !mpImpl->bReadOnly );
+        const EventPair* pEventPair = LookupEvent(mpImpl->xEventLB->get_id(nEvent));
+        const bool bAssigned = pEventPair && !pEventPair->second.isEmpty();
+        mpImpl->xDeletePB->set_sensitive(!mpImpl->bReadOnly && bAssigned);
         mpImpl->xAssignPB->set_sensitive( !mpImpl->bReadOnly );
         if( mpImpl->xAssignComponentPB )
             mpImpl->xAssignComponentPB->set_sensitive( !mpImpl->bReadOnly );
@@ -384,6 +386,24 @@ IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, weld::TreeView&, bool)
     return true;
 }
 
+const EventPair* SvxMacroTabPage_::LookupEvent(const OUString& rEventName)
+{
+    const EventPair* pRet = nullptr;
+    if (bAppEvents)
+    {
+        EventsHash::iterator h_it = m_appEventsHash.find(rEventName);
+        if (h_it != m_appEventsHash.end() )
+            pRet = &h_it->second;
+    }
+    else
+    {
+        EventsHash::iterator h_it = m_docEventsHash.find(rEventName);
+        if (h_it != m_docEventsHash.end() )
+            pRet = &h_it->second;
+    }
+    return pRet;
+}
+
 // handler for double click on the listbox, and for the assign/delete buttons
 void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
 {
@@ -401,23 +421,10 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
 
     OUString sEventURL;
     OUString sEventType;
-    if (bAppEvents)
+    if (const EventPair* pEventPair = LookupEvent(sEventName))
     {
-        EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
-        if (h_it != m_appEventsHash.end() )
-        {
-            sEventType = h_it->second.first;
-            sEventURL = h_it->second.second;
-        }
-    }
-    else
-    {
-        EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
-        if (h_it != m_docEventsHash.end() )
-        {
-            sEventType = h_it->second.first;
-            sEventURL = h_it->second.second;
-        }
+        sEventType = pEventPair->first;
+        sEventURL = pEventPair->second;
     }
 
     bool bDoubleClick = (pBtn == nullptr);
@@ -548,7 +555,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
 // returns the two props EventType & Script for a given event name
 Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
 {
-    const std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
+    const EventPair& rAssignedEvent(eventsHash[eventName]);
 
     Any aReturn;
     ::comphelper::NamedValueCollection aProps;
@@ -564,7 +571,7 @@ Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eve
 
 // converts the Any returned by GetByName into a pair which can be stored in
 // the EventHash
-std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
+EventPair SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
 {
     Sequence< beans::PropertyValue > props;
     OUString type, url;
