@@ -62,18 +62,19 @@ extern "C" {
 
         return pScriptURL;
     }
-    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer(void *pParent, sal_Int16 nTabId)
+    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer(void *pParent, void* pDocFrame_AsXFrame, sal_Int16 nTabId)
     {
         SAL_INFO("basctl.basicide","in basicide_macro_organizer");
-        basctl::Organize(static_cast<weld::Window*>(pParent), nTabId);
+        Reference< frame::XFrame > aDocFrame( static_cast< frame::XFrame* >( pDocFrame_AsXFrame ) );
+        basctl::Organize(static_cast<weld::Window*>(pParent), aDocFrame, nTabId);
     }
 }
 
-void Organize(weld::Window* pParent, sal_Int16 tabId)
+void Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
 {
     EnsureIde();
 
-    auto xDlg(std::make_shared<OrganizeDialog>(pParent, tabId));
+    auto xDlg(std::make_shared<OrganizeDialog>(pParent, xDocFrame, tabId));
     weld::DialogController::runAsync(xDlg, [](int) {});
 }
 

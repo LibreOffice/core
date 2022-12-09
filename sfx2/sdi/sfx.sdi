@@ -2341,7 +2341,7 @@ SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER
 
 
 SfxScriptOrganizerItem MacroOrganizer SID_MACROORGANIZER
-(SfxUInt16Item TabId SID_MACROORGANIZER)
+(SfxUInt16Item TabId SID_MACROORGANIZER, SfxBoolItem CurrentDocument FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

@@ -1544,14 +1544,21 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             SAL_INFO("sfx.appl", "handling SID_MACROORGANIZER");
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxUInt16Item* pItem;
             sal_Int16 nTabId = 0;
-            if(pArgs && (pItem = pArgs->GetItemIfSet(SID_MACROORGANIZER, false) ))
+            Reference <XFrame> xFrame;
+            if (pArgs)
             {
-                nTabId = pItem->GetValue();
+                if (const SfxUInt16Item* pItem = pArgs->GetItemIfSet(SID_MACROORGANIZER, false))
+                    nTabId = pItem->GetValue();
+                if (const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_2))
+                {
+                    // if set then default to showing the macros of the document associated
+                    // with this frame
+                    if (pItem->GetValue())
+                        xFrame = GetRequestFrame(rReq);
+                }
             }
-
-            SfxApplication::MacroOrganizer(rReq.GetFrameWeld(), nTabId);
+            SfxApplication::MacroOrganizer(rReq.GetFrameWeld(), xFrame, nTabId);
             rReq.Done();
         }
         break;

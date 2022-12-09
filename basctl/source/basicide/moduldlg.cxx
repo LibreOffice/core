@@ -31,6 +31,7 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -182,8 +183,24 @@ void Shell::CopyDialogResources(
     io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
 }
 
+void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFrame>& xDocFrame)
+{
+    if (!xDocFrame)
+        return;
+    Reference<css::frame::XController> xController(xDocFrame->getController());
+    if (!xController)
+        return;
+    Reference<css::frame::XModel> xModel(xController->getModel());
+    if (!xModel)
+        return;
+    ScriptDocument aScriptDocument(xModel);
+    EntryDescriptor aDesc(aScriptDocument, LIBRARY_LOCATION_DOCUMENT, OUString(), OUString(), OUString(), OBJ_TYPE_DOCUMENT);
+    m_xModulePage->SetCurrentEntry(aDesc);
+    m_xDialogPage->SetCurrentEntry(aDesc);
+}
+
 // OrganizeDialog
-OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId )
+OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
     : GenericDialogController(pParent, "modules/BasicIDE/ui/organizedialog.ui", "OrganizeDialog")
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page("modules"), "ModulePage", BrowseMode::Modules, this))
@@ -191,6 +208,8 @@ OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId )
     , m_xLibPage(new LibPage(m_xTabCtrl->get_page("libraries"), this))
 {
     m_xTabCtrl->connect_enter_page(LINK(this, OrganizeDialog, ActivatePageHdl));
+
+    SetCurrentEntry(xDocFrame);
 
     OString sPage;
     if (tabId == 0)
