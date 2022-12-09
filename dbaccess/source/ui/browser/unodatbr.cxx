@@ -547,7 +547,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
             if (m_xCurrentlyDisplayed)
             {
                 Sequence< OUString> aProperties(6 + ( m_bPreview ? 5 : 0 ));
-                Sequence< Any> aValues(7 + ( m_bPreview ? 5 : 0 ));
+                Sequence< Any> aValues(6 + ( m_bPreview ? 5 : 0 ));
 
                 weld::TreeView& rTreeView = m_pTreeView->GetWidget();
                 DBTreeListUserData* pData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(*m_xCurrentlyDisplayed));
