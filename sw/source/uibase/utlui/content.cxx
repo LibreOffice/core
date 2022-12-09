@@ -1265,6 +1265,15 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         BringTextFieldsToAttention(aTextAttrArr);
                     }
                 }
+                else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
+                {
+                    if (const SwTextAttr* pTextAttr =
+                            static_cast<SwTextFootnoteContent*> (pCnt)->GetTextFootnote())
+                    {
+                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                        BringFootnotesToAttention(aTextAttrArr);
+                    }
+                }
             }
         }
         else // content type entry
@@ -1388,18 +1397,33 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 else if (nType == ContentTypeId::TEXTFIELD)
                 {
                     std::vector<const SwTextAttr*> aTextAttrArr;
-                    for (size_t i = 0; i < m_aActiveContentArr[nType]->GetMemberCount(); i++)
+                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
+                    for (size_t i = 0; i < nCount; i++)
                     {
-                        const SwTextFieldContent* pTextFieldContent =
+                        if (const SwTextFieldContent* pTextFieldContent =
                                 static_cast<const SwTextFieldContent*>(
-                                    m_aActiveContentArr[nType]->GetMember(i));
-                        if (pTextFieldContent)
+                                    m_aActiveContentArr[nType]->GetMember(i)))
                             if (const SwFormatField* pFormatField =
                                     pTextFieldContent->GetFormatField())
                                 if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
                                     aTextAttrArr.push_back(pTextAttr);
                     }
                     BringTextFieldsToAttention(aTextAttrArr);
+                }
+                else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr;
+                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
+                    for (size_t i = 0; i < nCount; i++)
+                    {
+                        if (const SwTextFootnoteContent* pTextFootnoteContent =
+                                static_cast<const SwTextFootnoteContent*>(
+                                    m_aActiveContentArr[nType]->GetMember(i)))
+                            if (const SwTextAttr* pTextAttr =
+                                    pTextFootnoteContent->GetTextFootnote())
+                                aTextAttrArr.push_back(pTextAttr);
+                    }
+                    BringFootnotesToAttention(aTextAttrArr);
                 }
             }
         }
@@ -5919,6 +5943,50 @@ void SwContentTree::BringReferencesToAttention(std::vector<const SwTextAttr*>& r
                                                               true /*unused for Invert type*/));
     m_aOverlayObjectDelayTimer.Start();
 }
+
+void SwContentTree::BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const SwTextAttr* p : rTextAttrsArr)
+    {
+        const SwTextNode& rTextNode = p->GetFootnote().GetTextFootnote()->GetTextNode();
+        if (SwTextFrame* pFrame = static_cast<SwTextFrame*>(
+                    rTextNode.getLayoutFrame(m_pActiveShell->GetLayout())))
+        {
+            SwRect aStartCharRect;
+            SwPosition aStartPos(rTextNode, p->GetStart());
+            pFrame->GetCharRect(aStartCharRect, aStartPos);
+            SwRect aEndCharRect;
+            SwPosition aEndPos(rTextNode, p->GetStart() + 1);
+            pFrame->GetCharRect(aEndCharRect, aEndPos);
+            if (aStartCharRect.Top() == aEndCharRect.Top())
+            {
+                // single line range
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+            }
+            else
+            {
+                // multi line range
+                SwRect aFrameRect = pFrame->getFrameArea();
+                aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                     aFrameRect.Right(), aStartCharRect.Bottom() + 1);
+                if (aStartCharRect.Bottom() + 1 != aEndCharRect.Top())
+                    aRanges.emplace_back(aFrameRect.Left(), aStartCharRect.Bottom() + 1,
+                                         aFrameRect.Right(), aEndCharRect.Top() + 1);
+                aRanges.emplace_back(aFrameRect.Left(), aEndCharRect.Top() + 1,
+                                     aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+            }
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
+}
+
 
 void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr)
 {
