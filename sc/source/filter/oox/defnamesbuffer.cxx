@@ -234,9 +234,9 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        maScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet, maModel.mbHidden );
+        maScRangeData = createLocalNamedRangeObject(maCalcName, nIndex, nNameFlags, maModel.mnSheet, maModel.mbHidden);
     else
-        maScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mbHidden );
+        maScRangeData = createNamedRangeObject( maCalcName, nIndex, nNameFlags, maModel.mbHidden);
     mnTokenIndex = nIndex;
 }
 

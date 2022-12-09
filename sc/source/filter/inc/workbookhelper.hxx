@@ -168,7 +168,6 @@ public:
         @param orName  (in/out-parameter) Returns the resulting used name. */
     RangeDataRet createNamedRangeObject(
                             OUString& orName,
-                            const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
                             sal_Int32 nNameFlags, bool bHidden ) const;
 
@@ -177,7 +176,6 @@ public:
         @param orName  (in/out-parameter) Returns the resulting used name. */
     RangeDataRet createLocalNamedRangeObject(
                             OUString& orName,
-                            const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
                             sal_Int32 nNameFlags, sal_Int32 nTab, bool bHidden ) const;
 
