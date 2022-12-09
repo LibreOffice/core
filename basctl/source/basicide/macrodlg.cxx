@@ -718,7 +718,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         if (m_xDocumentFrame.is())
             aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, m_xDocumentFrame));
 
-        SfxRequest aRequest(SID_CONFIG, SfxCallMode::SYNCHRON, Args, aInternalSet);
+        SfxRequest aRequest(SID_CONFIGACCEL, SfxCallMode::SYNCHRON, Args, aInternalSet);
         aRequest.AppendItem( aItem );
         SfxGetpApp()->ExecuteSlot( aRequest );
     }
