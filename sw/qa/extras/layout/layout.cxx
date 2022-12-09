@@ -3504,6 +3504,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
     assertXPathContent(pXmlDoc, "//tab/row/cell[1]/txt", "Abcd efghijkl");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf152413)
+{
+    createSwDoc("tdf152413.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 2
+    // - In <>, XPath '/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion' number of nodes is incorrect
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion", "portion",
+                u"صِرَ ٰطَ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)
 {
     createSwDoc("tdf125893.docx");
