@@ -53,6 +53,7 @@ inline constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
 
 inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
 inline constexpr OUStringLiteral ITEM_TOOLBAR_URL = u"private:resource/toolbar/";
+inline constexpr OUStringLiteral ITEM_EVENT_URL = u"private:resource/event/";
 
 inline constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
 

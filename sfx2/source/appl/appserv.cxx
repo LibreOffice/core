@@ -403,14 +403,25 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             SfxItemSetFixed<SID_CONFIG, SID_CONFIG, SID_MACROINFO, SID_MACROINFO> aSet( GetPool() );
 
+            // SID_CONFIG property will determine the default page shown
             if ( pStringItem )
             {
                 aSet.Put( SfxStringItem(
                     SID_CONFIG, pStringItem->GetValue() ) );
             }
+            else if (rReq.GetSlot() == SID_CONFIGEVENT)
+            {
+                aSet.Put( SfxStringItem(
+                    SID_CONFIG, "private:resource/event/" ) );
+            }
+            else if (rReq.GetSlot() == SID_TOOLBOXOPTIONS)
+            {
+                aSet.Put( SfxStringItem(
+                    SID_CONFIG, "private:resource/toolbar/" ) );
+            }
 
 #if HAVE_FEATURE_SCRIPTING
-            // Preselect a macro:
+            // Preselect a macro in the 'keyboard' page
             if (auto const item = rReq.GetArg<SfxMacroInfoItem>(SID_MACROINFO)) {
                 aSet.Put(*item);
             }
