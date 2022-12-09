@@ -8,9 +8,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes" context="qrcodegen|edit_name">www.libreoffice.org</property>
-  </object>
   <object class="GtkDialog" id="QrCodeGenDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -347,7 +344,6 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="buffer">textbuffer1</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="edit_text-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the code.</property>

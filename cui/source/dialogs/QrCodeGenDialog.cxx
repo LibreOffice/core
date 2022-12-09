@@ -171,18 +171,14 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
                                   m_xEdittext->get_height_rows(6));
     if (!bEditExisting)
     {
-        OUString sSelection;
         // TODO: This only works in Writer doc. Should also work in shapes
         Reference<XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
         if (xSelections.is())
         {
             Reference<XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
             if (xSelection.is())
-                sSelection = xSelection->getString();
+                m_xEdittext->set_text(xSelection->getString());
         }
-        if (!sSelection.isEmpty())
-            m_xEdittext->set_text(sSelection);
-        m_xEdittext->select_region(0, -1);
         return;
     }
 
