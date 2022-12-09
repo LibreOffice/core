@@ -1213,6 +1213,27 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 {
                     BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
                 }
+                else if (nType == ContentTypeId::REGION)
+                {
+                    const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
+                    if (const size_t nSize = rFormats.size())
+                    {
+                        auto aEntryName = pCnt->GetName();
+                        for (SwSectionFormats::size_type n = nSize; n;)
+                        {
+                            if (const SwSectionFormat* pFormat = rFormats[--n])
+                            {
+                                const SwSection* pSect = pFormat->GetSection();
+                                if (pSect && !pSect->IsHiddenFlag() &&
+                                        pSect->GetSectionName() == aEntryName)
+                                {
+                                    BringFramesToAttention(std::vector<const SwFrameFormat*> {pFormat});
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
                 else if (nType == ContentTypeId::URLFIELD)
                 {
                     BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
@@ -1300,6 +1321,24 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         auto aNames(comphelper::sequenceToContainer<std::vector<OUString>>(
                                         xNames->getElementNames()));
                         BringBookmarksToAttention(aNames);
+                    }
+                }
+                else if (nType == ContentTypeId::REGION)
+                {
+                    const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
+                    if (const size_t nSize = rFormats.size())
+                    {
+                        std::vector<const SwFrameFormat*> aSectionsFormatsArr;
+                        for (SwSectionFormats::size_type n = nSize; n;)
+                        {
+                            if (const SwSectionFormat* pFormat = rFormats[--n])
+                            {
+                                const SwSection* pSect = pFormat->GetSection();
+                                if (pSect && !pSect->IsHiddenFlag())
+                                    aSectionsFormatsArr.push_back(pFormat);
+                            }
+                        }
+                        BringFramesToAttention(aSectionsFormatsArr);
                     }
                 }
                 else if (nType == ContentTypeId::URLFIELD)
