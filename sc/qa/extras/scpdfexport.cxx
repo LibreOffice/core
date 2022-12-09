@@ -29,6 +29,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/scheduler.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -62,6 +63,7 @@ public:
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
     void testTdf143978();
+    void testTdf120190();
     void testTdf84012();
     void testTdf78897();
     void testForcepoint97();
@@ -72,6 +74,7 @@ public:
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
     CPPUNIT_TEST(testTdf143978);
+    CPPUNIT_TEST(testTdf120190);
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
     CPPUNIT_TEST(testForcepoint97);
@@ -424,6 +427,74 @@ void ScPDFExportTest::testTdf143978()
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
     OUString sText2 = pPageObject2->getText(pTextPage);
     CPPUNIT_ASSERT_EQUAL(OUString("2021-11-17"), sText2);
+}
+
+void ScPDFExportTest::testTdf120190()
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    xSheet0->getCellByPosition(0, 0)->setFormula("=5&CHAR(10)&6");
+
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(OUString("A1")) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+
+    dispatchCommand(mxComponent, ".uno:ConvertFormulaToValue", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // A1
+    ScRange range1(0, 0, 0, 0, 0, 0);
+    exportToPDF(xModel, range1);
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(5, nPageObjectCount);
+
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject1 = pPdfPage->getObject(0);
+    OUString sText1 = pPageObject1->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sText1);
+
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
+    OUString sText2 = pPageObject2->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("Page "), sText2);
+
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject3 = pPdfPage->getObject(2);
+    OUString sText3 = pPageObject3->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), sText3);
+
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject4 = pPdfPage->getObject(3);
+    OUString sText4 = pPageObject4->getText(pTextPage);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5
+    // - Actual  : 56
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), sText4);
+
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject5 = pPdfPage->getObject(4);
+    OUString sText5 = pPageObject5->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), sText5);
 }
 
 void ScPDFExportTest::testTdf84012()
