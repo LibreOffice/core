@@ -1283,6 +1283,63 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     }
 }
 
+void SfxViewFrame::AppendContainsMacrosInfobar()
+{
+    auto pInfoBar = AppendInfoBar("macro", SfxResId(RID_SECURITY_WARNING_TITLE), SfxResId(STR_CONTAINS_MACROS), InfobarType::WARNING);
+    if (!pInfoBar)
+        return;
+
+    SfxObjectShell_Impl* pObjImpl = m_xObjSh->Get_Impl();
+
+    // what's the difference between pObjImpl->documentStorageHasMacros() and pObjImpl->aMacroMode.hasMacroLibrary() ?
+    if (pObjImpl->aMacroMode.hasMacroLibrary())
+    {
+        weld::Button& rMacroButton = pInfoBar->addButton();
+        rMacroButton.set_label(SfxResId(STR_MACROS));
+        rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
+    }
+
+    Reference<XModel> xModel = m_xObjSh->GetModel();
+    uno::Reference<document::XEventsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+    bool bHasBoundConfigEvents(false);
+    if (xSupplier.is())
+    {
+        css::uno::Reference<css::container::XNameReplace> xDocumentEvents = xSupplier->getEvents();
+
+        Sequence<OUString> eventNames = xDocumentEvents->getElementNames();
+        sal_Int32 nEventCount = eventNames.getLength();
+        for (sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent)
+        {
+            OUString url;
+            try
+            {
+                Any aAny(xDocumentEvents->getByName(eventNames[nEvent]));
+                Sequence<beans::PropertyValue> props;
+                if (aAny >>= props)
+                {
+                    ::comphelper::NamedValueCollection aProps(props);
+                    url = aProps.getOrDefault("Script", url);
+                }
+            }
+            catch (const Exception&)
+            {
+            }
+            if (!url.isEmpty())
+            {
+                bHasBoundConfigEvents = true;
+                break;
+            }
+        }
+    }
+
+    if (bHasBoundConfigEvents)
+    {
+        weld::Button& rEventButton = pInfoBar->addButton();
+        rEventButton.set_label(SfxResId(STR_EVENTS));
+        rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
+    }
+}
+
 namespace
 {
 css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame& rFrame)
@@ -1472,16 +1529,21 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     }
                 }
 
+                const bool bEmbedded = m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
+
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( m_xObjSh->IsReadOnly() &&
                     ! m_xObjSh->IsSecurityOptOpenReadOnly() &&
-                    ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
+                    ( !bEmbedded ||
                         (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
                     AppendReadOnlyInfobar();
                 }
+
+                if (!bEmbedded && m_xObjSh->Get_Impl()->getCurrentMacroExecMode() == css::document::MacroExecMode::NEVER_EXECUTE)
+                    AppendContainsMacrosInfobar();
 
                 if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
                     sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
@@ -1696,6 +1758,23 @@ IMPL_LINK_NOARG(SfxViewFrame, HyphenationMissingHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_HYPHENATIONMISSING);
     RemoveInfoBar(u"hyphenationmissing");
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, MacroButtonHandler, weld::Button&, void)
+{
+    // start with tab 0 displayed
+    SfxUInt16Item aTabItem(SID_MACROORGANIZER, 0);
+    SfxBoolItem aCurrentDocItem(FN_PARAM_2, true);
+    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+    GetDispatcher()->ExecuteList(SID_MACROORGANIZER, SfxCallMode::ASYNCHRON,
+                                 { &aTabItem, &aCurrentDocItem }, { &aDocFrame });
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, EventButtonHandler, weld::Button&, void)
+{
+    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+    GetDispatcher()->ExecuteList(SID_CONFIGEVENT, SfxCallMode::ASYNCHRON,
+                                 {}, { &aDocFrame });
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)

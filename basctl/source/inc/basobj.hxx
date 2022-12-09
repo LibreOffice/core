@@ -32,8 +32,7 @@ namespace weld { class Widget; class Window; }
 
 namespace basctl
 {
-    void            Organize(weld::Window* pParent, sal_Int16 tabId);
-
+    void            Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId);
 
     // help methods for the general use:
     SbMethod*       CreateMacro( SbModule* pModule, const OUString& rMacroName );

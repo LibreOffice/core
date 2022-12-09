@@ -30,6 +30,7 @@
 
 #include <sfx2/shell.hxx>
 
+namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::script { class XLibraryContainer; }
 
 namespace weld { class Window; }
@@ -138,7 +139,9 @@ public:
     // Basic/Scripting
     static bool                 IsXScriptURL( const OUString& rScriptURL );
     static OUString             ChooseScript(weld::Window *pParent);
-    static void                 MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId);
+    // if xDocFrame is present, then select that document in the macro organizer by default, otherwise it is typically "Application Macros"
+    // that is preselected
+    static void                 MacroOrganizer(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 nTabId);
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const OUString& i_macroName )
                                 { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), nullptr, nullptr ); }

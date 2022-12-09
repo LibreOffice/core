@@ -145,7 +145,7 @@
 #define STR_QUERY_UPDATE_LINKS                  NC_("STR_QUERY_UPDATE_LINKS", "The document %{filename} contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?")
 #define STR_DDE_ERROR                           NC_("STR_DDE_ERROR", "DDE link to %1 for %2 area %3 are not available.")
 #define STR_SECURITY_WARNING_NO_HYPERLINKS      NC_("STR_SECURITY_WARNING_NO_HYPERLINKS", "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.")
-#define RID_SECURITY_WARNING_TITLE                  NC_("RID_SECURITY_WARNING_TITLE", "Security Warning")
+#define RID_SECURITY_WARNING_TITLE              NC_("RID_SECURITY_WARNING_TITLE", "Security Warning")
 #define RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE NC_("RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE", "Saving will remove all existing signatures.\nDo you want to continue saving the document?")
 #define RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN  NC_("RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN", "The document has to be saved before it can be signed.\nDo you want to save the document?")
 #define STR_QUERY_CANCELCHECKOUT                NC_("STR_QUERY_CANCELCHECKOUT", "This will discard all changes on the server since check-out.\nDo you want to proceed?")
@@ -292,6 +292,9 @@
 #define STR_HYPHENATION_BUTTON                  NC_("STR_HYPHENATION_BUTTON", "Learn more")
 #define STR_REFRESH_MASTER_PASSWORD             NC_("STR_REFRESH_MASTER_PASSWORD", "The master password is stored in an outdated format, you should refresh it")
 #define STR_REFRESH_PASSWORD                    NC_("STR_REFRESH_PASSWORD", "Refresh Password")
+#define STR_CONTAINS_MACROS                     NC_("STR_CONTAINS_MACROS", "The document contains macros.")
+#define STR_MACROS                              NC_("STR_MACROS", "Macros")
+#define STR_EVENTS                              NC_("STR_EVENTS", "Events")
 
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
