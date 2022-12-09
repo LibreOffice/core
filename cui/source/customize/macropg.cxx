@@ -375,20 +375,19 @@ IMPL_LINK_NOARG( SvxMacroTabPage_, SelectEvent_Impl, weld::TreeView&, void)
 
 IMPL_LINK( SvxMacroTabPage_, AssignDeleteHdl_Impl, weld::Button&, rBtn, void )
 {
-    GenericHandler_Impl(this, &rBtn);
+    GenericHandler_Impl(&rBtn);
 }
 
 IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, weld::TreeView&, bool)
 {
-    GenericHandler_Impl(this, nullptr);
+    GenericHandler_Impl(nullptr);
     return true;
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
-void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::Button* pBtn)
+void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
 {
-    SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl.get();
-    weld::TreeView& rListBox = *pImpl->xEventLB;
+    weld::TreeView& rListBox = *mpImpl->xEventLB;
     int nEntry = rListBox.get_selected_index();
     if (nEntry == -1)
     {
@@ -396,16 +395,16 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
         return;
     }
 
-    const bool bAssEnabled = pBtn != pImpl->xDeletePB.get() && pImpl->xAssignPB->get_sensitive();
+    const bool bAssEnabled = pBtn != mpImpl->xDeletePB.get() && mpImpl->xAssignPB->get_sensitive();
 
     OUString sEventName = rListBox.get_id(nEntry);
 
     OUString sEventURL;
     OUString sEventType;
-    if(pThis->bAppEvents)
+    if (bAppEvents)
     {
-        EventsHash::iterator h_it = pThis->m_appEventsHash.find(sEventName);
-        if(h_it != pThis->m_appEventsHash.end() )
+        EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
+        if (h_it != m_appEventsHash.end() )
         {
             sEventType = h_it->second.first;
             sEventURL = h_it->second.second;
@@ -413,8 +412,8 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
     }
     else
     {
-        EventsHash::iterator h_it = pThis->m_docEventsHash.find(sEventName);
-        if(h_it != pThis->m_docEventsHash.end() )
+        EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
+        if (h_it != m_docEventsHash.end() )
         {
             sEventType = h_it->second.first;
             sEventURL = h_it->second.second;
@@ -423,57 +422,57 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
 
     bool bDoubleClick = (pBtn == nullptr);
     bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
-    if( pBtn == pImpl->xDeletePB.get() )
+    if (pBtn == mpImpl->xDeletePB.get())
     {
         // delete pressed
         sEventType =  "Script" ;
         sEventURL.clear();
-        if(!pThis->bAppEvents)
-            pThis->bDocModified = true;
+        if (!bAppEvents)
+            bDocModified = true;
     }
     else if (   (   ( pBtn != nullptr )
-                &&  ( pBtn == pImpl->xAssignComponentPB.get() )
+                &&  ( pBtn == mpImpl->xAssignComponentPB.get() )
                 )
             ||  (   bDoubleClick
                 &&  bUNOAssigned
                 )
             )
     {
-        AssignComponentDialog aAssignDlg(pThis->GetFrameWeld(), sEventURL);
+        AssignComponentDialog aAssignDlg(GetFrameWeld(), sEventURL);
 
         short ret = aAssignDlg.run();
         if( ret )
         {
             sEventType = "UNO";
             sEventURL = aAssignDlg.getURL();
-            if(!pThis->bAppEvents)
-                pThis->bDocModified = true;
+            if (!bAppEvents)
+                bDocModified = true;
         }
     }
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog aDlg(pThis->GetFrameWeld(), pThis->GetFrame());
+        SvxScriptSelectorDialog aDlg(GetFrameWeld(), GetFrame());
         short ret = aDlg.run();
         if ( ret )
         {
             sEventType = "Script";
             sEventURL = aDlg.GetScriptURL();
-            if(!pThis->bAppEvents)
-                pThis->bDocModified = true;
+            if (!bAppEvents)
+                bDocModified = true;
         }
     }
 
     // update the hashes
-    if(pThis->bAppEvents)
+    if (bAppEvents)
     {
-        EventsHash::iterator h_it = pThis->m_appEventsHash.find(sEventName);
+        EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
     else
     {
-        EventsHash::iterator h_it = pThis->m_docEventsHash.find(sEventName);
+        EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
@@ -484,7 +483,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
     rListBox.select(nEntry );
     rListBox.scroll_to_row(nEntry);
 
-    pThis->EnableButtons();
+    EnableButtons();
 }
 
 // pass in the XNameReplace.
