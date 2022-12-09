@@ -14,6 +14,8 @@
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
 #include <o3tl/string_view.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -29,6 +31,12 @@
 #include <IDocumentContentOperations.hxx>
 #include <fmtfsize.hxx>
 #include <fmtfollowtextflow.hxx>
+#include <view.hxx>
+#include <cmdid.h>
+#include <node.hxx>
+#include <ndtxt.hxx>
+#include <tabfrm.hxx>
+#include <cntfrm.hxx>
 
 /// Covers sw/source/core/layout/ fixes.
 class SwCoreLayoutTest : public SwModelTestBase
@@ -881,6 +889,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     // - Actual  : 396
     // i.e. the image was larger than the containing cell.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1000), nCellHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
+{
+    // Given a document with a ToC and several tables, one table marked with a bookmark:
+    createSwDoc("page-remove-fly-table.odt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When updating the ToC and incrementally formatting the document:
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SfxDispatcher& rDispatcher = *pView->GetViewFrame()->GetDispatcher();
+    rDispatcher.Execute(FN_UPDATE_TOX);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Reformat();
+
+    // Then make sure that the 2nd table below the bookmark has no unwanted top margin:
+    pWrtShell->GotoMark("test");
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPoint()->GetNode().GetTextNode();
+    SwFrame* pTextFrame = pTextNode->getLayoutFrame(nullptr);
+    SwTabFrame* pInnerTable = pTextFrame->FindTabFrame();
+    SwTabFrame* pOuterTable = pInnerTable->GetUpper()->FindTabFrame();
+    tools::Long nActual = pOuterTable->getFramePrintArea().Top();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 5879
+    // i.e. the problematic table had a large, unwanted/leftover top margin.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(0), nActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
