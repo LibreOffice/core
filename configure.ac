@@ -1879,7 +1879,7 @@ libo_FUZZ_ARG_ENABLE(release-build,
         [Enable release build. Note that the "release build" choice is orthogonal to
          whether symbols are present, debug info is generated, or optimization
          is done.
-         See http://wiki.documentfoundation.org/Development/DevBuild]),
+         See https://wiki.documentfoundation.org/Development/DevBuild]),
 ,)
 
 AC_ARG_ENABLE(windows-build-signing,
@@ -2587,7 +2587,7 @@ AC_ARG_WITH(bffvalidator,
         [Enables export validation for Microsoft Binary formats (doc, xls, ppt).
          Requires installed Microsoft Office Binary File Format Validator.
          Note: export-validation (--with-export-validation) is required to be turned on.
-         See https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
+         See https://web.archive.org/web/20200804155745/https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
 ,with_bffvalidator=no)
 
 libo_FUZZ_ARG_WITH(junit,
@@ -3537,7 +3537,7 @@ if test $_os = Darwin; then
         if test "$enable_macosx_code_signing" = yes; then
             # By default use the first suitable certificate (?).
 
-            # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
+            # https://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
             # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
             # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
             # the App Store, the "3rd Party Mac Developer" one. I think it works best to the
@@ -6980,7 +6980,7 @@ if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
         AC_MSG_RESULT([ok (g++ $_gpp_version)])
     fi
 
-    dnl see https://code.google.com/p/android/issues/detail?id=41770
+    dnl see https://issuetracker.google.com/issues/36962819
         glibcxx_threads=no
         AC_LANG_PUSH([C++])
         AC_REQUIRE_CPP
@@ -9134,7 +9134,7 @@ if test "$enable_epm" = "yes"; then
             if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
                 AC_MSG_RESULT([yes])
             else
-                AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm])
+                AC_MSG_ERROR([no. Install ESP Package Manager (https://jimjag.github.io/epm/) and/or specify the path to the right epm])
             fi
             AC_MSG_CHECKING([epm version])
             EPM_VERSION=`$EPM | grep 'ESP Package Manager' | cut -d' ' -f4 | $SED -e s/v//`
@@ -9143,7 +9143,7 @@ if test "$enable_epm" = "yes"; then
                 AC_MSG_RESULT([OK, >= 3.7])
             else
                 AC_MSG_RESULT([too old. epm >= 3.7 is required.])
-                AC_MSG_ERROR([Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm])
+                AC_MSG_ERROR([Install ESP Package Manager (https://jimjag.github.io/epm/) and/or specify the path to the right epm])
             fi
         fi
     fi
@@ -9508,7 +9508,7 @@ cd /opt/lo/bin
 wget https://dev-www.libreoffice.org/bin/cygwin/nasm.exe
 chmod +x nasm
 
-or get and install one from http://www.nasm.us/
+or get and install one from https://www.nasm.us/
 
 Then re-run autogen.sh
 
@@ -9518,7 +9518,7 @@ Alternatively, you can install the 'new' nasm where ever you want and make sure 
 _EOS
             else
 cat << _EOS
-consult https://github.com/libjpeg-turbo/libjpeg-turbo/blob/master/BUILDING.md
+consult https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/BUILDING.md
 
 _EOS
             fi
@@ -9545,7 +9545,7 @@ if test "$SYSTEM_CLUCENE" = TRUE; then
     save_CPPFLAGS=$CPPFLAGS
     CXXFLAGS="$CXXFLAGS $CLUCENE_CFLAGS"
     CPPFLAGS="$CPPFLAGS $CLUCENE_CFLAGS"
-    dnl http://sourceforge.net/tracker/index.php?func=detail&aid=3392466&group_id=80013&atid=558446
+    dnl https://sourceforge.net/p/clucene/bugs/200/
     dnl https://bugzilla.redhat.com/show_bug.cgi?id=794795
     AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
                  [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [#include <CLucene.h>])
@@ -11055,8 +11055,8 @@ if test "$enable_openssl" = "yes"; then
     if test "$_os" = Darwin ; then
         # OpenSSL is deprecated when building for 10.7 or later.
         #
-        # http://stackoverflow.com/questions/7406946/why-is-apple-deprecating-openssl-in-macos-10-7-lion
-        # http://stackoverflow.com/questions/7475914/libcrypto-deprecated-on-mac-os-x-10-7-lion
+        # https://stackoverflow.com/questions/7406946/why-is-apple-deprecating-openssl-in-macos-10-7-lion
+        # https://stackoverflow.com/questions/7475914/libcrypto-deprecated-on-mac-os-x-10-7-lion
 
         with_system_openssl=no
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
@@ -11198,8 +11198,8 @@ else
         for i in $CPLUS_INCLUDE_PATH /usr/include; do
             dnl Reset IFS as soon as possible, to avoid unexpected side effects (and the
             dnl "/usr/include" fallback makes sure we get here at least once; resetting rather than
-            dnl unsetting follows the advice at <http://git.savannah.gnu.org/gitweb/?p=autoconf.git;
-            dnl a=commit;h=e51c9919f2cf70185b7916ac040bc0bbfd0f743b> "Add recommendation on (not)
+            dnl unsetting follows the advice at <https://git.savannah.gnu.org/gitweb/?p=autoconf.git;
+            dnl a=commitdiff;h=e51c9919f2cf70185b7916ac040bc0bbfd0f743b> "Add recommendation on (not)
             dnl unsetting IFS."):
             IFS=$save_IFS
             dnl TODO: GCC and Clang treat empty paths in CPLUS_INCLUDE_PATH like ".", but we simply
