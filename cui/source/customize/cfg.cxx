@@ -36,6 +36,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
 
+#include <sfx2/minfitem.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -91,6 +92,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
+#include <config_features.h>
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
@@ -215,17 +217,19 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
-    const SfxPoolItem* pItem = pInSet->GetItem( SID_CONFIG );
-
-    if ( pItem )
+    if (const SfxPoolItem* pItem = pInSet->GetItem(SID_CONFIG))
     {
         OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
-
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
-        {
             SetCurPageId("toolbars");
-        }
     }
+#if HAVE_FEATURE_SCRIPTING
+    // for the "assign" button in the Basic Macros chooser automatically switch
+    // to the keyboard tab in which this macro will be pre-selected for assigning
+    // to a keystroke
+    if (pInSet->GetItemIfSet(SID_MACROINFO))
+        SetCurPageId("keyboard");
+#endif
 }
 
 void SvxConfigDialog::ActivatePage(const OString& rPage)
