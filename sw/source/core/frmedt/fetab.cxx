@@ -520,7 +520,11 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 pPam->SetMark();            // both want something
                 pPam->DeleteMark();
                 if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                {
                     pWrtShell->UpdateCursor();
+                    // tdf#150578 enable the disabled table toolbar by (zero) cursor moving
+                    pWrtShell->Right( SwCursorSkipMode::Chars, false, 0, false );
+                }
 
                 EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
                 return true;
