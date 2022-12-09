@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstdlib>
 #include <string>
 #include <string_view>
 
@@ -75,7 +76,7 @@ bool Prot::protect(
 
 extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector *
 unoexceptionprotector() {
-    return new Prot;
+    return std::getenv("CPPUNIT_PROPAGATE_EXCEPTIONS") == nullptr ? new Prot : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -465,16 +465,17 @@ static bool main2()
             std::exit(EXIT_FAILURE);
         }
 #endif
-        CppUnit::Protector *protector = fn == nullptr
-            ? nullptr
-            : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-        if (protector == nullptr) {
+        if (fn == nullptr) {
             std::cerr
                 << "Failure instantiating protector \"" << convertLazy(lib)
                 << "\", \"" << convertLazy(sym) << '"' << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        protectors.push_back(protector);
+        CppUnit::Protector *protector =
+            (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
+        if (protector != nullptr) {
+            protectors.push_back(protector);
+        }
         index+=3;
     }
 
