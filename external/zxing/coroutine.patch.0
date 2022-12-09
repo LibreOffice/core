@@ -1,0 +1,11 @@
+--- core/src/Generator.h
++++ core/src/Generator.h
+@@ -26,7 +26,7 @@
+ 			current_value = std::move(value);
+ 			return {};
+ 		}
+-//		void return_value(T&& value) noexcept { current_value = std::move(value); }
++		void return_void() noexcept {}
+ 		// Disallow co_await in generator coroutines.
+ 		void await_transform() = delete;
+ 		[[noreturn]] static void unhandled_exception() { throw; }

@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/android_include.patch.0 \
 	external/zxing/missing-include.patch.0 \
 	external/zxing/msvc-lambdacapture.patch.0 \
+	external/zxing/coroutine.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
