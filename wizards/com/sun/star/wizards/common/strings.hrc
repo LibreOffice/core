@@ -30,11 +30,11 @@ def NC_(context, string):
 
 # common section
 RID_COMMON_START_0                      = NC_("RID_COMMON_START_0", "The directory '%1' could not be created.<BR>There may not be enough space left on your hard disk.")
-RID_COMMON_START_1                      = NC_("RID_COMMON_START_1", "The text document could not be created.<BR>Please check if the module 'PRODUCTNAME Writer' is installed.")
-RID_COMMON_START_2                      = NC_("RID_COMMON_START_2", "The spreadsheet could not be created.<BR>Please check if the module 'PRODUCTNAME Calc' is installed.")
-RID_COMMON_START_3                      = NC_("RID_COMMON_START_3", "The presentation could not be created.<BR>Please check if the module 'PRODUCTNAME Impress' is installed.")
-RID_COMMON_START_4                      = NC_("RID_COMMON_START_4", "The drawing could not be created.<BR>Please check if the module 'PRODUCTNAME Draw' is installed.")
-RID_COMMON_START_5                      = NC_("RID_COMMON_START_5", "The formula could not be created.<BR>Please check if the module 'PRODUCTNAME Math' is installed.")
+RID_COMMON_START_1                      = NC_("RID_COMMON_START_1", "The text document could not be created.<BR>Please check if the module '%PRODUCTNAME Writer' is installed.")
+RID_COMMON_START_2                      = NC_("RID_COMMON_START_2", "The spreadsheet could not be created.<BR>Please check if the module '%PRODUCTNAME Calc' is installed.")
+RID_COMMON_START_3                      = NC_("RID_COMMON_START_3", "The presentation could not be created.<BR>Please check if the module '%PRODUCTNAME Impress' is installed.")
+RID_COMMON_START_4                      = NC_("RID_COMMON_START_4", "The drawing could not be created.<BR>Please check if the module '%PRODUCTNAME Draw' is installed.")
+RID_COMMON_START_5                      = NC_("RID_COMMON_START_5", "The formula could not be created.<BR>Please check if the module '%PRODUCTNAME Math' is installed.")
 RID_COMMON_START_6                      = NC_("RID_COMMON_START_6", "The files required could not be found.<BR>Please start the %PRODUCTNAME Setup and choose 'Repair'.")
 RID_COMMON_START_7                      = NC_("RID_COMMON_START_7", "The file '<PATH>' already exists.<BR><BR>Would you like to overwrite the existing file?")
 RID_COMMON_START_8                      = NC_("RID_COMMON_START_8", "Yes")
