@@ -2486,9 +2486,10 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         OStringBuffer aLine(1024);
         aLine.append(nFontObject);
         aLine.append(" 0 obj\n"
-                     "<</Type/Font/Subtype/Type3\n");
+                     "<</Type/Font/Subtype/Type3/Name/");
+        appendName(aSubsetInfo.m_aPSName, aLine);
 
-        aLine.append("/FontBBox[");
+        aLine.append("\n/FontBBox[");
         // note: Top and Bottom are reversed in VCL and PDF rectangles
         aLine.append(OString::number(aSubsetInfo.m_aFontBBox.Left()));
         aLine.append(' ');
