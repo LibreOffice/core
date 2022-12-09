@@ -222,13 +222,17 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
         OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
             SetCurPageId("toolbars");
+        else if (text.startsWith( ITEM_EVENT_URL) )
+            SetCurPageId("events");
     }
 #if HAVE_FEATURE_SCRIPTING
-    // for the "assign" button in the Basic Macros chooser automatically switch
-    // to the keyboard tab in which this macro will be pre-selected for assigning
-    // to a keystroke
-    if (pInSet->GetItemIfSet(SID_MACROINFO))
+    else if (pInSet->GetItemIfSet(SID_MACROINFO))
+    {
+        // for the "assign" button in the Basic Macros chooser automatically switch
+        // to the keyboard tab in which this macro will be pre-selected for assigning
+        // to a keystroke
         SetCurPageId("keyboard");
+    }
 #endif
 }
 
