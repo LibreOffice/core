@@ -3492,7 +3492,7 @@
     <resource name="CT_OfficeArtExtension" resource="Stream">
       <element name="adec:decorative" tokenid="ooxml:CT_OfficeArtExtension_Decorative"/>
     </resource>
-    <!-- this is not ideal, but unlike more obivous variants it appears to work -->
+    <!-- this is not ideal, but unlike more obvious variants it appears to work -->
     <resource name="adec_decorative" resource="Stream"/>
     <resource name="adec_decorative_val" resource="Properties">
       <attribute name="val" tokenid="ooxml:OfficeArtExtension_Decorative_val"/>
