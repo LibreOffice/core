@@ -1152,26 +1152,35 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
     // initialize the compare entry iterator with the first tree entry iterator
     if (!m_xOverlayCompareEntry && !m_xTreeView->get_iter_first(*m_xOverlayCompareEntry))
        return false;
-    bool bRemoveOverlayObject = false;
     if (rMEvt.IsLeaveWindow())
     {
-        bRemoveOverlayObject = true;
+        m_aOverlayObjectDelayTimer.Stop();
+        if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        {
+            m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+            m_xOverlayObject.reset();
+        }
     }
     else if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
             m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
     {
+        // Remove the overlay object if the pointer is over a different entry than the last time
+        // it was here.
+        if (m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+        {
+            m_aOverlayObjectDelayTimer.Stop();
+            if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+            {
+                m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+                m_xOverlayObject.reset();
+            }
+        }
         if (lcl_IsContent(*xEntry, *m_xTreeView)) // content entry
         {
             SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
             const ContentTypeId nType = pCnt->GetParent()->GetType();
-            bRemoveOverlayObject =
-                    nType != ContentTypeId::OUTLINE && nType != ContentTypeId::TABLE &&
-                    nType != ContentTypeId::FRAME && nType != ContentTypeId::GRAPHIC &&
-                    nType != ContentTypeId::OLE && nType != ContentTypeId::BOOKMARK &&
-                    nType != ContentTypeId::URLFIELD && nType != ContentTypeId::REFERENCE &&
-                    nType != ContentTypeId::TEXTFIELD;
-            if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
-                                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
+            if (rMEvt.IsEnterWindow() ||
+                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
@@ -1218,6 +1227,14 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         BringReferencesToAttention(aTextAttrArr);
                     }
                 }
+                else if (nType == ContentTypeId::DRAWOBJECT)
+                {
+                    if (!pCnt->IsInvisible())
+                    {
+                        std::vector<const SdrObject*> aSdrObjectArr {GetDrawingObjectsByContent(pCnt)};
+                        BringDrawingObjectsToAttention(aSdrObjectArr);
+                    }
+                }
                 else if (nType == ContentTypeId::TEXTFIELD)
                 {
                     if (const SwTextAttr* pTextAttr =
@@ -1233,14 +1250,8 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         {
             const ContentTypeId nType =
                     weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
-            bRemoveOverlayObject =
-                    nType != ContentTypeId::OUTLINE && nType != ContentTypeId::TABLE &&
-                    nType != ContentTypeId::FRAME && nType != ContentTypeId::GRAPHIC &&
-                    nType != ContentTypeId::OLE && nType != ContentTypeId::BOOKMARK &&
-                    nType != ContentTypeId::URLFIELD && nType != ContentTypeId::REFERENCE &&
-                    nType != ContentTypeId::TEXTFIELD;
-            if (!bRemoveOverlayObject && (rMEvt.IsEnterWindow() ||
-                                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
+            if (rMEvt.IsEnterWindow() ||
+                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
@@ -1313,6 +1324,28 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                     }
                     BringReferencesToAttention(aTextAttrArr);
                 }
+                else if (nType == ContentTypeId::DRAWOBJECT)
+                {
+                    IDocumentDrawModelAccess& rIDDMA = m_pActiveShell->getIDocumentDrawModelAccess();
+                    if (const SwDrawModel* pModel = rIDDMA.GetDrawModel())
+                    {
+                        if (const SdrPage* pPage = pModel->GetPage(0))
+                        {
+                            if (const size_t nCount = pPage->GetObjCount())
+                            {
+                                std::vector<const SdrObject*> aSdrObjectArr;
+                                for (size_t i = 0; i < nCount; ++i)
+                                {
+                                    const SdrObject* pObject = pPage->GetObj(i);
+                                    if (pObject && !pObject->GetName().isEmpty() &&
+                                            rIDDMA.IsVisibleLayerId(pObject->GetLayer()))
+                                        aSdrObjectArr.push_back(pObject);
+                                }
+                                BringDrawingObjectsToAttention(aSdrObjectArr);
+                            }
+                        }
+                    }
+                }
                 else if (nType == ContentTypeId::TEXTFIELD)
                 {
                     std::vector<const SwTextAttr*> aTextAttrArr;
@@ -1332,15 +1365,6 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             }
         }
         m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
-    }
-    if (bRemoveOverlayObject)
-    {
-        m_aOverlayObjectDelayTimer.Stop();
-        if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
-        {
-            m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
-            m_xOverlayObject.reset();
-        }
     }
     return false;
 }
@@ -5847,6 +5871,25 @@ void SwContentTree::BringReferencesToAttention(std::vector<const SwTextAttr*>& r
                 aRanges.emplace_back(aFrameRect.Left(), aEndCharRect.Top() + 1,
                                      aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
             }
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
+}
+
+void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const SdrObject* pObject : rDrawingObjectsArr)
+    {
+        if (pObject)
+        {
+            tools::Rectangle aRect(pObject->GetLogicRect());
+            aRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
         }
     }
     if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
