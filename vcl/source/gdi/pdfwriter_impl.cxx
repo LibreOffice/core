@@ -2472,7 +2472,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         // write font descriptor
         sal_Int32 nFontDescriptor = 0;
         if (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_4)
-            nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, 0, 0);
+            nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, rSubset.m_nFontID, 0);
 
         if (nToUnicodeStream)
             nToUnicodeStream = createToUnicodeCMap(pEncoding, aCodeUnits.data(), pCodeUnitsPerGlyph,
