@@ -183,6 +183,9 @@ SalInstance* autodetect_plugin()
 
     static const char* const pStandardFallbackList[] =
     {
+#if ENABLE_KF5
+        "kf5",
+#endif
         "gtk3", "gen", nullptr
     };
 
