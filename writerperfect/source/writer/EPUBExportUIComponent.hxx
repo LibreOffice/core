@@ -12,12 +12,18 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
+
+namespace weld
+{
+class DialogController;
+}
 
 namespace com::sun::star::uno
 {
@@ -30,6 +36,7 @@ namespace writerperfect
 class EPUBExportUIComponent
     : public cppu::WeakImplHelper<css::beans::XPropertyAccess, css::lang::XInitialization,
                                   css::lang::XServiceInfo, css::ui::dialogs::XExecutableDialog,
+                                  css::ui::dialogs::XAsynchronousExecutableDialog,
                                   css::document::XExporter>
 {
 public:
@@ -49,6 +56,12 @@ public:
     void SAL_CALL setTitle(const OUString& rTitle) override;
     sal_Int16 SAL_CALL execute() override;
 
+    // XAsynchronousExecutableDialog
+    void SAL_CALL setDialogTitle(const OUString& aTitle) override;
+
+    void SAL_CALL startExecuteModal(
+        const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override;
+
     // XExporter
     void SAL_CALL
     setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
@@ -65,6 +78,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
     css::uno::Reference<css::awt::XWindow> mxDialogParent;
+    std::shared_ptr<weld::DialogController> mxAsyncDialog;
 };
 
 } // namespace writerperfect

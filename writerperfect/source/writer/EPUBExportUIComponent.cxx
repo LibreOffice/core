@@ -90,6 +90,31 @@ void SAL_CALL EPUBExportUIComponent::setSourceDocument(
     mxSourceDocument = xDocument;
 }
 
+void SAL_CALL EPUBExportUIComponent::setDialogTitle(const OUString& aTitle) { setTitle(aTitle); }
+
+void SAL_CALL EPUBExportUIComponent::startExecuteModal(
+    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+{
+    SolarMutexGuard aSolarGuard;
+
+    if (!mxAsyncDialog)
+    {
+        if (mxSourceDocument.is())
+            mxAsyncDialog
+                = std::make_shared<EPUBExportDialog>(Application::GetFrameWeld(mxDialogParent),
+                                                     maFilterData, mxContext, mxSourceDocument);
+
+        if (!mxAsyncDialog)
+            return;
+    }
+
+    weld::DialogController::runAsync(mxAsyncDialog, [xListener](sal_Int32 nResponse) {
+        css::ui::dialogs::DialogClosedEvent aEvent;
+        aEvent.DialogResult = nResponse;
+        xListener->dialogClosed(aEvent);
+    });
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
