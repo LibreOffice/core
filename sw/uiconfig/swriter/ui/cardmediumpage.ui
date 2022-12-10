@@ -445,7 +445,7 @@
                         <property name="popup_fixed_width">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="type-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="cardmediumpage|extended_tip|type">Select the size format that you want to use. The available formats depend on the brand on what you selected in the Brand list. If you want to use a custom label format, select [User], and then click the Format tab to define the format.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cardmediumpage|extended_tip|type">Select the size format that you want to use. The available formats depend on the brand you selected in the Brand list. If you want to use a custom label format, select [User], and then click the Format tab to define the format.</property>
                           </object>
                         </child>
                       </object>
