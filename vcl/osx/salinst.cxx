@@ -524,7 +524,11 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 bool AquaSalInstance::RunInMainYield( bool bHandleAllCurrentEvents )
 {
     OSX_SALDATA_RUNINMAIN_UNION( DoYield( false, bHandleAllCurrentEvents), boolean )
-    assert( false && "Don't call this from the main thread!" );
+
+    // PrinterController::removeTransparencies() calls this frequently on the
+    // main thread so reduce the severity from an assert so that printing still
+    // works in a debug builds
+    SAL_WARN_IF( true, "vcl", "Don't call this from the main thread!" );
     return false;
 
 }

@@ -115,6 +115,66 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPix
     return false;
 }
 
+#if HAVE_FEATURE_SKIA
+
+bool QuartzSalBitmap::Create( const SkiaSalBitmap& rSalBmp, const SalTwoRect& rPosAry )
+{
+    bool bRet = false;
+
+    // Ugly but necessary to acquire the bitmap buffer because all of the
+    // SalBitmap instances that callers pass are already const. At least we
+    // only need to read, not write to the bitmap paramter.
+    SkiaSalBitmap& rSkiaSalBmp = const_cast<SkiaSalBitmap&>( rSalBmp );
+
+    BitmapBuffer *pSrcBuffer = rSkiaSalBmp.AcquireBuffer( BitmapAccessMode::Read );
+    if ( !pSrcBuffer )
+        return bRet;
+
+    if ( !pSrcBuffer->mpBits )
+    {
+        rSkiaSalBmp.ReleaseBuffer( pSrcBuffer, BitmapAccessMode::Read );
+        return bRet;
+    }
+
+    // Create only a 1 pixel buffer as it will always be discarded
+    mnBits = 32;
+    mnWidth = 1;
+    mnHeight = 1;
+    if( AllocateUserData() )
+    {
+        BitmapBuffer *pDestBuffer = AcquireBuffer( BitmapAccessMode::Read );
+        if ( pDestBuffer )
+        {
+            std::unique_ptr<BitmapBuffer> pConvertedBuffer = StretchAndConvert( *pSrcBuffer, rPosAry, pDestBuffer->mnFormat, pDestBuffer->maPalette, &pDestBuffer->maColorMask );
+            bool bUseDestBuffer = ( pConvertedBuffer &&
+                 pConvertedBuffer->mpBits &&
+                 pConvertedBuffer->mnFormat == pDestBuffer->mnFormat &&
+                 pConvertedBuffer->mnWidth == rPosAry.mnDestWidth &&
+                 pConvertedBuffer->mnHeight == rPosAry.mnDestHeight );
+
+            ReleaseBuffer( pDestBuffer, BitmapAccessMode::Read );
+
+            if ( bUseDestBuffer )
+            {
+                // Surprisingly, BitmapBuffer does not delete the bits so
+                // discard our 1 pixel buffer and take ownership of the bits
+                DestroyContext();
+                m_pUserBuffer.reset( pConvertedBuffer->mpBits );
+                mnWidth = pConvertedBuffer->mnWidth;
+                mnHeight = pConvertedBuffer->mnHeight;
+                mnBytesPerRow = pConvertedBuffer->mnScanlineSize;
+                bRet = true;
+            }
+        }
+    }
+
+    rSkiaSalBmp.ReleaseBuffer( pSrcBuffer, BitmapAccessMode::Read );
+
+    return bRet;
+}
+
+#endif
+
 bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
                               Size& /*rSize*/, bool /*bMask*/ )
 {

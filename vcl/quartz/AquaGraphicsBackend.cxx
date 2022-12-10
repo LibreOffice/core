@@ -44,6 +44,11 @@
 #include <svdata.hxx>
 #endif
 
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#include <skia/salbmp.hxx>
+#endif
+
 using namespace vcl;
 
 namespace
@@ -187,6 +192,48 @@ void drawPattern50(void*, CGContextRef rContext)
     CGContextAddRects(rContext, aRects, 2);
     CGContextFillPath(rContext);
 }
+
+#if HAVE_FEATURE_SKIA
+
+// Related: tdf#146842 Convert SkiaSalBitmap to QuartzSalBitmap
+// Commit de3f13e2175564316eb5a62dee65e9ff8f31b460 disabled Skia for printing.
+// However, since all SalBitmaps created are either all QuartzSalBitmaps or all
+// SkiaSalBitmaps, a crash occurs whenever a SkiaSalBitmap is passed to a
+// printer's SalGraphics instance which is now always non-Skia.
+QuartzSalBitmap* checkAndConvertToQuartzSalBitmap(const SalTwoRect& rPosAry,
+                                                  const SalBitmap& rSalBitmap,
+                                                  SalTwoRect* pAdjustedSrcPosAry)
+{
+    QuartzSalBitmap* pRet = nullptr;
+
+    if (SkiaHelper::isVCLSkiaEnabled() && dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap))
+    {
+        const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
+
+        SalTwoRect aSrcPosAry(rPosAry);
+        aSrcPosAry.mnDestX = 0;
+        aSrcPosAry.mnDestY = 0;
+
+        pRet = new QuartzSalBitmap;
+        if (pRet)
+        {
+            // Ignore any failures as returning a nullptr will lead to a crash
+            pRet->Create(rSkiaBitmap, aSrcPosAry);
+
+            if (pAdjustedSrcPosAry)
+            {
+                pAdjustedSrcPosAry->mnSrcX = 0;
+                pAdjustedSrcPosAry->mnSrcY = 0;
+                pAdjustedSrcPosAry->mnSrcWidth = aSrcPosAry.mnDestWidth;
+                pAdjustedSrcPosAry->mnSrcHeight = aSrcPosAry.mnDestHeight;
+            }
+        }
+    }
+
+    return pRet;
+}
+
+#endif
 }
 
 AquaGraphicsBackend::AquaGraphicsBackend(AquaSharedAttributes& rShared)
@@ -904,6 +951,21 @@ void AquaGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     if (!mrShared.checkContext())
         return;
 
+#if HAVE_FEATURE_SKIA
+    if (mrShared.mbPrinter)
+    {
+        SAL_INFO("vcl.print", "Printing with Skia bitmaps: AquaGraphicsBackend::drawBitmap");
+        SalTwoRect aDestPosAry(rPosAry);
+        std::unique_ptr<QuartzSalBitmap> pSalBitmap(
+            checkAndConvertToQuartzSalBitmap(rPosAry, rSalBitmap, &aDestPosAry));
+        if (pSalBitmap)
+        {
+            drawBitmap(aDestPosAry, *pSalBitmap);
+            return;
+        }
+    }
+#endif
+
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateCroppedImage(
         static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
@@ -925,6 +987,31 @@ void AquaGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     if (!mrShared.checkContext())
         return;
 
+#if HAVE_FEATURE_SKIA
+    if (mrShared.mbPrinter)
+    {
+        SAL_INFO(
+            "vcl.print",
+            "Printing with Skia bitmaps: AquaGraphicsBackend::drawBitmapWithTranspraentBitmap");
+        SalTwoRect aDestPosAry(rPosAry);
+        std::unique_ptr<QuartzSalBitmap> pSalBitmap(
+            checkAndConvertToQuartzSalBitmap(rPosAry, rSalBitmap, &aDestPosAry));
+        if (pSalBitmap)
+        {
+            drawBitmap(aDestPosAry, *pSalBitmap, rTransparentBitmap);
+            return;
+        }
+
+        pSalBitmap.reset(
+            checkAndConvertToQuartzSalBitmap(rPosAry, rTransparentBitmap, &aDestPosAry));
+        if (pSalBitmap)
+        {
+            drawBitmap(aDestPosAry, rSalBitmap, *pSalBitmap);
+            return;
+        }
+    }
+#endif
+
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     const QuartzSalBitmap& rMask = static_cast<const QuartzSalBitmap&>(rTransparentBitmap);
 
@@ -945,6 +1032,21 @@ void AquaGraphicsBackend::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 {
     if (!mrShared.checkContext())
         return;
+
+#if HAVE_FEATURE_SKIA
+    if (mrShared.mbPrinter)
+    {
+        SAL_INFO("vcl.print", "Printing with Skia bitmaps: AquaGraphicsBackend::drawMask");
+        SalTwoRect aDestPosAry(rPosAry);
+        std::unique_ptr<QuartzSalBitmap> pSalBitmap(
+            checkAndConvertToQuartzSalBitmap(rPosAry, rSalBitmap, &aDestPosAry));
+        if (pSalBitmap)
+        {
+            drawMask(aDestPosAry, *pSalBitmap, nMaskColor);
+            return;
+        }
+    }
+#endif
 
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateColorMask(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth,
@@ -1224,6 +1326,25 @@ bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap
     if (rTR.mnDestWidth < 0 || rTR.mnDestHeight < 0)
         return false;
 
+#if HAVE_FEATURE_SKIA
+    if (!mrShared.checkContext())
+        return false;
+
+    if (mrShared.mbPrinter)
+    {
+        SAL_INFO("vcl.print", "Printing with Skia bitmaps: AquaGraphicsBackend::drawAlphaBitmap");
+        SalTwoRect aDestPosAry(rTR);
+        std::unique_ptr<QuartzSalBitmap> pSalBitmap(
+            checkAndConvertToQuartzSalBitmap(rTR, rSrcBitmap, &aDestPosAry));
+        if (pSalBitmap)
+            return drawAlphaBitmap(aDestPosAry, *pSalBitmap, rAlphaBmp);
+
+        pSalBitmap.reset(checkAndConvertToQuartzSalBitmap(rTR, rAlphaBmp, &aDestPosAry));
+        if (pSalBitmap)
+            return drawAlphaBitmap(aDestPosAry, rSrcBitmap, *pSalBitmap);
+    }
+#endif
+
     const QuartzSalBitmap& rSrcSalBmp = static_cast<const QuartzSalBitmap&>(rSrcBitmap);
     const QuartzSalBitmap& rMaskSalBmp = static_cast<const QuartzSalBitmap&>(rAlphaBmp);
     CGImageRef xMaskedImage = rSrcSalBmp.CreateWithMask(rMaskSalBmp, rTR.mnSrcX, rTR.mnSrcY,
@@ -1255,6 +1376,24 @@ bool AquaGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
 
     if (fAlpha != 1.0)
         return false;
+
+#if HAVE_FEATURE_SKIA
+    if (mrShared.mbPrinter)
+    {
+        SAL_INFO("vcl.print",
+                 "Printing with Skia bitmaps: AquaGraphicsBackend::drawTransformedBitmap");
+        const Size aSize = rSrcBitmap.GetSize();
+        SalTwoRect aTR(0, 0, aSize.Width(), aSize.Height(), 0, 0, aSize.Width(), aSize.Height());
+        std::unique_ptr<QuartzSalBitmap> pSalBitmap(
+            checkAndConvertToQuartzSalBitmap(aTR, rSrcBitmap, nullptr));
+        if (pSalBitmap)
+            return drawTransformedBitmap(rNull, rX, rY, *pSalBitmap, pAlphaBmp, fAlpha);
+
+        pSalBitmap.reset(checkAndConvertToQuartzSalBitmap(aTR, *pAlphaBmp, nullptr));
+        if (pSalBitmap)
+            return drawTransformedBitmap(rNull, rX, rY, rSrcBitmap, pSalBitmap.get(), fAlpha);
+    }
+#endif
 
     // get the Quartz image
     CGImageRef xImage = nullptr;
