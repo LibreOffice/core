@@ -29,18 +29,15 @@ $(postprocess_WORKDIR)/services_componentfiles.list: \
     $(foreach comp,$(gb_ComponentTarget__ALLCOMPONENTS),$(call gb_ComponentTarget_get_target,$(comp))) \
     | $(postprocess_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
-	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)), \
-            $(foreach comp,$(sort $(gb_ComponentTarget__ALLCOMPONENTS)),$(call gb_ComponentTarget_get_target,$(comp))$(gb_NEWLINE))) && \
-            mv $$TEMPFILE $@
+	$(file >$@,$(foreach comp,$(sort $(gb_ComponentTarget__ALLCOMPONENTS)),$(call gb_ComponentTarget_get_target,$(comp))$(gb_NEWLINE)))
 
 $(postprocess_WORKDIR)/services_constructors.list: \
     $(SRCDIR)/solenv/bin/constructors.py \
     $(postprocess_WORKDIR)/services_componentfiles.list \
     | $(postprocess_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
-	TEMPFILE=$(shell $(gb_MKTEMP)) && \
-	    $(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $^) > $$TEMPFILE && \
-	    $(call gb_Helper_replace_if_different_and_touch,$${TEMPFILE},$@)
+	$(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $^) > $@.tmp && \
+	    $(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@)
 
 .PHONY: $(postprocess_WORKDIR)/services_componentfiles.list
 

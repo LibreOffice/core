@@ -567,7 +567,7 @@ $(dir $(call gb_HelpTarget_get_target,%))%/.dir :
 # Translation of the module's .xhp files and all used modules is done.
 # Also creates the list for gb_HelpTarget_get_filelist.
 $(call gb_HelpTarget_get_translation_target,%) :
-	rm -f $@ && mv $(call gb_var2file,$@.tmp,$(strip $(HELP_FILES))) $@
+	$(file >$@,$(strip $(HELP_FILES)))
 
 # Translation of the module's .xhp files and all used and linked modules
 # is done.

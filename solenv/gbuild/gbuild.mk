@@ -194,7 +194,10 @@ endif
 
 include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/TargetLocations.mk
-include $(GBUILDDIR)/Tempfile.mk
+
+define gb_var2file
+$(file >$(1),$(2))$(1)
+endef
 
 $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk
