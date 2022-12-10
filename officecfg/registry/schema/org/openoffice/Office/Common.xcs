@@ -5443,6 +5443,18 @@
           <it>DIN Light,1509,-503,1509,-483,1997,483</it>
         </value>
       </prop>
+      <prop oor:name="FontsDontUseUnderlineMetrics" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>
+            Fonts where the underline or striketout metrics need to be ignored in order to draw the underline or strikeout correctly.
+            Fonts are identified by their name and the underline metrics (see fontmetric.cxx:ShouldNotUseUnderlineMetrics).
+          </desc>
+        </info>
+        <value>
+          <!-- tdf#152267 -->
+          <it>Liberation Serif,100,-123,100,420</it>
+        </value>
+      </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools  Options  Browser  Other  Plug-Ins  Enable -->
         <info>

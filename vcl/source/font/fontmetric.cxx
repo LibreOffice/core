@@ -176,6 +176,25 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
+bool ImplFontMetricData::ShouldNotUseUnderlineMetrics(int nUnderlineSize, int nUnderlineOffset,
+                                                      int nStrikeoutSize,
+                                                      int nStrikeoutOffset) const
+{
+    OUString aFontIdentifier(GetFamilyName() + "," + OUString::number(nUnderlineSize) + ","
+                             + OUString::number(nUnderlineOffset) + ","
+                             + OUString::number(nStrikeoutSize) + ","
+                             + OUString::number(nStrikeoutOffset));
+
+    css::uno::Sequence<OUString> rNoUnderlineMetricsList(
+        officecfg::Office::Common::Misc::FontsDontUseUnderlineMetrics::get());
+    if (comphelper::findValue(rNoUnderlineMetricsList, aFontIdentifier) != -1)
+    {
+        SAL_INFO("vcl.gdi.fontmetric", "Not using underline metrics for: " << aFontIdentifier);
+        return true;
+    }
+    return false;
+}
+
 bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont)
 {
     auto* pHbFont = pFont->GetHbFont();
@@ -191,6 +210,10 @@ bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont
         return false;
     hb_position_t nStrikeoutOffset;
     if (!hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &nStrikeoutOffset))
+        return false;
+
+    if (ShouldNotUseUnderlineMetrics(nUnderlineSize, nUnderlineOffset, nStrikeoutSize,
+                                     nStrikeoutOffset))
         return false;
 
     double fScale = 0;
