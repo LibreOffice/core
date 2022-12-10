@@ -196,20 +196,7 @@ endef
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
-ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
-	printf '[Version]\n' > $@ && \
-	printf 'AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)\n' >> $@ && \
-	printf 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)\n' >> $@ && \
-	printf 'ExtensionUpdateURL=https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update\n' >> $@ && \
-	printf 'UpdateChannel=$(if $(ENABLE_ONLINE_UPDATE_MAR),$(shell cd $(SRCDIR) && bin/update/get_update_channel.py $(UPDATE_CONFIG)))\n' >> $@ && \
-	printf 'ReferenceOOoMajorMinor=4.1\n' >> $@ && \
-	printf 'UpdateID=$(PRODUCTNAME)_$(LIBO_VERSION_MAJOR)_en-US\n' >> $@ && \
-	printf 'UpdateURL=$(if $(ENABLE_ONLINE_UPDATE),https://update.libreoffice.org/check.php$(if $(filter-out WNT,$(OS)),?pkgfmt=$(PKGFORMAT)))\n' >> $@ && \
-	printf 'UpdateUserAgent=<PRODUCT> ($${buildid}; $${_OS}; $${_ARCH}; <OPTIONAL_OS_HW_DATA>)\n' >> $@ && \
-	printf 'Vendor=$(OOO_VENDOR)\n' >> $@
-else
 	$(file > $@,$(call instsetoo_native_genversionini))
-endif
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

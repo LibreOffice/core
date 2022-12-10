@@ -24,14 +24,7 @@ $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_al
 		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
 	$(call gb_Trace_StartRange,officecfg_qa_allheaders.hxx,CAT)
-ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
-	mkdir -p $(dir $@) && \
-	rm -f $@ \
-	$(foreach file,$(officecfg_XCSFILES),\
-		&& echo "#include <officecfg/$(file).hxx>" >> $@)
-else
 	mv $(call gb_var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
-endif
 	$(call gb_Trace_EndRange,officecfg_qa_allheaders.hxx,CAT)
 
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
