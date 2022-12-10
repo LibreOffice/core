@@ -36,6 +36,7 @@
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <Diagram.hxx>
+#include <dumpxmltostring.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -1257,12 +1258,17 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 }
 
 //XDumper
-OUString SAL_CALL ChartModel::dump()
+OUString SAL_CALL ChartModel::dump(OUString const & kind)
 {
+    if (kind.isEmpty()) {
+        return dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });
+    }
+
+    // kind == "shapes":
     uno::Reference< qa::XDumper > xDumper(
             createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     if (xDumper.is())
-        return xDumper->dump();
+        return xDumper->dump(kind);
 
     return OUString();
 }

@@ -63,6 +63,11 @@ private:
 
 namespace
 {
+OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
+{
+    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump("shapes");
+}
+
 bool checkDumpAgainstFile(std::u16string_view rDump, std::u16string_view aFilePath,
                           char const* toleranceFile)
 {
@@ -80,8 +85,7 @@ OUString Chart2XShapeTest::getXShapeDumpString()
 {
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     UNO_QUERY_THROW);
-    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    return xDumper->dump();
+    return getShapeDump(xChartDoc);
 }
 
 xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
@@ -132,8 +136,7 @@ void Chart2XShapeTest::testTdf149204()
     // - Attr: sizeX
     loadFromURL(u"pptx/tdf149204.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
-    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    compareAgainstReference(xDumper->dump(), u"tdf149204.xml");
+    compareAgainstReference(getShapeDump(xChartDoc), u"tdf149204.xml");
 }
 
 void Chart2XShapeTest::testTdf151424()
@@ -251,8 +254,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
     loadFromURL(u"pptx/tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
-    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    OUString rDump = xDumper->dump();
+    OUString rDump = getShapeDump(xChartDoc);
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 

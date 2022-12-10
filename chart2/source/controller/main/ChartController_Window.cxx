@@ -1563,7 +1563,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         rtl::Reference< ChartModel > xChartModel = getChartModel();
         if(xChartModel.is())
         {
-            OUString aDump = xChartModel->dump();
+            OUString aDump = xChartModel->dump("shapes");
             SAL_WARN("chart2", aDump);
         }
     }

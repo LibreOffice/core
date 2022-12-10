@@ -52,9 +52,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <sfx2/xmldump.hxx>
 
 #include <memory>
+
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace com::sun::star::awt { class XRequestCallback; }
 namespace com::sun::star::chart2::data { class XDataProvider; }
@@ -113,7 +114,7 @@ class UndoManager;
 class ChartView;
 
 class OOO_DLLPUBLIC_CHARTTOOLS SAL_LOPLUGIN_ANNOTATE("crosscast") ChartModel final :
-    public impl::ChartModel_Base, public sfx2::XmlDump
+    public impl::ChartModel_Base
 {
 
 private:
@@ -452,7 +453,7 @@ public:
     virtual void SAL_CALL update() override;
 
     // XDumper
-    virtual OUString SAL_CALL dump() override;
+    virtual OUString SAL_CALL dump(OUString const & kind) override;
 
     // normal methods
     css::uno::Reference< css::util::XNumberFormatsSupplier > const &
@@ -474,10 +475,9 @@ public:
 
     const rtl::Reference< ::chart::ChartTypeManager > & getTypeManager() const { return m_xChartTypeManager; }
 
-    /// See sfx2::XmlDump::dumpAsXml().
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
 private:
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
 };

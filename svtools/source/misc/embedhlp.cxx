@@ -51,12 +51,12 @@
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 #include <embeddedobj/embeddedupdate.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
-#include <sfx2/xmldump.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -287,10 +287,14 @@ struct EmbeddedObjectRef_Impl
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mxObj"));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
                                           BAD_CAST(typeid(*mxObj).name()));
-        auto pComponent = dynamic_cast<sfx2::XmlDump*>(mxObj->getComponent().get());
-        if (pComponent)
+        css::uno::Reference<css::qa::XDumper> pComponent(
+            mxObj->getComponent(), css::uno::UNO_QUERY);
+        if (pComponent.is())
         {
-            pComponent->dumpAsXml(pWriter);
+            auto const s = pComponent->dump("");
+            auto const s1 = OUStringToOString(s, RTL_TEXTENCODING_ISO_8859_1); //TODO
+            (void)xmlTextWriterWriteRawLen(
+                pWriter, reinterpret_cast<xmlChar const *>(s1.getStr()), s1.getLength());
         }
         (void)xmlTextWriterEndElement(pWriter);
 
