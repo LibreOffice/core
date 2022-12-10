@@ -522,7 +522,9 @@ AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 LIBO_THIS_YEAR=`date +%Y`
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 
-AC_DEFINE_UNQUOTED([BUILDCONFIG],[["$ac_configure_args"]],[Options passed to configure script])
+# replace backslashes, to get a valid c++ string
+config_args=$(echo $ac_configure_args | tr '\\' '/')
+AC_DEFINE_UNQUOTED([BUILDCONFIG],[["$config_args"]],[Options passed to configure script])
 
 dnl ===================================================================
 dnl Product version
