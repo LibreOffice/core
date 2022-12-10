@@ -1149,9 +1149,6 @@ SwContentTree::~SwContentTree()
 
 IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    // initialize the compare entry iterator with the first tree entry iterator
-    if (!m_xOverlayCompareEntry && !m_xTreeView->get_iter_first(*m_xOverlayCompareEntry))
-       return false;
     if (rMEvt.IsLeaveWindow())
     {
         m_aOverlayObjectDelayTimer.Stop();
@@ -1165,8 +1162,11 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
     {
         // Remove the overlay object if the pointer is over a different entry than the last time
-        // it was here.
-        if (m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
+        // it was here. Gaurd against doing the iter_compare when entering the window to work
+        // around a bug that causes sal backends to crash when m_xOverlayCompareEntry iterator is
+        // nullptr which is the case on initial window entry.
+        if (!rMEvt.IsEnterWindow() &&
+                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
         {
             m_aOverlayObjectDelayTimer.Stop();
             if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
