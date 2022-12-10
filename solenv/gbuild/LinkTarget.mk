@@ -805,7 +805,7 @@ endef
 
 # call gb_LinkTarget__command_objectlist,linktarget
 define gb_LinkTarget__command_objectlist
-TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+$(file >$(1),\
 	$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 	$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
@@ -819,8 +819,7 @@ TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 	$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 	$(PCHOBJS) \
-	$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist)))) && \
-mv $${TEMPFILE} $(1)
+	$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))))
 
 endef
 
@@ -893,10 +892,9 @@ define gb_LinkTarget__static_dep_x_template
 
 define gb_LinkTarget__command_dep_$(1)
 $$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
-mkdir -p $$(dir $$(1)) && \
-TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),\
-	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
-	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
+$$(shell mkdir -p $$(dir $$(1)))
+$$(file >$$(1).tmp,$$(call gb_LinkTarget__get_all_$(1),$$(2)))
+$$(call gb_Helper_replace_if_different_and_touch,$$(1).tmp,$$(1))
 
 endef
 

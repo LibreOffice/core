@@ -24,7 +24,8 @@ $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_al
 		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
 	$(call gb_Trace_StartRange,officecfg_qa_allheaders.hxx,CAT)
-	mv $(call gb_var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
+	$(shell mkdir -p $(dir $@))
+	$(file >$@,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file))))
 	$(call gb_Trace_EndRange,officecfg_qa_allheaders.hxx,CAT)
 
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return

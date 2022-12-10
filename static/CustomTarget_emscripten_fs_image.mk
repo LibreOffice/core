@@ -1514,10 +1514,9 @@ $(emscripten_fs_image_WORKDIR)/soffice.data.filelist: \
 		$(emscripten_fs_image_WORKDIR)/soffice.data.concat_lists \
 		$(gb_emscripten_fs_image_files) \
 		| $(emscripten_fs_image_WORKDIR)/.dir
-	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	$(file >$@,\
 	    $(subst @,@@,$(subst $(BUILDDIR)/,,$(filter $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)))) \
-	    $(foreach item,$(filter-out $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)),$(subst @,@@,$(item))@$(subst @,@@,$(subst $(SRCDIR)/,,$(item))))) \
-	&& mv $$TEMPFILE $@
+	    $(foreach item,$(filter-out $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)),$(subst @,@@,$(item))@$(subst @,@@,$(subst $(SRCDIR)/,,$(item)))))
 
 # Unfortunately the file packager just allows a cmdline file list, but all paths are
 # relative to $(BUILDDIR), so we won't run out of cmdline space that fast...

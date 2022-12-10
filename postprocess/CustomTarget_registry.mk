@@ -652,10 +652,9 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
-	mv $(call gb_var2file,$@.tmp,<list> $(foreach i,$(postprocess_DEPS_$*), <dependency file='$i'/>) \
+	$(file >$@,<list> $(foreach i,$(postprocess_DEPS_$*), <dependency file='$i'/>) \
 		   $(foreach i,$(postprocess_OPTDEPS_$*), <dependency file='$i' optional='true'/>) \
-		   $(foreach i,$(postprocess_FILES_$*), <filename>$(i)</filename>) </list>) \
-	   $@
+		   $(foreach i,$(postprocess_FILES_$*), <filename>$(i)</filename>) </list>)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:
