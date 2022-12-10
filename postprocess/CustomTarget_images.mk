@@ -92,21 +92,30 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 	sed 's/\.png/\.svg/g' $@.png > $@.svg
 	cat $@.png $@.svg > $@
 
-# commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
-.PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
+packimages_everything := $(shell $(FIND) $(SRCDIR)/icon-themes)
+packimages_icon_themes := $(filter %/,$(wildcard $(SRCDIR)/icon-themes/*/))
+# TODO: awkward workaround for windows - the filter call chokes for some reason
+# on the full list, and similarly the recursive filtering call from the initial
+# version of the patch also fails on windows for some reason
+# so don't try to be clever and do it in this awkward/tedious way.
+# all this does is filtering everything for png/svg files that have /cmd/ as
+# part of their path and then replacing the path to the theme-directory with
+# %MODULE% - the surrounding sort not only sorts the lists, but gets rid of
+# duplicate filenames that are left after the %MODULE% replacement
+packimages_cmd_images := $(sort $(foreach file,$(packimages_everything),\
+        $(if $(findstring /cmd/,$(filter %.png %.svg,$(file))),\
+            $(foreach theme,$(packimages_icon_themes),\
+                $(filter-out $(SRCDIR)/%,$(subst $(theme),%MODULE%/,$(file)))))))
 
-$(packimages_DIR)/commandimagelist.ilst :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
-	$(call gb_Helper_abbreviate_dirs, \
-		$(FIND) $(SRCDIR)/icon-themes -name "*.png" -o -name "*.svg" | \
-			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | \
-			sed "s#^#%MODULE%#" | \
-			LC_ALL=C $(SORT) -u > $@.tmp && \
-		$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@))
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
+# adding everything as dependencies here, so that file deletion (when only the directory timestamp
+# gets updated) will also trigger regeneration of the list
+$(packimages_DIR)/commandimagelist.ilst : $(packimages_everything)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LST,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),LST)
+	$(file >$@,$(subst $(WHITESPACE),$(NEWLINE),$(packimages_cmd_images)))
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),LST)
 
-$(packimages_DIR)/sorted.lst : \
+$(packimages_DIR)/sorted.lst : $(packimages_DIR)/commandimagelist.ilst \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
 		$(call gb_Postprocess_get_target,AllUIConfigs) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
