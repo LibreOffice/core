@@ -266,7 +266,7 @@
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tilesheet-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|tilesheet">Specifies that pages are to be printed in tiled format. If the pages or slides are smaller than the paper, repeat the pages or slides on one sheet of paper.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|tilesheet">Specifies that pages are to be printed in tiled format. If the pages are smaller than the paper, the page will be repeated multiple times on one sheet of paper.</property>
                   </object>
                 </child>
               </object>
