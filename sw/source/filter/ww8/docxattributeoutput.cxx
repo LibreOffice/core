@@ -3874,7 +3874,12 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
-                    OString sStyleName = MSWordStyles::CreateStyleId( sParaStyleName );
+                    OString sStyleName;
+                    if (auto format = m_rExport.m_rDoc.FindTextFormatCollByName(sParaStyleName))
+                        if (auto slot = m_rExport.m_pStyles->GetSlot(format); slot != 0xfff)
+                            sStyleName = m_rExport.m_pStyles->GetStyleId(slot);
+                    if (sStyleName.isEmpty())
+                        sStyleName = MSWordStyles::CreateStyleId(sParaStyleName);
                     if ( !sStyleName.isEmpty() )
                         m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
 
@@ -7164,20 +7169,14 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             SAL_WARN("sw.ww8", "Unhandled style property: " << rProp.Name);
     }
 
-    // MSO exports English names and writerfilter only recognize them.
-    const char *pEnglishName = nullptr;
     const char* pType = nullptr;
     switch (eType)
     {
         case STYLE_TYPE_PARA:
             pType = "paragraph";
-            if ( nWwId < ww::stiMax)
-                pEnglishName = ww::GetEnglishNameFromSti( static_cast<ww::sti>(nWwId ) );
             break;
         case STYLE_TYPE_CHAR:
             pType = "character";
-            if (nWwId < ww::stiMax)
-                pEnglishName = ww::GetEnglishNameFromSti(static_cast<ww::sti>(nWwId));
             break;
         case STYLE_TYPE_LIST: pType = "numbering"; break;
     }
@@ -7188,8 +7187,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     if (bCustomStyle)
         pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     m_pSerializer->startElementNS( XML_w, XML_style, pStyleAttributeList);
-    m_pSerializer->singleElementNS( XML_w, XML_name,
-            FSNS( XML_w, XML_val ), pEnglishName ? pEnglishName : rName.toUtf8() );
+    m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), rName);
 
     if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
     {

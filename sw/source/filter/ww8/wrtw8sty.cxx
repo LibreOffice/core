@@ -158,6 +158,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
     memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
+    BuildWwNames();
     BuildStyleIds();
 }
 
@@ -288,7 +289,7 @@ void MSWordStyles::BuildStylesTable()
         sal_uInt16 nSlot = BuildGetSlot(*pFormat);
         if (nSlot != 0xfff)
         {
-            m_aStyles[nSlot].format = pFormat;
+            m_aStyles[nSlot] = { pFormat };
         }
         else
         {
@@ -318,6 +319,59 @@ void MSWordStyles::BuildStylesTable()
     }
 }
 
+void MSWordStyles::BuildWwNames()
+{
+    std::unordered_set<OUString> aUsed;
+
+    auto makeUniqueName = [&aUsed](OUString& name) {
+        // toAsciiLowerCase rules out e.g. user's "normal"; no problem if there are non-ASCII chars
+        OUString lower(name.toAsciiLowerCase());
+        if (!aUsed.insert(lower).second)
+        {
+            int nFree = 1;
+            while (!aUsed.insert(lower + OUString::number(nFree)).second)
+                ++nFree;
+
+            name += OUString::number(nFree);
+        }
+    };
+
+    // We want to map LO's default style to Word's "Normal" style.
+    // Word looks for this specific style name when reading docx files.
+    // (It must be the English word regardless of language settings)
+    assert(!m_aStyles.empty());
+    assert(!m_aStyles[0].format || m_aStyles[0].ww_id == ww::stiNormal);
+    m_aStyles[0].ww_name = "Normal";
+    aUsed.insert("normal");
+
+    // 1. Handle styles having special wwIds, and thus pre-defined names
+    for (auto& entry : m_aStyles)
+    {
+        if (!entry.ww_name.isEmpty())
+            continue; // "Normal" is already added
+        if (entry.ww_id >= ww::stiMax)
+            continue; // Not a format with special name
+        assert(entry.format);
+
+        entry.ww_name = OUString::createFromAscii(ww::GetEnglishNameFromSti(static_cast<ww::sti>(entry.ww_id)));
+        makeUniqueName(entry.ww_name);
+    }
+
+    // 2. Now handle other styles
+    for (auto& entry : m_aStyles)
+    {
+        if (!entry.ww_name.isEmpty())
+            continue;
+        if (entry.format)
+            entry.ww_name = entry.format->GetName();
+        else if (entry.num_rule)
+            entry.ww_name = entry.num_rule->GetName();
+        else
+            continue;
+        makeUniqueName(entry.ww_name);
+    }
+}
+
 OString MSWordStyles::CreateStyleId(std::u16string_view aName)
 {
     OStringBuffer aStyleIdBuf(aName.size());
@@ -340,23 +394,9 @@ void MSWordStyles::BuildStyleIds()
 {
     std::unordered_set<OString> aUsed;
 
-    assert(!m_aStyles.empty());
-    m_aStyles[0].style_id = "Normal";
-    aUsed.insert("normal");
-
     for (auto& entry : m_aStyles)
     {
-        if (!entry.style_id.isEmpty())
-            continue; // "Normal" is already added
-
-        assert(entry.style_id.isEmpty());
-        OUString name;
-        if (entry.format)
-            name = entry.format->GetName();
-        else if (entry.num_rule)
-            name = entry.num_rule->GetName();
-
-        OString aStyleId = CreateStyleId(name);
+        OString aStyleId = CreateStyleId(entry.ww_name);
 
         if (aStyleId.isEmpty())
             aStyleId = "Style";
@@ -589,68 +629,45 @@ void WW8AttributeOutput::DefaultStyle()
     m_rWW8Export.m_pTableStrm->WriteUInt16(0);   // empty Style
 }
 
-void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nSlot)
+void MSWordStyles::OutputStyle(sal_uInt16 nSlot)
 {
-    m_rExport.AttrOutput().StartStyle( pNumRule->GetName(), STYLE_TYPE_LIST,
+    const auto& entry = m_aStyles[nSlot];
+
+    if (entry.num_rule)
+    {
+        m_rExport.AttrOutput().StartStyle( entry.ww_name, STYLE_TYPE_LIST,
             /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWwLink =*/ 0, /*nWWId =*/ 0, nSlot,
             /*bAutoUpdateFormat =*/ false );
 
-    m_rExport.AttrOutput().EndStyle();
-}
-
-// OutputStyle applies for TextFormatColls and CharFormats
-void MSWordStyles::OutputStyle( const SwFormat* pFormat, sal_uInt16 nSlot)
-{
-    if ( !pFormat )
+        m_rExport.AttrOutput().EndStyle();
+    }
+    else if (!entry.format)
+    {
         m_rExport.AttrOutput().DefaultStyle();
+    }
     else
     {
         bool bFormatColl;
         sal_uInt16 nBase, nWwNext;
         sal_uInt16 nWwLink = 0x0FFF;
 
-        GetStyleData(pFormat, bFormatColl, nBase, nWwNext, nWwLink);
+        GetStyleData(entry.format, bFormatColl, nBase, nWwNext, nWwLink);
 
-        OUString aName = pFormat->GetName();
-        // We want to map LO's default style to Word's "Normal" style.
-        // Word looks for this specific style name when reading docx files.
-        // (It must be the English word regardless of language settings)
-        if (nSlot == 0)
-        {
-            assert( pFormat->GetPoolFormatId() == RES_POOLCOLL_STANDARD );
-            aName = "Normal";
-        }
-        else if (aName.equalsIgnoreAsciiCase("Normal"))
-        {
-            // If LO has a style named "Normal"(!) rename it to something unique
-            const OUString aBaseName = "LO-" + aName;
-            aName = aBaseName;
-            // Check if we still have a clash, in which case we add a suffix
-            for ( int nSuffix = 0; ; ++nSuffix ) {
-                if (std::none_of(m_aStyles.begin() + 1, m_aStyles.end(),
-                                 [&aName](const auto& entry) {
-                                     return entry.format
-                                            && entry.format->GetName().equalsIgnoreAsciiCase(aName);
-                                 }))
-                    break; // Found a unique name
-                aName = aBaseName + OUString::number(nSuffix);
-            }
-        }
-        else if (!bFormatColl && m_rExport.GetExportFormat() == MSWordExportBase::DOCX &&
-                        m_rExport.m_pStyles->GetStyleId(nSlot).startsWith("ListLabel"))
+        if (!bFormatColl && m_rExport.GetExportFormat() == MSWordExportBase::DOCX &&
+                        entry.style_id.startsWith("ListLabel"))
         {
             // tdf#92335 don't export redundant DOCX import style "ListLabel"
             return;
         }
 
-        m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
-                nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nSlot,
-                pFormat->IsAutoUpdateOnDirectFormat() );
+        m_rExport.AttrOutput().StartStyle(entry.ww_name, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
+                nBase, nWwNext, nWwLink, m_aStyles[nSlot].ww_id, nSlot,
+                entry.format->IsAutoUpdateOnDirectFormat() );
 
         if ( bFormatColl )
-            WriteProperties( pFormat, true, nSlot, nBase==0xfff );           // UPX.papx
+            WriteProperties( entry.format, true, nSlot, nBase==0xfff );           // UPX.papx
 
-        WriteProperties( pFormat, false, nSlot, bFormatColl && nBase==0xfff );  // UPX.chpx
+        WriteProperties( entry.format, false, nSlot, bFormatColl && nBase==0xfff );  // UPX.chpx
 
         m_rExport.AttrOutput().EndStyle();
     }
@@ -699,12 +716,7 @@ void MSWordStyles::OutputStylesTable()
     // Implementing check for all exports DOCX, DOC, RTF
     assert(m_aStyles.size() <= MSWORD_MAX_STYLES_LIMIT);
     for (size_t slot = 0; slot < m_aStyles.size(); ++slot)
-    {
-        if (m_aStyles[slot].num_rule)
-            OutputStyle(m_aStyles[slot].num_rule, slot);
-        else
-            OutputStyle(m_aStyles[slot].format, slot);
-    }
+        OutputStyle(slot);
 
     m_rExport.AttrOutput().EndStyles(m_aStyles.size());
 

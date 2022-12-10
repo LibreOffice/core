@@ -270,6 +270,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
     // CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para4Style);
     // But for now, just make sure that the style names differ
     CPPUNIT_ASSERT(Para4Style != Para3Style);
+    const OUString Para5Style = getProperty<OUString>(getParagraph(5), "ParaStyleName");
+    // Eventually, we need to check this:
+    // CPPUNIT_ASSERT_EQUAL(OUString("List Bullet 5"), Para5Style);
+    // But for now, just make sure that the style names differ
+    CPPUNIT_ASSERT(Para5Style != Para4Style);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
