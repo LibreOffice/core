@@ -6315,35 +6315,11 @@ TAB=`printf '\t'`
 AC_MSG_CHECKING([the GNU Make version])
 _make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-if test "$_make_longver" -ge "038200"; then
+if test "$_make_longver" -ge "040000"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
+    AC_MSG_ERROR([failed ($GNUMAKE version >= 4.0 needed)])
 fi
-
-# find if gnumake support file function
-AC_MSG_CHECKING([whether GNU Make supports the 'file' function])
-TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
-if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-    TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
-fi
-$SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
-\$(file >test.txt,Success )
-
-.PHONY: all
-all:
-<TAB>@cat test.txt
-
-EOF
-$GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
-if test -f $TESTGMAKEFILEFUNC/test.txt; then
-    HAVE_GNUMAKE_FILE_FUNC=TRUE
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-rm -rf $TESTGMAKEFILEFUNC
-AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
 
 _make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
 STALE_MAKE=
@@ -14839,7 +14815,7 @@ else
 fi
 
 
-if test \( "$STALE_MAKE" = "TRUE" -o "$HAVE_GNUMAKE_FILE_FUNC" != "TRUE" \) \
+if test \( "$STALE_MAKE" = "TRUE" \) \
         -a "$build_os" = "cygwin"; then
 
 cat << _EOS
@@ -14876,9 +14852,6 @@ Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GN
 Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
 
 _EOS
-if test "$HAVE_GNUMAKE_FILE_FUNC" != "TRUE"; then
-    AC_MSG_ERROR([no file function found; the build will fail without it; use GNU make 4.0 or later])
-fi
 fi
 
 

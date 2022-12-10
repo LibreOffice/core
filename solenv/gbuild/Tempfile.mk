@@ -17,29 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-ifneq ($(HAVE_GNUMAKE_FILE_FUNC),)
 define gb_var2file
 $(file >$(1),$(3))$(1)
 endef
-else
-# Write string to temporary file by chopping into pieces that
-# fit the commandline
-# parameters: filename, maxitems (for one write), string
-# returns: filename
-define gb_var2file
-$(strip $(1)
-$(eval gb_var2file_helpervar := $$(shell printf "%s" "" > $(1) ))\
-$(eval gb_var2file_curblock := $(firstword $(3)))\
-$(foreach item,$(wordlist 2,99999,$(3)),$(eval gb_var2file_curblock += $(item)
-	ifeq ($$(words $$(gb_var2file_curblock)),$(2)) 
-		gb_var2file_helpervar := $$(shell printf "%s" "$$(gb_var2file_curblock)" >> $(1) )
-		gb_var2file_curblock :=
-	endif
-	))\
-	$(eval gb_var2file_helpervar := $(shell printf "%s\n" "$(gb_var2file_curblock)" >> $(1) )
-		gb_var2file_curblock :=
-	))
-endef
-endif
 
 # vim: set noet sw=4 ts=4:
