@@ -1577,10 +1577,12 @@ class MSWordStyles
         const SwFormat* format = nullptr;
         const SwNumRule* num_rule = nullptr;
         /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.
+        sal_uInt16 ww_id = ww::stiUser;
+        OUString ww_name;
         OString style_id;
 
         MapEntry() = default;
-        MapEntry(const SwFormat* f) : format(f) {}
+        MapEntry(const SwFormat* f) : format(f) { if (f) ww_id = GetWWId(*f); }
         MapEntry(const SwNumRule* r) : num_rule(r) {}
     };
     std::vector<MapEntry> m_aStyles; ///< Slot <-> Character/paragraph/list style array.
@@ -1588,6 +1590,9 @@ class MSWordStyles
 
     /// Create the style table, called from the constructor.
     void BuildStylesTable();
+
+    /// Generate proper Word names, taking mapping between special types into account
+    void BuildWwNames();
 
     /// Based on style names, fill in unique, MS-like names.
     void BuildStyleIds();
@@ -1603,8 +1608,7 @@ class MSWordStyles
     void SetStyleDefaults( const SwFormat& rFormat, bool bPap );
 
     /// Outputs one style - called (in a loop) from OutputStylesTable().
-    void OutputStyle( const SwFormat* pFormat, sal_uInt16 nSlot );
-    void OutputStyle( const SwNumRule* pNumRule, sal_uInt16 nSlot);
+    void OutputStyle( sal_uInt16 nSlot );
 
     MSWordStyles( const MSWordStyles& ) = delete;
     MSWordStyles& operator=( const MSWordStyles& ) = delete;

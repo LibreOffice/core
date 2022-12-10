@@ -984,7 +984,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143726, "Simple-TOC.odt")
     CPPUNIT_ASSERT(pXmlStyles);
     // Without the fix this was "TOA Heading" which belongs to the "Table of Authorities" index in Word
     // TOC's heading style should be exported as "TOC Heading" as that's the default Word style name
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ContentsHeading']/w:name", "val", "TOC Heading");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name", "val", "TOC Heading");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

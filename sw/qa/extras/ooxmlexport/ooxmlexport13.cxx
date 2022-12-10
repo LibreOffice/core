@@ -1238,8 +1238,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123628)
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='InternetLink']/w:name", "val", "Hyperlink");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "Hyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name", "val", "Hyperlink");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
@@ -1265,7 +1265,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
     loadAndSave("tdf127925.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name", "val", "FollowedHyperlink");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
@@ -1273,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
     loadAndSave("tdf127579.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "Hyperlink");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
