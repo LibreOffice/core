@@ -1514,7 +1514,7 @@ $(emscripten_fs_image_WORKDIR)/soffice.data.filelist: \
 		$(emscripten_fs_image_WORKDIR)/soffice.data.concat_lists \
 		$(gb_emscripten_fs_image_files) \
 		| $(emscripten_fs_image_WORKDIR)/.dir
-	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,\
+	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 	    $(subst @,@@,$(subst $(BUILDDIR)/,,$(filter $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)))) \
 	    $(foreach item,$(filter-out $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)),$(subst @,@@,$(item))@$(subst @,@@,$(subst $(SRCDIR)/,,$(item))))) \
 	&& mv $$TEMPFILE $@

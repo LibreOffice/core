@@ -29,7 +29,7 @@ endef
 
 define gb_InstallScript__command
 $(call gb_Helper_abbreviate_dirs,\
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,\
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 		$(call gb_InstallScript__make_arglist,\
 			$(call gb_InstallScript__get_files,$(SCP_MODULES))) \
 	) && \

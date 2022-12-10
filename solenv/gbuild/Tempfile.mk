@@ -18,7 +18,7 @@
 #
 
 define gb_var2file
-$(file >$(1),$(3))$(1)
+$(file >$(1),$(2))$(1)
 endef
 
 # vim: set noet sw=4 ts=4:

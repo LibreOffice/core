@@ -722,7 +722,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 .PHONY : $(WORKDIR)/Clean/LinkTarget/%
 $(WORKDIR)/Clean/LinkTarget/% :
 	$(call gb_Output_announce,$(LINKTARGETMAKEFILENAME),$(false),LNK,4)
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),200,\
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dwo_target,$(object))) \
@@ -783,7 +783,7 @@ $(call gb_Output_announce,LNK:$(2).d,$(true),DEP,1)
 	$(call gb_Trace_StartRange,LNK:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),200,\
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object)))\
@@ -805,7 +805,7 @@ endef
 
 # call gb_LinkTarget__command_objectlist,linktarget
 define gb_LinkTarget__command_objectlist
-TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),200,\
+TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 	$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 	$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
@@ -894,7 +894,7 @@ define gb_LinkTarget__static_dep_x_template
 define gb_LinkTarget__command_dep_$(1)
 $$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
 mkdir -p $$(dir $$(1)) && \
-TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,\
+TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),\
 	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
 	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
 
