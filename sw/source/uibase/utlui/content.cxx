@@ -1162,7 +1162,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
     {
         // Remove the overlay object if the pointer is over a different entry than the last time
-        // it was here. Gaurd against doing the iter_compare when entering the window to work
+        // it was here. Guard against doing the iter_compare when entering the window to work
         // around a bug that causes sal backends to crash when m_xOverlayCompareEntry iterator is
         // nullptr which is the case on initial window entry.
         if (!rMEvt.IsEnterWindow() &&
