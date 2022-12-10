@@ -2298,14 +2298,14 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                         sEntry = m_sSpace;
                     OUString sId(weld::toId(pCnt));
 
-                    auto lamba = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry)
+                    auto lambda = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry)
                     {
                         return lcl_IsLowerOutlineContent(*entry, *m_xTreeView, nLevel);
                     };
 
                     // if there is a preceding outline node candidate with a lower outline level use
                     // that as a parent, otherwise use the root node
-                    auto aFind = std::find_if(aParentCandidates.rbegin(), aParentCandidates.rend(), lamba);
+                    auto aFind = std::find_if(aParentCandidates.rbegin(), aParentCandidates.rend(), lambda);
                     if (aFind != aParentCandidates.rend())
                         insert(aFind->get(), sEntry, sId, false, xChild.get());
                     else
@@ -2315,7 +2315,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
 
                     // remove any parent candidates equal to or higher than this node
                     aParentCandidates.erase(std::remove_if(aParentCandidates.begin(), aParentCandidates.end(),
-                                                          std::not_fn(lamba)), aParentCandidates.end());
+                                                          std::not_fn(lambda)), aParentCandidates.end());
 
                     // add this node as a parent candidate for any following nodes at a higher outline level
                     aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
