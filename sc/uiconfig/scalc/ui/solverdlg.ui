@@ -57,7 +57,7 @@
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="options-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|options">Opens the Solver Options dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|options">Opens the solver’s Options dialog.</property>
                   </object>
                 </child>
               </object>
