@@ -258,8 +258,9 @@ std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken
 {
     std::string_view aValue = getView( nAttrToken );
     util::DateTime aDateTime;
-    bool bValid = (aValue.size() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
-        (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
+    bool bValid = (aValue.size() == 19 || (aValue.size() == 20 && aValue[19] == 'Z')) &&
+        (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') && (aValue[ 10 ] == 'T') &&
+        (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if (!bValid)
         return std::optional< util::DateTime >();
     aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 0, 4 )) );
