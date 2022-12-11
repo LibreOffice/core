@@ -10,6 +10,7 @@
 import re
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import type_text
 
 from libreoffice.linguistic.linguservice import get_spellchecker
 from com.sun.star.lang import Locale
@@ -137,5 +138,35 @@ frog, dogg, catt"""
             # but now "goood" is not a misspelling because it is accepted
             # correctly without the redline containing a deleted "o"
             self.assertEqual(output_text, 'goood baaadbaaed eeend')
+
+    def test_DoNotCheckURL(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
+
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            cursor = document.getCurrentController().getViewCursor()
+            # Inserted text must be en_US, so make sure to set language in current location
+            cursor.CharLocale = Locale("en", "US", "")
+
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xEdit = xMainWindow.getChild("writer_edit")
+
+            # URL is recognized during typing
+            type_text(xEdit, "baaad http://www.baaad.org baaad baaad")
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+                checkgrammar = xDialog.getChild('checkgrammar')
+                if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+                    checkgrammar.executeAction('CLICK', ())
+                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+
+                change = xDialog.getChild('change')
+                change.executeAction("CLICK", ())
+                change.executeAction("CLICK", ())
+
+            output_text = document.Text.getString()
+            # This was "Baaed HTTP://www.baaad.org baaad baaad" (spelling URLs)
+            self.assertEqual("Baaed http://www.baaad.org baaed baaad", output_text)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
