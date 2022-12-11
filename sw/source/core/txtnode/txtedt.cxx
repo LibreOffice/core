@@ -992,12 +992,15 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
         {
             const OUString& rWord = aScanner.GetWord();
 
+            // skip URLs
+            bool bHyperlink = GetTextAttrAt(aScanner.GetBegin(), RES_TXTATR_INETFMT) ? true: false;
+
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( GetTextNode()->GetDoc(), pArgs->xSpeller, eActLang );
 
-            if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang )
+            if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang && !bHyperlink )
             {
                 if (pArgs->xSpeller.is())
                 {
@@ -1301,8 +1304,11 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( rDoc, xSpell, eActLang );
 
+            // skip URLs
+            bool bHyperlink = pNode->GetTextAttrAt(nBegin, RES_TXTATR_INETFMT) ? true: false;
+
             bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
-            if( bSpell && !rWord.isEmpty() )
+            if( bSpell && !rWord.isEmpty() && !bHyperlink )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
