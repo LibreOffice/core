@@ -32,6 +32,8 @@ using namespace ::com::sun::star;
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <svtools/ehdl.hxx>
 #include <svtools/langtab.hxx>
 #include <basic/sbxcore.hxx>
@@ -539,7 +541,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if (pViewFrame)
                     {
                         pViewFrame->RemoveInfoBar(u"enablecontent");
-                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
+                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", SfxResId(RID_SECURITY_WARNING_TITLE),
+                                                                  ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
                             weld::Button& rHelpBtn = pInfoBar->addButton();
