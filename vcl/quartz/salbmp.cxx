@@ -123,7 +123,7 @@ bool QuartzSalBitmap::Create( const SkiaSalBitmap& rSalBmp, const SalTwoRect& rP
 
     // Ugly but necessary to acquire the bitmap buffer because all of the
     // SalBitmap instances that callers pass are already const. At least we
-    // only need to read, not write to the bitmap paramter.
+    // only need to read, not write to the bitmap parameter.
     SkiaSalBitmap& rSkiaSalBmp = const_cast<SkiaSalBitmap&>( rSalBmp );
 
     BitmapBuffer *pSrcBuffer = rSkiaSalBmp.AcquireBuffer( BitmapAccessMode::Read );
