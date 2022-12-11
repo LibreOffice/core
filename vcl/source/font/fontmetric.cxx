@@ -180,6 +180,9 @@ bool ImplFontMetricData::ShouldNotUseUnderlineMetrics(int nUnderlineSize, int nU
                                                       int nStrikeoutSize,
                                                       int nStrikeoutOffset) const
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
+
     OUString aFontIdentifier(GetFamilyName() + "," + OUString::number(nUnderlineSize) + ","
                              + OUString::number(nUnderlineOffset) + ","
                              + OUString::number(nStrikeoutSize) + ","
