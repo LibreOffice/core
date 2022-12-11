@@ -250,8 +250,9 @@ OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) co
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     util::DateTime aDateTime;
-    bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
-        (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
+    bool bValid = (aValue.getLength() == 19 || (aValue.getLength() == 20 && aValue[19] == 'Z')) &&
+        (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') && (aValue[ 10 ] == 'T') &&
+        (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if( bValid )
     {
         aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
