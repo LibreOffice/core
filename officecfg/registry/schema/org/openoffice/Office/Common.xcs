@@ -5446,7 +5446,7 @@
       <prop oor:name="FontsDontUseUnderlineMetrics" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>
-            Fonts where the underline or striketout metrics need to be ignored in order to draw the underline or strikeout correctly.
+            Fonts where the underline or strikeout metrics need to be ignored in order to draw the underline or strikeout correctly.
             Fonts are identified by their name and the underline metrics (see fontmetric.cxx:ShouldNotUseUnderlineMetrics).
           </desc>
         </info>
