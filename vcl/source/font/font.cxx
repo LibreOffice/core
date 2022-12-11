@@ -514,7 +514,8 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
         rIStm.ReadUChar( nTmp8 );     rImplFont.meRelief = static_cast<FontRelief>(nTmp8);
         rIStm.ReadUInt16( nTmp16 );   rImplFont.maCJKLanguageTag.reset( LanguageType(nTmp16) );
         rIStm.ReadCharAsBool( bTmp ); rImplFont.mbVertical = bTmp;
-        rIStm.ReadUInt16( nTmp16 );   rImplFont.meEmphasisMark = static_cast<FontEmphasisMark>(nTmp16);
+        rIStm.ReadUInt16( nTmp16 );
+        rImplFont.meEmphasisMark = static_cast<FontEmphasisMark>(nTmp16 & o3tl::typed_flags<FontEmphasisMark>::mask);
     }
 
     if( aCompat.GetVersion() >= 3 )
