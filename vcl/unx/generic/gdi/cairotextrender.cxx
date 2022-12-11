@@ -266,6 +266,12 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         return;
     }
 
+    if (nWidth > 4024)
+    {
+        SAL_WARN("vcl", "rendering text would use > 2G Memory: " << nWidth);
+        return;
+    }
+
     if (__lsan_disable)
         __lsan_disable();
 #endif
