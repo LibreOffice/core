@@ -532,7 +532,14 @@ void Chart2Positioner::glueState()
     }
 
     ScComplexRefData aData;
-    ScRefTokenHelper::getDoubleRefDataFromToken(aData, mrRefTokens.front());
+    if (!ScRefTokenHelper::getDoubleRefDataFromToken(aData, mrRefTokens.front()))
+    {
+        SAL_WARN("sc", "Chart2Positioner::glueState getDoubleRefDataFromToken failed");
+        invalidateGlue();
+        mnStartCol = 0;
+        mnStartRow = 0;
+        return;
+    }
     mnStartCol = aData.Ref1.Col();
     mnStartRow = aData.Ref1.Row();
 
