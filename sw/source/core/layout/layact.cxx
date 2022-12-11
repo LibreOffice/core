@@ -500,8 +500,20 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         return bAgain;
     };
 
+    int nOuterLoopControlRuns = 0;
+    const int nOutermoopControlMax = 10000;
     while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
+        // Fix infinite loop in sw_ooxmlexport17 unit test
+        // When running the sw_ooxmlexport17 unit test on slower macOS Intel
+        // machines, This loop will never end even after 1M+ loops so set a
+        // maximum number of loops like is done in the nested while loops.
+        if (++nOuterLoopControlRuns > nOutermoopControlMax)
+        {
+            SAL_WARN("sw", "SwLayAction::InternalAction has run too many loops");
+            m_bInterrupt = true;
+        }
+
         // note: this is the only place that consumes and resets m_nCheckPageNum
         if ((IsInterrupt() || !pPage) && m_nCheckPageNum != USHRT_MAX)
         {
