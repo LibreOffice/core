@@ -946,7 +946,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
 
     ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
                     aParam.nCol2, aParam.nRow2, aParam.nTab );
-    SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
+    aRange.PutInOrder();
+    SCCOL nColCnt = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
 
     maRef = aRange;
 
