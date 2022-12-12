@@ -5881,7 +5881,7 @@
           <desc>Specifies whether a preview of the index is displayed in the Insert Index dialog .</desc>
           <label>Show Preview</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="FormLetter">
