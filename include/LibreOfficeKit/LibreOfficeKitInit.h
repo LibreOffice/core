@@ -259,13 +259,13 @@ typedef int             (LokHookPreInit)  ( const char *install_path, const char
 
 typedef int             (LokHookPreInit2) ( const char *install_path, const char *user_profile_url, LibreOfficeKit** kit);
 
-#if defined(IOS) || defined(ANDROID)
+#if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
 
 static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
     void *dlhandle;
     char *imp_lib;
     LokHookFunction *pSym;
