@@ -88,6 +88,8 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
                                                                                                                    sal_Int32                                             nSearchFlags     ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
+        void ClearProtocolHandlers() { m_aProtocolHandlers.clear(); }
+
     /* helper */
     private:
         // Let him protected! So nobody can use us as base ...

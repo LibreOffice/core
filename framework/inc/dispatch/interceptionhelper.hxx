@@ -244,6 +244,8 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
          */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
+        css::uno::Reference<css::frame::XDispatchProvider> GetSlave() const { return m_xSlave; }
+
 }; // class InterceptionHelper
 
 } // namespace framework
