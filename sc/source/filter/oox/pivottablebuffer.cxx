@@ -755,8 +755,9 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
             {
                 ScDPSaveData* pSaveData = pDPObj->GetSaveData();
                 ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
+                SAL_WARN_IF(!pDim, "sc.filter", "PivotTableField::convertRowColPageField - no Dimension found for: " << pCacheField->getName());
 
-                try
+                if (pDim) try
                 {
                     for( const auto& rItem : maItems )
                     {
