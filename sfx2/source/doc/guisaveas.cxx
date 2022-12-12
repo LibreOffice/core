@@ -1089,8 +1089,21 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
-    // the path should be provided outside since it might be used for further calls to the dialog
-    aSuggestedName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // keep name with extension
+        aSuggestedName = aRecommendedName;
+        OUString aExtension;
+        if (size_t nPos = aSuggestedName.lastIndexOf('.') + 1)
+            aExtension = aSuggestedName.copy(nPos, aSuggestedName.getLength() - nPos);
+        aURL.SetExtension(aExtension);
+    }
+    else
+    {
+        // the path should be provided outside since it might be used for further calls to the dialog
+        aSuggestedName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+    }
     aSuggestedDir = pFileDlg->GetDisplayDirectory();
 
     // old filter options should be cleared in case different filter is used
