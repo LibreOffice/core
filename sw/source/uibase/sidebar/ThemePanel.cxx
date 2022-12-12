@@ -29,6 +29,7 @@
 #include <docstyle.hxx>
 #include <fmtcol.hxx>
 #include <format.hxx>
+#include <svx/ColorSets.hxx>
 
 namespace
 {
@@ -220,7 +221,7 @@ void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, 
     auto nThemeIndex = aColorItem.GetThemeColor().GetThemeIndex();
     if (nThemeIndex >= 0)
     {
-        Color aColor = rColorSet.getColor(nThemeIndex);
+        Color aColor = rColorSet.getColor(svx::convertToThemeColorType(nThemeIndex));
         aColor.ApplyTintOrShade(aColorItem.GetThemeColor().GetTintOrShade());
         aColorItem.SetValue(aColor);
         pCollection->SetFormatAttr(aColorItem);
@@ -393,10 +394,10 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
-        pVirtualDev->SetFillColor(rColorSet.getColor(i));
+        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y1, x + SIZE, y1 + SIZE));
 
-        pVirtualDev->SetFillColor(rColorSet.getColor(i + 1));
+        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i + 1)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;
