@@ -1378,7 +1378,18 @@ void WorksheetGlobals::finalizeDrawings()
         Needed if the imported document is inserted as "OLE object from file"
         and thus does not provide an OLE size property by itself. */
     if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
-        extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
+    {
+        ScRange aRange(getCellRangeFromRectangle(maShapeBoundingBox));
+        if (aRange.aStart.Col() < 0)
+            aRange.aStart.SetCol(0);
+        if (aRange.aStart.Row() < 0)
+            aRange.aStart.SetRow(0);
+        if (aRange.aEnd.Col() < 0)
+            aRange.aEnd.SetCol(0);
+        if (aRange.aEnd.Row() < 0)
+            aRange.aEnd.SetRow(0);
+        extendUsedArea(aRange);
+    }
 
     // if no used area is set, default to A1
     if( maUsedArea.aStart.Col() > maUsedArea.aEnd.Col() )
