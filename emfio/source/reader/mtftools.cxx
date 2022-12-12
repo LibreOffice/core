@@ -2365,6 +2365,7 @@ namespace emfio
 
     void MtfTools::Push()                       // !! to be able to access the original ClipRegion it
     {                                               // is not allowed to use the MetaPushAction()
+        UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
         auto pSave = std::make_shared<SaveStruct>();
 
         pSave->aLineStyle = maLineStyle;

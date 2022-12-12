@@ -1019,19 +1019,16 @@ void Test::TestEmfPlusSave()
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h33544v21311h-33544z");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor[1]/polypolygon", "path",
+    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor/polypolygon", "path",
                 "m327.458333333333 638.222222222222h437007.1875v295555.555555556h-437007.1875z");
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor[1]", "color",
-                "#ff0cad");
+    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor", "color", "#ff0cad");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor[2]/polypolygon", "path",
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor/polypolygon", "path",
                 "m10853.4145539602 7321.41354709201h41952690v29630720h-41952690z");
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor[2]", "color",
-                "#00ffad");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", "color", "#00ffad");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polygonstrokearrow/line", "color",
-                "#000000");
-    assertXPathContent(pDocument, aXPathPrefix + "mask/group/mask/polygonstrokearrow/polygon",
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "color", "#000000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstrokearrow/polygon",
                        "10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
                        "12832.6557236512,4907.54325697157");
 }
