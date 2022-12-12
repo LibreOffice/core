@@ -145,20 +145,25 @@ namespace {
 class FontSchemeContext : public ContextHandler2
 {
 public:
-    FontSchemeContext( ContextHandler2Helper const & rParent, FontScheme& rFontScheme );
+    FontSchemeContext(ContextHandler2Helper const & rParent, FontScheme& rFontScheme,
+                      std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap);
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void onEndElement() override;
 
 private:
     FontScheme& mrFontScheme;
     TextCharacterPropertiesPtr mxCharProps;
+    std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& mrSupplementalFontMap;
+    sal_Int32 maCurrentFont = 0;
 };
 
 }
 
-FontSchemeContext::FontSchemeContext( ContextHandler2Helper const & rParent, FontScheme& rFontScheme ) :
-    ContextHandler2( rParent ),
-    mrFontScheme( rFontScheme )
+FontSchemeContext::FontSchemeContext(ContextHandler2Helper const & rParent, FontScheme& rFontScheme,
+                                     std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap)
+    : ContextHandler2(rParent)
+    , mrFontScheme(rFontScheme)
+    , mrSupplementalFontMap(rSupplementalFontMap)
 {
 }
 
@@ -169,12 +174,13 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
         case A_TOKEN( majorFont ):
             mxCharProps = std::make_shared<TextCharacterProperties>();
             mrFontScheme[ XML_major ] = mxCharProps;
+            maCurrentFont = XML_major;
             return this;
         case A_TOKEN( minorFont ):
             mxCharProps = std::make_shared<TextCharacterProperties>();
             mrFontScheme[ XML_minor ] = mxCharProps;
+            maCurrentFont = XML_minor;
             return this;
-
         case A_TOKEN( latin ):
             if( mxCharProps )
                 mxCharProps->maLatinFont.setAttributes( rAttribs );
@@ -186,6 +192,11 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
         case A_TOKEN( cs ):
             if( mxCharProps )
                 mxCharProps->maComplexFont.setAttributes( rAttribs );
+        break;
+        case A_TOKEN(font):
+            OUString aScript = rAttribs.getStringDefaulted(XML_script);
+            OUString aTypeface = rAttribs.getStringDefaulted(XML_typeface);
+            mrSupplementalFontMap[maCurrentFont].emplace_back(std::pair<OUString, OUString>{aScript, aTypeface});
         break;
     }
     return nullptr;
@@ -223,7 +234,7 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
         {
             if (rAttribs.hasAttribute(XML_name))
                 mrTheme.setFontSchemeName(rAttribs.getStringDefaulted(XML_name));
-            return new FontSchemeContext(*this, mrTheme.getFontScheme());
+            return new FontSchemeContext(*this, mrTheme.getFontScheme(), mrTheme.getSupplementalFontMap());
         }
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
