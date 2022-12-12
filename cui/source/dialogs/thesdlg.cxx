@@ -315,6 +315,8 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     // disable controls if service is missing
     if (!xThesaurus.is())
         m_xDialog->set_sensitive(false);
+    else
+        m_xWordCB->grab_focus();
 }
 
 SvxThesaurusDialog::~SvxThesaurusDialog()
