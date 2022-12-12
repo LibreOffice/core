@@ -504,10 +504,14 @@ void SlidePersist::createConnectorShapeConnection()
                     }
                 }
             }
-            ConnectorType aConnectorType;
-            xPropertySet->getPropertyValue("EdgeKind") >>= aConnectorType;
-            if (aConnectorType == ConnectorType_STANDARD)
-                lcl_SetEdgeLineValue(xConnector, pIt->second);
+            uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropertySet->getPropertySetInfo();
+            if (xPropInfo->hasPropertyByName("EdgeKind"))
+            {
+                ConnectorType aConnectorType;
+                xPropertySet->getPropertyValue("EdgeKind") >>= aConnectorType;
+                if (aConnectorType == ConnectorType_STANDARD)
+                    lcl_SetEdgeLineValue(xConnector, pIt->second);
+            }
         }
     }
     maConnectorShapeId.clear();
