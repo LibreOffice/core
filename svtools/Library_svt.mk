@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/cliplistener \
     svtools/source/misc/dialogclosedlistener \
     svtools/source/misc/ehdl \
+    svtools/source/misc/embeddedupdate \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
     svtools/source/misc/filechangedchecker \

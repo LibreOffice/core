@@ -35,11 +35,12 @@
 #include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <embeddedobj/embeddedupdate.hxx>
 #include <rtl/ref.hxx>
 #include <map>
 #include <memory>
+#include <svtools/embeddedupdate.hxx>
 #include <svtools/filechangedchecker.hxx>
 
 namespace com::sun::star {
@@ -87,6 +88,7 @@ class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
                             , public css::lang::XServiceInfo
                             , public css::lang::XInitialization
                             , public css::lang::XTypeProvider
+                            , public css::lang::XUnoTunnel
                             , public ::cppu::OWeakObject
 {
 protected:
@@ -434,6 +436,9 @@ public:
     // XTypeProvider
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
     css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+
+    // XUnoTunnel
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

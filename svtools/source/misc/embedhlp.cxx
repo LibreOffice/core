@@ -19,6 +19,7 @@
 
 #include <libxml/xmlwriter.h>
 
+#include <svtools/embeddedupdate.hxx>
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
@@ -30,6 +31,7 @@
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -52,7 +54,6 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
-#include <embeddedobj/embeddedupdate.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -933,7 +934,7 @@ void EmbeddedObjectRef::UpdateReplacement( bool bUpdateOle )
 
 void EmbeddedObjectRef::UpdateOleObject( bool bUpdateOle )
 {
-    embed::EmbeddedUpdate* pObj = dynamic_cast<embed::EmbeddedUpdate*> (GetObject().get());
+    embed::EmbeddedUpdate* pObj = comphelper::getFromUnoTunnel<embed::EmbeddedUpdate> (GetObject());
     if( pObj )
         pObj->SetOleState( bUpdateOle );
 }
