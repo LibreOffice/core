@@ -102,6 +102,7 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 
+#include <txtannotationfld.hxx>
 #include <txtfrm.hxx>
 #include <txtrfmrk.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
@@ -1248,6 +1249,15 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         BringReferencesToAttention(aTextAttrArr);
                     }
                 }
+                else if (nType == ContentTypeId::POSTIT)
+                {
+                    if (const SwTextAttr* pTextAttr =
+                            static_cast<SwPostItContent*>(pCnt)->GetPostIt()->GetTextField())
+                    {
+                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                        BringPostItFieldsToAttention(aTextAttrArr);
+                    }
+                }
                 else if (nType == ContentTypeId::DRAWOBJECT)
                 {
                     if (!pCnt->IsInvisible())
@@ -1371,6 +1381,20 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                             aTextAttrArr.push_back(pTextRef);
                     }
                     BringReferencesToAttention(aTextAttrArr);
+                }
+                else if (nType == ContentTypeId::POSTIT)
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr;
+                    for (size_t i = 0; i < m_aActiveContentArr[nType]->GetMemberCount(); i++)
+                    {
+                        const SwPostItContent* pPostItContent = static_cast<const SwPostItContent*>(
+                                    m_aActiveContentArr[nType]->GetMember(i));
+                        if (pPostItContent && !pPostItContent->IsInvisible())
+                            if (const SwFormatField* pFormatField = pPostItContent->GetPostIt())
+                                if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
+                                    aTextAttrArr.push_back(pTextAttr);
+                    }
+                    BringPostItFieldsToAttention(aTextAttrArr);
                 }
                 else if (nType == ContentTypeId::DRAWOBJECT)
                 {
@@ -5944,6 +5968,66 @@ void SwContentTree::BringReferencesToAttention(std::vector<const SwTextAttr*>& r
     m_aOverlayObjectDelayTimer.Start();
 }
 
+void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const SwTextAttr* p : rTextAttrsArr)
+    {
+        if (!p)
+            continue;
+        // use as a fallback when there is no mark
+        SwTextNode& rTextNode = p->GetFormatField().GetTextField()->GetTextNode();
+        if (!rTextNode.getLayoutFrame(m_pActiveShell->GetLayout()))
+            continue;
+        assert(dynamic_cast<const SwTextAnnotationField*>(p->GetFormatField().GetTextField()));
+        const SwTextAnnotationField* pTextAnnotationField =
+                static_cast<const SwTextAnnotationField*>(p->GetFormatField().GetTextField());
+        if (!pTextAnnotationField)
+            continue;
+        const ::sw::mark::IMark* pAnnotationMark =
+                pTextAnnotationField != nullptr ? pTextAnnotationField->GetAnnotationMark()
+                                                : nullptr;
+        const SwPosition aMarkStart = pAnnotationMark ? pAnnotationMark->GetMarkStart()
+                                                : SwPosition(rTextNode, p->GetStart());
+        const SwPosition aMarkEnd = pAnnotationMark ? pAnnotationMark->GetMarkEnd()
+                                              : SwPosition(rTextNode, p->GetAnyEnd());
+        const SwTextFrame* pMarkStartFrame = static_cast<SwTextFrame*>(
+                    aMarkStart.GetNode().GetTextNode()->getLayoutFrame(m_pActiveShell->GetLayout()));
+        const SwTextFrame* pMarkEndFrame = static_cast<SwTextFrame*>(
+                    aMarkEnd.GetNode().GetTextNode()->getLayoutFrame(m_pActiveShell->GetLayout()));
+        if (!pMarkStartFrame || !pMarkEndFrame)
+            continue;
+        SwRect aStartCharRect;
+        pMarkStartFrame->GetCharRect(aStartCharRect, aMarkStart);
+        SwRect aEndCharRect;
+        pMarkEndFrame->GetCharRect(aEndCharRect, aMarkEnd);
+        if (aStartCharRect.Top() == aEndCharRect.Top())
+        {
+            // single line range
+            aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                 aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+        }
+        else
+        {
+            // multi line range
+            SwRect aFrameRect = pMarkStartFrame->getFrameArea();
+            aRanges.emplace_back(aStartCharRect.Left(), aStartCharRect.Top(),
+                                 aFrameRect.Right(), aStartCharRect.Bottom() + 1);
+            if (aStartCharRect.Bottom() + 1 != aEndCharRect.Top())
+                aRanges.emplace_back(aFrameRect.Left(), aStartCharRect.Bottom() + 1,
+                                     aFrameRect.Right(), aEndCharRect.Top() + 1);
+            aRanges.emplace_back(aFrameRect.Left(), aEndCharRect.Top() + 1,
+                                 aEndCharRect.Right() + 1, aEndCharRect.Bottom() + 1);
+        }
+    }
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                              Color(), std::move(aRanges),
+                                                              true /*unused for Invert type*/));
+    m_aOverlayObjectDelayTimer.Start();
+}
+
 void SwContentTree::BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
 {
     std::vector<basegfx::B2DRange> aRanges;
@@ -5986,7 +6070,6 @@ void SwContentTree::BringFootnotesToAttention(std::vector<const SwTextAttr*>& rT
                                                               true /*unused for Invert type*/));
     m_aOverlayObjectDelayTimer.Start();
 }
-
 
 void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr)
 {
