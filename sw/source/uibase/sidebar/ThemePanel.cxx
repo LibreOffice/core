@@ -30,6 +30,11 @@
 #include <fmtcol.hxx>
 #include <format.hxx>
 #include <svx/ColorSets.hxx>
+#include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
+
 
 namespace
 {
@@ -441,6 +446,16 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     mxListBoxFonts->set_size_request(-1, mxListBoxFonts->get_height_rows(aFontSets.size()));
 
     maColorSets.init();
+
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwDoc* pDocument = pDocSh->GetDoc();
+    if (pDocument)
+    {
+        SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        if (pTheme)
+            maColorSets.insert(*pTheme->GetColorSet());
+    }
 
     const std::vector<svx::ColorSet>& aColorSets = maColorSets.getColorSets();
     for (size_t i = 0; i < aColorSets.size(); ++i)

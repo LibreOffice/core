@@ -238,6 +238,11 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
     return maColorSets[0];
 }
 
+void ColorSets::insert(ColorSet const& rColorSet)
+{
+    maColorSets.push_back(rColorSet);
+}
+
 Theme::Theme(OUString const& rName)
     : maName(rName)
 {
