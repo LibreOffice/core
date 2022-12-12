@@ -35,8 +35,12 @@ namespace com::sun::star {
     namespace drawing { class XDrawPage; }
     namespace xml::dom { class XDocument; }
 }
+namespace svx {
+    class Theme;
+}
 
-namespace oox::drawingml {
+namespace oox::drawingml
+{
 
 struct EffectProperties;
 struct FillProperties;
@@ -82,6 +86,10 @@ public:
 
     FontScheme&              getFontScheme() { return maFontScheme; }
     const FontScheme&        getFontScheme() const { return maFontScheme; }
+
+    std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& getSupplementalFontMap() { return maSupplementalFontMap; }
+    std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>> const& getSupplementalFontMap() const { return maSupplementalFontMap; }
+
     /** Returns theme font properties by scheme type (major/minor). */
     const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const;
     /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
@@ -99,6 +107,7 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
+    std::unique_ptr<svx::Theme> createSvxTheme() const;
     void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
 private:
@@ -111,6 +120,7 @@ private:
     LineStyleList       maLineStyleList;
     EffectStyleList     maEffectStyleList;
     FontScheme          maFontScheme;
+    std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>> maSupplementalFontMap;
     Shape               maSpDef;
     Shape               maLnDef;
     Shape               maTxDef;

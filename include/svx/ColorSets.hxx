@@ -101,6 +101,146 @@ public:
     const ColorSet& getColorSet(std::u16string_view rName);
 };
 
+struct SVXCORE_DLLPUBLIC ThemeSupplementalFont
+{
+    OUString maScript;
+    OUString maTypeface;
+};
+
+struct SVXCORE_DLLPUBLIC ThemeFont
+{
+    OUString maTypeface;
+    OUString maPanose;
+    sal_Int16 maPitch;
+    sal_Int16 maFamily;
+    sal_Int32 maCharset;
+
+    sal_Int16 getPitchFamily() const
+    {
+        return (maPitch & 0x0F) | (maFamily & 0x0F) << 4;
+    }
+};
+
+class SVXCORE_DLLPUBLIC FontScheme
+{
+private:
+    OUString maName;
+
+    ThemeFont maMinorLatin;
+    ThemeFont maMinorAsian;
+    ThemeFont maMinorComplex;
+
+    ThemeFont maMajorLatin;
+    ThemeFont maMajorAsian;
+    ThemeFont maMajorComplex;
+
+    std::vector<ThemeSupplementalFont> maMinorSupplementalFontList;
+    std::vector<ThemeSupplementalFont> maMajorSupplementalFontList;
+
+public:
+    FontScheme() = default;
+    FontScheme(OUString const& rName)
+        : maName(rName)
+    {}
+
+    const OUString& getName() const
+    {
+        return maName;
+    }
+
+    ThemeFont const& getMinorLatin() const
+    {
+        return maMinorLatin;
+    }
+    void setMinorLatin(ThemeFont const& aMinor)
+    {
+        maMinorLatin = aMinor;
+    }
+
+    ThemeFont const& getMinorAsian() const
+    {
+        return maMinorAsian;
+    }
+    void setMinorAsian(ThemeFont const& aMinor)
+    {
+        maMinorAsian = aMinor;
+    }
+
+    ThemeFont const& getMinorComplex() const
+    {
+        return maMinorComplex;
+    }
+    void setMinorComplex(ThemeFont const& aMinor)
+    {
+        maMinorComplex = aMinor;
+    }
+
+    ThemeFont const& getMajorLatin() const
+    {
+        return maMajorLatin;
+    }
+    void setMajorLatin(ThemeFont const& aMajor)
+    {
+        maMajorLatin = aMajor;
+    }
+
+    ThemeFont const& getMajorAsian() const
+    {
+        return maMajorAsian;
+    }
+    void setMajorAsian(ThemeFont const& aMajor)
+    {
+        maMajorAsian = aMajor;
+    }
+
+    ThemeFont const& getMajorComplex() const
+    {
+        return maMajorComplex;
+    }
+    void setMajorComplex(ThemeFont const& aMajor)
+    {
+        maMajorComplex = aMajor;
+    }
+
+    OUString findMinorSupplementalTypeface(std::u16string_view rScript) const
+    {
+        for (auto const& rSupplementalFont : maMinorSupplementalFontList)
+        {
+            if (rSupplementalFont.maScript == rScript)
+                return rSupplementalFont.maTypeface;
+        }
+        return OUString();
+    }
+
+    std::vector<ThemeSupplementalFont> const& getMinorSupplementalFontList() const
+    {
+        return maMinorSupplementalFontList;
+    }
+    void setMinorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)
+    {
+        maMinorSupplementalFontList = rSupplementalFont;
+    }
+
+    OUString findMajorSupplementalTypeface(std::u16string_view rScript) const
+    {
+        for (auto const& rSupplementalFont : maMajorSupplementalFontList)
+        {
+            if (rSupplementalFont.maScript == rScript)
+                return rSupplementalFont.maTypeface;
+        }
+        return OUString();
+    }
+
+    std::vector<ThemeSupplementalFont> const& getMajorSupplementalFontList() const
+    {
+        return maMajorSupplementalFontList;
+    }
+    void setMajorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)
+    {
+        maMajorSupplementalFontList = rSupplementalFont;
+    }
+};
+
 /// A named theme has a named color set.
 class SVXCORE_DLLPUBLIC Theme
 {
@@ -108,8 +248,17 @@ private:
     OUString maName;
     std::unique_ptr<ColorSet> mpColorSet;
 
+    FontScheme maFontScheme;
+
 public:
     Theme(OUString const& rName);
+
+    void setFontScheme(FontScheme const& rFontScheme)
+    {
+        maFontScheme = rFontScheme;
+    }
+
+    FontScheme const& getFontScheme() const { return maFontScheme; }
 
     void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
     const ColorSet* GetColorSet() const;

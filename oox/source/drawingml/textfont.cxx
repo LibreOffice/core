@@ -24,6 +24,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/ColorSets.hxx>
 
 using ::oox::core::XmlFilterBase;
 
@@ -88,6 +89,14 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     rFontName = maTypeface;
     resolvePitch(mnPitchFamily, rnFontPitch, rnFontFamily);
     return !rFontName.isEmpty();
+}
+
+void TextFont::fillThemeFont(svx::ThemeFont& rThemeFont) const
+{
+    rThemeFont.maTypeface = maTypeface;
+    rThemeFont.maPanose = maPanose;
+    rThemeFont.maCharset = mnCharset;
+    resolvePitch(mnPitchFamily, rThemeFont.maPitch, rThemeFont.maFamily);
 }
 
 void TextFont::resolvePitch(sal_Int32 nOoxPitchFamily, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily)
