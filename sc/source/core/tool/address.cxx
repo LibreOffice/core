@@ -2094,7 +2094,7 @@ static void lcl_Split_DocTab( const ScDocument& rDoc,  SCTAB nTab,
     rDoc.GetName(nTab, rTabName);
     rDocName.clear();
     // External reference, same as in ScCompiler::MakeTabStr()
-    if ( rTabName[0] == '\'' )
+    if (!rTabName.isEmpty() && rTabName[0] == '\'')
     {   // "'Doc'#Tab"
         sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
         if (nPos != -1)
