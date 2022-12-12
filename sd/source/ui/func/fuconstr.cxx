@@ -389,7 +389,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
 
                 aAttr.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
 
-                svx::ThemeColorType eColorType = svx::ThemeColorType::ACCENT1;
+                svx::ThemeColorType eColorType = svx::ThemeColorType::Accent1;
                 Color aColor = pTheme->GetColor(eColorType);
                 XFillColorItem aFillColorItem("", aColor);
                 aFillColorItem.GetThemeColor().SetThemeIndex(static_cast<sal_Int16>(eColorType));

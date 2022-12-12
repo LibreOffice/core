@@ -24,6 +24,32 @@ class SdrPage;
 namespace svx
 {
 
+/// Offsets into the color list of a theme.
+enum class ThemeColorType : sal_Int32
+{
+    Unknown = -1,
+    Dark1 = 0,
+    Light1 = 1,
+    Dark2 = 2,
+    Light2 = 3,
+    Accent1 = 4,
+    Accent2 = 5,
+    Accent3 = 6,
+    Accent4 = 7,
+    Accent5 = 8,
+    Accent6 = 9,
+    Hyperlink = 10,
+    FollowedHyperlink = 11,
+    LAST = FollowedHyperlink
+};
+
+constexpr ThemeColorType convertToThemeColorType(sal_Int32 nIndex)
+{
+    if (nIndex < 0 || nIndex > 11)
+        return ThemeColorType::Unknown;
+    return static_cast<ThemeColorType>(nIndex);
+}
+
 class ColorSet
 {
     OUString maColorSetName;
@@ -40,9 +66,10 @@ public:
     {
         return maColorSetName;
     }
-    const Color& getColor(sal_uInt32 nIndex) const
+
+    Color getColor(ThemeColorType nType) const
     {
-        return maColors[nIndex];
+        return maColors[size_t(nType)];
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -67,23 +94,6 @@ public:
     }
 
     const ColorSet& getColorSet(std::u16string_view rName);
-};
-
-/// Offsets into the color list of a theme.
-enum class ThemeColorType
-{
-    DK1 = 0,
-    LT1 = 1,
-    DK2 = 2,
-    LT2 = 3,
-    ACCENT1 = 4,
-    ACCENT2 = 5,
-    ACCENT3 = 6,
-    ACCENT4 = 7,
-    ACCENT5 = 8,
-    ACCENT6 = 9,
-    HLINK = 10,
-    FOLHLINK = 11,
 };
 
 /// A named theme has a named color set.
