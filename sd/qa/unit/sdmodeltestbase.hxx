@@ -172,23 +172,4 @@ public:
     }
 };
 
-CPPUNIT_NS_BEGIN
-
-template <> struct assertion_traits<tools::Rectangle>
-{
-    static bool equal(const tools::Rectangle& r1, const tools::Rectangle& r2) { return r1 == r2; }
-
-    static std::string toString(const tools::Rectangle& r)
-    {
-        OStringStream ost;
-        ost << "Rect P: [" << r.Top() << ", " << r.Left()
-            << "] "
-               "S: ["
-            << r.GetWidth() << ", " << r.GetHeight() << "]";
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
