@@ -6768,7 +6768,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData)
 {
-#if defined(IOS) || defined(ANDROID)
+#if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
     Application::GetSolarMutex().acquire();
 #endif
 
@@ -6779,7 +6779,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
         Application::UpdateMainThread();
         soffice_main();
     }
-#if defined(IOS) || defined(ANDROID)
+#if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
     vcl::lok::unregisterPollCallbacks();
     Application::ReleaseSolarMutex();
 #endif
@@ -7100,6 +7100,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     {
 #ifdef ANDROID
         aAppPath = OUString::fromUtf8(lo_get_app_data_dir()) + "/program";
+#elif defined __EMSCRIPTEN__
+        aAppPath = OUString::fromUtf8("instdir/program");
 #else
         // Fun conversion dance back and forth between URLs and system paths...
         OUString aAppURL;
@@ -7296,8 +7298,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         comphelper::ThreadPool::getSharedOptimalPool().shutdown();
     }
 
-// Turn off quick editing on IOS and ANDROID
-#if defined IOS || defined ANDROID
+// Turn off quick editing on iOS, Android and Emscripten
+#if defined IOS || defined ANDROID || defined __EMSCRIPTEN__
     if (officecfg::Office::Impress::Misc::TextObject::QuickEditing::get())
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
