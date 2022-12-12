@@ -22,6 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <tools/poly.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
@@ -1415,19 +1416,17 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // is cursor at a misspelled word ?
                 Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
+                EditView* pActiveView = GetEditViewPtr();
 
                 boost::property_tree::ptree aHyperlinkTree;
-                if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
+                if (URLFieldHelper::IsCursorAtURLField(*pActiveView))
                 {
-                    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
-                    {
-                        aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
-                    }
+                    if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
+                        if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+                            aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                 }
                 else if (GetEditSelection().HasRange())
                 {
-                    EditView* pActiveView = GetEditViewPtr();
-
                     if (pActiveView)
                     {
                         const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
