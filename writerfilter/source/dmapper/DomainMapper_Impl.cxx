@@ -882,7 +882,8 @@ void DomainMapper_Impl::PopSdt()
         // DomainMapper_Impl::AddDummyParaForTableInSection() would make our range multi-paragraph,
         // while the intention is to keep start/end inside the same paragraph for run SDTs.
         uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
-        if (xParagraphCursor.is())
+        if (xParagraphCursor.is()
+            && m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
         {
             xCursor->gotoRange(xEnd, /*bExpand=*/false);
             xParagraphCursor->gotoStartOfParagraph(/*bExpand=*/false);
