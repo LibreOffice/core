@@ -231,6 +231,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/DMLPresetShapeExport \
     oox/source/export/shapes \
     oox/source/export/vmlexport \
+    oox/source/export/ThemeExport \
     oox/source/helper/attributelist \
     oox/source/helper/binaryinputstream \
     oox/source/helper/binaryoutputstream \
