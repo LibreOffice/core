@@ -2308,7 +2308,7 @@
             saved in a time interval.</desc>
             <label>AutoSave every</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="GenerateThumbnail" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
@@ -2326,7 +2326,7 @@
             document is saved.</desc>
             <label>Always create backup copy</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="EditProperty" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
