@@ -15,6 +15,10 @@ endif
 endif
 gb_LinkTarget_LDFLAGS += $(gb__LinkTarget_LDFLAGS_zdefs)
 
+ifneq ($(findstring lld,$(USE_LD)),)
+USE_LD += -Wl,--undefined-version
+endif
+
 include $(GBUILDDIR)/platform/unxgcc.mk
 
 ifneq ($(ATOMIC_LIB),)
