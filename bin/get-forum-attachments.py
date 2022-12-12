@@ -43,14 +43,22 @@ forums = {
     'mso-en2': ["https://www.excelguru.ca/forums", False, 0],
     'mso-en3': ["http://www.vbaexpress.com/forum", True, 5100],
     'mso-en4': ["https://www.excelforum.com", True, 5100],
-    # lang : [url, doLogin, startIndex]
+    # forum : [url, doLogin, startIndex]
 }
 
-def get_attachment_query(lang):
-    if lang.startswith("mso"):
+def get_attachment_query(forum):
+    if forum.startswith("mso"):
         return "/attachment.php?attachmentid="
     else:
         return "/download/file.php?id="
+
+def createSession():
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
 
 def login(session, url, configFile):
     config = configparser.ConfigParser()
@@ -81,7 +89,7 @@ def login(session, url, configFile):
 
     return False
 
-def get_attachments_from_url(lang, config, pathes):
+def get_attachments_from_url(forum, config, args):
     url = config[0]
     doLogin = config[1]
     startIndex = config[2]
@@ -89,25 +97,21 @@ def get_attachments_from_url(lang, config, pathes):
     print("Checking " + url)
 
     # Keep the index and resume from there
-    indexFile = os.path.join(pathes.outdir, lang + ".index")
+    indexFile = os.path.join(args.outdir, forum + ".index")
     if os.path.isfile(indexFile):
         with open(indexFile) as f:
             startIndex = int(f.readline().rstrip()) + 1
 
-    session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=0.5)
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
+    session = createSession()
 
     if doLogin:
-        if not login(session, url, pathes.config):
+        if not login(session, url, args.config):
             print("Can't log in to " + url)
             return
 
     invalidCount = 0
     for i in range(startIndex, 999999):
-        fileUrl = url + get_attachment_query(lang) + str(i)
+        fileUrl = url + get_attachment_query(forum) + str(i)
 
         h = session.head(fileUrl)
         header = h.headers
@@ -129,14 +133,14 @@ def get_attachments_from_url(lang, config, pathes):
                 mimetype = magic.from_file(tmp.name, mime=True)
                 if mimetype in mimetypes:
                     suffix = mimetypes[mimetype]
-                    suffixDir = os.path.join(pathes.outdir, suffix)
+                    suffixDir = os.path.join(args.outdir, suffix)
                     try:
                         os.mkdir(suffixDir)
                     except:
                         pass
 
                     download = os.path.join(suffixDir,
-                            "forum-" + lang + '-' + str(i) + '.' + suffix)
+                            "forum-" + forum + '-' + str(i) + '.' + suffix)
 
                     print("Downloading as " + download)
                     shutil.copy(tmp.name, download)
@@ -150,23 +154,57 @@ if __name__ == '__main__':
 
     parser.add_argument('--outdir', action='store', dest="outdir", required=True)
     parser.add_argument('--config', action="store", dest="config", required=True)
+    parser.add_argument('--get-file', action="store", dest="fileName", required=False)
 
-    pathes = parser.parse_args()
+    args = parser.parse_args()
 
-    if not os.path.exists(pathes.outdir) or os.path.isfile(pathes.outdir):
+    if not os.path.exists(args.outdir) or os.path.isfile(args.outdir):
         print("Outdir folder doesn't exists")
         sys.exit(1)
-    elif not os.path.exists(pathes.config) or not os.path.isfile(pathes.config):
+    elif not os.path.exists(args.config) or not os.path.isfile(args.config):
         print("Config file doesn't exists")
         sys.exit(1)
 
-    processes = []
-    # by default, 10 at a time seems to work fine
-    with ThreadPoolExecutor(max_workers=int(os.environ.get('PARALLELISM', 10))) as executor:
-        for lang, config in forums.items():
-            processes.append(executor.submit(get_attachments_from_url, lang, config, pathes))
+    if not args.fileName:
+        processes = []
+        # by default, 10 at a time seems to work fine
+        with ThreadPoolExecutor(max_workers=int(os.environ.get('PARALLELISM', 10))) as executor:
+            for forum, config in forums.items():
+                processes.append(executor.submit(get_attachments_from_url, forum, config, args))
 
-    for task in as_completed(processes):
-        result = task.result()
-        if result:
-            print(result)
+        for task in as_completed(processes):
+            result = task.result()
+            if result:
+                print(result)
+    else:
+        fileNameSplit = args.fileName.split("-")
+        if fileNameSplit[0] != "forum" or (len(fileNameSplit) != 3 and len(fileNameSplit) != 4):
+            print("Incorrect file name")
+            sys.exit(1)
+
+        forum = fileNameSplit[1]
+        fileId = fileNameSplit[2]
+        if fileNameSplit[1] == "mso":
+            forum += "-" + fileNameSplit[2]
+            fileId = fileNameSplit[3]
+
+        url = forums[forum][0]
+        fileUrl = url + get_attachment_query(forum) + fileId.split(".")[0]
+
+        session = createSession()
+
+        doLogin = forums[forum][1]
+        if doLogin:
+            if not login(session, url, args.config):
+                print("Can't log in to " + url)
+                sys.exit(1)
+
+        r = session.get(fileUrl, allow_redirects=True)
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(r.content)
+
+            download = os.path.join(args.outdir, args.fileName)
+
+            print("Downloading " + fileUrl + " as " + download)
+            shutil.copy(tmp.name, download)
+
