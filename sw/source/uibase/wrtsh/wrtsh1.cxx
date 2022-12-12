@@ -117,6 +117,7 @@
 #include <UndoCore.hxx>
 #include <formatlinebreak.hxx>
 #include <formatcontentcontrol.hxx>
+#include <textcontentcontrol.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -261,6 +262,19 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
+
+    // Check whether node is content control
+    SwTextContentControl* pTextContentControl = CursorInsideContentControl();
+    if (pTextContentControl)
+    {
+        std::shared_ptr<SwContentControl> pContentControl =
+            pTextContentControl->GetContentControl().GetContentControl();
+        if (pContentControl)
+        {
+            // Set showingPlcHdr to false as node has been edited
+            pContentControl->SetShowingPlaceHolder(false);
+        }
+    }
 
     if( bStarted )
     {

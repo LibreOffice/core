@@ -720,7 +720,6 @@ void SwTextContentControl::Invalidate()
     pDocShell->GetWrtShell()->Push();
 
     // visit the control in the text (which makes any necessary visual changes)
-    // NOTE: simply going to a control indicates cancelling ShowingPlaceHolder, unless bOnlyRefresh
     // NOTE: simply going to a checkbox causes a toggle, unless bOnlyRefresh
     auto& rFormatContentControl = static_cast<SwFormatContentControl&>(GetAttr());
     pDocShell->GetWrtShell()->GotoContentControl(rFormatContentControl, /*bOnlyRefresh=*/true);
