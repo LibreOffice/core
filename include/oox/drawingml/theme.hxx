@@ -57,8 +57,9 @@ class TextFont;
 class OOX_DLLPUBLIC Theme
 {
 public:
-    void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
-    void setThemeName(const OUString& rThemeName) { maThemeName = rThemeName; }
+    void setThemeName(OUString const& rName) { maThemeName = rName; }
+    void setFormatSchemeName(OUString const& rName) { maFormatSchemeName = rName; }
+    void setFontSchemeName(OUString const& rName) { maFontSchemeName = rName; }
 
     ClrScheme&               getClrScheme() { return maClrScheme; }
     const ClrScheme&         getClrScheme() const { return maClrScheme; }
@@ -101,8 +102,9 @@ public:
     void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
 private:
-    OUString            maStyleName;
     OUString            maThemeName;
+    OUString            maFontSchemeName;
+    OUString            maFormatSchemeName;
     ClrScheme           maClrScheme;
     FillStyleList       maFillStyleList;
     FillStyleList       maBgFillStyleList;
