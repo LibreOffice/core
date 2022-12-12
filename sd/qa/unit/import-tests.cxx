@@ -83,6 +83,7 @@ public:
     }
 
     void testDocumentLayout();
+    void testTdf152434();
     void testConnectors();
     void testTdf150719();
     void testTdf149314();
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testConnectors);
     CPPUNIT_TEST(testTdf150719);
     CPPUNIT_TEST(testTdf149314);
@@ -336,6 +338,17 @@ void SdImportTest::testDocumentLayout()
             }
         }
     }
+}
+
+void SdImportTest::testTdf152434()
+{
+    createSdImpressDoc("pptx/tdf152434.pptx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const SdrPage* pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
 void SdImportTest::testConnectors()
