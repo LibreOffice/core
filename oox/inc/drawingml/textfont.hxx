@@ -51,6 +51,8 @@ public:
                             sal_Int16& rnFontFamily,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
+    static void resolvePitch(sal_Int32 nOoxPitch, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily);
+
 private:
     bool                implGetFontData(
                             OUString& rFontName,
@@ -58,10 +60,10 @@ private:
                             sal_Int16& rnFontFamily ) const;
 
 private:
-    OUString     maTypeface;
-    OUString     maPanose;
-    sal_Int32           mnPitch;
-    sal_Int32           mnCharset;
+    OUString maTypeface;
+    OUString maPanose;
+    sal_Int32 mnPitchFamily;
+    sal_Int32 mnCharset;
 };
 
 
