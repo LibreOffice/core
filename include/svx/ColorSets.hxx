@@ -99,6 +99,8 @@ public:
     }
 
     const ColorSet& getColorSet(std::u16string_view rName);
+
+    void insert(ColorSet const& rColorSet);
 };
 
 struct SVXCORE_DLLPUBLIC ThemeSupplementalFont
