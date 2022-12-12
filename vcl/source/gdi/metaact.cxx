@@ -1029,8 +1029,30 @@ MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
     mnLen       ( nLen )
 {}
 
+static bool AllowY(long nY)
+{
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+    {
+        if (nY > 0x20000000 || nY < -0x20000000)
+        {
+            SAL_WARN("vcl", "skipping huge y: " << nY);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool AllowRect(const tools::Rectangle& rRect)
+{
+    return AllowY(rRect.Top()) && AllowY(rRect.Bottom());
+}
+
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowY(maPt.Y()))
+        return;
+
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
 }
 
@@ -1322,25 +1344,6 @@ MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
     maStr       ( rStr ),
     mnStyle     ( nStyle )
 {}
-
-static bool AllowRect(const tools::Rectangle& rRect)
-{
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    if (bFuzzing)
-    {
-        if (rRect.Top() > 0x20000000 || rRect.Top() < -0x20000000)
-        {
-            SAL_WARN("vcl", "skipping huge rect top: " << rRect.Top());
-            return false;
-        }
-        if (rRect.Bottom() > 0x20000000 || rRect.Bottom() < -0x20000000)
-        {
-            SAL_WARN("vcl", "skipping huge rect bottom: " << rRect.Bottom());
-            return false;
-        }
-    }
-    return true;
-}
 
 void MetaTextRectAction::Execute( OutputDevice* pOut )
 {
