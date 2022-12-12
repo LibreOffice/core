@@ -214,17 +214,24 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
     switch( nElement )
     {
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
+        {
             if (rAttribs.hasAttribute(XML_name))
-            {
                 mrTheme.getClrScheme().SetName(rAttribs.getStringDefaulted(XML_name));
-            }
-            return new clrSchemeContext( *this, mrTheme.getClrScheme() );
+            return new clrSchemeContext(*this, mrTheme.getClrScheme());
+        }
         case A_TOKEN( fontScheme ): // CT_FontScheme
-            return new FontSchemeContext( *this, mrTheme.getFontScheme() );
+        {
+            if (rAttribs.hasAttribute(XML_name))
+                mrTheme.setFontSchemeName(rAttribs.getStringDefaulted(XML_name));
+            return new FontSchemeContext(*this, mrTheme.getFontScheme());
+        }
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
-            mrTheme.setStyleName( rAttribs.getStringDefaulted( XML_name ) );
+        {
+            if (rAttribs.hasAttribute(XML_name))
+                mrTheme.setFormatSchemeName(rAttribs.getStringDefaulted(XML_name));
             return this;
+        }
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
             return new FillStyleListContext( *this, mrTheme.getFillStyleList() );
