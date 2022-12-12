@@ -201,6 +201,44 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
     testCopyPasteToNewSheet(xChartDoc, "Object 1", 2, 6);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
+{
+    loadFromURL(u"xlsx/tdf98690.xlsx");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
+    uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeriesList.getLength());
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToObject", OUString("Chart 2")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // create a new document
+    load("private:factory/scalc");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 0, mxComponent),
+                                                     uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc2.is());
+    uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(), uno::UNO_QUERY_THROW);
+    uno::Sequence<OUString> aSeriesList2 = xChartData2->getColumnDescriptions();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 12
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aSeriesList2.getLength());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
