@@ -27,7 +27,7 @@ class SwVbaTableHelper
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
-    SwTable* pTable;
+    SwTable* m_pTable;
 
 private:
     /// @throws css::uno::RuntimeException

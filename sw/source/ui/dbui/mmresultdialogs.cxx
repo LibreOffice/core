@@ -164,7 +164,7 @@ public:
 
 class SwSendQueryBox_Impl : public SwMessageAndEditDialog
 {
-    bool            bIsEmptyAllowed;
+    bool            m_bIsEmptyAllowed;
     DECL_LINK( ModifyHdl, weld::Entry&, void);
 public:
     SwSendQueryBox_Impl(weld::Window* pParent, const OString& rID,
@@ -183,7 +183,7 @@ public:
 
     void SetIsEmptyTextAllowed(bool bSet)
     {
-        bIsEmptyAllowed = bSet;
+        m_bIsEmptyAllowed = bSet;
         ModifyHdl(*m_xEdit);
     }
 };
@@ -212,7 +212,7 @@ IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
 SwSendQueryBox_Impl::SwSendQueryBox_Impl(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription)
     : SwMessageAndEditDialog(pParent, rID, rUIXMLDescription)
-    , bIsEmptyAllowed(true)
+    , m_bIsEmptyAllowed(true)
 {
     m_xEdit->connect_changed(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
     ModifyHdl(*m_xEdit);
@@ -220,7 +220,7 @@ SwSendQueryBox_Impl::SwSendQueryBox_Impl(weld::Window* pParent, const OString& r
 
 IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
 {
-    m_xOKPB->set_sensitive(bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
+    m_xOKPB->set_sensitive(m_bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
 }
 
 namespace {

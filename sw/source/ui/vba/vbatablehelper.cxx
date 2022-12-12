@@ -31,7 +31,7 @@ using namespace ::ooo::vba;
 
 SwVbaTableHelper::SwVbaTableHelper( uno::Reference< text::XTextTable > xTextTable ) : mxTextTable(std::move( xTextTable ))
 {
-    pTable = GetSwTable( mxTextTable );
+    m_pTable = GetSwTable( mxTextTable );
 }
 
 SwTable* SwVbaTableHelper::GetSwTable( const uno::Reference< text::XTextTable >& xTextTable )
@@ -52,9 +52,9 @@ SwTable* SwVbaTableHelper::GetSwTable( const uno::Reference< text::XTextTable >&
 sal_Int32 SwVbaTableHelper::getTabColumnsCount( sal_Int32 nRowIndex )
 {
     sal_Int32 nRet = 0;
-    if(!pTable->IsTableComplex())
+    if(!m_pTable->IsTableComplex())
     {
-        SwTableLines& rLines = pTable->GetTabLines();
+        SwTableLines& rLines = m_pTable->GetTabLines();
         SwTableLine* pLine = rLines[ nRowIndex ];
         nRet = pLine->GetTabBoxes().size();
     }
@@ -64,7 +64,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsCount( sal_Int32 nRowIndex )
 sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( )
 {
     sal_Int32 nRet = 0;
-    sal_Int32 nRowCount = pTable->GetTabLines().size();
+    sal_Int32 nRowCount = m_pTable->GetTabLines().size();
     for( sal_Int32 index = 0; index < nRowCount; index++ )
     {
         sal_Int32 nColCount = getTabColumnsCount( index );
@@ -77,20 +77,20 @@ sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( )
 sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& rCellName )
 {
     sal_Int32 nRet = 0;
-    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox( rCellName ));
+    SwTableBox* pBox = const_cast<SwTableBox*>(m_pTable->GetTableBox( rCellName ));
     if( !pBox )
         throw uno::RuntimeException();
 
     const SwTableLine* pLine = pBox->GetUpper();
     const SwTableLines* pLines = pLine->GetUpper()
-                     ? &pLine->GetUpper()->GetTabLines() : &pTable->GetTabLines();
+                     ? &pLine->GetUpper()->GetTabLines() : &m_pTable->GetTabLines();
     nRet = pLines->GetPos( pLine );
     return nRet;
 }
 
 sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& rCellName )
 {
-    const SwTableBox* pBox = pTable->GetTableBox( rCellName );
+    const SwTableBox* pBox = m_pTable->GetTableBox( rCellName );
     if( !pBox )
         throw uno::RuntimeException();
     return pBox->GetUpper()->GetBoxPos( pBox );
@@ -137,7 +137,7 @@ sal_Int32 SwVbaTableHelper::getTableWidth( ) const
 
 SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow )
 {
-    SwTableLines& rLines = pTable->GetTabLines();
+    SwTableLines& rLines = m_pTable->GetTabLines();
     sal_Int32 nRowCount = rLines.size();
     if (nRow < 0 || nRow >= nRowCount)
         throw uno::RuntimeException();
@@ -161,7 +161,7 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart )
     rCols.SetLeft    ( 0 );
     rCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     rCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
-    pTable->GetTabCols( rCols, pStart );
+    m_pTable->GetTabCols( rCols, pStart );
 }
 
 sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols const & rCols )
@@ -271,7 +271,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     else
         aCols.SetRight( std::min( static_cast<tools::Long>(nNewWidth), aCols.GetRightMax()) );
 
-    pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
+    m_pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

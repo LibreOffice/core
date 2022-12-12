@@ -30,22 +30,22 @@ namespace {
 class CellsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 mnIndex;
 
 public:
-    explicit CellsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), nIndex( 0 )
+    explicit CellsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), mnIndex( 0 )
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex < mxIndexAccess->getCount() );
+        return ( mnIndex < mxIndexAccess->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if( nIndex < mxIndexAccess->getCount() )
+        if( mnIndex < mxIndexAccess->getCount() )
         {
-            return mxIndexAccess->getByIndex( nIndex++ );
+            return mxIndexAccess->getByIndex( mnIndex++ );
         }
         throw container::NoSuchElementException();
     }
