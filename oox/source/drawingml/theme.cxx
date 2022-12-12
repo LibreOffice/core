@@ -24,6 +24,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <sal/log.hxx>
+#include <svx/unopage.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/ColorSets.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace com::sun::star;
 
@@ -105,16 +110,21 @@ const TextFont* Theme::resolveFont( std::u16string_view rName ) const
 
 void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
 {
-    beans::PropertyValue aColorScheme;
-    aColorScheme.Name = "ColorScheme";
-    maClrScheme.ToAny(aColorScheme.Value);
-    beans::PropertyValues aValues = {
-        comphelper::makePropertyValue("Name", maThemeName),
-        comphelper::makePropertyValue("ColorSchemeName", maClrScheme.GetName()),
-        aColorScheme,
-    };
-    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("Theme", uno::Any(aValues));
+    SAL_WARN_IF(!xDrawPage.is(), "oox", "DrawPage is not set");
+
+    SdrPage* pPage = GetSdrPageFromXDrawPage(xDrawPage);
+
+    SAL_WARN_IF(!pPage, "oox", "Can't get SdrPage from XDrawPage");
+
+    if (!pPage)
+        return;
+
+    auto pTheme = std::make_unique<svx::Theme>(maThemeName);
+    auto pColorSet = std::make_unique<svx::ColorSet>(maClrScheme.GetName());
+    maClrScheme.fill(*pColorSet);
+    pTheme->SetColorSet(std::move(pColorSet));
+
+    pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
 }
 
 } // namespace oox::drawingml
