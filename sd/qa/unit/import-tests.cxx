@@ -84,6 +84,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf152434();
     void testConnectors();
     void testTdf149314();
     void testTdf149124();
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testConnectors);
     CPPUNIT_TEST(testTdf149314);
     CPPUNIT_TEST(testTdf149124);
@@ -304,6 +306,15 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf152434()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf152434.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage( 1, xDocShRef );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
 void SdImportTest::testConnectors()
