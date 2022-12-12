@@ -125,10 +125,6 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
     (this->*m_fnKillSel)(nullptr, false);
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
-    // Assume that once the placeholder is selected, the content is no longer the placeholder.
-    if (!bOnlyRefresh && pContentControl)
-        pContentControl->SetShowingPlaceHolder(false);
-
 
     if (bRet && pContentControl && pContentControl->GetCheckbox())
     {

@@ -399,6 +399,13 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
     // Without the accompanying fix in place, this test would have failed, there was no special
     // handling for plain text content controls.
     CPPUNIT_ASSERT(pContentControl->GetPlainText());
+
+    CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
+    pWrtShell->GotoContentControl(rFormatContentControl);
+    CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
+    pWrtShell->Insert("Foo");
+    // No longer showing placeholder text, as it has been changed
+    CPPUNIT_ASSERT(!pContentControl->GetShowingPlaceHolder());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertComboBoxContentControl)
