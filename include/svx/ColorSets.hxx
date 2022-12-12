@@ -50,7 +50,7 @@ constexpr ThemeColorType convertToThemeColorType(sal_Int32 nIndex)
     return static_cast<ThemeColorType>(nIndex);
 }
 
-class ColorSet
+class SVXCORE_DLLPUBLIC ColorSet
 {
     OUString maColorSetName;
     std::vector<Color> maColors;
