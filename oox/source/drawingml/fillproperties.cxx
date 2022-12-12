@@ -616,7 +616,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         }
                         ++aIt;
                     }
-                    assert( nWidestWidth > 0 );
+                    assert( nWidestWidth >= 0 );
 
                     double nBorder = 0;
                     bool bSwap(false);
