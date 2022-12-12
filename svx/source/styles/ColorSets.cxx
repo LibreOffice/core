@@ -37,7 +37,7 @@ namespace
 {
 /// Updates a text portion to match a new color set, in case it already uses theme colors.
 void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion,
-                               svx::ColorSet& rColorSet)
+                               svx::ColorSet const& rColorSet)
 {
     sal_Int16 nCharColorTheme = -1;
     xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
@@ -67,7 +67,7 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
                                uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
 
-void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::ColorSet& rColorSet)
+void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::ColorSet const& rColorSet)
 {
     if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME))
     {
@@ -95,7 +95,7 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::
 
 void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 {
-    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    const svx::ColorSet* pColorSet = pTheme->GetColorSet();
     if (!pColorSet)
     {
         return;
@@ -128,20 +128,21 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 namespace svx
 {
 
-ColorSet::ColorSet(OUString const & aColorSetName)
-    : maColorSetName(aColorSetName)
-    , maColors(12)
+ColorSet::ColorSet(OUString const & rName)
+    : maName(rName)
 {}
 
-ColorSets::ColorSets()
-{}
+void ColorSet::add(sal_uInt32 nIndex, Color aColorData)
+{
+    maColors[nIndex] = aColorData;
+}
 
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maColorSetName"),
-                                      BAD_CAST(maColorSetName.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maName"),
+                                      BAD_CAST(maName.toUtf8().getStr()));
 
     for (const auto& rColor : maColors)
     {
@@ -154,6 +155,9 @@ void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterEndElement(pWriter);
 }
+
+ColorSets::ColorSets()
+{}
 
 ColorSets::~ColorSets()
 {}
@@ -236,14 +240,14 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
     return maColorSets[0];
 }
 
-Theme::Theme(const OUString& rName)
+Theme::Theme(OUString const& rName)
     : maName(rName)
 {
 }
 
-Theme::~Theme() {}
-
 void Theme::SetColorSet(std::unique_ptr<ColorSet> pColorSet) { mpColorSet = std::move(pColorSet); }
+
+const ColorSet* Theme::GetColorSet() const { return mpColorSet.get(); }
 
 ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
 
