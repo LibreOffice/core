@@ -11,6 +11,7 @@
 #ifndef INCLUDED_SVX_COLORSETS_HXX
 #define INCLUDED_SVX_COLORSETS_HXX
 
+#include <array>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -52,19 +53,17 @@ constexpr ThemeColorType convertToThemeColorType(sal_Int32 nIndex)
 
 class SVXCORE_DLLPUBLIC ColorSet
 {
-    OUString maColorSetName;
-    std::vector<Color> maColors;
-public:
-    ColorSet(OUString aName);
+    OUString maName;
+    std::array<Color, 12> maColors;
 
-    void add(sal_uInt32 nIndex, ::Color aColorData)
-    {
-        maColors[nIndex] = aColorData;
-    }
+public:
+    ColorSet(OUString const& rName);
+
+    void add(sal_uInt32 nIndex, Color aColorData);
 
     const OUString& getName() const
     {
-        return maColorSetName;
+        return maName;
     }
 
     Color getColor(ThemeColorType nType) const
@@ -88,7 +87,7 @@ public:
         return maColorSets;
     }
 
-    const ColorSet& getColorSet(sal_uInt32 nIndex)
+    const ColorSet& getColorSet(sal_uInt32 nIndex) const
     {
         return maColorSets[nIndex];
     }
@@ -99,14 +98,15 @@ public:
 /// A named theme has a named color set.
 class SVXCORE_DLLPUBLIC Theme
 {
+private:
     OUString maName;
     std::unique_ptr<ColorSet> mpColorSet;
 
 public:
-    Theme(OUString sName);
-    ~Theme();
+    Theme(OUString const& rName);
 
     void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
+    const ColorSet* GetColorSet() const;
     ColorSet* GetColorSet();
 
     void SetName(const OUString& rName);
