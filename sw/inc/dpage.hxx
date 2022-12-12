@@ -27,6 +27,9 @@ class SdrPageGridFrameList;
 class SwDrawModel;
 class SwDoc;
 
+/// SwDPage is Writer's draw page: derives from SdrPage, but has a reference to the Writer document
+/// via SwDrawModel. One Writer document has 1 draw page, i.e. all Writer pages share the same draw
+/// page.
 class SwDPage final : public FmFormPage, public SdrObjUserCall
 {
     SwDPage &operator=(const SwDPage&) = delete;
