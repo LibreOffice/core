@@ -13,11 +13,13 @@
 
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <unotextrange.hxx>
 
 #include "vbaformfield.hxx"
 #include "vbaformfieldcheckbox.hxx"
 #include "vbaformfielddropdown.hxx"
 #include "vbaformfieldtextinput.hxx"
+#include "vbarange.hxx"
 #include "wordvbahelper.hxx"
 
 using namespace ::ooo::vba;
@@ -34,10 +36,10 @@ using namespace ::com::sun::star;
  */
 SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>& rParent,
                                const uno::Reference<uno::XComponentContext>& rContext,
-                               const uno::Reference<frame::XModel>& xModel,
+                               const uno::Reference<text::XTextDocument>& xTextDocument,
                                sw::mark::IFieldmark& rFormField)
     : SwVbaFormField_BASE(rParent, rContext)
-    , mxModel(xModel)
+    , m_xTextDocument(xTextDocument)
     , m_rFormField(rFormField)
 {
 }
@@ -64,7 +66,7 @@ uno::Any SAL_CALL SwVbaFormField::TextInput()
 
 uno::Any SAL_CALL SwVbaFormField::Previous()
 {
-    SwDoc* pDoc = word::getDocShell(mxModel)->GetDoc();
+    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
     if (!pDoc)
         return uno::Any();
 
@@ -86,12 +88,12 @@ uno::Any SAL_CALL SwVbaFormField::Previous()
         return uno::Any();
 
     return uno::Any(uno::Reference<word::XFormField>(
-        new SwVbaFormField(mxParent, mxContext, mxModel, *pFieldMark)));
+        new SwVbaFormField(mxParent, mxContext, m_xTextDocument, *pFieldMark)));
 }
 
 uno::Any SAL_CALL SwVbaFormField::Next()
 {
-    SwDoc* pDoc = word::getDocShell(mxModel)->GetDoc();
+    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
     if (!pDoc)
         return uno::Any();
 
@@ -113,13 +115,22 @@ uno::Any SAL_CALL SwVbaFormField::Next()
         return uno::Any();
 
     return uno::Any(uno::Reference<word::XFormField>(
-        new SwVbaFormField(mxParent, mxContext, mxModel, *pFieldMark)));
+        new SwVbaFormField(mxParent, mxContext, m_xTextDocument, *pFieldMark)));
 }
 
-uno::Any SAL_CALL SwVbaFormField::Range()
+uno::Reference<word::XRange> SwVbaFormField::Range()
 {
-    SAL_INFO("sw.vba", "SwVbaFormField::getRange stub");
-    return uno::Any();
+    uno::Reference<word::XRange> xRet;
+    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
+    if (pDoc)
+    {
+        uno::Reference<text::XTextRange> xText(SwXTextRange::CreateXTextRange(
+            *pDoc, m_rFormField.GetMarkStart(), &m_rFormField.GetMarkEnd()));
+        if (xText.is())
+            xRet = new SwVbaRange(mxParent, mxContext, m_xTextDocument, xText->getStart(),
+                                  xText->getEnd());
+    }
+    return xRet;
 }
 
 OUString SwVbaFormField::getDefaultPropertyName() { return "Type"; }

@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <ooo/vba/word/XFormFields.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -20,7 +21,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaFormFields(const css::uno::Reference<ov::XHelperInterface>& xParent,
                     const css::uno::Reference<css::uno::XComponentContext>& xContext,
-                    const css::uno::Reference<css::frame::XModel>& xModel);
+                    const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
 
     // XFormFields
     sal_Bool SAL_CALL getShaded() override;

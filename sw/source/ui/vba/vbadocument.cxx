@@ -327,7 +327,7 @@ SwVbaDocument::TablesOfContents( const uno::Any& index )
 
 uno::Any SAL_CALL SwVbaDocument::FormFields(const uno::Any& index)
 {
-    uno::Reference<XCollection> xCol(new SwVbaFormFields(this, mxContext, mxModel));
+    uno::Reference<XCollection> xCol(new SwVbaFormFields(this, mxContext, mxTextDocument));
     if (index.hasValue())
         return xCol->Item(index, uno::Any());
     return uno::Any(xCol);

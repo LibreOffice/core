@@ -19,6 +19,7 @@
 
 module ooo {  module vba {  module word {
 
+interface XRange;
 interface XFormField
 {
     interface ooo::vba::XHelperInterface;
@@ -75,7 +76,7 @@ interface XFormField
      * Represents a contiguous area in a document.
      * Each Range object is defined by a starting and ending character position.
      */
-    any Range();
+    XRange Range();
 };
 
 }; }; };
