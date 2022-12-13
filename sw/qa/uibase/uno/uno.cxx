@@ -158,6 +158,48 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionGraphic)
     CPPUNIT_ASSERT_EQUAL(aAnchorPos, *aPaM.GetPoint());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionAtPageGraphic)
+{
+    // Given a document with an at-page anchored image:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_PAGE));
+    xTextGraphic->setPropertyValue("AnchorPageNo", uno::Any(static_cast<sal_Int16>(1)));
+    xTextGraphic->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(10000)));
+    xTextGraphic->setPropertyValue("Height", uno::Any(static_cast<sal_Int32>(10000)));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xBodyText->insertTextContent(xCursor, xTextContent, false);
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwSortedObjs& rDrawObjs = *pPage->GetDrawObjs();
+    SwAnchoredObject* pAnchored = rDrawObjs[0];
+    Point aLogic = pAnchored->GetObjRect().Center();
+    SwView* pView = pDocShell->GetView();
+    SwEditWin& rEditWin = pView->GetEditWin();
+    Point aPixel = rEditWin.LogicToPixel(aLogic);
+
+    // When asking for the doc model pos of the image's anchor by pixel position:
+    uno::Reference<frame::XModel2> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xControllers = xModel->getControllers();
+    uno::Reference<text::XTextViewTextRangeSupplier> xController(xControllers->nextElement(),
+                                                                 uno::UNO_QUERY);
+    awt::Point aPoint(aPixel.getX(), aPixel.getY());
+    // Without the accompanying fix in place, this test would have crashed.
+    uno::Reference<text::XTextRange> xTextRange
+        = xController->createTextRangeByPixelPosition(aPoint);
+
+    // Then make sure that the result is empty, since the image is at-page anchored:
+    CPPUNIT_ASSERT(!xTextRange.is());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
 {
     // Given a document with 3 fieldmarks: 2 zotero items and a zotero
