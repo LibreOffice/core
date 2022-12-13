@@ -751,7 +751,11 @@ Const cstSubArgs = &quot;Key, Value&quot;
 Check:
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._Validate(Key, &quot;Key&quot;, V_STRING) Then GoTo Catch
-		If Not SF_Utils._Validate(Value, &quot;Value&quot;) Then GoTo Catch
+		If IsArray(Value) Then
+			If Not SF_Utils._ValidateArray(Value, &quot;Value&quot;) Then GoTo Catch
+		Else
+			If Not SF_Utils._Validate(Value, &quot;Value&quot;) Then GoTo Catch
+		End If
 	End If
 	If Not Exists(Key) Then GoTo CatchUnknown
 
