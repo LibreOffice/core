@@ -27,6 +27,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(if $(filter EMSCRIPTEN,$(OS)),-pthread)" \
 			$(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		LDFLAGS="$(call gb_ExternalProject_get_link_flags,fontconfig)" \
+		$(if $(filter EMSCRIPTEN,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)") \
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--disable-silent-rules \
@@ -39,6 +40,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			    --with-baseconfigdir=/instdir/share/fontconfig \
 			    --with-cache-dir=/instdir/share/fontconfig/cache \
 			    --with-add-fonts=/instdir/share/fonts \
+			    --enable-libxml2 \
 			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
 			) \
 		&& $(MAKE) -C src && $(MAKE) fonts.conf \
