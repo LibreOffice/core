@@ -112,6 +112,54 @@ static bool lcl_HasComments(const SwTextNode& rNode)
     return false;
 }
 
+// possible delimiter characters within URLs for word breaking
+static bool lcl_IsDelim( const sal_Unicode c )
+{
+   return '#' == c || '$' == c || '%' == c || '&' == c || '+' == c ||
+          ',' == c || '-' == c || '.' == c || '/' == c || ':' == c ||
+          ';' == c || '=' == c || '?' == c || '@' == c || '_' == c;
+}
+
+// allow to check normal text with hyperlink by recognizing (parts of) URLs
+static bool lcl_IsURL(std::u16string_view rWord,
+    SwTextNode &rNode, sal_Int32 nBegin, sal_Int32 nLen)
+{
+    // not a text with hyperlink
+    if ( !rNode.GetTextAttrAt(nBegin, RES_TXTATR_INETFMT) )
+        return false;
+
+    // there is a dot in the word, wich is not a period ("example.org")
+    const size_t nPosAt = rWord.find('.');
+    if (nPosAt != std::u16string_view::npos && nPosAt < rWord.length() - 1)
+        return true;
+
+    // an e-mail address ("user@example")
+    if ( rWord.find('@') != std::u16string_view::npos )
+        return true;
+
+    const OUString& rText = rNode.GetText();
+
+    // scheme (e.g. "http" in "http://" or "mailto" in "mailto:address"):
+    // word is followed by 1) ':' + an alphanumeric character; 2) or ':' + a delimiter
+    if ( nBegin + nLen + 2 <= rText.getLength() && ':' == rText[nBegin + nLen] )
+    {
+         sal_Unicode c = rText[nBegin + nLen + 1];
+         if ( u_isalnum(c) || lcl_IsDelim(c) )
+             return true;
+    }
+
+    // path, query, fragment (e.g. "path" in "example.org/path"):
+    // word is preceded by 1) an alphanumeric character + a delimiter; 2) or two delimiters
+    if ( 2 <= nBegin && lcl_IsDelim(rText[nBegin - 1]) )
+    {
+        sal_Unicode c = rText[nBegin - 2];
+        if ( u_isalnum(c) || lcl_IsDelim(c) )
+            return true;
+    }
+
+    return false;
+}
+
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
  * only for deleted redlines
@@ -992,15 +1040,13 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
         {
             const OUString& rWord = aScanner.GetWord();
 
-            // skip URLs
-            bool bHyperlink = GetTextAttrAt(aScanner.GetBegin(), RES_TXTATR_INETFMT) ? true: false;
-
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( GetTextNode()->GetDoc(), pArgs->xSpeller, eActLang );
 
-            if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang && !bHyperlink )
+            if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang &&
+                !lcl_IsURL(rWord, *this, aScanner.GetBegin(), aScanner.GetLen() ) )
             {
                 if (pArgs->xSpeller.is())
                 {
@@ -1304,11 +1350,8 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( rDoc, xSpell, eActLang );
 
-            // skip URLs
-            bool bHyperlink = pNode->GetTextAttrAt(nBegin, RES_TXTATR_INETFMT) ? true: false;
-
             bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
-            if( bSpell && !rWord.isEmpty() && !bHyperlink )
+            if( bSpell && !rWord.isEmpty() && !lcl_IsURL(rWord, *pNode, nBegin, nLen) )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
