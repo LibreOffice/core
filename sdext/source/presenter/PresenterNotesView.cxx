@@ -37,6 +37,7 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -375,6 +376,15 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
 }
 
 void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent&) {}
+
+sal_Int64 PresenterNotesView::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & PresenterNotesView::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
+}
 
 
 void PresenterNotesView::Layout()

@@ -24,6 +24,7 @@
 #include "PresenterPaneContainer.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
@@ -792,7 +793,7 @@ NotesFontSizeCommand::NotesFontSizeCommand(
     if (!pDescriptor)
         return nullptr;
 
-    return dynamic_cast<PresenterNotesView*>(pDescriptor->mxView.get());
+    return comphelper::getFromUnoTunnel<PresenterNotesView>(pDescriptor->mxView);
 }
 
 void NotesFontSizeCommand::Execute()

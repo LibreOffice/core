@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
@@ -513,7 +514,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     if (pNotesPane)
         xNotesView = pNotesPane->mxView;
     rtl::Reference<PresenterNotesView> pNotesView (
-        dynamic_cast<PresenterNotesView*>(xNotesView.get()));
+        comphelper::getFromUnoTunnel<PresenterNotesView>(xNotesView));
 
     UpdateAccessibilityHierarchy(
         pPreviewPane ? pPreviewPane->mxContentWindow : Reference<awt::XWindow>(),
