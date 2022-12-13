@@ -14,7 +14,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cppunit,$(CPPUNIT_TARBALL),,cppunit
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,cppunit))
 
 # * external/cppunit/order.patch.0 upstreamed at <https://gerrit.libreoffice.org/c/cppunit/+/123963>
-#   "Run tests in deterministic order":
+#   "Run tests in deterministic order";
+# * external/cppunit/propagate-exceptions.patch.0 upstreamed at
+#   <https://gerrit.libreoffice.org/c/cppunit/+/144074> "Introduce CPPUNIT_PROPAGATE_EXCEPTIONS
+#   environment variable":
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows.patch \
 	external/cppunit/unix.patch \
