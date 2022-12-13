@@ -15,9 +15,11 @@
 #include <sal/log.hxx>
 
 #include <ndtxt.hxx>
+#include <unotextrange.hxx>
 
 #include "vbacontentcontrol.hxx"
 #include "vbacontentcontrollistentries.hxx"
+#include "vbarange.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -569,8 +571,21 @@ sal_Bool SwVbaContentControl::getShowingPlaceholderText()
 
 uno::Reference<word::XRange> SwVbaContentControl::getRange()
 {
-    SAL_INFO("sw.vba", "SwVbaContentControl::getRange stub");
-    return uno::Reference<word::XRange>();
+    uno::Reference<word::XRange> xRet;
+    SwTextNode* pTextNode = m_rCC.GetTextNode();
+    if (pTextNode)
+    {
+        // Don't select the text attribute itself at the start.
+        SwPosition aStart(*pTextNode, m_rCC.GetStart() + 1);
+        // Don't select the CH_TXTATR_BREAKWORD itself at the end.
+        SwPosition aEnd(*pTextNode, *m_rCC.End() - 1);
+        uno::Reference<text::XTextRange> xText(
+            SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), aStart, &aEnd));
+        if (xText.is())
+            xRet = new SwVbaRange(mxParent, mxContext, mxTextDocument, xText->getStart(),
+                                  xText->getEnd());
+    }
+    return xRet;
 }
 
 OUString SwVbaContentControl::getRepeatingSectionItemTitle()
