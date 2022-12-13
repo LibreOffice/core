@@ -169,4 +169,40 @@ frog, dogg, catt"""
             # This was "Baaed HTTP://www.baaad.org baaad baaad" (spelling URLs)
             self.assertEqual("Baaed http://www.baaad.org baaed baaad", output_text)
 
+    def test_tdf45949(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
+
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            cursor = document.getCurrentController().getViewCursor()
+            # Inserted text must be en_US, so make sure to set language in current location
+            cursor.CharLocale = Locale("en", "US", "")
+
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xEdit = xMainWindow.getChild("writer_edit")
+
+            # URL is recognized during typing
+            type_text(xEdit, "baaad http://www.baaad.org baaad")
+
+            # add spaces before and after the word "baaad" within the URL
+            cursor.goLeft(10, False)
+            type_text(xEdit, " ")
+            cursor.goLeft(6, False)
+            type_text(xEdit, " ")
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+                checkgrammar = xDialog.getChild('checkgrammar')
+                if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+                    checkgrammar.executeAction('CLICK', ())
+                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+
+                change = xDialog.getChild('change')
+                change.executeAction("CLICK", ())
+                change.executeAction("CLICK", ())
+
+            output_text = document.Text.getString()
+            # This was "Baaed HTTP://www. baaad .org baaed" (skipped non-URL words of hypertext)
+            self.assertEqual("Baaed http://www. baaed .org baaad", output_text)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
