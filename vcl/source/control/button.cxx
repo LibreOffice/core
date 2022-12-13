@@ -895,6 +895,25 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
             else
                 aColor = rStyleSettings.GetButtonTextColor();
 
+#if defined(MACOSX) || defined(IOS)
+    // tdf#152486 These are the buttons in infobars where the infobar has a custom
+    // background color and on these platforms the buttons blend with
+    // their background.
+    vcl::Window* pParent = GetParent();
+    if (pParent->get_id() == "ExtraButton")
+    {
+        while (pParent && !pParent->IsControlBackground())
+            pParent = pParent->GetParent();
+        if (pParent)
+        {
+            if (aColor.IsBright() && !pParent->GetControlBackground().IsDark())
+                aColor = COL_BLACK;
+            else if (aColor.IsDark() && !pParent->GetControlBackground().IsBright())
+                aColor = COL_WHITE;
+        }
+    }
+#endif
+
     pDev->SetTextColor(aColor);
 
     if ( IsEnabled() )
