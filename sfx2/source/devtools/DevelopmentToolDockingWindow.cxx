@@ -14,6 +14,7 @@
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -87,7 +88,7 @@ void DevelopmentToolDockingWindow::dispose()
 {
     // Stop and remove the listener
     auto* pSelectionChangeHandler
-        = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
+        = comphelper::getFromUnoTunnel<SelectionChangeHandler>(mxSelectionListener);
     if (pSelectionChangeHandler)
         pSelectionChangeHandler->stopListening();
 
