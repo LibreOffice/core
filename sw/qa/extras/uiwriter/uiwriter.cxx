@@ -58,6 +58,8 @@
 #include <iodetect.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotxdoc.hxx>
+#include <swdtflvr.hxx>
+#include <sortedobjs.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 
@@ -206,6 +208,79 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testThreadedException)
     bool bRes = TestImportFODT(aFileStream);
 
     CPPUNIT_ASSERT(!bRes);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
+{
+    createSwDoc("demo91.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // all 4 shapes are on the 2nd paragraph
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+
+    {
+        pWrtShell->Down(false);
+        pWrtShell->EndPara(/*bSelect=*/true);
+        rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+        pTransfer->Cut();
+
+        // one shape is anchored in the middle, others at the start/end/at-para
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+
+        pWrtShell->Up(false);
+        TransferableDataHelper aHelper(pTransfer);
+        SwTransferable::Paste(*pWrtShell, aHelper);
+
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+
+        pWrtShell->Undo();
+        pWrtShell->Undo();
+
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+    }
+
+    // now try the same with redlining enabled - should be the same result
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    {
+        pWrtShell->Down(false);
+        pWrtShell->SttPara(/*bSelect=*/false);
+        pWrtShell->EndPara(/*bSelect=*/true);
+        rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+        pTransfer->Cut();
+
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        // problem was that this deleted all at-char flys, even at the start/end
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+
+        pWrtShell->Up(false);
+        TransferableDataHelper aHelper(pTransfer);
+        SwTransferable::Paste(*pWrtShell, aHelper);
+
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+
+        pWrtShell->Undo();
+        pWrtShell->Undo();
+
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
+        CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
