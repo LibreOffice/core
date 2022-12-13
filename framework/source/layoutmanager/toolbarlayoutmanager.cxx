@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -668,7 +669,7 @@ bool ToolbarLayoutManager::showToolbar( std::u16string_view rResourceURL )
     // Addons appear to need to be populated at start, but we don't
     // want to populate them with (scaled) images until later.
     AddonsToolBarWrapper *pAddOns;
-    pAddOns = dynamic_cast<AddonsToolBarWrapper *>( aUIElement.m_xUIElement.get());
+    pAddOns = comphelper::getFromUnoTunnel<AddonsToolBarWrapper>( aUIElement.m_xUIElement);
     if (pAddOns)
         pAddOns->populateImages();
 

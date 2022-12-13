@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -40,7 +41,7 @@ namespace framework
 {
 
 AddonsToolBarWrapper::AddonsToolBarWrapper( const Reference< XComponentContext >& xContext ) :
-    UIElementWrapperBase( UIElementType::TOOLBAR ),
+    ImplInheritanceHelper( UIElementType::TOOLBAR ),
     m_xContext( xContext ),
     m_bCreatedImages( false )
 {
@@ -164,6 +165,15 @@ void AddonsToolBarWrapper::populateImages()
             m_bCreatedImages = true;
         }
     }
+}
+
+sal_Int64 AddonsToolBarWrapper::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & AddonsToolBarWrapper::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 } // namespace framework

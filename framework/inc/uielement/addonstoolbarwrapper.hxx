@@ -22,12 +22,15 @@
 #include <helper/uielementwrapperbase.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework
 {
 
-class AddonsToolBarWrapper final : public UIElementWrapperBase
+class AddonsToolBarWrapper final :
+    public cppu::ImplInheritanceHelper<UIElementWrapperBase, css::lang::XUnoTunnel>
 {
     public:
         AddonsToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -44,6 +47,9 @@ class AddonsToolBarWrapper final : public UIElementWrapperBase
 
         // cf. ToolbarLayoutManager
         void populateImages();
+
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     private:
         css::uno::Reference< css::uno::XComponentContext >                        m_xContext;
