@@ -187,9 +187,9 @@ SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
 
 SwContentControl::~SwContentControl() {}
 
-void SwContentControl::SetXContentControl(const rtl::Reference<SwXContentControl>& xContentCnotrol)
+void SwContentControl::SetXContentControl(const rtl::Reference<SwXContentControl>& xContentControl)
 {
-    m_wXContentControl = xContentCnotrol.get();
+    m_wXContentControl = xContentControl.get();
 }
 
 SwTextContentControl* SwContentControl::GetTextAttr() const

@@ -215,7 +215,7 @@ public:
         return m_wXContentControl;
     }
 
-    void SetXContentControl(const rtl::Reference<SwXContentControl>& xContentCnotrol);
+    void SetXContentControl(const rtl::Reference<SwXContentControl>& xContentControl);
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
