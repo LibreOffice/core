@@ -20,7 +20,7 @@ typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XContentControlListEntr
 class SwVbaContentControlListEntry : public SwVbaContentControlListEntry_BASE
 {
 private:
-    SwTextContentControl& m_rCC;
+    std::shared_ptr<SwContentControl> m_pCC;
     // All LO and internal UNO functions are 0-based. Convert to 1-based when sending to VBA
     size_t m_nZIndex;
 
@@ -28,7 +28,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaContentControlListEntry(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                                  const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                                 SwTextContentControl& rCC, size_t nZIndex);
+                                 std::shared_ptr<SwContentControl> pCC, size_t nZIndex);
     ~SwVbaContentControlListEntry() override;
 
     // XContentControlListEntry
