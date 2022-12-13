@@ -2538,6 +2538,16 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     if (!xObj.is())
     {
         SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: no object");
+
+        // tdf#152436 Export the preview graphic of the object if the object is missing.
+        SdrObject* pSdrOLE2(SdrObject::getSdrObjectFromXShape(xShape));
+        if (auto pOle2Obj = dynamic_cast<SdrOle2Obj*>(pSdrOLE2))
+        {
+            const Graphic* pGraphic = pOle2Obj->GetGraphic();
+            if (pGraphic)
+                WriteGraphicObjectShapePart(xShape, pGraphic);
+        }
+
         return *this;
     }
 
