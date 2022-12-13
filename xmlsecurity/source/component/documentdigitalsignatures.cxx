@@ -72,9 +72,9 @@ using namespace css::xml::crypto;
 
 namespace {
 class DocumentDigitalSignatures
-    : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
-                                  css::lang::XInitialization, css::lang::XServiceInfo>,
-      public sfx2::DigitalSignatures
+    : public cppu::ImplInheritanceHelper<sfx2::DigitalSignatures,
+                                         css::security::XDocumentDigitalSignatures,
+                                         css::lang::XInitialization, css::lang::XServiceInfo>
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
