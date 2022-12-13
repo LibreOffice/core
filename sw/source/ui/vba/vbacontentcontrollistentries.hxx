@@ -24,13 +24,13 @@ typedef CollTestImplHelper<ooo::vba::word::XContentControlListEntries>
 class SwVbaContentControlListEntries : public SwVbaContentControlListEntries_BASE
 {
 private:
-    SwTextContentControl& m_rCC;
+    std::shared_ptr<SwContentControl> m_pCC;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaContentControlListEntries(const css::uno::Reference<ov::XHelperInterface>& xParent,
                                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
-                                   SwTextContentControl& rCC);
+                                   std::shared_ptr<SwContentControl> pCC);
 
     // XContentControlListEntries
     css::uno::Reference<ooo::vba::word::XContentControlListEntry> SAL_CALL
