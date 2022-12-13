@@ -762,11 +762,17 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::TabPane )
     {
         // tabpane in tabcontrols gets drawn in "darkmode" as if it was a
-        // a "light" theme, so bodge this by drawing with a button instead
+        // a "light" theme, so bodge this by drawing a frame directly
         if (UseDarkMode())
-            iPart = BP_PUSHBUTTON;
-        else
-            iPart = TABP_PANE;
+        {
+            Color aColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                     aColor.GetGreen(),
+                                                     aColor.GetBlue())));
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+        iPart = TABP_PANE;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -804,7 +810,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iPart = TABP_TABITEMLEFTEDGE;
         else if (rValue.isRightAligned())
             iPart = TABP_TABITEMRIGHTEDGE;
-        else iPart = TABP_TABITEM;
+        else
+            iPart = TABP_TABITEM;
 
         if( !(nState & ControlState::ENABLED) )
             iState = TILES_DISABLED;
@@ -834,25 +841,31 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         // a "light" theme, so bodge this by drawing with a button instead
         if (UseDarkMode())
         {
-            iPart = BP_PUSHBUTTON;
-            switch (iState)
-            {
-                case TILES_DISABLED:
-                    iState = PBS_DISABLED;
-                    break;
-                case TILES_SELECTED:
-                    iState = PBS_DEFAULTED;
-                    break;
-                case TILES_HOT:
-                    iState = PBS_HOT;
-                    break;
-                case TILES_FOCUSED:
-                    iState = PBS_PRESSED;
-                    break;
-                default:
-                    iState = PBS_NORMAL;
-                    break;
-            }
+            Color aColor;
+            if (iState == TILES_SELECTED)
+                aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
+            else
+                aColor = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                     aColor.GetGreen(),
+                                                     aColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            aColor = Application::GetSettings().GetStyleSettings().GetDisableColor();
+            ScopedSelectedHPEN hPen(hDC, CreatePen(PS_SOLID, 1, RGB(aColor.GetRed(),
+                                                                    aColor.GetGreen(),
+                                                                    aColor.GetBlue())));
+            POINT apt[4];
+            apt[0].x = rc.left;
+            apt[0].y = rc.bottom - (iPart == TABP_TABITEMLEFTEDGE ? 1 : 2);
+            apt[1].x = rc.left;
+            apt[1].y = rc.top;
+            apt[2].x = rc.right;
+            apt[2].y = rc.top;
+            apt[3].x = rc.right;
+            apt[3].y = rc.bottom - 1;
+            Polyline(hDC, apt, SAL_N_ELEMENTS(apt));
+            return true;
         }
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -1195,14 +1208,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             break;
         case ControlType::TabPane:
         case ControlType::TabItem:
-            if (bUseDarkMode)
-            {
-                // tabitem in tabcontrols gets drawn in "darkmode" as if it was a
-                // a "light" theme, so bodge this by drawing with a button instead
-                hTheme = getThemeHandle(mhWnd, L"Button", mWinSalGraphicsImplBase);
-            }
-            else
-                hTheme = getThemeHandle(mhWnd, L"Tab", mWinSalGraphicsImplBase);
+            hTheme = getThemeHandle(mhWnd, L"Tab", mWinSalGraphicsImplBase);
             break;
         case ControlType::Toolbar:
             if( nPart == ControlPart::Entire || nPart == ControlPart::Button )
