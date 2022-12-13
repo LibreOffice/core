@@ -213,7 +213,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     if (rWrtSh.HasSelection() && rWrtSh.IsSelFullPara())
     {
         pColl = rWrtSh.GetCurTextFormatColl();
-        if ( pColl && !pColl->IsAutoUpdateFormat() )
+        if ( pColl && !pColl->IsAutoUpdateOnDirectFormat() )
             pColl = nullptr;
     }
     SfxItemPool& rPool = GetPool();
@@ -444,7 +444,7 @@ SET_LINESPACE:
     }
     SwWrtShell& rWrtSh = GetShell();
     SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
-    if(pColl && pColl->IsAutoUpdateFormat())
+    if(pColl && pColl->IsAutoUpdateOnDirectFormat())
     {
         rWrtSh.AutoUpdatePara(pColl, aSet);
     }

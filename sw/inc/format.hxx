@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
                                        default is true! */
     bool   m_bFormatInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
                                        to recognize this in FormatChg-message!! */
-    bool   m_bAutoUpdateFormat : 1;/**< TRUE: Set attributes of a whole paragraph
+    bool   m_bAutoUpdateOnDirectFormat : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool m_bHidden : 1;
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
@@ -184,9 +184,9 @@ public:
     void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);
 
-    /// Query / set bAutoUpdateFormat-flag.
-    bool IsAutoUpdateFormat() const                { return m_bAutoUpdateFormat; }
-    void SetAutoUpdateFormat( bool bNew = true )   { m_bAutoUpdateFormat = bNew; }
+    /// Query / set m_bAutoUpdateOnDirectFormat-flag.
+    bool IsAutoUpdateOnDirectFormat() const                { return m_bAutoUpdateOnDirectFormat; }
+    void SetAutoUpdateOnDirectFormat( bool bNew = true )   { m_bAutoUpdateOnDirectFormat = bNew; }
 
     bool IsFormatInDTOR() const { return m_bFormatInDTOR; }
 

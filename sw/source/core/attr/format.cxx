@@ -46,7 +46,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
     m_nPoolHelpId( USHRT_MAX ),
     m_nPoolHlpFileId( UCHAR_MAX )
 {
-    m_bAutoUpdateFormat = false; // LAYER_IMPL
+    m_bAutoUpdateOnDirectFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
     m_bFormatInDTOR = m_bHidden = false;
 
@@ -67,7 +67,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, OUString aFormatNm,
     m_nPoolHelpId( USHRT_MAX ),
     m_nPoolHlpFileId( UCHAR_MAX )
 {
-    m_bAutoUpdateFormat = false; // LAYER_IMPL
+    m_bAutoUpdateOnDirectFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
     m_bFormatInDTOR = m_bHidden = false;
 
@@ -90,7 +90,7 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_bFormatInDTOR = false; // LAYER_IMPL
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
-    m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
+    m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
 
     if( auto pDerived = rFormat.DerivedFrom() )
     {
@@ -138,7 +138,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
-    m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
+    m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
     return *this;
 }
 

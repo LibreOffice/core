@@ -439,7 +439,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 // Templates AutoUpdate
                 SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
-                if(pFormat && pFormat->IsAutoUpdateFormat())
+                if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
                 {
                     pFormat->SetFormatAttr(*pSet);
                     SfxItemSetFixed<

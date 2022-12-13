@@ -238,7 +238,7 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
     aTmpSet.ClearItem(FN_PARAM_SELECTION);
 
     SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
-    if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFormat())
+    if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateOnDirectFormat())
     {
         rWrtSh.AutoUpdatePara(pColl, aTmpSet);
     }
@@ -289,7 +289,7 @@ static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRe
         rWrtSh.SetAttrSet(*pSet, SetAttrMode::DEFAULT, pPaM);
         rWrtSh.EndAction();
         SwTextFormatColl* pColl = rWrtSh.GetPaMTextFormatColl(pPaM);
-        if(pColl && pColl->IsAutoUpdateFormat())
+        if(pColl && pColl->IsAutoUpdateOnDirectFormat())
         {
             rWrtSh.AutoUpdatePara(pColl, *pSet, pPaM);
         }

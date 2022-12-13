@@ -1680,7 +1680,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aProtect.SetPosProtect( true );
             aSet.Put( aProtect );
 
-            pNewFormat->SetAutoUpdateFormat();
+            pNewFormat->SetAutoUpdateOnDirectFormat();
         }
         break;
     }

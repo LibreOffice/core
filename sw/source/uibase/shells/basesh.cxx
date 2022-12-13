@@ -2279,7 +2279,7 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                  ( rSh.HasSelection() && rSh.IsSelFullPara() ) )
             {
                 SwTextFormatColl * pColl = rSh.GetCurTextFormatColl();
-                if ( pColl && pColl->IsAutoUpdateFormat() )
+                if ( pColl && pColl->IsAutoUpdateOnDirectFormat() )
                 {
                     rSh.AutoUpdatePara( pColl, *pArgs );
                     bAuto = true;
@@ -2568,7 +2568,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             // Template autoupdate
             SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
 
-            if(pFormat && pFormat->IsAutoUpdateFormat())
+            if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
             {
                 rSh.AutoUpdateFrame(pFormat, aCoreSet);
             }
@@ -2581,7 +2581,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         {
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
 
-            if(pColl && pColl->IsAutoUpdateFormat())
+            if(pColl && pColl->IsAutoUpdateOnDirectFormat())
             {
                 rSh.AutoUpdatePara(pColl, aCoreSet);
             }

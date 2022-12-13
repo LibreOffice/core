@@ -645,7 +645,7 @@ void MSWordStyles::OutputStyle( const SwFormat* pFormat, sal_uInt16 nSlot)
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nSlot,
-                pFormat->IsAutoUpdateFormat() );
+                pFormat->IsAutoUpdateOnDirectFormat() );
 
         if ( bFormatColl )
             WriteProperties( pFormat, true, nSlot, nBase==0xfff );           // UPX.papx

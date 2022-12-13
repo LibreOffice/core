@@ -640,7 +640,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             ::MakeDefTabs( ::GetTabDist( rDefTabs ), aTabStops );
 
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
-            if( pColl && pColl->IsAutoUpdateFormat() )
+            if( pColl && pColl->IsAutoUpdateOnDirectFormat() )
             {
                 SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP> aTmp(GetPool());
                 aTmp.Put(aTabStops);
@@ -769,7 +769,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 aParaMargin.SetWhich( nSlot );
                 GetViewFrame()->GetBindings().SetState( aParaMargin );
             }
-            else if( pColl && pColl->IsAutoUpdateFormat() )
+            else if( pColl && pColl->IsAutoUpdateOnDirectFormat() )
             {
                 SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aSet(GetPool());
                 aSet.Put(aParaMargin);
@@ -805,7 +805,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
                     ::MakeDefTabs( ::GetTabDist(rDefTabs), *aTabStops );
 
-                    if( pColl && pColl->IsAutoUpdateFormat())
+                    if( pColl && pColl->IsAutoUpdateOnDirectFormat())
                     {
                         SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP> aSetTmp(GetPool());
                         aSetTmp.Put(std::move(aTabStops));
@@ -828,7 +828,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
             aParaMargin.SetWhich( RES_UL_SPACE );
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
-            if( pColl && pColl->IsAutoUpdateFormat() )
+            if( pColl && pColl->IsAutoUpdateOnDirectFormat() )
             {
                 SfxItemSetFixed<RES_UL_SPACE, RES_UL_SPACE> aSet(GetPool());
                 aSet.Put(aParaMargin);
@@ -862,7 +862,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             aULSpace.SetLower( nLower );
 
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
-            if( pColl && pColl->IsAutoUpdateFormat() )
+            if( pColl && pColl->IsAutoUpdateOnDirectFormat() )
             {
                 aULSpaceSet.Put( aULSpace );
                 rSh.AutoUpdatePara( pColl, aULSpaceSet );

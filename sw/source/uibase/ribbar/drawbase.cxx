@@ -297,7 +297,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     aSet.Put(aCol);
                     // Template AutoUpdate
                     SwFrameFormat* pFormat = m_pSh->GetSelectedFrameFormat();
-                    if(pFormat && pFormat->IsAutoUpdateFormat())
+                    if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
                         m_pSh->AutoUpdateFrame(pFormat, aSet);
                     else
                         m_pSh->SetFlyFrameAttr( aSet );

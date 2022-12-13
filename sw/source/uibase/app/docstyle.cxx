@@ -1359,7 +1359,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                     OSL_ENSURE(m_pColl, "Where's Collection");
                     m_aCoreSet.Put(m_pColl->GetAttrSet());
                     m_aCoreSet.Put( aBoxInfo );
-                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pColl->IsAutoUpdateFormat()));
+                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pColl->IsAutoUpdateOnDirectFormat()));
 
                     if(m_pColl->DerivedFrom())
                         m_aCoreSet.SetParent(&m_pColl->DerivedFrom()->GetAttrSet());
@@ -1369,7 +1369,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                     OSL_ENSURE(m_pFrameFormat, "Where's FrameFormat");
                     m_aCoreSet.Put(m_pFrameFormat->GetAttrSet());
                     m_aCoreSet.Put( aBoxInfo );
-                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pFrameFormat->IsAutoUpdateFormat()));
+                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pFrameFormat->IsAutoUpdateOnDirectFormat()));
 
                     if(m_pFrameFormat->DerivedFrom())
                         m_aCoreSet.SetParent(&m_pFrameFormat->DerivedFrom()->GetAttrSet());
@@ -1485,7 +1485,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             OSL_ENSURE(m_pColl, "Where's Collection");
             if(const SfxBoolItem* pAutoUpdate = rSet.GetItemIfSet(SID_ATTR_AUTO_STYLE_UPDATE,false))
             {
-                m_pColl->SetAutoUpdateFormat(pAutoUpdate->GetValue());
+                m_pColl->SetAutoUpdateOnDirectFormat(pAutoUpdate->GetValue());
             }
 
             const SwCondCollItem* pCondItem = rSet.GetItemIfSet( FN_COND_COLL, false );
@@ -1605,7 +1605,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
             if(const SfxPoolItem* pAutoUpdate = rSet.GetItemIfSet(SID_ATTR_AUTO_STYLE_UPDATE,false))
             {
-                m_pFrameFormat->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
+                m_pFrameFormat->SetAutoUpdateOnDirectFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }
             pFormat = m_pFrameFormat;
         }

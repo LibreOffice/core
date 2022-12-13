@@ -192,7 +192,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(aCol);
                 // Template AutoUpdate
                 SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
-                if(pFormat && pFormat->IsAutoUpdateFormat())
+                if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
                 {
                     rSh.AutoUpdateFrame(pFormat, aSet);
                 }
@@ -557,7 +557,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                         // Template AutoUpdate
                         SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
-                        if(pFormat && pFormat->IsAutoUpdateFormat())
+                        if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
                         {
                             rSh.AutoUpdateFrame(pFormat, *pOutSet);
                             // Anything which is not supported by the format must be set hard.
@@ -714,7 +714,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     if ( bUpdateMgr )
     {
         SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
-        if ( bCopyToFormat && pFormat && pFormat->IsAutoUpdateFormat() )
+        if ( bCopyToFormat && pFormat && pFormat->IsAutoUpdateOnDirectFormat() )
         {
             rSh.AutoUpdateFrame(pFormat, aMgr.GetAttrSet());
         }
@@ -1244,7 +1244,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     aFrameSet.Put( std::move(aBoxItem) );
     // Template AutoUpdate
     SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
-    if(pFormat && pFormat->IsAutoUpdateFormat())
+    if(pFormat && pFormat->IsAutoUpdateOnDirectFormat())
     {
         rSh.AutoUpdateFrame(pFormat, aFrameSet);
     }

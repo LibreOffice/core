@@ -1862,9 +1862,9 @@ void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertyMapE
         throw lang::IllegalArgumentException();
     const bool bAuto(rValue.get<bool>());
     if(SfxStyleFamily::Para == m_rEntry.m_eFamily)
-        o_rStyleBase.getNewBase()->GetCollection()->SetAutoUpdateFormat(bAuto);
+        o_rStyleBase.getNewBase()->GetCollection()->SetAutoUpdateOnDirectFormat(bAuto);
     else if(SfxStyleFamily::Frame == m_rEntry.m_eFamily)
-        o_rStyleBase.getNewBase()->GetFrameFormat()->SetAutoUpdateFormat(bAuto);
+        o_rStyleBase.getNewBase()->GetFrameFormat()->SetAutoUpdateOnDirectFormat(bAuto);
 }
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -2238,8 +2238,8 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemProperty
     PrepareStyleBase(rBase);
     switch(GetFamily())
     {
-        case SfxStyleFamily::Para : return uno::Any(rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat());
-        case SfxStyleFamily::Frame: return uno::Any(rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat());
+        case SfxStyleFamily::Para : return uno::Any(rBase.getNewBase()->GetCollection()->IsAutoUpdateOnDirectFormat());
+        case SfxStyleFamily::Frame: return uno::Any(rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateOnDirectFormat());
         default: return uno::Any();
     }
 }
