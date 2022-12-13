@@ -128,7 +128,7 @@ static bool lcl_IsURL(std::u16string_view rWord,
     if ( !rNode.GetTextAttrAt(nBegin, RES_TXTATR_INETFMT) )
         return false;
 
-    // there is a dot in the word, wich is not a period ("example.org")
+    // there is a dot in the word, which is not a period ("example.org")
     const size_t nPosAt = rWord.find('.');
     if (nPosAt != std::u16string_view::npos && nPosAt < rWord.length() - 1)
         return true;
