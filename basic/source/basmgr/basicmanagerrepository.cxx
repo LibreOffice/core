@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -462,7 +463,7 @@ namespace basic
         }
 
         // knit the containers with the BasicManager
-        LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< SfxScriptLibraryContainer* >( xBasicLibs.get() ) );
+        LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, comphelper::getFromUnoTunnel< SfxScriptLibraryContainer >( xBasicLibs ) );
         OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
         _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
 

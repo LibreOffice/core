@@ -21,15 +21,18 @@
 
 #include "namecont.hxx"
 #include <basic/basmgr.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 namespace basic
 {
 
 
-class SfxScriptLibraryContainer final : public SfxLibraryContainer
+class SfxScriptLibraryContainer final :
+    public cppu::ImplInheritanceHelper<SfxLibraryContainer, css::lang::XUnoTunnel>
 {
     css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
@@ -99,6 +102,9 @@ public:
 
     // Library password handling for 5.0 documents
     void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword );
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 };
 
 
