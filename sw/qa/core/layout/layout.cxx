@@ -862,9 +862,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
-    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
     SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
-    SfxItemSet aGrfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
     aFrameSet.Put(aAnchor);
     SwFormatSurround aSurround(text::WrapTextMode_THROUGH);
@@ -874,11 +872,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     SwFormatFollowTextFlow aFlow(true);
     aFrameSet.Put(aFlow);
     Graphic aGrf;
-    rIDCO.InsertGraphic(*pWrtShell->GetCursor(), OUString(), OUString(), &aGrf, &aFrameSet,
-                        &aGrfSet, nullptr);
 
-    // When laying out that document:
-    calcLayout();
+    // When inserting that image:
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
 
     // Then make sure that the cell height grows to have space for the graphic, given that
     // background=true is not specified.
