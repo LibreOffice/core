@@ -62,19 +62,9 @@ lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
 
 bool lcl_SuffixIsUser(const OUString & rString)
 {
-    const sal_Unicode *pChar = rString.getStr();
-    sal_Int32 nLen = rString.getLength();
-    bool bRet = false;
-    if( nLen > 8 &&
-        pChar[nLen-7] == ' ' &&
-        pChar[nLen-6] == '(' &&
-        pChar[nLen-5] == 'u' &&
-        pChar[nLen-4] == 's' &&
-        pChar[nLen-3] == 'e' &&
-        pChar[nLen-2] == 'r' &&
-        pChar[nLen-1] == ')' )
-        bRet = true;
-    return bRet;
+    // Interesting, why the rest must be longer than 1 character? It is so
+    // since commit 4fbc9dd48b7cebb304010e7337b1bbc3936c7923 (2001-08-16)
+    return rString.getLength() > 8 && rString.endsWith(" (user)");
 }
 
 void lcl_CheckSuffixAndDelete(OUString & rString)
