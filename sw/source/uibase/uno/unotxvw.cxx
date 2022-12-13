@@ -550,6 +550,11 @@ SwXTextView::createTextRangeByPixelPosition(const awt::Point& rPixelPosition)
             {
                 aPosition = *pAnchor;
             }
+            else
+            {
+                // Page-anchored graphics have no anchor.
+                return {};
+            }
         }
     }
 
