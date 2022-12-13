@@ -36,6 +36,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -94,7 +95,8 @@ typedef cppu::WeakComponentImplHelper<
            css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
-           css::frame::XUntitledNumbers > Desktop_BASE;
+           css::frame::XUntitledNumbers,
+           css::lang::XUnoTunnel > Desktop_BASE;
 
 class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
                 public Desktop_BASE,
@@ -286,6 +288,9 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         bool terminateQuickstarterToo();
 
         void shutdown();
+
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     private:
         //  OPropertySetHelper

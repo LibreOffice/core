@@ -50,6 +50,7 @@
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -333,6 +334,15 @@ void Desktop::shutdown()
     // Because it shuts down the whole process asynchronous!
     if (xSfxTerminator.is())
         xSfxTerminator->notifyTermination(aEvent);
+}
+
+sal_Int64 Desktop::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & Desktop::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 namespace
