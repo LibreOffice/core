@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "spritecanvas.hxx"
 #include "outdevholder.hxx"
@@ -159,6 +160,10 @@ namespace vclcanvas
     sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
     {
         return cppu::supportsService(this, sServiceName);
+    }
+
+    sal_Int64 SpriteCanvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+        return comphelper::getSomethingImpl(aIdentifier, static_cast<RepaintTarget *>(this));
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,

@@ -23,6 +23,7 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "cachedbitmap.hxx"
 #include "repainttarget.hxx"
@@ -70,7 +71,7 @@ namespace vclcanvas
         if( rNewState.Clip != rOldState.Clip )
             return rendering::RepaintResult::FAILED;
 
-        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
+        RepaintTarget* pTarget = comphelper::getFromUnoTunnel< RepaintTarget >(rTargetCanvas);
 
         ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );

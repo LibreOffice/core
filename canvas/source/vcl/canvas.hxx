@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -48,7 +49,8 @@ namespace vclcanvas
                                              css::lang::XMultiServiceFactory,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
-                                             css::lang::XServiceName >    GraphicDeviceBase_Base;
+                                             css::lang::XServiceName,
+                                             css::lang::XUnoTunnel>    GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                            DeviceHelper,
                                            tools::LocalGuard,
@@ -95,6 +97,9 @@ namespace vclcanvas
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override;
+
+        // XUnoTunnel
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,

@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
@@ -57,7 +58,8 @@ namespace vclcanvas
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
-                                             css::lang::XServiceInfo >    WindowGraphicDeviceBase_Base;
+                                             css::lang::XServiceInfo,
+                                             css::lang::XUnoTunnel >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                  SpriteDeviceHelper,
                                                  tools::LocalGuard,
@@ -137,6 +139,9 @@ namespace vclcanvas
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+
+        // XUnoTunnel
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
