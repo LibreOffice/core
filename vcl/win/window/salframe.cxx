@@ -2677,6 +2677,12 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aMenuBarRolloverTextColor = ImplWinColorToSal( color );
         CloseThemeData(hTheme);
 
+        aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
+        hTheme = OpenThemeData(mhWnd, L"Toolbar");
+        GetThemeColor(hTheme, 0, 0, TMT_FILLCOLOR, &color);
+        aStyleSettings.SetInactiveTabColor( ImplWinColorToSal( color ) );
+        CloseThemeData(hTheme);
+
         // tdf#148448 pick a warning color more likely to be readable as a
         // background in a dark theme
         aStyleSettings.SetWarningColor(Color(0xf5, 0x79, 0x00));
@@ -2694,6 +2700,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aMenuBarTextColor = ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) );
         aMenuBarRolloverTextColor = aHighlightTextColor;
+        aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
+        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     }
 
     if ( std::optional<Color> aColor = aStyleSettings.GetPersonaMenuBarTextColor() )
@@ -2705,7 +2713,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuBarTextColor( aMenuBarTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarRolloverTextColor );
 
-    aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
     aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
@@ -2747,7 +2754,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
-    aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetListBoxWindowBackgroundColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
