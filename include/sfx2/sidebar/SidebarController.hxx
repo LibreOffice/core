@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
@@ -48,7 +49,8 @@ typedef comphelper::WeakComponentImplHelper <
     css::beans::XPropertyChangeListener,
     css::ui::XSidebar,
     css::frame::XStatusListener,
-    css::frame::XFrameActionListener
+    css::frame::XFrameActionListener,
+    css::lang::XUnoTunnel
     > SidebarControllerInterfaceBase;
 
 class SfxSplitWindow;
@@ -174,6 +176,9 @@ public:
     bool hasChartOrMathContextCurrently() const;
 
     static SidebarController* GetSidebarControllerForView(const SfxViewShell* pViewShell);
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
