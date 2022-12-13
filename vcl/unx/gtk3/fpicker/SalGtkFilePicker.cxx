@@ -1007,6 +1007,10 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                                 aMsg.getStr()
                             );
 
+                            GtkWidget* pOkButton = gtk_dialog_get_widget_for_response(GTK_DIALOG(dlg), GTK_RESPONSE_YES);
+                            GtkStyleContext* pStyleContext = gtk_widget_get_style_context(pOkButton);
+                            gtk_style_context_add_class(pStyleContext, "destructive-action");
+
                             sal_Int32 nSegmentCount = aFileObj.getSegmentCount();
                             if (nSegmentCount >= 2)
                             {
