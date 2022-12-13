@@ -819,7 +819,7 @@ OUString AquaSalInstance::GetDefaultPrinter()
             {
                 // Related: tdf#151700 Return the name of the fake printer if
                 // there are no printers so that the LibreOffice printing code
-                // will be able to find the the fake printer returned by
+                // will be able to find the fake printer returned by
                 // AquaSalInstance::GetPrinterQueueInfo()
                 NSString* pDefName = [pPr name];
                 SAL_WARN_IF( !pDefName, "vcl", "printer has no name" );
