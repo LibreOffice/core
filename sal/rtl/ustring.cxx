@@ -194,10 +194,10 @@ sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* p
     const char*     pStr2Run = pStr2+nStrLen;
     while ( pStr1 < pStr1Run )
     {
-        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
-                    "rtl_ustr_asciil_reverseEquals_WithLength - Found char > 127" );
         pStr1Run--;
         pStr2Run--;
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2Run)), "rtl.string",
+                    "rtl_ustr_asciil_reverseEquals_WithLength - Found char > 127" );
         if( *pStr1Run != static_cast<sal_Unicode>(*pStr2Run) )
             return false;
     }
