@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <xmlsec-wrapper.h>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>
 
@@ -77,7 +78,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     }
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
+        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -281,7 +282,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         throw RuntimeException() ;
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
+        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr )
         throw RuntimeException() ;
 
