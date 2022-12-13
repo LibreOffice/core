@@ -136,7 +136,7 @@ $(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
 
 $(call gb_Gallery_get_workdir,$(1))/$(1).str : $(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 
-# oder-only, the Gallery-Target also makes those files
+# order-only, the Gallery-Target also makes those files
 $(addprefix $(call gb_Gallery_get_workdir,$(1))/$(1),.sdg .sdv .thm): | $(call gb_Gallery_get_target,$(1))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
 
