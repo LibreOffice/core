@@ -38,6 +38,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -338,7 +339,7 @@ namespace pcr
         OUString sUIFile("modules/spropctrlr/ui/formproperties.ui");
         std::unique_ptr<weld::Builder> xBuilder;
 
-        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xContainerWindow.get()))
+        if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xContainerWindow))
         {
             xBuilder = Application::CreateBuilder(pTunnel->getWidget(), sUIFile);
         }
@@ -1107,7 +1108,7 @@ namespace pcr
 
             // for ui-testing try and distinguish different instances of the controls
             auto xWindow = _rDescriptor.Control->getControlWindow();
-            if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
+            if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xWindow))
             {
                 weld::Widget* m_pControlWindow = pTunnel->getWidget();
                 if (m_pControlWindow)

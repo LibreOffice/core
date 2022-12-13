@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/weldutils.hxx>
 
@@ -61,7 +62,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         Reference<css::frame::XController> xController (aArguments.getOrDefault("Controller", Reference<css::frame::XController>()));
 
         weld::Widget* pParent(nullptr);
-        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
             pParent = pTunnel->getWidget();
 
         if (!pParent)

@@ -67,7 +67,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     // Throw exceptions when the arguments are not as expected.
     weld::Widget* pParent(nullptr);
-    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+    if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
         pParent = pTunnel->getWidget();
 
     if (!pParent)

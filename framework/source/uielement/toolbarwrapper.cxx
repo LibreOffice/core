@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -153,7 +154,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
             m_xToolBarManager = pToolBarManager;
             pToolBar->WillUsePopupMode( bPopupMode );
         }
-        else if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        else if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
         {
             m_xBuilder = Application::CreateBuilder(pTunnel->getWidget(), "svt/ui/managedtoolbar.ui");
             m_xTopLevel = m_xBuilder->weld_container("toolbarcontainer");

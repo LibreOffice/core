@@ -30,6 +30,7 @@
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -291,8 +292,9 @@ namespace pcr
     std::unique_ptr<weld::Builder> PropertyHandlerHelper::makeBuilder(const OUString& rUIFile, const Reference<XComponentContext>& rContext)
     {
         Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
-        weld::TransportAsXWindow& rTunnel = dynamic_cast<weld::TransportAsXWindow&>(*xWindow);
-        return Application::CreateBuilder(rTunnel.getWidget(), rUIFile);
+        weld::TransportAsXWindow* rTunnel
+            = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xWindow);
+        return Application::CreateBuilder(rTunnel->getWidget(), rUIFile);
     }
 
     void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)

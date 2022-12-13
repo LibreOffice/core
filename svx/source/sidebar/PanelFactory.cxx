@@ -42,6 +42,7 @@
 #include <vcl/weldutils.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/compbase.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -102,7 +103,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     weld::Widget* pParent(nullptr);
-    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+    if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
         pParent = pTunnel->getWidget();
 
     if (!pParent)
