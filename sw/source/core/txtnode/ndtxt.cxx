@@ -57,6 +57,7 @@
 #include <paratr.hxx>
 #include <txtfrm.hxx>
 #include <ftnfrm.hxx>
+#include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <expfld.hxx>
 #include <section.hxx>
@@ -1593,10 +1594,21 @@ void SwTextNode::Update(
 
     //Any drawing objects anchored into this text node may be sorted by their
     //anchor position which may have changed here, so resort them
-    SwContentFrame* pContentFrame = getLayoutFrame(GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
-    SwSortedObjs* pSortedObjs = pContentFrame ? pContentFrame->GetDrawObjs() : nullptr;
-    if (pSortedObjs)
-        pSortedObjs->UpdateAll();
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
+    for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
+    {
+        SwSortedObjs * pSortedObjs(pFrame->GetDrawObjs());
+        if (pSortedObjs)
+        {
+            pSortedObjs->UpdateAll();
+        }
+        // also sort the objs on the page frame
+        pSortedObjs = pFrame->FindPageFrame()->GetSortedObjs();
+        if (pSortedObjs) // doesn't exist yet if called for inserting as-char fly
+        {
+            pSortedObjs->UpdateAll();
+        }
+    }
 
     // Update the paragraph signatures.
     if (SwEditShell* pEditShell = GetDoc().GetEditShell())
