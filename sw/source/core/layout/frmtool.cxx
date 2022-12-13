@@ -1068,6 +1068,12 @@ static bool IsShown(sal_uLong const nIndex,
         assert(pFirstNode);
         assert(pLastNode);
         assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
+        if (*pIter == *pEnd && rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+        {   // tdf#149595 special case - it *could* be shown if first == last
+            return !IsDestroyFrameAnchoredAtChar(*rAnch.GetContentAnchor(),
+                        SwPosition(const_cast<SwTextNode&>(*pFirstNode), 0),
+                        SwPosition(const_cast<SwTextNode&>(*pLastNode), pLastNode->Len()));
+        }
         for (auto iter = *pIter; iter != *pEnd; ++iter)
         {
             assert(iter->nStart != iter->nEnd); // TODO possible?
