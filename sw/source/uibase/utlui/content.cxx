@@ -5386,22 +5386,17 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         break;
         case ContentTypeId::TEXTFIELD:
         {
-            const SwTextFieldContent* pTextFieldCnt = static_cast<const SwTextFieldContent*>(pCnt);
             if (nMode == EditEntryMode::DELETE)
             {
+                const SwTextFieldContent* pTextFieldCnt =
+                        static_cast<const SwTextFieldContent*>(pCnt);
                 const SwTextField* pTextField = pTextFieldCnt->GetFormatField()->GetTextField();
                 SwTextField::DeleteTextField(*pTextField);
             }
             else
-            {
-                if (pTextFieldCnt->GetFormatField()->GetField()->GetTypeId() != SwFieldTypesEnum::Postit)
-                {
-                    nSlot = FN_EDIT_FIELD;
-                    break;
-                }
-            }
-            [[fallthrough]]; // execute FN_POSTIT assuring standard mode first
+                nSlot = FN_EDIT_FIELD;
         }
+        break;
         case ContentTypeId::POSTIT:
         {
             auto& rView = m_pActiveShell->GetView();
