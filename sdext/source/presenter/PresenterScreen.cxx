@@ -364,7 +364,7 @@ void PresenterScreen::InitializePresenterScreen()
                 SetupConfiguration(xContext, xMainPaneId);
 
                 mpPresenterController = new PresenterController(
-                    css::uno::WeakReference<css::lang::XEventListener>(this),
+                    this,
                     xContext,
                     mxController,
                     xSlideShowController,

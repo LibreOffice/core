@@ -83,7 +83,7 @@ PresenterController::InstanceContainer PresenterController::maInstances;
 }
 
 PresenterController::PresenterController (
-    css::uno::WeakReference<css::lang::XEventListener> xScreen,
+    unotools::WeakReference<PresenterScreen> xScreen,
     const Reference<XComponentContext>& rxContext,
     const Reference<frame::XController>& rxController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
@@ -1156,11 +1156,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 
 void PresenterController::SwitchMonitors()
 {
-    Reference<lang::XEventListener> xScreen( mxScreen );
-    if (!xScreen.is())
-        return;
-
-    PresenterScreen *pScreen = dynamic_cast<PresenterScreen *>(xScreen.get());
+    rtl::Reference<PresenterScreen> pScreen( mxScreen );
     if (!pScreen)
         return;
 

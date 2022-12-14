@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 #include <map>
 #include <memory>
 
@@ -48,6 +49,7 @@ class PresenterPaintManager;
 class PresenterPaneAnimator;
 class PresenterPaneContainer;
 class PresenterPaneBorderPainter;
+class PresenterScreen;
 class PresenterTheme;
 class PresenterWindowManager;
 
@@ -81,7 +83,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     PresenterController (
-        css::uno::WeakReference<css::lang::XEventListener> xScreen,
+        unotools::WeakReference<PresenterScreen> xScreen,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
@@ -171,7 +173,7 @@ private:
     typedef ::std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;
     static InstanceContainer maInstances;
 
-    css::uno::WeakReference<css::lang::XEventListener> mxScreen;
+    unotools::WeakReference<PresenterScreen> mxScreen;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     css::uno::Reference<css::frame::XController> mxController;
