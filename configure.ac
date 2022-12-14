@@ -3634,27 +3634,19 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
-    current_sdk_ver=16.1
-    older_sdk_vers="16.0 15.6"
+
     if test "$enable_ios_simulator" = "yes"; then
-        platform=iPhoneSimulator
+        platformlc=iphonesimulator
         versionmin=-mios-simulator-version-min=14.5
     else
-        platform=iPhoneOS
+        platformlc=iphoneos
         versionmin=-miphoneos-version-min=14.5
     fi
-    xcode_developer=`xcode-select -print-path`
 
-    for sdkver in $current_sdk_ver $older_sdk_vers; do
-        t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
-        if test -d $t; then
-            sysroot=$t
-            break
-        fi
-    done
+    sysroot=`xcrun --sdk $platformlc --show-sdk-path`
 
-    if test -z "$sysroot"; then
-        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}${current_sdk_ver}.sdk])
+    if ! test -d "$sysroot"; then
+        AC_MSG_ERROR([Could not find iOS SDK $sysroot])
     fi
 
     AC_MSG_RESULT($sysroot)
