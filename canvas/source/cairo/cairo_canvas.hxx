@@ -50,7 +50,8 @@ namespace cairocanvas
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
-                                             css::lang::XServiceInfo >  GraphicDeviceBase_Base;
+                                             css::lang::XServiceInfo,
+                                             css::lang::XUnoTunnel >  GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                                  DeviceHelper,
                                                  ::osl::MutexGuard,
@@ -121,6 +122,9 @@ namespace cairocanvas
         virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+        // XUnoTunnel
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr& pSurface,

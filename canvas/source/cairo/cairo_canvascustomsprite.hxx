@@ -23,6 +23,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -46,7 +47,8 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
                                              css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
-                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+                                             css::lang::XServiceInfo,
+                                             css::lang::XUnoTunnel >  CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -112,6 +114,9 @@ namespace cairocanvas
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+        // XUnoTunnel
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
         // Sprite
         virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,

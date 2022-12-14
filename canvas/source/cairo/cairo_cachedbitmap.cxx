@@ -23,6 +23,7 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_repainttarget.hxx"
@@ -59,7 +60,7 @@ namespace cairocanvas
                           "CachedBitmap::doRedraw(): base called with changed view transform "
                           "(told otherwise during construction)" );
 
-        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
+        RepaintTarget* pTarget = comphelper::getFromUnoTunnel< RepaintTarget >(rTargetCanvas);
 
         ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );

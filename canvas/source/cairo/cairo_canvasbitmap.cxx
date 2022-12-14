@@ -143,6 +143,10 @@ namespace cairocanvas
         return aRV;
     }
 
+    sal_Int64 CanvasBitmap::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+        return RepaintTarget::getSomething(aIdentifier);
+    }
+
     OUString SAL_CALL CanvasBitmap::getImplementationName(  )
     {
         return "CairoCanvas.CanvasBitmap";
