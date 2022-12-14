@@ -612,6 +612,11 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
 }
 
 
+sal_Int64 PresenterSlideSorter::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return CachablePresenterView::getSomething(aIdentifier);
+}
+
+
 void PresenterSlideSorter::UpdateLayout()
 {
     if ( ! mxWindow.is())

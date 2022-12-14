@@ -575,6 +575,11 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage()
 }
 
 
+sal_Int64 PresenterToolBar::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return CachablePresenterView::getSomething(aIdentifier);
+}
+
+
 void PresenterToolBar::CreateControls (
     const OUString& rsConfigurationPath)
 {

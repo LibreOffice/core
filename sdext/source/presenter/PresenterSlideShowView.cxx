@@ -279,6 +279,10 @@ css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::ge
     return mxCurrentSlide;
 }
 
+sal_Int64 PresenterSlideShowView::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return CachablePresenterView::getSomething(aIdentifier);
+}
+
 //----- CachablePresenterView -------------------------------------------------
 
 void PresenterSlideShowView::ReleaseView()

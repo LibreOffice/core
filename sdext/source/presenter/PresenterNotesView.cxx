@@ -378,7 +378,8 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
 void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent&) {}
 
 sal_Int64 PresenterNotesView::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
+    return comphelper::getSomethingImpl(
+        aIdentifier, this, comphelper::FallbackToGetSomethingOf<CachablePresenterView>{});
 }
 
 css::uno::Sequence<sal_Int8> const & PresenterNotesView::getUnoTunnelId() {
