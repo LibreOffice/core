@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(LimitBox, ActivateHdl, weld::ComboBox&, bool)
 
 LimitBoxController::LimitBoxController(
     const uno::Reference< uno::XComponentContext >& rxContext ) :
-    svt::ToolboxController( rxContext,
+    LimitBoxController_Base( rxContext,
                             uno::Reference< frame::XFrame >(),
                             ".uno:DBLimit" ),
     m_xLimitBox( nullptr )
@@ -184,27 +184,6 @@ LimitBoxController::LimitBoxController(
 LimitBoxController::~LimitBoxController()
 {
 }
-
-/// XInterface
-uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
-}
-
-void SAL_CALL LimitBoxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL LimitBoxController::release() noexcept
-{
-    ToolboxController::release();
-}
-
 
 /// XServiceInfo
 OUString SAL_CALL LimitBoxController::getImplementationName()

@@ -24,18 +24,13 @@ class LimitBox;
  * It is communicating with querycontroller and this channel make enable
  * to set\get the value of limitbox when switching between views
  */
-class LimitBoxController: public svt::ToolboxController,
-                          public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> LimitBoxController_Base;
+class LimitBoxController: public LimitBoxController_Base
 {
     public:
         explicit LimitBoxController(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~LimitBoxController() override;
-
-        /// XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
 
         /// XServiceInfo
         DECLARE_SERVICE_INFO();
