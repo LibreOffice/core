@@ -263,7 +263,7 @@ namespace cairocanvas
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "CanvasHelper::drawTextLayout(): layout is NULL");
 
-        TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
+        TextLayout* pTextLayout = comphelper::getFromUnoTunnel< TextLayout >( xLayoutedText );
 
         if( pTextLayout )
         {
