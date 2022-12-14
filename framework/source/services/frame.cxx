@@ -71,6 +71,7 @@
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -374,7 +375,7 @@ private:
     /// points to an external set progress, which should be used instead of the internal one.
     css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception;
     /// helper for XDispatch/Provider and interception interfaces
-    css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper;
+    rtl::Reference< InterceptionHelper >                    m_xDispatchHelper;
     /// helper for XFrames, XIndexAccess and XElementAccess interfaces
     css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper;
     /// container for ALL Listener
@@ -1474,10 +1475,9 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
             SolarMutexGuard aWriteLock;
             m_xController = nullptr;
 
-            auto pInterceptionHelper = dynamic_cast<InterceptionHelper*>(m_xDispatchHelper.get());
-            if (pInterceptionHelper)
+            if (m_xDispatchHelper)
             {
-                rtl::Reference<DispatchProvider> pDispatchProvider = pInterceptionHelper->GetSlave();
+                rtl::Reference<DispatchProvider> pDispatchProvider = m_xDispatchHelper->GetSlave();
                 if (pDispatchProvider)
                 {
                     pDispatchProvider->ClearProtocolHandlers();
@@ -2117,7 +2117,7 @@ void SAL_CALL XFrameImpl::disposing()
     css::uno::Reference< css::lang::XEventListener > xDispatchHelper;
     {
         SolarMutexGuard g;
-        xDispatchHelper.set(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
+        xDispatchHelper = m_xDispatchHelper;
     }
     xDispatchHelper->disposing(aEvent);
     xDispatchHelper.clear();
@@ -2383,7 +2383,7 @@ void SAL_CALL XFrameImpl::registerDispatchProviderInterceptor(
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
     {
         SolarMutexGuard g;
-        xInterceptionHelper.set( m_xDispatchHelper, css::uno::UNO_QUERY );
+        xInterceptionHelper = m_xDispatchHelper;
     }
     if (xInterceptionHelper.is()) {
         xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
@@ -2402,7 +2402,7 @@ void SAL_CALL XFrameImpl::releaseDispatchProviderInterceptor(
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
     {
         SolarMutexGuard g;
-        xInterceptionHelper.set( m_xDispatchHelper, css::uno::UNO_QUERY );
+        xInterceptionHelper = m_xDispatchHelper;
     }
     if (xInterceptionHelper.is()) {
         xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
