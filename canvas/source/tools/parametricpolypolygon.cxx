@@ -22,6 +22,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -192,6 +193,16 @@ namespace canvas
     uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  )
     {
         return { "com.sun.star.rendering.ParametricPolyPolygon" };
+    }
+
+    sal_Int64 ParametricPolyPolygon::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
+    {
+        return comphelper::getSomethingImpl(aIdentifier, this);
+    }
+
+    css::uno::Sequence<sal_Int8> const & ParametricPolyPolygon::getUnoTunnelId() {
+        static comphelper::UnoIdInit const id;
+        return id.getSeq();
     }
 
     ParametricPolyPolygon::~ParametricPolyPolygon()

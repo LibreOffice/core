@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <comphelper/compbase.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -36,7 +37,8 @@ namespace com::sun::star::rendering { class XGraphicDevice; }
 namespace canvas
 {
     typedef comphelper::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
-                                           css::lang::XServiceInfo > ParametricPolyPolygon_Base;
+                                           css::lang::XServiceInfo,
+                                           css::lang::XUnoTunnel > ParametricPolyPolygon_Base;
 
     class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ParametricPolyPolygon_Base
     {
@@ -103,6 +105,9 @@ namespace canvas
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         /// Query all defining values of this object atomically
         Values getValues() const;
