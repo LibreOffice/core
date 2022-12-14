@@ -35,6 +35,8 @@
 #include <o3tl/cppunittraitshelper.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
@@ -44,6 +46,18 @@
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 #include <wrong.hxx>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <linguistic/misc.hxx>
+
+using namespace osl;
+using namespace com::sun::star;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::linguistic2;
+using namespace linguistic;
 
 namespace
 {
@@ -70,6 +84,13 @@ void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
         rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
+}
+
+uno::Reference<XLinguServiceManager2> GetLngSvcMgr_Impl()
+{
+    uno::Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<XLinguServiceManager2> xRes = LinguServiceManager::create(xContext);
+    return xRes;
 }
 } //namespace
 
@@ -1354,8 +1375,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
 
-// missing spelling dictionary on Windows test platform?
-#if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 {
     createSwDoc();
@@ -1370,39 +1389,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 
     CPPUNIT_ASSERT(pOpt->IsOnlineSpell());
 
-    // Type a correct word
+    // check available en_US dictionary and test spelling with it
+    uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
+    uno::Reference<XSpellChecker1> xSpell;
+    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("en", "US", OUString()));
+    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    {
+        // Type a correct word
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    emulateTyping(*pTextDoc, u"the ");
-    SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
-    // no bad word
-    CPPUNIT_ASSERT_EQUAL(static_cast<SwWrongList*>(nullptr), pNode->GetWrong());
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        emulateTyping(*pTextDoc, u"the ");
+        SwCursorShell* pShell(pDoc->GetEditShell());
+        SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
+        // no bad word
+        CPPUNIT_ASSERT_EQUAL(static_cast<SwWrongList*>(nullptr), pNode->GetWrong());
 
-    // Create a bad word from the good: "the" -> "thex"
+        // Create a bad word from the good: "the" -> "thex"
 
-    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    emulateTyping(*pTextDoc, u"x");
-    // tdf#92036 pending spell checking
-    bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
-    CPPUNIT_ASSERT(bPending);
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        emulateTyping(*pTextDoc, u"x");
+        // tdf#92036 pending spell checking
+        bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
+        CPPUNIT_ASSERT(bPending);
 
-    // Move right, leave the bad word
+        // Move right, leave the bad word
 
-    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    // tdf#92036 still pending spell checking
-    bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
-    CPPUNIT_ASSERT(bPending);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        // tdf#92036 still pending spell checking
+        bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
+        CPPUNIT_ASSERT(bPending);
 
-    // Move down to trigger spell checking
+        // Move down to trigger spell checking
 
-    pWrtShell->Down(/*bSelect=*/false, 1);
-    Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(pNode->GetWrong());
-    // This was 0 (pending spell checking)
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+        pWrtShell->Down(/*bSelect=*/false, 1);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(pNode->GetWrong());
+        // This was 0 (pending spell checking)
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+    }
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 {
