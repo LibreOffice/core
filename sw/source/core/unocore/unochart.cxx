@@ -753,9 +753,9 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     {
         sal_Int32 nFirstSeqLen = 0;
         sal_Int32 nFirstSeqLabelIdx = -1;
-        bool bFirstFound = false;
         for (oi = 0; oi < oiEnd; ++oi)
         {
+            bool bFirstFound = false;
             // row/col used at all?
             if (aDataStartIdx[oi] != -1 &&
                 (!bFirstIsLabel || aLabelIdx[oi] != -1))
