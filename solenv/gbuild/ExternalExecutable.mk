@@ -185,6 +185,7 @@ endef
 define gb_ExternalExecutable__get_command
 $(call gb_ExternalExecutale__check_registration,$(1))
 $(gb_ExternalExecutable_$(1)_PRECOMMAND) \
+	$(2) \
 	$(call gb_ExternalExecutable__get_internal,$(1)) \
 	$(call gb_ExternalExecutable__get_executable,$(1)) \
 	$(gb_ExternalExecutable_$(1)_ARGUMENTS)
@@ -196,9 +197,12 @@ endef
 # LD_LIBRARY_PATH for internally built executables), and icerun wrapper
 # for limiting the maximum number of processes, if available.
 #
+# $2 is an optional part (like "xargs") to place between the setting of shell variables and the
+# command proper.
+#
 # gb_ExternalExecutable_get_command executable
 define gb_ExternalExecutable_get_command
-$(strip $(call gb_ExternalExecutable__get_command,$(1)))
+$(strip $(call gb_ExternalExecutable__get_command,$(1),$(2)))
 endef
 
 define gb_ExternalExecutable__get_dependencies
