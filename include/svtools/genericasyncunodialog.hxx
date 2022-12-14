@@ -57,14 +57,6 @@ protected:
     {
     }
 
-    virtual ~OGenericUnoAsyncDialog() override
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_xAsyncDialog)
-            destroyAsyncDialog();
-    }
-
 public:
     // XAsynchronousExecutableDialog
     void SAL_CALL setDialogTitle(const OUString& aTitle) override
