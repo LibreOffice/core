@@ -5346,9 +5346,6 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterEndElement(pWriter);
     }
 
-    if (GetNumRule())
-        GetNumRule()->dumpAsXml(pWriter);
-
     (void)xmlTextWriterEndElement(pWriter);
 }
 
