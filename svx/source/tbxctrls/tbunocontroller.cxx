@@ -52,17 +52,12 @@ namespace {
 class SvxFontSizeBox_Base;
 class SvxFontSizeBox_Impl;
 
-class FontHeightToolBoxControl : public svt::ToolboxController,
-                                 public lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, lang::XServiceInfo> FontHeightToolBoxControl_Base;
+class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
 {
     public:
         explicit FontHeightToolBoxControl(
             const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -353,32 +348,12 @@ IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
- : svt::ToolboxController( rxContext,
+ : FontHeightToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
                            ".uno:FontHeight" ),
    m_pBox( nullptr )
 {
     addStatusListener( ".uno:CharFontName");
-}
-
-// XInterface
-css::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const css::uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
-}
-
-void SAL_CALL FontHeightToolBoxControl::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL FontHeightToolBoxControl::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo

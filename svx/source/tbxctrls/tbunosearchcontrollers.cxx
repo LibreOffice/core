@@ -526,17 +526,12 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
     return xStatusListener;
 }
 
-class FindTextToolbarController : public svt::ToolboxController,
-                                  public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> FindTextToolbarController_Base;
+class FindTextToolbarController : public FindTextToolbarController_Base
 {
 public:
 
     FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -570,32 +565,12 @@ private:
 };
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), COMMAND_FINDTEXT)
+    : FindTextToolbarController_Base(rxContext, css::uno::Reference< css::frame::XFrame >(), COMMAND_FINDTEXT)
     , m_pFindTextFieldControl(nullptr)
     , m_nDownSearchId(0)
     , m_nUpSearchId(0)
     , m_nFindAllId(0)
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL FindTextToolbarController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL FindTextToolbarController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL FindTextToolbarController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -703,18 +678,13 @@ void FindTextToolbarController::textfieldChanged() {
     }
 }
 
-class UpDownSearchToolboxController : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> UpDownSearchToolboxController_Base;
+class UpDownSearchToolboxController : public UpDownSearchToolboxController_Base
 {
 public:
     enum Type { UP, DOWN };
 
     UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -738,31 +708,11 @@ private:
 };
 
 UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
-    : svt::ToolboxController( rxContext,
+    : UpDownSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == UP) ? OUString( COMMAND_UPSEARCH ):  OUString( COMMAND_DOWNSEARCH ) ),
       meType( eType )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL UpDownSearchToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL UpDownSearchToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL UpDownSearchToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -823,16 +773,11 @@ void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::Fe
 {
 }
 
-class MatchCaseToolboxController : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> MatchCaseToolboxController_Base;
+class MatchCaseToolboxController : public MatchCaseToolboxController_Base
 {
 public:
     MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -856,31 +801,11 @@ private:
 };
 
 MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : svt::ToolboxController( rxContext,
+    : MatchCaseToolboxController_Base( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_MATCHCASE )
     , m_xMatchCaseControl(nullptr)
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL MatchCaseToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL MatchCaseToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL MatchCaseToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -939,16 +864,11 @@ void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::Featu
 {
 }
 
-class SearchFormattedToolboxController : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> SearchFormattedToolboxController_Base;
+class SearchFormattedToolboxController : public SearchFormattedToolboxController_Base
 {
 public:
     SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -972,31 +892,11 @@ private:
 };
 
 SearchFormattedToolboxController::SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : svt::ToolboxController( rxContext,
+    : SearchFormattedToolboxController_Base( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_SEARCHFORMATTED )
     , m_xSearchFormattedControl(nullptr)
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL SearchFormattedToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL SearchFormattedToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL SearchFormattedToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -1055,16 +955,11 @@ void SAL_CALL SearchFormattedToolboxController::statusChanged( const css::frame:
 {
 }
 
-class FindAllToolboxController   : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> FindAllToolboxController_Base;
+class FindAllToolboxController : public FindAllToolboxController_Base
 {
 public:
     FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1085,30 +980,10 @@ public:
 };
 
 FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
-    : svt::ToolboxController( rxContext,
+    : FindAllToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             ".uno:FindAll" )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL FindAllToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL FindAllToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL FindAllToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -1162,16 +1037,11 @@ void SAL_CALL FindAllToolboxController::statusChanged( const css::frame::Feature
 {
 }
 
-class ExitSearchToolboxController   : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> ExitSearchToolboxController_Base;
+class ExitSearchToolboxController : public ExitSearchToolboxController_Base
 {
 public:
     ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1192,30 +1062,10 @@ public:
 };
 
 ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
-    : svt::ToolboxController( rxContext,
+    : ExitSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             ".uno:ExitSearch" )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL ExitSearchToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL ExitSearchToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL ExitSearchToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -1280,16 +1130,11 @@ void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::Feat
 {
 }
 
-class SearchLabelToolboxController : public svt::ToolboxController,
-                                     public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> SearchLabelToolboxController_Base;
+class SearchLabelToolboxController : public SearchLabelToolboxController_Base
 {
 public:
     SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1313,30 +1158,10 @@ private:
 };
 
 SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
-    : svt::ToolboxController( rxContext,
+    : SearchLabelToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             ".uno:SearchLabel" )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL SearchLabelToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL SearchLabelToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL SearchLabelToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
