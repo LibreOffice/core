@@ -14,6 +14,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/opengrf.hxx>
@@ -92,6 +93,7 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     , m_xInitialCreator(m_xBuilder->weld_entry("author"))
     , m_xLanguage(m_xBuilder->weld_entry("language"))
     , m_xDate(m_xBuilder->weld_entry("date"))
+    , m_xCustomizeFrame(m_xBuilder->weld_frame("customize"))
 
 {
     assert(PositionToVersion(m_xVersion->get_active()) == EPUBExportFilter::GetDefaultVersion());
@@ -154,6 +156,9 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     }
 
     m_xOKButton->connect_clicked(LINK(this, EPUBExportDialog, OKClickHdl));
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xCustomizeFrame->hide();
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBox&, void)
