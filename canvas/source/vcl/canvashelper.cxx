@@ -34,6 +34,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
@@ -612,7 +613,7 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
-        TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
+        TextLayout* pTextLayout = comphelper::getFromUnoTunnel< TextLayout >( xLayoutedText );
 
         if( pTextLayout )
         {

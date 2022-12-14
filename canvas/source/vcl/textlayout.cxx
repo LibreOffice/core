@@ -29,6 +29,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <vcl/kernarray.hxx>
@@ -419,6 +420,15 @@ namespace vclcanvas
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
     {
         return { "com.sun.star.rendering.TextLayout" };
+    }
+
+    sal_Int64 TextLayout::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+        return comphelper::getSomethingImpl(aIdentifier, this);
+    }
+
+    css::uno::Sequence<sal_Int8> const & TextLayout::getUnoTunnelId() {
+        static comphelper::UnoIdInit const id;
+        return id.getSeq();
     }
 }
 
