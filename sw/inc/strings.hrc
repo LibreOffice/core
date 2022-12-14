@@ -331,6 +331,7 @@
 #define STR_SOUTH                               NC_("STR_SOUTH", "South")
 #define STR_SUM                                 NC_("STR_SUM", "Sum")
 #define STR_INVALID_AUTOFORMAT_NAME             NC_("STR_INVALID_AUTOFORMAT_NAME", "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name.")
+#define STR_CANT_SAVE_MACROS                    NC_("STR_CANT_SAVE_MACROS", "This document has macros, but macros will not be saved in this file format.")
 #define STR_NUMERIC                             NC_("STR_NUMERIC", "Numeric")
 #define STR_ROW                                 NC_("STR_ROW", "Rows")
 #define STR_COL                                 NC_("STR_COL", "Column")

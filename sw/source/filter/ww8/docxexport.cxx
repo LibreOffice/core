@@ -538,7 +538,8 @@ ErrCode DocxExport::ExportDocument_Impl()
 
     WriteEmbeddings();
 
-    WriteVBA();
+    if (m_bDocm)
+        WriteVBA();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     m_pStyles.reset();
