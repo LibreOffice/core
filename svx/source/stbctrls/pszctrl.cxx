@@ -32,6 +32,9 @@
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
 #include <sfx2/module.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/statusitem.hxx>
+#include <svx/strings.hrc>
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
 
@@ -321,8 +324,48 @@ void SvxPosSizeStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16 nSID
         pImpl->bSize = true;
         pImpl->bTable = false;
     }
+    else if ( auto pStatusItem = dynamic_cast<const SvxStatusItem*>( pState) )
+    {
+        // show string (table cell or different)
+        pImpl->aStr = pStatusItem->GetValue();
+        pImpl->bTable = true;
+        pImpl->bPos = false;
+        pImpl->bSize = false;
+        if (!pImpl->aStr.isEmpty())
+        {
+            OUString sTip;
+            switch (pStatusItem->GetCategory())
+            {
+                case StatusCategory::TableCell:
+                    sTip = SvxResId(RID_SVXSTR_TABLECELL_HINT);
+                    break;
+                case StatusCategory::Section:
+                    sTip = SvxResId(RID_SVXSTR_SECTION_HINT);
+                    break;
+                case StatusCategory::TableOfContents:
+                    sTip = SvxResId(RID_SVXSTR_TOC_HINT);
+                    break;
+                case StatusCategory::Numbering:
+                    sTip = SvxResId(RID_SVXSTR_NUMBERING_HINT);
+                    break;
+                case StatusCategory::ListStyle:
+                    sTip = SvxResId(RID_SVXSTR_LIST_STYLE_HINT);
+                    break;
+                case StatusCategory::Formula:
+                    sTip = SvxResId(RID_SVXSTR_FORMULA_HINT);
+                    break;
+                case StatusCategory::RowColumn:
+                    sTip = SvxResId(RID_SVXSTR_ROW_COLUMN_HINT);
+                    break;
+                case StatusCategory::NONE:
+                    break;
+            }
+            GetStatusBar().SetQuickHelpText(GetId(), sTip);
+        }
+    }
     else if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
     {
+        SAL_WARN( "svx.stbcrtls", "this should be a SvxStatusItem not a SfxStringItem" );
         // show string (table cel or different)
         pImpl->aStr = pStringItem->GetValue();
         pImpl->bTable = true;

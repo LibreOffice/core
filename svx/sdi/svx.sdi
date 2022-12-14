@@ -10378,7 +10378,7 @@ SfxVoidItem DecrementIndent SID_DEC_INDENT
 ]
 
 
-SfxStringItem StateTableCell SID_TABLE_CELL
+SvxStatusItem StateTableCell SID_TABLE_CELL
 
 [
     AutoUpdate = FALSE,

@@ -55,6 +55,7 @@
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/langitem.hxx>
+#include <svx/statusitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
@@ -4204,7 +4205,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 rBnd.Invalidate(SID_ATTR_POSITION);
             }
             rBnd.Invalidate(SID_ATTR_SIZE);
-            const SfxStringItem aCell( SID_TABLE_CELL, OUString() );
+            const SvxStatusItem aCell( SID_TABLE_CELL, OUString(), StatusCategory::NONE );
             rBnd.SetState( aCell );
         }
     }

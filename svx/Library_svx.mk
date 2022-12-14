@@ -200,6 +200,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/items/postattr \
     svx/source/items/rotmodit \
     svx/source/items/SmartTagItem \
+    svx/source/items/statusitem \
     svx/source/items/svxerr \
     svx/source/items/viewlayoutitem \
     svx/source/items/zoomslideritem \
