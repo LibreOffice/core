@@ -5797,7 +5797,6 @@ if test "$cross_compiling" = "yes"; then
         LIBXSLT
         MDDS
         NATIVE
-        OOX
         OPENSSL
         ORCUS
         PYTHON
