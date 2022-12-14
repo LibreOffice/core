@@ -46,9 +46,10 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <editeng/langitem.hxx>
+#include <svx/linkwarn.hxx>
+#include <svx/statusitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svx/linkwarn.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
@@ -1963,12 +1964,14 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             }
             else
             {
+                StatusCategory eCategory(StatusCategory::NONE);
                 OUString sStr;
                 if( rShell.IsCursorInTable() )
                 {
                     // table name + cell coordinate
                     sStr = rShell.GetTableFormat()->GetName() + ":";
                     sStr += rShell.GetBoxNms();
+                    eCategory = StatusCategory::TableCell;
                 }
                 else
                 {
@@ -1982,17 +1985,22 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             {
                                 const SwTOXBase* pTOX = m_pWrtShell->GetCurTOX();
                                 if( pTOX )
+                                {
                                     sStr = pTOX->GetTOXName();
+                                    eCategory = StatusCategory::TableOfContents;
+                                }
                                 else
                                 {
                                     OSL_ENSURE( false,
                                         "Unknown kind of section" );
                                     sStr = pCurrSect->GetSectionName();
+                                    eCategory = StatusCategory::Section;
                                 }
                             }
                             break;
                         default:
                             sStr = pCurrSect->GetSectionName();
+                            eCategory = StatusCategory::Section;
                             break;
                         }
                     }
@@ -2019,6 +2027,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 {
                                     if(!sStr.isEmpty())
                                         sStr += sStatusDelim;
+                                    if (eCategory == StatusCategory::NONE)
+                                        eCategory = StatusCategory::ListStyle;
                                     sStr += rNumStyle;
                                 }
                             }
@@ -2026,7 +2036,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         if (!sStr.isEmpty())
                             sStr += sStatusDelim;
                         sStr += SwResId(STR_NUM_LEVEL) + OUString::number( nNumLevel + 1 );
-
+                        if (eCategory == StatusCategory::NONE)
+                            eCategory = StatusCategory::Numbering;
                     }
                 }
                 const int nOutlineLevel = rShell.GetCurrentParaOutlineLevel();
@@ -2042,6 +2053,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     else
                         sStr += SwResId(STR_NUM_OUTLINE);
                     sStr += OUString::number( nOutlineLevel);
+                    if (eCategory == StatusCategory::NONE)
+                        eCategory = StatusCategory::Numbering;
                 }
 
                 if( rShell.HasReadonlySel() )
@@ -2051,7 +2064,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     sStr = SwResId(SW_STR_READONLY) + sStr;
                 }
                 if (!sStr.isEmpty())
-                    rSet.Put( SfxStringItem( SID_TABLE_CELL, sStr ));
+                    rSet.Put( SvxStatusItem( SID_TABLE_CELL, sStr, eCategory ));
             }
             break;
             case FN_STAT_SELMODE:

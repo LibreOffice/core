@@ -22,11 +22,12 @@
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svtools/javacontext.hxx>
 #include <svtools/javainteractionhandler.hxx>
-#include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -1167,7 +1168,6 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
              aEvent.FeatureURL.Path == "RowColSelCount" ||
              aEvent.FeatureURL.Path == "StatusPageStyle" ||
-             aEvent.FeatureURL.Path == "StateTableCell" ||
              aEvent.FeatureURL.Path == "StateWordCount" ||
              aEvent.FeatureURL.Path == "PageStyleName" ||
              aEvent.FeatureURL.Path == "PageStatus" ||
@@ -1180,6 +1180,14 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         if (aEvent.IsEnabled && (aEvent.State >>= aString))
         {
             aBuffer.append(aString);
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "StateTableCell")
+    {
+        if (aEvent.IsEnabled)
+        {
+            if (const SfxStringItem* pSvxStatusItem = dynamic_cast<const SfxStringItem*>(pState))
+                aBuffer.append(pSvxStatusItem->GetValue());
         }
     }
     else if (aEvent.FeatureURL.Path == "InsertMode" ||

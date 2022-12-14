@@ -45,6 +45,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/srchdlg.hxx>
+#include <svx/statusitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
@@ -426,7 +427,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 aPos += " : " +
                     SwResId(STR_SRCVIEW_COL);
                 aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
-                SfxStringItem aItem( nWhich, aPos );
+                SvxStatusItem aItem( SID_TABLE_CELL, aPos, StatusCategory::RowColumn );
                 rSet.Put( aItem );
             }
             break;

@@ -30,6 +30,7 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/statusitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>

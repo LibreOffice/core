@@ -109,6 +109,13 @@
     item SfxScriptOrganizer SfxScriptOrganizerItem;
     item String     SvxClipboardFormatItem;    //! Dummy
 
+    struct Status
+    {
+        String Value MID_VALUE;
+        INT16 Status MID_TYPE;
+    };
+    item Status SvxStatusItem;
+
     struct SvxZoom
     {
         UINT16 Value         MID_VALUE;

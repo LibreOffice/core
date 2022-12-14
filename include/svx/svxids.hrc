@@ -63,6 +63,7 @@ class SvxPostItTextItem;
 class SvxRulerItem;
 class SvxSetItem;
 class SvxSizeItem;
+class SvxStatusItem;
 class SvxSmartTagItem;
 class SvxViewLayoutItem;
 class SvxZoomSliderItem;
@@ -355,7 +356,7 @@ class XFillGradientItem;
 #define SID_ATTR_ZOOM_USER                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 222 )
 #define SID_ATTR_POSITION                               TypedWhichId<SfxPointItem>( SID_SVX_START + 223 )
 #define SID_ATTR_SIZE                                   TypedWhichId<SvxSizeItem>( SID_SVX_START + 224 )
-#define SID_TABLE_CELL                                  ( SID_SVX_START + 225 )
+#define SID_TABLE_CELL                                  TypedWhichId<SvxStatusItem>( SID_SVX_START + 225 )
 #define SID_ATTR_ALIGN_MARGIN                           ( SID_SVX_START + 228 )
 #define SID_ATTR_ALIGN_STACKED                          ( SID_SVX_START + 229 )
 #define SID_ATTR_ALIGN_LINEBREAK                        ( SID_SVX_START + 230 )

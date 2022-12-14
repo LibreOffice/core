@@ -27,6 +27,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/postattr.hxx>
+#include <svx/statusitem.hxx>
 #include <editeng/postitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/zoomitem.hxx>
