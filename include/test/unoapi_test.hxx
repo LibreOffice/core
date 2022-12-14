@@ -84,6 +84,22 @@ private:
     OUString maImportFilterName;
 };
 
+inline void assertRectangleEqual(const tools::Rectangle& rExpected, const tools::Rectangle& rActual,
+                                 const sal_Int32 nTolerance, const CppUnit::SourceLine& rSourceLine)
+{
+    CPPUNIT_NS::assertDoubleEquals(rExpected.Top(), rActual.Top(), nTolerance, rSourceLine,
+                                   "different Top");
+    CPPUNIT_NS::assertDoubleEquals(rExpected.Left(), rActual.Left(), nTolerance, rSourceLine,
+                                   "different Left");
+    CPPUNIT_NS::assertDoubleEquals(rExpected.GetWidth(), rActual.GetWidth(), nTolerance,
+                                   rSourceLine, "different Width");
+    CPPUNIT_NS::assertDoubleEquals(rExpected.GetHeight(), rActual.GetHeight(), nTolerance,
+                                   rSourceLine, "different Height");
+}
+
+#define CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aActual, aTolerance)                             \
+    assertRectangleEqual(aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE())
+
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

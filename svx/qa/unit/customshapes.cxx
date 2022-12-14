@@ -89,36 +89,6 @@ sal_uInt8 CustomshapesTest::countShapes()
     return xDrawPage->getCount();
 }
 
-void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Rectangle& rExpected,
-                                      const tools::Rectangle& rActual, const sal_Int32 nTolerance)
-{
-    // Left
-    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
-                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
-                   + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
-
-    // Top
-    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
-           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
-
-    // Width
-    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
-           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
-
-    // Height
-    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
-           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
-}
-
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
 {
     loadFromURL(u"tdf147409_GeomItemHash.odg");
@@ -357,7 +327,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape0)));
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
         tools::Rectangle aExpected(Point(1000, 1000), Size(6002, 5001));
-        lcl_AssertRectEqualWithTolerance("Pos 0.0 extrusion", aExpected, aBoundRect, 40);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aBoundRect, 40);
     }
     {
         // Second shape has half of extrusion behind the shape.
@@ -367,7 +337,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
         // Without the fix the height was 1 instead of 5001.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
         tools::Rectangle aExpected(Point(9000, 3500), Size(6002, 5001));
-        lcl_AssertRectEqualWithTolerance("Pos 0.5 extrusion", aExpected, aBoundRect, 40);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aBoundRect, 40);
     }
     {
         // Third shape has extrusion before the shape.
@@ -377,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
         // Without the fix the y-coordinate was 1000 instead of 6000.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
         tools::Rectangle aExpected(Point(18000, 6000), Size(6002, 5001));
-        lcl_AssertRectEqualWithTolerance("Pos 1.0 extrusion", aExpected, aBoundRect, 40);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aBoundRect, 40);
     }
 }
 
@@ -401,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_siz
     // The expected values 1501|1777, 3941 x 1446 are only valid for 96dpi.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
     tools::Rectangle aExpected(Point(1501, 1777), Size(3941, 1446));
-    lcl_AssertRectEqualWithTolerance("Wrong text rendering", aExpected, aBoundRect, 5);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aBoundRect, 5);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
@@ -508,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(-0.5));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
-        lcl_AssertRectEqualWithTolerance("height changed, mirror vert", aSnapRect, aBoundRect, 3);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRect, aBoundRect, 3);
     }
 
     // Change height
@@ -518,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(2.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
-        lcl_AssertRectEqualWithTolerance("height changed", aSnapRect, aBoundRect, 3);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRect, aBoundRect, 3);
     }
 
     // Change width
@@ -528,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(2.0), Fraction(1.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
-        lcl_AssertRectEqualWithTolerance("width changed", aSnapRect, aBoundRect, 3);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRect, aBoundRect, 3);
     }
 
     // Change width and mirror horizontal
@@ -538,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(-0.5), Fraction(1.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
-        lcl_AssertRectEqualWithTolerance("width changed, mirror hori", aSnapRect, aBoundRect, 3);
+        CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRect, aBoundRect, 3);
     }
 }
 

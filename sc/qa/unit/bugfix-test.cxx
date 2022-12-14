@@ -87,38 +87,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
-                                             const tools::Rectangle& rExpected,
-                                             const tools::Rectangle& rActual,
-                                             const sal_Int32 nTolerance)
-{
-    // Left
-    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
-                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
-                   + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
-
-    // Top
-    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
-           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
-
-    // Width
-    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
-           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
-
-    // Height
-    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
-           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
-}
-
 void ScFiltersTest::testTdf137576_Measureline()
 {
     // The document contains a vertical measure line, anchored "To Cell (resize with cell)" with
@@ -205,8 +173,8 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // Get original object values
     tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
     Point aOriginalEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
-    lcl_AssertRectEqualWithTolerance("Load:", tools::Rectangle(Point(500, 3500), Size(1501, 11001)),
-                                     aSnapRectOrig, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(tools::Rectangle(Point(500, 3500), Size(1501, 11001)),
+                                   aSnapRectOrig, 1);
     CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aOriginalEndOffset, 1);
 
     // Hide rows 5 and 6 in UI = row index 4 to 5.
@@ -227,8 +195,8 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // Get new values and compare. End offset should be the same, height should be 6000 smaller.
     tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
     Point aReloadEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
-    lcl_AssertRectEqualWithTolerance(
-        "Reload:", tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(tools::Rectangle(Point(500, 3500), Size(1501, 5001)),
+                                   aSnapRectReload, 1);
     CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aReloadEndOffset, 1);
 }
 
@@ -251,7 +219,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     // Vertical mirror on center should not change the snap rect.
     pObj->Mirror(aSnapRectOrig.LeftCenter(), aSnapRectOrig.RightCenter());
     const tools::Rectangle aSnapRectFlip = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Mirror:", aSnapRectOrig, aSnapRectFlip, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -267,7 +235,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
 
     // Check pos and size of shape again, should be unchanged
     const tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload:", aSnapRectOrig, aSnapRectReload, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectReload, 1);
 }
 
 void ScFiltersTest::testTdf64229()

@@ -104,38 +104,6 @@ ScShapeTest::ScShapeTest()
 {
 }
 
-static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
-                                             const tools::Rectangle& rExpected,
-                                             const tools::Rectangle& rActual,
-                                             const sal_Int32 nTolerance)
-{
-    // Left
-    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
-                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
-                   + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
-
-    // Top
-    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
-           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
-
-    // Width
-    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
-           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
-
-    // Height
-    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
-           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
-           + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
-                           std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
-}
-
 static SdrPage* lcl_getSdrPageWithAssert(ScDocument& rDoc)
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -187,7 +155,7 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 40);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 40);
 }
 
 void ScShapeTest::testTdf144242_Line_noSwapWH()
@@ -220,7 +188,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 40);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 40);
 }
 
 void ScShapeTest::testTdf143619_validation_circle_pos()
@@ -411,9 +379,9 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
 
     // Test reading was correct
     SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
-    lcl_AssertRectEqualWithTolerance("load shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectA, pObj->GetSnapRect(), 1);
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    lcl_AssertRectEqualWithTolerance("load shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectB, pObj->GetSnapRect(), 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -423,9 +391,9 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
 
     // And test again
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
-    lcl_AssertRectEqualWithTolerance("reload shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectA, pObj->GetSnapRect(), 1);
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    lcl_AssertRectEqualWithTolerance("reload shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectB, pObj->GetSnapRect(), 1);
 }
 
 void ScShapeTest::testTdf137081_RTL_page_anchored()
@@ -517,8 +485,7 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     pObj = static_cast<SdrRectObj*>(lcl_getSdrObjectWithAssert(*pDoc, 0));
 
     //  Without the fix in place, the shape would have nearly zero size.
-    lcl_AssertRectEqualWithTolerance("Show: Object geometry should not change", aRect,
-                                     pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aRect, pObj->GetSnapRect(), 1);
 }
 
 void ScShapeTest::testTdf137033_FlipHori_Resize()
@@ -534,7 +501,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     // Verify shape is correctly loaded. Then set shape to "resize with cell".
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     const tools::Rectangle aExpectRect(Point(4998, 7000), Size(9644, 6723));
-    lcl_AssertRectEqualWithTolerance("Load, wrong pos or size: ", aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
 
     // Save and reload.
@@ -546,7 +513,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
 
     // Check shape has the original geometry, besides rounding and unit conversion errors
     aSnapRect = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload, wrong pos or size: ", aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testTdf137033_RotShear_ResizeHide()
@@ -581,7 +548,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
                            abs(aShearAngle - aExpectShearAngle) <= 1_deg100);
     CPPUNIT_ASSERT_MESSAGE("Hide rows, rotate angle: ",
                            abs(aRotateAngle - aExpectRotateAngle) <= 1_deg100);
-    lcl_AssertRectEqualWithTolerance("Load: wrong pos or size", aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -598,7 +565,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
                            abs(aShearAngle - aExpectShearAngle) <= 3_deg100);
     CPPUNIT_ASSERT_MESSAGE("Reload, rotate angle: ",
                            abs(aRotateAngle - aExpectRotateAngle) <= 3_deg100);
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 7);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 7);
 }
 
 void ScShapeTest::testTdf137033_RotShear_Hide()
@@ -631,7 +598,7 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     // Values are manually taken from shape before hiding column C.
     const tools::Rectangle aExpectRect(Point(4500, 3500), Size(15143, 5187));
     const tools::Rectangle aSnapRect = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
@@ -789,8 +756,7 @@ void ScShapeTest::testHideColsShow()
     // Check object is visible and has old size
     CPPUNIT_ASSERT_MESSAGE("Show: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectShow(pObj->GetSnapRect());
-    lcl_AssertRectEqualWithTolerance("Show: Object geometry should not change", aSnapRectOrig,
-                                     aSnapRectShow, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectShow, 1);
 }
 
 void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
@@ -806,7 +772,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     // Check anchor and position of shape. The expected values are taken from UI.
     tools::Rectangle aSnapRect = pObj->GetSnapRect();
     tools::Rectangle aExpectedRect(Point(10000, 3000), Size(1000, 7500));
-    lcl_AssertRectEqualWithTolerance("Load original: ", aExpectedRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
 
     // Insert two columns after column B
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
@@ -818,8 +784,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
     aExpectedRect = tools::Rectangle(Point(16000, 3000), Size(1000, 7500)); // col width 3000
     aSnapRect = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Shift: Wrong after insert of columns ", aExpectedRect,
-                                     aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -830,8 +795,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
 
     // Assert objects size is unchanged, position is shifted.
     aSnapRect = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload: Shape geometry has changed.", aExpectedRect,
-                                     aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testLoadVerticalFlip()
@@ -869,11 +833,10 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // Check anchor and position of shape. The expected values are taken from UI before saving.
     tools::Rectangle aSnapRect0Collapse = pObj0->GetSnapRect();
     tools::Rectangle aExpectedRect0(Point(4672, 1334), Size(1787, 1723));
-    lcl_AssertRectEqualWithTolerance("Collapse: Custom shape", aExpectedRect0, aSnapRect0Collapse,
-                                     1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect0, aSnapRect0Collapse, 1);
     tools::Rectangle aSnapRect1Collapse = pObj1->GetSnapRect();
     tools::Rectangle aExpectedRect1(Point(5647, 4172), Size(21, 3441));
-    lcl_AssertRectEqualWithTolerance("Collapse: Line", aExpectedRect1, aSnapRect1Collapse, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect1, aSnapRect1Collapse, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -886,12 +849,10 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // Assert objects size and position are not changed. Actual values differ a little bit
     // because of cumulated Twips-Hmm conversion errors.
     tools::Rectangle aSnapRect0Reload = pObj0->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload: Custom shape geometry has changed.", aExpectedRect0,
-                                     aSnapRect0Reload, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect0, aSnapRect0Reload, 2);
 
     tools::Rectangle aSnapRect1Reload = pObj1->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload: Line geometry has changed.", aExpectedRect1,
-                                     aSnapRect1Reload, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect1, aSnapRect1Reload, 2);
 }
 
 void ScShapeTest::testTdf137355_UndoHideRows()
@@ -927,8 +888,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     CPPUNIT_ASSERT_MESSAGE("Undo: Object should exist", pObj);
     CPPUNIT_ASSERT_MESSAGE("Undo: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectUndo(pObj->GetSnapRect());
-    lcl_AssertRectEqualWithTolerance("Undo: Object geometry should not change", aSnapRectOrig,
-                                     aSnapRectUndo, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectUndo, 1);
 }
 
 void ScShapeTest::testTdf152081_UndoHideColsWithNotes()
@@ -1002,8 +962,7 @@ void ScShapeTest::testTdf115655_HideDetail()
 
     // Assert image size is not changed
     tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
-    lcl_AssertRectEqualWithTolerance("Reload: Object geometry has changed.", aSnapRectOrig,
-                                     aSnapRectReload, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectReload, 1);
 }
 
 void ScShapeTest::testFitToCellSize()
@@ -1032,7 +991,7 @@ void ScShapeTest::testFitToCellSize()
 
     const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
     const tools::Rectangle aCellRect = pDoc->GetMMRect(1, 1, 1, 1, 0);
-    lcl_AssertRectEqualWithTolerance("Cell and SnapRect should be equal", aCellRect, rShapeRect, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aCellRect, rShapeRect, 2);
 }
 
 void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
@@ -1051,7 +1010,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     pDoc->SetDrawPageSize(0); // trigger recalcpos
     tools::Rectangle aRect(2400, 751, 5772, 3694); // expected snap rect from values in file
     const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
-    lcl_AssertRectEqualWithTolerance("Load: wrong pos and size", aRect, rShapeRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aRect, rShapeRect, 1);
 
     // Check anchor
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
