@@ -119,20 +119,6 @@ static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
-static void lcl_AssertPointEqualWithTolerance(std::string_view sInfo, const Point rExpected,
-                                              const Point rActual, const sal_Int32 nTolerance)
-{
-    // X
-    OString sMsg = OString::Concat(sInfo) + " X expected " + OString::number(rExpected.X())
-                   + " actual " + OString::number(rActual.X()) + " Tolerance "
-                   + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
-    // Y
-    sMsg = OString::Concat(sInfo) + " Y expected " + OString::number(rExpected.Y()) + " actual "
-           + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
-}
-
 void ScFiltersTest::testTdf137576_Measureline()
 {
     // The document contains a vertical measure line, anchored "To Cell (resize with cell)" with
@@ -152,9 +138,9 @@ void ScFiltersTest::testTdf137576_Measureline()
 
     // Check start and end point of measureline
     const Point aStart = pObj->GetPoint(0);
-    lcl_AssertPointEqualWithTolerance("Load, start point: ", Point(4800, 1500), aStart, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 1500), aStart, 1);
     const Point aEnd = pObj->GetPoint(1);
-    lcl_AssertPointEqualWithTolerance("Load, end point: ", Point(4800, 5200), aEnd, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 5200), aEnd, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -170,9 +156,9 @@ void ScFiltersTest::testTdf137576_Measureline()
 
     // Check start and end point of measureline, should be unchanged
     const Point aStart2 = pObj->GetPoint(0);
-    lcl_AssertPointEqualWithTolerance("Reload start point: ", Point(4800, 1500), aStart2, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 1500), aStart2, 1);
     const Point aEnd2 = pObj->GetPoint(1);
-    lcl_AssertPointEqualWithTolerance("Reload end point: ", Point(4800, 5200), aEnd2, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 5200), aEnd2, 1);
 }
 
 void ScFiltersTest::testTdf137216_HideCol()
@@ -221,7 +207,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     Point aOriginalEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
     lcl_AssertRectEqualWithTolerance("Load:", tools::Rectangle(Point(500, 3500), Size(1501, 11001)),
                                      aSnapRectOrig, 1);
-    lcl_AssertPointEqualWithTolerance("Load: end offset", Point(2000, 2499), aOriginalEndOffset, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aOriginalEndOffset, 1);
 
     // Hide rows 5 and 6 in UI = row index 4 to 5.
     pDoc->SetRowHidden(4, 5, 0, true);
@@ -243,7 +229,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     Point aReloadEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
     lcl_AssertRectEqualWithTolerance(
         "Reload:", tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
-    lcl_AssertPointEqualWithTolerance("Reload: end offset", Point(2000, 2499), aReloadEndOffset, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aReloadEndOffset, 1);
 }
 
 void ScFiltersTest::testTdf137020_FlipVertical()

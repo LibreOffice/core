@@ -189,4 +189,15 @@ private:
 #define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
 
+inline void assertPointEqual(
+    const Point& rExpected, const Point& rActual, const sal_Int32 nTolerance,
+    const CppUnit::SourceLine& rSourceLine )
+{
+    CPPUNIT_NS::assertDoubleEquals( rExpected.X(), rActual.X(), nTolerance, rSourceLine, "different X" );
+    CPPUNIT_NS::assertDoubleEquals( rExpected.Y(), rActual.Y(), nTolerance, rSourceLine, "different Y" );
+}
+
+#define CPPUNIT_ASSERT_POINT_EQUAL(aExpected, aActual, aTolerance) \
+        assertPointEqual( aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE() )
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

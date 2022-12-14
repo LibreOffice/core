@@ -136,20 +136,6 @@ static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
-static void lcl_AssertPointEqualWithTolerance(std::string_view sInfo, const Point rExpected,
-                                              const Point rActual, const sal_Int32 nTolerance)
-{
-    // X
-    OString sMsg = OString::Concat(sInfo) + " X expected " + OString::number(rExpected.X())
-                   + " actual " + OString::number(rActual.X()) + " Tolerance "
-                   + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
-    // Y
-    sMsg = OString::Concat(sInfo) + " Y expected " + OString::number(rExpected.Y()) + " actual "
-           + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
-}
-
 static SdrPage* lcl_getSdrPageWithAssert(ScDocument& rDoc)
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -260,7 +246,7 @@ void ScShapeTest::testTdf143619_validation_circle_pos()
 
     // Without fix in place the position was (2007, 833)
     Point aPos = pObj->GetSnapRect().TopLeft();
-    lcl_AssertPointEqualWithTolerance("after row and col delete", Point(6523, 1736), aPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(6523, 1736), aPos, 1);
 }
 
 void ScShapeTest::testTdf140252_DragCreateFormControl()
@@ -465,19 +451,18 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     // Test reading was correct
     SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     // Measure line
-    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aStart, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aEnd, pObj->GetPoint(1), 1);
     // Polyline
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
-    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aFirst, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aSecond, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aThird, pObj->GetPoint(2), 1);
     //Custom shape
     SdrObjCustomShape* pObjCS
         = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(*pDoc, 2));
     CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
-    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
-                                      pObjCS->GetLogicRect().TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -488,18 +473,17 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     // And test again
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     // Measure line
-    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aStart, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aEnd, pObj->GetPoint(1), 1);
     // Polyline
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
-    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aFirst, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aSecond, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aThird, pObj->GetPoint(2), 1);
     //Custom shape
     pObjCS = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(*pDoc, 2));
     CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
-    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
-                                      pObjCS->GetLogicRect().TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 }
 
 void ScShapeTest::testTdf139583_Rotate180deg()
@@ -693,7 +677,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     // Assert object position is unchanged, besides Twips<->Hmm inaccuracy.
     Point aNewPos = pObj->GetRelativePos();
-    lcl_AssertPointEqualWithTolerance("after reload", aOldPos, aNewPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aOldPos, aNewPos, 1);
 }
 
 void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
@@ -744,8 +728,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     // Make sure loading is correct
     Point aStartPoint(7500, 15000); // according UI
     Point aEndPoint(17500, 8000);
-    lcl_AssertPointEqualWithTolerance("Load start: ", aStartPoint, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("Load end: ", aEndPoint, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 1);
 
     // Hide column A
     pDoc->SetColHidden(0, 0, 0, true);
@@ -753,8 +737,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     // Shape should move by column width, here 3000
     aStartPoint.Move(-3000, 0);
     aEndPoint.Move(-3000, 0);
-    lcl_AssertPointEqualWithTolerance("Hide col A: ", aStartPoint, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("Hide col A: ", aEndPoint, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 1);
 
     // save and reload
     saveAndReload("calc8");
@@ -764,8 +748,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
 
     // Check that start and end point are unchanged besides rounding and unit conversion errors
-    lcl_AssertPointEqualWithTolerance("Reload start: ", aStartPoint, pObj->GetPoint(0), 2);
-    lcl_AssertPointEqualWithTolerance("Reload end: ", aEndPoint, pObj->GetPoint(1), 2);
+    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 2);
+    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 2);
 }
 
 void ScShapeTest::testHideColsShow()
@@ -1092,7 +1076,7 @@ void ScShapeTest::testLargeAnchorOffset()
 
     const Point aOldPos = pObj->GetRelativePos();
     // Just to check that it imports correctly
-    lcl_AssertPointEqualWithTolerance("before reload", { 9504, 9089 }, aOldPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(Point(9504, 9089), aOldPos, 1);
 
     saveAndReload("calc8");
 
@@ -1105,7 +1089,7 @@ void ScShapeTest::testLargeAnchorOffset()
     //   - Expression: std::abs(rExpected.Y() - rActual.Y()) <= nTolerance
     //   - after reload Y expected 9089 actual 9643 Tolerance 1
     const Point aNewPos = pObj->GetRelativePos();
-    lcl_AssertPointEqualWithTolerance("after reload", aOldPos, aNewPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL(aOldPos, aNewPos, 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeTest);
