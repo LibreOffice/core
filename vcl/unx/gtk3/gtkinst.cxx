@@ -18831,6 +18831,47 @@ public:
 
 #endif
 
+gboolean signalTooltipQuery(GtkWidget* pWidget, gint /*x*/, gint /*y*/,
+                            gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
+{
+    const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
+    if (aHelpData.mbBalloonHelp) // extended tips
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // by default use accessible description
+        AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
+        const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+        if (pDesc && pDesc[0])
+        {
+            gtk_tooltip_set_text(tooltip, pDesc);
+            return true;
+        }
+#endif
+
+        // fallback to the mechanism which needs help installed
+        OString sHelpId = ::get_help_id(pWidget);
+        Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
+        if (pHelp)
+        {
+            OUString sHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), static_cast<weld::Widget*>(nullptr));
+            if (!sHelpText.isEmpty())
+            {
+                gtk_tooltip_set_text(tooltip, OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr());
+                return true;
+            }
+        }
+    }
+
+    const char* pDesc = gtk_widget_get_tooltip_text(pWidget);
+    if (pDesc && pDesc[0])
+    {
+        gtk_tooltip_set_text(tooltip, pDesc);
+        return true;
+    }
+
+    return false;
+}
+
 #if GTK_CHECK_VERSION(4, 0, 0)
 
 class GtkInstanceComboBox : public GtkInstanceWidget, public vcl::ISearchableStringList, public virtual weld::ComboBox
@@ -21647,6 +21688,14 @@ private:
         return true;
     }
 
+    static gboolean signalComboTooltipQuery(GtkWidget* /*pWidget*/, gint x, gint y,
+                                            gboolean keyboard_mode, GtkTooltip *tooltip,
+                                            gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        return signalTooltipQuery(GTK_WIDGET(pThis->m_pComboBox), x, y, keyboard_mode, tooltip);
+    }
+
     int include_mru(int pos)
     {
         if (m_nMRUCount && pos != -1)
@@ -21695,6 +21744,12 @@ public:
 
         if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox)), "small-button"))
             gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(getContainer())), "small-button");
+
+        if (gtk_widget_get_has_tooltip(GTK_WIDGET(m_pComboBox)))
+        {
+            gtk_widget_set_has_tooltip(GTK_WIDGET(getContainer()), true);
+            g_signal_connect(getContainer(), "query-tooltip", G_CALLBACK(signalComboTooltipQuery), this);
+        }
 
         insertAsParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
@@ -22859,51 +22914,6 @@ public:
         g_signal_handler_disconnect(m_pExpander, m_nSignalId);
     }
 };
-
-}
-
-namespace {
-
-    gboolean signalTooltipQuery(GtkWidget* pWidget, gint /*x*/, gint /*y*/,
-                                         gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
-    {
-        const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
-        if (aHelpData.mbBalloonHelp) // extended tips
-        {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            // by default use accessible description
-            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
-            if (pDesc && pDesc[0])
-            {
-                gtk_tooltip_set_text(tooltip, pDesc);
-                return true;
-            }
-#endif
-
-            // fallback to the mechanism which needs help installed
-            OString sHelpId = ::get_help_id(pWidget);
-            Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
-            if (pHelp)
-            {
-                OUString sHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), static_cast<weld::Widget*>(nullptr));
-                if (!sHelpText.isEmpty())
-                {
-                    gtk_tooltip_set_text(tooltip, OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr());
-                    return true;
-                }
-            }
-        }
-
-        const char* pDesc = gtk_widget_get_tooltip_text(pWidget);
-        if (pDesc && pDesc[0])
-        {
-            gtk_tooltip_set_text(tooltip, pDesc);
-            return true;
-        }
-
-        return false;
-    }
 
 }
 
