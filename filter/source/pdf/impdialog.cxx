@@ -632,7 +632,15 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxCbExportNotes->set_active( pParent->mbExportNotes );
     mxCbExportNotesInMargin->set_active( pParent->mbExportNotesInMargin );
-    mxCbViewPDF->set_active( pParent->mbViewPDF);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mxCbViewPDF->hide();
+        mxCbViewPDF->set_active(false);
+    }
+    else
+    {
+       mxCbViewPDF->set_active(pParent->mbViewPDF);
+    }
 
     if ( mbIsPresentation )
     {
