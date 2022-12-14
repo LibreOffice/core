@@ -115,8 +115,8 @@ namespace cairocanvas
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
 
-        // XUnoTunnel
         sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;

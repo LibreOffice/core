@@ -40,6 +40,7 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -294,7 +295,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
      **/
     static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
     {
-        CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
+        CanvasBitmap* pBitmapImpl = comphelper::getFromUnoTunnel< CanvasBitmap >( xBitmap );
         if( pBitmapImpl )
             return pBitmapImpl->getSurface();
 
