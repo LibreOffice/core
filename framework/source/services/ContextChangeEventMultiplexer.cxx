@@ -322,6 +322,7 @@ static uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_Impl
     uno::Reference<ui::XContextChangeEventListener> xRet;
 
     rtl::Reference<ContextChangeEventMultiplexer> pMultiplexer =
+        // [-loplugin:unocast]
         dynamic_cast<ContextChangeEventMultiplexer *>(ui::ContextChangeEventMultiplexer::get(xComponentContext).get());
     assert(pMultiplexer);
 

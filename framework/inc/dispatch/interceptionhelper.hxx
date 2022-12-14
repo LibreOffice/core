@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 
+#include <rtl/ref.hxx>
 #include <tools/wldcrd.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -34,6 +35,8 @@
 #include <string_view>
 
 namespace framework{
+
+class DispatchProvider;
 
 /** @short      implements a helper to support interception with additional functionality.
 
@@ -129,7 +132,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
         /** @short this interception helper implements the top level master of an interceptor list ...
                    but this member is the lowest possible slave! */
-        css::uno::Reference< css::frame::XDispatchProvider > m_xSlave;
+        rtl::Reference< DispatchProvider > m_xSlave;
 
         /** @short contains all registered interceptor objects. */
         InterceptorList m_lInterceptionRegs;
@@ -147,7 +150,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                     an outside creates dispatch provider, which has to be used here as lowest slave "interceptor".
          */
         InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
-                           css::uno::Reference< css::frame::XDispatchProvider >  xSlave);
+                           rtl::Reference< DispatchProvider >  xSlave);
 
     private:
 
@@ -244,7 +247,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
          */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
-        css::uno::Reference<css::frame::XDispatchProvider> GetSlave() const { return m_xSlave; }
+        rtl::Reference<DispatchProvider> GetSlave() const { return m_xSlave; }
 
 }; // class InterceptionHelper
 

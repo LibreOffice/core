@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <dispatch/dispatchprovider.hxx>
 #include <dispatch/interceptionhelper.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -31,7 +32,7 @@ using namespace com::sun::star;
 namespace framework{
 
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
-                                       css::uno::Reference< css::frame::XDispatchProvider >  xSlave)
+                                       rtl::Reference< DispatchProvider >  xSlave)
     : m_xOwnerWeak  (xOwner                       )
     , m_xSlave      (std::move(xSlave                       ))
 {

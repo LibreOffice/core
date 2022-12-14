@@ -1477,8 +1477,7 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
             auto pInterceptionHelper = dynamic_cast<InterceptionHelper*>(m_xDispatchHelper.get());
             if (pInterceptionHelper)
             {
-                css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider = pInterceptionHelper->GetSlave();
-                auto pDispatchProvider = dynamic_cast<DispatchProvider*>(xDispatchProvider.get());
+                rtl::Reference<DispatchProvider> pDispatchProvider = pInterceptionHelper->GetSlave();
                 if (pDispatchProvider)
                 {
                     pDispatchProvider->ClearProtocolHandlers();
