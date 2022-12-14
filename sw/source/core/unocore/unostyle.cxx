@@ -630,23 +630,18 @@ public:
     void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl);
 };
 
+typedef cppu::ImplInheritanceHelper< SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
 class SwXFrameStyle
-    : public SwXStyle
-    , public css::document::XEventsSupplier
+    : public SwXFrameStyle_Base
     , public sw::ICoreFrameStyle
 {
 public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool,
                                 SwDoc*  pDoc,
                                 const OUString& rStyleName) :
-        SwXStyle(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
+        SwXFrameStyle_Base(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
     explicit SwXFrameStyle(SwDoc *pDoc);
 
-    virtual void SAL_CALL acquire(  ) noexcept override {SwXStyle::acquire();}
-    virtual void SAL_CALL release(  ) noexcept override {SwXStyle::release();}
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 
     //ICoreStyle
@@ -3343,7 +3338,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
 }
 
 SwXFrameStyle::SwXFrameStyle(SwDoc *pDoc)
-    : SwXStyle(pDoc, SfxStyleFamily::Frame, false)
+    : SwXFrameStyle_Base(pDoc, SfxStyleFamily::Frame, false)
 { }
 
 void SwXFrameStyle::SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem)
@@ -3367,21 +3362,6 @@ const SfxPoolItem* SwXFrameStyle::GetItem(sal_uInt16 eAtr)
         return nullptr;
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     return &xStyle->GetItemSet().Get(eAtr);
-}
-
-uno::Sequence<uno::Type> SwXFrameStyle::getTypes()
-{
-    return cppu::OTypeCollection(
-            cppu::UnoType<XEventsSupplier>::get(),
-            SwXStyle::getTypes()
-        ).getTypes();
-}
-
-uno::Any SwXFrameStyle::queryInterface(const uno::Type& rType)
-{
-    if(rType == cppu::UnoType<XEventsSupplier>::get())
-        return uno::Any(uno::Reference<XEventsSupplier>(this));
-    return SwXStyle::queryInterface(rType);
 }
 
 uno::Reference<container::XNameReplace> SwXFrameStyle::getEvents()

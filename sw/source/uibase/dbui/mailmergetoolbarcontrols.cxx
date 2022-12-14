@@ -97,7 +97,8 @@ IMPL_LINK(CurrentEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 /// Controller for .uno:MailMergeCurrentEntry toolbar checkbox: creates the checkbox & handles the value.
-class MMCurrentEntryController : public svt::ToolboxController, public lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> MMCurrentEntryController_Base;
+class MMCurrentEntryController : public MMCurrentEntryController_Base
 {
     VclPtr<CurrentEdit> m_xCurrentEdit;
 
@@ -105,29 +106,9 @@ class MMCurrentEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
+        : MMCurrentEntryController_Base(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
         , m_xCurrentEdit(nullptr)
     {
-    }
-
-    // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
-    {
-        uno::Any a(ToolboxController::queryInterface(aType));
-        if (a.hasValue())
-            return a;
-
-        return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
-    }
-
-    void SAL_CALL acquire() noexcept override
-    {
-        ToolboxController::acquire();
-    }
-
-    void SAL_CALL release() noexcept override
-    {
-        ToolboxController::release();
     }
 
     // XServiceInfo
@@ -208,7 +189,8 @@ IMPL_LINK(ExcludeCheckBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 /// Controller for .uno:MailMergeExcludeEntry toolbar checkbox: creates the checkbox & handles the value.
-class MMExcludeEntryController : public svt::ToolboxController, public lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> MMExcludeEntryController_Base;
+class MMExcludeEntryController : public MMExcludeEntryController_Base
 {
     VclPtr<ExcludeCheckBox> m_xExcludeCheckbox;
 
@@ -216,29 +198,9 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
+        : MMExcludeEntryController_Base(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
         , m_xExcludeCheckbox(nullptr)
     {
-    }
-
-    // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
-    {
-        uno::Any a(ToolboxController::queryInterface(aType));
-        if (a.hasValue())
-            return a;
-
-        return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
-    }
-
-    void SAL_CALL acquire() noexcept override
-    {
-        ToolboxController::acquire();
-    }
-
-    void SAL_CALL release() noexcept override
-    {
-        ToolboxController::release();
     }
 
     // XServiceInfo

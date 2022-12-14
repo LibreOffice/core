@@ -153,16 +153,12 @@ public:
     }
 };
 
-class NavElementToolBoxControl : public svt::ToolboxController, public lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, lang::XServiceInfo> NavElementToolBoxControl_Base;
+class NavElementToolBoxControl : public NavElementToolBoxControl_Base
 {
 public:
     explicit NavElementToolBoxControl(
         const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

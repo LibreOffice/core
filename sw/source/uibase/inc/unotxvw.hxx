@@ -48,18 +48,19 @@
 class SdrObject;
 class SwView;
 
-class SwXTextView final :
-    public css::view::XSelectionSupplier,
-    public css::lang::XServiceInfo,
-    public css::view::XFormLayerAccess,
-    public css::text::XTextViewCursorSupplier,
-    public css::text::XTextViewTextRangeSupplier,
-    public css::text::XRubySelection,
-    public css::view::XViewSettingsSupplier,
-    public css::beans::XPropertySet,
-    public css::datatransfer::XTransferableSupplier,
-    public css::datatransfer::XTransferableTextSupplier,
-    public SfxBaseController
+typedef cppu::ImplInheritanceHelper<
+            SfxBaseController,
+            css::view::XSelectionSupplier,
+            css::lang::XServiceInfo,
+            css::view::XFormLayerAccess,
+            css::text::XTextViewCursorSupplier,
+            css::text::XTextViewTextRangeSupplier,
+            css::text::XRubySelection,
+            css::view::XViewSettingsSupplier,
+            css::beans::XPropertySet,
+            css::datatransfer::XTransferableSupplier,
+            css::datatransfer::XTransferableTextSupplier> SwXTextView_Base;
+class SwXTextView final : public SwXTextView_Base
 {
     ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener> m_SelChangedListeners;
 
@@ -77,14 +78,6 @@ class SwXTextView final :
     virtual ~SwXTextView() override;
 public:
     SwXTextView(SwView* pSwView);
-
-    virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XSelectionSupplier
     virtual css::uno::Any SAL_CALL getSelection() override;

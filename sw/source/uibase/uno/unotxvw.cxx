@@ -85,7 +85,7 @@ using namespace ::com::sun::star::frame;
 using ::com::sun::star::util::URL;
 
 SwXTextView::SwXTextView(SwView* pSwView) :
-    SfxBaseController(pSwView),
+    SwXTextView_Base(pSwView),
     m_SelChangedListeners(m_aMutex),
     m_pView(pSwView),
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_VIEW ) )
@@ -124,101 +124,6 @@ void SwXTextView::Invalidate()
 
     osl_atomic_decrement(&m_refCount);
     m_pView = nullptr;
-}
-
-Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  )
-{
-    return cppu::OTypeCollection(
-            cppu::UnoType<XSelectionSupplier>::get(),
-            cppu::UnoType<XServiceInfo>::get(),
-            cppu::UnoType<XFormLayerAccess>::get(),
-            cppu::UnoType<XTextViewCursorSupplier>::get(),
-            cppu::UnoType<XTextViewTextRangeSupplier>::get(),
-            cppu::UnoType<XViewSettingsSupplier>::get(),
-            cppu::UnoType<XRubySelection>::get(),
-            cppu::UnoType<XPropertySet>::get(),
-            cppu::UnoType<datatransfer::XTransferableSupplier>::get(),
-            cppu::UnoType<datatransfer::XTransferableTextSupplier>::get(),
-            SfxBaseController::getTypes()
-        ).getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  )
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-void SAL_CALL SwXTextView::acquire(  )noexcept
-{
-    SfxBaseController::acquire();
-}
-
-void SAL_CALL SwXTextView::release(  )noexcept
-{
-    SfxBaseController::release();
-}
-
-uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
-{
-    uno::Any aRet;
-    if(aType == cppu::UnoType<view::XSelectionSupplier>::get())
-    {
-        uno::Reference<view::XSelectionSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<lang::XServiceInfo>::get())
-    {
-        uno::Reference<lang::XServiceInfo> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<view::XControlAccess>::get())
-    {
-        uno::Reference<view::XControlAccess> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<view::XFormLayerAccess>::get())
-    {
-        uno::Reference<view::XFormLayerAccess> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<text::XTextViewCursorSupplier>::get())
-    {
-        uno::Reference<text::XTextViewCursorSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else if (aType == cppu::UnoType<text::XTextViewTextRangeSupplier>::get())
-    {
-        uno::Reference<text::XTextViewTextRangeSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<view::XViewSettingsSupplier>::get())
-    {
-        uno::Reference<view::XViewSettingsSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<XRubySelection>::get())
-    {
-        uno::Reference<XRubySelection> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<XPropertySet>::get())
-    {
-        uno::Reference<XPropertySet> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<datatransfer::XTransferableSupplier>::get())
-    {
-        uno::Reference<datatransfer::XTransferableSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else if(aType == cppu::UnoType<datatransfer::XTransferableTextSupplier>::get())
-    {
-        uno::Reference<datatransfer::XTransferableTextSupplier> xRet = this;
-        aRet <<= xRet;
-    }
-    else
-        aRet = SfxBaseController::queryInterface(aType);
-    return aRet;
 }
 
 sal_Bool SwXTextView::select(const uno::Any& aInterface)

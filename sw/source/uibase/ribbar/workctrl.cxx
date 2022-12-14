@@ -661,31 +661,11 @@ bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
 }
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
- : svt::ToolboxController( rxContext,
+ : NavElementToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
                            ".uno:NavElement" ),
    m_pBox( nullptr )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL NavElementToolBoxControl::queryInterface( const css::uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL NavElementToolBoxControl::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL NavElementToolBoxControl::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -800,18 +780,13 @@ lo_writer_NavElementToolBoxController_get_implementation(
 
 namespace {
 
-class PrevNextScrollToolboxController : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> PrevNextScrollToolboxController_Base;
+class PrevNextScrollToolboxController : public PrevNextScrollToolboxController_Base
 {
 public:
     enum Type { PREVIOUS, NEXT };
 
     PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -831,32 +806,12 @@ private:
 }
 
 PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
-    : svt::ToolboxController( rxContext,
+    : PrevNextScrollToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == PREVIOUS) ? OUString( ".uno:ScrollToPrevious" ): OUString( ".uno:ScrollToNext" ) ),
       meType( eType )
 {
     addStatusListener(".uno:NavElement");
-}
-
-// XInterface
-css::uno::Any SAL_CALL PrevNextScrollToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL PrevNextScrollToolboxController::acquire() noexcept
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL PrevNextScrollToolboxController::release() noexcept
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
