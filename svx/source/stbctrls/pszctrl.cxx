@@ -323,7 +323,7 @@ void SvxPosSizeStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16 nSID
     }
     else if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
     {
-        // show string (table cel or different)
+        // show string (table cell or different)
         pImpl->aStr = pStringItem->GetValue();
         pImpl->bTable = true;
         pImpl->bPos = false;
