@@ -86,7 +86,8 @@ namespace vclcanvas
     }
 
     sal_Int64 CanvasBitmap::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl<RepaintTarget>(aIdentifier, this);
+        return comphelper::getSomethingImpl(
+            aIdentifier, this, comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 
     BitmapEx CanvasBitmap::getBitmap() const

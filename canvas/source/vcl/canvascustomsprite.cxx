@@ -23,7 +23,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/outdev.hxx>
 
 #include "canvascustomsprite.hxx"
@@ -118,7 +117,7 @@ namespace vclcanvas
     }
 
     sal_Int64 CanvasCustomSprite::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl<RepaintTarget>(aIdentifier, this);
+        return RepaintTarget::getSomething(aIdentifier);
     }
 
     // Sprite

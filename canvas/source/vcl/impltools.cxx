@@ -28,6 +28,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
@@ -50,7 +51,7 @@ namespace vclcanvas::tools
         {
             // TODO(F3): CanvasCustomSprite should also be tunnelled
             // through (also implements XIntegerBitmap interface)
-            CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
+            CanvasBitmap* pBitmapImpl = comphelper::getFromUnoTunnel< CanvasBitmap >( xBitmap );
 
             if( pBitmapImpl )
             {

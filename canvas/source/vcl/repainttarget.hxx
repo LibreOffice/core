@@ -51,6 +51,10 @@ namespace vclcanvas
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const = 0;
 
+        sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & id) {
+            return comphelper::getSomethingImpl(id, this);
+        }
+
         static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
             static comphelper::UnoIdInit const id;
             return id.getSeq();
