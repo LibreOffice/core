@@ -28,20 +28,13 @@
 namespace framework
 {
 
-class MenuBarWrapper final : public UIConfigElementWrapperBase,
-                       public css::container::XNameAccess
+typedef cppu::ImplInheritanceHelper< UIConfigElementWrapperBase, css::container::XNameAccess> MenuBarWrapper_Base;
+class MenuBarWrapper final : public MenuBarWrapper_Base
 
 {
     public:
         MenuBarWrapper( css::uno::Reference< css::uno::XComponentContext > xContext );
         virtual ~MenuBarWrapper() override;
-
-        //  XInterface, XTypeProvider
-        virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
-        virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
 

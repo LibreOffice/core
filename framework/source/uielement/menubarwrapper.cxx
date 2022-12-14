@@ -45,72 +45,10 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-void SAL_CALL MenuBarWrapper::acquire() noexcept                                                                          \
-{                                                                                                                                                       \
-    /* Don't use mutex in methods of XInterface! */                                                                                                     \
-    UIConfigElementWrapperBase::acquire();                                                                                                                               \
-}                                                                                                                                                       \
-                                                                                                                                                        \
-void SAL_CALL MenuBarWrapper::release() noexcept                                                                          \
-{                                                                                                                                                       \
-    /* Don't use mutex in methods of XInterface! */                                                                                                     \
-    UIConfigElementWrapperBase::release();                                                                                                                               \
-}
-
-css::uno::Any SAL_CALL MenuBarWrapper::queryInterface( const css::uno::Type& aType )
-{
-    /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */
-    /* Ask for my own supported interfaces ...                                          */
-    css::uno::Any aReturn  = ::cppu::queryInterface( aType,
-                        static_cast< css::lang::XTypeProvider* >( this ),
-                        static_cast< css::ui::XUIElement* >( this ),
-                        static_cast< css::ui::XUIElementSettings* >( this ),
-                        static_cast< css::beans::XMultiPropertySet* >( this ),
-                        static_cast< css::beans::XFastPropertySet* >( this ),
-                        static_cast< css::beans::XPropertySet* >( this ),
-                        static_cast< css::lang::XInitialization* >( this ),
-                        static_cast< css::lang::XComponent* >( this ),
-                        static_cast< css::util::XUpdatable* >( this ),
-                        static_cast< css::ui::XUIConfigurationListener* >( this ),
-                        static_cast< css::container::XNameAccess* >( static_cast< css::container::XElementAccess* >( this ) )
-                                        );
-    /* If searched interface not supported by this class ... */
-    if ( !aReturn.hasValue() )
-    {
-        /* ... ask baseclass for interfaces! */
-        aReturn = UIConfigElementWrapperBase::queryInterface( aType );
-    }
-    /* Return result of this search. */
-    return aReturn;
-}
-
-css::uno::Sequence< sal_Int8 > SAL_CALL MenuBarWrapper::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL MenuBarWrapper::getTypes()
-{
-    /* Attention: "TYPES" will expand to "(...)"!   */
-    static cppu::OTypeCollection ourTypeCollection {
-                        cppu::UnoType<css::lang::XTypeProvider>::get()           ,
-                        cppu::UnoType<css::ui::XUIElement>::get()                ,
-                        cppu::UnoType<css::ui::XUIElementSettings>::get()        ,
-                        cppu::UnoType<css::beans::XMultiPropertySet>::get()      ,
-                        cppu::UnoType<css::beans::XFastPropertySet>::get()       ,
-                        cppu::UnoType<css::beans::XPropertySet>::get()           ,
-                        cppu::UnoType<css::lang::XInitialization>::get()         ,
-                        cppu::UnoType<css::lang::XComponent>::get()              ,
-                        cppu::UnoType<css::util::XUpdatable>::get()              ,
-                        cppu::UnoType<css::ui::XUIConfigurationListener>::get()  ,
-                    cppu::UnoType<css::container::XNameAccess>::get() };
-    return ourTypeCollection.getTypes();
-}
-
 MenuBarWrapper::MenuBarWrapper(
     css::uno::Reference< css::uno::XComponentContext > xContext
     )
-:    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
+:    MenuBarWrapper_Base( UIElementType::MENUBAR ),
      m_bRefreshPopupControllerCache( true ),
      m_xContext(std::move( xContext ))
 {
