@@ -29,6 +29,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/AccessibilityCheckDialog.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -254,7 +255,10 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
 
     // queue the tab pages for later creation (created when first shown)
     AddTabPage("general", ImpPDFTabGeneralPage::Create, nullptr );
-    AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, nullptr);
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xTabCtrl->remove_page("digitalsignatures");
+    else
+        AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, nullptr);
     AddTabPage("security", ImpPDFTabSecurityPage::Create, nullptr);
     AddTabPage("links", ImpPDFTabLinksPage::Create, nullptr);
     AddTabPage("userinterface", ImpPDFTabViewerPage::Create, nullptr);
