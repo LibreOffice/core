@@ -83,6 +83,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChange
     Sequence<PropertyValues> aRubyValues;
     Reference<XController> xController;
     bool bHasSelectionChanged;
+    bool bDisposing;
 
 public:
     SvxRubyData_Impl();
@@ -98,6 +99,7 @@ public:
         return xModel;
     }
     bool HasSelectionChanged() const { return bHasSelectionChanged; }
+    bool IsDisposing() const { return bDisposing; }
     Reference<XRubySelection> const& GetRubySelection()
     {
         xSelection.set(xController, UNO_QUERY);
@@ -120,6 +122,7 @@ public:
 
 SvxRubyData_Impl::SvxRubyData_Impl()
     : bHasSelectionChanged(false)
+    , bDisposing(false)
 {
 }
 
@@ -161,6 +164,7 @@ void SvxRubyData_Impl::disposing(const EventObject&)
     {
     }
     xController = nullptr;
+    bDisposing = true;
 }
 
 void SvxRubyData_Impl::AssertOneEntry()
@@ -269,9 +273,9 @@ void SvxRubyDialog::Close()
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialogController::Activate();
-    if (!m_xContentArea)
+    if (m_pImpl->IsDisposing())
     {
-        // tdf#141967 if Activate is called during tear down bail early
+        // tdf#141967/tdf#152495 if Activate is called during tear down bail early
         return;
     }
     //get selection from current view frame
