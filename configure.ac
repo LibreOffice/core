@@ -2882,7 +2882,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macosx-version-min-required=10.14
+                          e. g.: --with-macosx-version-min-required=10.15
     ],
 ,)
 
@@ -3446,8 +3446,8 @@ if test $_os = Darwin; then
     # we don't target the lower versions anymore, so it doesn't matter that we don't generate the
     # correct version in case such an old SDK is specified, it will be rejected later anyway
     MACOSX_SDK_VERSION=$(echo $macosx_sdk | $AWK -F. '{ print $1*10000+$2*100+$3 }')
-    if test $MACOSX_SDK_VERSION -lt 101400; then
-        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported, lowest supported version is 10.14])
+    if test $MACOSX_SDK_VERSION -lt 101500; then
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported, lowest supported version is 10.15])
     fi
     if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
         AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported for Apple Silicon (need at least 11.0)])
@@ -3457,15 +3457,15 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what minimum version of macOS to require])
     if test "$with_macosx_version_min_required" = "" ; then
         if test "$host_cpu" = x86_64; then
-            with_macosx_version_min_required="10.14";
+            with_macosx_version_min_required="10.15";
         else
             with_macosx_version_min_required="11.0";
         fi
     fi
     # see same notes about MACOSX_SDK_VERSION above
     MAC_OS_X_VERSION_MIN_REQUIRED=$(echo $with_macosx_version_min_required | $AWK -F. '{ print $1*10000+$2*100+$3 }')
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 101400; then
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, minimum supported version is 10.14])
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 101500; then
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, minimum supported version is 10.15])
     fi
     AC_MSG_RESULT([$with_macosx_version_min_required])
 
