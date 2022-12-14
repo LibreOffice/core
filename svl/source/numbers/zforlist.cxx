@@ -1718,12 +1718,15 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         bPrecChanged = true;
     }
 
-    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, pFormat,
-                                     bForceSystemLocale ? LANGUAGE_SYSTEM : LANGUAGE_DONTKNOW);
     // if bFiltering true keep the nRealKey format
-    if ( nKey != nRealKey && !bFiltering )
+    if (!bFiltering)
     {
-        pFormat = GetFormatEntry( nKey );
+        sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, pFormat,
+                                         bForceSystemLocale ? LANGUAGE_SYSTEM : LANGUAGE_DONTKNOW);
+        if (nKey != nRealKey)
+        {
+            pFormat = GetFormatEntry( nKey );
+        }
     }
     assert(pFormat);
     if (pFormat)
