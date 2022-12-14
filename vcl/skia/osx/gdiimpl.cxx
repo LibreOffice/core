@@ -142,7 +142,7 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
     if (pixmap.bounds() != mDirtyRect && pixmap.bounds().bottom() == mDirtyRect.bottom())
     {
         // HACK for tdf#145843: If mDirtyRect includes the last line but not the first pixel of it,
-        // then the rowBytes() trick would lead to the GC* functions thinking that even pixels after
+        // then the rowBytes() trick would lead to the CG* functions thinking that even pixels after
         // the pixmap data belong to the area (since the shifted x()+rowBytes() points there) and
         // at least on Intel Mac they would actually read those data, even though I see no good reason
         // to do that, as that's beyond the x()+width() for the last line. That could be handled
@@ -151,22 +151,49 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
         mDirtyRect.fLeft = 0;
         assert(mDirtyRect.width() == pixmap.bounds().width());
     }
-    CGContextRef context = CGBitmapContextCreate(
-        pixmap.writable_addr32(mDirtyRect.x() * mScaling, mDirtyRect.y() * mScaling),
-        mDirtyRect.width() * mScaling, mDirtyRect.height() * mScaling, 8, pixmap.rowBytes(),
-        GetSalData()->mxRGBSpace, toCGBitmapType(image->colorType(), image->alphaType()));
-    if (!context)
+
+    // tdf#145843 Do not use CGBitmapContextCreate() to create a bitmap context
+    // As described in the comment in the above code, CGBitmapContextCreate()
+    // and CGBitmapContextCreateWithData() will try to access pixels up to
+    // mDirtyRect.x() + pixmap.bounds.width() for each row. When reading the
+    // last line in the SkPixmap, the buffer allocated for the SkPixmap ends at
+    // mDirtyRect.x() + mDirtyRect.width() and mDirtyRect.width() is clamped to
+    // pixmap.bounds.width() - mDirtyRect.x().
+    // This behavior looks like an optimization within CGBitmapContextCreate()
+    // to draw with a single memcpy() so fix this bug by chaining the
+    // CGDataProvider(), CGImageCreate(), and CGImageCreateWithImageInRect()
+    // functions to create the screen image.
+    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(
+        nullptr, pixmap.writable_addr32(0, 0), pixmap.computeByteSize(), nullptr);
+    if (!dataProvider)
     {
-        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate bitmap context");
+        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate data provider");
         return;
     }
-    CGImageRef screenImage = CGBitmapContextCreateImage(context);
+
+    CGImageRef fullImage = CGImageCreate(pixmap.bounds().width(), pixmap.bounds().height(), 8,
+                                         8 * image->imageInfo().bytesPerPixel(), pixmap.rowBytes(),
+                                         GetSalData()->mxRGBSpace,
+                                         toCGBitmapType(image->colorType(), image->alphaType()),
+                                         dataProvider, nullptr, false, kCGRenderingIntentDefault);
+    if (!fullImage)
+    {
+        CGDataProviderRelease(dataProvider);
+        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate full image");
+        return;
+    }
+
+    CGImageRef screenImage = CGImageCreateWithImageInRect(
+        fullImage, CGRectMake(mDirtyRect.x() * mScaling, mDirtyRect.y() * mScaling,
+                              mDirtyRect.width() * mScaling, mDirtyRect.height() * mScaling));
     if (!screenImage)
     {
-        CGContextRelease(context);
+        CGImageRelease(fullImage);
+        CGDataProviderRelease(dataProvider);
         SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate screen image");
         return;
     }
+
     mrShared.maContextHolder.saveState();
     // Drawing to the actual window has scaling active, so use unscaled coordinates, the scaling matrix will scale them
     // to the proper screen coordinates. Unless the scaling is fake for debugging, in which case scale them to draw
@@ -191,7 +218,9 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
     mrShared.maContextHolder.restoreState();
 
     CGImageRelease(screenImage);
-    CGContextRelease(context);
+    CGImageRelease(fullImage);
+    CGDataProviderRelease(dataProvider);
+
     // This is also in VCL coordinates.
     mrShared.refreshRect(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
 }
