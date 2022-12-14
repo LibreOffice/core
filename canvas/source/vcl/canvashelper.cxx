@@ -1111,7 +1111,7 @@ namespace vclcanvas
 
         setupOutDevState( viewState, renderState, TEXT_COLOR );
 
-        CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
+        CanvasFont* pFont = comphelper::getFromUnoTunnel< CanvasFont >( xFont );
 
         ENSURE_ARG_OR_THROW( pFont,
                              "Font not compatible with this canvas" );
