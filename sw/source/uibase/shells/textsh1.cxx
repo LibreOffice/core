@@ -102,6 +102,7 @@
 #include <xmloff/odffields.hxx>
 #include <bookmark.hxx>
 #include <linguistic/misc.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <authfld.hxx>
 #include <config_wasm_strip.h>
 #if !ENABLE_WASM_STRIP_EXTRA
@@ -110,6 +111,7 @@
 #endif // ENABLE_WASM_STRIP_EXTRA
 #include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentUndoRedo.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -377,6 +379,92 @@ OUString GetLocalURL(const SwWrtShell& rSh)
     return rLocalURL;
 }
 
+void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
+    {
+        return;
+    }
+
+    OUString aBookmarkNamePrefix;
+    const SfxStringItem* pBookmarkNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (pBookmarkNamePrefix)
+    {
+        aBookmarkNamePrefix = pBookmarkNamePrefix->GetValue();
+    }
+
+    uno::Sequence<beans::PropertyValues> aBookmarks;
+    const SfxUnoAnyItem* pBookmarks = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
+    if (pBookmarks)
+    {
+        pBookmarks->GetValue() >>= aBookmarks;
+    }
+
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+
+    IDocumentMarkAccess& rIDMA = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
+    sal_Int32 nBookmarkIndex = 0;
+    bool bSortMarks = false;
+    for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
+    {
+        auto pMark = dynamic_cast<sw::mark::Bookmark*>(*it);
+        assert(pMark);
+        if (!pMark->GetName().startsWith(aBookmarkNamePrefix))
+        {
+            continue;
+        }
+
+        if (aBookmarks.getLength() <= nBookmarkIndex)
+        {
+            continue;
+        }
+
+        comphelper::SequenceAsHashMap aMap(aBookmarks[nBookmarkIndex++]);
+        if (aMap["Bookmark"].get<OUString>() != pMark->GetName())
+        {
+            continue;
+        }
+
+        OUString aBookmarkText = aMap["BookmarkText"].get<OUString>();
+
+        // Insert markers to remember where the paste positions are.
+        SwPaM aMarkers(pMark->GetMarkEnd());
+        IDocumentContentOperations& rIDCO = rWrtSh.GetDoc()->getIDocumentContentOperations();
+        bool bSuccess = rIDCO.InsertString(aMarkers, "XY");
+        if (bSuccess)
+        {
+            SwPaM aPasteEnd(pMark->GetMarkEnd());
+            aPasteEnd.Move(fnMoveForward, GoInContent);
+
+            // Paste HTML content.
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
+            *pCursorPos = aPasteEnd;
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8(), true);
+
+            // Update the bookmark to point to the new content.
+            SwPaM aPasteStart(pMark->GetMarkEnd());
+            aPasteStart.Move(fnMoveForward, GoInContent);
+            SwPaM aStartMarker(pMark->GetMarkStart(), *aPasteStart.GetPoint());
+            SwPaM aEndMarker(*aPasteEnd.GetPoint(), *aPasteEnd.GetPoint());
+            aEndMarker.GetMark()->AdjustContent(1);
+            pMark->SetMarkPos(*aPasteStart.GetPoint());
+            pMark->SetOtherMarkPos(*aPasteEnd.GetPoint());
+            bSortMarks = true;
+
+            // Remove markers. the start marker includes the old content as well.
+            rIDCO.DeleteAndJoin(aStartMarker);
+            rIDCO.DeleteAndJoin(aEndMarker);
+        }
+    }
+    if (bSortMarks)
+    {
+        rIDMA.assureSortedMarkContainers();
+    }
+
+    rWrtSh.EndAction();
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+}
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -754,6 +842,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pDlg->StartExecuteAsync(aContext);
             }
 
+            break;
+        }
+        case FN_UPDATE_BOOKMARKS:
+        {
+            UpdateBookmarks(rReq, rWrtSh);
             break;
         }
         case FN_DELETE_BOOKMARK:

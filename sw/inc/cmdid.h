@@ -203,6 +203,7 @@ class SwUINumRuleItem;
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
+// FN_INSERT + 3 is FN_INSERT_BREAK
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
 #define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
@@ -319,6 +320,7 @@ class SwUINumRuleItem;
 #define FN_TABLE_PASTE_COL_BEFORE   (FN_INSERT2 + 32)  /* paste table as new table columns */
 
 #define FN_EDIT_BOOKMARK        (FN_INSERT2 + 33 )  /* Bookmark */
+#define FN_UPDATE_BOOKMARKS (FN_INSERT2 + 34)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

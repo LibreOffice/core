@@ -2586,6 +2586,20 @@ SfxVoidItem EditBookmark FN_EDIT_BOOKMARK
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem UpdateBookmarks FN_UPDATE_BOOKMARKS
+(SfxStringItem BookmarkNamePrefix FN_PARAM_1, SfxUnoAnyItem Bookmarks FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem SetReminder FN_SET_REMINDER
 
 [
