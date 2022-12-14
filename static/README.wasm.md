@@ -43,19 +43,14 @@ generally the Qt6 WASM documentation is much better, because it incorporated man
 information from the Qt Wiki.
 
 FWIW: Qt 5.15 LTS is not maintained publicly and Qt WASM has quite a few bugs. Most
-WASM fixes from Qt 6 are needed for Qt 5.15 too. They can mainly be cherry-picked from:
-- git log origin/dev src/plugins/platforms/wasm/
-- git log --grep wasm origin/dev
+WASM fixes from Qt 6 are needed for Qt 5.15 too. Allotropia offers a Qt repository
+with the necessary patches cherry-picked.
 
-We will probably offer our own Qt repository clone at some point.
-
-But even the public Qt 5.15 branch is still broken, so better start with the v5.15.2 tag.
-
-    git clone https://github.com/qt/qt5.git
+    git clone https://github.com/allotropia/qt5.git
     cd qt5
-    git checkout v5.15.2
+    git checkout v5.15.2+wasm
     ./init-repository --module-subset=qtbase
-    ./configure -xplatform wasm-emscripten -feature-thread -prefix $PWD/install-5.15.2
+    ./configure -xplatform wasm-emscripten -feature-thread -prefix <whatever>
     make -j<CORES> module-qtbase
 
 Optionally you can add the configure flag "-compile-examples". But then you also have to
