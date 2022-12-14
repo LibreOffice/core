@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,fontconfig))
 
 $(eval $(call gb_ExternalProject_use_externals,fontconfig,\
-	expat \
+	$(if $(filter EMSCRIPTEN,$(OS)),libxml2,expat) \
 	freetype \
 ))
 
