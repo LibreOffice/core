@@ -687,8 +687,14 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 {
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
 
+    if (!pView)
+        pView = SfxViewFrame::Current();
+
+    if (!pView)
+        return xRecorder;
+
     css::uno::Reference< css::beans::XPropertySet > xSet(
-        (pView ? pView : SfxViewFrame::Current())->GetFrame().GetFrameInterface(),
+        pView->GetFrame().GetFrameInterface(),
         css::uno::UNO_QUERY);
 
     if(xSet.is())
