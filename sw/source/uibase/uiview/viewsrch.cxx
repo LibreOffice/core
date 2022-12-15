@@ -830,9 +830,13 @@ SvxSearchDialog* SwView::GetSearchDialog()
 {
 #if HAVE_FEATURE_DESKTOP
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->GetChildWindow(nId) );
-    auto pSrchDlg = pWrp ? pWrp->getDialog() : nullptr;
-    return pSrchDlg;
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    if (!pFrame)
+        return nullptr;
+    SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>(pFrame->GetChildWindow(nId));
+    if (!pWrp)
+        return nullptr;
+    return pWrp->getDialog();
 #else
     return nullptr;
 #endif
