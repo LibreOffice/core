@@ -1180,7 +1180,8 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
             const SwNumRule* pNumRule = pStyle->GetNumRule();
             if (pNumRule->GetName() == SwResId(STR_POOLNUMRULE_NOLIST))
             {
-                SfxViewFrame::Current()->GetDispatcher()->Execute(FN_NUM_BULLET_OFF);
+                if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+                    pViewFrm->GetDispatcher()->Execute(FN_NUM_BULLET_OFF);
                 break;
             }
             const OUString sListIdForStyle =pNumRule->GetDefaultListId();
