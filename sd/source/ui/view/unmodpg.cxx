@@ -118,8 +118,12 @@ void ModifyPageUndoAction::Undo()
     }
 
     // Redisplay
-    SfxViewFrame::Current()->GetDispatcher()->Execute(
-        SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if( pCurrent )
+    {
+        pCurrent->GetDispatcher()->Execute(
+            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    }
 }
 
 void ModifyPageUndoAction::Redo()
@@ -161,8 +165,12 @@ void ModifyPageUndoAction::Redo()
     }
 
     // Redisplay
-    SfxViewFrame::Current()->GetDispatcher()->Execute(
-        SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if( pCurrent )
+    {
+        pCurrent->GetDispatcher()->Execute(
+            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    }
 }
 
 ModifyPageUndoAction::~ModifyPageUndoAction()
