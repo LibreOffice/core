@@ -1383,7 +1383,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     emulateTyping(*pTextDoc, u"x");
-    CPPUNIT_ASSERT(pNode->GetWrong());
     // tdf#92036 pending spell checking
     bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
     CPPUNIT_ASSERT(bPending);
@@ -1391,7 +1390,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     // Move right, leave the bad word
 
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    CPPUNIT_ASSERT(pNode->GetWrong());
     // tdf#92036 still pending spell checking
     bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
     CPPUNIT_ASSERT(bPending);
