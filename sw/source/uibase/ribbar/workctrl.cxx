@@ -420,10 +420,11 @@ void SwZoomBox_Impl::Select()
             m_xWidget->set_entry_text(m_xWidget->get_saved_value());
         }
 
-        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-
-        pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM,
-                SfxCallMode::ASYNCHRON, { &aZoom });
+        if (SfxObjectShell* pCurrentShell = SfxObjectShell::Current())
+        {
+            pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM,
+                    SfxCallMode::ASYNCHRON, { &aZoom });
+        }
     }
     ReleaseFocus();
 }
@@ -619,11 +620,14 @@ IMPL_STATIC_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void
 {
     if (!rComboBox.changed_by_direct_pick())  // only when picked from the list
         return;
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
     SfxUInt32Item aParam(FN_NAV_ELEMENT, rComboBox.get_active_id().toUInt32());
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
     aArgs[1] = nullptr;
-    SfxDispatcher* pDispatch = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+    SfxDispatcher* pDispatch = pViewFrm->GetBindings().GetDispatcher();
     pDispatch->Execute(FN_NAV_ELEMENT, SfxCallMode::SYNCHRON, aArgs);
 }
 

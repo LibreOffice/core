@@ -180,8 +180,11 @@ void SwFieldDlg::ReInitDlg()
 
     if (bNewMode != m_bHtmlMode)
     {
-        SfxViewFrame::Current()->GetDispatcher()->
-            Execute(FN_INSERT_FIELD, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        {
+            pViewFrm->GetDispatcher()->
+                Execute(FN_INSERT_FIELD, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
+        }
         Close();
     }
 

@@ -80,7 +80,8 @@ SwSyncBtnDlg::~SwSyncBtnDlg()
 
 IMPL_STATIC_LINK_NOARG(SwSyncBtnDlg, BtnHdl, weld::Button&, void)
 {
-    SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
