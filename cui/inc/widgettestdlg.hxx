@@ -18,9 +18,13 @@ class WidgetTestDialog final : public weld::GenericDialogController
 private:
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::Button> m_xCancelButton;
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeView> m_xTreeView2;
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
+
+    void FillTreeView();
 
 public:
     WidgetTestDialog(weld::Window* pParent);
