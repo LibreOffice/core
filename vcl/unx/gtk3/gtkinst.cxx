@@ -18281,7 +18281,12 @@ public:
 #endif
 
         ensureMouseEventWidget();
+#if GTK_CHECK_VERSION(4,0,0)
+        m_pZoomGesture = gtk_gesture_zoom_new();
+        gtk_widget_add_controller(m_pMouseEventBox, GTK_EVENT_CONTROLLER(m_pZoomGesture));
+#else
         m_pZoomGesture = gtk_gesture_zoom_new(m_pMouseEventBox);
+#endif
         gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pZoomGesture),
                                                    GTK_PHASE_TARGET);
         // Note that the default zoom gesture signal handler needs to run first to setup correct
