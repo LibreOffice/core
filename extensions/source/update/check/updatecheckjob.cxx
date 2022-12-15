@@ -96,6 +96,7 @@ public:
     virtual void SAL_CALL notifyTermination( lang::EventObject const & evt ) override;
 
 private:
+    std::mutex m_mutex;
     uno::Reference<uno::XComponentContext>  m_xContext;
     uno::Reference< frame::XDesktop2 >      m_xDesktop;
     std::unique_ptr< InitUpdateCheckJobThread > m_pInitThread;
@@ -174,6 +175,7 @@ UpdateCheckJob::~UpdateCheckJob()
 uno::Any
 UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
+    std::scoped_lock l(m_mutex);
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
         if ( namedValues[ n ].Name == "DynamicData" )
@@ -274,6 +276,7 @@ UpdateCheckJob::supportsService( OUString const & serviceName )
 // XEventListener
 void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
 {
+    std::scoped_lock l(m_mutex);
     bool shutDown = ( rEvt.Source == m_xDesktop );
 
     if ( shutDown && m_xDesktop.is() )
@@ -292,6 +295,7 @@ void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
 
 void UpdateCheckJob::terminateAndJoinThread()
 {
+    std::scoped_lock l(m_mutex);
     if (m_pInitThread != nullptr)
     {
         m_pInitThread->setTerminating();
