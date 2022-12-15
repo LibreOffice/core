@@ -305,12 +305,16 @@ SfxInterfaceId ViewShell::Implementation::GetViewId() const
 
 SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog()
 {
-    SvxIMapDlg* pDialog = nullptr;
-    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return nullptr;
+
+    SfxChildWindow* pChildWindow = pViewFrm->GetChildWindow(
         SvxIMapDlgChildWindow::GetChildWindowId());
-    if (pChildWindow != nullptr)
-        pDialog = dynamic_cast<SvxIMapDlg*>(pChildWindow->GetController().get());
-    return pDialog;
+    if (pChildWindow == nullptr)
+        return nullptr;
+
+    return dynamic_cast<SvxIMapDlg*>(pChildWindow->GetController().get());
 }
 
 //===== ToolBarManagerLock ====================================================
