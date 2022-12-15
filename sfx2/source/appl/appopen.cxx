@@ -959,8 +959,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             xTargetFrame = pUnoFrameItem->GetFrame();
     }
 
-    if ( !pTargetFrame && !xTargetFrame.is() && SfxViewFrame::Current() )
-        pTargetFrame = &SfxViewFrame::Current()->GetFrame();
+    if (!pTargetFrame && !xTargetFrame.is())
+    {
+        if (const SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+            pTargetFrame = &pViewFrame->GetFrame();
+    }
 
     // check if caller has set a callback
     std::unique_ptr<SfxLinkItem> pLinkItem;

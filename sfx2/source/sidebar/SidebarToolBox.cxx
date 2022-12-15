@@ -67,9 +67,9 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     SetToolboxButtonSize(GetDefaultButtonSize());
 
     SvtMiscOptions().AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
-    if (SfxViewFrame::Current())
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        auto xFrame(SfxViewFrame::Current()->GetFrame().GetFrameInterface());
+        auto xFrame(pViewFrm->GetFrame().GetFrameInterface());
         auto xWidget(VCLUnoHelper::GetInterface(this));
         mxImageController = sfx2::sidebar::ControllerFactory::CreateImageController(xFrame, xWidget);
     }
@@ -253,10 +253,10 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
             // dropdown. The controller should know better than us what it was.
             xController->updateImage();
         }
-        else if (SfxViewFrame::Current())
+        else if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
             OUString aCommandURL = GetItemCommand(it.first);
-            css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+            css::uno::Reference<frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
             Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
             SetItemImage(it.first, aImage);
         }

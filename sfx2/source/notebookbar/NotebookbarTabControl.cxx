@@ -53,11 +53,11 @@ public:
     {
         try
         {
-            if( SfxViewFrame::Current() )
+            if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             {
                 Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
                 const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
-                Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+                Reference<XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
                 OUString aModuleName = xModuleManager->identify( xFrame );
 
                 Reference<XUIConfigurationManager> m_xConfigManager;
@@ -95,11 +95,11 @@ public:
     {
         try
         {
-            if( SfxViewFrame::Current() )
+            if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             {
                 Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
                 const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
-                Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+                Reference<XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
                 OUString aModuleName = xModuleManager->identify( xFrame );
 
                 Reference<XUIConfigurationManager> m_xConfigManager;
@@ -237,7 +237,8 @@ bool NotebookbarTabControl::EventNotify( NotifyEvent& rNEvt )
 
 void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 {
-    if( !m_bInitialized && SfxViewFrame::Current() )
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!m_bInitialized && pViewFrm)
     {
         VclPtr<ShortcutsToolBox> pShortcuts = VclPtr<ShortcutsToolBox>::Create( this );
         pShortcuts->Show();
@@ -249,7 +250,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 
         m_bInitialized = true;
     }
-    if( m_bInitialized && m_bInvalidate && SfxViewFrame::Current() )
+    if (m_bInitialized && m_bInvalidate && pViewFrm)
     {
         ToolBox* pToolBox = GetToolBox();
         if( !pToolBox )
@@ -259,7 +260,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
-        m_xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        m_xFrame = pViewFrm->GetFrame().GetFrameInterface();
         OUString aModuleName = xModuleManager->identify( m_xFrame );
 
         FillShortcutsToolBox( xContext, m_xFrame, aModuleName, pToolBox );

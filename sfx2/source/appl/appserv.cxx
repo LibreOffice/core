@@ -187,10 +187,11 @@ namespace
             SfxStringItem aURL(SID_FILE_NAME, ".component:Bibliography/View1");
             SfxStringItem aRef(SID_REFERER, "private:user");
             SfxStringItem aTarget(SID_TARGETNAME, "_blank");
-            const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            if ( pViewFrame )
+            if (const SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+            {
                 pViewFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
                         SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
+            }
         }
         catch (const Exception &)
         {
@@ -766,7 +767,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString aCurrentMode;
 
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            if( pViewFrame )
+            if (pViewFrame)
             {
                 xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
 
@@ -1085,8 +1086,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_TOOLBAR_LOCK:
         {
-            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            if (pViewFrame)
+            if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
             {
                 Reference<XFrame> xCurrentFrame;
                 uno::Reference<uno::XComponentContext> xContext
@@ -1571,8 +1571,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
             if ( !xFrame.is() )
             {
-                const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                if ( pViewFrame )
+                if (const SfxViewFrame* pViewFrame = SfxViewFrame::Current())
                     xFrame = pViewFrame->GetFrame().GetFrameInterface();
             }
 

@@ -204,8 +204,8 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
     {
         if(pSysWindow->GetNotebookBar())
             pSysWindow->CloseNotebookBar();
-        if (SfxViewFrame::Current())
-            SfxNotebookBar::ShowMenubar(SfxViewFrame::Current(), true);
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+            SfxNotebookBar::ShowMenubar(pViewFrm, true);
     }
 }
 
@@ -228,9 +228,9 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
 
     vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Any;
 
-    if (SfxViewFrame::Current())
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        const Reference<frame::XFrame>& xFrame = pViewFrm->GetFrame().GetFrameInterface();
         if (!xFrame.is())
             return false;
 
@@ -313,14 +313,17 @@ void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Applicati
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
 {
     // Save active UI file name
-    if ( !rUIName.isEmpty() && SfxViewFrame::Current() )
+    if (!rUIName.isEmpty())
     {
-        const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-        if (xFrame.is())
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
-            const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
-            vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
-            lcl_setNotebookbarFileName( eApp, rUIName );
+            const Reference<frame::XFrame>& xFrame = pViewFrm->GetFrame().GetFrameInterface();
+            if (xFrame.is())
+            {
+                const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
+                vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+                lcl_setNotebookbarFileName( eApp, rUIName );
+            }
         }
     }
 
@@ -343,8 +346,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 {
     if (!pSysWindow)
     {
-        if (SfxViewFrame::Current() && SfxViewFrame::Current()->GetWindow().GetSystemWindow())
-            pSysWindow = SfxViewFrame::Current()->GetWindow().GetSystemWindow();
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (pViewFrm && pViewFrm->GetWindow().GetSystemWindow())
+            pSysWindow = pViewFrm->GetWindow().GetSystemWindow();
         else
             return false;
     }
@@ -471,9 +475,9 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
 
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        xFrame = pViewFrm->GetFrame().GetFrameInterface();
         eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
     }
 
@@ -536,10 +540,11 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
 
 void SfxNotebookBar::ToggleMenubar()
 {
-    if (!SfxViewFrame::Current())
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
         return;
 
-    const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    const Reference<frame::XFrame>& xFrame = pViewFrm->GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 
