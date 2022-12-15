@@ -720,13 +720,11 @@ void SwTextContentControl::Delete(bool bSaveContents)
     if (!GetTextNode())
         return;
 
+    SwPaM aPaM(*GetTextNode(), GetStart(), *GetTextNode(), *End());
     if (bSaveContents)
-        GetTextNode()->RstTextAttr(GetStart(), *End() - GetStart(), RES_TXTATR_CONTENTCONTROL);
+        GetTextNode()->GetDoc().ResetAttrs(aPaM, /*bTextAttr=*/true, { RES_TXTATR_CONTENTCONTROL });
     else
-    {
-        SwPaM aPaM(*GetTextNode(), GetStart(), *GetTextNode(), *End());
         GetTextNode()->GetDoc().getIDocumentContentOperations().DeleteAndJoin(aPaM);
-    }
 }
 
 SwTextNode* SwTextContentControl::GetTextNode() const
