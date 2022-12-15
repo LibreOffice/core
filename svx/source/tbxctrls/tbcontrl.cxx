@@ -104,10 +104,7 @@
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/BreakIterator.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/editeng.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -126,9 +123,9 @@ namespace
 struct ScriptInfo
 {
     tools::Long textWidth;
-    sal_uInt16 scriptType;
+    SvtScriptType scriptType;
     sal_Int32 changePos;
-    ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+    ScriptInfo(SvtScriptType scrptType, sal_Int32 position)
         : textWidth(0)
         , scriptType(scrptType)
         , changePos(position)
@@ -209,8 +206,6 @@ private:
     std::optional<SvxFont> m_oCJKFont;
     std::optional<SvxFont> m_oCTLFont;
 
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
-
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
@@ -224,7 +219,6 @@ private:
 
     void Select(bool bNonTravelSelect);
 
-    std::vector<ScriptInfo> CheckScript(const OUString &rStyleName);
     tools::Rectangle CalcBoundRect(vcl::RenderContext& rRenderContext, const OUString &rStyleName, std::vector<ScriptInfo>& rScriptChanges, double fRatio = 1);
 
 protected:
@@ -1126,46 +1120,35 @@ void SvxStyleBox_Impl::SetOptimalSize()
     SetSizePixel(get_preferred_size());
 }
 
-std::vector<ScriptInfo> SvxStyleBox_Base::CheckScript(const OUString &rStyleName)
+namespace
+{
+std::vector<ScriptInfo> CheckScript(const OUString &rStyleName)
 {
     assert(!rStyleName.isEmpty()); // must have a preview text here!
 
     std::vector<ScriptInfo> aScriptChanges;
 
-    if (!mxBreak.is())
-    {
-        auto xContext = comphelper::getProcessComponentContext();
-        mxBreak = css::i18n::BreakIterator::create(xContext);
-    }
+    auto aEditEngine = EditEngine(nullptr);
+    aEditEngine.SetText(rStyleName);
 
-    sal_Int16 nScript = mxBreak->getScriptType(rStyleName, 0);
-    sal_Int32 nChg = 0;
-    if (css::i18n::ScriptType::WEAK == nScript)
+    auto aScript = aEditEngine.GetScriptType({ 0, 0, 0, 0 });
+    for (sal_Int32 i = 1; i <= rStyleName.getLength(); i++)
     {
-        nChg = mxBreak->endOfScript(rStyleName, nChg, nScript);
-        if (nChg < rStyleName.getLength())
-            nScript = mxBreak->getScriptType(rStyleName, nChg);
-        else
-            nScript = css::i18n::ScriptType::LATIN;
-    }
-
-    while (true)
-    {
-        nChg = mxBreak->endOfScript(rStyleName, nChg, nScript);
-        aScriptChanges.emplace_back(nScript, nChg);
-        if (nChg >= rStyleName.getLength() || nChg < 0)
-            break;
-        nScript = mxBreak->getScriptType(rStyleName, nChg);
+        auto aNextScript = aEditEngine.GetScriptType({ 0, i, 0, i });
+        if (aNextScript != aScript || i == rStyleName.getLength())
+            aScriptChanges.emplace_back(aScript, i);
+        aScript = aNextScript;
     }
 
     return aScriptChanges;
+}
 }
 
 tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderContext, const OUString &rStyleName, std::vector<ScriptInfo>& rScriptChanges, double fRatio)
 {
     tools::Rectangle aTextRect;
 
-    sal_uInt16 nScript;
+    SvtScriptType aScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd;
@@ -1174,19 +1157,19 @@ tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderCont
     if (nCnt)
     {
         nEnd = rScriptChanges[nIdx].changePos;
-        nScript = rScriptChanges[nIdx].scriptType;
+        aScript = rScriptChanges[nIdx].scriptType;
     }
     else
     {
         nEnd = rStyleName.getLength();
-        nScript = css::i18n::ScriptType::LATIN;
+        aScript = SvtScriptType::LATIN;
     }
 
     do
     {
-        auto oFont = (nScript == css::i18n::ScriptType::ASIAN) ?
+        auto oFont = (aScript == SvtScriptType::ASIAN) ?
                          m_oCJKFont :
-                         ((nScript == css::i18n::ScriptType::COMPLEX) ?
+                         ((aScript == SvtScriptType::COMPLEX) ?
                              m_oCTLFont :
                              m_oFont);
 
@@ -1222,7 +1205,7 @@ tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderCont
         {
             nStart = nEnd;
             nEnd = rScriptChanges[nIdx].changePos;
-            nScript = rScriptChanges[nIdx].scriptType;
+            aScript = rScriptChanges[nIdx].scriptType;
         }
         else
             break;
@@ -1248,29 +1231,31 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
     else
         aPos.AdjustY((rRect.GetHeight() - rTextRect.Bottom()) / 2);
 
-    sal_uInt16 nScript;
+    SvtScriptType aScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd;
     size_t nCnt = rScriptChanges.size();
+
     if (nCnt)
     {
         nEnd = rScriptChanges[nIdx].changePos;
-        nScript = rScriptChanges[nIdx].scriptType;
+        aScript = rScriptChanges[nIdx].scriptType;
     }
     else
     {
         nEnd = rStyleName.getLength();
-        nScript = css::i18n::ScriptType::LATIN;
+        aScript = SvtScriptType::LATIN;
     }
+
 
     do
     {
-        auto oFont = (nScript == css::i18n::ScriptType::ASIAN)
-                         ? m_oCJKFont
-                         : ((nScript == css::i18n::ScriptType::COMPLEX)
-                             ? m_oCTLFont
-                             : m_oFont);
+        auto oFont = (aScript == SvtScriptType::ASIAN) ?
+                         m_oCJKFont :
+                         ((aScript == SvtScriptType::COMPLEX) ?
+                             m_oCTLFont :
+                             m_oFont);
 
         rRenderContext.Push(vcl::PushFlags::FONT);
 
@@ -1296,7 +1281,7 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
         {
             nStart = nEnd;
             nEnd = rScriptChanges[nIdx].changePos;
-            nScript = rScriptChanges[nIdx].scriptType;
+            aScript = rScriptChanges[nIdx].scriptType;
         }
         else
             break;
