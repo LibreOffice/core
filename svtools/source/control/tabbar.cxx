@@ -439,7 +439,7 @@ public:
     std::shared_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
     std::shared_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
 
-    TabButtons(TabBar* pParent)
+    TabButtons(TabBar* pParent, bool bSheets)
         : InterimItemWindow(pParent,
                             pParent->IsMirrored() ? OUString("svt/ui/tabbuttonsmirrored.ui")
                                                   : OUString("svt/ui/tabbuttons.ui"),
@@ -459,6 +459,15 @@ public:
         m_xNextButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
         m_xLastButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND));
         m_xAddButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_ADDTAB));
+
+        if (bSheets)
+        {
+            m_xFirstButton->set_tooltip_text(SvtResId(STR_TABBAR_HINT_MOVETOHOME_SHEETS));
+            m_xPrevButton->set_tooltip_text(SvtResId(STR_TABBAR_HINT_MOVELEFT_SHEETS));
+            m_xNextButton->set_tooltip_text(SvtResId(STR_TABBAR_HINT_MOVERIGHT_SHEETS));
+            m_xLastButton->set_tooltip_text(SvtResId(STR_TABBAR_HINT_MOVETOEND_SHEETS));
+            m_xAddButton->set_tooltip_text(SvtResId(STR_TABBAR_HINT_ADDTAB_SHEETS));
+        }
     }
 
     void AdaptToHeight(int nHeight)
@@ -504,10 +513,10 @@ struct TabBar_Impl
     }
 };
 
-TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
+TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle, bool bSheets ) :
     Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
 {
-    ImplInit( nWinStyle );
+    ImplInit( nWinStyle, bSheets );
     maCurrentItemList = 0;
 }
 
@@ -526,7 +535,7 @@ void TabBar::dispose()
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
 
-void TabBar::ImplInit( WinBits nWinStyle )
+void TabBar::ImplInit( WinBits nWinStyle, bool bSheets )
 {
     mpImpl.reset(new TabBar_Impl);
 
@@ -552,6 +561,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbInSelect      = false;
     mbMirrored      = false;
     mbScrollAlwaysEnabled = false;
+    mbSheets = bSheets;
 
     ImplInitControls();
 
@@ -782,7 +792,7 @@ void TabBar::ImplInitControls()
         mpImpl->mpSizer.disposeAndClear();
     }
 
-    mpImpl->mxButtonBox.disposeAndReset(VclPtr<TabButtons>::Create(this));
+    mpImpl->mxButtonBox.disposeAndReset(VclPtr<TabButtons>::Create(this, mbSheets));
 
     Link<const CommandEvent&, void> aContextLink = LINK( this, TabBar, ContextMenuHdl );
 
