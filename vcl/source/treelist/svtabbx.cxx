@@ -70,6 +70,16 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                         rJsonWriter.put("text", pStringItem->GetText());
                     }
                 }
+                else if (rItem.GetType() == SvLBoxItemType::ContextBmp)
+                {
+                    const SvLBoxContextBmp* pBmpItem = dynamic_cast<const SvLBoxContextBmp*>(&rItem);
+                    if (pBmpItem)
+                    {
+                        auto aColumn = rJsonWriter.startStruct();
+                        rJsonWriter.put("collapsed", pBmpItem->GetBitmap1().GetStock());
+                        rJsonWriter.put("expanded", pBmpItem->GetBitmap2().GetStock());
+                    }
+                }
             }
         }
 
