@@ -994,7 +994,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     const tools::Long nDiff = nPrtWidth - (getFrameArea().*fnRect->fnGetWidth)();
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     // SwRectFn switched between horizontal and vertical when bVert == IsNeighbourFrame().
-                    // We pick fnSubLeft or fnAddRight that is correspondant to SwRectFn->fnAddBottom
+                    // We pick fnSubLeft or fnAddRight that is correspondent to SwRectFn->fnAddBottom
                     if( ( IsCellFrame() && IsRightToLeft() ) || ( IsColumnFrame() && bVert && !IsVertLR() ) )
                     {
                         (aFrm.*fnRect->fnSubLeft)( nDiff );
