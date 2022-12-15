@@ -98,7 +98,7 @@ namespace vclcanvas
     }
 
     sal_Int64 Canvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl(aIdentifier, static_cast<RepaintTarget *>(this));
+        return comphelper::getSomethingImpl<RepaintTarget>(aIdentifier, this);
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
