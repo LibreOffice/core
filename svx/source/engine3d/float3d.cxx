@@ -74,8 +74,8 @@ namespace {
     {
         SfxDispatcher* pDispatcher = nullptr;
 
-        if (SfxViewFrame::Current() != nullptr)
-            pDispatcher = SfxViewFrame::Current()->GetDispatcher();
+        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+            pDispatcher = pViewFrame->GetDispatcher();
         else if (pBindings != nullptr)
             pDispatcher = pBindings->GetDispatcher();
 

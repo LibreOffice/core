@@ -719,8 +719,9 @@ IMPL_LINK( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
 SvxIMapDlg* GetIMapDlg()
 {
     SfxChildWindow* pWnd = nullptr;
-    if (SfxViewFrame::Current() && SfxViewFrame::Current()->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
-        pWnd = SfxViewFrame::Current()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm && pViewFrm->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
+        pWnd = pViewFrm->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
     return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetController().get()) : nullptr;
 }
 

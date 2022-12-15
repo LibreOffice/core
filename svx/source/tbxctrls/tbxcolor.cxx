@@ -39,12 +39,13 @@ namespace svx
         m_sToolboxResName += rToolboxName;
 
         // the layout manager
-        if ( !SfxViewFrame::Current() )
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (!pViewFrm)
             return;
 
         try
         {
-            Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+            Reference< XFrame > xFrame = pViewFrm->GetFrame().GetFrameInterface();
             Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY );
             if ( xFrameProps.is() )
                 xFrameProps->getPropertyValue( "LayoutManager" ) >>= m_xLayouter;
