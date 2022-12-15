@@ -49,7 +49,7 @@
         <child>
           <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="anglegrid">
-            <property name="visible">True</property>
+            <property name="no-show-all">True</property>
             <property name="can_focus">False</property>
             <property name="row_spacing">6</property>
             <child>
@@ -266,7 +266,7 @@
         <child>
           <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="centergrid">
-            <property name="visible">True</property>
+            <property name="no-show-all">True</property>
             <property name="can_focus">False</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
