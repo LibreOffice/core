@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -35,7 +36,7 @@ namespace {
 SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
-    SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
+    SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = comphelper::getFromUnoTunnel<SvxLineStyleToolBoxControl>(xController);
     return pToolBoxLineStyleControl;
 }
 

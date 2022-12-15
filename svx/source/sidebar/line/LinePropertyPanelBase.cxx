@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <comphelper/servicehelper.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/linectrl.hxx>
@@ -57,7 +58,7 @@ namespace
     SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
     {
         css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
-        SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
+        SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = comphelper::getFromUnoTunnel<SvxLineStyleToolBoxControl>(xController);
         return pToolBoxLineStyleControl;
     }
 }
