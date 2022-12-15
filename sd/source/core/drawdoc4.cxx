@@ -948,9 +948,15 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, Sdr
         StartOnlineSpelling();
     }
     else if (nCommand == SpellCallbackCommand::STARTSPELLDLG)
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
+    {
+        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+            pViewFrame->GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
+    }
     else if (nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
+    {
+        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+            pViewFrame->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
+    }
 }
 
 // Return formatted page number (1, I, i, a, etc.)
