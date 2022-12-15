@@ -11845,6 +11845,7 @@ svx/source/table/cellrange.cxx
 svx/source/table/cellrange.hxx
 svx/source/table/propertyset.cxx
 svx/source/table/propertyset.hxx
+svx/source/table/sdrtableobjimpl.hxx
 svx/source/table/svdotable.cxx
 svx/source/table/tablecolumn.cxx
 svx/source/table/tablecolumn.hxx

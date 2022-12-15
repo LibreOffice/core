@@ -42,7 +42,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
-#include <celltypes.hxx>
+#include "sdrtableobjimpl.hxx"
 
 #include <vector>
 #include <map>
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL TableDesignStyle::isInUse()
         comphelper::OInterfaceIteratorHelper4 it(aGuard, maModifyListeners);
         while ( it.hasMoreElements() )
         {
-            TableDesignUser* pUser = dynamic_cast< TableDesignUser* >( it.next().get() );
+            SdrTableObjImpl* pUser = dynamic_cast< SdrTableObjImpl* >( it.next().get() );
             if( pUser && pUser->isInUse() )
                 return true;
         }

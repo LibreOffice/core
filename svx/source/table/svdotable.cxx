@@ -50,11 +50,12 @@
 #include <svx/dialmgr.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <boost/property_tree/ptree.hpp>
+
+#include "sdrtableobjimpl.hxx"
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -187,67 +188,6 @@ bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
         (mbUseColumnBanding == rStyle.mbUseColumnBanding);
 }
 
-
-class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper< css::util::XModifyListener >
-{
-public:
-    CellRef mxActiveCell;
-    TableModelRef mxTable;
-    SdrTableObj* mpTableObj;
-    std::unique_ptr<TableLayouter> mpLayouter;
-    CellPos maEditPos;
-    TableStyleSettings maTableStyle;
-    Reference< XIndexAccess > mxTableStyle;
-    std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
-    bool mbSkipChangeLayout;
-
-    void CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd);
-
-    CellRef getCell( const CellPos& rPos ) const;
-    void LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight );
-
-    void ApplyCellStyles();
-    void UpdateCells( tools::Rectangle const & rArea );
-
-    SdrTableObjImpl();
-    virtual ~SdrTableObjImpl() override;
-
-    void init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 nRows );
-    void dispose();
-
-    sal_Int32 getColumnCount() const;
-    /// Get widths of the columns in the table.
-    std::vector<sal_Int32> getColumnWidths() const;
-    sal_Int32 getRowCount() const;
-
-    void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
-
-    SdrTableObjImpl& operator=( const SdrTableObjImpl& rSource );
-
-    // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
-    void update();
-
-    void connectTableStyle();
-    void disconnectTableStyle();
-    virtual bool isInUse() override;
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
-private:
-    static SdrTableObjImpl* lastLayoutTable;
-    static tools::Rectangle lastLayoutInputRectangle;
-    static tools::Rectangle lastLayoutResultRectangle;
-    static bool lastLayoutFitWidth;
-    static bool lastLayoutFitHeight;
-    static WritingMode lastLayoutMode;
-    static sal_Int32 lastRowCount;
-    static sal_Int32 lastColCount;
-    static std::vector<sal_Int32> lastColWidths;
-    static bool rowSizeChanged;
-};
 
 SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = nullptr;
 tools::Rectangle SdrTableObjImpl::lastLayoutInputRectangle;

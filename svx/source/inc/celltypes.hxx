@@ -39,15 +39,6 @@ typedef std::vector<CellRef> CellVector;
 typedef std::vector<TableRowRef> RowVector;
 typedef std::vector<TableColumnRef> ColumnVector;
 
-class SAL_LOPLUGIN_ANNOTATE("crosscast") TableDesignUser
-{
-public:
-    virtual bool isInUse() = 0;
-
-protected:
-    ~TableDesignUser() {}
-};
-
 template <typename T> class RangeIterator
 {
 public:
