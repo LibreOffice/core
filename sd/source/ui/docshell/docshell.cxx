@@ -336,9 +336,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 
-    SfxViewFrame* pFrame = SfxViewFrame::Current();
-
-    if (pFrame)
+    if (SfxViewFrame* pFrame = SfxViewFrame::Current())
     {
         if (rSet.GetItemState(SID_RELOAD) != SfxItemState::UNKNOWN)
         {

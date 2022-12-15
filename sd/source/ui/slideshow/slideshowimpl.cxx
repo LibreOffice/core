@@ -1499,8 +1499,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
             SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxBoolItem aBrowsing( SID_BROWSE, true );
 
-            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-            if (pViewFrm)
+            if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             {
                 SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pViewFrm->GetFrame().GetFrameInterface());
                 pViewFrm->GetDispatcher()->ExecuteList( SID_OPENDOC,

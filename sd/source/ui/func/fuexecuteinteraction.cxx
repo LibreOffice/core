@@ -183,15 +183,16 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
 
             if (INetProtocol::File == aURL.GetProtocol())
             {
-                SfxStringItem aUrl(SID_FILE_NAME,
-                                   aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-                SfxBoolItem aBrowsing(SID_BROWSE, true);
+                if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+                {
+                    SfxStringItem aUrl(SID_FILE_NAME,
+                                       aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                    SfxBoolItem aBrowsing(SID_BROWSE, true);
 
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if (pViewFrm)
                     pViewFrm->GetDispatcher()->ExecuteList(
                         SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                         { &aUrl, &aBrowsing });
+                }
             }
         }
         break;

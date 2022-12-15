@@ -2287,8 +2287,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
                     SfxBoolItem aBrowsing( SID_BROWSE, true );
 
-                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                    if (pViewFrm)
+                    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
                     {
                         pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,

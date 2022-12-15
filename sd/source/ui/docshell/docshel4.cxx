@@ -851,12 +851,14 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
         }
     }
 
-    SfxBindings& rBindings = ((pDrawViewShell && pDrawViewShell->GetViewFrame()!=nullptr)
+    if (SfxViewFrame* pViewFrame = (pDrawViewShell && pDrawViewShell->GetViewFrame())
         ? pDrawViewShell->GetViewFrame()
-        : SfxViewFrame::Current() )->GetBindings();
-
-    rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
-    rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
+        : SfxViewFrame::Current())
+    {
+        SfxBindings& rBindings = pViewFrame->GetBindings();
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
+        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
+    }
 }
 
 /**
@@ -964,7 +966,8 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
     const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, nullptr };
-    ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
+    if (SfxViewFrame* pFrame = mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current())
+        pFrame->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
 std::shared_ptr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
