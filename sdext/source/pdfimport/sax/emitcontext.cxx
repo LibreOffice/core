@@ -25,6 +25,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <xmloff/xmlimp.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -42,7 +43,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     m_xDocHdl( xDocHdl )
 {
     OSL_PRECOND(m_xDocHdl.is(), "SaxEmitter(): invalid doc handler");
-    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(m_xDocHdl.get()))
+    if (SvXMLImport *pFastHandler = comphelper::getFromUnoTunnel<SvXMLImport>(m_xDocHdl))
         m_xDocHdl.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
     try
     {

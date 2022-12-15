@@ -176,7 +176,7 @@ public:
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 };
 
-class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public cppu::WeakImplHelper<
+class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
              css::xml::sax::XFastDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization,
