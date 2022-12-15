@@ -125,7 +125,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/hatchwindow/ipwin \
     toolkit/source/helper/accessibilityclient \
     toolkit/source/helper/btndlg \
-    toolkit/source/helper/formpdfexport \
     toolkit/source/helper/imagealign \
     toolkit/source/helper/listenermultiplexer \
     toolkit/source/helper/property \

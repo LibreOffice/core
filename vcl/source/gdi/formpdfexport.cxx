@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <toolkit/helper/formpdfexport.hxx>
+#include <vcl/formpdfexport.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/lineend.hxx>
 #include <unordered_map>
@@ -39,10 +39,45 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <algorithm>
 #include <iterator>
 
+
+static vcl::Font CreateFont( const css::awt::FontDescriptor& rDescr )
+{
+    vcl::Font aFont;
+    if ( !rDescr.Name.isEmpty() )
+        aFont.SetFamilyName( rDescr.Name );
+    if ( !rDescr.StyleName.isEmpty() )
+        aFont.SetStyleName( rDescr.StyleName );
+    if ( rDescr.Height )
+        aFont.SetFontSize( Size( rDescr.Width, rDescr.Height ) );
+    if ( static_cast<FontFamily>(rDescr.Family) != FAMILY_DONTKNOW )
+        aFont.SetFamily( static_cast<FontFamily>(rDescr.Family) );
+    if ( static_cast<rtl_TextEncoding>(rDescr.CharSet) != RTL_TEXTENCODING_DONTKNOW )
+        aFont.SetCharSet( static_cast<rtl_TextEncoding>(rDescr.CharSet) );
+    if ( static_cast<FontPitch>(rDescr.Pitch) != PITCH_DONTKNOW )
+        aFont.SetPitch( static_cast<FontPitch>(rDescr.Pitch) );
+    if ( rDescr.CharacterWidth )
+        aFont.SetWidthType(vcl::unohelper::ConvertFontWidth(rDescr.CharacterWidth));
+    if ( rDescr.Weight )
+        aFont.SetWeight(vcl::unohelper::ConvertFontWeight(rDescr.Weight));
+    if ( rDescr.Slant != css::awt::FontSlant_DONTKNOW )
+        aFont.SetItalic(vcl::unohelper::ConvertFontSlant(rDescr.Slant));
+    if ( static_cast<FontLineStyle>(rDescr.Underline) != LINESTYLE_DONTKNOW )
+        aFont.SetUnderline( static_cast<FontLineStyle>(rDescr.Underline) );
+    if ( static_cast<FontStrikeout>(rDescr.Strikeout) != STRIKEOUT_DONTKNOW )
+        aFont.SetStrikeout( static_cast<FontStrikeout>(rDescr.Strikeout) );
+
+    // Not DONTKNOW
+    aFont.SetOrientation( Degree10(static_cast<sal_Int16>(rDescr.Orientation * 10)) );
+    aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
+    aFont.SetWordLineMode( rDescr.WordLineMode );
+
+    return aFont;
+}
 
 namespace toolkitform
 {
@@ -442,7 +477,7 @@ namespace toolkitform
                 FontDescriptor aUNOFont;
                 if( ! (xModelProps->getPropertyValue( FM_PROP_FONT ) >>= aUNOFont) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_FONT);
-                Descriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, vcl::Font() );
+                Descriptor->TextFont = CreateFont( aUNOFont );
             }
 
             // tab order

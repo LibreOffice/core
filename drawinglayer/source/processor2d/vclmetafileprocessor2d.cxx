@@ -38,7 +38,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
-#include <toolkit/helper/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
+#include <vcl/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>

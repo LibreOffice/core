@@ -6129,7 +6129,6 @@ include/toolkit/controls/unocontrolmodel.hxx
 include/toolkit/controls/unocontrols.hxx
 include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/convert.hxx
-include/toolkit/helper/formpdfexport.hxx
 include/toolkit/helper/listenermultiplexer.hxx
 include/toolkit/helper/macros.hxx
 include/toolkit/helper/mutexandbroadcasthelper.hxx
@@ -6323,6 +6322,7 @@ include/vcl/fntstyle.hxx
 include/vcl/font.hxx
 include/vcl/fontcapabilities.hxx
 include/vcl/fontcharmap.hxx
+include/vcl/formpdfexport.hxx
 include/vcl/gdimtf.hxx
 include/vcl/gfxlink.hxx
 include/vcl/gradient.hxx
@@ -13670,7 +13670,6 @@ toolkit/source/hatchwindow/ipwin.cxx
 toolkit/source/hatchwindow/ipwin.hxx
 toolkit/source/helper/accessibilityclient.cxx
 toolkit/source/helper/btndlg.cxx
-toolkit/source/helper/formpdfexport.cxx
 toolkit/source/helper/imagealign.cxx
 toolkit/source/helper/listenermultiplexer.cxx
 toolkit/source/helper/property.cxx
@@ -14766,6 +14765,7 @@ vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
 vcl/source/gdi/embeddedfontshelper.cxx
+vcl/source/gdi/formpdfexport.cxx
 vcl/source/gdi/gdimetafiletools.cxx
 vcl/source/gdi/gdimtf.cxx
 vcl/source/gdi/gfxlink.cxx

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
 #define INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
 
-#include <toolkit/dllapi.h>
+#include <vcl/dllapi.h>
 
 #include <vcl/pdfwriter.hxx>
 
@@ -41,7 +41,7 @@ namespace toolkitform
 
     /** creates a PDF compatible control descriptor for the given control
     */
-    std::unique_ptr<vcl::PDFWriter::AnyWidget> TOOLKIT_DLLPUBLIC describePDFControl(
+    std::unique_ptr<vcl::PDFWriter::AnyWidget> VCL_DLLPUBLIC describePDFControl(
             const css::uno::Reference< css::awt::XControl >& _rxControl,
             vcl::PDFExtOutDevData& i_pdfExportData
         );

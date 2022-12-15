@@ -47,7 +47,6 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     salhelper \
     svl \
     svt \
-    tk \
     tl \
     vcl \
 ))
