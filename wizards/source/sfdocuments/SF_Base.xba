@@ -520,7 +520,7 @@ Public Function OpenQuery(Optional ByVal QueryName As Variant _
 &apos;&apos;&apos;		QueryName: a valid Query name as a case-sensitive string
 &apos;&apos;&apos;		DesignMode: when True the query is opened in design mode (Default = False)
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A Datasheet class instance if the query could be opened and DesignMode = False, otherwise False
+&apos;&apos;&apos;		A Datasheet class instance if the query could be opened and DesignMode = False, otherwise Nothing
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		Query name is invalid
 &apos;&apos;&apos;	Example:

@@ -21,7 +21,7 @@ Option Explicit
 &apos;&apos;&apos;		In the context of ScriptForge, a datasheet may be opened automatically by script code :
 &apos;&apos;&apos;			- either by reproducing the behaviour of the user interface
 &apos;&apos;&apos;			- or at any moment. In this case the Base document may or may not be opened.
-&apos;&apos;&apos;			  Additionally, any SELECT SQL statement may trigger the datasheet display.
+&apos;&apos;&apos;			  Additionally, any SELECT SQL statement may define the datasheet display.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The proposed API allows for either datasheets (opened manually of by code) in particular
 &apos;&apos;&apos;		to know which cell is selected and its content.
@@ -30,8 +30,8 @@ Option Explicit
 &apos;&apos;&apos;			1) From an open Base document
 &apos;&apos;&apos;				Set ui = CreateScriptService(&quot;UI&quot;)
 &apos;&apos;&apos;				Set oBase = ui.getDocument(&quot;/home/user/Documents/myDb.odb&quot;)
-&apos;&apos;&apos;				Set oSheet1 = oBase.OpenTable(&quot;Customers&quot;)	&apos;	or OpenQuery(...)
-&apos;&apos;&apos;				Set oSheet2 = oBase.Datasheets(&quot;Products&quot;)	&apos;	when the datasheet has been opened manually
+&apos;&apos;&apos;				Set oSheet = oBase.OpenTable(&quot;Customers&quot;)	&apos;	or OpenQuery(...)
+&apos;&apos;&apos;						&apos;	May be executed also when the given table is already open
 &apos;&apos;&apos;			2) Independently from a Base document
 &apos;&apos;&apos;				Set oDatabase = CreateScriptService(&quot;Database&quot;, &quot;/home/user/Documents/myDb.odb&quot;)
 &apos;&apos;&apos;				Set oSheet = oDatabase.OpenTable(&quot;Customers&quot;)
@@ -709,8 +709,8 @@ Try:
 		Set _ControlModel = _ControlView.getModel()
 	End With
 
-		&apos;	Retrieve the parent database instance
 	With _TabControllerModel
+		&apos;	Retrieve the parent database instance
 		Select Case _ParentType
 			Case &quot;BASE&quot;
 				Set _ParentDatabase = [_Parent].GetDatabase(.User, .Password)
