@@ -78,7 +78,8 @@ void PageOrientationControl::ExecuteMarginLRChange(
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
-    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
             SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
 }
 
@@ -88,20 +89,25 @@ void PageOrientationControl::ExecuteMarginULChange(
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );
-    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
             SfxCallMode::RECORD, { mpPageULMarginItem.get() });
 }
 
 void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
 {
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
+
     css::uno::Reference< css::document::XUndoManager > mxUndoManager(
-                getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
+                getUndoManager( pViewFrm->GetFrame().GetFrameInterface() ) );
 
     if ( mxUndoManager.is() )
         mxUndoManager->enterUndoContext( "" );
 
     const SvxSizeItem* pSizeItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
     mpPageSizeItem.reset( pSizeItem->Clone() );
 
     // Prevent accidental toggling of page orientation
@@ -113,11 +119,11 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
     }
 
     const SvxLongLRSpaceItem* pLRSpaceItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
     mpPageLRMarginItem.reset( pLRSpaceItem->Clone() );
 
     const SvxLongULSpaceItem* pULSpaceItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
     mpPageULMarginItem.reset( pULSpaceItem->Clone() );
 
     {
@@ -130,11 +136,8 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
         mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
         // apply changed attributes
-        if (SfxViewShell::Current())
-        {
-            SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-                SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
-        }
+        pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+            SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
     }
 
     // check, if margin values still fit to the changed page size.
