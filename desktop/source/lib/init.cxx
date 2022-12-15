@@ -792,6 +792,10 @@ void ExecuteMarginULChange(
 // Main function which toggles page orientation of the Writer doc. Needed by ToggleOrientation
 void ExecuteOrientationChange()
 {
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
+
     std::unique_ptr<SvxPageItem> pPageItem(new SvxPageItem(SID_ATTR_PAGE));
 
     // 1mm in twips rounded
@@ -799,22 +803,22 @@ void ExecuteOrientationChange()
     constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm);
 
     css::uno::Reference< css::document::XUndoManager > mxUndoManager(
-                getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
+                getUndoManager( pViewFrm->GetFrame().GetFrameInterface() ) );
 
     if ( mxUndoManager.is() )
         mxUndoManager->enterUndoContext( "" );
 
 
     const SvxSizeItem* pSizeItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
     std::unique_ptr<SvxSizeItem> pPageSizeItem(pSizeItem->Clone());
 
     const SvxLongLRSpaceItem* pLRSpaceItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
     std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(pLRSpaceItem->Clone());
 
     const SvxLongULSpaceItem* pULSpaceItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
     std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(pULSpaceItem->Clone());
 
     {

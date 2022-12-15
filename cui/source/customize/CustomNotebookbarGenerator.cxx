@@ -74,11 +74,14 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
 static OUString getAppNameRegistryPath()
 {
     vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Any;
-    const Reference<frame::XFrame>& xFrame
-        = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-    const Reference<frame::XModuleManager> xModuleManager
-        = frame::ModuleManager::create(::comphelper::getProcessComponentContext());
-    eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+
+    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+    {
+        const Reference<frame::XFrame>& xFrame = pViewFrame->GetFrame().GetFrameInterface();
+        const Reference<frame::XModuleManager> xModuleManager
+            = frame::ModuleManager::create(::comphelper::getProcessComponentContext());
+        eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+    }
 
     OUString sAppName(lcl_getAppName(eApp));
     return "org.openoffice.Office.UI.ToolbarMode/Applications/" + sAppName;
