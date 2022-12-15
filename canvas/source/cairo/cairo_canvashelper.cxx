@@ -299,7 +299,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         if( pBitmapImpl )
             return pBitmapImpl->getSurface();
 
-        SurfaceProvider* pSurfaceProvider = dynamic_cast<SurfaceProvider*>( xBitmap.get() );
+        SurfaceProvider* pSurfaceProvider
+            = comphelper::getFromUnoTunnel<SurfaceProvider>( xBitmap );
         if( pSurfaceProvider )
             return pSurfaceProvider->getSurface();
 

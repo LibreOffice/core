@@ -82,6 +82,16 @@ namespace comphelper {
             && memcmp(T::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0;
     }
 
+    template<typename T> struct MixinToGetSomethingOf {
+        static bool get(css::uno::Sequence<sal_Int8> const & id, T * p, sal_Int64 * result) {
+            if (!isUnoTunnelId<T>(id)) {
+                return false;
+            }
+            *result = getSomething_cast(p);
+            return true;
+        }
+    };
+
     template <class Base> struct FallbackToGetSomethingOf
     {
         static sal_Int64 get(const css::uno::Sequence<sal_Int8>& rId, Base* p)
@@ -95,12 +105,65 @@ namespace comphelper {
         static sal_Int64 get(const css::uno::Sequence<sal_Int8>&, void*) { return 0; }
     };
 
+    // There are five cases how to implement T::getSomething:
+    // (1) Delegate to Base:
+    //     Either, if Base has only getUnoTunnelId but no getSomething:
+    //     return getSomethingImpl<Base>(aIdentifier, this);
+    //     Or, if Base has getSomething:
+    //     return Base::getSomething(aIdentifier)
+    // (2) Check against T::getUnoTunnelId, else return 0:
+    //     return getSomethingImpl(aIdentifier, this);
+    // (3) Check against T::getUnoTunnelId, else delegate to Base:
+    //     return getSomethingImpl(aIdentifier, this, FallbackToGetSomethingOf<Base>{});
+    // (4) Check against T::getUnoTunnelId, else check against each Mixins::getUnoTunnelId, else
+    //     delegate to Base:
+    //     return getSomethingImpl(
+    //         aIdentifier, this, MixinToGetSomethingOf<Mixin1>{}, ...,
+    //         MixinToGetSomethingOf<MixinN>{}, FallbackToGetSomethingOf<Base>{});
+    // (5) Check against each Mixins::getUnoTunnelId, else delegate to Base:
+    //     return getSomethingImpl_skipDerived(
+    //         aIdentifier, this, MixinToGetSomethingOf<Mixin1>{}, ...,
+    //         MixinToGetSomethingOf<MixinN>{}, FallbackToGetSomethingOf<Base>{});
+
     template <class T, class Base = void>
     sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
         FallbackToGetSomethingOf<Base> = {})
     {
-        if (isUnoTunnelId<T>(rId))
-            return getSomething_cast(pThis);
+        sal_Int64 res;
+        if (MixinToGetSomethingOf<T>::get(rId, pThis, &res)) {
+            return res;
+        }
+
+        return FallbackToGetSomethingOf<Base>::get(rId, pThis);
+    }
+
+    template <class T, class Mixin, class... Mixins, class Base>
+    sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
+        MixinToGetSomethingOf<Mixin>, MixinToGetSomethingOf<Mixins>...,
+        FallbackToGetSomethingOf<Base>)
+    {
+        sal_Int64 res;
+        if (((MixinToGetSomethingOf<T>::get(rId, pThis, &res)
+              || MixinToGetSomethingOf<Mixin>::get(rId, pThis, &res)) || ...
+             || MixinToGetSomethingOf<Mixins>::get(rId, pThis, &res)))
+        {
+            return res;
+        }
+
+        return FallbackToGetSomethingOf<Base>::get(rId, pThis);
+    }
+
+    template <class T, class Mixin, class... Mixins, class Base>
+    sal_Int64 getSomethingImpl_skipDerived(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
+        MixinToGetSomethingOf<Mixin>, MixinToGetSomethingOf<Mixins>...,
+        FallbackToGetSomethingOf<Base>)
+    {
+        sal_Int64 res;
+        if ((MixinToGetSomethingOf<Mixin>::get(rId, pThis, &res) || ...
+             || MixinToGetSomethingOf<Mixins>::get(rId, pThis, &res)))
+        {
+            return res;
+        }
 
         return FallbackToGetSomethingOf<Base>::get(rId, pThis);
     }

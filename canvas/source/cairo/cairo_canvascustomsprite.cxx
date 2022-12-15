@@ -148,7 +148,9 @@ namespace cairocanvas
     }
 
     sal_Int64 CanvasCustomSprite::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
+        return comphelper::getSomethingImpl_skipDerived(
+            aIdentifier, this, comphelper::MixinToGetSomethingOf<SurfaceProvider>{},
+            comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 }
 

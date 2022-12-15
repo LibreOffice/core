@@ -152,7 +152,9 @@ namespace cairocanvas
     }
 
     sal_Int64 SpriteCanvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
+        return comphelper::getSomethingImpl_skipDerived(
+            aIdentifier, this, comphelper::MixinToGetSomethingOf<SurfaceProvider>{},
+            comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 
     SurfaceSharedPtr SpriteCanvas::getSurface()

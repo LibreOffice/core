@@ -145,7 +145,8 @@ namespace cairocanvas
 
     sal_Int64 CanvasBitmap::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
         return comphelper::getSomethingImpl(
-            aIdentifier, this, comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
+            aIdentifier, this, comphelper::MixinToGetSomethingOf<SurfaceProvider>{},
+            comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 
     css::uno::Sequence<sal_Int8> const & CanvasBitmap::getUnoTunnelId() {

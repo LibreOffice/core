@@ -20,7 +20,10 @@
 #pragma once
 
 #include <rtl/ref.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <comphelper/servicehelper.hxx>
+#include <sal/types.h>
 
 #include <basegfx/vector/b2isize.hxx>
 #include <vcl/cairo.hxx>
@@ -37,7 +40,7 @@ namespace cairocanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class SAL_LOPLUGIN_ANNOTATE("crosscast") SurfaceProvider : public css::uno::XInterface
+    class SurfaceProvider : public css::uno::XInterface
     {
     public:
         virtual ~SurfaceProvider() {}
@@ -62,6 +65,15 @@ namespace cairocanvas
         /** Provides the underlying vcl outputdevice this surface renders on
          */
         virtual OutputDevice* getOutputDevice() = 0;
+
+        sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+            return comphelper::getSomethingImpl(aIdentifier, this);
+        }
+
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
+            static comphelper::UnoIdInit const id;
+            return id.getSeq();
+        }
     };
 
     typedef ::rtl::Reference< SurfaceProvider > SurfaceProviderRef;
