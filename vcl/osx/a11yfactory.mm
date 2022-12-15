@@ -166,7 +166,26 @@ static bool enabled = false;
             if (parent) {
                 if ([parent isKindOfClass:[NSView class]]) {
                     NSView *parentView = static_cast<NSView *>(parent);
-                    [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
+
+                    // tdf#146765 Fix infinite recursion in -[NSView visibleRect]
+                    // HACK: Adding a subview to an NSView that is not attached
+                    // to an NSWindow leads to infinite recursion in the native
+                    // NSViewGetVisibleRect() function. This seems to be a new
+                    // behavior starting with macOS 12.6.2.
+                    // In the case of tdf#146765, we end up here because
+                    // -[AquaA11yWrapper childrenAttribute] is called by a
+                    // wrapper that is already attached to an NSWindow. That is
+                    // normal. What isn't normal is that the child wrapper's
+                    // unignored accessible parent is a differnt wrapper than
+                    // the caller and that different wrapper is not yet
+                    // attached to an NSWindow.
+                    // TODO: switch the AquaA11yWrapper class to inherit the
+                    // lightweight NSAccessibilityElement class instead of the
+                    // NSView class to possibly avoid the need for this hack.
+                    NSWindow *window = [parentView window];
+                    SAL_WARN_IF(!window, "vcl.a11y","Can't add subview. Parent view's window is nil!");
+                    if (window)
+                        [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
                 } else if ([parent isKindOfClass:NSClassFromString(@"SalFrameWindow")]) {
                     NSWindow *window = static_cast<NSWindow *>(parent);
                     NSView *salView = [window contentView];
