@@ -1023,30 +1023,42 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
 
         case SOLID:
         {
-            const XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+            if (mpColorItem)
+            {
+                const XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+            }
         }
         break;
 
         case GRADIENT:
         {
-            const XFillGradientItem aItem( mpGradientItem->GetName(), mpGradientItem->GetGradientValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+            if (mpGradientItem)
+            {
+                const XFillGradientItem aItem( mpGradientItem->GetName(), mpGradientItem->GetGradientValue() );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+            }
         }
         break;
 
         case HATCH:
         {
-            const XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+            if (mpHatchItem)
+            {
+                const XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+            }
         }
         break;
 
         case BITMAP:
         case PATTERN:
         {
-            const XFillBitmapItem aItem( mpBitmapItem->GetName(), mpBitmapItem->GetGraphicObject() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+            if (mpBitmapItem)
+            {
+                const XFillBitmapItem aItem( mpBitmapItem->GetName(), mpBitmapItem->GetGraphicObject() );
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+            }
         }
         break;
 
