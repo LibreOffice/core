@@ -152,6 +152,8 @@ void MenuContentHandler::addCommandIfPossible(
         return;
 
     auto* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
 
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
