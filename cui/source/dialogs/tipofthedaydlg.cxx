@@ -157,8 +157,7 @@ void TipOfTheDayDialog::UpdateTip()
     {
         m_pLink->set_visible(false);
         //show the link only if the UNO command is available in the current module
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        if (pViewFrame)
+        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
         {
             const auto xFrame = pViewFrame->GetFrame().GetFrameInterface();
             const css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(

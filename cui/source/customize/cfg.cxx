@@ -1293,8 +1293,11 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
             _inout_rxFrame = xDesktop->getCurrentFrame();
         }
 
-        if ( !_inout_rxFrame.is() && SfxViewFrame::Current() )
-            _inout_rxFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        if ( !_inout_rxFrame.is())
+        {
+            if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+                _inout_rxFrame = pViewFrame->GetFrame().GetFrameInterface();
+        }
 
         if ( !_inout_rxFrame.is() )
         {

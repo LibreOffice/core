@@ -715,8 +715,7 @@ void SpellDialog::Close()
     // section - in that case, the cursor can move from the editable field to
     // the protected area, and the slots get disabled because of
     // SfxDisableFlags::SwOnProtectedCursor (see FN_SPELL_GRAMMAR_DIALOG in .sdi).
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (pViewFrame)
+    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
         pViewFrame->ToggleChildWindow(rParent.GetType());
 }
 

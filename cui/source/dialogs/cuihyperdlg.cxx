@@ -177,8 +177,7 @@ void SvxHpLinkDlg::Close()
 {
     if (IsClosing())
         return;
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (pViewFrame)
+    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
         pViewFrame->ToggleChildWindow(SID_HYPERLINK_DIALOG);
 }
 
