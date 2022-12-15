@@ -278,9 +278,10 @@ void SvxRubyDialog::Activate()
         // tdf#141967/tdf#152495 if Activate is called during tear down bail early
         return;
     }
+
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
-    Reference<XController> xCtrl = pCurFrm->GetFrame().GetController();
+    Reference<XController> xCtrl(pCurFrm ? pCurFrm->GetFrame().GetController() : nullptr);
     m_pImpl->SetController(xCtrl);
     if (!m_pImpl->HasSelectionChanged())
         return;
