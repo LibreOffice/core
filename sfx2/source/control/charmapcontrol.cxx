@@ -207,8 +207,11 @@ IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)
 {
     m_xControl->EndPopupMode();
 
-    uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-    comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, {});
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+    {
+        uno::Reference<frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
+        comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, {});
+    }
 }
 
 void SfxCharmapCtrl::GrabFocus()
