@@ -423,8 +423,12 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
 
     SetLineSpace(aSpacing, nEntry);
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(
-            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if( pCurrent )
+    {
+        pCurrent->GetBindings().GetDispatcher()->ExecuteList(
+                SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
+    }
 
     // close when the user used the buttons
     mxControl->EndPopupMode();
