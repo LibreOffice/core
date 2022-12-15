@@ -75,6 +75,10 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     if( !(pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0) )
         return;
 
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
+
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/bookmarkmenu.ui"));
     std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
 
@@ -99,7 +103,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     if (!sResult.isEmpty())
     {
         SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[sResult.toUInt32()] );
-        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
+        pViewFrm->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
             { &aBookmark });
     }

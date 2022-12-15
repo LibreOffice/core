@@ -37,10 +37,10 @@ PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pP
     , m_xControl(pControl)
 {
     bool bLandscape = false;
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         const SvxPageItem *pPageItem;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
         bLandscape = pPageItem->IsLandscape();
     }
 
@@ -89,8 +89,8 @@ void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
 {
     SfxInt16Item aPageColumnTypeItem(SID_ATTR_PAGE_COLUMN);
     aPageColumnTypeItem.SetValue( nColumnType );
-    if ( SfxViewFrame::Current() )
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
             SfxCallMode::RECORD, { &aPageColumnTypeItem });
 }
 
@@ -112,8 +112,8 @@ IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, weld::Button&, rButton,
 
 IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, weld::Button&, void )
 {
-    if ( SfxViewFrame::Current() )
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetBindings().GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
     m_xControl->EndPopupMode();
 }
 

@@ -45,19 +45,14 @@ namespace
 {
     FieldUnit lcl_GetFieldUnit()
     {
-        FieldUnit eUnit = FieldUnit::INCH;
         const SfxUInt16Item* pItem = nullptr;
-        SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
-        if ( pItem && eState >= SfxItemState::DEFAULT )
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
-            eUnit = static_cast<FieldUnit>(pItem->GetValue());
+            SfxItemState eState = pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem);
+            if (pItem && eState >= SfxItemState::DEFAULT)
+                return static_cast<FieldUnit>(pItem->GetValue());
         }
-        else
-        {
-            return SfxModule::GetCurrentFieldUnit();
-        }
-
-        return eUnit;
+        return SfxModule::GetCurrentFieldUnit();
     }
 
     MapUnit lcl_GetUnit()
@@ -120,12 +115,12 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
 
         bool bLandscape = false;
         const SvxSizeItem* pSize = nullptr;
-        if ( SfxViewFrame::Current() )
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
             const SvxPageItem* pPageItem;
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+            pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
             bLandscape = pPageItem->IsLandscape();
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
+            pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
         }
 
         const LocaleDataWrapper& localeDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
@@ -195,10 +190,11 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
     bool bLandscape = false;
     const SvxPageItem *pItem;
     MapUnit eUnit = lcl_GetUnit();
-    if ( !SfxViewFrame::Current() )
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
         return;
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
+    pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
     bLandscape = pItem->IsLandscape();
 
     SvxSizeItem aPageSizeItem(SID_ATTR_PAGE_SIZE);
@@ -209,7 +205,7 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
     }
     aPageSizeItem.SetSize( aPageSize );
 
-    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+    pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
         SfxCallMode::RECORD, { &aPageSizeItem });
 }
 
@@ -226,8 +222,8 @@ IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, ValueSet*, void)
 
 IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, weld::Button&, void)
 {
-    if ( SfxViewFrame::Current() )
-        SfxViewFrame::Current()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
     mxControl->EndPopupMode();
 }
 
