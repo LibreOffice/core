@@ -18,13 +18,10 @@ class BigIntPrinter(object):
         self.val = val
 
     def to_string(self):
-        if self.val['bIsSet']:
-            if self.val['bIsBig']:
-                return self._value()
-            else:
-                return self.val['nVal']
+        if self.val['nLen']:
+            return self._value()
         else:
-            return "unset %s" % self.typename
+            return self.val['nVal']
 
     def _value(self):
         len = self.val['nLen']
