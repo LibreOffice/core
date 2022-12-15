@@ -1925,13 +1925,15 @@ weld::Window* SdOutliner::GetMessageBoxParent()
     switch (meMode)
     {
         case SEARCH:
-            pChildWindow = SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId());
+            if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+                pChildWindow = pViewFrm->GetChildWindow(
+                    SvxSearchDialogWrapper::GetChildWindowId());
             break;
 
         case SPELL:
-            pChildWindow = SfxViewFrame::Current()->GetChildWindow(
-                sd::SpellDialogChildWindow::GetChildWindowId());
+            if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+                pChildWindow = pViewFrm->GetChildWindow(
+                    sd::SpellDialogChildWindow::GetChildWindowId());
             break;
 
         case TEXT_CONVERSION:
