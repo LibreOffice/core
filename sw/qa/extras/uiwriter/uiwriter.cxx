@@ -283,6 +283,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149548)
+{
+    createSwDoc("forum-mso-en-13192-min.docx");
+    SwDoc* pDoc = getSwDoc();
+
+    for (SwRangeRedline const*const pRedline : pDoc->getIDocumentRedlineAccess().GetRedlineTable())
+    {
+        if (pRedline->GetType() == RedlineType::Delete)
+        {
+            int nLevel(0);
+            for (SwNodeIndex index = pRedline->Start()->nNode; index <= pRedline->End()->nNode; ++index)
+            {
+                switch (index.GetNode().GetNodeType())
+                {
+                    case SwNodeType::Start:
+                    case SwNodeType::Table:
+                    case SwNodeType::Section:
+                        ++nLevel;
+                        break;
+                    case SwNodeType::End:
+                        CPPUNIT_ASSERT_MESSAGE("bad overlapping redline", nLevel != 0);
+                        --nLevel;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("bad overlapping redline", int(0), nLevel);
+        }
+    }
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+
+    TransferableDataHelper aHelper(pTransfer);
+    // this was a use-after-free on nodes deleted by Copy
+    SwTransferable::Paste(*pWrtShell, aHelper);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
 {
     createSwDoc();
