@@ -258,7 +258,11 @@ Check:
 	If Not _IsStillAlive() Then GoTo Finally
 
 Try:
-	_TabControllerModel.close()
+	With _TabControllerModel
+		.ApplyFilter = False
+		.Filter = &quot;&quot;
+		.close()
+	End With
 	_Frame.close(True)
 	_Frame.dispose()
 	Dispose()
@@ -398,6 +402,8 @@ Try:
 			If Column &gt;= 1 Then
 				lMaxCol = .Count - 1
 				If Column &gt; lMaxCol + 1 Then lCol = lMaxCol Else lCol = Column - 1
+			Else
+				lCol = .getCurrentColumnPosition()
 			End If
 		End If
 
@@ -452,11 +458,15 @@ Try:
 	If VarType(Column) = V_STRING Then
 		lCol = ScriptForge.SF_Array.IndexOf(_ColumnHeaders, Column, CaseSensitive := False) + 1
 	Else
-		lCol = 0
-		If Column &gt;= 1 Then
-			lMaxCol = _ControlView.Count
-			If Column &gt; lMaxCol Then lCol = lMaxCol Else lCol = Column
-		End If
+		With _ControlView
+			lCol = 0
+			If Column &gt;= 1 Then
+				lMaxCol = .Count
+				If Column &gt; lMaxCol Then lCol = lMaxCol Else lCol = Column
+			Else
+				lCol = .getCurrentColumnPosition() + 1
+			End If
+		End With
 	End If
 
 	&apos;	The _TabControllerModel acts exactly as a result set, from which the generic _GetColumnValue can extract the searched value
