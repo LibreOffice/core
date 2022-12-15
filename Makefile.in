@@ -293,7 +293,7 @@ endif
 
 build-non-l10n-only build-l10n-only check debugrun translations packageinfo coverage $(gb_Top_MODULE_CHECK_TARGETS): build
 
-help showmodules gbuildtojson:
+help showmodules gbuildtojson pocheck:
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 cross-toolset: bootstrap fetch install-gdb-printers

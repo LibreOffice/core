@@ -62,4 +62,9 @@ create-partial-info:
 	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
 	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(BUILDID)"
 
+# also possible to bypass the dependencies/the gbuild processing by just running
+# LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
+pocheck: | $(call gb_Executable_get_runtime_target,pocheck)
+	ALL_LANGS="$(ALL_LANGS)" $(call gb_Executable_get_command,pocheck) 2>&1 | tee $${POCHECK_LOG:-/tmp/pocheck.log}
+
 # vim: set noet sw=4 ts=4:
