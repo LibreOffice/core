@@ -320,7 +320,7 @@ endif
 
 define gb_Top_DoInstall
 echo "$(1) in $(INSTALLDIR) ..." && \
-$(SRCDIR)/solenv/bin/ooinstall $(2) "$(INSTALLDIR)"
+WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/solenv/bin/ooinstall $(2) "$(INSTALLDIR)"
 
 endef
 
@@ -358,7 +358,7 @@ test-install: build
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-	@$(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
+	@WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
 ifeq ($(OS),MACOSX)
 #
 # Create Resources/*.lproj directories for languages supported by macOS
@@ -449,10 +449,10 @@ endif
 	touch $@
 
 distro-pack-install: install
-	$(SRCDIR)/bin/distro-install-clean-up
+	WITH_LANG_LIST="$(WITH_LANG_LIST)" WITH_POOR_HELP_LOCALIZATIONS="$(WITH_POOR_HELP_LOCALIZATIONS)" $(SRCDIR)/bin/distro-install-clean-up
 	$(SRCDIR)/bin/distro-install-desktop-integration
 	$(SRCDIR)/bin/distro-install-sdk
-	$(SRCDIR)/bin/distro-install-file-lists
+	WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/bin/distro-install-file-lists
 
 install-package-%:
 	$(MAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
