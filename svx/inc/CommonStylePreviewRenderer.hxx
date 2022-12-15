@@ -12,15 +12,13 @@
 #include <optional>
 #include <vector>
 
+#include <editeng/editeng.hxx>
 #include <editeng/svxfont.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/BreakIterator.hpp>
 
 class OutputDevice;
 class SfxStyleSheetBase;
@@ -41,13 +39,12 @@ class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
     tools::Long mnBaseLine;
     OUString maStyleName;
     OUString maScriptText;
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
     struct ScriptInfo
     {
         tools::Long textWidth;
-        sal_uInt16 scriptType;
+        SvtScriptType scriptType;
         sal_Int32 changePos;
-        ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+        ScriptInfo(SvtScriptType scrptType, sal_Int32 position)
             : textWidth(0)
             , scriptType(scrptType)
             , changePos(position)

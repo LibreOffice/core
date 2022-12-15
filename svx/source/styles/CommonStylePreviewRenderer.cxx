@@ -29,6 +29,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
@@ -38,9 +39,6 @@
 #include <editeng/cmapitem.hxx>
 
 #include <editeng/editids.hrc>
-
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace css;
 
@@ -235,7 +233,7 @@ void CommonStylePreviewRenderer::CalcRenderSize()
 
     mnBaseLine = 0;
     mnHeight = 0;
-    sal_uInt16 nScript;
+    SvtScriptType aScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd;
@@ -244,19 +242,19 @@ void CommonStylePreviewRenderer::CalcRenderSize()
     if (nCnt)
     {
         nEnd = maScriptChanges[nIdx].changePos;
-        nScript = maScriptChanges[nIdx].scriptType;
+        aScript = maScriptChanges[nIdx].scriptType;
     }
     else
     {
         nEnd = rText.getLength();
-        nScript = css::i18n::ScriptType::LATIN;
+        aScript = SvtScriptType::LATIN;
     }
 
     do
     {
-        auto oFont = (nScript == css::i18n::ScriptType::ASIAN) ?
+        auto oFont = (aScript == SvtScriptType::ASIAN) ?
                          m_oCJKFont :
-                         ((nScript == css::i18n::ScriptType::COMPLEX) ?
+                         ((aScript == SvtScriptType::COMPLEX) ?
                              m_oCTLFont :
                              m_oFont);
 
@@ -287,7 +285,7 @@ void CommonStylePreviewRenderer::CalcRenderSize()
         {
             nStart = nEnd;
             nEnd = maScriptChanges[nIdx].changePos;
-            nScript = maScriptChanges[nIdx].scriptType;
+            aScript = maScriptChanges[nIdx].scriptType;
         }
         else
             break;
@@ -351,7 +349,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
             aFontDrawPosition.AdjustY((aRectangle.GetHeight() - mnHeight) / 2 );
     }
 
-    sal_uInt16 nScript;
+    SvtScriptType aScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd;
@@ -359,19 +357,19 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
     if (nCnt)
     {
         nEnd = maScriptChanges[nIdx].changePos;
-        nScript = maScriptChanges[nIdx].scriptType;
+        aScript = maScriptChanges[nIdx].scriptType;
     }
     else
     {
         nEnd = rText.getLength();
-        nScript = css::i18n::ScriptType::LATIN;
+        aScript = SvtScriptType::LATIN;
     }
 
     do
     {
-        auto oFont = (nScript == css::i18n::ScriptType::ASIAN)
+        auto oFont = (aScript == SvtScriptType::ASIAN)
                          ? m_oCJKFont
-                         : ((nScript == css::i18n::ScriptType::COMPLEX)
+                         : ((aScript == SvtScriptType::COMPLEX)
                              ? m_oCTLFont
                              : m_oFont);
 
@@ -392,7 +390,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         {
             nStart = nEnd;
             nEnd = maScriptChanges[nIdx].changePos;
-            nScript = maScriptChanges[nIdx].scriptType;
+            aScript = maScriptChanges[nIdx].scriptType;
         }
         else
             break;
@@ -413,30 +411,16 @@ void CommonStylePreviewRenderer::CheckScript()
     maScriptText = maStyleName;
     maScriptChanges.clear();
 
-    if (!mxBreak.is())
-    {
-        auto xContext = comphelper::getProcessComponentContext();
-        mxBreak = css::i18n::BreakIterator::create(xContext);
-    }
+    auto aEditEngine = EditEngine(nullptr);
+    aEditEngine.SetText(maScriptText);
 
-    sal_Int16 nScript = mxBreak->getScriptType(maStyleName, 0);
-    sal_Int32 nChg = 0;
-    if (css::i18n::ScriptType::WEAK == nScript)
+    auto aScript = aEditEngine.GetScriptType({ 0, 0, 0, 0 });
+    for (sal_Int32 i = 1; i <= maScriptText.getLength(); i++)
     {
-        nChg = mxBreak->endOfScript(maStyleName, nChg, nScript);
-        if (nChg < maStyleName.getLength())
-            nScript = mxBreak->getScriptType(maStyleName, nChg);
-        else
-            nScript = css::i18n::ScriptType::LATIN;
-    }
-
-    while (true)
-    {
-        nChg = mxBreak->endOfScript(maStyleName, nChg, nScript);
-        maScriptChanges.emplace_back(nScript, nChg);
-        if (nChg >= maStyleName.getLength() || nChg < 0)
-            break;
-        nScript = mxBreak->getScriptType(maStyleName, nChg);
+        auto aNextScript = aEditEngine.GetScriptType({ 0, i, 0, i });
+        if (aNextScript != aScript || i == maScriptText.getLength())
+            maScriptChanges.emplace_back(aScript, i);
+        aScript = aNextScript;
     }
 }
 
