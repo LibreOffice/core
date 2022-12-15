@@ -283,7 +283,7 @@ void ExtConditionalFormattingContext::onEndElement()
                     maEntries.push_back(std::unique_ptr<ScFormatEntry>(pEntry));
                 }
 
-                assert(maModels.size() == maPriorities.size());
+                assert(maPriorities.size() >= maModels.size());
                 maModels.clear();
             }
 
