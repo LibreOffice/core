@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# convert FOO := BAR$(MICRO) to export FOO=BAR$MICRO
+source <(sed -e's#\([^ ]\{1,\}\) := #export \1=#g' ${SRCDIR}/download.lst | sed -e 's#[)(]##g')
+
 my_gitbranch="${1?}"
 subst="-e s!@BRANCH@!${my_gitbranch?}!"
 
