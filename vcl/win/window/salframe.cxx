@@ -2664,7 +2664,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         hTheme = OpenThemeData(mhWnd, L"Button");
         GetThemeColor(hTheme, BP_PUSHBUTTON, PBS_NORMAL, TMT_TEXTCOLOR, &color);
         aControlTextColor = ImplWinColorToSal(color);
-        GetThemeColor(hTheme, BP_CHECKBOX, PBS_NORMAL, TMT_TEXTCOLOR, &color);
+        GetThemeColor(hTheme, BP_CHECKBOX, CBS_CHECKEDNORMAL, TMT_TEXTCOLOR, &color);
         aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( color ) );
         CloseThemeData(hTheme);
 
