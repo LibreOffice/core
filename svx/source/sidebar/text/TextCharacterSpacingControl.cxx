@@ -106,12 +106,13 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
 
 void TextCharacterSpacingControl::Initialize()
 {
-    const SvxKerningItem* pKerningItem;
-    SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_KERNING, pKerningItem);
+    const SvxKerningItem* pKerningItem(nullptr);
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    SfxItemState eState = pViewFrm ? pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_KERNING, pKerningItem) : SfxItemState::UNKNOWN;
 
     tools::Long nKerning = 0;
 
-    if(pKerningItem)
+    if (pKerningItem)
         nKerning = pKerningItem->GetValue();
 
     SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
@@ -163,8 +164,11 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bo
 
     SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
-        SfxCallMode::RECORD, { &aKernItem });
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+    {
+        pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
+            SfxCallMode::RECORD, { &aKernItem });
+    }
 
     if (bClose)
         mxControl->EndPopupMode();

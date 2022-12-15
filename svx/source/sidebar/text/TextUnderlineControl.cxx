@@ -99,11 +99,14 @@ namespace {
 
 Color GetUnderlineColor()
 {
-    const SvxUnderlineItem* pUnderlineItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pUnderlineItem);
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+    {
+        const SvxUnderlineItem* pUnderlineItem;
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pUnderlineItem);
 
-    if(pUnderlineItem)
-        return pUnderlineItem->GetColor();
+        if (pUnderlineItem)
+            return pUnderlineItem->GetColor();
+    }
 
     return COL_AUTO;
 }
@@ -112,20 +115,23 @@ Color GetUnderlineColor()
 
 IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
 {
-    if (&rButton == mxMoreOptions.get())
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
-        pDisp->Execute(SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON);
-    }
-    else
-    {
-        const FontLineStyle eUnderline = getLineStyle(rButton);
+        if (&rButton == mxMoreOptions.get())
+        {
+            SfxDispatcher* pDisp = pViewFrm->GetBindings().GetDispatcher();
+            pDisp->Execute(SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON);
+        }
+        else
+        {
+            const FontLineStyle eUnderline = getLineStyle(rButton);
 
-        SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
-        aLineItem.SetColor(GetUnderlineColor());
+            SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
+            aLineItem.SetColor(GetUnderlineColor());
 
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
-               SfxCallMode::RECORD, { &aLineItem });
+            pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
+                   SfxCallMode::RECORD, { &aLineItem });
+        }
     }
     mxControl->EndPopupMode();
 }
