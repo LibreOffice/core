@@ -572,7 +572,10 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    ScTabView* pTabView = pViewData->GetView();
+    ScTabView* pTabView = nullptr;
+
+    if (pViewData)
+        pTabView = pViewData->GetView();
 
     if (pTabView)
     {
@@ -599,6 +602,8 @@ int ScModelObj::getPart()
 OUString ScModelObj::getPartInfo( int nPart )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return OUString();
     const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
@@ -618,6 +623,8 @@ OUString ScModelObj::getPartName( int nPart )
 {
     OUString sTabName;
     ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return OUString();
     pViewData->GetDocument().GetName(nPart, sTabName);
     return sTabName;
 }
@@ -626,6 +633,8 @@ OUString ScModelObj::getPartHash( int nPart )
 {
     sal_Int64 nHashCode;
     ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return OUString();
     return (pViewData->GetDocument().GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
 }
 
