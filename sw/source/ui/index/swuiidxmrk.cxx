@@ -686,8 +686,11 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, weld::Button&, void)
 {
     if (m_bNewMark)
     {
-        SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_IDX_ENTRY_DLG,
-                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        {
+            pViewFrm->GetDispatcher()->Execute(FN_INSERT_IDX_ENTRY_DLG,
+                        SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
+        }
     }
     else
     {
@@ -819,7 +822,8 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, weld::Button&, void)
     else
     {
         CloseHdl(*m_xCloseBT);
-        SfxViewFrame::Current()->GetBindings().Invalidate(FN_EDIT_IDX_ENTRY_DLG);
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+            pViewFrm->GetBindings().Invalidate(FN_EDIT_IDX_ENTRY_DLG);
     }
 }
 
@@ -1218,8 +1222,11 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl, weld::Button&, void)
 {
     if(m_bNewEntry)
     {
-        SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_AUTH_ENTRY_DLG,
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        {
+            pViewFrm->GetDispatcher()->Execute(FN_INSERT_AUTH_ENTRY_DLG,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
+        }
     }
     else
     {

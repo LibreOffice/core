@@ -129,7 +129,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
     }
 
     SfxViewFrame* pFrame = SfxViewFrame::Current();
-    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
+    uno::Reference<frame::XFrame> xFrame(pFrame ? pFrame->GetFrame().GetFrameInterface() : nullptr);
     uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(xFrame, uno::UNO_QUERY);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
