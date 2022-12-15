@@ -1934,6 +1934,11 @@ void FormulaCompiler::Factor()
                 case ocIfNA:
                     nJumpMax = 2;
                     break;
+                case ocStop:
+                    // May happen only if PutCode(pFacToken) ran into overflow.
+                    nJumpMax = 0;
+                    assert(pc == FORMULA_MAXTOKENS && pArr->GetCodeError() != FormulaError::NONE);
+                    break;
                 default:
                     nJumpMax = 0;
                     SAL_WARN("formula.core","Jump OpCode: " << +eFacOpCode);
@@ -1972,6 +1977,14 @@ void FormulaCompiler::Factor()
                     case ocIfError:
                     case ocIfNA:
                         bLimitOk = (nJumpCount <= 2);
+                        break;
+                    case ocStop:
+                        // May happen only if PutCode(pFacToken) ran into overflow.
+                        // This may had resulted from a stacked token array and
+                        // error wasn't propagated so assert only the program
+                        // counter.
+                        bLimitOk = false;
+                        assert(pc == FORMULA_MAXTOKENS);
                         break;
                     default:
                         bLimitOk = false;
@@ -2836,6 +2849,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
     {
         if ( pc == FORMULA_MAXTOKENS - 1 )
         {
+            SAL_WARN("formula.core", "FormulaCompiler::PutCode - CodeOverflow with OpCode " << +p->GetOpCode());
             p = new FormulaByteToken( ocStop );
             p->IncRef();
             *pCode++ = p.get();
