@@ -31,6 +31,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
+#include <svl/visitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -331,8 +332,17 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case SID_ACCESSIBILITY_CHECK_ONLINE:
             {
-                bool bOnlineAccessibilityCheck = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
-                aBool.SetValue(bOnlineAccessibilityCheck);
+                // visible only when experimental mode is enabled
+                if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+                {
+                    rSet.Put(SfxVisibilityItem(nWhich, false));
+                    nWhich = 0;
+                }
+                else
+                {
+                    bool bOnlineAccessibilityCheck = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+                    aBool.SetValue(bOnlineAccessibilityCheck);
+                }
             }
             break;
             case FN_SHADOWCURSOR:
