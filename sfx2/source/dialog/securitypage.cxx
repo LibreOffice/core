@@ -106,7 +106,7 @@ static bool lcl_GetPassword(
 }
 
 
-static bool lcl_IsPasswordCorrect( std::u16string_view rPassword )
+static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPassword)
 {
     bool bRes = false;
 
@@ -138,7 +138,7 @@ static bool lcl_IsPasswordCorrect( std::u16string_view rPassword )
 
     if ( !bRes )
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
         xInfoBox->run();
@@ -360,7 +360,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::Toggleable
             bAlreadyDone = true;
 
         // ask for password and if dialog is canceled or no password provided return
-        if (lcl_IsPasswordCorrect( aPasswordText ))
+        if (lcl_IsPasswordCorrect(m_rMyTabPage.GetFrameWeld(), aPasswordText))
             m_bOrigPasswordIsConfirmed = true;
         else
             bAlreadyDone = true;
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
         // provided password still needs to be checked?
         if (!bNewProtection && !m_bOrigPasswordIsConfirmed)
         {
-            if (lcl_IsPasswordCorrect( aPasswordText ))
+            if (lcl_IsPasswordCorrect(m_rMyTabPage.GetFrameWeld(), aPasswordText))
                 m_bOrigPasswordIsConfirmed = true;
             else
                 return;
