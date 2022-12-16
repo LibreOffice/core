@@ -3259,7 +3259,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
         return;
 
     comphelper::OInterfaceContainerHelper2* pIC =
-        m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
+        xKeepAlive->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
     if ( pIC )
     {
         SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
@@ -3272,7 +3272,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
                 aDocumentEvent ) );
     }
 
-    pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
+    pIC = xKeepAlive->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
     if ( pIC )
     {
         SAL_INFO("sfx.doc", "SfxEvent: " + aName);
