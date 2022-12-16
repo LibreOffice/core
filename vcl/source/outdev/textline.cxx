@@ -23,7 +23,7 @@
 #include <tools/helpers.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
-
+#include <unotools/configmgr.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
@@ -276,6 +276,14 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
                                          Color aColor,
                                          bool bIsAbove )
 {
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing && nWidth > 10000000)
+    {
+        SAL_WARN("vcl.gdi", "drawLine, skipping suspicious WaveTextLine of length: "
+                                << nWidth << " for fuzzing performance");
+        return;
+    }
+
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
     tools::Long            nLineHeight;
     tools::Long            nLinePos;
