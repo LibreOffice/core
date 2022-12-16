@@ -558,8 +558,11 @@ private:
     /// Skip paragraphs from the <w:separator/> footnote
     SkipFootnoteSeparator           m_eSkipFootnoteState;
     /// preload footnotes and endnotes
-    sal_Int32                       m_nFootnotes;
-    sal_Int32                       m_nEndnotes;
+    sal_Int32                       m_nFootnotes; // footnote count
+    sal_Int32                       m_nEndnotes;  // endnote count
+    // these are the real first notes, use their content in the first notes
+    sal_Int32                       m_nFirstFootnoteIndex;
+    sal_Int32                       m_nFirstEndnoteIndex;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -886,6 +889,9 @@ public:
     void IncrementFootnoteCount() { ++m_nFootnotes; }
     sal_Int32 GetEndnoteCount() const { return m_nEndnotes; }
     void IncrementEndnoteCount() { ++m_nEndnotes; }
+    bool CopyTemporaryNotes(
+        css::uno::Reference< css::text::XFootnote > xNoteSrc,
+        css::uno::Reference< css::text::XFootnote > xNoteDest );
     void RemoveTemporaryFootOrEndnotes();
 
     void PushAnnotation();
