@@ -786,9 +786,11 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 //search for the font
                 if(!pList)
                 {
-                    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-                    const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>( pCurDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) );
-                    pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                    if (SfxObjectShell* pCurDocShell = SfxObjectShell::Current())
+                    {
+                        const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>(pCurDocShell->GetItem(SID_ATTR_CHAR_FONTLIST));
+                        pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                    }
                 }
                 if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                 {

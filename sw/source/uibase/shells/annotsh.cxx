@@ -224,8 +224,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case FN_GROW_FONT_SIZE:
         case FN_SHRINK_FONT_SIZE:
         {
-            const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
-                    ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+            const SfxObjectShell* pObjSh = SfxObjectShell::Current();
+            const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>
+                    (pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr);
             const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
             pOLV->GetEditView().ChangeFontSize( nSlot == FN_GROW_FONT_SIZE, pFontList );
         }

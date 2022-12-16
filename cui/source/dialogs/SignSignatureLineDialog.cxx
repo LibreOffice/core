@@ -156,7 +156,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
 {
     // Document needs to be saved before selecting a certificate
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    if (!pShell->PrepareForSigning(m_xDialog.get()))
+    if (!pShell || !pShell->PrepareForSigning(m_xDialog.get()))
         return;
 
     Reference<XCertificate> xSignCertificate
@@ -193,6 +193,12 @@ void SignSignatureLineDialog::Apply()
     }
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
+    if (!pShell)
+    {
+        SAL_WARN("cui.dialogs", "No SfxObjectShell!");
+        return;
+    }
+
     Reference<XGraphic> xValidGraphic = getSignedGraphic(true);
     Reference<XGraphic> xInvalidGraphic = getSignedGraphic(false);
     pShell->SignSignatureLine(m_xDialog.get(), m_aSignatureLineId, m_xSelectedCertifate,

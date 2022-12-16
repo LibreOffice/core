@@ -327,8 +327,7 @@ ScriptProtocolHandler::getScriptInvocation()
                     if ( pFrame->GetFrameInterface() == m_xFrame )
                         break;
                 }
-                SfxObjectShell* pDocShell = pFrame ? pFrame->GetCurrentDocument() : SfxObjectShell::Current();
-                if ( pDocShell )
+                if (SfxObjectShell* pDocShell = pFrame ? pFrame->GetCurrentDocument() : SfxObjectShell::Current())
                 {
                     Reference< XModel > xModel( pDocShell->GetModel() );
                     m_xScriptInvocation.set( xModel, UNO_QUERY );

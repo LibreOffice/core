@@ -769,7 +769,8 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
             bool bKeepSourceFormatting = newEntry.pUserData == &bHasSelectionText;
             if (bKeepSourceFormatting)
             {
-                pAutoCorrect->PutText(newEntry.sShort, *SfxObjectShell::Current(), eCurrentLang);
+                if (SfxObjectShell* pSh = SfxObjectShell::Current())
+                    pAutoCorrect->PutText(newEntry.sShort, *pSh, eCurrentLang);
                 continue;
             }
 
