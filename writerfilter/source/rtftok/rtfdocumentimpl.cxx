@@ -2967,12 +2967,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             {
                 uno::Reference<util::XCloseable> xComponent(xObject->getComponent(),
                                                             uno::UNO_SET_THROW);
-                // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
-                // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
-                // to RTLD_GLOBAL, so most probably a gcc bug.
-                auto& rImport = dynamic_cast<oox::FormulaImportBase&>(
-                    dynamic_cast<SfxBaseModel&>(*xComponent));
-                rImport.readFormulaOoxml(m_aMathBuffer);
+                if (oox::FormulaImportBase* pImport
+                    = dynamic_cast<oox::FormulaImportBase*>(xComponent.get()))
+                    pImport->readFormulaOoxml(m_aMathBuffer);
 
                 auto pValue = new RTFValue(xObject);
                 RTFSprms aMathAttributes;

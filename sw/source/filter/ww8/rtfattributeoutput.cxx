@@ -66,7 +66,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <sfx2/sfxbasemodel.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <docufld.hxx>
@@ -4188,16 +4187,15 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
     uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
     if (!xClosable.is())
         return false;
-    // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
-    // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
-    // to RTLD_GLOBAL, so most probably a gcc bug.
-    auto pBase
-        = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
-    assert(pBase != nullptr);
-    OStringBuffer aBuf;
+    auto pBase = dynamic_cast<oox::FormulaExportBase*>(xClosable.get());
+    SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)
+    {
+        OStringBuffer aBuf;
         pBase->writeFormulaRtf(aBuf, m_rExport.GetCurrentEncoding());
-    m_aRunText->append(aBuf);
+        m_aRunText->append(aBuf);
+    }
+
     // Replacement graphic.
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATHPICT " ");
     FlyFrameOLEReplacement(pFlyFrameFormat, rOLENode, rSize);

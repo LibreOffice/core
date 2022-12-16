@@ -99,7 +99,6 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/svdogrp.hxx>
 #include <svl/grabbagitem.hxx>
-#include <sfx2/sfxbasemodel.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
@@ -5986,14 +5985,11 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         SAL_WARN("sw.ww8", "Broken math object");
         return;
     }
-// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
-// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
-// to RTLD_GLOBAL, so most probably a gcc bug.
-    oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
-    assert( formulaexport != nullptr );
-    if (formulaexport)
+    if( oox::FormulaExportBase* formulaexport = dynamic_cast< oox::FormulaExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
                 oox::drawingml::DOCUMENT_DOCX, nAlign);
+    else
+        OSL_FAIL( "Math OLE object cannot write out OOXML" );
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
