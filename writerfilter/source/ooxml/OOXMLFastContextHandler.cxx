@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
@@ -2283,7 +2284,7 @@ void OOXMLFastContextHandlerMath::process()
         return;
     uno::Reference< uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
     if( oox::FormulaImExportBase* import
-        = dynamic_cast< oox::FormulaImExportBase* >( component.get()))
+        = comphelper::getFromUnoTunnel< oox::FormulaImExportBase >( component))
         import->readFormulaOoxml( buffer );
     if (!isForwardEvents())
         return;

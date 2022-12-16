@@ -71,6 +71,7 @@
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
 #include <utility>
@@ -2473,7 +2474,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->startElementNS(XML_a14, XML_m);
 
     oox::FormulaImExportBase *const pMagic(
-        dynamic_cast<oox::FormulaImExportBase*>(xMathModel.get()));
+        comphelper::getFromUnoTunnel<oox::FormulaImExportBase>(xMathModel));
     assert(pMagic);
     pMagic->writeFormulaOoxml(GetFS(), GetFB()->getVersion(), GetDocumentType(),
         FormulaImExportBase::eFormulaAlign::INLINE);

@@ -137,6 +137,26 @@ namespace comphelper {
         return FallbackToGetSomethingOf<Base>::get(rId, pThis);
     }
 
+#if defined _MSC_VER && _MSC_VER < 1930 && !defined __clang__
+    // Without this additional overload, at least VS 2019 16.11.21 has sometimes issues deducing the
+    // Base template argument in calls to the "full" getSomethingImpl overload with zero arguments
+    // substituted for the variadic Mixins parameter:
+    template <class T, class Mixin, class Base>
+    sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
+        MixinToGetSomethingOf<Mixin>,
+        FallbackToGetSomethingOf<Base>)
+    {
+        sal_Int64 res;
+        if (MixinToGetSomethingOf<T>::get(rId, pThis, &res)
+            || MixinToGetSomethingOf<Mixin>::get(rId, pThis, &res))
+        {
+            return res;
+        }
+
+        return FallbackToGetSomethingOf<Base>::get(rId, pThis);
+    }
+#endif
+
     template <class T, class Mixin, class... Mixins, class Base>
     sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
         MixinToGetSomethingOf<Mixin>, MixinToGetSomethingOf<Mixins>...,

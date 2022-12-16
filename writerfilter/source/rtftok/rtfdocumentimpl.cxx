@@ -26,6 +26,7 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
@@ -2968,7 +2969,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 uno::Reference<util::XCloseable> xComponent(xObject->getComponent(),
                                                             uno::UNO_SET_THROW);
                 if (oox::FormulaImExportBase* pImport
-                    = dynamic_cast<oox::FormulaImExportBase*>(xComponent.get()))
+                    = comphelper::getFromUnoTunnel<oox::FormulaImExportBase>(xComponent))
                     pImport->readFormulaOoxml(m_aMathBuffer);
 
                 auto pValue = new RTFValue(xObject);

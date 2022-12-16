@@ -45,6 +45,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
@@ -5985,7 +5986,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         SAL_WARN("sw.ww8", "Broken math object");
         return;
     }
-    if( oox::FormulaImExportBase* formulaexport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
+    if( oox::FormulaImExportBase* formulaexport = comphelper::getFromUnoTunnel< oox::FormulaImExportBase >( xInterface))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
                 oox::drawingml::DOCUMENT_DOCX, nAlign);
     else
