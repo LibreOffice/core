@@ -574,8 +574,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
     m_xMergeAdjacentBordersCB->hide();
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    if (pDocSh)
+    if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
     {
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )

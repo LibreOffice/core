@@ -154,10 +154,11 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
 
 } // end anonymous namespace
 
-ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
+ClassificationDialog::ClassificationDialog(weld::Window* pParent,const css::uno::Reference<css::document::XDocumentProperties>& rDocProps,
+                                           const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
     : GenericDialogController(pParent, "svx/ui/classificationdialog.ui", "AdvancedDocumentClassificationDialog")
-    , maHelper(SfxObjectShell::Current()->getDocProperties())
-    , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
+    , maHelper(rDocProps)
+    , maInternationalHelper(rDocProps, /*bUseLocalizedPolicy*/ false)
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(rParagraphSignHandler)
     , m_nCurrentSelectedCategory(-1)

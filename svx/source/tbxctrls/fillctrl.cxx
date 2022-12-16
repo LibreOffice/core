@@ -275,11 +275,12 @@ void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
                     if(mpFillGradientItem)
                     {
                         const OUString aString( mpFillGradientItem->GetName() );
-                        const SfxObjectShell* pSh = SfxObjectShell::Current();
-
                         mpLbFillAttr->clear();
-                        mpLbFillAttr->set_sensitive(true);
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                        if (const SfxObjectShell* pSh = SfxObjectShell::Current())
+                        {
+                            mpLbFillAttr->set_sensitive(true);
+                            SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                        }
                         mpLbFillAttr->set_active_text(aString);
                     }
                     else
@@ -299,11 +300,12 @@ void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
                     if(mpHatchItem)
                     {
                         const OUString aString( mpHatchItem->GetName() );
-                        const SfxObjectShell* pSh = SfxObjectShell::Current();
-
                         mpLbFillAttr->clear();
-                        mpLbFillAttr->set_sensitive(true);
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+                        if (const SfxObjectShell* pSh = SfxObjectShell::Current())
+                        {
+                            mpLbFillAttr->set_sensitive(true);
+                            SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+                        }
                         mpLbFillAttr->set_active_text(aString);
                     }
                     else
@@ -323,11 +325,12 @@ void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
                     if(mpBitmapItem)
                     {
                         const OUString aString( mpBitmapItem->GetName() );
-                        const SfxObjectShell* pSh = SfxObjectShell::Current();
-
                         mpLbFillAttr->clear();
-                        mpLbFillAttr->set_sensitive(true);
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                        if (const SfxObjectShell* pSh = SfxObjectShell::Current())
+                        {
+                            mpLbFillAttr->set_sensitive(true);
+                            SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                        }
                         mpLbFillAttr->set_active_text(aString);
                     }
                     else

@@ -475,8 +475,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
 
     bool bUseStarFormat = false;
-    SfxObjectShell* pDocSh  = SfxObjectShell::Current();
-    if ( pDocSh )
+    if (SfxObjectShell* pDocSh  = SfxObjectShell::Current())
     {
         // is this a calc document
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
@@ -714,11 +713,8 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             else
             {
                 SfxObjectShell* pDocSh  = SfxObjectShell::Current();
-
                 DBG_ASSERT( pDocSh, "DocShell not found!" );
-
-
-                if ( pDocSh )
+                if (pDocSh)
                     pDocSh->PutItem( *pNumItem );
             }
         }

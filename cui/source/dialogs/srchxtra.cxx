@@ -64,9 +64,7 @@ void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
     if (rId == "font")
     {
         const FontList* pApm_pFontList = nullptr;
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-
-        if ( pSh )
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
         {
             const SvxFontListItem* pFLItem = static_cast<const SvxFontListItem*>(
                 pSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
@@ -119,42 +117,44 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
-
-    SfxItemPool& rPool = pSh->GetPool();
-    SfxItemSet aSet( rPool, pWhRanges );
-    SfxWhichIter aIter( aSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
-
-    while ( nWhich )
+    if (pSh)
     {
-        sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
-        if ( nSlot >= SID_SVX_START )
-        {
-            bool bChecked = false, bFound = false;
-            for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
-            {
-                if ( nSlot == rList[i].nSlot )
-                {
-                    bFound = true;
-                    if ( IsInvalidItem( rList[i].pItem ) )
-                        bChecked = true;
-                }
-            }
+        SfxItemPool& rPool = pSh->GetPool();
+        SfxItemSet aSet( rPool, pWhRanges );
+        SfxWhichIter aIter( aSet );
+        sal_uInt16 nWhich = aIter.FirstWhich();
 
-            // item resources are in svx
-            sal_uInt32 nId  = SvxAttrNameTable::FindIndex(nSlot);
-            if (RESARRAY_INDEX_NOTFOUND != nId)
+        while ( nWhich )
+        {
+            sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
+            if ( nSlot >= SID_SVX_START )
             {
-                m_xAttrLB->append();
-                const int nRow = m_xAttrLB->n_children() - 1;
-                m_xAttrLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-                m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 0);
-                m_xAttrLB->set_id(nRow, OUString::number(nSlot));
+                bool bChecked = false, bFound = false;
+                for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
+                {
+                    if ( nSlot == rList[i].nSlot )
+                    {
+                        bFound = true;
+                        if ( IsInvalidItem( rList[i].pItem ) )
+                            bChecked = true;
+                    }
+                }
+
+                // item resources are in svx
+                sal_uInt32 nId  = SvxAttrNameTable::FindIndex(nSlot);
+                if (RESARRAY_INDEX_NOTFOUND != nId)
+                {
+                    m_xAttrLB->append();
+                    const int nRow = m_xAttrLB->n_children() - 1;
+                    m_xAttrLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 0);
+                    m_xAttrLB->set_id(nRow, OUString::number(nSlot));
+                }
+                else
+                    SAL_WARN( "cui.dialogs", "no resource for slot id " << static_cast<sal_Int32>(nSlot) );
             }
-            else
-                SAL_WARN( "cui.dialogs", "no resource for slot id " << static_cast<sal_Int32>(nSlot) );
+            nWhich = aIter.NextWhich();
         }
-        nWhich = aIter.NextWhich();
     }
 
     m_xAttrLB->make_sorted();

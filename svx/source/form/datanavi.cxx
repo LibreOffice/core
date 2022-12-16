@@ -1925,7 +1925,7 @@ namespace svxform
     {
         SfxObjectShell* pCurrentDoc = SfxObjectShell::Current();
         DBG_ASSERT( pCurrentDoc, "DataNavigatorWindow::SetDocModified(): no objectshell" );
-        if ( !pCurrentDoc->IsModified() && pCurrentDoc->IsEnableSetModified() )
+        if (pCurrentDoc && !pCurrentDoc->IsModified() && pCurrentDoc->IsEnableSetModified())
             pCurrentDoc->SetModified();
     }
 

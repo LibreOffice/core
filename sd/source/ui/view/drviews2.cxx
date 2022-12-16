@@ -244,9 +244,9 @@ protected:
     uno::Reference<beans::XPropertyContainer> m_xPropertyContainer;
     sfx::ClassificationKeyCreator m_aKeyCreator;
 public:
-    ClassificationCommon(sd::DrawViewShell & rDrawViewShell)
+    ClassificationCommon(sd::DrawViewShell& rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
         : m_rDrawViewShell(rDrawViewShell)
-        , m_xDocumentProperties(SfxObjectShell::Current()->getDocProperties())
+        , m_xDocumentProperties(rDocProps)
         , m_xPropertyContainer(m_xDocumentProperties->getUserDefinedProperties())
         , m_aKeyCreator(SfxClassificationHelper::getPolicyType())
     {}
@@ -306,8 +306,8 @@ private:
     }
 
 public:
-    ClassificationCollector(sd::DrawViewShell & rDrawViewShell)
-        : ClassificationCommon(rDrawViewShell)
+    ClassificationCollector(sd::DrawViewShell & rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
+        : ClassificationCommon(rDrawViewShell, rDocProps)
     {}
 
     std::vector<svx::ClassificationResult> const & getResults() const
@@ -461,8 +461,8 @@ private:
     }
 
 public:
-    ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
-        : ClassificationCommon(rDrawViewShell)
+    ClassificationInserter(sd::DrawViewShell & rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
+        : ClassificationCommon(rDrawViewShell, rDocProps)
     {
     }
 
@@ -1689,18 +1689,22 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CLASSIFICATION_DIALOG:
         {
-            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetFrameWeld(), false, [](){} );
-            ClassificationCollector aCollector(*this);
-            aCollector.collect();
-
-            xDialog->setupValues(std::vector(aCollector.getResults()));
-
-            if (RET_OK == xDialog->run())
+            if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
             {
-                ClassificationInserter aInserter(*this);
-                aInserter.insert(xDialog->getResult());
+                css::uno::Reference<css::document::XDocumentProperties> xDocProps(pObjShell->getDocProperties());
+                auto xDialog = std::make_shared<svx::ClassificationDialog>(GetFrameWeld(), xDocProps, false, [](){} );
+                ClassificationCollector aCollector(*this, xDocProps);
+                aCollector.collect();
+
+                xDialog->setupValues(std::vector(aCollector.getResults()));
+
+                if (RET_OK == xDialog->run())
+                {
+                    ClassificationInserter aInserter(*this, xDocProps);
+                    aInserter.insert(xDialog->getResult());
+                }
+                xDialog.reset();
             }
-            xDialog.reset();
 
             Cancel();
             rReq.Ignore();

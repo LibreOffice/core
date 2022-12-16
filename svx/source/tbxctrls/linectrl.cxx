@@ -599,14 +599,12 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
         default:
         {
             eXLS = drawing::LineStyle_DASH;
-
-            if ( nPos != -1 &&
-                 SfxObjectShell::Current()  &&
-                 SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
+            const SfxObjectShell* pObjSh = SfxObjectShell::Current();
+            if (nPos != -1 && pObjSh && pObjSh->GetItem(SID_DASH_LIST))
             {
                 // LineDashItem will only be sent if it also has a dash.
                 // Notify cares!
-                SvxDashListItem const * pItem = SfxObjectShell::Current()->GetItem( SID_DASH_LIST );
+                SvxDashListItem const * pItem = pObjSh->GetItem( SID_DASH_LIST );
                 const XDashEntry* pEntry = pItem->GetDashList()->GetDash(nPos - 2);
                 XLineDashItem aLineDashItem(pEntry->GetName(), pEntry->GetDash());
 
