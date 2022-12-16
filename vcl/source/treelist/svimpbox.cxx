@@ -2392,9 +2392,12 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_SUBTRACT:
             if (m_pView->IsExpanded(m_pCursor))
-                m_pView->Collapse(m_pCursor);
-            if (bMod1)
-                CollapseTo(m_pTree->GetRootLevelParent(m_pCursor));
+            {
+                if (bMod1)
+                    CollapseTo(m_pCursor);
+                else
+                    m_pView->Collapse(m_pCursor);
+            }
             break;
 
         case KEY_MULTIPLY:
