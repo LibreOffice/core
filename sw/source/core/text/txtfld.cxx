@@ -787,13 +787,13 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     const SwTextNode& rTextNode = *rInf.GetTextFrame()->GetTextNodeForParaProps();
                     if (const SwpHints* pHints = rTextNode.GetpSwpHints())
                     {
-                        // Also look for a character hint that cover the entire current paragraph:
+                        // Also look for an empty character hint that sits at the paragraph end:
                         for (size_t i = 0; i < pHints->Count(); ++i)
                         {
-                            const SwTextAttr* pHint = pHints->Get(i);
-                            if (pHint->Which() == RES_TXTATR_AUTOFMT && pHint->GetStart() == 0
-                                && pHint->GetEnd()
-                                && *pHint->GetEnd() == rTextNode.GetText().getLength())
+                            const SwTextAttr* pHint = pHints->GetSortedByEnd(i);
+                            if (pHint->Which() == RES_TXTATR_AUTOFMT && pHint->GetEnd()
+                                && pHint->GetStart() == *pHint->GetEnd()
+                                && pHint->GetStart() == rTextNode.GetText().getLength())
                             {
                                 std::shared_ptr<SfxItemSet> pSet
                                     = pHint->GetAutoFormat().GetStyleHandle();

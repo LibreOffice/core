@@ -1408,7 +1408,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     bool bBoldWritten = false;
     while (nWhichId)
     {
-        if (aIter.GetItemState(true, &pItem) == SfxItemState::SET && nWhichId != RES_CHRATR_GRABBAG)
+        if (aIter.GetItemState(true, &pItem) == SfxItemState::SET)
         {
             if (isCHRATR(nWhichId) || nWhichId == RES_TXTATR_CHARFMT)
             {

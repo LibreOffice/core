@@ -862,6 +862,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
                 "font-height", "480");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
+{
+    // Given a document with a numbering and a single paragraph, the entire run is red:
+    createSwDoc("number-portion-noformat.docx");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that just because the entire run is red, the numbering portion is not red:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ffffffff (COL_AUTO)
+    // - Actual  : 00ff0000 (COL_LIGHTRED)
+    // i.e. the run color affected the color of the number portion in Writer, but not in Word.
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("ffffffff"),
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

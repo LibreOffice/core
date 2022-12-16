@@ -758,6 +758,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
     CPPUNIT_ASSERT(xRun->getString().endsWith("tellus."));
     xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(hasProperty(xRun, "Bookmark"));
+
+    // The paragraph marker's formatting.
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT(xRun->getString().isEmpty());
+
     // deleted paragraph mark at the end of the second paragraph
     if (isExported())
     {
