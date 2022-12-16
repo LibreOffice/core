@@ -487,7 +487,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             }
             else
             {
-                if (pSh && pSh->GetItem(SID_GRADIENT_LIST))
+                if (pSh->GetItem(SID_GRADIENT_LIST))
                 {
                     SvxFillAttrBox::Fill(*mxLbFillAttr,
                                          pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
