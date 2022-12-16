@@ -1513,6 +1513,26 @@ static void lcl_CreatePortions(
             // text portion because there may be a hyperlink attribute
             xRef = new SwXTextPortion(pUnoCursor, i_xParentText, PORTION_TEXT);
         }
+        else if (bAtEnd && !xRef.is() && pHints)
+        {
+            // See if there is an empty autofmt at the paragraph end. If so, export it, since that
+            // affects the formatting of number portions.
+            for (size_t i = 0; i < pHints->Count(); ++i)
+            {
+                const SwTextAttr* pHint = pHints->GetSortedByEnd(i);
+                if (pHint->GetStart() < pTextNode->Len())
+                {
+                    break;
+                }
+                if (pHint->Which() == RES_TXTATR_AUTOFMT && pHint->GetEnd()
+                    && pHint->GetStart() == *pHint->GetEnd()
+                    && pHint->GetStart() == pTextNode->Len())
+                {
+                    xRef = new SwXTextPortion(pUnoCursor, i_xParentText, PORTION_TEXT);
+                    break;
+                }
+            }
+        }
 
         if (xRef.is())
         {
