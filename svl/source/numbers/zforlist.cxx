@@ -3991,7 +3991,10 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
         }
         else
         {
-            eExtLang = LanguageType((nExtLang < 0) ? -nExtLang : nExtLang);
+            if (nExtLang < 0)
+                nExtLang = -nExtLang;
+            SAL_WARN_IF(nExtLang > 0xFFFF, "svl.numbers", "Out of range Lang Id: " << nExtLang << " from input string: " << OUString(rExtension));
+            eExtLang = LanguageType(nExtLang & 0xFFFF);
         }
     }
     else

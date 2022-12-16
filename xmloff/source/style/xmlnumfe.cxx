@@ -362,7 +362,8 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
         sal_Int32 nLang = o3tl::toInt32(rExt, 16);
         if ( nLang < 0 )
             nLang = -nLang;
-        AddLanguageAttr_Impl( LanguageType(nLang) );          // adds to pAttrList
+        SAL_WARN_IF(nLang > 0xFFFF, "xmloff.style", "Out of range Lang Id: " << nLang << " from input string: " << OUString(rExt));
+        AddLanguageAttr_Impl( LanguageType(nLang & 0xFFFF) );          // adds to pAttrList
     }
 
     SvXMLElementExport aElem( rExport,
