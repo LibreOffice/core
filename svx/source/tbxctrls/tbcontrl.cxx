@@ -1363,15 +1363,16 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         return;
 
     SfxObjectShell *pShell = SfxObjectShell::Current();
-    SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyle = nullptr;
+    if (!pShell)
+        return;
 
-    if ( pPool )
-    {
-        pStyle = pPool->First(eStyleFamily);
-        while (pStyle && pStyle->GetName() != rStyleName)
-            pStyle = pPool->Next();
-    }
+    SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+    if (!pPool)
+        return;
+
+    SfxStyleSheetBase* pStyle = pPool->First(eStyleFamily);
+    while (pStyle && pStyle->GetName() != rStyleName)
+        pStyle = pPool->Next();
 
     if (!pStyle )
         return;
