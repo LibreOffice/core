@@ -342,10 +342,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         try
         {
-            if (SfxObjectShell::Current() && SfxObjectShell::Current()->IsLoadingFinished())
+            SfxObjectShell* pObjSh = SfxObjectShell::Current();
+            if (pObjSh && pObjSh->IsLoadingFinished())
             {
                 auto pNonConstCustomPropertyField = const_cast<editeng::CustomPropertyField*>(pCustomPropertyField);
-                OUString sCurrent = pNonConstCustomPropertyField->GetFormatted(SfxObjectShell::Current()->getDocProperties());
+                OUString sCurrent = pNonConstCustomPropertyField->GetFormatted(pObjSh->getDocProperties());
                 pInfo->SetRepresentation(sCurrent);
             }
             else

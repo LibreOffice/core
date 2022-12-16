@@ -118,13 +118,13 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
 
 BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 {
-    SfxMedium aMedium(aUrl, StreamMode::STD_READWRITE);
-    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
-    SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
-    xTemplDoc->DoInitNew();
-    if (xTemplDoc->LoadFrom(aMedium))
+    if (SfxObjectShell* pObjectShell = SfxObjectShell::Current())
     {
-        return GenerateStylePreview(*xTemplDoc, aName);
+        SfxMedium aMedium(aUrl, StreamMode::STD_READWRITE);
+        SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
+        xTemplDoc->DoInitNew();
+        if (xTemplDoc->LoadFrom(aMedium))
+            return GenerateStylePreview(*xTemplDoc, aName);
     }
     return BitmapEx();
 }
@@ -185,8 +185,7 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
     sal_Int32 nItemId = mxValueSet->GetSelectedItemId();
     TemplateEntry* pEntry = static_cast<TemplateEntry*>(mxValueSet->GetItemData(nItemId));
 
-    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-    if (pDocSh)
+    if (SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current()))
     {
         SwgReaderOption aOption;
         aOption.SetTextFormats(true);

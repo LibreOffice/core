@@ -777,7 +777,11 @@ static void equaliseNumberOfParagraph(std::vector<svx::ClassificationResult> con
 void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationResult> const & rResults)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell || !SfxObjectShell::Current())
+    if (!pDocShell)
+        return;
+
+    const SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if (!pObjSh)
         return;
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
@@ -787,7 +791,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjSh->getDocProperties();
 
     const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
     const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
@@ -949,12 +953,16 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     std::vector<svx::ClassificationResult> aResult;
 
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell || !SfxObjectShell::Current())
+    if (!pDocShell)
+        return aResult;
+
+    const SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if (!pObjSh)
         return aResult;
 
     const OUString sBlank;
 
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjSh->getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
 

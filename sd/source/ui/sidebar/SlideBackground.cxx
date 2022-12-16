@@ -754,11 +754,14 @@ XGradient const & SlideBackground::GetGradientSetOrDefault()
 {
     if( !mpGradientItem )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxGradientListItem * pGradListItem = pSh->GetItem(SID_GRADIENT_LIST);
-        const XGradient aGradient = pGradListItem->GetGradientList()->GetGradient(0)->GetGradient();
-        const OUString aGradientName = pGradListItem->GetGradientList()->GetGradient(0)->GetName();
-
+        XGradient aGradient;
+        OUString aGradientName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxGradientListItem * pGradListItem = pSh->GetItem(SID_GRADIENT_LIST);
+            aGradient = pGradListItem->GetGradientList()->GetGradient(0)->GetGradient();
+            aGradientName = pGradListItem->GetGradientList()->GetGradient(0)->GetName();
+        }
         mpGradientItem.reset( new XFillGradientItem( aGradientName, aGradient ) );
     }
 
@@ -769,11 +772,14 @@ OUString const & SlideBackground::GetHatchingSetOrDefault()
 {
     if( !mpHatchItem )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
-        const XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(0)->GetHatch();
-        const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(0)->GetName();
-
+        XHatch aHatch;
+        OUString aHatchName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
+            aHatch = pHatchListItem->GetHatchList()->GetHatch(0)->GetHatch();
+            aHatchName = pHatchListItem->GetHatchList()->GetHatch(0)->GetName();
+        }
         mpHatchItem.reset( new XFillHatchItem( aHatchName, aHatch ) );
     }
 
@@ -784,11 +790,14 @@ OUString const & SlideBackground::GetBitmapSetOrDefault()
 {
     if( !mpBitmapItem || mpBitmapItem->isPattern())
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxBitmapListItem * pBmpListItem = pSh->GetItem(SID_BITMAP_LIST);
-        const GraphicObject aGraphObj = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aBmpName = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetName();
-
+        GraphicObject aGraphObj;
+        OUString aBmpName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxBitmapListItem * pBmpListItem = pSh->GetItem(SID_BITMAP_LIST);
+            aGraphObj = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetGraphicObject();
+            aBmpName = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetName();
+        }
         mpBitmapItem.reset( new XFillBitmapItem( aBmpName, aGraphObj ) );
     }
 
@@ -799,11 +808,14 @@ OUString const & SlideBackground::GetPatternSetOrDefault()
 {
     if( !mpBitmapItem || !(mpBitmapItem->isPattern()))
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxPatternListItem * pPtrnListItem = pSh->GetItem(SID_PATTERN_LIST);
-        const GraphicObject aGraphObj = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aPtrnName = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetName();
-
+        GraphicObject aGraphObj;
+        OUString aPtrnName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxPatternListItem * pPtrnListItem = pSh->GetItem(SID_PATTERN_LIST);
+            aGraphObj = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetGraphicObject();
+            aPtrnName = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetName();
+        }
         mpBitmapItem.reset( new XFillBitmapItem( aPtrnName, aGraphObj ) );
     }
 
@@ -1134,6 +1146,8 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
 {
     const eFillStyle nFillPos = static_cast<eFillStyle>(mxFillStyle->get_active());
     SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (!pSh)
+        return;
     switch(nFillPos)
     {
 

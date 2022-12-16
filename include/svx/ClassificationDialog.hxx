@@ -82,8 +82,9 @@ private:
     void toggleWidgetsDependingOnCategory();
 
 public:
-    ClassificationDialog(weld::Window* pParent, bool bPerParagraph,
-                         std::function<void()> aParagraphSignHandler = []() {});
+    ClassificationDialog(weld::Window* pParent,
+                         const css::uno::Reference<css::document::XDocumentProperties>& rDocProps,
+                         bool bPerParagraph, std::function<void()> aParagraphSignHandler = []() {});
     ~ClassificationDialog() override;
 
     std::vector<ClassificationResult> getResult();

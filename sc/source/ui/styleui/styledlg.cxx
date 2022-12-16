@@ -99,9 +99,8 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
             rTabPage.PageCreated(aSet);
         }
     }
-    else
+    else if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
     {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rPageId == "numbers")
         {

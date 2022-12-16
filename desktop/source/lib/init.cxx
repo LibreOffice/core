@@ -1232,6 +1232,8 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 const vcl::Font* FindFont(std::u16string_view rFontName)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if (!pDocSh)
+        return nullptr;
     const SvxFontListItem* pFonts
         = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
@@ -4580,7 +4582,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     {
         // Check if saving a PDF file
         OUString aMimeType = lcl_getCurrentDocumentMimeType(pDocument);
-        if (pDocSh->IsModified() && aMimeType == "application/pdf")
+        if (pDocSh && pDocSh->IsModified() && aMimeType == "application/pdf")
         {
             // If we have a PDF file (for saving annotations for example), we need
             // to run save-as to the same file as the opened document. Plain save
@@ -4621,7 +4623,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                                                    }), aPropertyValuesVector.end());
 
         // skip saving and tell the result via UNO_COMMAND_RESULT
-        if (bDontSaveIfUnmodified && !pDocSh->IsModified())
+        if (bDontSaveIfUnmodified && (!pDocSh || !pDocSh->IsModified()))
         {
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
@@ -5393,6 +5395,8 @@ static char* getLanguages(const char* pCommand)
 static char* getFonts (const char* pCommand)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if (!pDocSh)
+        return nullptr;
     const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;

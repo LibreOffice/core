@@ -265,11 +265,10 @@ SdFontPropertyBox::SdFontPropertyBox(weld::Label* pLabel, weld::Container* pPare
     mxControl->show();
     pLabel->set_mnemonic_widget(mxControl.get());
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const FontList* pFontList = nullptr;
     bool bMustDelete = false;
 
-    if (pDocSh)
+    if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
     {
         auto pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
         if (pItem)

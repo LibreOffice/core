@@ -203,31 +203,39 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, weld::Button&, void
     if( nError != ERRCODE_NONE )
         return;
 
-    XBitmapListRef pList = SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)->GetBitmapList();
-    INetURLObject   aURL( aDlg.GetPath() );
-    OUString aFileName = aURL.GetLastName().getToken(0, '.');
-    OUString aName = aFileName;
-    tools::Long j = 1;
-    bool bValidBitmapName = false;
-    while( !bValidBitmapName )
+    mxLbFillAttr->clear();
+
+    if (SfxObjectShell* pSh = SfxObjectShell::Current())
     {
-        bValidBitmapName = true;
-        for( tools::Long i = 0; i < pList->Count() && bValidBitmapName; i++ )
+        INetURLObject aURL(aDlg.GetPath());
+        OUString aFileName = aURL.GetLastName().getToken(0, '.');
+        OUString aName = aFileName;
+
+        XBitmapListRef pList = pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList();
+
+        tools::Long j = 1;
+        bool bValidBitmapName = false;
+        while( !bValidBitmapName )
         {
-            if( aName == pList->GetBitmap(i)->GetName() )
+            bValidBitmapName = true;
+            for( tools::Long i = 0; i < pList->Count() && bValidBitmapName; i++ )
             {
-                bValidBitmapName = false;
-                aName = aFileName + OUString::number(j++);
+                if( aName == pList->GetBitmap(i)->GetName() )
+                {
+                    bValidBitmapName = false;
+                    aName = aFileName + OUString::number(j++);
+                }
             }
         }
-    }
 
-    pList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName));
-    pList->Save();
-    mxLbFillAttr->clear();
-    SvxFillAttrBox::Fill(*mxLbFillAttr, pList);
-    mxLbFillAttr->set_active_text(aName);
-    SelectFillAttrHdl(*mxLbFillAttr);
+        pList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName));
+        pList->Save();
+
+        SvxFillAttrBox::Fill(*mxLbFillAttr, pList);
+
+        mxLbFillAttr->set_active_text(aName);
+        SelectFillAttrHdl(*mxLbFillAttr);
+    }
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
@@ -285,7 +293,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
         case eFillStyle::GRADIENT:
         {
 
-            if(pSh && pSh->GetItem(SID_COLOR_TABLE))
+            if (pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
                 XGradient aGradient;
                 aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
@@ -1097,10 +1105,12 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                     {
                         const OUString aString( mpFillGradientItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-
                         mxLbFillAttr->clear();
-                        mxLbFillAttr->set_sensitive(true);
-                        SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                        if (pSh)
+                        {
+                            mxLbFillAttr->set_sensitive(true);
+                            SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                        }
                         mxLbFillAttr->set_active_text(aString);
                     }
                     else
@@ -1121,10 +1131,12 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                     {
                         const OUString aString( mpHatchItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-
                         mxLbFillAttr->clear();
-                        mxLbFillAttr->set_sensitive(true);
-                        SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+                        if (pSh)
+                        {
+                            mxLbFillAttr->set_sensitive(true);
+                            SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+                        }
                         mxLbFillAttr->set_active_text(aString);
                     }
                     else
@@ -1148,13 +1160,12 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
                         mxLbFillAttr->clear();
                         mxLbFillAttr->show();
-                        if(nSID == SID_BITMAP_LIST)
+                        if (pSh)
                         {
-                            SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
-                        }
-                        else if(nSID == SID_PATTERN_LIST)
-                        {
-                            SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
+                            if(nSID == SID_BITMAP_LIST)
+                                SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                            else if(nSID == SID_PATTERN_LIST)
+                                SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                         }
                         mxLbFillAttr->set_active_text(aString);
                     }

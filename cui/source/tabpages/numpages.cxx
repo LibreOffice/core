@@ -645,11 +645,13 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 //search for the font
                 if(!pList)
                 {
-                    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-                    const SvxFontListItem* pFontListItem =
-                            static_cast<const SvxFontListItem*>( pCurDocShell
-                                                ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                    pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                    if (SfxObjectShell* pCurDocShell = SfxObjectShell::Current())
+                    {
+                        const SvxFontListItem* pFontListItem =
+                                static_cast<const SvxFontListItem*>( pCurDocShell
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                        pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                    }
                 }
                 if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                 {
@@ -1243,8 +1245,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         rSet->GetItemIfSet( SID_HTML_MODE, false );
     if (!pHtmlModeItem)
     {
-        SfxObjectShell* pShell = SfxObjectShell::Current();
-        if (pShell)
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
             pHtmlModeItem = pShell->GetItem( SID_HTML_MODE );
     }
     if ( pHtmlModeItem )

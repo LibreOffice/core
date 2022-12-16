@@ -148,8 +148,7 @@ static sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
     const SfxUInt16Item* pItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
     if (!pItem)
     {
-        SfxObjectShell* pShell = SfxObjectShell::Current();
-        if (pShell)
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
             pItem = pShell->GetItem(SID_HTML_MODE);
     }
     if(pItem)
@@ -1999,8 +1998,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xPageNumBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl));
     m_xKeepParaBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl));
 
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    if ( pSh )
+    if (SfxObjectShell* pSh = SfxObjectShell::Current())
     {
         SfxStyleSheetBasePool* pPool = pSh->GetStyleSheetPool();
         SfxStyleSheetBase* pStyle = pPool->First(SfxStyleFamily::Page);

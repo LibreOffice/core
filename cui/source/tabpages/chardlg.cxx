@@ -344,10 +344,8 @@ const FontList* SvxCharNamePage::GetFontList() const
 {
     if ( !m_pImpl->m_pFontList )
     {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-
         /* #110771# SvxFontListItem::GetFontList can return NULL */
-        if ( pDocSh )
+        if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
         {
             const SfxPoolItem* pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
             if ( pItem != nullptr )
@@ -1366,8 +1364,7 @@ void SvxCharEffectsPage::Initialize()
     const SfxUInt16Item* pHtmlModeItem = GetItemSet().GetItemIfSet( SID_HTML_MODE, false );
     if ( !pHtmlModeItem)
     {
-        SfxObjectShell* pShell = SfxObjectShell::Current();
-        if (pShell)
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
            pHtmlModeItem = pShell->GetItem( SID_HTML_MODE );
     }
     if (pHtmlModeItem)
