@@ -18,7 +18,7 @@ test -n "$SED" && glv_sed="$SED" || glv_sed=$(command -v sed)
 while [ -n "$1" ] ; do
     glv_var="$1"
     shift
-    glv_value=$("${glv_grep}" "^ *export ${glv_var}=" ${glv_config} | "${glv_sed}" -e 's/[^=]*=//')
+    glv_value=$("${glv_grep}" "^ *\(export *\)\?${glv_var}=" ${glv_config} | "${glv_sed}" -e 's/[^=]*=//')
     export ${glv_var}="${glv_value}"
 done
 
