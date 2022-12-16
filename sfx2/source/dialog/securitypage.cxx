@@ -108,9 +108,11 @@ static bool lcl_GetPassword(
 
 static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPassword)
 {
-    bool bRes = false;
-
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+    if (!pCurDocShell)
+        return false;
+
+    bool bRes = false;
     uno::Sequence< sal_Int8 >   aPasswordHash;
     pCurDocShell->GetProtectionHash( aPasswordHash );
 
@@ -199,7 +201,7 @@ bool SfxSecurityPage_Impl::FillItemSet_Impl()
     bool bModified = false;
 
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    if (pCurDocShell&& !pCurDocShell->IsReadOnly())
+    if (pCurDocShell && !pCurDocShell->IsReadOnly())
     {
         if (m_eRedlingMode != RL_NONE )
         {

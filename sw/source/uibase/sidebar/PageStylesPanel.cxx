@@ -260,11 +260,14 @@ XGradient const & PageStylesPanel::GetGradientSetOrDefault()
 {
     if( !mpBgGradientItem )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxGradientListItem * pGradListItem = pSh->GetItem(SID_GRADIENT_LIST);
-        const XGradient aGradient = pGradListItem->GetGradientList()->GetGradient(0)->GetGradient();
-        const OUString aGradientName = pGradListItem->GetGradientList()->GetGradient(0)->GetName();
-
+        XGradient aGradient;
+        OUString aGradientName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxGradientListItem* pGradListItem = pSh->GetItem(SID_GRADIENT_LIST);
+            aGradient = pGradListItem->GetGradientList()->GetGradient(0)->GetGradient();
+            aGradientName = pGradListItem->GetGradientList()->GetGradient(0)->GetName();
+        }
         mpBgGradientItem.reset( new XFillGradientItem( aGradientName, aGradient ) );
     }
 
@@ -275,11 +278,14 @@ OUString const & PageStylesPanel::GetHatchingSetOrDefault()
 {
     if( !mpBgHatchItem )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
-        const XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(0)->GetHatch();
-        const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(0)->GetName();
-
+        XHatch aHatch;
+        OUString aHatchName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
+            aHatch = pHatchListItem->GetHatchList()->GetHatch(0)->GetHatch();
+            aHatchName = pHatchListItem->GetHatchList()->GetHatch(0)->GetName();
+        }
         mpBgHatchItem.reset( new XFillHatchItem( aHatchName, aHatch ) );
     }
 
@@ -290,11 +296,14 @@ OUString const & PageStylesPanel::GetBitmapSetOrDefault()
 {
     if( !mpBgBitmapItem || mpBgBitmapItem->isPattern() )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxBitmapListItem * pBmpListItem = pSh->GetItem(SID_BITMAP_LIST);
-        const GraphicObject aGraphObj = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aBmpName = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetName();
-
+        GraphicObject aGraphObj;
+        OUString aBmpName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxBitmapListItem * pBmpListItem = pSh->GetItem(SID_BITMAP_LIST);
+            aGraphObj = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetGraphicObject();
+            aBmpName = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetName();
+        }
         mpBgBitmapItem.reset( new XFillBitmapItem( aBmpName, aGraphObj ) );
     }
 
@@ -305,11 +314,14 @@ OUString const & PageStylesPanel::GetPatternSetOrDefault()
 {
     if( !mpBgBitmapItem || !mpBgBitmapItem->isPattern() )
     {
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxPatternListItem * pPatternListItem = pSh->GetItem(SID_PATTERN_LIST);
-        const GraphicObject aGraphObj = pPatternListItem->GetPatternList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aPatternName = pPatternListItem->GetPatternList()->GetBitmap(0)->GetName();
-
+        GraphicObject aGraphObj;
+        OUString aPatternName;
+        if (SfxObjectShell* pSh = SfxObjectShell::Current())
+        {
+            const SvxPatternListItem * pPatternListItem = pSh->GetItem(SID_PATTERN_LIST);
+            aGraphObj = pPatternListItem->GetPatternList()->GetBitmap(0)->GetGraphicObject();
+            aPatternName = pPatternListItem->GetPatternList()->GetBitmap(0)->GetName();
+        }
         mpBgBitmapItem.reset( new XFillBitmapItem( aPatternName, aGraphObj ) );
     }
 
@@ -547,40 +559,42 @@ void PageStylesPanel::ModifyFillColor()
         }
         break;
         case HATCH:
-        {
-            const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
-            sal_uInt16 nPos = mxBgHatchingLB->get_active();
-            XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetHatch();
-            const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
+            if (pSh)
+            {
+                const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
+                sal_uInt16 nPos = mxBgHatchingLB->get_active();
+                XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetHatch();
+                const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
-            XFillHatchItem aItem(aHatchName, aHatch);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
-        }
-        break;
+                XFillHatchItem aItem(aHatchName, aHatch);
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+            }
+            break;
         case BITMAP:
         case PATTERN:
-        {
-            sal_Int16 nPos = mxBgBitmapLB->get_active();
-            GraphicObject aBitmap;
-            OUString aBitmapName;
-
-            if ( eXFS == BITMAP )
+            if (pSh)
             {
-                SvxBitmapListItem const * pBitmapListItem = pSh->GetItem(SID_BITMAP_LIST);
-                aBitmap = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
-                aBitmapName = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetName();
-            }
-            else
-            {
-                SvxPatternListItem const * pPatternListItem = pSh->GetItem(SID_PATTERN_LIST);
-                aBitmap = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
-                aBitmapName = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetName();
-            }
+                sal_Int16 nPos = mxBgBitmapLB->get_active();
+                GraphicObject aBitmap;
+                OUString aBitmapName;
 
-            XFillBitmapItem aItem(aBitmapName, aBitmap);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
-        }
-        break;
+                if ( eXFS == BITMAP )
+                {
+                    SvxBitmapListItem const * pBitmapListItem = pSh->GetItem(SID_BITMAP_LIST);
+                    aBitmap = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
+                    aBitmapName = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetName();
+                }
+                else
+                {
+                    SvxPatternListItem const * pPatternListItem = pSh->GetItem(SID_PATTERN_LIST);
+                    aBitmap = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
+                    aBitmapName = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetName();
+                }
+
+                XFillBitmapItem aItem(aBitmapName, aBitmap);
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+            }
+            break;
         default:
             break;
     }

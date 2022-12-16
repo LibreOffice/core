@@ -1223,36 +1223,38 @@ void SwDocShell::Execute(SfxRequest& rReq)
         }
         break;
         case SID_CLASSIFICATION_DIALOG:
-        {
-            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), false);
-
-            SwWrtShell* pShell = GetWrtShell();
-            std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
-            xDialog->setupValues(std::move(aInput));
-
-            weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
-                if (RET_OK == nResult)
-                    pShell->ApplyAdvancedClassification(xDialog->getResult());
-            });
-        }
-        break;
-        case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
-        {
-            SwWrtShell* pShell = GetWrtShell();
-            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), true, [pShell]()
+            if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
             {
-                pShell->SignParagraph();
-            });
+                auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), pObjSh->getDocProperties(), false);
 
-            std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
-            xDialog->setupValues(std::move(aInput));
+                SwWrtShell* pShell = GetWrtShell();
+                std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
+                xDialog->setupValues(std::move(aInput));
 
-            weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
-                if (RET_OK == nResult)
-                    pShell->ApplyParagraphClassification(xDialog->getResult());
-            });
-        }
-        break;
+                weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
+                    if (RET_OK == nResult)
+                        pShell->ApplyAdvancedClassification(xDialog->getResult());
+                });
+            }
+            break;
+        case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
+            if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
+            {
+                SwWrtShell* pShell = GetWrtShell();
+                auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), pObjSh->getDocProperties(), true, [pShell]()
+                {
+                    pShell->SignParagraph();
+                });
+
+                std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
+                xDialog->setupValues(std::move(aInput));
+
+                weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
+                    if (RET_OK == nResult)
+                        pShell->ApplyParagraphClassification(xDialog->getResult());
+                });
+            }
+            break;
         case SID_WATERMARK:
         {
             SwWrtShell* pSh = GetWrtShell();

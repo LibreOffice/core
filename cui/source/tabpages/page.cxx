@@ -199,8 +199,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     const SfxUInt16Item* pHtmlModeItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);
     if (!pHtmlModeItem)
     {
-        SfxObjectShell* pShell = SfxObjectShell::Current();
-        if (pShell)
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
             pHtmlModeItem = pShell->GetItem(SID_HTML_MODE);
     }
     if (pHtmlModeItem)

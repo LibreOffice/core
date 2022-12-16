@@ -362,9 +362,8 @@ IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
     }
     else
     {
-        SfxObjectShell* pShell = SfxObjectShell::Current();
         OUString aBaseURL;
-        if (pShell)
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
         {
             aBaseURL = pShell->getDocumentBaseURL();
         }

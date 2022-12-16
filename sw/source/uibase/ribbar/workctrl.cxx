@@ -560,9 +560,11 @@ IMPL_LINK_NOARG(SwJumpToSpecificBox_Impl, SelectHdl, weld::Entry&, bool)
     OUString sEntry(m_xWidget->get_text());
     SfxUInt16Item aPageNum(m_nSlotId);
     aPageNum.SetValue(o3tl::narrowing<sal_uInt16>(sEntry.toInt32()));
-    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-    pCurrentShell->GetDispatcher()->ExecuteList(m_nSlotId, SfxCallMode::ASYNCHRON,
-            { &aPageNum });
+    if (SfxObjectShell* pCurrentShell = SfxObjectShell::Current())
+    {
+        pCurrentShell->GetDispatcher()->ExecuteList(m_nSlotId, SfxCallMode::ASYNCHRON,
+                { &aPageNum });
+    }
     return true;
 }
 

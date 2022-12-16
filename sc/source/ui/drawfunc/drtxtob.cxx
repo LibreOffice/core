@@ -820,11 +820,14 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                     pView->GetTextEditOutlinerView() : nullptr;
                 if ( pOutView )
                 {
-                    const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
-                            ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
-                    const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
-                    pOutView->GetEditView().ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
-                    mrViewData.GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+                    if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
+                    {
+                        const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
+                                ( pObjSh->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+                        const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                        pOutView->GetEditView().ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
+                        mrViewData.GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+                    }
                     bDone = false;
                 }
             }

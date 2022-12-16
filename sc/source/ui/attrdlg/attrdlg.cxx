@@ -72,7 +72,7 @@ void ScAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
     {
         rTabPage.PageCreated(aSet);
     }
-    else if (rPageId == "font")
+    else if (rPageId == "font" && pDocSh)
     {
         const SfxPoolItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
         assert(pInfoItem && "FontListItem  not found :-(");
