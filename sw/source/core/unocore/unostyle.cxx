@@ -153,25 +153,22 @@ namespace {
         paragraphstyle_t m_eCategory;
         SfxStyleSearchBits m_nSwStyleBits;
         collectionbits_t m_nCollectionBits;
-        ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, SfxStyleSearchBits nSwStyleBits, collectionbits_t nCollectionBits)
+        constexpr ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, SfxStyleSearchBits nSwStyleBits, collectionbits_t nCollectionBits)
                 : m_eCategory(eCategory)
                 , m_nSwStyleBits(nSwStyleBits)
                 , m_nCollectionBits(nCollectionBits)
             { }
     };
-    
-const std::vector<ParagraphStyleCategoryEntry>& lcl_GetParagraphStyleCategoryEntries()
+
+constexpr ParagraphStyleCategoryEntry sParagraphStyleCategoryEntries[]
 {
-    static const std::vector<ParagraphStyleCategoryEntry> our_pParagraphStyleCategoryEntries{
         { style::ParagraphStyleCategory::TEXT,    SfxStyleSearchBits::SwText,    COLL_TEXT_BITS     },
         { style::ParagraphStyleCategory::CHAPTER, SfxStyleSearchBits::SwChapter, COLL_DOC_BITS      },
         { style::ParagraphStyleCategory::LIST,    SfxStyleSearchBits::SwList,    COLL_LISTS_BITS    },
         { style::ParagraphStyleCategory::INDEX,   SfxStyleSearchBits::SwIndex,   COLL_REGISTER_BITS },
         { style::ParagraphStyleCategory::EXTRA,   SfxStyleSearchBits::SwExtra,   COLL_EXTRA_BITS    },
         { style::ParagraphStyleCategory::HTML,    SfxStyleSearchBits::SwHtml,    COLL_HTML_BITS     }
-    };
-    return our_pParagraphStyleCategoryEntries;
-}
+};
 
 class StyleFamilyEntry
 {
@@ -1889,9 +1886,8 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&,
     if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
         throw lang::IllegalArgumentException();
     static const std::map<paragraphstyle_t, SfxStyleSearchBits> aUnoToCore = []{
-        auto& entries = lcl_GetParagraphStyleCategoryEntries();
         std::map<paragraphstyle_t, SfxStyleSearchBits> map;
-        std::transform(entries.begin(), entries.end(), std::inserter(map, map.end()),
+        std::transform(std::begin(sParagraphStyleCategoryEntries), std::end(sParagraphStyleCategoryEntries), std::inserter(map, map.end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::make_pair(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
         return map;
     }();
@@ -2260,9 +2256,8 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEnt
 {
     PrepareStyleBase(rBase);
     static const std::map<collectionbits_t, paragraphstyle_t> aUnoToCore = []{
-        auto& entries = lcl_GetParagraphStyleCategoryEntries();
         std::map<collectionbits_t, paragraphstyle_t> map;
-        std::transform(entries.begin(), entries.end(), std::inserter(map, map.end()),
+        std::transform(std::begin(sParagraphStyleCategoryEntries), std::end(sParagraphStyleCategoryEntries), std::inserter(map, map.end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::make_pair(rEntry.m_nCollectionBits, rEntry.m_eCategory); });
         return map;
     }();
