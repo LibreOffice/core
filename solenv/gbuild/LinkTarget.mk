@@ -797,7 +797,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
 		) && \
-	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
+	SYSTEM_BOOST="$(SYSTEM_BOOST)" $(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 	$(call gb_Trace_EndRange,LNK:$(2),DEP)
 
