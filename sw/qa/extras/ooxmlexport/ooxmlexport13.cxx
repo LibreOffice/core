@@ -761,6 +761,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(true, getRun( getParagraph( 2 ), 3 )->getString().endsWith("tellus."));
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 4), "Bookmark"));
+
+    // The paragraph marker's formatting.
+    CPPUNIT_ASSERT_EQUAL(true, getRun(getParagraph(2), 5)->getString().isEmpty());
+
     // deleted paragraph mark at the end of the second paragraph
     if (mbExported)
     {
@@ -768,7 +772,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
         bool bCaught = false;
         try
         {
-            getRun( getParagraph( 2 ), 5 );
+            getRun( getParagraph( 2 ), 6 );
         }
         catch (container::NoSuchElementException&)
         {
