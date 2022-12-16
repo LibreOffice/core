@@ -1290,6 +1290,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
     CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152206)
+{
+    loadAndSave("tdf152206.docx");
+    xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XTextRange> xLastFootnote(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    // This was "Footnote for pg5" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg 6"), xLastFootnote->getString().trim() );
+
+    uno::Reference<text::XTextRange> xLastButOne(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // This was "Footnote for pg 6" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
+}
+
 // skip test for macOS (missing fonts?)
 #if !defined(MACOSX)
 DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")

@@ -3773,11 +3773,18 @@ void DomainMapper::lcl_checkId(const sal_Int32 nId)
 {
     if (m_pImpl->IsInFootnote())
     {
-        if (m_pImpl->GetFootnoteCount() > -1)
-            m_pImpl->m_aFootnoteIds.push_back(nId);
+        m_pImpl->m_aFootnoteIds.push_back(nId);
+        // keep only the first real footnote
+        if (m_pImpl->GetFootnoteCount() == -1 && m_pImpl->m_aFootnoteIds.size() == 2)
+            m_pImpl->m_aFootnoteIds.pop_front();
     }
-    else if (m_pImpl->GetEndnoteCount() > -1)
+    else
+    {
         m_pImpl->m_aEndnoteIds.push_back(nId);
+        // keep only the first real endnote
+        if (m_pImpl->GetEndnoteCount() == -1 && m_pImpl->m_aEndnoteIds.size() == 2)
+            m_pImpl->m_aEndnoteIds.pop_front();
+    }
 }
 
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)

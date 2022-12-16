@@ -356,6 +356,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_eSkipFootnoteState(SkipFootnoteSeparator::OFF),
         m_nFootnotes(-1),
         m_nEndnotes(-1),
+        m_nFirstFootnoteIndex(-1),
+        m_nFirstEndnoteIndex(-1),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
@@ -3628,6 +3630,36 @@ static void lcl_PasteRedlines(
     }
 }
 
+bool DomainMapper_Impl::CopyTemporaryNotes(
+        uno::Reference< text::XFootnote > xNoteSrc,
+        uno::Reference< text::XFootnote > xNoteDest )
+{
+    if (!m_bSaxError && xNoteSrc != xNoteDest)
+    {
+        uno::Reference< text::XText > xSrc( xNoteSrc, uno::UNO_QUERY_THROW );
+        uno::Reference< text::XText > xDest( xNoteDest, uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextCopy > xTxt, xTxt2;
+        xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
+        xTxt2.set( xDest, uno::UNO_QUERY_THROW );
+        xTxt2->copyText( xTxt );
+
+        // copy its redlines
+        std::vector<sal_Int32> redPos, redLen;
+        sal_Int32 redIdx;
+        enum StoredRedlines eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
+        lcl_CopyRedlines(xSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+        lcl_PasteRedlines(xDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+
+        // remove processed redlines
+        for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
+            m_aStoredRedlines[eType].pop_front();
+
+        return true;
+    }
+
+    return false;
+}
+
 void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
 {
     uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
@@ -3636,6 +3668,15 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
     if  (GetFootnoteCount() > 0)
     {
         auto xFootnotes = xFootnotesSupplier->getFootnotes();
+        if ( m_nFirstFootnoteIndex > 0 )
+        {
+            uno::Reference< text::XFootnote > xFirstNote;
+            xFootnotes->getByIndex(0) >>= xFirstNote;
+            uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
+            xText->setString("");
+            xFootnotes->getByIndex(m_nFirstFootnoteIndex) >>= xNote;
+            CopyTemporaryNotes(xNote, xFirstNote);
+        }
         for (sal_Int32 i = GetFootnoteCount(); i > 0; --i)
         {
             xFootnotes->getByIndex(i) >>= xNote;
@@ -3645,6 +3686,15 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
     if  (GetEndnoteCount() > 0)
     {
         auto xEndnotes = xEndnotesSupplier->getEndnotes();
+        if ( m_nFirstEndnoteIndex > 0 )
+        {
+            uno::Reference< text::XFootnote > xFirstNote;
+            xEndnotes->getByIndex(0) >>= xFirstNote;
+            uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
+            xText->setString("");
+            xEndnotes->getByIndex(m_nFirstEndnoteIndex) >>= xNote;
+            CopyTemporaryNotes(xNote, xFirstNote);
+        }
         for (sal_Int32 i = GetEndnoteCount(); i > 0; --i)
         {
             xEndnotes->getByIndex(i) >>= xNote;
@@ -3653,7 +3703,7 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
     }
 }
 
-static void lcl_convertToNoteIndices(std::deque<sal_Int32>& rNoteIds)
+static void lcl_convertToNoteIndices(std::deque<sal_Int32>& rNoteIds, sal_Int32& rFirstNoteIndex)
 {
     // convert arbitrary footnote identifiers to 0, 1, 2...
     // indices, keeping their possible random order
@@ -3664,6 +3714,8 @@ static void lcl_convertToNoteIndices(std::deque<sal_Int32>& rNoteIds)
         aMapIds[aSortedIds[i]] = i;
     for (size_t i = 0; i < rNoteIds.size(); ++i)
         rNoteIds[i] = aMapIds[rNoteIds[i]];
+    rFirstNoteIndex = rNoteIds.front();
+    rNoteIds.pop_front();
 }
 
 void DomainMapper_Impl::PopFootOrEndnote()
@@ -3677,30 +3729,30 @@ void DomainMapper_Impl::PopFootOrEndnote()
     if ( IsInFootOrEndnote() && ( ( IsInFootnote() && GetFootnoteCount() > -1 && xFootnotesSupplier.is() ) ||
          ( !IsInFootnote() && GetEndnoteCount() > -1 && xEndnotesSupplier.is() ) ) )
     {
-        uno::Reference< text::XFootnote > xFootnoteFirst, xFootnoteLast;
+        uno::Reference< text::XFootnote > xNoteFirst, xNoteLast;
         auto xFootnotes = xFootnotesSupplier->getFootnotes();
         auto xEndnotes = xEndnotesSupplier->getEndnotes();
         if ( ( ( IsInFootnote() && xFootnotes->getCount() > 1 &&
-                       ( xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xFootnoteLast ) ) ||
+                       ( xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xNoteLast ) ) ||
                ( !IsInFootnote() && xEndnotes->getCount() > 1 &&
-                       ( xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xFootnoteLast ) )
-             ) && xFootnoteLast->getLabel().isEmpty() )
+                       ( xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xNoteLast ) )
+             ) && xNoteLast->getLabel().isEmpty() )
         {
             // copy content of the next temporary footnote
             try
             {
                 if ( IsInFootnote() && !m_aFootnoteIds.empty() )
                 {
-                    if ( m_aFootnoteIds.size() == sal::static_int_cast<size_t>(GetFootnoteCount()) )
-                        lcl_convertToNoteIndices(m_aFootnoteIds);
-                    xFootnotes->getByIndex(m_aFootnoteIds.front() + 1) >>= xFootnoteFirst;
+                    if ( m_nFirstFootnoteIndex == -1 )
+                        lcl_convertToNoteIndices(m_aFootnoteIds, m_nFirstFootnoteIndex);
+                    xFootnotes->getByIndex(m_aFootnoteIds.front()) >>= xNoteFirst;
                     m_aFootnoteIds.pop_front();
                 }
                 else if ( !IsInFootnote() && !m_aEndnoteIds.empty() )
                 {
-                    if ( m_aEndnoteIds.size() == sal::static_int_cast<size_t>(GetEndnoteCount()) )
-                        lcl_convertToNoteIndices(m_aEndnoteIds);
-                    xEndnotes->getByIndex(m_aEndnoteIds.front() + 1) >>= xFootnoteFirst;
+                    if ( m_nFirstEndnoteIndex == -1 )
+                        lcl_convertToNoteIndices(m_aEndnoteIds, m_nFirstEndnoteIndex);
+                    xEndnotes->getByIndex(m_aEndnoteIds.front()) >>= xNoteFirst;
                     m_aEndnoteIds.pop_front();
                 }
                 else
@@ -3711,28 +3763,8 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Cannot insert footnote/endnote");
                 m_bSaxError = true;
             }
-            if (!m_bSaxError && xFootnoteFirst != xFootnoteLast)
-            {
-                uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
-                uno::Reference< text::XText > xDest( xFootnoteLast, uno::UNO_QUERY_THROW );
-                uno::Reference< text::XTextCopy > xTxt, xTxt2;
-                xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
-                xTxt2.set( xDest, uno::UNO_QUERY_THROW );
-                xTxt2->copyText( xTxt );
 
-                // copy its redlines
-                std::vector<sal_Int32> redPos, redLen;
-                sal_Int32 redIdx;
-                enum StoredRedlines eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
-                lcl_CopyRedlines(xSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
-                lcl_PasteRedlines(xDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
-
-                // remove processed redlines
-                for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
-                    m_aStoredRedlines[eType].pop_front();
-
-                bCopied = true;
-            }
+            bCopied = CopyTemporaryNotes(xNoteFirst, xNoteLast);
         }
     }
 
