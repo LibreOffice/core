@@ -176,7 +176,7 @@ static bool enabled = false;
                     // -[AquaA11yWrapper childrenAttribute] is called by a
                     // wrapper that is already attached to an NSWindow. That is
                     // normal. What isn't normal is that the child wrapper's
-                    // unignored accessible parent is a differnt wrapper than
+                    // unignored accessible parent is a different wrapper than
                     // the caller and that different wrapper is not yet
                     // attached to an NSWindow.
                     // TODO: switch the AquaA11yWrapper class to inherit the
