@@ -4628,7 +4628,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     short nFirstLineIndent = 0;                     // indentations
 
     auto nDepth = m_aContexts.size();
-    if (m_bFuzzing && nDepth > 512)
+    if (m_bFuzzing && nDepth > 128)
     {
         SAL_WARN("sw.html", "Not applying any more text collection attributes to a deeply nested node for fuzzing performance");
         nDepth = 0;
