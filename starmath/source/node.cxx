@@ -25,6 +25,7 @@
 #include <visitors.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/metric.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -835,8 +836,14 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     const SmRect &rOpRect = pOper->GetRect();
 
-    tools::Long nDist = (rOpRect.GetWidth() *
-                 rFormat.GetDistance(DIS_HORIZONTAL)) / 100;
+    tools::Long nMul;
+    if (o3tl::checked_multiply<tools::Long>(rOpRect.GetWidth(), rFormat.GetDistance(DIS_HORIZONTAL), nMul))
+    {
+        SAL_WARN("starmath", "integer overflow");
+        return;
+    }
+
+    tools::Long nDist = nMul / 100;
 
     SmRect::operator = (*pLeft);
 
