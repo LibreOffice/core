@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 //        [in] negative indexes indicate the need to search by name, otherwise get by index,
 //             using SAL_MAX_INT32 to indicate the need to just get the total count.
 //        [out] rIndex indicates the found index, or the total number of content controls
-static SwTextContentControl*
+static std::shared_ptr<SwContentControl>
 lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
                       std::u16string_view sTitle, sal_Int32& rIndex,
                       const uno::Reference<text::XTextDocument>& xTextDocument,
@@ -38,7 +38,7 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
 
     assert(sTag.empty() || sTitle.empty()); // only one grouping at a time is allowed
 
-    SwTextContentControl* pControl = nullptr;
+    std::shared_ptr<SwContentControl> pControl;
     std::vector<OUString> vElementNames;
     SwContentControlManager& rManager = pDoc->GetContentControlManager();
     const size_t nLen = rManager.GetCount();
@@ -47,7 +47,7 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
         size_t i = static_cast<size_t>(rIndex);
         // This is the normal get-by-index/getCount mode - no need for fancy filtering.
         if (i < nLen)
-            pControl = rManager.Get(i);
+            pControl = rManager.Get(i)->GetContentControl().GetContentControl();
         else
             rIndex = nLen;
     }
@@ -57,17 +57,14 @@ lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
         sal_Int32 nCounter = 0;
         for (size_t i = 0; i < nLen; ++i)
         {
-            pControl = rManager.Get(i);
-            if (!sTag.empty()
-                && sTag != pControl->GetContentControl().GetContentControl()->GetTag())
+            pControl = rManager.Get(i)->GetContentControl().GetContentControl();
+            if (!sTag.empty() && sTag != pControl->GetTag())
                 continue;
-            if (!sTitle.empty()
-                && sTitle != pControl->GetContentControl().GetContentControl()->GetAlias())
+            if (!sTitle.empty() && sTitle != pControl->GetAlias())
                 continue;
 
             // When treated as a name, consider the integer ID to be unsigned
-            const OUString sID = OUString::number(static_cast<sal_uInt32>(
-                pControl->GetContentControl().GetContentControl()->GetId()));
+            const OUString sID = OUString::number(static_cast<sal_uInt32>(pControl->GetId()));
             if (!sName.empty() && sName != sID)
                 continue;
 
@@ -123,7 +120,7 @@ private:
     uno::Reference<text::XTextDocument> mxTextDocument;
     const OUString m_sTag;
     const OUString m_sTitle;
-    SwTextContentControl* m_pCache;
+    std::shared_ptr<SwContentControl> m_pCache;
 
 public:
     /// @throws css::uno::RuntimeException
@@ -137,7 +134,6 @@ public:
         , mxTextDocument(std::move(xTextDocument))
         , m_sTag(rTag)
         , m_sTitle(rTitle)
-        , m_pCache(nullptr)
     {
     }
 
@@ -156,7 +152,7 @@ public:
             throw lang::IndexOutOfBoundsException();
 
         return uno::Any(uno::Reference<word::XContentControl>(
-            new SwVbaContentControl(mxParent, mxContext, mxTextDocument, *m_pCache)));
+            new SwVbaContentControl(mxParent, mxContext, mxTextDocument, m_pCache)));
     }
 
     // XNameAccess
@@ -174,7 +170,7 @@ public:
             throw container::NoSuchElementException();
 
         return uno::Any(uno::Reference<word::XContentControl>(
-            new SwVbaContentControl(mxParent, mxContext, mxTextDocument, *m_pCache)));
+            new SwVbaContentControl(mxParent, mxContext, mxTextDocument, m_pCache)));
     }
 
     sal_Bool SAL_CALL hasByName(const OUString& aName) override
@@ -236,7 +232,7 @@ SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface
 //     }
 //
 //     return uno::Reference<ooo::vba::word::XContentControl>(
-//         new SwVbaContentControl(mxParent, mxContext, m_xTextDocument, *pFieldmark));
+//         new SwVbaContentControl(mxParent, mxContext, m_xTextDocument, pFieldmark));
 // }
 
 // XEnumerationAccess

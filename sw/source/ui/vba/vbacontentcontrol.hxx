@@ -21,14 +21,14 @@ class SwVbaContentControl : public SwVbaContentControl_BASE
 {
 private:
     css::uno::Reference<css::text::XTextDocument> mxTextDocument;
-    SwTextContentControl& m_rCC;
+    std::shared_ptr<SwContentControl> m_pCC;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaContentControl(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                         const css::uno::Reference<css::uno::XComponentContext>& rContext,
                         const css::uno::Reference<css::text::XTextDocument>& xTextDocument,
-                        SwTextContentControl& rContentControl);
+                        std::shared_ptr<SwContentControl> pContentControl);
     ~SwVbaContentControl() override;
 
     // XContentControl Properties
