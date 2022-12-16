@@ -5506,6 +5506,11 @@ void DomainMapper_Impl::handleFieldAsk
  */
 OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
 
+    if (!m_pSettingsTable)
+    {
+        return input;
+    }
+
     OUString listSeparator = m_pSettingsTable->GetListSeparator();
 
     /* Replace logical condition functions with LO equivalent operators */
