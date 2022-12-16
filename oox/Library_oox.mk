@@ -244,8 +244,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/storagebase \
     oox/source/helper/textinputstream \
     oox/source/helper/zipstorage \
-    oox/source/mathml/export \
-    oox/source/mathml/import \
+    oox/source/mathml/imexport \
     oox/source/mathml/importutils \
     oox/source/ole/axbinaryreader \
     oox/source/ole/axbinarywriter \

@@ -48,7 +48,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -5985,7 +5985,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         SAL_WARN("sw.ww8", "Broken math object");
         return;
     }
-    if( oox::FormulaExportBase* formulaexport = dynamic_cast< oox::FormulaExportBase* >( xInterface.get()))
+    if( oox::FormulaImExportBase* formulaexport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
                 oox::drawingml::DOCUMENT_DOCX, nAlign);
     else
@@ -6755,7 +6755,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
 
                     //output variable for the formula alignment (default inline)
-                    sal_Int8 nAlign(FormulaExportBase::eFormulaAlign::INLINE);
+                    sal_Int8 nAlign(FormulaImExportBase::eFormulaAlign::INLINE);
                     auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the formula
 
                     //tdf133030: Export formula position
@@ -6773,11 +6773,11 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                                 auto aParaAdjust = pTextNode->GetSwAttrSet().GetAdjust().GetAdjust();
                                 //And set the formula according to the paragraph alignment
                                 if (aParaAdjust == SvxAdjust::Center)
-                                    nAlign = FormulaExportBase::eFormulaAlign::CENTER;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::CENTER;
                                 else if (aParaAdjust == SvxAdjust::Right)
-                                    nAlign = FormulaExportBase::eFormulaAlign::RIGHT;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::RIGHT;
                                 else // left in the case of left and justified paragraph alignments
-                                    nAlign = FormulaExportBase::eFormulaAlign::LEFT;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::LEFT;
                             }
                         }
                     }

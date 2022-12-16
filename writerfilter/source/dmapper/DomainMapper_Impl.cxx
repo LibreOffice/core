@@ -86,7 +86,7 @@
 #include <editeng/unotext.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
@@ -3009,7 +3009,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         xComponentProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
             uno::Any(sal_Int32(0)));
         Size size( 1000, 1000 );
-        if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
+        if( oox::FormulaImExportBase* formulaimport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
             size = formulaimport->getFormulaSize();
         xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
             uno::Any( sal_Int32(size.Width())));

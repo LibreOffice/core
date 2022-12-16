@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 
 #include <oox/mathml/importutils.hxx>
 #include <oox/core/contexthandler.hxx>
@@ -21,7 +21,7 @@ using namespace ::com::sun::star;
 namespace oox
 {
 
-FormulaImportBase::FormulaImportBase()
+FormulaImExportBase::FormulaImExportBase()
 {
 }
 

@@ -5404,8 +5404,7 @@ include/oox/helper/refvector.hxx
 include/oox/helper/storagebase.hxx
 include/oox/helper/textinputstream.hxx
 include/oox/helper/zipstorage.hxx
-include/oox/mathml/export.hxx
-include/oox/mathml/import.hxx
+include/oox/mathml/imexport.hxx
 include/oox/ole/axbinaryreader.hxx
 include/oox/ole/axbinarywriter.hxx
 include/oox/ole/axcontrol.hxx
@@ -7204,7 +7203,7 @@ oox/source/helper/propertyset.cxx
 oox/source/helper/storagebase.cxx
 oox/source/helper/textinputstream.cxx
 oox/source/helper/zipstorage.cxx
-oox/source/mathml/import.cxx
+oox/source/mathml/imexport.cxx
 oox/source/mathml/importutils.cxx
 oox/source/ole/axbinaryreader.cxx
 oox/source/ole/axbinarywriter.cxx

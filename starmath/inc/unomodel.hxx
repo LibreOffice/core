@@ -25,8 +25,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <vcl/print.hxx>
-#include <oox/mathml/export.hxx>
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 
 inline constexpr OUStringLiteral PRTUIOPT_TITLE_ROW = u"TitleRow";
 inline constexpr OUStringLiteral PRTUIOPT_FORMULA_TEXT = u"FormulaText";
@@ -45,8 +44,7 @@ class SmModel final : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public css::lang::XServiceInfo,
                 public css::view::XRenderable,
-                public oox::FormulaExportBase,
-                public oox::FormulaImportBase
+                public oox::FormulaImExportBase
 {
     std::unique_ptr<SmPrintUIOptions> m_pPrintUIOptions;
 
@@ -81,12 +79,11 @@ public:
 
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
 
-    // oox::FormulaExportBase
+    // oox::FormulaImExportBase
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
             oox::core::OoxmlVersion version,
             oox::drawingml::DocumentType documentType, sal_Int8 nAlign) override;
     virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding) override;
-    // oox::FormulaImportBase
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;
     virtual Size getFormulaSize() const override;
 };

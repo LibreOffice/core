@@ -12,7 +12,7 @@
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 
 using namespace oox;
 using namespace oox::core;
@@ -50,18 +50,18 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
     //          </m:oMath>
     //      </m:oMathPara>
 
-    if (nAlign != FormulaExportBase::eFormulaAlign::INLINE)
+    if (nAlign != FormulaImExportBase::eFormulaAlign::INLINE)
     {
         m_pSerializer->startElementNS(XML_m, XML_oMathPara,
             FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
         m_pSerializer->startElementNS(XML_m, XML_oMathParaPr);
-        if (nAlign == FormulaExportBase::eFormulaAlign::CENTER)
+        if (nAlign == FormulaImExportBase::eFormulaAlign::CENTER)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
-        if (nAlign == FormulaExportBase::eFormulaAlign::GROUPEDCENTER)
+        if (nAlign == FormulaImExportBase::eFormulaAlign::GROUPEDCENTER)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
-        if (nAlign == FormulaExportBase::eFormulaAlign::LEFT)
+        if (nAlign == FormulaImExportBase::eFormulaAlign::LEFT)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "left");
-        if (nAlign == FormulaExportBase::eFormulaAlign::RIGHT)
+        if (nAlign == FormulaImExportBase::eFormulaAlign::RIGHT)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "right");
         m_pSerializer->endElementNS(XML_m, XML_oMathParaPr);
         m_pSerializer->startElementNS(XML_m, XML_oMath);
