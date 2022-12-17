@@ -61,6 +61,7 @@ IntroPage::IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
     , mxComboBox(m_xBuilder->weld_combo_box("LB_SETTINGS"))
     , mxButton(m_xBuilder->weld_button("STR_REMOVE"))
 {
+    rOptimizerDialog.SetIntroPage(this);
     mxComboBox->connect_changed(LINK(this, IntroPage, ComboBoxActionPerformed));
     mxButton->connect_clicked(LINK(this, IntroPage, ButtonActionPerformed));
 }
@@ -83,6 +84,7 @@ SlidesPage::SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog
     , mxComboBox(m_xBuilder->weld_combo_box("LB_SLIDES"))
     , mxClearNodes(m_xBuilder->weld_check_button("STR_DELETE_NOTES_PAGES"))
 {
+    rOptimizerDialog.SetSlidesPage(this);
     mxMasterSlides->connect_toggled(LINK(this, SlidesPage, UnusedMasterPagesActionPerformed));
     mxHiddenSlides->connect_toggled(LINK(this, SlidesPage, UnusedHiddenSlidesActionPerformed));
     mxUnusedSlides->connect_toggled(LINK(this, SlidesPage, UnusedSlidesActionPerformed));
@@ -116,6 +118,7 @@ ImagesPage::ImagesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog
     , m_xRemoveCropArea(m_xBuilder->weld_check_button("STR_REMOVE_CROP_AREA"))
     , m_xEmbedLinkedGraphics(m_xBuilder->weld_check_button("STR_EMBED_LINKED_GRAPHICS"))
 {
+    rOptimizerDialog.SetImagesPage(this);
     m_xRemoveCropArea->connect_toggled(LINK(this, ImagesPage, RemoveCropAreaActionPerformed));
     m_xEmbedLinkedGraphics->connect_toggled(LINK(this, ImagesPage, EmbedLinkedGraphicsActionPerformed));
     m_xResolution->connect_changed(LINK(this, ImagesPage, ComboBoxActionPerformed));
@@ -146,6 +149,7 @@ ObjectsPage::ObjectsPage(weld::Container* pPage, OptimizerDialog& rOptimizerDial
     , m_xForeignOLEObjects(m_xBuilder->weld_radio_button("STR_ALIEN_OLE_OBJECTS_ONLY"))
     , m_xLabel(m_xBuilder->weld_label("STR_OLE_OBJECTS_DESC"))
 {
+    rOptimizerDialog.SetObjectsPage(this);
     m_xCreateStaticImage->connect_toggled(LINK(this, ObjectsPage, OLEOptimizationActionPerformed));
     m_xAllOLEObjects->connect_toggled(LINK(this, ObjectsPage, OLEActionPerformed));
     m_xForeignOLEObjects->connect_toggled(LINK(this, ObjectsPage, OLEActionPerformed));
@@ -180,6 +184,7 @@ SummaryPage::SummaryPage(weld::Container* pPage, OptimizerDialog& rOptimizerDial
     , m_xComboBox(m_xBuilder->weld_combo_box("MY_SETTINGS"))
     , m_xSaveSettings(m_xBuilder->weld_check_button("STR_SAVE_SETTINGS"))
 {
+    rOptimizerDialog.SetSummaryPage(this);
     m_xApplyToCurrent->connect_toggled(LINK(this, SummaryPage, SaveAsNewActionPerformed));
     m_xSaveToNew->connect_toggled(LINK(this, SummaryPage, SaveAsNewActionPerformed));
     m_xSaveSettings->connect_toggled(LINK(this, SummaryPage, SaveSettingsActionPerformed));
@@ -316,23 +321,18 @@ std::unique_ptr<BuilderPage> OptimizerDialog::createPage(vcl::WizardTypes::Wizar
     {
         case ITEM_ID_INTRODUCTION:
             xRet.reset(new IntroPage(pPageContainer, *this));
-            mpPage0 = static_cast<IntroPage*>(xRet.get());
             break;
         case ITEM_ID_SLIDES:
             xRet.reset(new SlidesPage(pPageContainer, *this));
-            mpPage1 = static_cast<SlidesPage*>(xRet.get());
             break;
         case ITEM_ID_GRAPHIC_OPTIMIZATION:
             xRet.reset(new ImagesPage(pPageContainer, *this));
-            mpPage2 = static_cast<ImagesPage*>(xRet.get());
             break;
         case ITEM_ID_OLE_OPTIMIZATION:
             xRet.reset(new ObjectsPage(pPageContainer, *this));
-            mpPage3 = static_cast<ObjectsPage*>(xRet.get());
             break;
         case ITEM_ID_SUMMARY:
             xRet.reset(new SummaryPage(pPageContainer, *this));
-            mpPage4 = static_cast<SummaryPage*>(xRet.get());
             break;
     }
 
