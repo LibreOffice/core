@@ -1216,7 +1216,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 {
                     BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
                 }
-                else if (nType == ContentTypeId::REGION)
+                else if (nType == ContentTypeId::REGION|| nType == ContentTypeId::INDEX)
                 {
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
                     const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
@@ -1320,7 +1320,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                     }
                     BringBookmarksToAttention(aNames);
                 }
-                else if (nType == ContentTypeId::REGION)
+                else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
                 {
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
                     if (const size_t nSize = rFormats.size())
@@ -1334,9 +1334,13 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                                 const SwSection* pSection = pFormat->GetSection();
                                 if (pSection && !pSection->IsHiddenFlag())
                                 {
-                                    if (SectionType eSectionType = pSection->GetType();
-                                            eSectionType == SectionType::ToxContent ||
-                                            eSectionType == SectionType::ToxHeader)
+                                    const SectionType eSectionType = pSection->GetType();
+                                    if (nType == ContentTypeId::REGION &&
+                                            (eSectionType == SectionType::ToxContent ||
+                                            eSectionType == SectionType::ToxHeader))
+                                        continue;
+                                    if (nType == ContentTypeId::INDEX &&
+                                            eSectionType != SectionType::ToxContent)
                                         continue;
                                     aSectionsFormatsArr.push_back(pFormat);
                                 }
