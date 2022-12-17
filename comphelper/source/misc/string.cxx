@@ -32,6 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 
 #include <comphelper/string.hxx>
@@ -650,6 +651,32 @@ void replaceAt(OUStringBuffer& rIn, sal_Int32 nIndex, sal_Int32 nCount, std::u16
     memcpy(pStr + nIndex, newStr.data(), newStr.size());
 
     rIn.setLength(nNewLength);
+}
+
+OUString sanitizeStringSurrogates(const OUString& rString)
+{
+    sal_Int32 i=0;
+    while (i < rString.getLength())
+    {
+        sal_Unicode c = rString[i];
+        if (rtl::isHighSurrogate(c))
+        {
+            if (i+1 == rString.getLength()
+                || !rtl::isLowSurrogate(rString[i+1]))
+            {
+                SAL_WARN("comphelper", "Surrogate error: high without low");
+                return rString.copy(0, i);
+            }
+            ++i;    //skip correct low
+        }
+        if (rtl::isLowSurrogate(c)) //bare low without preceding high
+        {
+            SAL_WARN("comphelper", "Surrogate error: low without high");
+            return rString.copy(0, i);
+        }
+        ++i;
+    }
+    return rString;
 }
 
 }

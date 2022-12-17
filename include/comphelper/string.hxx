@@ -375,6 +375,15 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
+/** Santitize an OUString to not have invalid surrogates
+
+    @param rString  An OUString
+
+    @return         same string if no surrogates or surrogates are valid.
+                    Otherwise the string truncated to the valid sequence.
+ */
+COMPHELPER_DLLPUBLIC OUString sanitizeStringSurrogates(const OUString& rString);
+
 } // namespace comphelper::string
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
