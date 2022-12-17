@@ -5666,9 +5666,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
             !m_pActiveShell->IsObjSelected()))
     {
-        Point rPoint = m_pActiveShell->GetCursorDocPos();
-        rPoint.setX(0);
-        rView.SetVisArea(rPoint);
+        Point aPoint(rView.GetVisArea().getX(), m_pActiveShell->GetCursorDocPos().getY());
+        rView.SetVisArea(aPoint);
     }
 }
 
