@@ -19,6 +19,7 @@
 
 #include <oox/helper/attributelist.hxx>
 
+#include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/fastattribs.hxx>
@@ -102,7 +103,7 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     const sal_Unicode* pcEnd = pcStr + rValue.getLength();
     while( pcStr < pcEnd )
         aBuffer.append( lclGetXChar( pcStr, pcEnd ) );
-    return aBuffer.makeStringAndClear();
+    return comphelper::string::sanitizeStringSurrogates(aBuffer.makeStringAndClear());
 }
 
 sal_Int32 AttributeConversion::decodeInteger( std::u16string_view rValue )
