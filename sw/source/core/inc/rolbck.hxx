@@ -159,7 +159,7 @@ class SwHistorySetRefMark final : public SwHistoryHint
 public:
     SwHistorySetRefMark( const SwTextRefMark* pTextHt, SwNodeOffset nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
-
+    const OUString& GetRefName() {return m_RefName;}
 };
 
 class SwHistorySetTOXMark final : public SwHistoryHint

@@ -68,6 +68,8 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
+#include <rolbck.hxx>
+#include <UndoAttribute.hxx>
 #include <UndoCore.hxx>
 #include <UndoTable.hxx>
 #include <pagedesc.hxx>
@@ -1113,6 +1115,28 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     }
 
     return nCount;
+}
+
+void SwDoc::DeleteFormatRefMark(const SwFormatRefMark* pFormatRefMark)
+{
+    const SwTextRefMark* pTextRefMark = pFormatRefMark->GetTextRefMark();
+    SwTextNode& rTextNd = const_cast<SwTextNode&>(pTextRefMark->GetTextNode());
+    std::unique_ptr<SwRegHistory> aRegHistory;
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr(SwPosition(rTextNd, pTextRefMark->GetStart()),
+                                                     RES_TXTATR_REFMARK);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
+        aRegHistory.reset(new SwRegHistory(rTextNd, &pUndo->GetHistory()));
+        rTextNd.GetpSwpHints()->Register(aRegHistory.get());
+    }
+    rTextNd.DeleteAttribute(const_cast<SwTextRefMark*>(pTextRefMark));
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        if (rTextNd.GetpSwpHints())
+            rTextNd.GetpSwpHints()->DeRegister();
+    }
+    getIDocumentState().SetModified();
 }
 
 static bool lcl_SpellAndGrammarAgain( SwNode* pNd, void* pArgs )
