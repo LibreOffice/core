@@ -380,7 +380,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         break;
         case ContentTypeId::REFERENCE:
             m_bEdit = false;
-            m_bDelete = false;
+            m_bDelete = true;
         break;
         case ContentTypeId::URLFIELD:
             m_bEdit = true;
@@ -1906,6 +1906,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
          bRemoveDeleteOLEObjectEntry = true,
          bRemoveDeleteBookmarkEntry = true,
          bRemoveDeleteHyperlinkEntry = true,
+         bRemoveDeleteReferenceEntry = true,
          bRemoveDeleteIndexEntry= true,
          bRemoveDeleteCommentEntry = true,
          bRemoveDeleteDrawingObjectEntry = true,
@@ -2063,6 +2064,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     case ContentTypeId::URLFIELD:
                         bRemoveDeleteHyperlinkEntry = false;
                     break;
+                    case ContentTypeId::REFERENCE:
+                        bRemoveDeleteReferenceEntry = false;
+                    break;
                     case ContentTypeId::INDEX:
                         bRemoveDeleteIndexEntry = false;
                     break;
@@ -2204,6 +2208,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("deletebookmark");
     if (bRemoveDeleteHyperlinkEntry)
         xPop->remove("deletehyperlink");
+    if (bRemoveDeleteReferenceEntry)
+        xPop->remove("deletereference");
     if (bRemoveDeleteIndexEntry)
         xPop->remove("deleteindex");
     if (bRemoveDeleteCommentEntry)
@@ -2221,6 +2227,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteOLEObjectEntry &&
             bRemoveDeleteBookmarkEntry &&
             bRemoveDeleteHyperlinkEntry &&
+            bRemoveDeleteReferenceEntry &&
             bRemoveDeleteIndexEntry &&
             bRemoveDeleteCommentEntry &&
             bRemoveDeleteDrawingObjectEntry &&
@@ -4866,6 +4873,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
              rSelectedPopupEntry == "deleteoleobject" ||
              rSelectedPopupEntry == "deletebookmark" ||
              rSelectedPopupEntry == "deletehyperlink" ||
+             rSelectedPopupEntry == "deletereference" ||
              rSelectedPopupEntry == "deleteindex" ||
              rSelectedPopupEntry == "deletecomment" ||
              rSelectedPopupEntry == "deletedrawingobject" ||
@@ -5396,6 +5404,28 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 nSlot = SID_EDIT_HYPERLINK;
         break;
         case ContentTypeId::REFERENCE:
+        {
+            if(nMode == EditEntryMode::DELETE)
+            {
+                const OUString& rName = pCnt->GetName();
+                for (SfxPoolItem* pItem :
+                     m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+                {
+                    assert(dynamic_cast<const SwFormatRefMark*>(pItem));
+                    const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
+                    if (!pFormatRefMark)
+                        continue;
+                    const SwTextRefMark* pTextRef = pFormatRefMark->GetTextRefMark();
+                    if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
+                            &m_pActiveShell->GetNodes() && rName == pFormatRefMark->GetRefName())
+                    {
+                        m_pActiveShell->GetDoc()->DeleteFormatRefMark(pFormatRefMark);
+                        m_pActiveShell->SwViewShell::UpdateFields();
+                        break;
+                    }
+                }
+            }
+        }
         break;
         case ContentTypeId::TEXTFIELD:
         {
