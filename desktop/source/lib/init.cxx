@@ -7188,7 +7188,7 @@ void setLanguageToolConfig()
         if (aEnabled != "true")
             return;
         OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
-        OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
+        OUString aRestProtocol = pRestProtocol ? OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8) : "";
         try
         {
             SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
