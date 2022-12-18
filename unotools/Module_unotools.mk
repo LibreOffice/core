@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,unotools,\
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,unotools,\
-    JunitTest_unotools_complex \
+    PythonTest_unotools_python \
 ))
 $(eval $(call gb_Module_add_check_targets,unotools,\
     CppunitTest_unotools_configpaths \
