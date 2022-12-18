@@ -375,7 +375,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
-/** Santitize an OUString to not have invalid surrogates
+/** Sanitize an OUString to not have invalid surrogates
 
     @param rString  An OUString
 
