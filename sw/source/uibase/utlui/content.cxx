@@ -5915,8 +5915,6 @@ void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>&
         assert(dynamic_cast<const SwTextAnnotationField*>(pTextField));
         const SwTextAnnotationField* pTextAnnotationField =
                 static_cast<const SwTextAnnotationField*>(pTextField);
-        if (!pTextAnnotationField)
-            continue;
         const ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField->GetAnnotationMark();
         const SwPosition aMarkStart = pAnnotationMark ? pAnnotationMark->GetMarkStart()
                                                 : SwPosition(rTextNode, p->GetStart());
