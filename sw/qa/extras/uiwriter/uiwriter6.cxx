@@ -29,6 +29,14 @@
 #include <UndoManager.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
+#include <svl/stritem.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <sfx2/dispatch.hxx>
+#include <cmdid.h>
+#include <tools/json_writer.hxx>
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -1428,6 +1436,78 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
         // This was 0 (pending spell checking)
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
+{
+#if !defined(MACOSX)
+    createSwDoc("tdf65535.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    uno::Sequence<beans::PropertyValue> params
+        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    // Automatic Spell Checking is enabled
+
+    CPPUNIT_ASSERT(pOpt->IsOnlineSpell());
+
+    // check available en_US dictionary and test spelling with it
+    uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
+    uno::Reference<XSpellChecker1> xSpell;
+    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("en", "US", OUString()));
+    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    {
+        // trigger online spell checking by (a few) spaces to be sure to get it
+
+        emulateTyping(*pTextDoc, u" ");
+
+        // FIXME: inserting a space before the bad word removes the red underline
+        // Insert a second space to get the red underline (back)
+
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        emulateTyping(*pTextDoc, u" ");
+
+        // Select the bad word (right to left, as during right click)
+
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+
+        // choose the word "Baaed" from the spelling suggestions of the context menu
+
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        {
+            static const OUStringLiteral sApplyRule(u"Spelling_Baaed");
+            SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
+            pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
+        }
+
+        // check the replacement in the text
+
+        CPPUNIT_ASSERT_EQUAL(OUString("  Baaed"), getParagraph(1)->getString());
+    }
+
+    // check the remaining comment
+
+    tools::JsonWriter aJsonWriter;
+    pTextDoc->getPostIts(aJsonWriter);
+    char* pChar = aJsonWriter.extractData();
+    std::stringstream aStream(pChar);
+    free(pChar);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    OString sCommentText;
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+    {
+        const boost::property_tree::ptree& rComment = rValue.second;
+        sCommentText = OString(rComment.get<std::string>("text").c_str());
+    }
+    // This was false (lost comment with spelling replacement)
+    CPPUNIT_ASSERT_EQUAL(OString("with comment"), sCommentText);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
