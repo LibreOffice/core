@@ -608,7 +608,7 @@ hchar_string Outline::GetUnicode() const
                 {
                     char dest[80];
                     int l = 0;
-                    int i = level;
+                    unsigned int i = level;
                     if( deco[i][0] ){
                         buffer[l++] = deco[i][0];
                     }
@@ -616,73 +616,76 @@ hchar_string Outline::GetUnicode() const
    number has the value. ex) '1.2.1' has '1,2,1'
    style has the value which starts from 1 according to the definition in hbox.h
  */
-                    switch( user_shape[i] )
+                    if (i < std::size(user_shape))
                     {
-                        case 0:
-                            buffer[l++] = '1' + number[i] - 1;
-                            break;
-                        case 1: /* Uppercase Roman */
-                        case 2: /* Lowercase Roman */
-                            num2roman(number[i], dest);
-                            if( user_shape[i] == 1 ){
-                                char *ptr = dest;
-                                while( *ptr )
-                                {
-                                    *ptr = sal::static_int_cast<char>(rtl::toAsciiUpperCase(static_cast<unsigned char>(*ptr)));
-                                    ptr++;
-                                }
-                            }
-                            str2hstr(dest, buffer + l);
-                            l += strlen(dest);
-                            break;
-                        case 3:
-                            buffer[l++] = 'A' + number[i] -1;
-                            break;
-                        case 4:
-                            buffer[l++] = 'a' + number[i] -1;
-                            break;
-                        case 5:
-                            buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_KANATA);
-                            break;
-                        case 6:
-                            buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_JASO);
-                            break;
-                        case 7: /* Chinese numbers: the number represented by the general */
-                            buffer[l++] = '1' + number[i] -1;
-                            break;
-                        case 8: /* Circled numbers */
-                            buffer[l++] = 0x2e00 + number[i];
-                            break;
-                        case 9: /* Circled lowercase alphabet */
-                            buffer[l++] = 0x2c20 + number[i];
-                            break;
-                        case 10: /* Circled Korean Alphabet */
-                            buffer[l++] = 0x2c50 + number[i] -1;
-                            break;
-                        case 11: /* Circled Korean Characters */
-                            buffer[l++] = 0x2c40 + number[i] -1;
-                            break;
-                        case 12: /* Sequenced numbers. */
+                        switch( user_shape[i] )
                         {
-                             char cur_num_str[10],buf[80];
-                             int j;
-                             buf[0] = 0;
-                             for (j = 0; j <= level; j++)
-                             {
-                                  levelnum = ((number[j] < 1) ? 1 : number[j]);
-                                  if ((j && j == level) || (j == level && deco[i][1]))
-                                        sprintf(cur_num_str, "%d%c", levelnum, 0);
-                                  else
-                                        sprintf(cur_num_str, "%d%c", levelnum, '.');
-                                  strcat(buf, cur_num_str);
-                             }
-                             str2hstr(buf, buffer + l);
-                             l += strlen(buf);
-                             break;
+                            case 0:
+                                buffer[l++] = '1' + number[i] - 1;
+                                break;
+                            case 1: /* Uppercase Roman */
+                            case 2: /* Lowercase Roman */
+                                num2roman(number[i], dest);
+                                if( user_shape[i] == 1 ){
+                                    char *ptr = dest;
+                                    while( *ptr )
+                                    {
+                                        *ptr = sal::static_int_cast<char>(rtl::toAsciiUpperCase(static_cast<unsigned char>(*ptr)));
+                                        ptr++;
+                                    }
+                                }
+                                str2hstr(dest, buffer + l);
+                                l += strlen(dest);
+                                break;
+                            case 3:
+                                buffer[l++] = 'A' + number[i] -1;
+                                break;
+                            case 4:
+                                buffer[l++] = 'a' + number[i] -1;
+                                break;
+                            case 5:
+                                buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_KANATA);
+                                break;
+                            case 6:
+                                buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_JASO);
+                                break;
+                            case 7: /* Chinese numbers: the number represented by the general */
+                                buffer[l++] = '1' + number[i] -1;
+                                break;
+                            case 8: /* Circled numbers */
+                                buffer[l++] = 0x2e00 + number[i];
+                                break;
+                            case 9: /* Circled lowercase alphabet */
+                                buffer[l++] = 0x2c20 + number[i];
+                                break;
+                            case 10: /* Circled Korean Alphabet */
+                                buffer[l++] = 0x2c50 + number[i] -1;
+                                break;
+                            case 11: /* Circled Korean Characters */
+                                buffer[l++] = 0x2c40 + number[i] -1;
+                                break;
+                            case 12: /* Sequenced numbers. */
+                            {
+                                 char cur_num_str[10],buf[80];
+                                 int j;
+                                 buf[0] = 0;
+                                 for (j = 0; j <= level; j++)
+                                 {
+                                      levelnum = ((number[j] < 1) ? 1 : number[j]);
+                                      if ((j && j == level) || (j == level && deco[i][1]))
+                                            sprintf(cur_num_str, "%d%c", levelnum, 0);
+                                      else
+                                            sprintf(cur_num_str, "%d%c", levelnum, '.');
+                                      strcat(buf, cur_num_str);
+                                 }
+                                 str2hstr(buf, buffer + l);
+                                 l += strlen(buf);
+                                 break;
+                            }
+                            default:
+                                buffer[l++] = user_shape[i];
+                                break;
                         }
-                        default:
-                            buffer[l++] = user_shape[i];
-                            break;
                     }
                     if( deco[i][1] ){
                         buffer[l++] = deco[i][1];
