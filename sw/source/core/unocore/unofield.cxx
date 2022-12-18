@@ -1999,7 +1999,8 @@ void SAL_CALL SwXTextField::attach(
               && m_pImpl->m_pDoc != nullptr
               && m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation )
     {
-        SwUnoInternalPaM aIntPam( *m_pImpl->m_pDoc );
+        SwDoc* pDoc = m_pImpl->m_pDoc;
+        SwUnoInternalPaM aIntPam( *pDoc );
         if ( !::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
             throw lang::IllegalArgumentException();
 
@@ -2007,13 +2008,13 @@ void SAL_CALL SwXTextField::attach(
         // value.
         if (!aIntPam.HasMark() || *aIntPam.Start() != *aIntPam.End())
         {
-            UnoActionContext aCont( m_pImpl->m_pDoc );
+            UnoActionContext aCont( pDoc );
             // insert copy of annotation at new text range
             std::unique_ptr<SwPostItField> pPostItField(static_cast< SwPostItField* >(m_pImpl->GetFormatField()->GetField()->CopyField().release()));
             SwFormatField aFormatField( *pPostItField );
             pPostItField.reset();
             SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
-            m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
+            pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
             // delete former annotation
             {
                 const SwTextField* pTextField = m_pImpl->GetFormatField()->GetTextField();
@@ -2021,14 +2022,14 @@ void SAL_CALL SwXTextField::attach(
                 SwPaM aPam( rTextNode, pTextField->GetStart() );
                 aPam.SetMark();
                 aPam.Move();
-                m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
             }
             // keep inserted annotation
             {
                 SwTextField *const pTextAttr = aEnd.GetPointNode().GetTextNode()->GetFieldTextAttrAt(aEnd.End()->GetContentIndex()-1, ::sw::GetTextAttrMode::Default);
                 if ( pTextAttr != nullptr )
                 {
-                    m_pImpl->SetFormatField(const_cast<SwFormatField*>(&pTextAttr->GetFormatField()), m_pImpl->m_pDoc);
+                    m_pImpl->SetFormatField(const_cast<SwFormatField*>(&pTextAttr->GetFormatField()), pDoc);
 
                     if ( *aIntPam.GetPoint() != *aIntPam.GetMark() )
                     {
