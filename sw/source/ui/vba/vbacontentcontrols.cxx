@@ -92,22 +92,22 @@ namespace
 class ContentControlsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference<container::XIndexAccess> mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 mnIndex;
 
 public:
     explicit ContentControlsEnumWrapper(uno::Reference<container::XIndexAccess> xIndexAccess)
         : mxIndexAccess(std::move(xIndexAccess))
-        , nIndex(0)
+        , mnIndex(0)
     {
     }
 
-    sal_Bool SAL_CALL hasMoreElements() override { return (nIndex < mxIndexAccess->getCount()); }
+    sal_Bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
     uno::Any SAL_CALL nextElement() override
     {
-        if (nIndex < mxIndexAccess->getCount())
+        if (mnIndex < mxIndexAccess->getCount())
         {
-            return mxIndexAccess->getByIndex(nIndex++);
+            return mxIndexAccess->getByIndex(mnIndex++);
         }
         throw container::NoSuchElementException();
     }
