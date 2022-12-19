@@ -763,8 +763,6 @@ public:
         { m_pCellControl->AlignControl(nAlignment);}
 
 protected:
-    void onWindowEvent(const VclEventId _nEventId, const void* _pEventData);
-
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent );
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent );
@@ -776,8 +774,8 @@ private:
     DECL_LINK(OnMousePress, const MouseEvent&, void);
     DECL_LINK(OnMouseRelease, const MouseEvent&, void);
     DECL_LINK(OnMouseMove, const MouseEvent&, void);
-
-    DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
+    DECL_LINK(OnKeyInput, const KeyEvent&, void);
+    DECL_LINK(OnKeyRelease, const KeyEvent&, void);
 };
 
 
