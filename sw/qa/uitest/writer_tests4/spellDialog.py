@@ -205,4 +205,45 @@ frog, dogg, catt"""
             # This was "Baaed HTTP://www. baaad .org baaed" (skipped non-URL words of hypertext)
             self.assertEqual("Baaed http://www. baaed .org baaad", output_text)
 
+    def test_tdf65535(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
+
+        with self.ui_test.load_file(get_url_for_data_file("tdf65535.fodt")) as document:
+            cursor = document.getCurrentController().getViewCursor()
+            # Inserted text must be en_US, so make sure to set language in current location
+            cursor.CharLocale = Locale("en", "US", "")
+
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xEdit = xMainWindow.getChild("writer_edit")
+
+            # type a bad word after the word with comment
+            cursor.goRight(5, False)
+            type_text(xEdit, " baad")
+            cursor.goLeft(10, False)
+
+            # fix the first word using the spelling dialog
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+                checkgrammar = xDialog.getChild('checkgrammar')
+                if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+                    checkgrammar.executeAction('CLICK', ())
+                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+
+                change = xDialog.getChild('change')
+                change.executeAction("CLICK", ())
+
+            output_text = document.Text.getString()
+            self.assertEqual("Bad baad", output_text)
+
+            # check the original comment
+            has_comment = False
+            textfields = document.getTextFields()
+            for textfield in textfields:
+                if textfield.supportsService("com.sun.star.text.TextField.Annotation"):
+                    has_comment = True
+
+            # This was False (lost comment)
+            self.assertEqual(True, has_comment)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
