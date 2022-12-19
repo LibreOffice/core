@@ -455,6 +455,8 @@ protected:
     tools::Long            nPntMul;
     tools::Long            nPntDiv;
     bool            bNeedMap;
+    sal_Int32       nMinAllowedVal;
+    sal_Int32       nMaxAllowedVal;
     sal_uInt32      nSvxMSDffSettings;
     sal_uInt32      nSvxMSDffOLEConvFlags;
 
