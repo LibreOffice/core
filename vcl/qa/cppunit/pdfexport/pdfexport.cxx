@@ -14,6 +14,7 @@
 #include <type_traits>
 
 #include <config_features.h>
+#include <osl/process.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -3348,18 +3349,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportRefToKids)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
     {
         bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
     }
     comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
         if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
     });
 
     // Load the PDF and save as PDF
@@ -3382,24 +3381,20 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportRefToKids)
         if (rPair.first.startsWith("Im"))
             CPPUNIT_ASSERT(pXObjects->LookupObject(rPair.first));
     }
-
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
     {
         bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
     }
     comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
         if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
     });
 
     // Load the PDF and save as PDF
@@ -3436,23 +3431,20 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
     OString aImage = "100 0 30 50 re B*\n70 67 50 30 re B*\n";
     auto it = std::search(pStart, pEnd, aImage.getStr(), aImage.getStr() + aImage.getLength());
     CPPUNIT_ASSERT(it != pEnd);
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
     {
         bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
     }
     comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
         if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
     });
 
     // Load the PDF and save as PDF
@@ -3490,24 +3482,20 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
         CPPUNIT_ASSERT(pNumElement);
         CPPUNIT_ASSERT_EQUAL(aBBox[nIdx], static_cast<sal_Int32>(pNumElement->GetValue()));
     }
-
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
     {
         bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
     }
     comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
         if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
     });
 
     // Load the PDF and save as PDF
@@ -3540,8 +3528,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
 
     auto pFontWidths = pFontDict->LookupObject("Widths");
     CPPUNIT_ASSERT(pFontWidths);
-
-#endif
 }
 
 } // end anonymous namespace
