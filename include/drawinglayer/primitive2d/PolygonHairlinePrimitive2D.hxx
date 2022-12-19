@@ -63,6 +63,88 @@ public:
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
 
+/** SingleLinePrimitive2D class
+
+    This primitive defines a simple line, just two points. It is
+    sometimes useful for simpler tasks and decomposes to a
+    PolygonHairlinePrimitive2D (see above). It is also a
+    hairline-primitive, see above.
+*/
+class DRAWINGLAYER_DLLPUBLIC SingleLinePrimitive2D final : public BasePrimitive2D
+{
+private:
+    /// the line geometry
+    basegfx::B2DPoint maStart;
+    basegfx::B2DPoint maEnd;
+
+    /// the line color
+    basegfx::BColor maBColor;
+
+public:
+    /// constructor
+    SingleLinePrimitive2D(const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
+                          const basegfx::BColor& rBColor);
+
+    /// data read access
+    const basegfx::B2DPoint& getStart() const { return maStart; }
+    const basegfx::B2DPoint& getEnd() const { return maEnd; }
+    const basegfx::BColor& getBColor() const { return maBColor; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+
+    /// return as PolygonHairlinePrimitive2D
+    virtual void
+    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                       const geometry::ViewInformation2D& rViewInformation) const override;
+};
+
+/** LineRectanglePrimitive2D class
+
+    Tooling: This primitive defines a simple rectangle. It is
+    sometimes useful for simpler tasks and decomposes to a
+    more gereralized PolygonHairlinePrimitive2D (see above)
+*/
+class DRAWINGLAYER_DLLPUBLIC LineRectanglePrimitive2D final : public BasePrimitive2D
+{
+private:
+    /// the  geometry
+    basegfx::B2DRange maB2DRange;
+
+    /// the line color
+    basegfx::BColor maBColor;
+
+public:
+    /// constructor
+    LineRectanglePrimitive2D(const basegfx::B2DRange& rB2DRange, const basegfx::BColor& rBColor);
+
+    /// data read access
+    const basegfx::B2DRange& getB2DRange() const { return maB2DRange; }
+    const basegfx::BColor& getBColor() const { return maBColor; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+
+    /// return as PolygonHairlinePrimitive2D
+    virtual void
+    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                       const geometry::ViewInformation2D& rViewInformation) const override;
+};
+
 } // end of namespace primitive2d::drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
