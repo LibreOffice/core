@@ -422,7 +422,7 @@ void setStackModeAtSeries(
             {
                 dataSeries->setPropertyValue( "StackingDirection", aPropValue );
 
-                sal_Int32 nAxisIndex;
+                sal_Int32 nAxisIndex = 0;
                 dataSeries->getPropertyValue( "AttachedAxisIndex" ) >>= nAxisIndex;
                 aAxisIndexSet.insert(nAxisIndex);
             }
