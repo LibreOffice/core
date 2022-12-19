@@ -76,7 +76,8 @@ enum SwTextPortionType
     PORTION_ANNOTATION,
     PORTION_ANNOTATION_END,
     PORTION_LINEBREAK,
-    PORTION_CONTENT_CONTROL
+    PORTION_CONTENT_CONTROL,
+    PORTION_LIST_AUTOFMT
 };
 
 class SwXTextPortion : public cppu::WeakImplHelper
@@ -122,6 +123,10 @@ private:
     const SwTextPortionType     m_ePortionType;
 
     bool                        m_bIsCollapsed;
+
+    /// Expose the paragraph's RES_PARATR_LIST_AUTOFMT, not the char props of the underlying (empty)
+    /// text.
+    bool m_bIsListAutoFormat;
 
     void init(const SwUnoCursor* pPortionCursor);
 
