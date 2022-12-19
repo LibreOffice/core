@@ -237,8 +237,12 @@ DataStream::Cell::Cell( const Cell& r ) : mbValue(r.mbValue)
 
 void DataStream::MakeToolbarVisible()
 {
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
     css::uno::Reference< css::frame::XFrame > xFrame =
-        ScDocShell::GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+        pViewData->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 
@@ -523,7 +527,11 @@ bool DataStream::ImportData()
         // We no longer support this mode. To be deleted later.
         return false;
 
-    if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return false;
+
+    if (pViewData->GetViewShell()->NeedsRepaint())
         return mbRunning;
 
     Text2Doc();
