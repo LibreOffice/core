@@ -615,7 +615,7 @@ OUString Outline::GetUnicode() const
                     char dest[80];
                     int l = 0;
                     unsigned int i = level;
-                    if( deco[i][0] ){
+                    if (i < std::size(deco) && deco[i][0]) {
                         buffer[l++] = deco[i][0];
                     }
 /* level starts from zero. ex) '1.1.1.' is the level 2.
@@ -693,7 +693,7 @@ OUString Outline::GetUnicode() const
                                 break;
                         }
                     }
-                    if( deco[i][1] ){
+                    if (i < std::size(deco) && deco[i][1]) {
                         buffer[l++] = deco[i][1];
                     }
                     buffer[l] = 0;
