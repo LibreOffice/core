@@ -232,12 +232,12 @@ rm -rf $${MERGEINPUT}
 endef
 
 $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS)
+	$(call gb_Output_announce,$*,$(true),XCX,1)
+	$(call gb_Trace_StartRange,$*,XCX)
 	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
-		$(call gb_Output_announce,$*,$(true),XCX,1) \
-		$(call gb_Trace_StartRange,$*,XCX) \
 		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),\
-		$(call gb_Trace_EndRange,$*,XCX) \
 		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
+	$(call gb_Trace_EndRange,$*,XCX)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCX,1)
