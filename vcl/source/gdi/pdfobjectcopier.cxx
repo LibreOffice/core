@@ -235,13 +235,10 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
         auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
         if (!pReference)
         {
-            if (pKindObject)
+            if (pKindObject && dynamic_cast<filter::PDFDictionaryElement*>(rItem.second) != nullptr)
             {
-                if (auto* pDict = dynamic_cast<filter::PDFDictionaryElement*>(rItem.second))
-                {
-                    bHasDictValue = true;
-                    break;
-                }
+                bHasDictValue = true;
+                break;
             }
 
             continue;
