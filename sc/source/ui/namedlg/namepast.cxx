@@ -43,8 +43,9 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
         m_RangeMap.insert(std::make_pair(aTemp, *pName));
     }
 
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+    ScAddress aPos;
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
+        aPos = ScAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
 
     std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("ctrl"));
     xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
