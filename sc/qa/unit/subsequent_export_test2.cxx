@@ -2273,7 +2273,7 @@ void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
 
 void ScExportTest2::testTdf151755_stylesLostOnXLSXExport()
 {
-    // Check if empty cells with custom sytle are exported, even if
+    // Check if empty cells with custom style are exported, even if
     // there is other empty cells with default style, left of it.
     createScDoc("xlsx/tdf151755_stylesLostOnXLSXExport.xlsx");
 
