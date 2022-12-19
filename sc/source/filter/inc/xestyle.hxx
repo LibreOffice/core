@@ -734,6 +734,7 @@ public:
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
     void SaveXmlExt( XclExpXmlStream& rStrm);
+    void SetFinalColors();
 
 private:
     std::unique_ptr<XclExpCellAlign> mpAlign;
@@ -755,6 +756,8 @@ public:
     void AddColor(Color aColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
+    void Finalize();
+
 private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;

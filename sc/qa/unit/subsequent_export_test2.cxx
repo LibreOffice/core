@@ -167,6 +167,7 @@ public:
     void testTdf144642_RowHeightRounding();
     void testTdf145129_DefaultRowHeightRounding();
     void testTdf151755_stylesLostOnXLSXExport();
+    void testTdf152581_bordercolorNotExportedToXLSX();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testTdf144642_RowHeightRounding);
     CPPUNIT_TEST(testTdf145129_DefaultRowHeightRounding);
     CPPUNIT_TEST(testTdf151755_stylesLostOnXLSXExport);
+    CPPUNIT_TEST(testTdf152581_bordercolorNotExportedToXLSX);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
@@ -2288,6 +2290,19 @@ void ScExportTest2::testTdf151755_stylesLostOnXLSXExport()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]", "s", aCellStyleId);
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[3]", "s", aCellStyleId);
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[4]", "s", aCellStyleId);
+}
+
+void ScExportTest2::testTdf152581_bordercolorNotExportedToXLSX()
+{
+    createScDoc("xlsx/tdf152581_bordercolorNotExportedToXLSX.xlsx");
+
+    // Resave the xlsx file without any modification.
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    CPPUNIT_ASSERT(pStyles);
+
+    // Check if conditional format border color is exported
+    assertXPath(pStyles, "/x:styleSheet/x:dxfs/x:dxf/x:border/x:left/x:color", "rgb", "FFED7D31");
 }
 
 void ScExportTest2::testTdf140431()
