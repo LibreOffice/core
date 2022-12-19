@@ -616,7 +616,7 @@ OUString Outline::GetUnicode() const
                     char dest[80];
                     int l = 0;
                     unsigned i = level;
-                    if( deco[i][0] ){
+                    if (i < std::size(deco) && deco[i][0]) {
                         buffer[l++] = deco[i][0];
                     }
                     if (i < std::size(user_shape))
@@ -690,7 +690,7 @@ OUString Outline::GetUnicode() const
                                 break;
                         }
                     }
-                    if( deco[i][1] ){
+                    if (i < std::size(deco) && deco[i][1]) {
                         buffer[l++] = deco[i][1];
                     }
                     buffer[l] = 0;
