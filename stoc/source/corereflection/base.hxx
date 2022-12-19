@@ -255,9 +255,8 @@ public:
 };
 
 
-class ArrayIdlClassImpl
-    : public IdlClassImpl
-    , public css::reflection::XIdlArray
+typedef cppu::ImplInheritanceHelper<IdlClassImpl, css::reflection::XIdlArray> ArrayIdlClassImpl_Base;
+class ArrayIdlClassImpl : public ArrayIdlClassImpl_Base
 {
 public:
     typelib_IndirectTypeDescription * getTypeDescr() const
@@ -267,16 +266,8 @@ public:
     ArrayIdlClassImpl( IdlReflectionServiceImpl * pReflection,
                        const OUString & rName, typelib_TypeClass eTypeClass,
                        typelib_TypeDescription * pTypeDescr )
-        : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
+        : ArrayIdlClassImpl_Base( pReflection, rName, eTypeClass, pTypeDescr )
         {}
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // IdlClassImpl modifications
     virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;

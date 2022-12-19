@@ -33,28 +33,17 @@ namespace stoc_corefl
 
 namespace {
 
-class IdlEnumFieldImpl
-    : public IdlMemberImpl
-    , public XIdlField
-    , public XIdlField2
+typedef cppu::ImplInheritanceHelper<IdlMemberImpl, XIdlField, XIdlField2> IdlEnumFieldImpl_Base;
+class IdlEnumFieldImpl : public IdlEnumFieldImpl_Base
 {
     sal_Int32               _nValue;
 
 public:
     IdlEnumFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                       typelib_TypeDescription * pTypeDescr, sal_Int32 nValue )
-        : IdlMemberImpl( pReflection, rName, pTypeDescr, pTypeDescr )
+        : IdlEnumFieldImpl_Base( pReflection, rName, pTypeDescr, pTypeDescr )
         , _nValue( nValue )
         {}
-
-    // XInterface
-    virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-
-    // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XIdlMember
     virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() override;
@@ -68,43 +57,6 @@ public:
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) override;
 };
 
-}
-
-// XInterface
-
-Any IdlEnumFieldImpl::queryInterface( const Type & rType )
-{
-    Any aRet( ::cppu::queryInterface( rType,
-                                      static_cast< XIdlField * >( this ),
-                                      static_cast< XIdlField2 * >( this ) ) );
-    return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
-}
-
-void IdlEnumFieldImpl::acquire() noexcept
-{
-    IdlMemberImpl::acquire();
-}
-
-void IdlEnumFieldImpl::release() noexcept
-{
-    IdlMemberImpl::release();
-}
-
-// XTypeProvider
-
-Sequence< Type > IdlEnumFieldImpl::getTypes()
-{
-    static cppu::OTypeCollection s_aTypes(
-        cppu::UnoType<XIdlField2>::get(),
-        cppu::UnoType<XIdlField>::get(),
-        IdlMemberImpl::getTypes() );
-
-    return s_aTypes.getTypes();
-}
-
-Sequence< sal_Int8 > IdlEnumFieldImpl::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XIdlMember

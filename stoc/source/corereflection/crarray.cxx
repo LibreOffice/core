@@ -31,40 +31,6 @@ using namespace css::uno;
 namespace stoc_corefl
 {
 
-// XInterface
-
-Any ArrayIdlClassImpl::queryInterface( const Type & rType )
-{
-    Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlArray * >( this ) ) );
-    return (aRet.hasValue() ? aRet : IdlClassImpl::queryInterface( rType ));
-}
-
-void ArrayIdlClassImpl::acquire() noexcept
-{
-    IdlClassImpl::acquire();
-}
-
-void ArrayIdlClassImpl::release() noexcept
-{
-    IdlClassImpl::release();
-}
-
-// XTypeProvider
-
-Sequence< Type > ArrayIdlClassImpl::getTypes()
-{
-    static cppu::OTypeCollection s_aTypes(
-        cppu::UnoType<XIdlArray>::get(),
-        IdlClassImpl::getTypes() );
-
-    return s_aTypes.getTypes();
-}
-
-Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XIdlArray
 
 void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
