@@ -270,6 +270,53 @@ namespace basegfx
         }
     }
 
+    BColorModifier_randomize::BColorModifier_randomize(double fRandomPart)
+    : mfRandomPart(fRandomPart)
+    {
+    }
+
+    BColorModifier_randomize::~BColorModifier_randomize()
+    {
+    }
+
+    // compare operator
+    bool BColorModifier_randomize::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_randomize* pCompare = dynamic_cast< const BColorModifier_randomize* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return mfRandomPart == pCompare->mfRandomPart;
+    }
+
+    // compute modified color
+    ::basegfx::BColor BColorModifier_randomize::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        if(0.0 >= mfRandomPart)
+        {
+            // no randomizing, use orig color
+            return aSourceColor;
+        }
+
+        if(1.0 <= mfRandomPart)
+        {
+            // full randomized color
+            const double fMul(1.0 / RAND_MAX);
+            return basegfx::BColor(rand() * fMul, rand() * fMul, rand() * fMul);
+        }
+
+        // mixed color
+        const double fMulA(1.0 - mfRandomPart);
+        const double fMulB(mfRandomPart / RAND_MAX);
+        return basegfx::BColor(
+            aSourceColor.getRed() * fMulA + rand() * fMulB,
+            aSourceColor.getGreen() * fMulA + rand() * fMulB,
+            aSourceColor.getBlue() * fMulA + rand() * fMulB);
+    }
+
     ::basegfx::BColor BColorModifierStack::getModifiedColor(const ::basegfx::BColor& rSource) const
     {
         if(maBColorModifiers.empty())
