@@ -1047,8 +1047,8 @@ bool XclExpXmlStream::exportDocument()
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
     // Get the viewsettings before processing
-    if( ScDocShell::GetViewData() )
-        ScDocShell::GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
+        pViewData->WriteExtOptions( mpRoot->GetExtDocOptions() );
 
     OUString const workbook = "xl/workbook.xml";
     const char* pWorkbookContentType = nullptr;
