@@ -545,10 +545,13 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                         rPropSet.setPropertyValue(*pEntry, prop.Value, items);
                     }
 
+                    IStyleAccess& rStyleAccess = rPam.GetDoc().GetIStyleAccess();
+                    // Add it to the autostyle pool, needed by the ODT export.
+                    const std::shared_ptr<SfxItemSet> pAutoStyle
+                        = rStyleAccess.getAutomaticStyle(items, IStyleAccess::AUTO_STYLE_CHAR);
                     SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
-                    // TODO: for ODF export we'd need to add it to the autostyle pool
                     // note: paragraph auto styles have ParaStyleName property for the parent style; character auto styles currently do not because there's a separate hint, but for this it would be a good way to add it in order to export it as style:parent-style-name, see XMLTextParagraphExport::Add()
-                    item.SetStyleHandle(std::make_shared<SfxItemSet>(items));
+                    item.SetStyleHandle(pAutoStyle);
                     pTextNd->SetAttr(item);
                 }
             }

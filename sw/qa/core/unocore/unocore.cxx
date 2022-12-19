@@ -864,6 +864,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControls)
     CPPUNIT_ASSERT_EQUAL(OUString("tag2"), aTag);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
+{
+    // Given a document with a red numbering portion, from the paragraph marker's format:
+    createSwDoc("paragraph-marker.docx");
+
+    // When saving that as ODT + reload:
+    reload("writer8", nullptr);
+
+    // Then make sure that it still has the correct color:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 00ff0000 (COL_LIGHTRED)
+    // - Actual  : ffffffff (COL_AUTO)
+    // i.e. the custom "red" color was lost as RES_PARATR_LIST_AUTOFMT was not serialized to ODT.
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("00ff0000"),
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

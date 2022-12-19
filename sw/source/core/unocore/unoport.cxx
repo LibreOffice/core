@@ -71,9 +71,14 @@ SwXTextPortion::SwXTextPortion(
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(std::move(xParent))
     , m_pFrameFormat(nullptr)
-    , m_ePortionType(eType)
+    , m_ePortionType(eType != PORTION_LIST_AUTOFMT ? eType : PORTION_TEXT)
     , m_bIsCollapsed(false)
+    , m_bIsListAutoFormat(false)
 {
+    if (eType == PORTION_LIST_AUTOFMT)
+    {
+        m_bIsListAutoFormat = true;
+    }
     init( pPortionCursor);
 }
 
@@ -87,6 +92,7 @@ SwXTextPortion::SwXTextPortion(
     , m_pFrameFormat(&rFormat)
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
+    , m_bIsListAutoFormat(false)
 {
     StartListening(rFormat.GetNotifier());
     init( pPortionCursor);
@@ -103,6 +109,7 @@ SwXTextPortion::SwXTextPortion(
     , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
+    , m_bIsListAutoFormat(false)
 {
     if (!bIsEnd)
     {
@@ -370,8 +377,23 @@ void SwXTextPortion::GetPropertyValue(
         break;
         default:
             beans::PropertyState eTemp;
-            bool bDone = SwUnoCursorHelper::getCursorPropertyValue(
-                                rEntry, *pUnoCursor, &rVal, eTemp );
+            bool bDone = false;
+            if (m_bIsListAutoFormat)
+            {
+                SwTextNode* pTextNode = pUnoCursor->GetPointNode().GetTextNode();
+                std::shared_ptr<SfxItemSet> pListSet
+                    = pTextNode->GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle();
+                if (pListSet)
+                {
+                    m_pPropSet->getPropertyValue(rEntry, *pListSet, rVal);
+                    bDone = true;
+                }
+            }
+            if (!bDone)
+            {
+                bDone = SwUnoCursorHelper::getCursorPropertyValue(
+                                    rEntry, *pUnoCursor, &rVal, eTemp );
+            }
             if(!bDone)
             {
                 if(!pSet)
@@ -610,11 +632,30 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
         const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
 
-        uno::Sequence< beans::PropertyState > aPropertyStates =
-            SwUnoCursorHelper::GetPropertyStates(
-                rUnoCursor, *m_pPropSet,
-                rPropertyNames,
-                SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
+        uno::Sequence< beans::PropertyState > aPropertyStates;
+        if (m_bIsListAutoFormat)
+        {
+            SwTextNode* pTextNode = rUnoCursor.GetPointNode().GetTextNode();
+            std::shared_ptr<SfxItemSet> pListSet
+                = pTextNode->GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle();
+            if (pListSet)
+            {
+                std::vector<beans::PropertyState> aStates;
+                for (const auto& rPropertyName : rPropertyNames)
+                {
+                    aStates.push_back(m_pPropSet->getPropertyState(rPropertyName, *pListSet));
+                }
+                aPropertyStates = comphelper::containerToSequence(aStates);
+            }
+        }
+        if (!aPropertyStates.hasElements())
+        {
+            aPropertyStates =
+                SwUnoCursorHelper::GetPropertyStates(
+                    rUnoCursor, *m_pPropSet,
+                    rPropertyNames,
+                    SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
+        }
         const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
 
         for (sal_Int32 i = 0;  i < nProps;  ++i)
