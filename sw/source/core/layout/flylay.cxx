@@ -720,6 +720,19 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
     m_bLayout = true;
 }
 
+void SwFlyLayFrame::RegisterAtPage(SwPageFrame & rPageFrame)
+{
+    assert(GetPageFrame() != &rPageFrame);
+    if (GetPageFrame())
+    {
+        GetPageFrame()->MoveFly( this, &rPageFrame );
+    }
+    else
+    {
+        rPageFrame.AppendFlyToPage( this );
+    }
+}
+
 // #i28701#
 
 void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)

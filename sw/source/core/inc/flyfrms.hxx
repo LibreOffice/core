@@ -150,6 +150,8 @@ public:
     // #i28701#
 
     SwFlyLayFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
+
+    virtual void RegisterAtPage(SwPageFrame &) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
