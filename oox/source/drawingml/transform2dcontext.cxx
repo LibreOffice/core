@@ -42,7 +42,7 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, c
     }
     else
     {
-        if( rAttribs.hasAttribute( XML_rot ) )
+        if (rAttribs.hasAttribute(XML_rot) && mrShape.getTextBody())
             mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot ).get();
     }
 }
