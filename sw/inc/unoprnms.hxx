@@ -502,6 +502,7 @@
 #define UNO_NAME_IS_SKIP_HIDDEN_TEXT "IsSkipHiddenText"
 #define UNO_NAME_IS_SKIP_PROTECTED_TEXT "IsSkipProtectedText"
 #define UNO_NAME_RESET_PARAGRAPH_LIST_ATTRIBUTES "ResetParagraphListAttributes"
+#define UNO_NAME_NO_FORMAT_ATTR "NoFormatAttr"
 #define UNO_NAME_DOCUMENT_INDEX_MARKS "DocumentIndexMarks"
 #define UNO_NAME_FOOTNOTE_IS_COLLECT_AT_TEXT_END "FootnoteIsCollectAtTextEnd"
 #define UNO_NAME_FOOTNOTE_IS_RESTART_NUMBERING "FootnoteIsRestartNumbering"

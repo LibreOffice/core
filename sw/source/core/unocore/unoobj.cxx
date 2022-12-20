@@ -227,6 +227,57 @@ lcl_setAutoStyle(IStyleAccess & rStyleAccess, const uno::Any & rValue,
     rSet.Put(aFormat);
 };
 
+/// Tries to map rValue to RES_PARATR_LIST_AUTOFMT on the current paragraph, returns true on
+/// success.
+static bool lcl_setListAutoStyle(SwPaM& rPam, const uno::Any& rValue, SfxItemSet& rItemSet)
+{
+    // See if this is an empty range at the end of a paragraph.
+    if (rPam.Start()->nNode.GetIndex() != rPam.End()->nNode.GetIndex())
+    {
+        return false;
+    }
+
+    if (rPam.Start()->nContent.GetIndex() != rPam.End()->nContent.GetIndex())
+    {
+        return false;
+    }
+
+    SwTextNode* pTextNode = rPam.GetNode().GetTextNode();
+    if (!pTextNode)
+    {
+        return false;
+    }
+
+    if (rPam.Start()->nContent.GetIndex() != pTextNode->Len())
+    {
+        return false;
+    }
+
+    // Look up the style content based on the name.
+    OUString sStyle;
+    if (!(rValue >>= sStyle))
+    {
+        return false;
+    }
+
+    IStyleAccess& rStyleAccess = rPam.GetDoc().GetIStyleAccess();
+    std::shared_ptr<SfxItemSet> pStyle
+        = rStyleAccess.getByName(sStyle, IStyleAccess::AUTO_STYLE_CHAR);
+    if (!pStyle)
+    {
+        return false;
+    }
+
+    // Set the style on the text node.
+    SwFormatAutoFormat aItem(RES_PARATR_LIST_AUTOFMT);
+    aItem.SetStyleHandle(pStyle);
+    pTextNode->SetAttr(aItem);
+    // Clear the style from the hints array. Without clearing, it would contain some style which
+    // happened to be there previously.
+    rItemSet.ClearItem(RES_TXTATR_AUTOFMT);
+    return true;
+}
+
 void
 SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
 {
@@ -451,6 +502,11 @@ SwUnoCursorHelper::SetCursorPropertyValue(
             lcl_setCharStyle(rPam.GetDoc(), rValue, rItemSet);
         break;
         case RES_TXTATR_AUTOFMT:
+            if (lcl_setListAutoStyle(rPam, rValue, rItemSet))
+            {
+                break;
+            }
+
             lcl_setAutoStyle(rPam.GetDoc().GetIStyleAccess(),
                     rValue, rItemSet, false);
         break;
@@ -2019,7 +2075,8 @@ SwUnoCursorHelper::GetPropertyStates(
         if(!pEntry)
         {
             if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
-                pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
+                pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT ||
+                pNames[i] == UNO_NAME_NO_FORMAT_ATTR)
             {
                 pStates[i] = beans::PropertyState_DEFAULT_VALUE;
                 continue;
@@ -2212,6 +2269,7 @@ SwXTextCursor::getPropertySetInfo()
         {
             { u"" UNO_NAME_IS_SKIP_HIDDEN_TEXT, FN_SKIP_HIDDEN_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
             { u"" UNO_NAME_IS_SKIP_PROTECTED_TEXT, FN_SKIP_PROTECTED_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+            { u"" UNO_NAME_NO_FORMAT_ATTR, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
             { u"", 0, css::uno::Type(), 0, 0 }
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
@@ -2260,10 +2318,26 @@ SwXTextCursor::setPropertyValue(
             pTextNode->ResetAttr(RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END);
         }
     }
+    else if (rPropertyName == UNO_NAME_NO_FORMAT_ATTR)
+    {
+        bool bSet(false);
+        if (!(rValue >>= bSet))
+        {
+            throw lang::IllegalArgumentException();
+        }
+        if (bSet)
+        {
+            m_nAttrMode = SetAttrMode::NOFORMATATTR;
+        }
+        else
+        {
+            m_nAttrMode = SetAttrMode::DEFAULT;
+        }
+    }
     else
     {
         SwUnoCursorHelper::SetPropertyValue(rUnoCursor,
-                m_rPropSet, rPropertyName, rValue);
+                m_rPropSet, rPropertyName, rValue, m_nAttrMode);
     }
 }
 
@@ -2576,7 +2650,8 @@ SwXTextCursor::getPropertyDefaults(
             if (!pEntry)
             {
                 if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
-                    pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
+                    pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT ||
+                    pNames[i] == UNO_NAME_NO_FORMAT_ATTR)
                 {
                     continue;
                 }
