@@ -1231,6 +1231,7 @@ disable_x11_tests()
 test "$using_x11" = yes && USING_X11=TRUE
 
 if test "$using_freetype_fontconfig" = yes; then
+    AC_DEFINE(USE_HEADLESS_CODE)
     USE_HEADLESS_CODE=TRUE
     if test "$using_headless_plugin" = yes; then
         AC_DEFINE(ENABLE_HEADLESS)
