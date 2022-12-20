@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -50,7 +51,7 @@ namespace ooo::vba {
     namespace msforms { class XShapeRange; }
 }
 
-typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
+typedef CollTestImplHelper< ov::msforms::XShapes, css::lang::XUnoTunnel > ScVbaShapes_BASE;
 
 class VBAHELPER_DLLPUBLIC ScVbaShapes final : public ScVbaShapes_BASE
 {
@@ -84,6 +85,9 @@ public:
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     virtual void SAL_CALL SelectAll() override;
     //helper::calc
