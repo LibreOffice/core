@@ -883,6 +883,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
         getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
+{
+    // Given a document with a bold run and non-bold paragraph marker:
+    createSwDoc("paragraph-marker-formatted-run.docx");
+
+    // When saving that as ODT + reload:
+    reload("writer8", nullptr);
+
+    // Then make sure that the numbering portion is still non-bold, matching Word:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: normal
+    // - Actual  : bold
+    // i.e. the numbering portion was bold, while its weight should be normal.
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("normal"),
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-weight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
