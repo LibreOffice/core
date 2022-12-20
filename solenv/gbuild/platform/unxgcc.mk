@@ -134,7 +134,7 @@ $(if $(call gb_LinkTarget__WantLock,$2), \
    $(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock) ;  \
    echo "$(call gb_Output_announce_str,$(2): got link lock at $$(date -u),$(true),LNK,5)" ; \
 )
-	$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS ;) \
+	+$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS ;) \
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
