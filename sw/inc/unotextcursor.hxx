@@ -76,6 +76,7 @@ private:
     const CursorType            m_eType;
     const css::uno::Reference< css::text::XText > m_xParentText;
     sw::UnoCursorPointer m_pUnoCursor;
+    SetAttrMode m_nAttrMode = SetAttrMode::DEFAULT;
 
     SwUnoCursor& GetCursorOrThrow() {
         if(!m_pUnoCursor)

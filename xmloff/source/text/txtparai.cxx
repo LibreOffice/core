@@ -1821,6 +1821,19 @@ void XMLParaContext::endFastElement(sal_Int32 )
 
     if (m_xHints)
     {
+        bool bSetNoFormatAttr = false;
+        uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
+        if (m_xHints->GetHints().size() > 1)
+        {
+            // We have multiple hints, then make try to ask the cursor to not upgrade our character
+            // attributes to paragraph-level formatting, which would lead to incorrect rendering.
+            uno::Reference<beans::XPropertySetInfo> xCursorPropsInfo = xCursorProps->getPropertySetInfo();
+            bSetNoFormatAttr = xCursorPropsInfo->hasPropertyByName("NoFormatAttr");
+        }
+        if (bSetNoFormatAttr)
+        {
+            xCursorProps->setPropertyValue("NoFormatAttr", uno::Any(true));
+        }
         for (const auto & i : m_xHints->GetHints())
         {
             XMLHint_Impl *const pHint = i.get();
@@ -1959,6 +1972,10 @@ void XMLParaContext::endFastElement(sal_Int32 )
                 SAL_WARN( "xmloff.text", "What's this" );
                 break;
             }
+        }
+        if (bSetNoFormatAttr)
+        {
+            xCursorProps->setPropertyValue("NoFormatAttr", uno::Any(false));
         }
     }
     m_xHints.reset();
