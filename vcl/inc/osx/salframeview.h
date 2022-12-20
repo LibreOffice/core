@@ -86,6 +86,7 @@ enum class SalEvent;
     BOOL            mbInEndExtTextInput;
     BOOL            mbInCommitMarkedText;
     NSAttributedString* mpLastMarkedText;
+    BOOL            mbTextInputWantsNonRepeatKeyDown;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -217,6 +218,7 @@ enum class SalEvent;
 
 -(void)endExtTextInput;
 -(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
+-(void)deleteTextInputWantsNonRepeatKeyDown;
 
 @end
 
