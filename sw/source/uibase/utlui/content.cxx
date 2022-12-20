@@ -109,6 +109,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <node2lay.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -1194,11 +1195,15 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
-                   if (const SwFrameFormats* pFrameFormats =
+                    if (const SwFrameFormats* pFrameFormats =
                             m_pActiveShell->GetDoc()->GetTableFrameFormats())
                         if (const SwFrameFormat* pFrameFormat =
                                 pFrameFormats->FindFormatByName(pCnt->GetName()))
-                            BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
+                        {
+                            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+                            if (pTable)
+                                BringTypesWithFlowFramesToAttention({pTable->GetTableNode()});
+                        }
                 }
                 else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
                          nType == ContentTypeId::OLE)
@@ -1221,7 +1226,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
                     const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
                     if (pFormat)
-                        BringFramesToAttention(std::vector<const SwFrameFormat*> {pFormat});
+                        BringTypesWithFlowFramesToAttention({pFormat->GetSectionNode()});
                 }
                 else if (nType == ContentTypeId::URLFIELD)
                 {
@@ -1284,7 +1289,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
-                    std::vector<const SwFrameFormat*> aTableFormatsArr;
+                    std::vector<const SwNode*> aNodesArr;
                     const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
                     const SwFrameFormats* pFrameFormats =
                             m_pActiveShell->GetDoc()->GetTableFrameFormats();
@@ -1294,9 +1299,13 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         if (const SwTableFormat* pTableFormat =
                                 static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
                             if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
-                                aTableFormatsArr.push_back(pTableFormat);
+                            {
+                                SwTable* pTable = SwTable::FindTable(pTableFormat);
+                                if (pTable)
+                                    aNodesArr.push_back(pTable->GetTableNode());
+                            }
                     }
-                    BringFramesToAttention(aTableFormatsArr);
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
                          nType == ContentTypeId::OLE)
@@ -1322,32 +1331,31 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 }
                 else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
                 {
+                    std::vector<const SwNode*> aNodesArr;
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
-                    if (const size_t nSize = rFormats.size())
+                    const size_t nSize = rFormats.size();
+                    for (SwSectionFormats::size_type n = nSize; n;)
                     {
-                        std::vector<const SwFrameFormat*> aSectionsFormatsArr;
-                        for (SwSectionFormats::size_type n = nSize; n;)
+                        const SwSectionFormat* pSectionFormat = rFormats[--n];
+                        if (pSectionFormat && pSectionFormat->IsInNodesArr())
                         {
-                            const SwSectionFormat* pFormat = rFormats[--n];
-                            if (pFormat && pFormat->IsInNodesArr())
+                            const SwSection* pSection = pSectionFormat->GetSection();
+                            if (pSection && !pSection->IsHiddenFlag())
                             {
-                                const SwSection* pSection = pFormat->GetSection();
-                                if (pSection && !pSection->IsHiddenFlag())
-                                {
-                                    const SectionType eSectionType = pSection->GetType();
-                                    if (nType == ContentTypeId::REGION &&
-                                            (eSectionType == SectionType::ToxContent ||
-                                            eSectionType == SectionType::ToxHeader))
-                                        continue;
-                                    if (nType == ContentTypeId::INDEX &&
-                                            eSectionType != SectionType::ToxContent)
-                                        continue;
-                                    aSectionsFormatsArr.push_back(pFormat);
-                                }
+                                const SectionType eSectionType = pSection->GetType();
+                                if (nType == ContentTypeId::REGION &&
+                                        (eSectionType == SectionType::ToxContent ||
+                                         eSectionType == SectionType::ToxHeader))
+                                    continue;
+                                if (nType == ContentTypeId::INDEX &&
+                                        eSectionType != SectionType::ToxContent)
+                                    continue;
+                                if (const SwNode* pNode = pSectionFormat->GetSectionNode())
+                                    aNodesArr.push_back(pNode);
                             }
                         }
-                        BringFramesToAttention(aSectionsFormatsArr);
                     }
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::URLFIELD)
                 {
@@ -5850,6 +5858,33 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
                 aMarkStart.AdjustContent(-1);
         }
         lcl_CalcOverlayRanges(pMarkStartFrame, pMarkEndFrame, aMarkStart, aMarkEnd, aRanges);
+    }
+    if (aRanges.size())
+        OverlayObject(std::move(aRanges));
+}
+
+void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const auto* pNode : rNodes)
+    {
+        if (!pNode)
+            continue;
+        SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
+        SwFrame* pFrame = aTmp.NextFrame();
+        while (pFrame)
+        {
+            const SwRect& rFrameRect = pFrame->getFrameArea();
+            if (!rFrameRect.IsEmpty())
+                aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(), rFrameRect.Right(),
+                                     rFrameRect.Bottom());
+            if (!pFrame->IsFlowFrame())
+                break;
+            SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+            if (!pFollow)
+                break;
+            pFrame = &pFollow->GetFrame();
+        }
     }
     if (aRanges.size())
         OverlayObject(std::move(aRanges));
