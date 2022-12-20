@@ -50,7 +50,7 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, c
     }
     else
     {
-        if (rAttribs.hasAttribute(XML_rot))
+        if (rAttribs.hasAttribute(XML_rot) && mrShape.getTextBody())
         {
             mno_txXfrmRot = rAttribs.getInteger(XML_rot, 0);
             sal_Int32 nTextAreaRot = mrShape.getTextBody()->getTextProperties().moTextAreaRotation.value_or(0);
