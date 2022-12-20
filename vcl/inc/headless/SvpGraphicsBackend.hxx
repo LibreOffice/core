@@ -40,7 +40,7 @@ public:
 
     OUString getRenderBackendName() const override { return "svp"; }
 
-    bool setClipRegion(vcl::Region const& rRegion) override;
+    void setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;
 
     sal_uInt16 GetBitCount() const override;

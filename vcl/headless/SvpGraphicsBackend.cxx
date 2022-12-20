@@ -34,10 +34,9 @@ void SvpGraphicsBackend::Init() {}
 
 void SvpGraphicsBackend::freeResources() {}
 
-bool SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
+void SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
 {
     m_rCairoCommon.m_aClipRegion = i_rClip;
-    return true;
 }
 
 void SvpGraphicsBackend::ResetClipRegion() { m_rCairoCommon.m_aClipRegion.SetNull(); }

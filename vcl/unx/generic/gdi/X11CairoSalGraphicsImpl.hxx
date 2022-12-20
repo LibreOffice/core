@@ -49,10 +49,10 @@ public:
         X11SalGraphicsImpl::ResetClipRegion();
     }
 
-    bool setClipRegion(const vcl::Region& i_rClip) override
+    void setClipRegion(const vcl::Region& i_rClip) override
     {
         maClipRegion = i_rClip;
-        return X11SalGraphicsImpl::setClipRegion(i_rClip);
+        X11SalGraphicsImpl::setClipRegion(i_rClip);
     }
 
     void SetLineColor() override

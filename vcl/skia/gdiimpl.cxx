@@ -566,10 +566,10 @@ void SkiaSalGraphicsImpl::resetCanvasScalingAndClipping()
     canvas->restore(); // undo scaling
 }
 
-bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
+void SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
     if (mClipRegion == region)
-        return true;
+        return;
     SkiaZone zone;
     checkPendingDrawing();
     checkSurface();
@@ -580,7 +580,6 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     canvas->restore(); // undo previous clip state, see setCanvasScalingAndClipping()
     canvas->save();
     setCanvasClipRegion(canvas, region);
-    return true;
 }
 
 void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region)

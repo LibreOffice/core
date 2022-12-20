@@ -246,7 +246,7 @@ AquaGraphicsBackend::~AquaGraphicsBackend() {}
 void AquaGraphicsBackend::Init() {}
 void AquaGraphicsBackend::freeResources() {}
 
-bool AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
+void AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
 {
     // release old clip path
     mrShared.unsetClipPath();
@@ -274,8 +274,6 @@ bool AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
     // set the current path as clip region
     if (mrShared.checkContext())
         mrShared.setState();
-
-    return true;
 }
 
 void AquaGraphicsBackend::ResetClipRegion()

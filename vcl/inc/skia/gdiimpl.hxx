@@ -47,7 +47,7 @@ public:
     virtual OUString getRenderBackendName() const override { return "skia"; }
 
     const vcl::Region& getClipRegion() const;
-    virtual bool setClipRegion(const vcl::Region&) override;
+    virtual void setClipRegion(const vcl::Region&) override;
 
     //
     // get the depth of the device

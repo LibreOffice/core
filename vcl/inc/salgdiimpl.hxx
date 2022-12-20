@@ -80,7 +80,7 @@ public:
 
     virtual OUString getRenderBackendName() const = 0;
 
-    virtual bool setClipRegion( const vcl::Region& ) = 0;
+    virtual void setClipRegion( const vcl::Region& ) = 0;
 
     virtual sal_uInt16 GetBitCount() const = 0;
 

@@ -946,7 +946,7 @@ void X11SalGraphicsImpl::ResetClipRegion()
     mrParent.mpClipRegion    = nullptr;
 }
 
-bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
+void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 {
     if( mrParent.mpClipRegion )
         XDestroyRegion( mrParent.mpClipRegion );
@@ -1008,7 +1008,6 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
         XDestroyRegion( mrParent.mpClipRegion );
         mrParent.mpClipRegion= nullptr;
     }
-    return true;
 }
 
 void X11SalGraphicsImpl::SetLineColor()

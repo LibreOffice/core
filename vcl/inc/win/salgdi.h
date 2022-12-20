@@ -221,7 +221,7 @@ public:
     void Flush();
 
 protected:
-    virtual bool        setClipRegion( const vcl::Region& ) override;
+    virtual void        setClipRegion( const vcl::Region& ) override;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( tools::Long nX, tools::Long nY ) override;
     virtual void        drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;

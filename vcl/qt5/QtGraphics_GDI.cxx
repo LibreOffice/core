@@ -125,7 +125,7 @@ static bool AddPolyPolygonToPath(QPainterPath& rPath, const basegfx::B2DPolyPoly
     return true;
 }
 
-bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
+void QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
 {
     if (rRegion.IsRectangle())
     {
@@ -162,7 +162,6 @@ bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
             m_aClipRegion.swap(aRegion);
         }
     }
-    return true;
 }
 
 void QtGraphicsBackend::ResetClipRegion()

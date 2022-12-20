@@ -113,7 +113,7 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
-    virtual bool setClipRegion( const vcl::Region& ) override;
+    virtual void setClipRegion( const vcl::Region& ) override;
     //
     // get the depth of the device
     virtual sal_uInt16 GetBitCount() const override;
