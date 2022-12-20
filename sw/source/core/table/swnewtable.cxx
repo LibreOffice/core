@@ -2176,7 +2176,6 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
             && outerSize.GetHeightSizeType() != SwFrameSize::Variable
             && minHeights < outerSize.GetHeight())
         {
-            assert(false); // this should be impossible currently, such subtable isn't converted because layout is needed to determine how much space is taken up by variable height rows
             SwFormatFrameSize lastSize(pNewLine->GetFrameFormat()->GetFrameSize());
             lastSize.SetHeight(lastSize.GetHeight() + outerSize.GetHeight() - minHeights);
             if (lastSize.GetHeightSizeType() == SwFrameSize::Variable)
@@ -2325,6 +2324,10 @@ bool SwTable::CanConvertSubtables() const
                         {
                             haveNonFixedInnerLine = true;
                         }
+                    }
+                    else
+                    {
+                        haveNonFixedInnerLine = true; // default
                     }
                     for (SwTableBox const*const pInnerBox : pInnerLine->GetTabBoxes())
                     {
