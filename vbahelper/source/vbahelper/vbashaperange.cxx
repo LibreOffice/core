@@ -24,6 +24,7 @@
 #include <ooo/vba/office/MsoShapeType.hpp>
 
 #include <utility>
+#include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbashaperange.hxx>
 #include <vbahelper/vbashape.hxx>
 using namespace ::ooo::vba;
@@ -44,7 +45,7 @@ public:
         }
         virtual uno::Any SAL_CALL nextElement(  ) override
         {
-                ScVbaShapeRange* pCollectionImpl = dynamic_cast< ScVbaShapeRange* >(m_xParent.get());
+                ScVbaShapeRange* pCollectionImpl = comphelper::getFromUnoTunnel< ScVbaShapeRange >(m_xParent);
                 if ( pCollectionImpl && hasMoreElements() )
                     return pCollectionImpl->createCollectionObject(  m_xIndexAccess->getByIndex( nIndex++ ) );
                 throw container::NoSuchElementException();
@@ -389,6 +390,15 @@ uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaShapeRange::createEnumeration()
 {
     return new VbShapeRangeEnumHelper( this, m_xIndexAccess );
+}
+
+sal_Int64 ScVbaShapeRange::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
+    return comphelper::getSomethingImpl(aIdentifier, this);
+}
+
+css::uno::Sequence<sal_Int8> const & ScVbaShapeRange::getUnoTunnelId() {
+    static comphelper::UnoIdInit const id;
+    return id.getSeq();
 }
 
 uno::Any
