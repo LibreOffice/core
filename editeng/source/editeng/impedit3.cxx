@@ -2832,8 +2832,14 @@ void ImpEditEngine::SetRotation(TextRotation nRotation)
 
 void ImpEditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
 {
+    assert(nColumns >= 1);
     if (mnColumns != nColumns || mnColumnSpacing != nSpacing)
     {
+        if (nColumns == 0)
+        {
+            SAL_WARN("editeng", "bad nColumns value, ignoring");
+            nColumns = 1;
+        }
         mnColumns = nColumns;
         mnColumnSpacing = nSpacing;
         if (IsFormatted())
