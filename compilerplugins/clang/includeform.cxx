@@ -31,7 +31,7 @@ private:
         SourceLocation HashLoc, Token const & IncludeTok, StringRef,
         bool IsAngled, CharSourceRange FilenameRange,
 #if CLANG_VERSION >= 160000
-        std::optional<FileEntryRef> File,
+        OptionalFileEntryRef File,
 #elif CLANG_VERSION >= 150000
         Optional<FileEntryRef> File,
 #else
