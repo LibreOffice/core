@@ -28,9 +28,7 @@ BUILDDIR := $(if $(wildcard $(gb_partial_build__makefile_dir)../Module_external.
   $(gb_partial_build__makefile_dir)..)
 endif
 
-ifeq ($(BUILD_TYPE),)
 include $(BUILDDIR)/config_$(gb_Side).mk
-endif
 
 gb_PARTIAL_BUILD := T
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
