@@ -147,6 +147,7 @@ class SwContentTree final : public SfxListener
     void BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr);
     void BringTextFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
     void BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
+    void BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.
