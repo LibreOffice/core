@@ -23,11 +23,9 @@ $(eval $(call gb_JunitTest_use_unoapi_jars,comphelper_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,comphelper_complex,\
     comphelper/qa/complex/comphelper/Map \
-    comphelper/qa/complex/comphelper/SequenceOutputStreamUnitTest \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,comphelper_complex,\
-    complex.comphelper.SequenceOutputStreamUnitTest \
     complex.comphelper.Map \
 ))
 

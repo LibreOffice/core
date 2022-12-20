@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_targets,comphelper,\
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
     JunitTest_comphelper_complex \
+    PythonTest_comphelper_python \
 ))
 
 $(eval $(call gb_Module_add_check_targets,comphelper,\
