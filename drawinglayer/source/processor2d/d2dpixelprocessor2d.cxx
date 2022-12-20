@@ -1476,10 +1476,10 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
     const basegfx::B2DHomMatrix& rObjectToView(
         getViewInformation2D().getObjectToViewTransformation());
     const double fDiscreteLineWidth(
-        bHairline ? 1.0
-                  : ceil(basegfx::B2DVector(rObjectToView
-                                            * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0))
-                             .getLength()));
+        bHairline
+            ? 1.0
+            : basegfx::B2DVector(rObjectToView * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0))
+                  .getLength());
 
     // Here for every combination which the system-specific implementation is not
     // capable of visualizing, use the (for decomposable Primitives always possible)
@@ -1672,6 +1672,113 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
     }
 }
 
+void D2DPixelProcessor2D::processLineRectanglePrimitive2D(
+    const primitive2d::LineRectanglePrimitive2D& rLineRectanglePrimitive2D)
+{
+    if (rLineRectanglePrimitive2D.getB2DRange().isEmpty())
+    {
+        // no geometry, done
+        return;
+    }
+
+    const basegfx::BColor aHairlineColor(
+        maBColorModifierStack.getModifiedColor(rLineRectanglePrimitive2D.getBColor()));
+    const D2D1::ColorF aD2DColor(aHairlineColor.getRed(), aHairlineColor.getGreen(),
+                                 aHairlineColor.getBlue());
+    ID2D1SolidColorBrush* pColorBrush(nullptr);
+    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    bool bDone(false);
+
+    if (SUCCEEDED(hr))
+    {
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        const basegfx::B2DHomMatrix aLocalTransform(
+            getViewInformation2D().getObjectToViewTransformation());
+        getRenderTarget().SetTransform(D2D1::Matrix3x2F(
+            aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
+            aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
+        const basegfx::B2DRange& rRange(rLineRectanglePrimitive2D.getB2DRange());
+        const D2D1_RECT_F rect
+            = { rRange.getMinX(), rRange.getMinY(), rRange.getMaxX(), rRange.getMaxY() };
+        const double fDiscreteLineWidth(
+            basegfx::B2DVector(getViewInformation2D().getInverseObjectToViewTransformation()
+                               * basegfx::B2DVector(1.44, 0.0))
+                .getLength());
+
+        getRenderTarget().DrawRectangle(&rect, pColorBrush, fDiscreteLineWidth);
+        bDone = true;
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
+void D2DPixelProcessor2D::processFilledRectanglePrimitive2D(
+    const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D)
+{
+    if (rFilledRectanglePrimitive2D.getB2DRange().isEmpty())
+    {
+        // no geometry, done
+        return;
+    }
+
+    const basegfx::BColor aFillColor(
+        maBColorModifierStack.getModifiedColor(rFilledRectanglePrimitive2D.getBColor()));
+    const D2D1::ColorF aD2DColor(aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
+    ID2D1SolidColorBrush* pColorBrush(nullptr);
+    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    bool bDone(false);
+
+    if (SUCCEEDED(hr))
+    {
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        const basegfx::B2DHomMatrix aLocalTransform(
+            getViewInformation2D().getObjectToViewTransformation());
+        getRenderTarget().SetTransform(D2D1::Matrix3x2F(
+            aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
+            aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
+        const basegfx::B2DRange& rRange(rFilledRectanglePrimitive2D.getB2DRange());
+        const D2D1_RECT_F rect
+            = { rRange.getMinX(), rRange.getMinY(), rRange.getMaxX(), rRange.getMaxY() };
+
+        getRenderTarget().FillRectangle(&rect, pColorBrush);
+        bDone = true;
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
+void D2DPixelProcessor2D::processSingleLinePrimitive2D(
+    const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D)
+{
+    const basegfx::BColor aLineColor(
+        maBColorModifierStack.getModifiedColor(rSingleLinePrimitive2D.getBColor()));
+    const D2D1::ColorF aD2DColor(aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
+    ID2D1SolidColorBrush* pColorBrush(nullptr);
+    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    bool bDone(false);
+
+    if (SUCCEEDED(hr))
+    {
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        basegfx::B2DHomMatrix aLocalTransform(
+            getViewInformation2D().getObjectToViewTransformation());
+        const basegfx::B2DPoint aStart(aLocalTransform * rSingleLinePrimitive2D.getStart());
+        const basegfx::B2DPoint aEnd(aLocalTransform * rSingleLinePrimitive2D.getEnd());
+
+        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+        const D2D1_POINT_2F aD2D1Start = { aStart.getX() + fAAOffset, aStart.getY() + fAAOffset };
+        const D2D1_POINT_2F aD2D1End = { aEnd.getX() + fAAOffset, aEnd.getY() + fAAOffset };
+
+        getRenderTarget().DrawLine(aD2D1Start, aD2D1End, pColorBrush, 1.44f);
+        bDone = true;
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
 void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     if (0 == mnRecursionCounter)
@@ -1763,6 +1870,24 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processPolygonStrokePrimitive2D(
                 static_cast<const primitive2d::PolygonStrokePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
+        {
+            processLineRectanglePrimitive2D(
+                static_cast<const primitive2d::LineRectanglePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
+        {
+            processFilledRectanglePrimitive2D(
+                static_cast<const primitive2d::FilledRectanglePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
+        {
+            processSingleLinePrimitive2D(
+                static_cast<const primitive2d::SingleLinePrimitive2D&>(rCandidate));
             break;
         }
 

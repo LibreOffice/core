@@ -40,6 +40,9 @@ class TransformPrimitive2D;
 class PointArrayPrimitive2D;
 class MarkerArrayPrimitive2D;
 class PolygonStrokePrimitive2D;
+class LineRectanglePrimitive2D;
+class FilledRectanglePrimitive2D;
+class SingleLinePrimitive2D;
 }
 
 struct ID2D1RenderTarget;
@@ -79,6 +82,12 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
         const primitive2d::BackgroundColorPrimitive2D& rBackgroundColorCandidate);
     void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
         const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
+    void processLineRectanglePrimitive2D(
+        const primitive2d::LineRectanglePrimitive2D& rLineRectanglePrimitive2D);
+    void processFilledRectanglePrimitive2D(
+        const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D);
+    void
+    processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
 
     // common helpers
     ID2D1Bitmap* implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate,
