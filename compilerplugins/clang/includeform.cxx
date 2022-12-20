@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <optional>
 
 #include "config_clang.h"
 
