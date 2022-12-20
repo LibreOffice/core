@@ -263,7 +263,10 @@ std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken
         (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') && (aValue[ 10 ] == 'T') &&
         (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if (!bValid)
+    {
+        SAL_WARN("oox", "bad date string: " << aValue);
         return std::optional< util::DateTime >();
+    }
     aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 0, 4 )) );
     aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 5, 2 )) );
     aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 8, 2 )) );
