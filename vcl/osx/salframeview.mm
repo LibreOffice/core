@@ -483,6 +483,7 @@ static AquaSalFrame* getMouseContainerFrame()
         mbInEndExtTextInput = NO;
         mbInCommitMarkedText = NO;
         mpLastMarkedText = nil;
+        mbTextInputWantsNonRepeatKeyDown = NO;
     }
 
     return self;
@@ -969,8 +970,52 @@ static AquaSalFrame* getMouseContainerFrame()
 
         if( ! [self handleKeyDownException: pEvent] )
         {
+            sal_uInt16 nKeyCode = ImplMapKeyCode( [pEvent keyCode] );
+            if ( nKeyCode == KEY_DELETE && mbTextInputWantsNonRepeatKeyDown )
+            {
+                // tdf#42437 Enable press-and-hold special character input method
+                // Emulate the press-and-hold behavior of the TextEdit
+                // application by deleting the marked text when only the
+                // Delete key is pressed and keep the marked text when the
+                // Backspace key or Fn-Delete keys are pressed.
+                if ( [pEvent keyCode] == 51 )
+                {
+                    [self deleteTextInputWantsNonRepeatKeyDown];
+                }
+                else
+                {
+                    [self unmarkText];
+                    mbKeyHandled = true;
+                    mbInKeyInput = false;
+                }
+
+                [self endExtTextInput];
+                return;
+            }
+
             NSArray* pArray = [NSArray arrayWithObject: pEvent];
             [self interpretKeyEvents: pArray];
+
+            // Handle repeat key events by explicitly inserting the text if
+            // -[NSResponder interpretKeyEvents:] does not insert or mark any
+            // text. Note: do not do this step if there is uncommitted text.
+            if ( !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
+            {
+                NSString *pChars = [mpLastEvent characters];
+                [self insertText:pChars replacementRange:NSMakeRange( 0, [pChars length] )];
+            }
+            // tdf#42437 Enable press-and-hold special character input method
+            // Emulate the press-and-hold behavior of the TextEdit application
+            // by committing an empty string for key down events dispatched
+            // while the special character input method popup is displayed.
+            else if ( mpLastMarkedText && mbTextInputWantsNonRepeatKeyDown && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && ![mpLastEvent isARepeat] )
+            {
+                // If the escape or return key is pressed, unmark the text to
+                // skip deletion of marked text
+                if ( nKeyCode == KEY_ESCAPE || nKeyCode == KEY_RETURN )
+                    [self unmarkText];
+                [self insertText:[NSString string] replacementRange:NSMakeRange( NSNotFound, 0 )];
+            }
         }
 
         mbInKeyInput = false;
@@ -1014,6 +1059,8 @@ static AquaSalFrame* getMouseContainerFrame()
     (void) replacementRange; // FIXME: surely it must be used
 
     SolarMutexGuard aGuard;
+
+    [self deleteTextInputWantsNonRepeatKeyDown];
 
     // Ignore duplicate events that are sometimes posted during cancellation
     // of the native input method session. This usually happens when
@@ -1588,7 +1635,12 @@ static AquaSalFrame* getMouseContainerFrame()
 
 - (NSRange)selectedRange
 {
-    return mSelectedRange;
+    // tdf#42437 Enable press-and-hold special character input method
+    // Always return a valid range location. If the range location is
+    // NSNotFound, -[NSResponder interpretKeyEvents:] will not call
+    // [self firstRectForCharacterRange:actualRange:] and will not display the
+    // special character input method popup.
+    return ( mSelectedRange.location == NSNotFound ? NSMakeRange( 0, 0 ) : mSelectedRange );
 }
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange replacementRange:(NSRange)replacementRange
@@ -1596,6 +1648,8 @@ static AquaSalFrame* getMouseContainerFrame()
     (void) replacementRange; // FIXME - use it!
 
     SolarMutexGuard aGuard;
+
+    [self deleteTextInputWantsNonRepeatKeyDown];
 
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
@@ -1666,6 +1720,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
         aInputEvent.maText = aInsertString;
         aInputEvent.mnCursorPos = nSelectionStart;
+        aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = aInputFlags.data();
         mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
     } else {
@@ -1741,6 +1796,8 @@ static AquaSalFrame* getMouseContainerFrame()
         [mpLastMarkedText release];
         mpLastMarkedText = nil;
     }
+
+    mbTextInputWantsNonRepeatKeyDown = NO;
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
@@ -1751,17 +1808,66 @@ static AquaSalFrame* getMouseContainerFrame()
 
     SolarMutexGuard aGuard;
 
+    // tdf#42437 Enable press-and-hold special character input method
+    // Some text entry controls, such as Writer comments or the cell editor in
+    // Calc's Formula Bar, need to have an input method session open or else
+    // the returned position won't be anywhere near the text cursor. So,
+    // dispatch an empty SalEvent::ExtTextInput event, fetch the position,
+    // and then dispatch a SalEvent::EndExtTextInput event.
+    BOOL bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+    if ( bNeedsExtTextInput )
+    {
+        SalExtTextInputEvent aInputEvent;
+        aInputEvent.maText.clear();
+        aInputEvent.mnCursorPos = 0;
+        aInputEvent.mnCursorFlags = 0;
+        aInputEvent.mpTextAttr = nullptr;
+        if ( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+            mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+    }
+
     SalExtTextInputPosEvent aPosEvent;
-    mpFrame->CallCallback( SalEvent::ExtTextInputPos, static_cast<void *>(&aPosEvent) );
+    if ( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        mpFrame->CallCallback( SalEvent::ExtTextInputPos, static_cast<void *>(&aPosEvent) );
+
+    if ( bNeedsExtTextInput )
+    {
+        if ( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+            mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+
+        // tdf#42437 Enable press-and-hold special character input method
+        // Emulate the press-and-hold behavior of the TextEdit application by
+        // setting the marked text to the last key down event's characters. The
+        // characters will already have been committed by the special character
+        // input method so set the mbTextInputWantsNonRepeatKeyDown flag to
+        // indicate that the characters need to be deleted if the input method
+        // replaces the committed characters.
+        NSString *pChars = [mpLastEvent characters];
+        if ( pChars )
+        {
+            [self unmarkText];
+            mpLastMarkedText = [[NSAttributedString alloc] initWithString:pChars];
+            mSelectedRange = mMarkedRange = NSMakeRange( 0, [mpLastMarkedText length] );
+            mbTextInputWantsNonRepeatKeyDown = YES;
+        }
+    }
 
     NSRect rect;
 
-    rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.x();
-    rect.origin.y = aPosEvent.mnY + mpFrame->maGeometry.y() + 4; // add some space for underlines
-    rect.size.width = aPosEvent.mnWidth;
-    rect.size.height = aPosEvent.mnHeight;
+    if ( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    {
+        rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.x();
+        rect.origin.y = aPosEvent.mnY + mpFrame->maGeometry.y() + 4; // add some space for underlines
+        rect.size.width = aPosEvent.mnWidth;
+        rect.size.height = aPosEvent.mnHeight;
 
-    mpFrame->VCLToCocoa( rect );
+        mpFrame->VCLToCocoa( rect );
+    }
+    else
+    {
+        rect = NSMakeRect( aPosEvent.mnX, aPosEvent.mnY, aPosEvent.mnWidth, aPosEvent.mnHeight );
+    }
+
     return rect;
 }
 
@@ -1874,9 +1980,17 @@ static AquaSalFrame* getMouseContainerFrame()
             // to be visible.
             mbInCommitMarkedText = YES;
             if (nFlags & EndExtTextInputFlags::Complete)
-                [self insertText:mpLastMarkedText replacementRange:NSMakeRange(0, [mpLastMarkedText length])];
+            {
+                // Retain the last marked text as it will be releasd in
+                // [self insertText:replacementText:]
+                NSAttributedString *pText = [mpLastMarkedText retain];
+                [self insertText:pText replacementRange:NSMakeRange(0, [mpLastMarkedText length])];
+                [pText release];
+            }
             else
+            {
                 [self insertText:[NSString string] replacementRange:NSMakeRange(0, 0)];
+            }
             mbInCommitMarkedText = NO;
         }
 
@@ -1896,6 +2010,33 @@ static AquaSalFrame* getMouseContainerFrame()
     }
 
     mbInEndExtTextInput = NO;
+}
+
+-(void)deleteTextInputWantsNonRepeatKeyDown
+{
+    SolarMutexGuard aGuard;
+
+    // tdf#42437 Enable press-and-hold special character input method
+    // Emulate the press-and-hold behavior of the TextEdit application by
+    // dispatching backspace events to delete any marked characters. The
+    // special character input method commits the marked characters so we must
+    // delete the marked characters before the input method calls
+    // [self insertText:replacementRange:].
+    if (mbTextInputWantsNonRepeatKeyDown)
+    {
+        if ( mpLastMarkedText )
+        {
+            NSString *pChars = [mpLastMarkedText string];
+            if ( pChars )
+            {
+                NSUInteger nLength = [pChars length];
+                for ( NSUInteger i = 0; i < nLength; i++ )
+                    [self deleteBackward:self];
+            }
+        }
+
+        [self unmarkText];
+    }
 }
 
 @end
