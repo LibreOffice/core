@@ -17,6 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+// win-specific
+#include <prewin.h>
+#include <d2d1.h>
+#include <d2d1_1.h>
+#include <postwin.h>
+
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
@@ -28,16 +36,21 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-
-// win-specific
-#include <d2d1.h>
-#include <d2d1_1.h>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 
