@@ -550,8 +550,9 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     // #i79128# ...and use correct OutDev for that
     if (pTargetPaintWindow)
     {
+        Color maBackColor = rRenderContext.GetSettings().GetStyleSettings().GetLightColor();
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
-        rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(COL_WHITE));
+        rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(maBackColor));
     }
 
     // do paint (unbuffered) and mark repaint end
