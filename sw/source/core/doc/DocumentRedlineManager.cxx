@@ -1679,7 +1679,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     break;
 
                 case SwComparePosition::CollideEnd:
-                    if (pRStt->nContent != 0)
+                    if (pRStt->nContent != 0
+                        && pRStt->nNode != pREnd->nNode)
                     {   // tdf#147466 HACK: don't combine in this case to avoid the tdf#119571 code from *undeleting* section nodes
                         break;
                     }
