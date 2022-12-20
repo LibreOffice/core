@@ -151,6 +151,7 @@ public:
 
     SwFlyLayFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
+    virtual void RegisterAtPage(SwPageFrame &) override;
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 };
