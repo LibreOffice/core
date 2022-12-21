@@ -4418,6 +4418,9 @@ void ScInputHandler::InputSelection( const EditView* pView )
 
 void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
 {
+    if ( !pView )
+        return;
+
     UpdateActiveView();
 
     // #i20282# DataChanged needs to know if this is from the input line's modify handler
