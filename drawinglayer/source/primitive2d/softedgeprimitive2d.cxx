@@ -88,6 +88,12 @@ bool SoftEdgePrimitive2D::prepareValuesAndcheckValidity(
         basegfx::B2DRange aVisibleArea(rViewInformation.getViewport());
         aVisibleArea.grow(getRadius() * 2);
 
+        // To do this correctly, it needs to be done in discrete coordinates.
+        // The object may be transformed relative to the original#
+        // ObjectTransformation, e.g. when re-used in shadow
+        aVisibleArea.transform(rViewInformation.getViewTransformation());
+        rClippedRange.transform(rViewInformation.getObjectToViewTransformation());
+
         // calculate ClippedRange
         rClippedRange.intersect(aVisibleArea);
 
@@ -95,6 +101,9 @@ bool SoftEdgePrimitive2D::prepareValuesAndcheckValidity(
         // will be empty and we are done
         if (rClippedRange.isEmpty())
             return false;
+
+        // convert result back to object coordinates
+        rClippedRange.transform(rViewInformation.getInverseObjectToViewTransformation());
     }
 
     // calculate discrete pixel size of SoftRange. If it's too small to visualize, we are done
