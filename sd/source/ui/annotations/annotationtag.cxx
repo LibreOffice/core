@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
@@ -225,7 +226,7 @@ void AnnotationHdl::CreateB2dIAObject()
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
-            auto* pAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
+            auto* pAnnotation = comphelper::getFromUnoTunnel<sd::Annotation>(mxAnnotation);
 
             if (pAnnotation && pAnnotation->hasCustomAnnotationMarker())
             {
