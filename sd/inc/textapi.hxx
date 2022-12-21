@@ -43,7 +43,8 @@ public:
     void                SetText( OutlinerParaObject const & rText );
     OUString            GetText() const;
 
-    static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 private:
     std::unique_ptr<TextAPIEditSource>  mpSource;
