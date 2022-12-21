@@ -30,6 +30,9 @@ class TransformPrimitive2D;
 class PointArrayPrimitive2D;
 class MarkerArrayPrimitive2D;
 class PolygonStrokePrimitive2D;
+class LineRectanglePrimitive2D;
+class FilledRectanglePrimitive2D;
+class SingleLinePrimitive2D;
 }
 
 namespace drawinglayer::processor2d
@@ -47,38 +50,29 @@ class DRAWINGLAYER_DLLPUBLIC CairoPixelProcessor2D : public BaseProcessor2D
         const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);
     void processPolyPolygonColorPrimitive2D(
         const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D);
-#if 0
     void processBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
-#endif
     void
     processTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate);
-#if 0
     void processUnifiedTransparencePrimitive2D(
         const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);
-#endif
     void processMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
     void processModifiedColorPrimitive2D(
         const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
     void processTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
     void
     processPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
-#if 0
     void
     processMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
     void processBackgroundColorPrimitive2D(
         const primitive2d::BackgroundColorPrimitive2D& rBackgroundColorCandidate);
-#endif
     void processPolygonStrokePrimitive2D(
         const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
-#if 0
-    // common helpers
-    ID2D1Bitmap* implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate,
-                                        const basegfx::B2DRange& rVisibleRange);
-    ID2D1Bitmap*
-    implCreateAlpha_B2DBitmap(const primitive2d::TransparencePrimitive2D& rTransCandidate,
-                              const basegfx::B2DRange& rVisibleRange,
-                              D2D1_MATRIX_3X2_F& rMaskScale);
-#endif
+    void processLineRectanglePrimitive2D(
+        const primitive2d::LineRectanglePrimitive2D& rLineRectanglePrimitive2D);
+    void processFilledRectanglePrimitive2D(
+        const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D);
+    void
+    processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

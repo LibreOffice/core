@@ -493,9 +493,9 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
     const basegfx::B2DHomMatrix& rObjectToView(
         getViewInformation2D().getObjectToViewTransformation());
     const double fDiscreteLineWidth(
-        bHairline ? 1.0
-                  : ceil((rObjectToView * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0))
-                             .getLength()));
+        bHairline
+            ? 1.0
+            : (rObjectToView * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0)).getLength());
 
     // Here for every combination which the system-specific implementation is not
     // capable of visualizing, use the (for decomposable Primitives always possible)
@@ -615,6 +615,104 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
     cairo_restore(mpRT);
 }
 
+void CairoPixelProcessor2D::processLineRectanglePrimitive2D(
+    const primitive2d::LineRectanglePrimitive2D& rLineRectanglePrimitive2D)
+{
+    if (rLineRectanglePrimitive2D.getB2DRange().isEmpty())
+    {
+        // no geometry, done
+        return;
+    }
+
+    cairo_save(mpRT);
+
+    cairo_matrix_t aMatrix;
+    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+    const basegfx::B2DHomMatrix& rObjectToView(
+        getViewInformation2D().getObjectToViewTransformation());
+    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
+                      rObjectToView.f() + fAAOffset);
+
+    // set linear transformation
+    cairo_set_matrix(mpRT, &aMatrix);
+
+    const basegfx::BColor aHairlineColor(
+        maBColorModifierStack.getModifiedColor(rLineRectanglePrimitive2D.getBColor()));
+    cairo_set_source_rgb(mpRT, aHairlineColor.getRed(), aHairlineColor.getGreen(),
+                         aHairlineColor.getBlue());
+
+    const double fDiscreteLineWidth((getViewInformation2D().getInverseObjectToViewTransformation()
+                                     * basegfx::B2DVector(1.44, 0.0))
+                                        .getLength());
+    cairo_set_line_width(mpRT, fDiscreteLineWidth);
+
+    const basegfx::B2DRange& rRange(rLineRectanglePrimitive2D.getB2DRange());
+    cairo_rectangle(mpRT, rRange.getMinX(), rRange.getMinY(), rRange.getWidth(),
+                    rRange.getHeight());
+    cairo_stroke(mpRT);
+
+    cairo_restore(mpRT);
+}
+
+void CairoPixelProcessor2D::processFilledRectanglePrimitive2D(
+    const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D)
+{
+    if (rFilledRectanglePrimitive2D.getB2DRange().isEmpty())
+    {
+        // no geometry, done
+        return;
+    }
+
+    cairo_save(mpRT);
+
+    cairo_matrix_t aMatrix;
+    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+    const basegfx::B2DHomMatrix& rObjectToView(
+        getViewInformation2D().getObjectToViewTransformation());
+    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
+                      rObjectToView.f() + fAAOffset);
+
+    // set linear transformation
+    cairo_set_matrix(mpRT, &aMatrix);
+
+    const basegfx::BColor aFillColor(
+        maBColorModifierStack.getModifiedColor(rFilledRectanglePrimitive2D.getBColor()));
+    cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
+
+    const basegfx::B2DRange& rRange(rFilledRectanglePrimitive2D.getB2DRange());
+    cairo_rectangle(mpRT, rRange.getMinX(), rRange.getMinY(), rRange.getWidth(),
+                    rRange.getHeight());
+    cairo_fill(mpRT);
+
+    cairo_restore(mpRT);
+}
+
+void CairoPixelProcessor2D::processSingleLinePrimitive2D(
+    const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D)
+{
+    cairo_save(mpRT);
+
+    const basegfx::BColor aLineColor(
+        maBColorModifierStack.getModifiedColor(rSingleLinePrimitive2D.getBColor()));
+    cairo_set_source_rgb(mpRT, aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
+
+    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+    const basegfx::B2DHomMatrix& rObjectToView(
+        getViewInformation2D().getObjectToViewTransformation());
+    const basegfx::B2DPoint aStart(rObjectToView * rSingleLinePrimitive2D.getStart());
+    const basegfx::B2DPoint aEnd(rObjectToView * rSingleLinePrimitive2D.getEnd());
+
+    cairo_set_line_width(mpRT, 1.44f);
+
+    cairo_move_to(mpRT, aStart.getX() + fAAOffset, aStart.getY() + fAAOffset);
+    cairo_line_to(mpRT, aEnd.getX() + fAAOffset, aEnd.getY() + fAAOffset);
+    cairo_stroke(mpRT);
+
+    cairo_restore(mpRT);
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -704,6 +802,24 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processPolygonStrokePrimitive2D(
                 static_cast<const primitive2d::PolygonStrokePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
+        {
+            processLineRectanglePrimitive2D(
+                static_cast<const primitive2d::LineRectanglePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
+        {
+            processFilledRectanglePrimitive2D(
+                static_cast<const primitive2d::FilledRectanglePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
+        {
+            processSingleLinePrimitive2D(
+                static_cast<const primitive2d::SingleLinePrimitive2D&>(rCandidate));
             break;
         }
 

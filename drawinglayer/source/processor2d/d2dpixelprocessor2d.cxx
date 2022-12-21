@@ -1478,8 +1478,7 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
     const double fDiscreteLineWidth(
         bHairline
             ? 1.0
-            : basegfx::B2DVector(rObjectToView * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0))
-                  .getLength());
+            : (rObjectToView * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0)).getLength());
 
     // Here for every combination which the system-specific implementation is not
     // capable of visualizing, use the (for decomposable Primitives always possible)
@@ -1701,8 +1700,8 @@ void D2DPixelProcessor2D::processLineRectanglePrimitive2D(
         const D2D1_RECT_F rect
             = { rRange.getMinX(), rRange.getMinY(), rRange.getMaxX(), rRange.getMaxY() };
         const double fDiscreteLineWidth(
-            basegfx::B2DVector(getViewInformation2D().getInverseObjectToViewTransformation()
-                               * basegfx::B2DVector(1.44, 0.0))
+            (getViewInformation2D().getInverseObjectToViewTransformation()
+             * basegfx::B2DVector(1.44, 0.0))
                 .getLength());
 
         getRenderTarget().DrawRectangle(&rect, pColorBrush, fDiscreteLineWidth);
