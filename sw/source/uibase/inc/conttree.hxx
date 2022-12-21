@@ -138,7 +138,6 @@ class SwContentTree final : public SfxListener
 
     void OverlayObject(std::vector<basegfx::B2DRange>&& aRanges);
 
-    void BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr);
     void BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats);
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
