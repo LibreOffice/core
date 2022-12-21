@@ -268,6 +268,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                             false, &pItem ))
                     nType = static_cast<SwFieldTypesEnum>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
+                else if (pArgs->GetItemState(FN_PARAM_4, false, &pItem) == SfxItemState::SET)
+                {
+                    const OUString& rTypeName = static_cast<const SfxStringItem *>(pItem)->GetValue();
+                    nType = SwFieldTypeFromString(rTypeName);
+                }
                 if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
                                                             false, &pItem ))
                     nSubType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
