@@ -107,13 +107,13 @@ namespace pcr
         @param TControlWindow
             a class which is derived from weld::Widget
     */
-    template < class TControlInterface, class TControlWindow >
+    template < class TControlWindow, class... TControlInterface >
     class CommonBehaviourControl    :public ::cppu::BaseMutex
-                                    ,public ::cppu::WeakComponentImplHelper< TControlInterface >
+                                    ,public ::cppu::WeakComponentImplHelper< TControlInterface... >
                                     ,public CommonBehaviourControlHelper
     {
     protected:
-        typedef ::cppu::WeakComponentImplHelper< TControlInterface >    ComponentBaseClass;
+        typedef ::cppu::WeakComponentImplHelper< TControlInterface... >    ComponentBaseClass;
 
         inline CommonBehaviourControl(sal_Int16 nControlType,
                                       std::unique_ptr<weld::Builder> xBuilder,
@@ -179,8 +179,8 @@ namespace pcr
     };
 
     //= CommonBehaviourControl - implementation
-    template< class TControlInterface, class TControlWindow >
-    inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl(sal_Int16 nControlType,
+    template< class TControlWindow, class... TControlInterface >
+    inline CommonBehaviourControl< TControlWindow, TControlInterface... >::CommonBehaviourControl(sal_Int16 nControlType,
                                                                                                std::unique_ptr<weld::Builder> xBuilder,
                                                                                                std::unique_ptr<TControlWindow> xWidget,
                                                                                                bool bReadOnly)
@@ -196,8 +196,8 @@ namespace pcr
         }
     }
 
-    template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::impl_checkDisposed_throw()
+    template< class TControlWindow, class... TControlInterface >
+    inline void CommonBehaviourControl< TControlWindow, TControlInterface... >::impl_checkDisposed_throw()
     {
         if ( ComponentBaseClass::rBHelper.bDisposed )
             throw css::lang::DisposedException( OUString(), *this );

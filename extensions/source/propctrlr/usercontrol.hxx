@@ -20,6 +20,7 @@
 #pragma once
 
 #include "commoncontrol.hxx"
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svtools/inettbc.hxx>
 #include <svl/zforlist.hxx>
 
@@ -28,7 +29,7 @@ class SvNumberFormatsSupplierObj;
 namespace pcr
 {
     //= OFormatSampleControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> OFormatSampleControl_Base;
+    typedef CommonBehaviourControl<weld::Container, css::inspection::XPropertyControl> OFormatSampleControl_Base;
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
     private:
@@ -84,7 +85,7 @@ namespace pcr
     };
 
     //= OFormattedNumericControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::FormattedSpinButton> OFormattedNumericControl_Base;
+    typedef CommonBehaviourControl<weld::FormattedSpinButton, css::inspection::XPropertyControl, css::lang::XUnoTunnel> OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
     public:
@@ -94,6 +95,9 @@ namespace pcr
         virtual css::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
+
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         void SetFormatDescription( const FormatDescription& rDesc );
 
@@ -115,7 +119,7 @@ namespace pcr
     };
 
     //= OFileUrlControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, SvtURLBox> OFileUrlControl_Base;
+    typedef CommonBehaviourControl<SvtURLBox, css::inspection::XPropertyControl> OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
     private:

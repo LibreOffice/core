@@ -77,6 +77,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
@@ -1708,7 +1709,7 @@ namespace pcr
                 catch( const UnknownPropertyException& ) {}
                 if ( xControl.is() )
                 {
-                    OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
+                    OFormattedNumericControl* pControl = comphelper::getFromUnoTunnel< OFormattedNumericControl >( xControl );
                     DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
                     if (pControl)
                     {
@@ -1754,7 +1755,7 @@ namespace pcr
                     catch( const UnknownPropertyException& ) {}
                     if ( xControl.is() )
                     {
-                        OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
+                        OFormattedNumericControl* pControl = comphelper::getFromUnoTunnel< OFormattedNumericControl >( xControl );
                         DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
                         if ( pControl )
                             pControl->SetFormatDescription( aNewDesc );
