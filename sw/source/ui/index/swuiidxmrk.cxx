@@ -1206,6 +1206,8 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
 
     m_xEntryED->set_visible(!m_bNewEntry);
     m_xEntryLB->set_visible(m_bNewEntry);
+    // tdf#90641 - sort bibliography entries by identifier
+    m_xEntryLB->make_sorted();
     if (m_bNewEntry)
     {
         m_xEntryLB->connect_changed(LINK(this, SwAuthorMarkPane, CompEntryHdl));
