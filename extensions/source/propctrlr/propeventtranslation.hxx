@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 
 
@@ -29,7 +30,7 @@ namespace pcr
 
     //= PropertyEventTranslation
 
-    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener, css::lang::XUnoTunnel
                                     >   PropertyEventTranslation_Base;
 
     class PropertyEventTranslation : public PropertyEventTranslation_Base
@@ -51,6 +52,9 @@ namespace pcr
 
         const css::uno::Reference< css::beans::XPropertyChangeListener >&
             getDelegator() const { return m_xDelegator; }
+
+        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
+        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     protected:
         // XPropertyChangeListener
