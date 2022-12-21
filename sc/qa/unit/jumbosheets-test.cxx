@@ -14,6 +14,7 @@
 #include <vcl/keycodes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
@@ -90,7 +91,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
 {
     loadFromURL(name);
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
         ScDocument* pDoc = pModelObj->GetDocument();
         // Check the value at BXX1 (2000th column).
@@ -104,7 +105,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
 
     saveAndReload(OUString::createFromAscii(format));
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
         ScDocument* pDoc = pModelObj->GetDocument();
@@ -120,7 +121,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 {
     loadFromURL(u"ods/sum-whole-column-row.ods");
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
         ScDocument* pDoc = pModelObj->GetDocument();
         // Check the formula referencing the whole-row range.
@@ -131,7 +132,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 
     saveAndReload("calc8");
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
         ScDocument* pDoc = pModelObj->GetDocument();
@@ -155,7 +156,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
     loadFromURL(u"ods/sum-whole-column-row.ods");
     saveAndReload("Calc Office Open XML");
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
         ScDocument* pDoc = pModelObj->GetDocument();
@@ -181,7 +182,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const
                                                { "COLUMN_E", "$Sheet1.$E:$E" },
                                                { "ROW_4", "$Sheet1.$4:$4" } };
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
         ScDocument* pDoc = pModelObj->GetDocument();
         for (const auto& range : ranges)
@@ -194,7 +195,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const
 
     saveAndReload(OUString::createFromAscii(format));
     {
-        ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
         ScDocument* pDoc = pModelObj->GetDocument();
         for (const auto& range : ranges)
@@ -222,7 +223,7 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
     // as named references even though with 16k columns those are normally NUM1 and NUM2 cells.
     loadFromURL(u"ods/named-range-conflict.ods");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     pDoc->CalcAll();
@@ -244,7 +245,7 @@ void ScJumboSheetsTest::testTdf134553()
 {
     loadFromURL(u"xlsx/tdf134553.xlsx");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -296,7 +297,7 @@ void ScJumboSheetsTest::testTdf134392()
     // Without the fix in place, the file would have crashed
     loadFromURL(u"xlsx/tdf134392.xlsx");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     pDoc->CalcAll(); // perform hard re-calculation.
@@ -305,7 +306,7 @@ void ScJumboSheetsTest::testTdf134392()
 void ScJumboSheetsTest::testTdf147509()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -334,7 +335,7 @@ void ScJumboSheetsTest::testTdf147509()
 void ScJumboSheetsTest::testTdf133033()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
@@ -349,7 +350,7 @@ void ScJumboSheetsTest::testTdf109061()
     // Without the fix in place, the file would have crashed
     loadFromURL(u"xlsx/tdf109061.xlsx");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     pDoc->CalcAll(); // perform hard re-calculation.

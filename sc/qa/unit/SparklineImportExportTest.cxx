@@ -10,6 +10,7 @@
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <docsh.hxx>
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
@@ -149,13 +150,13 @@ void checkSparklines(ScDocument& rDocument)
 void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 {
     loadFromURL(u"xlsx/Sparklines.xlsx");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     checkSparklines(*pModelObj->GetDocument());
 
     saveAndReload("Calc Office Open XML");
-    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     checkSparklines(*pModelObj->GetDocument());
@@ -212,14 +213,14 @@ void SparklineImportExportTest::testSparklinesExportODS()
 void SparklineImportExportTest::testSparklinesRoundtripODS()
 {
     loadFromURL(u"xlsx/Sparklines.xlsx");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     checkSparklines(*pModelObj->GetDocument());
 
     // Trigger export and import of sparklines
     saveAndReload("calc8");
-    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     checkSparklines(*pModelObj->GetDocument());

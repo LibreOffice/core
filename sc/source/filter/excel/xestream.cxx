@@ -70,6 +70,7 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <memory>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <externalrefmgr.hxx>
@@ -994,7 +995,7 @@ ScDocShell* XclExpXmlStream::getDocShell()
 {
     uno::Reference< XInterface > xModel( getModel(), UNO_QUERY );
 
-    ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
+    ScModelObj *pObj = comphelper::getFromUnoTunnel < ScModelObj >( xModel );
 
     if ( pObj )
         return static_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
