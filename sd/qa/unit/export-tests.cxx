@@ -94,6 +94,7 @@ public:
     void testSoftEdges();
     void testShadowBlur();
     void testRhbz1870501();
+    void testTdf152606();
     void testTdf91060();
     void testTdf128550();
     void testTdf140714();
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testSoftEdges);
     CPPUNIT_TEST(testShadowBlur);
     CPPUNIT_TEST(testRhbz1870501);
+    CPPUNIT_TEST(testTdf152606);
     CPPUNIT_TEST(testTdf91060);
     CPPUNIT_TEST(testTdf128550);
     CPPUNIT_TEST(testTdf140714);
@@ -1494,6 +1496,18 @@ void SdExportTest::testRhbz1870501()
     //Without the fix in place, it would crash at export time
     createSdDrawDoc("odg/rhbz1870501.odg");
     saveAndReload("draw8");
+}
+
+void SdExportTest::testTdf152606()
+{
+    //Without the fix in place, it would crash at import time
+    createSdImpressDoc("pptx/tdf152606.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 }
 
 void SdExportTest::testTdf91060()
