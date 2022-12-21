@@ -1088,6 +1088,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertAuthoritiesEntry" ||
              aEvent.FeatureURL.Path == "InsertMultiIndex" ||
              aEvent.FeatureURL.Path == "InsertField" ||
+             aEvent.FeatureURL.Path == "PageNumberWizard" ||
              aEvent.FeatureURL.Path == "InsertPageNumberField" ||
              aEvent.FeatureURL.Path == "InsertPageCountField" ||
              aEvent.FeatureURL.Path == "InsertDateField" ||

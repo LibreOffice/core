@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeMultiPara)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageNumber)
 {
     load(u"private:factory/swriter");
-    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Number"));
+    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>1</PARAGRAPH>"), collectText());
 }
 
@@ -81,11 +81,11 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageBreak)
 {
     load(u"private:factory/swriter");
 
-    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Number"));
+    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Break"));
     // we need to move focus to the paragraph after the page break to insert the page number there
     documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
-    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Number"));
+    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
 
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>1</PARAGRAPH><PARAGRAPH>2</PARAGRAPH>"),
                          collectText());

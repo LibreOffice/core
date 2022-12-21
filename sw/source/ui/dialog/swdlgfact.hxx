@@ -56,6 +56,7 @@
 #include <itabenum.hxx>
 #include <optional>
 #include <o3tl/deleter.hxx>
+#include <pagenumberdlg.hxx>
 
 
 class SwInsertAbstractDlg;
@@ -150,6 +151,20 @@ public:
     }
     virtual short Execute() override;
     virtual void FillOptions( SwAsciiOptions& rOptions ) override;
+};
+
+class AbstractSwPageNumberDlg_Impl : public AbstractSwPageNumberDlg
+{
+    std::shared_ptr<SwPageNumberDlg> m_xDlg;
+public:
+    explicit AbstractSwPageNumberDlg_Impl(std::shared_ptr<SwPageNumberDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual int GetPageNumberPosition() const override;
+    virtual int GetPageNumberAlignment() const override;
 };
 
 class AbstractGenericDialog_Impl : public VclAbstractDialog
@@ -707,6 +722,7 @@ public:
                                                                 SvStream* pStream) override;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg(weld::Window *pParent, SwWrtShell &rSh, OUString const* pSelected) override;
     virtual VclPtr<VclAbstractDialog> CreateSwContentControlDlg(weld::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<AbstractSwPageNumberDlg> CreateSwPageNumberDlg(weld::Window *pParent) override;
 
     VclPtr<AbstractSwContentControlListItemDlg>
     CreateSwContentControlListItemDlg(weld::Window* pParent,

@@ -229,6 +229,16 @@ public:
 
 };
 
+/// Interface for the insert -> fields -> page number wizard dialog
+class AbstractSwPageNumberDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwPageNumberDlg() override = default;
+public:
+    virtual int GetPageNumberPosition() const = 0;
+    virtual int GetPageNumberAlignment() const = 0;
+};
+
 /**
  * Interface for the insert -> more breaks -> manual break dialog. It's implemented by
  * AbstractSwBreakDlg_Impl, but SwTextShell only knows about this interface and the
@@ -475,6 +485,7 @@ public:
         css::uno::Reference< css::container::XNamed > & xNamed,
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) = 0;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(weld::Window *pParent) = 0;
+    virtual VclPtr<AbstractSwPageNumberDlg> CreateSwPageNumberDlg(weld::Window* pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateFrameTabDialog(const OUString &rDialogType,

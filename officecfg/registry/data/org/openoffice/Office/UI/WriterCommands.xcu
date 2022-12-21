@@ -1011,6 +1011,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:PageNumberWizard" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Page Number...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertPageNumberField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page Number</value>

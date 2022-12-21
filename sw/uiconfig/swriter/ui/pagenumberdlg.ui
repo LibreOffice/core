@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="sw">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkDialog" id="PageNumberDialog">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes" context="pagenumberdlg|PageNumberDialog">Page Number Wizard</property>
+    <property name="resizable">False</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
+    <property name="gravity">north-east</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="mainVBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="buttonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="HBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">29</property>
+            <child>
+              <object class="GtkBox" id="leftVBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">10</property>
+                <property name="margin-bottom">10</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="positionLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="xpad">7</property>
+                    <property name="ypad">7</property>
+                    <property name="label" translatable="yes" context="pagenumberdlg|positionLabel">Position:</property>
+                    <accessibility>
+                      <relation type="label-for" target="positionCombo"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="positionLabel-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="pagenumberdlg|positionLabel-atkobject">Position</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="positionCombo">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="active">1</property>
+                    <items>
+                      <item translatable="yes" context="pagenumberdlg|liststore2">Top of page (Header)</item>
+                      <item translatable="yes" context="pagenumberdlg|liststore2">Bottom of page (Footer)</item>
+                    </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="positionLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="alignmentLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="xpad">7</property>
+                    <property name="ypad">7</property>
+                    <property name="label" translatable="yes" context="pagenumberdlg|alignmentLabel">Alignment:</property>
+                    <accessibility>
+                      <relation type="label-for" target="alignmentCombo"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="alignmentLabel-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="pagenumberdlg|alignmentLabel-atkobject">Alignment</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="alignmentCombo">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="pagenumberdlg|liststore1">Left</item>
+                      <item translatable="yes" context="pagenumberdlg|liststore1">Center</item>
+                      <item translatable="yes" context="pagenumberdlg|liststore1">Right</item>
+                    </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="alignmentLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="rightVBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">10</property>
+                <property name="margin-bottom">10</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="previewLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="xpad">7</property>
+                    <property name="ypad">7</property>
+                    <property name="label" translatable="yes" context="pagenumberdlg|previewLabel">Preview</property>
+                    <property name="justify">center</property>
+                    <accessibility>
+                      <relation type="label-for" target="previewImage"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="previewImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="previewLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+    </action-widgets>
+  </object>
+</interface>
