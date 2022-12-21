@@ -529,6 +529,37 @@ OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat, LanguageType nLang)
         return aNumber.GetNumStr(nNum, LanguageTag::convertToLocale(nLang));
 }
 
+SwFieldTypesEnum SwFieldTypeFromString(std::u16string_view rString)
+{
+    if (rString == u"Date")
+        return SwFieldTypesEnum::Date;
+    if (rString == u"Time")
+        return SwFieldTypesEnum::Time;
+    if (rString == u"Filename")
+        return SwFieldTypesEnum::Filename;
+    if (rString == u"DatabaseName")
+        return SwFieldTypesEnum::DatabaseName;
+    if (rString == u"Chapter")
+        return SwFieldTypesEnum::Chapter;
+    if (rString == u"PageNumber")
+        return SwFieldTypesEnum::PageNumber;
+    if (rString == u"DocumentStatistics")
+        return SwFieldTypesEnum::DocumentStatistics;
+    if (rString == u"Author")
+        return SwFieldTypesEnum::Author;
+    if (rString == u"Set")
+        return SwFieldTypesEnum::Set;
+    if (rString == u"Get")
+        return SwFieldTypesEnum::Get;
+    if (rString == u"Formel")
+        return SwFieldTypesEnum::Formel;
+    if (rString == u"HiddenText")
+        return SwFieldTypesEnum::HiddenText;
+    if (rString == u"SetRef")
+        return SwFieldTypesEnum::SetRef;
+    return SwFieldTypesEnum::Unknown;
+}
+
 SwValueFieldType::SwValueFieldType(SwDoc *const pDoc, SwFieldIds const nWhichId)
     : SwFieldType(nWhichId)
     , m_pDoc(pDoc)

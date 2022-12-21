@@ -72,6 +72,8 @@
 #include <viewopt.hxx>
 #include <txmsrt.hxx>
 #include <unotools/useroptions.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <translatehelper.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -1071,7 +1073,40 @@ bool SwFieldMgr::InsertField(
         {
             if( !rData.m_sPar1.isEmpty() && CanInsertRefMark( rData.m_sPar1 ) )
             {
+                const OUString& rRefmarkText = rData.m_sPar2;
+                SwPaM* pCursorPos = pCurShell->GetCursor();
+                pCurShell->StartAction();
+                if (!rRefmarkText.isEmpty())
+                {
+                    // Split node to remember where the start position is.
+                    bool bSuccess = pCurShell->GetDoc()->getIDocumentContentOperations().SplitNode(
+                            *pCursorPos->GetPoint(), /*bChkTableStart=*/false);
+                    if (bSuccess)
+                    {
+                        SwPaM aRefmarkPam(*pCursorPos->GetPoint());
+                        aRefmarkPam.Move(fnMoveBackward, GoInContent);
+
+                        // Paste HTML content.
+                        SwTranslateHelper::PasteHTMLToPaM(
+                                *pCurShell, pCursorPos, rRefmarkText.toUtf8(), /*bSetSelection=*/true);
+
+                        // Undo the above SplitNode().
+                        aRefmarkPam.SetMark();
+                        aRefmarkPam.Move(fnMoveForward, GoInContent);
+                        pCurShell->GetDoc()->getIDocumentContentOperations().DeleteAndJoin(
+                                aRefmarkPam);
+                        *aRefmarkPam.GetMark() = *pCursorPos->GetPoint();
+                        *pCursorPos = aRefmarkPam;
+                    }
+                }
+
                 pCurShell->SetAttrItem( SwFormatRefMark( rData.m_sPar1 ) );
+
+                if (!rRefmarkText.isEmpty())
+                {
+                    pCursorPos->DeleteMark();
+                }
+                pCurShell->EndAction();
                 return true;
             }
             return false;
