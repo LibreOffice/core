@@ -3746,15 +3746,25 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 {
                     if ( m_nFirstFootnoteIndex == -1 )
                         lcl_convertToNoteIndices(m_aFootnoteIds, m_nFirstFootnoteIndex);
-                    xFootnotes->getByIndex(m_aFootnoteIds.front()) >>= xNoteFirst;
-                    m_aFootnoteIds.pop_front();
+                    if (m_aFootnoteIds.empty()) // lcl_convertToNoteIndices pops m_aFootnoteIds
+                        m_bSaxError = true;
+                    else
+                    {
+                        xFootnotes->getByIndex(m_aFootnoteIds.front()) >>= xNoteFirst;
+                        m_aFootnoteIds.pop_front();
+                    }
                 }
                 else if ( !IsInFootnote() && !m_aEndnoteIds.empty() )
                 {
                     if ( m_nFirstEndnoteIndex == -1 )
                         lcl_convertToNoteIndices(m_aEndnoteIds, m_nFirstEndnoteIndex);
-                    xEndnotes->getByIndex(m_aEndnoteIds.front()) >>= xNoteFirst;
-                    m_aEndnoteIds.pop_front();
+                    if (m_aEndnoteIds.empty()) // lcl_convertToNoteIndices pops m_aEndnoteIds
+                        m_bSaxError = true;
+                    else
+                    {
+                        xEndnotes->getByIndex(m_aEndnoteIds.front()) >>= xNoteFirst;
+                        m_aEndnoteIds.pop_front();
+                    }
                 }
                 else
                     m_bSaxError = true;
