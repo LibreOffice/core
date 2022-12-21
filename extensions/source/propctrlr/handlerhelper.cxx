@@ -292,9 +292,10 @@ namespace pcr
     std::unique_ptr<weld::Builder> PropertyHandlerHelper::makeBuilder(const OUString& rUIFile, const Reference<XComponentContext>& rContext)
     {
         Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
-        weld::TransportAsXWindow* rTunnel
+        weld::TransportAsXWindow* pTunnel
             = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xWindow);
-        return Application::CreateBuilder(rTunnel->getWidget(), rUIFile);
+        assert(pTunnel && "must exist");
+        return Application::CreateBuilder(pTunnel->getWidget(), rUIFile);
     }
 
     void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
