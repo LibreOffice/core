@@ -328,26 +328,29 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     }
                 }
 
-                // Calculate indent offsets
-                sal_Int32 nOffsetLeft = aUnrotatedTxXfrm.X - aPresetTextRectangle.X;
-                sal_Int32 nOffsetTop = aUnrotatedTxXfrm.Y - aPresetTextRectangle.Y;
-                sal_Int32 nOffsetRight
-                    = aPresetTextRectangle.Width - aUnrotatedTxXfrm.Width - nOffsetLeft;
-                sal_Int32 nOffsetBottom
-                    = aPresetTextRectangle.Height - aUnrotatedTxXfrm.Height - nOffsetTop;
+                if(mrShape.getTextBody())
+                {
+                    // Calculate indent offsets
+                    sal_Int32 nOffsetLeft = aUnrotatedTxXfrm.X - aPresetTextRectangle.X;
+                    sal_Int32 nOffsetTop = aUnrotatedTxXfrm.Y - aPresetTextRectangle.Y;
+                    sal_Int32 nOffsetRight
+                        = aPresetTextRectangle.Width - aUnrotatedTxXfrm.Width - nOffsetLeft;
+                    sal_Int32 nOffsetBottom
+                        = aPresetTextRectangle.Height - aUnrotatedTxXfrm.Height - nOffsetTop;
 
-                if (nOffsetLeft)
-                    mrShape.getTextBody()->getTextProperties().moTextOffLeft
-                        = GetCoordinate(nOffsetLeft);
-                if (nOffsetTop)
-                    mrShape.getTextBody()->getTextProperties().moTextOffUpper
-                        = GetCoordinate(nOffsetTop);
-                if (nOffsetRight)
-                    mrShape.getTextBody()->getTextProperties().moTextOffRight
-                        = GetCoordinate(nOffsetRight);
-                if (nOffsetBottom)
-                    mrShape.getTextBody()->getTextProperties().moTextOffLower
-                        = GetCoordinate(nOffsetBottom);
+                    if (nOffsetLeft)
+                        mrShape.getTextBody()->getTextProperties().moTextOffLeft
+                            = GetCoordinate(nOffsetLeft);
+                    if (nOffsetTop)
+                        mrShape.getTextBody()->getTextProperties().moTextOffUpper
+                            = GetCoordinate(nOffsetTop);
+                    if (nOffsetRight)
+                        mrShape.getTextBody()->getTextProperties().moTextOffRight
+                            = GetCoordinate(nOffsetRight);
+                    if (nOffsetBottom)
+                        mrShape.getTextBody()->getTextProperties().moTextOffLower
+                            = GetCoordinate(nOffsetBottom);
+                }
             }
             break;
         }
