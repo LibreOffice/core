@@ -1349,13 +1349,14 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
     return aRecommendedName;
 }
 
-
-
-
 SfxStoringHelper::SfxStoringHelper()
+    : m_bRemote(false)
+    , m_bPreselectPassword(false)
+    , m_bDialogUsed(false)
+    , m_bSetStandardName(false)
+    , m_nStoreMode(0)
 {
 }
-
 
 uno::Reference< container::XNameAccess > const & SfxStoringHelper::GetFilterConfiguration()
 {
@@ -1368,7 +1369,6 @@ uno::Reference< container::XNameAccess > const & SfxStoringHelper::GetFilterConf
     return m_xFilterCFG;
 }
 
-
 uno::Reference< container::XContainerQuery > const & SfxStoringHelper::GetFilterQuery()
 {
     if ( !m_xFilterQuery.is() )
@@ -1378,7 +1378,6 @@ uno::Reference< container::XContainerQuery > const & SfxStoringHelper::GetFilter
 
     return m_xFilterQuery;
 }
-
 
 uno::Reference< css::frame::XModuleManager2 > const & SfxStoringHelper::GetModuleManager()
 {

@@ -62,7 +62,6 @@ private:
     css::uno::Reference< css::container::XContainerQuery > const & GetFilterQuery();
     css::uno::Reference< css::frame::XModuleManager2 > const & GetModuleManager();
 
-    bool m_xDialogUsed;
     bool m_bRemote;
     bool m_bPreselectPassword;
     bool m_bDialogUsed;
