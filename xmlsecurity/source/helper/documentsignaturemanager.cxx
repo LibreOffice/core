@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/base64.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -331,7 +332,7 @@ bool DocumentSignatureManager::add(
         comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
 
         OUString aKeyId;
-        if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
+        if (auto pCertificate = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xCert))
         {
             OUStringBuffer aBuffer;
             comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
@@ -378,7 +379,7 @@ bool DocumentSignatureManager::add(
         OUString aCertDigest;
         svl::crypto::SignatureMethodAlgorithm eAlgorithmID
             = svl::crypto::SignatureMethodAlgorithm::RSA;
-        if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
+        if (auto pCertificate = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xCert))
         {
             OUStringBuffer aBuffer;
             comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());

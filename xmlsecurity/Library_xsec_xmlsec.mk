@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/biginteger \
+	xmlsecurity/source/xmlsec/certificate \
 	xmlsecurity/source/xmlsec/certificateextension_certextn \
 	xmlsecurity/source/xmlsec/errorcallback \
 	xmlsecurity/source/xmlsec/saxhelper \

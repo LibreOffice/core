@@ -27,20 +27,13 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 #include <certificate.hxx>
 
-class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
-    css::security::XCertificate ,
-    css::lang::XUnoTunnel,
-    css::lang::XServiceInfo > , public xmlsecurity::Certificate
+class X509Certificate_MSCryptImpl : public xmlsecurity::Certificate
 {
     private:
         const CERT_CONTEXT* m_pCertContext ;

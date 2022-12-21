@@ -52,6 +52,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -685,8 +686,8 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
                 return false;
             uno::Reference<css::security::XCertificate> xCert = aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(rAuthor.RawData);
 
-            auto pAuthor = dynamic_cast<xmlsecurity::Certificate*>(xAuthor.get());
-            auto pCert = dynamic_cast<xmlsecurity::Certificate*>(xCert.get());
+            auto pAuthor = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xAuthor);
+            auto pCert = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xCert);
             if (pAuthor && pCert)
                 return pCert->getSHA256Thumbprint() == pAuthor->getSHA256Thumbprint();
 

@@ -11,7 +11,13 @@
 
 #include <sal/types.h>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase.hxx>
+
+#include "xsecxmlsecdllapi.h"
 
 namespace svl
 {
@@ -23,8 +29,10 @@ enum class SignatureMethodAlgorithm;
 
 namespace xmlsecurity
 {
-/// Extension of css::security::XCertificate for module-internal purposes.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") Certificate
+/// Base class of css::security::XCertificate implementations, for module-internal purposes.
+class XSECXMLSEC_DLLPUBLIC Certificate
+    : public ::cppu::WeakImplHelper<css::security::XCertificate, css::lang::XUnoTunnel,
+                                    css::lang::XServiceInfo>
 {
 public:
     /// Returns the SHA-256 thumbprint.
@@ -34,6 +42,9 @@ public:
 
     /// Same as getSubjectPublicKeyAlgorithm(), but returns an ID, not a string.
     virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() = 0;
+
+    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const& aIdentifier) override;
+    static css::uno::Sequence<sal_Int8> const& getUnoTunnelId();
 
 protected:
     ~Certificate() noexcept = default;
