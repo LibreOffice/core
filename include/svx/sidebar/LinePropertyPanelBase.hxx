@@ -119,7 +119,7 @@ private:
     OUString maIMGNone;
 
     // multi-images
-    OUString maIMGWidthIcon[8];
+    BitmapEx maIMGWidthIcon[8];
 
     bool mbWidthValuable : 1;
     bool mbArrowSupported;
