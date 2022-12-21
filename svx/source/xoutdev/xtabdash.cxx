@@ -74,7 +74,12 @@ bool XDashList::Create()
     return true;
 }
 
-BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
+double XDashList::ImpGetDefaultLineThickness()
+{
+    return StyleSettings::GetListBoxPreviewDefaultLineWidth() * 1.1;
+}
+
+BitmapEx XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickness)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
@@ -89,7 +94,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     // prepare LineAttribute
     const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
-    const double fLineWidth(StyleSettings::GetListBoxPreviewDefaultLineWidth() * (nFactor * 1.1));
+    const double fLineWidth(fLineThickness * nFactor);
     const drawinglayer::attribute::LineAttribute aLineAttribute(
         aLineColor,
         fLineWidth);
@@ -181,14 +186,14 @@ BitmapEx XDashList::CreateBitmapForUI( tools::Long nIndex )
 {
     const XDash& rDash = GetDash(nIndex)->GetDash();
 
-    return ImpCreateBitmapForXDash(&rDash);
+    return CreateBitmapForXDash(&rDash, ImpGetDefaultLineThickness());
 }
 
 BitmapEx const & XDashList::GetBitmapForUISolidLine() const
 {
     if(maBitmapSolidLine.IsEmpty())
     {
-        const_cast< XDashList* >(this)->maBitmapSolidLine = XDashList::ImpCreateBitmapForXDash(nullptr);
+        const_cast< XDashList* >(this)->maBitmapSolidLine = XDashList::CreateBitmapForXDash(nullptr, ImpGetDefaultLineThickness());
     }
 
     return maBitmapSolidLine;
