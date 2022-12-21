@@ -53,7 +53,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     {
         // Workaround: only for rectangles
         const sal_Int32 nType = mrShape.getCustomShapeProperties()->getShapePresetType();
-        if( nType == XML_rect || nType == XML_roundRect || nType == XML_ellipse )
+        if( mrShape.getTextBody() && ( nType == XML_rect || nType == XML_roundRect || nType == XML_ellipse ) )
         {
             switch( aElementToken )
             {
