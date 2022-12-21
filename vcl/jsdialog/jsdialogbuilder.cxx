@@ -1895,4 +1895,16 @@ JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder
 {
 }
 
+void JSImage::set_image(VirtualDevice* pDevice)
+{
+    SalInstanceImage::set_image(pDevice);
+    sendUpdate();
+}
+
+void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    SalInstanceImage::set_image(rImage);
+    sendUpdate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -66,6 +66,7 @@
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
 #include <translatehelper.hxx>
+#include <sfx2/dispatch.hxx>
 
 
 using namespace nsSwDocInfoSubType;
@@ -928,6 +929,86 @@ FIELD_INSERT:
 
         rSh.EndAction();
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+    }
+    break;
+    case FN_PGNUMBER_WIZARD:
+    {
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        VclPtr<AbstractSwPageNumberDlg> pDlg(
+                pFact->CreateSwPageNumberDlg(GetView().GetFrameWeld()));
+        auto pShell = GetShellPtr();
+        pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
+            if ( nResult == RET_OK )
+            {
+                auto rDoc = rSh.GetDoc();
+
+                rSh.LockView(true);
+                rSh.StartAllAction();
+                rSh.SwCursorShell::Push();
+                rDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+
+                // Insert header/footer
+                bool bFooter = (pDlg->GetPageNumberPosition() == 1);
+                sal_uInt16 nPageNumberPosition = bFooter ?
+                    FN_INSERT_PAGEFOOTER : FN_INSERT_PAGEHEADER;
+                SfxBoolItem aItem(FN_PARAM_1, true);
+                rSh.GetView().GetDispatcher().ExecuteList(
+                    nPageNumberPosition,
+                    SfxCallMode::API | SfxCallMode::SYNCHRON,
+                    {&aItem}
+                );
+
+                SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
+
+                // Insert new line if there is already text in header/footer
+                if (pTextNode && !pTextNode->GetText().isEmpty())
+                {
+                    rDoc->getIDocumentContentOperations().SplitNode(*rSh.GetCursor()->GetPoint(), false);
+                }
+
+                // Go back to start of header/footer
+                if (bFooter)
+                    rSh.GotoFooterText();
+                else
+                    rSh.GotoHeaderText();
+
+                // Set alignment for the new line
+                switch (pDlg->GetPageNumberAlignment())
+                {
+                    case 0:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Left, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                    case 1:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                    case 2:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                }
+
+                // Insert page number
+                SwFieldMgr aMgr(pShell);
+                SwInsertField_Data aData(SwFieldTypesEnum::PageNumber, 0,
+                            OUString(), OUString(), SVX_NUM_PAGEDESC);
+                aMgr.InsertField(aData);
+
+                rSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
+                rSh.EndAllAction();
+                rSh.LockView(false);
+                rDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+            }
+            pDlg->disposeOnce();
+        });
+        rReq.Done();
     }
     break;
         default:

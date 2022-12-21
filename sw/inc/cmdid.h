@@ -242,6 +242,7 @@ class SwUINumRuleItem;
 #define FN_TOOL_ANCHOR_PAGE     (FN_INSERT + 50)    /* anchor Draw object to page */
 #define FN_TOOL_ANCHOR_PARAGRAPH (FN_INSERT + 51)   /* anchor Draw object to paragraph */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* change hierarchy */
+#define FN_PGNUMBER_WIZARD      (FN_INSERT + 53)    /* page number wizard */
 
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
 #define FN_TOOL_ANCHOR_FRAME    (FN_INSERT + 66)    /* anchor Draw-Object to frame*/

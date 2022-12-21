@@ -3336,6 +3336,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertAuthoritiesEntry"),
         OUString(".uno:InsertMultiIndex"),
         OUString(".uno:InsertField"),
+        OUString(".uno:PageNumberWizard"),
         OUString(".uno:InsertPageNumberField"),
         OUString(".uno:InsertPageCountField"),
         OUString(".uno:InsertDateField"),
