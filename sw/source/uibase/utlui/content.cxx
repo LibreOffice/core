@@ -1188,10 +1188,8 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
-                    SwOutlineNodes aOutlineNodes;
-                    aOutlineNodes.insert(m_pActiveShell->GetNodes().
-                            GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]);
-                    BringHeadingsToAttention(aOutlineNodes);
+                    BringTypesWithFlowFramesToAttention({m_pActiveShell->GetNodes().
+                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]});
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
@@ -1285,7 +1283,10 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
-                    BringHeadingsToAttention(m_pActiveShell->GetNodes().GetOutLineNds());
+                    std::vector<const SwNode*> aNodesArr(
+                                m_pActiveShell->GetNodes().GetOutLineNds().begin(),
+                                m_pActiveShell->GetNodes().GetOutLineNds().end());
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
@@ -5784,28 +5785,6 @@ void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
                                                               Color(), std::move(aRanges),
                                                               true /*unused for Invert type*/));
     m_aOverlayObjectDelayTimer.Start();
-}
-
-void SwContentTree::BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr)
-{
-    std::vector<basegfx::B2DRange> aRanges;
-    for (const SwNode* p : rOutlineNodesArr)
-    {
-        if (!p || !p->GetTextNode())
-            continue;
-        const SwTextNode& rTextNode = *p->GetTextNode();
-        if (const SwTextFrame* pFrame = static_cast<const SwTextFrame*>(
-                    rTextNode.getLayoutFrame(m_pActiveShell->GetLayout())))
-        {
-            SwContentIndex nIndex(&rTextNode);
-            auto nStart = nIndex.GetIndex();
-            auto nEnd = nStart +  rTextNode.GetText().getLength();
-            SwPosition aStartPos(rTextNode, nStart), aEndPos(rTextNode, nEnd);
-            lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
-        }
-    }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats)
