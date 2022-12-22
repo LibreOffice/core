@@ -170,6 +170,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak2)
+{
+    loadAndReload("tdf152636_lostPageBreak2.docx");
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
 {
     // Given a document with 2 inline <w:sdt>, with each a <w:id>:

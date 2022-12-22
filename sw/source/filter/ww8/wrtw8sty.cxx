@@ -1623,12 +1623,15 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         //  0xfff -> Section terminated
         nBreakCode = 0;         // consecutive section
 
-        if ( rSepInfo.pPDNd && rSepInfo.pPDNd->IsContentNode() )
+        if (rSepInfo.pPDNd && (rSepInfo.pPDNd->IsContentNode() || rSepInfo.pPDNd->IsTableNode()))
         {
-            if ( !NoPageBreakSection( &rSepInfo.pPDNd->GetContentNode()->GetSwAttrSet() ) )
-            {
+            const SfxItemSet* pSet
+                = rSepInfo.pPDNd->IsContentNode()
+                      ? &rSepInfo.pPDNd->GetContentNode()->GetSwAttrSet()
+                      : &rSepInfo.pPDNd->GetTableNode()->GetTable().GetFrameFormat()->GetAttrSet();
+
+            if (!NoPageBreakSection(pSet))
                 nBreakCode = 2;
-            }
         }
 
         if (reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) != rSepInfo.pSectionFormat)
