@@ -313,11 +313,18 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
+    SwEditShell *const pEditShell(rDoc.GetEditShell());
+    OSL_ENSURE(pEditShell, "SwUndoInsTable::RedoImpl needs a SwEditShell!");
+    if (!pEditShell)
+    {
+        throw uno::RuntimeException();
+    }
+
     SwPosition const aPos(SwNodeIndex(rDoc.GetNodes(), m_nStartNode));
     const SwTable* pTable = rDoc.InsertTable( m_aInsTableOptions, aPos, m_nRows, m_nColumns,
                                             m_nAdjust,
                                             m_pAutoFormat.get(), m_pColumnWidth.get() );
-    rDoc.GetEditShell()->MoveTable( GotoPrevTable, fnTableStart );
+    pEditShell->MoveTable( GotoPrevTable, fnTableStart );
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( m_sTableName );
     SwTableNode* pTableNode = rDoc.GetNodes()[m_nStartNode]->GetTableNode();
 

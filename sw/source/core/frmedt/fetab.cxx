@@ -354,8 +354,8 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         // don't need to remove the row frames in Show Changes mode
         if ( !bRecordAndHideChanges )
         {
-            SwEditShell* pEditShell = GetDoc()->GetEditShell();
-            pEditShell->Delete(false);
+            if (SwEditShell* pEditShell = GetDoc()->GetEditShell())
+                pEditShell->Delete(false);
 
             EndAllActionAndCall();
             EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
@@ -480,7 +480,8 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pWrtShell->UpdateCursor();
                 }
 
-                pEditShell->Delete(false);
+                if (pEditShell)
+                    pEditShell->Delete(false);
             }
 
             SwNodeOffset nIdx;
