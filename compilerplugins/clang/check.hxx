@@ -140,6 +140,8 @@ public:
     explicit ContextCheck(const clang::NamespaceDecl * decl ) : context_( decl ) {}
 
 private:
+    clang::DeclContext const * lookThroughLinkageSpec() const;
+
     clang::DeclContext const * const context_;
 };
 
@@ -277,7 +279,7 @@ ContextCheck DeclCheck::Var(llvm::StringRef id) const
 ContextCheck ContextCheck::Namespace(llvm::StringRef id) const
 {
     if (context_) {
-        auto n = llvm::dyn_cast<clang::NamespaceDecl>(context_);
+        auto n = llvm::dyn_cast<clang::NamespaceDecl>(lookThroughLinkageSpec());
         if (n != nullptr) {
             auto const i = n->getIdentifier();
             if (i != nullptr && i->getName() == id) {
