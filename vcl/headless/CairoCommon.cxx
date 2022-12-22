@@ -899,12 +899,10 @@ basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR, cairo_s
     cairo_clip(cr);
 
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    double fXScale = 1.0f;
-    double fYScale = 1.0f;
     if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0)
     {
-        fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
-        fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
+        double fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
+        double fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
         cairo_scale(cr, fXScale, fYScale);
     }
 
