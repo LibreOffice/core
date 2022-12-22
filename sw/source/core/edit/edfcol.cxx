@@ -1728,9 +1728,10 @@ void SwUndoParagraphSigning::Insert()
     // Prevent validation since this will trigger a premature validation
     // upon inserting, but before setting the metadata.
     SwEditShell* pEditSh = m_rDoc.GetEditShell();
-    const bool bOldValidationFlag = pEditSh->SetParagraphSignatureValidation(false);
+    const bool bOldValidationFlag = pEditSh && pEditSh->SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([&] () {
-            pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
+            if (pEditSh)
+                pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
             m_rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
@@ -1747,9 +1748,10 @@ void SwUndoParagraphSigning::Remove()
     // Prevent validation since this will trigger a premature validation
     // upon removing.
     SwEditShell* pEditSh = m_rDoc.GetEditShell();
-    const bool bOldValidationFlag = pEditSh->SetParagraphSignatureValidation(false);
+    const bool bOldValidationFlag = pEditSh && pEditSh->SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([&] () {
-            pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
+            if (pEditSh)
+                pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
             m_rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 

@@ -918,19 +918,20 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
         // Allow editing when the cursor/selection is fully inside of a legacy form field.
         bRet = !( pA != nullptr && !bAtStartA && !bAtStartB && pA == pB );
 
-        if (bRet && rDoc.GetEditShell() && rDoc.GetEditShell()->CursorInsideContentControl())
+        if (bRet)
         {
             // Also allow editing inside content controls in general, similar to form fields.
             // Specific types will be disabled below.
-            bRet = false;
+            if (const SwEditShell* pEditShell = rDoc.GetEditShell())
+                bRet = !pEditShell->CursorInsideContentControl();
         }
     }
 
     if (!bRet)
     {
         // Paragraph Signatures and Classification fields are read-only.
-        if (rDoc.GetEditShell())
-            bRet = rDoc.GetEditShell()->IsCursorInParagraphMetadataField();
+        if (const SwEditShell* pEditShell = rDoc.GetEditShell())
+            bRet = pEditShell->IsCursorInParagraphMetadataField();
     }
 
     if (!bRet &&

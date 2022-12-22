@@ -49,8 +49,8 @@
 
 namespace sw::sidebar
 {
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
-                       sal_Int32& rParIdx);
+static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+                       std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx);
 
 std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
 {
@@ -74,9 +74,9 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()
-        && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
-        UpdateTree(pDocSh, aStore, m_nParIdx);
+    SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
+    if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
+        UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
     updateEntries(aStore, m_nParIdx);
 }
 
@@ -519,11 +519,11 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
         });
 }
 
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
-                       sal_Int32& rParIdx)
+static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+                       std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx)
 {
-    SwDoc* pDoc = pDocSh->GetDoc();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwDoc* pDoc = rDocSh.GetDoc();
+    SwPaM* pCursor = rEditSh.GetCursor();
     svx::sidebar::TreeNode aCharDFNode;
     svx::sidebar::TreeNode aCharNode;
     svx::sidebar::TreeNode aParaNode;
@@ -566,7 +566,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties, aFieldsNode);
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(rDocSh.GetBaseModel(),
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -626,7 +626,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(rDocSh.GetBaseModel(),
                                                                 uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
@@ -662,7 +662,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     }
 
     // Collect sections at character position
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(rDocSh.GetBaseModel(),
                                                                       uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
@@ -738,9 +738,9 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
     std::vector<svx::sidebar::TreeNode> aStore;
 
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()
-        && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
-        UpdateTree(pDocSh, aStore, m_nParIdx);
+    SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
+    if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
+        UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
 
     updateEntries(aStore, m_nParIdx);
 }

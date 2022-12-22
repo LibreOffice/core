@@ -91,9 +91,8 @@ void PaMCorrAbs( const SwPaM& rRange,
     SwPosition const aEnd( *rRange.End() );
     SwPosition const aNewPos( rNewPos );
     SwDoc& rDoc = aStart.GetNode().GetDoc();
-    SwCursorShell *const pShell = rDoc.GetEditShell();
 
-    if( pShell )
+    if (SwCursorShell *const pShell = rDoc.GetEditShell())
     {
         for(const SwViewShell& rShell : pShell->GetRingContainer())
         {
@@ -249,8 +248,7 @@ void PaMCorrRel( const SwNode &rOldNode,
 
     const sal_Int32 nCntIdx = rNewPos.GetContentIndex() + nOffset;
 
-    SwCursorShell const* pShell = rDoc.GetEditShell();
-    if( pShell )
+    if (SwCursorShell const* pShell = rDoc.GetEditShell())
     {
         for(const SwViewShell& rShell : pShell->GetRingContainer())
         {

@@ -114,8 +114,7 @@ void SwIntrnlRefLink::Closed()
     {
         // advise goes, convert all fields into text?
         SwViewShell* pSh = m_rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-        SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell();
-        if( pESh )
+        if (SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell())
         {
             pESh->StartAllAction();
             pESh->FieldToText(&m_rFieldType);
