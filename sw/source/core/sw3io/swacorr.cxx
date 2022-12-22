@@ -65,7 +65,11 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
                                  SfxObjectShell& rObjSh, OUString& rLong )
 {
     SwDocShell* pDShell = dynamic_cast<SwDocShell*>(&rObjSh);
-    if( !pDShell )
+    if (!pDShell)
+        return false;
+
+    SwEditShell* pEditSh = pDShell->GetEditShell();
+    if (!pEditSh)
         return false;
 
     ErrCode nRet = ERRCODE_NONE;
@@ -77,7 +81,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
     nRet = aBlk.BeginPutDoc( rShort, rShort );
     if( ! nRet.IsError() )
     {
-        pDShell->GetEditShell()->CopySelToDoc( *pDoc );
+        pEditSh->CopySelToDoc(*pDoc);
         nRet = aBlk.PutDoc();
         aBlk.AddName ( rShort, rShort );
         if( ! nRet.IsError() )

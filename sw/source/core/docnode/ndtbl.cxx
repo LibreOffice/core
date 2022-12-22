@@ -1437,7 +1437,7 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
     // If this is triggered by SwUndoTableToText::Repeat() nobody ever deleted
     // the table cursor.
     SwEditShell* pESh = GetEditShell();
-    if( pESh && pESh->IsTableMode() )
+    if (pESh && pESh->IsTableMode())
         pESh->ClearMark();
 
     SwNodeRange aRg( *pTableNd, SwNodeOffset(0), *pTableNd->EndOfSectionNode() );
@@ -1828,8 +1828,7 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
         if( aFndBox.GetLines().empty() )
             return;
 
-        SwEditShell* pESh = GetEditShell();
-        if( pESh )
+        if (SwEditShell* pESh = GetEditShell())
         {
             pESh->KillPams();
             // FIXME: actually we should be iterating over all Shells!
@@ -1910,8 +1909,7 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
     // The Cursors need to be removed from the to-be-deleted range.
     // Always place them after/on top of the Table; they are always set
     // to the old position via the document position.
-    SwEditShell* pESh = GetEditShell();
-    if( pESh )
+    if (SwEditShell* pESh = GetEditShell())
     {
         const SwNode* pNd = rCursor.GetPointNode().FindTableBoxStartNode();
         pESh->ParkCursor( *pNd );

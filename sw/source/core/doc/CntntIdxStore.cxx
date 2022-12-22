@@ -435,7 +435,7 @@ void ContentIdxStoreImpl::RestoreUnoCursors(updater_t const & rUpdater)
 void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent)
 {
     SwCursorShell* pShell = rDoc.GetEditShell();
-    if( !pShell )
+    if (!pShell)
         return;
     for(SwViewShell& rCurShell : pShell->GetRingContainer())
     {

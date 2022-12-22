@@ -897,7 +897,7 @@ void SwDoc::PrtOLENotify( bool bAll )
 IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
 {
     SwFEShell* pSh = static_cast<SwFEShell*>(GetEditShell());
-    if( !pSh )
+    if (!pSh)
         return;
 
     mbOLEPrtNotifyPending = mbAllOLENotify = false;
