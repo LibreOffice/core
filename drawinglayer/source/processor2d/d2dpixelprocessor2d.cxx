@@ -1352,7 +1352,7 @@ void D2DPixelProcessor2D::processPointArrayPrimitive2D(
                 getViewInformation2D().getObjectToViewTransformation() * pos);
             const double fX(ceil(aDiscretePos.getX()));
             const double fY(ceil(aDiscretePos.getY()));
-            const D2D1_RECT_F rect = { fX, fY, fX, fY };
+            const D2D1_RECT_F rect = { FLOAT(fX), FLOAT(fY), FLOAT(fX), FLOAT(fY) };
 
             getRenderTarget().DrawRectangle(&rect, pColorBrush);
         }
@@ -1399,7 +1399,8 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
                 getViewInformation2D().getObjectToViewTransformation() * pos);
             const double fX(ceil(aDiscretePos.getX()));
             const double fY(ceil(aDiscretePos.getY()));
-            const D2D1_RECT_F rect = { fX - nMiX, fY - nMiY, fX + nPlX, fY + nPlY };
+            const D2D1_RECT_F rect
+                = { FLOAT(fX - nMiX), FLOAT(fY - nMiY), FLOAT(fX + nPlX), FLOAT(fY + nPlY) };
 
             getRenderTarget().DrawBitmap(pD2DBitmap, &rect);
         }
@@ -1697,8 +1698,8 @@ void D2DPixelProcessor2D::processLineRectanglePrimitive2D(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
         const basegfx::B2DRange& rRange(rLineRectanglePrimitive2D.getB2DRange());
-        const D2D1_RECT_F rect
-            = { rRange.getMinX(), rRange.getMinY(), rRange.getMaxX(), rRange.getMaxY() };
+        const D2D1_RECT_F rect = { FLOAT(rRange.getMinX()), FLOAT(rRange.getMinY()),
+                                   FLOAT(rRange.getMaxX()), FLOAT(rRange.getMaxY()) };
         const double fDiscreteLineWidth(
             (getViewInformation2D().getInverseObjectToViewTransformation()
              * basegfx::B2DVector(1.44, 0.0))
@@ -1737,8 +1738,8 @@ void D2DPixelProcessor2D::processFilledRectanglePrimitive2D(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
         const basegfx::B2DRange& rRange(rFilledRectanglePrimitive2D.getB2DRange());
-        const D2D1_RECT_F rect
-            = { rRange.getMinX(), rRange.getMinY(), rRange.getMaxX(), rRange.getMaxY() };
+        const D2D1_RECT_F rect = { FLOAT(rRange.getMinX()), FLOAT(rRange.getMinY()),
+                                   FLOAT(rRange.getMaxX()), FLOAT(rRange.getMaxY()) };
 
         getRenderTarget().FillRectangle(&rect, pColorBrush);
         bDone = true;
@@ -1767,8 +1768,10 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
         const basegfx::B2DPoint aEnd(aLocalTransform * rSingleLinePrimitive2D.getEnd());
 
         getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
-        const D2D1_POINT_2F aD2D1Start = { aStart.getX() + fAAOffset, aStart.getY() + fAAOffset };
-        const D2D1_POINT_2F aD2D1End = { aEnd.getX() + fAAOffset, aEnd.getY() + fAAOffset };
+        const D2D1_POINT_2F aD2D1Start
+            = { FLOAT(aStart.getX() + fAAOffset), FLOAT(aStart.getY() + fAAOffset) };
+        const D2D1_POINT_2F aD2D1End
+            = { FLOAT(aEnd.getX() + fAAOffset), FLOAT(aEnd.getY() + fAAOffset) };
 
         getRenderTarget().DrawLine(aD2D1Start, aD2D1End, pColorBrush, 1.44f);
         bDone = true;
