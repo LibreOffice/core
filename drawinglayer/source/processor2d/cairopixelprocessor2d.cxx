@@ -11,6 +11,7 @@
 
 #include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
 #include <sal/log.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -160,6 +161,65 @@ void addB2DPolygonToPathGeometry(cairo_t* cr, const basegfx::B2DPolygon& rPolygo
         cairo_close_path(cr);
     }
 }
+
+// split alpha remains as a constant irritant
+std::vector<sal_uInt8> createBitmapData(const BitmapEx& rBitmapEx)
+{
+    const Size& rSizePixel(rBitmapEx.GetSizePixel());
+    const bool bAlpha(rBitmapEx.IsAlpha());
+    const sal_uInt32 nStride
+        = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, rSizePixel.Width());
+    std::vector<sal_uInt8> aData(nStride * rSizePixel.Height());
+
+    if (bAlpha)
+    {
+        Bitmap aSrcAlpha(rBitmapEx.GetAlpha().GetBitmap());
+        Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
+        Bitmap::ScopedReadAccess pAlphaReadAccess(bAlpha ? aSrcAlpha.AcquireReadAccess() : nullptr,
+                                                  aSrcAlpha);
+        const tools::Long nHeight(pReadAccess->Height());
+        const tools::Long nWidth(pReadAccess->Width());
+
+        for (tools::Long y = 0; y < nHeight; ++y)
+        {
+            unsigned char* pPixelData = aData.data() + (nStride * y);
+            for (tools::Long x = 0; x < nWidth; ++x)
+            {
+                const BitmapColor aColor(pReadAccess->GetColor(y, x));
+                const BitmapColor aAlpha(pAlphaReadAccess->GetColor(y, x));
+                const sal_uInt16 nAlpha(255 - aAlpha.GetRed());
+
+                pPixelData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
+                pPixelData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
+                pPixelData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+                pPixelData[SVP_CAIRO_ALPHA] = nAlpha;
+                pPixelData += 4;
+            }
+        }
+    }
+    else
+    {
+        Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
+        const tools::Long nHeight(pReadAccess->Height());
+        const tools::Long nWidth(pReadAccess->Width());
+
+        for (tools::Long y = 0; y < nHeight; ++y)
+        {
+            unsigned char* pPixelData = aData.data() + (nStride * y);
+            for (tools::Long x = 0; x < nWidth; ++x)
+            {
+                const BitmapColor aColor(pReadAccess->GetColor(y, x));
+                pPixelData[SVP_CAIRO_RED] = aColor.GetRed();
+                pPixelData[SVP_CAIRO_GREEN] = aColor.GetGreen();
+                pPixelData[SVP_CAIRO_BLUE] = aColor.GetBlue();
+                pPixelData[SVP_CAIRO_ALPHA] = 255;
+                pPixelData += 4;
+            }
+        }
+    }
+
+    return aData;
+}
 }
 
 namespace drawinglayer::processor2d
@@ -267,15 +327,91 @@ void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     cairo_restore(mpRT);
 }
 
-#if 0
-
 void CairoPixelProcessor2D::processBitmapPrimitive2D(
     const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
-    // TODO: All the smarts to get/make a cairo_surface_t from a BitmapEx is internal to vcl at the moment
-}
+    // check if graphic content is inside discrete local ViewPort
+    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+    const basegfx::B2DHomMatrix aLocalTransform(
+        getViewInformation2D().getObjectToViewTransformation() * rBitmapCandidate.getTransform());
 
-#endif
+    if (!rDiscreteViewPort.isEmpty())
+    {
+        basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+        aUnitRange.transform(aLocalTransform);
+
+        if (!aUnitRange.overlaps(rDiscreteViewPort))
+        {
+            // content is outside discrete local ViewPort
+            return;
+        }
+    }
+
+    BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
+
+    if (aBitmapEx.IsEmpty() || aBitmapEx.GetSizePixel().IsEmpty())
+    {
+        return;
+    }
+
+    if (maBColorModifierStack.count())
+    {
+        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+
+        if (aBitmapEx.IsEmpty())
+        {
+            // color gets completely replaced, get it
+            const basegfx::BColor aModifiedColor(
+                maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+            aPolygon.transform(aLocalTransform);
+
+            // shortcut with local temporary instance
+            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> xTemp(
+                new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
+                                                             aModifiedColor));
+            processPolyPolygonColorPrimitive2D(*xTemp);
+            return;
+        }
+    }
+
+    // nasty copy of bitmap data
+    std::vector<sal_uInt8> aPixelData(createBitmapData(aBitmapEx));
+    const Size& rSizePixel(aBitmapEx.GetSizePixel());
+    cairo_surface_t* pBitmapSurface = cairo_image_surface_create_for_data(
+        aPixelData.data(), CAIRO_FORMAT_ARGB32, rSizePixel.Width(), rSizePixel.Height(),
+        cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, rSizePixel.Width()));
+
+    cairo_save(mpRT);
+
+    cairo_matrix_t aMatrix;
+    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+    cairo_matrix_init(&aMatrix, aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(),
+                      aLocalTransform.d(), aLocalTransform.e() + fAAOffset,
+                      aLocalTransform.f() + fAAOffset);
+
+    // set linear transformation
+    cairo_set_matrix(mpRT, &aMatrix);
+
+    // destinationRectangle is part of transformation above, so use UnitRange
+    cairo_rectangle(mpRT, 0, 0, 1, 1);
+    cairo_clip(mpRT);
+
+    cairo_set_source_surface(mpRT, pBitmapSurface, 0, 0);
+    // get the pattern created by cairo_set_source_surface
+    cairo_pattern_t* sourcepattern = cairo_get_source(mpRT);
+    cairo_pattern_get_matrix(sourcepattern, &aMatrix);
+    // scale to match the current transformation
+    cairo_matrix_scale(&aMatrix, rSizePixel.Width(), rSizePixel.Height());
+    cairo_pattern_set_matrix(sourcepattern, &aMatrix);
+
+    cairo_paint(mpRT);
+
+    cairo_surface_destroy(pBitmapSurface);
+
+    cairo_restore(mpRT);
+}
 
 namespace
 {
@@ -717,7 +853,6 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
 {
     switch (rCandidate.getPrimitive2DID())
     {
-#if 0
         // geometry that *has* to be processed
         case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
         {
@@ -725,7 +860,6 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
                 static_cast<const primitive2d::BitmapPrimitive2D&>(rCandidate));
             break;
         }
-#endif
         case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D:
         {
             processPointArrayPrimitive2D(
