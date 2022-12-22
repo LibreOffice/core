@@ -118,6 +118,7 @@ public:
     typedef std::function<void(size_t, size_t, bool)> BoolOpFunction;
     typedef std::function<void(size_t, size_t, svl::SharedString)> StringOpFunction;
     typedef std::function<void(size_t, size_t)> EmptyOpFunction;
+    typedef std::function<double(double, double)> CalculateOpFunction;
 
     /**
      * When adding all numerical matrix elements for a scalar result such as
@@ -409,6 +410,10 @@ public:
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) ;
+
+    /** Apply binary operation to values from two input matrices, storing result into this matrix. */
+    void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
+            ScInterpreter* pInterpreter, CalculateOpFunction op);
 
 #if DEBUG_MATRIX
     void Dump() const;
