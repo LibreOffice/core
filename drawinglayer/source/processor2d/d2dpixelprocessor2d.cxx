@@ -756,7 +756,7 @@ void D2DPixelProcessor2D::processPolygonHairlinePrimitive2D(
                 // TODO: Unfortunately Direct2D paint of one pixel wide lines does not
                 // correctly and completely blend 100% over the background. Experimenting
                 // shows that a value around/slightly below 2.0 is needed which hints that
-                // alpha bleding the half-shifted lines (see fAAOffset above) is involved.
+                // alpha blending the half-shifted lines (see fAAOffset above) is involved.
                 // To get correct blending I try to use just wider hairlines for now. This
                 // may need to be improved - or balanced (trying sqrt(2) now...)
                 getRenderTarget().DrawGeometry(pTransformedGeometry, pColorBrush, 1.44f);
