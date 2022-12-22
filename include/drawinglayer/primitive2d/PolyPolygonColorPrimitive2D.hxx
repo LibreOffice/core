@@ -66,7 +66,7 @@ public:
 
     Tooling: This primitive defines a simple rectangle. It is
     sometimes useful for simpler tasks and decomposes to a
-    more gereralized PolyPolygonColorPrimitive2D (see above)
+    more generalized PolyPolygonColorPrimitive2D (see above)
 */
 class DRAWINGLAYER_DLLPUBLIC FilledRectanglePrimitive2D final : public BasePrimitive2D
 {

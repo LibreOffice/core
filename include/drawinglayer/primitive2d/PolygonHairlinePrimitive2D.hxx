@@ -110,7 +110,7 @@ public:
 
     Tooling: This primitive defines a simple rectangle. It is
     sometimes useful for simpler tasks and decomposes to a
-    more gereralized PolygonHairlinePrimitive2D (see above)
+    more generalized PolygonHairlinePrimitive2D (see above)
 */
 class DRAWINGLAYER_DLLPUBLIC LineRectanglePrimitive2D final : public BasePrimitive2D
 {

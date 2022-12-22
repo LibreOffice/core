@@ -115,8 +115,8 @@ public:
             // interestingly this ID2D1DCRenderTarget already works and can hold
             // created ID2D1Bitmap(s) in RenderTarget-specific form, *without*
             // any call to "BindDC", thus *without* the need of a real HDC - nice :-)
-            // When that would be needed, Application::GetDefaultDevice() would do
-            // to have a HDC that is valid during LO livetime.
+            // When that would be needed, Application::GetDefaultDevice() would need
+            // to have a HDC that is valid during LO's lifetime.
 
             if (!SUCCEEDED(hr))
                 const_cast<ID2D1GlobalRenderTargetProvider*>(this)->mpID2D1DCRenderTarget = nullptr;
@@ -455,7 +455,7 @@ ID2D1Bitmap* createB2DBitmap(const BitmapEx& rBitmapEx)
 
     // use GlobalRenderTraget to allow usage combined with
     // the Direct2D CreateSharedBitmap-mechanism. This is needed
-    // since ID2D1Bitmap is a ID2D1RenderTarget-dependent ressource
+    // since ID2D1Bitmap is a ID2D1RenderTarget-dependent resource
     // and thus - in principle - would have to be re-created for
     // *each* new ID2D1RenderTarget, that means for *each* new
     // target HDC, resp. OutputDevice
@@ -545,14 +545,14 @@ ID2D1Bitmap* getOrCreateB2DBitmap(ID2D1RenderTarget& rRT, const BitmapEx& rBitma
 }
 
 // This is a simple local derivation of D2DPixelProcessor2D to be used
-// when sub-content needs to be rendered to pixls. Hand over the adapted
+// when sub-content needs to be rendered to pixels. Hand over the adapted
 // ViewInformation2D, a pixel size and the parent RenderTarget. It will
 // locally create and use a ID2D1BitmapRenderTarget to render the stuff
 // (you need to call process() with the primitives to be painted of
-// course). Then use the local helper getID2D1Bitmap() to acces the
+// course). Then use the local helper getID2D1Bitmap() to access the
 // ID2D1Bitmap which was the target of that operation.
 // The class does not need to call mpBitmapRenderTarget->Release() since
-// mpRT of parent is set to it and that calls Release() already itn it's
+// mpRT of parent is set to it and that calls Release() already in its
 // destructor, so no destructor needed here.
 class D2DBitmapPixelProcessor2D final : public drawinglayer::processor2d::D2DPixelProcessor2D
 {
@@ -900,7 +900,7 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
     const basegfx::B2DRange& rVisibleRange)
 {
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
-    // ony then can we use ID2D1Effect/CLSID_D2D1LuminanceToAlpha and it makes
+    // Only then can we use ID2D1Effect/CLSID_D2D1LuminanceToAlpha and it makes
     // sense to try to do it this way in this implementation
     ID2D1DeviceContext* pID2D1DeviceContext(nullptr);
     getRenderTarget().QueryInterface(__uuidof(ID2D1DeviceContext),
@@ -925,7 +925,7 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
     // of it when true by setting used colors to their LuminanceToAlpha values,
     // so another necessity similar and besides a possible ColorModifierStack.
     // That worked okay, since for now this is not complex to do since only
-    // gradients (decomnposed to Polygons) get rendered for now when a
+    // gradients (decomposed to Polygons) get rendered for now when a
     // TransparencePrimitive2D is processed, so it would work as long as only
     // polygons are treated correctly.
     // But the definition of TransparencePrimitive2D is (see include\
@@ -1006,7 +1006,7 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
 
         if (pID2D1DeviceContext)
         {
-            // crete the effect
+            // create the effect
             ID2D1Effect* pLuminanceToAlpha(nullptr);
             pID2D1DeviceContext->CreateEffect(CLSID_D2D1LuminanceToAlpha, &pLuminanceToAlpha);
 
@@ -1149,8 +1149,8 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
         return;
     }
 
-    // try to create directly, this needs the curent mpRT to be a ID2D1DeviceContext/d2d1_1
-    // what is not guarenteed but usually works for more modern windows (after 7)
+    // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
+    // what is not guaranteed but usually works for more modern windows (after 7)
     ID2D1Bitmap* pAlphaBitmap(implCreateAlpha_Direct(rTransCandidate, aVisibleRange));
     D2D1_MATRIX_3X2_F aMaskScale(D2D1::Matrix3x2F::Identity());
 
@@ -1428,7 +1428,7 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
 void D2DPixelProcessor2D::processBackgroundColorPrimitive2D(
     const primitive2d::BackgroundColorPrimitive2D& rBackgroundColorCandidate)
 {
-    // check for alloed range [0.0 .. 1.0[
+    // check for allowed range [0.0 .. 1.0[
     if (rBackgroundColorCandidate.getTransparency() < 0.0
         || rBackgroundColorCandidate.getTransparency() >= 1.0)
         return;
@@ -1605,7 +1605,7 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                         //     that a miter prolongation would have at that angle, so use some trigonometry.
                         //     Unfortunately there is also some'precision' problem (probably), so I had to
                         //     experimentally come to a correction value around 0.9925. Since that seems to
-                        //     be no obvoius numerical value involved somehow (and as long as I find no other
+                        //     be no obvious numerical value involved somehow (and as long as I find no other
                         //     explanation) I will have to use that.
                         // With both done I can use Direct2D for Miter completely - what is good for speed.
                         aLineJoin = D2D1_LINE_JOIN_MITER_OR_BEVEL;
