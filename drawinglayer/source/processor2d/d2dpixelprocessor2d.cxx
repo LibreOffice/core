@@ -864,11 +864,11 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
             basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
             aPolygon.transform(aLocalTransform);
 
-            // shortcut with local temporary instance
-            const primitive2d::PolyPolygonColorPrimitive2D aTemp(basegfx::B2DPolyPolygon(aPolygon),
-                                                                 aModifiedColor);
+            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
+                new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
+                                                             aModifiedColor));
 
-            processPolyPolygonColorPrimitive2D(aTemp);
+            processPolyPolygonColorPrimitive2D(*aTemp);
             return;
         }
     }
@@ -1507,10 +1507,11 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
         const attribute::LineAttribute aRed(
             basegfx::BColor(1.0, 0.0, 0.0), rLineAttribute.getWidth(), rLineAttribute.getLineJoin(),
             rLineAttribute.getLineCap(), rLineAttribute.getMiterMinimumAngle());
-        const primitive2d::PolygonStrokePrimitive2D aCopy(
-            rPolygonStrokeCandidate.getB2DPolygon(), aRed,
-            rPolygonStrokeCandidate.getStrokeAttribute());
-        process(aCopy);
+        rtl::Reference<primitive2d::PolygonStrokePrimitive2D> aCopy(
+            new primitive2d::PolygonStrokePrimitive2D(
+                rPolygonStrokeCandidate.getB2DPolygon(), aRed,
+                rPolygonStrokeCandidate.getStrokeAttribute()));
+        process(*aCopy);
     }
 
     bool bDone(false);
