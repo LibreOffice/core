@@ -1981,7 +1981,7 @@ static AquaSalFrame* getMouseContainerFrame()
             mbInCommitMarkedText = YES;
             if (nFlags & EndExtTextInputFlags::Complete)
             {
-                // Retain the last marked text as it will be releasd in
+                // Retain the last marked text as it will be released in
                 // [self insertText:replacementText:]
                 NSAttributedString *pText = [mpLastMarkedText retain];
                 [self insertText:pText replacementRange:NSMakeRange(0, [mpLastMarkedText length])];
