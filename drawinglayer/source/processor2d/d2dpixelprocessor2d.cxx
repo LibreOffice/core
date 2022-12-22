@@ -1302,7 +1302,7 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
         if (SUCCEEDED(hr))
         {
             ID2D1Layer* pLayer = nullptr;
-            HRESULT hr = getRenderTarget().CreateLayer(nullptr, &pLayer);
+            hr = getRenderTarget().CreateLayer(nullptr, &pLayer);
 
             if (SUCCEEDED(hr))
             {
