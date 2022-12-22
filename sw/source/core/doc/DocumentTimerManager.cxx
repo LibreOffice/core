@@ -199,8 +199,8 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
         m_rDoc.getIDocumentFieldsAccess().UpdateRefFields();  // References
 
         // Validate and update the paragraph signatures.
-        if (m_rDoc.GetEditShell())
-            m_rDoc.GetEditShell()->ValidateAllParagraphSignatures(true);
+        if (SwEditShell* pSh = m_rDoc.GetEditShell())
+            pSh->ValidateAllParagraphSignatures(true);
 
         pTmpRoot->EndAllAction();
 
