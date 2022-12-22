@@ -163,6 +163,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
     assertXPathAttrs(pXmlDoc, "//wps:bodyPr", { { "tIns", "179640" }, { "bIns", "360000" } });
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
+{
+    loadAndReload("tdf152636_lostPageBreak.odt");
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
 {
     // Given a document with 2 inline <w:sdt>, with each a <w:id>:
