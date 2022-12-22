@@ -80,7 +80,7 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     processMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
     void processBackgroundColorPrimitive2D(
         const primitive2d::BackgroundColorPrimitive2D& rBackgroundColorCandidate);
-    void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
+    void processPolygonStrokePrimitive2D(
         const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
     void processLineRectanglePrimitive2D(
         const primitive2d::LineRectanglePrimitive2D& rLineRectanglePrimitive2D);
