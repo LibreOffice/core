@@ -1629,8 +1629,7 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                     for (auto& value : rStrokeAttribute.getDotDashArray())
                     {
                         dashes.push_back(
-                            basegfx::B2DVector(rObjectToView * basegfx::B2DVector(value, 0.0))
-                                .getLength()
+                            (rObjectToView * basegfx::B2DVector(value, 0.0)).getLength()
                             / fDiscreteLineWidth);
                     }
                 }
