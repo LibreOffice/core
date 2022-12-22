@@ -942,7 +942,7 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration1_caption_only"), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("an other image"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("another image"), xRange->getString());
     }
 
     // Cross references to text frames
