@@ -47,45 +47,30 @@ using namespace formula;
 
 namespace {
 
-struct MatrixAdd
+double MatrixAdd(const double& lhs, const double& rhs)
 {
-    double operator() (const double& lhs, const double& rhs) const
-    {
-        return ::rtl::math::approxAdd( lhs,rhs);
-    }
-};
+    return ::rtl::math::approxAdd( lhs,rhs);
+}
 
-struct MatrixSub
+double MatrixSub(const double& lhs, const double& rhs)
 {
-    double operator() (const double& lhs, const double& rhs) const
-    {
-        return ::rtl::math::approxSub( lhs,rhs);
-    }
-};
+    return ::rtl::math::approxSub( lhs,rhs);
+}
 
-struct MatrixMul
+double MatrixMul(const double& lhs, const double& rhs)
 {
-    double operator() (const double& lhs, const double& rhs) const
-    {
-        return lhs * rhs;
-    }
-};
+    return lhs * rhs;
+}
 
-struct MatrixDiv
+double MatrixDiv(const double& lhs, const double& rhs)
 {
-    double operator() (const double& lhs, const double& rhs) const
-    {
-        return ScInterpreter::div( lhs,rhs);
-    }
-};
+    return ScInterpreter::div( lhs,rhs);
+}
 
-struct MatrixPow
+double MatrixPow(const double& lhs, const double& rhs)
 {
-    double operator() (const double& lhs, const double& rhs) const
-    {
-        return ::pow( lhs,rhs);
-    }
-};
+    return ::pow( lhs,rhs);
+}
 
 // Multiply n x m Mat A with m x l Mat B to n x l Mat R
 void lcl_MFastMult(const ScMatrixRef& pA, const ScMatrixRef& pB, const ScMatrixRef& pR,
@@ -1164,66 +1149,18 @@ static SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
         return n2;
 }
 
-template<class Function>
 static ScMatrixRef lcl_MatrixCalculation(
-    const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
+    const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter, ScMatrix::CalculateOpFunction Op)
 {
-    static const Function Op;
-
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
     rMat1.GetDimensions(nC1, nR1);
     rMat2.GetDimensions(nC2, nR2);
     nMinC = lcl_GetMinExtent( nC1, nC2);
     nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = pInterpreter->GetNewMat(nMinC, nMinR, /*bEmpty*/true);
     if (xResMat)
-    {
-        for (i = 0; i < nMinC; i++)
-        {
-            for (j = 0; j < nMinR; j++)
-            {
-                bool bVal1 = rMat1.IsValueOrEmpty(i,j);
-                bool bVal2 = rMat2.IsValueOrEmpty(i,j);
-                FormulaError nErr;
-                if (bVal1 && bVal2)
-                {
-                    double d = Op(rMat1.GetDouble(i,j), rMat2.GetDouble(i,j));
-                    xResMat->PutDouble( d, i, j);
-                }
-                else if (((nErr = rMat1.GetErrorIfNotString(i,j)) != FormulaError::NONE) ||
-                         ((nErr = rMat2.GetErrorIfNotString(i,j)) != FormulaError::NONE))
-                {
-                    xResMat->PutError( nErr, i, j);
-                }
-                else if ((!bVal1 && rMat1.IsStringOrEmpty(i,j)) || (!bVal2 && rMat2.IsStringOrEmpty(i,j)))
-                {
-                    FormulaError nError1 = FormulaError::NONE;
-                    SvNumFormatType nFmt1 = SvNumFormatType::ALL;
-                    double fVal1 = (bVal1 ? rMat1.GetDouble(i,j) :
-                            pInterpreter->ConvertStringToValue( rMat1.GetString(i,j).getString(), nError1, nFmt1));
-
-                    FormulaError nError2 = FormulaError::NONE;
-                    SvNumFormatType nFmt2 = SvNumFormatType::ALL;
-                    double fVal2 = (bVal2 ? rMat2.GetDouble(i,j) :
-                            pInterpreter->ConvertStringToValue( rMat2.GetString(i,j).getString(), nError2, nFmt2));
-
-                    if (nError1 != FormulaError::NONE)
-                        xResMat->PutError( nError1, i, j);
-                    else if (nError2 != FormulaError::NONE)
-                        xResMat->PutError( nError2, i, j);
-                    else
-                    {
-                        double d = Op( fVal1, fVal2);
-                        xResMat->PutDouble( d, i, j);
-                    }
-                }
-                else
-                    xResMat->PutError( FormulaError::NoValue, i, j);
-            }
-        }
-    }
+        xResMat->ExecuteBinaryOp(nMinC, nMinR, rMat1, rMat2, pInterpreter, Op);
     return xResMat;
 }
 
@@ -1337,11 +1274,11 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat;
         if ( _bSub )
         {
-            pResMat = lcl_MatrixCalculation<MatrixSub>( *pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixSub);
         }
         else
         {
-            pResMat = lcl_MatrixCalculation<MatrixAdd>( *pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixAdd);
         }
 
         if (!pResMat)
@@ -1537,7 +1474,7 @@ void ScInterpreter::ScMul()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>( *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixMul);
         if (!pResMat)
             PushNoValue();
         else
@@ -1609,7 +1546,7 @@ void ScInterpreter::ScDiv()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>( *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixDiv);
         if (!pResMat)
             PushNoValue();
         else
@@ -1676,7 +1613,7 @@ void ScInterpreter::ScPow()
         fVal1 = GetDouble();
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>( *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixPow);
         if (!pResMat)
             PushNoValue();
         else
@@ -1847,7 +1784,7 @@ void ScInterpreter::ScSumXMY2()
         PushNoValue();
         return;
     } // if (nC1 != nC2 || nR1 != nR2)
-    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>( *pMat1, *pMat2, this);
+    ScMatrixRef pResMat = lcl_MatrixCalculation( *pMat1, *pMat2, this, MatrixSub);
     if (!pResMat)
     {
         PushNoValue();
