@@ -80,7 +80,7 @@ public:
     ID2D1Factory* getID2D1Factory() const { return mpD2DFactory; }
 };
 
-static ID2D1FactoryProvider aID2D1FactoryProvider;
+ID2D1FactoryProvider aID2D1FactoryProvider;
 
 class ID2D1GlobalRenderTargetProvider
 {
@@ -126,7 +126,7 @@ public:
     }
 };
 
-static ID2D1GlobalRenderTargetProvider aID2D1GlobalRenderTargetProvider;
+ID2D1GlobalRenderTargetProvider aID2D1GlobalRenderTargetProvider;
 
 class SystemDependentData_ID2D1PathGeometry : public basegfx::SystemDependentData
 {
