@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
 {
-    // Given a document with 3 custom properties: 2 zotero ones and an other one:
+    // Given a document with 3 custom properties: 2 Zotero ones and one other:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
