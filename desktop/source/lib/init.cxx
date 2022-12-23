@@ -58,6 +58,8 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
+#include <svl/zforlist.hxx>
+#include <linguistic/misc.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -7068,6 +7070,23 @@ void setLanguageToolConfig()
                 OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
                 rLanguageOpts.setUsername(aUsername);
                 rLanguageOpts.setApiKey(aApiKey);
+            }
+
+            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+                css::linguistic2::LinguServiceManager::create(xContext);
+            if (xLangSrv.is())
+            {
+                css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+                if (xSpell.is())
+                {
+                    Sequence<OUString> aEmpty;
+                    Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
+
+                    for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
+                    {
+                        xLangSrv->setConfiguredServices(SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
+                    }
+                }
             }
         }
         catch(uno::Exception const& rException)
