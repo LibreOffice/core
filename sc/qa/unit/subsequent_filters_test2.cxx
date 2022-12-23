@@ -1366,10 +1366,13 @@ void ScFiltersTest2::testTdf126116()
 
     rDoc.SetString(ScAddress(0, 0, 0), "03/03");
 
+    // Get the current year from B1 with format YY
+    OUString aYear = rDoc.GetString(ScAddress(1, 0, 0));
+
     // Without the fix in place, this test would have failed with
     // - Expected: 03/03/21
     // - Actual  : 03/03/2021
-    CPPUNIT_ASSERT_EQUAL(OUString("03/03/21"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/03/" + aYear), rDoc.GetString(ScAddress(0, 0, 0)));
 
     xDocSh->DoClose();
 }
