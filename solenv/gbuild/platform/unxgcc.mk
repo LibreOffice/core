@@ -178,11 +178,13 @@ $(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
         | cut -d' ' -f1-2 >> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
     $(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
         $(WORKDIR)/LinkTarget/$(2).exports,$(1))))
-$(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS)),$(filter TRUE,$(ENABLE_QT5))), \
+$(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS))), \
+$(if $(filter TRUE,$(ENABLE_QT5)), \
+    sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)); \
     cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) ; \
-    sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)) ; \
+) \
     ln -sf $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data $(dir $(1))/soffice.data ; \
-    ln -sf $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata $(dir $(1))/soffice.data.js.metadata ; \
+    ln -sf $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata $(dir $(1))/soffice.data.js.metadata \
 )
 endef
 
