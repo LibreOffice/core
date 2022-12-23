@@ -76,6 +76,8 @@ namespace
 LanguageTag g_defaultLanguageTag("en-US", true);
 LanguageTag g_loadLanguageTag("en-US", true); //< The language used to load.
 LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
+bool g_isDefaultTimezoneSet = false;
+OUString g_DefaultTimezone;
 }
 
 int SfxLokHelper::createView(SfxViewFrame* pViewFrame, ViewShellDocId docId)
@@ -337,6 +339,46 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::MOBILE;
     else
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
+}
+
+void SfxLokHelper::setDefaultTimezone(bool isSet, const OUString& rTimezone)
+{
+    g_isDefaultTimezoneSet = isSet;
+    g_DefaultTimezone = rTimezone;
+}
+
+std::pair<bool, OUString> SfxLokHelper::getDefaultTimezone()
+{
+    return { g_isDefaultTimezoneSet, g_DefaultTimezone };
+}
+
+void SfxLokHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKTimezone(isSet, rTimezone);
+            return;
+        }
+    }
+}
+
+std::pair<bool, OUString> SfxLokHelper::getViewTimezone(int nId)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            return pViewShell->GetLOKTimezone();
+        }
+    }
+
+    return {};
 }
 
 /*

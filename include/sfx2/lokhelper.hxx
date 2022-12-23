@@ -91,6 +91,17 @@ public:
     /// Set the device form factor that should be used for a new view.
     static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
 
+    /// Set timezone of the given view.
+    /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.
+    /// @rTimezone the value to set (which could be empty).
+    static void setDefaultTimezone(bool isSet, const OUString& rTimezone);
+    /// Get timezone of the given view. See @setDefaultTimezone.
+    static std::pair<bool, OUString> getDefaultTimezone();
+    /// Set the timezone of the given view.
+    static void setViewTimezone(int nId, bool isSet, const OUString& rTimezone);
+    /// Get the timezone of the given view.
+    static std::pair<bool, OUString> getViewTimezone(int nId);
+
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);

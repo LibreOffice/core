@@ -171,6 +171,8 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
+    OUString maLOKTimezone;
+    bool maLOKIsTimezoneSet;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
@@ -402,6 +404,21 @@ public:
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
+
+    /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
+    std::pair<bool, OUString> GetLOKTimezone() const
+    {
+        return { maLOKIsTimezoneSet, maLOKTimezone };
+    }
+
+    /// Set the LibreOfficeKit timezone of this view.
+    /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.
+    /// @rTimezone the value to set (which could be empty).
+    void SetLOKTimezone(bool isSet, const OUString& rTimezone)
+    {
+        maLOKIsTimezoneSet = isSet;
+        maLOKTimezone = rTimezone;
+    }
 
     /// Set the LibreOfficeKit locale of this view.
     void SetLOKLocale(const OUString& rBcp47LanguageTag);

@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <osl/process.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
 
@@ -253,6 +254,24 @@ bool isAllowlistedLanguage(const OUString& lang)
 
     return false;
 #endif
+}
+
+void setTimezone(bool isSet, const OUString& rTimezone)
+{
+    if (isSet)
+    {
+        // Set the given timezone, even if empty.
+        osl_setEnvironment(OUString("TZ").pData, rTimezone.pData);
+    }
+    else
+    {
+        // Unset and empty aren't the same.
+        // When unset, it means default to the system configured timezone.
+        osl_clearEnvironment(OUString("TZ").pData);
+    }
+
+    // Update the timezone data.
+    ::tzset();
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText)(nullptr);

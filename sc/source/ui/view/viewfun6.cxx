@@ -21,6 +21,7 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -47,6 +48,7 @@
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
 #include <postit.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <vector>
 
@@ -285,6 +287,23 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
             pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
+
+    const int nView(comphelper::LibreOfficeKit::isActive() ? SfxLokHelper::getView() : -1);
+    if (nView >= 0)
+    {
+        const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getViewTimezone(nView);
+        comphelper::LibreOfficeKit::setTimezone(isTimezoneSet, aTimezone);
+    }
+
+    comphelper::ScopeGuard aAutoUserTimezone(
+        [nView]()
+        {
+            if (nView >= 0)
+            {
+                const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
+                comphelper::LibreOfficeKit::setTimezone(isTimezoneSet, aTimezone);
+            }
+        });
 
     if (bInputMode)
     {

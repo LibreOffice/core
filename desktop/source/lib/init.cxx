@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sfx2/lokhelper.hxx>
 #include <config_buildconfig.h>
 #include <config_features.h>
 
@@ -1203,6 +1204,8 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
 
 static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments);
 
+static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
+
 } // extern "C"
 
 namespace {
@@ -1352,6 +1355,8 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setBlockedCommandList = doc_setBlockedCommandList;
 
         m_pDocumentClass->sendContentControlEvent = doc_sendContentControlEvent;
+
+        m_pDocumentClass->setViewTimezone = doc_setViewTimezone;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -2598,6 +2603,27 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             setLanguageAndLocale(aLanguage);
             // Need to reset the static initialized values
             SvNumberFormatter::resetTheCurrencyTable();
+        }
+
+        // Set the timezone, if not empty.
+        const OUString aTimezone = extractParameter(aOptions, u"Timezone");
+        if (!aTimezone.isEmpty())
+        {
+            SfxLokHelper::setDefaultTimezone(true, aTimezone);
+        }
+        else
+        {
+            // Default to the TZ envar, if set.
+            const char* tz = ::getenv("TZ");
+            if (tz)
+            {
+                SfxLokHelper::setDefaultTimezone(true,
+                                                 OStringToOUString(tz, RTL_TEXTENCODING_UTF8));
+            }
+            else
+            {
+                SfxLokHelper::setDefaultTimezone(false, OUString());
+            }
         }
 
         const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
@@ -6598,6 +6624,22 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     pDoc->executeContentControlEvent(aMap);
 }
 
+static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,
+                                const char* pTimezone)
+{
+    comphelper::ProfileZone aZone("doc_setViewTimezone");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    // Leave the default if we get a null timezone.
+    if (pTimezone)
+    {
+        OUString sTimezone = OStringToOUString(pTimezone, RTL_TEXTENCODING_UTF8);
+        SfxLokHelper::setViewTimezone(nId, true, sTimezone);
+    }
+}
+
 static char* lo_getError (LibreOfficeKit *pThis)
 {
     comphelper::ProfileZone aZone("lo_getError");
@@ -7065,7 +7107,14 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     comphelper::ProfileZone aZone("lok-init");
 
     if (eStage == PRE_INIT)
+    {
         rtl_alloc_preInit(true);
+
+        // Set the default timezone to the TZ envar, if set.
+        const char* tz = ::getenv("TZ");
+        SfxLokHelper::setDefaultTimezone(!!tz, tz ? OStringToOUString(tz, RTL_TEXTENCODING_UTF8)
+                                                  : OUString());
+    }
 
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
