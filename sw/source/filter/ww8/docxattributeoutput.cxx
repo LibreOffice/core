@@ -1522,7 +1522,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_pSerializer->endElementNS(XML_w, XML_smartTag);
     }
 
-    if ( m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE )
+    if ((m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE)
+        && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         m_pSerializer->startElementNS(XML_w, XML_r);
         m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "column");
@@ -1534,7 +1535,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
             m_nColBreakStatus = COLBRK_NONE;
     }
 
-    if ( m_bPostponedPageBreak && !m_bWritingHeaderFooter )
+    if (m_bPostponedPageBreak && !m_bWritingHeaderFooter
+        && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         m_pSerializer->startElementNS(XML_w, XML_r);
         m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
