@@ -493,6 +493,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getEditMode().
     int (*getEditMode) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::setViewTimezone().
+    void (*setViewTimezone) (LibreOfficeKitDocument* pThis, int nId, const char* timezone);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -1083,6 +1083,10 @@ SfxViewShell::SfxViewShell
         maLOKLanguageTag = SfxLokHelper::getDefaultLanguage();
         maLOKLocale = SfxLokHelper::getDefaultLanguage();
 
+        const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
+        maLOKIsTimezoneSet = isTimezoneSet;
+        maLOKTimezone = aTimezone;
+
         maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
