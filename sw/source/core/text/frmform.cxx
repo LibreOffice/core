@@ -1799,7 +1799,6 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     if( aRectFnSet.GetWidth(getFramePrintArea()) <= 0 )
     {
         // If MustFit is set, we shrink to the Upper's bottom edge if needed.
-        // Else we just take a standard size of 12 Pt. (240 twip).
         SwTextLineAccess aAccess( this );
         tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
 
@@ -1809,14 +1808,6 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             const SwTwips nDiff = - aRectFnSet.BottomDist( getFrameArea(), nLimit );
             if( nDiff > 0 )
                 Shrink( nDiff );
-        }
-        else if( 240 < nFrameHeight )
-        {
-            Shrink( nFrameHeight - 240 );
-        }
-        else if( 240 > nFrameHeight )
-        {
-            Grow( 240 - nFrameHeight );
         }
 
         nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
