@@ -466,6 +466,8 @@ void VBAMacroTest::testVba()
         { OUString("vba_findFunction."),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
+        { OUString("BGR-RGBTest."),
+          OUString("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document") }
     };
     OUString sTempDir;
     OUString sTempDirURL;

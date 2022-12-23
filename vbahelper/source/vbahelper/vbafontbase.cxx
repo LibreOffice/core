@@ -37,10 +37,12 @@ VbaFontBase::VbaFontBase(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< css::container::XIndexAccess >& xPalette,
         const uno::Reference< beans::XPropertySet >& xPropertySet,
+        Component eWhich,
         bool bFormControl ) :
     VbaFontBase_BASE( xParent, xContext ),
     mxFont( xPropertySet, uno::UNO_SET_THROW ),
     mxPalette( xPalette, uno::UNO_SET_THROW ),
+    meWhich( eWhich ),
     mbFormControl( bFormControl )
 {
 }
@@ -141,10 +143,12 @@ VbaFontBase::setColorIndex( const uno::Any& _colorindex )
 
     --nIndex; // OOo indices are zero bases
 
-    // setColor expects colors in XL RGB values
-    // #FIXME this is daft we convert OO RGB val to XL RGB val and
-    // then back again to OO RGB value
-    setColor( OORGBToXLRGB(mxPalette->getByIndex( nIndex )) );
+    if (meWhich == EXCEL){
+        setColor( OORGBToXLRGB(mxPalette->getByIndex( nIndex )) );
+    }
+    else{
+        setColor( mxPalette->getByIndex( nIndex ));
+    }
 }
 
 
@@ -153,7 +157,13 @@ VbaFontBase::getColorIndex()
 {
     sal_Int32 nColor = 0;
 
-    XLRGBToOORGB( getColor() ) >>= nColor;
+    if (meWhich == EXCEL){
+        XLRGBToOORGB( getColor() ) >>= nColor;
+    }
+    else{
+        getColor() >>= nColor;
+    }
+
     sal_Int32 nElems = mxPalette->getCount();
     sal_Int32 nIndex = -1;
     for ( sal_Int32 count=0; count<nElems; ++count )
@@ -257,8 +267,14 @@ VbaFontBase::getName()
 uno::Any
 VbaFontBase::getColor()
 {
-    uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
-    return aAny;
+    if (meWhich == EXCEL){
+        uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
+        return aAny;
+    }
+    else{
+        uno::Any aAny = mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) );
+        return aAny;
+    }
 }
 
 void

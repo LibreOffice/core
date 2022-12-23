@@ -111,7 +111,8 @@ public:
 
 }
 
-SwVbaFont::SwVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPalette, uno::Reference< css::beans::XPropertySet > const & xPropertySet ) : SwVbaFont_BASE( xParent, xContext, xPalette, xPropertySet )
+SwVbaFont::SwVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPalette, uno::Reference< css::beans::XPropertySet > const & xPropertySet )
+    : SwVbaFont_BASE( xParent, xContext, xPalette, xPropertySet, Component::WORD )
 {
 }
 
@@ -139,14 +140,6 @@ OUString
 SwVbaFont::getServiceImplName()
 {
     return "SwVbaFont";
-}
-
-void SAL_CALL
-SwVbaFont::setColorIndex( const uno::Any& _colorindex )
-{
-        sal_Int32 nIndex = 0;
-        _colorindex >>= nIndex;
-        return setColor( mxPalette->getByIndex( nIndex ) );
 }
 
 uno::Any SAL_CALL

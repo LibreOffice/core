@@ -31,7 +31,6 @@ public:
     SwVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPalette, css::uno::Reference< css::beans::XPropertySet > const & xPropertySet );
 
     // Attributes
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) override;
     virtual css::uno::Any SAL_CALL getColorIndex() override;
     virtual css::uno::Any SAL_CALL getUnderline() override;
     virtual void SAL_CALL setUnderline( const css::uno::Any& _underline ) override;

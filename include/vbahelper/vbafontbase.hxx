@@ -44,9 +44,13 @@ typedef  InheritedHelperInterfaceWeakImpl< ov::XFontBase > VbaFontBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaFontBase : public VbaFontBase_BASE
 {
+public:
+    enum Component { WORD, EXCEL };
+
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxFont;
     css::uno::Reference< css::container::XIndexAccess > mxPalette;
+    Component meWhich;
     bool mbFormControl;
 
 public:
@@ -79,7 +83,9 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::container::XIndexAccess >& xPalette,
         const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
-        bool bFormControl = false );
+        Component eWhich,
+        bool bFormControl = false);
+
     virtual ~VbaFontBase() override;// {}
 
     // Attributes
