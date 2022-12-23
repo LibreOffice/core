@@ -50,6 +50,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
     CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf151704_thinColumnHeight, "tdf151704_thinColumnHeight.docx")
+{
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nRowHeightT1 = getXPath(
+        pXmlDoc, "//page[1]/body//tab[1]/row/cell/tab[1]/row[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nRowHeightT2 = getXPath(
+        pXmlDoc, "//page[2]/body//tab/row[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Same row height in both tables", nRowHeightT1, nRowHeightT2);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
