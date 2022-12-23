@@ -875,6 +875,17 @@ public:
         mpDoc->pClass->sendContentControlEvent(mpDoc, pArguments);
     }
 
+    /**
+     * Set the timezone of the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param timezone a timezone in the tzfile(5) format (e.g. Pacific/Auckland).
+     */
+    void setViewTimezone(int nId, const char* timezone)
+    {
+        mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
