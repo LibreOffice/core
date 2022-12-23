@@ -183,8 +183,8 @@ $(if $(filter TRUE,$(ENABLE_QT5)), \
     sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)); \
     cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) ; \
 ) \
-    ln -sf $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data $(dir $(1))/soffice.data ; \
-    ln -sf $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata $(dir $(1))/soffice.data.js.metadata \
+    cp $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data $(dir $(1))/soffice.data ; \
+    cp $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata $(dir $(1))/soffice.data.js.metadata \
 )
 endef
 
