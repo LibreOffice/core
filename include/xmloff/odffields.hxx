@@ -25,7 +25,6 @@
 
 #define ODF_FORMCHECKBOX u"vnd.oasis.opendocument.field.FORMCHECKBOX"
 #define ODF_FORMCHECKBOX_HELPTEXT "Checkbox_HelpText"
-#define ODF_FORMCHECKBOX_NAME "Checkbox_Name"
 #define ODF_FORMCHECKBOX_RESULT "Checkbox_Checked"
 
 #define ODF_FORMDROPDOWN u"vnd.oasis.opendocument.field.FORMDROPDOWN"
