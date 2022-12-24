@@ -1046,6 +1046,18 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeContentDemo.docm")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
+    {
+        const OUString sName = (*aIter)->GetName();
+        CPPUNIT_ASSERT(sName == "Check1" || sName == "Text1" || sName == "Dropdown1");
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
 {
     // Previously import just crashed (due to infinite recursion).
