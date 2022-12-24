@@ -12,6 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,openssl))
 $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
+	external/openssl/0001-x509-fix-double-locking-problem.patch.1 \
 	external/openssl/openssl-no-multilib.patch.0 \
 	external/openssl/configurable-z-option.patch.0 \
 	external/openssl/openssl-no-ipc-cmd.patch.0 \
