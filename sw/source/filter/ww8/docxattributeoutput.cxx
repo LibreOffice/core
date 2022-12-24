@@ -2263,10 +2263,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        OUString sName;
+        const OUString sName = params.getName();
         bool bChecked = false;
-
-        params.extractParam( ODF_FORMCHECKBOX_NAME, sName );
 
         const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )

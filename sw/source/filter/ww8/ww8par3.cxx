@@ -231,7 +231,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         if (pFieldmark!=nullptr) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[ODF_FORMCHECKBOX_NAME] <<= aFormula.msTitle;
             (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] <<= aFormula.msToolTip;
 
             if(pCheckboxFm)
