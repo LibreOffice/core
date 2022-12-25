@@ -30,9 +30,6 @@
 #include <salinst.hxx>
 #include <salvd.hxx>
 #include <salbmp.hxx>
-#if HAVE_FEATURE_SKIA
-#include <skia/salbmp.hxx>
-#endif
 
 #include <memory>
 
@@ -64,9 +61,6 @@ public:
     bool            Create( const SalBitmap& rSalBmp ) override;
     bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics ) override;
     bool            Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat) override;
-#if HAVE_FEATURE_SKIA
-    bool            Create( const SkiaSalBitmap& rSkiaSalBmp, const SalTwoRect& rPosAry );
-#endif
     virtual bool    Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                             Size& rSize,
                             bool bMask = false ) override;
@@ -99,9 +93,9 @@ public:
     bool            Create(CGLayerHolder const & rLayerHolder, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bFlipped);
 
 public:
-    CGImageRef      CreateWithMask( const QuartzSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
-    CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, Color nMaskColor ) const;
-    CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
+    virtual CGImageRef CreateWithMask( const SalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const override;
+    virtual CGImageRef CreateColorMask( int nX, int nY, int nWidth, int nHeight, Color nMaskColor ) const override;
+    virtual CGImageRef CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const override;
 
     void doDestroy();
 };

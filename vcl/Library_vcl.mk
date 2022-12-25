@@ -682,6 +682,12 @@ ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/quartz/cgutils \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        vcl/skia/quartz/salbmp \
+    ) \
+))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
@@ -707,6 +713,12 @@ endif
 
 
 ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/quartz/cgutils \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        vcl/skia/quartz/salbmp \
+    ) \
+))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     Cocoa \
     CoreFoundation \

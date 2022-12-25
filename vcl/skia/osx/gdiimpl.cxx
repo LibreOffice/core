@@ -26,6 +26,7 @@
 #include <tools/sk_app/mac/WindowContextFactory_mac.h>
 
 #include <quartz/ctfonts.hxx>
+#include <skia/quartz/cgutils.h>
 
 #include <SkBitmap.h>
 #include <SkCanvas.h>
@@ -102,24 +103,6 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
         SkiaSalGraphicsImpl::flushSurfaceToWindowContext();
 }
 
-constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
-{
-    if (alpha == kPremul_SkAlphaType)
-    {
-        return color == kBGRA_8888_SkColorType
-                   ? (uint32_t(kCGImageAlphaPremultipliedFirst)
-                      | uint32_t(kCGBitmapByteOrder32Little))
-                   : (uint32_t(kCGImageAlphaPremultipliedLast) | uint32_t(kCGBitmapByteOrder32Big));
-    }
-    else
-    {
-        assert(alpha == kOpaque_SkAlphaType);
-        return color == kBGRA_8888_SkColorType
-                   ? (uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGBitmapByteOrder32Little))
-                   : (uint32_t(kCGImageAlphaNoneSkipLast) | uint32_t(kCGBitmapByteOrder32Big));
-    }
-}
-
 // For Raster we use our own screen blitting (see above).
 void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
 {
@@ -174,7 +157,7 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
     CGImageRef fullImage = CGImageCreate(pixmap.bounds().width(), pixmap.bounds().height(), 8,
                                          8 * image->imageInfo().bytesPerPixel(), pixmap.rowBytes(),
                                          GetSalData()->mxRGBSpace,
-                                         toCGBitmapType(image->colorType(), image->alphaType()),
+                                         SkiaToCGBitmapType(image->colorType(), image->alphaType()),
                                          dataProvider, nullptr, false, kCGRenderingIntentDefault);
     if (!fullImage)
     {
@@ -247,7 +230,7 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     memset(data.get(), 0, bytes);
     CGContextRef context = CGBitmapContextCreate(
         data.get(), width, height, 8, width * 4, GetSalData()->mxRGBSpace,
-        toCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
+        SkiaToCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
     if (!context)
     {
         SAL_WARN("vcl.skia", "drawNativeControl(): Failed to allocate bitmap context");

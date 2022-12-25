@@ -29,6 +29,12 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <basegfx/utils/systemdependentdata.hxx>
 
+#if defined MACOSX || defined IOS
+#include <premac.h>
+#include <CoreGraphics/CoreGraphics.h>
+#include <postmac.h>
+#endif
+
 struct BitmapBuffer;
 class Color;
 class SalGraphics;
@@ -97,6 +103,23 @@ public:
     {
         return false;
     }
+
+#if defined MACOSX || defined IOS
+    // Related: tdf#146842 Eliminate temporary copies of SkiaSalBitmap when
+    // printing
+    // Commit 9eb732a32023e74c44ac8c3b5af9f5424273bb6c fixed crashing when
+    // printing SkiaSalBitmaps to a non-Skia SalGraphics. However, the fix
+    // almost always makes two copies of the SkiaSalBitmap's bitmap data: the
+    // first copy is made in SkiaSalBitmap::AcquireBuffer() and then
+    // QuartzSalBitmap makes a copy of the first copy.
+    // By making QuartzSalBitmap's methods that return a CGImageRef pure
+    // virtual, a non-Skia SalGraphics can now create a CGImageRef directly
+    // from a SkiaSalBitmap's Skia bitmap data without copying to any
+    // intermediate buffers.
+    virtual CGImageRef      CreateWithMask( const SalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const = 0;
+    virtual CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, Color nMaskColor ) const = 0;
+    virtual CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const = 0;
+#endif
 
     BitmapChecksum GetChecksum() const
     {
