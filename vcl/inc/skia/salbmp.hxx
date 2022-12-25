@@ -64,6 +64,13 @@ public:
     virtual bool ConvertToGreyscale() override;
     virtual bool Erase(const Color& color) override;
     virtual bool AlphaBlendWith(const SalBitmap& rSalBmp) override;
+#if defined MACOSX || defined IOS
+    virtual CGImageRef CreateWithMask(const SalBitmap& rMask, int nX, int nY, int nWidth,
+                                      int nHeight) const override;
+    virtual CGImageRef CreateColorMask(int nX, int nY, int nWidth, int nHeight,
+                                       Color nMaskColor) const override;
+    virtual CGImageRef CreateCroppedImage(int nX, int nY, int nWidth, int nHeight) const override;
+#endif
 
     const BitmapPalette& Palette() const { return mPalette; }
 
