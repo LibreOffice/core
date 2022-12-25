@@ -668,7 +668,7 @@ PrevLineCommentLbl:
         bPrevLineExtentsComment = false;
         aSym = "REM";
         sal_Int32 nLen = aLine.getLength() - nLineIdx;
-        // tdf#149402 - don't extend comment if line ends in a whitespace (asicCharClass::isWhitespace)
+        // tdf#149402 - don't extend comment if line ends in a whitespace (BasicCharClass::isWhitespace)
         if (bCompatible && !bLineEndsWithWhitespace && aLine[nLineIdx + nLen - 1] == '_'
             && aLine[nLineIdx + nLen - 2] == ' ')
             bPrevLineExtentsComment = true;
