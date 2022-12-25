@@ -1122,6 +1122,12 @@ namespace
 
         aMasked.set(vcl::UnicodeCoverage::GREEK_EXTENDED, false);
         aMasked.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
+        // tdf#88484
+        // Some fonts set the Arabic Presentation Forms-B bit because they
+        // support U+FEFF (Zero Width Space) which happens to be in that block
+        // but it isn’t an Arabic code point. By the time we reach here we
+        // decided this isn’t an Arabic font, so it should be safe.
+        aMasked.set(vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_B, false);
         if (aMasked.count() == 1)
             return otCoverageToScript(static_cast<UnicodeCoverageEnum>(find_first(aMasked)));
 
