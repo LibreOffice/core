@@ -87,7 +87,7 @@ public:
 
     bool isReadOnly(OUString const & path) const;
 
-    css::uno::Any getPropertyValue(OUString const & path) const;
+    css::uno::Any getPropertyValue(std::u16string_view path) const;
 
     static void setPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
