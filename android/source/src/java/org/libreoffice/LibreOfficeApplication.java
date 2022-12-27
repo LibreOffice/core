@@ -10,11 +10,11 @@
 
 package org.libreoffice;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
+import androidx.multidex.MultiDexApplication;
 
-public class LibreOfficeApplication extends Application {
+public class LibreOfficeApplication extends MultiDexApplication {
 
     private static Handler mainHandler;
 

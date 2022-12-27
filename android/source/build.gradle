@@ -26,8 +26,9 @@ dependencies {
             "libreoffice.jar",
             "unoloader.jar"
     ])
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.multidex:multidex:2.0.1"
 }
 
 android {
@@ -49,6 +50,9 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 33
+        // multidex needed when > 65,536 methods referenced with minSdKVersion < 21
+        // s. https://developer.android.com/studio/build/multidex
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
