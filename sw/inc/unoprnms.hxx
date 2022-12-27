@@ -915,6 +915,7 @@ inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_PREFIX_MAPPINGS
 inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_XPATH = u"DataBindingXpath";
 inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_STORE_ITEM_ID = u"DataBindingStoreItemID";
 inline constexpr OUStringLiteral UNO_NAME_COLOR = u"Color";
+inline constexpr OUStringLiteral UNO_NAME_APPEARANCE = u"Appearance";
 inline constexpr OUStringLiteral UNO_NAME_ALIAS = u"Alias";
 inline constexpr OUStringLiteral UNO_NAME_TAG = u"Tag";
 inline constexpr OUStringLiteral UNO_NAME_ID = u"Id";

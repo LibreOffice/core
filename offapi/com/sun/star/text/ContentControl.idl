@@ -92,6 +92,12 @@ service ContentControl
     */
     [optional, property] string Color;
 
+    /** The appearance: just remembered.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property] string Appearance;
+
     /** Combo box that allows free-form text as well, i.e. not dropdown.
 
         @since LibreOffice 7.5

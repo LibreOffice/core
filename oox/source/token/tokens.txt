@@ -600,6 +600,7 @@ anyType
 anyURI
 appName
 appWorkspace
+appearance
 apples
 applyAlignment
 applyAlignmentFormats
