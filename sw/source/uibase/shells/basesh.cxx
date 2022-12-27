@@ -591,7 +591,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
+    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc(), true);
 
     SwWrtShell &rWrtShell = GetShell();
 
