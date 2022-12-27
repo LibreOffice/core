@@ -139,11 +139,12 @@ task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'assets'
 
-    // include icons
+    // include icons and Impress styles
     into ('share') {
         into ('config') {
             from ("${liboInstdir}/share/config")
-            includes = ['images_**.zip']
+            includes = ['images_**.zip',
+                        '**/simpress/styles.xml']
         }
     }
 
