@@ -2069,7 +2069,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 1.33 cm intervals
-                    754, 1508, 1191, 2262, 3016, 3771, 4525, 5279, 6033, 6787
+                    754, 1508, 2262, 3016, 3771, 4525, 5279, 6033, 6787, 7541
                 };
             const sal_uInt16* pArr = aAbsSpace;
 
