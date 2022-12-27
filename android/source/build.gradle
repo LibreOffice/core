@@ -31,6 +31,7 @@ dependencies {
 }
 
 android {
+    namespace 'org.libreoffice'
     compileSdkVersion 32
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
