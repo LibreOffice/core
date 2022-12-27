@@ -175,6 +175,7 @@ public:
     OUString m_aDataBindingXpath;
     OUString m_aDataBindingStoreItemID;
     OUString m_aColor;
+    OUString m_aAppearance;
     OUString m_aAlias;
     OUString m_aTag;
     sal_Int32 m_nId;
@@ -556,6 +557,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDataBindingXpath(m_pImpl->m_aDataBindingXpath);
     pContentControl->SetDataBindingStoreItemID(m_pImpl->m_aDataBindingStoreItemID);
     pContentControl->SetColor(m_pImpl->m_aColor);
+    pContentControl->SetAppearance(m_pImpl->m_aAppearance);
     pContentControl->SetAlias(m_pImpl->m_aAlias);
     pContentControl->SetTag(m_pImpl->m_aTag);
     pContentControl->SetId(m_pImpl->m_nId);
@@ -1006,6 +1008,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_APPEARANCE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aAppearance = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetAppearance(aValue);
+            }
+        }
+    }
     else if (rPropertyName == UNO_NAME_ALIAS)
     {
         OUString aValue;
@@ -1301,6 +1318,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetColor();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_APPEARANCE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aAppearance;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetAppearance();
         }
     }
     else if (rPropertyName == UNO_NAME_ALIAS)

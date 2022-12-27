@@ -889,6 +889,7 @@
 #define UNO_NAME_DATA_BINDING_XPATH "DataBindingXpath"
 #define UNO_NAME_DATA_BINDING_STORE_ITEM_ID "DataBindingStoreItemID"
 #define UNO_NAME_COLOR "Color"
+#define UNO_NAME_APPEARANCE "Appearance"
 #define UNO_NAME_ALIAS "Alias"
 #define UNO_NAME_TAG "Tag"
 #define UNO_NAME_ID "Id"

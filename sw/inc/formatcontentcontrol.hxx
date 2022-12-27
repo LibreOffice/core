@@ -169,6 +169,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The color: just remembered.
     OUString m_aColor;
 
+    /// The appearance: just remembered.
+    OUString m_aAppearance;
+
     /// The alias: just remembered.
     OUString m_aAlias;
 
@@ -354,6 +357,10 @@ public:
     void SetColor(const OUString& rColor) { m_aColor = rColor; }
 
     OUString GetColor() const { return m_aColor; }
+
+    void SetAppearance(const OUString& rAppearance) { m_aAppearance = rAppearance; }
+
+    const OUString& GetAppearance() const { return m_aAppearance; }
 
     void SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
 

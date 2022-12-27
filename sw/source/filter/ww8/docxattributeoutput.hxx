@@ -142,6 +142,7 @@ public:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTextAttrs;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pDataBindingAttrs;
     OUString m_aColor;
+    OUString m_aAppearance;
     OUString m_aPlaceHolderDocPart;
     bool m_bShowingPlaceHolder;
     OUString m_aAlias;
