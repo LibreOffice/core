@@ -536,6 +536,10 @@ void SdtHelper::SetColor(const OUString& rColor) { m_aColor = rColor; }
 
 const OUString& SdtHelper::GetColor() const { return m_aColor; }
 
+void SdtHelper::SetAppearance(const OUString& rAppearance) { m_aAppearance = rAppearance; }
+
+const OUString& SdtHelper::GetAppearance() const { return m_aAppearance; }
+
 void SdtHelper::SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
 
 const OUString& SdtHelper::GetAlias() const { return m_aAlias; }

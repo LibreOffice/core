@@ -943,6 +943,12 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(m_pSdtHelper->GetColor()));
     }
 
+    if (!m_pSdtHelper->GetAppearance().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("Appearance",
+                                               uno::Any(m_pSdtHelper->GetAppearance()));
+    }
+
     if (!m_pSdtHelper->GetAlias().isEmpty())
     {
         xContentControlProps->setPropertyValue("Alias",

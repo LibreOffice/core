@@ -1014,6 +1014,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentCo
         { UNO_NAME_DATA_BINDING_XPATH, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_DATA_BINDING_STORE_ITEM_ID, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_COLOR, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_APPEARANCE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_ALIAS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_TAG, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_ID, 0, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0 },

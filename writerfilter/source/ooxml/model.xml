@@ -13972,6 +13972,11 @@
           <data type="string"/>
         </attribute>
       </define>
+      <define name="CT_SdtAppearance">
+        <attribute name="w15:val">
+          <data type="string"/>
+        </attribute>
+      </define>
       <define name="CT_SdtPr">
         <choice>
           <element name="rPr">
@@ -14045,6 +14050,9 @@
           </element>
           <element name="w15:color">
             <ref name="CT_SdtColor"/>
+          </element>
+          <element name="w15:appearance">
+            <ref name="CT_SdtAppearance"/>
           </element>
         </choice>
       </define>
@@ -18292,6 +18300,9 @@
     <resource name="CT_SdtColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SdtColor_val"/>
     </resource>
+    <resource name="CT_SdtAppearance" resource="Properties">
+      <attribute name="w15:val" tokenid="ooxml:CT_SdtAppearance_val"/>
+    </resource>
     <resource name="CT_SdtPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
       <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>
@@ -18317,6 +18328,7 @@
       <element name="group" tokenid="ooxml:CT_SdtPr_group"/>
       <element name="bibliography" tokenid="ooxml:CT_SdtPr_bibliography"/>
       <element name="w15:color" tokenid="ooxml:CT_SdtPr_color"/>
+      <element name="w15:appearance" tokenid="ooxml:CT_SdtPr_appearance"/>
     </resource>
     <resource name="CT_SdtEndPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtEndPr_rPr"/>

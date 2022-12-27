@@ -623,6 +623,8 @@ void SdtBlockHelper::DeleteAndResetTheLists()
         m_aPlaceHolderDocPart.clear();
     if (!m_aColor.isEmpty())
         m_aColor.clear();
+    if (!m_aAppearance.isEmpty())
+        m_aAppearance.clear();
     m_bShowingPlaceHolder = false;
     m_nId = 0;
     m_nTabIndex = 0;
@@ -720,6 +722,11 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
     if (!m_aColor.isEmpty())
     {
         pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val), m_aColor);
+    }
+
+    if (!m_aAppearance.isEmpty())
+    {
+        pSerializer->singleElementNS(XML_w15, XML_appearance, FSNS(XML_w15, XML_val), m_aAppearance);
     }
 
     if (!m_aAlias.isEmpty())
@@ -832,6 +839,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
                 if (rProp.Name == "ooxml:CT_SdtColor_val")
                     m_aColor = sValue;
             }
+        }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_appearance")
+        {
+            if (!(aPropertyValue.Value >>= m_aAppearance))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt appearance value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_showingPlcHdr")
         {
@@ -2401,6 +2413,12 @@ void DocxAttributeOutput::WriteContentControlStart()
     {
         m_pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val),
                                        m_pContentControl->GetColor());
+    }
+
+    if (!m_pContentControl->GetAppearance().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w15, XML_appearance, FSNS(XML_w15, XML_val),
+                                       m_pContentControl->GetAppearance());
     }
 
     if (!m_pContentControl->GetAlias().isEmpty())

@@ -1233,6 +1233,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtColor_val", sStringValue);
             m_pImpl->m_pSdtHelper->SetColor(sStringValue);
             break;
+        case NS_ooxml::LN_CT_SdtAppearance_val:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtAppearance_val", sStringValue);
+            m_pImpl->m_pSdtHelper->SetAppearance(sStringValue);
+        break;
         case NS_ooxml::LN_CT_SdtText_multiLine:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtText_multiLine", sStringValue);
             break;
@@ -2863,6 +2867,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
     case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
     case NS_ooxml::LN_CT_SdtPr_color:
+    case NS_ooxml::LN_CT_SdtPr_appearance:
     case NS_ooxml::LN_CT_SdtPr_tag:
     case NS_ooxml::LN_CT_SdtPr_tabIndex:
     case NS_ooxml::LN_CT_SdtPr_lock:
@@ -2876,6 +2881,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
 
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_appearance)
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if (pProperties)
@@ -2967,6 +2982,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
             case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
             case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
+            case NS_ooxml::LN_CT_SdtPr_appearance:  sName = "ooxml:CT_SdtPr_appearance"; break;
             default: assert(false);
         };
         if (
