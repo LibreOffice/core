@@ -523,6 +523,15 @@ DECLARE_RTFEXPORT_TEST(testInvalidParagraphStyle, "invalidParagraphStyle.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, numFormat);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf152784_1, "tdf152784_1.rtf")
+{
+    // Ensure that paragraph having style with numbering does not have numbering
+    // since it is not explitly defined in paragraph properties
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Here should be no numbering!"),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<OUString>(xPara, "NumberingStyleName").isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
