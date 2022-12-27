@@ -2547,6 +2547,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151801)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
+{
+    createSwDoc("cursor_position_after_undo.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // switch on "Outline Folding" mode
+    dispatchCommand(mxComponent, ".uno:ShowOutlineContentVisibilityButton", {});
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton());
+
+    // move the cursor to the beginning of the 3rd word in the 3rd paragraph, "tincidunt"
+    pWrtShell->FwdPara();
+    pWrtShell->FwdPara();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 16, /*bBasicCall=*/false);
+
+    // select the word
+    dispatchCommand(mxComponent, ".uno:SelectWord", {});
+
+    // check the word is select
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("tincidunt"), pShellCursor->GetText());
+
+    // remember the cursor position for comparsion
+    SwPosition aCursorPos(*pWrtShell->GetCursor()->GetPoint());
+
+    // delete the selected word
+    pWrtShell->Delete();
+
+    // undo delete
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // without the fix in place, the cursor would have been set to the start of the outline node
+    // - Expected: SwPosition (node 11, offset 25)
+    // - Actual  : SwPosition (node 9, offset 0)
+    CPPUNIT_ASSERT_EQUAL(aCursorPos, *pWrtShell->GetCursor()->GetPoint());
+
+    // switch off "Outline Folding" mode
+    dispatchCommand(mxComponent, ".uno:ShowOutlineContentVisibilityButton", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

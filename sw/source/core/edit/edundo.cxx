@@ -104,7 +104,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 
 void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc(), true);
 
     CurrShell aCurr( this );
 
@@ -161,7 +161,7 @@ void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
 
 void SwEditShell::Redo(sal_uInt16 const nCount)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc(), true);
 
     CurrShell aCurr( this );
 

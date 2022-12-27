@@ -681,9 +681,10 @@ class MakeAllOutlineContentTemporarilyVisible
 private:
     SwWrtShell* m_pWrtSh = nullptr;
     bool m_bDone = false;
+    bool m_bScrollToCursor = false;
 public:
     static sal_uInt32 nLock;
-    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc)
+    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc, bool bScrollToCursor = false)
     {
         ++nLock;
         if (nLock > 1)
@@ -692,8 +693,10 @@ public:
             if ((m_pWrtSh = pDocSh->GetWrtShell()) && m_pWrtSh->GetViewOptions() &&
                     m_pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
             {
-                m_pWrtSh->StartAllAction();
+                m_pWrtSh->LockView(true);
+                m_pWrtSh->LockPaint();
                 m_pWrtSh->MakeAllFoldedOutlineContentVisible();
+                m_bScrollToCursor = bScrollToCursor;
                 m_bDone = true;
             }
     }
@@ -706,7 +709,10 @@ public:
         if (m_bDone && m_pWrtSh)
         {
             m_pWrtSh->MakeAllFoldedOutlineContentVisible(false);
-            m_pWrtSh->EndAllAction();
+            m_pWrtSh->UnlockPaint();
+            m_pWrtSh->LockView(false);
+            if (m_bScrollToCursor)
+                m_pWrtSh->UpdateCursor(SwCursorShell::SCROLLWIN);
         }
     }
 };
