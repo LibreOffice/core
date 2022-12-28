@@ -6267,89 +6267,178 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
     // OpCode of the "root" operator (which is already in RPN array).
     OpCode eOpCode = (*(pCode - 1))->GetOpCode();
     // eOpCode can be some operator which does not change with operands with or contains zero values.
-    if (eOpCode != ocSum)
-        return;
-
-    FormulaToken** ppTok = pCode - 2; // exclude the root operator.
-    // The following loop runs till a "pattern" is found or there is a mismatch
-    // and marks the push DoubleRef arguments as trimmable when there is a match.
-    // The pattern is
-    // SUM(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
-    // such that one of the operands of ocEqual is a double-ref.
-    // Examples of formula that matches this are:
-    //   SUM(IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)
-    //   SUM((IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)*$H$2*5/$G$3)
-    //   SUM(IF(E:E=16,F:F)*$H$1*100)
-    bool bTillClose = true;
-    bool bCloseTillIf = false;
-    sal_Int16 nToksTillIf = 0;
-    constexpr sal_Int16 MAXDIST_IF = 15;
-    while (*ppTok)
+    if (eOpCode == ocSum)
     {
-        FormulaToken* pTok = *ppTok;
-        OpCode eCurrOp = pTok->GetOpCode();
-        ++nToksTillIf;
-
-        // TODO : Is there a better way to handle this ?
-        // ocIf is too far off from the sum opcode.
-        if (nToksTillIf > MAXDIST_IF)
-            return;
-
-        switch (eCurrOp)
+        FormulaToken** ppTok = pCode - 2; // exclude the root operator.
+        // The following loop runs till a "pattern" is found or there is a mismatch
+        // and marks the push DoubleRef arguments as trimmable when there is a match.
+        // The pattern is
+        // SUM(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
+        // such that one of the operands of ocEqual is a double-ref.
+        // Examples of formula that matches this are:
+        //   SUM(IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)
+        //   SUM((IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)*$H$2*5/$G$3)
+        //   SUM(IF(E:E=16,F:F)*$H$1*100)
+        bool bTillClose = true;
+        bool bCloseTillIf = false;
+        sal_Int16 nToksTillIf = 0;
+        constexpr sal_Int16 MAXDIST_IF = 15;
+        while (*ppTok)
         {
-            case ocDiv:
-            case ocMul:
-                if (!bTillClose)
-                    return;
-                break;
-            case ocPush:
+            FormulaToken* pTok = *ppTok;
+            OpCode eCurrOp = pTok->GetOpCode();
+            ++nToksTillIf;
 
-                break;
-            case ocClose:
-                if (bTillClose)
-                {
-                    bTillClose = false;
-                    bCloseTillIf = true;
-                }
-                else
-                    return;
-                break;
-            case ocIf:
-                {
-                    if (!bCloseTillIf)
+            // TODO : Is there a better way to handle this ?
+            // ocIf is too far off from the sum opcode.
+            if (nToksTillIf > MAXDIST_IF)
+                return;
+
+            switch (eCurrOp)
+            {
+                case ocDiv:
+                case ocMul:
+                    if (!bTillClose)
                         return;
+                    break;
+                case ocPush:
 
-                    if (!pTok->IsInForceArray())
-                        return;
-
-                    const short nJumpCount = pTok->GetJump()[0];
-                    if (nJumpCount != 2) // Should have THEN but no ELSE.
-                        return;
-
-                    OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
-                    if (eCompOp != ocEqual)
-                        return;
-
-                    FormulaToken* pLHS = *(ppTok - 2);
-                    FormulaToken* pRHS = *(ppTok - 3);
-                    if (((pLHS->GetType() == svSingleRef || pLHS->GetType() == svDouble) && pRHS->GetType() == svDoubleRef) ||
-                        ((pRHS->GetType() == svSingleRef || pRHS->GetType() == svDouble) && pLHS->GetType() == svDoubleRef))
+                    break;
+                case ocClose:
+                    if (bTillClose)
                     {
-                        if (pLHS->GetType() == svDoubleRef)
+                        bTillClose = false;
+                        bCloseTillIf = true;
+                    }
+                    else
+                        return;
+                    break;
+                case ocIf:
+                    {
+                        if (!bCloseTillIf)
+                            return;
+
+                        if (!pTok->IsInForceArray())
+                            return;
+
+                        const short nJumpCount = pTok->GetJump()[0];
+                        if (nJumpCount != 2) // Should have THEN but no ELSE.
+                            return;
+
+                        OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
+                        if (eCompOp != ocEqual)
+                            return;
+
+                        FormulaToken* pLHS = *(ppTok - 2);
+                        FormulaToken* pRHS = *(ppTok - 3);
+                        if (((pLHS->GetType() == svSingleRef || pLHS->GetType() == svDouble) && pRHS->GetType() == svDoubleRef) ||
+                            ((pRHS->GetType() == svSingleRef || pRHS->GetType() == svDouble) && pLHS->GetType() == svDoubleRef))
+                        {
+                            if (pLHS->GetType() == svDoubleRef)
+                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                            else
+                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                            return;
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+            --ppTok;
+        }
+    }
+    else if (eOpCode == ocSumProduct)
+    {
+        FormulaToken** ppTok = pCode - 2; // exclude the root operator.
+        // The following loop runs till a "pattern" is found or there is a mismatch
+        // and marks the push DoubleRef arguments as trimmable when there is a match.
+        // The pattern is
+        // SUMPRODUCT(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
+        // such that one of the operands of ocEqual is a double-ref.
+        // Examples of formula that matches this are:
+        //   SUMPRODUCT(IF($A:$A=$L12;$D:$D*G:G))
+        bool bTillClose = true;
+        bool bCloseTillIf = false;
+        sal_Int16 nToksTillIf = 0;
+        constexpr sal_Int16 MAXDIST_IF = 15;
+        while (*ppTok)
+        {
+            FormulaToken* pTok = *ppTok;
+            OpCode eCurrOp = pTok->GetOpCode();
+            ++nToksTillIf;
+
+            // TODO : Is there a better way to handle this ?
+            // ocIf is too far off from the sum opcode.
+            if (nToksTillIf > MAXDIST_IF)
+                return;
+
+            switch (eCurrOp)
+            {
+                case ocDiv:
+                case ocMul:
+                    {
+                        if (!pTok->IsInForceArray())
+                            break;
+                        FormulaToken* pLHS = *(ppTok - 1);
+                        FormulaToken* pRHS = *(ppTok - 2);
+                        StackVar lhsType = pLHS->GetType();
+                        StackVar rhsType = pRHS->GetType();
+                        if (lhsType == svDoubleRef && rhsType == svDoubleRef)
+                        {
                             pLHS->GetDoubleRef()->SetTrimToData(true);
-                        else
                             pRHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                    }
+                    break;
+                case ocPush:
+                    break;
+                case ocClose:
+                    if (bTillClose)
+                    {
+                        bTillClose = false;
+                        bCloseTillIf = true;
+                    }
+                    else
+                        return;
+                    break;
+                case ocIf:
+                    {
+                        if (!bCloseTillIf)
+                            return;
+
+                        if (!pTok->IsInForceArray())
+                            return;
+
+                        const short nJumpCount = pTok->GetJump()[0];
+                        if (nJumpCount != 2) // Should have THEN but no ELSE.
+                            return;
+
+                        OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
+                        if (eCompOp != ocEqual)
+                            return;
+
+                        FormulaToken* pLHS = *(ppTok - 2);
+                        FormulaToken* pRHS = *(ppTok - 3);
+                        StackVar lhsType = pLHS->GetType();
+                        StackVar rhsType = pRHS->GetType();
+                        if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDouble))
+                        {
+                            pLHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                        if ((lhsType == svSingleRef || lhsType == svDouble) && rhsType == svDoubleRef)
+                        {
+                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                        }
                         return;
                     }
-                }
-                break;
-            default:
-                return;
+                    break;
+                default:
+                    return;
+            }
+            --ppTok;
         }
-        --ppTok;
     }
-
-    return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
