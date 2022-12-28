@@ -1946,13 +1946,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 #endif
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
-    OSL_ENSURE( pEntry, "no style sheet found" );
+    SAL_WARN_IF(!pEntry, "writerfilter.dmapper", "no style sheet found");
     const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->pProperties.get() : nullptr;
     sal_Int32 nListId = pParaContext ? pParaContext->props().GetListId() : -1;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = nListId > -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
+        if (!pEntry || pEntry->nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
+            // We could not resolve paragraph style or it is not a paragraph style
+            // Remove this style reference, otherwise it will cause exceptions during further
+            // processing and not all paragraph styles will be initialized.
+            SAL_WARN("writerfilter.dmapper", "Paragraph style is incorrect. Ignored");
+            pParaContext->Erase(PROP_PARA_STYLE_NAME);
+        }
+
         bool bNumberingFromBaseStyle = false;
         if (!isNumberingViaRule)
             nListId = lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle);
