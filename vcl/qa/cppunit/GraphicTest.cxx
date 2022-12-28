@@ -191,26 +191,10 @@ std::string toHexString(const std::vector<unsigned char>& a)
     return aStrm.str();
 }
 
-std::unique_ptr<SvStream> createStream(OUString const& rSwapFileURL)
-{
-    std::unique_ptr<SvStream> xStream;
-
-    try
-    {
-        xStream = ::utl::UcbStreamHelper::CreateStream(
-            rSwapFileURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-    }
-    catch (const css::uno::Exception&)
-    {
-    }
-
-    return xStream;
-}
-
-std::vector<unsigned char> calculateHash(std::unique_ptr<SvStream>& rStream)
+std::vector<unsigned char> calculateHash(SvStream* pStream)
 {
     comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
-    const sal_uInt32 nSize(rStream->remainingSize());
+    const sal_uInt32 nSize(pStream->remainingSize());
     std::vector<sal_uInt8> aData(nSize);
     aHashEngine.update(aData.data(), nSize);
     return aHashEngine.finalize();
@@ -576,7 +560,7 @@ void GraphicTest::testSwappingGraphic_PNG_WithGfxLink()
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
 
     // Check the swap file (shouldn't exist)
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Swapping out
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
@@ -587,7 +571,7 @@ void GraphicTest::testSwappingGraphic_PNG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
 
     // Check the swap file (still shouldn't exist)
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Let's swap in
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -627,8 +611,7 @@ void GraphicTest::testSwappingGraphic_PNG_WithoutGfxLink()
 
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
-    OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(true, rSwapFileURL.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Swapping out
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
@@ -639,17 +622,15 @@ void GraphicTest::testSwappingGraphic_PNG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
 
     // Let's check the swap file
-    rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(true, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
 
     { // Check the swap file content
-        std::unique_ptr<SvStream> xStream = createStream(rSwapFileURL);
-        CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
+        SvStream* pStream = aGraphic.ImplGetImpGraphic()->getSwapFileStream();
+        pStream->Seek(0);
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(36079), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(36079), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(xStream);
+        std::vector<unsigned char> aHash = calculateHash(pStream);
         CPPUNIT_ASSERT_EQUAL(std::string("9347511e3b80dfdfaadf91a3bdef55a8ae85552b"),
                              toHexString(aHash));
     }
@@ -665,7 +646,7 @@ void GraphicTest::testSwappingGraphic_PNG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(aChecksumBeforeSwapping, aGraphic.GetChecksum());
 
     // File shouldn't be available anymore
-    CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Check the bitmap
     CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
@@ -808,7 +789,7 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(223), rByteSize);
 
     // Make sure we don't have a file
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // SWAP OUT the Graphic and make sure it's not available currently
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
@@ -816,7 +797,7 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // We use GfxLink so no swap file in this case
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Byte size doesn't change when we swapped out
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
@@ -865,8 +846,7 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
     CPPUNIT_ASSERT_EQUAL(sal_uLong(223), rByteSize);
 
-    OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(true, rSwapFileURL.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Swapping out
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
@@ -878,19 +858,15 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
 
     // Let's check the swap file
-    rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(false, rSwapFileURL.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(true, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
-
     {
         // Check the swap file content
-        std::unique_ptr<SvStream> xStream = createStream(rSwapFileURL);
-        CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
+        SvStream* pStream = aGraphic.ImplGetImpGraphic()->getSwapFileStream();
+        pStream->Seek(0);
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(247), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(247), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(xStream);
+        std::vector<unsigned char> aHash = calculateHash(pStream);
         CPPUNIT_ASSERT_EQUAL(std::string("666820973fd95e6cd9e7bc5f1c53732acbc99326"),
                              toHexString(aHash));
     }
@@ -914,7 +890,8 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
 
     // File shouldn't be available anymore
-    CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SvStream*>(nullptr),
+                         aGraphic.ImplGetImpGraphic()->getSwapFileStream());
 }
 
 void GraphicTest::testSwappingGraphicProperties_SVG_WithGfxLink()
@@ -1161,7 +1138,7 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(89552), rByteSize);
 
     // Make sure we don't have a file
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // SWAP OUT the Graphic and make sure it's not available currently
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
@@ -1169,7 +1146,7 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // We use GfxLink so no swap file in this case
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // Byte size doesn't change when we swapped out
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
@@ -1212,8 +1189,7 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
 
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
-    OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(true, rSwapFileURL.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
 
     // SWAP OUT
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
@@ -1225,18 +1201,15 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
 
     // Let's check the swap file
-    rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
-    CPPUNIT_ASSERT_EQUAL(true, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
-
     {
         // Check the swap file content
-        std::unique_ptr<SvStream> xStream = createStream(rSwapFileURL);
-        CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
+        SvStream* pStream = aGraphic.ImplGetImpGraphic()->getSwapFileStream();
+        pStream->Seek(0);
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15139), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15139), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(xStream);
+        std::vector<unsigned char> aHash = calculateHash(pStream);
         CPPUNIT_ASSERT_EQUAL(std::string("ecae5354edd9cf98553eb3153e44181f56d35338"),
                              toHexString(aHash));
     }
@@ -1248,7 +1221,8 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // File shouldn't be available anymore
-    CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SvStream*>(nullptr),
+                         aGraphic.ImplGetImpGraphic()->getSwapFileStream());
 
     // Check the bitmap
     CPPUNIT_ASSERT_EQUAL(tools::Long(124), aGraphic.GetSizePixel().Width());

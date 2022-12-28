@@ -65,20 +65,19 @@ private:
     OUString maOriginURL;
 
 public:
-    ImpSwapFile(INetURLObject const & rSwapURL, OUString aOriginURL)
-        : SwapFile(rSwapURL)
-        , maOriginURL(std::move(aOriginURL))
+    ImpSwapFile(OUString aOriginURL)
+        : maOriginURL(std::move(aOriginURL))
     {
     }
 
     OUString const & getOriginURL() const { return maOriginURL; }
 };
 
-OUString ImpGraphic::getSwapFileURL() const
+SvStream* ImpGraphic::getSwapFileStream() const
 {
     if (mpSwapFile)
-        return mpSwapFile->getSwapURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    return OUString();
+        return mpSwapFile->getStream();
+    return nullptr;
 }
 
 ImpGraphic::ImpGraphic() :
@@ -1320,28 +1319,25 @@ bool ImpGraphic::swapOut()
     }
     else
     {
-        // Create a temp filename for the swap file
-        const INetURLObject aTempFileURL(utl::CreateTempURL());
-
         // Create a swap file
-        auto pSwapFile = o3tl::make_shared<ImpSwapFile>(aTempFileURL, getOriginURL());
+        auto pSwapFile = o3tl::make_shared<ImpSwapFile>(getOriginURL());
 
         // Open a stream to write the swap file to
         {
-            std::unique_ptr<SvStream> xOutputStream = pSwapFile->openOutputStream();
+            SvStream* pOutputStream = pSwapFile->getStream();
 
-            if (!xOutputStream)
+            if (!pOutputStream)
                 return false;
 
             // Write to stream
-            xOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
-            xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
-            xOutputStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
+            pOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
+            pOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
+            pOutputStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
 
-            if (!xOutputStream->GetError() && swapOutContent(*xOutputStream))
+            if (!pOutputStream->GetError() && swapOutContent(*pOutputStream))
             {
-                xOutputStream->FlushBuffer();
-                bResult = !xOutputStream->GetError();
+                pOutputStream->FlushBuffer();
+                bResult = !pOutputStream->GetError();
             }
         }
 
@@ -1511,39 +1507,25 @@ bool ImpGraphic::swapIn()
     }
     else
     {
-        OUString aSwapURL;
+        SvStream* pStream = nullptr;
 
         if (mpSwapFile)
-            aSwapURL = mpSwapFile->getSwapURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            pStream = mpSwapFile->getStream();
 
-        if (!aSwapURL.isEmpty())
+        if (pStream)
         {
-            std::unique_ptr<SvStream> xStream;
-            try
-            {
-                xStream = ::utl::UcbStreamHelper::CreateStream(aSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-            }
-            catch( const css::uno::Exception& )
-            {
-            }
+            pStream->SetVersion(SOFFICE_FILEFORMAT_50);
+            pStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
+            pStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
+            pStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-            if (xStream)
-            {
-                xStream->SetVersion(SOFFICE_FILEFORMAT_50);
-                xStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
-                xStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
+            bReturn = swapInFromStream(*pStream);
 
-                bReturn = swapInFromStream(*xStream);
+            restoreFromSwapInfo();
 
-                xStream.reset();
+            setOriginURL(mpSwapFile->getOriginURL());
 
-                restoreFromSwapInfo();
-
-                if (mpSwapFile)
-                    setOriginURL(mpSwapFile->getOriginURL());
-
-                mpSwapFile.reset();
-            }
+            mpSwapFile.reset();
         }
     }
 
