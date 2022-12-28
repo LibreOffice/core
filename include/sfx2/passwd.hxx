@@ -63,6 +63,8 @@ private:
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
+    std::shared_ptr<weld::MessageDialog> m_xConfirmFailedDialog;
+
     OUString        maMinLenPwdStr;
     OUString        maMinLenPwdStr1;
     OUString        maEmptyPwdStr;
@@ -124,7 +126,11 @@ public:
 
     void ShowMinLengthText(bool bShow);
 
+    void PreRun();
+
     virtual short run() override;
+
+    ~SfxPasswordDialog();
 };
 
 #endif // INCLUDED_SFX2_PASSWD_HXX

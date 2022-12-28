@@ -86,6 +86,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"sfx/ui/documentpropertiesdialog.ui"
         || rUIFile == u"sfx/ui/editdurationdialog.ui"
         || rUIFile == u"sfx/ui/linefragment.ui"
+        || rUIFile == u"sfx/ui/password.ui"
         // svx
         || rUIFile == u"svx/ui/accessibilitycheckdialog.ui"
         || rUIFile == u"svx/ui/accessibilitycheckentry.ui"
@@ -106,8 +107,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"filter/ui/pdflinkspage.ui"
         || rUIFile == u"filter/ui/warnpdfdialog.ui"
         || rUIFile == u"filter/ui/pdfsignpage.ui"
-        || rUIFile == u"writerperfect/ui/exportepub.ui"
-        )
+        || rUIFile == u"writerperfect/ui/exportepub.ui")
         {
         return true;
     }
