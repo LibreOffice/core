@@ -10,6 +10,8 @@
 
 $(eval $(call gb_Library_Library,lo-bootstrap))
 
+ifeq (ANDROID,$(OS))
+
 # We explicitly *don't* want gb_STDLIBS to be linked here
 $(eval $(call gb_Library_disable_standard_system_libs,lo-bootstrap))
 
@@ -22,6 +24,13 @@ $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
 	sal/android/libreofficekit-jni \
 	sal/android/lo-bootstrap \
 ))
+endif
+
+ifeq (EMSCRIPTEN,$(OS))
+$(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
+	sal/emscripten/lo-bootstrap \
+))
+endif
 
 $(eval $(call gb_Library_set_include,lo-bootstrap,\
 	$$(INCLUDE) \

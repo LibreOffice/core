@@ -50,6 +50,10 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <osl/detail/emscripten-bootstrap.h>
+#endif
+
 #ifdef IOS
 #include <premac.h>
 #import <Foundation/Foundation.h>
@@ -456,7 +460,7 @@ bool Bootstrap_Impl::getValue(
         return true;
     }
 
-#ifdef ANDROID
+#if defined ANDROID || defined EMSCRIPTEN
     if (key == "APP_DATA_DIR")
     {
         const char *app_data_dir = lo_get_app_data_dir();

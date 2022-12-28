@@ -5464,6 +5464,7 @@ include/osl/conditn.hxx
 include/osl/detail/android-bootstrap.h
 include/osl/detail/component-defines.h
 include/osl/detail/component-mapping.h
+include/osl/detail/emscripten-bootstrap.h
 include/osl/diagnose.h
 include/osl/diagnose.hxx
 include/osl/endian.h
@@ -7575,6 +7576,7 @@ sal/android/libreofficekit-jni.c
 sal/android/lo-bootstrap.c
 sal/android/uthash.h
 sal/cppunittester/cppunittester.cxx
+sal/emscripten/lo-bootstrap.c
 sal/inc/signalshared.hxx
 sal/osl/all/compat.cxx
 sal/osl/all/debugbase.cxx

@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
 	$(if $(CROSS_COMPILING),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,Executable_cppunittester)) \
-	$(if $(filter $(OS),ANDROID), \
+	$(if $(filter $(OS),ANDROID EMSCRIPTEN), \
 		Library_lo-bootstrap) \
 	Library_sal \
     $(call gb_CondLibSalTextenc,Library_sal_textenc) \

@@ -335,6 +335,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 	OGLTrans \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	lo-bootstrap \
+))
+endif
+
 ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
