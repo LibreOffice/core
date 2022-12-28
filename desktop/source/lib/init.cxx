@@ -29,6 +29,10 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <osl/detail/emscripten-bootstrap.h>
+#endif
+
 #include <algorithm>
 #include <memory>
 #include <iostream>
@@ -7106,10 +7110,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
     else
     {
-#ifdef ANDROID
+#if defined ANDROID || defined EMSCRIPTEN
         aAppPath = OUString::fromUtf8(lo_get_app_data_dir()) + "/program";
-#elif defined __EMSCRIPTEN__
-        aAppPath = OUString::fromUtf8("instdir/program");
 #else
         // Fun conversion dance back and forth between URLs and system paths...
         OUString aAppURL;

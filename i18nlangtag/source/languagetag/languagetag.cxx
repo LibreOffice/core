@@ -36,6 +36,10 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <osl/detail/emscripten-bootstrap.h>
+#endif
+
 using namespace com::sun::star;
 
 namespace {
@@ -215,7 +219,7 @@ void LiblangtagDataRef::teardown()
 
 void LiblangtagDataRef::setupDataPath()
 {
-#if defined(ANDROID)
+#if defined(ANDROID) || defined(EMSCRIPTEN)
     maDataPath = OString(lo_get_app_data_dir()) + "/share/liblangtag";
 #else
     // maDataPath is assumed to be empty here.

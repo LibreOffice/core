@@ -37,7 +37,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
-	$(if $(filter ANDROID,$(OS)), \
+	$(if $(filter ANDROID EMSCRIPTEN,$(OS)), \
 		lo-bootstrap \
 	) \
 ))
