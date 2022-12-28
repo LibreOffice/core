@@ -1290,9 +1290,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
     CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf152206)
+CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
 {
-    loadAndSave("tdf152206.docx");
+    loadAndSave("tdf152506.docx");
     xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
     CPPUNIT_ASSERT(pXml);
 
