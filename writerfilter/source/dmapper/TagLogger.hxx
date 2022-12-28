@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <libxml/xmlwriter.h>
 
 namespace writerfilter
@@ -54,6 +55,10 @@ namespace writerfilter
 #ifdef DBG_UTIL
         void attribute(const std::string & name, std::u16string_view value);
         void attribute(const std::string & name, sal_uInt32 value);
+        template<typename T> std::enable_if_t<std::is_integral_v<T>, void>
+        attribute(const std::string & name, T value)
+        { return attribute(name, static_cast<sal_uInt32>(value)); }
+        void attribute(const std::string & name, float value);
         void attribute(const std::string & name, const css::uno::Any& aAny);
         void chars(const std::string & chars);
         void chars(std::u16string_view chars);
