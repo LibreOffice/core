@@ -1171,6 +1171,10 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(weld::Container* pPage, weld::Dialo
 
 ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
+    if (mpPasswordDialog)
+        mpPasswordDialog->response(RET_CANCEL);
+    if (mpUnsupportedMsgDialog)
+        mpUnsupportedMsgDialog->response(RET_CANCEL);
 }
 
 std::unique_ptr<SfxTabPage> ImpPDFTabSecurityPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
@@ -1261,40 +1265,51 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
 {
-    SfxPasswordDialog aPwdDialog(m_xContainer.get(), &msUserPwdTitle);
-    aPwdDialog.SetMinLen(0);
-    aPwdDialog.ShowMinLengthText(false);
-    aPwdDialog.ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
-    aPwdDialog.set_title(msStrSetPwd);
-    aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
-    aPwdDialog.AllowAsciiOnly();
-    if (aPwdDialog.run() == RET_OK)  // OK issued get password and set it
-    {
-        OUString aUserPW(aPwdDialog.GetPassword());
-        OUString aOwnerPW(aPwdDialog.GetPassword2());
+    if(mpPasswordDialog)
+        mpPasswordDialog->response(RET_CANCEL);
 
-        mbHaveUserPassword = !aUserPW.isEmpty();
-        mbHaveOwnerPassword = !aOwnerPW.isEmpty();
+    mpPasswordDialog = std::make_shared<SfxPasswordDialog>(m_xContainer.get(), &msUserPwdTitle);
 
-        mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
-        if (!mxPreparedPasswords.is()) {
-            OUString msg;
-            ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TODO: handle failure
-            std::unique_ptr<weld::MessageDialog>(
-                Application::CreateMessageDialog(
-                    GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
-                ->run();
-            return;
-        }
+    mpPasswordDialog->SetMinLen(0);
+    mpPasswordDialog->ShowMinLengthText(false);
+    mpPasswordDialog->ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
+    mpPasswordDialog->set_title(msStrSetPwd);
+    mpPasswordDialog->SetGroup2Text(msOwnerPwdTitle);
+    mpPasswordDialog->AllowAsciiOnly();
 
-        if( mbHaveOwnerPassword )
+    mpPasswordDialog->PreRun();
+
+    weld::DialogController::runAsync(mpPasswordDialog, [this](sal_Int32 response){
+        if (response == RET_OK)
         {
-            maPreparedOwnerPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aOwnerPW );
+            OUString aUserPW(mpPasswordDialog->GetPassword());
+            OUString aOwnerPW(mpPasswordDialog->GetPassword2());
+
+            mbHaveUserPassword = !aUserPW.isEmpty();
+            mbHaveOwnerPassword = !aOwnerPW.isEmpty();
+
+            mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
+            if (!mxPreparedPasswords.is())
+            {
+                OUString msg;
+                ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TODO: handle failure
+                mpUnsupportedMsgDialog = std::shared_ptr<weld::MessageDialog>(
+                Application::CreateMessageDialog(
+                    GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg));
+
+                mpUnsupportedMsgDialog->runAsync(mpUnsupportedMsgDialog, [](sal_Int32){ });
+                return;
+            }
+
+            if( mbHaveOwnerPassword )
+                maPreparedOwnerPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aOwnerPW );
+            else
+                maPreparedOwnerPassword = Sequence< NamedValue >();
         }
-        else
-            maPreparedOwnerPassword = Sequence< NamedValue >();
-    }
-    enablePermissionControls();
+        if (response != RET_CANCEL)
+            enablePermissionControls();
+        mpPasswordDialog.reset();
+    });
 }
 
 void ImpPDFTabSecurityPage::enablePermissionControls()

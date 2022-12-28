@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/passwd.hxx>
 #include <svx/AccessibilityCheckDialog.hxx>
 
 #include <vcl/pdfwriter.hxx>
@@ -345,6 +346,9 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbEnableCopy;
     std::unique_ptr<weld::CheckButton> mxCbEnableAccessibility;
     std::unique_ptr<weld::Label> mxPasswordTitle;
+
+    std::shared_ptr< SfxPasswordDialog > mpPasswordDialog;
+    std::shared_ptr< weld::MessageDialog > mpUnsupportedMsgDialog;
 
     DECL_LINK(ClickmaPbSetPwdHdl, weld::Button&, void);
 
