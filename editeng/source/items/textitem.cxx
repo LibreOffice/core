@@ -1353,38 +1353,6 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
-SvxThemeColor::SvxThemeColor()
-    : maThemeIndex(-1)
-    , mnLumMod(10000)
-    , mnLumOff(0)
-    , mnTintOrShade(0)
-{
-}
-
-bool SvxThemeColor::operator==(const SvxThemeColor& rThemeColor) const
-{
-    return maThemeIndex == rThemeColor.maThemeIndex &&
-        mnLumMod == rThemeColor.mnLumMod &&
-        mnLumOff == rThemeColor.mnLumOff &&
-        mnTintOrShade  == rThemeColor.mnTintOrShade;
-}
-
-void SvxThemeColor::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxThemeColor"));
-
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
-                                      BAD_CAST(OString::number(maThemeIndex).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lum-mod"),
-                                      BAD_CAST(OString::number(mnLumMod).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lum-off"),
-                                      BAD_CAST(OString::number(mnLumOff).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("tint-or-shade"),
-                                      BAD_CAST(OString::number(mnTintOrShade).getStr()));
-
-    (void)xmlTextWriterEndElement(pWriter);
-}
-
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
@@ -1429,22 +1397,42 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= maThemeColor.GetThemeIndex();
+            rVal <<= sal_Int16(maThemeColor.getType());
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
         {
-            rVal <<= maThemeColor.GetTintOrShade();
+            sal_Int16 nValue = 0;
+            for (auto const& rTransform : maThemeColor.getTransformations())
+            {
+                if (rTransform.meType == model::TransformationType::Tint)
+                    nValue = rTransform.mnValue;
+                else if (rTransform.meType == model::TransformationType::Shade)
+                    nValue = -rTransform.mnValue;
+            }
+            rVal <<= nValue;
             break;
         }
         case MID_COLOR_LUM_MOD:
         {
-            rVal <<= maThemeColor.GetLumMod();
+            sal_Int16 nValue = 10000;
+            for (auto const& rTransform : maThemeColor.getTransformations())
+            {
+                if (rTransform.meType == model::TransformationType::LumMod)
+                    nValue = rTransform.mnValue;
+            }
+            rVal <<= nValue;
             break;
         }
         case MID_COLOR_LUM_OFF:
         {
-            rVal <<= maThemeColor.GetLumOff();
+            sal_Int16 nValue = 0;
+            for (auto const& rTransform : maThemeColor.getTransformations())
+            {
+                if (rTransform.meType == model::TransformationType::LumOff)
+                    nValue = rTransform.mnValue;
+            }
+            rVal <<= nValue;
             break;
         }
         default:
@@ -1482,31 +1470,43 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maThemeColor.SetThemeIndex(nIndex);
+            maThemeColor.setType(model::convertToThemeColorType(nIndex));
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
         {
-            sal_Int16 nTintShade = -1;
+            sal_Int16 nTintShade = 0;
             if (!(rVal >>= nTintShade))
                 return false;
-            maThemeColor.SetTintOrShade(nTintShade);
+
+            maThemeColor.removeTransformations(model::TransformationType::Tint);
+            maThemeColor.removeTransformations(model::TransformationType::Shade);
+
+            if (nTintShade > 0)
+                maThemeColor.addTransformation({model::TransformationType::Tint, nTintShade});
+            else if (nTintShade < 0)
+            {
+                sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-nTintShade);
+                maThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+            }
         }
         break;
         case MID_COLOR_LUM_MOD:
         {
-            sal_Int16 nLumMod = -1;
+            sal_Int16 nLumMod = 10000;
             if (!(rVal >>= nLumMod))
                 return false;
-            maThemeColor.SetLumMod(nLumMod);
+            maThemeColor.removeTransformations(model::TransformationType::LumMod);
+            maThemeColor.addTransformation({model::TransformationType::LumMod, nLumMod});
         }
         break;
         case MID_COLOR_LUM_OFF:
         {
-            sal_Int16 nLumOff = -1;
+            sal_Int16 nLumOff = 0;
             if (!(rVal >>= nLumOff))
                 return false;
-            maThemeColor.SetLumOff(nLumOff);
+            maThemeColor.removeTransformations(model::TransformationType::LumOff);
+            maThemeColor.addTransformation({model::TransformationType::LumOff, nLumOff});
         }
         break;
         default:
@@ -1549,12 +1549,25 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, aStr, aIntlWrapper);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr()));
 
-    maThemeColor.dumpAsXml(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("theme-color"));
+
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
+                                      BAD_CAST(OString::number(sal_Int16(maThemeColor.getType())).getStr()));
+
+    for (auto const& rTransform : maThemeColor.getTransformations())
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("transformation"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),
+                                      BAD_CAST(OString::number(sal_Int16(rTransform.meType)).getStr()));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(rTransform.mnValue).getStr()));
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
-
-
 
 void SvxColorItem::SetValue( const Color& rNewCol )
 {

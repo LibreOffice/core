@@ -335,7 +335,22 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     NameOrIndex::dumpAsXml(pWriter);
 
-    maThemeColor.dumpAsXml(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("theme-color"));
+
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
+                                      BAD_CAST(OString::number(sal_Int16(maThemeColor.getType())).getStr()));
+
+    for (auto const& rTransform : maThemeColor.getTransformations())
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("transformation"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),
+                                      BAD_CAST(OString::number(sal_Int16(rTransform.meType)).getStr()));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(rTransform.mnValue).getStr()));
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -1908,17 +1923,29 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     {
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= GetThemeColor().GetThemeIndex();
+            rVal <<= sal_Int16(GetThemeColor().getType());
             break;
         }
         case MID_COLOR_LUM_MOD:
         {
-            rVal <<= GetThemeColor().GetLumMod();
+            sal_Int16 nValue = 10000;
+            for (auto const& rTransform : GetThemeColor().getTransformations())
+            {
+                if (rTransform.meType == model::TransformationType::LumMod)
+                    nValue = rTransform.mnValue;
+            }
+            rVal <<= nValue;
             break;
         }
         case MID_COLOR_LUM_OFF:
         {
-            rVal <<= GetThemeColor().GetLumOff();
+            sal_Int16 nValue = 0;
+            for (auto const& rTransform : GetThemeColor().getTransformations())
+            {
+                if (rTransform.meType == model::TransformationType::LumOff)
+                    nValue = rTransform.mnValue;
+            }
+            rVal <<= nValue;
             break;
         }
         default:
@@ -1941,23 +1968,25 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            GetThemeColor().SetThemeIndex(nIndex);
+            GetThemeColor().setType(model::convertToThemeColorType(nIndex));
             break;
         }
         case MID_COLOR_LUM_MOD:
         {
-            sal_Int16 nLumMod = -1;
+            sal_Int16 nLumMod = 10000;
             if (!(rVal >>= nLumMod))
                 return false;
-            GetThemeColor().SetLumMod(nLumMod);
+            GetThemeColor().removeTransformations(model::TransformationType::LumMod);
+            GetThemeColor().addTransformation({model::TransformationType::LumMod, nLumMod});
         }
         break;
         case MID_COLOR_LUM_OFF:
         {
-            sal_Int16 nLumOff = -1;
+            sal_Int16 nLumOff = 0;
             if (!(rVal >>= nLumOff))
                 return false;
-            GetThemeColor().SetLumOff(nLumOff);
+            GetThemeColor().removeTransformations(model::TransformationType::LumOff);
+            GetThemeColor().addTransformation({model::TransformationType::LumOff, nLumOff});
         }
         break;
         default:

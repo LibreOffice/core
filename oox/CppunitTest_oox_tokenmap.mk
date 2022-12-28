@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_tokenmap,\
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     editeng \
     expwrap \
     drawinglayer \

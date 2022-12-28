@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     drawinglayer \
     editeng \
     i18nlangtag \

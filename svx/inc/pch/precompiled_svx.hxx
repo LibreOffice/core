@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-01-26 09:16:16 using:
+ Generated on 2023-01-10 23:28:52 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,11 +26,13 @@
 #include <array>
 #include <cassert>
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
 #include <functional>
 #include <limits.h>
+#include <limits>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -84,7 +86,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
@@ -122,10 +123,11 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/basicrange.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -169,7 +171,6 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -196,7 +197,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -206,6 +206,8 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -217,7 +219,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
@@ -226,11 +227,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
+#include <docmodel/theme/ThemeColor.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/borderline.hxx>
@@ -267,6 +266,8 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -334,7 +335,6 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
@@ -350,15 +350,14 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <typelib/typedescription.h>
-#include <uno/data.h>
+#include <unotools/configmgr.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/viewoptions.hxx>
+#include <unotools/weakref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <cell.hxx>

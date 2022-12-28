@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-08-13 18:00:55 using:
+ Generated on 2023-01-10 23:29:57 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -53,6 +53,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -114,7 +115,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -125,6 +125,7 @@
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
@@ -177,6 +178,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Size2D.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
 #include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -186,6 +188,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/sbxdef.hxx>
@@ -261,6 +264,8 @@
 #include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -276,6 +281,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
@@ -297,6 +303,7 @@
 #include <editeng/svxfont.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -401,7 +408,6 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -420,7 +426,6 @@
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>
-#include <tools/weakbase.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -434,6 +439,7 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <unotools/weakref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <cfgutil.hxx>

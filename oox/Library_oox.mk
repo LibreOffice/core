@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     editeng \
     expwrap \
     drawinglayer \
+    docmodel \
     msfilter \
     sal \
     i18nlangtag \

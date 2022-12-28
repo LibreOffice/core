@@ -1358,7 +1358,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 if (pEntry->nMemberId == MID_COLOR_THEME_INDEX)
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().GetThemeIndex() == -1)
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1366,7 +1366,13 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 else if (pEntry->nMemberId == MID_COLOR_LUM_MOD)
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().GetLumMod() == 10000)
+                    sal_Int16 nLumMod = 10000;
+                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    {
+                        if (rTransform.meType == model::TransformationType::LumMod)
+                            nLumMod = rTransform.mnValue;
+                    }
+                    if (nLumMod == 10000)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1374,7 +1380,13 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 else if (pEntry->nMemberId == MID_COLOR_LUM_OFF)
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().GetLumOff() == 0)
+                    sal_Int16 nLumOff = 0;
+                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    {
+                        if (rTransform.meType == model::TransformationType::LumOff)
+                            nLumOff = rTransform.mnValue;
+                    }
+                    if (nLumOff == 0)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }

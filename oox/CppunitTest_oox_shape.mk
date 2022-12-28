@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_shape, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     oox \
     sal \
     subsequenttest \

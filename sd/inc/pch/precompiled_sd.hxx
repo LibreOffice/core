@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-08-08 10:27:15 using:
+ Generated on 2023-01-10 23:30:40 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,16 +25,21 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
+#include <cstring>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <iterator>
+#include <limits>
 #include <locale>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <mutex>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -61,12 +66,16 @@
 #include <osl/socket_decl.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
-#include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -77,13 +86,13 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
@@ -96,6 +105,7 @@
 #include <vcl/image.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
@@ -121,6 +131,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -131,6 +142,7 @@
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
@@ -138,10 +150,27 @@
 #include <cache/SlsPageCacheManager.hxx>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#include <com/sun/star/animations/Event.hpp>
+#include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
+#include <com/sun/star/animations/Timing.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
+#include <com/sun/star/animations/XCommand.hpp>
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -164,9 +193,13 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -185,6 +218,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -198,11 +232,20 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/presentation/TextAnimationType.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -226,6 +269,8 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -233,6 +278,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <controller/SlideSorterController.hxx>
@@ -293,16 +339,17 @@
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
+#include <filter/msfilter/msfilterdllapi.h>
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Pane.hxx>
 #include <framework/ViewShellWrapper.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
@@ -312,7 +359,10 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <oox/dllapi.h>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
@@ -351,6 +401,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
@@ -368,6 +419,7 @@
 #include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/urihelper.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/ehdl.hxx>
@@ -385,9 +437,11 @@
 #include <svx/fmshell.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/gallery.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
+#include <svx/msdffdef.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/ruler.hxx>
@@ -402,6 +456,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdetc.hxx>
@@ -422,6 +477,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
@@ -448,12 +504,11 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
-#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
@@ -474,6 +529,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>

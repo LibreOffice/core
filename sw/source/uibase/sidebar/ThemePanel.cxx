@@ -223,11 +223,12 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
 void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
     SvxColorItem aColorItem(pCollection->GetColor());
-    auto nThemeIndex = aColorItem.GetThemeColor().GetThemeIndex();
-    if (nThemeIndex >= 0)
+    model::ThemeColor const& rThemeColor = aColorItem.GetThemeColor();
+    auto eThemeType = rThemeColor.getType();
+    if (eThemeType != model::ThemeColorType::Unknown)
     {
-        Color aColor = rColorSet.getColor(svx::convertToThemeColorType(nThemeIndex));
-        aColor.ApplyTintOrShade(aColorItem.GetThemeColor().GetTintOrShade());
+        Color aColor = rColorSet.getColor(eThemeType);
+        aColor = rThemeColor.applyTransformations(aColor);
         aColorItem.SetValue(aColor);
         pCollection->SetFormatAttr(aColorItem);
     }
@@ -399,10 +400,10 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
-        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i)));
+        pVirtualDev->SetFillColor(rColorSet.getColor(model::convertToThemeColorType(i)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y1, x + SIZE, y1 + SIZE));
 
-        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i + 1)));
+        pVirtualDev->SetFillColor(rColorSet.getColor(model::convertToThemeColorType(i + 1)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;

@@ -2186,7 +2186,7 @@ bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme
     {
         sal_Int32 nToken = aPredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
         pFS->startElementNS(XML_a, nToken);
-        svx::ThemeColorType eType = svx::convertToThemeColorType(nId);
+        model::ThemeColorType eType = model::convertToThemeColorType(nId);
         pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(eType))));
         pFS->endElementNS(XML_a, nToken);
     }

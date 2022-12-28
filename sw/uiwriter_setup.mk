@@ -13,6 +13,7 @@ define sw_uiwriter_libraries
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     editeng \
     i18nlangtag \
     msword \

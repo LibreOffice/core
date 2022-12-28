@@ -224,19 +224,19 @@ bool ThemeExport::writeFormatScheme(sax_fastparser::FSHelperPtr pFS)
 
 bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, svx::Theme const& rTheme)
 {
-    static std::unordered_map<sal_Int32, svx::ThemeColorType> constTokenMap
-        = { { XML_dk1, svx::ThemeColorType::Dark1 },
-            { XML_lt1, svx::ThemeColorType::Light1 },
-            { XML_dk2, svx::ThemeColorType::Dark2 },
-            { XML_lt2, svx::ThemeColorType::Light2 },
-            { XML_accent1, svx::ThemeColorType::Accent1 },
-            { XML_accent2, svx::ThemeColorType::Accent2 },
-            { XML_accent3, svx::ThemeColorType::Accent3 },
-            { XML_accent4, svx::ThemeColorType::Accent4 },
-            { XML_accent5, svx::ThemeColorType::Accent5 },
-            { XML_accent6, svx::ThemeColorType::Accent6 },
-            { XML_hlink, svx::ThemeColorType::Hyperlink },
-            { XML_folHlink, svx::ThemeColorType::FollowedHyperlink } };
+    static std::unordered_map<sal_Int32, model::ThemeColorType> constTokenMap
+        = { { XML_dk1, model::ThemeColorType::Dark1 },
+            { XML_lt1, model::ThemeColorType::Light1 },
+            { XML_dk2, model::ThemeColorType::Dark2 },
+            { XML_lt2, model::ThemeColorType::Light2 },
+            { XML_accent1, model::ThemeColorType::Accent1 },
+            { XML_accent2, model::ThemeColorType::Accent2 },
+            { XML_accent3, model::ThemeColorType::Accent3 },
+            { XML_accent4, model::ThemeColorType::Accent4 },
+            { XML_accent5, model::ThemeColorType::Accent5 },
+            { XML_accent6, model::ThemeColorType::Accent6 },
+            { XML_hlink, model::ThemeColorType::Hyperlink },
+            { XML_folHlink, model::ThemeColorType::FollowedHyperlink } };
 
     static std::array<sal_Int32, 12> constTokenArray
         = { XML_dk1,     XML_lt1,     XML_dk2,     XML_lt2,     XML_accent1, XML_accent2,
@@ -248,7 +248,7 @@ bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, svx::Theme cons
 
     for (auto nToken : constTokenArray)
     {
-        svx::ThemeColorType eColorType = constTokenMap[nToken];
+        model::ThemeColorType eColorType = constTokenMap[nToken];
         Color aColor = pColorSet->getColor(eColorType);
         pFS->startElementNS(XML_a, nToken);
         pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));

@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport2, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     sal \
     sfx \
     subsequenttest \

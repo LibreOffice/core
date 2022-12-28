@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     cppcanvas \
     cppu \
     cppuhelper \
+    docmodel \
     drawinglayer \
     drawinglayercore \
     editeng \
