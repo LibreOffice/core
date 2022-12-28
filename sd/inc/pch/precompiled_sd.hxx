@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:51:32 using:
+ Generated on 2023-01-16 00:10:01 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,18 +25,20 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <iterator>
 #include <locale>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
+#include <string>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
@@ -68,6 +70,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/backtrace.hxx>
 #include <sal/log.hxx>
@@ -87,6 +90,7 @@
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
@@ -96,6 +100,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/region.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -112,7 +117,6 @@
 #include <vcl/wrkwin.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <avmedia/avmediadllapi.h>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -190,6 +194,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -213,7 +218,6 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -235,6 +239,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -312,10 +317,11 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
-#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
@@ -356,6 +362,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -402,6 +409,7 @@
 #include <svx/rulritem.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
@@ -447,6 +455,7 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/UnitConversion.hxx>
@@ -462,6 +471,7 @@
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -479,8 +489,10 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>

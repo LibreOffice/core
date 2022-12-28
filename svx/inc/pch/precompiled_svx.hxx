@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:23 using:
+ Generated on 2023-01-16 00:10:07 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,11 +28,15 @@
 #include <climits>
 #include <cstddef>
 #include <cstdlib>
+#include <deque>
 #include <functional>
 #include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <map>
 #include <memory>
+#include <mutex>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -48,10 +52,8 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -61,6 +63,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
@@ -79,6 +82,7 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>
@@ -114,16 +118,13 @@
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -216,10 +217,12 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
@@ -234,16 +237,17 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/theme/ThemeColor.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
@@ -262,6 +266,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -293,6 +298,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -309,6 +315,8 @@
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -327,6 +335,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
@@ -367,8 +376,8 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/viewoptions.hxx>
@@ -433,6 +442,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
@@ -455,6 +465,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <uiobject.hxx>
 #endif // PCH_LEVEL >= 4

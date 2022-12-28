@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-28 05:29:25 using:
+ Generated on 2023-01-16 00:08:03 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -151,7 +151,6 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
@@ -164,7 +163,6 @@
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
-#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -246,7 +244,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -269,6 +266,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
@@ -280,6 +278,7 @@
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -299,14 +298,13 @@
 #include <editeng/svxfont.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/span.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -352,6 +350,7 @@
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/DiagramDataInterface.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
@@ -432,6 +431,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/charclass.hxx>
+#include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>

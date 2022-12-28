@@ -13,6 +13,7 @@ define sw_ooxmlexport_libraries
 	comphelper \
 	cppu \
 	cppuhelper \
+	docmodel \
 	editeng \
 	sal \
 	sfx \

@@ -74,6 +74,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	cppcanvas \
 	cppu \
 	cppuhelper \
+	docmodel \
 	drawinglayer \
 	editeng \
 	i18nlangtag \

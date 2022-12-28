@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-28 05:37:38 using:
+ Generated on 2023-01-16 00:09:09 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,13 +47,12 @@
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -113,7 +112,11 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
@@ -122,15 +125,20 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -168,6 +176,7 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -178,6 +187,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/converterbase.hxx>
@@ -187,6 +198,7 @@
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>
+#include <drawingml/linepropertiescontext.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/table/tablestylepart.hxx>
@@ -200,25 +212,42 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/span.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
+#include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
+#include <svx/ColorSets.hxx>
+#include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
+#include <svx/sdtaditm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
+#include <svx/svddef.hxx>
+#include <svx/svdoattr.hxx>
 #include <svx/svdobjkind.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdtext.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
+#include <tools/datetime.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>

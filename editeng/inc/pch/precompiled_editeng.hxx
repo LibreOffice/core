@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-07-28 20:17:03 using:
+ Generated on 2023-01-16 00:08:47 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,11 +37,13 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
@@ -53,6 +55,7 @@
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/json_parser.hpp>
@@ -77,6 +80,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -150,10 +154,21 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -186,6 +201,7 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -253,6 +269,7 @@
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -266,6 +283,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/options.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>

@@ -822,25 +822,22 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if (nSlot == SID_ATTR_CHAR_COLOR)
             {
                 pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
-            }
-            const SfxPoolItem* pItem = nullptr;
-            if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
-            {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->GetThemeColor().SetThemeIndex(pIntItem->GetValue());
-            }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
-            {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->GetThemeColor().SetLumMod(pIntItem->GetValue());
-            }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
-            {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->GetThemeColor().SetLumOff(pIntItem->GetValue());
-            }
-            if (pColorItem)
-            {
+                const SfxPoolItem* pItem = nullptr;
+                if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    pColorItem->GetThemeColor().setType(model::convertToThemeColorType(pIntItem->GetValue()));
+                }
+                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    pColorItem->GetThemeColor().addTransformation({model::TransformationType::LumMod, pIntItem->GetValue()});
+                }
+                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    pColorItem->GetThemeColor().addTransformation({model::TransformationType::LumOff, pIntItem->GetValue()});
+                }
                 pNewArgs->Put(*pColorItem);
             }
 

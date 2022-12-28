@@ -29,6 +29,7 @@ MERGE_LIBRARY_LIST := \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(USING_X11),desktop_detector) \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
+	docmodel \
 	drawinglayer \
 	editeng \
 	emfio \
