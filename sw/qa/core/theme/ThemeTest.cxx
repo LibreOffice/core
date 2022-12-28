@@ -50,16 +50,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
     CPPUNIT_ASSERT(pColorSet);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
 
-    CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(svx::ThemeColorType::Accent1));
-    CPPUNIT_ASSERT_EQUAL(Color(0xBD582C), pTheme->GetColor(svx::ThemeColorType::Accent2));
-    CPPUNIT_ASSERT_EQUAL(Color(0x865640), pTheme->GetColor(svx::ThemeColorType::Accent3));
-    CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(svx::ThemeColorType::Accent4));
-    CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(svx::ThemeColorType::Accent5));
-    CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(svx::ThemeColorType::Accent6));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(svx::ThemeColorType::Dark1));
-    CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(svx::ThemeColorType::Dark2));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(svx::ThemeColorType::Light1));
-    CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(svx::ThemeColorType::Light2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xBD582C), pTheme->GetColor(model::ThemeColorType::Accent2));
+    CPPUNIT_ASSERT_EQUAL(Color(0x865640), pTheme->GetColor(model::ThemeColorType::Accent3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
+    CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
+    CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
+    CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 
     svx::FontScheme const& rFontScheme = pTheme->getFontScheme();
     CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri Light"), rFontScheme.getMajorLatin().maTypeface);

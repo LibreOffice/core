@@ -138,6 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
 $(eval $(call gb_Library_use_libraries,editeng,\
     xo \
     basegfx \
+    docmodel \
     lng \
     svt \
     tk \

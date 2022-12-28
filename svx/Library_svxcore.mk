@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     cppu \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
+    docmodel \
     drawinglayercore \
     drawinglayer \
     editeng \

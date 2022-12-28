@@ -22,18 +22,17 @@
 
 #include <tools/color.hxx>
 #include <editeng/colritem.hxx>
+#include <docmodel/theme/ThemeColor.hxx>
 
 #include <svx/svxdllapi.h>
 #include <svx/xit.hxx>
 
 class XColorList;
 
-
-
 class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
 {
     Color   aColor;
-    SvxThemeColor maThemeColor;
+    model::ThemeColor maThemeColor;
 
 public:
             static SfxPoolItem* CreateDefault();
@@ -51,8 +50,8 @@ public:
     const Color&    GetColorValue() const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
 
-    SvxThemeColor& GetThemeColor() { return maThemeColor; }
-    const SvxThemeColor& GetThemeColor() const { return maThemeColor; }
+    model::ThemeColor& GetThemeColor() { return maThemeColor; }
+    const model::ThemeColor& GetThemeColor() const { return maThemeColor; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     cppuhelper \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
+    docmodel \
     drawinglayer \
     drawinglayercore \
     editeng \

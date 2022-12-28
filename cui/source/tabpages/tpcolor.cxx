@@ -245,17 +245,19 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
        sColorName = "#" + aCurrentColor.m_aColor.AsRGBHexString().toAsciiUpperCase();
     maPaletteManager.AddRecentColor( aCurrentColor.m_aColor, sColorName );
     XFillColorItem aColorItem( sColorName, aCurrentColor.m_aColor );
-    if (aCurrentColor.m_nThemeIndex != -1)
+    model::ThemeColorType eType = model::convertToThemeColorType(aCurrentColor.m_nThemeIndex);
+    if (eType != model::ThemeColorType::Unknown)
     {
-        aColorItem.GetThemeColor().SetThemeIndex(aCurrentColor.m_nThemeIndex);
+        aColorItem.GetThemeColor().setType(eType);
     }
+    aColorItem.GetThemeColor().clearTransformations();
     if (aCurrentColor.m_nLumMod != 10000)
     {
-        aColorItem.GetThemeColor().SetLumMod(aCurrentColor.m_nLumMod);
+        aColorItem.GetThemeColor().addTransformation({model::TransformationType::LumMod, aCurrentColor.m_nLumMod});
     }
     if (aCurrentColor.m_nLumOff != 0)
     {
-        aColorItem.GetThemeColor().SetLumOff(aCurrentColor.m_nLumOff);
+        aColorItem.GetThemeColor().addTransformation({model::TransformationType::LumOff, aCurrentColor.m_nLumOff});
     }
     rSet->Put( aColorItem );
     rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );

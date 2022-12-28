@@ -1142,23 +1142,39 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             switch (pMap->nMemberId)
             {
                 case MID_COLOR_THEME_INDEX:
-                    if (pColor->GetThemeColor().GetThemeIndex() == -1)
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
                     break;
                 case MID_COLOR_LUM_MOD:
-                    if (pColor->GetThemeColor().GetLumMod() == 10000)
+                {
+                    sal_Int16 nLumMod = 10000;
+                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    {
+                        if (rTransform.meType == model::TransformationType::LumMod)
+                            nLumMod = rTransform.mnValue;
+                    }
+                    if (nLumMod == 10000)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
                     break;
+                }
                 case MID_COLOR_LUM_OFF:
-                    if (pColor->GetThemeColor().GetLumOff() == 0)
+                {
+                    sal_Int16 nLumOff = 0;
+                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    {
+                        if (rTransform.meType == model::TransformationType::LumOff)
+                            nLumOff = rTransform.mnValue;
+                    }
+                    if (nLumOff == 0)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
                     break;
+                }
             }
         }
 

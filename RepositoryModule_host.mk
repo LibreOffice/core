@@ -74,6 +74,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cui \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
+	docmodel\
 	drawinglayer \
 	editeng \
 	embeddedobj \

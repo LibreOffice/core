@@ -780,21 +780,20 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if (nSlot == SID_ATTR_CHAR_COLOR)
             {
                 pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
-            }
-            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_THEME_INDEX, false))
-            {
-                pColorItem->GetThemeColor().SetThemeIndex(pIntItem->GetValue());
-            }
-            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_MOD, false))
-            {
-                pColorItem->GetThemeColor().SetLumMod(pIntItem->GetValue());
-            }
-            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_OFF, false))
-            {
-                pColorItem->GetThemeColor().SetLumOff(pIntItem->GetValue());
-            }
-            if (pColorItem)
-            {
+                pColorItem->GetThemeColor().clearTransformations();
+
+                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_THEME_INDEX, false))
+                {
+                    pColorItem->GetThemeColor().setType(model::convertToThemeColorType(pIntItem->GetValue()));
+                }
+                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_MOD, false))
+                {
+                    pColorItem->GetThemeColor().addTransformation({model::TransformationType::LumMod, pIntItem->GetValue()});
+                }
+                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_OFF, false))
+                {
+                    pColorItem->GetThemeColor().addTransformation({model::TransformationType::LumOff, pIntItem->GetValue()});
+                }
                 pNewArgs->Put(std::move(pColorItem));
             }
 

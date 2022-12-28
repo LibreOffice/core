@@ -1596,12 +1596,14 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     {
         SvxColorItem aItem( aSelectedColor.m_aColor, nWhich );
 
-        if (aSelectedColor.m_nThemeIndex != -1)
+        // The color was picked from the theme palette, remember its index.
+        model::ThemeColorType eType = model::convertToThemeColorType(aSelectedColor.m_nThemeIndex);
+        if (eType != model::ThemeColorType::Unknown)
         {
-            // The color was picked from the theme palette, remember its index.
-            aItem.GetThemeColor().SetThemeIndex(aSelectedColor.m_nThemeIndex);
-            aItem.GetThemeColor().SetLumMod(aSelectedColor.m_nLumMod);
-            aItem.GetThemeColor().SetLumOff(aSelectedColor.m_nLumOff);
+            aItem.GetThemeColor().setType(eType);
+            aItem.GetThemeColor().clearTransformations();
+            aItem.GetThemeColor().addTransformation({model::TransformationType::LumMod, aSelectedColor.m_nLumMod});
+            aItem.GetThemeColor().addTransformation({model::TransformationType::LumOff, aSelectedColor.m_nLumOff});
         }
 
         rSet.Put(aItem);

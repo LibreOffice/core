@@ -39,9 +39,9 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
 {
     sal_Int16 nCharColorTheme = -1;
     xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
-    svx::ThemeColorType eColorThemeType = svx::convertToThemeColorType(nCharColorTheme);
+    model::ThemeColorType eColorThemeType = model::convertToThemeColorType(nCharColorTheme);
 
-    if (eColorThemeType == svx::ThemeColorType::Unknown)
+    if (eColorThemeType == model::ThemeColorType::Unknown)
         return;
 
     Color aColor = rColorSet.getColor(eColorThemeType);
@@ -74,8 +74,8 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const
 
     sal_Int16 nFillColorTheme = -1;
     xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME) >>= nFillColorTheme;
-    svx::ThemeColorType eColorThemeType = svx::convertToThemeColorType(nFillColorTheme);
-    if (eColorThemeType == svx::ThemeColorType::Unknown)
+    model::ThemeColorType eColorThemeType = model::convertToThemeColorType(nFillColorTheme);
+    if (eColorThemeType == model::ThemeColorType::Unknown)
         return;
 
     Color aColor = rColorSet.getColor(eColorThemeType);
@@ -281,7 +281,7 @@ void Theme::ToAny(css::uno::Any& rVal) const
     if (mpColorSet)
     {
         std::vector<util::Color> aColorScheme;
-        for (auto eThemeColorType : o3tl::enumrange<svx::ThemeColorType>())
+        for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
         {
             Color aColor = mpColorSet->getColor(eThemeColorType);
             aColorScheme.push_back(sal_Int32(aColor));
@@ -362,14 +362,14 @@ std::vector<Color> Theme::GetColors() const
         return {};
 
     std::vector<Color> aColors;
-    for (auto eThemeColorType : o3tl::enumrange<svx::ThemeColorType>())
+    for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
     {
         aColors.push_back(mpColorSet->getColor(eThemeColorType));
     }
     return aColors;
 }
 
-Color Theme::GetColor(ThemeColorType eType) const
+Color Theme::GetColor(model::ThemeColorType eType) const
 {
     if (!mpColorSet)
         return {};

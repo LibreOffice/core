@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_styles, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     svx \
     sal \
     subsequenttest \

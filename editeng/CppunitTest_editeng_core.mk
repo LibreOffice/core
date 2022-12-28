@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     i18nlangtag \
     i18nutil \
     lng \

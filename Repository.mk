@@ -401,6 +401,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
+	docmodel \
 	drawinglayercore \
 	drawinglayer \
 	editeng \

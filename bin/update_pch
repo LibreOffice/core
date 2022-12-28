@@ -73,6 +73,7 @@ DEFAULTS = \
     'desktop.deploymentgui'             : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   5.7
     'desktop.deploymentmisc'            : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   3.4
     'desktop.sofficeapp'                : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   6.5
+    'docmodel.docmodel'                 : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   3.8
     'drawinglayer.drawinglayer'         : ( 4, EXCLUDE, EXCLUDE, EXCLUDE), #   7.4
     'editeng.editeng'                   : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #  13.0
     'forms.frm'                         : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  14.2
@@ -1191,8 +1192,8 @@ class TestMakefileParser(unittest.TestCase):
 
     def test_parse_multiline_eval(self):
         source = """$(eval $(call gb_Library_set_include,sal,\\
-	$$(INCLUDE) \\
-	-I$(SRCDIR)/sal/inc \\
+    $$(INCLUDE) \\
+    -I$(SRCDIR)/sal/inc \\
 ))
 """
         lines = source.split('\n')
@@ -1203,9 +1204,9 @@ class TestMakefileParser(unittest.TestCase):
 
     def test_parse_multiline_eval_with_if(self):
         source = """$(eval $(call gb_Library_add_defs,sal,\\
-	$(if $(filter $(OS),iOS), \\
-		-DNO_CHILD_PROCESSES \\
-	) \\
+    $(if $(filter $(OS),iOS), \\
+        -DNO_CHILD_PROCESSES \\
+    ) \\
 ))
 """
         lines = source.split('\n')
@@ -1216,7 +1217,7 @@ class TestMakefileParser(unittest.TestCase):
 
     def test_parse_multiline_add_with_if(self):
         source = """$(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/unx/time \\
+    sal/osl/unx/time \\
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \\
 ))
 """
@@ -1230,11 +1231,11 @@ class TestMakefileParser(unittest.TestCase):
     def test_parse_if_else(self):
         source = """ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/mac/mac \\
+    sal/osl/mac/mac \\
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/unx/uunxapi \\
+    sal/osl/unx/uunxapi \\
 ))
 endif
 """
@@ -1251,16 +1252,16 @@ endif
     def test_parse_nested_if(self):
         source = """ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/mac/mac \\
+    sal/osl/mac/mac \\
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/unx/uunxapi \\
+    sal/osl/unx/uunxapi \\
 ))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/textenc/context \\
+    sal/textenc/context \\
 ))
 endif
 endif
@@ -1280,16 +1281,16 @@ endif
     def test_parse_exclude_system(self):
         source = """ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/mac/mac \\
+    sal/osl/mac/mac \\
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/unx/uunxapi \\
+    sal/osl/unx/uunxapi \\
 ))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/textenc/context \\
+    sal/textenc/context \\
 ))
 endif
 endif
@@ -1306,7 +1307,7 @@ endif
     def test_parse_filter(self):
         source = """ifneq ($(filter $(OS),MACOSX iOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\\
-	sal/osl/unx/osxlocale \\
+    sal/osl/unx/osxlocale \\
 ))
 endif
 """
