@@ -74,12 +74,18 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                                 VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 SfxResId(STR_ERROR_WRONG_CONFIRM)));
-        xBox->run();
-        m_xConfirm1ED->set_text(OUString());
-        m_xConfirm1ED->grab_focus();
+        if (m_xConfirmFailedDialog)
+            m_xConfirmFailedDialog->response(RET_CANCEL);
+
+        m_xConfirmFailedDialog =
+            std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(m_xDialog.get(),
+                                                    VclMessageType::Warning, VclButtonsType::Ok,
+                                                    SfxResId(STR_ERROR_WRONG_CONFIRM)));
+        m_xConfirmFailedDialog->runAsync(m_xConfirmFailedDialog, [this](sal_uInt32 response){
+            m_xConfirm1ED->set_text(OUString());
+            m_xConfirm1ED->grab_focus();
+            m_xConfirmFailedDialog->response(response);
+         });
     }
     else
         m_xDialog->response(RET_OK);
@@ -165,7 +171,7 @@ void SfxPasswordDialog::AllowAsciiOnly()
     m_xOnlyAsciiFT->show();
 }
 
-short SfxPasswordDialog::run()
+void SfxPasswordDialog::PreRun()
 {
     m_xUserFT->hide();
     m_xUserED->hide();
@@ -202,8 +208,18 @@ short SfxPasswordDialog::run()
         m_xConfirm2FT->show();
         m_xConfirm2ED->show();
     }
+}
+
+short SfxPasswordDialog::run()
+{
+    PreRun();
 
     return GenericDialogController::run();
 }
 
+SfxPasswordDialog::~SfxPasswordDialog()
+{
+    if (m_xConfirmFailedDialog)
+        m_xConfirmFailedDialog->response(RET_CANCEL);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
