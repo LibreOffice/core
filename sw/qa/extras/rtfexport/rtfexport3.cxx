@@ -514,6 +514,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
 }
 
+DECLARE_RTFEXPORT_TEST(testInvalidParagraphStyle, "invalidParagraphStyle.rtf")
+{
+    // Given test has character style #30, but referred as paragraph style #30
+    // This was causing exception in finishParagraph(), so numbering and other
+    // properties were not applied. Ensure numbering is still here
+    sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, numFormat);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
