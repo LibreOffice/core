@@ -175,8 +175,7 @@ std::vector<sal_uInt8> createBitmapData(const BitmapEx& rBitmapEx)
     {
         Bitmap aSrcAlpha(rBitmapEx.GetAlpha().GetBitmap());
         Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
-        Bitmap::ScopedReadAccess pAlphaReadAccess(bAlpha ? aSrcAlpha.AcquireReadAccess() : nullptr,
-                                                  aSrcAlpha);
+        Bitmap::ScopedReadAccess pAlphaReadAccess(aSrcAlpha.AcquireReadAccess(), aSrcAlpha);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
 
