@@ -757,7 +757,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
     // Set FillPageColor
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "Color", uno::Any(OUString("ff0000")) },
+        { "ColorString", uno::Any(OUString("ff0000")) },
     }));
 
     dispatchCommand(mxComponent, ".uno:FillPageColor", aPropertyValues);
