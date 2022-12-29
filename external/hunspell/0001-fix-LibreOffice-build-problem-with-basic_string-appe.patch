@@ -1,0 +1,84 @@
+From 1587ea4ab5e8d94c9c0d552f7ab61c217ebdcbeb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Fri, 30 Dec 2022 12:20:02 +0100
+Subject: [PATCH] fix LibreOffice build problem with basic_string::append()
+
+---
+ src/hunspell/affentry.cxx | 6 +++---
+ src/hunspell/affixmgr.cxx | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/hunspell/affentry.cxx b/src/hunspell/affentry.cxx
+index 46e8b58..6ee23be 100644
+--- a/src/hunspell/affentry.cxx
++++ b/src/hunspell/affentry.cxx
+@@ -290,7 +290,7 @@ struct hentry* PfxEntry::check_twosfx(const std::string& word,
+     // back any characters that would have been stripped
+ 
+     std::string tmpword(strip);
+-    tmpword.append(word, start + appnd.size());
++    tmpword.append(word, start + appnd.size(), tmpl);
+ 
+     // now make sure all of the conditions on characters
+     // are met.  Please see the appendix at the end of
+@@ -338,7 +338,7 @@ std::string PfxEntry::check_twosfx_morph(const std::string& word,
+     // back any characters that would have been stripped
+ 
+     std::string tmpword(strip);
+-    tmpword.append(word, start + appnd.size());
++    tmpword.append(word, start + appnd.size(), tmpl);
+ 
+     // now make sure all of the conditions on characters
+     // are met.  Please see the appendix at the end of
+@@ -386,7 +386,7 @@ std::string PfxEntry::check_morph(const std::string& word,
+     // back any characters that would have been stripped
+ 
+     std::string tmpword(strip);
+-    tmpword.append(word, start + appnd.size());
++    tmpword.append(word, start + appnd.size(), tmpl);
+ 
+     // now make sure all of the conditions on characters
+     // are met.  Please see the appendix at the end of
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index 4d1ad2f..a8931c1 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -2465,7 +2465,7 @@ int AffixMgr::compound_check_morph(const std::string& word,
+           result.append(presult);
+           result.push_back(MSEP_FLD);
+           result.append(MORPH_PART);
+-          result.append(word, i);
++          result.append(word, i, word.size());
+           if (complexprefixes && HENTRY_DATA(rv))
+             result.append(HENTRY_DATA2(rv));
+           if (!HENTRY_FIND(rv, MORPH_STEM)) {
+@@ -2522,7 +2522,7 @@ int AffixMgr::compound_check_morph(const std::string& word,
+           result.append(presult);
+           result.push_back(MSEP_FLD);
+           result.append(MORPH_PART);
+-          result.append(word, i);
++          result.append(word, i, word.size());
+ 
+           if (HENTRY_DATA(rv)) {
+             if (complexprefixes)
+@@ -2573,7 +2573,7 @@ int AffixMgr::compound_check_morph(const std::string& word,
+             if (!m.empty()) {
+               result.push_back(MSEP_FLD);
+               result.append(MORPH_PART);
+-              result.append(word, i);
++              result.append(word, i, word.size());
+               line_uniq_app(m, MSEP_REC);
+               result.append(m);
+             }
+@@ -2665,7 +2665,7 @@ int AffixMgr::compound_check_morph(const std::string& word,
+           if (!m.empty()) {
+             result.push_back(MSEP_FLD);
+             result.append(MORPH_PART);
+-            result.append(word, i);
++            result.append(word, i, word.size());
+             line_uniq_app(m, MSEP_REC);
+             result.push_back(MSEP_FLD);
+             result.append(m);
+-- 
+2.17.1
+

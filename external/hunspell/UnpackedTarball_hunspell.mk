@@ -20,6 +20,7 @@ endif
 $(eval $(call gb_UnpackedTarball_set_patchlevel,hunspell,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
+	external/hunspell/0001-fix-LibreOffice-build-problem-with-basic_string-appe.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
