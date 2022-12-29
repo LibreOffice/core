@@ -125,6 +125,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/libvisio/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libtiff/libtiff/.libs/*.a \
      $WORKDIR/UnpackedTarball/libwebp/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libwebp/sharpyuv/.libs/*.a \
      $WORKDIR/UnpackedTarball/libwp?/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/raptor/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/rasqal/src/.libs/*.a \

@@ -330,8 +330,8 @@ LIBTOMMATH_TARBALL := ltm-1.0.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBWEBP_SHA256SUM := 7bf5a8a28cc69bcfa8cb214f2c3095703c6b73ac5fba4d5480c205331d9494df
-LIBWEBP_TARBALL := libwebp-1.2.4.tar.gz
+LIBWEBP_SHA256SUM := 17fd427d210702a595f08ec619afa2cd3bd323f838ad109666482eac8fff65f0
+LIBWEBP_TARBALL := libwebp-1.3.0-rc1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
