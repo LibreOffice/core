@@ -24,6 +24,7 @@
 class SfxGrabBagItem;
 class SfxUInt16Item;
 class SvxBrushItem;
+class SvxColorItem;
 class SvxFontItem;
 class SvxKerningItem;
 class SvxLanguageItem;
@@ -56,7 +57,7 @@ class SvxWeightItem;
 #define SID_ATTR_CHAR_UNDERLINE                         TypedWhichId<SvxUnderlineItem>( SID_SVX_START + 14 )
 #define SID_ATTR_CHAR_FONTHEIGHT                        ( SID_SVX_START + 15 )
   // free
-#define SID_ATTR_CHAR_COLOR                             ( SID_SVX_START + 17 )
+#define SID_ATTR_CHAR_COLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 17 )
 #define SID_ATTR_CHAR_KERNING                           TypedWhichId<SvxKerningItem>( SID_SVX_START + 18 )
 #define SID_ATTR_CHAR_CASEMAP                           ( SID_SVX_START + 19 )
 #define SID_ATTR_CHAR_LANGUAGE                          ( SID_SVX_START + 20 )
