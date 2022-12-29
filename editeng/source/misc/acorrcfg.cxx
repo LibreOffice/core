@@ -96,7 +96,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                     }
                     catch (const uno::Exception&)
                     {
-                        TOOLS_WARN_EXCEPTION("editeng", "Unable to get directory entry.");
+                        TOOLS_WARN_EXCEPTION("editeng", "Unable to get a directory entry from '" << rURL << "'");
                     }
                 }
             }
@@ -104,7 +104,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("editeng", "Unable to iterate directory.");
+        TOOLS_WARN_EXCEPTION("editeng", "Unable to iterate directory '" << rURL << "'");
     }
 }
 
