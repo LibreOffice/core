@@ -15,6 +15,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
@@ -68,6 +69,11 @@ public:
 
     Color getColor(ThemeColorType nType) const
     {
+        if (nType == ThemeColorType::Unknown)
+        {
+            SAL_WARN("svx", "ColorSet::getColor with ThemeColorType::Unknown");
+            return COL_AUTO;
+        }
         return maColors[size_t(nType)];
     }
 
