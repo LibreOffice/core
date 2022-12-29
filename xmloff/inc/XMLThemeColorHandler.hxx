@@ -32,9 +32,8 @@ public:
                    const SvXMLUnitConverter&) const override
     {
         sal_Int16 nThemeIndex;
-        rValue >>= nThemeIndex;
 
-        if (nThemeIndex == -1) // Default
+        if (!(rValue >>= nThemeIndex) || nThemeIndex == -1) // Default
             return false;
 
         OUStringBuffer aOutBuffer;
