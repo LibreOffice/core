@@ -38,6 +38,10 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 
+#if defined(_WIN32)
+#include <systools/win32/comtools.hxx>
+#include <urlmon.h>
+#endif
 
 namespace sfx2
 {
@@ -286,7 +290,57 @@ namespace sfx2
             }
         }
 
-        // conformation is required
+#if defined(_WIN32)
+        // Windows specific: try to decide macros loading depending on Windows Security Zones
+        // (file is local, or it was downloaded from internet, etc)
+        OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
+        sal::systools::COMReference<IZoneIdentifier> pZoneId;
+        auto e1 = CoCreateInstance(
+            CLSID_PersistentZoneIdentifier, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&pZoneId));
+        if (FAILED(e1))
+            return disallowMacroExecution();
+        sal::systools::COMReference<IPersistFile> pPersist(pZoneId.QueryInterface<IPersistFile>(IID_IPersistFile));
+        DWORD dwZone;
+        OUString sFilePath;
+        osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
+        if (SUCCEEDED(pPersist->Load(reinterpret_cast<LPCOLESTR>(sFilePath.getStr()), STGM_READ)) &&
+            SUCCEEDED(pZoneId->GetId(&dwZone))) {
+            // We got zone id
+            sal_Int32 nAction = 0;
+            switch (dwZone) {
+                case 0:
+                    nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal::get();
+                    break;
+                case 1:
+                    nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet::get();
+                    break;
+                case 2:
+                    nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted::get();
+                    break;
+                case 3:
+                    nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet::get();
+                    break;
+                case 4:
+                    nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted::get();
+                    break;
+                default:
+                    nAction = 0;
+                    break;
+            }
+            switch (nAction)
+            {
+            case 0: // Ask
+                break;
+            case 1: // Allow
+                return allowMacroExecution();
+            default:
+                [[fallthrough]];
+            case 2: // Deny
+                return disallowMacroExecution();
+            }
+        }
+#endif
+        // confirmation is required
         bool bSecure = false;
 
         if ( eAutoConfirm == eNoAutoConfirm )
