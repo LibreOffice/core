@@ -20,8 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <SwapFile.hxx>
-
 #include <comphelper/fileformat.h>
 #include <o3tl/make_shared.hxx>
 #include <tools/fract.hxx>
@@ -59,9 +57,11 @@
 
 using namespace com::sun::star;
 
-class ImpSwapFile : public vcl::SwapFile
+
+class ImpSwapFile
 {
 private:
+    utl::TempFileFast maTempFile;
     OUString maOriginURL;
 
 public:
@@ -70,6 +70,7 @@ public:
     {
     }
 
+    SvStream* getStream() { return maTempFile.GetStream(StreamMode::READWRITE); }
     OUString const & getOriginURL() const { return maOriginURL; }
 };
 
