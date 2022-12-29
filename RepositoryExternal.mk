@@ -2701,6 +2701,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,libwebp)/src/.libs -lwebp \
+	-L$(call gb_UnpackedTarball_get_dir,libwebp)/sharpyuv/.libs -lsharpyuv \
 )
 endif
 $(call gb_LinkTarget_use_external_project,$(1),libwebp)
