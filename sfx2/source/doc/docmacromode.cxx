@@ -39,6 +39,7 @@
 #include <tools/urlobj.hxx>
 
 #if defined(_WIN32)
+#include <officecfg/Office/Common.hxx>
 #include <systools/win32/comtools.hxx>
 #include <urlmon.h>
 #endif
