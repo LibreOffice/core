@@ -772,21 +772,10 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
             m_GlyphItems[i].addNewWidth(nDiff);
             m_GlyphItems[i].adjustLinearPosX(nDelta + nDiff);
 
-            // Warning:
-            // If you are tempted to improve the two loops below, think again.
-            // Even though I wrote this code, I no longer understand how it
-            // works, and every time I think I finally got it, I introduce a
-            // bug. - Khaled
-
             // Adjust the X position of the rest of the glyphs in the cluster.
-            size_t j = i;
-            while (j > 0)
-            {
-                --j;
-                if (!m_GlyphItems[j].IsInCluster())
-                    break;
+            // We iterate backwards since this is an RTL glyph.
+            for (int j = i - 1; j >= 0 && m_GlyphItems[j].IsInCluster(); j--)
                 m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
-            }
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
             // will be inserted below.
