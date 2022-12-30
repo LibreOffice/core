@@ -43,8 +43,8 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		$(gb_RUN_CONFIGURE) ./configure \
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-secure-transport,\
-				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"),--without-nss)) \
-			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
+				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") --with-nss-deprecated,--without-nss)) \
+			--without-openssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-metalink --without-nghttp2 \
@@ -84,10 +84,12 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			VC=12 \
 			MACHINE=$(gb_MSBUILD_PLATFORM) \
 			GEN_PDB=$(if $(call gb_Module__symbols_enabled,curl),yes,no) \
+			$(if $(call gb_Module__symbols_enabled,curl),CFLAGS_PDB_VALUE="$(gb_DEBUGINFO_FLAGS)") \
 			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
 			ENABLE_IPV6=yes \
 			ENABLE_SSPI=yes \
 			ENABLE_WINSSL=yes \
+			WITH_ZLIB=static \
 	,winbuild)
 	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
