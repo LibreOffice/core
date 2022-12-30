@@ -12,8 +12,8 @@
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -78,6 +78,10 @@
- bool Curl_win32_idn_to_ascii(const char *in, char **out);
- #endif  /* USE_LIBIDN2 */
+ 
+ #include <limits.h>
  
 +#ifdef _WIN32
 +#include <WinHttp.h>
