@@ -54,8 +54,8 @@ inline constexpr OUStringLiteral UPN_DEFAULT_LOCALE_CTL              = u"Default
 inline constexpr OUStringLiteral UPN_IS_HYPH_AUTO                    = u"IsHyphAuto";
 inline constexpr OUStringLiteral UPN_IS_HYPH_SPECIAL                 = u"IsHyphSpecial";
 inline constexpr OUStringLiteral UPN_IS_SPELL_AUTO                   = u"IsSpellAuto";
-inline constexpr OUStringLiteral UPN_IS_SPELL_HIDE                   = u"IsSpellHide";           /*! deprecated #i91949 !*/
-inline constexpr OUStringLiteral UPN_IS_SPELL_IN_ALL_LANGUAGES       = u"IsSpellInAllLanguages"; /*! deprecated #i91949 !*/
+inline constexpr OUStringLiteral UPN_IS_SPELL_CLOSED_COMPOUND        = u"IsSpellClosedCompound";
+inline constexpr OUStringLiteral UPN_IS_SPELL_HYPHENATED_COMPOUND    = u"IsSpellHyphenatedCompound";
 inline constexpr OUStringLiteral UPN_IS_SPELL_SPECIAL                = u"IsSpellSpecial";
 inline constexpr OUStringLiteral UPN_IS_WRAP_REVERSE                 = u"IsWrapReverse";
 inline constexpr OUStringLiteral UPN_DATA_FILES_CHANGED_CHECK_VALUE  = u"DataFilesChangedCheckValue";
@@ -86,8 +86,8 @@ inline constexpr OUStringLiteral UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInter
 #define UPH_HYPH_MIN_WORD_LENGTH             8
 #define UPH_DEFAULT_LOCALE                   9
 #define UPH_IS_SPELL_AUTO                   10
-#define UPH_IS_SPELL_HIDE                   11
-#define UPH_IS_SPELL_IN_ALL_LANGUAGES       12
+#define UPH_IS_SPELL_CLOSED_COMPOUND        11
+#define UPH_IS_SPELL_HYPHENATED_COMPOUND    12
 #define UPH_IS_SPELL_SPECIAL                13
 #define UPH_IS_HYPH_AUTO                    14
 #define UPH_IS_HYPH_SPECIAL                 15

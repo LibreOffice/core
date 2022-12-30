@@ -85,11 +85,15 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
     // SpellChecker service specific options
     bool    bIsSpellWithDigits,
             bIsSpellUpperCase,
-            bIsSpellCapitalization;
+            bIsSpellCapitalization,
+            bIsSpellClosedCompound,
+            bIsSpellHyphenatedCompound;
 
     bool    bROIsSpellWithDigits,
             bROIsSpellUpperCase,
-            bROIsSpellCapitalization;
+            bROIsSpellCapitalization,
+            bROIsSpellClosedCompound,
+            bROIsSpellHyphenatedCompound;
 
     // text conversion specific options
     bool    bIsIgnorePostPositionalWord;

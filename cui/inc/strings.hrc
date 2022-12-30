@@ -293,6 +293,8 @@
 #define RID_CUISTR_CAPITAL_WORDS                    NC_("RID_SVXSTR_CAPITAL_WORDS", "Check uppercase words")
 #define RID_CUISTR_WORDS_WITH_DIGITS                NC_("RID_SVXSTR_WORDS_WITH_DIGITS", "Check words with numbers ")
 #define RID_CUISTR_SPELL_SPECIAL                    NC_("RID_SVXSTR_SPELL_SPECIAL", "Check special regions")
+#define RID_CUISTR_SPELL_CLOSED_COMPOUND            NC_("RID_SVXSTR_SPELL_CLOSED_COMPOUND", "Accept possible closed compound words")
+#define RID_CUISTR_SPELL_HYPHENATED_COMPOUND        NC_("RID_SVXSTR_SPELL_HYPHENATED_COMPOUND", "Accept possible hyphenated compound words")
 #define RID_CUISTR_SPELL_AUTO                       NC_("RID_SVXSTR_SPELL_AUTO", "Check spelling as you type")
 #define RID_CUISTR_GRAMMAR_AUTO                     NC_("RID_SVXSTR_GRAMMAR_AUTO", "Check grammar as you type")
 #define RID_CUISTR_NUM_MIN_WORDLEN                  NC_("RID_SVXSTR_NUM_MIN_WORDLEN", "Minimal number of characters for hyphenation: ")

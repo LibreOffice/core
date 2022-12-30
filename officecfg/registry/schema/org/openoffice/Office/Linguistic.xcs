@@ -349,6 +349,22 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="IsSpellClosedCompound" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Allows rule-based closed compounding of dictionary words</desc>
+          <label>Accept possible closed compound words</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="IsSpellHyphenatedCompound" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Allows rule-based hyphenated compounding of dictionary words</desc>
+          <label>Accept possible hyphenated compound words</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="IsReverseDirection" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - Language -->
         <info>

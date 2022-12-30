@@ -79,7 +79,7 @@ class SpellChecker :
         return m_pPropHelper ? *m_pPropHelper : GetPropHelper_Impl();
     }
 
-    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
+    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale, int& rInfo );
     Reference< XSpellAlternatives > GetProposals( const OUString &rWord, const Locale &rLocale );
 
 public:

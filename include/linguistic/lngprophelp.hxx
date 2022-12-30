@@ -166,11 +166,15 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Spell final :
     bool        bIsSpellUpperCase;
     bool        bIsSpellWithDigits;
     bool        bIsSpellCapitalization;
+    bool        bIsSpellClosedCompound;
+    bool        bIsSpellHyphenatedCompound;
 
     // return values, will be set to default value or current temporary value
     bool        bResIsSpellUpperCase;
     bool        bResIsSpellWithDigits;
     bool        bResIsSpellCapitalization;
+    bool        bResIsSpellClosedCompound;
+    bool        bResIsSpellHyphenatedCompound;
 
     PropertyHelper_Spell( const PropertyHelper_Spell & ) = delete;
     PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & ) = delete;
@@ -196,6 +200,8 @@ public:
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
     bool        IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
     bool        IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+    bool        IsSpellClosedCompound() const       { return bResIsSpellClosedCompound; }
+    bool        IsSpellHyphenatedCompound() const   { return bResIsSpellHyphenatedCompound; }
 };
 
 
@@ -219,6 +225,8 @@ public:
     bool    IsSpellUpperCase() const;
     bool    IsSpellWithDigits() const;
     bool    IsSpellCapitalization() const;
+    bool    IsSpellClosedCompound() const;
+    bool    IsSpellHyphenatedCompound() const;
     /// @throws css::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );

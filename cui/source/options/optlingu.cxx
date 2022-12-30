@@ -193,7 +193,9 @@ enum EID_OPTIONS
     EID_NUM_PRE_BREAK,
     EID_NUM_POST_BREAK,
     EID_HYPH_AUTO,
-    EID_HYPH_SPECIAL
+    EID_HYPH_SPECIAL,
+    EID_SPELL_CLOSED_COMPOUND,
+    EID_SPELL_HYPHENATED_COMPOUND
 };
 
 }
@@ -205,6 +207,8 @@ static OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
         case EID_SPELL_AUTO: return UPN_IS_SPELL_AUTO;
         case EID_GRAMMAR_AUTO: return UPN_IS_GRAMMAR_AUTO;
         case EID_CAPITAL_WORDS: return UPN_IS_SPELL_UPPER_CASE;
+        case EID_SPELL_CLOSED_COMPOUND: return UPN_IS_SPELL_CLOSED_COMPOUND;
+        case EID_SPELL_HYPHENATED_COMPOUND: return UPN_IS_SPELL_HYPHENATED_COMPOUND;
         case EID_WORDS_WITH_DIGITS: return UPN_IS_SPELL_WITH_DIGITS;
         case EID_SPELL_SPECIAL: return UPN_IS_SPELL_SPECIAL;
         case EID_NUM_MIN_WORDLEN: return UPN_HYPH_MIN_WORD_LENGTH;
@@ -827,6 +831,8 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , sWordsWithDigits(CuiResId(RID_CUISTR_WORDS_WITH_DIGITS))
     , sSpellSpecial   (CuiResId(RID_CUISTR_SPELL_SPECIAL))
     , sSpellAuto      (CuiResId(RID_CUISTR_SPELL_AUTO))
+    , sSpellClosedCompound (CuiResId(RID_CUISTR_SPELL_CLOSED_COMPOUND))
+    , sSpellHyphenatedCompound (CuiResId(RID_CUISTR_SPELL_HYPHENATED_COMPOUND))
     , sGrammarAuto    (CuiResId(RID_CUISTR_GRAMMAR_AUTO))
     , sNumMinWordlen  (CuiResId(RID_CUISTR_NUM_MIN_WORDLEN))
     , sNumPreBreak    (CuiResId(RID_CUISTR_NUM_PRE_BREAK))
@@ -1205,6 +1211,24 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, false, 0, true, bVal).GetUserData();
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sWordsWithDigits, 0);
+    m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+
+    m_xLinguOptionsCLB->append();
+    ++nEntry;
+
+    aLngCfg.GetProperty( UPN_IS_SPELL_CLOSED_COMPOUND ) >>= bVal;
+    nUserData = OptionsUserData( EID_SPELL_CLOSED_COMPOUND, false, 0, true, bVal).GetUserData();
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sSpellClosedCompound, 0);
+    m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+
+    m_xLinguOptionsCLB->append();
+    ++nEntry;
+
+    aLngCfg.GetProperty( UPN_IS_SPELL_HYPHENATED_COMPOUND ) >>= bVal;
+    nUserData = OptionsUserData( EID_SPELL_HYPHENATED_COMPOUND, false, 0, true, bVal).GetUserData();
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sSpellHyphenatedCompound, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();

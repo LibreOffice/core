@@ -124,6 +124,14 @@ public:
         { return getPropertyBool(UPN_IS_SPELL_CAPITALIZATION); }
     virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) override
         { setProperty(UPN_IS_SPELL_CAPITALIZATION, static_cast<bool>(p1)); }
+    virtual sal_Bool SAL_CALL getIsSpellClosedCompound() override
+        { return getPropertyBool(UPN_IS_SPELL_CLOSED_COMPOUND); }
+    virtual void SAL_CALL setIsSpellClosedCompound(sal_Bool p1) override
+        { setProperty(UPN_IS_SPELL_CLOSED_COMPOUND, static_cast<bool>(p1)); }
+    virtual sal_Bool SAL_CALL getIsSpellHyphenatedCompound() override
+        { return getPropertyBool(UPN_IS_SPELL_HYPHENATED_COMPOUND); }
+    virtual void SAL_CALL setIsSpellHyphenatedCompound(sal_Bool p1) override
+        { setProperty(UPN_IS_SPELL_HYPHENATED_COMPOUND, static_cast<bool>(p1)); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) override

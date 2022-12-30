@@ -84,6 +84,8 @@ private:
     OUString            sWordsWithDigits;
     OUString            sSpellSpecial;
     OUString            sSpellAuto;
+    OUString            sSpellClosedCompound;
+    OUString            sSpellHyphenatedCompound;
     OUString            sGrammarAuto;
     OUString            sNumMinWordlen;
     OUString            sNumPreBreak;
