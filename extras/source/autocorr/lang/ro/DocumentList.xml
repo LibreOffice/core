@@ -216,8 +216,6 @@
   <block-list:block block-list:abbreviated-name="Admiratie" block-list:name="Admirație"/>
   <block-list:block block-list:abbreviated-name="admisi" block-list:name="admiși"/>
   <block-list:block block-list:abbreviated-name="Admisi" block-list:name="Admiși"/>
-  <block-list:block block-list:abbreviated-name="adolescent" block-list:name="adolescent"/>
-  <block-list:block block-list:abbreviated-name="Adolescent" block-list:name="Adolescent"/>
   <block-list:block block-list:abbreviated-name="adolescenti" block-list:name="adolescenți"/>
   <block-list:block block-list:abbreviated-name="Adolescenti" block-list:name="Adolescenți"/>
   <block-list:block block-list:abbreviated-name="adormiti" block-list:name="adormiți"/>
@@ -546,14 +544,8 @@
   <block-list:block block-list:abbreviated-name="Apropiati" block-list:name="Apropiați"/>
   <block-list:block block-list:abbreviated-name="apropiati-va" block-list:name="apropiați-vă"/>
   <block-list:block block-list:abbreviated-name="Apropiati-va" block-list:name="Apropiați-vă"/>
-  <block-list:block block-list:abbreviated-name="aranjat" block-list:name="aranjat"/>
-  <block-list:block block-list:abbreviated-name="Aranjat" block-list:name="Aranjat"/>
   <block-list:block block-list:abbreviated-name="aranjeaza-ti" block-list:name="aranjează-ți"/>
   <block-list:block block-list:abbreviated-name="Aranjeaza-ti" block-list:name="Aranjează-ți"/>
-  <block-list:block block-list:abbreviated-name="aranjez" block-list:name="aranjez"/>
-  <block-list:block block-list:abbreviated-name="Aranjez" block-list:name="Aranjez"/>
-  <block-list:block block-list:abbreviated-name="aranjezi" block-list:name="aranjezi"/>
-  <block-list:block block-list:abbreviated-name="Aranjezi" block-list:name="Aranjezi"/>
   <block-list:block block-list:abbreviated-name="arata-i" block-list:name="arată-i"/>
   <block-list:block block-list:abbreviated-name="Arata-i" block-list:name="Arată-i"/>
   <block-list:block block-list:abbreviated-name="arata-mi" block-list:name="arată-mi"/>
@@ -610,8 +602,6 @@
   <block-list:block block-list:abbreviated-name="Arunca-ma" block-list:name="Aruncă-mă"/>
   <block-list:block block-list:abbreviated-name="aruncandu-i" block-list:name="aruncându-i"/>
   <block-list:block block-list:abbreviated-name="Aruncandu-i" block-list:name="Aruncându-i"/>
-  <block-list:block block-list:abbreviated-name="aruncate" block-list:name="aruncate"/>
-  <block-list:block block-list:abbreviated-name="Aruncate" block-list:name="Aruncate"/>
   <block-list:block block-list:abbreviated-name="aruncati" block-list:name="aruncați"/>
   <block-list:block block-list:abbreviated-name="Aruncati" block-list:name="Aruncați"/>
   <block-list:block block-list:abbreviated-name="aruncati-l" block-list:name="aruncați-l"/>
@@ -1073,8 +1063,6 @@
   <block-list:block block-list:abbreviated-name="Binefacatorul" block-list:name="Binefăcătorul"/>
   <block-list:block block-list:abbreviated-name="bineinteles" block-list:name="bineânțeles"/>
   <block-list:block block-list:abbreviated-name="Bineinteles" block-list:name="Bineânțeles"/>
-  <block-list:block block-list:abbreviated-name="bineînțeles" block-list:name="bineînțeles"/>
-  <block-list:block block-list:abbreviated-name="Bineînțeles" block-list:name="Bineînțeles"/>
   <block-list:block block-list:abbreviated-name="bineveniti" block-list:name="bineveniți"/>
   <block-list:block block-list:abbreviated-name="Bineveniti" block-list:name="Bineveniți"/>
   <block-list:block block-list:abbreviated-name="binisor" block-list:name="binișor"/>
@@ -5712,8 +5700,6 @@
   <block-list:block block-list:abbreviated-name="Misto" block-list:name="Mișto"/>
   <block-list:block block-list:abbreviated-name="mlastina" block-list:name="mlaștina"/>
   <block-list:block block-list:abbreviated-name="Mlastina" block-list:name="Mlaștina"/>
-  <block-list:block block-list:abbreviated-name="mlaștina" block-list:name="mlaștina"/>
-  <block-list:block block-list:abbreviated-name="Mlaștina" block-list:name="Mlaștina"/>
   <block-list:block block-list:abbreviated-name="moarta" block-list:name="moartă"/>
   <block-list:block block-list:abbreviated-name="Moarta" block-list:name="Moartă"/>
   <block-list:block block-list:abbreviated-name="mocnita" block-list:name="mocnită"/>
@@ -8322,8 +8308,6 @@
   <block-list:block block-list:abbreviated-name="Slabit" block-list:name="Slăbit"/>
   <block-list:block block-list:abbreviated-name="slabita" block-list:name="slăbită"/>
   <block-list:block block-list:abbreviated-name="Slabita" block-list:name="Slăbită"/>
-  <block-list:block block-list:abbreviated-name="sleiască" block-list:name="sleiască"/>
-  <block-list:block block-list:abbreviated-name="Sleiască" block-list:name="Sleiască"/>
   <block-list:block block-list:abbreviated-name="smecher" block-list:name="șmecher"/>
   <block-list:block block-list:abbreviated-name="Smecher" block-list:name="Șmecher"/>
   <block-list:block block-list:abbreviated-name="smechera" block-list:name="șmechera"/>
@@ -8450,8 +8434,6 @@
   <block-list:block block-list:abbreviated-name="Sperantei" block-list:name="Speranței"/>
   <block-list:block block-list:abbreviated-name="sperantele" block-list:name="speranțele"/>
   <block-list:block block-list:abbreviated-name="Sperantele" block-list:name="Speranțele"/>
-  <block-list:block block-list:abbreviated-name="speranța" block-list:name="speranța"/>
-  <block-list:block block-list:abbreviated-name="Speranța" block-list:name="Speranța"/>
   <block-list:block block-list:abbreviated-name="speriata" block-list:name="speriată"/>
   <block-list:block block-list:abbreviated-name="Speriata" block-list:name="Speriată"/>
   <block-list:block block-list:abbreviated-name="speriati" block-list:name="speriați"/>
@@ -8803,7 +8785,6 @@
   <block-list:block block-list:abbreviated-name="Suvoi" block-list:name="Șuvoi"/>
   <block-list:block block-list:abbreviated-name="suvoiul" block-list:name="șuvoiul"/>
   <block-list:block block-list:abbreviated-name="Suvoiul" block-list:name="Șuvoiul"/>
-  <block-list:block block-list:abbreviated-name="șansa" block-list:name="șansa"/>
   <block-list:block block-list:abbreviated-name="taca" block-list:name="tacă"/>
   <block-list:block block-list:abbreviated-name="Taca" block-list:name="Tacă"/>
   <block-list:block block-list:abbreviated-name="taca-ti" block-list:name="tacă-ți"/>
@@ -9606,8 +9587,6 @@
   <block-list:block block-list:abbreviated-name="Viata" block-list:name="Viața"/>
   <block-list:block block-list:abbreviated-name="viata-i" block-list:name="viața-i"/>
   <block-list:block block-list:abbreviated-name="Viata-i" block-list:name="Viața-i"/>
-  <block-list:block block-list:abbreviated-name="viața" block-list:name="viața"/>
-  <block-list:block block-list:abbreviated-name="Viața" block-list:name="Viața"/>
   <block-list:block block-list:abbreviated-name="vicepresedinte" block-list:name="vicepreședinte"/>
   <block-list:block block-list:abbreviated-name="Vicepresedinte" block-list:name="Vicepreședinte"/>
   <block-list:block block-list:abbreviated-name="vieti" block-list:name="vieți"/>
@@ -9710,8 +9689,6 @@
   <block-list:block block-list:abbreviated-name="Vrajitorul" block-list:name="Vrăjitorul"/>
   <block-list:block block-list:abbreviated-name="vrajitorului" block-list:name="vrăjitorului"/>
   <block-list:block block-list:abbreviated-name="Vrajitorului" block-list:name="Vrăjitorului"/>
-  <block-list:block block-list:abbreviated-name="vrăjitoria" block-list:name="vrăjitoria"/>
-  <block-list:block block-list:abbreviated-name="Vrăjitoria" block-list:name="Vrăjitoria"/>
   <block-list:block block-list:abbreviated-name="vreodata" block-list:name="vreodată"/>
   <block-list:block block-list:abbreviated-name="Vreodata" block-list:name="Vreodată"/>
   <block-list:block block-list:abbreviated-name="vreti" block-list:name="vreți"/>
