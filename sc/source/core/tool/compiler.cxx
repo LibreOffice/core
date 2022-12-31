@@ -21,6 +21,7 @@
 
 #include <compiler.hxx>
 
+#include <mutex>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
@@ -77,7 +78,6 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
-osl::Mutex                          ScCompiler::maMutex;
 const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
 const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -222,11 +222,17 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
     return !aIntName.isEmpty();       // no valid function name
 }
 
+static std::mutex& getCharClassMutex()
+{
+    static std::mutex aMutex;
+    return aMutex;
+}
+
 const CharClass* ScCompiler::GetCharClassEnglish()
 {
     if (!pCharClassEnglish)
     {
-        osl::MutexGuard aGuard(maMutex);
+        std::scoped_lock aGuard(getCharClassMutex());
         if (!pCharClassEnglish)
         {
             pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
@@ -242,7 +248,7 @@ const CharClass* ScCompiler::GetCharClassLocalized()
     {
         // Switching UI language requires restart; if not, we would have to
         // keep track of that.
-        osl::MutexGuard aGuard(maMutex);
+        std::scoped_lock aGuard(getCharClassMutex());
         if (!pCharClassLocalized)
         {
             pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
