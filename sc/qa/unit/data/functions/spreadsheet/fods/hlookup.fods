@@ -1304,10 +1304,41 @@
      <table:table-cell table:style-name="ce15" table:number-columns-repeated="5"/>
      <table:table-cell table:number-columns-repeated="18"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell table:number-columns-repeated="29"/>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=HLOOKUP(&quot;a&quot;;{1|3|&quot;b&quot;|&quot;d&quot;};1;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A39])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=HLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,1)" calcext:value-type="string">
+      <text:p>=HLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="27"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=HLOOKUP(&quot;a&quot;;{1|3|&quot;b&quot;|&quot;d&quot;};1;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A40])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="=HLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,0)" calcext:value-type="string">
+      <text:p>=HLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="27"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>

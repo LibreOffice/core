@@ -2559,8 +2559,67 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="36"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048502">
-     <table:table-cell table:number-columns-repeated="34"/>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=VLOOKUP(&quot;a&quot;;{1|3|&quot;b&quot;|&quot;d&quot;};1;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A74])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A74])" office:value-type="string" office:string-value="=VLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="35"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=VLOOKUP(&quot;a&quot;;{1|3|&quot;b&quot;|&quot;d&quot;};1;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A75])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A75])" office:value-type="string" office:string-value="=VLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(&quot;a&quot;,{1;3;&quot;b&quot;;&quot;d&quot;},1,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="35"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+     <table:table-cell table:style-name="ce21" table:formula="of:=VLOOKUP(3; {1;&quot;a&quot;;&quot;d&quot;|2;&quot;b&quot;;&quot;e&quot;|3;&quot;c&quot;;&quot;f&quot;}; 2; 1)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A76]=[.B76]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A76])" office:value-type="string" office:string-value="=VLOOKUP(3, {1,&quot;a&quot;,&quot;d&quot;;2,&quot;b&quot;,&quot;e&quot;;3,&quot;c&quot;,&quot;f&quot;}, 2, 1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(3, {1,&quot;a&quot;,&quot;d&quot;;2,&quot;b&quot;,&quot;e&quot;;3,&quot;c&quot;,&quot;f&quot;}, 2, 1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="35"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="24">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:number-columns-repeated="37"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048475">
+     <table:table-cell table:number-columns-repeated="40"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="34"/>
