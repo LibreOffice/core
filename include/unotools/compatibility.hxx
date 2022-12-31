@@ -129,19 +129,8 @@ class SvtCompatibilityEntry
             setValue(rIdx, css::uno::Any(rValue));
         }
 
-        bool isDefaultEntry() const
-        {
-            return m_bDefaultEntry;
-        }
-
-        void setDefaultEntry( bool rValue )
-        {
-            m_bDefaultEntry = rValue;
-        }
-
     private:
         std::vector<css::uno::Any> m_aPropertyValue;
-        bool                       m_bDefaultEntry;
 };
 
 /*-************************************************************************************************************
