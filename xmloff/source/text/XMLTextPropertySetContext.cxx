@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include "XMLTextPropertySetContext.hxx"
 #include <XMLTextColumnsContext.hxx>
+#include <XMLThemeColorContext.hxx>
 #include <XMLBackgroundImageContext.hxx>
 #include "XMLSectionFootnoteConfigImport.hxx"
 
@@ -27,7 +28,6 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmltabi.hxx>
 #include "txtdropi.hxx"
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -67,6 +67,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
         return new XMLTextColumnsContext( GetImport(), nElement,
                                                    xAttrList, rProp,
                                                    rProperties );
+        break;
+
+    case CTF_THEME_COLOR:
+        return new XMLThemeColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
         break;
 
     case CTF_DROPCAPFORMAT:

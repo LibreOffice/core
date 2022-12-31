@@ -19,6 +19,7 @@
 
 #include <XMLShapePropertySetContext.hxx>
 #include <XMLTextColumnsContext.hxx>
+#include <XMLThemeColorContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmltabi.hxx>
@@ -81,6 +82,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
                                                    rProperties );
     case CTF_TEXTCOLUMNS:
         return new XMLTextColumnsContext(GetImport(), nElement, xAttrList, rProp, rProperties);
+
+    case CTF_THEME_COLOR:
+        return new XMLThemeColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
     }
 
     return SvXMLPropertySetContext::createFastChildContext( nElement,

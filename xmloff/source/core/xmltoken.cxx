@@ -3484,8 +3484,8 @@ namespace xmloff::token {
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
         TOKEN("theme",               XML_THEME ),
-        TOKEN("theme-color",         XML_THEME_COLOR ),
-        TOKEN("fill-theme-color",    XML_FILL_THEME_COLOR ),
+        TOKEN("char-color-theme-reference", XML_CHAR_COLOR_THEME_REFERENCE),
+        TOKEN("fill-color-theme-reference", XML_FILL_COLOR_THEME_REFERENCE),
         TOKEN("dk1",                 XML_DK1 ),
         TOKEN("lt1",                 XML_LT1 ),
         TOKEN("dk2",                 XML_DK2 ),
@@ -3498,10 +3498,6 @@ namespace xmloff::token {
         TOKEN("accent6",             XML_ACCENT6 ),
         TOKEN("hlink",               XML_HLINK ),
         TOKEN("folHlink",            XML_FOLHLINK ),
-        TOKEN("color-lum-mod",       XML_COLOR_LUM_MOD ),
-        TOKEN("color-lum-off",       XML_COLOR_LUM_OFF ),
-        TOKEN("fill-color-lum-mod",  XML_FILL_COLOR_LUM_MOD ),
-        TOKEN("fill-color-lum-off",  XML_FILL_COLOR_LUM_OFF ),
 
         TOKEN("content-control",     XML_CONTENT_CONTROL ),
         TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),

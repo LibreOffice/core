@@ -3228,8 +3228,8 @@ rtl
 symmetric
 linked-style-name
 theme
-theme-color
-fill-theme-color
+char-color-theme-reference
+fill-color-theme-reference
 dk1
 lt1
 dk2
@@ -3242,10 +3242,6 @@ accent5
 accent6
 hlink
 folHlink
-color-lum-mod
-color-lum-off
-fill-color-lum-mod
-fill-color-lum-off
 content-control
 showing-place-holder
 checked-state

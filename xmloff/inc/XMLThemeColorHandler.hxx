@@ -9,39 +9,38 @@
 
 #pragma once
 
-#include <xmloff/xmlprhdl.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 
 using namespace ::xmloff::token;
+using namespace css;
 
 class XMLThemeColorHandler : public XMLPropertyHandler
 {
 public:
-    bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
+    bool importXML(const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/,
                    const SvXMLUnitConverter&) const override
     {
-        sal_Int16 nValue;
-        bool bReturn = SvXMLUnitConverter::convertEnum(nValue, rStrImpValue, pXML_ThemeColor_Enum);
-
-        if (bReturn)
-            rValue <<= nValue;
-
-        return bReturn;
+        return false;
     }
 
-    bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+    bool exportXML(OUString& /*rStrExpValue*/, const css::uno::Any& /*rValue*/,
                    const SvXMLUnitConverter&) const override
     {
-        sal_Int16 nThemeIndex;
+        return false;
+    }
 
-        if (!(rValue >>= nThemeIndex) || nThemeIndex == -1) // Default
-            return false;
+    bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override
+    {
+        uno::Reference<util::XThemeColor> xThemeColor1;
+        uno::Reference<util::XThemeColor> xThemeColor2;
+        rAny1 >>= xThemeColor1;
+        rAny2 >>= xThemeColor2;
+        model::ThemeColor aThemeColor1;
+        model::ThemeColor aThemeColor2;
+        model::theme::setFromXThemeColor(aThemeColor1, xThemeColor1);
+        model::theme::setFromXThemeColor(aThemeColor2, xThemeColor2);
 
-        OUStringBuffer aOutBuffer;
-        bool bReturn = SvXMLUnitConverter::convertEnum(aOutBuffer, nThemeIndex,
-                                                       pXML_ThemeColor_Enum, XML_NONE);
-        rStrExpValue = aOutBuffer.makeStringAndClear();
-
-        return bReturn;
+        return aThemeColor1 == aThemeColor2;
     }
 };
 

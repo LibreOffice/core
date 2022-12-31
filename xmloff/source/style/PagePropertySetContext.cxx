@@ -98,9 +98,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext
         break;
 
     case CTF_PM_TEXTCOLUMNS:
-        return new XMLTextColumnsContext( GetImport(), nElement,
-                                              xAttrList, rProp,
-                                              rProperties );
+        return new XMLTextColumnsContext(GetImport(), nElement, xAttrList, rProp, rProperties);
         break;
 
     case CTF_PM_FTN_LINE_WEIGHT:
