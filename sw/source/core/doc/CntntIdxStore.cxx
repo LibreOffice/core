@@ -342,14 +342,14 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nC
         if ( RES_FLYFRMFMT == pFrameFormat->Which() || RES_DRAWFRMFMT == pFrameFormat->Which() )
         {
             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-            SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-            if ( pAPos && ( nNode == pAPos->GetNodeIndex() ) &&
+            SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
+            if ( pAnchorNode && ( nNode == pAnchorNode->GetIndex() ) &&
                  ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() ||
                    RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {
                 bool bSkip = false;
                 aSave.m_bOther = false;
-                aSave.m_nContent = pAPos->GetContentIndex();
+                aSave.m_nContent = rAnchor.GetAnchorContentOffset();
                 if ( RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() )
                 {
                     if( nContent <= aSave.m_nContent )
