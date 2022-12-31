@@ -5052,7 +5052,11 @@ void ScInterpreter::ScMatch()
 
             if (nHitIndex > 0) // valid hit must be 2nd item or higher
             {
-                PushDouble( nHitIndex); // non-exact match
+                if ( ! ( rItem.meType == ScQueryEntry::ByString &&  aMatAcc.IsValue( nHitIndex-1 ) ) &&
+                     ! ( rItem.meType == ScQueryEntry::ByValue  && !aMatAcc.IsValue( nHitIndex-1 ) ) )
+                    PushDouble( nHitIndex); // non-exact match
+                else
+                    PushNA();
                 return;
             }
 

@@ -5716,11 +5716,23 @@
      <table:table-cell table:style-name="ce33"/>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="3"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce13" table:formula="of:=MATCH(&quot;a&quot;;{1;3;&quot;b&quot;;&quot;d&quot;};1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" table:formula="of:=ISERROR([.A118])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A118])" office:value-type="string" office:string-value="=MATCH(&quot;a&quot;,{1,3,&quot;b&quot;,&quot;d&quot;},1)" calcext:value-type="string">
+      <text:p>=MATCH(&quot;a&quot;,{1,3,&quot;b&quot;,&quot;d&quot;},1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
       <text:p>4</text:p>
      </table:table-cell>
@@ -5731,11 +5743,23 @@
      <table:table-cell table:style-name="ce33"/>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="3"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce13" table:formula="of:=MATCH(4;{&quot;d&quot;;&quot;b&quot;;3;1};-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce49" table:formula="of:=ISERROR([.A119])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A119])" office:value-type="string" office:string-value="=MATCH(4,{&quot;d&quot;,&quot;b&quot;,3,1},-1)" calcext:value-type="string">
+      <text:p>=MATCH(4,{&quot;d&quot;,&quot;b&quot;,3,1},-1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#152774</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
