@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     i18nlangtag \
     sal \
     salhelper \
@@ -324,6 +325,8 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/text/XMLTextCharStyleNamesElementExport \
     xmloff/source/text/XMLTextColumnsContext \
     xmloff/source/text/XMLTextColumnsExport \
+    xmloff/source/text/XMLThemeColorContext \
+    xmloff/source/text/XMLThemeColorExport \
     xmloff/source/text/XMLTextFrameContext \
     xmloff/source/text/XMLTextFrameHyperlinkContext \
     xmloff/source/text/XMLTextHeaderFooterContext \
