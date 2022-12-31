@@ -353,27 +353,20 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testReferToThemeShapeFill)
+CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
 {
     // Given an ODP file that contains references to a theme for shape fill:
-    loadFromURL(u"refer-to-theme-shape-fill.odp");
+    loadFromURL(u"ReferenceShapeFill.odp");
 
     // When saving that document:
     save("Impress Office Open XML");
 
-    // Then make sure the shape fill color is a scheme color:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : 0
-    // i.e. the <a:schemeClr> element was not written. Note that this was already working from PPTX
-    // files via grab-bags, so this test intentionally uses an ODP file as input.
+    // Then make sure the shape fill color is a scheme color.
+    // Note that this was already working from PPTX files via grab-bags,
+    //so this test intentionally uses an ODP file as input.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent1");
-    // Without the accompanying fix in place, this test would have failed with:
-    // - XPath '//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod' number of nodes is incorrect
-    // i.e. the effects of the themed color were lost.
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod", "val", "40000");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumOff", "val", "60000");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent6");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod", "val", "75000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)

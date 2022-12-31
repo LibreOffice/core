@@ -72,6 +72,12 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         pThis->maTextColumnsExport.exportXML( rProperty.maValue );
         break;
 
+    case CTF_THEME_COLOR:
+        pThis->maThemeColorExport.exportXML(rProperty.maValue,
+                    getPropertySetMapper()->GetEntryNameSpace(rProperty.mnIndex),
+                    getPropertySetMapper()->GetEntryXMLName(rProperty.mnIndex));
+        break;
+
     case CTF_BACKGROUND_URL:
         {
             const Any *pPos = nullptr, *pFilter = nullptr, *pTrans = nullptr;
@@ -210,6 +216,7 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
     maDropCapExport( rExp ),
     maTabStopExport( rExp ),
     maTextColumnsExport( rExp ),
+    maThemeColorExport(rExp),
     maBackgroundImageExport( rExp )
 {
 }

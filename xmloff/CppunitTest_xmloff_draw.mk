@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_draw, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     embobj \
     sal \
     subsequenttest \
