@@ -441,7 +441,6 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
     // better supported by hardware, and the memory savings are not worth
     // it anymore.
     // TODO: Possibly remove the 1bpp code later.
-    constexpr bool use8BitMask = true;
 
     if (!nTol && pReadAcc
         && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
@@ -453,9 +452,8 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         return *this;
     }
 
-    auto ePixelFormat = use8BitMask ? vcl::PixelFormat::N8_BPP : vcl::PixelFormat::N1_BPP;
-    Bitmap aNewBmp(GetSizePixel(), ePixelFormat,
-                   use8BitMask ? &Bitmap::GetGreyPalette(256) : nullptr);
+    auto ePixelFormat = vcl::PixelFormat::N8_BPP;
+    Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &Bitmap::GetGreyPalette(256));
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
@@ -470,49 +468,10 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         {
             const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
-            if (pWriteAcc->GetBitCount() == 1
-                && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
-            {
-                // optimized for 8Bit source palette
-                const sal_uInt8 cTest = aTest.GetIndex();
-
-                if (pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal
-                    && aWhite.GetIndex() == 1)
-                {
-                    // optimized for 1Bit-MSB destination palette
-                    for (tools::Long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (tools::Long nX = 0; nX < nWidth; ++nX)
-                        {
-                            if (cTest == pSrc[nX])
-                                pDst[nX >> 3] |= 1 << (7 - (nX & 7));
-                            else
-                                pDst[nX >> 3] &= ~(1 << (7 - (nX & 7)));
-                        }
-                    }
-                }
-                else
-                {
-                    for (tools::Long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (tools::Long nX = 0; nX < nWidth; ++nX)
-                        {
-                            if (cTest == pSrc[nX])
-                                pWriteAcc->SetPixelOnData(pDst, nX, aWhite);
-                            else
-                                pWriteAcc->SetPixelOnData(pDst, nX, aBlack);
-                        }
-                    }
-                }
-            }
-            else if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat()
-                     && aWhite.GetIndex() == 1
-                     && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-                         || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
+            if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat()
+                && aWhite.GetIndex() == 1
+                && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
+                    || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
             {
                 for (tools::Long nY = 0; nY < nHeight; ++nY)
                 {
@@ -524,8 +483,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
                         pDst[nX] = ~pSrc[nX];
                 }
             }
-            else if (use8BitMask && pWriteAcc->GetBitCount() == 8
-                     && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+            else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
             {
                 // optimized for 8Bit source palette
                 const sal_uInt8 cTest = aTest.GetIndex();
