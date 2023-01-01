@@ -29,6 +29,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include <docmodel/uno/UnoThemeColor.hxx>
+
 #include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
@@ -393,24 +395,22 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    // 4 is accent1, see oox::drawingml::Color::getSchemeColorIndex().
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4),
-                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int32>());
-    // 60000 in the file, just 100th vs 1000th percents.
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 6000
-    // - Actual  : 10000
-    // i.e. we had the default 100% value, not the value from the file.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
-                         xPortion->getPropertyValue("CharColorLumMod").get<sal_Int32>());
 
-    // 40000 in the file, just 100th vs 1000th percents.
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4000
-    // - Actual  : 0
-    // i.e. we had the default 0% value, not the value from the file.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
-                         xPortion->getPropertyValue("CharColorLumOff").get<sal_Int32>());
+    // Check the theme colors are as expected
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aThemeColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aThemeColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
+                             aThemeColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aThemeColor.getTransformations()[1].mnValue);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
@@ -453,18 +453,31 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
     uno::Reference<table::XCellRange> xTable;
     CPPUNIT_ASSERT(xShape->getPropertyValue("Model") >>= xTable);
     uno::Reference<beans::XPropertySet> xA1(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
-    sal_Int16 nFillColorTheme{};
-    CPPUNIT_ASSERT(xA1->getPropertyValue("FillColorTheme") >>= nFillColorTheme);
-    // This is OK, no problematic effects:
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nFillColorTheme);
-    uno::Reference<beans::XPropertySet> xA2(xTable->getCellByPosition(0, 1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xA2->getPropertyValue("FillColorTheme") >>= nFillColorTheme);
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: -1
-    // - Actual  : 4
-    // i.e. we remembered the theme index, without being able to remember the tint effect, leading
-    // to a bad background color.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(-1), nFillColorTheme);
+    // check theme color
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xA1->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        // This is OK, no problematic effects:
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+    }
+
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        uno::Reference<beans::XPropertySet> xA2(xTable->getCellByPosition(0, 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xA2->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: -1
+        // - Actual  : 4
+        // i.e. we remembered the theme index, without being able to remember the tint effect, leading
+        // to a bad background color.
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Unknown, aThemeColor.getType());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)

@@ -1487,6 +1487,15 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                             eState = PropertyState_DEFAULT_VALUE;
                         }
                     }
+                    else if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                    {
+                        const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                        if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                        {
+                            eState = PropertyState_DEFAULT_VALUE;
+                        }
+                    }
+                    break;
                 }
             }
         }

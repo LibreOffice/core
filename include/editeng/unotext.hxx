@@ -91,6 +91,7 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE, EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_TINT_OR_SHADE }, \
     { UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD,       EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_LUM_MOD }, \
     { UNO_NAME_EDIT_CHAR_COLOR_LUM_OFF,       EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_LUM_OFF }, \
+    { UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE, EE_CHAR_COLOR,    ::cppu::UnoType<css::uno::XInterface>::get(), 0, MID_COLOR_THEME_REFERENCE }, \
     { u"CharBackColor",                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
     { u"CharBackTransparent",          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
     { UNO_NAME_EDIT_CHAR_ESCAPEMENT,  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \

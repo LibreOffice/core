@@ -26,6 +26,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <o3tl/enumrange.hxx>
 #include <utility>
 
@@ -37,57 +38,44 @@ namespace
 void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion,
                                const svx::ColorSet& rColorSet)
 {
-    sal_Int16 nCharColorTheme = -1;
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
-    model::ThemeColorType eColorThemeType = model::convertToThemeColorType(nCharColorTheme);
-
-    if (eColorThemeType == model::ThemeColorType::Unknown)
+    if (!xPortion->getPropertySetInfo()->hasPropertyByName(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE))
         return;
 
-    Color aColor = rColorSet.getColor(eColorThemeType);
-    sal_Int32 nCharColorLumMod{};
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD) >>= nCharColorLumMod;
-    sal_Int32 nCharColorLumOff{};
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_LUM_OFF) >>= nCharColorLumOff;
-    if (nCharColorLumMod != 10000 || nCharColorLumOff != 0)
-    {
-        aColor.ApplyLumModOff(nCharColorLumMod, nCharColorLumOff);
-    }
+    uno::Reference<util::XThemeColor> xThemeColor;
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE) >>= xThemeColor;
+    if (!xThemeColor.is())
+        return;
 
-    sal_Int32 nCharColorTintOrShade{};
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE) >>= nCharColorTintOrShade;
-    if (nCharColorTintOrShade != 0)
-    {
-        aColor.ApplyTintOrShade(nCharColorTintOrShade);
-    }
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
 
-    xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR,
-                               uno::Any(static_cast<sal_Int32>(aColor)));
+    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+        return;
+
+    Color aColor = rColorSet.getColor(aThemeColor.getType());
+    aColor = aThemeColor.applyTransformations(aColor);
+
+    xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
 void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const svx::ColorSet& rColorSet)
 {
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME))
-    {
-        return;
-    }
-
-    sal_Int16 nFillColorTheme = -1;
-    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME) >>= nFillColorTheme;
-    model::ThemeColorType eColorThemeType = model::convertToThemeColorType(nFillColorTheme);
-    if (eColorThemeType == model::ThemeColorType::Unknown)
+    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME_REFERENCE))
         return;
 
-    Color aColor = rColorSet.getColor(eColorThemeType);
-    sal_Int32 nFillColorLumMod{};
-    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_LUM_MOD) >>= nFillColorLumMod;
-    sal_Int32 nFillColorLumOff{};
-    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_LUM_OFF) >>= nFillColorLumOff;
-    if (nFillColorLumMod != 10000 || nFillColorLumOff != 0)
-    {
-        aColor.ApplyLumModOff(nFillColorLumMod, nFillColorLumOff);
-    }
+    uno::Reference<util::XThemeColor> xThemeColor;
+    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME_REFERENCE) >>= xThemeColor;
+    if (!xThemeColor.is())
+        return;
 
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+
+    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+        return;
+
+    Color aColor = rColorSet.getColor(aThemeColor.getType());
+    aColor = aThemeColor.applyTransformations(aColor);
     xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
