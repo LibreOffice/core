@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-import sys
-
 instantiatedSet = set()
 definitionSet = set()
 parentChildDict = {}

@@ -2,7 +2,6 @@
 
 import io
 import re
-import sys
 
 definitionSet = set()
 definitionToSourceLocationMap = dict()
