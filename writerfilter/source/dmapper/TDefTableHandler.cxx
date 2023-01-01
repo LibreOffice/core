@@ -269,48 +269,48 @@ OUString TDefTableHandler::getThemeColorTypeString(sal_Int32 nType)
     return OUString();
 }
 
-sal_Int16 TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
+model::ThemeColorType TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
 {
     switch (nType)
     {
         case NS_ooxml::LN_Value_St_ThemeColor_dark1:
-                return 0;
+                return model::ThemeColorType::Dark1;
         case NS_ooxml::LN_Value_St_ThemeColor_light1:
-                return 1;
+                return model::ThemeColorType::Light1;
         case NS_ooxml::LN_Value_St_ThemeColor_dark2:
-                return 2;
+                return model::ThemeColorType::Dark2;
         case NS_ooxml::LN_Value_St_ThemeColor_light2:
-                return 3;
+                return model::ThemeColorType::Light2;
         case NS_ooxml::LN_Value_St_ThemeColor_accent1:
-                return 4;
+                return model::ThemeColorType::Accent1;
         case NS_ooxml::LN_Value_St_ThemeColor_accent2:
-                return 5;
+                return model::ThemeColorType::Accent2;
         case NS_ooxml::LN_Value_St_ThemeColor_accent3:
-                return 6;
+                return model::ThemeColorType::Accent3;
         case NS_ooxml::LN_Value_St_ThemeColor_accent4:
-                return 7;
+                return model::ThemeColorType::Accent4;
         case NS_ooxml::LN_Value_St_ThemeColor_accent5:
-                return 8;
+                return model::ThemeColorType::Accent5;
         case NS_ooxml::LN_Value_St_ThemeColor_accent6:
-                return 9;
+                return model::ThemeColorType::Accent6;
         case NS_ooxml::LN_Value_St_ThemeColor_hyperlink:
-                return 10;
+                return model::ThemeColorType::Hyperlink;
         case NS_ooxml::LN_Value_St_ThemeColor_followedHyperlink:
-                return 11;
+                return model::ThemeColorType::FollowedHyperlink;
         case NS_ooxml::LN_Value_St_ThemeColor_none:
-                return -1;
+                return model::ThemeColorType::Unknown;
         case NS_ooxml::LN_Value_St_ThemeColor_background1:
-                return 0;
+                return model::ThemeColorType::Dark1;
         case NS_ooxml::LN_Value_St_ThemeColor_text1:
-                return 1;
+                return model::ThemeColorType::Light1;
         case NS_ooxml::LN_Value_St_ThemeColor_background2:
-                return 2;
+                return model::ThemeColorType::Dark2;
         case NS_ooxml::LN_Value_St_ThemeColor_text2:
-                return 3;
+                return model::ThemeColorType::Light2;
         default:
                 break;
     }
-    return -1;
+    return model::ThemeColorType::Unknown;
 }
 
 void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)

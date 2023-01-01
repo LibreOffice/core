@@ -1175,6 +1175,12 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                     }
                     break;
                 }
+                case MID_COLOR_THEME_REFERENCE:
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    {
+                        eItemState = SfxItemState::DEFAULT;
+                    }
+                    break;
             }
         }
 

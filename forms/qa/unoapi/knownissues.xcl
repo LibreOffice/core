@@ -147,3 +147,5 @@ forms.OGridControlModel::com::sun::star::view::XSelectionSupplier
 
 ### i111333 ###
 forms.OImageControlControl::com::sun::star::awt::XControl
+
+forms.OEditModel::com::sun::star::io::XPersistObject

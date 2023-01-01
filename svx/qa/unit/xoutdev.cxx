@@ -19,6 +19,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 
 using namespace com::sun::star;
 
@@ -100,31 +101,31 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
-    sal_Int16 nExpected = 4; // Accent 1
-    xShape->setPropertyValue("FillColorTheme", uno::Any(nExpected));
-
-    // 80% lighter
-    sal_Int16 nExpectedLumMod = 2000;
-    xShape->setPropertyValue("FillColorLumMod", uno::Any(nExpectedLumMod));
-    sal_Int16 nExpectedLumOff = 8000;
-    xShape->setPropertyValue("FillColorLumOff", uno::Any(nExpectedLumOff));
+    // Set theme color
+    {
+        model::ThemeColor aThemeColor;
+        aThemeColor.setType(model::ThemeColorType::Accent1);
+        aThemeColor.addTransformation({ model::TransformationType::LumMod, 2000 });
+        aThemeColor.addTransformation({ model::TransformationType::LumOff, 8000 });
+        xShape->setPropertyValue("FillColorThemeReference",
+                                 uno::Any(model::theme::createXThemeColor(aThemeColor)));
+    }
 
     // Then make sure the value we read back is the expected one:
-    sal_Int16 nActual = -1;
-    xShape->getPropertyValue("FillColorTheme") >>= nActual;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4
-    // - Actual  : -1
-    // i.e. setting the value was broken.
-    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
-    xShape->getPropertyValue("FillColorLumMod") >>= nActual;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2000
-    // - Actual  : 8000
-    // i.e. FillColorLumOff was set as FillColor, then getting FillColorLumMod returned FillColor.
-    CPPUNIT_ASSERT_EQUAL(nExpectedLumMod, nActual);
-    xShape->getPropertyValue("FillColorLumOff") >>= nActual;
-    CPPUNIT_ASSERT_EQUAL(nExpectedLumOff, nActual);
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aThemeColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aThemeColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
+                             aThemeColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aThemeColor.getTransformations()[1].mnValue);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

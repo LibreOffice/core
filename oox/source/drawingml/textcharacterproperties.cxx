@@ -26,6 +26,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/escapementitem.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -133,11 +134,23 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
                 aColor = aLineColor;
         }
         rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
-        // set color theme index
-        rPropMap.setProperty(PROP_CharColorTheme, aColor.getSchemeColorIndex());
-        rPropMap.setProperty(PROP_CharColorTintOrShade, aColor.getTintOrShade());
-        rPropMap.setProperty(PROP_CharColorLumMod, aColor.getLumMod());
-        rPropMap.setProperty(PROP_CharColorLumOff, aColor.getLumOff());
+
+        // set theme color
+        model::ThemeColor aThemeColor;
+        aThemeColor.setType(model::convertToThemeColorType(aColor.getSchemeColorIndex()));
+        if (aColor.getTintOrShade() > 0)
+            aThemeColor.addTransformation({model::TransformationType::Tint, aColor.getTintOrShade()});
+        if (aColor.getTintOrShade() < 0)
+        {
+            sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-aColor.getTintOrShade());
+            aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+        }
+        if (aColor.getLumMod() != 10000)
+            aThemeColor.addTransformation({model::TransformationType::LumMod, aColor.getLumMod()});
+        if (aColor.getLumOff() != 0)
+            aThemeColor.addTransformation({model::TransformationType::LumOff, aColor.getLumOff()});
+
+        rPropMap.setProperty(PROP_CharColorThemeReference, model::theme::createXThemeColor(aThemeColor));
         rPropMap.setProperty(PROP_CharContoured, bContoured);
 
         if (aColor.hasTransparency())

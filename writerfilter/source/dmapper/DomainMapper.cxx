@@ -69,6 +69,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XThemeColor.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -79,6 +80,7 @@
 #include <unotools/mediadescriptor.hxx>
 
 #include "TextEffectsHandler.hxx"
+#include "ThemeColorHandler.hxx"
 #include "CellColorHandler.hxx"
 #include "SectionColumnHandler.hxx"
 #include "GraphicHelpers.hxx"
@@ -337,11 +339,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Underline_val:
             if (m_pImpl->GetTopContext())
                 handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
-            break;
-        case NS_ooxml::LN_CT_Color_val:
-            if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::Any( nIntValue ) );
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", msfilter::util::ConvertColorOU(Color(ColorTransparency,nIntValue)));
             break;
         case NS_ooxml::LN_CT_Underline_color:
             if (m_pImpl->GetTopContext())
@@ -1029,31 +1026,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_FtnEdnRef_id:
             // footnote or endnote reference id - not needed
-        break;
-        case NS_ooxml::LN_CT_Color_themeColor:
-            if (m_pImpl->GetTopContext())
-            {
-                sal_Int16 nIndex = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-                if (nIndex >= 0 && nIndex <= 11)
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_INDEX, uno::Any(nIndex));
-            }
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
-        break;
-        case NS_ooxml::LN_CT_Color_themeTint:
-            if (m_pImpl->GetTopContext())
-            {
-                if (nIntValue != 0)
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((256 - nIntValue) * 10000 / 256)));
-            }
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", OUString::number(nIntValue, 16));
-        break;
-        case NS_ooxml::LN_CT_Color_themeShade:
-            if (m_pImpl->GetTopContext())
-            {
-                if (nIntValue != 0)
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((nIntValue - 256) * 10000 / 256)));
-            }
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeShade", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_DocGrid_linePitch:
         {
@@ -2172,8 +2144,70 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
         }
         break;
-    case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_color:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties)
+        {
+            auto pThemeColorHandler = std::make_shared<ThemeColorHandler>();
+            pProperties->resolve(*pThemeColorHandler);
+
+            uno::Any aThemeColorName(TDefTableHandler::getThemeColorTypeString(pThemeColorHandler->mnIndex));
+            uno::Any aThemeColorTint(OUString::number(pThemeColorHandler->mnTint, 16));
+            uno::Any aThemeColorShade(OUString::number(pThemeColorHandler->mnShade, 16));
+
+            if (m_pImpl->GetTopContext())
+            {
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::Any(pThemeColorHandler->mnColor));
+
+                auto eType = TDefTableHandler::getThemeColorTypeIndex(pThemeColorHandler->mnIndex);
+                if (eType != model::ThemeColorType::Unknown)
+                {
+                    model::ThemeColor aThemeColor;
+                    aThemeColor.setType(eType);
+
+                    if (pThemeColorHandler->mnTint > 0 )
+                    {
+                        sal_Int16 nTint = sal_Int16((256 - pThemeColorHandler->mnTint) * 10000 / 256);
+                        aThemeColor.addTransformation({model::TransformationType::Tint, nTint});
+                    }
+                    if (pThemeColorHandler->mnShade > 0)
+                    {
+                        sal_Int16 nShade = sal_Int16((256 - pThemeColorHandler->mnShade) * 10000 / 256);
+                        aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                    }
+
+                    auto xThemeColor = model::theme::createXThemeColor(aThemeColor);
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_REFERENCE, uno::Any(xThemeColor));
+                }
+
+                uno::Any aColorAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, pThemeColorHandler->mnColor)));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, aColorAny, true, CHAR_GRAB_BAG);
+
+                if (pThemeColorHandler->mnIndex >= 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR, aThemeColorName, true, CHAR_GRAB_BAG);
+
+                if (pThemeColorHandler->mnTint > 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_TINT, aThemeColorTint, true, CHAR_GRAB_BAG);
+
+                if (pThemeColorHandler->mnShade > 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_SHADE, aThemeColorShade, true, CHAR_GRAB_BAG);
+            }
+            {
+                if (pThemeColorHandler->mnIndex >= 0)
+                {
+                    m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", aThemeColorName.get<OUString>());
+                    if (pThemeColorHandler->mnTint > 0)
+                        m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", aThemeColorTint.get<OUString>());
+                    if (pThemeColorHandler->mnShade > 0)
+                        m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeShade", aThemeColorShade.get<OUString>());
+                }
+                m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "color", m_pImpl->m_aSubInteropGrabBag);
+            }
+        }
+    }
+    break;
+    case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
@@ -2187,12 +2221,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_PPr_rPr:
     case NS_ooxml::LN_CT_PPrBase_numPr:
     {
-        bool bTempGrabBag = !m_pImpl->isInteropGrabBagEnabled();
         if (nSprmId == NS_ooxml::LN_CT_PPr_sectPr)
             m_pImpl->SetParaSectpr(true);
-        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color && bTempGrabBag)
-            // if DomainMapper grab bag is not enabled, enable it temporarily
-            m_pImpl->enableInteropGrabBag("TempColorPropsGrabBag");
         resolveSprmProps(*this, rSprm);
         if (nSprmId == NS_ooxml::LN_CT_PPrBase_spacing)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", m_pImpl->m_aSubInteropGrabBag);
@@ -2200,25 +2230,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "rFonts", m_pImpl->m_aSubInteropGrabBag);
         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_lang)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lang", m_pImpl->m_aSubInteropGrabBag);
-        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color)
-        {
-            for (const auto& rItem : m_pImpl->m_aSubInteropGrabBag)
-            {
-                if (rItem.Name == "val")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, rItem.Value, true, CHAR_GRAB_BAG);
-                else if (rItem.Name == "themeColor")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR, rItem.Value, true, CHAR_GRAB_BAG);
-                else if (rItem.Name == "themeShade")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_SHADE, rItem.Value, true, CHAR_GRAB_BAG);
-                else if (rItem.Name == "themeTint")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_TINT, rItem.Value, true, CHAR_GRAB_BAG);
-            }
-            if (bTempGrabBag)
-                //disable and clear DomainMapper grab bag if it wasn't enabled before
-                m_pImpl->disableInteropGrabBag();
-
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "color", m_pImpl->m_aSubInteropGrabBag);
-        }
         else if (nSprmId == NS_ooxml::LN_CT_PPrBase_ind)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ind", m_pImpl->m_aSubInteropGrabBag);
     }

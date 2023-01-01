@@ -43,6 +43,7 @@
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -1020,19 +1021,20 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
         xShapeParaAccess->createEnumeration()->nextElement(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    sal_Int16 nCharColorTheme{};
-    xPortion->getPropertyValue("CharColorTheme") >>= nCharColorTheme;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4
-    // - Actual  : -1
-    // i.e. the theme index (accent1) was not set.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nCharColorTheme);
-    sal_Int16 nCharColorLumMod{};
-    xPortion->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2000), nCharColorLumMod);
-    sal_Int16 nCharColorLumOff{};
-    xPortion->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(8000), nCharColorLumOff);
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aThemeColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aThemeColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
+                             aThemeColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aThemeColor.getTransformations()[1].mnValue);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
@@ -1059,25 +1061,20 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure the theme index is not lost when the sidebar sets it:
-    sal_Int16 nFillColorTheme{};
-    xShape->getPropertyValue("FillColorTheme") >>= nFillColorTheme;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4
-    // - Actual  : -1
-    // i.e. the theme index was lost during the dispatch of the command.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nFillColorTheme);
-
-    // Then also verify the effects:
-    sal_Int16 nFillColorLumMod = 10000;
-    xShape->getPropertyValue("FillColorLumMod") >>= nFillColorLumMod;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4000
-    // - Actual  : 10000
-    // i.e. the theme index was set, but not the effects.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4000), nFillColorLumMod);
-    sal_Int16 nFillColorLumOff = 0;
-    xShape->getPropertyValue("FillColorLumOff") >>= nFillColorLumOff;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(6000), nFillColorLumOff);
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aThemeColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aThemeColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
+                             aThemeColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aThemeColor.getTransformations()[1].mnValue);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)

@@ -125,6 +125,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/unonrule.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdtrans.hxx>
@@ -433,44 +434,41 @@ void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTra
 
 bool DrawingML::WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet)
 {
-    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("CharColorTheme"))
-    {
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("CharColorThemeReference"))
         return false;
-    }
 
-    sal_Int32 nCharColorTheme = -1;
-    xPropertySet->getPropertyValue("CharColorTheme") >>= nCharColorTheme;
-    if (nCharColorTheme < 0 || nCharColorTheme > 11)
-    {
+    uno::Reference<util::XThemeColor> xThemeColor;
+    xPropertySet->getPropertyValue("CharColorThemeReference") >>= xThemeColor;
+    if (!xThemeColor.is())
         return false;
-    }
 
-    const char* pColorName = g_aPredefinedClrNames[nCharColorTheme];
-
-    sal_Int32 nCharColorTintOrShade{};
-    xPropertySet->getPropertyValue("CharColorTintOrShade") >>= nCharColorTintOrShade;
-    if (nCharColorTintOrShade != 0)
-    {
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
         return false;
-    }
-
+    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aThemeColor.getType())];
     mpFS->startElementNS(XML_a, XML_solidFill);
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
-
-    sal_Int32 nCharColorLumMod{};
-    xPropertySet->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
-    if (nCharColorLumMod != 10000)
+    for (auto const& rTransform : aThemeColor.getTransformations())
     {
-        mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(nCharColorLumMod * 10));
+        switch (rTransform.meType)
+        {
+            case model::TransformationType::LumMod:
+                mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::LumOff:
+                mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::Tint:
+                mpFS->singleElementNS(XML_a, XML_tint, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::Shade:
+                mpFS->singleElementNS(XML_a, XML_shade, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            default:
+                break;
+        }
     }
-
-    sal_Int32 nCharColorLumOff{};
-    xPropertySet->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
-    if (nCharColorLumOff != 0)
-    {
-        mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(nCharColorLumOff * 10));
-    }
-
     mpFS->endElementNS(XML_a, XML_schemeClr);
     mpFS->endElementNS(XML_a, XML_solidFill);
 
@@ -589,35 +587,34 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
 
 bool DrawingML::WriteFillColor(const uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("FillColorTheme"))
-    {
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("FillColorThemeReference"))
         return false;
-    }
 
-    sal_Int32 nFillColorTheme = -1;
-    xPropertySet->getPropertyValue("FillColorTheme") >>= nFillColorTheme;
-    if (nFillColorTheme < 0 || nFillColorTheme > 11)
-    {
+    uno::Reference<util::XThemeColor> xThemeColor;
+    xPropertySet->getPropertyValue("FillColorThemeReference") >>= xThemeColor;
+    if (!xThemeColor.is())
         return false;
-    }
 
-    const char* pColorName = g_aPredefinedClrNames[nFillColorTheme];
-
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+        return false;
+    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aThemeColor.getType())];
     mpFS->startElementNS(XML_a, XML_solidFill);
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
-
-    sal_Int32 nFillColorLumMod{};
-    xPropertySet->getPropertyValue("FillColorLumMod") >>= nFillColorLumMod;
-    if (nFillColorLumMod != 10000)
+    for (auto const& rTransform : aThemeColor.getTransformations())
     {
-        mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(nFillColorLumMod * 10));
-    }
-
-    sal_Int32 nFillColorLumOff{};
-    xPropertySet->getPropertyValue("FillColorLumOff") >>= nFillColorLumOff;
-    if (nFillColorLumOff != 0)
-    {
-        mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(nFillColorLumOff * 10));
+        switch (rTransform.meType)
+        {
+            case model::TransformationType::LumMod:
+                mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::LumOff:
+                mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            default:
+                break;
+        }
     }
 
     mpFS->endElementNS(XML_a, XML_schemeClr);

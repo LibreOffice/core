@@ -292,6 +292,7 @@
     { UNO_NAME_FILLCOLOR_THEME,   XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_THEME_INDEX}, \
     { UNO_NAME_FILLCOLOR_LUM_MOD, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_MOD}, \
     { UNO_NAME_FILLCOLOR_LUM_OFF, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_OFF}, \
+    { UNO_NAME_FILLCOLOR_THEME_REFERENCE,   XATTR_FILLCOLOR, ::cppu::UnoType<css::uno::XInterface>::get(),          0,     MID_COLOR_THEME_REFERENCE}, \
     { UNO_NAME_GRAPHIC_GRAPHICCROP, SDRATTR_GRAFCROP      , ::cppu::UnoType<css::text::GraphicCrop>::get(), 0, 0 }, \
     { UNO_NAME_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND, cppu::UnoType<bool>::get(), 0,   0},
 

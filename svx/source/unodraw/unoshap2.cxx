@@ -608,6 +608,7 @@ const SvxShapeControlPropertyMapping[] =
     { "CharCaseMap", "CharCaseMap" },
     { "CharColorTheme", "CharColorTheme" },
     { "CharColorTintOrShade", "CharColorTintOrShade" },
+    { UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE, "CharColorThemeReference" },
 };
 
 namespace

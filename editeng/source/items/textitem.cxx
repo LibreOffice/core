@@ -77,6 +77,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -1435,6 +1436,12 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= nValue;
             break;
         }
+       case MID_COLOR_THEME_REFERENCE:
+        {
+            auto xThemeColor = model::theme::createXThemeColor(maThemeColor);
+            rVal <<= xThemeColor;
+            break;
+        }
         default:
         {
             rVal <<= mColor;
@@ -1507,6 +1514,18 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             maThemeColor.removeTransformations(model::TransformationType::LumOff);
             maThemeColor.addTransformation({model::TransformationType::LumOff, nLumOff});
+        }
+        break;
+        case MID_COLOR_THEME_REFERENCE:
+        {
+            css::uno::Reference<css::util::XThemeColor> xThemeColor;
+            if (!(rVal >>= xThemeColor))
+                return false;
+
+            if (xThemeColor.is())
+            {
+                model::theme::setFromXThemeColor(maThemeColor, xThemeColor);
+            }
         }
         break;
         default:

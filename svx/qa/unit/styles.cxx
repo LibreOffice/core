@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <docmodel/uno/UnoThemeColor.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,28 +72,34 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
     // Blue.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
-    // The theme index of this filled shape is set by the PPTX import:
-    sal_Int16 nColorTheme = -1;
-    xShape4->getPropertyValue("FillColorTheme") >>= nColorTheme;
-    // 4 means accent1, this was -1 without the PPTX import bit in place.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nColorTheme);
+
+    // The theme color of this filled shape is set by the PPTX import:
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xShape4->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+    }
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
     // The theme index, and effects (lum mod, lum off) are set by the PPTX import:
-    nColorTheme = -1;
-    xShape5->getPropertyValue("FillColorTheme") >>= nColorTheme;
-    // 4 means accent1, this was -1 without the PPTX import bit in place.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nColorTheme);
-    sal_Int16 nColorLumMod = 10000;
-    xShape5->getPropertyValue("FillColorLumMod") >>= nColorLumMod;
-    // This was 10000 without the PPTX import bit in place.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4000), nColorLumMod);
-    sal_Int16 nColorLumOff = 0;
-    xShape5->getPropertyValue("FillColorLumOff") >>= nColorLumOff;
-    // This was 0 without the PPTX import bit in place.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(6000), nColorLumOff);
-
+    {
+        uno::Reference<util::XThemeColor> xThemeColor;
+        CPPUNIT_ASSERT(xShape5->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::ThemeColor aThemeColor;
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aThemeColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aThemeColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
+                             aThemeColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aThemeColor.getTransformations()[1].mnValue);
+    }
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
         xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);

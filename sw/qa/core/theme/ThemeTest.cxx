@@ -16,6 +16,9 @@
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/svdpage.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
+
+using namespace css;
 
 class SwCoreThemeTest : public SwModelTestBase
 {
@@ -32,7 +35,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(getParagraph(1), "CharColorTheme"));
+    auto xThemeColor = getProperty<uno::Reference<util::XThemeColor>>(getParagraph(1),
+                                                                      "CharColorThemeReference");
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)

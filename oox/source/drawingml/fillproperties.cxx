@@ -26,6 +26,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -448,15 +449,27 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 if( maFillColor.hasTransparency() )
                     rPropMap.setProperty( ShapeProperty::FillTransparency, maFillColor.getTransparency() );
 
+                model::ThemeColor aThemeColor;
                 if (aFillColor == nPhClr)
                 {
-                    rPropMap.setProperty(PROP_FillColorTheme, nPhClrTheme);
+                    aThemeColor.setType(model::convertToThemeColorType(nPhClrTheme));
+                    rPropMap.setProperty(PROP_FillColorThemeReference, model::theme::createXThemeColor(aThemeColor));
                 }
                 else if (maFillColor.getTintOrShade() == 0)
                 {
-                    rPropMap.setProperty(PROP_FillColorTheme, maFillColor.getSchemeColorIndex());
-                    rPropMap.setProperty(PROP_FillColorLumMod, maFillColor.getLumMod());
-                    rPropMap.setProperty(PROP_FillColorLumOff, maFillColor.getLumOff());
+                    aThemeColor.setType(model::convertToThemeColorType(maFillColor.getSchemeColorIndex()));
+                    if (maFillColor.getLumMod() != 10000)
+                        aThemeColor.addTransformation({model::TransformationType::LumMod, maFillColor.getLumMod()});
+                    if (maFillColor.getLumOff() != 0)
+                        aThemeColor.addTransformation({model::TransformationType::LumOff, maFillColor.getLumOff()});
+                    if (maFillColor.getTintOrShade() > 0)
+                        aThemeColor.addTransformation({model::TransformationType::Tint, maFillColor.getTintOrShade()});
+                    if (maFillColor.getTintOrShade() < 0)
+                    {
+                        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-maFillColor.getTintOrShade());
+                        aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                    }
+                    rPropMap.setProperty(PROP_FillColorThemeReference, model::theme::createXThemeColor(aThemeColor));
                 }
 
                 eFillStyle = FillStyle_SOLID;

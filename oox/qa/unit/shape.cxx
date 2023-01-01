@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdoashp.hxx>
 #include <tools/color.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 
 using namespace ::com::sun::star;
 
@@ -308,11 +309,15 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     // - Actual  : 16777215 (0xFFFFFF), that is text was white
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), nActualColor);
 
-    // clrScheme. For map between name in docx and index from CharColorTheme see
+    // clrScheme. For map between name in docx and index from CharColorThemeReference see
     // oox::drawingml::Color::getSchemeColorIndex()
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
-                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int16>());
+    uno::Reference<util::XThemeColor> xThemeColor;
+    CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
+    CPPUNIT_ASSERT(xThemeColor.is());
+    model::ThemeColor aThemeColor;
+    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aThemeColor.getType());
 
     if (!bUseGroup)
     {

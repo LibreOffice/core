@@ -36,6 +36,7 @@
 #include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
@@ -1948,6 +1949,12 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             rVal <<= nValue;
             break;
         }
+        case MID_COLOR_THEME_REFERENCE:
+        {
+            auto xThemeColor = model::theme::createXThemeColor(GetThemeColor());
+            rVal <<= xThemeColor;
+            break;
+        }
         default:
         {
             rVal <<= GetColorValue().GetRGBColor();
@@ -1987,6 +1994,14 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             GetThemeColor().removeTransformations(model::TransformationType::LumOff);
             GetThemeColor().addTransformation({model::TransformationType::LumOff, nLumOff});
+        }
+        break;
+        case MID_COLOR_THEME_REFERENCE:
+        {
+            css::uno::Reference<css::util::XThemeColor> xThemeColor;
+            if (!(rVal >>= xThemeColor))
+                return false;
+            model::theme::setFromXThemeColor(GetThemeColor(), xThemeColor);
         }
         break;
         default:

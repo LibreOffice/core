@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     cppu \
     cppuhelper \
     editeng \
+    docmodel \
     expwrap \
     drawinglayer \
     docmodel \

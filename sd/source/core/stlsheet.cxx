@@ -1391,6 +1391,15 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                         eState = PropertyState_DEFAULT_VALUE;
                     }
                 }
+                else if (pEntry->nMemberId == MID_COLOR_THEME_REFERENCE)
+                {
+                    const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    {
+                        eState = PropertyState_DEFAULT_VALUE;
+                    }
+                }
+                break;
                 break;
             }
         }
