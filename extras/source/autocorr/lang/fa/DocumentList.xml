@@ -178,7 +178,6 @@
   <block-list:block block-list:abbreviated-name="اتشی" block-list:name="آتشی"/>
   <block-list:block block-list:abbreviated-name="اتفاق ها" block-list:name="اتفاق‌ها"/>
   <block-list:block block-list:abbreviated-name="اتفاقا" block-list:name="اتفاقاً"/>
-  <block-list:block block-list:abbreviated-name="اتفاقات" block-list:name="اتفاقات"/>
   <block-list:block block-list:abbreviated-name="اتوریتگی اش" block-list:name="اتوریتگی‌اش"/>
   <block-list:block block-list:abbreviated-name="اتوریته ایم" block-list:name="اتوریته‌ایم"/>
   <block-list:block block-list:abbreviated-name="اتوریته ها" block-list:name="اتوریته‌ها"/>
@@ -870,7 +869,6 @@
   <block-list:block block-list:abbreviated-name="بت هایی" block-list:name="بت‌هایی"/>
   <block-list:block block-list:abbreviated-name="بته" block-list:name="بوته"/>
   <block-list:block block-list:abbreviated-name="بجه" block-list:name="بچه"/>
-  <block-list:block block-list:abbreviated-name="بچگانه" block-list:name="بچگانه"/>
   <block-list:block block-list:abbreviated-name="بچگی مان" block-list:name="بچگی‌مان"/>
   <block-list:block block-list:abbreviated-name="بچه ات" block-list:name="بچه‌ات"/>
   <block-list:block block-list:abbreviated-name="بچه اش" block-list:name="بچه‌اش"/>
@@ -1809,7 +1807,6 @@
   <block-list:block block-list:abbreviated-name="جرات" block-list:name="جرأت"/>
   <block-list:block block-list:abbreviated-name="جراتی" block-list:name="جرأتی"/>
   <block-list:block block-list:abbreviated-name="جرئت" block-list:name="جرأت"/>
-  <block-list:block block-list:abbreviated-name="جرأتش" block-list:name="جرأتش"/>
   <block-list:block block-list:abbreviated-name="جربزه ام" block-list:name="جربزه‌ام"/>
   <block-list:block block-list:abbreviated-name="جزام" block-list:name="جذام"/>
   <block-list:block block-list:abbreviated-name="جزئی اندیش" block-list:name="جزئی‌اندیش"/>
@@ -2706,7 +2703,6 @@
   <block-list:block block-list:abbreviated-name="روان‌شناس ها" block-list:name="روان‌شناس‌ها"/>
   <block-list:block block-list:abbreviated-name="روان‌شناس های" block-list:name="روان‌شناس‌های"/>
   <block-list:block block-list:abbreviated-name="روانشناس هایی" block-list:name="روانشناس‌هایی"/>
-  <block-list:block block-list:abbreviated-name="روان‌شناس‌هایی" block-list:name="روان‌شناس‌هایی"/>
   <block-list:block block-list:abbreviated-name="روانشناسی‏" block-list:name="روان‌شناسی"/>
   <block-list:block block-list:abbreviated-name="روانشناسی‏ ام" block-list:name="روان‌شناسی‌ام"/>
   <block-list:block block-list:abbreviated-name="روانی ات" block-list:name="روانی‌ات"/>
@@ -4030,7 +4026,6 @@
   <block-list:block block-list:abbreviated-name="گرفتاری ها" block-list:name="گرفتاری‌ها"/>
   <block-list:block block-list:abbreviated-name="گرفتاری های" block-list:name="گرفتاری‌های"/>
   <block-list:block block-list:abbreviated-name="گرفتاری هایی" block-list:name="گرفتاری‌هایی"/>
-  <block-list:block block-list:abbreviated-name="گرفتاری‌مان" block-list:name="گرفتاری‌مان"/>
   <block-list:block block-list:abbreviated-name="گرفته ام" block-list:name="گرفته‌ام"/>
   <block-list:block block-list:abbreviated-name="گرفته اند" block-list:name="گرفته‌اند"/>
   <block-list:block block-list:abbreviated-name="گرفته ای" block-list:name="گرفته‌ای"/>
@@ -4190,7 +4185,6 @@
   <block-list:block block-list:abbreviated-name="ماخوذ" block-list:name="مأخوذ"/>
   <block-list:block block-list:abbreviated-name="ماده ای" block-list:name="ماده‌ای"/>
   <block-list:block block-list:abbreviated-name="مادّه ای‏" block-list:name="ماده‌ای"/>
-  <block-list:block block-list:abbreviated-name="مادی" block-list:name="مادی"/>
   <block-list:block block-list:abbreviated-name="مادی اش" block-list:name="مادی‌اش"/>
   <block-list:block block-list:abbreviated-name="مادّی شان" block-list:name="مادی‌شان"/>
   <block-list:block block-list:abbreviated-name="مادی گرا" block-list:name="مادی‌گرا"/>
@@ -4215,7 +4209,6 @@
   <block-list:block block-list:abbreviated-name="مانده ام" block-list:name="مانده‌ام"/>
   <block-list:block block-list:abbreviated-name="مانده ایم" block-list:name="مانده‌ایم"/>
   <block-list:block block-list:abbreviated-name="ماوراءالطبیعه ای" block-list:name="ماوراءالطبیعه‌ای"/>
-  <block-list:block block-list:abbreviated-name="ماه‌ها" block-list:name="ماه‌ها"/>
   <block-list:block block-list:abbreviated-name="ماهی ها" block-list:name="ماهی‌ها"/>
   <block-list:block block-list:abbreviated-name="ماهی های" block-list:name="ماهی‌های"/>
   <block-list:block block-list:abbreviated-name="ماهی هایی" block-list:name="ماهی‌هایی"/>
@@ -4247,7 +4240,6 @@
   <block-list:block block-list:abbreviated-name="متریالیست ها" block-list:name="متریالیست‌ها"/>
   <block-list:block block-list:abbreviated-name="متریالیست های" block-list:name="متریالیست‌های"/>
   <block-list:block block-list:abbreviated-name="متریالیست هایی" block-list:name="متریالیست‌هایی"/>
-  <block-list:block block-list:abbreviated-name="متشخص" block-list:name="متشخص"/>
   <block-list:block block-list:abbreviated-name="متشخص تر" block-list:name="متشخص‌تر"/>
   <block-list:block block-list:abbreviated-name="متشخص ترم" block-list:name="متشخص‌ترم"/>
   <block-list:block block-list:abbreviated-name="متشخص تری" block-list:name="متشخص‌تری"/>
@@ -5291,8 +5283,6 @@
   <block-list:block block-list:abbreviated-name="میخچه ای" block-list:name="میخچه‌ای"/>
   <block-list:block block-list:abbreviated-name="میخواسته" block-list:name="می‌خواسته"/>
   <block-list:block block-list:abbreviated-name="میدان دار" block-list:name="میدان‌دار"/>
-  <block-list:block block-list:abbreviated-name="می‌رسند" block-list:name="می‌رسند"/>
-  <block-list:block block-list:abbreviated-name="می‌رسیم" block-list:name="می‌رسیم"/>
   <block-list:block block-list:abbreviated-name="میرود" block-list:name="می‌رود"/>
   <block-list:block block-list:abbreviated-name="میروم" block-list:name="می‌روم"/>
   <block-list:block block-list:abbreviated-name="میروند" block-list:name="می‌روند"/>
@@ -5314,9 +5304,6 @@
   <block-list:block block-list:abbreviated-name="میلیون ها" block-list:name="میلیون‌ها"/>
   <block-list:block block-list:abbreviated-name="میلیون های" block-list:name="میلیون‌های"/>
   <block-list:block block-list:abbreviated-name="میلیون هایی" block-list:name="میلیون‌هایی"/>
-  <block-list:block block-list:abbreviated-name="می‌نویسد" block-list:name="می‌نویسد"/>
-  <block-list:block block-list:abbreviated-name="می‌نویسند" block-list:name="می‌نویسند"/>
-  <block-list:block block-list:abbreviated-name="می‌نویسید" block-list:name="می‌نویسید"/>
   <block-list:block block-list:abbreviated-name="میوه جات" block-list:name="میوه‌جات"/>
   <block-list:block block-list:abbreviated-name="میوه ها" block-list:name="میوه‌ها"/>
   <block-list:block block-list:abbreviated-name="میوه های" block-list:name="میوه‌های"/>
