@@ -8,12 +8,10 @@
 #
 
 import unittest
-import uno
 
 from inspect import isclass
-
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
+
 
 # Footnote instance factory
 def getFootnoteInstance(doc):

@@ -8,10 +8,8 @@
 #
 
 import unittest
-import uno
 
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
 
 
 # Tests behaviour of objects implementing XEnumerationAccess using the new-style

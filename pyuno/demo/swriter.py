@@ -19,15 +19,11 @@
 
 # bootstrap uno component context
 import uno
-import unohelper
-
-from com.sun.star.lang import IllegalArgumentException
 
 # a UNO struct later needed to create a document
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.text.TextContentAnchorType import AS_CHARACTER
 from com.sun.star.awt import Size
-
 
 def insertTextIntoCell( table, cellName, text, color ):
     tableText = table.getCellByName( cellName )

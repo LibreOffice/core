@@ -11,7 +11,6 @@ import unittest
 import uno
 
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
 
 
 # ContentIndex instance factory
