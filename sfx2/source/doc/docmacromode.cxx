@@ -303,25 +303,25 @@ namespace sfx2
         {
             // no Security Zone info found -> assume a local file, not
             // from the internet
-            dwZone = 0;
+            dwZone = URLZONE_LOCAL_MACHINE;
         }
 
         // determine action from zone and settings
-        sal_Int32 nAction = 0;
+        sal_Int32 nAction;
         switch (dwZone) {
-            case 0:
+            case URLZONE_LOCAL_MACHINE:
                 nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal::get();
                 break;
-            case 1:
+            case URLZONE_INTRANET:
                 nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet::get();
                 break;
-            case 2:
+            case URLZONE_TRUSTED:
                 nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted::get();
                 break;
-            case 3:
+            case URLZONE_INTERNET:
                 nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet::get();
                 break;
-            case 4:
+            case URLZONE_UNTRUSTED:
                 nAction = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted::get();
                 break;
             default:
