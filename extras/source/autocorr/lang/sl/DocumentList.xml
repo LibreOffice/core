@@ -51,7 +51,7 @@
   <block-list:block block-list:abbreviated-name="bogatstvoma" block-list:name="bogastvoma"/>
   <block-list:block block-list:abbreviated-name="bogatstvu" block-list:name="bogastvu"/>
   <block-list:block block-list:abbreviated-name="bolana" block-list:name="bolna"/>
-  <block-list:block block-list:abbreviated-name="bolane" block-list:name="bolane"/>
+  <block-list:block block-list:abbreviated-name="bolane" block-list:name="bolne"/>
   <block-list:block block-list:abbreviated-name="brezob" block-list:name="brezzob"/>
   <block-list:block block-list:abbreviated-name="cik cak" block-list:name="cikcak"/>
   <block-list:block block-list:abbreviated-name="čtre" block-list:name="črte"/>
@@ -83,8 +83,8 @@
   <block-list:block block-list:abbreviated-name="Http:\\" block-list:name="http://"/>
   <block-list:block block-list:abbreviated-name="infromacije" block-list:name="informacije"/>
   <block-list:block block-list:abbreviated-name="iza" block-list:name="izza"/>
-  <block-list:block block-list:abbreviated-name="jaboljk" block-list:name="jaboljk"/>
-  <block-list:block block-list:abbreviated-name="jaboljka" block-list:name="jaboljka"/>
+  <block-list:block block-list:abbreviated-name="jaboljk" block-list:name="jabolk"/>
+  <block-list:block block-list:abbreviated-name="jaboljka" block-list:name="jabolka"/>
   <block-list:block block-list:abbreviated-name="jaboljki" block-list:name="jabolki"/>
   <block-list:block block-list:abbreviated-name="jaboljko" block-list:name="jabolko"/>
   <block-list:block block-list:abbreviated-name="jaboljkom" block-list:name="jabolkom"/>
