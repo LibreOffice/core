@@ -255,8 +255,8 @@
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>disabte</DefaultAbbrvName>
-          <DefaultFullName>disabte</DefaultFullName>
+          <DefaultAbbrvName>dissabte</DefaultAbbrvName>
+          <DefaultFullName>dissabte</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
