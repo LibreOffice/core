@@ -597,6 +597,7 @@ const SvxShapeControlPropertyMapping[] =
     { RTL_CONSTASCII_STRINGPARAM("CharCaseMap"), RTL_CONSTASCII_STRINGPARAM("CharCaseMap") },
     { RTL_CONSTASCII_STRINGPARAM("CharColorTheme"), RTL_CONSTASCII_STRINGPARAM("CharColorTheme") },
     { RTL_CONSTASCII_STRINGPARAM("CharColorTintOrShade"), RTL_CONSTASCII_STRINGPARAM("CharColorTintOrShade") },
+    { RTL_CONSTASCII_STRINGPARAM("CharColorThemeReference"), RTL_CONSTASCII_STRINGPARAM("CharColorThemeReference") },
     { nullptr,0, nullptr, 0 }
 };
 

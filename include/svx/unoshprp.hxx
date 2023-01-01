@@ -292,6 +292,7 @@
     { u"" UNO_NAME_FILLCOLOR_THEME,   XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_THEME_INDEX}, \
     { u"" UNO_NAME_FILLCOLOR_LUM_MOD, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_MOD}, \
     { u"" UNO_NAME_FILLCOLOR_LUM_OFF, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_OFF}, \
+    { u"" UNO_NAME_FILLCOLOR_THEME_REFERENCE, XATTR_FILLCOLOR, ::cppu::UnoType<css::uno::XInterface>::get(), 0, MID_COLOR_THEME_REFERENCE}, \
     { u"" UNO_NAME_GRAPHIC_GRAPHICCROP, SDRATTR_GRAFCROP      , ::cppu::UnoType<css::text::GraphicCrop>::get(), 0, 0 },
 
 #define EDGERADIUS_PROPERTIES \

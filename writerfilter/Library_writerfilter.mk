@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     editeng \
     i18nlangtag \
     i18nutil \

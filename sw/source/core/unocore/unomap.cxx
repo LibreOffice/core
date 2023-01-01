@@ -1509,6 +1509,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { u"" UNO_NAME_CHAR_COLOR,             RES_CHRATR_COLOR,  cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                    },
                     { u"" UNO_NAME_CHAR_COLOR_THEME,         RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_THEME_INDEX },
                     { u"" UNO_NAME_CHAR_COLOR_TINT_OR_SHADE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_TINT_OR_SHADE },
+                    { u"" UNO_NAME_CHAR_COLOR_THEME_REFERENCE, RES_CHRATR_COLOR, cppu::UnoType<css::uno::XInterface>::get(), PROPERTY_NONE, MID_COLOR_THEME_REFERENCE },
                     // SvxShadowedItem
                     { u"" UNO_NAME_CHAR_SHADOWED,          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxContouredItem

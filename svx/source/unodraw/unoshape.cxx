@@ -2077,6 +2077,15 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }
                 }
+                else if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                {
+                    const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    {
+                        eState = beans::PropertyState_DEFAULT_VALUE;
+                    }
+                }
+                break;
                 break;
             }
         }
