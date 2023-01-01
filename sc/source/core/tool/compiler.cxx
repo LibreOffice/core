@@ -2154,8 +2154,8 @@ std::vector<ScCompiler::Whitespace> ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
-    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0]);
-    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar());
+    sal_Unicode cDecSep = (mxSymbols->isEnglishLocale() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0]);
+    sal_Unicode cDecSepAlt = (mxSymbols->isEnglishLocale() ? 0 : ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar());
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -3168,7 +3168,7 @@ bool ScCompiler::ParseValue( const OUString& rSym )
     }
 
     double fVal;
-    sal_uInt32 nIndex = mxSymbols->isEnglish() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
+    sal_uInt32 nIndex = mxSymbols->isEnglishLocale() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
 
     if (!mpFormatter->IsNumberFormat(rSym, nIndex, fVal))
         return false;
@@ -3425,7 +3425,7 @@ bool ScCompiler::ParseReference( const OUString& rName, const OUString* pErrRef 
     mnCurrentSheetTab = -1;
 
     sal_Unicode ch1 = rName[0];
-    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0] );
+    sal_Unicode cDecSep = ( mxSymbols->isEnglishLocale() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
     // Code further down checks only if cDecSep=='.' so simply obtaining the

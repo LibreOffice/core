@@ -83,12 +83,13 @@ public:
     {
         OpCodeHashMap           maHashMap;                  /// Hash map of symbols, OUString -> OpCode
         std::unique_ptr<OUString[]> mpTable;                /// Array of symbols, OpCode -> OUString, offset==OpCode
-        ExternalHashMap         maExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
-        ExternalHashMap         maReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
+        ExternalHashMap         maExternalHashMap;          /// Hash map of ocExternal, Filter String -> AddIn String
+        ExternalHashMap         maReverseExternalHashMap;   /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
         sal_uInt16              mnSymbols;                  /// Count of OpCode symbols
-        bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
-        bool                    mbEnglish   : 1;            /// If English symbols and external names
+        bool                    mbCore          : 1;        /// If mapping was setup by core, not filters
+        bool                    mbEnglish       : 1;        /// If English symbols and external names
+        bool                    mbEnglishLocale : 1;        /// If English locale for numbers
 
         OpCodeMap( const OpCodeMap& ) = delete;
         OpCodeMap& operator=( const OpCodeMap& ) = delete;
@@ -101,7 +102,8 @@ public:
             meGrammar( eGrammar),
             mnSymbols( nSymbols),
             mbCore( bCore),
-            mbEnglish ( FormulaGrammar::isEnglish(eGrammar) )
+            mbEnglish ( FormulaGrammar::isEnglish(eGrammar) ),
+            mbEnglishLocale ( mbEnglish )
         {
         }
 
@@ -144,6 +146,10 @@ public:
         /** Are these English symbols, as opposed to native language (which may
             be English as well)? */
         bool isEnglish() const { return mbEnglish; }
+
+        /** Are inline numbers parsed/formatted in en-US locale, as opposed
+            to default locale? */
+        bool isEnglishLocale() const { return mbEnglishLocale; }
 
         /// Is it an ODF 1.1 compatibility mapping?
         bool isPODF() const { return FormulaGrammar::isPODF( meGrammar); }
