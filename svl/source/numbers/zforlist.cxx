@@ -3231,6 +3231,15 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         sString.append(GetNumDecimalSep());
         padToLength(sString, sString.getLength() + nPrecision, '0');
     }
+
+    // Native Number
+    const OUString sPosNatNumModifier = pFormat ? pFormat->GetNatNumModifierString( 0 ) : "";
+    const OUString sNegNatNumModifier = pFormat ?
+            // if a negative format already exists, use its NatNum modifier
+            // else use NatNum modifier of positive format
+            ( pFormat->GetNumForString( 1, 0 )  ? pFormat->GetNatNumModifierString( 1 ) : sPosNatNumModifier )
+            : "";
+
     if (eType == SvNumFormatType::PERCENT)
     {
         sString.append( pFormat->GetPercentString() );
@@ -3254,50 +3263,62 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         OUString aCurr;
         const NfCurrencyEntry* pEntry;
         bool bBank;
-        if ( GetNewCurrencySymbolString( nIndex, aCurr, &pEntry, &bBank ) )
+        bool isPosNatNum12 = sPosNatNumModifier.startsWith( "[NatNum12" );
+        bool isNegNatNum12 = sNegNatNumModifier.startsWith( "[NatNum12" );
+        if ( !isPosNatNum12 || !isNegNatNum12 )
         {
-            if ( pEntry )
+            if ( GetNewCurrencySymbolString( nIndex, aCurr, &pEntry, &bBank ) )
             {
-                sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-                    xLocaleData->getCurrPositiveFormat(),
-                    pEntry->GetPositiveFormat(), bBank );
-                sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-                    xLocaleData->getCurrNegativeFormat(),
-                    pEntry->GetNegativeFormat(), bBank );
-                pEntry->CompletePositiveFormatString( sString, bBank, nPosiForm );
-                pEntry->CompleteNegativeFormatString( sNegStr, bBank, nNegaForm );
+                if ( pEntry )
+                {
+                    sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
+                        xLocaleData->getCurrPositiveFormat(),
+                        pEntry->GetPositiveFormat(), bBank );
+                    sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
+                        xLocaleData->getCurrNegativeFormat(),
+                        pEntry->GetNegativeFormat(), bBank );
+                    if ( !isPosNatNum12 )
+                        pEntry->CompletePositiveFormatString( sString, bBank, nPosiForm );
+                    if ( !isNegNatNum12 )
+                        pEntry->CompleteNegativeFormatString( sNegStr, bBank, nNegaForm );
+                }
+                else
+                {   // assume currency abbreviation (AKA banking symbol), not symbol
+                    sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
+                        xLocaleData->getCurrPositiveFormat(),
+                        xLocaleData->getCurrPositiveFormat(), true );
+                    sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
+                        xLocaleData->getCurrNegativeFormat(),
+                        xLocaleData->getCurrNegativeFormat(), true );
+                    if ( !isPosNatNum12 )
+                        NfCurrencyEntry::CompletePositiveFormatString( sString, aCurr, nPosiForm );
+                    if ( !isNegNatNum12 )
+                        NfCurrencyEntry::CompleteNegativeFormatString( sNegStr, aCurr, nNegaForm );
+                }
             }
             else
-            {   // assume currency abbreviation (AKA banking symbol), not symbol
-                sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-                    xLocaleData->getCurrPositiveFormat(),
-                    xLocaleData->getCurrPositiveFormat(), true );
-                sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-                    xLocaleData->getCurrNegativeFormat(),
-                    xLocaleData->getCurrNegativeFormat(), true );
-                NfCurrencyEntry::CompletePositiveFormatString( sString, aCurr, nPosiForm );
-                NfCurrencyEntry::CompleteNegativeFormatString( sNegStr, aCurr, nNegaForm );
+            {   // "automatic" old style
+                OUString aSymbol, aAbbrev;
+                GetCompatibilityCurrency( aSymbol, aAbbrev );
+                if ( !isPosNatNum12 )
+                    NfCurrencyEntry::CompletePositiveFormatString( sString,
+                                        aSymbol, xLocaleData->getCurrPositiveFormat() );
+                if ( !isNegNatNum12 )
+                    NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
+                                        aSymbol, xLocaleData->getCurrNegativeFormat() );
             }
         }
-        else
-        {   // "automatic" old style
-            OUString aSymbol, aAbbrev;
-            GetCompatibilityCurrency( aSymbol, aAbbrev );
-            NfCurrencyEntry::CompletePositiveFormatString( sString,
-                                aSymbol, xLocaleData->getCurrPositiveFormat() );
-            NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
-                                aSymbol, xLocaleData->getCurrNegativeFormat() );
-        }
+        sString.append( ';' );
         if (IsRed)
         {
-            sString.append(';');
             sString.append('[');
             sString.append(pFormatScanner->GetRedString());
             sString.append(']');
         }
-        else
+        sString.append( sNegNatNumModifier );
+        if ( isNegNatNum12 )
         {
-            sString.append(';');
+            sString.append( '-' );
         }
         sString.append(sNegStr);
     }
@@ -3343,6 +3364,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
                 sTmpStr.append(pFormatScanner->GetRedString());
                 sTmpStr.append(']');
             }
+            sTmpStr.append( sNegNatNumModifier );
 
             if (insertBrackets)
             {
@@ -3358,6 +3380,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString = sTmpStr;
         }
     }
+    sString.insert( 0, sPosNatNumModifier );
     return sString.makeStringAndClear();
 }
 
