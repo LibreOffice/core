@@ -5765,6 +5765,26 @@ void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes2& rAttr,
     }
 }
 
+OUString SvNumberformat::GetNatNumModifierString( sal_uInt16 nNumFor ) const
+{
+    if ( nNumFor > 3 )
+        return "";
+    const SvNumberNatNum& rNum = NumFor[nNumFor].GetNatNum();
+    if ( !rNum.IsSet() )
+        return "";
+    OUStringBuffer sNatNumModifier = "[NatNum";
+    const sal_Int32 nNum = rNum.GetNatNum();
+    sNatNumModifier.append( nNum );
+    if ( NatNumTakesParameters( nNum ) )
+    {
+        sNatNumModifier.append( " " );
+        sNatNumModifier.append( rNum.GetParams() );
+    }
+    sNatNumModifier.append( "]" );
+
+    return sNatNumModifier.makeStringAndClear();
+}
+
 // static
 bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
 {
