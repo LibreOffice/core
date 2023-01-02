@@ -53,6 +53,7 @@ void NotifyTableCollapsedParagraph(const SwContentNode* pNode, SwCursorShell *co
 
 }
 
+/// Implements undo/redo for Table -> Insert Table.
 class SwUndoInsTable final : public SwUndo
 {
     OUString m_sTableName;
