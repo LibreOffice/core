@@ -1519,16 +1519,35 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         {
             SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
             sal_uInt32 nLevel = 0;
+
             // within Writer table cells, inserting worksheets using HTML format results only plain text, not a native table,
             // so remove all outer nested tables temporary to get a working insertion point
             // (RTF format has no such problem, but that inserts the hidden rows of the original Calc worksheet, too)
+
+            // For this, switch off change tracking temporarily, if needed
+            RedlineFlags eOld = rSh.GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+            if ( eOld & RedlineFlags::On )
+                rSh.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld & ~RedlineFlags::On );
+
+            OUString sPreviousTableName;
             do
             {
+                // tdf#152245 add a limit to the loop, if it's not possible to delete the table
+                const SwTableNode* pNode = rSh.GetCursor()->GetPointNode().FindTableNode();
+                const OUString sTableName = pNode->GetTable().GetFrameFormat()->GetName();
+                if ( sTableName == sPreviousTableName )
+                    break;
+                sPreviousTableName = sTableName;
                 // insert a random character to redo the place of the insertion at the end
                 pDispatch->Execute(FN_INSERT_NNBSP, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
                 nLevel++;
             } while (SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr);
+
+            // restore change tracking settings
+            if ( eOld & RedlineFlags::On )
+                rSh.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
+
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable) )
             {
