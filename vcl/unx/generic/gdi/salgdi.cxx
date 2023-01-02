@@ -57,9 +57,7 @@
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
-#if ENABLE_CAIRO_CANVAS
 #include "X11CairoSalGraphicsImpl.hxx"
-#endif
 
 
 // X11Common
@@ -121,11 +119,7 @@ X11SalGraphics::X11SalGraphics():
 #endif
     {
         mxTextRenderImpl.reset(new X11CairoTextRender(*this));
-#if ENABLE_CAIRO_CANVAS
         mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maX11Common));
-#else
-        mxImpl.reset(new X11SalGraphicsImpl(*this));
-#endif
     }
 }
 

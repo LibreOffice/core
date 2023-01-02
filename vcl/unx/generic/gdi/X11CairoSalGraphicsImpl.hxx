@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-#include <config_cairo_canvas.h>
-
-#if ENABLE_CAIRO_CANVAS
-
 #include <cairo-xlib.h>
 #include <unx/salgdi.h>
 #include "gdiimpl.hxx"
@@ -91,7 +86,5 @@ public:
                       css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                       bool bPixelSnapHairline) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

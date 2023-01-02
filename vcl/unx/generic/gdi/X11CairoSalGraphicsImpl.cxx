@@ -19,8 +19,6 @@
 
 #include "X11CairoSalGraphicsImpl.hxx"
 
-#if ENABLE_CAIRO_CANVAS
-
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
@@ -158,7 +156,5 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
 
     return bRetval;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
