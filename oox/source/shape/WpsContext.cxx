@@ -96,7 +96,7 @@ bool lcl_getTextPropsFromFrameText(const uno::Reference<text::XText>& xText,
 
 // CharInteropGrabBag puts all attributes of an element into a property with Name="attributes" and
 // Value being a sequence of the attributes. This methods finds the value of an individual rName
-// attribute and puts it into rValue paramenter. If it does not find it, rValue is unchanged and
+// attribute and puts it into rValue parameter. If it does not find it, rValue is unchanged and
 // the methode returns false, otherwise it returns true.
 bool lcl_getAttributeAsString(const uno::Sequence<beans::PropertyValue>& aPropertyValueAsSeq,
                               const OUString& rName, OUString& rValue)
