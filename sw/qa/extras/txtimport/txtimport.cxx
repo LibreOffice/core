@@ -15,6 +15,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <rtl/ustrbuf.hxx>
 
 class TxtImportTest : public SwModelTestBase
 {
@@ -188,6 +189,47 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
     // - Expected: 1\n
     // - Actual  : 1t
     CPPUNIT_ASSERT_EQUAL(OUString("1\n"), aActual.replaceAll("\r", "\n"));
+}
+
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    constexpr sal_Int32 size = 30000; // It should be multiple of 10
+    constexpr sal_Int32 parts = size / 10;
+
+    rtl::OUStringBuffer s(size);
+
+    for (size_t i = 0; i < parts; i++)
+    {
+        s.append("0123456789");
+    }
+
+    OUString aResStr = s.makeStringAndClear();
+    pWrtShell->Insert(aResStr);
+
+    save("Text", "maTempFile"); //Saving the resulting file
+    reload(mpFilter, "Text"); //Reloading the file again
+
+    // Without the fix, this test would have failed with:
+    // - Expected: 1
+    // - Actual: 3
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    OUString aPara = xPara->getString();
+
+    // Without the fix, this test would have failed with:
+    // - Expected: 30000
+    // - Actual: 10000
+    CPPUNIT_ASSERT_EQUAL(size, aPara.getLength());
+
+    //Matching the paragraph text and created string
+    CPPUNIT_ASSERT_EQUAL(aResStr, aPara);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
