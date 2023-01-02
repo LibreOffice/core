@@ -336,8 +336,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // Is it a Fontwork?
-    bool bTextBox;
-    xShapeProps->getPropertyValue(u"TextBox") >>= bTextBox;
+    bool bTextBox = bool();
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextBox") >>= bTextBox);
     CPPUNIT_ASSERT(!bTextBox);
 
     uno::Reference<css::text::XTextFrame> xTextFrame;
@@ -354,8 +354,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     CPPUNIT_ASSERT(aTextPathSeq.getLength() > 0);
 
     comphelper::SequenceAsHashMap aTextPathPropMap(aTextPathSeq);
-    bool bTextPathOn;
-    aTextPathPropMap.getValue(u"TextPath") >>= bTextPathOn;
+    bool bTextPathOn = bool();
+    CPPUNIT_ASSERT(aTextPathPropMap.getValue(u"TextPath") >>= bTextPathOn);
     CPPUNIT_ASSERT(bTextPathOn);
 
     // Is it the correct kind of Fontwork?
