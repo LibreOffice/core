@@ -126,22 +126,16 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObje
 }
 
 bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
-                                           const basegfx::B2DPolygon& rPolygon,
+                                           const basegfx::B2DPolygon& rPolyLine,
                                            double fTransparency, double fLineWidth,
                                            const std::vector<double>* pStroke,
                                            basegfx::B2DLineJoin eLineJoin,
                                            css::drawing::LineCap eLineCap,
                                            double fMiterMinimumAngle, bool bPixelSnapHairline)
 {
-    if (0 == rPolygon.count())
-    {
+    // short circuit if there is nothing to do
+    if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
         return true;
-    }
-
-    if (fTransparency >= 1.0)
-    {
-        return true;
-    }
 
     cairo_t* cr = mrX11Common.getCairoContext();
     clipRegion(cr);
@@ -149,7 +143,7 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
     // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
     // that will take care of all needed stuff
     const bool bRetval(CairoCommon::drawPolyLine(
-        cr, nullptr, mnPenColor, getAntiAlias(), rObjectToDevice, rPolygon, fTransparency,
+        cr, nullptr, mnPenColor, getAntiAlias(), rObjectToDevice, rPolyLine, fTransparency,
         fLineWidth, pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline));
 
     X11Common::releaseCairoContext(cr);

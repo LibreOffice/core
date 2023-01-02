@@ -360,9 +360,7 @@ bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevi
 {
     // short circuit if there is nothing to do
     if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
-    {
         return true;
-    }
 
     // Wrap call to static version of ::drawPolyLine by
     // preparing/getting some local data and parameters
