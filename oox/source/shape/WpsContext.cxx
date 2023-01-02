@@ -97,7 +97,7 @@ bool lcl_getTextPropsFromFrameText(const uno::Reference<text::XText>& xText,
 // CharInteropGrabBag puts all attributes of an element into a property with Name="attributes" and
 // Value being a sequence of the attributes. This methods finds the value of an individual rName
 // attribute and puts it into rValue parameter. If it does not find it, rValue is unchanged and
-// the methode returns false, otherwise it returns true.
+// the method returns false, otherwise it returns true.
 bool lcl_getAttributeAsString(const uno::Sequence<beans::PropertyValue>& aPropertyValueAsSeq,
                               const OUString& rName, OUString& rValue)
 {
@@ -219,7 +219,7 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
     if ((aTextFillMap.getValue(u"gradFill") >>= aPropSeq) && aPropSeq.hasElements())
     {
         rFillProperties.moFillType = oox::XML_gradFill;
-        // aPropSeq should have two items. One ist "gsLst" for the stop colors, the other is
+        // aPropSeq should have two items. One is "gsLst" for the stop colors, the other is
         // either "lin" or "path" for the kind of gradient.
         // First get stop colors
         comphelper::SequenceAsHashMap aPropMap(aPropSeq);
