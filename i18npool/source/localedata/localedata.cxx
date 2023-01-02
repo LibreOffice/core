@@ -23,10 +23,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <editeng/svxenum.hxx>
 #include <localedata.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1487,7 +1487,6 @@ LocaleDataImpl::getAllInstalledLocaleNames()
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
 
 OutlineNumbering::OutlineNumbering(std::unique_ptr<const OutlineNumberingLevel_Impl[]> pOutlnLevels, int nLevels) :
     m_pOutlineLevels(std::move(pOutlnLevels)),
@@ -1529,7 +1528,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[8].Name = "FirstLineOffset";
     pValues[8].Value <<= pTemp->nFirstLineOffset;
     pValues[9].Name = "Adjust";
-    pValues[9].Value <<= sal_Int16(HoriOrientation::LEFT);
+    pValues[9].Value <<= sal_Int16(SvxAdjust::Left);
     pValues[10].Name = "Transliteration";
     pValues[10].Value <<= pTemp->sTransliteration;
     pValues[11].Name = "NatNum";
