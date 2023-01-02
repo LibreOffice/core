@@ -719,6 +719,16 @@ FIELD_INSERT:
                 aFieldCode = pFieldCode->GetValue();
             }
 
+            if (rSh.HasReadonlySel())
+            {
+                // Inform the user that the request has been ignored.
+                auto xInfo = std::make_shared<weld::GenericDialogController>(
+                    GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui",
+                    "InfoReadonlyDialog");
+                weld::DialogController::runAsync(xInfo, [](sal_Int32 /*nResult*/) {});
+                break;
+            }
+
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
             // Don't update the layout after inserting content and before deleting temporary
             // text nodes.
