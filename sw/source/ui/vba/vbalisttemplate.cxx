@@ -25,7 +25,7 @@ using namespace ::com::sun::star;
 
 SwVbaListTemplate::SwVbaListTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : SwVbaListTemplate_BASE( rParent, rContext )
 {
-    pListHelper = std::make_shared<SwVbaListHelper>( xTextDoc, nGalleryType, nTemplateType );
+    m_pListHelper = std::make_shared<SwVbaListHelper>( xTextDoc, nGalleryType, nTemplateType );
 }
 
 SwVbaListTemplate::~SwVbaListTemplate()
@@ -35,7 +35,7 @@ SwVbaListTemplate::~SwVbaListTemplate()
 uno::Any SAL_CALL
 SwVbaListTemplate::ListLevels( const uno::Any& index )
 {
-    uno::Reference< XCollection > xCol( new SwVbaListLevels( mxParent, mxContext, pListHelper ) );
+    uno::Reference< XCollection > xCol( new SwVbaListLevels( mxParent, mxContext, m_pListHelper ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
     return uno::Any( xCol );
@@ -43,7 +43,7 @@ SwVbaListTemplate::ListLevels( const uno::Any& index )
 
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet > const & xProps )
 {
-    uno::Reference< container::XIndexReplace > xNumberingRules = pListHelper->getNumberingRules();
+    uno::Reference< container::XIndexReplace > xNumberingRules = m_pListHelper->getNumberingRules();
     xProps->setPropertyValue("NumberingRules", uno::Any( xNumberingRules ) );
 }
 
