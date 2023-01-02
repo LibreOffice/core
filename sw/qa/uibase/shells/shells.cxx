@@ -501,6 +501,37 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     CPPUNIT_ASSERT_EQUAL(OUString("Anew result 1Cnew result 2E"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
+{
+    // Given a document with a fieldmark, the cursor inside the fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand", uno::Any(OUString("my command"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("my result"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    pCursor->SttEndDoc(/*bSttDoc=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // When trying to insert an inner fieldmark:
+    // Without the accompanying fix in place, this test would have crashed.
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // Then make sure the read-only content refuses to accept that inner fieldmark, so we still have
+    // just one:
+    size_t nActual = 0;
+    IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
+    for (auto it = rIDMA.getFieldmarksBegin(); it != rIDMA.getFieldmarksEnd(); ++it)
+    {
+        ++nActual;
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
