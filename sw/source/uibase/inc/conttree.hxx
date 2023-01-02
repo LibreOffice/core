@@ -136,8 +136,9 @@ class SwContentTree final : public SfxListener
     std::unique_ptr<weld::TreeIter> m_xOverlayCompareEntry;
     std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
 
-    void OverlayObject(std::vector<basegfx::B2DRange>&& aRanges);
+    void OverlayObject(std::vector<basegfx::B2DRange>&& aRanges = {});
 
+    void BringEntryToAttention(const weld::TreeIter& rEntry);
     void BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats);
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
@@ -202,7 +203,7 @@ class SwContentTree final : public SfxListener
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(TimerUpdate, Timer *, void);
-    DECL_LINK(m_aOverlayObjectDelayTimerHdl, Timer *, void);
+    DECL_LINK(OverlayObjectDelayTimerHdl, Timer *, void);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
 
 public:
