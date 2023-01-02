@@ -153,31 +153,18 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
         return true;
     }
 
-    // disable by setting to something
-    static const char* pUseCairoForFatLines(getenv("SAL_DISABLE_USE_CAIRO_FOR_FATLINES"));
+    cairo_t* cr = mrX11Common.getCairoContext();
+    clipRegion(cr);
 
-    if (nullptr == pUseCairoForFatLines && mrX11Common.SupportsCairo())
-    {
-        cairo_t* cr = mrX11Common.getCairoContext();
-        clipRegion(cr);
+    // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
+    // that will take care of all needed stuff
+    const bool bRetval(CairoCommon::drawPolyLine(
+        cr, nullptr, mnPenColor, getAntiAlias(), rObjectToDevice, rPolygon, fTransparency,
+        fLineWidth, pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline));
 
-        // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
-        // that will take care of all needed stuff
-        const bool bRetval(CairoCommon::drawPolyLine(
-            cr, nullptr, mnPenColor, getAntiAlias(), rObjectToDevice, rPolygon, fTransparency,
-            fLineWidth, pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline));
+    X11Common::releaseCairoContext(cr);
 
-        X11Common::releaseCairoContext(cr);
-
-        if (bRetval)
-        {
-            return true;
-        }
-    }
-
-    return X11SalGraphicsImpl::drawPolyLine(rObjectToDevice, rPolygon, fTransparency, fLineWidth,
-                                            pStroke, eLineJoin, eLineCap, fMiterMinimumAngle,
-                                            bPixelSnapHairline);
+    return bRetval;
 }
 
 #endif
