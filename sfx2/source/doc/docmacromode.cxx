@@ -39,6 +39,7 @@
 #include <tools/urlobj.hxx>
 
 #if defined(_WIN32)
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <systools/win32/comtools.hxx>
 #include <urlmon.h>
@@ -299,7 +300,7 @@ namespace sfx2
         pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
         sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
         DWORD dwZone;
-        if (!SUCCEEDED(pPersist->Load(reinterpret_cast<LPCOLESTR>(sFilePath.getStr()), STGM_READ)) ||
+        if (!SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
             !SUCCEEDED(pZoneId->GetId(&dwZone)))
         {
             // no Security Zone info found -> assume a local file, not
