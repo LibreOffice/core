@@ -1319,6 +1319,7 @@ struct OutlineNumberingLevel_Impl
     sal_Int32       nLeftMargin;
     sal_Int32       nSymbolTextDistance;
     sal_Int32       nFirstLineOffset;
+    sal_Int16       nAdjust;
     OUString        sTransliteration;
     sal_Int32       nNatNum;
 };
@@ -1384,7 +1385,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
                         case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
                         case 7: level[j].nSymbolTextDistance = tmp.toInt32();   break;
                         case 8: level[j].nFirstLineOffset    = tmp.toInt32();   break;
-                        case 9: break;
+                        case 9: level[j].nAdjust             = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
@@ -1395,6 +1396,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
             level[j].sPrefix.clear();
             level[j].nNumType            = 0;
             level[j].sSuffix.clear();
+            level[j].nAdjust = 0;
             level[j].cBulletChar         = 0;
             level[j].sBulletFontName.clear();
             level[j].nParentNumbering    = 0;
@@ -1528,7 +1530,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[8].Name = "FirstLineOffset";
     pValues[8].Value <<= pTemp->nFirstLineOffset;
     pValues[9].Name = "Adjust";
-    pValues[9].Value <<= sal_Int16(SvxAdjust::Left);
+    pValues[9].Value <<= pTemp->nAdjust;
     pValues[10].Name = "Transliteration";
     pValues[10].Value <<= pTemp->sTransliteration;
     pValues[11].Name = "NatNum";
