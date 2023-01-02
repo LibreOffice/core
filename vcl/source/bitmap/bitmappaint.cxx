@@ -433,18 +433,19 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
     return bRet;
 };
 
-Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
+Bitmap Bitmap::CreateMask(const Color& rTransColor) const
 {
     ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    if (!pReadAcc)
+        return Bitmap();
 
     // Historically LO used 1bpp masks, but 8bpp masks are much faster,
     // better supported by hardware, and the memory savings are not worth
     // it anymore.
     // TODO: Possibly remove the 1bpp code later.
 
-    if (!nTol && pReadAcc
-        && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-            || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
+    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
+         || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
         && pReadAcc->GetBestMatchingColor(COL_WHITE) == pReadAcc->GetBestMatchingColor(rTransColor))
     {
         // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
@@ -455,146 +456,164 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
     auto ePixelFormat = vcl::PixelFormat::N8_BPP;
     Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &Bitmap::GetGreyPalette(256));
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-    bool bRet = false;
+    if (!pWriteAcc)
+        return Bitmap();
 
-    if (pWriteAcc && pReadAcc)
+    const tools::Long nWidth = pReadAcc->Width();
+    const tools::Long nHeight = pReadAcc->Height();
+    const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
+    const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
+
+    const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
+
+    if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat() && aWhite.GetIndex() == 1
+        && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
+            || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
     {
-        const tools::Long nWidth = pReadAcc->Width();
-        const tools::Long nHeight = pReadAcc->Height();
-        const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
-        const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
-
-        if (!nTol)
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
         {
-            const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
+            Scanline pSrc = pReadAcc->GetScanline(nY);
+            Scanline pDst = pWriteAcc->GetScanline(nY);
+            assert(pWriteAcc->GetScanlineSize() == pReadAcc->GetScanlineSize());
+            const tools::Long nScanlineSize = pWriteAcc->GetScanlineSize();
+            for (tools::Long nX = 0; nX < nScanlineSize; ++nX)
+                pDst[nX] = ~pSrc[nX];
+        }
+    }
+    else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+    {
+        // optimized for 8Bit source palette
+        const sal_uInt8 cTest = aTest.GetIndex();
 
-            if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat()
-                && aWhite.GetIndex() == 1
-                && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-                    || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
+        {
+            Scanline pSrc = pReadAcc->GetScanline(nY);
+            Scanline pDst = pWriteAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX)
             {
-                for (tools::Long nY = 0; nY < nHeight; ++nY)
-                {
-                    Scanline pSrc = pReadAcc->GetScanline(nY);
-                    Scanline pDst = pWriteAcc->GetScanline(nY);
-                    assert(pWriteAcc->GetScanlineSize() == pReadAcc->GetScanlineSize());
-                    const tools::Long nScanlineSize = pWriteAcc->GetScanlineSize();
-                    for (tools::Long nX = 0; nX < nScanlineSize; ++nX)
-                        pDst[nX] = ~pSrc[nX];
-                }
-            }
-            else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
-            {
-                // optimized for 8Bit source palette
-                const sal_uInt8 cTest = aTest.GetIndex();
-
-                for (tools::Long nY = 0; nY < nHeight; ++nY)
-                {
-                    Scanline pSrc = pReadAcc->GetScanline(nY);
-                    Scanline pDst = pWriteAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; ++nX)
-                    {
-                        if (cTest == pSrc[nX])
-                            pDst[nX] = aWhite.GetIndex();
-                        else
-                            pDst[nX] = aBlack.GetIndex();
-                    }
-                }
-            }
-            else
-            {
-                // not optimized
-                for (tools::Long nY = 0; nY < nHeight; ++nY)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; ++nX)
-                    {
-                        if (aTest == pReadAcc->GetPixelFromData(pScanlineRead, nX))
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        else
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
-                    }
-                }
+                if (cTest == pSrc[nX])
+                    pDst[nX] = aWhite.GetIndex();
+                else
+                    pDst[nX] = aBlack.GetIndex();
             }
         }
-        else
+    }
+    else
+    {
+        // not optimized
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
         {
-            BitmapColor aCol;
-            tools::Long nR, nG, nB;
-            const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
-            const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
-            const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
-            const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
-            const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
-            const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
-
-            if (pReadAcc->HasPalette())
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX)
             {
-                for (tools::Long nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; nX++)
-                    {
-                        aCol = pReadAcc->GetPaletteColor(
-                            pReadAcc->GetIndexFromData(pScanlineRead, nX));
-                        nR = aCol.GetRed();
-                        nG = aCol.GetGreen();
-                        nB = aCol.GetBlue();
-
-                        if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
-                            && nMaxB >= nB)
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                for (tools::Long nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; nX++)
-                    {
-                        aCol = pReadAcc->GetPixelFromData(pScanlineRead, nX);
-                        nR = aCol.GetRed();
-                        nG = aCol.GetGreen();
-                        nB = aCol.GetBlue();
-
-                        if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
-                            && nMaxB >= nB)
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
-                }
+                if (aTest == pReadAcc->GetPixelFromData(pScanlineRead, nX))
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
+                else
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
             }
         }
-
-        bRet = true;
     }
 
     pWriteAcc.reset();
     pReadAcc.reset();
 
-    if (bRet)
+    aNewBmp.maPrefSize = maPrefSize;
+    aNewBmp.maPrefMapMode = maPrefMapMode;
+
+    return aNewBmp;
+}
+
+Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
+{
+    if (nTol == 0)
+        return CreateMask(rTransColor);
+
+    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    if (!pReadAcc)
+        return Bitmap();
+
+    // Historically LO used 1bpp masks, but 8bpp masks are much faster,
+    // better supported by hardware, and the memory savings are not worth
+    // it anymore.
+    // TODO: Possibly remove the 1bpp code later.
+
+    auto ePixelFormat = vcl::PixelFormat::N8_BPP;
+    Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &Bitmap::GetGreyPalette(256));
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return Bitmap();
+
+    const tools::Long nWidth = pReadAcc->Width();
+    const tools::Long nHeight = pReadAcc->Height();
+    const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
+    const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
+
+    BitmapColor aCol;
+    tools::Long nR, nG, nB;
+    const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
+    const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
+    const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
+    const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
+    const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
+    const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
+
+    if (pReadAcc->HasPalette())
     {
-        aNewBmp.maPrefSize = maPrefSize;
-        aNewBmp.maPrefMapMode = maPrefMapMode;
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                aCol = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nX));
+                nR = aCol.GetRed();
+                nG = aCol.GetGreen();
+                nB = aCol.GetBlue();
+
+                if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
+                    && nMaxB >= nB)
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
+                }
+            }
+        }
     }
     else
-        aNewBmp = Bitmap();
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                aCol = pReadAcc->GetPixelFromData(pScanlineRead, nX);
+                nR = aCol.GetRed();
+                nG = aCol.GetGreen();
+                nB = aCol.GetBlue();
+
+                if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
+                    && nMaxB >= nB)
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
+                }
+            }
+        }
+    }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
+
+    aNewBmp.maPrefSize = maPrefSize;
+    aNewBmp.maPrefMapMode = maPrefMapMode;
 
     return aNewBmp;
 }
