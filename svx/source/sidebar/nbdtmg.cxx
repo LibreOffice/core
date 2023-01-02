@@ -103,6 +103,12 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
             rValue.Value >>= pNew->sPrefix;
         else if(rValue.Name == "Suffix")
             rValue.Value >>= pNew->sSuffix;
+        else if (rValue.Name == "Adjust")
+        {
+            sal_Int16 nTmp;
+            if (rValue.Value >>= nTmp)
+                pNew->eNumAlign = static_cast<SvxAdjust>(nTmp);
+        }
         else if(rValue.Name == "ParentNumbering")
             rValue.Value >>= pNew->nParentNumbering;
         else if(rValue.Name == "BulletChar")
@@ -600,10 +606,13 @@ void OutlineTypeMgr::Init()
 
                 NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
                 const SvxNumberFormat& aNumFmt( aDefNumRule.GetLevel( nLevel) );
+                assert(aNumFmt.GetNumAdjust() == SvxAdjust::Left && "new entry was previously defined by default, now defaults to Left");
                 pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
                 pNew->nTabValue = aNumFmt.GetListtabPos();
-                pNew->eNumAlign = aNumFmt.GetNumAdjust();
-                pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
+                if (pNew->eNumAlign == SvxAdjust::Right)
+                    pNew->nNumAlignAt = -174; // number borrowed from RES_POOLNUMRULE_NUM4
+                else
+                    pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
                 pNew->nNumIndentAt = aNumFmt.GetIndentAt();
                 pItemArr->pNumSettingsArr->push_back(std::shared_ptr<NumSettings_Impl>(pNew));
             }

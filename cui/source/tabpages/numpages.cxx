@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
 #include <numpages.hxx>
@@ -692,6 +691,11 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 1));
             aFmt.SetCharFormatName(sNumCharFmtName);
             aFmt.SetBulletRelSize(100);
+
+            // Completely ignore the Left/Right value provided by the locale outline definition,
+            // because this function doesn't actually modify the indents at all,
+            // and right-adjusted numbering definitely needs a different FirstLineIndent.
+
             // #i93908#
             aFmt.SetListFormat(pLevelSettings->sPrefix, pLevelSettings->sSuffix, i);
         }

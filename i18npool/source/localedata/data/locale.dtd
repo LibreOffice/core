@@ -681,5 +681,6 @@
 <!ATTLIST OutLineNumberingLevel LeftMargin CDATA   #REQUIRED>
 <!ATTLIST OutLineNumberingLevel SymbolTextDistance CDATA  #REQUIRED >
 <!ATTLIST OutLineNumberingLevel FirstLineOffset CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel Adjust CDATA #IMPLIED >
 <!ATTLIST OutLineNumberingLevel Transliteration CDATA #IMPLIED >
 <!ATTLIST OutLineNumberingLevel NatNum CDATA #IMPLIED>
