@@ -545,7 +545,6 @@ public:
 
     void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
     {
-        Color aColor;
         const SfxPoolItem* pItem = nullptr;
 
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
@@ -557,32 +556,6 @@ public:
 
             XLineWidthItem aItem(nValue);
             pArgs->Put(aItem);
-        }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
-        {
-            OUString sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
-
-            if (sColor == "transparent")
-                aColor = COL_TRANSPARENT;
-            else
-                aColor = Color(ColorTransparency, sColor.toInt32(16));
-
-            switch (nSlot)
-            {
-                case SID_ATTR_LINE_COLOR:
-                {
-                    XLineColorItem aLineColorItem(OUString(), aColor);
-                    pArgs->Put(aLineColorItem);
-                    break;
-                }
-
-                case SID_ATTR_FILL_COLOR:
-                {
-                    XFillColorItem aFillColorItem(OUString(), aColor);
-                    pArgs->Put(aFillColorItem);
-                    break;
-                }
-            }
         }
         if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
         {

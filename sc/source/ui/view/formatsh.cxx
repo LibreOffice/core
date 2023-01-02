@@ -1628,27 +1628,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
 }
 
-namespace
-{
-    bool lcl_getColorFromStr(const SfxItemSet *pArgs, Color &rColor)
-    {
-        const SfxStringItem* pColorStringItem = nullptr;
-
-        if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
-        {
-            OUString sColor;
-            sColor = pColorStringItem->GetValue();
-
-            if (sColor == "transparent")
-                rColor = COL_TRANSPARENT;
-            else
-                rColor = Color(ColorTransparency, sColor.toInt32(16));
-            return true;
-        }
-        return false;
-    }
-}
-
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
     ScTabViewShell*     pTabViewShell = GetViewData().GetViewShell();
@@ -1792,18 +1771,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_COLOR:
             case SID_SCATTR_PROTECTION :
             {
-                Color aColor;
-                if (lcl_getColorFromStr(pNewAttrs, aColor))
-                {
-                    SvxColorItem aColorItem(pTabViewShell->GetSelectionPattern()->
-                                                GetItem( ATTR_FONT_COLOR ) );
-                    aColorItem.SetValue(aColor);
-                    pTabViewShell->ApplyAttr(aColorItem, false);
-                }
-                else
-                {
-                    pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot) ), false);
-                }
+                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot) ), false);
 
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
@@ -1871,9 +1839,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     ::editeng::SvxBorderLine*  pDefLine = pTabViewShell->GetDefaultFrameLine();
 
-                    Color aColor;
-                    if (!lcl_getColorFromStr(pNewAttrs, aColor))
-                        aColor = pNewAttrs->Get( SID_FRAME_LINECOLOR ).GetValue();
+                    Color aColor = pNewAttrs->Get( SID_FRAME_LINECOLOR ).GetValue();
 
                     // Update default line
                     if ( pDefLine )
@@ -1983,13 +1949,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) has to be set to two IDs:
             case SID_BACKGROUND_COLOR:
                 {
-                    Color aColor;
-
-                    if (!lcl_getColorFromStr(pNewAttrs, aColor))
-                    {
-                        const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
-                        aColor = rNewColorItem.GetValue();
-                    }
+                    const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
+                    Color aColor = rNewColorItem.GetValue();
 
                     SvxBrushItem aBrushItem(
                         pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );

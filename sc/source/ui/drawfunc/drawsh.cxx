@@ -68,10 +68,8 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
+    void lcl_convertStringArguments(SfxItemSet& rArgs)
     {
-        Color aColor;
-
         if (const SvxDoubleItem* pWidthItem = rArgs.GetItemIfSet(SID_ATTR_LINE_WIDTH_ARG, false))
         {
             double fValue = pWidthItem->GetValue();
@@ -81,39 +79,6 @@ namespace
 
             XLineWidthItem aItem(nValue);
             rArgs.Put(aItem);
-        }
-        else if (const SfxStringItem* pColorItem = rArgs.GetItemIfSet(SID_ATTR_COLOR_STR, false))
-        {
-            OUString sColor = pColorItem->GetValue();
-
-            if (sColor == "transparent")
-                aColor = COL_TRANSPARENT;
-            else
-                aColor = Color(ColorTransparency, sColor.toInt32(16));
-
-            switch (nSlot)
-            {
-                case SID_ATTR_LINE_COLOR:
-                {
-                    XLineColorItem aLineColorItem(OUString(), aColor);
-                    rArgs.Put(aLineColorItem);
-                    break;
-                }
-
-                case SID_ATTR_FILL_COLOR:
-                {
-                    XFillColorItem aFillColorItem(OUString(), aColor);
-                    rArgs.Put(aFillColorItem);
-                    break;
-                }
-
-                case SID_ATTR_SHADOW_COLOR:
-                {
-                    XColorItem aItem(SDRATTR_SHADOWCOLOR, aColor);
-                    rArgs.Put(aItem);
-                    break;
-                }
-            }
         }
         if (const SfxStringItem* pJSON = rArgs.GetItemIfSet(SID_FILL_GRADIENT_JSON, false))
         {
@@ -290,7 +255,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 if( pView->AreObjectsMarked() )
                 {
                     SfxItemSet aNewArgs = rReq.GetArgs()->CloneAsValue();
-                    lcl_convertStringArguments( rReq.GetSlot(), aNewArgs );
+                    lcl_convertStringArguments(aNewArgs);
                     pView->SetAttrToMarked( aNewArgs, false );
                 }
                 else

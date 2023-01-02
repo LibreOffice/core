@@ -2599,32 +2599,12 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_BACKGROUND_COLOR:
         case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
-            const SfxPoolItem* pColorStringItem = nullptr;
             bool bIsTransparent = false;
 
             aBrushItem->SetGraphicPos(GPOS_NONE);
 
             sal_uInt16 nSlotId = (nSlot == SID_BACKGROUND_COLOR) ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR;
-            if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
-            {
-                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                if (sColor == "transparent")
-                {
-                    bIsTransparent = true;
-                }
-                else
-                {
-                    Color aColor(ColorTransparency, sColor.toInt32(16));
-
-                    aBrushItem->SetColor(aColor);
-
-                    SvxColorItem aNewColorItem(nSlotId);
-                    aNewColorItem.SetValue(aColor);
-
-                    GetView().GetViewFrame()->GetBindings().SetState(aNewColorItem);
-                }
-            }
-            else if (pArgs)
+            if (pArgs)
             {
                 const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(nSlotId));
                 const Color& rNewColor = rNewColorItem.GetValue();

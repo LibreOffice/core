@@ -82,42 +82,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
-    {
-        Color aColor;
-        OUString sColor;
-        const SfxStringItem* pItem = rArgs.GetItemIfSet(SID_ATTR_COLOR_STR, false);
-        if (!pItem)
-            return;
-
-        sColor = pItem->GetValue();
-
-        if (sColor == "transparent")
-            aColor = COL_TRANSPARENT;
-        else
-            aColor = Color(ColorTransparency, sColor.toInt32(16));
-
-        switch (nSlot)
-        {
-            case SID_ATTR_CHAR_COLOR:
-            {
-                SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-                rArgs.Put(aColorItem);
-                break;
-            }
-
-            case SID_ATTR_CHAR_BACK_COLOR:
-            {
-                SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
-                rArgs.Put(pBackgroundItem);
-                break;
-            }
-        }
-    }
-}
-
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
@@ -638,8 +602,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     }
     if (nEEWhich && pNewAttrs)
     {
-        lcl_convertStringArguments(nSlot, *pNewAttrs);
-
         aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
     else if (nEEWhich == EE_CHAR_COLOR)

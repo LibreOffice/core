@@ -378,7 +378,7 @@ SfxVoidItem AutoSum FN_TABLE_AUTOSUM
 ]
 
 SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND // deprecated - use CHAR_BACK_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND)
+(SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND)
 
 [
     AutoUpdate = TRUE,
@@ -1281,7 +1281,7 @@ SfxBoolItem Fields FN_VIEW_FIELDS
 ]
 
 SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem FontColor SID_ATTR_CHAR_COLOR2)
+(SvxColorItem FontColor SID_ATTR_CHAR_COLOR2)
 
 [
     AutoUpdate = TRUE,

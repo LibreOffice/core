@@ -408,7 +408,7 @@ SfxVoidItem TableDesign SID_TABLEDESIGN
 ]
 
 SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem BackgroundColor SID_BACKGROUND_COLOR)
+(SvxColorItem BackgroundColor SID_BACKGROUND_COLOR)
 
 [
     AutoUpdate = TRUE,
@@ -1506,7 +1506,7 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 
 
 SvxColorItem Color SID_ATTR_CHAR_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem Color SID_ATTR_CHAR_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
+(SvxColorItem Color SID_ATTR_CHAR_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1524,7 +1524,7 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
 ]
 
 SvxColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR)
+(SvxColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -2798,7 +2798,7 @@ XFillBitmapItem FillPageBitmap SID_ATTR_PAGE_BITMAP
 ]
 
 XFillColorItem FillColor SID_ATTR_FILL_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, XFillColorItem FillColor SID_ATTR_FILL_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
+(XFillColorItem FillColor SID_ATTR_FILL_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -2816,7 +2816,7 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
 ]
 
 XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR)
+(XFillColorItem FillColor SID_ATTR_PAGE_COLOR)
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -5677,7 +5677,7 @@ SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 ]
 
 SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, SvxColorItem FrameLineColor SID_FRAME_LINECOLOR)
+(SvxColorItem FrameLineColor SID_FRAME_LINECOLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -7874,7 +7874,7 @@ SdrOnOffItem FillShadow SID_ATTR_FILL_SHADOW
 ]
 
 XColorItem FillShadowColor SID_ATTR_SHADOW_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR)
+
 [
 
     AutoUpdate = TRUE,
@@ -9118,7 +9118,7 @@ SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
 
 
 XLineColorItem XLineColor SID_ATTR_LINE_COLOR
-(SfxStringItem ColorString SID_ATTR_COLOR_STR, XLineColorItem XLineColor SID_ATTR_LINE_COLOR)
+(XLineColorItem XLineColor SID_ATTR_LINE_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

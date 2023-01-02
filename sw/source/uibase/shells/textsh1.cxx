@@ -1344,18 +1344,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR2:
         {
             Color aSet;
-            const SfxStringItem* pColorStringItem = nullptr;
             bool bHasItem = false;
 
             if(pItem)
             {
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
-                bHasItem = true;
-            }
-            else if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
-            {
-                OUString sColor = pColorStringItem->GetValue();
-                aSet = Color(ColorTransparency, sColor.toInt32(16));
                 bHasItem = true;
             }
 
@@ -1381,17 +1374,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
-            const SfxStringItem* pColorStringItem = nullptr;
 
-            if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
-            {
-                OUString sColor = pColorStringItem->GetValue();
-                if (sColor == "transparent")
-                    aSet = COL_TRANSPARENT;
-                else
-                    aSet = Color(ColorTransparency, sColor.toInt32(16));
-            }
-            else if (pItem)
+            if (pItem)
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
             else
                 aSet = COL_TRANSPARENT;

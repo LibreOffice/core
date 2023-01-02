@@ -66,43 +66,6 @@
 
 #include <memory>
 
-namespace
-{
-    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
-    {
-        Color aColor;
-        OUString sColor;
-        const SfxPoolItem* pColorStringItem = nullptr;
-
-        if (SfxItemState::SET != pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
-            return;
-
-        sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-
-        if (sColor == "transparent")
-            aColor = COL_TRANSPARENT;
-        else
-            aColor = Color(ColorTransparency, sColor.toInt32(16));
-
-        switch (nSlot)
-        {
-            case SID_ATTR_CHAR_COLOR:
-            {
-                SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-                pArgs->Put(aColorItem);
-                break;
-            }
-
-            case SID_ATTR_CHAR_BACK_COLOR:
-            {
-                SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
-                pArgs->Put(pBackgroundItem);
-                break;
-            }
-        }
-    }
-}
-
 namespace sd {
 
 /**
@@ -811,7 +774,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
 
             std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
-            lcl_convertStringArguments(nSlot, pNewArgs);
 
             // Merge the color parameters to the color itself.
             std::unique_ptr<SvxColorItem> pColorItem;

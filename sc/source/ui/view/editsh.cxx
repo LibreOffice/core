@@ -968,21 +968,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    if ( const SfxStringItem* pColorStringItem = pArgs->GetItemIfSet( SID_ATTR_COLOR_STR, false ) )
-                    {
-                        Color aColor;
-                        OUString sColor = pColorStringItem->GetValue();
-                        if ( sColor == "transparent" )
-                            aColor = COL_TRANSPARENT;
-                        else
-                            aColor = Color( ColorTransparency, sColor.toInt32( 16 ) );
-
-                        aSet.Put( SvxColorItem( aColor, EE_CHAR_COLOR ) );
-                    }
-                    else
-                    {
-                        aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhich( nSlot ) ) );
-                    }
+                    aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhich( nSlot ) ) );
                     rBindings.Invalidate( nSlot );
                 }
             }
