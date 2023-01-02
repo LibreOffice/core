@@ -1984,28 +1984,4 @@ bool X11SalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPol
     return false;
 }
 
-bool X11SalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
-{
-    bool bRet = false;
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-        case OutDevSupportType::B2DDraw:
-        {
-            XRenderPeer& rPeer = XRenderPeer::GetInstance();
-            const SalDisplay* pSalDisp = mrParent.GetDisplay();
-            const SalVisual& rSalVis = pSalDisp->GetVisual(mrParent.GetScreenNumber());
-
-            Visual* pDstXVisual = rSalVis.GetVisual();
-            XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat(pDstXVisual);
-            if (pDstVisFmt)
-                bRet = true;
-        }
-        break;
-        default:
-            break;
-    }
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
