@@ -1092,7 +1092,6 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_bIsLastReadOnly(false)
     , m_bIsOutlineMoveable(true)
     , m_bViewHasChanged(false)
-    , m_xOverlayCompareEntry(m_xTreeView->make_iterator())
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
                                   m_xTreeView->get_text_height() * 14);
@@ -1133,7 +1132,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
 
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
     m_aUpdTimer.SetTimeout(1000);
-    m_aOverlayObjectDelayTimer.SetInvokeHandler(LINK(this, SwContentTree, m_aOverlayObjectDelayTimerHdl));
+    m_aOverlayObjectDelayTimer.SetInvokeHandler(LINK(this, SwContentTree, OverlayObjectDelayTimerHdl));
     m_aOverlayObjectDelayTimer.SetTimeout(500);
 }
 
@@ -1153,304 +1152,27 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
     if (m_eState == State::HIDDEN)
         return false;
-    if (rMEvt.IsLeaveWindow())
+    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+            m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false) &&
+            !rMEvt.IsLeaveWindow())
     {
+        if (!m_xOverlayCompareEntry)
+            m_xOverlayCompareEntry.reset(m_xTreeView->make_iterator().release());
+        else if (m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) == 0)
+            return false; // The entry under the mouse has not changed.
+        m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
+        BringEntryToAttention(*xEntry);
+    }
+    else
+    {
+        if (m_xOverlayCompareEntry)
+            m_xOverlayCompareEntry.reset();
         m_aOverlayObjectDelayTimer.Stop();
         if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
         {
             m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
             m_xOverlayObject.reset();
         }
-    }
-    else if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
-    {
-        // Remove the overlay object if the pointer is over a different entry than the last time
-        // it was here. Guard against doing the iter_compare when entering the window to work
-        // around a bug that causes sal backends to crash when m_xOverlayCompareEntry iterator is
-        // nullptr which is the case on initial window entry.
-        if (!rMEvt.IsEnterWindow() &&
-                m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
-        {
-            m_aOverlayObjectDelayTimer.Stop();
-            if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
-            {
-                m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
-                m_xOverlayObject.reset();
-            }
-        }
-        if (lcl_IsContent(*xEntry, *m_xTreeView)) // content entry
-        {
-            SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
-            const ContentTypeId nType = pCnt->GetParent()->GetType();
-            if (!pCnt->IsInvisible() && (rMEvt.IsEnterWindow() ||
-                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0))
-            {
-                if (nType == ContentTypeId::OUTLINE)
-                {
-                    BringTypesWithFlowFramesToAttention({m_pActiveShell->GetNodes().
-                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]});
-                }
-                else if (nType == ContentTypeId::TABLE)
-                {
-                    if (const SwFrameFormats* pFrameFormats =
-                            m_pActiveShell->GetDoc()->GetTableFrameFormats())
-                        if (const SwFrameFormat* pFrameFormat =
-                                pFrameFormats->FindFormatByName(pCnt->GetName()))
-                        {
-                            SwTable* pTable = SwTable::FindTable(pFrameFormat);
-                            if (pTable)
-                                BringTypesWithFlowFramesToAttention({pTable->GetTableNode()});
-                        }
-                }
-                else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
-                         nType == ContentTypeId::OLE)
-                {
-                    SwNodeType eNodeType = SwNodeType::Text;
-                    if(nType == ContentTypeId::GRAPHIC)
-                        eNodeType = SwNodeType::Grf;
-                    else if(nType == ContentTypeId::OLE)
-                        eNodeType = SwNodeType::Ole;
-                    if (const SwFrameFormat* pFrameFormat =
-                            m_pActiveShell->GetDoc()->FindFlyByName(pCnt->GetName(), eNodeType))
-                        BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
-                }
-                else if (nType == ContentTypeId::BOOKMARK)
-                {
-                    BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
-                }
-                else if (nType == ContentTypeId::REGION|| nType == ContentTypeId::INDEX)
-                {
-                    const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
-                    const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
-                    if (pFormat)
-                        BringTypesWithFlowFramesToAttention({pFormat->GetSectionNode()});
-                }
-                else if (nType == ContentTypeId::URLFIELD)
-                {
-                    BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
-                                        *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr())});
-                }
-                else if (nType == ContentTypeId::REFERENCE)
-                {
-                    if (const SwTextAttr* pTextAttr =
-                            m_pActiveShell->GetDoc()->GetRefMark(pCnt->GetName())->GetTextRefMark())
-                    {
-                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
-                        BringReferencesToAttention(aTextAttrArr);
-                    }
-                }
-                else if (nType == ContentTypeId::POSTIT)
-                {
-                    if (const SwTextAttr* pTextAttr =
-                            static_cast<SwPostItContent*>(pCnt)->GetPostIt()->GetTextField())
-                    {
-                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
-                        BringPostItFieldsToAttention(aTextAttrArr);
-                    }
-                }
-                else if (nType == ContentTypeId::DRAWOBJECT)
-                {
-                    std::vector<const SdrObject*> aSdrObjectArr {GetDrawingObjectsByContent(pCnt)};
-                    BringDrawingObjectsToAttention(aSdrObjectArr);
-                }
-                else if (nType == ContentTypeId::TEXTFIELD)
-                {
-                    if (const SwTextAttr* pTextAttr =
-                            static_cast<SwTextFieldContent*>(pCnt)->GetFormatField()->GetTextField())
-                    {
-                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
-                        BringTextFieldsToAttention(aTextAttrArr);
-                    }
-                }
-                else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
-                {
-                    if (const SwTextAttr* pTextAttr =
-                            static_cast<SwTextFootnoteContent*> (pCnt)->GetTextFootnote())
-                    {
-                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
-                        BringFootnotesToAttention(aTextAttrArr);
-                    }
-                }
-            }
-        }
-        else // content type entry
-        {
-            const ContentTypeId nType =
-                    weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry))->GetType();
-            if (rMEvt.IsEnterWindow() ||
-                    m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) != 0)
-            {
-                if (nType == ContentTypeId::OUTLINE)
-                {
-                    std::vector<const SwNode*> aNodesArr(
-                                m_pActiveShell->GetNodes().GetOutLineNds().begin(),
-                                m_pActiveShell->GetNodes().GetOutLineNds().end());
-                    BringTypesWithFlowFramesToAttention(aNodesArr);
-                }
-                else if (nType == ContentTypeId::TABLE)
-                {
-                    std::vector<const SwNode*> aNodesArr;
-                    const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
-                    const SwFrameFormats* pFrameFormats =
-                            m_pActiveShell->GetDoc()->GetTableFrameFormats();
-                    SwAutoFormatGetDocNode aGetHt(&m_pActiveShell->GetNodes());
-                    for(size_t i = 0; i < nCount; ++i)
-                    {
-                        if (const SwTableFormat* pTableFormat =
-                                static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
-                            if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
-                            {
-                                SwTable* pTable = SwTable::FindTable(pTableFormat);
-                                if (pTable)
-                                    aNodesArr.push_back(pTable->GetTableNode());
-                            }
-                    }
-                    BringTypesWithFlowFramesToAttention(aNodesArr);
-                }
-                else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
-                         nType == ContentTypeId::OLE)
-                {
-                    FlyCntType eType = FLYCNTTYPE_FRM;
-                    if(nType == ContentTypeId::GRAPHIC)
-                        eType = FLYCNTTYPE_GRF;
-                    else if(nType == ContentTypeId::OLE)
-                        eType = FLYCNTTYPE_OLE;
-                    BringFramesToAttention(m_pActiveShell->GetFlyFrameFormats(eType, true));
-                }
-                else if (nType == ContentTypeId::BOOKMARK)
-                {
-                    std::vector<OUString> aNames;
-                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
-                    for (size_t i = 0; i < nCount; i++)
-                    {
-                        const SwContent* pMember = m_aActiveContentArr[nType]->GetMember(i);
-                        if (pMember && !pMember->IsInvisible())
-                            aNames.push_back(pMember->GetName());
-                    }
-                    BringBookmarksToAttention(aNames);
-                }
-                else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
-                {
-                    std::vector<const SwNode*> aNodesArr;
-                    const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
-                    const size_t nSize = rFormats.size();
-                    for (SwSectionFormats::size_type n = nSize; n;)
-                    {
-                        const SwSectionFormat* pSectionFormat = rFormats[--n];
-                        if (pSectionFormat && pSectionFormat->IsInNodesArr())
-                        {
-                            const SwSection* pSection = pSectionFormat->GetSection();
-                            if (pSection && !pSection->IsHiddenFlag())
-                            {
-                                const SectionType eSectionType = pSection->GetType();
-                                if (nType == ContentTypeId::REGION &&
-                                        (eSectionType == SectionType::ToxContent ||
-                                         eSectionType == SectionType::ToxHeader))
-                                    continue;
-                                if (nType == ContentTypeId::INDEX &&
-                                        eSectionType != SectionType::ToxContent)
-                                    continue;
-                                if (const SwNode* pNode = pSectionFormat->GetSectionNode())
-                                    aNodesArr.push_back(pNode);
-                            }
-                        }
-                    }
-                    BringTypesWithFlowFramesToAttention(aNodesArr);
-                }
-                else if (nType == ContentTypeId::URLFIELD)
-                {
-                    SwGetINetAttrs aINetAttrsArr;
-                    m_pActiveShell->GetINetAttrs(aINetAttrsArr, false);
-                    BringURLFieldsToAttention(aINetAttrsArr);
-                }
-                else if (nType == ContentTypeId::REFERENCE)
-                {
-                    std::vector<const SwTextAttr*> aTextAttrArr;
-                    for (const SfxPoolItem* pItem :
-                         m_pActiveShell->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
-                    {
-                        if (const auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem))
-                        {
-                            const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
-                            if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
-                                    &m_pActiveShell->GetNodes())
-                                aTextAttrArr.push_back(pTextRef);
-                        }
-                    }
-                    BringReferencesToAttention(aTextAttrArr);
-                }
-                else if (nType == ContentTypeId::POSTIT)
-                {
-                    std::vector<const SwTextAttr*> aTextAttrArr;
-                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
-                    for (size_t i = 0; i < nCount; i++)
-                    {
-                        const SwPostItContent* pPostItContent = static_cast<const SwPostItContent*>(
-                                    m_aActiveContentArr[nType]->GetMember(i));
-                        if (pPostItContent && !pPostItContent->IsInvisible())
-                            if (const SwFormatField* pFormatField = pPostItContent->GetPostIt())
-                                if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
-                                    aTextAttrArr.push_back(pTextAttr);
-                    }
-                    BringPostItFieldsToAttention(aTextAttrArr);
-                }
-                else if (nType == ContentTypeId::DRAWOBJECT)
-                {
-                    IDocumentDrawModelAccess& rIDDMA = m_pActiveShell->getIDocumentDrawModelAccess();
-                    if (const SwDrawModel* pModel = rIDDMA.GetDrawModel())
-                    {
-                        if (const SdrPage* pPage = pModel->GetPage(0))
-                        {
-                            if (const size_t nCount = pPage->GetObjCount())
-                            {
-                                std::vector<const SdrObject*> aSdrObjectArr;
-                                for (size_t i = 0; i < nCount; ++i)
-                                {
-                                    const SdrObject* pObject = pPage->GetObj(i);
-                                    if (pObject && !pObject->GetName().isEmpty() &&
-                                            rIDDMA.IsVisibleLayerId(pObject->GetLayer()))
-                                        aSdrObjectArr.push_back(pObject);
-                                }
-                                BringDrawingObjectsToAttention(aSdrObjectArr);
-                            }
-                        }
-                    }
-                }
-                else if (nType == ContentTypeId::TEXTFIELD)
-                {
-                    std::vector<const SwTextAttr*> aTextAttrArr;
-                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
-                    for (size_t i = 0; i < nCount; i++)
-                    {
-                        const SwTextFieldContent* pTextFieldCnt =
-                                static_cast<const SwTextFieldContent*>(
-                                    m_aActiveContentArr[nType]->GetMember(i));
-                        if (pTextFieldCnt && !pTextFieldCnt->IsInvisible())
-                            if (const SwFormatField* pFormatField = pTextFieldCnt->GetFormatField())
-                                if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
-                                    aTextAttrArr.push_back(pTextAttr);
-                    }
-                    BringTextFieldsToAttention(aTextAttrArr);
-                }
-                else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
-                {
-                    std::vector<const SwTextAttr*> aTextAttrArr;
-                    const auto nCount = m_aActiveContentArr[nType]->GetMemberCount();
-                    for (size_t i = 0; i < nCount; i++)
-                    {
-                        const SwTextFootnoteContent* pTextFootnoteCnt =
-                                static_cast<const SwTextFootnoteContent*>(
-                                    m_aActiveContentArr[nType]->GetMember(i));
-                        if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
-                            if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
-                                aTextAttrArr.push_back(pTextAttr);
-                    }
-                    BringFootnotesToAttention(aTextAttrArr);
-                }
-            }
-        }
-        m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
     }
     return false;
 }
@@ -5209,23 +4931,6 @@ void SwContentTree::ShowActualView()
     GetParentWindow()->UpdateListBox();
 }
 
-IMPL_LINK_NOARG(SwContentTree, m_aOverlayObjectDelayTimerHdl, Timer *, void)
-{
-    m_aOverlayObjectDelayTimer.Stop();
-    if (m_xOverlayObject)
-    {
-        if (SdrView* pView = m_pActiveShell->GetDrawView())
-        {
-            if (SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(0))
-            {
-                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager =
-                        pPaintWindow->GetOverlayManager();
-                xOverlayManager->add(*m_xOverlayObject);
-            }
-        }
-    }
-}
-
 IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
 {
     if (m_pConfig->IsNavigateOnSelect())
@@ -5813,6 +5518,314 @@ void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
     } while (m_xTreeView->iter_next_sibling(*xIter));
 }
 
+IMPL_LINK_NOARG(SwContentTree, OverlayObjectDelayTimerHdl, Timer *, void)
+{
+    m_aOverlayObjectDelayTimer.Stop();
+    if (m_xOverlayObject)
+    {
+        if (SdrView* pView = m_pActiveShell->GetDrawView())
+        {
+            if (SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(0))
+            {
+                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager =
+                        pPaintWindow->GetOverlayManager();
+                xOverlayManager->add(*m_xOverlayObject);
+            }
+        }
+    }
+}
+
+void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
+{
+    m_aOverlayObjectDelayTimer.Stop();
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    if (aRanges.empty())
+        m_xOverlayObject.reset();
+    else
+    {
+        m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(
+                                   sdr::overlay::OverlayType::Invert,
+                                   Color(), std::move(aRanges), true/*unused for Invert type*/));
+        m_aOverlayObjectDelayTimer.Start();
+    }
+}
+
+void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
+{
+    if (lcl_IsContent(rEntry, *m_xTreeView)) // content entry
+    {
+        SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(rEntry));
+        if (pCnt->IsInvisible())
+            OverlayObject();
+        else
+        {
+            const ContentTypeId nType = pCnt->GetParent()->GetType();
+            if (nType == ContentTypeId::OUTLINE)
+            {
+                BringTypesWithFlowFramesToAttention({m_pActiveShell->GetNodes().
+                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]});
+            }
+            else if (nType == ContentTypeId::TABLE)
+            {
+                if (const SwFrameFormats* pFrameFormats =
+                        m_pActiveShell->GetDoc()->GetTableFrameFormats())
+                    if (const SwFrameFormat* pFrameFormat =
+                            pFrameFormats->FindFormatByName(pCnt->GetName()))
+                    {
+                        SwTable* pTable = SwTable::FindTable(pFrameFormat);
+                        if (pTable)
+                            BringTypesWithFlowFramesToAttention({pTable->GetTableNode()});
+                    }
+            }
+            else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
+                     nType == ContentTypeId::OLE)
+            {
+                SwNodeType eNodeType = SwNodeType::Text;
+                if(nType == ContentTypeId::GRAPHIC)
+                    eNodeType = SwNodeType::Grf;
+                else if(nType == ContentTypeId::OLE)
+                    eNodeType = SwNodeType::Ole;
+                if (const SwFrameFormat* pFrameFormat =
+                        m_pActiveShell->GetDoc()->FindFlyByName(pCnt->GetName(), eNodeType))
+                    BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
+            }
+            else if (nType == ContentTypeId::BOOKMARK)
+            {
+                BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
+            }
+            else if (nType == ContentTypeId::REGION|| nType == ContentTypeId::INDEX)
+            {
+                const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
+                const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
+                if (pFormat)
+                    BringTypesWithFlowFramesToAttention({pFormat->GetSectionNode()});
+            }
+            else if (nType == ContentTypeId::URLFIELD)
+            {
+                BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
+                                        *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr())});
+            }
+            else if (nType == ContentTypeId::REFERENCE)
+            {
+                if (const SwTextAttr* pTextAttr =
+                        m_pActiveShell->GetDoc()->GetRefMark(pCnt->GetName())->GetTextRefMark())
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                    BringReferencesToAttention(aTextAttrArr);
+                }
+            }
+            else if (nType == ContentTypeId::POSTIT)
+            {
+                if (const SwTextAttr* pTextAttr =
+                        static_cast<SwPostItContent*>(pCnt)->GetPostIt()->GetTextField())
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                    BringPostItFieldsToAttention(aTextAttrArr);
+                }
+            }
+            else if (nType == ContentTypeId::DRAWOBJECT)
+            {
+                std::vector<const SdrObject*> aSdrObjectArr {GetDrawingObjectsByContent(pCnt)};
+                BringDrawingObjectsToAttention(aSdrObjectArr);
+            }
+            else if (nType == ContentTypeId::TEXTFIELD)
+            {
+                if (const SwTextAttr* pTextAttr =
+                        static_cast<SwTextFieldContent*>(pCnt)->GetFormatField()->GetTextField())
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                    BringTextFieldsToAttention(aTextAttrArr);
+                }
+            }
+            else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
+            {
+                if (const SwTextAttr* pTextAttr =
+                        static_cast<SwTextFootnoteContent*> (pCnt)->GetTextFootnote())
+                {
+                    std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                    BringFootnotesToAttention(aTextAttrArr);
+                }
+            }
+        }
+    }
+    else // content type entry
+    {
+        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rEntry));
+        if (pCntType->GetMemberCount() == 0)
+            OverlayObject();
+        else
+        {
+            const ContentTypeId nType = pCntType->GetType();
+            if (nType == ContentTypeId::OUTLINE)
+            {
+                std::vector<const SwNode*> aNodesArr(
+                            m_pActiveShell->GetNodes().GetOutLineNds().begin(),
+                            m_pActiveShell->GetNodes().GetOutLineNds().end());
+                BringTypesWithFlowFramesToAttention(aNodesArr);
+            }
+            else if (nType == ContentTypeId::TABLE)
+            {
+                std::vector<const SwNode*> aNodesArr;
+                const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
+                const SwFrameFormats* pFrameFormats =
+                        m_pActiveShell->GetDoc()->GetTableFrameFormats();
+                SwAutoFormatGetDocNode aGetHt(&m_pActiveShell->GetNodes());
+                for(size_t i = 0; i < nCount; ++i)
+                {
+                    if (const SwTableFormat* pTableFormat =
+                            static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
+                        if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
+                        {
+                            SwTable* pTable = SwTable::FindTable(pTableFormat);
+                            if (pTable)
+                                aNodesArr.push_back(pTable->GetTableNode());
+                        }
+                }
+                BringTypesWithFlowFramesToAttention(aNodesArr);
+            }
+            else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
+                     nType == ContentTypeId::OLE)
+            {
+                FlyCntType eType = FLYCNTTYPE_FRM;
+                if(nType == ContentTypeId::GRAPHIC)
+                    eType = FLYCNTTYPE_GRF;
+                else if(nType == ContentTypeId::OLE)
+                    eType = FLYCNTTYPE_OLE;
+                BringFramesToAttention(m_pActiveShell->GetFlyFrameFormats(eType, true));
+            }
+            else if (nType == ContentTypeId::BOOKMARK)
+            {
+                std::vector<OUString> aNames;
+                const auto nCount = pCntType->GetMemberCount();
+                for (size_t i = 0; i < nCount; i++)
+                {
+                    const SwContent* pMember = pCntType->GetMember(i);
+                    if (pMember && !pMember->IsInvisible())
+                        aNames.push_back(pMember->GetName());
+                }
+                BringBookmarksToAttention(aNames);
+            }
+            else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
+            {
+                std::vector<const SwNode*> aNodesArr;
+                const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
+                const size_t nSize = rFormats.size();
+                for (SwSectionFormats::size_type n = nSize; n;)
+                {
+                    const SwSectionFormat* pSectionFormat = rFormats[--n];
+                    if (pSectionFormat && pSectionFormat->IsInNodesArr())
+                    {
+                        const SwSection* pSection = pSectionFormat->GetSection();
+                        if (pSection && !pSection->IsHiddenFlag())
+                        {
+                            const SectionType eSectionType = pSection->GetType();
+                            if (nType == ContentTypeId::REGION &&
+                                    (eSectionType == SectionType::ToxContent ||
+                                     eSectionType == SectionType::ToxHeader))
+                                continue;
+                            if (nType == ContentTypeId::INDEX &&
+                                    eSectionType != SectionType::ToxContent)
+                                continue;
+                            if (const SwNode* pNode = pSectionFormat->GetSectionNode())
+                                aNodesArr.push_back(pNode);
+                        }
+                    }
+                }
+                BringTypesWithFlowFramesToAttention(aNodesArr);
+            }
+            else if (nType == ContentTypeId::URLFIELD)
+            {
+                SwGetINetAttrs aINetAttrsArr;
+                m_pActiveShell->GetINetAttrs(aINetAttrsArr, false);
+                BringURLFieldsToAttention(aINetAttrsArr);
+            }
+            else if (nType == ContentTypeId::REFERENCE)
+            {
+                std::vector<const SwTextAttr*> aTextAttrArr;
+                for (const SfxPoolItem* pItem :
+                     m_pActiveShell->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+                {
+                    if (const auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem))
+                    {
+                        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+                        if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
+                                &m_pActiveShell->GetNodes())
+                            aTextAttrArr.push_back(pTextRef);
+                    }
+                }
+                BringReferencesToAttention(aTextAttrArr);
+            }
+            else if (nType == ContentTypeId::POSTIT)
+            {
+                std::vector<const SwTextAttr*> aTextAttrArr;
+                const auto nCount = pCntType->GetMemberCount();
+                for (size_t i = 0; i < nCount; i++)
+                {
+                    const SwPostItContent* pPostItContent = static_cast<const SwPostItContent*>(
+                                pCntType->GetMember(i));
+                    if (pPostItContent && !pPostItContent->IsInvisible())
+                        if (const SwFormatField* pFormatField = pPostItContent->GetPostIt())
+                            if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
+                                aTextAttrArr.push_back(pTextAttr);
+                }
+                BringPostItFieldsToAttention(aTextAttrArr);
+            }
+            else if (nType == ContentTypeId::DRAWOBJECT)
+            {
+                IDocumentDrawModelAccess& rIDDMA = m_pActiveShell->getIDocumentDrawModelAccess();
+                if (const SwDrawModel* pModel = rIDDMA.GetDrawModel())
+                {
+                    if (const SdrPage* pPage = pModel->GetPage(0))
+                    {
+                        if (const size_t nCount = pPage->GetObjCount())
+                        {
+                            std::vector<const SdrObject*> aSdrObjectArr;
+                            for (size_t i = 0; i < nCount; ++i)
+                            {
+                                const SdrObject* pObject = pPage->GetObj(i);
+                                if (pObject && !pObject->GetName().isEmpty() &&
+                                        rIDDMA.IsVisibleLayerId(pObject->GetLayer()))
+                                    aSdrObjectArr.push_back(pObject);
+                            }
+                            BringDrawingObjectsToAttention(aSdrObjectArr);
+                        }
+                    }
+                }
+            }
+            else if (nType == ContentTypeId::TEXTFIELD)
+            {
+                std::vector<const SwTextAttr*> aTextAttrArr;
+                const auto nCount = pCntType->GetMemberCount();
+                for (size_t i = 0; i < nCount; i++)
+                {
+                    const SwTextFieldContent* pTextFieldCnt =
+                            static_cast<const SwTextFieldContent*>(pCntType->GetMember(i));
+                    if (pTextFieldCnt && !pTextFieldCnt->IsInvisible())
+                        if (const SwFormatField* pFormatField = pTextFieldCnt->GetFormatField())
+                            if (const SwTextAttr* pTextAttr = pFormatField->GetTextField())
+                                aTextAttrArr.push_back(pTextAttr);
+                }
+                BringTextFieldsToAttention(aTextAttrArr);
+            }
+            else if (nType == ContentTypeId::FOOTNOTE || nType == ContentTypeId::ENDNOTE)
+            {
+                std::vector<const SwTextAttr*> aTextAttrArr;
+                const auto nCount = pCntType->GetMemberCount();
+                for (size_t i = 0; i < nCount; i++)
+                {
+                    const SwTextFootnoteContent* pTextFootnoteCnt =
+                            static_cast<const SwTextFootnoteContent*>(pCntType->GetMember(i));
+                    if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
+                        if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
+                            aTextAttrArr.push_back(pTextAttr);
+                }
+                BringFootnotesToAttention(aTextAttrArr);
+            }
+        }
+    }
+}
+
 static void lcl_CalcOverlayRanges(const SwTextFrame* pStartFrame, const SwTextFrame* pEndFrame,
                                   const SwPosition& aStartPos, const SwPosition& aEndPos,
                                   std::vector<basegfx::B2DRange>& aRanges)
@@ -5844,16 +5857,6 @@ static void lcl_CalcOverlayRanges(const SwTextFrame* pStartFrame, const SwTextFr
     }
 }
 
-void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
-{
-    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
-        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
-    m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
-                                                              Color(), std::move(aRanges),
-                                                              true /*unused for Invert type*/));
-    m_aOverlayObjectDelayTimer.Start();
-}
-
 void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats)
 {
     std::vector<basegfx::B2DRange> aRanges;
@@ -5866,8 +5869,7 @@ void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat
             aRanges.emplace_back(aFrameRect.Left(), aFrameRect.Top(), aFrameRect.Right(),
                                  aFrameRect.Bottom());
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rNames)
@@ -5905,8 +5907,7 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
         }
         lcl_CalcOverlayRanges(pMarkStartFrame, pMarkEndFrame, aMarkStart, aMarkEnd, aRanges);
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes)
@@ -5932,8 +5933,7 @@ void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const 
             pFrame = &pFollow->GetFrame();
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr)
@@ -5951,8 +5951,7 @@ void SwContentTree::BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsAr
             lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringReferencesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
@@ -5975,8 +5974,7 @@ void SwContentTree::BringReferencesToAttention(std::vector<const SwTextAttr*>& r
             lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
@@ -6010,8 +6008,7 @@ void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>&
         lcl_CalcOverlayRanges(pMarkStartFrame, pMarkEndFrame, aMarkStart,
                               aMarkEnd, aRanges);
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
@@ -6034,8 +6031,7 @@ void SwContentTree::BringFootnotesToAttention(std::vector<const SwTextAttr*>& rT
             lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr)
@@ -6050,8 +6046,7 @@ void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>
                 aRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 void SwContentTree::BringTextFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr)
@@ -6076,8 +6071,7 @@ void SwContentTree::BringTextFieldsToAttention(std::vector<const SwTextAttr*>& r
             lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
         }
     }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
+    OverlayObject(std::move(aRanges));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
