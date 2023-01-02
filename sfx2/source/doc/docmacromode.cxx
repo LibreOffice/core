@@ -205,12 +205,13 @@ namespace sfx2
         if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
             return allowMacroExecution();
 
+        const OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
         try
         {
             // get document location from medium name and check whether it is a trusted one
             // the service is created without document version, since it is not of interest here
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
-            INetURLObject aURLReferer( m_xData->m_rDocumentAccess.getDocumentLocation() );
+            INetURLObject aURLReferer(sURL);
 
             OUString aLocation = aURLReferer.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
@@ -297,7 +298,6 @@ namespace sfx2
 #if defined(_WIN32)
         // Windows specific: try to decide macros loading depending on Windows Security Zones
         // (is the file local, or it was downloaded from internet, etc?)
-        OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
         OUString sFilePath;
         osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
         sal::systools::COMReference<IZoneIdentifier> pZoneId;
@@ -352,7 +352,7 @@ namespace sfx2
 
         if ( eAutoConfirm == eNoAutoConfirm )
         {
-            OUString sReferrer( m_xData->m_rDocumentAccess.getDocumentLocation() );
+            OUString sReferrer(sURL);
 
             OUString aSystemFileURL;
             if ( osl::FileBase::getSystemPathFromFileURL( sReferrer, aSystemFileURL ) == osl::FileBase::E_None )
