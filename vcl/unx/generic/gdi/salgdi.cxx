@@ -66,16 +66,6 @@ X11Common::X11Common()
     , m_pColormap(nullptr)
 {}
 
-bool X11Common::SupportsCairo() const
-{
-    static bool bSupportsCairo = [this] {
-        Display *pDisplay = GetXDisplay();
-        int nDummy;
-        return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
-    }();
-    return bSupportsCairo;
-}
-
 // X11SalGraphics
 
 X11SalGraphics::X11SalGraphics():
@@ -236,7 +226,7 @@ void X11SalGraphics::Flush()
 
 bool X11SalGraphics::SupportsCairo() const
 {
-    return maX11Common.SupportsCairo();
+    return true;
 }
 
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const

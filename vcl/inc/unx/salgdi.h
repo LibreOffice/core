@@ -72,8 +72,6 @@ public:
 
     X11Common();
 
-    bool SupportsCairo() const;
-
     const SalColormap& GetColormap() const { return *m_pColormap; }
     const SalDisplay* GetDisplay() const { return GetColormap().GetDisplay(); }
     const SalVisual& GetVisual() const { return GetColormap().GetVisual(); }
