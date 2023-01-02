@@ -153,13 +153,7 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
 
 bool X11CairoSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-        case OutDevSupportType::B2DDraw:
-            return true;
-    }
-    return false;
+    return CairoCommon::supportsOperation(eType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

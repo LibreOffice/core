@@ -1112,6 +1112,17 @@ cairo_surface_t* CairoCommon::createCairoSurface(const BitmapBuffer* pBuffer)
     return target;
 }
 
+bool CairoCommon::supportsOperation(OutDevSupportType eType)
+{
+    switch (eType)
+    {
+        case OutDevSupportType::TransparentRect:
+        case OutDevSupportType::B2DDraw:
+            return true;
+    }
+    return false;
+}
+
 std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
 {
     if (pSrc == nullptr)

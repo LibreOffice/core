@@ -27,6 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/BitmapBuffer.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -171,6 +172,8 @@ struct VCL_DLLPUBLIC CairoCommon
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
+
+    static bool supportsOperation(OutDevSupportType eType);
 
 private:
     void doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop, sal_Int32 nExtentsRight,

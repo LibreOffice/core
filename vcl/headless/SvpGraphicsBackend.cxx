@@ -993,13 +993,7 @@ bool SvpGraphicsBackend::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPo
 
 bool SvpGraphicsBackend::supportsOperation(OutDevSupportType eType) const
 {
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-        case OutDevSupportType::B2DDraw:
-            return true;
-    }
-    return false;
+    return CairoCommon::supportsOperation(eType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
