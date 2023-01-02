@@ -233,6 +233,10 @@ frog, dogg, catt"""
                 change = xDialog.getChild('change')
                 change.executeAction("CLICK", ())
 
+            # fix UPSAN build
+            import time
+            time.sleep(0.2)
+
             output_text = document.Text.getString()
             self.assertEqual("Bad baad", output_text)
 
