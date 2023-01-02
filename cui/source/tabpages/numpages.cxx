@@ -510,11 +510,14 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
             SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
 
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
+            for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
-                Any aValueAny = xLevel->getByIndex(nLevel);
+                // use the last locale-defined level for all remaining levels.
+                sal_Int32 nLocaleLevel = std::min(nLevel, xLevel->getCount() - 1);
                 Sequence<PropertyValue> aLevelProps;
-                aValueAny >>= aLevelProps;
+                if (nLocaleLevel >= 0)
+                    xLevel->getByIndex(nLocaleLevel) >>= aLevelProps;
+
                 SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
                 rItemArr.push_back( std::unique_ptr<SvxNumSettings_Impl>(pNew) );
             }
