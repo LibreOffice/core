@@ -20,6 +20,7 @@
 #include <headless/CairoCommon.hxx>
 #include <dlfcn.h>
 #include <vcl/BitmapTools.hxx>
+#include <SalGradient.hxx>
 #include <svdata.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -883,6 +884,40 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
 
     // draw and consume
     cairo_stroke(cr);
+
+    return true;
+}
+
+bool CairoCommon::implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
+                                   basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                   SalGradient const& rGradient)
+{
+    basegfx::B2DHomMatrix rObjectToDevice;
+
+    for (auto const& rPolygon : rPolyPolygon)
+        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !bAntiAlias, false);
+
+    cairo_pattern_t* pattern
+        = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(),
+                                      rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
+
+    for (SalGradientStop const& rStop : rGradient.maStops)
+    {
+        double r = rStop.maColor.GetRed() / 255.0;
+        double g = rStop.maColor.GetGreen() / 255.0;
+        double b = rStop.maColor.GetBlue() / 255.0;
+        double a = rStop.maColor.GetAlpha() / 255.0;
+        double offset = rStop.mfOffset;
+
+        cairo_pattern_add_color_stop_rgba(pattern, offset, r, g, b, a);
+    }
+    cairo_set_source(cr, pattern);
+    cairo_pattern_destroy(pattern);
+
+    if (pExtents)
+        *pExtents = getClippedFillDamage(cr);
+
+    cairo_fill_preserve(cr);
 
     return true;
 }

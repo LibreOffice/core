@@ -286,7 +286,6 @@ public:
                     sal_uInt8 nTransparency ) override;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
-    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
 
 public:
     void Init() override;

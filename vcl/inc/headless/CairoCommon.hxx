@@ -45,6 +45,8 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
+struct SalGradient;
+
 VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale,
                                                      double y_scale);
 VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, double* x_scale,
@@ -158,6 +160,10 @@ struct VCL_DLLPUBLIC CairoCommon
                              double fLineWidth, const std::vector<double>* pStroke,
                              basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                              double fMiterMinimumAngle, bool bPixelSnapHairline);
+
+    static bool implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
+                                 basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                 SalGradient const& rGradient);
 
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source, cairo_operator_t eOp,
                           bool bAntiAlias);

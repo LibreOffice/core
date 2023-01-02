@@ -959,36 +959,15 @@ bool SvpGraphicsBackend::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPo
                                           SalGradient const& rGradient)
 {
     cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    basegfx::B2DHomMatrix rObjectToDevice;
-
-    for (auto const& rPolygon : rPolyPolygon)
-        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);
-
-    cairo_pattern_t* pattern
-        = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(),
-                                      rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
-
-    for (SalGradientStop const& rStop : rGradient.maStops)
-    {
-        double r = rStop.maColor.GetRed() / 255.0;
-        double g = rStop.maColor.GetGreen() / 255.0;
-        double b = rStop.maColor.GetBlue() / 255.0;
-        double a = rStop.maColor.GetAlpha() / 255.0;
-        double offset = rStop.mfOffset;
-
-        cairo_pattern_add_color_stop_rgba(pattern, offset, r, g, b, a);
-    }
-    cairo_set_source(cr, pattern);
-    cairo_pattern_destroy(pattern);
-
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-    cairo_fill_preserve(cr);
+    bool bRetVal(
+        CairoCommon::implDrawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
 
     m_rCairoCommon.releaseCairoContext(cr, true, extents);
 
-    return true;
+    return bRetVal;
 }
 
 bool SvpGraphicsBackend::supportsOperation(OutDevSupportType eType) const

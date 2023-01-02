@@ -1979,9 +1979,4 @@ bool X11SalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/, co
     return false;
 }
 
-bool X11SalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/, SalGradient const & /*rGradient*/)
-{
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
