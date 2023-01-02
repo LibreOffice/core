@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 {
     loadFromURL(u"tdf125885_WordArt.docx");
-    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers some basic properties.
 
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 {
     loadFromURL(u"tdf125885_WordArt2.docx");
-    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers whether theme color properties are correctly converted on import.
 
@@ -446,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 {
     loadFromURL(u"tdf125885_WordArt3.docx");
-    // Without the patch WordArt in text document was imported as rectangular custome shape with
+    // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers some aspects of import of gradient fill.
 
