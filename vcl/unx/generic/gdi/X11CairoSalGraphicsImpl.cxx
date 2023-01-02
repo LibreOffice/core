@@ -55,84 +55,76 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObje
         return true;
     }
 
-    // enable by setting to something
-    static const char* pUseCairoForPolygons(getenv("SAL_ENABLE_USE_CAIRO_FOR_POLYGONS"));
+    // snap to raster if requested
+    const bool bSnapPoints(!getAntiAlias());
 
-    if (nullptr != pUseCairoForPolygons && mrX11Common.SupportsCairo())
+    if (bSnapPoints)
     {
-        // snap to raster if requested
-        const bool bSnapPoints(!getAntiAlias());
-
-        if (bSnapPoints)
-        {
-            aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygon);
-        }
-
-        cairo_t* cr = mrX11Common.getCairoContext();
-        clipRegion(cr);
-
-        for (auto const& rPolygon : std::as_const(aPolyPolygon))
-        {
-            const sal_uInt32 nPointCount(rPolygon.count());
-
-            if (nPointCount)
-            {
-                const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
-
-                if (nEdgeCount)
-                {
-                    basegfx::B2DCubicBezier aEdge;
-
-                    for (sal_uInt32 b = 0; b < nEdgeCount; ++b)
-                    {
-                        rPolygon.getBezierSegment(b, aEdge);
-
-                        if (!b)
-                        {
-                            const basegfx::B2DPoint aStart(aEdge.getStartPoint());
-                            cairo_move_to(cr, aStart.getX(), aStart.getY());
-                        }
-
-                        const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
-
-                        if (aEdge.isBezier())
-                        {
-                            const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
-                            const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
-                            cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
-                                           aEnd.getX(), aEnd.getY());
-                        }
-                        else
-                        {
-                            cairo_line_to(cr, aEnd.getX(), aEnd.getY());
-                        }
-                    }
-
-                    cairo_close_path(cr);
-                }
-            }
-        }
-
-        if (SALCOLOR_NONE != mnFillColor)
-        {
-            cairo_set_source_rgba(cr, mnFillColor.GetRed() / 255.0, mnFillColor.GetGreen() / 255.0,
-                                  mnFillColor.GetBlue() / 255.0, 1.0 - fTransparency);
-            cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
-            cairo_fill_preserve(cr);
-        }
-
-        if (SALCOLOR_NONE != mnPenColor)
-        {
-            cairo_set_source_rgba(cr, mnPenColor.GetRed() / 255.0, mnPenColor.GetGreen() / 255.0,
-                                  mnPenColor.GetBlue() / 255.0, 1.0 - fTransparency);
-            cairo_stroke_preserve(cr);
-        }
-
-        X11Common::releaseCairoContext(cr);
-        return true;
+        aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygon);
     }
 
-    return X11SalGraphicsImpl::drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
+    cairo_t* cr = mrX11Common.getCairoContext();
+    clipRegion(cr);
+
+    for (auto const& rPolygon : std::as_const(aPolyPolygon))
+    {
+        const sal_uInt32 nPointCount(rPolygon.count());
+
+        if (nPointCount)
+        {
+            const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
+
+            if (nEdgeCount)
+            {
+                basegfx::B2DCubicBezier aEdge;
+
+                for (sal_uInt32 b = 0; b < nEdgeCount; ++b)
+                {
+                    rPolygon.getBezierSegment(b, aEdge);
+
+                    if (!b)
+                    {
+                        const basegfx::B2DPoint aStart(aEdge.getStartPoint());
+                        cairo_move_to(cr, aStart.getX(), aStart.getY());
+                    }
+
+                    const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
+
+                    if (aEdge.isBezier())
+                    {
+                        const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
+                        const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
+                        cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
+                                       aEnd.getX(), aEnd.getY());
+                    }
+                    else
+                    {
+                        cairo_line_to(cr, aEnd.getX(), aEnd.getY());
+                    }
+                }
+
+                cairo_close_path(cr);
+            }
+        }
+    }
+
+    if (SALCOLOR_NONE != mnFillColor)
+    {
+        cairo_set_source_rgba(cr, mnFillColor.GetRed() / 255.0, mnFillColor.GetGreen() / 255.0,
+                              mnFillColor.GetBlue() / 255.0, 1.0 - fTransparency);
+        cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+        cairo_fill_preserve(cr);
+    }
+
+    if (SALCOLOR_NONE != mnPenColor)
+    {
+        cairo_set_source_rgba(cr, mnPenColor.GetRed() / 255.0, mnPenColor.GetGreen() / 255.0,
+                              mnPenColor.GetBlue() / 255.0, 1.0 - fTransparency);
+        cairo_stroke_preserve(cr);
+    }
+
+    X11Common::releaseCairoContext(cr);
+    return true;
 }
 
 bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
