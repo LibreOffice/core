@@ -203,6 +203,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_lt),             60},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_gt),             62},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_amp),        38},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_apos),        39},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_quot),       34},
 
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_C_Agrave),        192},

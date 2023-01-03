@@ -150,6 +150,7 @@
 #define OOO_STRING_SVTOOLS_HTML_C_lt "lt"
 #define OOO_STRING_SVTOOLS_HTML_C_gt "gt"
 #define OOO_STRING_SVTOOLS_HTML_C_amp "amp"
+#define OOO_STRING_SVTOOLS_HTML_C_apos "apos"
 #define OOO_STRING_SVTOOLS_HTML_C_quot "quot"
 #define OOO_STRING_SVTOOLS_HTML_C_Aacute "Aacute"
 #define OOO_STRING_SVTOOLS_HTML_C_Agrave "Agrave"
