@@ -36,6 +36,10 @@
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#endif
+
 #define WHEEL_EVENT_FACTOR 1.5
 
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
@@ -215,6 +219,21 @@ static AquaSalFrame* getMouseContainerFrame()
     if( GetSalData() && GetSalData()->mpInstance )
     {
         SolarMutexGuard aGuard;
+
+#if HAVE_FEATURE_SKIA
+        // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
+        // The window will clear its background so when Skia/Metal is enabled,
+        // explicitly flush the Skia graphics to the window during live
+        // resizing or else nothing will be drawn until after live resizing
+        // has ended.
+        if ( [self inLiveResize] && SkiaHelper::isVCLSkiaEnabled() && mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        {
+            AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+            if ( pGraphics )
+                pGraphics->Flush();
+        }
+#endif
+
         [super displayIfNeeded];
     }
 }
@@ -317,7 +336,17 @@ static AquaSalFrame* getMouseContainerFrame()
     {
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
-        mpFrame->SendPaintEvent();
+
+        // Related: tdf#152703 Stop flicker with Skia/Metal while resizing
+        // When Skia/Metal is enabled, rapidly resizing a window has a
+        // noticeable amount of flicker so don't send any paint events during
+        // live resizing.
+        // Also, it appears that most of the LibreOffice layouts do not change
+        // their layout much during live resizing so apply this change when
+        // Skia is not enabled to ensure consistent behavior whether Skia is
+        // enabled or not.
+        if ( ![self inLiveResize] )
+            mpFrame->SendPaintEvent();
     }
 }
 
