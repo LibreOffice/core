@@ -815,7 +815,10 @@ bool SvpGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     return true;
 }
 
-bool SvpGraphicsBackend::hasFastDrawTransformedBitmap() const { return false; }
+bool SvpGraphicsBackend::hasFastDrawTransformedBitmap() const
+{
+    return CairoCommon::hasFastDrawTransformedBitmap();
+}
 
 bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                        tools::Long nHeight, sal_uInt8 nTransparency)

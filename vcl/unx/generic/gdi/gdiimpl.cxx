@@ -852,11 +852,6 @@ bool X11SalGraphicsImpl::drawTransformedBitmap(
     return false;
 }
 
-bool X11SalGraphicsImpl::hasFastDrawTransformedBitmap() const
-{
-    return false;
-}
-
 void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
                                Color nMaskColor )

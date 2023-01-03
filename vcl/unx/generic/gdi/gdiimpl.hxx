@@ -272,8 +272,6 @@ public:
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) override;
 
-    virtual bool hasFastDrawTransformedBitmap() const override;
-
 public:
     void Init() override;
 };

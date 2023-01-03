@@ -1278,6 +1278,8 @@ cairo_surface_t* CairoCommon::createCairoSurface(const BitmapBuffer* pBuffer)
     return target;
 }
 
+bool CairoCommon::hasFastDrawTransformedBitmap() { return false; }
+
 bool CairoCommon::supportsOperation(OutDevSupportType eType)
 {
     switch (eType)

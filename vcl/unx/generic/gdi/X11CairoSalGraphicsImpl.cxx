@@ -193,6 +193,11 @@ bool X11CairoSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const& rP
     return bRetval;
 }
 
+bool X11CairoSalGraphicsImpl::hasFastDrawTransformedBitmap() const
+{
+    return CairoCommon::hasFastDrawTransformedBitmap();
+}
+
 bool X11CairoSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
     return CairoCommon::supportsOperation(eType);

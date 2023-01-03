@@ -100,6 +100,8 @@ public:
     bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                           SalGradient const& rGradient) override;
 
+    virtual bool hasFastDrawTransformedBitmap() const override;
+
     virtual bool supportsOperation(OutDevSupportType eType) const override;
 };
 
