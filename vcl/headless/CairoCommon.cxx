@@ -567,7 +567,7 @@ cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
 
 void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
 {
-    if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
+    if (cairo_surface_get_content(cairo_get_target(cr)) == CAIRO_CONTENT_COLOR_ALPHA)
     {
         cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
                               aColor.GetBlue() / 255.0, 1.0 - fTransparency);

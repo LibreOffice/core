@@ -144,7 +144,7 @@ struct VCL_DLLPUBLIC CairoCommon
 
     cairo_t* createTmpCompatibleCairoContext() const;
 
-    void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
+    static void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 

@@ -112,7 +112,7 @@ void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
     m_rCairoCommon.clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
-    m_rCairoCommon.applyColor(cr, aColor, 0.0);
+    CairoCommon::applyColor(cr, aColor, 0.0);
     cairo_fill(cr);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
@@ -141,7 +141,7 @@ void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long 
 
     AddPolygonToPath(cr, aPoly, basegfx::B2DHomMatrix(), !getAntiAlias(), false);
 
-    m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aLineColor);
+    CairoCommon::applyColor(cr, m_rCairoCommon.m_aLineColor);
 
     basegfx::B2DRange extents = getClippedStrokeDamage(cr);
     extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
@@ -187,7 +187,7 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        CairoCommon::applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -317,7 +317,7 @@ bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
     {
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        CairoCommon::applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -333,7 +333,7 @@ bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
 
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
+        CairoCommon::applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
@@ -842,7 +842,7 @@ bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lo
     {
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        CairoCommon::applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
 
         // set FillDamage
         extents = getClippedFillDamage(cr);
@@ -860,7 +860,7 @@ bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lo
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
+        CairoCommon::applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
