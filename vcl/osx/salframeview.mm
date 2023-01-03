@@ -1843,7 +1843,7 @@ static AquaSalFrame* getMouseContainerFrame()
     // the returned position won't be anywhere near the text cursor. So,
     // dispatch an empty SalEvent::ExtTextInput event, fetch the position,
     // and then dispatch a SalEvent::EndExtTextInput event.
-    BOOL bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+    bool bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
     if ( bNeedsExtTextInput )
     {
         SalExtTextInputEvent aInputEvent;
