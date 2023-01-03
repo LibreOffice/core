@@ -19,7 +19,13 @@ $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		$(call gb_Rdb_get_target,uno_services) \
 		$(call gb_Rdb_get_target,ure/services) \
 		$(call gb_UnoApi_get_target,udkapi) \
-		$(if $(ENABLE_JAVA),$(call gb_Jar_get_target,testComponent))
+		$(if $(ENABLE_JAVA), \
+			$(call gb_Jar_get_target,java_uno) \
+			$(call gb_Jar_get_target,testComponent) \
+			$(call gb_Library_get_target,java_uno) \
+			$(call gb_Package_get_target,jvmfwk_javavendors) \
+			$(call gb_Package_get_target,jvmfwk_jreproperties) \
+			$(call gb_Package_get_target,jvmfwk_jvmfwk3_ini))
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
