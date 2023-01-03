@@ -1664,42 +1664,42 @@ bool ImplWriteDIB(
     const Size aSizePix(rSource.GetSizePixel());
     bool bRet(false);
 
-    if(aSizePix.Width() && aSizePix.Height())
+    if(!aSizePix.Width() || !aSizePix.Height())
+        return false;
+
+    Bitmap::ScopedReadAccess pAcc(const_cast< Bitmap& >(rSource));
+    Bitmap::ScopedReadAccess pAccAlpha;
+    const SvStreamEndian nOldFormat(rOStm.GetEndian());
+    const sal_uInt64 nOldPos(rOStm.Tell());
+
+    rOStm.SetEndian(SvStreamEndian::LITTLE);
+
+    if (pAcc)
     {
-        Bitmap::ScopedReadAccess pAcc(const_cast< Bitmap& >(rSource));
-        Bitmap::ScopedReadAccess pAccAlpha;
-        const SvStreamEndian nOldFormat(rOStm.GetEndian());
-        const sal_uInt64 nOldPos(rOStm.Tell());
-
-        rOStm.SetEndian(SvStreamEndian::LITTLE);
-
-        if (pAcc)
+        if(bFileHeader)
         {
-            if(bFileHeader)
-            {
-                if(ImplWriteDIBFileHeader(rOStm, *pAcc))
-                {
-                    bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
-                }
-            }
-            else
+            if(ImplWriteDIBFileHeader(rOStm, *pAcc))
             {
                 bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
             }
-
-            pAcc.reset();
         }
-
-        pAccAlpha.reset();
-
-        if(!bRet)
+        else
         {
-            rOStm.SetError(SVSTREAM_GENERALERROR);
-            rOStm.Seek(nOldPos);
+            bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
         }
 
-        rOStm.SetEndian(nOldFormat);
+        pAcc.reset();
     }
+
+    pAccAlpha.reset();
+
+    if(!bRet)
+    {
+        rOStm.SetError(SVSTREAM_GENERALERROR);
+        rOStm.Seek(nOldPos);
+    }
+
+    rOStm.SetEndian(nOldFormat);
 
     return bRet;
 }

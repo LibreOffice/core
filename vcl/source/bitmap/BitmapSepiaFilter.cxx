@@ -22,89 +22,78 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
-    bool bRet = false;
+    if (!pReadAcc)
+        return BitmapEx();
 
-    if (pReadAcc)
+    const sal_Int32 nSepia
+        = 10000 - 100 * std::clamp(mnSepiaPercent, sal_uInt16(0), sal_uInt16(100));
+    BitmapPalette aSepiaPal(256);
+
+    for (sal_uInt16 i = 0; i < 256; i++)
     {
-        const sal_Int32 nSepia
-            = 10000 - 100 * std::clamp(mnSepiaPercent, sal_uInt16(0), sal_uInt16(100));
-        BitmapPalette aSepiaPal(256);
+        BitmapColor& rCol = aSepiaPal[i];
+        const sal_uInt8 cSepiaValue = static_cast<sal_uInt8>(nSepia * i / 10000);
 
-        for (sal_uInt16 i = 0; i < 256; i++)
+        rCol.SetRed(static_cast<sal_uInt8>(i));
+        rCol.SetGreen(cSepiaValue);
+        rCol.SetBlue(cSepiaValue);
+    }
+
+    Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aSepiaPal);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return BitmapEx();
+
+    BitmapColor aCol(sal_uInt8(0));
+    const sal_Int32 nWidth = pWriteAcc->Width();
+    const sal_Int32 nHeight = pWriteAcc->Height();
+
+    if (pReadAcc->HasPalette())
+    {
+        const sal_uInt16 nPalCount = pReadAcc->GetPaletteEntryCount();
+        std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[nPalCount]);
+        for (sal_uInt16 i = 0; i < nPalCount; i++)
         {
-            BitmapColor& rCol = aSepiaPal[i];
-            const sal_uInt8 cSepiaValue = static_cast<sal_uInt8>(nSepia * i / 10000);
-
-            rCol.SetRed(static_cast<sal_uInt8>(i));
-            rCol.SetGreen(cSepiaValue);
-            rCol.SetBlue(cSepiaValue);
+            pIndexMap[i] = pReadAcc->GetPaletteColor(i).GetLuminance();
         }
 
-        Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aSepiaPal);
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if (pWriteAcc)
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
         {
-            BitmapColor aCol(sal_uInt8(0));
-            const sal_Int32 nWidth = pWriteAcc->Width();
-            const sal_Int32 nHeight = pWriteAcc->Height();
-
-            if (pReadAcc->HasPalette())
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
             {
-                const sal_uInt16 nPalCount = pReadAcc->GetPaletteEntryCount();
-                std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[nPalCount]);
-                for (sal_uInt16 i = 0; i < nPalCount; i++)
-                {
-                    pIndexMap[i] = pReadAcc->GetPaletteColor(i).GetLuminance();
-                }
-
-                for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                    {
-                        aCol.SetIndex(pIndexMap[pReadAcc->GetIndexFromData(pScanlineRead, nX)]);
-                        pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
-                    }
-                }
+                aCol.SetIndex(pIndexMap[pReadAcc->GetIndexFromData(pScanlineRead, nX)]);
+                pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
             }
-            else
-            {
-                for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                    {
-                        aCol.SetIndex(pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance());
-                        pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
         }
-
-        pReadAcc.reset();
-
-        if (bRet)
+    }
+    else
+    {
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
         {
-            const MapMode aMap(aBitmap.GetPrefMapMode());
-            const Size aPrefSize(aBitmap.GetPrefSize());
-
-            aBitmap = aNewBmp;
-
-            aBitmap.SetPrefMapMode(aMap);
-            aBitmap.SetPrefSize(aPrefSize);
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
+            {
+                aCol.SetIndex(pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance());
+                pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
+            }
         }
     }
 
-    if (bRet)
-        return BitmapEx(aBitmap);
+    pWriteAcc.reset();
+    pReadAcc.reset();
 
-    return BitmapEx();
+    const MapMode aMap(aBitmap.GetPrefMapMode());
+    const Size aPrefSize(aBitmap.GetPrefSize());
+
+    aBitmap = aNewBmp;
+
+    aBitmap.SetPrefMapMode(aMap);
+    aBitmap.SetPrefSize(aPrefSize);
+
+    return BitmapEx(aBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
