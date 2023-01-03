@@ -34,6 +34,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <fmtrfmrk.hxx>
 
 using namespace ::com::sun::star;
 
@@ -170,6 +171,53 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
         rJsonWriter.put("name", pMark->GetName());
     }
 }
+
+/// Implements getCommandValues(".uno:Fields").
+///
+/// Parameters:
+///
+/// - typeName: field type condition to not return all fields
+/// - namePrefix: field name prefix to not return all fields
+void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+               const std::map<OUString, OUString>& rArguments)
+{
+    OUString aTypeName;
+    {
+        auto it = rArguments.find("typeName");
+        if (it != rArguments.end())
+        {
+            aTypeName = it->second;
+        }
+    }
+    // See SwFieldTypeFromString().
+    if (aTypeName != "SetRef")
+    {
+        return;
+    }
+
+    OUString aNamePrefix;
+    {
+        auto it = rArguments.find("namePrefix");
+        if (it != rArguments.end())
+        {
+            aNamePrefix = it->second;
+        }
+    }
+
+    SwDoc* pDoc = pDocShell->GetDoc();
+    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("setRefs");
+    for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
+    {
+        const SwFormatRefMark* pRefMark = pDoc->GetRefMark(i);
+        if (!pRefMark->GetRefName().startsWith(aNamePrefix))
+        {
+            continue;
+        }
+
+        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        rJsonWriter.put("name", pRefMark->GetRefName());
+    }
+}
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
@@ -179,6 +227,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
     static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
     static constexpr OStringLiteral aBookmarks(".uno:Bookmarks");
+    static constexpr OStringLiteral aFields(".uno:Fields");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -213,6 +262,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     else if (o3tl::starts_with(rCommand, aBookmarks))
     {
         GetBookmarks(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aFields))
+    {
+        GetFields(rJsonWriter, m_pDocShell, aMap);
     }
 }
 
