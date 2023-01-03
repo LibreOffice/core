@@ -318,6 +318,35 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("bookmarks").count(""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("mycontent"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When getting the refmarks:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Fields?typeName=SetRef&namePrefix=ZOTERO_ITEM%20CSL_CITATION");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we get the 1 refmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (setRefs)
+    // i.e. the returned JSON was just empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("setRefs").count(""));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
