@@ -363,10 +363,12 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
             // color gets completely replaced, get it
             const basegfx::BColor aModifiedColor(
                 maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
-            aPolygon.transform(aLocalTransform);
 
-            // shortcut with local temporary instance
+            // use unit geometry as fallback object geometry. Do *not*
+            // transform, the below used method will use the already
+            // correctly initialized local ViewInformation
+            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+
             rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> xTemp(
                 new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
                                                              aModifiedColor));
