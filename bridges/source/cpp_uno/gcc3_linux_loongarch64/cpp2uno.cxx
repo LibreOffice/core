@@ -28,6 +28,7 @@
 #include "vtablefactory.hxx"
 #include "call.hxx"
 #include "share.hxx"
+#include "abi.hxx"
 
 #include <stdio.h>
 #include <string.h>
@@ -84,19 +85,25 @@ bool return_in_hidden_param(typelib_TypeDescriptionReference* pTypeRef)
 
 namespace
 {
-static typelib_TypeClass
-cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
-             const typelib_TypeDescription* pMemberTypeDescr,
-             typelib_TypeDescriptionReference* pReturnTypeRef, // 0 indicates void return
-             sal_Int32 nParams, typelib_MethodParameter* pParams, void** gpreg, void** fpreg,
-             void** ovrflw, sal_uInt64* pRegisterReturn /* space for register return */)
+static int cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
+                        const typelib_TypeDescription* pMemberTypeDescr,
+                        typelib_TypeDescriptionReference* pReturnTypeRef, // 0 indicates void return
+                        sal_Int32 nParams, typelib_MethodParameter* pParams, void** gpreg,
+                        void** fpreg, void** ovrflw,
+                        sal_uInt64* pRegisterReturn /* space for register return */)
 {
-    unsigned int nREG = 0;
+    sal_Int32 gCount = 0;
+    sal_Int32 fCount = 0;
+    sal_Int32 sp = 0;
 
     // return
     typelib_TypeDescription* pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET(&pReturnTypeDescr, pReturnTypeRef);
+    loongarch64::ReturnKind returnKind
+        = (pReturnTypeRef == nullptr || pReturnTypeRef->eTypeClass == typelib_TypeClass_VOID)
+              ? loongarch64::ReturnKind::RegistersInt
+              : loongarch64::getReturnKind(pReturnTypeRef);
 
     void* pUnoReturn = 0;
     void* pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
@@ -105,9 +112,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
     {
         if (CPPU_CURRENT_NAMESPACE::return_in_hidden_param(pReturnTypeRef))
         {
-            pCppReturn = gpreg[nREG]; // complex return via ptr (pCppReturn)
-            nREG++;
-
+            pCppReturn = gpreg[gCount++]; // complex return via ptr (pCppReturn)
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr)
                               ? alloca(pReturnTypeDescr->nSize)
                               : pCppReturn); // direct way
@@ -119,7 +124,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
     }
 
     // pop this
-    nREG++;
+    gCount++;
 
     // stack space
     static_assert(sizeof(void*) == sizeof(sal_Int64), "### unexpected size!");
@@ -147,31 +152,15 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
             {
                 case typelib_TypeClass_FLOAT:
                 case typelib_TypeClass_DOUBLE:
-                    if (nREG < MAX_FP_REGS)
-                    {
-                        pCppArgs[nPos] = &(fpreg[nREG]);
-                        pUnoArgs[nPos] = &(fpreg[nREG]);
-                    }
-                    else
-                    {
-                        pCppArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
-                        pUnoArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
-                    }
-                    nREG++;
+                    pCppArgs[nPos]
+                        = fCount != MAX_FP_REGS
+                              ? &(fpreg[fCount++])
+                              : (gCount != MAX_GP_REGS ? &(gpreg[gCount++]) : &(ovrflw[sp++]));
+                    pUnoArgs[nPos] = pCppArgs[nPos];
                     break;
-
                 default:
-                    if (nREG < MAX_GP_REGS)
-                    {
-                        pCppArgs[nPos] = &(gpreg[nREG]);
-                        pUnoArgs[nPos] = &(gpreg[nREG]);
-                    }
-                    else
-                    {
-                        pCppArgs[nPos] = &(ovrflw[nREG - MAX_GP_REGS]);
-                        pUnoArgs[nPos] = &(ovrflw[nREG - MAX_GP_REGS]);
-                    }
-                    nREG++;
+                    pCppArgs[nPos] = gCount == MAX_GP_REGS ? &(ovrflw[sp++]) : &(gpreg[gCount++]);
+                    pUnoArgs[nPos] = pCppArgs[nPos];
                     break;
             }
             // no longer needed
@@ -180,16 +169,8 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         else // ptr to complex value | ref
         {
             void* pCppStack;
-            if (nREG < MAX_GP_REGS)
-            {
-                pCppArgs[nPos] = pCppStack = gpreg[nREG];
-            }
-            else
-            {
-                pCppArgs[nPos] = pCppStack = ovrflw[nREG - MAX_GP_REGS];
-            }
-            nREG++;
-
+            pCppStack = gCount == MAX_GP_REGS ? ovrflw[sp++] : gpreg[gCount++];
+            pCppArgs[nPos] = pCppStack;
             if (!rParam.bIn) // is pure out
             {
                 // uno out is unconstructed mem!
@@ -240,7 +221,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         CPPU_CURRENT_NAMESPACE::raiseException(&aUnoExc, pThis->getBridge()->getUno2Cpp());
         // has to destruct the any
         // is here for dummy
-        return typelib_TypeClass_VOID;
+        return -1;
     }
     else // else no exception occurred...
     {
@@ -277,12 +258,17 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         }
         if (pReturnTypeDescr)
         {
-            typelib_TypeClass eRet = (typelib_TypeClass)pReturnTypeDescr->eTypeClass;
             TYPELIB_DANGER_RELEASE(pReturnTypeDescr);
-            return eRet;
         }
-        else
-            return typelib_TypeClass_VOID;
+        switch (returnKind)
+        {
+            case loongarch64::ReturnKind::RegistersIntFp:
+                return 0;
+            case loongarch64::ReturnKind::RegistersFpInt:
+                return 1;
+            default:
+                return -1;
+        }
     }
 }
 
@@ -290,9 +276,8 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
    * is called on incoming vtable calls
    * (called by asm snippets)
    */
-typelib_TypeClass cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, void** gpreg,
-                                  void** fpreg, void** ovrflw,
-                                  sal_uInt64* pRegisterReturn /* space for register return */)
+int cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, void** gpreg, void** fpreg,
+                    void** ovrflw, sal_uInt64* pRegisterReturn /* space for register return */)
 {
     static_assert(sizeof(sal_Int64) == sizeof(void*), "### unexpected!");
 
@@ -331,7 +316,7 @@ typelib_TypeClass cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOff
 
     TypeDescription aMemberDescr(pTypeDescr->ppAllMembers[nMemberPos]);
 
-    typelib_TypeClass eRet;
+    int eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -367,11 +352,11 @@ typelib_TypeClass cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOff
             {
                 case 1: // acquire()
                     pCppI->acquireProxy(); // non virtual call!
-                    eRet = typelib_TypeClass_VOID;
+                    eRet = -1;
                     break;
                 case 2: // release()
                     pCppI->releaseProxy(); // non virtual call!
-                    eRet = typelib_TypeClass_VOID;
+                    eRet = -1;
                     break;
                 case 0: // queryInterface() opt
                 {
@@ -394,7 +379,7 @@ typelib_TypeClass cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOff
                             TYPELIB_DANGER_RELEASE(pTD);
 
                             reinterpret_cast<void**>(pRegisterReturn)[0] = gpreg[0];
-                            eRet = typelib_TypeClass_ANY;
+                            eRet = -1;
                             break;
                         }
                         TYPELIB_DANGER_RELEASE(pTD);

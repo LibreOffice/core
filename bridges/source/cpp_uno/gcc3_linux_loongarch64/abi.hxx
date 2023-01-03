@@ -19,15 +19,33 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <typelib/typedescription.hxx>
 
-#include <sal/types.h>
+#define MAX_GP_REGS 8
+#define MAX_FP_REGS 8
 
-namespace
+namespace loongarch64
 {
-extern "C" int cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, void** gpreg,
-                               void** fpreg, void** ovrflw,
-                               sal_uInt64* pRegisterReturn /* space for register return */);
-}
+enum class ReturnKind
+{
+    RegistersInt,
+    RegistersFp,
+    RegistersFpInt,
+    RegistersIntFp
+};
+typedef struct Registers
+{
+    bool priorInt;
+    bool priorFp;
+    int nr_fp;
+    int nr_int;
+} Registers;
+int flatten_struct(typelib_TypeDescription* pTypeDescr, Registers& regs);
+
+ReturnKind getReturnKind(typelib_TypeDescriptionReference* type);
+
+void fillReturn(typelib_TypeDescriptionReference* pTypeRef, sal_Int64* gret, double* fret,
+                void* pRegisterReturn);
+} // namespace loongarch64
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

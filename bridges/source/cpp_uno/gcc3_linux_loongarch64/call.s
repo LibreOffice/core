@@ -30,6 +30,9 @@ privateSnippetExecutor:
         st.d	$ra,$sp,152
         .cfi_offset 1, -8
 .LEHB0 = .
+	// Clear return value space
+	st.d	$zero,$sp,0
+	st.d	$zero,$sp,8
         // Save the float point registers
         fst.d	$f0,$sp,80
         fst.d	$f1,$sp,88
@@ -67,11 +70,21 @@ privateSnippetExecutor:
 
 .LEHE0 = .
         // Perform return value
+	beq	$a0,$zero,.Lintfp
+	blt	$zero,$a0,.Lfpint
         fld.d	$f0,$sp,0
         fld.d	$f1,$sp,8
         ld.d	$a0,$sp,0
         ld.d	$a1,$sp,8
-
+	b	.Lfinish
+.Lintfp:
+	ld.d	$a0,$sp,0
+	fld.d	$f0,$sp,8
+	b	.Lfinish
+.Lfpint:
+	fld.d	$f0,$sp,0
+	ld.d	$a0,$sp,8
+.Lfinish:
         ld.d	$ra,$sp,152
         .cfi_restore 1
         addi.d	$sp,$sp,160
