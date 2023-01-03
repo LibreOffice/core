@@ -500,6 +500,65 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
+{
+    loadFromURL(u"tdf152840_WordArt_non_accent_color.docx");
+    // The file contains WordArt which uses the theme colors "Background 1", "Text 1", "Background 2"
+    // and "Text 2".
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // The ID for the theme colors is not yet in API, but definied in enum PredefinedClrSchemeID
+    // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used, and the color
+    // was Black (=0).
+
+    // background 1 = lt1 = ID 1
+    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)), xShape0Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 204, 153)),
+                         xShape0Props->getPropertyValue(u"FillColor"));
+
+    // text 1 = dk1 = ID 0
+    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)), xShape1Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 0, 0)), xShape1Props->getPropertyValue(u"FillColor"));
+
+    // background 2 = lt2 = ID 3
+    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xShape2Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(235, 221, 195)),
+                         xShape2Props->getPropertyValue(u"FillColor"));
+
+    // text 2 = dk2 = ID 2
+    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)), xShape3Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(119, 95, 85)),
+                         xShape3Props->getPropertyValue(u"FillColor"));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
+{
+    loadFromURL(u"tdf152840_theme_color_non_accent.docx");
+    // The file contains shapes which uses the theme colors "bg2", "bg1", "tx1" and "tx2" in this
+    // order as fill color.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // The ID for the theme colors is not yet in API, but definied in enum PredefinedClrSchemeID
+    // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used.
+    uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xShape0Props->getPropertyValue(u"FillColorTheme"));
+    uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)), xShape1Props->getPropertyValue(u"FillColorTheme"));
+    uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)), xShape2Props->getPropertyValue(u"FillColorTheme"));
+    uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)), xShape3Props->getPropertyValue(u"FillColorTheme"));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

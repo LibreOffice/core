@@ -715,7 +715,11 @@ sal_Int16 Color::getSchemeColorIndex() const
     static std::map<OUString, sal_Int32> const aSchemeColorNameToIndex{
         { "dk1", 0 },     { "lt1", 1 },     { "dk2", 2 },     { "lt2", 3 },
         { "accent1", 4 }, { "accent2", 5 }, { "accent3", 6 }, { "accent4", 7 },
-        { "accent5", 8 }, { "accent6", 9 }, { "hlink", 10 },  { "folHlink", 11 }
+        { "accent5", 8 }, { "accent6", 9 }, { "hlink", 10 },  { "folHlink", 11 },
+        { "tx1", 0 },     { "bg1", 1 },     { "tx2", 2 },     { "bg2", 3 },
+        { "dark1", 0},    { "light1", 1},   { "dark2", 2 },   { "light2", 3 },
+        { "text1", 0 }, { "background1", 1 }, { "text2", 2 }, { "background2", 3 },
+        { "hyperlink", 10 }, { "followedHyperlink", 11}
     };
 
     auto aIt = aSchemeColorNameToIndex.find(msSchemeName);

@@ -80,6 +80,16 @@ bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, ::Color& rColor ) const
         case XML_bg2 : nSchemeClrToken = XML_lt2; break;
         case XML_tx1 : nSchemeClrToken = XML_dk1; break;
         case XML_tx2 : nSchemeClrToken = XML_dk2; break;
+        case XML_background1 : nSchemeClrToken = XML_lt1; break;
+        case XML_background2 : nSchemeClrToken = XML_lt2; break;
+        case XML_text1 : nSchemeClrToken = XML_dk1; break;
+        case XML_text2 : nSchemeClrToken = XML_dk2; break;
+        case XML_light1 : nSchemeClrToken = XML_lt1; break;
+        case XML_light2 : nSchemeClrToken = XML_lt2; break;
+        case XML_dark1 : nSchemeClrToken = XML_dk1; break;
+        case XML_dark2 : nSchemeClrToken = XML_dk2; break;
+        case XML_hyperlink : nSchemeClrToken = XML_hlink; break;
+        case XML_followedHyperlink: nSchemeClrToken = XML_folHlink; break;
     }
 
     auto aIter = std::find_if(maClrScheme.begin(), maClrScheme.end(), find_by_token(nSchemeClrToken) );
