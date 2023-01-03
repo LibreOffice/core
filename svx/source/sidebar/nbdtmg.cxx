@@ -590,11 +590,14 @@ void OutlineTypeMgr::Init()
             pItemArr->sDescription = SvxResId( TranslateId(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpContext, id.getStr()) );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
+            for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
-                Any aValueAny = xLevel->getByIndex(nLevel);
+                // use the last locale-defined level for all remaining levels.
+                sal_Int32 nLocaleLevel = std::min(nLevel, xLevel->getCount() - 1);
                 Sequence<PropertyValue> aLevelProps;
-                aValueAny >>= aLevelProps;
+                if (nLocaleLevel >= 0)
+                    xLevel->getByIndex(nLocaleLevel) >>= aLevelProps;
+
                 NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
                 const SvxNumberFormat& aNumFmt( aDefNumRule.GetLevel( nLevel) );
                 pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
@@ -618,7 +621,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     {
         bool bNotMatch = false;
         OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[iDex];
-        sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
+        sal_uInt16 nCount = pItemArr ? pItemArr->pNumSettingsArr->size() : 0;
         for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
         {
             NumSettings_Impl* _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
@@ -633,7 +636,9 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                 sal_UCS4 cChar = aFmt.GetBulletChar();
 
                 sal_UCS4 ccChar
-                    = _pSet->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
+                    = _pSet->sBulletChar.isEmpty()
+                          ? 0
+                          : _pSet->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 
                 if ( !((cChar == ccChar) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
