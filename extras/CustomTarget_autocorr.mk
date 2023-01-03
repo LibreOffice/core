@@ -134,6 +134,7 @@ extras_AUTOCORR_XMLFILES := \
 	hu/META-INF/manifest.xml \
 	hu/SentenceExceptList.xml \
 	hu/WordExceptList.xml \
+	is/DocumentList.xml \
 	is/META-INF/manifest.xml \
 	is/SentenceExceptList.xml \
 	it/DocumentList.xml \
