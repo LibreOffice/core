@@ -876,83 +876,16 @@ bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lo
 bool SvpGraphicsBackend::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                       const Gradient& rGradient)
 {
-    if (rGradient.GetStyle() != GradientStyle::Linear
-        && rGradient.GetStyle() != GradientStyle::Radial)
-        return false; // unsupported
-    if (rGradient.GetSteps() != 0)
-        return false; // We can't tell cairo how many colors to use in the gradient.
-
     cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    tools::Rectangle aInputRect(rPolyPolygon.GetBoundRect());
-    if (rPolyPolygon.IsRect())
-    {
-        // Rect->Polygon conversion loses the right and bottom edge, fix that.
-        aInputRect.AdjustRight(1);
-        aInputRect.AdjustBottom(1);
-        basegfx::B2DHomMatrix rObjectToDevice;
-        AddPolygonToPath(cr, tools::Polygon(aInputRect).getB2DPolygon(), rObjectToDevice,
-                         !getAntiAlias(), false);
-    }
-    else
-    {
-        basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon.getB2DPolyPolygon());
-        for (auto const& rPolygon : std::as_const(aB2DPolyPolygon))
-        {
-            basegfx::B2DHomMatrix rObjectToDevice;
-            AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);
-        }
-    }
-
-    Gradient aGradient(rGradient);
-
-    tools::Rectangle aBoundRect;
-    Point aCenter;
-
-    aGradient.SetAngle(aGradient.GetAngle() + 2700_deg10);
-    aGradient.GetBoundRect(aInputRect, aBoundRect, aCenter);
-    Color aStartColor = aGradient.GetStartColor();
-    Color aEndColor = aGradient.GetEndColor();
-
-    cairo_pattern_t* pattern;
-    if (rGradient.GetStyle() == GradientStyle::Linear)
-    {
-        tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
-        pattern
-            = cairo_pattern_create_linear(aPoly[0].X(), aPoly[0].Y(), aPoly[1].X(), aPoly[1].Y());
-    }
-    else
-    {
-        double radius = std::max(aBoundRect.GetWidth() / 2.0, aBoundRect.GetHeight() / 2.0);
-        // Move the center a bit to the top-left (the default VCL algorithm is a bit off-center that way,
-        // cairo is the opposite way).
-        pattern = cairo_pattern_create_radial(aCenter.X() - 0.5, aCenter.Y() - 0.5, 0,
-                                              aCenter.X() - 0.5, aCenter.Y() - 0.5, radius);
-        std::swap(aStartColor, aEndColor);
-    }
-
-    cairo_pattern_add_color_stop_rgba(
-        pattern, aGradient.GetBorder() / 100.0,
-        aStartColor.GetRed() * aGradient.GetStartIntensity() / 25500.0,
-        aStartColor.GetGreen() * aGradient.GetStartIntensity() / 25500.0,
-        aStartColor.GetBlue() * aGradient.GetStartIntensity() / 25500.0, 1.0);
-
-    cairo_pattern_add_color_stop_rgba(
-        pattern, 1.0, aEndColor.GetRed() * aGradient.GetEndIntensity() / 25500.0,
-        aEndColor.GetGreen() * aGradient.GetEndIntensity() / 25500.0,
-        aEndColor.GetBlue() * aGradient.GetEndIntensity() / 25500.0, 1.0);
-
-    cairo_set_source(cr, pattern);
-    cairo_pattern_destroy(pattern);
-
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-    cairo_fill_preserve(cr);
+    const bool bRetval(
+        CairoCommon::drawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
 
     m_rCairoCommon.releaseCairoContext(cr, true, extents);
 
-    return true;
+    return bRetval;
 }
 
 bool SvpGraphicsBackend::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,

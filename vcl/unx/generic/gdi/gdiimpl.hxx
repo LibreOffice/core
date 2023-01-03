@@ -285,8 +285,6 @@ public:
                     tools::Long nWidth, tools::Long nHeight,
                     sal_uInt8 nTransparency ) override;
 
-    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
-
 public:
     void Init() override;
 };

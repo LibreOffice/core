@@ -151,6 +151,20 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
     return bRetval;
 }
 
+bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
+                                           const Gradient& rGradient)
+{
+    cairo_t* cr = mrX11Common.getCairoContext();
+    clipRegion(cr);
+
+    const bool bRetval(
+        CairoCommon::drawGradient(cr, nullptr, getAntiAlias(), rPolyPolygon, rGradient));
+
+    X11Common::releaseCairoContext(cr);
+
+    return bRetval;
+}
+
 bool X11CairoSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                                                SalGradient const& rGradient)
 {

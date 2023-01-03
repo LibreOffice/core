@@ -86,6 +86,8 @@ public:
                       css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                       bool bPixelSnapHairline) override;
 
+    bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
+
     bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                           SalGradient const& rGradient) override;
 
