@@ -24,9 +24,6 @@
 #include <exception>
 #include <cstddef>
 
-#define MAX_GP_REGS (8)
-#define MAX_FP_REGS (8)
-
 namespace CPPU_CURRENT_NAMESPACE
 {
 void dummy_can_throw_anything(char const*);

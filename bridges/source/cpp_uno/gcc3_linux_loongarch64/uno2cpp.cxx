@@ -36,108 +36,22 @@
 #include "vtables.hxx"
 
 #include "share.hxx"
-
-#define INSERT_FLOAT_DOUBLE(pSV, nr, pFPR, pDS)                                                    \
-    if (nr < MAX_FP_REGS)                                                                          \
-        pFPR[nr++] = *reinterpret_cast<double*>(pSV);                                              \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_uInt64*>(pSV); // verbatim!
-
-#define INSERT_INT64(pSV, nr, pGPR, pDS)                                                           \
-    if (nr < MAX_GP_REGS)                                                                          \
-        pGPR[nr++] = *reinterpret_cast<sal_Int64*>(pSV);                                           \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_Int64*>(pSV);
-
-#define INSERT_INT32(pSV, nr, pGPR, pDS)                                                           \
-    if (nr < MAX_GP_REGS)                                                                          \
-        pGPR[nr++] = *reinterpret_cast<sal_Int32*>(pSV);                                           \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_Int32*>(pSV);
-
-#define INSERT_INT16(pSV, nr, pGPR, pDS)                                                           \
-    if (nr < MAX_GP_REGS)                                                                          \
-        pGPR[nr++] = *reinterpret_cast<sal_Int16*>(pSV);                                           \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_Int16*>(pSV);
-
-#define INSERT_UINT16(pSV, nr, pGPR, pDS)                                                          \
-    if (nr < MAX_GP_REGS)                                                                          \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt16*>(pSV);                                          \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_uInt16*>(pSV);
-
-#define INSERT_INT8(pSV, nr, pGPR, pDS)                                                            \
-    if (nr < MAX_GP_REGS)                                                                          \
-        pGPR[nr++] = *reinterpret_cast<sal_Int8*>(pSV);                                            \
-    else                                                                                           \
-        *pDS++ = *reinterpret_cast<sal_Int8*>(pSV);
+#include "abi.hxx"
 
 using namespace ::com::sun::star::uno;
 
 namespace
 {
-bool isReturnInFPR(const typelib_TypeDescription* pTypeDescr, sal_uInt32& nSize)
+void pushArgs(unsigned long value, unsigned long* const stack, sal_Int32* const sp,
+              unsigned long* const regs, sal_Int32* const nregs)
 {
-    const typelib_CompoundTypeDescription* p
-        = reinterpret_cast<const typelib_CompoundTypeDescription*>(pTypeDescr);
-
-    for (sal_Int32 i = 0; i < p->nMembers; ++i)
-    {
-        typelib_TypeDescriptionReference* pTypeInStruct = p->ppTypeRefs[i];
-
-        switch (pTypeInStruct->eTypeClass)
-        {
-            case typelib_TypeClass_STRUCT:
-            case typelib_TypeClass_EXCEPTION:
-            {
-                typelib_TypeDescription* t = 0;
-                TYPELIB_DANGER_GET(&t, pTypeInStruct);
-                bool isFPR = isReturnInFPR(t, nSize);
-                TYPELIB_DANGER_RELEASE(t);
-                if (!isFPR)
-                    return false;
-            }
-            break;
-            case typelib_TypeClass_FLOAT:
-            case typelib_TypeClass_DOUBLE:
-                if (nSize >= 16)
-                    return false;
-                nSize += 8;
-                break;
-            default:
-                return false;
-        }
-    }
-    return true;
-}
-
-void fillReturn(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, double* fret,
-                void* pRegisterReturn)
-{
-    sal_uInt32 nSize = 0;
-    if (isReturnInFPR(pTypeDescr, nSize))
-    {
-        reinterpret_cast<double*>(pRegisterReturn)[0] = fret[0];
-        reinterpret_cast<double*>(pRegisterReturn)[1] = fret[1];
-    }
-    else
-    {
-        reinterpret_cast<sal_Int64*>(pRegisterReturn)[0] = gret[0];
-        reinterpret_cast<sal_Int64*>(pRegisterReturn)[1] = gret[1];
-    }
+    (*nregs != 8 ? regs[(*nregs)++] : stack[(*sp)++]) = value;
 }
 
 static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, void* pRegisterReturn,
                               typelib_TypeDescriptionReference* pReturnTypeRef, bool bSimpleReturn,
-                              sal_uInt64* pStack, sal_uInt32 nStack, sal_uInt64* pGPR, double* pFPR,
-                              sal_uInt32 nREG)
+                              sal_uInt64* pStack, sal_uInt32 nStack, sal_uInt64* pGPR, double* pFPR)
 {
-    // Should not happen, but...
-    static_assert(MAX_GP_REGS == MAX_FP_REGS, "must be the same size");
-    if (nREG > MAX_GP_REGS)
-        nREG = MAX_GP_REGS;
-
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64*)pAdjustedThisPtr);
     pMethod += 8 * nVtableIndex;
@@ -211,10 +125,7 @@ static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, vo
             sal_Int32 const nRetSize = pReturnTypeRef->pType->nSize;
             if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
             {
-                typelib_TypeDescription* pTypeDescr = 0;
-                TYPELIB_DANGER_GET(&pTypeDescr, pReturnTypeRef);
-                fillReturn(pTypeDescr, gret, fret, pRegisterReturn);
-                TYPELIB_DANGER_RELEASE(pTypeDescr);
+                loongarch64::fillReturn(pReturnTypeRef, gret, fret, pRegisterReturn);
             }
             break;
         }
@@ -232,10 +143,12 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
     // max space for: [complex ret ptr], values|ptr ...
     sal_uInt64* pStack = (sal_uInt64*)__builtin_alloca(((nParams + 3) * sizeof(sal_Int64)));
     sal_uInt64* pStackStart = pStack;
+    sal_Int32 sp = 0;
 
     sal_uInt64 pGPR[MAX_GP_REGS];
+    sal_Int32 gCount = 0;
     double pFPR[MAX_FP_REGS];
-    sal_uInt32 nREG = 0;
+    sal_Int32 fCount = 0;
 
     // return
     typelib_TypeDescription* pReturnTypeDescr = 0;
@@ -254,7 +167,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
             pCppReturn = bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr)
                              ? __builtin_alloca(pReturnTypeDescr->nSize)
                              : pUnoReturn;
-            INSERT_INT64(&pCppReturn, nREG, pGPR, pStack);
+            pGPR[gCount++] = reinterpret_cast<unsigned long>(pCppReturn);
         }
         else
         {
@@ -264,7 +177,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
 
     // push this
     void* pAdjustedThisPtr = reinterpret_cast<void**>(pThis->getCppI()) + aVtableSlot.offset;
-    INSERT_INT64(&pAdjustedThisPtr, nREG, pGPR, pStack);
+    pGPR[gCount++] = reinterpret_cast<unsigned long>(pAdjustedThisPtr);
 
     // args
     void** pCppArgs = (void**)alloca(3 * sizeof(void*) * nParams);
@@ -290,30 +203,49 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
             switch (pParamTypeDescr->eTypeClass)
             {
                 case typelib_TypeClass_LONG:
-                case typelib_TypeClass_UNSIGNED_LONG:
-                    INSERT_INT64(pCppArgs[nPos], nREG, pGPR, pStack);
-                    break;
                 case typelib_TypeClass_ENUM:
-                    INSERT_INT32(pCppArgs[nPos], nREG, pGPR, pStack);
+                    pushArgs(*static_cast<sal_Int32*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
+                    break;
+                case typelib_TypeClass_UNSIGNED_LONG:
+                    pushArgs(*static_cast<sal_uInt32*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_CHAR:
+                    pushArgs(*static_cast<sal_Unicode*>(pCppArgs[nPos]), pStack, &sp, pGPR,
+                             &gCount);
+                    break;
                 case typelib_TypeClass_SHORT:
-                    INSERT_INT16(pCppArgs[nPos], nREG, pGPR, pStack);
+                    pushArgs(*static_cast<sal_Int16*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_UNSIGNED_SHORT:
-                    INSERT_UINT16(pCppArgs[nPos], nREG, pGPR, pStack);
+                    pushArgs(*static_cast<sal_uInt16*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_BOOLEAN:
+                    pushArgs(static_cast<unsigned long>(*static_cast<sal_Bool*>(pCppArgs[nPos])),
+                             pStack, &sp, pGPR, &gCount);
+                    break;
                 case typelib_TypeClass_BYTE:
-                    INSERT_INT8(pCppArgs[nPos], nREG, pGPR, pStack);
+                    pushArgs(*static_cast<sal_Int8*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_FLOAT:
                 case typelib_TypeClass_DOUBLE:
-                    INSERT_FLOAT_DOUBLE(pCppArgs[nPos], nREG, pFPR, pStack);
+                    if (fCount != MAX_FP_REGS)
+                    {
+                        pFPR[fCount++] = *static_cast<double*>(pCppArgs[nPos]);
+                    }
+                    else if (gCount != MAX_GP_REGS)
+                    {
+                        pGPR[gCount++] = *static_cast<unsigned long*>(pCppArgs[nPos]);
+                    }
+                    else
+                    {
+                        pStack[sp++] = *static_cast<unsigned long*>(pCppArgs[nPos]);
+                    }
                     break;
                 case typelib_TypeClass_HYPER:
+                    pushArgs(*static_cast<sal_Int64*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
+                    break;
                 case typelib_TypeClass_UNSIGNED_HYPER:
-                    INSERT_INT64(pCppArgs[nPos], nREG, pGPR, pStack);
+                    pushArgs(*static_cast<sal_uInt64*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 default:
                     break;
@@ -349,7 +281,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
                 // no longer needed
                 TYPELIB_DANGER_RELEASE(pParamTypeDescr);
             }
-            INSERT_INT64(&(pCppArgs[nPos]), nREG, pGPR, pStack);
+            pushArgs(reinterpret_cast<unsigned long>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
         }
     }
 
@@ -358,7 +290,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
         try
         {
             callVirtualMethod(pAdjustedThisPtr, aVtableSlot.index, pCppReturn, pReturnTypeRef,
-                              bSimpleReturn, pStackStart, (pStack - pStackStart), pGPR, pFPR, nREG);
+                              bSimpleReturn, pStackStart, sp, pGPR, pFPR);
         }
         catch (css::uno::Exception&)
         {
