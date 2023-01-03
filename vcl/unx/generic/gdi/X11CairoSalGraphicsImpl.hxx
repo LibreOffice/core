@@ -86,6 +86,15 @@ public:
                       css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                       bool bPixelSnapHairline) override;
 
+    /** Render solid rectangle with given transparency
+
+        @param nTransparency
+        Transparency value (0-255) to use. 0 blits and opaque, 255 a
+        fully transparent rectangle
+     */
+    bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                       sal_uInt8 nTransparency) override;
+
     bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
     bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,

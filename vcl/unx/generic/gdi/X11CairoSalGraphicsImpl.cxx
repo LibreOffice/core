@@ -151,6 +151,20 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
     return bRetval;
 }
 
+bool X11CairoSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                            tools::Long nHeight, sal_uInt8 nTransparency)
+{
+    cairo_t* cr = mrX11Common.getCairoContext();
+    clipRegion(cr);
+
+    const bool bRetval(CairoCommon::drawAlphaRect(cr, nullptr, mnPenColor, mnFillColor, nX, nY,
+                                                  nWidth, nHeight, nTransparency));
+
+    X11Common::releaseCairoContext(cr);
+
+    return bRetval;
+}
+
 bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                            const Gradient& rGradient)
 {

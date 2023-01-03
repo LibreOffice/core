@@ -888,6 +888,59 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     return true;
 }
 
+bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                                const Color& rFillColor, tools::Long nX, tools::Long nY,
+                                tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
+{
+    const bool bHasFill(rFillColor != SALCOLOR_NONE);
+    const bool bHasLine(rLineColor != SALCOLOR_NONE);
+
+    if (!bHasFill && !bHasLine)
+        return true;
+
+    const double fTransparency = nTransparency * (1.0 / 100);
+
+    if (bHasFill)
+    {
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+        applyColor(cr, rFillColor, fTransparency);
+
+        if (pExtents)
+        {
+            // set FillDamage
+            *pExtents = getClippedFillDamage(cr);
+        }
+
+        cairo_fill(cr);
+    }
+
+    if (bHasLine)
+    {
+        // PixelOffset used: Set PixelOffset as linear transformation
+        // Note: Was missing here - probably not by purpose (?)
+        cairo_matrix_t aMatrix;
+        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
+        cairo_set_matrix(cr, &aMatrix);
+
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+        applyColor(cr, rLineColor, fTransparency);
+
+        if (pExtents)
+        {
+            // expand with possible StrokeDamage
+            basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+            stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+            pExtents->expand(stroke_extents);
+        }
+
+        cairo_stroke(cr);
+    }
+
+    return true;
+}
+
 bool CairoCommon::drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
                                const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
 {

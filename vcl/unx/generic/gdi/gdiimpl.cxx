@@ -857,35 +857,6 @@ bool X11SalGraphicsImpl::hasFastDrawTransformedBitmap() const
     return false;
 }
 
-bool X11SalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                    tools::Long nHeight, sal_uInt8 nTransparency )
-{
-    if( ! mrParent.m_pFrame && ! mrParent.m_pVDev )
-        return false;
-
-    if( mbPenGC || !mbBrushGC || mbXORMode )
-        return false; // can only perform solid fills without XOR.
-
-    if( mrParent.m_pVDev && static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetDepth() < 8 )
-        return false;
-
-    Picture aDstPic = GetXRenderPicture();
-    if( !aDstPic )
-        return false;
-
-    const double fTransparency = (100 - nTransparency) * (1.0/100);
-    const XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency);
-
-    XRenderPeer& rPeer = XRenderPeer::GetInstance();
-    rPeer.FillRectangle( PictOpOver,
-                         aDstPic,
-                         &aRenderColor,
-                         nX, nY,
-                         nWidth, nHeight );
-
-    return true;
-}
-
 void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
                                Color nMaskColor )

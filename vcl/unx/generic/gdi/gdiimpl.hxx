@@ -274,17 +274,6 @@ public:
 
     virtual bool hasFastDrawTransformedBitmap() const override;
 
-    /** Render solid rectangle with given transparency
-
-        @param nTransparency
-        Transparency value (0-255) to use. 0 blits and opaque, 255 a
-        fully transparent rectangle
-     */
-    virtual bool drawAlphaRect(
-                    tools::Long nX, tools::Long nY,
-                    tools::Long nWidth, tools::Long nHeight,
-                    sal_uInt8 nTransparency ) override;
-
 public:
     void Init() override;
 };

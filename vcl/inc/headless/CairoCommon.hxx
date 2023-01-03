@@ -162,6 +162,10 @@ struct VCL_DLLPUBLIC CairoCommon
                              basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                              double fMiterMinimumAngle, bool bPixelSnapHairline);
 
+    static bool drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                              const Color& rFillColor, tools::Long nX, tools::Long nY,
+                              tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency);
+
     static bool drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
                              const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient);
 
