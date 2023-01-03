@@ -708,6 +708,12 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 aFillColor = static_cast<sal_Int32>(
                     rCharProps.maFillProperties.maFillColor.getColor(rFilter.getGraphicHelper())
                         .GetRGBColor());
+                if (rCharProps.maFillProperties.maFillColor.hasTransparency())
+                {
+                    const sal_Int16 aTransparence
+                        = rCharProps.maFillProperties.maFillColor.getTransparency();
+                    xSet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(aTransparence));
+                }
             }
             xSet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(aFillColor));
 
