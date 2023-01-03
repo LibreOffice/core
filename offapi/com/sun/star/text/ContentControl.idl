@@ -94,7 +94,7 @@ service ContentControl
 
     /** The appearance: just remembered.
 
-        @since LibreOffice 7.5
+        @since LibreOffice 7.6
     */
     [optional, property] string Appearance;
 
