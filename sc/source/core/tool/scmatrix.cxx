@@ -64,10 +64,18 @@ struct matrix_trait
 
     typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
+struct matrix_flag_trait
+{
+    typedef sc::string_block string_element_block;
+    typedef mdds::mtv::uint8_element_block integer_element_block;
+
+    typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
+};
 
 }
 
 typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
+typedef mdds::multi_type_matrix<matrix_flag_trait> MatrixFlagImplType;
 
 namespace {
 
@@ -218,16 +226,14 @@ Comp CompareMatrixElemFunc<Comp>::maComp;
 
 }
 
-/* TODO: it would be good if mdds had get/set<sal_uInt8> additionally to
- * get/set<bool>, we're abusing double here. */
-typedef double TMatFlag;
-const TMatFlag SC_MATFLAG_EMPTYRESULT = 1.0;
-const TMatFlag SC_MATFLAG_EMPTYPATH   = 2.0;
+typedef uint8_t TMatFlag;
+const TMatFlag SC_MATFLAG_EMPTYRESULT = 1;
+const TMatFlag SC_MATFLAG_EMPTYPATH   = 2;
 
 class ScMatrixImpl
 {
     MatrixImplType maMat;
-    MatrixImplType maMatFlag;
+    MatrixFlagImplType maMatFlag;
     ScInterpreter* pErrorInterpreter;
 
 public:
@@ -706,7 +712,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             return maMat.get_string(aPos);
         case mdds::mtm::element_empty:
         {
-            if (maMatFlag.get_numeric(nR, nC) != SC_MATFLAG_EMPTYPATH)
+            if (maMatFlag.get<uint8_t>(nR, nC) != SC_MATFLAG_EMPTYPATH)
                 // not an empty path.
                 return svl::SharedString::getEmptyString();
 
@@ -769,8 +775,8 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                     case mdds::mtm::element_empty:
                         aVal.nType = ScMatValType::Empty;
                     break;
-                    case mdds::mtm::element_numeric:
-                        aVal.nType = maMatFlag.get<TMatFlag>(nR, nC)
+                    case mdds::mtm::element_integer:
+                        aVal.nType = maMatFlag.get<uint8_t>(nR, nC)
                             == SC_MATFLAG_EMPTYPATH ? ScMatValType::EmptyPath : ScMatValType::Empty;
                     break;
                     default:
@@ -816,7 +822,7 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
     // but not an 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_numeric(nR, nC) != SC_MATFLAG_EMPTYPATH;
+        maMatFlag.get_integer(nR, nC) != SC_MATFLAG_EMPTYPATH;
 }
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
@@ -834,7 +840,7 @@ bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
     // 'empty' or 'empty cell' or 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_numeric(nR, nC) == SC_MATFLAG_EMPTYRESULT;
+        maMatFlag.get_integer(nR, nC) == SC_MATFLAG_EMPTYRESULT;
 }
 
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
@@ -842,7 +848,7 @@ bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
     // Flag must indicate an 'empty path' element.
     if (ValidColRowOrReplicated( nC, nR ))
         return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-            maMatFlag.get_numeric(nR, nC) == SC_MATFLAG_EMPTYPATH;
+            maMatFlag.get_integer(nR, nC) == SC_MATFLAG_EMPTYPATH;
     else
         return true;
 }
@@ -973,7 +979,7 @@ void ScMatrixImpl::PutEmptyResultVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
     {
         maMat.set_empty(nR, nC, nCount);
         // Flag to indicate that this is 'empty result', not 'empty' or 'empty path'.
-        std::vector<TMatFlag> aVals(nCount, SC_MATFLAG_EMPTYRESULT);
+        std::vector<uint8_t> aVals(nCount, SC_MATFLAG_EMPTYRESULT);
         maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
     }
     else
@@ -988,7 +994,7 @@ void ScMatrixImpl::PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
     {
         maMat.set_empty(nR, nC, nCount);
         // Flag to indicate 'empty path'.
-        std::vector<TMatFlag> aVals(nCount, SC_MATFLAG_EMPTYPATH);
+        std::vector<uint8_t> aVals(nCount, SC_MATFLAG_EMPTYPATH);
         maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
     }
     else
