@@ -860,8 +860,11 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
             // color gets completely replaced, get it
             const basegfx::BColor aModifiedColor(
                 maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+
+            // use unit geometry as fallback object geometry. Do *not*
+            // transform, the below used method will use the already
+            // correctly initialized local ViewInformation
             basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
-            aPolygon.transform(aLocalTransform);
 
             rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
                 new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
@@ -1178,7 +1181,8 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
             // apply MaskScale to Brush, maybe used if implCreateAlpha_B2DBitmap was needed
             pBitmapBrush->SetTransform(aMaskScale);
 
-            // need to set transform offset for Layer initialization
+            // need to set transform offset for Layer initialization, we work
+            // in discrete device coordinates
             getRenderTarget().SetTransform(D2D1::Matrix3x2F::Translation(
                 floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
 
@@ -1248,6 +1252,10 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
 
     if (SUCCEEDED(hr))
     {
+        // need to set correct transform for Layer initialization, we work
+        // in discrete device coordinates
+        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+
         getRenderTarget().PushLayer(
             D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr, D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
                                   D2D1::IdentityMatrix(),
@@ -1305,6 +1313,10 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
 
             if (SUCCEEDED(hr))
             {
+                // need to set correct transform for Layer initialization, we work
+                // in discrete device coordinates
+                getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+
                 getRenderTarget().PushLayer(
                     D2D1::LayerParameters(D2D1::InfiniteRect(), pTransformedMaskGeometry), pLayer);
                 process(rMaskCandidate.getChildren());
