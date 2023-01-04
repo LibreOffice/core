@@ -1179,82 +1179,75 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
 {
     constexpr sal_uInt8 cEdgeDetectThreshold = 128;
     const Size  aSize( rBmp.GetSizePixel() );
-    Bitmap      aRetBmp;
 
-    if( ( aSize.Width() > 2 ) && ( aSize.Height() > 2 ) )
+    if( ( aSize.Width() <= 2 ) || ( aSize.Height() <= 2 ) )
+        return rBmp;
+
+    Bitmap aWorkBmp( rBmp );
+
+    if( !aWorkBmp.Convert( BmpConversion::N8BitGreys ) )
+        return rBmp;
+
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+    pVirDev->SetOutputSizePixel(aSize);
+    Bitmap::ScopedReadAccess pReadAcc(aWorkBmp);
+    if( !pReadAcc )
+        return rBmp;
+
+    const tools::Long          nWidth = aSize.Width();
+    const tools::Long          nWidth2 = nWidth - 2;
+    const tools::Long          nHeight = aSize.Height();
+    const tools::Long          nHeight2 = nHeight - 2;
+    const tools::Long          lThres2 = static_cast<tools::Long>(cEdgeDetectThreshold) * cEdgeDetectThreshold;
+    tools::Long                nSum1;
+    tools::Long                nSum2;
+    tools::Long                lGray;
+
+    // initialize border with white pixels
+    pVirDev->SetLineColor( COL_WHITE );
+    pVirDev->DrawLine( Point(), Point( nWidth - 1, 0L ) );
+    pVirDev->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
+    pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
+    pVirDev->DrawLine( Point( 0, nHeight - 1 ), Point() );
+
+    for( tools::Long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
     {
-        Bitmap aWorkBmp( rBmp );
-
-        if( aWorkBmp.Convert( BmpConversion::N8BitGreys ) )
+        Scanline pScanlineRead = pReadAcc->GetScanline( nY );
+        Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
+        Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
+        for( tools::Long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
         {
-            bool bRet = false;
+            nXTmp = nX;
 
-            ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
-            pVirDev->SetOutputSizePixel(aSize);
-            Bitmap::ScopedReadAccess pReadAcc(aWorkBmp);
+            nSum2 = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
+            nSum1 = -nSum2;
+            nSum2 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
+            lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );
+            nSum1 += lGray;
+            nSum2 += lGray;
 
-            if( pReadAcc )
-            {
-                const tools::Long          nWidth = aSize.Width();
-                const tools::Long          nWidth2 = nWidth - 2;
-                const tools::Long          nHeight = aSize.Height();
-                const tools::Long          nHeight2 = nHeight - 2;
-                const tools::Long          lThres2 = static_cast<tools::Long>(cEdgeDetectThreshold) * cEdgeDetectThreshold;
-                tools::Long                nSum1;
-                tools::Long                nSum2;
-                tools::Long                lGray;
+            nSum1 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+            nXTmp -= 2;
+            nSum1 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
 
-                // initialize border with white pixels
-                pVirDev->SetLineColor( COL_WHITE );
-                pVirDev->DrawLine( Point(), Point( nWidth - 1, 0L ) );
-                pVirDev->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
-                pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
-                pVirDev->DrawLine( Point( 0, nHeight - 1 ), Point() );
+            lGray = -static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
+            nSum1 += lGray;
+            nSum2 += lGray;
+            nSum2 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
+            lGray = static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
+            nSum1 += lGray;
+            nSum2 -= lGray;
 
-                for( tools::Long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
-                {
-                    Scanline pScanlineRead = pReadAcc->GetScanline( nY );
-                    Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
-                    Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
-                    for( tools::Long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
-                    {
-                        nXTmp = nX;
-
-                        nSum2 = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
-                        nSum1 = -nSum2;
-                        nSum2 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
-                        lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );
-                        nSum1 += lGray;
-                        nSum2 += lGray;
-
-                        nSum1 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
-                        nXTmp -= 2;
-                        nSum1 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
-
-                        lGray = -static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
-                        nSum1 += lGray;
-                        nSum2 += lGray;
-                        nSum2 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
-                        lGray = static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
-                        nSum1 += lGray;
-                        nSum2 -= lGray;
-
-                        if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pVirDev->DrawPixel( Point(nXDst, nY), COL_WHITE );
-                        else
-                            pVirDev->DrawPixel( Point(nXDst, nY), COL_BLACK );
-                    }
-                }
-
-                bRet = true;
-            }
-
-            pReadAcc.reset();
-
-            if( bRet )
-                aRetBmp = pVirDev->GetBitmap(Point(0,0), aSize);
+            if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
+                pVirDev->DrawPixel( Point(nXDst, nY), COL_WHITE );
+            else
+                pVirDev->DrawPixel( Point(nXDst, nY), COL_BLACK );
         }
     }
+
+    pReadAcc.reset();
+
+    Bitmap aRetBmp = pVirDev->GetBitmap(Point(0,0), aSize);
 
     if( aRetBmp.IsEmpty() )
         aRetBmp = rBmp;
