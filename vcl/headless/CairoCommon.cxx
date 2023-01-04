@@ -609,6 +609,20 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
 
+void CairoCommon::drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                            tools::Long nX, tools::Long nY)
+{
+    if (rLineColor == SALCOLOR_NONE)
+        return;
+
+    cairo_rectangle(cr, nX, nY, 1, 1);
+    CairoCommon::applyColor(cr, rLineColor, 0.0);
+    cairo_fill(cr);
+
+    if (pExtents)
+        *pExtents = getClippedFillDamage(cr);
+}
+
 void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                            bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
                            tools::Long nY2)

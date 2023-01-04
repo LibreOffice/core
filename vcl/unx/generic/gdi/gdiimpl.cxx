@@ -1087,38 +1087,10 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     }
 }
 
-void X11SalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY )
+void X11SalGraphicsImpl::internalDrawPixel( tools::Long nX, tools::Long nY )
 {
     if( mnPenColor !=  SALCOLOR_NONE )
         XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
-}
-
-void X11SalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
-{
-    if( nColor == SALCOLOR_NONE )
-        return;
-
-    Display *pDisplay = mrParent.GetXDisplay();
-
-    if( (mnPenColor == SALCOLOR_NONE) && !mbPenGC )
-    {
-        SetLineColor( nColor );
-        XDrawPoint( pDisplay, mrParent.GetDrawable(), SelectPen(), nX, nY );
-        mnPenColor = SALCOLOR_NONE;
-        mbPenGC = False;
-    }
-    else
-    {
-        GC pGC = SelectPen();
-
-        if( nColor != mnPenColor )
-            XSetForeground( pDisplay, pGC, mrParent.GetPixel( nColor ) );
-
-        XDrawPoint( pDisplay, mrParent.GetDrawable(), pGC, nX, nY );
-
-        if( nColor != mnPenColor )
-            XSetForeground( pDisplay, pGC, mnPenPixel );
-    }
 }
 
 void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
@@ -1172,7 +1144,7 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
         if( !mbXORMode )
         {
             if( 1 == nPoints  )
-                drawPixel( pPtAry[0].getX(), pPtAry[0].getY() );
+                internalDrawPixel( pPtAry[0].getX(), pPtAry[0].getY() );
             else
                 internalDrawLine( pPtAry[0].getX(), pPtAry[0].getY(),
                           pPtAry[1].getX(), pPtAry[1].getY() );
