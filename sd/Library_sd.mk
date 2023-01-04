@@ -97,7 +97,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	ucbhelper \
 	utl \
 	vcl \
-	xo \
 	$(if $(ENABLE_NSS),xmlsecurity) \
 ))
 

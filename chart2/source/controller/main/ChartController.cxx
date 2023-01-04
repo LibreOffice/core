@@ -377,7 +377,7 @@ void SAL_CALL ChartController::attachFrame(
     uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
     if (xSidebar.is())
     {
-        auto pSidebar = comphelper::getFromUnoTunnel<sfx2::sidebar::SidebarController>(xSidebar);
+        auto pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         assert(pSidebar);
         pSidebar->registerSidebarForFrame(this);
         pSidebar->updateModel(getChartModel());
@@ -761,7 +761,7 @@ void SAL_CALL ChartController::dispose()
     if (getModel().is())
     {
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
-        if (sfx2::sidebar::SidebarController* pSidebar = comphelper::getFromUnoTunnel<sfx2::sidebar::SidebarController>(xSidebar))
+        if (sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get()))
         {
             pSidebar->unregisterSidebarForFrame(this);
         }

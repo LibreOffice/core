@@ -29,7 +29,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/keystoplerp.hxx>
 #include <basegfx/utils/lerp.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -296,12 +294,11 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
      **/
     static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
     {
-        CanvasBitmap* pBitmapImpl = comphelper::getFromUnoTunnel< CanvasBitmap >( xBitmap );
+        CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
         if( pBitmapImpl )
             return pBitmapImpl->getSurface();
 
-        SurfaceProvider* pSurfaceProvider
-            = comphelper::getFromUnoTunnel<SurfaceProvider>( xBitmap );
+        SurfaceProvider* pSurfaceProvider = dynamic_cast<SurfaceProvider*>( xBitmap.get() );
         if( pSurfaceProvider )
             return pSurfaceProvider->getSurface();
 
@@ -1342,7 +1339,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
     namespace
     {
-        class CairoColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace, css::lang::XUnoTunnel >
+        class CairoColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
         {
         private:
             uno::Sequence< sal_Int8 >  maComponentTags;
@@ -1500,7 +1497,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                  const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
             {
-                if( comphelper::getFromUnoTunnel<CairoColorSpace>(targetColorSpace) )
+                if( dynamic_cast<CairoColorSpace*>(targetColorSpace.get()) )
                 {
                     const sal_Int8* pIn( deviceColor.getConstArray() );
                     const std::size_t  nLen( deviceColor.getLength() );
@@ -1531,7 +1528,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                      const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override
             {
-                if( comphelper::getFromUnoTunnel<CairoColorSpace>(targetColorSpace) )
+                if( dynamic_cast<CairoColorSpace*>(targetColorSpace.get()) )
                 {
                     // it's us, so simply pass-through the data
                     return deviceColor;
@@ -1688,17 +1685,6 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                     pBitCounts[2] =
                     pBitCounts[3] = 8;
             }
-
-            sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
-                override
-            {
-                return comphelper::getSomethingImpl(aIdentifier, this);
-            }
-
-            static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
-                static comphelper::UnoIdInit const id;
-                return id.getSeq();
-            }
         };
 
         class CairoNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
@@ -1833,7 +1819,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                  const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
             {
-                if( comphelper::getFromUnoTunnel<CairoColorSpace>(targetColorSpace) )
+                if( dynamic_cast<CairoColorSpace*>(targetColorSpace.get()) )
                 {
                     const sal_Int8* pIn( deviceColor.getConstArray() );
                     const std::size_t  nLen( deviceColor.getLength() );

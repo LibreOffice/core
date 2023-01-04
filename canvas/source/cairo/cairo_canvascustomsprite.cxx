@@ -146,12 +146,6 @@ namespace cairocanvas
     {
         return { "com.sun.star.rendering.CanvasCustomSprite" };
     }
-
-    sal_Int64 CanvasCustomSprite::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl_skipDerived(
-            aIdentifier, this, comphelper::MixinToGetSomethingOf<SurfaceProvider>{},
-            comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

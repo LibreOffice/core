@@ -33,7 +33,7 @@
 namespace pcr
 {
     //= OTimeControl
-    typedef CommonBehaviourControl<weld::FormattedSpinButton, css::inspection::XPropertyControl> OTimeControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::FormattedSpinButton> OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
     {
         std::unique_ptr<weld::TimeFormatter> m_xFormatter;
@@ -61,7 +61,7 @@ namespace pcr
     };
 
     //= ODateControl
-    typedef CommonBehaviourControl<weld::Container, css::inspection::XPropertyControl> ODateControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> ODateControl_Base;
     class ODateControl : public ODateControl_Base
     {
         std::unique_ptr<weld::Entry> m_xEntry;
@@ -97,7 +97,7 @@ namespace pcr
     };
 
     //= OEditControl
-    typedef CommonBehaviourControl<weld::Entry, css::inspection::XPropertyControl> OEditControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Entry> OEditControl_Base;
     class OEditControl final : public OEditControl_Base
     {
         bool m_bIsPassword : 1;
@@ -123,7 +123,7 @@ namespace pcr
     };
 
     //= ODateTimeControl
-    typedef CommonBehaviourControl<weld::Container, css::inspection::XPropertyControl> ODateTimeControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> ODateTimeControl_Base;
     class ODateTimeControl : public ODateTimeControl_Base
     {
     private:
@@ -162,7 +162,7 @@ namespace pcr
     };
 
     //= OHyperlinkControl
-    typedef CommonBehaviourControl<weld::Container, css::inspection::XHyperlinkControl> OHyperlinkControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XHyperlinkControl, weld::Container> OHyperlinkControl_Base;
     class OHyperlinkControl final : public OHyperlinkControl_Base
     {
     private:
@@ -203,7 +203,7 @@ namespace pcr
     };
 
     //= ONumericControl
-    typedef CommonBehaviourControl<weld::MetricSpinButton, css::inspection::XNumericControl> ONumericControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XNumericControl, weld::MetricSpinButton> ONumericControl_Base;
     class ONumericControl : public ONumericControl_Base
     {
     private:
@@ -255,7 +255,7 @@ namespace pcr
     };
 
     //= OColorControl
-    typedef CommonBehaviourControl<ColorListBox, css::inspection::XPropertyControl> OColorControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, ColorListBox> OColorControl_Base;
     class OColorControl : public OColorControl_Base
     {
     public:
@@ -281,7 +281,7 @@ namespace pcr
     };
 
     //= OListboxControl
-    typedef CommonBehaviourControl<weld::ComboBox, css::inspection::XStringListControl> OListboxControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XStringListControl, weld::ComboBox> OListboxControl_Base;
     class OListboxControl : public OListboxControl_Base
     {
     public:
@@ -311,7 +311,7 @@ namespace pcr
     };
 
     //= OComboboxControl
-    typedef CommonBehaviourControl< weld::ComboBox, css::inspection::XStringListControl > OComboboxControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XStringListControl, weld::ComboBox > OComboboxControl_Base;
     class OComboboxControl final : public OComboboxControl_Base
     {
     public:
@@ -351,7 +351,7 @@ namespace pcr
     };
 
     //= OMultilineEditControl
-    typedef CommonBehaviourControl<weld::Container, css::inspection::XPropertyControl> OMultilineEditControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> OMultilineEditControl_Base;
     class OMultilineEditControl : public OMultilineEditControl_Base
     {
     private:

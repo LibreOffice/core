@@ -23,7 +23,6 @@
 #include <framework/desktop.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
@@ -343,7 +342,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
             // honestly: how many implementations of XDesktop will we ever have?
             // so casting this directly to the implementation
-            Desktop* pDesktop(comphelper::getFromUnoTunnel<Desktop>(xDesktop));
+            Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));
             if(pDesktop)
             {
                 SAL_INFO("fwk.session", " XDesktop is a framework::Desktop -- good.");

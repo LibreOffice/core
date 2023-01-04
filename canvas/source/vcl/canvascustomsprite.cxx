@@ -116,10 +116,6 @@ namespace vclcanvas
         return { "com.sun.star.rendering.CanvasCustomSprite" };
     }
 
-    sal_Int64 CanvasCustomSprite::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
-    }
-
     // Sprite
     void CanvasCustomSprite::redraw( OutputDevice& rOutDev,
                                      bool          bBufferedUpdate ) const

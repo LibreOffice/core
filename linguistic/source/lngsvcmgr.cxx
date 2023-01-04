@@ -38,7 +38,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
@@ -891,7 +890,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( bool bSetSvcList  )
 
     if (xGCI.is())
     {
-        mxGrammarDsp = comphelper::getFromUnoTunnel< GrammarCheckingIterator >(xGCI);
+        mxGrammarDsp = dynamic_cast< GrammarCheckingIterator * >(xGCI.get());
         SAL_WARN_IF( mxGrammarDsp == nullptr, "linguistic", "failed to get implementation" );
         if (bSetSvcList && mxGrammarDsp.is())
             SetCfgServiceLists( *mxGrammarDsp );

@@ -196,8 +196,7 @@ sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
 /* XUnoTunnel */
 sal_Int64 SAL_CALL CertificateImpl::getSomething(const Sequence< sal_Int8 >& aIdentifier)
 {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<xmlsecurity::Certificate>{});
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */

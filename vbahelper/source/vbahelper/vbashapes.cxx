@@ -39,7 +39,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <utility>
-#include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbashapes.hxx>
@@ -64,7 +63,7 @@ public:
         }
         virtual uno::Any SAL_CALL nextElement(  ) override
         {
-                ScVbaShapes* pShapes = comphelper::getFromUnoTunnel< ScVbaShapes >(m_xParent);
+                ScVbaShapes* pShapes = dynamic_cast< ScVbaShapes* >(m_xParent.get());
                 if ( pShapes && hasMoreElements() )
                     return pShapes->createCollectionObject(  m_xIndexAccess->getByIndex( nIndex++ ) );
                 throw container::NoSuchElementException();
@@ -100,15 +99,6 @@ uno::Reference< container::XEnumeration >
 ScVbaShapes::createEnumeration()
 {
     return new VbShapeEnumHelper( this,  m_xIndexAccess );
-}
-
-sal_Int64 ScVbaShapes::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & ScVbaShapes::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 uno::Any

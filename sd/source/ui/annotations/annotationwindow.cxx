@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/servicehelper.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/langitem.hxx>
@@ -488,7 +487,7 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
     if( xAnnotation.is() )
     {
         Reference< XText > xText( xAnnotation->getTextRange() );
-        return comphelper::getFromUnoTunnel<TextApiObject>( xText );
+        return TextApiObject::getImplementation( xText );
     }
     return nullptr;
 }

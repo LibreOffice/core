@@ -28,7 +28,6 @@
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <xmloff/attrlist.hxx>
@@ -340,7 +339,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     if (!m_xDocumentHandler.is() || !m_xModel.is())
         throw uno::Exception("no delegatee and no model", nullptr);
 
-    m_xDelegatee.set(new SvXMLLegacyToFastDocHandler(comphelper::getFromUnoTunnel<SvXMLImport>(m_xDocumentHandler)));
+    m_xDelegatee.set(new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(m_xDocumentHandler.get())));
 
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )

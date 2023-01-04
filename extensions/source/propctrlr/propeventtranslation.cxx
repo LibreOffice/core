@@ -20,7 +20,6 @@
 #include "propeventtranslation.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/servicehelper.hxx>
 
 
 namespace pcr
@@ -46,18 +45,6 @@ namespace pcr
     {
         if ( !m_xDelegator.is() )
             throw RuntimeException();
-    }
-
-
-    sal_Int64 PropertyEventTranslation::getSomething(
-        css::uno::Sequence<sal_Int8> const & aIdentifier)
-    {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    css::uno::Sequence<sal_Int8> const & PropertyEventTranslation::getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 
 

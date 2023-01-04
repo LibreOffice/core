@@ -20,7 +20,6 @@
 #include "usercontrol.hxx"
 
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/event.hxx>
@@ -198,17 +197,6 @@ namespace pcr
     Type SAL_CALL OFormattedNumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
-    }
-
-    sal_Int64 OFormattedNumericControl::getSomething(
-        css::uno::Sequence<sal_Int8> const & aIdentifier)
-    {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    css::uno::Sequence<sal_Int8> const & OFormattedNumericControl::getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)

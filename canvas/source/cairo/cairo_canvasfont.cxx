@@ -21,7 +21,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/math.hxx>
@@ -146,15 +145,6 @@ namespace cairocanvas
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()
     {
         return { "com.sun.star.rendering.CanvasFont" };
-    }
-
-    sal_Int64 CanvasFont::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    css::uno::Sequence<sal_Int8> const & CanvasFont::getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 
     vcl::Font const & CanvasFont::getVCLFont() const

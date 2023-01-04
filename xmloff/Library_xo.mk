@@ -154,7 +154,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/sdpropls \
     xmloff/source/draw/sdxmlexp \
     xmloff/source/draw/sdxmlimp \
-    xmloff/source/draw/settingsstore \
     xmloff/source/draw/shapeexport \
     xmloff/source/draw/shapeimport \
     xmloff/source/draw/SignatureLineContext \

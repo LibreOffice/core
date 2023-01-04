@@ -21,13 +21,20 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <certificate.hxx>
 #include <certt.h>
 #include <keythi.h>
 
-class X509Certificate_NssImpl : public xmlsecurity::Certificate
+class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
+    css::security::XCertificate ,
+    css::lang::XUnoTunnel,
+    css::lang::XServiceInfo > , public xmlsecurity::Certificate
 {
     private:
         CERTCertificate* m_pCert;

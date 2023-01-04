@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_LINECTRL_HXX
 #define INCLUDED_SVX_LINECTRL_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
@@ -37,8 +35,7 @@ typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSele
 typedef std::function<void(bool)> LineStyleIsNoneFunction;
 
 // SvxLineStyleController:
-class SVXCORE_DLLPUBLIC SvxLineStyleToolBoxControl final :
-    public cppu::ImplInheritanceHelper<svt::PopupWindowController, css::lang::XUnoTunnel>
+class SVXCORE_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
 {
 private:
     std::unique_ptr<svx::ToolboxButtonLineStyleUpdater> m_xBtnUpdater;
@@ -55,9 +52,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;

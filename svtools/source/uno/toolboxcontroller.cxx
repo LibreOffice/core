@@ -34,7 +34,6 @@
 #include <vcl/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/servicehelper.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 constexpr OUStringLiteral TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible";
@@ -223,7 +222,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
     if ( !m_aCommandURL.isEmpty() )
         m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
 
-    if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(getParent()))
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
     {
         m_pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
         assert(m_pToolbar && "must be a toolbar");

@@ -78,7 +78,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <comphelper/string.hxx>
 #include <framework/interaction.hxx>
@@ -4009,7 +4008,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
             comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
-    auto xModelSigner = comphelper::getFromUnoTunnel<sfx2::DigitalSignatures>(xSigner);
+    auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
     if (!xModelSigner)
     {
         return bChanges;

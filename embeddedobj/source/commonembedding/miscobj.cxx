@@ -25,13 +25,11 @@
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/multicontainer2.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
@@ -764,7 +762,6 @@ uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XInitialization>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
-        cppu::UnoType<lang::XUnoTunnel>::get(),
     };
     return aTypes;
 }
@@ -772,10 +769,6 @@ uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
 uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
 {
     return uno::Sequence<sal_Int8>();
-}
-
-sal_Int64 OCommonEmbeddedObject::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, static_cast<EmbeddedUpdate *>(this));
 }
 
 void SAL_CALL OCommonEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)

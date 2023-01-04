@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -343,12 +342,6 @@ public:
     weld::Window* getFrameWeld() const
     {
         return m_pWeldWidget;
-    }
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const& aIdentifier) override
-    {
-        return comphelper::getSomethingImpl(
-            aIdentifier, this, comphelper::FallbackToGetSomethingOf<TransportAsXWindow>{});
     }
 };
 

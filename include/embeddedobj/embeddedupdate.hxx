@@ -9,9 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <sal/types.h>
-#include <svtools/svtdllapi.h>
+#include <embeddedobj/embobjdllapi.h>
 
 namespace com
 {
@@ -26,7 +24,7 @@ namespace embed
 
     @since LibreOffice 7.4
  */
-class SVT_DLLPUBLIC EmbeddedUpdate
+class EMBOBJ_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") EmbeddedUpdate
 {
     /** By "Refresh all" is used to perform an OLE update and a link update.
         In the case of a link update, the class OCommonEmbeddedObject is
@@ -41,8 +39,6 @@ public:
 
     EmbeddedUpdate() = default;
     virtual ~EmbeddedUpdate() = default;
-
-    static css::uno::Sequence<sal_Int8> const& getUnoTunnelId();
 
 private:
     EmbeddedUpdate(const EmbeddedUpdate&) = delete;

@@ -23,7 +23,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XTextLayout.hpp>
@@ -38,8 +37,7 @@
 namespace cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout,
-                                             css::lang::XServiceInfo,
-                                             css::lang::XUnoTunnel > TextLayout_Base;
+                                             css::lang::XServiceInfo > TextLayout_Base;
 
     class TextLayout : public ::cppu::BaseMutex,
                        public TextLayout_Base
@@ -81,9 +79,6 @@ namespace cairocanvas
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         void draw( OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,

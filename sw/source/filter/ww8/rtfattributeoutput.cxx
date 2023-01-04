@@ -24,7 +24,6 @@
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
 #include <fmtcntnt.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <sot/exchange.hxx>
@@ -4189,7 +4188,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
     uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
     if (!xClosable.is())
         return false;
-    auto pBase = comphelper::getFromUnoTunnel<oox::FormulaImExportBase>(xClosable);
+    auto pBase = dynamic_cast<oox::FormulaImExportBase*>(xClosable.get());
     SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)
     {

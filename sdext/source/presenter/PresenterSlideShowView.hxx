@@ -32,7 +32,6 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -48,8 +47,7 @@ typedef cppu::WeakComponentImplHelper<
     css::awt::XMouseMotionListener,
     css::awt::XWindowListener,
     css::drawing::framework::XView,
-    css::drawing::XDrawView,
-    css::lang::XUnoTunnel
+    css::drawing::XDrawView
     > PresenterSlideShowViewInterfaceBase;
 
 /** Life view in a secondary window of a full screen slide show.
@@ -167,10 +165,6 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
-
-    // XUnoTunnel
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
     // CachablePresenterView
 

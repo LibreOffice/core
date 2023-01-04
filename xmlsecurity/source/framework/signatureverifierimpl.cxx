@@ -21,7 +21,6 @@
 #include <framework/signatureverifierimpl.hxx>
 #include <framework/xmlsignaturetemplateimpl.hxx>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
@@ -126,15 +125,6 @@ sal_Bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServi
 css::uno::Sequence< OUString > SAL_CALL SignatureVerifierImpl::getSupportedServiceNames(  )
 {
     return SignatureVerifierImpl_getSupportedServiceNames();
-}
-
-sal_Int64 SignatureVerifierImpl::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & SignatureVerifierImpl::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

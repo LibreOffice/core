@@ -35,7 +35,6 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 namespace sdext::presenter {
@@ -51,8 +50,7 @@ typedef cppu::WeakComponentImplHelper<
     css::drawing::XSlidePreviewCacheListener,
     css::awt::XMouseListener,
     css::awt::XMouseMotionListener,
-    css::drawing::XDrawView,
-    css::lang::XUnoTunnel
+    css::drawing::XDrawView
     > PresenterSlideSorterInterfaceBase;
 
 /** A simple slide sorter for the presenter screen.  It uses a preview cache
@@ -130,10 +128,6 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
-
-    // XUnoTunnel
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

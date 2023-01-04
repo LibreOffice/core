@@ -39,7 +39,7 @@ typedef ::cppu::WeakComponentImplHelper <
 /** Base class for presenter views that allows the view factory to store
     them in a cache and reuse deactivated views.
 */
-class CachablePresenterView
+class SAL_LOPLUGIN_ANNOTATE("crosscast") CachablePresenterView
 {
 public:
     virtual void ActivatePresenterView();
@@ -54,9 +54,6 @@ public:
         callbacks that do not result in DisposedExceptions.
     */
     virtual void ReleaseView();
-
-    sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & id);
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 protected:
     bool mbIsPresenterViewActive;

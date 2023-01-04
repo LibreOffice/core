@@ -23,7 +23,6 @@
 
 #include <textapi.hxx>
 #include <drawdoc.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
@@ -180,14 +179,14 @@ OUString TextApiObject::GetText() const
     return mpSource->GetText();
 }
 
-sal_Int64 TextApiObject::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<SvxUnoText>{});
-}
+TextApiObject* TextApiObject::getImplementation( const css::uno::Reference< css::text::XText >& xText )
+{
+    TextApiObject* pImpl = dynamic_cast< TextApiObject* >( xText.get() );
 
-css::uno::Sequence<sal_Int8> const & TextApiObject::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
+    if( !pImpl )
+        pImpl = dynamic_cast< TextApiObject* >(  comphelper::getFromUnoTunnel<SvxUnoTextBase>( xText ) );
+
+    return pImpl;
 }
 
 TextAPIEditSource::TextAPIEditSource(const TextAPIEditSource& rSource)

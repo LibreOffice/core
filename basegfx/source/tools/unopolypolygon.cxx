@@ -27,7 +27,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 
@@ -61,7 +60,7 @@ namespace basegfx::unotools
         }
 
         B2DPolyPolygon        aSrcPoly;
-        const UnoPolyPolygon* pSrc( comphelper::getFromUnoTunnel< UnoPolyPolygon >(polyPolygon) );
+        const UnoPolyPolygon* pSrc( dynamic_cast< UnoPolyPolygon* >(polyPolygon.get()) );
 
         // try to extract polygon data from interface. First,
         // check whether it's the same implementation object,
@@ -433,15 +432,6 @@ namespace basegfx::unotools
     uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()
     {
         return { "com.sun.star.rendering.PolyPolygon2D" };
-    }
-
-    sal_Int64 UnoPolyPolygon::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    css::uno::Sequence<sal_Int8> const & UnoPolyPolygon::getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 
     B2DPolyPolygon UnoPolyPolygon::getPolyPolygon() const

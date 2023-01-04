@@ -22,7 +22,6 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -43,8 +42,7 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::lang::XServiceInfo,
-                                             css::beans::XFastPropertySet,
-                                             css::lang::XUnoTunnel>   CanvasBitmapBase_Base;
+                                             css::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
         public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
@@ -114,9 +112,6 @@ namespace cairocanvas
         //     3rd the pixmap depth
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
-
-        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;

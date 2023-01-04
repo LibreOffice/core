@@ -34,7 +34,6 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
@@ -613,7 +612,7 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
-        TextLayout* pTextLayout = comphelper::getFromUnoTunnel< TextLayout >( xLayoutedText );
+        TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
 
         if( pTextLayout )
         {
@@ -1112,7 +1111,7 @@ namespace vclcanvas
 
         setupOutDevState( viewState, renderState, TEXT_COLOR );
 
-        CanvasFont* pFont = comphelper::getFromUnoTunnel< CanvasFont >( xFont );
+        CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
         ENSURE_ARG_OR_THROW( pFont,
                              "Font not compatible with this canvas" );

@@ -22,11 +22,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorksheet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -34,8 +32,7 @@ using namespace ::ooo::vba;
 
 namespace {
 
-class RangePageBreaks :
-    public ::cppu::WeakImplHelper<container::XIndexAccess, css::lang::XUnoTunnel >
+class RangePageBreaks : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
@@ -105,15 +102,6 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override
     {
         return true;
-    }
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 };
 
@@ -233,8 +221,7 @@ ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xP
 
 uno::Any SAL_CALL ScVbaHPageBreaks::Add( const uno::Any& Before)
 {
-    RangePageBreaks* pPageBreaks
-        = comphelper::getFromUnoTunnel< RangePageBreaks >( m_xIndexAccess );
+    RangePageBreaks* pPageBreaks = dynamic_cast< RangePageBreaks* >( m_xIndexAccess.get() );
     if( pPageBreaks )
     {
         return pPageBreaks->Add( Before );
@@ -291,8 +278,7 @@ ScVbaVPageBreaks::~ScVbaVPageBreaks()
 uno::Any SAL_CALL
 ScVbaVPageBreaks::Add( const uno::Any& Before )
 {
-    RangePageBreaks* pPageBreaks
-        = comphelper::getFromUnoTunnel< RangePageBreaks >( m_xIndexAccess );
+    RangePageBreaks* pPageBreaks = dynamic_cast< RangePageBreaks* >( m_xIndexAccess.get() );
     if( pPageBreaks )
     {
         return pPageBreaks->Add( Before );

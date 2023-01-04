@@ -21,7 +21,6 @@
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/font.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
@@ -554,7 +553,7 @@ namespace oglcanvas
                 // try to cast XParametricPolyPolygon2D reference to
                 // our implementation class.
                 ::canvas::ParametricPolyPolygon* pGradient =
-                      comphelper::getFromUnoTunnel< ::canvas::ParametricPolyPolygon >( textures[0].Gradient );
+                      dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
                 if( pGradient )
                 {

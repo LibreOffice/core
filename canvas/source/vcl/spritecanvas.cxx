@@ -161,10 +161,6 @@ namespace vclcanvas
         return cppu::supportsService(this, sServiceName);
     }
 
-    sal_Int64 SpriteCanvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
-    }
-
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,

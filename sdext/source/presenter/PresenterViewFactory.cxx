@@ -26,7 +26,6 @@
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -216,7 +215,7 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
         pDescriptor->SetActivationState(false);
 
     // Dispose only views that we can not put into the cache.
-    CachablePresenterView* pView = comphelper::getFromUnoTunnel<CachablePresenterView>(rxView);
+    CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
     if (pView == nullptr || mpResourceCache == nullptr)
     {
         try
@@ -272,7 +271,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
             if (iView->second.second == rxAnchorPane)
             {
                 CachablePresenterView* pView
-                    = comphelper::getFromUnoTunnel<CachablePresenterView>(iView->second.first);
+                    = dynamic_cast<CachablePresenterView*>(iView->second.first.get());
                 if (pView != nullptr)
                     pView->ActivatePresenterView();
                 return iView->second.first;
@@ -323,7 +322,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
         }
 
         // Activate it.
-        CachablePresenterView* pView = comphelper::getFromUnoTunnel<CachablePresenterView>(xView);
+        CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
         if (pView != nullptr)
             pView->ActivatePresenterView();
     }
@@ -480,15 +479,6 @@ void PresenterViewFactory::ThrowIfDisposed() const
 }
 
 //===== CachablePresenterView =================================================
-
-sal_Int64 CachablePresenterView::getSomething(css::uno::Sequence<sal_Int8> const & id) {
-    return comphelper::getSomethingImpl(id, this);
-}
-
-css::uno::Sequence<sal_Int8> const & CachablePresenterView::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
-}
 
 CachablePresenterView::CachablePresenterView()
     : mbIsPresenterViewActive(true)

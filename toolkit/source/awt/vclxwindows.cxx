@@ -34,7 +34,6 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 
 #include <awt/vclxwindows.hxx>
@@ -2224,16 +2223,6 @@ VCLXDialog::~VCLXDialog()
     SAL_INFO("toolkit", __FUNCTION__);
 }
 
-sal_Int64 VCLXDialog::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
-}
-
-css::uno::Sequence<sal_Int8> const & VCLXDialog::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
-}
-
 void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )
 {
     SolarMutexGuard aGuard;
@@ -2409,17 +2398,6 @@ void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 VCLXMultiPage::~VCLXMultiPage()
 {
 }
-
-sal_Int64 VCLXMultiPage::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
-}
-
-css::uno::Sequence<sal_Int8> const & VCLXMultiPage::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
-}
-
 void SAL_CALL VCLXMultiPage::dispose()
 {
     SolarMutexGuard aGuard;
@@ -2670,16 +2648,6 @@ void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 VCLXTabPage::~VCLXTabPage()
 {
-}
-
-sal_Int64 VCLXTabPage::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<VCLXWindow>{});
-}
-
-css::uno::Sequence<sal_Int8> const & VCLXTabPage::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 // css::awt::XView

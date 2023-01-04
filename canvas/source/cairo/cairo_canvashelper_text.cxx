@@ -24,7 +24,6 @@
 #include <rtl/math.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
@@ -173,7 +172,7 @@ namespace cairocanvas
     {
         setupOutDevState( rOutDev, pOwner, viewState, renderState );
 
-        CanvasFont* pFont = comphelper::getFromUnoTunnel< CanvasFont >( xFont );
+        CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
         ENSURE_ARG_OR_THROW( pFont,
                          "CanvasHelper::setupTextOutput(): Font not compatible with this canvas" );
@@ -248,7 +247,7 @@ namespace cairocanvas
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
-            rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(comphelper::getFromUnoTunnel< CanvasFont >( xFont )), mpSurfaceProvider) );
+            rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
             pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
         }
 
@@ -263,7 +262,7 @@ namespace cairocanvas
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "CanvasHelper::drawTextLayout(): layout is NULL");
 
-        TextLayout* pTextLayout = comphelper::getFromUnoTunnel< TextLayout >( xLayoutedText );
+        TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
 
         if( pTextLayout )
         {

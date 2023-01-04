@@ -14,9 +14,13 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #if defined _MSC_VER && defined __clang__
 #pragma clang diagnostic push
@@ -27,7 +31,10 @@
 #pragma clang diagnostic pop
 #endif
 
-class CertificateImpl : public xmlsecurity::Certificate
+class CertificateImpl : public cppu::WeakImplHelper< css::security::XCertificate,
+                                                     css::lang::XUnoTunnel,
+                                                     css::lang::XServiceInfo >,
+                        public xmlsecurity::Certificate
 {
 private:
     GpgME::Key m_pKey;

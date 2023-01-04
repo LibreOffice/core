@@ -82,7 +82,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <comphelper/indexedpropertyvalues.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
 #include <o3tl/safeint.hxx>
@@ -3026,7 +3025,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         xComponentProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
             uno::Any(sal_Int32(0)));
         Size size( 1000, 1000 );
-        if( oox::FormulaImExportBase* formulaimport = comphelper::getFromUnoTunnel< oox::FormulaImExportBase >( xInterface))
+        if( oox::FormulaImExportBase* formulaimport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
             size = formulaimport->getFormulaSize();
         xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
             uno::Any( sal_Int32(size.Width())));

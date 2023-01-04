@@ -48,7 +48,6 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -61,7 +60,7 @@ using namespace ::com::sun::star;
 #define MAX_LINES 12
 
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
-    : ImplInheritanceHelper( rContext, nullptr, OUString() )
+    : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
     addStatusListener(".uno:LineDash");
 }
@@ -216,16 +215,6 @@ OUString SvxLineStyleToolBoxControl::getImplementationName()
 css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceNames()
 {
     return { "com.sun.star.frame.ToolbarController" };
-}
-
-sal_Int64 SvxLineStyleToolBoxControl::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & SvxLineStyleToolBoxControl::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

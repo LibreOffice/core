@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_CANVASBITMAP_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
@@ -33,8 +32,7 @@ namespace vcl::unotools
     class VCL_DLLPUBLIC VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
                                      css::rendering::XBitmapPalette,
-                                     css::rendering::XIntegerBitmapColorSpace,
-                                     css::lang::XUnoTunnel >
+                                     css::rendering::XIntegerBitmapColorSpace >
     {
     private:
         BitmapEx                                       m_aBmpEx;
@@ -104,10 +102,6 @@ namespace vcl::unotools
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
-
-        sal_Int64 SAL_CALL getSomething(
-            css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         /** Create API wrapper for given BitmapEx
 

@@ -13,7 +13,6 @@
 #include <oox/core/contexthandler.hxx>
 #include <oox/token/namespaces.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <drawingml/textparagraph.hxx>
 
 
@@ -21,15 +20,6 @@ using namespace ::com::sun::star;
 
 namespace oox
 {
-
-sal_Int64 FormulaImExportBase::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & FormulaImExportBase::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
-}
 
 FormulaImExportBase::FormulaImExportBase()
 {

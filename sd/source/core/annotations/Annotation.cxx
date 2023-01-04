@@ -26,7 +26,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <unotools/datetime.hxx>
 
@@ -119,7 +118,7 @@ void createAnnotation(uno::Reference<office::XAnnotation>& xAnnotation, SdPage* 
 sal_uInt32 Annotation::m_nLastId = 1;
 
 Annotation::Annotation( const uno::Reference<uno::XComponentContext>& context, SdPage* pPage )
-: WeakComponentImplHelper(m_aMutex)
+: ::cppu::WeakComponentImplHelper<office::XAnnotation>(m_aMutex)
 , ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET, uno::Sequence<OUString>())
 , m_nId( m_nLastId++ )
 , mpPage( pPage )
@@ -142,7 +141,7 @@ void SAL_CALL Annotation::disposing()
 
 uno::Any Annotation::queryInterface(css::uno::Type const & type)
 {
-    return WeakComponentImplHelper::queryInterface(type);
+    return ::cppu::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
 }
 
 // com.sun.star.beans.XPropertySet:
@@ -302,18 +301,9 @@ uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
     return m_TextRange;
 }
 
-sal_Int64 Annotation::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & Annotation::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
-}
-
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Reference<office::XAnnotation>& xAnnotation, bool bInsert )
 {
-    Annotation* pAnnotation = comphelper::getFromUnoTunnel< Annotation >( xAnnotation );
+    Annotation* pAnnotation = dynamic_cast< Annotation* >( xAnnotation.get() );
     if( pAnnotation )
     {
         return std::make_unique< UndoInsertOrRemoveAnnotation >( *pAnnotation, bInsert );
@@ -326,14 +316,14 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Re
 
 void CreateChangeUndo(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
-    Annotation* pAnnotation = comphelper::getFromUnoTunnel<Annotation>(xAnnotation);
+    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
     if (pAnnotation)
         pAnnotation->createChangeUndo();
 }
 
 sal_uInt32 getAnnotationId(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
-    Annotation* pAnnotation = comphelper::getFromUnoTunnel<Annotation>(xAnnotation);
+    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
     sal_uInt32 nId = 0;
     if (pAnnotation)
         nId = pAnnotation->GetId();
@@ -342,7 +332,7 @@ sal_uInt32 getAnnotationId(const uno::Reference<office::XAnnotation>& xAnnotatio
 
 const SdPage* getAnnotationPage(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
-    Annotation* pAnnotation = comphelper::getFromUnoTunnel<Annotation>(xAnnotation);
+    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
     if (pAnnotation)
         return pAnnotation->GetPage();
     return nullptr;

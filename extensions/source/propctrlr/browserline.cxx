@@ -26,7 +26,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -111,7 +110,7 @@ namespace pcr
     {
         m_xControl = rxControl;
         auto xWindow = m_xControl->getControlWindow();
-        if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xWindow))
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
             m_pControlWindow = pTunnel->getWidget();
         else
             m_pControlWindow = nullptr;

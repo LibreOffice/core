@@ -9,14 +9,12 @@
 #ifndef INCLUDED_OOX_MATHML_IMEXPORT_HXX
 #define INCLUDED_OOX_MATHML_IMEXPORT_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/export/utils.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/textenc.h>
-#include <sal/types.h>
 #include <sax/fshelper.hxx>
 #include <tools/gen.hxx>
 
@@ -44,9 +42,6 @@ public:
             oox::drawingml::DocumentType documentType, sal_Int8 nAlign) = 0;
     virtual void writeFormulaRtf( OStringBuffer& rBuffer, rtl_TextEncoding nEncoding ) = 0;
     enum eFormulaAlign { INLINE, CENTER, GROUPEDCENTER, LEFT, RIGHT };
-
-    sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & id);
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 protected:
     FormulaImExportBase();

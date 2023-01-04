@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <osl/mutex.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -127,12 +126,6 @@ namespace cairocanvas
     css::uno::Sequence< OUString > Canvas::getSupportedServiceNames()
     {
         return { getServiceName() };
-    }
-
-    sal_Int64 Canvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl_skipDerived(
-            aIdentifier, this, comphelper::MixinToGetSomethingOf<SurfaceProvider>{},
-            comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 
     bool Canvas::repaint( const SurfaceSharedPtr&       pSurface,

@@ -22,7 +22,6 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -38,7 +37,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <unordered_map>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -73,7 +72,7 @@ typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterf
 // OInterfaceContainer
 // implements a container for form components
 
-typedef ::cppu::ImplHelper9 <   css::container::XNameContainer
+typedef ::cppu::ImplHelper8 <   css::container::XNameContainer
                             ,   css::container::XIndexContainer
                             ,   css::container::XContainer
                             ,   css::container::XEnumerationAccess
@@ -81,7 +80,6 @@ typedef ::cppu::ImplHelper9 <   css::container::XNameContainer
                             ,   css::beans::XPropertyChangeListener
                             ,   css::io::XPersistObject
                             ,   css::util::XCloneable
-                            ,   css::lang::XUnoTunnel
                             > OInterfaceContainer_BASE;
 
 class OInterfaceContainer : public OInterfaceContainer_BASE
@@ -174,9 +172,6 @@ public:
     virtual void SAL_CALL detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
     virtual void SAL_CALL addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
     virtual void SAL_CALL removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 protected:
     // helper

@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <sal/log.hxx>
@@ -1632,7 +1631,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<uno::Any>& rArgumen
 
     if (xParentWindow.is())
     {
-        if (SalGtkXWindow* pGtkXWindow = comphelper::getFromUnoTunnel<SalGtkXWindow>(xParentWindow))
+        if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
             pParentWidget = pGtkXWindow->getGtkWidget();
         else
         {

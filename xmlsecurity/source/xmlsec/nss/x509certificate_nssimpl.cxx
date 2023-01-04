@@ -334,8 +334,7 @@ SECKEYPrivateKey* X509Certificate_NssImpl::getPrivateKey()
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) {
-    return comphelper::getSomethingImpl(
-        aIdentifier, this, comphelper::FallbackToGetSomethingOf<xmlsecurity::Certificate>{});
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */

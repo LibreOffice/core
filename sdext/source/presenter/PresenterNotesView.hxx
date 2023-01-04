@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/ref.hxx>
 #include <memory>
 
@@ -46,8 +45,7 @@ typedef cppu::WeakComponentImplHelper<
     css::awt::XPaintListener,
     css::drawing::framework::XView,
     css::drawing::XDrawView,
-    css::awt::XKeyListener,
-    css::lang::XUnoTunnel
+    css::awt::XKeyListener
     > PresenterNotesViewInterfaceBase;
 
 /** A drawing framework view of the notes of a slide.  At the moment this is
@@ -118,9 +116,6 @@ public:
 
     virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent) override;
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent) override;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;

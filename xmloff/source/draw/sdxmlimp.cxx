@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <xmloff/xmlscripti.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -553,7 +552,7 @@ void SdXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::
     const uno::Sequence<beans::PropertyValue>* pValues = &aConfigProps;
 
     DocumentSettingsSerializer *pFilter;
-    pFilter = comphelper::getFromUnoTunnel<DocumentSettingsSerializer>(xProps);
+    pFilter = dynamic_cast<DocumentSettingsSerializer *>(xProps.get());
     uno::Sequence<beans::PropertyValue> aFiltered;
     if( pFilter )
     {

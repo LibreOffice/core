@@ -23,7 +23,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -41,8 +40,7 @@
 namespace vclcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont,
-                                             css::lang::XServiceInfo,
-                                             css::lang::XUnoTunnel > CanvasFont_Base;
+                                             css::lang::XServiceInfo > CanvasFont_Base;
 
     class CanvasFont : public ::cppu::BaseMutex,
                        public CanvasFont_Base
@@ -74,9 +72,6 @@ namespace vclcanvas
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         vcl::Font const & getVCLFont() const;
 

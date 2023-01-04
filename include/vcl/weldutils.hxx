@@ -14,11 +14,9 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/compbase.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
@@ -35,8 +33,7 @@ class Window;
 
 namespace weld
 {
-typedef comphelper::WeakComponentImplHelper<css::awt::XWindow, css::lang::XUnoTunnel>
-    TransportAsXWindow_Base;
+typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 
 class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
 {
@@ -171,13 +168,6 @@ public:
         std::unique_lock g(m_aMutex);
         m_aPaintListeners.removeInterface(g, rListener);
     }
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const& aIdentifier) override
-    {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    static css::uno::Sequence<sal_Int8> const& getUnoTunnelId();
 };
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC

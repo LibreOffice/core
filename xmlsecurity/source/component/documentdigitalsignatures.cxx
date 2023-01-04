@@ -52,7 +52,6 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -72,9 +71,9 @@ using namespace css::xml::crypto;
 
 namespace {
 class DocumentDigitalSignatures
-    : public cppu::ImplInheritanceHelper<sfx2::DigitalSignatures,
-                                         css::security::XDocumentDigitalSignatures,
-                                         css::lang::XInitialization, css::lang::XServiceInfo>
+    : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
+                                  css::lang::XInitialization, css::lang::XServiceInfo>,
+      public sfx2::DigitalSignatures
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
@@ -686,8 +685,8 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
                 return false;
             uno::Reference<css::security::XCertificate> xCert = aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(rAuthor.RawData);
 
-            auto pAuthor = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xAuthor);
-            auto pCert = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xCert);
+            auto pAuthor = dynamic_cast<xmlsecurity::Certificate*>(xAuthor.get());
+            auto pCert = dynamic_cast<xmlsecurity::Certificate*>(xCert.get());
             if (pAuthor && pCert)
                 return pCert->getSHA256Thumbprint() == pAuthor->getSHA256Thumbprint();
 

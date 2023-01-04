@@ -35,7 +35,6 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
@@ -638,7 +637,7 @@ namespace vclcanvas
                 // try to cast XParametricPolyPolygon2D reference to
                 // our implementation class.
                 ::canvas::ParametricPolyPolygon* pGradient =
-                      comphelper::getFromUnoTunnel< ::canvas::ParametricPolyPolygon >( textures[0].Gradient );
+                      dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
                 if( pGradient && pGradient->getValues().maColors.hasElements() )
                 {

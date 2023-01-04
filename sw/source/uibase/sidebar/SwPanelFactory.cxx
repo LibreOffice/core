@@ -37,7 +37,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/compbase.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 
@@ -91,7 +90,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     weld::Widget* pParent(nullptr);
-    if (weld::TransportAsXWindow* pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
         pParent = pTunnel->getWidget();
 
     if (!pParent)

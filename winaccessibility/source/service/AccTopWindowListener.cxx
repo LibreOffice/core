@@ -18,7 +18,6 @@
  */
 
 
-#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -45,8 +44,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     VclPtr<vcl::Window> window;
     if (auto pvclwindow = dynamic_cast<VCLXWindow*>(pAccessible))
         window = pvclwindow->GetWindow();
-    else if (auto pvclxcomponent
-                 = comphelper::getFromUnoTunnel<VCLXAccessibleComponent>(pAccessible))
+    else if (auto pvclxcomponent = dynamic_cast<VCLXAccessibleComponent*>(pAccessible))
         window = pvclxcomponent->GetWindow();
     assert(window);
     // The SalFrame of window may be destructed at this time

@@ -41,7 +41,6 @@
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/safeint.hxx>
@@ -835,7 +834,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( bHandleVbaEvents )
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
-        OInterfaceContainer* pIfcMgr = xMgr.is() ? comphelper::getFromUnoTunnel<OInterfaceContainer>(xMgr) : nullptr;
+        OInterfaceContainer* pIfcMgr = xMgr.is() ? dynamic_cast<OInterfaceContainer*>(xMgr.get()) : nullptr;
         if (pIfcMgr)
         {
             sal_Int32 nLen = pIfcMgr->getCount();
@@ -1234,16 +1233,6 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScrip
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->removeScriptListener( xListener );
-}
-
-
-sal_Int64 OInterfaceContainer::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & OInterfaceContainer::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 

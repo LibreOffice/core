@@ -65,7 +65,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -24484,7 +24483,7 @@ weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, Vcl
 
 weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
 {
-    if (SalGtkXWindow* pGtkXWindow = comphelper::getFromUnoTunnel<SalGtkXWindow>(rWindow))
+    if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(rWindow.get()))
         return pGtkXWindow->getFrameWeld();
     return SalInstance::GetFrameWeld(rWindow);
 }

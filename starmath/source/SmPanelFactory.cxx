@@ -26,7 +26,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <vcl/weldutils.hxx>
 
@@ -70,7 +69,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
         weld::Widget* pParent(nullptr);
-        if (auto pTunnel = comphelper::getFromUnoTunnel<weld::TransportAsXWindow>(xParentWindow))
+        if (auto pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
             pParent = pTunnel->getWidget();
 
         if (!pParent)

@@ -34,7 +34,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <functional>
 
@@ -45,8 +44,7 @@ typedef cppu::WeakComponentImplHelper<
     css::awt::XPaintListener,
     css::awt::XMouseListener,
     css::awt::XMouseMotionListener,
-    css::drawing::XDrawView,
-    css::lang::XUnoTunnel
+    css::drawing::XDrawView
     > PresenterToolBarInterfaceBase;
 
 typedef cppu::WeakComponentImplHelper<
@@ -135,10 +133,6 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
-
-    // XUnoTunnel
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
     class Context;
 

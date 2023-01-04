@@ -36,7 +36,6 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/outdev.hxx>
 
 #include <vcl/image.hxx>
@@ -788,11 +787,11 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
     uno::Reference< awt::XSimpleTabController > xTabCntrl( getPeer(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
 
-    VCLXTabPage* pXPage = comphelper::getFromUnoTunnel< VCLXTabPage >( xPage );
+    VCLXTabPage* pXPage = dynamic_cast< VCLXTabPage* >( xPage.get() );
     TabPage* pPage = pXPage ? pXPage->getTabPage() : nullptr;
     if ( xTabCntrl.is() && pPage )
     {
-        VCLXMultiPage* pXTab = comphelper::getFromUnoTunnel< VCLXMultiPage >( xTabCntrl );
+        VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );
         if ( pXTab )
         {
             OUString sTitle;

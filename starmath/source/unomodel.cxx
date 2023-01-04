@@ -361,7 +361,6 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::MixinToGetSomethingOf<FormulaImExportBase>{},
                                         comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
 }
 

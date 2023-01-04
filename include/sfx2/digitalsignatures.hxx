@@ -12,17 +12,14 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
-#include <cppuhelper/implbase.hxx>
 #include <sal/types.h>
-#include <sfx2/dllapi.h>
 
 namespace sfx2
 {
 /// Extension of css::security::XDocumentDigitalSignatures for internal purposes.
-class SFX2_DLLPUBLIC DigitalSignatures : public cppu::WeakImplHelper<css::lang::XUnoTunnel>
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") DigitalSignatures
 {
 public:
     /// Same as signDocumentWithCertificate(), but passes the xModel as well.
@@ -33,12 +30,8 @@ public:
                              const css::uno::Reference<css::io::XStream>& xStream)
         = 0;
 
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const& aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const& getUnoTunnelId();
-
 protected:
-    DigitalSignatures();
-    ~DigitalSignatures() override;
+    ~DigitalSignatures() noexcept = default;
 };
 }
 

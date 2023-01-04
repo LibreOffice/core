@@ -22,7 +22,6 @@
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
@@ -35,8 +34,7 @@ namespace basegfx::unotools
     typedef comphelper::WeakComponentImplHelper<
             css::rendering::XLinePolyPolygon2D,
             css::rendering::XBezierPolyPolygon2D,
-            css::lang::XServiceInfo,
-            css::lang::XUnoTunnel > UnoPolyPolygonBase;
+            css::lang::XServiceInfo > UnoPolyPolygonBase;
 
     class BASEGFX_DLLPUBLIC UnoPolyPolygon
         : public UnoPolyPolygonBase
@@ -69,10 +67,6 @@ namespace basegfx::unotools
         SAL_DLLPRIVATE virtual OUString SAL_CALL getImplementationName() override;
         SAL_DLLPRIVATE virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         SAL_DLLPRIVATE virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        SAL_DLLPRIVATE sal_Int64 SAL_CALL getSomething(
-            css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static SAL_DLLPRIVATE css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
         SAL_DLLPRIVATE B2DPolyPolygon getPolyPolygon() const;
 

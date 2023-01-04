@@ -57,7 +57,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
@@ -1157,7 +1156,7 @@ Reference< XShape > const & Shape::createAndInsert(
             {
                 uno::Reference<uno::XInterface> const xMathModel(xObj->getComponent());
                 oox::FormulaImExportBase *const pMagic(
-                        comphelper::getFromUnoTunnel<oox::FormulaImExportBase>(xMathModel));
+                        dynamic_cast<oox::FormulaImExportBase*>(xMathModel.get()));
                 assert(pMagic);
                 pMagic->readFormulaOoxml(*pMathXml);
             }

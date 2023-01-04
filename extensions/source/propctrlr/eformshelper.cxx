@@ -32,7 +32,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <algorithm>
 #include <o3tl/functional.hxx>
@@ -244,7 +243,7 @@ namespace pcr
             ::comphelper::OInterfaceIteratorHelper3 aListenerIterator(m_aPropertyListeners);
             while ( aListenerIterator.hasMoreElements() )
             {
-                PropertyEventTranslation* pTranslator = comphelper::getFromUnoTunnel< PropertyEventTranslation >( aListenerIterator.next() );
+                PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( aListenerIterator.next().get() );
                 OSL_ENSURE( pTranslator, "EFormsHelper::impl_toggleBindingPropertyListening_throw: invalid listener element in my container!" );
                 if ( !pTranslator )
                     continue;

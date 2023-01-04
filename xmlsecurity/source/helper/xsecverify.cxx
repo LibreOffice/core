@@ -42,7 +42,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
-#include <comphelper/servicehelper.hxx>
 
 namespace com::sun::star::graphic { class XGraphic; }
 
@@ -134,8 +133,8 @@ void XSecController::switchGpgSignature()
         return;
 
     SignatureVerifierImpl* pImpl=
-        comphelper::getFromUnoTunnel<SignatureVerifierImpl>(
-            m_vInternalSignatureInformations.back().xReferenceResolvedListener);
+        dynamic_cast<SignatureVerifierImpl*>(
+            m_vInternalSignatureInformations.back().xReferenceResolvedListener.get());
     if (pImpl)
     {
         css::uno::Reference<css::xml::crypto::XSEInitializer> xGpgSEInitializer(

@@ -96,10 +96,6 @@ namespace vclcanvas
         return "com.sun.star.rendering.Canvas.VCL";
     }
 
-    sal_Int64 Canvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
-    }
-
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
                           const rendering::ViewState&   viewState,
                           const rendering::RenderState& renderState,

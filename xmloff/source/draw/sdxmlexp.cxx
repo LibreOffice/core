@@ -52,7 +52,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/gen.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlaustp.hxx>
@@ -2474,8 +2473,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
     if( xProps.is() )
         SvXMLUnitConverter::convertPropertySet( rProps, xProps );
-    DocumentSettingsSerializer *pFilter(
-        comphelper::getFromUnoTunnel<DocumentSettingsSerializer>(xProps));
+    DocumentSettingsSerializer *pFilter(dynamic_cast<DocumentSettingsSerializer *>(xProps.get()));
     if (!pFilter)
         return;
     const uno::Reference< embed::XStorage > xStorage(GetTargetStorage());

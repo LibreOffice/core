@@ -26,7 +26,6 @@
 #include <com/sun/star/rendering/RenderingIntent.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -949,7 +948,7 @@ sal_Int8 SAL_CALL VclCanvasBitmap::getEndianness(  )
 uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                               const uno::Reference< ::rendering::XColorSpace >& targetColorSpace )
 {
-    if( comphelper::getFromUnoTunnel<VclCanvasBitmap>(targetColorSpace) )
+    if( dynamic_cast<VclCanvasBitmap*>(targetColorSpace.get()) )
     {
         SolarMutexGuard aGuard;
 
@@ -1013,7 +1012,7 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
 uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                   const uno::Reference< ::rendering::XIntegerBitmapColorSpace >& targetColorSpace )
 {
-    if( comphelper::getFromUnoTunnel<VclCanvasBitmap>(targetColorSpace) )
+    if( dynamic_cast<VclCanvasBitmap*>(targetColorSpace.get()) )
     {
         // it's us, so simply pass-through the data
         return deviceColor;
@@ -1343,15 +1342,6 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
     }
 
     return aRes;
-}
-
-sal_Int64 VclCanvasBitmap::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & VclCanvasBitmap::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 

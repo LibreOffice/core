@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "canvasbitmap.hxx"
@@ -83,11 +82,6 @@ namespace vclcanvas
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
     {
         return { "com.sun.star.rendering.CanvasBitmap" };
-    }
-
-    sal_Int64 CanvasBitmap::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl(
-            aIdentifier, this, comphelper::FallbackToGetSomethingOf<RepaintTarget>{});
     }
 
     BitmapEx CanvasBitmap::getBitmap() const

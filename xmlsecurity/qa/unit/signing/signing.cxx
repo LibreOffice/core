@@ -33,7 +33,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -128,7 +127,7 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 
     for (const auto& xCertificate : aCertificates)
     {
-        auto pCertificate = comphelper::getFromUnoTunnel<xmlsecurity::Certificate>(xCertificate);
+        auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCertificate.get());
         CPPUNIT_ASSERT(pCertificate);
         if (pCertificate->getSignatureMethodAlgorithm() == eAlgo
             && IsValid(xCertificate, xSecurityEnvironment))

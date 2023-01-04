@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <memory>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -75,8 +74,7 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
 };
 
 class Annotation final : private ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper<
-                       css::office::XAnnotation, css::lang::XUnoTunnel>,
+                   public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
 public:
@@ -92,8 +90,8 @@ public:
 
     // XInterface:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
-    virtual void SAL_CALL acquire() noexcept override { WeakComponentImplHelper::acquire(); }
-    virtual void SAL_CALL release() noexcept override { WeakComponentImplHelper::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -117,9 +115,6 @@ public:
     virtual css::util::DateTime SAL_CALL getDateTime() override;
     virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
     virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     void createChangeUndo();
 

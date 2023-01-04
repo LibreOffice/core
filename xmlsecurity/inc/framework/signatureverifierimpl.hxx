@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <xmlsecuritydllapi.h>
@@ -36,8 +35,7 @@ typedef cppu::ImplInheritanceHelper
     SignatureEngine,
     css::xml::crypto::sax::XSignatureVerifyResultBroadcaster,
     css::lang::XInitialization,
-    css::lang::XServiceInfo,
-    css::lang::XUnoTunnel
+    css::lang::XServiceInfo
 > SignatureVerifierImpl_Base;
 
 class SignatureVerifierImpl final : public SignatureVerifierImpl_Base
@@ -75,9 +73,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-    static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     void updateSignature( const css::uno::Reference< css::xml::crypto::XXMLSignature >& xSignature,
                           const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }

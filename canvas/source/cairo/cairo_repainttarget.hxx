@@ -21,9 +21,6 @@
 
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <sal/types.h>
 
 #include <vcl/cairo.hxx>
 
@@ -36,7 +33,7 @@ namespace cairocanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class RepaintTarget
+    class SAL_LOPLUGIN_ANNOTATE("crosscast") RepaintTarget
     {
     public:
         virtual ~RepaintTarget() {}
@@ -45,15 +42,6 @@ namespace cairocanvas
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
                               const css::rendering::ViewState&   viewState,
                               const css::rendering::RenderState& renderState ) = 0;
-
-        sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & id) {
-            return comphelper::getSomethingImpl(id, this);
-        }
-
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
-            static comphelper::UnoIdInit const id;
-            return id.getSeq();
-        }
     };
 }
 

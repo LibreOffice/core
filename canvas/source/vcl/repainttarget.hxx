@@ -19,10 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <sal/types.h>
-
 #include "cachedbitmap.hxx"
 
 class Point;
@@ -38,7 +34,7 @@ namespace vclcanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class RepaintTarget
+    class SAL_LOPLUGIN_ANNOTATE("crosscast") RepaintTarget
     {
     public:
         virtual ~RepaintTarget() {}
@@ -50,15 +46,6 @@ namespace vclcanvas
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const = 0;
-
-        sal_Int64 getSomething(css::uno::Sequence<sal_Int8> const & id) {
-            return comphelper::getSomethingImpl(id, this);
-        }
-
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId() {
-            static comphelper::UnoIdInit const id;
-            return id.getSeq();
-        }
     };
 }
 
