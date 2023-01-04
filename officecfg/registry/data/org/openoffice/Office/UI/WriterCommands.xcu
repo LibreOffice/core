@@ -524,6 +524,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Content Control Properties</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Properties</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -637,6 +640,12 @@
       </node>
       <node oor:name=".uno:InsertContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rich Text Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Rich Text</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Rich Text Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -645,6 +654,12 @@
       </node>
       <node oor:name=".uno:InsertCheckboxContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Check Box Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Check Box</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Check Box Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -653,6 +668,12 @@
       </node>
       <node oor:name=".uno:InsertDropdownContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Drop-Down List Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Drop-Down List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Drop-Down List Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -661,6 +682,12 @@
       </node>
       <node oor:name=".uno:InsertPictureContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Picture Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Picture</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Picture Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -669,6 +696,12 @@
       </node>
       <node oor:name=".uno:InsertDateContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Date Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Date Control</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Date Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -677,6 +710,12 @@
       </node>
       <node oor:name=".uno:InsertPlainTextContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Plain Text Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Plain Text</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Plain Text Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -685,6 +724,12 @@
       </node>
       <node oor:name=".uno:InsertComboBoxContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Combo Box Content Control</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Combo Box</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Combo Box Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
