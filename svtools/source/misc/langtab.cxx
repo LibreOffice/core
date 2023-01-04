@@ -240,7 +240,7 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
     OUString sLangTag( lcl_getDescription( LanguageTag(nLang)));
     SAL_WARN("svtools.misc", "Language: 0x"
         << std::hex << nLang
-        << " with unknown name, so returning lang-tag of: "
+        << " with unknown name, so returning generated: "
         << sLangTag);
 
     // And add it to the table if it is an on-the-fly-id, which it usually is,
