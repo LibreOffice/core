@@ -75,9 +75,16 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     const SvLBoxContextBmp* pBmpItem = dynamic_cast<const SvLBoxContextBmp*>(&rItem);
                     if (pBmpItem)
                     {
-                        auto aColumn = rJsonWriter.startStruct();
-                        rJsonWriter.put("collapsed", pBmpItem->GetBitmap1().GetStock());
-                        rJsonWriter.put("expanded", pBmpItem->GetBitmap2().GetStock());
+                        const OUString& rCollapsed = pBmpItem->GetBitmap1().GetStock();
+                        const OUString& rExpanded = pBmpItem->GetBitmap2().GetStock();
+                        if (!rCollapsed.trim().isEmpty() || !rExpanded.trim().isEmpty())
+                        {
+                            auto aColumn = rJsonWriter.startStruct();
+                            if (!rCollapsed.trim().isEmpty())
+                                rJsonWriter.put("collapsed", rCollapsed);
+                            if (!rExpanded.trim().isEmpty())
+                                rJsonWriter.put("expanded", rExpanded);
+                        }
                     }
                 }
             }
