@@ -90,6 +90,7 @@
 #include <svx/galleryitem.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <memory>
 
 #include <svx/unobrushitemhelper.hxx>
@@ -98,12 +99,16 @@
 #include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <shellres.hxx>
 #include <UndoTable.hxx>
 
 #include <ndtxt.hxx>
 #include <UndoManager.hxx>
+#include <fmtrfmrk.hxx>
+#include <txtrfmrk.hxx>
+#include <translatehelper.hxx>
 
 FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;
 
@@ -765,6 +770,102 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
     }
 }
 
+namespace
+{
+/// Searches for the specified field type and field name prefix and update the matching fields to
+/// have the provided new name and content.
+bool UpdateFieldConents(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (!pTypeName || pTypeName->GetValue() != "SetRef")
+    {
+        // This is implemented so far only for reference marks.
+        return false;
+    }
+
+    const SfxStringItem* pNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    if (!pNamePrefix)
+    {
+        return false;
+    }
+    const OUString& rNamePrefix = pNamePrefix->GetValue();
+
+    const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+    if (!pFields)
+    {
+        return false;
+    }
+    uno::Sequence<beans::PropertyValues> aFields;
+    pFields->GetValue() >>= aFields;
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+    for (sal_uInt16 nRefMark = 0; nRefMark < pDoc->GetRefMarks(); ++nRefMark)
+    {
+        auto pRefMark = const_cast<SwFormatRefMark*>(pDoc->GetRefMark(nRefMark));
+        if (!pRefMark->GetRefName().startsWith(rNamePrefix))
+        {
+            continue;
+        }
+
+        if (aFields.getLength() <= nRefMark)
+        {
+            continue;
+        }
+        comphelper::SequenceAsHashMap aMap(aFields[nRefMark]);
+        auto aName = aMap["Name"].get<OUString>();
+        pRefMark->GetRefName() = aName;
+
+        OUString aContent = aMap["Content"].get<OUString>();
+        auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
+        if (!pTextRefMark->End())
+        {
+            continue;
+        }
+
+        // Insert markers to remember where the paste positions are.
+        const SwTextNode& rTextNode = pTextRefMark->GetTextNode();
+        SwPaM aMarkers(SwPosition(rTextNode, *pTextRefMark->End()));
+        IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+        pTextRefMark->SetDontExpand(false);
+        bool bSuccess = rIDCO.InsertString(aMarkers, "XY");
+        if (bSuccess)
+        {
+            SwPaM aPasteEnd(SwPosition(rTextNode, *pTextRefMark->End()));
+            aPasteEnd.Move(fnMoveBackward, GoInContent);
+
+            // Paste HTML content.
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
+            *pCursorPos = aPasteEnd;
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
+
+            // Update the refmark to point to the new content.
+            sal_Int32 nOldStart = pTextRefMark->GetStart();
+            sal_Int32 nNewStart = *pTextRefMark->End();
+            // First grow it to include text till the end of the paste position.
+            pTextRefMark->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
+            // Then shrink it to only start at the paste start: we know that the refmark was
+            // truncated to the paste start, as the refmark has to stay inside a single text node
+            pTextRefMark->SetStart(nNewStart);
+            rTextNode.GetSwpHints().SortIfNeedBe();
+            SwPaM aEndMarker(*aPasteEnd.GetPoint());
+            aEndMarker.SetMark();
+            aEndMarker.GetMark()->AdjustContent(1);
+            SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
+
+            // Remove markers. The start marker includes the old content as well.
+            rIDCO.DeleteAndJoin(aStartMarker);
+            rIDCO.DeleteAndJoin(aEndMarker);
+        }
+    }
+
+    rWrtSh.EndAction();
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+    return true;
+}
+}
+
 // Evaluate respectively dispatching the slot Id
 
 void SwBaseShell::Execute(SfxRequest &rReq)
@@ -787,6 +888,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
         case FN_UPDATE_FIELDS:
             {
+                if (UpdateFieldConents(rReq, rSh))
+                {
+                    // Parameters indicated that the name / content of fields has to be updated to
+                    // the provided values, don't do an actual fields update.
+                    break;
+                }
+
                 rSh.UpdateDocStat();
                 rSh.EndAllTableBoxEdit();
                 rSh.SwViewShell::UpdateFields(true);

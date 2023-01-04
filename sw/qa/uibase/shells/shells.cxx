@@ -532,6 +532,61 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When updating that refmark:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "TypeName": {
+        "type": "string",
+        "value": "SetRef"
+    },
+    "NamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_ITEM CSL_CITATION"
+    },
+    "Fields": {
+        "type": "[][]com.sun.star.beans.PropertyValue",
+        "value": [
+            {
+                "Name": {
+                    "type": "string",
+                    "value": "ZOTERO_ITEM CSL_CITATION {} new refmark"
+                },
+                "Content": {
+                    "type": "string",
+                    "value": "new content"
+                }
+            }
+        ]
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateFields", aArgs);
+
+    // Then make sure that the document text features the new content:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new content
+    // - Actual  : old content
+    // i.e. the doc content was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

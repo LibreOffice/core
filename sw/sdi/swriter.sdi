@@ -6514,7 +6514,7 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
 ]
 
 SfxVoidItem UpdateFields FN_UPDATE_FIELDS
-()
+(SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
