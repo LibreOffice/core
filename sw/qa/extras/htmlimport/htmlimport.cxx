@@ -569,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
     const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
     const Color nBackColor(0xaed89a);
 
-    // Without the accompanying fix in place, this test would have failed, the backround
+    // Without the accompanying fix in place, this test would have failed, the background
     // color was not imported at all, when it was in hex RGBA format in HTML.
     CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
 }
