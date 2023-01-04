@@ -169,6 +169,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
     mDraggingDestinationHandler = nil;
+    mbInLiveResize = NO;
     mpFrame = pFrame;
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
                      { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
@@ -226,6 +227,7 @@ static AquaSalFrame* getMouseContainerFrame()
         // explicitly flush the Skia graphics to the window during live
         // resizing or else nothing will be drawn until after live resizing
         // has ended.
+        // TODO: See if flickering when flushing can be eliminated somehow.
         if ( [self inLiveResize] && SkiaHelper::isVCLSkiaEnabled() && mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         {
             AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
@@ -337,16 +339,35 @@ static AquaSalFrame* getMouseContainerFrame()
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        // Related: tdf#152703 Stop flicker with Skia/Metal while resizing
-        // When Skia/Metal is enabled, rapidly resizing a window has a
-        // noticeable amount of flicker so don't send any paint events during
-        // live resizing.
-        // Also, it appears that most of the LibreOffice layouts do not change
-        // their layout much during live resizing so apply this change when
-        // Skia is not enabled to ensure consistent behavior whether Skia is
-        // enabled or not.
-        if ( ![self inLiveResize] )
+        if ( [self inLiveResize] )
+        {
+            mbInLiveResize = YES;
+
+            // tdf#152703 Force relayout during live resizing of window
+            // During a live resize, macOS floods the application with
+            // windowDidResize: notifications so sending a paint event does
+            // not trigger redrawing with the new size.
+            // Instead, force relayout by dispatching all pending internal
+            // events and firing any pending timers.
+            Application::Reschedule( true );
+
+            // tdf#152703 Force repaint after live resizing ends
+            // Repost this notification so that this selector will be called
+            // at least once after live resizing ends. Pass nil for withObject:
+            // since it is unused and makes it easier to cancel all pending
+            // selector execution when live resizing ends.
+            [self performSelector:@selector(windowDidResize:) withObject:nil afterDelay:0.1f];
+        }
+        else
+        {
+            if ( mbInLiveResize )
+            {
+                mbInLiveResize = NO;
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(windowDidResize:) object:nil];
+            }
+
             mpFrame->SendPaintEvent();
+        }
     }
 }
 

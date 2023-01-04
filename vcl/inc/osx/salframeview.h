@@ -28,6 +28,7 @@ enum class SalEvent;
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
+    BOOL                mbInLiveResize;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(BOOL)canBecomeKeyWindow;
