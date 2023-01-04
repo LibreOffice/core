@@ -1263,6 +1263,10 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
         bRet = check( raiseOnewayException( xLBT ),
                       "oneway exception test" ) && bRet;
+        // Check that a dynamic_cast from what is potentially a proxy object does not cause a crash
+        // (and the choice of TestBridgeImpl as target is rather arbitrary, it is just some type for
+        // which the dynamic_cast is known to be null):
+        bRet = (dynamic_cast<TestBridgeImpl *>(xOriginal.get()) == nullptr) && bRet;
         if (! bRet)
         {
             throw RuntimeException( "error: test failed!" );

@@ -20,6 +20,7 @@
 
 #include <sal/alloca.h>
 #include <strings.h>
+#include <typeinfo>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -431,7 +432,7 @@ unsigned char * codeSnippet(
 
 }
 
-struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void const * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
@@ -445,6 +446,12 @@ std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
+namespace {
+// Some dummy type whose RTTI is used in the synthesized proxy vtables to make uses of dynamic_cast
+// on such proxy objects not crash:
+struct ProxyRtti {};
+}
+
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount, sal_Int32,
@@ -452,7 +459,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 {
     Slot * slots = mapBlockToVtable(block);
     slots[-2].fn = 0;
-    slots[-1].fn = 0;
+    slots[-1].fn = &typeid(ProxyRtti);
     return slots + slotCount;
 }
 

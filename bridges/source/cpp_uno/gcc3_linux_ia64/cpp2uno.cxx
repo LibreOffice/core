@@ -30,6 +30,7 @@
 
 #include "share.hxx"
 #include <stdio.h>
+#include <typeinfo>
 
 extern "C" { extern void (*privateSnippetExecutor)(); }
 
@@ -607,10 +608,16 @@ std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     return (slotCount + 1) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
+namespace {
+// Some dummy type whose RTTI is used in the synthesized proxy vtables to make uses of dynamic_cast
+// on such proxy objects not crash:
+struct ProxyRtti {};
+}
+
 bridges::cpp_uno::shared::VtableFactory::Slot* bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block, sal_Int32 slotCount, sal_Int32, typelib_InterfaceTypeDescription *)
 {
     Slot * slots = mapBlockToVtable(block);
-    slots[-1] = {0,0};
+    slots[-1] = {0,reinterpret_cast<sal_uInt64>(&typeid(ProxyRtti))};
     return slots + slotCount;
 }
 
