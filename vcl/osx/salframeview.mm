@@ -220,22 +220,6 @@ static AquaSalFrame* getMouseContainerFrame()
     if( GetSalData() && GetSalData()->mpInstance )
     {
         SolarMutexGuard aGuard;
-
-#if HAVE_FEATURE_SKIA
-        // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
-        // The window will clear its background so when Skia/Metal is enabled,
-        // explicitly flush the Skia graphics to the window during live
-        // resizing or else nothing will be drawn until after live resizing
-        // has ended.
-        // TODO: See if flickering when flushing can be eliminated somehow.
-        if ( [self inLiveResize] && SkiaHelper::isVCLSkiaEnabled() && mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        {
-            AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
-            if ( pGraphics )
-                pGraphics->Flush();
-        }
-#endif
-
         [super displayIfNeeded];
     }
 }
@@ -339,9 +323,29 @@ static AquaSalFrame* getMouseContainerFrame()
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        if ( [self inLiveResize] )
+        BOOL bInLiveResize = [self inLiveResize];
+        if ( bInLiveResize || mbInLiveResize )
         {
-            mbInLiveResize = YES;
+            mbInLiveResize = bInLiveResize;
+
+#if HAVE_FEATURE_SKIA
+            // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
+            // The window will clear its background so when Skia/Metal is
+            // enabled, explicitly flush the Skia graphics to the window
+            // during live resizing or else nothing will be drawn until after
+            // live resizing has ended.
+            // Also, flushing during [self windowDidResize:] eliminates flicker
+            // by forcing this window's SkSurface to recreate its underlying
+            // CAMetalLayer with the new size. Flushing in
+            // [self displayIfNeeded] does not eliminate flicker so apparently
+            // [self windowDidResize:] is called earlier.
+            if ( SkiaHelper::isVCLSkiaEnabled() )
+            {
+                AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+                if ( pGraphics )
+                    pGraphics->Flush();
+            }
+#endif
 
             // tdf#152703 Force relayout during live resizing of window
             // During a live resize, macOS floods the application with
@@ -349,23 +353,35 @@ static AquaSalFrame* getMouseContainerFrame()
             // not trigger redrawing with the new size.
             // Instead, force relayout by dispatching all pending internal
             // events and firing any pending timers.
+            // Also, Application::Reschedule() can potentially display a
+            // modal dialog which will cause a hang so temporarily disable
+            // live resize by clampiing the window's minimum and maximum sizes
+            // to the current frame size which in Application::Reschedule().
+            NSRect aFrame = [self frame];
+            NSSize aMinSize = [self minSize];
+            NSSize aMaxSize = [self maxSize];
+            [self setMinSize:aFrame.size];
+            [self setMaxSize:aFrame.size];
             Application::Reschedule( true );
+            [self setMinSize:aMinSize];
+            [self setMaxSize:aMaxSize];
 
-            // tdf#152703 Force repaint after live resizing ends
-            // Repost this notification so that this selector will be called
-            // at least once after live resizing ends. Pass nil for withObject:
-            // since it is unused and makes it easier to cancel all pending
-            // selector execution when live resizing ends.
-            [self performSelector:@selector(windowDidResize:) withObject:nil afterDelay:0.1f];
+            if ( mbInLiveResize )
+            {
+                // tdf#152703 Force repaint after live resizing ends
+                // Repost this notification so that this selector will be called
+                // at least once after live resizing ends. Pass nil for
+                // withObject: since it is unused and makes it easier to cancel
+                // all pending selector execution when live resizing ends.
+                [self performSelector:@selector(windowDidResize:) withObject:nil afterDelay:0.1f];
+            }
+            else
+            {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(windowDidResize:) object:nil];
+            }
         }
         else
         {
-            if ( mbInLiveResize )
-            {
-                mbInLiveResize = NO;
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(windowDidResize:) object:nil];
-            }
-
             mpFrame->SendPaintEvent();
         }
     }
