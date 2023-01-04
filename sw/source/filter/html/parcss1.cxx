@@ -530,11 +530,11 @@ CSS1Token CSS1Parser::GetNextToken()
                 bool bEOFSave = m_bEOF;
 
                 // first try to parse a hex digit
-                OUStringBuffer sTmpBuffer(6);
+                OUStringBuffer sTmpBuffer(8);
                 do {
                     sTmpBuffer.append( m_cNextCh );
                     m_cNextCh = GetNextChar();
-                } while( sTmpBuffer.getLength() < 7 &&
+                } while( sTmpBuffer.getLength() < 9 &&
                          ( ('0'<=m_cNextCh && '9'>=m_cNextCh) ||
                            ('A'<=m_cNextCh && 'F'>=m_cNextCh) ||
                            ('a'<=m_cNextCh && 'f'>=m_cNextCh) ) &&
@@ -542,8 +542,28 @@ CSS1Token CSS1Parser::GetNextToken()
 
                 if( sTmpBuffer.getLength()==6 || sTmpBuffer.getLength()==3 )
                 {
-                    // we found a color in hex
+                    // we found a color in hex (RGB)
                     m_aToken += sTmpBuffer;
+                    nRet = CSS1_HEXCOLOR;
+                    bNextCh = false;
+
+                    break;
+                }
+
+                if( sTmpBuffer.getLength()==8 )
+                {
+                    // we found a color in hex (RGBA)
+                    // we convert it to RGB assuming white background
+                    sal_uInt32 nColor = sTmpBuffer.makeStringAndClear().toUInt32(16);
+                    sal_uInt32 nRed = (nColor & 0xff000000) >> 24;
+                    sal_uInt32 nGreen = (nColor & 0xff0000) >> 16;
+                    sal_uInt32 nBlue = (nColor & 0xff00) >> 8;
+                    double nAlpha = (nColor & 0xff) / 255.0;
+                    nRed = (1 - nAlpha) * 255 + nAlpha * nRed;
+                    nGreen = (1 - nAlpha) * 255 + nAlpha * nGreen;
+                    nBlue = (1 - nAlpha) * 255 + nAlpha * nBlue;
+                    nColor = (nRed << 16) + (nGreen << 8) + nBlue;
+                    m_aToken += OUString::number(nColor, 16);
                     nRet = CSS1_HEXCOLOR;
                     bNextCh = false;
 
