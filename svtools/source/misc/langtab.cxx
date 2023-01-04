@@ -243,10 +243,8 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
         << " with unknown name, so returning generated: "
         << sLangTag);
 
-    // And add it to the table if it is an on-the-fly-id, which it usually is,
-    // so it is available in all subsequent language boxes.
-    if (LanguageTag::isOnTheFlyID( nLang))
-        const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
+    // And add it to the table, so it is available in all subsequent language boxes.
+    const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
 
     return sLangTag;
 }
