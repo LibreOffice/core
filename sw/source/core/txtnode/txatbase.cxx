@@ -113,13 +113,6 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     case RES_TXTATR_FLYCNT:
         pWhich = "fly content";
         break;
-    case RES_TXTATR_CHARFMT:
-        {
-            pWhich = "character format";
-            if (SwCharFormat* pCharFormat = GetCharFormat().GetCharFormat())
-                oValue = OString("name: " + OUStringToOString(pCharFormat->GetName(), RTL_TEXTENCODING_UTF8));
-            break;
-        }
     case RES_TXTATR_INETFMT:
         {
             pWhich = "inet format";
