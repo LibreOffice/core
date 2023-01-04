@@ -880,7 +880,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_glade \
 	extras_labels \
 	$(if $(filter WNT,$(OS)),extras_newfiles) \
-	extras_libstdcpp \
+	$(if $(filter LINUX,$(OS)),extras_libstdcpp) \
 	extras_palettes \
 	extras_personas \
 	extras_persona_dark \

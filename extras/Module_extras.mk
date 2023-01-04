@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autotextuser \
 	CustomTarget_glade \
 	CustomTarget_gallsystem \
-	CustomTarget_libstdcpp \
+	$(if $(filter LINUX,$(OS)),CustomTarget_libstdcpp) \
 	CustomTarget_tplofficorr \
 	CustomTarget_tploffimisc \
 	CustomTarget_tplpersonal \
@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
-	Package_libstdcpp \
+	$(if $(filter LINUX,$(OS)),Package_libstdcpp) \
 	Package_resource_fonts \
 	Package_gallbullets \
 	Package_gallmytheme \
