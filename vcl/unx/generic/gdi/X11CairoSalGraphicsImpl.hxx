@@ -76,6 +76,8 @@ public:
 
     void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, maClipRegion); }
 
+    void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2) override;
+
     bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                          double fTransparency) override;

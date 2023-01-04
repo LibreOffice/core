@@ -103,6 +103,8 @@ private:
 
     void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
 
+    void internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
+
 public:
 
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
@@ -150,8 +152,6 @@ public:
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( tools::Long nX, tools::Long nY ) override;
     virtual void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
-
-    virtual void drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
 
     virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 

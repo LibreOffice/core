@@ -122,31 +122,12 @@ void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
 void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                   tools::Long nY2)
 {
-    basegfx::B2DPolygon aPoly;
-
-    // PixelOffset used: To not mix with possible PixelSnap, cannot do
-    // directly on coordinates as tried before - despite being already 'snapped'
-    // due to being integer. If it would be directly added here, it would be
-    // 'snapped' again when !getAntiAlias(), losing the (0.5, 0.5) offset
-    aPoly.append(basegfx::B2DPoint(nX1, nY1));
-    aPoly.append(basegfx::B2DPoint(nX2, nY2));
-
     cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    // PixelOffset used: Set PixelOffset as linear transformation
-    cairo_matrix_t aMatrix;
-    cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
-    cairo_set_matrix(cr, &aMatrix);
-
-    AddPolygonToPath(cr, aPoly, basegfx::B2DHomMatrix(), !getAntiAlias(), false);
-
-    CairoCommon::applyColor(cr, m_rCairoCommon.m_aLineColor);
-
-    basegfx::B2DRange extents = getClippedStrokeDamage(cr);
-    extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-
-    cairo_stroke(cr);
+    CairoCommon::drawLine(cr, &extents, m_rCairoCommon.m_aLineColor, getAntiAlias(), nX1, nY1, nX2,
+                          nY2);
 
     m_rCairoCommon.releaseCairoContext(cr, false, extents);
 }

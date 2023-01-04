@@ -152,6 +152,10 @@ struct VCL_DLLPUBLIC CairoCommon
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
+    static void drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                         bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                         tools::Long nY2);
+
     // need this static version of ::drawPolyLine for usage from
     // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
     // ::drawPolyLine with some added parameters (see there)

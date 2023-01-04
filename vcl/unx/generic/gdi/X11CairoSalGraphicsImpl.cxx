@@ -125,6 +125,17 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObje
     return true;
 }
 
+void X11CairoSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                                       tools::Long nY2)
+{
+    cairo_t* cr = mrX11Common.getCairoContext();
+    clipRegion(cr);
+
+    CairoCommon::drawLine(cr, nullptr, mnPenColor, getAntiAlias(), nX1, nY1, nX2, nY2);
+
+    X11Common::releaseCairoContext(cr);
+}
+
 bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                            const basegfx::B2DPolygon& rPolyLine,
                                            double fTransparency, double fLineWidth,

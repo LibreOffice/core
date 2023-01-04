@@ -437,7 +437,7 @@ void X11SalGraphicsImpl::DrawLines(sal_uInt32              nPoints,
     if( bClose )
     {
         if( rPoints[nPoints-1].x != rPoints[0].x || rPoints[nPoints-1].y != rPoints[0].y )
-            drawLine( rPoints[nPoints-1].x, rPoints[nPoints-1].y, rPoints[0].x, rPoints[0].y );
+            internalDrawLine( rPoints[nPoints-1].x, rPoints[nPoints-1].y, rPoints[0].x, rPoints[0].y );
     }
 }
 
@@ -1121,7 +1121,7 @@ void X11SalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor
     }
 }
 
-void X11SalGraphicsImpl::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
+void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     if( mnPenColor != SALCOLOR_NONE )
     {
@@ -1174,7 +1174,7 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
             if( 1 == nPoints  )
                 drawPixel( pPtAry[0].getX(), pPtAry[0].getY() );
             else
-                drawLine( pPtAry[0].getX(), pPtAry[0].getY(),
+                internalDrawLine( pPtAry[0].getX(), pPtAry[0].getY(),
                           pPtAry[1].getX(), pPtAry[1].getY() );
         }
         return;

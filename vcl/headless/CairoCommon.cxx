@@ -609,6 +609,37 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
 
+void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                           bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                           tools::Long nY2)
+{
+    basegfx::B2DPolygon aPoly;
+
+    // PixelOffset used: To not mix with possible PixelSnap, cannot do
+    // directly on coordinates as tried before - despite being already 'snapped'
+    // due to being integer. If it would be directly added here, it would be
+    // 'snapped' again when !getAntiAlias(), losing the (0.5, 0.5) offset
+    aPoly.append(basegfx::B2DPoint(nX1, nY1));
+    aPoly.append(basegfx::B2DPoint(nX2, nY2));
+
+    // PixelOffset used: Set PixelOffset as linear transformation
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
+    cairo_set_matrix(cr, &aMatrix);
+
+    AddPolygonToPath(cr, aPoly, basegfx::B2DHomMatrix(), !bAntiAlias, false);
+
+    CairoCommon::applyColor(cr, rLineColor);
+
+    if (pExtents)
+    {
+        *pExtents = getClippedStrokeDamage(cr);
+        pExtents->transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+    }
+
+    cairo_stroke(cr);
+}
+
 bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                                bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,
