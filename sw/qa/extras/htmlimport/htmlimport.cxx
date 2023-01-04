@@ -536,6 +536,18 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
                          getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
+{
+    load(mpTestDocumentPath, "green-highlight.html");
+    const uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
+    const Color nBackColor(0xaed89a);
+
+    // Without the accompanying fix in place, this test would have failed, the backround
+    // color was not imported at all, when it was in hex RGBA format in HTML.
+    CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
