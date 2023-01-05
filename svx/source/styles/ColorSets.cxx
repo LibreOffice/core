@@ -54,8 +54,7 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
     if (aThemeColor.getType() == model::ThemeColorType::Unknown)
         return;
 
-    Color aColor = rColorSet.getColor(aThemeColor.getType());
-    aColor = aThemeColor.applyTransformations(aColor);
+    Color aColor = rColorSet.resolveColor(aThemeColor);
 
     xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
@@ -76,8 +75,7 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::
     if (aThemeColor.getType() == model::ThemeColorType::Unknown)
         return;
 
-    Color aColor = rColorSet.getColor(aThemeColor.getType());
-    aColor = aThemeColor.applyTransformations(aColor);
+    Color aColor = rColorSet.resolveColor(aThemeColor);
     xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
 
@@ -125,6 +123,28 @@ void ColorSet::add(model::ThemeColorType eType, Color aColorData)
     if (eType == model::ThemeColorType::Unknown)
         return;
     maColors[sal_Int16(eType)] = aColorData;
+}
+
+Color ColorSet::getColor(model::ThemeColorType eType) const
+{
+    if (eType == model::ThemeColorType::Unknown)
+    {
+        SAL_WARN("svx", "ColorSet::getColor with ThemeColorType::Unknown");
+        return COL_AUTO;
+    }
+    return maColors[size_t(eType)];
+}
+
+Color ColorSet::resolveColor(model::ThemeColor const& rThemeColor) const
+{
+    auto eType = rThemeColor.getType();
+    if (eType == model::ThemeColorType::Unknown)
+    {
+        SAL_WARN("svx", "ColorSet::resolveColor with ThemeColorType::Unknown");
+        return COL_AUTO;
+    }
+    Color aColor = getColor(eType);
+    return rThemeColor.applyTransformations(aColor);
 }
 
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
