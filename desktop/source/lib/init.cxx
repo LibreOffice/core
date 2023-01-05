@@ -5727,12 +5727,13 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static constexpr OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
     static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
     static constexpr OStringLiteral aFontSubset(".uno:FontSubset&name=");
-    static const std::initializer_list<std::u16string_view> vForward = {
-        u"TextFormFields",
-        u"SetDocumentProperties",
-        u"Bookmarks",
-        u"Fields"
-    };
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return nullptr;
+    }
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
@@ -5776,13 +5777,6 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return nullptr;
-        }
-
         tools::Rectangle aRectangle;
         if (aCommand.getLength() > aViewRowColumnHeaders.getLength())
         {
@@ -5828,13 +5822,6 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else if (aCommand.startsWith(aSheetGeometryData))
     {
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return nullptr;
-        }
-
         bool bColumns = true;
         bool bRows = true;
         bool bSizes = true;
@@ -5894,12 +5881,6 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else if (aCommand.startsWith(aCellCursor))
     {
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return nullptr;
-        }
         // Ignore command's deprecated parameters.
         tools::JsonWriter aJsonWriter;
         pDoc->getCellCursor(aJsonWriter);
@@ -5909,17 +5890,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getFontSubset(std::string_view(pCommand + aFontSubset.getLength()));
     }
-    else if (std::find(vForward.begin(), vForward.end(),
-                       INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath())
-             != vForward.end())
+    else if (pDoc->supportsCommandValues(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
     {
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return nullptr;
-        }
-
         tools::JsonWriter aJsonWriter;
         pDoc->getCommandValues(aJsonWriter, aCommand);
         return aJsonWriter.extractData();

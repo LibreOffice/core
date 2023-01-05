@@ -461,6 +461,9 @@ public:
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, const OString& rCommand) override;
 
+    /// @see vcl::ITiledRenderable::supportsCommandValues().
+    bool supportsCommandValues(const OUString& rCommand) override;
+
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
