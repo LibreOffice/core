@@ -418,49 +418,6 @@ void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTra
     }
 }
 
-bool DrawingML::WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet)
-{
-    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("CharColorThemeReference"))
-        return false;
-
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xPropertySet->getPropertyValue("CharColorThemeReference") >>= xThemeColor;
-    if (!xThemeColor.is())
-        return false;
-
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-        return false;
-    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aThemeColor.getType())];
-    mpFS->startElementNS(XML_a, XML_solidFill);
-    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
-    for (auto const& rTransform : aThemeColor.getTransformations())
-    {
-        switch (rTransform.meType)
-        {
-            case model::TransformationType::LumMod:
-                mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(rTransform.mnValue * 10));
-                break;
-            case model::TransformationType::LumOff:
-                mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(rTransform.mnValue * 10));
-                break;
-            case model::TransformationType::Tint:
-                mpFS->singleElementNS(XML_a, XML_tint, XML_val, OString::number(rTransform.mnValue * 10));
-                break;
-            case model::TransformationType::Shade:
-                mpFS->singleElementNS(XML_a, XML_shade, XML_val, OString::number(rTransform.mnValue * 10));
-                break;
-            default:
-                break;
-        }
-    }
-    mpFS->endElementNS(XML_a, XML_schemeClr);
-    mpFS->endElementNS(XML_a, XML_solidFill);
-
-    return true;
-}
-
 void DrawingML::WriteSolidFill( ::Color nColor, sal_Int32 nAlpha )
 {
     mpFS->startElementNS(XML_a, XML_solidFill);
@@ -553,7 +510,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        if (!WriteFillColor(rXPropSet))
+        if (!WriteSchemeColor(u"FillColorThemeReference", rXPropSet))
         {
             WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
         }
@@ -571,13 +528,13 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
 }
 
-bool DrawingML::WriteFillColor(const uno::Reference<beans::XPropertySet>& xPropertySet)
+bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("FillColorThemeReference"))
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(rPropertyName))
         return false;
 
     uno::Reference<util::XThemeColor> xThemeColor;
-    xPropertySet->getPropertyValue("FillColorThemeReference") >>= xThemeColor;
+    xPropertySet->getPropertyValue(rPropertyName) >>= xThemeColor;
     if (!xThemeColor.is())
         return false;
 
@@ -597,6 +554,12 @@ bool DrawingML::WriteFillColor(const uno::Reference<beans::XPropertySet>& xPrope
                 break;
             case model::TransformationType::LumOff:
                 mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::Tint:
+                mpFS->singleElementNS(XML_a, XML_tint, XML_val, OString::number(rTransform.mnValue * 10));
+                break;
+            case model::TransformationType::Shade:
+                mpFS->singleElementNS(XML_a, XML_shade, XML_val, OString::number(rTransform.mnValue * 10));
                 break;
             default:
                 break;
@@ -1058,7 +1021,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         if( nColor != nOriginalColor )
         {
             // the user has set a different color for the line
-            WriteSolidFill( nColor, nColorAlpha );
+            if (!WriteSchemeColor(u"LineColorThemeReference", rXPropSet))
+                    WriteSolidFill(nColor, nColorAlpha);
         }
         else if( !sColorFillScheme.isEmpty() )
         {
@@ -2260,7 +2224,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
-                if (!WriteCharColor(rXPropSet))
+                if (!WriteSchemeColor(u"CharColorThemeReference", rXPropSet))
                 {
                     WriteSolidFill(color, nTransparency);
                 }

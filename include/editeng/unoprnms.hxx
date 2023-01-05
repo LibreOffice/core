@@ -77,6 +77,7 @@
 #define UNO_NAME_LINEDASH                       "LineDash"
 #define UNO_NAME_LINEWIDTH                      "LineWidth"
 #define UNO_NAME_LINECOLOR                      "LineColor"
+#define UNO_NAME_LINECOLOR_THEME_REFERENCE      "LineColorThemeReference"
 #define UNO_NAME_LINEJOINT                      "LineJoint"
 #define UNO_NAME_LINESTART                      "LineStart"
 #define UNO_NAME_LINEEND                        "LineEnd"
