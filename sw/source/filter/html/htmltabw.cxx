@@ -455,7 +455,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             nNumFormat = pBox->GetFrameFormat()->GetTableBoxNumFormat().GetValue();
     }
 
-    if( bNumFormat || bValue )
+    if ((bNumFormat || bValue) && !rWrt.mbXHTML)
     {
         sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
             nNumFormat, *rWrt.m_pDoc->GetNumberFormatter(), rWrt.m_eDestEnc,
