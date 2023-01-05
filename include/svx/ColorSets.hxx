@@ -18,7 +18,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/theme/ThemeColor.hxx>
 #include <tools/color.hxx>
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -43,15 +43,8 @@ public:
         return maName;
     }
 
-    Color getColor(model::ThemeColorType nType) const
-    {
-        if (nType == model::ThemeColorType::Unknown)
-        {
-            SAL_WARN("svx", "ColorSet::getColor with ThemeColorType::Unknown");
-            return COL_AUTO;
-        }
-        return maColors[size_t(nType)];
-    }
+    Color resolveColor(model::ThemeColor const& rThemeColor) const;
+    Color getColor(model::ThemeColorType eType) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
