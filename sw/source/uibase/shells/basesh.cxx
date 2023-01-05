@@ -805,6 +805,7 @@ bool UpdateFieldConents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     SwDoc* pDoc = rWrtSh.GetDoc();
     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
     rWrtSh.StartAction();
+    sal_uInt16 nFieldIndex = 0;
     for (sal_uInt16 nRefMark = 0; nRefMark < pDoc->GetRefMarks(); ++nRefMark)
     {
         auto pRefMark = const_cast<SwFormatRefMark*>(pDoc->GetRefMark(nRefMark));
@@ -813,11 +814,11 @@ bool UpdateFieldConents(SfxRequest& rReq, SwWrtShell& rWrtSh)
             continue;
         }
 
-        if (aFields.getLength() <= nRefMark)
+        if (nFieldIndex >= aFields.getLength())
         {
             continue;
         }
-        comphelper::SequenceAsHashMap aMap(aFields[nRefMark]);
+        comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
         auto aName = aMap["Name"].get<OUString>();
         pRefMark->GetRefName() = aName;
 
