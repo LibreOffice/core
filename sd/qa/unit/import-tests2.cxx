@@ -141,6 +141,7 @@ public:
     void testTdf89928BlackWhiteThreshold();
     void testTdf151547TransparentWhiteText();
     void testTdf149961AutofitIndentation();
+    void testTdf149588TransparentSolidFill();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -216,6 +217,7 @@ public:
     CPPUNIT_TEST(testTdf89928BlackWhiteThreshold);
     CPPUNIT_TEST(testTdf151547TransparentWhiteText);
     CPPUNIT_TEST(testTdf149961AutofitIndentation);
+    CPPUNIT_TEST(testTdf149588TransparentSolidFill);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2204,6 +2206,29 @@ void SdImportTest2::testTdf149961AutofitIndentation()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-12700),
                              pNumFmt->GetNumRule().GetLevel(0).GetFirstLineOffset());
     }
+}
+
+void SdImportTest2::testTdf149588TransparentSolidFill()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149588_transparentSolidFill.pptx"),
+        PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(6, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:99 G:99 B:99 A   51  (T:204)
+    // - Actual  : Color: R:99 G:99 B:99 A: 255  (T:  0)
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xCC636363), nCharColor);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
