@@ -78,7 +78,6 @@ public:
 
     void drawPixel(tools::Long nX, tools::Long nY) override;
     void drawPixel(tools::Long nX, tools::Long nY, Color nColor) override;
-    Color getPixel(tools::Long nX, tools::Long nY) override;
 
     void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2) override;
 

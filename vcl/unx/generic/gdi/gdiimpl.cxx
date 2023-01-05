@@ -1789,6 +1789,40 @@ bool X11SalGraphicsImpl::drawPolyLine(
     return bDrawnOk;
 }
 
+Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
+{
+    if( mrParent.bWindow_ && !mrParent.bVirDev_ )
+    {
+        XWindowAttributes aAttrib;
+
+        XGetWindowAttributes( mrParent.GetXDisplay(), mrParent.GetDrawable(), &aAttrib );
+        if( aAttrib.map_state != IsViewable )
+        {
+            SAL_WARN( "vcl", "X11SalGraphics::GetPixel drawable not viewable" );
+            return 0;
+        }
+    }
+
+    XImage *pXImage = XGetImage( mrParent.GetXDisplay(),
+                                     mrParent.GetDrawable(),
+                                 nX, nY,
+                                 1,  1,
+                                 AllPlanes,
+                                 ZPixmap );
+    if( !pXImage )
+    {
+        SAL_WARN( "vcl", "X11SalGraphics::GetPixel !XGetImage()" );
+        return 0;
+    }
+
+    XColor aXColor;
+
+    aXColor.pixel = XGetPixel( pXImage, 0, 0 );
+    XDestroyImage( pXImage );
+
+    return mrParent.GetColormap().GetColor( aXColor.pixel );
+}
+
 std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     bool bFakeWindowBG = false;

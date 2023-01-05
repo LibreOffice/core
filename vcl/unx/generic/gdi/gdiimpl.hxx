@@ -214,6 +214,8 @@ public:
 
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
+    virtual Color getPixel( tools::Long nX, tools::Long nY ) override;
+
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
                 tools::Long nX, tools::Long nY,
