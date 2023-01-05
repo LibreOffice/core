@@ -316,6 +316,7 @@ LeftPageHeaderContent
 LegacyFragment
 LineCap
 LineColor
+LineColorThemeReference
 LineCount
 LineDash
 LineDashName

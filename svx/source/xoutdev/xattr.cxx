@@ -991,19 +991,49 @@ bool XLineColorItem::GetPresentation
     return true;
 }
 
-bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
-    rVal <<= GetColorValue().GetRGBColor();
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_COLOR_THEME_REFERENCE:
+        {
+            auto xThemeColor = model::theme::createXThemeColor(GetThemeColor());
+            rVal <<= xThemeColor;
+            break;
+        }
+        default:
+        {
+            rVal <<= GetColorValue().GetRGBColor();
+            break;
+        }
+    }
     return true;
 }
 
-bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
 {
-    sal_Int32 nValue = 0;
-    if(!(rVal >>= nValue))
-        return false;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch(nMemberId)
+    {
+        case MID_COLOR_THEME_REFERENCE:
+        {
+            css::uno::Reference<css::util::XThemeColor> xThemeColor;
+            if (!(rVal >>= xThemeColor))
+                return false;
+            model::theme::setFromXThemeColor(GetThemeColor(), xThemeColor);
+        }
+        break;
+        default:
+        {
+            sal_Int32 nValue;
+            if(!(rVal >>= nValue ))
+                return false;
 
-    SetColorValue( Color(ColorTransparency, nValue) );
+            SetColorValue( Color(ColorTransparency, nValue) );
+            break;
+        }
+    }
     return true;
 }
 

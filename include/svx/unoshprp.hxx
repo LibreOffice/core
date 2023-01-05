@@ -236,6 +236,7 @@
 #define LINE_PROPERTIES_DEFAULTS\
     { UNO_NAME_LINECAP,           XATTR_LINECAP,          ::cppu::UnoType<css::drawing::LineCap>::get(),     0,     0}, \
     { UNO_NAME_LINECOLOR,         XATTR_LINECOLOR,        ::cppu::UnoType<sal_Int32>::get() ,           0,     0}, \
+    { UNO_NAME_LINECOLOR_THEME_REFERENCE, XATTR_LINECOLOR, ::cppu::UnoType<css::uno::XInterface>::get() ,           0, MID_COLOR_THEME_REFERENCE}, \
     { UNO_NAME_LINEENDCENTER,     XATTR_LINEENDCENTER,    cppu::UnoType<bool>::get() ,           0,     0}, \
     { UNO_NAME_LINEENDWIDTH,      XATTR_LINEENDWIDTH,     ::cppu::UnoType<sal_Int32>::get() ,           0,     0, PropertyMoreFlags::METRIC_ITEM}, \
     { UNO_NAME_LINEJOINT,         XATTR_LINEJOINT,        ::cppu::UnoType<css::drawing::LineJoint>::get(),     0,     0}, \
