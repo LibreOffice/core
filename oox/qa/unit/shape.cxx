@@ -510,7 +510,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
-    // The ID for the theme colors is not yet in API, but definied in enum PredefinedClrSchemeID
+    // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used, and the color
     // was Black (=0).
 
@@ -548,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
-    // The ID for the theme colors is not yet in API, but definied in enum PredefinedClrSchemeID
+    // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used.
     uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xShape0Props->getPropertyValue(u"FillColorTheme"));
