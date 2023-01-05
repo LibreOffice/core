@@ -1037,7 +1037,7 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
     const double fDx = rP2.X() - rP1.X();
     const double fDy = rP2.Y() - rP1.Y();
 
-    return sqrt( fDx * fDx + fDy * fDy );
+    return std::hypot( fDx, fDy );
 }
 
 void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )

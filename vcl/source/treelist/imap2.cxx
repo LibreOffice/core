@@ -411,8 +411,7 @@ void ImageMap::ImpReadNCSALine( std::string_view rLine )
         const OUString  aURL( ImpReadNCSAURL( &pStr ) );
         const Point     aCenter( ImpReadNCSACoords( &pStr ) );
         const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
-        tools::Long            nRadius = static_cast<tools::Long>(sqrt( static_cast<double>(aDX.X()) * aDX.X() +
-                                               static_cast<double>(aDX.Y()) * aDX.Y() ));
+        tools::Long            nRadius = static_cast<tools::Long>(std::hypot( aDX.X(), aDX.Y()));
 
         maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
