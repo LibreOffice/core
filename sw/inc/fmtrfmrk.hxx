@@ -66,6 +66,7 @@ public:
     unotools::WeakReference<SwXReferenceMark> const& GetXRefMark() const
         { return m_wXReferenceMark; }
     void SetXRefMark(rtl::Reference<SwXReferenceMark> const& xMark);
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

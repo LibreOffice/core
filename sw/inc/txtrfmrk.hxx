@@ -39,6 +39,7 @@ public:
     // get and set TextNode pointer
     inline const SwTextNode& GetTextNode() const;
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwTextNode& SwTextRefMark::GetTextNode() const
