@@ -455,7 +455,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aThemeColor.setType(model::convertToThemeColorType(nPhClrTheme));
                     rPropMap.setProperty(PROP_FillColorThemeReference, model::theme::createXThemeColor(aThemeColor));
                 }
-                else if (maFillColor.getTintOrShade() == 0)
+                else
                 {
                     aThemeColor.setType(model::convertToThemeColorType(maFillColor.getSchemeColorIndex()));
                     if (maFillColor.getLumMod() != 10000)
