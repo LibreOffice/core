@@ -347,6 +347,44 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("setRefs").count(""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
+{
+    // Given a document with a fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // When stepping into the fieldmark with the cursor and getting the command value for
+    // uno:TextFormField:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:TextFormField?type=vnd.oasis.opendocument.field.UNHANDLED&"
+                              "commandPrefix=ADDIN%20ZOTERO_ITEM");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the inserted fieldmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (type)
+    // i.e. the returned JSON was just an empty object.
+    CPPUNIT_ASSERT_EQUAL(std::string("vnd.oasis.opendocument.field.UNHANDLED"),
+                         aTree.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string("ADDIN ZOTERO_ITEM foo bar"),
+                         aTree.get<std::string>("command"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
