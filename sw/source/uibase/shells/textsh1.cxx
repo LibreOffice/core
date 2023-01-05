@@ -2291,6 +2291,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                      !rSh.GetNumRuleAtCurrentSelection()));
             break;
 
+            case FN_SVX_SET_OUTLINE:
+            {
+                NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(NBOType::Outline);
+                auto pCurRule = const_cast<SwNumRule*>(rSh.GetNumRuleAtCurrCursorPos());
+                if (pOutline && pCurRule)
+                {
+                    SvxNumRule aSvxRule = pCurRule->MakeSvxNumRule();
+                    const sal_uInt16 nIndex = pOutline->GetNBOIndexForNumRule(aSvxRule, 0);
+                    rSet.Put(SfxBoolItem(FN_SVX_SET_OUTLINE, nIndex < USHRT_MAX));
+                }
+                break;
+            }
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
             case FN_OUTLINE_RULE_INDEX:

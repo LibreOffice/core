@@ -883,6 +883,7 @@ interface BaseText
     FN_SVX_SET_OUTLINE
     [
         ExecMethod = ExecSetNumber;
+        StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_OUTLINE_BULLET // status(final|play)
