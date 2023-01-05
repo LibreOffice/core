@@ -47,6 +47,24 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
     // i.e. text was imported as regular text with solid color only.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(74), nCharTransparence);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
+{
+    // Load a document with a single paragraph. It has semi-transparent text and the color is
+    // determined by a w14:schemeClr element.
+    loadFromURL(u"tdf152884_Char_Transparency.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    sal_Int16 nCharTransparence = 0;
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    xPortion->getPropertyValue("CharTransparence") >>= nCharTransparence;
+    // Without the fix this test would have failed with: Expected 74, Actual 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(74), nCharTransparence);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
