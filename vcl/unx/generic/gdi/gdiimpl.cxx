@@ -1121,16 +1121,11 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
 
 void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
-    internalDrawPolyLine( nPoints, pPtAry, false );
-}
-
-void X11SalGraphicsImpl::internalDrawPolyLine( sal_uInt32 nPoints, const Point *pPtAry, bool bClose )
-{
     if( mnPenColor != SALCOLOR_NONE )
     {
         SalPolyLine Points( nPoints, pPtAry );
 
-        DrawLines( nPoints, Points, SelectPen(), bClose );
+        DrawLines( nPoints, Points, SelectPen(), false );
     }
 }
 
@@ -1198,53 +1193,6 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 
     if( mnPenColor != SALCOLOR_NONE )
         DrawLines( nPoints, Points, SelectPen(), true );
-}
-
-void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
-                                   const sal_uInt32    *pPoints,
-                                   const Point*  *pPtAry )
-{
-    if( mnBrushColor != SALCOLOR_NONE )
-    {
-        sal_uInt32      i, n;
-        Region          pXRegA  = nullptr;
-
-        for( i = 0; i < nPoly; i++ ) {
-            n = pPoints[i];
-            SalPolyLine Points( n, pPtAry[i] );
-            if( n > 2 )
-            {
-                Region pXRegB = XPolygonRegion( &Points[0], n+1, WindingRule );
-                if( !pXRegA )
-                    pXRegA = pXRegB;
-                else
-                {
-                    XXorRegion( pXRegA, pXRegB, pXRegA );
-                    XDestroyRegion( pXRegB );
-                }
-            }
-        }
-
-        if( pXRegA )
-        {
-            XRectangle aXRect;
-            XClipBox( pXRegA, &aXRect );
-
-            GC pGC = SelectBrush();
-            mrParent.SetClipRegion( pGC, pXRegA ); // ??? twice
-            XDestroyRegion( pXRegA );
-            mbBrushGC = false;
-
-            XFillRectangle( mrParent.GetXDisplay(),
-                            mrParent.GetDrawable(),
-                            pGC,
-                            aXRect.x, aXRect.y, aXRect.width, aXRect.height );
-        }
-    }
-
-    if( mnPenColor != SALCOLOR_NONE )
-        for( sal_uInt32 i = 0; i < nPoly; i++ )
-            internalDrawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
@@ -1320,57 +1268,6 @@ bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Lon
     return false;
 }
 
-// draw a poly-polygon
-bool X11SalGraphicsImpl::drawPolyPolygon(
-    const basegfx::B2DHomMatrix& rObjectToDevice,
-    const basegfx::B2DPolyPolygon& rPolyPolygon,
-    double fTransparency)
-{
-    // nothing to do for empty polypolygons
-    const int nOrigPolyCount = rPolyPolygon.count();
-    if( nOrigPolyCount <= 0 )
-        return true;
-
-    // nothing to do if everything is transparent
-    if( (mnBrushColor == SALCOLOR_NONE)
-    &&  (mnPenColor == SALCOLOR_NONE) )
-        return true;
-
-    // cannot handle pencolor!=brushcolor yet
-    if( (mnPenColor != SALCOLOR_NONE)
-    &&  (mnPenColor != mnBrushColor) )
-        return false;
-
-    // TODO: remove the env-variable when no longer needed
-    static const char* pRenderEnv = getenv( "SAL_DISABLE_RENDER_POLY" );
-    if( pRenderEnv )
-        return false;
-
-    // Fallback: Transform to DeviceCoordinates
-    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
-    aPolyPolygon.transform(rObjectToDevice);
-
-    // snap to raster if requested
-    const bool bSnapToRaster = !mrParent.getAntiAlias();
-    if( bSnapToRaster )
-        aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPolygon );
-
-    // don't bother with polygons outside of visible area
-    const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    aPolyPolygon = basegfx::utils::clipPolyPolygonOnRange( aPolyPolygon, aViewRange, true, false );
-    if( !aPolyPolygon.count() )
-        return true;
-
-    // tessellate the polypolygon into trapezoids
-    basegfx::B2DTrapezoidVector aB2DTrapVector;
-    basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aPolyPolygon );
-    const int nTrapCount = aB2DTrapVector.size();
-    if( !nTrapCount )
-        return true;
-    const bool bDrawn = drawFilledTrapezoids( aB2DTrapVector.data(), nTrapCount, fTransparency );
-    return bDrawn;
-}
-
 tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
 {
     if( mrParent.m_pFrame )
@@ -1379,73 +1276,6 @@ tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
         return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
     else
         return 0;
-}
-
-bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
-{
-    if( nTrapCount <= 0 )
-        return true;
-
-    Picture aDstPic = GetXRenderPicture();
-    // check xrender support for this drawable
-    if( !aDstPic )
-        return false;
-
-     // convert the B2DTrapezoids into XRender-Trapezoids
-    std::vector<XTrapezoid> aTrapVector( nTrapCount );
-    const basegfx::B2DTrapezoid* pB2DTrap = pB2DTraps;
-    for( int i = 0; i < nTrapCount; ++pB2DTrap, ++i )
-    {
-        XTrapezoid& rTrap = aTrapVector[ i ] ;
-
-         // set y-coordinates
-        const double fY1 = pB2DTrap->getTopY();
-        rTrap.left.p1.y = rTrap.right.p1.y = rTrap.top = XDoubleToFixed( fY1 );
-        const double fY2 = pB2DTrap->getBottomY();
-        rTrap.left.p2.y = rTrap.right.p2.y = rTrap.bottom = XDoubleToFixed( fY2 );
-
-         // set x-coordinates
-        const double fXL1 = pB2DTrap->getTopXLeft();
-        rTrap.left.p1.x = XDoubleToFixed( fXL1 );
-        const double fXR1 = pB2DTrap->getTopXRight();
-        rTrap.right.p1.x = XDoubleToFixed( fXR1 );
-        const double fXL2 = pB2DTrap->getBottomXLeft();
-        rTrap.left.p2.x = XDoubleToFixed( fXL2 );
-        const double fXR2 = pB2DTrap->getBottomXRight();
-        rTrap.right.p2.x = XDoubleToFixed( fXR2 );
-    }
-
-    // get xrender Picture for polygon foreground
-    // TODO: cache it like the target picture which uses GetXRenderPicture()
-    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    SalDisplay::RenderEntry& rEntry = mrParent.GetDisplay()->GetRenderEntries( mrParent.m_nXScreen )[ 32 ];
-    if( !rEntry.m_aPicture )
-    {
-        Display* pXDisplay = mrParent.GetXDisplay();
-
-        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.GetDrawable(), 1, 1, 32 );
-        XRenderPictureAttributes aAttr;
-        aAttr.repeat = int(true);
-
-        XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat( PictStandardARGB32 );
-        rEntry.m_aPicture = rRenderPeer.CreatePicture( rEntry.m_aPixmap, pXRPF, CPRepeat, &aAttr );
-    }
-
-    // set polygon foreground color and opacity
-    XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency );
-    rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
-
-    // set clipping
-    // TODO: move into GetXRenderPicture?
-    if( mrParent.mpClipRegion && !XEmptyRegion( mrParent.mpClipRegion ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, mrParent.mpClipRegion );
-
-    // render the trapezoids
-    const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
-    rRenderPeer.CompositeTrapezoids( PictOpOver,
-        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, aTrapVector.data(), aTrapVector.size() );
-
-    return true;
 }
 
 bool X11SalGraphicsImpl::drawFilledTriangles(

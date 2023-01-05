@@ -161,6 +161,15 @@ struct VCL_DLLPUBLIC CairoCommon
                          bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
                          tools::Long nY2);
 
+    static void drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                                const Color& rFillColor, bool bAntiAlias, sal_uInt32 nPoly,
+                                const sal_uInt32* pPoints, const Point** pPtAry);
+
+    static bool drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                                const Color& rFillColor, bool bAntiAlias,
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolyPolygon&, double fTransparency);
+
     // need this static version of ::drawPolyLine for usage from
     // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
     // ::drawPolyLine with some added parameters (see there)

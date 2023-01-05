@@ -32,7 +32,6 @@ private:
     Color mnPenColor;
     Color mnFillColor;
 
-    using X11SalGraphicsImpl::drawPolyPolygon;
     using X11SalGraphicsImpl::drawPolyLine;
 
 public:
@@ -81,6 +80,9 @@ public:
     Color getPixel(tools::Long nX, tools::Long nY) override;
 
     void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2) override;
+
+    void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
+                         const Point** pPtAry) override;
 
     bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                          const basegfx::B2DPolyPolygon& rPolyPolygon,

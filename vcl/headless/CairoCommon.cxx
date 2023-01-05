@@ -687,6 +687,107 @@ void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color
     cairo_stroke(cr);
 }
 
+void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                                  const Color& rFillColor, bool bAntiAlias, sal_uInt32 nPoly,
+                                  const sal_uInt32* pPointCounts, const Point** pPtAry)
+{
+    basegfx::B2DPolyPolygon aPolyPoly;
+    for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
+    {
+        sal_uInt32 nPoints = pPointCounts[nPolygon];
+        if (nPoints)
+        {
+            const Point* pPoints = pPtAry[nPolygon];
+            basegfx::B2DPolygon aPoly;
+            aPoly.append(basegfx::B2DPoint(pPoints->getX(), pPoints->getY()), nPoints);
+            for (sal_uInt32 i = 1; i < nPoints; ++i)
+                aPoly.setB2DPoint(i, basegfx::B2DPoint(pPoints[i].getX(), pPoints[i].getY()));
+
+            aPolyPoly.append(aPoly);
+        }
+    }
+
+    drawPolyPolygon(cr, pExtents, rLineColor, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
+                    aPolyPoly, 0.0);
+}
+
+bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                                  const Color& rFillColor, bool bAntiAlias,
+                                  const basegfx::B2DHomMatrix& rObjectToDevice,
+                                  const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
+{
+    const bool bHasFill(rFillColor != SALCOLOR_NONE);
+    const bool bHasLine(rLineColor != SALCOLOR_NONE);
+
+    if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
+        || fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    // don't bother trying to draw stuff which is effectively invisible
+    basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
+    aPolygonRange.transform(rObjectToDevice);
+    if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
+        return true;
+
+    // Set full (Object-to-Device) transformation - if used
+    if (!rObjectToDevice.isIdentity())
+    {
+        cairo_matrix_t aMatrix;
+
+        cairo_matrix_init(&aMatrix, rObjectToDevice.get(0, 0), rObjectToDevice.get(1, 0),
+                          rObjectToDevice.get(0, 1), rObjectToDevice.get(1, 1),
+                          rObjectToDevice.get(0, 2), rObjectToDevice.get(1, 2));
+        cairo_set_matrix(cr, &aMatrix);
+    }
+
+    if (bHasFill)
+    {
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
+
+        CairoCommon::applyColor(cr, rFillColor, fTransparency);
+        if (pExtents)
+        {
+            // Get FillDamage (will be extended for LineDamage below)
+            *pExtents = getClippedFillDamage(cr);
+        }
+
+        cairo_fill(cr);
+    }
+
+    if (bHasLine)
+    {
+        // PixelOffset used: Set PixelOffset as linear transformation
+        cairo_matrix_t aMatrix;
+        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
+        cairo_set_matrix(cr, &aMatrix);
+
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
+
+        CairoCommon::applyColor(cr, rLineColor, fTransparency);
+
+        if (pExtents)
+        {
+            // expand with possible StrokeDamage
+            basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+            stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+            pExtents->expand(stroke_extents);
+        }
+
+        cairo_stroke(cr);
+    }
+
+    if (pExtents)
+    {
+        // if transformation has been applied, transform also extents (ranges)
+        // of damage so they can be correctly redrawn
+        pExtents->transform(rObjectToDevice);
+    }
+
+    return true;
+}
+
 bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                                bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,

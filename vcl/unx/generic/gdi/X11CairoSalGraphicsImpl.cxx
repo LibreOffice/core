@@ -30,99 +30,30 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Com
 {
 }
 
+void X11CairoSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
+                                              const Point** pPtAry)
+{
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
+    clipRegion(cr);
+
+    CairoCommon::drawPolyPolygon(cr, nullptr, mnPenColor, mnFillColor, getAntiAlias(), nPoly,
+                                 pPoints, pPtAry);
+
+    X11Common::releaseCairoContext(cr);
+}
+
 bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                               const basegfx::B2DPolyPolygon& rPolyPolygon,
                                               double fTransparency)
 {
-    if (fTransparency >= 1.0)
-    {
-        return true;
-    }
-
-    if (rPolyPolygon.count() == 0)
-    {
-        return true;
-    }
-
-    // Fallback: Transform to DeviceCoordinates
-    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
-    aPolyPolygon.transform(rObjectToDevice);
-
-    if (SALCOLOR_NONE == mnFillColor && SALCOLOR_NONE == mnPenColor)
-    {
-        return true;
-    }
-
-    // snap to raster if requested
-    const bool bSnapPoints(!getAntiAlias());
-
-    if (bSnapPoints)
-    {
-        aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygon);
-    }
-
     cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
-    for (auto const& rPolygon : std::as_const(aPolyPolygon))
-    {
-        const sal_uInt32 nPointCount(rPolygon.count());
-
-        if (nPointCount)
-        {
-            const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
-
-            if (nEdgeCount)
-            {
-                basegfx::B2DCubicBezier aEdge;
-
-                for (sal_uInt32 b = 0; b < nEdgeCount; ++b)
-                {
-                    rPolygon.getBezierSegment(b, aEdge);
-
-                    if (!b)
-                    {
-                        const basegfx::B2DPoint aStart(aEdge.getStartPoint());
-                        cairo_move_to(cr, aStart.getX(), aStart.getY());
-                    }
-
-                    const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
-
-                    if (aEdge.isBezier())
-                    {
-                        const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
-                        const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
-                        cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
-                                       aEnd.getX(), aEnd.getY());
-                    }
-                    else
-                    {
-                        cairo_line_to(cr, aEnd.getX(), aEnd.getY());
-                    }
-                }
-
-                cairo_close_path(cr);
-            }
-        }
-    }
-
-    if (SALCOLOR_NONE != mnFillColor)
-    {
-        cairo_set_source_rgba(cr, mnFillColor.GetRed() / 255.0, mnFillColor.GetGreen() / 255.0,
-                              mnFillColor.GetBlue() / 255.0, 1.0 - fTransparency);
-        cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
-        cairo_fill_preserve(cr);
-    }
-
-    if (SALCOLOR_NONE != mnPenColor)
-    {
-        cairo_set_source_rgba(cr, mnPenColor.GetRed() / 255.0, mnPenColor.GetGreen() / 255.0,
-                              mnPenColor.GetBlue() / 255.0, 1.0 - fTransparency);
-        cairo_stroke_preserve(cr);
-    }
+    bool bRetVal(CairoCommon::drawPolyPolygon(cr, nullptr, mnPenColor, mnFillColor, getAntiAlias(),
+                                              rObjectToDevice, rPolyPolygon, fTransparency));
 
     X11Common::releaseCairoContext(cr);
-    return true;
+    return bRetVal;
 }
 
 void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)

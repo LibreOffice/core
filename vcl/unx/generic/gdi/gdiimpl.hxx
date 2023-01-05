@@ -90,7 +90,6 @@ private:
                                );
 
     XID GetXRenderPicture();
-    bool drawFilledTrapezoids( const basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
     bool drawFilledTriangles(
         const basegfx::B2DHomMatrix& rObjectToDevice,
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
@@ -102,7 +101,6 @@ private:
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
 
-    void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
     void internalDrawPixel( tools::Long nX, tools::Long nY );
     void internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
 
@@ -155,13 +153,6 @@ public:
     virtual void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
     virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-
-    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
-
-    virtual bool drawPolyPolygon(
-                const basegfx::B2DHomMatrix& rObjectToDevice,
-                const basegfx::B2DPolyPolygon&,
-                double fTransparency) override;
 
     virtual bool drawPolyLine(
                 const basegfx::B2DHomMatrix& rObjectToDevice,

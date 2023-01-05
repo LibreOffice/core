@@ -234,97 +234,32 @@ void SvpGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
                                          const Point** pPtAry)
 {
-    basegfx::B2DPolyPolygon aPolyPoly;
-    for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
-    {
-        sal_uInt32 nPoints = pPointCounts[nPolygon];
-        if (nPoints)
-        {
-            const Point* pPoints = pPtAry[nPolygon];
-            basegfx::B2DPolygon aPoly;
-            aPoly.append(basegfx::B2DPoint(pPoints->getX(), pPoints->getY()), nPoints);
-            for (sal_uInt32 i = 1; i < nPoints; ++i)
-                aPoly.setB2DPoint(i, basegfx::B2DPoint(pPoints[i].getX(), pPoints[i].getY()));
+    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    m_rCairoCommon.clipRegion(cr);
 
-            aPolyPoly.append(aPoly);
-        }
-    }
+    CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_aLineColor,
+                                 m_rCairoCommon.m_aFillColor, getAntiAlias(), nPoly, pPointCounts,
+                                 pPtAry);
 
-    drawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPoly, 0.0);
+    m_rCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                                          double fTransparency)
 {
-    const bool bHasFill(m_rCairoCommon.m_aFillColor != SALCOLOR_NONE);
-    const bool bHasLine(m_rCairoCommon.m_aLineColor != SALCOLOR_NONE);
-
-    if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
-        || fTransparency >= 1.0)
-    {
-        return true;
-    }
-
-    // don't bother trying to draw stuff which is effectively invisible
-    basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
-    aPolygonRange.transform(rObjectToDevice);
-    if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
-        return true;
-
     cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    // Set full (Object-to-Device) transformation - if used
-    if (!rObjectToDevice.isIdentity())
-    {
-        cairo_matrix_t aMatrix;
+    bool bRetVal(CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_aLineColor,
+                                              m_rCairoCommon.m_aFillColor, getAntiAlias(),
+                                              rObjectToDevice, rPolyPolygon, fTransparency));
 
-        cairo_matrix_init(&aMatrix, rObjectToDevice.get(0, 0), rObjectToDevice.get(1, 0),
-                          rObjectToDevice.get(0, 1), rObjectToDevice.get(1, 1),
-                          rObjectToDevice.get(0, 2), rObjectToDevice.get(1, 2));
-        cairo_set_matrix(cr, &aMatrix);
-    }
-
-    // To make releaseCairoContext work, use empty extents
-    basegfx::B2DRange extents;
-
-    if (bHasFill)
-    {
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
-
-        CairoCommon::applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
-        // Get FillDamage (will be extended for LineDamage below)
-        extents = getClippedFillDamage(cr);
-
-        cairo_fill(cr);
-    }
-
-    if (bHasLine)
-    {
-        // PixelOffset used: Set PixelOffset as linear transformation
-        cairo_matrix_t aMatrix;
-        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
-        cairo_set_matrix(cr, &aMatrix);
-
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
-
-        CairoCommon::applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
-
-        // expand with possible StrokeDamage
-        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-        extents.expand(stroke_extents);
-
-        cairo_stroke(cr);
-    }
-
-    // if transformation has been applied, transform also extents (ranges)
-    // of damage so they can be correctly redrawn
-    extents.transform(rObjectToDevice);
     m_rCairoCommon.releaseCairoContext(cr, true, extents);
 
-    return true;
+    return bRetVal;
 }
 
 bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
