@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
                          xShapeSlideNum->getShapeType());
 }
 
-CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 {
     // Given a document with a table style, using theme color with tinting in the A2 cell:
     loadFromURL(u"theme-tint.pptx");
@@ -479,6 +479,75 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrans[0].meType);
             CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
+{
+    // Given a document with a table style, using theme color with tinting in the A2 cell:
+    loadFromURL(u"ThemeShapesReference.pptx");
+
+    // Then make sure that we only import theming info to the doc model if the effects are limited
+    // to lum mod / off that we can handle (i.e. no tint/shade):
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // check line and fill theme color of shape1
+    {
+        model::ThemeColor aThemeColor;
+        uno::Reference<util::XThemeColor> xThemeColor;
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(2), rTrans.size());
+            CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans[1].meType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans[1].mnValue);
+        }
+
+        CPPUNIT_ASSERT(xShape->getPropertyValue("LineColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
+            CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans[0].mnValue);
+        }
+    }
+    // check line and fill theme color of shape2
+    {
+        model::ThemeColor aThemeColor;
+        uno::Reference<util::XThemeColor> xThemeColor;
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
+        }
+
+        CPPUNIT_ASSERT(xShape->getPropertyValue("LineColorThemeReference") >>= xThemeColor);
+        CPPUNIT_ASSERT(xThemeColor.is());
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
+            CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), rTrans[0].mnValue);
         }
     }
 }

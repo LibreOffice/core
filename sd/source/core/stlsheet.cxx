@@ -40,6 +40,7 @@
 
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
+#include <svx/xlnclit.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/unoshprp.hxx>
@@ -1400,6 +1401,15 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                     }
                 }
                 break;
+            case XATTR_LINECOLOR:
+                if (pEntry->nMemberId == MID_COLOR_THEME_REFERENCE)
+                {
+                    auto const* pColor = rStyleSet.GetItem<XLineColorItem>(pEntry->nWID);
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    {
+                        eState = PropertyState_DEFAULT_VALUE;
+                    }
+                }
                 break;
             }
         }

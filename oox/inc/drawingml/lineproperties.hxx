@@ -69,7 +69,8 @@ struct LineProperties
     void                pushToPropMap(
                             ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
-                            ::Color nPhClr = API_RGB_TRANSPARENT ) const;
+                            ::Color nPhClr = API_RGB_TRANSPARENT,
+                            sal_Int16 nPhClrTheme = -1) const;
 
     /** Calculates the line style attribute from the internal state of the object */
     css::drawing::LineStyle  getLineStyle() const;

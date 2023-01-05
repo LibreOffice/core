@@ -56,6 +56,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <svx/xlnclit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1450,7 +1451,6 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                     }
                     break;
                 case XATTR_FILLCOLOR:
-
                     if (pMap->nMemberId == MID_COLOR_THEME_INDEX)
                     {
                         const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
@@ -1490,6 +1490,16 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                     else if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
                     {
                         const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                        if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                        {
+                            eState = PropertyState_DEFAULT_VALUE;
+                        }
+                    }
+                    break;
+                case XATTR_LINECOLOR:
+                    if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                    {
+                        auto const* pColor = rSet.GetItem<XLineColorItem>(pMap->nWID);
                         if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
                         {
                             eState = PropertyState_DEFAULT_VALUE;

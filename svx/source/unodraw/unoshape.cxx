@@ -43,6 +43,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
+#include <svx/xlnclit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/unopage.hxx>
@@ -1999,6 +2000,15 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                     }
                 }
                 break;
+            case XATTR_LINECOLOR:
+                if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                {
+                    auto const* pColor = rSet.GetItem<XLineColorItem>(pMap->nWID);
+                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    {
+                        eState = beans::PropertyState_DEFAULT_VALUE;
+                    }
+                }
                 break;
             }
         }

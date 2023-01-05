@@ -77,6 +77,7 @@ inline constexpr OUStringLiteral UNO_NAME_LINESTYLE = u"LineStyle";
 inline constexpr OUStringLiteral UNO_NAME_LINEDASH = u"LineDash";
 inline constexpr OUStringLiteral UNO_NAME_LINEWIDTH = u"LineWidth";
 inline constexpr OUStringLiteral UNO_NAME_LINECOLOR = u"LineColor";
+inline constexpr OUStringLiteral UNO_NAME_LINECOLOR_THEME_REFERENCE = u"LineColorThemeReference";
 inline constexpr OUStringLiteral UNO_NAME_LINEJOINT = u"LineJoint";
 inline constexpr OUStringLiteral UNO_NAME_LINESTART = u"LineStart";
 inline constexpr OUStringLiteral UNO_NAME_LINEEND = u"LineEnd";

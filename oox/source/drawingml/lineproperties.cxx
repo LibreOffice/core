@@ -33,6 +33,9 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/token/properties.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -430,7 +433,7 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
 }
 
 void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
+        const GraphicHelper& rGraphicHelper, ::Color nPhClr, sal_Int16 nPhClrTheme) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( !maLineFill.moFillType.has_value() )
@@ -491,11 +494,36 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
     // line color and transparence
     Color aLineColor = maLineFill.getBestSolidColor();
-    if( aLineColor.isUsed() )
+    if (aLineColor.isUsed())
     {
-        rPropMap.setProperty( ShapeProperty::LineColor, aLineColor.getColor( rGraphicHelper, nPhClr ) );
+        ::Color aColor = aLineColor.getColor(rGraphicHelper, nPhClr);
+        rPropMap.setProperty(ShapeProperty::LineColor, aColor);
         if( aLineColor.hasTransparency() )
             rPropMap.setProperty( ShapeProperty::LineTransparency, aLineColor.getTransparency() );
+
+        model::ThemeColor aThemeColor;
+
+        if (aColor == nPhClr)
+        {
+            aThemeColor.setType(model::convertToThemeColorType(nPhClrTheme));
+            rPropMap.setProperty(PROP_LineColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+        }
+        else
+        {
+            aThemeColor.setType(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
+            if (aLineColor.getLumMod() != 10000)
+                aThemeColor.addTransformation({model::TransformationType::LumMod, aLineColor.getLumMod()});
+            if (aLineColor.getLumOff() != 0)
+                aThemeColor.addTransformation({model::TransformationType::LumOff, aLineColor.getLumOff()});
+            if (aLineColor.getTintOrShade() > 0)
+                aThemeColor.addTransformation({model::TransformationType::Tint, aLineColor.getTintOrShade()});
+            if (aLineColor.getTintOrShade() < 0)
+            {
+                sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-aLineColor.getTintOrShade());
+                aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+            }
+            rPropMap.setProperty(PROP_LineColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+        }
     }
 
     // line markers
