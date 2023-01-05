@@ -300,13 +300,13 @@ model::ThemeColorType TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
         case NS_ooxml::LN_Value_St_ThemeColor_none:
                 return model::ThemeColorType::Unknown;
         case NS_ooxml::LN_Value_St_ThemeColor_background1:
-                return model::ThemeColorType::Dark1;
-        case NS_ooxml::LN_Value_St_ThemeColor_text1:
                 return model::ThemeColorType::Light1;
+        case NS_ooxml::LN_Value_St_ThemeColor_text1:
+                return model::ThemeColorType::Dark1;
         case NS_ooxml::LN_Value_St_ThemeColor_background2:
-                return model::ThemeColorType::Dark2;
-        case NS_ooxml::LN_Value_St_ThemeColor_text2:
                 return model::ThemeColorType::Light2;
+        case NS_ooxml::LN_Value_St_ThemeColor_text2:
+                return model::ThemeColorType::Dark2;
         default:
                 break;
     }
