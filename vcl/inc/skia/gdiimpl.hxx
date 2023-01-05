@@ -28,6 +28,7 @@
 #include <skia/utils.hxx>
 
 #include <SkPaint.h>
+#include <optional>
 
 class SkiaFlushIdle;
 class GenericSalLayout;
@@ -320,9 +321,9 @@ protected:
     // Create SkPaint set up for gradient drawing.
     SkPaint makeGradientPaint() const;
     // Create SkPaint set up for text drawing.
-    SkPaint makeTextPaint(Color color) const;
+    SkPaint makeTextPaint(std::optional<Color> color) const;
     // Create SkPaint for unspecified pixel drawing. Avoid if possible.
-    SkPaint makePixelPaint(Color color) const;
+    SkPaint makePixelPaint(std::optional<Color> color) const;
 
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&
@@ -350,8 +351,8 @@ protected:
     // Note that we generally use VCL coordinates, which is not mSurface coordinates if mScaling!=1.
     SkIRect mDirtyRect; // The area that has been changed since the last performFlush().
     vcl::Region mClipRegion;
-    Color mLineColor;
-    Color mFillColor;
+    std::optional<Color> moLineColor;
+    std::optional<Color> moFillColor;
     enum class XorMode
     {
         None,
@@ -388,23 +389,23 @@ inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const
 
 inline SkPaint SkiaSalGraphicsImpl::makeLinePaint(double transparency) const
 {
-    assert(mLineColor != SALCOLOR_NONE);
+    assert(moLineColor.has_value());
     SkPaint paint = makePaintInternal();
     paint.setColor(transparency == 0
-                       ? SkiaHelper::toSkColor(mLineColor)
-                       : SkiaHelper::toSkColorWithTransparency(mLineColor, transparency));
+                       ? SkiaHelper::toSkColor(*moLineColor)
+                       : SkiaHelper::toSkColorWithTransparency(*moLineColor, transparency));
     paint.setStyle(SkPaint::kStroke_Style);
     return paint;
 }
 
 inline SkPaint SkiaSalGraphicsImpl::makeFillPaint(double transparency) const
 {
-    assert(mFillColor != SALCOLOR_NONE);
+    assert(moFillColor.has_value());
     SkPaint paint = makePaintInternal();
     paint.setColor(transparency == 0
-                       ? SkiaHelper::toSkColor(mFillColor)
-                       : SkiaHelper::toSkColorWithTransparency(mFillColor, transparency));
-    if (mLineColor == mFillColor)
+                       ? SkiaHelper::toSkColor(*moFillColor)
+                       : SkiaHelper::toSkColorWithTransparency(*moFillColor, transparency));
+    if (moLineColor == moFillColor)
         paint.setStyle(SkPaint::kStrokeAndFill_Style);
     else
         paint.setStyle(SkPaint::kFill_Style);
@@ -415,19 +416,19 @@ inline SkPaint SkiaSalGraphicsImpl::makeBitmapPaint() const { return makePaintIn
 
 inline SkPaint SkiaSalGraphicsImpl::makeGradientPaint() const { return makePaintInternal(); }
 
-inline SkPaint SkiaSalGraphicsImpl::makeTextPaint(Color color) const
+inline SkPaint SkiaSalGraphicsImpl::makeTextPaint(std::optional<Color> color) const
 {
-    assert(color != SALCOLOR_NONE);
+    assert(color.has_value());
     SkPaint paint = makePaintInternal();
-    paint.setColor(SkiaHelper::toSkColor(color));
+    paint.setColor(SkiaHelper::toSkColor(*color));
     return paint;
 }
 
-inline SkPaint SkiaSalGraphicsImpl::makePixelPaint(Color color) const
+inline SkPaint SkiaSalGraphicsImpl::makePixelPaint(std::optional<Color> color) const
 {
-    assert(color != SALCOLOR_NONE);
+    assert(color.has_value());
     SkPaint paint = makePaintInternal();
-    paint.setColor(SkiaHelper::toSkColor(color));
+    paint.setColor(SkiaHelper::toSkColor(*color));
     return paint;
 }
 

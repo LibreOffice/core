@@ -39,17 +39,17 @@ QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8
         setClipPath(rGraphics.m_aClipPath);
     else
         setClipRegion(rGraphics.m_aClipRegion);
-    if (SALCOLOR_NONE != rGraphics.m_aLineColor)
+    if (rGraphics.m_oLineColor)
     {
-        QColor aColor = toQColor(rGraphics.m_aLineColor);
+        QColor aColor = toQColor(*rGraphics.m_oLineColor);
         aColor.setAlpha(nTransparency);
         setPen(aColor);
     }
     else
         setPen(Qt::NoPen);
-    if (bPrepareBrush && SALCOLOR_NONE != rGraphics.m_aFillColor)
+    if (bPrepareBrush && rGraphics.m_oFillColor)
     {
-        QColor aColor = toQColor(rGraphics.m_aFillColor);
+        QColor aColor = toQColor(*rGraphics.m_oFillColor);
         aColor.setAlpha(nTransparency);
         setBrush(aColor);
     }

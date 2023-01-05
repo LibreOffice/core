@@ -29,8 +29,8 @@ class X11CairoSalGraphicsImpl : public X11SalGraphicsImpl
 private:
     X11Common& mrX11Common;
     vcl::Region maClipRegion;
-    Color mnPenColor;
-    Color mnFillColor;
+    std::optional<Color> moPenColor;
+    std::optional<Color> moFillColor;
 
     using X11SalGraphicsImpl::drawPolyLine;
 
@@ -51,25 +51,25 @@ public:
 
     void SetLineColor() override
     {
-        mnPenColor = SALCOLOR_NONE;
+        moPenColor = std::nullopt;
         X11SalGraphicsImpl::SetLineColor();
     }
 
     void SetLineColor(Color nColor) override
     {
-        mnPenColor = nColor;
+        moPenColor = nColor;
         X11SalGraphicsImpl::SetLineColor(nColor);
     }
 
     void SetFillColor() override
     {
-        mnFillColor = SALCOLOR_NONE;
+        moFillColor = std::nullopt;
         X11SalGraphicsImpl::SetFillColor();
     }
 
     void SetFillColor(Color nColor) override
     {
-        mnFillColor = nColor;
+        moFillColor = nColor;
         X11SalGraphicsImpl::SetFillColor(nColor);
     }
 

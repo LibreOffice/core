@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <ControlCacheKey.hxx>
+#include <optional>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
@@ -44,7 +45,7 @@ protected:
     X11SalGraphics& mrParent;
 
 private:
-    Color mnBrushColor;
+    std::optional<Color> moBrushColor;
     GC mpBrushGC;      // Brush attributes
     Pixel mnBrushPixel;
 
@@ -60,7 +61,7 @@ private:
     bool mbXORMode : 1;      // is ROP XOR Mode set
 
     GC mpPenGC;        // Pen attributes
-    Color mnPenColor;
+    std::optional<Color> moPenColor;
     Pixel mnPenPixel;
 
 

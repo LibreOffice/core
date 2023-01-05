@@ -262,8 +262,8 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     : mParent(rParent)
     , mProvider(pProvider)
     , mIsGPU(false)
-    , mLineColor(SALCOLOR_NONE)
-    , mFillColor(SALCOLOR_NONE)
+    , moLineColor(std::nullopt)
+    , moFillColor(std::nullopt)
     , mXorMode(XorMode::None)
     , mFlush(new SkiaFlushIdle(this))
     , mScaling(1)
@@ -618,25 +618,25 @@ tools::Long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
 void SkiaSalGraphicsImpl::SetLineColor()
 {
     checkPendingDrawing();
-    mLineColor = SALCOLOR_NONE;
+    moLineColor = std::nullopt;
 }
 
 void SkiaSalGraphicsImpl::SetLineColor(Color nColor)
 {
     checkPendingDrawing();
-    mLineColor = nColor;
+    moLineColor = nColor;
 }
 
 void SkiaSalGraphicsImpl::SetFillColor()
 {
     checkPendingDrawing();
-    mFillColor = SALCOLOR_NONE;
+    moFillColor = std::nullopt;
 }
 
 void SkiaSalGraphicsImpl::SetFillColor(Color nColor)
 {
     checkPendingDrawing();
-    mFillColor = nColor;
+    moFillColor = nColor;
 }
 
 void SkiaSalGraphicsImpl::SetXORMode(bool set, bool invert)
@@ -655,13 +655,13 @@ void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            mLineColor = Color(0, 0, 0);
+            moLineColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            mLineColor = Color(0xff, 0xff, 0xff);
+            moLineColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            mLineColor = Color(0xff, 0xff, 0xff);
+            moLineColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
@@ -672,26 +672,24 @@ void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            mFillColor = Color(0, 0, 0);
+            moFillColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            mFillColor = Color(0xff, 0xff, 0xff);
+            moFillColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            mFillColor = Color(0xff, 0xff, 0xff);
+            moFillColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
 
 void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)
 {
-    drawPixel(nX, nY, mLineColor);
+    drawPixel(nX, nY, *moLineColor);
 }
 
 void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 {
-    if (nColor == SALCOLOR_NONE)
-        return;
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawpixel(" << this << "): " << Point(nX, nY) << ":" << nColor);
     addUpdateRegion(SkRect::MakeXYWH(nX, nY, 1, 1));
@@ -712,11 +710,11 @@ void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor
 void SkiaSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                    tools::Long nY2)
 {
-    if (mLineColor == SALCOLOR_NONE)
+    if (!moLineColor)
         return;
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawline(" << this << "): " << Point(nX1, nY1) << "->"
-                                           << Point(nX2, nY2) << ":" << mLineColor);
+                                           << Point(nX2, nY2) << ":" << *moLineColor);
     addUpdateRegion(SkRect::MakeLTRB(nX1, nY1, nX2, nY2).makeSorted());
     SkPaint paint = makeLinePaint();
     paint.setAntiAlias(mParent.getAntiAlias());
@@ -736,22 +734,23 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
                                                bool blockAA)
 {
     preDraw();
-    SAL_INFO("vcl.skia.trace",
-             "privatedrawrect(" << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight)
-                                << ":" << mLineColor << ":" << mFillColor << ":" << fTransparency);
+    SAL_INFO("vcl.skia.trace", "privatedrawrect("
+                                   << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight)
+                                   << ":" << *moLineColor << ":" << *moFillColor << ":"
+                                   << fTransparency);
     addUpdateRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     SkCanvas* canvas = getDrawCanvas();
-    if (mFillColor != SALCOLOR_NONE)
+    if (moFillColor)
     {
         SkPaint paint = makeFillPaint(fTransparency);
         paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
-        if (mLineColor == SALCOLOR_NONE && SkSize::Make(nWidth, nHeight).isEmpty())
+        if (!moLineColor && SkSize::Make(nWidth, nHeight).isEmpty())
             paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), paint);
     }
-    if (mLineColor != SALCOLOR_NONE && mLineColor != mFillColor) // otherwise handled by fill
+    if (moLineColor && moLineColor != moFillColor) // otherwise handled by fill
     {
         SkPaint paint = makeLinePaint(fTransparency);
         paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
@@ -828,8 +827,8 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
                                           const basegfx::B2DPolyPolygon& rPolyPolygon,
                                           double fTransparency)
 {
-    const bool bHasFill(mFillColor != SALCOLOR_NONE);
-    const bool bHasLine(mLineColor != SALCOLOR_NONE);
+    const bool bHasFill(moFillColor.has_value());
+    const bool bHasLine(moLineColor.has_value());
 
     if (rPolyPolygon.count() == 0 || !(bHasFill || bHasLine) || fTransparency < 0.0
         || fTransparency >= 1.0)
@@ -839,7 +838,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     aPolyPolygon.transform(rObjectToDevice);
 
     SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
-                                                  << mLineColor << ":" << mFillColor);
+                                                  << *moLineColor << ":" << *moFillColor);
 
     if (delayDrawPolyPolygon(aPolyPolygon, fTransparency))
     {
@@ -880,17 +879,17 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
         const SkScalar posFix = useAA ? toSkXYFix : 0;
         polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
     }
-    if (mFillColor != SALCOLOR_NONE)
+    if (moFillColor)
     {
         SkPaint aPaint = makeFillPaint(fTransparency);
         aPaint.setAntiAlias(useAA);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
-        if (mLineColor == SALCOLOR_NONE && polygonPath.getBounds().isEmpty())
+        if (!moLineColor && polygonPath.getBounds().isEmpty())
             aPaint.setStyle(SkPaint::kStroke_Style);
         getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
-    if (mLineColor != SALCOLOR_NONE && mLineColor != mFillColor) // otherwise handled by fill
+    if (moLineColor && moLineColor != moFillColor) // otherwise handled by fill
     {
         SkPaint aPaint = makeLinePaint(fTransparency);
         aPaint.setAntiAlias(useAA);
@@ -934,7 +933,7 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     if (!mParent.getAntiAlias())
         return false;
     // Only filled polygons without an outline are problematic.
-    if (mFillColor == SALCOLOR_NONE || mLineColor != SALCOLOR_NONE)
+    if (!moFillColor || moLineColor)
         return false;
     // Merge only simple polygons, real polypolygons most likely aren't needlessly split,
     // so they do not need joining.
@@ -1026,14 +1025,14 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                        bool bPixelSnapHairline)
 {
-    if (!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0
-        || mLineColor == SALCOLOR_NONE)
+    if (!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0 || !moLineColor)
     {
         return true;
     }
 
     preDraw();
-    SAL_INFO("vcl.skia.trace", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
+    SAL_INFO("vcl.skia.trace",
+             "drawpolyline(" << this << "): " << rPolyLine << ":" << *moLineColor);
 
     // Adjust line width for object-to-device scale.
     fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();

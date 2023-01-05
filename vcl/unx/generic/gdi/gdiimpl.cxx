@@ -121,7 +121,7 @@ namespace
 
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mrParent(rParent),
-    mnBrushColor( 0xFF, 0xFF, 0XFF ),
+    moBrushColor( std::in_place, 0xFF, 0xFF, 0XFF ),
     mpBrushGC(nullptr),
     mnBrushPixel(0),
     mbPenGC(false),
@@ -134,7 +134,7 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mbDitherBrush(false),
     mbXORMode(false),
     mpPenGC(nullptr),
-    mnPenColor( 0x00, 0x00, 0x00 ),
+    moPenColor( std::in_place, 0x00, 0x00, 0x00 ),
     mnPenPixel(0),
     mpMonoGC(nullptr),
     mpCopyGC(nullptr),
@@ -152,8 +152,8 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 
 void X11SalGraphicsImpl::Init()
 {
-    mnPenPixel = mrParent.GetPixel( mnPenColor );
-    mnBrushPixel = mrParent.GetPixel( mnBrushColor );
+    mnPenPixel = mrParent.GetPixel( *moPenColor );
+    mnBrushPixel = mrParent.GetPixel( *moBrushColor );
 }
 
 XID X11SalGraphicsImpl::GetXRenderPicture()
@@ -344,7 +344,7 @@ GC X11SalGraphicsImpl::SelectBrush()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    SAL_WARN_IF( mnBrushColor == SALCOLOR_NONE, "vcl", "Brush Transparent" );
+    SAL_WARN_IF( !moBrushColor, "vcl", "Brush Transparent" );
 
     if( !mpBrushGC )
     {
@@ -397,7 +397,7 @@ GC X11SalGraphicsImpl::SelectPen()
 
     if( !mbPenGC )
     {
-        if( mnPenColor != SALCOLOR_NONE )
+        if( moPenColor )
             XSetForeground( pDisplay, mpPenGC, mnPenPixel );
         XSetFunction  ( pDisplay, mpPenGC, mbXORMode ? GXxor : GXcopy );
         mrParent.SetClipRegion( mpPenGC );
@@ -978,18 +978,18 @@ void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
 void X11SalGraphicsImpl::SetLineColor()
 {
-    if( mnPenColor != SALCOLOR_NONE )
+    if( moPenColor )
     {
-        mnPenColor      = SALCOLOR_NONE;
+        moPenColor      = std::nullopt;
         mbPenGC         = false;
     }
 }
 
 void X11SalGraphicsImpl::SetLineColor( Color nColor )
 {
-    if( mnPenColor != nColor )
+    if( moPenColor != nColor )
     {
-        mnPenColor      = nColor;
+        moPenColor      = nColor;
         mnPenPixel      = mrParent.GetPixel( nColor );
         mbPenGC         = false;
     }
@@ -997,24 +997,24 @@ void X11SalGraphicsImpl::SetLineColor( Color nColor )
 
 void X11SalGraphicsImpl::SetFillColor()
 {
-    if( mnBrushColor != SALCOLOR_NONE )
+    if( moBrushColor )
     {
         mbDitherBrush   = false;
-        mnBrushColor    = SALCOLOR_NONE;
+        moBrushColor    = std::nullopt;
         mbBrushGC       = false;
     }
 }
 
 void X11SalGraphicsImpl::SetFillColor( Color nColor )
 {
-    if( mnBrushColor == nColor )
+    if( moBrushColor == nColor )
         return;
 
     mbDitherBrush   = false;
-    mnBrushColor    = nColor;
+    moBrushColor    = nColor;
     mnBrushPixel    = mrParent.GetPixel( nColor );
     if( TrueColor != mrParent.GetColormap().GetVisual().GetClass()
-        && mrParent.GetColormap().GetColor( mnBrushPixel ) != mnBrushColor
+        && mrParent.GetColormap().GetColor( mnBrushPixel ) != moBrushColor
         && nColor != Color( 0x00, 0x00, 0x00 ) // black
         && nColor != Color( 0x00, 0x00, 0x80 ) // blue
         && nColor != Color( 0x00, 0x80, 0x00 ) // green
@@ -1049,7 +1049,7 @@ void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
             mnPenPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
-    mnPenColor  = mrParent.GetColormap().GetColor( mnPenPixel );
+    moPenColor  = mrParent.GetColormap().GetColor( mnPenPixel );
     mbPenGC     = false;
 }
 
@@ -1068,7 +1068,7 @@ void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
             break;
     }
     mbDitherBrush   = false;
-    mnBrushColor    = mrParent.GetColormap().GetColor( mnBrushPixel );
+    moBrushColor    = mrParent.GetColormap().GetColor( mnBrushPixel );
     mbBrushGC       = false;
 }
 
@@ -1089,13 +1089,13 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
 
 void X11SalGraphicsImpl::internalDrawPixel( tools::Long nX, tools::Long nY )
 {
-    if( mnPenColor !=  SALCOLOR_NONE )
+    if( moPenColor )
         XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
 }
 
 void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
-    if( mnPenColor != SALCOLOR_NONE )
+    if( moPenColor )
     {
         XDrawLine( mrParent.GetXDisplay(), mrParent.GetDrawable(),SelectPen(),
                    nX1, nY1, nX2, nY2 );
@@ -1104,7 +1104,7 @@ void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, too
 
 void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
-    if( mnBrushColor != SALCOLOR_NONE )
+    if( moBrushColor )
     {
         XFillRectangle( mrParent.GetXDisplay(),
                         mrParent.GetDrawable(),
@@ -1112,7 +1112,7 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
                         nX, nY, nDX, nDY );
     }
     // description DrawRect is wrong; thus -1
-    if( mnPenColor != SALCOLOR_NONE )
+    if( moPenColor )
         XDrawRectangle( mrParent.GetXDisplay(),
                         mrParent.GetDrawable(),
                         SelectPen(),
@@ -1121,7 +1121,7 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
 
 void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
-    if( mnPenColor != SALCOLOR_NONE )
+    if( moPenColor )
     {
         SalPolyLine Points( nPoints, pPtAry );
 
@@ -1184,14 +1184,14 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
         }
     }
 
-    if( mnBrushColor != SALCOLOR_NONE )
+    if( moBrushColor )
         XFillPolygon( mrParent.GetXDisplay(),
                       mrParent.GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
 
-    if( mnPenColor != SALCOLOR_NONE )
+    if( moPenColor )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
 
@@ -1334,7 +1334,7 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     }
 
     // set polygon foreground color and opacity
-    XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency );
+    XRenderColor aRenderColor = GetXRenderColor( *moBrushColor , fTransparency );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // set clipping
@@ -1604,8 +1604,8 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
-    const Color aKeepBrushColor = mnBrushColor;
-    mnBrushColor = mnPenColor;
+    const std::optional<Color> aKeepBrushColor = moBrushColor;
+    moBrushColor = moPenColor;
 
     // create the area-polygon for the line
     const bool bDrawnOk(
@@ -1615,7 +1615,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
             fTransparency));
 
     // restore the original brush GC
-    mnBrushColor = aKeepBrushColor;
+    moBrushColor = aKeepBrushColor;
     return bDrawnOk;
 }
 

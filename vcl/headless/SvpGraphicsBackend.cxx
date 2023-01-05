@@ -53,13 +53,13 @@ tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
     return m_rCairoCommon.m_pSurface ? m_rCairoCommon.m_aFrameSize.getX() : 0;
 }
 
-void SvpGraphicsBackend::SetLineColor() { m_rCairoCommon.m_aLineColor = SALCOLOR_NONE; }
+void SvpGraphicsBackend::SetLineColor() { m_rCairoCommon.m_oLineColor = std::nullopt; }
 
-void SvpGraphicsBackend::SetLineColor(Color nColor) { m_rCairoCommon.m_aLineColor = nColor; }
+void SvpGraphicsBackend::SetLineColor(Color nColor) { m_rCairoCommon.m_oLineColor = nColor; }
 
-void SvpGraphicsBackend::SetFillColor() { m_rCairoCommon.m_aFillColor = SALCOLOR_NONE; }
+void SvpGraphicsBackend::SetFillColor() { m_rCairoCommon.m_oFillColor = std::nullopt; }
 
-void SvpGraphicsBackend::SetFillColor(Color nColor) { m_rCairoCommon.m_aFillColor = nColor; }
+void SvpGraphicsBackend::SetFillColor(Color nColor) { m_rCairoCommon.m_oFillColor = nColor; }
 
 void SvpGraphicsBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
 {
@@ -71,13 +71,13 @@ void SvpGraphicsBackend::SetROPLineColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            m_rCairoCommon.m_aLineColor = Color(0, 0, 0);
+            m_rCairoCommon.m_oLineColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            m_rCairoCommon.m_aLineColor = Color(0xff, 0xff, 0xff);
+            m_rCairoCommon.m_oLineColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            m_rCairoCommon.m_aLineColor = Color(0xff, 0xff, 0xff);
+            m_rCairoCommon.m_oLineColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
@@ -87,20 +87,20 @@ void SvpGraphicsBackend::SetROPFillColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            m_rCairoCommon.m_aFillColor = Color(0, 0, 0);
+            m_rCairoCommon.m_oFillColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            m_rCairoCommon.m_aFillColor = Color(0xff, 0xff, 0xff);
+            m_rCairoCommon.m_oFillColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            m_rCairoCommon.m_aFillColor = Color(0xff, 0xff, 0xff);
+            m_rCairoCommon.m_oFillColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
 
 void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
 {
-    drawPixel(nX, nY, m_rCairoCommon.m_aLineColor);
+    drawPixel(nX, nY, *m_rCairoCommon.m_oLineColor);
 }
 
 void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
@@ -121,7 +121,7 @@ void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long 
     basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawLine(cr, &extents, m_rCairoCommon.m_aLineColor, getAntiAlias(), nX1, nY1, nX2,
+    CairoCommon::drawLine(cr, &extents, *m_rCairoCommon.m_oLineColor, getAntiAlias(), nX1, nY1, nX2,
                           nY2);
 
     m_rCairoCommon.releaseCairoContext(cr, false, extents);
@@ -136,8 +136,8 @@ void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nW
 void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, double nHeight)
 {
     // fast path for the common case of simply creating a solid block of color
-    if (m_rCairoCommon.m_aFillColor != SALCOLOR_NONE && m_rCairoCommon.m_aLineColor != SALCOLOR_NONE
-        && m_rCairoCommon.m_aFillColor == m_rCairoCommon.m_aLineColor)
+    if (m_rCairoCommon.m_oFillColor && m_rCairoCommon.m_oLineColor
+        && m_rCairoCommon.m_oFillColor == m_rCairoCommon.m_oLineColor)
     {
         double fTransparency = 0;
 
@@ -163,7 +163,7 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        CairoCommon::applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        CairoCommon::applyColor(cr, *m_rCairoCommon.m_oFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -175,36 +175,36 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
     }
 
     // because of the -1 hack we have to do fill and draw separately
-    Color aOrigFillColor = m_rCairoCommon.m_aFillColor;
-    Color aOrigLineColor = m_rCairoCommon.m_aLineColor;
-    m_rCairoCommon.m_aFillColor = SALCOLOR_NONE;
-    m_rCairoCommon.m_aLineColor = SALCOLOR_NONE;
+    std::optional<Color> aOrigFillColor = m_rCairoCommon.m_oFillColor;
+    std::optional<Color> aOrigLineColor = m_rCairoCommon.m_oLineColor;
+    m_rCairoCommon.m_oFillColor = std::nullopt;
+    m_rCairoCommon.m_oLineColor = std::nullopt;
 
-    if (aOrigFillColor != SALCOLOR_NONE)
+    if (aOrigFillColor)
     {
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
-        m_rCairoCommon.m_aFillColor = aOrigFillColor;
+        m_rCairoCommon.m_oFillColor = aOrigFillColor;
 
         drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
 
-        m_rCairoCommon.m_aFillColor = SALCOLOR_NONE;
+        m_rCairoCommon.m_oFillColor = std::nullopt;
     }
 
-    if (aOrigLineColor != SALCOLOR_NONE)
+    if (aOrigLineColor)
     {
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
-        m_rCairoCommon.m_aLineColor = aOrigLineColor;
+        m_rCairoCommon.m_oLineColor = aOrigLineColor;
 
         drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
 
-        m_rCairoCommon.m_aLineColor = SALCOLOR_NONE;
+        m_rCairoCommon.m_oLineColor = std::nullopt;
     }
 
-    m_rCairoCommon.m_aFillColor = aOrigFillColor;
-    m_rCairoCommon.m_aLineColor = aOrigLineColor;
+    m_rCairoCommon.m_oFillColor = aOrigFillColor;
+    m_rCairoCommon.m_oLineColor = aOrigLineColor;
 }
 
 void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
@@ -238,8 +238,8 @@ void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPo
     basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_aLineColor,
-                                 m_rCairoCommon.m_aFillColor, getAntiAlias(), nPoly, pPointCounts,
+    CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_oLineColor,
+                                 m_rCairoCommon.m_oFillColor, getAntiAlias(), nPoly, pPointCounts,
                                  pPtAry);
 
     m_rCairoCommon.releaseCairoContext(cr, true, extents);
@@ -253,8 +253,8 @@ bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
     basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    bool bRetVal(CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_aLineColor,
-                                              m_rCairoCommon.m_aFillColor, getAntiAlias(),
+    bool bRetVal(CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_oLineColor,
+                                              m_rCairoCommon.m_oFillColor, getAntiAlias(),
                                               rObjectToDevice, rPolyPolygon, fTransparency));
 
     m_rCairoCommon.releaseCairoContext(cr, true, extents);
@@ -283,7 +283,7 @@ bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevi
     basegfx::B2DRange aExtents;
     m_rCairoCommon.clipRegion(cr);
 
-    bool bRetval(CairoCommon::drawPolyLine(cr, &aExtents, m_rCairoCommon.m_aLineColor,
+    bool bRetval(CairoCommon::drawPolyLine(cr, &aExtents, *m_rCairoCommon.m_oLineColor,
                                            getAntiAlias(), rObjectToDevice, rPolyLine,
                                            fTransparency, fLineWidth, pStroke, eLineJoin, eLineCap,
                                            fMiterMinimumAngle, bPixelSnapHairline));
@@ -710,10 +710,9 @@ bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lo
     basegfx::B2DRange extents;
     m_rCairoCommon.clipRegion(cr);
 
-    const bool bRetval(CairoCommon::drawAlphaRect(cr, &extents, m_rCairoCommon.m_aLineColor,
-                                                  m_rCairoCommon.m_aFillColor, nX, nY, nWidth,
+    const bool bRetval(CairoCommon::drawAlphaRect(cr, &extents, *m_rCairoCommon.m_oLineColor,
+                                                  *m_rCairoCommon.m_oFillColor, nX, nY, nWidth,
                                                   nHeight, nTransparency));
-
     m_rCairoCommon.releaseCairoContext(cr, false, extents);
 
     return bRetval;

@@ -609,14 +609,14 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
 
-void CairoCommon::drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                            tools::Long nX, tools::Long nY)
+void CairoCommon::drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents,
+                            const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY)
 {
-    if (rLineColor == SALCOLOR_NONE)
+    if (!rLineColor)
         return;
 
     cairo_rectangle(cr, nX, nY, 1, 1);
-    CairoCommon::applyColor(cr, rLineColor, 0.0);
+    CairoCommon::applyColor(cr, *rLineColor, 0.0);
     cairo_fill(cr);
 
     if (pExtents)
@@ -687,9 +687,11 @@ void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color
     cairo_stroke(cr);
 }
 
-void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                                  const Color& rFillColor, bool bAntiAlias, sal_uInt32 nPoly,
-                                  const sal_uInt32* pPointCounts, const Point** pPtAry)
+void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                                  const std::optional<Color>& rLineColor,
+                                  const std::optional<Color>& rFillColor, bool bAntiAlias,
+                                  sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
+                                  const Point** pPtAry)
 {
     basegfx::B2DPolyPolygon aPolyPoly;
     for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
@@ -711,13 +713,14 @@ void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, cons
                     aPolyPoly, 0.0);
 }
 
-bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                                  const Color& rFillColor, bool bAntiAlias,
+bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                                  const std::optional<Color>& rLineColor,
+                                  const std::optional<Color>& rFillColor, bool bAntiAlias,
                                   const basegfx::B2DHomMatrix& rObjectToDevice,
                                   const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
 {
-    const bool bHasFill(rFillColor != SALCOLOR_NONE);
-    const bool bHasLine(rLineColor != SALCOLOR_NONE);
+    const bool bHasFill(rFillColor.has_value());
+    const bool bHasLine(rLineColor.has_value());
 
     if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
         || fTransparency >= 1.0)
@@ -746,7 +749,7 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, cons
     {
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
 
-        CairoCommon::applyColor(cr, rFillColor, fTransparency);
+        CairoCommon::applyColor(cr, *rFillColor, fTransparency);
         if (pExtents)
         {
             // Get FillDamage (will be extended for LineDamage below)
@@ -765,7 +768,7 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents, cons
 
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
 
-        CairoCommon::applyColor(cr, rLineColor, fTransparency);
+        CairoCommon::applyColor(cr, *rLineColor, fTransparency);
 
         if (pExtents)
         {
@@ -1067,12 +1070,14 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     return true;
 }
 
-bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                                const Color& rFillColor, tools::Long nX, tools::Long nY,
-                                tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
+bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents,
+                                const std::optional<Color>& rLineColor,
+                                const std::optional<Color>& rFillColor, tools::Long nX,
+                                tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                                sal_uInt8 nTransparency)
 {
-    const bool bHasFill(rFillColor != SALCOLOR_NONE);
-    const bool bHasLine(rLineColor != SALCOLOR_NONE);
+    const bool bHasFill(rFillColor.has_value());
+    const bool bHasLine(rLineColor.has_value());
 
     if (!bHasFill && !bHasLine)
         return true;
@@ -1083,7 +1088,7 @@ bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents, const 
     {
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, rFillColor, fTransparency);
+        applyColor(cr, *rFillColor, fTransparency);
 
         if (pExtents)
         {
@@ -1104,7 +1109,7 @@ bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents, const 
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, rLineColor, fTransparency);
+        applyColor(cr, *rLineColor, fTransparency);
 
         if (pExtents)
         {

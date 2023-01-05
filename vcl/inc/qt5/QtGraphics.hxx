@@ -24,6 +24,7 @@
 #include <salgdi.hxx>
 
 #include <memory>
+#include <optional>
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
@@ -50,8 +51,8 @@ class QtGraphicsBackend final : public SalGraphicsImpl, public QtGraphicsBase
     QImage* m_pQImage;
     QRegion m_aClipRegion;
     QPainterPath m_aClipPath;
-    Color m_aLineColor;
-    Color m_aFillColor;
+    std::optional<Color> m_oLineColor;
+    std::optional<Color> m_oFillColor;
     QPainter::CompositionMode m_eCompositionMode;
 
 public:
