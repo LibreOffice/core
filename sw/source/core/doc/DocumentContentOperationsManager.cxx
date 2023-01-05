@@ -2070,6 +2070,18 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos,
     return bRet;
 }
 
+static auto GetCorrPosition(SwPaM const& rPam) -> SwPosition
+{
+    // tdf#152710 target position must be on node that survives deletion
+    // so that PaMCorrAbs can invalidate SwUnoCursors properly
+    return rPam.GetPoint()->GetNode().IsContentNode()
+            ? *rPam.GetPoint()
+            : rPam.GetMark()->GetNode().IsContentNode()
+                ? *rPam.GetMark()
+                // this would be the result in SwNodes::RemoveNode()
+                : SwPosition(rPam.End()->GetNode(), SwNodeOffset(+1));
+}
+
 /// Delete a full Section of the NodeArray.
 /// The passed Node is located somewhere in the designated Section.
 void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
@@ -2087,8 +2099,9 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
 
     {
         // move all Cursor/StackCursor/UnoCursor out of the to-be-deleted area
-        SwNodeIndex aMvStt( aSttIdx, 1 );
-        SwDoc::CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), true );
+        SwPaM const range(aSttIdx, aEndIdx);
+        SwPosition const pos(GetCorrPosition(range));
+        ::PaMCorrAbs(range, pos);
     }
 
     m_rDoc.GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
@@ -4229,14 +4242,7 @@ bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, SwDeleteFla
     // passed PaM, because it could be a cursor that would be moved!
     SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
     {
-        // tdf#152710 target position must be on node that survives deletion
-        // so that PaMCorrAbs can invalidate SwUnoCursors properly
-        SwPosition const pos(aDelPam.GetPoint()->GetNode().IsContentNode()
-                ? *aDelPam.GetPoint()
-                : aDelPam.GetMark()->GetNode().IsContentNode()
-                    ? *aDelPam.GetMark()
-                    // this would be the result in SwNodes::RemoveNode()
-                    : SwPosition(aDelPam.End()->GetNode(), SwNodeOffset(+1)));
+        SwPosition const pos(GetCorrPosition(aDelPam));
         ::PaMCorrAbs(aDelPam, pos);
     }
 

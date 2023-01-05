@@ -34,7 +34,7 @@ namespace
     /// returns NULL if no restrictions apply
     const SwStartNode* lcl_FindUnoCursorSection( const SwNode& rNode )
     {
-        const SwStartNode* pStartNode = rNode.StartOfSectionNode();
+        const SwStartNode* pStartNode = rNode.IsStartNode() ? rNode.GetStartNode() : rNode.StartOfSectionNode();
         while( ( pStartNode != nullptr ) &&
                ( pStartNode->StartOfSectionNode() != pStartNode ) &&
                // section node is only start node allowing overlapped delete
