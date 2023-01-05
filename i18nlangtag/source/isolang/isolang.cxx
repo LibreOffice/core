@@ -273,7 +273,6 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SPANISH_NICARAGUA,           "es", "NI", k0    },
     { LANGUAGE_SPANISH_PUERTO_RICO,         "es", "PR", k0    },
     { LANGUAGE_SPANISH_UNITED_STATES,       "es", "US", k0    },
-    { LANGUAGE_SPANISH_LATIN_AMERICA,       "es", ""  , k0    },
     { LANGUAGE_TURKISH,                     "tr", "TR", k0    },
     { LANGUAGE_UKRAINIAN,                   "uk", "UA", k0    },
     { LANGUAGE_VIETNAMESE,                  "vi", "VN", k0    },
@@ -791,6 +790,8 @@ Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_YIDDISH,                          "yi-001",   "", "", k0 },  // MS since rev.15, was "yi-Hebr" reserved, "001"="World"
     { LANGUAGE_FRENCH_WEST_INDIES,               "fr-029",   "", "", k0 },  // MS since rev.15, was "Neither defined nor reserved", "029"="Caribbean"
+    { LANGUAGE_SPANISH_LATIN_AMERICA,            "es-419",   "", "", k0 },  // MS reserved since rev.15, "419"="Latin America and the Caribbean"
+    { LANGUAGE_OBSOLETE_USER_SPANISH_LATIN_AMERICA, "es-419", "", "", LANGUAGE_SPANISH_LATIN_AMERICA },
     { LANGUAGE_USER_INTERSLAVIC_LATIN, "art-Latn-x-interslv", "", "", k0 },  // see discussion in tdf#145853
     { LANGUAGE_USER_INTERSLAVIC_CYRILLIC, "art-Cyrl-x-interslv", "", "", k0 },
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table

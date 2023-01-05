@@ -567,6 +567,8 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
         nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
     else if (nLang == LANGUAGE_OBSOLETE_USER_SPANISH_CUBA)
         nLang = LANGUAGE_SPANISH_CUBA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SPANISH_LATIN_AMERICA)
+        nLang = LANGUAGE_SPANISH_LATIN_AMERICA;
 
     // The following are not strictly obsolete but should be mapped to a
     // replacement locale when encountered.
