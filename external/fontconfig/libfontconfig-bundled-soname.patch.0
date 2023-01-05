@@ -1,7 +1,7 @@
 # -*- Mode: Diff -*-
 --- src/Makefile.in
 +++ src/Makefile.in
-@@ -525,6 +525,6 @@
+@@ -529,6 +529,6 @@
  lib_LTLIBRARIES = libfontconfig.la
  libfontconfig_la_LDFLAGS = \
 -	-version-info @LIBT_VERSION_INFO@ -no-undefined $(export_symbols)

@@ -1,0 +1,13 @@
+Avoids "error: undefined symbol: posix_fadvise" if ANDROID_API_LEVEL is less than 21.
+
+--- src/fccache.c
++++ src/fccache.c
+@@ -962,7 +962,7 @@
+     {
+ #if defined(HAVE_MMAP) || defined(__CYGWIN__)
+ 	cache = mmap (0, fd_stat->st_size, PROT_READ, MAP_SHARED, fd, 0);
+-#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_WILLNEED)
++#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_WILLNEED) && (!defined(__ANDROID_API__) || (__ANDROID_API__ >= 21))
+ 	posix_fadvise (fd, 0, fd_stat->st_size, POSIX_FADV_WILLNEED);
+ #endif
+ 	if (cache == MAP_FAILED)

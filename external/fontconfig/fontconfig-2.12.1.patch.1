@@ -1,7 +1,7 @@
 diff -up fontconfig/configure.dt fontconfig/configure
---- fontconfig/configure.dt	2017-02-01 22:07:29.671668568 +0100
-+++ fontconfig/configure	2017-02-01 22:09:53.335215490 +0100
-@@ -10469,7 +10469,7 @@ _LT_EOF
+--- fontconfig/configure.dt	2023-01-27 17:22:13.000000000 +0900
++++ fontconfig/configure	2023-02-21 20:04:01.347467874 +0900
+@@ -11534,7 +11534,7 @@ _LT_EOF
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -10,7 +10,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -10485,7 +10485,7 @@ _LT_EOF
+@@ -11550,7 +11550,7 @@ _LT_EOF
  	allow_undefined_flag=unsupported
  	# Joseph Beckenbach <jrb3@best.com> says some releases of gcc
  	# support --undefined.  This deserves some investigation.  FIXME
@@ -19,7 +19,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        else
  	ld_shlibs=no
        fi
-@@ -10519,7 +10519,7 @@ _LT_EOF
+@@ -11584,7 +11584,7 @@ _LT_EOF
        ;;
  
      haiku*)
@@ -28,7 +28,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        link_all_deplibs=yes
        ;;
  
-@@ -10614,13 +10614,13 @@ _LT_EOF
+@@ -11680,13 +11680,13 @@ _LT_EOF
  	*Sun\ F*)			# Sun Fortran 8.3
  	  tmp_sharedflag='-G' ;;
  	esac
@@ -37,14 +37,14 @@ diff -up fontconfig/configure.dt fontconfig/configure
  
          if test yes = "$supports_anon_versioning"; then
            archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
-             cat $export_symbols | sed -e "s/\(.*\)/\1;/" >> $output_objdir/$libname.ver~
+             cat $export_symbols | $SED -e "s/\(.*\)/\1;/" >> $output_objdir/$libname.ver~
              echo "local: *; };" >> $output_objdir/$libname.ver~
 -            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
 +            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
          fi
  
  	case $cc_basename in
-@@ -10650,8 +10650,8 @@ _LT_EOF
+@@ -11716,8 +11716,8 @@ _LT_EOF
  	archive_cmds='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
  	wlarc=
        else
@@ -55,7 +55,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        fi
        ;;
  
-@@ -10669,8 +10669,8 @@ _LT_EOF
+@@ -11735,8 +11735,8 @@ _LT_EOF
  
  _LT_EOF
        elif $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -66,7 +66,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        else
  	ld_shlibs=no
        fi
-@@ -10698,8 +10698,8 @@ _LT_EOF
+@@ -11764,8 +11764,8 @@ _LT_EOF
  	  # requires that you compile everything twice, which is a pain.
  	  if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
  	    hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
@@ -77,7 +77,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
  	  else
  	    ld_shlibs=no
  	  fi
-@@ -10716,8 +10716,8 @@ _LT_EOF
+@@ -11782,8 +11782,8 @@ _LT_EOF
  
      *)
        if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -88,7 +88,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        else
  	ld_shlibs=no
        fi
-@@ -11016,7 +11016,7 @@ fi
+@@ -12086,7 +12086,7 @@ fi
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -97,7 +97,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -11285,7 +11285,7 @@ fi
+@@ -12356,7 +12356,7 @@ fi
  
      irix5* | irix6* | nonstopux*)
        if test yes = "$GCC"; then
@@ -106,16 +106,16 @@ diff -up fontconfig/configure.dt fontconfig/configure
  	# Try to use the -exported_symbol ld option, if it does not
  	# work, assume that -exports_file does not work either and
  	# implicitly export all symbols.
-@@ -11313,7 +11313,7 @@ fi
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
- $as_echo "$lt_cv_irix_exported_symbol" >&6; }
+@@ -12386,7 +12386,7 @@ fi
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
+ printf "%s\n" "$lt_cv_irix_exported_symbol" >&6; }
  	if test yes = "$lt_cv_irix_exported_symbol"; then
 -          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
 +          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
  	fi
        else
  	archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -11408,7 +11408,7 @@ $as_echo "$lt_cv_irix_exported_symbol" >
+@@ -12482,7 +12482,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
      osf3*)
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
@@ -124,7 +124,7 @@ diff -up fontconfig/configure.dt fontconfig/configure
        else
  	allow_undefined_flag=' -expect_unresolved \*'
  	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -11421,7 +11421,7 @@ $as_echo "$lt_cv_irix_exported_symbol" >
+@@ -12495,7 +12495,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
      osf4* | osf5*)	# as osf3* with the addition of -msym flag
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'

@@ -23,13 +23,15 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(LIBO_SHARE
     conf.d/10-hinting-medium.conf \
     conf.d/10-hinting-none.conf \
     conf.d/10-hinting-slight.conf \
-    conf.d/10-no-sub-pixel.conf \
+    conf.d/10-no-antialias.conf \
     conf.d/10-scale-bitmap-fonts.conf \
     conf.d/10-sub-pixel-bgr.conf \
+    conf.d/10-sub-pixel-none.conf \
     conf.d/10-sub-pixel-rgb.conf \
     conf.d/10-sub-pixel-vbgr.conf \
     conf.d/10-sub-pixel-vrgb.conf \
     conf.d/10-unhinted.conf \
+    conf.d/10-yes-antialias.conf \
     conf.d/11-lcdfilter-default.conf \
     conf.d/11-lcdfilter-legacy.conf \
     conf.d/11-lcdfilter-light.conf \
@@ -40,6 +42,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(LIBO_SHARE
     conf.d/40-nonlatin.conf \
     conf.d/45-generic.conf \
     conf.d/45-latin.conf \
+    conf.d/48-spacing.conf \
     conf.d/49-sansserif.conf \
     conf.d/50-user.conf \
     conf.d/51-local.conf \
