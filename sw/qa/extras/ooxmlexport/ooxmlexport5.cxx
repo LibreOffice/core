@@ -249,6 +249,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblInd", "w", "360");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf131203)
+{
+    loadAndSave("tdf131203.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // loading thrown divide_by_zero()
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFDO76597)
 {
     loadAndSave("fdo76597.docx");
