@@ -389,7 +389,6 @@ namespace o3tl
 #define LANGUAGE_SPANISH_EL_SALVADOR        LanguageType(0x440A)
 #define LANGUAGE_SPANISH_GUATEMALA          LanguageType(0x100A)
 #define LANGUAGE_SPANISH_HONDURAS           LanguageType(0x480A)
-#define LANGUAGE_SPANISH_LATIN_AMERICA      LanguageType(0xE40A)  /* no locale possible */
 #define LANGUAGE_SPANISH_MEXICAN            LanguageType(0x080A)
 #define LANGUAGE_SPANISH_MODERN             LanguageType(0x0C0A)
 #define LANGUAGE_SPANISH_NICARAGUA          LanguageType(0x4C0A)
@@ -532,6 +531,8 @@ namespace o3tl
  * that such a mapping exists in i18nlangtag/source/isolang/isolang.cxx, but
  * mapping ISO back to LANGID will return the new value.
  */
+#define LANGUAGE_OBSOLETE_USER_SPANISH_LATIN_AMERICA LanguageType(0xE40A)  /* no locale possible, legacy for es-419, makeLangID( 0x39, getPrimaryLanguage( LANGUAGE_SPANISH)) */
+#define LANGUAGE_SPANISH_LATIN_AMERICA      LANGUAGE_es_419_reserved
 #define LANGUAGE_OBSOLETE_USER_LATIN        LanguageType(0x0610)
 #define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN
 #define LANGUAGE_OBSOLETE_USER_LATIN_VATICAN LanguageType(0x8076)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_LATIN)) */
