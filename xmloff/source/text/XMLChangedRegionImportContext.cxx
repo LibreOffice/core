@@ -122,9 +122,14 @@ void XMLChangedRegionImportContext::endFastElement(sal_Int32 )
     {
         // delete last paragraph
         // (one extra paragraph was inserted in the beginning)
-        rtl::Reference<XMLTextImportHelper> rHelper =
-            GetImport().GetTextImport();
-        rHelper->DeleteParagraph();
+        try
+        {
+            GetImport().GetTextImport()->DeleteParagraph();
+        }
+        catch (uno::Exception const&)
+        {   // cursor may be disposed - must reset to old cursor!
+            SAL_INFO("xmloff.text", "XMLChangedRegionImportContext: delete paragraph failed");
+        }
 
         GetImport().GetTextImport()->SetCursor(xOldCursor);
         xOldCursor = nullptr;
