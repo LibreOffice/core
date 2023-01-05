@@ -118,9 +118,11 @@ ColorSet::ColorSet(OUString const& rName)
     : maName(rName)
 {}
 
-void ColorSet::add(sal_uInt32 nIndex, Color aColorData)
+void ColorSet::add(model::ThemeColorType eType, Color aColorData)
 {
-    maColors[nIndex] = aColorData;
+    if (eType == model::ThemeColorType::Unknown)
+        return;
+    maColors[sal_Int16(eType)] = aColorData;
 }
 
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -150,70 +152,22 @@ ColorSets::~ColorSets()
 
 void ColorSets::init()
 {
-    {
+    //{
         ColorSet aColorSet("Breeze");
-        aColorSet.add(0,  0xFCFCFC);
-        aColorSet.add(1,  0x232629);
-        aColorSet.add(2,  0xEFF0F1);
-        aColorSet.add(3,  0x31363B);
-        aColorSet.add(4,  0xDA4453);
-        aColorSet.add(5,  0xF47750);
-        aColorSet.add(6,  0xFDBC4B);
-        aColorSet.add(7,  0xC9CE3B);
-        aColorSet.add(8,  0x1CDC9A);
-        aColorSet.add(9,  0x2ECC71);
-        aColorSet.add(10, 0x1D99F3);
-        aColorSet.add(11, 0x3DAEE9);
+        aColorSet.add(model::ThemeColorType::Dark1, 0x232629);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFCFCFC);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x31363B);
+        aColorSet.add(model::ThemeColorType::Light2, 0xEFF0F1);
+        aColorSet.add(model::ThemeColorType::Accent1, 0xDA4453);
+        aColorSet.add(model::ThemeColorType::Accent2, 0xF47750);
+        aColorSet.add(model::ThemeColorType::Accent3, 0xFDBC4B);
+        aColorSet.add(model::ThemeColorType::Accent4, 0xC9CE3B);
+        aColorSet.add(model::ThemeColorType::Accent5, 0x1CDC9A);
+        aColorSet.add(model::ThemeColorType::Accent6, 0x2ECC71);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x1D99F3);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x3DAEE9);
         maColorSets.push_back(aColorSet);
-    }
-    {
-        ColorSet aColorSet("Material Blue");
-        aColorSet.add(0,  0xFFFFFF);
-        aColorSet.add(1,  0x212121);
-        aColorSet.add(2,  0xECEFF1);
-        aColorSet.add(3,  0x37474F);
-        aColorSet.add(4,  0x7986CB);
-        aColorSet.add(5,  0x303F9F);
-        aColorSet.add(6,  0x64B5F6);
-        aColorSet.add(7,  0x1976D2);
-        aColorSet.add(8,  0x4FC3F7);
-        aColorSet.add(9,  0x0277BD);
-        aColorSet.add(10, 0x4DD0E1);
-        aColorSet.add(11, 0x0097A7);
-        maColorSets.push_back(aColorSet);
-    }
-    {
-        ColorSet aColorSet("Material Red");
-        aColorSet.add(0,  0xFFFFFF);
-        aColorSet.add(1,  0x212121);
-        aColorSet.add(2,  0xF5F5F5);
-        aColorSet.add(3,  0x424242);
-        aColorSet.add(4,  0xFF9800);
-        aColorSet.add(5,  0xFF6D00);
-        aColorSet.add(6,  0xFF5722);
-        aColorSet.add(7,  0xDD2C00);
-        aColorSet.add(8,  0xF44336);
-        aColorSet.add(9,  0xD50000);
-        aColorSet.add(10, 0xE91E63);
-        aColorSet.add(11, 0xC51162);
-        maColorSets.push_back(aColorSet);
-    }
-    {
-        ColorSet aColorSet("Material Green");
-        aColorSet.add(0,  0xFFFFFF);
-        aColorSet.add(1,  0x212121);
-        aColorSet.add(2,  0xF5F5F5);
-        aColorSet.add(3,  0x424242);
-        aColorSet.add(4,  0x009688);
-        aColorSet.add(5,  0x00bfa5);
-        aColorSet.add(6,  0x4caf50);
-        aColorSet.add(7,  0x00c853);
-        aColorSet.add(8,  0x8bc34a);
-        aColorSet.add(9,  0x64dd17);
-        aColorSet.add(10, 0xcddc39);
-        aColorSet.add(11, 0xaeea00);
-        maColorSets.push_back(aColorSet);
-    }
+    //}
 }
 
 const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
@@ -271,8 +225,11 @@ void Theme::ToAny(css::uno::Any& rVal) const
         std::vector<util::Color> aColorScheme;
         for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
         {
-            Color aColor = mpColorSet->getColor(eThemeColorType);
-            aColorScheme.push_back(sal_Int32(aColor));
+            if (eThemeColorType != model::ThemeColorType::Unknown)
+            {
+                Color aColor = mpColorSet->getColor(eThemeColorType);
+                aColorScheme.push_back(sal_Int32(aColor));
+            }
         }
 
         aMap["ColorSchemeName"] <<= mpColorSet->getName();
@@ -311,15 +268,20 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     {
         uno::Sequence<util::Color> aColors;
         it->second >>= aColors;
-        for (size_t i = 0; i < aColors.size(); ++i)
-        {
-            if (i >= 12)
-            {
-                SAL_WARN("svx", "Theme::FromAny: too many colors in the color set");
-                break;
-            }
 
-            pColorSet->add(i, Color(ColorTransparency, aColors[i]));
+        SAL_WARN_IF(aColors.size() > 12, "svx", "Theme::FromAny: number of colors greater than max theme colors supported");
+
+        for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
+        {
+            if (eThemeColorType != model::ThemeColorType::Unknown)
+            {
+                size_t nIndex(static_cast<sal_Int16>(eThemeColorType));
+                if (nIndex < aColors.size())
+                {
+                    Color aColor(ColorTransparency, aColors[nIndex]);
+                    pColorSet->add(eThemeColorType, aColor);
+                }
+            }
         }
     }
 
@@ -352,7 +314,8 @@ std::vector<Color> Theme::GetColors() const
     std::vector<Color> aColors;
     for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
     {
-        aColors.push_back(mpColorSet->getColor(eThemeColorType));
+        if (eThemeColorType != model::ThemeColorType::Unknown)
+            aColors.push_back(mpColorSet->getColor(eThemeColorType));
     }
     return aColors;
 }
