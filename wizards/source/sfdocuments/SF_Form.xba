@@ -24,7 +24,7 @@ Option Explicit
 &apos;&apos;&apos;		Definitions:
 &apos;&apos;&apos;
 &apos;&apos;&apos;			FormDocument: BASE DOCUMENTS ONLY
-&apos;&apos;&apos;				For usual documents, there is only 1 forms cpntainer. It is either the document itself or one of its sheets (Calc)
+&apos;&apos;&apos;				For usual documents, there is only 1 forms container. It is either the document itself or one of its sheets (Calc)
 &apos;&apos;&apos;				A Base document may contain an unlimited number of form documents.
 &apos;&apos;&apos;					In the Base terminology they are called &quot;forms&quot; or &quot;Base forms&quot;. This could create some confusion.
 &apos;&apos;&apos;					They can be organized in folders. Their name is then always the full path of folders + form
