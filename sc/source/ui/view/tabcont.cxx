@@ -213,11 +213,8 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     if( nMouseClickPageId == 0 )
     {
         // Click in the area next to the existing tabs:
-        // #i70320# if several sheets are selected, deselect all except the current sheet,
-        // otherwise add new sheet
-        sal_uInt16 nSlot = ( GetSelectPageCount() > 1 ) ? FID_TAB_DESELECTALL : FID_INS_TABLE;
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( nSlot, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        pDispatcher->Execute( FID_TAB_DESELECTALL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
     }
