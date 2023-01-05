@@ -140,6 +140,17 @@ void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nC
     X11Common::releaseCairoContext(cr);
 }
 
+Color X11CairoSalGraphicsImpl::getPixel(tools::Long nX, tools::Long nY)
+{
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
+
+    Color aRet = CairoCommon::getPixel(cairo_get_target(cr), nX, nY);
+
+    X11Common::releaseCairoContext(cr);
+
+    return aRet;
+}
+
 void X11CairoSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                        tools::Long nY2)
 {

@@ -155,6 +155,8 @@ struct VCL_DLLPUBLIC CairoCommon
     static void drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                           tools::Long nX, tools::Long nY);
 
+    static Color getPixel(cairo_surface_t* pSurface, tools::Long nX, tools::Long nY);
+
     static void drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                          bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
                          tools::Long nY2);
