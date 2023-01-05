@@ -726,7 +726,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 #endif
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
+                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading()
+                         && !comphelper::LibreOfficeKit::isActive() )
                     {
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
