@@ -354,9 +354,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
     if( m_aTableProperties )
     {
         //create properties from the table attributes
-        //...pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
-        //pPropMap->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::RIGHT ));
-        sal_Int32 nGapHalf = 0;
         sal_Int32 nLeftMargin = 0;
 
         comphelper::SequenceAsHashMap aGrabBag;
@@ -509,8 +506,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::Any( aGrabBag.getAsConstPropertyValueList() ) );
         }
 
-        m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
-
         std::optional<PropertyMap::Property> oLeftMarginFromStyle = m_aTableProperties->getProperty(PROP_LEFT_MARGIN);
         if (oLeftMarginFromStyle)
         {
@@ -625,7 +620,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
-            const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance;
+            const sal_Int32 nAdjustedMargin = nLeftMargin - rInfo.nLeftBorderDistance;
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
         }
         else
@@ -635,7 +630,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             // so emulate that by adding the half the width. (also see docxattributeoutput)
             if ( rInfo.nNestLevel > 1 && nLeftMargin < 0 )
                 nLeftMargin = 0;
-            const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf + (aLeftBorder.LineWidth / 2);
+            const sal_Int32 nAdjustedMargin = nLeftMargin + (aLeftBorder.LineWidth / 2);
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
         }
 
