@@ -1688,10 +1688,19 @@ void XMLParaContext::endFastElement(sal_Int32 )
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
-    Reference < XTextRange > xCrsrRange( xTxtImport->GetCursorAsRange() );
-    if( !xCrsrRange.is() )
-        return; // Robust (defective file)
-    Reference < XTextRange > xEnd(xCrsrRange->getStart());
+    Reference<XTextRange> xEnd;
+    try
+    {
+        Reference<XTextRange> const xCrsrRange(xTxtImport->GetCursorAsRange());
+        if (!xCrsrRange.is())
+            return; // Robust (defective file)
+        xEnd = xCrsrRange->getStart();
+    }
+    catch (uno::Exception const&)
+    {
+        SAL_INFO("xmloff.text", "XMLParaContext: cursor disposed?");
+        return;
+    }
 
     // if we have an id set for this paragraph, get a cursor for this
     // paragraph and register it with the given identifier
