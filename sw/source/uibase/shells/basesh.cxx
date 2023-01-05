@@ -774,7 +774,7 @@ namespace
 {
 /// Searches for the specified field type and field name prefix and update the matching fields to
 /// have the provided new name and content.
-bool UpdateFieldConents(SfxRequest& rReq, SwWrtShell& rWrtSh)
+bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
     if (!pTypeName || pTypeName->GetValue() != "SetRef")
@@ -812,7 +812,7 @@ bool UpdateFieldConents(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
         if (nFieldIndex >= aFields.getLength())
         {
-            continue;
+            break;
         }
         comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
         auto aName = aMap["Name"].get<OUString>();
@@ -889,7 +889,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
         case FN_UPDATE_FIELDS:
             {
-                if (UpdateFieldConents(rReq, rSh))
+                if (UpdateFieldContents(rReq, rSh))
                 {
                     // Parameters indicated that the name / content of fields has to be updated to
                     // the provided values, don't do an actual fields update.
