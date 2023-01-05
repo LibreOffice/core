@@ -4228,7 +4228,17 @@ bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, SwDeleteFla
     // Move all cursors out of the deleted range, but first copy the
     // passed PaM, because it could be a cursor that would be moved!
     SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
-    ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
+    {
+        // tdf#152710 target position must be on node that survives deletion
+        // so that PaMCorrAbs can invalidate SwUnoCursors properly
+        SwPosition const pos(aDelPam.GetPoint()->GetNode().IsContentNode()
+                ? *aDelPam.GetPoint()
+                : aDelPam.GetMark()->GetNode().IsContentNode()
+                    ? *aDelPam.GetMark()
+                    // this would be the result in SwNodes::RemoveNode()
+                    : SwPosition(aDelPam.End()->GetNode(), SwNodeOffset(+1)));
+        ::PaMCorrAbs(aDelPam, pos);
+    }
 
     bool const bSuccess( DeleteRangeImplImpl(aDelPam, flags) );
     if (bSuccess)

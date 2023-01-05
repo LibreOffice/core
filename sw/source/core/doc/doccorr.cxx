@@ -37,8 +37,11 @@ namespace
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();
         while( ( pStartNode != nullptr ) &&
                ( pStartNode->StartOfSectionNode() != pStartNode ) &&
-               ( pStartNode->GetStartNodeType() == SwNormalStartNode ) )
+               // section node is only start node allowing overlapped delete
+               pStartNode->IsSectionNode() )
+        {
             pStartNode = pStartNode->StartOfSectionNode();
+        }
 
         return pStartNode;
     }
