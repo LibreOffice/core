@@ -126,7 +126,7 @@ Try:
 		sService = vSplit(0)
 		&apos;	Accept other default values for associated libraries
 		Select Case LCase(sService)
-			Case &quot;document&quot;, &quot;calc&quot;, &quot;writer&quot;, &quot;base&quot;, &quot;documentevent&quot;, &quot;formevent&quot;
+			Case &quot;document&quot;, &quot;calc&quot;, &quot;writer&quot;, &quot;base&quot;, &quot;formdocument&quot;, &quot;documentevent&quot;, &quot;formevent&quot;
 														sLibrary = &quot;SFDocuments&quot;
 			Case &quot;dialog&quot;, &quot;dialogevent&quot;			:	sLibrary = &quot;SFDialogs&quot;
 			Case &quot;database&quot;, &quot;datasheet&quot;			:	sLibrary = &quot;SFDatabases&quot;

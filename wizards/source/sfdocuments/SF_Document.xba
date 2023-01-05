@@ -269,6 +269,11 @@ Property Get IsDraw() As Boolean
 End Property	&apos;	SFDocuments.SF_Document.IsDraw
 
 REM -----------------------------------------------------------------------------
+Property Get IsFormDocument() As Boolean
+	IsFormDocument = _PropertyGet(&quot;IsFormDocument&quot;)
+End Property	&apos;	SFDocuments.SF_Document.IsFormDocument
+
+REM -----------------------------------------------------------------------------
 Property Get IsImpress() As Boolean
 	IsImpress = _PropertyGet(&quot;IsImpress&quot;)
 End Property	&apos;	SFDocuments.SF_Document.IsImpress
@@ -459,7 +464,7 @@ Try:
 	If SaveAsk And _Component.IsModified Then	&apos;	Execute closure with the File/Close menu command
 		Activate()
 		RunCommand(&quot;CloseDoc&quot;)
-		bClosed = _IsStillAlive(, False)			&apos;	Do not raise error
+		bClosed = Not _IsStillAlive(, False)			&apos;	Do not raise error
 	Else
 		_Frame.close(True)
 		_Frame.dispose()
@@ -472,6 +477,7 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	On Local Error GoTo 0
 	GoTo Finally
 End Function   &apos;   SFDocuments.SF_Document.CloseDocument
 
@@ -592,7 +598,10 @@ Check:
 
 Try:
 	&apos;	Setup arguments
-	sFilter = LCase(_DocumentType) &amp; &quot;_pdf_Export&quot;
+	Select Case _DocumentType			&apos;	Disguise form documents as a Writer document
+		Case &quot;FormDocument&quot;			:	sFilter = &quot;Writer_pdf_Export&quot;
+		Case Else					:	sFilter = LCase(_DocumentType) &amp; &quot;_pdf_Export&quot;
+	End Select
 	&apos;	FilterData parameters are added only if they are meaningful
 	vFilterData = Array()
 	If Len(Pages) &gt; 0 Then
@@ -751,6 +760,7 @@ Public Function Properties() As Variant
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
+					, &quot;IsFormDocument&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
@@ -1471,7 +1481,7 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = _GetFilterNames(True)
 		Case &quot;ImportFilters&quot;
 			_PropertyGet = _GetFilterNames(False)
-		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;
+		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsFormDocument&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;
 			_PropertyGet = ( Mid(psProperty, 3) = _DocumentType )
 		Case &quot;Keywords&quot;
 			_PropertyGet = Join(_Component.DocumentProperties.Keywords, &quot;, &quot;)

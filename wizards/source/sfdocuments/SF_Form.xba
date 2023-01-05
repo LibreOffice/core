@@ -23,8 +23,8 @@ Option Explicit
 &apos;&apos;&apos;		
 &apos;&apos;&apos;		Definitions:
 &apos;&apos;&apos;
-&apos;&apos;&apos;			FormDocument:
-&apos;&apos;&apos;				For usual documents, there is only 1 form document. It is in fact the document itself.
+&apos;&apos;&apos;			FormDocument: BASE DOCUMENTS ONLY
+&apos;&apos;&apos;				For usual documents, there is only 1 forms cpntainer. It is either the document itself or one of its sheets (Calc)
 &apos;&apos;&apos;				A Base document may contain an unlimited number of form documents.
 &apos;&apos;&apos;					In the Base terminology they are called &quot;forms&quot; or &quot;Base forms&quot;. This could create some confusion.
 &apos;&apos;&apos;					They can be organized in folders. Their name is then always the full path of folders + form
@@ -34,29 +34,36 @@ Option Explicit
 &apos;&apos;&apos;					the user experience significantly
 &apos;&apos;&apos;
 &apos;&apos;&apos;			Form: WHERE IT IS ABOUT IN THE CURRENT &quot;Form&quot; SERVICE
-&apos;&apos;&apos;				Is an abstract set of Controls in an OPEN FormDocument
+&apos;&apos;&apos;				Is an abstract set of Controls in an OPEN Document or FormDocument
 &apos;&apos;&apos;				Each form is usually linked to one single dataset (table, query or Select statement),
 &apos;&apos;&apos;				located in any database (provided the user may access it)
 &apos;&apos;&apos;					A usual document may contain several forms. Each of which may have its own data source (database + dataset)
 &apos;&apos;&apos;					A Base form document may contain several forms. Each of which may address its own dataset. The database however is unique
-&apos;&apos;&apos;				A form is defined by its owning FormDocument and its FormName or FormIndex
+&apos;&apos;&apos;				A form is defined by its owning Document or FormDocument and its FormName or FormIndex
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocations:
 &apos;&apos;&apos;
-&apos;&apos;&apos;			REM the form is stored in a not-Base document (Calc, Writer)	
+&apos;&apos;&apos;			REM the form is stored in a Writer document
 &apos;&apos;&apos;			Dim oDoc As Object, myForm As Object
 &apos;&apos;&apos;				Set oDoc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisComponent)
 &apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;Form1&quot;)
 &apos;&apos;&apos;				&apos;	or, alternatively, when there is only 1 form
 &apos;&apos;&apos;				Set myForm = oDoc.Forms(0)	
 &apos;&apos;&apos;
-&apos;&apos;&apos;			REM the form is stored in one of the FormDocuments of a Base document
-&apos;&apos;&apos;			Dim oDoc As Object, myForm As Object, mySubForm As Object
-&apos;&apos;&apos;				Set oDoc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisDatabaseDocument)
-&apos;&apos;&apos;				oDoc.OpenFormDocument(&quot;thisFormDocument&quot;)
-&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;thisFormDocument&quot;, &quot;MainForm&quot;)
+&apos;&apos;&apos;			REM the form is stored in a Calc document
+&apos;&apos;&apos;			Dim oCalc As Object, myForm As Object
+&apos;&apos;&apos;				Set oCalc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisComponent)
+&apos;&apos;&apos;				Set myForm = oCalc.Forms(&quot;Sheet1&quot;, &quot;Form1&quot;)
 &apos;&apos;&apos;				&apos;	or, alternatively, when there is only 1 form
-&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;thisFormDocument&quot;, 0)
+&apos;&apos;&apos;				Set myForm = oCalc.Forms(&quot;Sheet1&quot;, 0)	
+&apos;&apos;&apos;
+&apos;&apos;&apos;			REM the form is stored in one of the FormDocuments of a Base document
+&apos;&apos;&apos;			Dim oBase As Object, myFormDoc As Object, myForm As Object, mySubForm As Object
+&apos;&apos;&apos;				Set oBase = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisDatabaseDocument)
+&apos;&apos;&apos;				Set oFormDoc = oBase.OpenFormDocument(&quot;thisFormDocument&quot;)
+&apos;&apos;&apos;				Set myForm = oFormDoc.Forms(&quot;MainForm&quot;)
+&apos;&apos;&apos;				&apos;	or, alternatively, when there is only 1 form
+&apos;&apos;&apos;				Set myForm = oFormDoc.Forms(0)
 &apos;&apos;&apos;				&apos;	To access a subform: myForm and mySubForm become distinct instances of the current class
 &apos;&apos;&apos;				Set mySubForm = myForm.SubForms(&quot;mySubForm&quot;)
 &apos;&apos;&apos;
@@ -87,9 +94,10 @@ Private _Name				As String		&apos; Internal name of the form
 Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
 Private _SheetName			As String		&apos; Name as the sheet containing the form (Calc only)
 Private _FormDocumentName	As String		&apos; The hierarchical name of the containing form document (Base only)
-Private _FormDocument		As Object		&apos; com.sun.star.comp.sdb.Content - the containing form document
-	&apos;	The form topmost container
-Private _Component			As Object		&apos; com.sun.star.lang.XComponent or com.sun.star.comp.dba.ODatabaseDocument
+Private _FormDocument		As Object		&apos; com.sun.star.comp.sdb.Content - the form document container
+&apos;	The form topmost containers
+Private _Component			As Object		&apos; com.sun.star.lang.XComponent
+Private _BaseComponent		As Object		&apos; com.sun.star.comp.dba.ODatabaseDocument
 
 &apos;	Events management
 Private _CacheIndex			As Long			&apos; Index in central cache storage
@@ -98,9 +106,9 @@ Private _CacheIndex			As Long			&apos; Index in central cache storage
 &apos;		The entry to the interactions with the form. Validity checked by the _IsStillAlive() method
 &apos;		Each method or property requiring that the form is opened should first invoke that method
 Private _Form				As Object		&apos; com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
-Private _Database			As Object		&apos; Database class instance
 
 &apos;	Form attributes
+Private _Database			As Object		&apos; Database class instance
 
 &apos;	Cache storage for controls
 Private _ControlNames		As Variant		&apos; Array of control names
@@ -110,7 +118,7 @@ REM ============================================================ MODULE CONSTANT
 
 Const ISDOCFORM				=	1			&apos; Form is stored in a Writer document
 Const ISCALCFORM			=	2			&apos; Form is stored in a Calc document
-Const ISBASEFORM			=	3			&apos; Form is stored in a Base document
+Const ISBASEFORM			=	3			&apos; Form is stored in a Base form document
 Const ISSUBFORM				=	4			&apos; Form is a subform of a form or of another subform
 Const ISUNDEFINED			=	-1			&apos; Undefined form type
 
@@ -126,6 +134,8 @@ Private Sub Class_Initialize()
 	_SheetName = &quot;&quot;
 	_FormDocumentName = &quot;&quot;
 	Set _FormDocument = Nothing
+	Set _Component = Nothing
+	Set _BaseComponent = Nothing
 	_FormType = ISUNDEFINED
 	_CacheIndex = -1
 	Set _Form = Nothing
@@ -535,11 +545,14 @@ Check:
 	End If
 Try:
 	Select Case _FormType
-		Case ISDOCFORM, ISCALCFORM, ISSUBFORM
-		Case ISBASEFORM
-			_FormDocument.close()
-			Dispose()
-			bClose = True
+		Case ISDOCFORM, ISCALCFORM
+		Case ISBASEFORM, ISSUBFORM
+			If Not IsNull(_FormDocument) Then
+				_FormDocument.close()
+				Dispose()
+				bClose = True
+			End If
+		Case Else
 	End Select
 
 Finally:
@@ -673,7 +686,7 @@ Check:
 	If IsMissing(User) Or IsEmpty(User) Then User = &quot;&quot;
 	If IsMissing(Password) Or IsEmpty(Password) Then Password = &quot;&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Parent]._IsStillAlive(True) Then GoTo Finally
+		If Not [_Parent]._IsStillAlive(False) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(User, &quot;User&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -691,7 +704,7 @@ Try:
 
 	&apos;	Connect to database, avoiding multiple requests
 	If IsNull(_Database) Then		&apos;	1st connection request from the current form instance
-		If _FormType = ISBASEFORM Then
+		If _FormType = ISBASEFORM And Not IsNull(_BaseComponent) Then
 			&apos;	Fetch the shared connection
 			Set _Database = [_Parent].GetDatabase(User, Password)
 		ElseIf _FormType = ISSUBFORM Then
@@ -1123,6 +1136,7 @@ Try:
 			Set .[_Parent] = [Me]
 			._FormType = ISSUBFORM
 			Set ._Component = _Component
+			Set ._BaseComponent = _BaseComponent
 			Set ._FormDocument = _FormDocument
 			._SheetName = _SheetName
 			._FormDocumentName = _FormDocumentName
@@ -1208,8 +1222,8 @@ Private Sub _GetParents()
 
 Dim oParent As Object				&apos;	Successive bottom-up parents
 Dim sType As String					&apos;	UNO object type
-Dim sPersistentName As String		&apos;	The Obj... name of a Base form
 Dim iLevel As Integer				&apos;	When = 1 =&gt; first parent
+Dim oBase As Object					&apos;	Empty Base instance
 Dim oSession As Object				:	Set oSession = ScriptForge.SF_Session
 
 	On Local Error GoTo Finally		&apos;	Being probably called from events, this method should avoid failures
@@ -1243,12 +1257,15 @@ Try:
 			Case &quot;com.sun.star.form.OFormsCollection&quot;		&apos;	The collection of forms inside a drawpage
 			Case &quot;SwXTextDocument&quot;							&apos;	The parent document: a Writer document or a Base form document
 				If oParent.Identifier = &quot;com.sun.star.sdb.FormDesign&quot; Then
-					sPersistentName = ScriptForge._GetPropertyValue(oParent.Args, &quot;HierarchicalDocumentName&quot;)
+					_FormType = ISBASEFORM
+					&apos;	Make a new SF_FormDocument instance
+					Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.FormDocument&quot;, oParent)
+					Set _FormDocument = [_Parent]._FormDocument
 				ElseIf oParent.Identifier = &quot;com.sun.star.text.TextDocument&quot; Then
 					_FormType = ISDOCFORM
 					Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
-					Set _Component = [_Parent]._Component
 				End If
+				Set _Component = oParent
 			Case &quot;ScModelObj&quot;								&apos;	The parent document: a Calc document
 				_FormType = ISCALCFORM
 				Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
@@ -1256,12 +1273,6 @@ Try:
 				&apos;	The triggered form event is presumed to be located in the (drawpage of the) active sheet
 				_SheetName = [_Parent].XSpreadsheet(&quot;~&quot;)
 			Case &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;	&apos;	The Base document
-				_FormType = ISBASEFORM
-				Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
-				Set _Component = oParent
-				If IsNull([_Parent]._FormDocuments) Then Set [_Parent]._FormDocuments = _Component.getFormDocuments()
-				Set _FormDocument = [_Parent]._FindByPersistentName([_Parent]._FormDocuments, sPersistentName)
-				_FormDocumentName = _FormDocument.HierarchicalName
 			Case Else
 		End Select
 		If oSession.HasUnoProperty(oParent, &quot;Parent&quot;) Then Set oParent = oParent.Parent Else Set oParent = Nothing

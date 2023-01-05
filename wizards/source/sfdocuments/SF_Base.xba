@@ -145,6 +145,7 @@ Public Function CloseFormDocument(Optional ByVal FormDocument As Variant) As Boo
 &apos;&apos;&apos;		True if closure is successful
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			oDoc.CloseFormDocument(&quot;Folder1/myFormDocument&quot;)
+&apos;&apos;&apos;	DEPRECATED - Use preferably the CloseDocument() method of the FormDocument service
 
 Dim bClose As Boolean				&apos;	Return value
 Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
@@ -235,6 +236,7 @@ Public Function Forms(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant
 &apos;&apos;&apos;				myList = oDoc.Forms(&quot;Folder1/myFormDocument&quot;)
 &apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;Folder1/myFormDocument&quot;, 0)
+&apos;&apos;&apos;	DEPRECATED - Use preferably the Forms() method of the FormDocument service
 
 Dim oForm As Object					&apos;	The new Form class instance
 Dim oFormDocument As Object			&apos;	com.sun.star.comp.sdb.Content
@@ -283,7 +285,8 @@ Try:
 			._Name = oXForm.Name
 			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
-			Set ._Component = _Component
+			Set ._Component = oFormDocument.Component
+			Set ._BaseComponent = _Component
 			._FormDocumentName = FormDocument
 			Set ._FormDocument = oFormDocument
 			._FormType = ISBASEFORM
@@ -455,28 +458,28 @@ End Function	&apos;	SFDocuments.SF_Base.Methods
 REM -----------------------------------------------------------------------------
 Public Function OpenFormDocument(Optional ByVal FormDocument As Variant _
 									, Optional ByVal DesignMode As Variant _
-									) As Boolean
+									) As Object
 &apos;&apos;&apos;	Open the FormDocument given by its hierarchical name either in normal or in design mode
 &apos;&apos;&apos;	If the form document is already open, the form document is made active without changing its mode
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FormDocument: a valid form document name as a case-sensitive string
+&apos;&apos;&apos;			When hierarchical, the hierarchy must be rendered with forward slashes (&quot;/&quot;)
 &apos;&apos;&apos;		DesignMode: when True the form document is opened in design mode (Default = False)
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		True if the form document could be opened, otherwise False
+&apos;&apos;&apos;		A FormDocument instance or Nothing
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		Form name is invalid
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		oDoc.OpenFormDocument(&quot;Folder1/myFormDocument&quot;)
+&apos;&apos;&apos;		Set oForm = oDoc.OpenFormDocument(&quot;Folbder1/myFormDocument&quot;)
 
-Dim bOpen As Boolean				&apos;	Return value
+Dim oOpen As Object					&apos;	Return value
 Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
-Dim oContainer As Object			&apos;	com.sun.star.awt.XWindow
 Dim oNewForm As Object				&apos;	Output of loadComponent()
 Const cstThisSub = &quot;SFDocuments.Base.OpenFormDocument&quot;
 Const cstSubArgs = &quot;FormDocument, [DesignMode=False]&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	bOpen = False
+	Set oOpen = Nothing
 
 Check:
 	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
@@ -499,10 +502,11 @@ Try:
 			If .isFormDesignMode() &lt;&gt; DesignMode Then .setFormDesignMode(DesignMode)
 		End With
 	End With
-	bOpen = True
+
+	Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.FormDocument&quot;, oNewForm)
 
 Finally:
-	OpenFormDocument = bOpen
+	Set OpenFormDocument = oOpen
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
@@ -632,6 +636,7 @@ Public Function PrintOut(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		oDoc.PrintOut(&quot;myForm&quot;, &quot;1-4;10;15-18&quot;, Copies := 2)
+&apos;&apos;&apos;	DEPRECATED - Use preferably the PrintOut() method of the FormDocument service
 
 Dim bPrint As Boolean				&apos;	Return value
 Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
@@ -681,6 +686,7 @@ Public Function Properties() As Variant
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw &quot; _
+					, &quot;IsFormDocument&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
@@ -708,6 +714,7 @@ Public Function SetPrinter(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		oDoc.SetPrinter(&quot;myForm&quot;, Orientation := &quot;PORTRAIT&quot;)
+&apos;&apos;&apos;	DEPRECATED - Use preferably the SetPrinter() method of the FormDocument service
 
 Dim bPrinter As Boolean				&apos;	Return value
 Dim vFormDocuments As Variant		&apos;	Array of form documents
@@ -828,6 +835,11 @@ REM ----------------------------------------------------------------------------
 Property Get IsDraw() As Boolean
 	IsDraw = [_Super].GetProperty(&quot;IsDraw&quot;)
 End Property	&apos;	SFDocuments.SF_Base.IsDraw
+
+REM -----------------------------------------------------------------------------
+Property Get IsFormDocument() As Boolean
+	IsFormDocument = [_Super].GetProperty(&quot;IsFormDocument&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.IsFormDocument
 
 REM -----------------------------------------------------------------------------
 Property Get IsImpress() As Boolean
@@ -968,7 +980,11 @@ Try:
 	End With
 
 Finally:
-	_CollectFormDocuments = Mid(sCollectNames, Len(cstToken) + 1)	&apos;	Skip the initial token
+	If Len(sCollectNames) &gt; 0 Then
+		_CollectFormDocuments = Mid(sCollectNames, Len(cstToken) + 1)	&apos;	Skip the initial token
+	Else
+		_CollectFormDocuments = &quot;&quot;
+	End If
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Base._CollectFormDocuments
 

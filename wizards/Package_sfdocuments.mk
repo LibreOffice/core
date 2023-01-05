@@ -27,6 +27,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvsfdocuments,$(LIBO_SHARE_FOLD
 	SF_DocumentListener.xba \
 	SF_Form.xba \
 	SF_FormControl.xba \
+	SF_FormDocument.xba \
 	SF_Register.xba \
 	SF_Writer.xba \
 	__License.xba \

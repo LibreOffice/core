@@ -69,6 +69,8 @@ Private	_MetaData				As Object		&apos; com.sun.star.sdbc.XDatabaseMetaData
 
 REM ============================================================ MODULE CONSTANTS
 
+Const cstToken = &quot;//&quot;							&apos; Form names accept special characters but not slashes
+
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
@@ -401,6 +403,7 @@ Public Function Methods() As Variant
 					, &quot;DMin&quot; _
 					, &quot;DSum&quot; _
 					, &quot;GetRows&quot; _
+					, &quot;OpenFormDocument&quot; _
 					, &quot;OpenQuery&quot; _
 					, &quot;OpenSql&quot; _
 					, &quot;OpenTable&quot; _
@@ -408,6 +411,56 @@ Public Function Methods() As Variant
 					)
 
 End Function	&apos;	SFDatabases.SF_Database.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function OpenFormDocument(Optional ByVal FormDocument As Variant) As Object
+&apos;&apos;&apos;	Open the FormDocument given by its hierarchical name in normal mode
+&apos;&apos;&apos;	If the form document is already open, the form document is made active
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid form document name as a case-sensitive string
+&apos;&apos;&apos;			When hierarchical, the hierarchy must be rendered with forward slashes (&quot;/&quot;)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A FormDocument instance or Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Form name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set oForm = oDb.OpenFormDocument(&quot;Folder1/myFormDocument&quot;)
+
+Dim oOpen As Object					&apos;	Return value
+Dim oFormDocuments As Variant		&apos;	com.sun.star.comp.dba.ODocumentContainer
+Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
+Dim vOpenArgs As Variant			&apos;	Array of property values
+Dim oNewForm As Object				&apos;	Output of loadComponent()
+Const cstThisSub = &quot;SFDatabases.Database.OpenFormDocument&quot;
+Const cstSubArgs = &quot;FormDocument&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+	Set oFormDocuments = _Connection.Parent.DataBaseDocument.FormDocuments
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		vFormNames = Split(_CollectFormDocuments(oFormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+	End If
+
+Try:
+	vOpenArgs = Array(SF_Utils._MakePropertyValue(&quot;ActiveConnection&quot;, _Connection) _
+						, SF_Utils._MakePropertyValue(&quot;OpenMode&quot;, &quot;open&quot;) _
+				)
+	Set oNewForm = oFormDocuments.loadComponentFromURL(FormDocument, &quot;&quot;, 0, vOpenArgs)
+
+	Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.FormDocument&quot;, oNewForm)
+
+Finally:
+	Set OpenFormDocument = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Databases.SF_Database.OpenFormDocument
 
 REM -----------------------------------------------------------------------------
 Public Function OpenQuery(Optional ByVal QueryName As Variant) As Object
@@ -631,6 +684,44 @@ Catch:
 End Function	&apos;	SFDatabases.SF_Database.SetProperty
 
 REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Private Function _CollectFormDocuments(ByRef poContainer As Object) As String
+&apos;&apos;&apos;	Returns a token-separated string of all hierarchical formdocument names
+&apos;&apos;&apos;	depending on the formdocuments container in argument
+&apos;&apos;&apos;	The function traverses recursively the whole tree below the container
+&apos;&apos;&apos;	The initial call starts from the container _Component.getFormDocuments
+&apos;&apos;&apos;	The list contains closed and open forms
+
+Dim sCollectNames As String			&apos;	Return value
+Dim oSubItem As Object				&apos;	com.sun.star.container.XNameAccess (folder) or com.sun.star.ucb.XContent (form)
+Dim i As Long
+Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
+									&apos;	Identifies forms. Folders have a zero-length content type
+
+	On Local Error GoTo Finally
+
+Try:
+	sCollectNames = &quot;&quot;
+	With poContainer
+		For i = 0 To .Count - 1
+			Set oSubItem = .getByIndex(i)
+			If oSubItem.ContentType = cstFormType Then		&apos;	Add the form to the list
+				sCollectNames = sCollectNames &amp; cstToken &amp; oSubItem.HierarchicalName
+			Else
+				sCollectNames = sCollectNames &amp; cstToken &amp; _CollectFormDocuments(oSubItem)
+			End If
+		Next i
+	End With
+
+Finally:
+	If Len(sCollectNames) &gt; 0 Then
+		_CollectFormDocuments = Mid(sCollectNames, Len(cstToken) + 1)	&apos;	Skip the initial token
+	Else
+		_CollectFormDocuments = &quot;&quot;
+	End If
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Base._CollectFormDocuments
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _DFunction(ByVal psFunction As String _
