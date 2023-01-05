@@ -355,7 +355,7 @@ static AquaSalFrame* getMouseContainerFrame()
             // events and firing any pending timers.
             // Also, Application::Reschedule() can potentially display a
             // modal dialog which will cause a hang so temporarily disable
-            // live resize by clampiing the window's minimum and maximum sizes
+            // live resize by clamping the window's minimum and maximum sizes
             // to the current frame size which in Application::Reschedule().
             NSRect aFrame = [self frame];
             NSSize aMinSize = [self minSize];
