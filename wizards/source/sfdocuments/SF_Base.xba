@@ -470,7 +470,7 @@ Public Function OpenFormDocument(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		Form name is invalid
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		Set oForm = oDoc.OpenFormDocument(&quot;Folbder1/myFormDocument&quot;)
+&apos;&apos;&apos;		Set oForm = oDoc.OpenFormDocument(&quot;Folder1/myFormDocument&quot;)
 
 Dim oOpen As Object					&apos;	Return value
 Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
