@@ -30,8 +30,8 @@ namespace tools { class Time; }
 
 enum SwDateSubFormat
 {
-    DATE_VAR,
     DATE_FIX,
+    DATE_VAR
 };
 
 class SAL_DLLPUBLIC_RTTI SwDateTimeFieldType final : public SwValueFieldType
