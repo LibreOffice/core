@@ -444,8 +444,6 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
     // Given a document with a table style, using theme color with tinting in the A2 cell:
     loadFromURL(u"theme-tint.pptx");
 
-    // Then make sure that we only import theming info to the doc model if the effects are limited
-    // to lum mod / off that we can handle (i.e. no tint/shade):
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -453,6 +451,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
     uno::Reference<table::XCellRange> xTable;
     CPPUNIT_ASSERT(xShape->getPropertyValue("Model") >>= xTable);
     uno::Reference<beans::XPropertySet> xA1(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+
     // check theme color
     {
         uno::Reference<util::XThemeColor> xThemeColor;
@@ -460,8 +459,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
         CPPUNIT_ASSERT(xThemeColor.is());
         model::ThemeColor aThemeColor;
         model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        // This is OK, no problematic effects:
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
+        }
     }
 
     {
@@ -471,12 +473,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
         CPPUNIT_ASSERT(xThemeColor.is());
         model::ThemeColor aThemeColor;
         model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        // Without the accompanying fix in place, this test would have failed with:
-        // - Expected: -1
-        // - Actual  : 4
-        // i.e. we remembered the theme index, without being able to remember the tint effect, leading
-        // to a bad background color.
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Unknown, aThemeColor.getType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        {
+            auto const& rTrans = aThemeColor.getTransformations();
+            CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
+            CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrans[0].meType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
+        }
     }
 }
 
