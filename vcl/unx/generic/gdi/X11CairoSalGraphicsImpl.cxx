@@ -61,7 +61,7 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObje
         aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygon);
     }
 
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     for (auto const& rPolygon : std::as_const(aPolyPolygon))
@@ -132,7 +132,7 @@ void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)
 
 void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     CairoCommon::drawPixel(cr, nullptr, nColor, nX, nY);
@@ -143,7 +143,7 @@ void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nC
 void X11CairoSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                        tools::Long nY2)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     CairoCommon::drawLine(cr, nullptr, mnPenColor, getAntiAlias(), nX1, nY1, nX2, nY2);
@@ -163,7 +163,7 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
     if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
         return true;
 
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
@@ -180,7 +180,7 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
 bool X11CairoSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                             tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     const bool bRetval(CairoCommon::drawAlphaRect(cr, nullptr, mnPenColor, mnFillColor, nX, nY,
@@ -194,7 +194,7 @@ bool X11CairoSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tool
 bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                            const Gradient& rGradient)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     const bool bRetval(
@@ -208,7 +208,7 @@ bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygo
 bool X11CairoSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                                                SalGradient const& rGradient)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
     clipRegion(cr);
 
     const bool bRetval(

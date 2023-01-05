@@ -40,9 +40,10 @@ class Gradient;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
-private:
+protected:
     X11SalGraphics& mrParent;
 
+private:
     Color mnBrushColor;
     GC mpBrushGC;      // Brush attributes
     Pixel mnBrushPixel;

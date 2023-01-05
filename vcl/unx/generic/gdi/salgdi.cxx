@@ -68,12 +68,15 @@ X11Common::X11Common()
     , m_pExternalSurface(nullptr)
 {}
 
-cairo_t* X11Common::getCairoContext()
+cairo_t* X11Common::getCairoContext(const SalGeometryProvider* pGeom)
 {
     if (m_pExternalSurface)
         return cairo_create(m_pExternalSurface);
 
-    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), m_hDrawable, GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
+    SAL_WARN_IF(!pGeom, "vcl", "No geometry available");
+    int nWidth = pGeom ? pGeom->GetWidth() : SAL_MAX_INT16;
+    int nHeight = pGeom ? pGeom->GetHeight() : SAL_MAX_INT16;
+    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), m_hDrawable, GetVisual().visual, nWidth, nHeight);
 
     cairo_t *cr = cairo_create(surface);
     cairo_surface_destroy(surface);
@@ -463,9 +466,9 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pVDev);
 }
 
-cairo_t* X11SalGraphics::getCairoContext()
+cairo_t* X11SalGraphics::getCairoContext(const SalGeometryProvider* pGeom)
 {
-    return maX11Common.getCairoContext();
+    return maX11Common.getCairoContext(pGeom);
 }
 
 void X11SalGraphics::releaseCairoContext(cairo_t* cr)
