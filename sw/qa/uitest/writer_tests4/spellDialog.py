@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import re
+import re, time
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import type_text
@@ -220,8 +220,8 @@ frog, dogg, catt"""
 
             # type a bad word after the word with comment
             cursor.goRight(5, False)
-            type_text(xEdit, " baad")
-            cursor.goLeft(10, False)
+            type_text(xEdit, " baad ")
+            cursor.goLeft(11, False)
 
             # fix the first word using the spelling dialog
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
@@ -233,12 +233,12 @@ frog, dogg, catt"""
                 change = xDialog.getChild('change')
                 change.executeAction("CLICK", ())
 
-            # fix UPSAN build
-            import time
-            time.sleep(0.2)
+            fixed_word = "Bad baad "
+            while fixed_word != document.Text.getString():
+                time.sleep(0.1)
 
             output_text = document.Text.getString()
-            self.assertEqual("Bad baad", output_text)
+            self.assertEqual(fixed_word, output_text)
 
             # check the original comment
             has_comment = False
