@@ -534,10 +534,20 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
 {
-    // Given a document with a refmark:
+    // Given a document with two refmarks, one is not interesting the other is a citation:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue("Name", uno::Any(OUString("some other old refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("some other old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->SplitNode();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    aArgs = {
         comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
         comphelper::makePropertyValue(
             "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
@@ -546,8 +556,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
     dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
 
     // When updating that refmark:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->SttEndDoc(/*bStt=*/true);
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
 {
     "TypeName": {
