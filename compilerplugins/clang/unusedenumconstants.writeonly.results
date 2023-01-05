@@ -5884,8 +5884,6 @@ writerfilter/source/dmapper/PropertyMap.hxx:563
     enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget TABLE_WIDTH
 writerfilter/source/dmapper/PropertyMap.hxx:564
     enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget TABLE_WIDTH_TYPE
-writerfilter/source/dmapper/PropertyMap.hxx:565
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget GAP_HALF
 writerfilter/source/dmapper/PropertyMap.hxx:566
     enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget LEFT_MARGIN
 writerfilter/source/dmapper/PropertyMap.hxx:567
