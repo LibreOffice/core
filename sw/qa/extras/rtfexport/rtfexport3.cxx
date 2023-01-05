@@ -514,6 +514,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf148578, "tdf148578.rtf")
+{
+    // \trgaph567 should affect only table cell margings (~1cm),
+    // but do not shift table, since \trleft is not provided
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+
+    xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+}
+
 DECLARE_RTFEXPORT_TEST(testInvalidParagraphStyle, "invalidParagraphStyle.rtf")
 {
     // Given test has character style #30, but referred as paragraph style #30
