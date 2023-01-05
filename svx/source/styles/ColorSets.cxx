@@ -171,7 +171,103 @@ ColorSets::~ColorSets()
 
 void ColorSets::init()
 {
-    //{
+    {
+        ColorSet aColorSet("LibreOffice");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light2, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Accent1, 0x18A303);
+        aColorSet.add(model::ThemeColorType::Accent2, 0x0369A3);
+        aColorSet.add(model::ThemeColorType::Accent3, 0xA33E03);
+        aColorSet.add(model::ThemeColorType::Accent4, 0x8E03A3);
+        aColorSet.add(model::ThemeColorType::Accent5, 0xC99C00);
+        aColorSet.add(model::ThemeColorType::Accent6, 0xC9211E);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x0000EE);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x551A8B);
+        maColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet("Rainbow");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x1C1C1C);
+        aColorSet.add(model::ThemeColorType::Light2, 0xDDDDDD);
+        aColorSet.add(model::ThemeColorType::Accent1, 0xFF0000);
+        aColorSet.add(model::ThemeColorType::Accent2, 0xFF8000);
+        aColorSet.add(model::ThemeColorType::Accent3, 0xFFFF00);
+        aColorSet.add(model::ThemeColorType::Accent4, 0x00A933);
+        aColorSet.add(model::ThemeColorType::Accent5, 0x2A6099);
+        aColorSet.add(model::ThemeColorType::Accent6, 0x800080);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x0000EE);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x551A8B);
+        maColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet("Beach");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0xFFBF00);
+        aColorSet.add(model::ThemeColorType::Light2, 0x333333);
+        aColorSet.add(model::ThemeColorType::Accent1, 0xFFF5CE);
+        aColorSet.add(model::ThemeColorType::Accent2, 0xDEE6EF);
+        aColorSet.add(model::ThemeColorType::Accent3, 0xE8F2A1);
+        aColorSet.add(model::ThemeColorType::Accent4, 0xFFD7D7);
+        aColorSet.add(model::ThemeColorType::Accent5, 0xDEE7E5);
+        aColorSet.add(model::ThemeColorType::Accent6, 0xDDDBB6);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x7777EE);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0xEE77D7);
+        maColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet("Sunset");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x492300);
+        aColorSet.add(model::ThemeColorType::Light2, 0xF6F9D4);
+        aColorSet.add(model::ThemeColorType::Accent1, 0xFFFF00);
+        aColorSet.add(model::ThemeColorType::Accent2, 0xFFBF00);
+        aColorSet.add(model::ThemeColorType::Accent3, 0xFF8000);
+        aColorSet.add(model::ThemeColorType::Accent4, 0xFF4000);
+        aColorSet.add(model::ThemeColorType::Accent5, 0xBF0041);
+        aColorSet.add(model::ThemeColorType::Accent6, 0x800080);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x0000EE);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x551A8B);
+        maColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet("Ocean");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x2A6099);
+        aColorSet.add(model::ThemeColorType::Light2, 0xCCCCCC);
+        aColorSet.add(model::ThemeColorType::Accent1, 0x800080);
+        aColorSet.add(model::ThemeColorType::Accent2, 0x55308D);
+        aColorSet.add(model::ThemeColorType::Accent3, 0x2A6099);
+        aColorSet.add(model::ThemeColorType::Accent4, 0x158466);
+        aColorSet.add(model::ThemeColorType::Accent5, 0x00A933);
+        aColorSet.add(model::ThemeColorType::Accent6, 0x81D41A);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x0000EE);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x551A8B);
+        maColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet("Forrest");
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light2, 0xFFFFFF);
+        aColorSet.add(model::ThemeColorType::Accent1, 0x813709);
+        aColorSet.add(model::ThemeColorType::Accent2, 0x224B12);
+        aColorSet.add(model::ThemeColorType::Accent3, 0x706E0C);
+        aColorSet.add(model::ThemeColorType::Accent4, 0x355269);
+        aColorSet.add(model::ThemeColorType::Accent5, 0xBE480A);
+        aColorSet.add(model::ThemeColorType::Accent6, 0xBE480A);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x2A6099);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x800080);
+        maColorSets.push_back(aColorSet);
+    }
+    {
         ColorSet aColorSet("Breeze");
         aColorSet.add(model::ThemeColorType::Dark1, 0x232629);
         aColorSet.add(model::ThemeColorType::Light1, 0xFCFCFC);
@@ -186,7 +282,7 @@ void ColorSets::init()
         aColorSet.add(model::ThemeColorType::Hyperlink, 0x1D99F3);
         aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x3DAEE9);
         maColorSets.push_back(aColorSet);
-    //}
+    }
 }
 
 const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
