@@ -545,6 +545,12 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             const sal_Int32 aFillColor = static_cast<sal_Int32>(
                 pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor() );
             xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( aFillColor ) );
+
+            if (pProperties.maFillProperties.maFillColor.hasTransparency())
+            {
+                const sal_Int16 aTransparence = pProperties.maFillProperties.maFillColor.getTransparency();
+                xSet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(aTransparence));
+            }
         }
         else
         {

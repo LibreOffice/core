@@ -177,6 +177,7 @@ public:
     void testCropToZero();
     void testTdf144092TableHeight();
     void testTdf151547TransparentWhiteText();
+    void testTdf149588TransparentSolidFill();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -246,6 +247,7 @@ public:
     CPPUNIT_TEST(testCropToZero);
     CPPUNIT_TEST(testTdf144092TableHeight);
     CPPUNIT_TEST(testTdf151547TransparentWhiteText);
+    CPPUNIT_TEST(testTdf149588TransparentSolidFill);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2037,6 +2039,29 @@ void SdImportTest2::testTdf151547TransparentWhiteText()
     // - Actual  : Color: R:255 G:255 B:255 A:255
     // i.e. fully transparent white text color was interpreted as COL_AUTO
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFE), nCharColor);
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf149588TransparentSolidFill()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149588_transparentSolidFill.pptx"),
+        PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(6, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:99 G:99 B:99 A   51  (T:204)
+    // - Actual  : Color: R:99 G:99 B:99 A: 255  (T:  0)
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xCC636363), nCharColor);
+
     xDocShRef->DoClose();
 }
 
