@@ -36,7 +36,7 @@ class SVXCORE_DLLPUBLIC ColorSet
 public:
     ColorSet(OUString const& rName);
 
-    void add(sal_uInt32 nIndex, Color aColorData);
+    void add(model::ThemeColorType Type, Color aColorData);
 
     const OUString& getName() const
     {
