@@ -319,8 +319,8 @@ LIBFFI_TARBALL := libffi-3.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBGPGERROR_SHA256SUM := a9ab83ca7acc442a5bd846a75b920285ff79bdb4e3d34aa382be88ed2c3aebaf
-LIBGPGERROR_TARBALL := libgpg-error-1.43.tar.bz2
+LIBGPGERROR_SHA256SUM := 9e3c670966b96ecc746c28c2c419541e3bcb787d1a73930f5e5f5e1bcbbb9bdb
+LIBGPGERROR_TARBALL := libgpg-error-1.47.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
