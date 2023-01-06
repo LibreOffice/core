@@ -801,10 +801,27 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     SwDoc* pDoc = rWrtSh.GetDoc();
     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
     rWrtSh.StartAction();
-    sal_uInt16 nFieldIndex = 0;
-    for (sal_uInt16 nRefMark = 0; nRefMark < pDoc->GetRefMarks(); ++nRefMark)
+
+    std::vector<const SwFormatRefMark*> aRefMarks;
+
+    for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
     {
-        auto pRefMark = const_cast<SwFormatRefMark*>(pDoc->GetRefMark(nRefMark));
+        aRefMarks.push_back(pDoc->GetRefMark(i));
+    }
+
+    std::sort(aRefMarks.begin(), aRefMarks.end(),
+              [](const SwFormatRefMark* pMark1, const SwFormatRefMark* pMark2) -> bool {
+                  const SwTextRefMark* pTextRefMark1 = pMark1->GetTextRefMark();
+                  const SwTextRefMark* pTextRefMark2 = pMark2->GetTextRefMark();
+                  SwPosition aPos1(pTextRefMark1->GetTextNode(), pTextRefMark1->GetStart());
+                  SwPosition aPos2(pTextRefMark2->GetTextNode(), pTextRefMark2->GetStart());
+                  return aPos1 < aPos2;
+              });
+
+    sal_uInt16 nFieldIndex = 0;
+    for (auto& pIntermediateRefMark : aRefMarks)
+    {
+        auto pRefMark = const_cast<SwFormatRefMark*>(pIntermediateRefMark);
         if (!pRefMark->GetRefName().startsWith(rNamePrefix))
         {
             continue;
