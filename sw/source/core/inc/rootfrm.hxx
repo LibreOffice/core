@@ -47,6 +47,7 @@ namespace sw {
     };
 
     enum class FieldmarkMode { ShowCommand = 1, ShowResult = 2, ShowBoth = 3 };
+    enum class ParagraphBreakMode { Shown, Hidden };
 };
 
 enum class SwInvalidateFlags
@@ -121,6 +122,7 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     bool    mbLayoutFreezed;
     bool    mbHideRedlines;
     sw::FieldmarkMode m_FieldmarkMode;
+    sw::ParagraphBreakMode m_ParagraphBreakMode;
 
     /**
      * For BrowseMode
@@ -421,10 +423,9 @@ public:
     bool IsHideRedlines() const { return mbHideRedlines; }
     void SetHideRedlines(bool);
     sw::FieldmarkMode GetFieldmarkMode() const { return m_FieldmarkMode; }
-    void SetFieldmarkMode(sw::FieldmarkMode);
-    bool HasMergedParas() const {
-        return IsHideRedlines() || GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth;
-    }
+    void SetFieldmarkMode(sw::FieldmarkMode, sw::ParagraphBreakMode);
+    sw::ParagraphBreakMode GetParagraphBreakMode() const { return m_ParagraphBreakMode; }
+    bool HasMergedParas() const;
 };
 
 inline tools::Long SwRootFrame::GetBrowseWidth() const

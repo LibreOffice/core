@@ -35,13 +35,14 @@ class SwTOXBase;
 namespace sw {
     enum class RedlineMode;
     enum class FieldmarkMode;
+    enum class ParagraphBreakMode;
 };
 
 class SwUndoInsSection final : public SwUndo, private SwUndRng
 {
 private:
     const std::unique_ptr<SwSectionData> m_pSectionData;
-    std::optional<std::tuple<std::unique_ptr<SwTOXBase>, sw::RedlineMode, sw::FieldmarkMode>> m_xTOXBase; /// set iff section is TOX
+    std::optional<std::tuple<std::unique_ptr<SwTOXBase>, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode>> m_xTOXBase; /// set iff section is TOX
     const std::unique_ptr<SfxItemSet> m_pAttrSet;
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlData;
@@ -56,7 +57,7 @@ private:
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
         SfxItemSet const* pSet,
-        std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const* pTOXBase);
+        std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode> const* pTOXBase);
 
     virtual ~SwUndoInsSection() override;
 

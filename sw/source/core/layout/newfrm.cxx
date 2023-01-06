@@ -418,6 +418,9 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     m_FieldmarkMode(pSh->GetViewOptions()->IsFieldName()
             ? sw::FieldmarkMode::ShowCommand
             : sw::FieldmarkMode::ShowResult),
+    m_ParagraphBreakMode(pSh->GetViewOptions()->IsParagraph()
+            ? sw::ParagraphBreakMode::Shown
+            : sw::ParagraphBreakMode::Hidden),
     mnBrowseWidth(MIN_BROWSE_WIDTH),
     mpTurbo( nullptr ),
     mpLastPage( nullptr ),
