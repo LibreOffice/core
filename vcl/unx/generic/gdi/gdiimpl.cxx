@@ -1096,23 +1096,6 @@ void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, too
     }
 }
 
-void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
-{
-    if( moBrushColor )
-    {
-        XFillRectangle( mrParent.GetXDisplay(),
-                        mrParent.GetDrawable(),
-                        SelectBrush(),
-                        nX, nY, nDX, nDY );
-    }
-    // description DrawRect is wrong; thus -1
-    if( moPenColor )
-        XDrawRectangle( mrParent.GetXDisplay(),
-                        mrParent.GetDrawable(),
-                        SelectPen(),
-                        nX, nY, nDX-1, nDY-1 );
-}
-
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
 {
     return false;

@@ -134,9 +134,6 @@ public:
 
     void drawBitmapBuffer(const SalTwoRect& rPosAry, const BitmapBuffer* pBuffer,
                           cairo_operator_t eOp);
-
-private:
-    void implDrawRect(double nX, double nY, double nWidth, double nHeight);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

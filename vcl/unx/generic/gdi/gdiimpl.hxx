@@ -144,8 +144,6 @@ public:
     // set fill color for raster operations
     virtual void SetROPFillColor( SalROPColor nROPColor ) override;
 
-    virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
                 const Point* pPtAry,

@@ -687,6 +687,55 @@ void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color
     cairo_stroke(cr);
 }
 
+void CairoCommon::drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
+                           const std::optional<Color>& rLineColor,
+                           const std::optional<Color>& rFillColor, bool bAntiAlias, double nX,
+                           double nY, double nWidth, double nHeight)
+{
+    // fast path for the common case of simply creating a solid block of color
+    if (rFillColor && rLineColor && rFillColor == rLineColor)
+    {
+        double fTransparency = 0;
+        // don't bother trying to draw stuff which is effectively invisible
+        if (nWidth < 0.1 || nHeight < 0.1)
+            return;
+        bool bPixelSnap = !bAntiAlias;
+        if (bPixelSnap)
+        {
+            // snap by rounding
+            nX = basegfx::fround(nX);
+            nY = basegfx::fround(nY);
+            nWidth = basegfx::fround(nWidth);
+            nHeight = basegfx::fround(nHeight);
+        }
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+        CairoCommon::applyColor(cr, *rFillColor, fTransparency);
+        if (pExtents)
+        {
+            // Get FillDamage
+            *pExtents = getClippedFillDamage(cr);
+        }
+        cairo_fill(cr);
+        return;
+    }
+    // because of the -1 hack we have to do fill and draw separately
+    if (rFillColor)
+    {
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
+        drawPolyPolygon(cr, pExtents, std::nullopt, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
+                        basegfx::B2DPolyPolygon(aRect), 0.0);
+    }
+    if (rLineColor)
+    {
+        // need same -1 hack as X11SalGraphicsImpl::drawRect
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
+        drawPolyPolygon(cr, pExtents, rLineColor, std::nullopt, bAntiAlias, basegfx::B2DHomMatrix(),
+                        basegfx::B2DPolyPolygon(aRect), 0.0);
+    }
+}
+
 void CairoCommon::drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
                               const std::optional<Color>& rLineColor,
                               const std::optional<Color>& rFillColor, bool bAntiAlias,

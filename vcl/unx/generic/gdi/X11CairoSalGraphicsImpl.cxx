@@ -30,6 +30,18 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Com
 {
 }
 
+void X11CairoSalGraphicsImpl::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                       tools::Long nHeight)
+{
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
+    clipRegion(cr);
+
+    CairoCommon::drawRect(cr, nullptr, moPenColor, moFillColor, getAntiAlias(), nX, nY, nWidth,
+                          nHeight);
+
+    X11Common::releaseCairoContext(cr);
+}
+
 void X11CairoSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
     cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());

@@ -162,6 +162,11 @@ struct VCL_DLLPUBLIC CairoCommon
                          bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
                          tools::Long nY2);
 
+    static void drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
+                         const std::optional<Color>& rLineColor,
+                         const std::optional<Color>& rFillColor, bool bAntiAlias, double nX,
+                         double nY, double nWidth, double nHeight);
+
     static void drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
                             const std::optional<Color>& rLineColor,
                             const std::optional<Color>& rFillColor, bool bAntiAlias,

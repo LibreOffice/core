@@ -130,81 +130,14 @@ void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long 
 void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                   tools::Long nHeight)
 {
-    implDrawRect(nX, nY, nWidth, nHeight);
-}
+    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    m_rCairoCommon.clipRegion(cr);
 
-void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, double nHeight)
-{
-    // fast path for the common case of simply creating a solid block of color
-    if (m_rCairoCommon.m_oFillColor && m_rCairoCommon.m_oLineColor
-        && m_rCairoCommon.m_oFillColor == m_rCairoCommon.m_oLineColor)
-    {
-        double fTransparency = 0;
+    CairoCommon::drawRect(cr, &extents, m_rCairoCommon.m_oLineColor, m_rCairoCommon.m_oFillColor,
+                          getAntiAlias(), nX, nY, nWidth, nHeight);
 
-        // don't bother trying to draw stuff which is effectively invisible
-        if (nWidth < 0.1 || nHeight < 0.1)
-            return;
-
-        cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-        m_rCairoCommon.clipRegion(cr);
-
-        // To make releaseCairoContext work, use empty extents
-        basegfx::B2DRange extents;
-
-        bool bPixelSnap = !getAntiAlias();
-        if (bPixelSnap)
-        {
-            // snap by rounding
-            nX = basegfx::fround(nX);
-            nY = basegfx::fround(nY);
-            nWidth = basegfx::fround(nWidth);
-            nHeight = basegfx::fround(nHeight);
-        }
-
-        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
-        CairoCommon::applyColor(cr, *m_rCairoCommon.m_oFillColor, fTransparency);
-        // Get FillDamage (will be extended for LineDamage below)
-        extents = getClippedFillDamage(cr);
-
-        cairo_fill(cr);
-
-        m_rCairoCommon.releaseCairoContext(cr, true, extents);
-
-        return;
-    }
-
-    // because of the -1 hack we have to do fill and draw separately
-    std::optional<Color> aOrigFillColor = m_rCairoCommon.m_oFillColor;
-    std::optional<Color> aOrigLineColor = m_rCairoCommon.m_oLineColor;
-    m_rCairoCommon.m_oFillColor = std::nullopt;
-    m_rCairoCommon.m_oLineColor = std::nullopt;
-
-    if (aOrigFillColor)
-    {
-        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
-            basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
-        m_rCairoCommon.m_oFillColor = aOrigFillColor;
-
-        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
-
-        m_rCairoCommon.m_oFillColor = std::nullopt;
-    }
-
-    if (aOrigLineColor)
-    {
-        // need same -1 hack as X11SalGraphicsImpl::drawRect
-        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
-            basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
-        m_rCairoCommon.m_oLineColor = aOrigLineColor;
-
-        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
-
-        m_rCairoCommon.m_oLineColor = std::nullopt;
-    }
-
-    m_rCairoCommon.m_oFillColor = aOrigFillColor;
-    m_rCairoCommon.m_oLineColor = aOrigLineColor;
+    m_rCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)

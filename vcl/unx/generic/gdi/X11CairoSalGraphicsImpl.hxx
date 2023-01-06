@@ -79,6 +79,8 @@ public:
 
     void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2) override;
 
+    void drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight) override;
+
     void drawPolygon(sal_uInt32 nPoints, const Point* pPtAry) override;
 
     void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
