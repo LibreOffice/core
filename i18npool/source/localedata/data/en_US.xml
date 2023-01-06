@@ -616,7 +616,7 @@
       <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
       <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="250" SymbolTextDistance="50" FirstLineOffset="0"/>
     </OutlineStyle>
-    <OutlineStyle>
+    <OutlineStyle> <!-- ISO 2145 compliant decimal outline-->
       <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
       <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
       <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
