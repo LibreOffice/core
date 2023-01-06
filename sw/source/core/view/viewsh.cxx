@@ -2322,11 +2322,15 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // - Of course, the screen is something completely different than the printer ...
     bool const isToggleFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName());
 
-    if (mpOpt->IsFieldName() != rOpt.IsFieldName())
+    if (mpOpt->IsFieldName() != rOpt.IsFieldName()
+        || mpOpt->IsParagraph() != rOpt.IsParagraph())
     {
         GetLayout()->SetFieldmarkMode( rOpt.IsFieldName()
                     ? sw::FieldmarkMode::ShowCommand
-                    : sw::FieldmarkMode::ShowResult );
+                    : sw::FieldmarkMode::ShowResult,
+                rOpt.IsParagraph()
+                    ? sw::ParagraphBreakMode::Shown
+                    : sw::ParagraphBreakMode::Hidden);
         bReformat = true;
     }
 

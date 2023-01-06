@@ -636,6 +636,43 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
+{
+    createSwDoc("hidden-para-separator.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", "C DE");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion", 0); // 5 is empty
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", "379");
+
+    dispatchCommand(mxComponent, ".uno:ControlCodes", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", "C ");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout", "portion", "D");
+    // 3 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
+    // frame; ideally it should only be hidden when control codes are hidden
+    // and be a full-height frame now, but that needs more work...
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/bounds", "height", "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout", "portion", "E");
+    assertXPath(pXmlDoc, "/root/page/body/txt[5]/SwParaPortion", 0); // 5 is empty
+    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds", "height", "379");
+
+    dispatchCommand(mxComponent, ".uno:ControlCodes", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", "C DE");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion", 0); // 5 is empty
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", "379");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
 {
     createSwDoc("tdf151954.docx");

@@ -77,7 +77,7 @@ static std::optional<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet,
-        std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const*const pTOXBase)
+        std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode> const*const pTOXBase)
     : SwUndo( SwUndoId::INSSECTION, &rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
@@ -90,7 +90,8 @@ SwUndoInsSection::SwUndoInsSection(
         m_xTOXBase.emplace(
             std::make_unique<SwTOXBase>(*std::get<0>(*pTOXBase)),
             std::get<1>(*pTOXBase),
-            std::get<2>(*pTOXBase));
+            std::get<2>(*pTOXBase),
+            std::get<3>(*pTOXBase));
 
     SwDoc& rDoc = rPam.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
@@ -187,18 +188,20 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame * pLayoutToReset(nullptr);
         sw::FieldmarkMode eFieldmarkMode{};
+        sw::ParagraphBreakMode eParagraphBreakMode{};
         comphelper::ScopeGuard g([&]() {
                 if (pLayoutToReset)
                 {
                     pLayoutToReset->SetHideRedlines(std::get<1>(*m_xTOXBase) == sw::RedlineMode::Shown);
-                    pLayoutToReset->SetFieldmarkMode(eFieldmarkMode);
+                    pLayoutToReset->SetFieldmarkMode(eFieldmarkMode, eParagraphBreakMode);
                 }
             });
         o3tl::sorted_vector<SwRootFrame *> layouts(rDoc.GetAllLayouts());
         for (SwRootFrame const*const p : layouts)
         {
             if ((std::get<1>(*m_xTOXBase) == sw::RedlineMode::Hidden) == p->IsHideRedlines()
-                && std::get<2>(*m_xTOXBase) == p->GetFieldmarkMode())
+                && std::get<2>(*m_xTOXBase) == p->GetFieldmarkMode()
+                && std::get<3>(*m_xTOXBase) == p->GetParagraphBreakMode())
             {
                 pLayout = p;
                 break;
@@ -209,8 +212,9 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
             assert(!layouts.empty()); // must have one layout
             pLayoutToReset = *layouts.begin();
             eFieldmarkMode = pLayoutToReset->GetFieldmarkMode();
+            eParagraphBreakMode = pLayoutToReset->GetParagraphBreakMode();
             pLayoutToReset->SetHideRedlines(std::get<1>(*m_xTOXBase) == sw::RedlineMode::Hidden);
-            pLayoutToReset->SetFieldmarkMode(std::get<2>(*m_xTOXBase));
+            pLayoutToReset->SetFieldmarkMode(std::get<2>(*m_xTOXBase), std::get<3>(*m_xTOXBase));
             pLayout = pLayoutToReset;
         }
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
