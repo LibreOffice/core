@@ -153,6 +153,7 @@ public:
     virtual void FillOptions( SwAsciiOptions& rOptions ) override;
 };
 
+/// Interface implementation for the insert -> fields -> page number wizard dialog
 class AbstractSwPageNumberDlg_Impl : public AbstractSwPageNumberDlg
 {
     std::shared_ptr<SwPageNumberDlg> m_xDlg;
