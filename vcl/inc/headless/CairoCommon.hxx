@@ -173,9 +173,9 @@ struct VCL_DLLPUBLIC CairoCommon
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolyPolygon&, double fTransparency);
 
-    // need this static version of ::drawPolyLine for usage from
-    // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
-    // ::drawPolyLine with some added parameters (see there)
+    static void drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                             bool bAntiAlias, sal_uInt32 nPoints, const Point* pPtAry);
+
     static bool drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                              bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
                              const basegfx::B2DPolygon& rPolyLine, double fTransparency,

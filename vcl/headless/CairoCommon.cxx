@@ -791,6 +791,20 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
     return true;
 }
 
+void CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                               bool bAntiAlias, sal_uInt32 nPoints, const Point* pPtAry)
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
+    aPoly.setClosed(false);
+
+    drawPolyLine(cr, pExtents, rLineColor, bAntiAlias, basegfx::B2DHomMatrix(), aPoly, 0.0, 1.0,
+                 nullptr, basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
+                 basegfx::deg2rad(15.0) /*default*/, false);
+}
+
 bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                                bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,

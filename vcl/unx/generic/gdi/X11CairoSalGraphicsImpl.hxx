@@ -32,8 +32,6 @@ private:
     std::optional<Color> moPenColor;
     std::optional<Color> moFillColor;
 
-    using X11SalGraphicsImpl::drawPolyLine;
-
 public:
     X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Common& rX11Common);
 
@@ -87,6 +85,8 @@ public:
     bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                          double fTransparency) override;
+
+    void drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry) override;
 
     bool drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                       const basegfx::B2DPolygon& rPolygon, double fTransparency, double fLineWidth,

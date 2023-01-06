@@ -209,16 +209,14 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
 
 void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
-    basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
-    for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
-    aPoly.setClosed(false);
+    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange aExtents;
+    m_rCairoCommon.clipRegion(cr);
 
-    drawPolyLine(basegfx::B2DHomMatrix(), aPoly, 0.0, 1.0,
-                 nullptr, // MM01
-                 basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
-                 basegfx::deg2rad(15.0) /*default*/, false);
+    CairoCommon::drawPolyLine(cr, &aExtents, *m_rCairoCommon.m_oLineColor, getAntiAlias(), nPoints,
+                              pPtAry);
+
+    m_rCairoCommon.releaseCairoContext(cr, false, aExtents);
 }
 
 void SvpGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)

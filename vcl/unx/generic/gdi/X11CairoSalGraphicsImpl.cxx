@@ -93,6 +93,16 @@ void X11CairoSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::
     X11Common::releaseCairoContext(cr);
 }
 
+void X11CairoSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
+{
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
+    clipRegion(cr);
+
+    CairoCommon::drawPolyLine(cr, nullptr, *moPenColor, getAntiAlias(), nPoints, pPtAry);
+
+    X11Common::releaseCairoContext(cr);
+}
+
 bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                            const basegfx::B2DPolygon& rPolyLine,
                                            double fTransparency, double fLineWidth,

@@ -91,10 +91,6 @@ private:
                                );
 
     XID GetXRenderPicture();
-    bool drawFilledTriangles(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::triangulator::B2DTriangleVector& rTriangles,
-        double fTransparency);
 
     tools::Long GetGraphicsHeight() const;
 
@@ -151,20 +147,7 @@ public:
 
     virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
-    virtual void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
-
     virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-
-    virtual bool drawPolyLine(
-                const basegfx::B2DHomMatrix& rObjectToDevice,
-                const basegfx::B2DPolygon&,
-                double fTransparency,
-                double fLineWidth,
-                const std::vector< double >* pStroke, // MM01
-                basegfx::B2DLineJoin,
-                css::drawing::LineCap,
-                double fMiterMinimumAngle,
-                bool bPixelSnapHairline) override;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
