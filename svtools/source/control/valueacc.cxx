@@ -573,7 +573,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "svtools", "OAccessibleContextHelper::getAccessibleIndexInParent" );
+        TOOLS_WARN_EXCEPTION( "svtools", "ValueSetAcc::getAccessibleIndexInParent" );
     }
 
     return nRet;
