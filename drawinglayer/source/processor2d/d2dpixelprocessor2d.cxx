@@ -1127,7 +1127,7 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     }
 
     // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
-    // what is not guarenteed but usually works for more modern windows (after 7)
+    // what is not guaranteed but usually works for more modern windows (after 7)
     sal::systools::COMReference<ID2D1Bitmap> pAlphaBitmap(
         implCreateAlpha_Direct(rTransCandidate, aVisibleRange));
     D2D1_MATRIX_3X2_F aMaskScale(D2D1::Matrix3x2F::Identity());
@@ -1818,10 +1818,10 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         // Embedding/groups that *have* to be processed
         //
         // These represent qualifiers for freely defined content, e.g. making
-        // any combinatiopn of priitives freely transformed or transparent
+        // any combination of primitives freely transformed or transparent
         // NOTE: PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D and
         //       PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D are pretty much default-
-        //       implementations that cand and are re-used in all processors.
+        //       implementations that can and are re-used in all processors.
         // So - with these and PRIMITIVE2D_ID_INVERTPRIMITIVE2D marked to
         // be removed in the future - just three really to be implemented
         // locally specifically
@@ -1892,14 +1892,14 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
         {
             // fat and stroked lines - much better doable locally, would decompose
-            // to the full line geometry creation (tesselation)
+            // to the full line geometry creation (tessellation)
             processPolygonStrokePrimitive2D(
                 static_cast<const primitive2d::PolygonStrokePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
         {
-            // simple primitve to support future fast callbacks from OutputDevice
+            // simple primitive to support future fast callbacks from OutputDevice
             // (see 'Example POC' in Gerrit), decomposes to polygon primitive
             processLineRectanglePrimitive2D(
                 static_cast<const primitive2d::LineRectanglePrimitive2D&>(rCandidate));
@@ -1907,7 +1907,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
         {
-            // simple primitve to support future fast callbacks from OutputDevice
+            // simple primitive to support future fast callbacks from OutputDevice
             // (see 'Example POC' in Gerrit), decomposes to filled polygon primitive
             processFilledRectanglePrimitive2D(
                 static_cast<const primitive2d::FilledRectanglePrimitive2D&>(rCandidate));
@@ -1915,7 +1915,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
         {
-            // simple primitve to support future fast callbacks from OutputDevice
+            // simple primitive to support future fast callbacks from OutputDevice
             // (see 'Example POC' in Gerrit), decomposes to polygon primitive
             processSingleLinePrimitive2D(
                 static_cast<const primitive2d::SingleLinePrimitive2D&>(rCandidate));
