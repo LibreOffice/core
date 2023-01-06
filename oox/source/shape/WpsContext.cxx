@@ -381,62 +381,72 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
 {
     oox::drawingml::FillProperties aFillProperties;
     aFillProperties.moFillType = oox::XML_solidFill; // default
+    // Theme color supersedes direct color. textFill supersedes theme color. Theme color and textFill
+    // are in CharInteropGrabBag.
+    uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
+    if ((rTextPropMap.getValue(u"CharInteropGrabBag") >>= aCharInteropGrabBagSeq)
+        && aCharInteropGrabBagSeq.hasElements())
+    {
+        // Handle case textFill
+        comphelper::SequenceAsHashMap aCharInteropGrabBagMap(aCharInteropGrabBagSeq);
+        beans::PropertyValue aProp;
+        if (aCharInteropGrabBagMap.getValue(u"CharTextFillTextEffect") >>= aProp)
+        {
+            uno::Sequence<beans::PropertyValue> aTextFillSeq;
+            if (aProp.Name == "textFill" && (aProp.Value >>= aTextFillSeq)
+                && aTextFillSeq.hasElements())
+            {
+                // Copy fill properties from aTextFillSeq to aFillProperties
+                lcl_getFillDetailsFromPropSeq(aTextFillSeq, aFillProperties);
+                return aFillProperties;
+            }
+        }
+
+        // no textFill, look for theme color, tint and shade
+        bool bColorFound(false);
+        OUString sColorString;
+        if (aCharInteropGrabBagMap.getValue("CharThemeOriginalColor") >>= sColorString)
+        {
+            sal_Int32 nThemeOrigColor = oox::AttributeConversion::decodeIntegerHex(sColorString);
+            aFillProperties.maFillColor.setSrgbClr(nThemeOrigColor);
+            bColorFound = true;
+        }
+        if (aCharInteropGrabBagMap.getValue("CharThemeColor") >>= sColorString)
+        {
+            sal_Int32 nColorToken = oox::AttributeConversion::decodeToken(sColorString);
+            aFillProperties.maFillColor.setSchemeClr(nColorToken);
+            aFillProperties.maFillColor.setSchemeName(sColorString);
+            bColorFound = true;
+            // A character color has shade or tint, a shape color has lumMod and lumOff.
+            OUString sTransformString;
+            if (aCharInteropGrabBagMap.getValue("CharThemeColorTint") >>= sTransformString)
+            {
+                double fTint = oox::AttributeConversion::decodeIntegerHex(sTransformString);
+                fTint = fTint / 255.0 * oox::drawingml::MAX_PERCENT;
+                aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumMod),
+                                                              static_cast<sal_Int32>(fTint + 0.5));
+                double fOff = oox::drawingml::MAX_PERCENT - fTint;
+                aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumOff),
+                                                              static_cast<sal_Int32>(fOff + 0.5));
+            }
+            else if (aCharInteropGrabBagMap.getValue("CharThemeColorShade") >>= sTransformString)
+            {
+                double fShade = oox::AttributeConversion::decodeIntegerHex(sTransformString);
+                fShade = fShade / 255.0 * oox::drawingml::MAX_PERCENT;
+                aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumMod),
+                                                              static_cast<sal_Int32>(fShade + 0.5));
+            }
+        }
+        if (bColorFound)
+            return aFillProperties;
+    }
+
+    // Neither textFill nor theme color. Look for direct color.
     sal_Int32 aCharColor = 0;
     if (rTextPropMap.getValue(u"CharColor") >>= aCharColor)
         aFillProperties.maFillColor.setSrgbClr(aCharColor);
     else
         aFillProperties.maFillColor.setUnused();
-
-    // Theme color superseds direct color. textFill superseds theme color. Theme color and textfill
-    // are in CharInteropGrabBag
-    uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
-    if (!((rTextPropMap.getValue(u"CharInteropGrabBag") >>= aCharInteropGrabBagSeq)
-          && aCharInteropGrabBagSeq.hasElements()))
-        return aFillProperties;
-    comphelper::SequenceAsHashMap aCharInteropGrabBagMap(aCharInteropGrabBagSeq);
-
-    // Handle theme color, tint and shade.
-    OUString sColorString;
-    if (aCharInteropGrabBagMap.getValue("CharThemeOriginalColor") >>= sColorString)
-    {
-        sal_Int32 nThemeOrigColor = oox::AttributeConversion::decodeIntegerHex(sColorString);
-        aFillProperties.maFillColor.setSrgbClr(nThemeOrigColor);
-    }
-    if (aCharInteropGrabBagMap.getValue("CharThemeColor") >>= sColorString)
-    {
-        sal_Int32 nColorToken = oox::AttributeConversion::decodeToken(sColorString);
-        aFillProperties.maFillColor.setSchemeClr(nColorToken);
-        aFillProperties.maFillColor.setSchemeName(sColorString);
-        // A character color has shade and tint, a shape color has lumMod and lumOff.
-        OUString sTransformString;
-        if (aCharInteropGrabBagMap.getValue("CharThemeColorTint") >>= sTransformString)
-        {
-            double fTint = oox::AttributeConversion::decodeIntegerHex(sTransformString);
-            fTint = fTint / 255.0 * oox::drawingml::MAX_PERCENT;
-            aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumMod),
-                                                          static_cast<sal_Int32>(fTint + 0.5));
-            double fOff = oox::drawingml::MAX_PERCENT - fTint;
-            aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumOff),
-                                                          static_cast<sal_Int32>(fOff + 0.5));
-        }
-        else if (aCharInteropGrabBagMap.getValue("CharThemeColorShade") >>= sTransformString)
-        {
-            double fShade = oox::AttributeConversion::decodeIntegerHex(sTransformString);
-            fShade = fShade / 255.0 * oox::drawingml::MAX_PERCENT;
-            aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumMod),
-                                                          static_cast<sal_Int32>(fShade + 0.5));
-        }
-    }
-
-    // Handle textFill
-    beans::PropertyValue aProp;
-    if (!(aCharInteropGrabBagMap.getValue(u"CharTextFillTextEffect") >>= aProp))
-        return aFillProperties;
-    uno::Sequence<beans::PropertyValue> aTextFillSeq;
-    if (!(aProp.Name == "textFill" && (aProp.Value >>= aTextFillSeq) && aTextFillSeq.hasElements()))
-        return aFillProperties;
-    // Copy fill properties from aTextFillSeq to aFillProperties
-    lcl_getFillDetailsFromPropSeq(aTextFillSeq, aFillProperties);
     return aFillProperties;
 }
 

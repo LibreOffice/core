@@ -559,6 +559,27 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
     uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)), xShape3Props->getPropertyValue(u"FillColorTheme"));
 }
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
+{
+    loadFromURL(u"tdf152896_WordArt_color_darken.docx");
+    // The file contains a WordArt shape with theme colors "Background 2", shading mode "Darken 25%"
+    // and "20% Transparency". Word writes this as w:color element with additional w14:textFill
+    // element. In such case the w14:textFill element supersedes the w:color element. Error was, that
+    // the darkening was applied twice, once from w:color and the other time from w14:textFill.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without the fix in place the test would have failed with
+    // Expected: 13676402 (= 0xD0AF72 = rgb(208, 175, 114) => luminance 63.14%)
+    // Actual: 11897660 (= 0xB58B3C = rgb(181, 139, 60) => luminance 47.25% )
+    // The original "Background 2" is 0xEBDDC3 = rgb(235, 221, 195) => luminance 84.31%
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(208, 175, 114)),
+                         xShapeProps->getPropertyValue(u"FillColor"));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
