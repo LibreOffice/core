@@ -127,6 +127,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     Animation aAnimation;
 
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    uint64_t nTotalPixelsRequired = 0;
 
     do
     {
@@ -160,7 +161,8 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         {
             const uint64_t MAX_PIXEL_SIZE = 150000000;
             const uint64_t MAX_TILE_SIZE = 100000000;
-            if (TIFFTileSize64(tif) > MAX_TILE_SIZE || nPixelsRequired > MAX_PIXEL_SIZE)
+            nTotalPixelsRequired += nPixelsRequired;
+            if (TIFFTileSize64(tif) > MAX_TILE_SIZE || nTotalPixelsRequired > MAX_PIXEL_SIZE)
             {
                 SAL_WARN("filter.tiff", "skipping large tiffs");
                 break;
