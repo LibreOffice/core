@@ -73,6 +73,9 @@ modules/swriter/ui/columndialog.ui
 modules/swriter/ui/columnpage.ui
 modules/swriter/ui/columnwidth.ui
 modules/swriter/ui/conditionpage.ui
+modules/swriter/ui/contentcontroldlg.ui
+modules/swriter/ui/contentcontrollistitemdlg.ui
+modules/swriter/ui/contentcontrolcalendar.ui
 modules/swriter/ui/converttexttable.ui
 modules/swriter/ui/createaddresslist.ui
 modules/swriter/ui/createauthorentry.ui
