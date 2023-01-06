@@ -1152,6 +1152,8 @@ MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
 
 void MetaMaskScaleAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, maSz))))
+        return;
     pOut->DrawMask( maPt, maSz, maBmp, maColor );
 }
 
