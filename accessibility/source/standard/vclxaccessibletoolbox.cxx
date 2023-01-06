@@ -29,6 +29,7 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclevent.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>

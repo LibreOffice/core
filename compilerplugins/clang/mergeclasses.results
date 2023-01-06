@@ -259,7 +259,6 @@ merge comphelper::ConfigurationListenerPropertyBase with comphelper::Configurati
 merge comphelper::ConfigurationListener_Base with comphelper::ConfigurationListener
 merge comphelper::MasterPropertySetInfo_Base with comphelper::MasterPropertySetInfo
 merge comphelper::OAccessibleComponentHelper_Base with comphelper::OAccessibleComponentHelper
-merge comphelper::OAccessibleContextHelper with comphelper::OCommonAccessibleComponent
 merge comphelper::OAccessibleWrapper_Base with comphelper::OAccessibleWrapper
 merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper

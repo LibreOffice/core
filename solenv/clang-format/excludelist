@@ -1372,7 +1372,6 @@ comphelper/source/container/namecontainer.cxx
 comphelper/source/eventattachermgr/eventattachermgr.cxx
 comphelper/source/misc/SelectionMultiplex.cxx
 comphelper/source/misc/accessiblecomponenthelper.cxx
-comphelper/source/misc/accessiblecontexthelper.cxx
 comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
 comphelper/source/misc/accessibleselectionhelper.cxx

@@ -30,6 +30,7 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <extended/textwindowaccessibility.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>

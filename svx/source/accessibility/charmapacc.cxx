@@ -29,6 +29,7 @@
 #include <osl/interlck.h>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/types.hxx>
 
 namespace svx

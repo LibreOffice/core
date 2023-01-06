@@ -18,6 +18,7 @@
  */
 
 #include <standard/vclxaccessibletabpagewindow.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>

@@ -84,7 +84,7 @@ namespace toolkit
         virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
         // XEventListener
-        using comphelper::OAccessibleContextHelper::disposing;
+        using comphelper::OCommonAccessibleComponent::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // retrieves the value of a string property from the model, if the property is present

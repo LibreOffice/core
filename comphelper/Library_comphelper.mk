@@ -77,7 +77,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/namecontainer \
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
-    comphelper/source/misc/accessiblecontexthelper \
     comphelper/source/misc/accessibleeventnotifier \
     comphelper/source/misc/accessiblekeybindinghelper \
     comphelper/source/misc/accessibleselectionhelper \

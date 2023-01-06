@@ -20,6 +20,7 @@
 #include <standard/vclxaccessiblemenuitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
