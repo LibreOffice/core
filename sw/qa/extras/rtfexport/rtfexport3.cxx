@@ -526,7 +526,7 @@ DECLARE_RTFEXPORT_TEST(testInvalidParagraphStyle, "invalidParagraphStyle.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf152784_1, "tdf152784_1.rtf")
 {
     // Ensure that paragraph having style with numbering does not have numbering
-    // since it is not explitly defined in paragraph properties
+    // since it is not explicitly defined in paragraph properties
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Here should be no numbering!"),
                                               uno::UNO_QUERY);
     CPPUNIT_ASSERT(getProperty<OUString>(xPara, "NumberingStyleName").isEmpty());
