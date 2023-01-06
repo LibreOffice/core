@@ -595,6 +595,68 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
     CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
+{
+    // Given a document with a fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("old result 1"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // When updating that fieldmark to have new field command & result:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "FieldType": {
+        "type": "string",
+        "value": "vnd.oasis.opendocument.field.UNHANDLED"
+    },
+    "FieldCommandPrefix": {
+        "type": "string",
+        "value": "ADDIN ZOTERO_ITEM"
+    },
+    "Field": {
+        "type": "[]com.sun.star.beans.PropertyValue",
+        "value": {
+            "FieldType": {
+                "type": "string",
+                "value": "vnd.oasis.opendocument.field.UNHANDLED"
+            },
+            "FieldCommand": {
+                "type": "string",
+                "value": "ADDIN ZOTERO_ITEM new command 1"
+            },
+            "FieldResult": {
+                "type": "string",
+                "value": "new result 1"
+            }
+        }
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateTextFormField", aArgs);
+
+    // Then make sure that the document text is updated accordingly:
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
+    static sal_Unicode const aForbidden[]
+        = { CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_FIELDEND, 0 };
+    aActual = comphelper::string::removeAny(aActual, aForbidden);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new result 1
+    // - Actual  : old result 1
+    // i.e. the document text was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new result 1"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1808,6 +1808,12 @@ interface BaseText
         StateMethod = StateField ;
     ]
 
+    FN_UPDATE_TEXT_FORMFIELD
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+    ]
+
     FN_PROTECT_FIELDS
     [
         ExecMethod = Execute ;

@@ -1011,6 +1011,72 @@ FIELD_INSERT:
         rReq.Done();
     }
     break;
+    case FN_UPDATE_TEXT_FORMFIELD:
+    {
+        OUString aFieldType;
+        const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pFieldType)
+        {
+            aFieldType = pFieldType->GetValue();
+        }
+        OUString aFieldCommandPrefix;
+        const SfxStringItem* pFieldCommandPrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        if (pFieldCommandPrefix)
+        {
+            aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
+        }
+        uno::Sequence<beans::PropertyValue> aField;
+        const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+        if (pFields)
+        {
+            pFields->GetValue() >>= aField;
+        }
+
+        IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
+        SwPosition& rCursor = *rSh.GetCursor()->GetPoint();
+        sw::mark::IFieldmark* pFieldmark = rIDMA.getFieldmarkFor(rCursor);
+        if (!pFieldmark)
+        {
+            break;
+        }
+
+        if (pFieldmark->GetFieldname() != aFieldType)
+        {
+            break;
+        }
+
+        auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+        if (itParam == pFieldmark->GetParameters()->end())
+        {
+            break;
+        }
+
+        OUString aCommand;
+        itParam->second >>= aCommand;
+        if (!aCommand.startsWith(aFieldCommandPrefix))
+        {
+            break;
+        }
+
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.StartAction();
+        comphelper::SequenceAsHashMap aMap(aField);
+        itParam->second = aMap["FieldCommand"];
+        SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
+        aPaM.Normalize();
+        // Skip field start & separator.
+        aPaM.GetPoint()->AdjustContent(2);
+        // Skip field end.
+        aPaM.GetMark()->AdjustContent(-1);
+        rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
+        OUString aFieldResult;
+        aMap["FieldResult"] >>= aFieldResult;
+        SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
+
+        rSh.EndAction();
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+    }
+    break;
         default:
             OSL_FAIL("wrong dispatcher");
             return;
