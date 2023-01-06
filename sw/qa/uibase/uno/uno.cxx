@@ -322,13 +322,21 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
 {
     // Given a document with a refmark:
     createSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("mycontent"))),
-    };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString aName("ZOTERO_ITEM CSL_CITATION {} ");
+    for (int i = 0; i < 5; ++i)
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+            comphelper::makePropertyValue("Name", uno::Any(aName + OUString::number(i + 1))),
+            comphelper::makePropertyValue("Content", uno::Any(OUString("mycontent"))),
+        };
+        dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+        pWrtShell->SplitNode();
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+    }
 
     // When getting the refmarks:
     tools::JsonWriter aJsonWriter;
@@ -344,7 +352,27 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
     // Without the accompanying fix in place, this test would have failed with:
     // - No such node (setRefs)
     // i.e. the returned JSON was just empty.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("setRefs").count(""));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("setRefs").count(""));
+    auto it = aTree.get_child("setRefs").begin();
+    boost::property_tree::ptree aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 1"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 2"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ZOTERO_ITEM CSL_CITATION {} 3
+    // - Actual  : ZOTERO_ITEM CSL_CITATION {} 4
+    // i.e. the output was unsorted.
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 3"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 4"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 5"),
+                         aRef.get<std::string>("name"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)

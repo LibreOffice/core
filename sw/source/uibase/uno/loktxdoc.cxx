@@ -36,6 +36,8 @@
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
 #include <wrtsh.hxx>
+#include <txtrfmrk.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -261,9 +263,23 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     SwDoc* pDoc = pDocShell->GetDoc();
     tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("setRefs");
+    std::vector<const SwFormatRefMark*> aRefMarks;
     for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
     {
-        const SwFormatRefMark* pRefMark = pDoc->GetRefMark(i);
+        aRefMarks.push_back(pDoc->GetRefMark(i));
+    }
+    // Sort the refmarks based on their start position.
+    std::sort(aRefMarks.begin(), aRefMarks.end(),
+              [](const SwFormatRefMark* pMark1, const SwFormatRefMark* pMark2) -> bool {
+                  const SwTextRefMark* pTextRefMark1 = pMark1->GetTextRefMark();
+                  const SwTextRefMark* pTextRefMark2 = pMark2->GetTextRefMark();
+                  SwPosition aPos1(pTextRefMark1->GetTextNode(), pTextRefMark1->GetStart());
+                  SwPosition aPos2(pTextRefMark2->GetTextNode(), pTextRefMark2->GetStart());
+                  return aPos1 < aPos2;
+              });
+
+    for (const auto& pRefMark : aRefMarks)
+    {
         if (!pRefMark->GetRefName().startsWith(aNamePrefix))
         {
             continue;
