@@ -687,6 +687,20 @@ void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color
     cairo_stroke(cr);
 }
 
+void CairoCommon::drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                              const std::optional<Color>& rLineColor,
+                              const std::optional<Color>& rFillColor, bool bAntiAlias,
+                              sal_uInt32 nPoints, const Point* pPtAry)
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
+
+    drawPolyPolygon(cr, pExtents, rLineColor, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
+                    basegfx::B2DPolyPolygon(aPoly), 0.0);
+}
+
 void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
                                   const std::optional<Color>& rLineColor,
                                   const std::optional<Color>& rFillColor, bool bAntiAlias,

@@ -30,6 +30,16 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Com
 {
 }
 
+void X11CairoSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
+{
+    cairo_t* cr = mrX11Common.getCairoContext(mrParent.GetGeometryProvider());
+    clipRegion(cr);
+
+    CairoCommon::drawPolygon(cr, nullptr, moPenColor, moFillColor, getAntiAlias(), nPoints, pPtAry);
+
+    X11Common::releaseCairoContext(cr);
+}
+
 void X11CairoSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                               const Point** pPtAry)
 {

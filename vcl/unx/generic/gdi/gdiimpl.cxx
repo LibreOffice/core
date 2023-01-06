@@ -1087,12 +1087,6 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     }
 }
 
-void X11SalGraphicsImpl::internalDrawPixel( tools::Long nX, tools::Long nY )
-{
-    if( moPenColor )
-        XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
-}
-
 void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     if( moPenColor )
@@ -1117,72 +1111,6 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
                         mrParent.GetDrawable(),
                         SelectPen(),
                         nX, nY, nDX-1, nDY-1 );
-}
-
-void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
-{
-    if( nPoints == 0 )
-        return;
-
-    if( nPoints < 3 )
-    {
-        if( !mbXORMode )
-        {
-            if( 1 == nPoints  )
-                internalDrawPixel( pPtAry[0].getX(), pPtAry[0].getY() );
-            else
-                internalDrawLine( pPtAry[0].getX(), pPtAry[0].getY(),
-                          pPtAry[1].getX(), pPtAry[1].getY() );
-        }
-        return;
-    }
-
-    SalPolyLine Points( nPoints, pPtAry );
-
-    nPoints++;
-
-    /* WORKAROUND: some Xservers (Xorg, VIA chipset in this case)
-     * do not draw the visible part of a polygon
-     * if it overlaps to the left of screen 0,y.
-     * This happens to be the case in the gradient drawn in the
-     * menubar background. workaround for the special case of
-     * of a rectangle overlapping to the left.
-     */
-    if (nPoints == 5 &&
-        Points[ 0 ].x == Points[ 1 ].x &&
-        Points[ 1 ].y == Points[ 2 ].y &&
-        Points[ 2 ].x == Points[ 3 ].x &&
-        Points[ 0 ].x == Points[ 4 ].x && Points[ 0 ].y == Points[ 4 ].y
-       )
-    {
-        bool bLeft = false;
-        bool bRight = false;
-        for(unsigned int i = 0; i < nPoints; i++ )
-        {
-            if( Points[i].x < 0 )
-                bLeft = true;
-            else
-                bRight= true;
-        }
-        if( bLeft && ! bRight )
-            return;
-        if( bLeft && bRight )
-        {
-            for( unsigned int i = 0; i < nPoints; i++ )
-                if( Points[i].x < 0 )
-                    Points[i].x = 0;
-        }
-    }
-
-    if( moBrushColor )
-        XFillPolygon( mrParent.GetXDisplay(),
-                      mrParent.GetDrawable(),
-                      SelectBrush(),
-                      &Points[0], nPoints,
-                      Complex, CoordModeOrigin );
-
-    if( moPenColor )
-        DrawLines( nPoints, Points, SelectPen(), true );
 }
 
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )

@@ -98,7 +98,6 @@ private:
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
 
-    void internalDrawPixel( tools::Long nX, tools::Long nY );
     void internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
 
 public:
@@ -146,8 +145,6 @@ public:
     virtual void SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
