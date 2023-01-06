@@ -770,7 +770,8 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     // set cursor onto Undo area
-    AddUndoRedoPaM(rContext);
+    if (!(m_nInsertFlags & SetAttrMode::NO_CURSOR_CHANGE))
+        AddUndoRedoPaM(rContext);
 }
 
 void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
@@ -787,10 +788,9 @@ void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoAttr::redoAttribute(SwPaM& rPam, sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    SwPaM & rPam = AddUndoRedoPaM(rContext);
 
     // Restore pointer to char format from name
     if (!m_aChrFormatName.isEmpty())
@@ -823,6 +823,21 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     } else {
         rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
+    }
+}
+
+void SwUndoAttr::RedoImpl(sw::UndoRedoContext & rContext)
+{
+    if (m_nInsertFlags & SetAttrMode::NO_CURSOR_CHANGE)
+    {
+        SwPaM aPam(rContext.GetDoc().GetNodes().GetEndOfContent());
+        SetPaM(aPam, false);
+        redoAttribute(aPam, rContext);
+    }
+    else
+    {
+        SwPaM& rPam = AddUndoRedoPaM(rContext);
+        redoAttribute(rPam, rContext);
     }
 }
 

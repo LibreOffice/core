@@ -13,54 +13,15 @@
 
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <docstyle.hxx>
 #include <drawdoc.hxx>
-#include <ndnotxt.hxx>
-#include <ndtxt.hxx>
-#include <fmtcol.hxx>
-#include <format.hxx>
-#include <charatr.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <ThemeColorChanger.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/ColorSets.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
-#include <sfx2/objsh.hxx>
-#include <editeng/colritem.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-namespace
-{
-
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet)
-{
-    SvxColorItem aColorItem(pCollection->GetColor());
-    model::ThemeColor const& rThemeColor = aColorItem.GetThemeColor();
-    auto eThemeType = rThemeColor.getType();
-    if (eThemeType != model::ThemeColorType::Unknown)
-    {
-        Color aColor = rColorSet.getColor(eThemeType);
-        aColor = rThemeColor.applyTransformations(aColor);
-        aColorItem.SetValue(aColor);
-        pCollection->SetFormatAttr(aColorItem);
-    }
-}
-
-void applyTheme(SfxStyleSheetBasePool* pPool, svx::ColorSet const& rColorSet)
-{
-    SwDocStyleSheet* pStyle;
-
-    pStyle = static_cast<SwDocStyleSheet*>(pPool->First(SfxStyleFamily::Para));
-    while (pStyle)
-    {
-        SwTextFormatColl* pCollection = pStyle->GetCollection();
-        changeColor(pCollection, rColorSet);
-        pStyle = static_cast<SwDocStyleSheet*>(pPool->Next());
-    }
-}
-
-} // end anonymous namespace
 
 namespace sw::sidebar
 {
@@ -147,7 +108,8 @@ void ThemePanel::DoubleClickHdl()
 
     svx::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
 
-    applyTheme(pDocSh->GetStyleSheetPool(), rColorSet);
+    ThemeColorChanger aChanger(pDocSh);
+    aChanger.apply(rColorSet);
 }
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,

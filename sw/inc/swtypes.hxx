@@ -143,17 +143,19 @@ enum class SetAttrMode
     NOHINTADJUST    = 0x0008,  // No merging of ranges.
     NOFORMATATTR    = 0x0010,  // Do not change into format attribute.
     APICALL         = 0x0020,  // Called from API (all UI related
-                                                        // functionality will be disabled).
+                               // functionality will be disabled).
     /// Force hint expand (only matters for hints with CH_TXTATR).
     FORCEHINTEXPAND = 0x0040,
     /// The inserted item is a copy -- intended for use in ndtxt.cxx.
     IS_COPY         = 0x0080,
     /// for Undo, translated to SwInsertFlags::NOHINTEXPAND
     NOHINTEXPAND    = 0x0100,
+    /// don't change the cursor position
+    NO_CURSOR_CHANGE = 0x0200
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x1ff> {};
+    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x3ff> {};
 }
 
 namespace sw {
