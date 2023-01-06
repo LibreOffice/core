@@ -106,8 +106,8 @@ IMPL_LINK(OCopyTable, RadioChangeHdl, weld::Toggleable&, rButton, void)
         SetAppendDataRadio();
         return;
     }
-    m_pParent->EnableNextButton(m_xRB_View->get_active());
-    bool bKey = m_bPKeyAllowed && m_xRB_View->get_active();
+    m_pParent->EnableNextButton(!m_xRB_View->get_active());
+    bool bKey = m_bPKeyAllowed && !m_xRB_View->get_active();
     m_xFT_KeyName->set_sensitive(bKey && m_xCB_PrimaryColumn->get_active());
     m_xEdKeyName->set_sensitive(bKey && m_xCB_PrimaryColumn->get_active());
     m_xCB_PrimaryColumn->set_sensitive(bKey);
