@@ -56,51 +56,44 @@ using namespace com::sun::star;
 
 namespace
 {
-class ID2D1FactoryProvider
+class ID2D1GlobalFactoryProvider
 {
-    ID2D1Factory* mpD2DFactory;
+    sal::systools::COMReference<ID2D1Factory> mpD2DFactory;
 
 public:
-    ID2D1FactoryProvider()
+    ID2D1GlobalFactoryProvider()
         : mpD2DFactory(nullptr)
     {
-        HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory),
-                                       nullptr, reinterpret_cast<void**>(&mpD2DFactory));
+        const HRESULT hr(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                                           __uuidof(ID2D1Factory), nullptr,
+                                           reinterpret_cast<void**>(&mpD2DFactory)));
 
         if (!SUCCEEDED(hr))
-            mpD2DFactory = nullptr;
+            mpD2DFactory.clear();
     }
 
-    ~ID2D1FactoryProvider()
-    {
-        if (mpD2DFactory)
-            mpD2DFactory->Release();
-    }
+    ~ID2D1GlobalFactoryProvider() {}
 
-    ID2D1Factory* getID2D1Factory() const { return mpD2DFactory; }
+    sal::systools::COMReference<ID2D1Factory>& getID2D1Factory() { return mpD2DFactory; }
 };
 
-ID2D1FactoryProvider aID2D1FactoryProvider;
+ID2D1GlobalFactoryProvider aID2D1GlobalFactoryProvider;
 
 class ID2D1GlobalRenderTargetProvider
 {
-    ID2D1DCRenderTarget* mpID2D1DCRenderTarget;
+    sal::systools::COMReference<ID2D1DCRenderTarget> mpID2D1DCRenderTarget;
 
 public:
     ID2D1GlobalRenderTargetProvider()
-        : mpID2D1DCRenderTarget(nullptr)
+        : mpID2D1DCRenderTarget()
     {
     }
 
-    ~ID2D1GlobalRenderTargetProvider()
-    {
-        if (mpID2D1DCRenderTarget)
-            mpID2D1DCRenderTarget->Release();
-    }
+    ~ID2D1GlobalRenderTargetProvider() {}
 
-    ID2D1DCRenderTarget* getID2D1DCRenderTarget() const
+    sal::systools::COMReference<ID2D1DCRenderTarget>& getID2D1DCRenderTarget()
     {
-        if (nullptr == mpID2D1DCRenderTarget && aID2D1FactoryProvider.getID2D1Factory())
+        if (!mpID2D1DCRenderTarget && aID2D1GlobalFactoryProvider.getID2D1Factory())
         {
             const D2D1_RENDER_TARGET_PROPERTIES aRTProps(D2D1::RenderTargetProperties(
                 D2D1_RENDER_TARGET_TYPE_DEFAULT,
@@ -108,9 +101,8 @@ public:
                                   D2D1_ALPHA_MODE_IGNORE), //D2D1_ALPHA_MODE_PREMULTIPLIED),
                 0, 0, D2D1_RENDER_TARGET_USAGE_NONE, D2D1_FEATURE_LEVEL_DEFAULT));
 
-            const HRESULT hr(aID2D1FactoryProvider.getID2D1Factory()->CreateDCRenderTarget(
-                &aRTProps,
-                &(const_cast<ID2D1GlobalRenderTargetProvider*>(this)->mpID2D1DCRenderTarget)));
+            const HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateDCRenderTarget(
+                &aRTProps, &mpID2D1DCRenderTarget));
 
             // interestingly this ID2D1DCRenderTarget already works and can hold
             // created ID2D1Bitmap(s) in RenderTarget-specific form, *without*
@@ -119,7 +111,7 @@ public:
             // to have a HDC that is valid during LO's lifetime.
 
             if (!SUCCEEDED(hr))
-                const_cast<ID2D1GlobalRenderTargetProvider*>(this)->mpID2D1DCRenderTarget = nullptr;
+                mpID2D1DCRenderTarget.clear();
         }
 
         return mpID2D1DCRenderTarget;
@@ -131,24 +123,20 @@ ID2D1GlobalRenderTargetProvider aID2D1GlobalRenderTargetProvider;
 class SystemDependentData_ID2D1PathGeometry : public basegfx::SystemDependentData
 {
 private:
-    ID2D1PathGeometry* mpID2D1PathGeometry;
+    sal::systools::COMReference<ID2D1PathGeometry> mpID2D1PathGeometry;
 
 public:
-    SystemDependentData_ID2D1PathGeometry(ID2D1PathGeometry* pID2D1PathGeometry)
+    SystemDependentData_ID2D1PathGeometry(
+        sal::systools::COMReference<ID2D1PathGeometry>& rID2D1PathGeometry)
         : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
-        , mpID2D1PathGeometry(pID2D1PathGeometry)
+        , mpID2D1PathGeometry(rID2D1PathGeometry)
     {
     }
 
-    ~SystemDependentData_ID2D1PathGeometry()
+    const sal::systools::COMReference<ID2D1PathGeometry>& getID2D1PathGeometry() const
     {
-        if (nullptr != getID2D1PathGeometry())
-        {
-            mpID2D1PathGeometry->Release();
-        }
+        return mpID2D1PathGeometry;
     }
-
-    ID2D1PathGeometry* getID2D1PathGeometry() const { return mpID2D1PathGeometry; }
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
@@ -156,10 +144,10 @@ sal_Int64 SystemDependentData_ID2D1PathGeometry::estimateUsageInBytes() const
 {
     sal_Int64 aRetval(0);
 
-    if (nullptr != getID2D1PathGeometry())
+    if (getID2D1PathGeometry())
     {
         UINT32 nCount(0);
-        HRESULT hr = getID2D1PathGeometry()->GetSegmentCount(&nCount);
+        const HRESULT hr(getID2D1PathGeometry()->GetSegmentCount(&nCount));
 
         if (SUCCEEDED(hr))
         {
@@ -212,7 +200,8 @@ basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
     return rPolygon.getB2DPoint(nIndex);
 }
 
-void addB2DPolygonToPathGeometry(ID2D1GeometrySink* pSink, const basegfx::B2DPolygon& rPolygon,
+void addB2DPolygonToPathGeometry(sal::systools::COMReference<ID2D1GeometrySink>& rSink,
+                                 const basegfx::B2DPolygon& rPolygon,
                                  const drawinglayer::geometry::ViewInformation2D* pViewInformation)
 {
     const sal_uInt32 nPointCount(rPolygon.count());
@@ -230,7 +219,7 @@ void addB2DPolygonToPathGeometry(ID2D1GeometrySink* pSink, const basegfx::B2DPol
 
         if (aEdge.isBezier())
         {
-            pSink->AddBezier(
+            rSink->AddBezier(
                 D2D1::BezierSegment(D2D1::Point2F(aEdge.getControlPointA().getX(),
                                                   aEdge.getControlPointA().getY()), //C1
                                     D2D1::Point2F(aEdge.getControlPointB().getX(),
@@ -239,7 +228,7 @@ void addB2DPolygonToPathGeometry(ID2D1GeometrySink* pSink, const basegfx::B2DPol
         }
         else
         {
-            pSink->AddLine(D2D1::Point2F(aEndPoint.getX(), aEndPoint.getY()));
+            rSink->AddLine(D2D1::Point2F(aEndPoint.getX(), aEndPoint.getY()));
         }
     }
 }
@@ -266,16 +255,17 @@ getOrCreatePathGeometry(const basegfx::B2DPolygon& rPolygon,
         }
     }
 
-    ID2D1PathGeometry* pID2D1PathGeometry(nullptr);
-    HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreatePathGeometry(&pID2D1PathGeometry);
+    sal::systools::COMReference<ID2D1PathGeometry> pID2D1PathGeometry;
+    HRESULT hr(
+        aID2D1GlobalFactoryProvider.getID2D1Factory()->CreatePathGeometry(&pID2D1PathGeometry));
     const sal_uInt32 nPointCount(rPolygon.count());
 
     if (SUCCEEDED(hr) && nPointCount)
     {
-        ID2D1GeometrySink* pSink = nullptr;
+        sal::systools::COMReference<ID2D1GeometrySink> pSink;
         hr = pID2D1PathGeometry->Open(&pSink);
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pSink)
         {
             const basegfx::B2DPoint aStart(rViewInformation.getPixelSnapHairline()
                                                ? rPolygon.getB2DPoint(0)
@@ -286,12 +276,11 @@ getOrCreatePathGeometry(const basegfx::B2DPolygon& rPolygon,
             addB2DPolygonToPathGeometry(pSink, rPolygon, &rViewInformation);
             pSink->EndFigure(rPolygon.isClosed() ? D2D1_FIGURE_END_CLOSED : D2D1_FIGURE_END_OPEN);
             pSink->Close();
-            pSink->Release();
         }
     }
 
     // add to buffering mechanism
-    if (nullptr != pID2D1PathGeometry)
+    if (pID2D1PathGeometry)
     {
         if (rViewInformation.getPixelSnapHairline() || nPointCount <= 4)
         {
@@ -321,16 +310,17 @@ getOrCreateFillGeometry(const basegfx::B2DPolyPolygon& rPolyPolygon)
         return pSystemDependentData_ID2D1PathGeometry;
     }
 
-    ID2D1PathGeometry* pID2D1PathGeometry(nullptr);
-    HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreatePathGeometry(&pID2D1PathGeometry);
+    sal::systools::COMReference<ID2D1PathGeometry> pID2D1PathGeometry;
+    HRESULT hr(
+        aID2D1GlobalFactoryProvider.getID2D1Factory()->CreatePathGeometry(&pID2D1PathGeometry));
     const sal_uInt32 nCount(rPolyPolygon.count());
 
     if (SUCCEEDED(hr) && nCount)
     {
-        ID2D1GeometrySink* pSink = nullptr;
+        sal::systools::COMReference<ID2D1GeometrySink> pSink;
         hr = pID2D1PathGeometry->Open(&pSink);
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pSink)
         {
             for (sal_uInt32 a(0); a < nCount; a++)
             {
@@ -349,12 +339,11 @@ getOrCreateFillGeometry(const basegfx::B2DPolyPolygon& rPolyPolygon)
             }
 
             pSink->Close();
-            pSink->Release();
         }
     }
 
     // add to buffering mechanism
-    if (nullptr != pID2D1PathGeometry)
+    if (pID2D1PathGeometry)
     {
         return rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_ID2D1PathGeometry>(
             pID2D1PathGeometry);
@@ -366,27 +355,21 @@ getOrCreateFillGeometry(const basegfx::B2DPolyPolygon& rPolyPolygon)
 class SystemDependentData_ID2D1Bitmap : public basegfx::SystemDependentData
 {
 private:
-    ID2D1Bitmap* mpD2DBitmap;
+    sal::systools::COMReference<ID2D1Bitmap> mpD2DBitmap;
     const std::shared_ptr<SalBitmap> maAssociatedAlpha;
 
 public:
-    SystemDependentData_ID2D1Bitmap(ID2D1Bitmap* pD2DBitmap,
+    SystemDependentData_ID2D1Bitmap(sal::systools::COMReference<ID2D1Bitmap>& rD2DBitmap,
                                     const std::shared_ptr<SalBitmap>& rAssociatedAlpha)
         : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
-        , mpD2DBitmap(pD2DBitmap)
+        , mpD2DBitmap(rD2DBitmap)
         , maAssociatedAlpha(rAssociatedAlpha)
     {
     }
 
-    ~SystemDependentData_ID2D1Bitmap()
-    {
-        if (nullptr != getID2D1Bitmap())
-        {
-            mpD2DBitmap->Release();
-        }
-    }
+    ~SystemDependentData_ID2D1Bitmap() {}
 
-    ID2D1Bitmap* getID2D1Bitmap() const { return mpD2DBitmap; }
+    const sal::systools::COMReference<ID2D1Bitmap>& getID2D1Bitmap() const { return mpD2DBitmap; }
     const std::shared_ptr<SalBitmap>& getAssociatedAlpha() const { return maAssociatedAlpha; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
@@ -396,8 +379,9 @@ sal_Int64 SystemDependentData_ID2D1Bitmap::estimateUsageInBytes() const
 {
     sal_Int64 aRetval(0);
 
-    if (nullptr != getID2D1Bitmap())
+    if (getID2D1Bitmap())
     {
+        // use factor 4 for RGBA_8 as estimation
         const D2D1_SIZE_U aSizePixel(getID2D1Bitmap()->GetPixelSize());
         aRetval = static_cast<sal_Int64>(aSizePixel.width)
                   * static_cast<sal_Int64>(aSizePixel.height) * 4;
@@ -406,7 +390,7 @@ sal_Int64 SystemDependentData_ID2D1Bitmap::estimateUsageInBytes() const
     return aRetval;
 }
 
-ID2D1Bitmap* createB2DBitmap(const BitmapEx& rBitmapEx)
+sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmapEx)
 {
     const Size& rSizePixel(rBitmapEx.GetSizePixel());
     const bool bAlpha(rBitmapEx.IsAlpha());
@@ -453,35 +437,34 @@ ID2D1Bitmap* createB2DBitmap(const BitmapEx& rBitmapEx)
         }
     }
 
-    // use GlobalRenderTraget to allow usage combined with
+    // use GlobalRenderTarget to allow usage combined with
     // the Direct2D CreateSharedBitmap-mechanism. This is needed
     // since ID2D1Bitmap is a ID2D1RenderTarget-dependent resource
     // and thus - in principle - would have to be re-created for
     // *each* new ID2D1RenderTarget, that means for *each* new
     // target HDC, resp. OutputDevice
-    ID2D1DCRenderTarget* pGlobalRenderTraget(
-        aID2D1GlobalRenderTargetProvider.getID2D1DCRenderTarget());
-    ID2D1Bitmap* pID2D1Bitmap(nullptr);
+    sal::systools::COMReference<ID2D1Bitmap> pID2D1Bitmap;
 
-    if (nullptr != pGlobalRenderTraget)
+    if (aID2D1GlobalRenderTargetProvider.getID2D1DCRenderTarget())
     {
-        HRESULT hr = pGlobalRenderTraget->CreateBitmap(
+        const HRESULT hr(aID2D1GlobalRenderTargetProvider.getID2D1DCRenderTarget()->CreateBitmap(
             D2D1::SizeU(rSizePixel.Width(), rSizePixel.Height()), &aData[0],
             rSizePixel.Width() * sizeof(sal_uInt32),
             D2D1::BitmapProperties(
                 D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, // DXGI_FORMAT
                                   bAlpha ? D2D1_ALPHA_MODE_PREMULTIPLIED
                                          : D2D1_ALPHA_MODE_IGNORE)), // D2D1_ALPHA_MODE
-            &pID2D1Bitmap);
+            &pID2D1Bitmap));
 
         if (!SUCCEEDED(hr))
-            return nullptr;
+            pID2D1Bitmap.clear();
     }
 
     return pID2D1Bitmap;
 }
 
-ID2D1Bitmap* getOrCreateB2DBitmap(ID2D1RenderTarget& rRT, const BitmapEx& rBitmapEx)
+sal::systools::COMReference<ID2D1Bitmap>
+getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const BitmapEx& rBitmapEx)
 {
     const basegfx::SystemDependentDataHolder* pHolder(
         rBitmapEx.GetBitmap().accessSystemDependentDataHolder());
@@ -508,9 +491,9 @@ ID2D1Bitmap* getOrCreateB2DBitmap(ID2D1RenderTarget& rRT, const BitmapEx& rBitma
     if (!pSystemDependentData_ID2D1Bitmap)
     {
         // have to create newly
-        ID2D1Bitmap* pID2D1Bitmap(createB2DBitmap(rBitmapEx));
+        sal::systools::COMReference<ID2D1Bitmap> pID2D1Bitmap(createB2DBitmap(rBitmapEx));
 
-        if (nullptr != pID2D1Bitmap)
+        if (pID2D1Bitmap)
         {
             // creation worked, create SystemDependentData_ID2D1Bitmap
             pSystemDependentData_ID2D1Bitmap = std::make_shared<SystemDependentData_ID2D1Bitmap>(
@@ -527,21 +510,22 @@ ID2D1Bitmap* getOrCreateB2DBitmap(ID2D1RenderTarget& rRT, const BitmapEx& rBitma
         }
     }
 
+    sal::systools::COMReference<ID2D1Bitmap> pWrappedD2DBitmap;
+
     if (pSystemDependentData_ID2D1Bitmap)
     {
         // embed to CreateSharedBitmap, that makes it usable on
         // the specified RenderTarget
-        ID2D1Bitmap* pWrappedD2DBitmap(nullptr);
-        HRESULT hr(rRT.CreateSharedBitmap(
+        const HRESULT hr(rRT->CreateSharedBitmap(
             __uuidof(ID2D1Bitmap),
             static_cast<void*>(pSystemDependentData_ID2D1Bitmap->getID2D1Bitmap()), nullptr,
             &pWrappedD2DBitmap));
 
-        if (SUCCEEDED(hr))
-            return pWrappedD2DBitmap;
+        if (!SUCCEEDED(hr))
+            pWrappedD2DBitmap.clear();
     }
 
-    return nullptr;
+    return pWrappedD2DBitmap;
 }
 
 // This is a simple local derivation of D2DPixelProcessor2D to be used
@@ -551,21 +535,19 @@ ID2D1Bitmap* getOrCreateB2DBitmap(ID2D1RenderTarget& rRT, const BitmapEx& rBitma
 // (you need to call process() with the primitives to be painted of
 // course). Then use the local helper getID2D1Bitmap() to access the
 // ID2D1Bitmap which was the target of that operation.
-// The class does not need to call mpBitmapRenderTarget->Release() since
-// mpRT of parent is set to it and that calls Release() already in its
-// destructor, so no destructor needed here.
 class D2DBitmapPixelProcessor2D final : public drawinglayer::processor2d::D2DPixelProcessor2D
 {
     // the local ID2D1BitmapRenderTarget
-    ID2D1BitmapRenderTarget* mpBitmapRenderTarget;
+    sal::systools::COMReference<ID2D1BitmapRenderTarget> mpBitmapRenderTarget;
 
 public:
     // helper class to create another instance of D2DPixelProcessor2D for
     // creating helper-ID2D1Bitmap's for a given ID2D1RenderTarget
     D2DBitmapPixelProcessor2D(const drawinglayer::geometry::ViewInformation2D& rViewInformation,
-                              sal_uInt32 nWidth, sal_uInt32 nHeight, ID2D1RenderTarget& rParent)
+                              sal_uInt32 nWidth, sal_uInt32 nHeight,
+                              sal::systools::COMReference<ID2D1RenderTarget>& rParent)
         : drawinglayer::processor2d::D2DPixelProcessor2D(rViewInformation)
-        , mpBitmapRenderTarget(nullptr)
+        , mpBitmapRenderTarget()
     {
         if (0 == nWidth || 0 == nHeight)
         {
@@ -577,7 +559,7 @@ public:
         {
             // Allocate compatible RGBA render target
             const D2D1_SIZE_U aRenderTargetSizePixel(D2D1::SizeU(nWidth, nHeight));
-            HRESULT hr(rParent.CreateCompatibleRenderTarget(
+            const HRESULT hr(rParent->CreateCompatibleRenderTarget(
                 nullptr, &aRenderTargetSizePixel, nullptr,
                 D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE, &mpBitmapRenderTarget));
 
@@ -588,30 +570,33 @@ public:
             }
             else
             {
-                setRenderTarget(mpBitmapRenderTarget);
+                sal::systools::COMReference<ID2D1RenderTarget> pRT;
+                mpBitmapRenderTarget->QueryInterface(__uuidof(ID2D1RenderTarget),
+                                                     reinterpret_cast<void**>(&pRT));
+                setRenderTarget(pRT);
             }
         }
 
         if (hasRenderTarget())
         {
             // clear as render preparation
-            getRenderTarget().BeginDraw();
-            getRenderTarget().Clear(D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.0f));
-            getRenderTarget().EndDraw();
+            getRenderTarget()->BeginDraw();
+            getRenderTarget()->Clear(D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.0f));
+            getRenderTarget()->EndDraw();
         }
     }
 
-    ID2D1Bitmap* getID2D1Bitmap() const
+    sal::systools::COMReference<ID2D1Bitmap> getID2D1Bitmap() const
     {
+        sal::systools::COMReference<ID2D1Bitmap> pResult;
+
         // access the resulting bitmap if exists
-        if (nullptr != mpBitmapRenderTarget)
+        if (mpBitmapRenderTarget)
         {
-            ID2D1Bitmap* pInBetweenResult(nullptr);
-            mpBitmapRenderTarget->GetBitmap(&pInBetweenResult);
-            return pInBetweenResult;
+            mpBitmapRenderTarget->GetBitmap(&pResult);
         }
 
-        return nullptr;
+        return pResult;
     }
 };
 }
@@ -621,7 +606,7 @@ namespace drawinglayer::processor2d
 D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation)
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
-    , mpRT(nullptr)
+    , mpRT()
     , mnRecursionCounter(0)
     , mnErrorCounter(0)
 {
@@ -631,11 +616,11 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
                                          HDC aHdc)
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
-    , mpRT(nullptr)
+    , mpRT()
     , mnRecursionCounter(0)
     , mnErrorCounter(0)
 {
-    ID2D1DCRenderTarget* pDCRT = nullptr;
+    sal::systools::COMReference<ID2D1DCRenderTarget> pDCRT;
     tools::Long aOutWidth(0), aOutHeight(0);
 
     if (aHdc)
@@ -644,7 +629,7 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
         aOutHeight = GetDeviceCaps(aHdc, VERTRES);
     }
 
-    if (aOutWidth > 0 && aOutHeight > 0 && aID2D1FactoryProvider.getID2D1Factory())
+    if (aOutWidth > 0 && aOutHeight > 0 && aID2D1GlobalFactoryProvider.getID2D1Factory())
     {
         const D2D1_RENDER_TARGET_PROPERTIES aRTProps(D2D1::RenderTargetProperties(
             D2D1_RENDER_TARGET_TYPE_DEFAULT,
@@ -653,12 +638,10 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
             0, 0, D2D1_RENDER_TARGET_USAGE_NONE, D2D1_FEATURE_LEVEL_DEFAULT));
 
         const HRESULT hr(
-            aID2D1FactoryProvider.getID2D1Factory()->CreateDCRenderTarget(&aRTProps, &pDCRT));
+            aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateDCRenderTarget(&aRTProps, &pDCRT));
 
         if (!SUCCEEDED(hr))
-        {
-            pDCRT = nullptr;
-        }
+            pDCRT.clear();
     }
 
     if (pDCRT)
@@ -668,10 +651,7 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
         const HRESULT hr(pDCRT->BindDC(aHdc, &rc));
 
         if (!SUCCEEDED(hr))
-        {
-            pDCRT->Release();
-            pDCRT = nullptr;
-        }
+            pDCRT.clear();
     }
 
     if (pDCRT)
@@ -701,18 +681,14 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
 
     if (pDCRT)
     {
-        setRenderTarget(pDCRT);
+        sal::systools::COMReference<ID2D1RenderTarget> pRT;
+        pDCRT->QueryInterface(__uuidof(ID2D1RenderTarget), reinterpret_cast<void**>(&pRT));
+        setRenderTarget(pRT);
     }
     else
     {
         increaseError();
     }
-}
-
-D2DPixelProcessor2D::~D2DPixelProcessor2D()
-{
-    if (hasRenderTarget())
-        getRenderTarget().Release();
 }
 
 void D2DPixelProcessor2D::processPolygonHairlinePrimitive2D(
@@ -721,7 +697,10 @@ void D2DPixelProcessor2D::processPolygonHairlinePrimitive2D(
     const basegfx::B2DPolygon& rPolygon(rPolygonHairlinePrimitive2D.getB2DPolygon());
 
     if (!rPolygon.count())
+    {
+        // no geometry, done
         return;
+    }
 
     bool bDone(false);
     std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
@@ -729,41 +708,38 @@ void D2DPixelProcessor2D::processPolygonHairlinePrimitive2D(
 
     if (pSystemDependentData_ID2D1PathGeometry)
     {
-        ID2D1TransformedGeometry* pTransformedGeometry = nullptr;
+        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedGeometry;
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
         const basegfx::B2DHomMatrix& rObjectToView(
             getViewInformation2D().getObjectToViewTransformation());
-        HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
+        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
             pSystemDependentData_ID2D1PathGeometry->getID2D1PathGeometry(),
             D2D1::Matrix3x2F(rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
                              rObjectToView.d(), rObjectToView.e() + fAAOffset,
                              rObjectToView.f() + fAAOffset),
-            &pTransformedGeometry);
+            &pTransformedGeometry));
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pTransformedGeometry)
         {
             const basegfx::BColor aHairlineColor(
                 maBColorModifierStack.getModifiedColor(rPolygonHairlinePrimitive2D.getBColor()));
             const D2D1::ColorF aD2DColor(aHairlineColor.getRed(), aHairlineColor.getGreen(),
                                          aHairlineColor.getBlue());
-            ID2D1SolidColorBrush* pColorBrush(nullptr);
-            hr = getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush);
+            sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+            hr = getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush);
 
-            if (SUCCEEDED(hr))
+            if (SUCCEEDED(hr) && pColorBrush)
             {
-                getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+                getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
                 // TODO: Unfortunately Direct2D paint of one pixel wide lines does not
                 // correctly and completely blend 100% over the background. Experimenting
                 // shows that a value around/slightly below 2.0 is needed which hints that
                 // alpha blending the half-shifted lines (see fAAOffset above) is involved.
                 // To get correct blending I try to use just wider hairlines for now. This
                 // may need to be improved - or balanced (trying sqrt(2) now...)
-                getRenderTarget().DrawGeometry(pTransformedGeometry, pColorBrush, 1.44f);
+                getRenderTarget()->DrawGeometry(pTransformedGeometry, pColorBrush, 1.44f);
                 bDone = true;
-                pColorBrush->Release();
             }
-
-            pTransformedGeometry->Release();
         }
     }
 
@@ -778,7 +754,10 @@ void D2DPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     const sal_uInt32 nCount(rPolyPolygon.count());
 
     if (!nCount)
+    {
+        // no geometry, done
         return;
+    }
 
     bool bDone(false);
     std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
@@ -786,36 +765,33 @@ void D2DPixelProcessor2D::processPolyPolygonColorPrimitive2D(
 
     if (pSystemDependentData_ID2D1PathGeometry)
     {
-        ID2D1TransformedGeometry* pTransformedGeometry = nullptr;
+        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedGeometry;
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
         const basegfx::B2DHomMatrix& rObjectToView(
             getViewInformation2D().getObjectToViewTransformation());
-        HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
+        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
             pSystemDependentData_ID2D1PathGeometry->getID2D1PathGeometry(),
             D2D1::Matrix3x2F(rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
                              rObjectToView.d(), rObjectToView.e() + fAAOffset,
                              rObjectToView.f() + fAAOffset),
-            &pTransformedGeometry);
+            &pTransformedGeometry));
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pTransformedGeometry)
         {
             const basegfx::BColor aFillColor(
                 maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
             const D2D1::ColorF aD2DColor(aFillColor.getRed(), aFillColor.getGreen(),
                                          aFillColor.getBlue());
 
-            ID2D1SolidColorBrush* pColorBrush(nullptr);
-            hr = getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush);
+            sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+            hr = getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush);
 
-            if (SUCCEEDED(hr))
+            if (SUCCEEDED(hr) && pColorBrush)
             {
-                getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
-                getRenderTarget().FillGeometry(pTransformedGeometry, pColorBrush);
+                getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+                getRenderTarget()->FillGeometry(pTransformedGeometry, pColorBrush);
                 bDone = true;
-                pColorBrush->Release();
             }
-
-            pTransformedGeometry->Release();
         }
     }
 
@@ -839,7 +815,7 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
 
         if (!aUnitRange.overlaps(rDiscreteViewPort))
         {
-            // content is outside discrete local ViewPort
+            // content is outside discrete local ViewPort, done
             return;
         }
     }
@@ -848,16 +824,18 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
 
     if (aBitmapEx.IsEmpty() || aBitmapEx.GetSizePixel().IsEmpty())
     {
+        // no pixel data, done
         return;
     }
 
     if (maBColorModifierStack.count())
     {
+        // need to apply ColorModifier to Bitmap data
         aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
 
         if (aBitmapEx.IsEmpty())
         {
-            // color gets completely replaced, get it
+            // color gets completely replaced, get it (any input works)
             const basegfx::BColor aModifiedColor(
                 maBColorModifierStack.getModifiedColor(basegfx::BColor()));
 
@@ -870,24 +848,25 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
                 new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
                                                              aModifiedColor));
 
+            // draw as Polygon, done
             processPolyPolygonColorPrimitive2D(*aTemp);
             return;
         }
     }
 
     bool bDone(false);
-    ID2D1Bitmap* pD2DBitmap(getOrCreateB2DBitmap(getRenderTarget(), aBitmapEx));
+    sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
+        getOrCreateB2DBitmap(getRenderTarget(), aBitmapEx));
 
-    if (nullptr != pD2DBitmap)
+    if (pD2DBitmap)
     {
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F(
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
 
         // destinationRectangle is part of transformation above, so use UnitRange
-        getRenderTarget().DrawBitmap(pD2DBitmap, D2D1::RectF(0.0, 0.0, 1.0, 1.0));
-        pD2DBitmap->Release();
+        getRenderTarget()->DrawBitmap(pD2DBitmap, D2D1::RectF(0.0, 0.0, 1.0, 1.0));
         bDone = true;
     }
 
@@ -895,27 +874,28 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
         increaseError();
 }
 
-ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
+sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Direct(
     const primitive2d::TransparencePrimitive2D& rTransCandidate,
     const basegfx::B2DRange& rVisibleRange)
 {
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
     // Only then can we use ID2D1Effect/CLSID_D2D1LuminanceToAlpha and it makes
     // sense to try to do it this way in this implementation
-    ID2D1DeviceContext* pID2D1DeviceContext(nullptr);
-    getRenderTarget().QueryInterface(__uuidof(ID2D1DeviceContext),
-                                     reinterpret_cast<void**>(&pID2D1DeviceContext));
+    sal::systools::COMReference<ID2D1DeviceContext> pID2D1DeviceContext;
+    getRenderTarget()->QueryInterface(__uuidof(ID2D1DeviceContext),
+                                      reinterpret_cast<void**>(&pID2D1DeviceContext));
+    sal::systools::COMReference<ID2D1Bitmap> pRetval;
 
-    if (nullptr == pID2D1DeviceContext)
+    if (!pID2D1DeviceContext)
     {
-        // no, done - use fallback by returning empty - we have not the preconditions for this
-        return nullptr;
+        // no, done - tell caller to use fallback by returning empty - we have
+        // not the preconditions for this
+        return pRetval;
     }
 
     // Release early, was only a test and I saw comments in docu thatQueryInterface
     // does already increase that refcount
-    pID2D1DeviceContext->Release();
-    pID2D1DeviceContext = nullptr;
+    pID2D1DeviceContext.clear();
 
     // I had a former version (call it 'a') where I directly painted to a
     // alpha-only bitmap target, see aAlphaFormat below and refer to
@@ -972,15 +952,14 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
     if (!aSubContentRenderer.valid())
     {
         // did not work, done
-        return nullptr;
+        return pRetval;
     }
 
     // render sub-content recursively
     aSubContentRenderer.process(rTransCandidate.getTransparence());
 
     // grab Bitmap & prepare results from RGBA content rendering
-    ID2D1Bitmap* pInBetweenResult(aSubContentRenderer.getID2D1Bitmap());
-    ID2D1Bitmap* pRetval(nullptr);
+    sal::systools::COMReference<ID2D1Bitmap> pInBetweenResult(aSubContentRenderer.getID2D1Bitmap());
 
     // Now we need a target to render this to, using the ID2D1Effect tooling.
     // We can directly apply the effect to an alpha-only 8bit target here,
@@ -989,12 +968,12 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
     // to pContent again, but that does not work due to the bitmap
     // fetched being probably only an internal reference to the
     // ID2D1BitmapRenderTarget, thus it would draw onto itself -> chaos
-    ID2D1BitmapRenderTarget* pContent(nullptr);
+    sal::systools::COMReference<ID2D1BitmapRenderTarget> pContent;
     const D2D1_PIXEL_FORMAT aAlphaFormat(
         D2D1::PixelFormat(DXGI_FORMAT_A8_UNORM, D2D1_ALPHA_MODE_STRAIGHT));
     const D2D1_SIZE_U aRenderTargetSizePixel(
         D2D1::SizeU(ceil(rVisibleRange.getWidth()), ceil(rVisibleRange.getHeight())));
-    HRESULT hr(getRenderTarget().CreateCompatibleRenderTarget(
+    const HRESULT hr(getRenderTarget()->CreateCompatibleRenderTarget(
         nullptr, &aRenderTargetSizePixel, &aAlphaFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
         &pContent));
 
@@ -1007,7 +986,7 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
         if (pID2D1DeviceContext)
         {
             // create the effect
-            ID2D1Effect* pLuminanceToAlpha(nullptr);
+            sal::systools::COMReference<ID2D1Effect> pLuminanceToAlpha;
             pID2D1DeviceContext->CreateEffect(CLSID_D2D1LuminanceToAlpha, &pLuminanceToAlpha);
 
             if (pLuminanceToAlpha)
@@ -1022,20 +1001,14 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_Direct(
 
                 // grab result
                 pContent->GetBitmap(&pRetval);
-                pLuminanceToAlpha->Release();
             }
-
-            pID2D1DeviceContext->Release();
         }
-
-        pContent->Release();
     }
 
-    pInBetweenResult->Release();
     return pRetval;
 }
 
-ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_B2DBitmap(
+sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_B2DBitmap(
     const primitive2d::TransparencePrimitive2D& rTransCandidate,
     const basegfx::B2DRange& rVisibleRange, D2D1_MATRIX_3X2_F& rMaskScale)
 {
@@ -1062,11 +1035,12 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_B2DBitmap(
     const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
         std::move(xEmbedSeq), aEmptyViewInformation2D, nDiscreteClippedWidth,
         nDiscreteClippedHeight, nMaximumQuadraticPixels, true));
+    sal::systools::COMReference<ID2D1Bitmap> pRetval;
 
     if (aAlpha.IsEmpty())
     {
         // if we have no content we are done
-        return nullptr;
+        return pRetval;
     }
 
     // use alpha data to create the ID2D1Bitmap
@@ -1088,19 +1062,16 @@ ID2D1Bitmap* D2DPixelProcessor2D::implCreateAlpha_B2DBitmap(
         }
     }
 
-    ID2D1Bitmap* pRetval(nullptr);
     const D2D1_BITMAP_PROPERTIES aBmProps(D2D1::BitmapProperties(
         D2D1::PixelFormat(DXGI_FORMAT_A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)));
-    HRESULT hr = getRenderTarget().CreateBitmap(
+    const HRESULT hr(getRenderTarget()->CreateBitmap(
         D2D1::SizeU(rSizePixel.Width(), rSizePixel.Height()), &aData[0],
-        rSizePixel.Width() * sizeof(sal_uInt8), &aBmProps, &pRetval);
+        rSizePixel.Width() * sizeof(sal_uInt8), &aBmProps, &pRetval));
 
-    //  D2D1_BITMAP_PROPERTIES
-
-    if (!SUCCEEDED(hr) || nullptr == pRetval)
+    if (!SUCCEEDED(hr) || !pRetval)
     {
         // did not work, done
-        return nullptr;
+        return pRetval;
     }
 
     // create needed adapted transformation for alpha brush.
@@ -1129,16 +1100,22 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     const primitive2d::TransparencePrimitive2D& rTransCandidate)
 {
     if (rTransCandidate.getChildren().empty())
+    {
+        // no content, done
         return;
+    }
 
     if (rTransCandidate.getTransparence().empty())
+    {
+        // no mask (so nothing visible), done
         return;
+    }
 
     // calculate visible range, create only for that range
     basegfx::B2DRange aDiscreteRange(
         rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget().GetPixelSize());
+    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
     const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
     basegfx::B2DRange aVisibleRange(aDiscreteRange);
     aVisibleRange.intersect(aViewRange);
@@ -1150,63 +1127,59 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     }
 
     // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
-    // what is not guaranteed but usually works for more modern windows (after 7)
-    ID2D1Bitmap* pAlphaBitmap(implCreateAlpha_Direct(rTransCandidate, aVisibleRange));
+    // what is not guarenteed but usually works for more modern windows (after 7)
+    sal::systools::COMReference<ID2D1Bitmap> pAlphaBitmap(
+        implCreateAlpha_Direct(rTransCandidate, aVisibleRange));
     D2D1_MATRIX_3X2_F aMaskScale(D2D1::Matrix3x2F::Identity());
 
-    if (nullptr == pAlphaBitmap)
+    if (!pAlphaBitmap)
     {
         // did not work, use more expensive fallback to existing tooling
         pAlphaBitmap = implCreateAlpha_B2DBitmap(rTransCandidate, aVisibleRange, aMaskScale);
     }
 
-    if (nullptr == pAlphaBitmap)
+    if (!pAlphaBitmap)
     {
         // could not create alpha channel, error
         increaseError();
         return;
     }
 
-    ID2D1Layer* pLayer = nullptr;
-    HRESULT hr = getRenderTarget().CreateLayer(nullptr, &pLayer);
+    sal::systools::COMReference<ID2D1Layer> pLayer;
+    HRESULT hr(getRenderTarget()->CreateLayer(nullptr, &pLayer));
     bool bDone(false);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pLayer)
     {
-        ID2D1BitmapBrush* pBitmapBrush = nullptr;
-        hr = getRenderTarget().CreateBitmapBrush(pAlphaBitmap, &pBitmapBrush);
+        sal::systools::COMReference<ID2D1BitmapBrush> pBitmapBrush;
+        hr = getRenderTarget()->CreateBitmapBrush(pAlphaBitmap, &pBitmapBrush);
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pBitmapBrush)
         {
             // apply MaskScale to Brush, maybe used if implCreateAlpha_B2DBitmap was needed
             pBitmapBrush->SetTransform(aMaskScale);
 
             // need to set transform offset for Layer initialization, we work
             // in discrete device coordinates
-            getRenderTarget().SetTransform(D2D1::Matrix3x2F::Translation(
+            getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Translation(
                 floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
 
-            getRenderTarget().PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr,
-                                                              D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
-                                                              D2D1::Matrix3x2F::Identity(), 1.0,
-                                                              pBitmapBrush),
-                                        pLayer);
+            getRenderTarget()->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr,
+                                                               D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+                                                               D2D1::Matrix3x2F::Identity(), 1.0,
+                                                               pBitmapBrush),
+                                         pLayer);
 
             // ... but need to reset to paint content unchanged
-            getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+            getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 
-            // draw content
+            // draw content recursively
             process(rTransCandidate.getChildren());
 
-            getRenderTarget().PopLayer();
+            getRenderTarget()->PopLayer();
             bDone = true;
-            pBitmapBrush->Release();
         }
-
-        pLayer->Release();
     }
-
-    pAlphaBitmap->Release();
 
     if (!bDone)
         increaseError();
@@ -1237,7 +1210,7 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     basegfx::B2DRange aTransparencyRange(
         rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aTransparencyRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget().GetPixelSize());
+    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
     const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
 
     // not visible, done
@@ -1247,25 +1220,22 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     }
 
     bool bDone(false);
-    ID2D1Layer* pLayer = nullptr;
-    HRESULT hr = getRenderTarget().CreateLayer(nullptr, &pLayer);
+    sal::systools::COMReference<ID2D1Layer> pLayer;
+    const HRESULT hr(getRenderTarget()->CreateLayer(nullptr, &pLayer));
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pLayer)
     {
         // need to set correct transform for Layer initialization, we work
         // in discrete device coordinates
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
-
-        getRenderTarget().PushLayer(
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+        getRenderTarget()->PushLayer(
             D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr, D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
                                   D2D1::IdentityMatrix(),
                                   1.0 - rTransCandidate.getTransparence()), // opacity
             pLayer);
         process(rTransCandidate.getChildren());
-        getRenderTarget().PopLayer();
+        getRenderTarget()->PopLayer();
         bDone = true;
-
-        pLayer->Release();
     }
 
     if (!bDone)
@@ -1276,20 +1246,29 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
     const primitive2d::MaskPrimitive2D& rMaskCandidate)
 {
     if (rMaskCandidate.getChildren().empty())
+    {
+        // no content, done
         return;
+    }
 
     basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
 
     if (!aMask.count())
+    {
+        // no mask (so nothing inside), done
         return;
+    }
 
     basegfx::B2DRange aMaskRange(aMask.getB2DRange());
     aMaskRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget().GetPixelSize());
+    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
     const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
 
     if (!aViewRange.overlaps(aMaskRange))
+    {
+        // not in visible range, done
         return;
+    }
 
     bool bDone(false);
     std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1MaskGeometry(
@@ -1297,36 +1276,31 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
 
     if (pSystemDependentData_ID2D1MaskGeometry)
     {
-        ID2D1TransformedGeometry* pTransformedMaskGeometry = nullptr;
+        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedMaskGeometry;
         const basegfx::B2DHomMatrix& rObjectToView(
             getViewInformation2D().getObjectToViewTransformation());
-        HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
+        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
             pSystemDependentData_ID2D1MaskGeometry->getID2D1PathGeometry(),
             D2D1::Matrix3x2F(rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
                              rObjectToView.d(), rObjectToView.e(), rObjectToView.f()),
-            &pTransformedMaskGeometry);
+            &pTransformedMaskGeometry));
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pTransformedMaskGeometry)
         {
-            ID2D1Layer* pLayer = nullptr;
-            hr = getRenderTarget().CreateLayer(nullptr, &pLayer);
+            sal::systools::COMReference<ID2D1Layer> pLayer;
+            hr = getRenderTarget()->CreateLayer(nullptr, &pLayer);
 
-            if (SUCCEEDED(hr))
+            if (SUCCEEDED(hr) && pLayer)
             {
                 // need to set correct transform for Layer initialization, we work
                 // in discrete device coordinates
-                getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
-
-                getRenderTarget().PushLayer(
+                getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+                getRenderTarget()->PushLayer(
                     D2D1::LayerParameters(D2D1::InfiniteRect(), pTransformedMaskGeometry), pLayer);
                 process(rMaskCandidate.getChildren());
-                getRenderTarget().PopLayer();
+                getRenderTarget()->PopLayer();
                 bDone = true;
-
-                pLayer->Release();
             }
-
-            pTransformedMaskGeometry->Release();
         }
     }
 
@@ -1338,24 +1312,28 @@ void D2DPixelProcessor2D::processPointArrayPrimitive2D(
     const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate)
 {
     const std::vector<basegfx::B2DPoint>& rPositions(rPointArrayCandidate.getPositions());
+
     if (rPositions.empty())
+    {
+        // no geometry, done
         return;
+    }
 
     const basegfx::BColor aPointColor(
         maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
-    ID2D1SolidColorBrush* pColorBrush(nullptr);
+    sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
     D2D1::ColorF aD2DColor(aPointColor.getRed(), aPointColor.getGreen(), aPointColor.getBlue());
-    HRESULT hr = getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush);
+    const HRESULT hr(getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush));
     bool bDone(false);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pColorBrush)
     {
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 
         // To really paint a single pixel I found nothing better than
         // switch off AA and draw a pixel-aligned rectangle
-        const D2D1_ANTIALIAS_MODE aOldAAMode(getRenderTarget().GetAntialiasMode());
-        getRenderTarget().SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+        const D2D1_ANTIALIAS_MODE aOldAAMode(getRenderTarget()->GetAntialiasMode());
+        getRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 
         for (auto const& pos : rPositions)
         {
@@ -1365,12 +1343,11 @@ void D2DPixelProcessor2D::processPointArrayPrimitive2D(
             const double fY(ceil(aDiscretePos.getY()));
             const D2D1_RECT_F rect = { FLOAT(fX), FLOAT(fY), FLOAT(fX), FLOAT(fY) };
 
-            getRenderTarget().DrawRectangle(&rect, pColorBrush);
+            getRenderTarget()->DrawRectangle(&rect, pColorBrush);
         }
 
-        getRenderTarget().SetAntialiasMode(aOldAAMode);
+        getRenderTarget()->SetAntialiasMode(aOldAAMode);
         bDone = true;
-        pColorBrush->Release();
     }
 
     if (!bDone)
@@ -1381,19 +1358,28 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
     const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate)
 {
     const std::vector<basegfx::B2DPoint>& rPositions(rMarkerArrayCandidate.getPositions());
+
     if (rPositions.empty())
+    {
+        // no geometry, done
         return;
+    }
 
     const BitmapEx& rMarker(rMarkerArrayCandidate.getMarker());
-    if (rMarker.IsEmpty())
-        return;
 
-    ID2D1Bitmap* pD2DBitmap(getOrCreateB2DBitmap(getRenderTarget(), rMarker));
+    if (rMarker.IsEmpty())
+    {
+        // no marker defined, done
+        return;
+    }
+
+    sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
+        getOrCreateB2DBitmap(getRenderTarget(), rMarker));
     bool bDone(false);
 
-    if (nullptr != pD2DBitmap)
+    if (pD2DBitmap)
     {
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
         const Size& rSizePixel(rMarker.GetSizePixel());
         const tools::Long nMiX((rSizePixel.Width() / 2) + 1);
         const tools::Long nMiY((rSizePixel.Height() / 2) + 1);
@@ -1401,8 +1387,8 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
         const tools::Long nPlY(rSizePixel.Height() - nMiY);
 
         // draw with non-AA to show unhampered, clear, non-scaled marker
-        const D2D1_ANTIALIAS_MODE aOldAAMode(getRenderTarget().GetAntialiasMode());
-        getRenderTarget().SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+        const D2D1_ANTIALIAS_MODE aOldAAMode(getRenderTarget()->GetAntialiasMode());
+        getRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 
         for (auto const& pos : rPositions)
         {
@@ -1413,12 +1399,11 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
             const D2D1_RECT_F rect
                 = { FLOAT(fX - nMiX), FLOAT(fY - nMiY), FLOAT(fX + nPlX), FLOAT(fY + nPlY) };
 
-            getRenderTarget().DrawBitmap(pD2DBitmap, &rect);
+            getRenderTarget()->DrawBitmap(pD2DBitmap, &rect);
         }
 
-        getRenderTarget().SetAntialiasMode(aOldAAMode);
+        getRenderTarget()->SetAntialiasMode(aOldAAMode);
         bDone = true;
-        pD2DBitmap->Release();
     }
 
     if (!bDone)
@@ -1438,7 +1423,7 @@ void D2DPixelProcessor2D::processBackgroundColorPrimitive2D(
                                  rBackgroundColorCandidate.getBColor().getBlue(),
                                  1.0 - rBackgroundColorCandidate.getTransparency());
 
-    getRenderTarget().Clear(aD2DColor);
+    getRenderTarget()->Clear(aD2DColor);
 }
 
 void D2DPixelProcessor2D::processModifiedColorPrimitive2D(
@@ -1532,16 +1517,16 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
 
     if (pSystemDependentData_ID2D1PathGeometry)
     {
-        ID2D1TransformedGeometry* pTransformedGeometry = nullptr;
+        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedGeometry;
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-        HRESULT hr = aID2D1FactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
+        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
             pSystemDependentData_ID2D1PathGeometry->getID2D1PathGeometry(),
             D2D1::Matrix3x2F(rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
                              rObjectToView.d(), rObjectToView.e() + fAAOffset,
                              rObjectToView.f() + fAAOffset),
-            &pTransformedGeometry);
+            &pTransformedGeometry));
 
-        if (SUCCEEDED(hr))
+        if (SUCCEEDED(hr) && pTransformedGeometry)
         {
             const basegfx::BColor aLineColor(
                 maBColorModifierStack.getModifiedColor(rLineAttribute.getColor()));
@@ -1553,12 +1538,12 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                 aD2DColor.a = 0.5;
             }
 
-            ID2D1SolidColorBrush* pColorBrush(nullptr);
-            hr = getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush);
+            sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+            hr = getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush);
 
-            if (SUCCEEDED(hr))
+            if (SUCCEEDED(hr) && pColorBrush)
             {
-                ID2D1StrokeStyle* pStrokeStyle(nullptr);
+                sal::systools::COMReference<ID2D1StrokeStyle> pStrokeStyle;
                 D2D1_CAP_STYLE aCapStyle(D2D1_CAP_STYLE_FLAT);
                 D2D1_LINE_JOIN aLineJoin(D2D1_LINE_JOIN_MITER);
                 const attribute::StrokeAttribute& rStrokeAttribute(
@@ -1598,7 +1583,7 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                         //     nice, but not what we need or is the standard for other graphic systems. Luckily there
                         //     is also D2D1_LINE_JOIN_MITER_OR_BEVEL and (after some search) the page
                         //     https://learn.microsoft.com/en-us/windows/win32/api/d2d1/ne-d2d1-d2d1_line_join
-                        //     which gives some explanation, so that is what we need to use.
+                        //     which gives some explanation, so that is what we need to use here.
                         // (2) Instead of using an angle in radians (15 deg default) MS uses
                         //     "miterLimit is relative to 1/2 LineWidth", so a length. After some experimenting
                         //     it shows that the (better understandable) angle has to be converted to the length
@@ -1607,6 +1592,8 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                         //     experimentally come to a correction value around 0.9925. Since that seems to
                         //     be no obvious numerical value involved somehow (and as long as I find no other
                         //     explanation) I will have to use that.
+                        // NOTE: To find that correction value I usd that handy bRenderDecomposeForCompareInRed
+                        //       and changes in debugger - as work tipp
                         // With both done I can use Direct2D for Miter completely - what is good for speed.
                         aLineJoin = D2D1_LINE_JOIN_MITER_OR_BEVEL;
 
@@ -1647,7 +1634,7 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                     }
                 }
 
-                hr = aID2D1FactoryProvider.getID2D1Factory()->CreateStrokeStyle(
+                hr = aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateStrokeStyle(
                     D2D1::StrokeStyleProperties(aCapStyle, // startCap
                                                 aCapStyle, // endCap
                                                 aCapStyle, // dashCap
@@ -1658,21 +1645,16 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                     bDashUsed ? dashes.data() : nullptr, bDashUsed ? dashes.size() : 0,
                     &pStrokeStyle);
 
-                if (SUCCEEDED(hr))
+                if (SUCCEEDED(hr) && pStrokeStyle)
                 {
-                    getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
-                    getRenderTarget().DrawGeometry(
+                    getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+                    getRenderTarget()->DrawGeometry(
                         pTransformedGeometry, pColorBrush,
                         // TODO: Hairline LineWidth, see comment at processPolygonHairlinePrimitive2D
                         bHairline ? 1.44 : fDiscreteLineWidth, pStrokeStyle);
                     bDone = true;
-                    pStrokeStyle->Release();
                 }
-
-                pColorBrush->Release();
             }
-
-            pTransformedGeometry->Release();
         }
     }
 
@@ -1696,16 +1678,16 @@ void D2DPixelProcessor2D::processLineRectanglePrimitive2D(
         maBColorModifierStack.getModifiedColor(rLineRectanglePrimitive2D.getBColor()));
     const D2D1::ColorF aD2DColor(aHairlineColor.getRed(), aHairlineColor.getGreen(),
                                  aHairlineColor.getBlue());
-    ID2D1SolidColorBrush* pColorBrush(nullptr);
-    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+    const HRESULT hr(getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush));
     bool bDone(false);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pColorBrush)
     {
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
         const basegfx::B2DHomMatrix aLocalTransform(
             getViewInformation2D().getObjectToViewTransformation());
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F(
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
         const basegfx::B2DRange& rRange(rLineRectanglePrimitive2D.getB2DRange());
@@ -1716,7 +1698,7 @@ void D2DPixelProcessor2D::processLineRectanglePrimitive2D(
              * basegfx::B2DVector(1.44, 0.0))
                 .getLength());
 
-        getRenderTarget().DrawRectangle(&rect, pColorBrush, fDiscreteLineWidth);
+        getRenderTarget()->DrawRectangle(&rect, pColorBrush, fDiscreteLineWidth);
         bDone = true;
     }
 
@@ -1736,23 +1718,23 @@ void D2DPixelProcessor2D::processFilledRectanglePrimitive2D(
     const basegfx::BColor aFillColor(
         maBColorModifierStack.getModifiedColor(rFilledRectanglePrimitive2D.getBColor()));
     const D2D1::ColorF aD2DColor(aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
-    ID2D1SolidColorBrush* pColorBrush(nullptr);
-    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+    const HRESULT hr(getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush));
     bool bDone(false);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pColorBrush)
     {
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
         const basegfx::B2DHomMatrix aLocalTransform(
             getViewInformation2D().getObjectToViewTransformation());
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F(
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
         const basegfx::B2DRange& rRange(rFilledRectanglePrimitive2D.getB2DRange());
         const D2D1_RECT_F rect = { FLOAT(rRange.getMinX()), FLOAT(rRange.getMinY()),
                                    FLOAT(rRange.getMaxX()), FLOAT(rRange.getMaxY()) };
 
-        getRenderTarget().FillRectangle(&rect, pColorBrush);
+        getRenderTarget()->FillRectangle(&rect, pColorBrush);
         bDone = true;
     }
 
@@ -1766,11 +1748,11 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
     const basegfx::BColor aLineColor(
         maBColorModifierStack.getModifiedColor(rSingleLinePrimitive2D.getBColor()));
     const D2D1::ColorF aD2DColor(aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
-    ID2D1SolidColorBrush* pColorBrush(nullptr);
-    HRESULT hr(getRenderTarget().CreateSolidColorBrush(aD2DColor, &pColorBrush));
+    sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+    const HRESULT hr(getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush));
     bool bDone(false);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(hr) && pColorBrush)
     {
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
         basegfx::B2DHomMatrix aLocalTransform(
@@ -1778,13 +1760,13 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
         const basegfx::B2DPoint aStart(aLocalTransform * rSingleLinePrimitive2D.getStart());
         const basegfx::B2DPoint aEnd(aLocalTransform * rSingleLinePrimitive2D.getEnd());
 
-        getRenderTarget().SetTransform(D2D1::Matrix3x2F::Identity());
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
         const D2D1_POINT_2F aD2D1Start
             = { FLOAT(aStart.getX() + fAAOffset), FLOAT(aStart.getY() + fAAOffset) };
         const D2D1_POINT_2F aD2D1End
             = { FLOAT(aEnd.getX() + fAAOffset), FLOAT(aEnd.getY() + fAAOffset) };
 
-        getRenderTarget().DrawLine(aD2D1Start, aD2D1End, pColorBrush, 1.44f);
+        getRenderTarget()->DrawLine(aD2D1Start, aD2D1End, pColorBrush, 1.44f);
         bDone = true;
     }
 
@@ -1795,12 +1777,19 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
 void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     if (0 == mnRecursionCounter)
-        getRenderTarget().BeginDraw();
+        getRenderTarget()->BeginDraw();
     mnRecursionCounter++;
 
     switch (rCandidate.getPrimitive2DID())
     {
-        // geometry that *has* to be processed
+        // Geometry that *has* to be processed
+        //
+        // These Primitives have *no* decompose implementation, so these are the basic ones
+        // Just four to go to make a processor work completely (but not optimized)
+        // NOTE: This *could* theoretically be reduced to one and all could implement
+        //       a decompose to pixel data, but that seemed not to make sense to me when
+        //       I designed this. Thus these four are the lowest-level best representation
+        //       from my POV
         case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
         {
             processBitmapPrimitive2D(
@@ -1826,7 +1815,16 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
             break;
         }
 
-        // embedding/groups that *have* to be processed
+        // Embedding/groups that *have* to be processed
+        //
+        // These represent qualifiers for freely defined content, e.g. making
+        // any combinatiopn of priitives freely transformed or transparent
+        // NOTE: PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D and
+        //       PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D are pretty much default-
+        //       implementations that cand and are re-used in all processors.
+        // So - with these and PRIMITIVE2D_ID_INVERTPRIMITIVE2D marked to
+        // be removed in the future - just three really to be implemented
+        // locally specifically
         case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D:
         {
             processTransparencePrimitive2D(
@@ -1837,7 +1835,9 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             // TODO: fallback is at VclPixelProcessor2D::processInvertPrimitive2D, so
             // not in reach. Ignore for now.
-            // processInvertPrimitive2D(rCandidate);
+            // NOTE: We *urgently* need to get rid of the last parts in LO that use
+            //       XOR paint. Modern graphic systems allow no read access to the
+            //       pixel targets, but that's naturally a precondition for XOR
             break;
         }
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
@@ -1859,52 +1859,70 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
             break;
         }
 
-        // geometry that *may* be processed due to being able to do it better
-        // then using the decomposition
+        // Geometry that *may* be processed due to being able to do it better
+        // then using the decomposition.
+        // NOTE: In these implementations you could always call what the default
+        //       case below does - call process(rCandidate) to use the decomposition.
+        //       So these impls should only do something if they can do it better/
+        //       faster that the decomposition. So some of them check if they could
+        //       - and if not - use exactly that.
         case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
         {
+            // transparence with a fixed alpha for all content, can be done
+            // significally faster
             processUnifiedTransparencePrimitive2D(
                 static_cast<const primitive2d::UnifiedTransparencePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D:
         {
+            // can be done simpler and without AA better locally
             processMarkerArrayPrimitive2D(
                 static_cast<const primitive2d::MarkerArrayPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
         {
+            // reset to a color, can be done more effectively locally, would
+            // else decompose to a polygon fill
             processBackgroundColorPrimitive2D(
                 static_cast<const primitive2d::BackgroundColorPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
         {
+            // fat and stroked lines - much better doable locally, would decompose
+            // to the full line geometry creation (tesselation)
             processPolygonStrokePrimitive2D(
                 static_cast<const primitive2d::PolygonStrokePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
         {
+            // simple primitve to support future fast callbacks from OutputDevice
+            // (see 'Example POC' in Gerrit), decomposes to polygon primitive
             processLineRectanglePrimitive2D(
                 static_cast<const primitive2d::LineRectanglePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
         {
+            // simple primitve to support future fast callbacks from OutputDevice
+            // (see 'Example POC' in Gerrit), decomposes to filled polygon primitive
             processFilledRectanglePrimitive2D(
                 static_cast<const primitive2d::FilledRectanglePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
         {
+            // simple primitve to support future fast callbacks from OutputDevice
+            // (see 'Example POC' in Gerrit), decomposes to polygon primitive
             processSingleLinePrimitive2D(
                 static_cast<const primitive2d::SingleLinePrimitive2D&>(rCandidate));
             break;
         }
 
-        // continue with decompose
+        // continue with decompose as fallback
         default:
         {
             SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(
@@ -1917,7 +1935,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
 
     mnRecursionCounter--;
     if (0 == mnRecursionCounter)
-        getRenderTarget().EndDraw();
+        getRenderTarget()->EndDraw();
 }
 } // end of namespace
 

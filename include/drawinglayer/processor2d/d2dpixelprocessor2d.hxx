@@ -21,6 +21,7 @@
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <systools/win32/comtools.hxx>
 #include <sal/config.h>
 
 // win-specific
@@ -56,7 +57,7 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     basegfx::BColorModifierStack maBColorModifierStack;
 
     // win and render specific data
-    ID2D1RenderTarget* mpRT;
+    sal::systools::COMReference<ID2D1RenderTarget> mpRT;
     sal_uInt32 mnRecursionCounter;
     sal_uInt32 mnErrorCounter;
 
@@ -90,9 +91,10 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
 
     // common helpers
-    ID2D1Bitmap* implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate,
-                                        const basegfx::B2DRange& rVisibleRange);
-    ID2D1Bitmap*
+    sal::systools::COMReference<ID2D1Bitmap>
+    implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate,
+                           const basegfx::B2DRange& rVisibleRange);
+    sal::systools::COMReference<ID2D1Bitmap>
     implCreateAlpha_B2DBitmap(const primitive2d::TransparencePrimitive2D& rTransCandidate,
                               const basegfx::B2DRange& rVisibleRange,
                               D2D1_MATRIX_3X2_F& rMaskScale);
@@ -109,14 +111,17 @@ protected:
     // local protected minimal accessors for usage in derivates, e.g. helpers
     void increaseError() { mnErrorCounter++; }
     bool hasError() const { return 0 != mnErrorCounter; }
-    void setRenderTarget(ID2D1RenderTarget* mpNewRT) { mpRT = mpNewRT; }
-    bool hasRenderTarget() const { return nullptr != mpRT; }
-    ID2D1RenderTarget& getRenderTarget() { return *mpRT; }
+    bool hasRenderTarget() const { return mpRT.is(); }
+
+    void setRenderTarget(const sal::systools::COMReference<ID2D1RenderTarget>& rNewRT)
+    {
+        mpRT = rNewRT;
+    }
+    sal::systools::COMReference<ID2D1RenderTarget>& getRenderTarget() { return mpRT; }
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
     D2DPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, HDC aHdc);
-    virtual ~D2DPixelProcessor2D() override;
 };
 }
 
