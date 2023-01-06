@@ -189,9 +189,6 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                     rSet.Put( SfxTemplateItem( nSlotId, pStyleSheet->GetName() ) );
                 else
                     rSet.Put( SfxTemplateItem( nSlotId, OUString() ) );
-
-                if ( bProtected )
-                    rSet.DisableItem( nSlotId );
             }
             break;
 
