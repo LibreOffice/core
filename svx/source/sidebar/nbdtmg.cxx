@@ -206,7 +206,7 @@ void NBOTypeMgrBase::ImplLoad(std::u16string_view filename)
                         aNum.SetLevel(i, aFmt);
                     }
                 }
-                RelplaceNumRule(aNum,nNumIndex,0x1/*nLevel*/);
+                ReplaceNumRule(aNum,nNumIndex,0x1/*nLevel*/);
                 xIStm->ReadInt32( nNumIndex );
             }
         }
@@ -298,7 +298,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     return sal_uInt16(0xFFFF);
 }
 
-void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void BulletsTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     if ( mLevel == sal_uInt16(0xFFFF) || mLevel == 0)
         return;
@@ -468,7 +468,7 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     return sal_uInt16(0xFFFF);
 }
 
-void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void NumberingTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
@@ -705,7 +705,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     return sal_uInt16(0xFFFF);
 }
 
-void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void OutlineTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     sal_uInt16 const nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
     if ( nIndex >= nLength )

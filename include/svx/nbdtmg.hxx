@@ -128,7 +128,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual ~NBOTypeMgrBase() {}
         virtual void Init()=0;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) = 0;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) = 0;
+        virtual void ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) = 0;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) = 0;
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault)=0;
         virtual bool IsCustomized(sal_uInt16 nIndex)=0;
@@ -160,7 +160,7 @@ class BulletsTypeMgr final : public NBOTypeMgrBase
         BulletsTypeMgr();
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
+        virtual void ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
@@ -176,7 +176,7 @@ class NumberingTypeMgr final : public NBOTypeMgrBase
         virtual ~NumberingTypeMgr() override;
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
+        virtual void ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
@@ -193,7 +193,7 @@ class OutlineTypeMgr final : public NBOTypeMgrBase
         OutlineTypeMgr();
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
+        virtual void ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
         virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
