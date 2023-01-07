@@ -1419,6 +1419,7 @@ void SbRtl_ConvertFromUrl(StarBASIC *, SbxArray & rPar, bool)
     {
         aSysPath = aStr;
     }
+    rPar.Get(0)->PutString(aSysPath);
 }
 
 
