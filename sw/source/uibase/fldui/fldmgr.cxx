@@ -159,14 +159,14 @@ const TranslateId FMT_AUTHOR_ARY[] =
 
 const TranslateId FLD_DATE_ARY[] =
 {
-    FLD_DATE_FIX,
     FLD_DATE_STD,
+    FLD_DATE_FIX
 };
 
 const TranslateId FLD_TIME_ARY[] =
 {
-    FLD_TIME_FIX,
-    FLD_TIME_STD
+    FLD_TIME_STD,
+    FLD_TIME_FIX
 };
 
 const TranslateId FMT_NUM_ARY[] =

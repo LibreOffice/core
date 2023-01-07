@@ -241,9 +241,9 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
                     case SwFieldTypesEnum::Date:
                     case SwFieldTypesEnum::Time:
                         m_xSelectionLB->append(sId, aLst[i]);
-                        if (static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && !i)
+                        if (static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && i)
                             m_xSelectionLB->select_id(sId);
-                        if (!static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && i)
+                        if (!static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && !i)
                             m_xSelectionLB->select_id(sId);
                         break;
                     case SwFieldTypesEnum::ExtendedUser:
