@@ -113,9 +113,9 @@ struct SVXCORE_DLLPUBLIC ThemeFont
 {
     OUString maTypeface;
     OUString maPanose;
-    sal_Int16 maPitch;
-    sal_Int16 maFamily;
-    sal_Int32 maCharset;
+    sal_Int16 maPitch = 0;
+    sal_Int16 maFamily = 0;
+    sal_Int32 maCharset = 0;
 
     sal_Int16 getPitchFamily() const
     {
