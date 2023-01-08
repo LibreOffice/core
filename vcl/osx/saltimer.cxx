@@ -83,7 +83,7 @@ void AquaSalTimer::Start( sal_uInt64 nMS )
         return;
     }
 
-    m_bDirectTimeout = (0 == nMS) && !pSalData->mpInstance->mbIsLiveResize;
+    m_bDirectTimeout = (0 == nMS) && !ImplGetSVData()->mpWinData->mbIsLiveResize;
     if ( m_bDirectTimeout )
         Stop();
     else
@@ -142,7 +142,7 @@ void AquaSalTimer::callTimerCallback()
 
 void AquaSalTimer::handleTimerElapsed()
 {
-    if ( m_bDirectTimeout || GetSalData()->mpInstance->mbIsLiveResize )
+    if ( m_bDirectTimeout || ImplGetSVData()->mpWinData->mbIsLiveResize )
     {
         // Stop the timer, as it is just invalidated after the firing function
         Stop();

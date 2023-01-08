@@ -170,6 +170,8 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     mDraggingDestinationHandler = nil;
     mbInLiveResize = NO;
+    mbInWindowDidResize = NO;
+    mpLiveResizeTimer = nil;
     mpFrame = pFrame;
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
                      { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
@@ -208,6 +210,22 @@ static AquaSalFrame* getMouseContainerFrame()
     [pNSWindow setDepthLimit: NSWindowDepthTwentyfourBitRGB];
 
     return static_cast<SalFrameWindow *>(pNSWindow);
+}
+
+-(void)clearLiveResizeTimer
+{
+    if ( mpLiveResizeTimer )
+    {
+        [mpLiveResizeTimer invalidate];
+        [mpLiveResizeTimer release];
+        mpLiveResizeTimer = nil;
+    }
+}
+
+-(void)dealloc
+{
+    [self clearLiveResizeTimer];
+    [super dealloc];
 }
 
 -(AquaSalFrame*)getSalFrame
@@ -318,12 +336,29 @@ static AquaSalFrame* getMouseContainerFrame()
     (void)pNotification;
     SolarMutexGuard aGuard;
 
+    if ( mbInWindowDidResize )
+        return;
+
+    mbInWindowDidResize = YES;
+
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
         bool bInLiveResize = [self inLiveResize];
+        ImplSVData* pSVData = ImplGetSVData();
+        assert( pSVData );
+        if ( pSVData )
+        {
+            const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
+            if ( bWasLiveResize != bInLiveResize )
+            {
+                pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
+                Scheduler::Wakeup();
+            }
+        }
+
         if ( bInLiveResize || mbInLiveResize )
         {
             mbInLiveResize = bInLiveResize;
@@ -370,21 +405,31 @@ static AquaSalFrame* getMouseContainerFrame()
             {
                 // tdf#152703 Force repaint after live resizing ends
                 // Repost this notification so that this selector will be called
-                // at least once after live resizing ends. Pass nil for
-                // withObject: since it is unused and makes it easier to cancel
-                // all pending selector execution when live resizing ends.
-                [self performSelector:@selector(windowDidResize:) withObject:nil afterDelay:0.1f];
-            }
-            else
-            {
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(windowDidResize:) object:nil];
+                // at least once after live resizing ends
+                if ( !mpLiveResizeTimer )
+                {
+                    mpLiveResizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(windowDidResizeWithTimer:) userInfo:pNotification repeats:YES];
+                    if ( mpLiveResizeTimer )
+                    {
+                        [mpLiveResizeTimer retain];
+
+                        // The timer won't fire without a call to
+                        // Application::Reschedule() unless we copy the fix for
+                        // #i84055# from vcl/osx/saltimer.cxx and add the timer
+                        // to the NSEventTrackingRunLoopMode run loop mode
+                        [[NSRunLoop currentRunLoop] addTimer:mpLiveResizeTimer forMode:NSEventTrackingRunLoopMode];
+                    }
+                }
             }
         }
         else
         {
+            [self clearLiveResizeTimer];
             mpFrame->SendPaintEvent();
         }
     }
+
+    mbInWindowDidResize = NO;
 }
 
 -(void)windowDidMiniaturize: (NSNotification*)pNotification
@@ -523,6 +568,12 @@ static AquaSalFrame* getMouseContainerFrame()
         [pView endExtTextInput:nFlags];
 }
 
+-(void)windowDidResizeWithTimer:(NSTimer *)pTimer
+{
+    if ( pTimer )
+        [self windowDidResize:[pTimer userInfo]];
+}
+
 @end
 
 @implementation SalFrameView
@@ -602,9 +653,9 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)drawRect: (NSRect)aRect
 {
-    AquaSalInstance *pInstance = GetSalData()->mpInstance;
-    assert(pInstance);
-    if (!pInstance)
+    ImplSVData* pSVData = ImplGetSVData();
+    assert( pSVData );
+    if ( !pSVData )
         return;
 
     SolarMutexGuard aGuard;
@@ -612,10 +663,10 @@ static AquaSalFrame* getMouseContainerFrame()
         return;
 
     const bool bIsLiveResize = [self inLiveResize];
-    const bool bWasLiveResize = pInstance->mbIsLiveResize;
+    const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
     if (bWasLiveResize != bIsLiveResize)
     {
-        pInstance->mbIsLiveResize = bIsLiveResize;
+        pSVData->mpWinData->mbIsLiveResize = bIsLiveResize;
         Scheduler::Wakeup();
     }
 

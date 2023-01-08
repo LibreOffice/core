@@ -269,6 +269,7 @@ struct ImplSVWinData
     StartAutoScrollFlags    mnAutoScrollFlags = StartAutoScrollFlags::NONE; // auto scroll flags
     bool                    mbNoDeactivate = false;         // true: do not execute Deactivate
     bool                    mbNoSaveFocus = false;          // true: menus must not save/restore focus
+    bool                    mbIsLiveResize = false;         // true: skip waiting for events and low priority timers
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
