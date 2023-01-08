@@ -152,8 +152,8 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 
 void X11SalGraphicsImpl::Init()
 {
-    mnPenPixel = mrParent.GetPixel( *moPenColor );
-    mnBrushPixel = mrParent.GetPixel( *moBrushColor );
+    mnPenPixel = moPenColor ? mrParent.GetPixel(*moPenColor) : 0;
+    mnBrushPixel = moBrushColor ? mrParent.GetPixel(*moBrushColor) : 0;
 }
 
 XID X11SalGraphicsImpl::GetXRenderPicture()
