@@ -2569,7 +2569,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("tincidunt"), pShellCursor->GetText());
 
-    // remember the cursor position for comparsion
+    // remember the cursor position for comparison
     SwPosition aCursorPos(*pWrtShell->GetCursor()->GetPoint());
 
     // delete the selected word
