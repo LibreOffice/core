@@ -410,12 +410,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         ShowAutoText(::GetCurrGlosGroup(), m_xShortNameEdit->get_text());
     }
     else
-    {
-        m_xNameED->set_text("");
-        m_xShortNameEdit->set_text("");
-        m_xShortNameEdit->set_sensitive(false);
         ShowAutoText("", "");
-    }
     // update controls
     NameModify(*m_xShortNameEdit);
     if( SfxRequest::HasMacroRecorder( m_pShell->GetView().GetViewFrame() ) )
@@ -904,6 +899,25 @@ void SwGlossaryDlg::Init()
     m_xInsertTipCB->set_active( rCfg.IsAutoTextTip() );
     m_xInsertTipCB->set_sensitive(!officecfg::Office::Writer::AutoFunction::Text::ShowToolTip::isReadOnly());
     m_xInsertTipCB->connect_toggled(LINK(this, SwGlossaryDlg, CheckBoxHdl));
+
+    // tdf#124088 - propose autotext and shortcut name based on selected text
+    if (m_pShell->HasSelection())
+    {
+        OUString aSelText;
+        m_pShell->GetSelectedText(aSelText, ParaBreakType::ToBlank);
+
+        aSelText = aSelText.trim();
+        if (aSelText.getLength() > 25)
+        {
+            aSelText = aSelText.copy(0, 25);
+            if (const sal_Int32 nBlankIndex = aSelText.lastIndexOf(' '); nBlankIndex != -1)
+                aSelText = aSelText.copy(0, nBlankIndex);
+        }
+
+        m_xNameED->set_text(aSelText);
+        m_xNameED->select_region(0, -1);
+        m_xShortNameEdit->set_text(lcl_GetValidShortCut(aSelText));
+    }
 }
 
 // KeyInput for ShortName - Edits without Spaces
