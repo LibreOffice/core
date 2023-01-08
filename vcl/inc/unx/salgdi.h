@@ -47,6 +47,7 @@ class SalBitmap;
 class SalColormap;
 class SalDisplay;
 class SalFrame;
+class X11SalFrame;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
@@ -71,7 +72,7 @@ public:
 
     X11Common();
 
-    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
+    cairo_t* getCairoContext();
 
     static void releaseCairoContext(cairo_t* cr);
 
@@ -94,9 +95,9 @@ public:
                                     X11SalGraphics();
     virtual                         ~X11SalGraphics() COVERITY_NOEXCEPT_FALSE override;
 
-    void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
-    void                            Init( X11SalVirtualDevice *pVirtualDevice, cairo_surface_t* pPreExistingTarget = nullptr,
-                                          SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
+    void                            Init(X11SalFrame& rFrame, Drawable aDrawable, SalX11Screen nXScreen);
+    void                            Init(X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr,
+                                         bool bDeleteColormap = false);
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
@@ -145,7 +146,7 @@ public:
      */
     void                            YieldGraphicsExpose();
 
-    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
+    cairo_t* getCairoContext();
     static void releaseCairoContext(cairo_t* cr);
 
 

@@ -52,6 +52,7 @@
 #include <salvd.hxx>
 #include "gdiimpl.hxx"
 
+#include <unx/salframe.h>
 #include <unx/x11/x11cairotextrender.hxx>
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
@@ -68,20 +69,10 @@ X11Common::X11Common()
     , m_pExternalSurface(nullptr)
 {}
 
-cairo_t* X11Common::getCairoContext(const SalGeometryProvider* pGeom)
+cairo_t* X11Common::getCairoContext()
 {
-    if (m_pExternalSurface)
-        return cairo_create(m_pExternalSurface);
-
-    SAL_WARN_IF(!pGeom, "vcl", "No geometry available");
-    int nWidth = pGeom ? pGeom->GetWidth() : SAL_MAX_INT16;
-    int nHeight = pGeom ? pGeom->GetHeight() : SAL_MAX_INT16;
-    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), m_hDrawable, GetVisual().visual, nWidth, nHeight);
-
-    cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    return cr;
+    assert(m_pExternalSurface && "must be already set");
+    return cairo_create(m_pExternalSurface);
 }
 
 void X11Common::releaseCairoContext(cairo_t* cr)
@@ -192,19 +183,19 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pExternalS
     }
 }
 
-void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
+void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
                            SalX11Screen nXScreen )
 {
     maX11Common.m_pColormap = &vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetColormap(nXScreen);
     m_nXScreen  = nXScreen;
 
-    m_pFrame    = pFrame;
+    m_pFrame    = &rFrame;
     m_pVDev     = nullptr;
 
     bWindow_    = true;
     bVirDev_    = false;
 
-    SetDrawable(aTarget, nullptr, nXScreen);
+    SetDrawable(aTarget, rFrame.GetSurface(), nXScreen);
     mxImpl->Init();
 }
 
@@ -466,9 +457,9 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pVDev);
 }
 
-cairo_t* X11SalGraphics::getCairoContext(const SalGeometryProvider* pGeom)
+cairo_t* X11SalGraphics::getCairoContext()
 {
-    return maX11Common.getCairoContext(pGeom);
+    return maX11Common.getCairoContext();
 }
 
 void X11SalGraphics::releaseCairoContext(cairo_t* cr)
