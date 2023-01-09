@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
             {
                 "Bookmark": {
                     "type": "string",
-                    "value": "ZOTERO_BREF_GiQ7DAWQYWLy"
+                    "value": "ZOTERO_BREF_new1"
                 },
                 "BookmarkText": {
                     "type": "string",
@@ -562,7 +562,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
             {
                 "Bookmark": {
                     "type": "string",
-                    "value": "ZOTERO_BREF_PRxDGUb4SWXF"
+                    "value": "ZOTERO_BREF_new2"
                 },
                 "BookmarkText": {
                     "type": "string",
@@ -584,6 +584,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     // - Actual  : ABCDE
     // i.e. the content was not updated.
     CPPUNIT_ASSERT_EQUAL(OUString("Anew result 1Cnew result 2E"), aActual);
+
+    // Without the accompanying fix in place, this test would have failed, ZOTERO_BREF_GiQ7DAWQYWLy
+    // was not renamed to ZOTERO_BREF_new1.
+    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_new1");
+    CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
