@@ -39,8 +39,10 @@ using namespace ::com::sun::star::uno;
         {
             sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
             sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();
-    
-            if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+
+            // tdf#152648 Handle overflow when multiplying rows and columns
+            sal_Int64 nCells = static_cast<sal_Int64>(nRows) * static_cast<sal_Int64>(nCols);
+            if( nCells >= 0 && nCells < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
             {
                 // make all children visible to the hierarchy
                 for ( sal_Int32 rowCount = 0; rowCount < nRows; rowCount++ )
@@ -111,9 +113,10 @@ using namespace ::com::sun::star::uno;
     {
         sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
         sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
-        
-        
-        if( nRows*nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+
+        // tdf#152648 Handle overflow when multiplying rows and columns
+        sal_Int64 nCells = static_cast<sal_Int64>(nRows) * static_cast<sal_Int64>(nCols);
+        if( nCells >= 0 && nCells < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
         {
             [ attributeNames addObject: NSAccessibilityRowsAttribute ];
             [ attributeNames addObject: NSAccessibilityColumnsAttribute ];
@@ -130,7 +133,10 @@ using namespace ::com::sun::star::uno;
     {
         sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
         sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
-        if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+
+        // tdf#152648 Handle overflow when multiplying rows and columns
+        sal_Int64 nCells = static_cast<sal_Int64>(nRows) * static_cast<sal_Int64>(nCols);
+        if( nCells >= 0 && nCells < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
         {
             NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
             try
@@ -168,7 +174,10 @@ using namespace ::com::sun::star::uno;
     {
         sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
         sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
-        if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+
+        // tdf#152648 Handle overflow when multiplying rows and columns
+        sal_Int64 nCells = static_cast<sal_Int64>(nRows) * static_cast<sal_Int64>(nCols);
+        if( nCells >= 0 && nCells < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
         {
             NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
             try
