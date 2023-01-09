@@ -370,7 +370,7 @@ public:
     virtual void setPaintTextEdit(bool) {}
 
     /// Decides if it's OK to call getCommandValues(rCommand).
-    virtual bool supportsCommandValues(std::u16string_view /*rCommand*/) { return false; }
+    virtual bool supportsCommand(std::u16string_view /*rCommand*/) { return false; }
 
     /// Returns a json mapping of the possible values for the given command.
     virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, std::string_view /*rCommand*/)

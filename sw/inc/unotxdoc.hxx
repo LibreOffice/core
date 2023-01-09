@@ -462,8 +462,8 @@ public:
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
-    /// @see vcl::ITiledRenderable::supportsCommandValues().
-    bool supportsCommandValues(std::u16string_view rCommand) override;
+    /// @see vcl::ITiledRenderable::supportsCommand().
+    bool supportsCommand(std::u16string_view rCommand) override;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);

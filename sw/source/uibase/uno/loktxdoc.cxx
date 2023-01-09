@@ -322,7 +322,7 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 }
 }
 
-bool SwXTextDocument::supportsCommandValues(std::u16string_view rCommand)
+bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
         = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties",
