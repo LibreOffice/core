@@ -292,13 +292,44 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
         rJsonWriter.put("name", pRefMark->GetRefName());
     }
 }
+
+/// Implements getCommandValues(".uno:Sections").
+///
+/// Parameters:
+///
+/// - namePrefix: field name prefix to not return all sections
+void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                 const std::map<OUString, OUString>& rArguments)
+{
+    OUString aNamePrefix;
+    {
+        auto it = rArguments.find("namePrefix");
+        if (it != rArguments.end())
+        {
+            aNamePrefix = it->second;
+        }
+    }
+
+    SwDoc* pDoc = pDocShell->GetDoc();
+    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("sections");
+    for (const auto& pSection : pDoc->GetSections())
+    {
+        if (!pSection->GetName().startsWith(aNamePrefix))
+        {
+            continue;
+        }
+
+        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        rJsonWriter.put("name", pSection->GetName());
+    }
+}
 }
 
 bool SwXTextDocument::supportsCommandValues(const OUString& rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
-        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties", u"Bookmarks",
-            u"Fields" };
+        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties",
+            u"Bookmarks",      u"Fields",        u"Sections" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
@@ -312,6 +343,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, const OSt
     static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
     static constexpr OStringLiteral aBookmarks(".uno:Bookmarks");
     static constexpr OStringLiteral aFields(".uno:Fields");
+    static constexpr OStringLiteral aSections(".uno:Sections");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -354,6 +386,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, const OSt
     else if (o3tl::starts_with(rCommand, aFields))
     {
         GetFields(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aSections))
+    {
+        GetSections(rJsonWriter, m_pDocShell, aMap);
     }
 }
 
