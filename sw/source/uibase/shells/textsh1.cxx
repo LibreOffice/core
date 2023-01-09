@@ -423,7 +423,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         comphelper::SequenceAsHashMap aMap(aBookmarks[nBookmarkIndex++]);
         if (aMap["Bookmark"].get<OUString>() != pMark->GetName())
         {
-            continue;
+            rIDMA.renameMark(pMark, aMap["Bookmark"].get<OUString>());
         }
 
         OUString aBookmarkText = aMap["BookmarkText"].get<OUString>();
