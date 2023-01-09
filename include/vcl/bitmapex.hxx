@@ -434,7 +434,7 @@ public:
                             const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
                             const Size &rSize );
 
-    void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+    void                ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
     void                AdjustTransparency( sal_uInt8 cTrans );
 

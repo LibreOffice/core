@@ -1357,24 +1357,24 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
     return aRetPoly;
 }
 
-void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
+void BitmapEx::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     AlphaMask aAlphaMask(GetAlpha());
-    BitmapScopedWriteAccess pWriteAccess(aAlphaMask);
+    BitmapScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
     Bitmap::ScopedReadAccess pReadAccess(maBitmap);
-    assert( pReadAccess.get() && pWriteAccess.get() );
-    if ( !(pReadAccess.get() && pWriteAccess.get()) )
+    assert( pReadAccess.get() && pAlphaWriteAccess.get() );
+    if ( !(pReadAccess.get() && pAlphaWriteAccess.get()) )
         return;
 
     for ( tools::Long nY = 0; nY < pReadAccess->Height(); nY++ )
     {
-        Scanline pScanline = pWriteAccess->GetScanline( nY );
+        Scanline pScanline = pAlphaWriteAccess->GetScanline( nY );
         Scanline pScanlineRead = pReadAccess->GetScanline( nY );
         for ( tools::Long nX = 0; nX < pReadAccess->Width(); nX++ )
         {
             const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
             if ( cIndex == cIndexFrom )
-                pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
+                pAlphaWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(255 - nAlphaTo) );
         }
     }
     *this = BitmapEx( GetBitmap(), aAlphaMask );
