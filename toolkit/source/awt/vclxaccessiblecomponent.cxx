@@ -553,8 +553,10 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclParent() const
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  )
 {
+    OExternalLockGuard aGuard( this );
+
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
@@ -562,16 +564,6 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
         if ( pParent )
             xAcc = pParent->GetAccessible();
     }
-    return xAcc;
-}
-
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    // we do _not_ have a foreign-controlled parent -> default to our VCL parent
-    uno::Reference< accessibility::XAccessible > xAcc = getVclParent();
-
     return xAcc;
 }
 

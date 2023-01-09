@@ -117,16 +117,6 @@ public:
 protected:
     // base class overridables
     css::awt::Rectangle implGetBounds(  ) override;
-
-private:
-    /** we may be reparented (if external components use OAccessibleImplementationAccess base class),
-        so this method here returns the parent in the VCL world, in opposite to the parent
-        an external component gave us
-    @precond
-        the caller must ensure thread safety, i.e. our mutex must be locked
-    */
-    css::uno::Reference< css::accessibility::XAccessible >
-            getVclParent() const;
 };
 
 /* ----------------------------------------------------------
