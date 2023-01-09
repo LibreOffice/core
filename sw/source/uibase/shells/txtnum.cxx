@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -310,37 +308,6 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     aNewNumRule.SetAutoRule( true );
                     const bool bCreateNewList = ( pNumRuleAtCurrentSelection == nullptr );
                     GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
-                }
-            }
-            else if (nSlot == FN_SVX_SET_OUTLINE)
-            {
-                // FN_SVX_SET_NUMBER and FN_SVX_SET_BULLET are only dropdown actions,
-                // but FN_SVX_SET_OUTLINE is different. It is also the button action,
-                // which is what is being handled here..
-
-                // Only toggle off if the current selection is a valid outline choice,
-                // otherwise do nothing if other bullets/numbering are part of the selection.
-                const SwNumRule* pNumRule = GetShell().GetNumRuleAtCurrentSelection();
-                if (pNumRule)
-                {
-                    SvxNumRule aSvxRule = pNumRule->MakeSvxNumRule();
-
-                    svx::sidebar::NBOTypeMgrBase* pOutline
-                        = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance(
-                            svx::sidebar::NBOType::Outline);
-                    if (pOutline)
-                    {
-                        const sal_uInt16 nIndex = pOutline->GetNBOIndexForNumRule(aSvxRule, 0);
-                        if (nIndex < USHRT_MAX)
-                            comphelper::dispatchCommand(".uno:RemoveBullets", {});
-                    }
-                }
-                else if (!GetShell().GetNumRuleAtCurrCursorPos())
-                {
-                    // No numbering yet. Just use the first locale-defined choice.
-                    auto aArgs(comphelper::InitPropertySequence(
-                        { { "SetOutline", uno::Any(sal_uInt16(1)) } }));
-                    comphelper::dispatchCommand(".uno:SetOutline", aArgs);
                 }
             }
         }
