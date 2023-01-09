@@ -167,7 +167,6 @@ void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& x
 
 void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const
 {
-    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     tools::Long nCount = pColl->GetFuncCount();
     for (tools::Long i=0; i < nCount; ++i)
@@ -175,8 +174,8 @@ void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr&
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
         {
-            OUString aName;
-            if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
+            const OUString aName( pFuncData->GetUpperEnglish());
+            if (!aName.isEmpty())
                 xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
                 xMap->putExternalSoftly( pFuncData->GetUpperName(),
@@ -5529,6 +5528,10 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
         {
             if ( _bIsEnglish )
             {
+                // This is used with OOXML import, so GetExcelName() is really
+                // wanted here until we'll have a parameter to differentiate
+                // from the general css::sheet::XFormulaOpCodeMapper case and
+                // use pFuncData->GetUpperEnglish().
                 OUString aName;
                 if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
                     aEntry.Name = aName;

@@ -739,9 +739,18 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
     // Even if GetUseEnglishFunctionName() would return true, do not set the
     // locale to en-US to get English function names as that also would mix in
-    // English descriptions and parameter names. English function names are now
-    // handled below.
+    // English descriptions and parameter names. Also, setting a locale will
+    // reinitialize the Add-In completely, so switching back and forth isn't a
+    // good idea either.
     xAddIn->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
+
+    // Instead, in a second run with 'en-US' obtain English names.
+    struct FuncNameData
+    {
+        OUString            aFuncU;
+        ScUnoAddInFuncData* pData;
+    };
+    std::vector<FuncNameData> aFuncNameData;
 
     OUString aServiceName( xName->getServiceName() );
     ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
@@ -785,7 +794,6 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if ( !pEnglishHashMap )
         pEnglishHashMap.reset( new ScAddInHashMap );
 
-    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
     for (tools::Long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
     {
@@ -946,19 +954,41 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                 pData->GetUpperLocal(),
                                 pData );
 
-                    OUString aEnglishName;
-                    if (!pData->GetExcelName( aEnglishLanguageTag, aEnglishName, false /*bFallbackToAny*/))
-                        SAL_WARN("sc.core", "no English name for " << aLocalName << " " << aFuncName);
-                    else
-                    {
-                        pEnglishHashMap->emplace(
-                                ScCompiler::GetCharClassEnglish()->uppercase(aEnglishName),
-                                pData );
-                    }
-                    pData->SetEnglishName(aEnglishName);    // takes care of handling empty
+                    aFuncNameData.push_back({aFuncU, pData});
                 }
             }
         }
+    }
+
+    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
+    xAddIn->setLocale( aEnglishLanguageTag.getLocale());
+    for (const auto& rFunc : aFuncNameData)
+    {
+        OUString aEnglishName;
+        try
+        {
+            aEnglishName = xAddIn->getDisplayFunctionName( rFunc.aFuncU );
+        }
+        catch(uno::Exception&)
+        {
+        }
+        if (aEnglishName.isEmpty()
+                && rFunc.pData->GetExcelName( aEnglishLanguageTag, aEnglishName, false /*bFallbackToAny*/))
+        {
+            // Check our known suffixes and append if not present. Note this
+            // depends on localization (that should not add such suffix, but..)
+            // and is really only a last resort.
+            if (rFunc.pData->GetLocalName().endsWith("_ADD") && !aEnglishName.endsWith("_ADD"))
+                aEnglishName += "_ADD";
+            else if (rFunc.pData->GetLocalName().endsWith("_EXCEL2003") && !aEnglishName.endsWith("_EXCEL2003"))
+                aEnglishName += "_EXCEL2003";
+            SAL_WARN("sc.core", "obtaining English name for " << rFunc.pData->GetLocalName() << " "
+                    << rFunc.pData->GetOriginalName() << " as ExcelName '" << aEnglishName << "'");
+        }
+        SAL_WARN_IF(aEnglishName.isEmpty(), "sc.core", "no English name for "
+                << rFunc.pData->GetLocalName() << " " << rFunc.pData->GetOriginalName());
+        rFunc.pData->SetEnglishName(aEnglishName);  // takes care of handling empty
+        pEnglishHashMap->emplace( rFunc.pData->GetUpperEnglish(), rFunc.pData);
     }
 }
 
