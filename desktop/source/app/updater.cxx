@@ -563,7 +563,11 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headerlist);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1); // follow redirects
     // only allow redirect to http:// and https://
-    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS_STR, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+#if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
+    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+#else
+    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+#endif
 
     std::string response_body;
     utl::TempFileNamed aTempFile;

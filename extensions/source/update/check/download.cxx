@@ -60,8 +60,8 @@ static void openFile( OutData& out )
     char * effective_url;
     curl_easy_getinfo(out.curl, CURLINFO_EFFECTIVE_URL, &effective_url);
 
-    double fDownloadSize;
-    curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &fDownloadSize);
+    curl_off_t nDownloadSize;
+    curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &nDownloadSize);
 
     OString aURL(effective_url);
 
@@ -94,7 +94,7 @@ static void openFile( OutData& out )
         } while( osl_File_E_EXIST == rc );
 
         if( osl_File_E_None == rc )
-            out.Handler->downloadStarted(out.File, static_cast<sal_Int64>(fDownloadSize));
+            out.Handler->downloadStarted(out.File, static_cast<sal_Int64>(nDownloadSize));
     }
 }
 
@@ -140,7 +140,7 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
 
 
 static int
-progress_callback( void *clientp, double dltotal, double dlnow, SAL_UNUSED_PARAMETER double, SAL_UNUSED_PARAMETER double )
+progress_callback( void *clientp, curl_off_t dltotal, curl_off_t dlnow, SAL_UNUSED_PARAMETER curl_off_t, SAL_UNUSED_PARAMETER curl_off_t)
 {
     OutData *out = static_cast < OutData * > (clientp);
 
@@ -148,7 +148,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, SAL_UNUSED_PARAM
 
     if (out && !out->StopCondition.check())
     {
-        double fPercent = 0;
+        float fPercent = 0;
         if ( dltotal + out->Offset )
             fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
         if( fPercent < 0 )
@@ -233,7 +233,11 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
         // enable redirection
         (void)curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
         // only allow redirect to http:// and https://
-        (void)curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+#if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
+    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+#else
+    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+#endif
 
         // write function
         (void)curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
@@ -274,9 +278,9 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
         {
             // this sometimes happens, when a user throws away his user data, but has already
             // completed the download of an update.
-            double fDownloadSize;
-            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &fDownloadSize );
-            if ( -1 == fDownloadSize )
+            curl_off_t nDownloadSize;
+            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &nDownloadSize );
+            if ( -1 == nDownloadSize )
             {
                 out.Handler->downloadFinished(out.File);
                 ret = true;
