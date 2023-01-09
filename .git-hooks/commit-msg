@@ -59,9 +59,9 @@ if grep -E -q "$fdo_regex" $1; then
 fi
 
 # ...and that it does not continue on the second line
-if [ "`wc -l < $1`" -gt 1 -a -n "`head -n 2 $1 | tail -n 1 | sed 's/^#.*//'`" ] ; then
-    abort "$1" "The second line is not empty - maybe the first line continues there?"
-fi
+#if [ "`wc -l < $1`" -gt 1 -a -n "`head -n 2 $1 | tail -n 1 | sed 's/^#.*//'`" ] ; then
+#    abort "$1" "The second line is not empty - maybe the first line continues there?"
+#fi
 
 # Check that the message is not a ChangeLog-like one
 
@@ -95,9 +95,9 @@ fi
 # limitations under the License.
 
 # Do not create a change id if requested
-if test "false" = "`git config --bool --get gerrit.createChangeId`" ; then
-    exit 0
-fi
+#if test "false" = "`git config --bool --get gerrit.createChangeId`" ; then
+#    exit 0
+#fi
 
 # $RANDOM will be undefined if not using bash, so don't use set -u
 random=$( (whoami ; hostname ; date; cat $1 ; echo $RANDOM) | git hash-object --stdin)

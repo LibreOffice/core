@@ -194,3 +194,7 @@ LibreOffice.VC.VC.opendb
 # Android builds
 /android/jniLibs/
 /android/obj/
+
+/cactus-build/temporary*
+/cactus-build/converted
+

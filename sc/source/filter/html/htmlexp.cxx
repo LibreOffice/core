@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-
+#include <iostream>
 #include <string_view>
 
 #include <scitems.hxx>
@@ -651,7 +651,9 @@ void ScHTMLExport::WriteBody()
                 }
                 if( !aLink.isEmpty() )
                 {
-                    rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
+                    rStrm.WriteChar( ' ' ).
+                          WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).
+                          WriteCharPtr( "=\"" );
                     OUT_STR( URIHelper::simpleNormalizedMakeRelative(
                                 aBaseURL,
                                 aLink ) ).WriteChar( '\"' );
@@ -768,7 +770,7 @@ void ScHTMLExport::WriteTables()
                     "=\""
                     OOO_STRING_SVTOOLS_HTML_AL_left "\"");
         }
-            // ALIGN=LEFT allow text and graphics to flow around
+        // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
         aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
                 "=\"" +
@@ -785,21 +787,23 @@ void ScHTMLExport::WriteTables()
             sal_Int32 nSpan = 0;
             while( nCol <= nEndCol )
             {
-                if( pDoc->ColHidden(nCol, nTab) )
-                {
-                    ++nCol;
-                    continue;
-                }
-
-                if( nWidth != ToPixel( pDoc->GetColWidth( nCol, nTab ) ) )
+                if( pDoc->ColHidden(nCol, nTab) || nWidth != ToPixel( pDoc->GetColWidth( nCol, nTab ) ) )
                 {
                     if( nSpan != 0 )
                     {
                         TAG_ON(lcl_getColGroupString(nSpan, nWidth).getStr());
                         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
                     }
-                    nWidth = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
-                    nSpan = 1;
+                    if (pDoc->ColHidden(nCol, nTab))
+                    {
+                        nWidth=0;
+                        nSpan=0;
+                    }
+                    else
+                    {
+                        nWidth = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
+                        nSpan = 1;
+                    }
                 }
                 else
                     nSpan++;
@@ -819,8 +823,9 @@ void ScHTMLExport::WriteTables()
         bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         // We need to cache sc::ColumnBlockPosition per each column.
         std::vector< sc::ColumnBlockPosition > blockPos( nEndCol - nStartCol + 1 );
-        for( SCCOL i = nStartCol; i <= nEndCol; ++i )
+        for( SCCOL i = nStartCol; i <= nEndCol; ++i ){
             pDoc->InitColumnBlockPosition( blockPos[ i - nStartCol ], nTab, i );
+        }
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
             if ( bHasHiddenRows && pDoc->RowHidden(nRow, nTab) )
@@ -834,9 +839,6 @@ void ScHTMLExport::WriteTables()
             bTableDataHeight = true;  // height at every first cell of each row
             for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
-                if ( pDoc->ColHidden(nCol2, nTab) )
-                    continue;   // for
-
                 if ( nCol2 == nEndCol )
                     IncIndent(-1);
                 WriteCell( blockPos[ nCol2 - nStartCol ], nCol2, nRow, nTab );
@@ -879,12 +881,13 @@ void ScHTMLExport::WriteTables()
     }
 }
 
-void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow, SCTAB nTab )
+void ScHTMLExport::WriteCell(sc::ColumnBlockPosition& rBlockPos,
+                             SCCOL nStartColumn, SCROW nStartRow, SCTAB nTab)
 {
-    ScAddress aPos( nCol, nRow, nTab );
+    ScAddress aPos( nStartColumn, nStartRow, nTab );
     ScRefCellValue aCell(*pDoc, aPos, rBlockPos);
-    const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
-    const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab, &aCell );
+    const ScPatternAttr* pAttr = pDoc->GetPattern( nStartColumn, nStartRow, nTab );
+    const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nStartColumn, nStartRow, nTab, &aCell );
 
     const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
     if ( rMergeFlagAttr.IsOverlapped() )
@@ -914,7 +917,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     bool bValueData = aCell.hasNumeric();
     SvtScriptType nScriptType = SvtScriptType::NONE;
     if (!aCell.isEmpty())
-        nScriptType = pDoc->GetScriptType(nCol, nRow, nTab, &aCell);
+        nScriptType = pDoc->GetScriptType(nStartColumn, nStartRow, nTab, &aCell);
 
     if ( nScriptType == SvtScriptType::NONE )
         nScriptType = aHTMLStyle.nDefaultScriptType;
@@ -922,7 +925,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
-    const SvxBoxItem* pBorder = pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
+    const SvxBoxItem* pBorder = pDoc->GetAttr( nStartColumn, nStartRow, nTab, ATTR_BORDER );
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
         aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_style "=\"");
@@ -946,41 +949,60 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     const ScMergeAttr& rMergeAttr = pAttr->GetItem( ATTR_MERGE, pCondItemSet );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
-        SCCOL nC, jC;
-        SCROW nR;
-        tools::Long v;
-        if ( pGraphEntry )
-            nC = std::max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
-                           rMergeAttr.GetColMerge() );
-        else
-            nC = rMergeAttr.GetColMerge();
-        if ( nC > 1 )
-        {
-            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
-                append('=').append(static_cast<sal_Int32>(nC));
-            nC = nC + nCol;
-            for ( jC=nCol, v=0; jC<nC; jC++ )
-                v += pDoc->GetColWidth( jC, nTab );
-        }
+        SCCOL nRawColSpan, jC;
+        SCROW nRawRowSpan;
 
         if ( pGraphEntry )
-            nR = std::max( SCROW(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
-                           rMergeAttr.GetRowMerge() );
+            nRawColSpan = std::max(SCCOL(pGraphEntry->aRange.aEnd.Col() -
+                                   nStartColumn + 1),
+                           rMergeAttr.GetColMerge() );
         else
-            nR = rMergeAttr.GetRowMerge();
-        if ( nR > 1 )
-        {
-            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
-                append('=').append(static_cast<sal_Int32>(nR));
-            nR += nRow;
-            v = pDoc->GetRowHeight( nRow, nR-1, nTab );
-            nHeightPixel = ToPixel( static_cast< sal_uInt16 >( v ) );
+            nRawColSpan = rMergeAttr.GetColMerge();
+
+        if ( nRawColSpan > 1 ) {
+            int nActColSpan = nRawColSpan;
+            int nLastCol = nRawColSpan + nStartColumn;
+            for ( jC=nStartColumn; jC<nLastCol; jC++ ){
+                if (pDoc->ColHidden(jC, nTab)){
+                    nActColSpan -= 1;
+                }
+            }
+            if (nActColSpan > 1)
+                aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
+                    append('=').append(static_cast<sal_Int32>(nActColSpan));
+            if (nActColSpan < 1) return; // nothing to print
         }
         else
-            nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
+            if (pDoc->ColHidden(nStartColumn, nTab)) return; // nothing to output
+
+
+        if ( pGraphEntry )
+            nRawRowSpan = std::max( SCROW(pGraphEntry->aRange.aEnd.Row() - nStartRow + 1),
+                           rMergeAttr.GetRowMerge() );
+        else
+            nRawRowSpan = rMergeAttr.GetRowMerge();
+        if ( nRawRowSpan > 1 )
+        {
+            int nLastRow = nRawRowSpan + nStartRow-1;
+
+            nHeightPixel = ToPixel( static_cast< sal_uInt16 >(
+                  pDoc->GetRowHeight( nStartRow, nLastRow, nTab, true ) ) );
+            int nRowNum;
+            int nActRowSpan = nRawRowSpan;
+            for (nRowNum=nStartRow; nRowNum <= nLastRow; nRowNum ++)
+            {
+                if (pDoc->RowHidden(nRowNum, nTab)) nActRowSpan -= 1;
+        }
+            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
+                append('=').append(static_cast<sal_Int32>(nActRowSpan));
+        }
+        else
+            nHeightPixel = ToPixel( pDoc->GetRowHeight( nStartRow, nTab ) );
     }
-    else
-        nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
+    else{
+        if (pDoc->ColHidden(nStartColumn, nTab)) return; // nothing to output
+        nHeightPixel = ToPixel( pDoc->GetRowHeight( nStartRow, nTab ) );
+    }
 
     if ( bTableDataHeight )
     {
