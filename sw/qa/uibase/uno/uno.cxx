@@ -413,6 +413,34 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
                          aTree.get<std::string>("command"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
+{
+    // Given a document with a section:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            "RegionName", uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+
+    // When asking for a list of section names:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Sections?namePrefix=ZOTERO_BIBL");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Make sure we find our just inserted section:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (sections)
+    // i.e. the returned JSON was an empty object.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("sections").count(""));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
