@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
 
 DECLARE_RTFEXPORT_TEST(testTdf148578, "tdf148578.rtf")
 {
-    // \trgaph567 should affect only table cell margings (~1cm),
+    // \trgaph567 should affect only table cell margins (~1cm),
     // but do not shift table, since \trleft is not provided
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
 
