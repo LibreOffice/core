@@ -106,6 +106,8 @@
 #include <authfld.hxx>
 #include <config_wasm_strip.h>
 #if !ENABLE_WASM_STRIP_EXTRA
+#include <officecfg/Office/Common.hxx>
+#include <svl/visitem.hxx>
 #include <translatelangselect.hxx>
 #include <svtools/deeplcfg.hxx>
 #endif // ENABLE_WASM_STRIP_EXTRA
@@ -2211,6 +2213,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case SID_FM_TRANSLATE:
                 {
 #if !ENABLE_WASM_STRIP_EXTRA
+                    if (!officecfg::Office::Common::Misc::ExperimentalMode::get()
+                        && !comphelper::LibreOfficeKit::isActive())
+                    {
+                        rSet.Put(SfxVisibilityItem(nWhich, false));
+                        break;
+                    }
                     const SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
                     if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
                     {
