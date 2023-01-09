@@ -1377,7 +1377,6 @@ comphelper/source/misc/accessiblekeybindinghelper.cxx
 comphelper/source/misc/accessibleselectionhelper.cxx
 comphelper/source/misc/accessibletexthelper.cxx
 comphelper/source/misc/accessiblewrapper.cxx
-comphelper/source/misc/accimplaccess.cxx
 comphelper/source/misc/anycompare.cxx
 comphelper/source/misc/anytohash.cxx
 comphelper/source/misc/anytostring.cxx
@@ -4873,7 +4872,6 @@ include/comphelper/accessiblekeybindinghelper.hxx
 include/comphelper/accessibleselectionhelper.hxx
 include/comphelper/accessibletexthelper.hxx
 include/comphelper/accessiblewrapper.hxx
-include/comphelper/accimplaccess.hxx
 include/comphelper/anycompare.hxx
 include/comphelper/asyncnotification.hxx
 include/comphelper/attributelist.hxx

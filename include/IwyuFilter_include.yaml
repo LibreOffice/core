@@ -132,9 +132,6 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleEventListener.hpp
-    include/comphelper/accimplaccess.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
     include/comphelper/attributelist.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XCloneable.hpp

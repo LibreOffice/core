@@ -20,7 +20,6 @@
 #pragma once
 
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <rtl/ref.hxx>
@@ -48,8 +47,7 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext final
-            :public ::comphelper::OAccessibleImplementationAccess
-            ,public OAccessibleControlContext_Base
+            :public OAccessibleControlContext_Base
             ,public OAccessibleControlContext_IBase
     {
     public:

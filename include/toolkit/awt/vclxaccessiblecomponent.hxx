@@ -23,7 +23,6 @@
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
 
@@ -47,7 +46,6 @@ typedef ::cppu::ImplHelper1<
 
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public comphelper::OAccessibleExtendedComponentHelper
-        ,public ::comphelper::OAccessibleImplementationAccess
         ,public VCLXAccessibleComponent_BASE
 {
 private:
