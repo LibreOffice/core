@@ -291,7 +291,7 @@ Color SwViewShellImp::GetRetoucheColor() const
 {
     Color aRet( COL_TRANSPARENT );
     const SwViewShell &rSh = *GetShell();
-    if ( rSh.GetWin() )
+    if (rSh.GetWin() || rSh.isOutputToWindow())
     {
         if ( rSh.GetViewOptions()->getBrowseMode() &&
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor() )

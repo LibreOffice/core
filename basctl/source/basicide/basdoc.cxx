@@ -82,7 +82,7 @@ void DocShell::FillClass( SvGlobalName*, SotClipboardFormatId*, OUString*, sal_I
     DBG_ASSERT( !bTemplate, "No template for Basic" );
 }
 
-void DocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
+void DocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16, bool )
 {}
 
 } // namespace basctl

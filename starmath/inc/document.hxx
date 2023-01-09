@@ -103,7 +103,8 @@ class SM_DLLPUBLIC SmDocShell final : public SfxObjectShell, public SfxListener
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
-                             sal_uInt16 nAspect) override;
+                             sal_uInt16 nAspect,
+                             bool bOutputForScreen) override;
 
     virtual void        FillClass(SvGlobalName* pClassName,
                                   SotClipboardFormatId*  pFormat,

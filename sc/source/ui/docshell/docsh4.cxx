@@ -2172,7 +2172,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
     }
 }
 
-void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uInt16 nAspect )
+void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uInt16 nAspect, bool /*bOutputToWindow*/ )
 {
 
     SCTAB nVisTab = m_pDocument->GetVisibleTab();

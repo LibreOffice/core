@@ -847,7 +847,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
 
 // Draw()-Override for OLE2 (Sfx)
 void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
-                               sal_uInt16 nAspect )
+                               sal_uInt16 nAspect, bool bOutputForScreen )
 {
     //fix #25341# Draw should not affect the Modified
     bool bResetModified = IsEnableSetModified();
@@ -876,7 +876,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetBackground();
     const bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
     SwPrintData aOpts;
-    SwViewShell::PrtOle2(m_xDoc.get(), SW_MOD()->GetUsrPref(bWeb), aOpts, *pDev, aRect);
+    SwViewShell::PrtOle2(m_xDoc.get(), SW_MOD()->GetUsrPref(bWeb), aOpts, *pDev, aRect, bOutputForScreen);
     pDev->Pop();
 
     if( pOrig )

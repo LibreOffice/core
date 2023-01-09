@@ -44,7 +44,7 @@ namespace sd {
 /**
  * Drawing of DocShell (with the helper class SdDrawViewShell)
  */
-void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
+void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect, bool /*bOutputForScreen*/)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {

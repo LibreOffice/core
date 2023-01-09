@@ -120,7 +120,7 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent,
                                                                                            const SfxItemSet &rSet) override;
     /// OLE-stuff
-    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16 nAspect) override;
+    SAL_DLLPRIVATE virtual void Draw(OutputDevice*, const JobSetup&, sal_uInt16 nAspect, bool bOutputToWindow) override;
 
     /// Methods for StyleSheets
 

@@ -391,7 +391,8 @@ public:
 
     // Printing for OLE 2.0.
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                         vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect );
+                         vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
+                         bool bOutputForScreen );
 
     // Fill temporary doc with selected text for Print or PDF export.
     void FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt );
