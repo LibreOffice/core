@@ -634,6 +634,43 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
 
+void CairoCommon::SetXORMode(bool bSet, bool /*bInvertOnly*/)
+{
+    m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
+}
+
+void CairoCommon::SetROPLineColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            m_oLineColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            m_oLineColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            m_oLineColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
+
+void CairoCommon::SetROPFillColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            m_oFillColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            m_oFillColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            m_oFillColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
+
 void CairoCommon::drawPixel(const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY,
                             bool bAntiAlias)
 {

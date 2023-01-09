@@ -153,6 +153,10 @@ struct VCL_DLLPUBLIC CairoCommon
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
+    void SetXORMode(bool bSet, bool bInvertOnly);
+    void SetROPLineColor(SalROPColor nROPColor);
+    void SetROPFillColor(SalROPColor nROPColor);
+
     void drawPixel(const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY,
                    bool bAntiAlias);
 

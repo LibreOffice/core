@@ -68,6 +68,24 @@ public:
         X11SalGraphicsImpl::SetFillColor(nColor);
     }
 
+    void SetXORMode(bool bSet, bool bInvertOnly) override
+    {
+        mrCairoCommon.SetXORMode(bSet, bInvertOnly);
+        X11SalGraphicsImpl::SetXORMode(bSet, bInvertOnly);
+    }
+
+    void SetROPLineColor(SalROPColor nROPColor) override
+    {
+        mrCairoCommon.SetROPLineColor(nROPColor);
+        X11SalGraphicsImpl::SetROPLineColor(nROPColor);
+    }
+
+    void SetROPFillColor(SalROPColor nROPColor) override
+    {
+        mrCairoCommon.SetROPFillColor(nROPColor);
+        X11SalGraphicsImpl::SetROPFillColor(nROPColor);
+    }
+
     void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, mrCairoCommon.m_aClipRegion); }
 
     void drawPixel(tools::Long nX, tools::Long nY) override;

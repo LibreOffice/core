@@ -61,41 +61,19 @@ void SvpGraphicsBackend::SetFillColor() { m_rCairoCommon.m_oFillColor = std::nul
 
 void SvpGraphicsBackend::SetFillColor(Color nColor) { m_rCairoCommon.m_oFillColor = nColor; }
 
-void SvpGraphicsBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
+void SvpGraphicsBackend::SetXORMode(bool bSet, bool bInvertOnly)
 {
-    m_rCairoCommon.m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
+    m_rCairoCommon.SetXORMode(bSet, bInvertOnly);
 }
 
 void SvpGraphicsBackend::SetROPLineColor(SalROPColor nROPColor)
 {
-    switch (nROPColor)
-    {
-        case SalROPColor::N0:
-            m_rCairoCommon.m_oLineColor = Color(0, 0, 0);
-            break;
-        case SalROPColor::N1:
-            m_rCairoCommon.m_oLineColor = Color(0xff, 0xff, 0xff);
-            break;
-        case SalROPColor::Invert:
-            m_rCairoCommon.m_oLineColor = Color(0xff, 0xff, 0xff);
-            break;
-    }
+    m_rCairoCommon.SetROPLineColor(nROPColor);
 }
 
 void SvpGraphicsBackend::SetROPFillColor(SalROPColor nROPColor)
 {
-    switch (nROPColor)
-    {
-        case SalROPColor::N0:
-            m_rCairoCommon.m_oFillColor = Color(0, 0, 0);
-            break;
-        case SalROPColor::N1:
-            m_rCairoCommon.m_oFillColor = Color(0xff, 0xff, 0xff);
-            break;
-        case SalROPColor::Invert:
-            m_rCairoCommon.m_oFillColor = Color(0xff, 0xff, 0xff);
-            break;
-    }
+    m_rCairoCommon.SetROPFillColor(nROPColor);
 }
 
 void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
