@@ -22,107 +22,112 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
-X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Common& rX11Common)
+X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon)
     : X11SalGraphicsImpl(rParent)
-    , mrX11Common(rX11Common)
-    , moPenColor(std::nullopt)
-    , moFillColor(std::nullopt)
+    , mrCairoCommon(rCairoCommon)
 {
 }
 
 void X11CairoSalGraphicsImpl::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                        tools::Long nHeight)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawRect(cr, nullptr, moPenColor, moFillColor, getAntiAlias(), nX, nY, nWidth,
-                          nHeight);
+    CairoCommon::drawRect(cr, &extents, mrCairoCommon.m_oLineColor, mrCairoCommon.m_oFillColor,
+                          getAntiAlias(), nX, nY, nWidth, nHeight);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 void X11CairoSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawPolygon(cr, nullptr, moPenColor, moFillColor, getAntiAlias(), nPoints, pPtAry);
+    CairoCommon::drawPolygon(cr, &extents, mrCairoCommon.m_oLineColor, mrCairoCommon.m_oFillColor,
+                             getAntiAlias(), nPoints, pPtAry);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
-void X11CairoSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
+void X11CairoSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
                                               const Point** pPtAry)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawPolyPolygon(cr, nullptr, moPenColor, moFillColor, getAntiAlias(), nPoly,
-                                 pPoints, pPtAry);
+    CairoCommon::drawPolyPolygon(cr, &extents, mrCairoCommon.m_oLineColor,
+                                 mrCairoCommon.m_oFillColor, getAntiAlias(), nPoly, pPointCounts,
+                                 pPtAry);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                               const basegfx::B2DPolyPolygon& rPolyPolygon,
                                               double fTransparency)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    bool bRetVal(CairoCommon::drawPolyPolygon(cr, nullptr, moPenColor, moFillColor, getAntiAlias(),
+    bool bRetVal(CairoCommon::drawPolyPolygon(cr, &extents, mrCairoCommon.m_oLineColor,
+                                              mrCairoCommon.m_oFillColor, getAntiAlias(),
                                               rObjectToDevice, rPolyPolygon, fTransparency));
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
+
     return bRetVal;
 }
 
 void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)
 {
-    drawPixel(nX, nY, *moPenColor);
+    drawPixel(nX, nY, *mrCairoCommon.m_oLineColor);
 }
 
-void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
+void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawPixel(cr, nullptr, nColor, nX, nY);
+    CairoCommon::drawPixel(cr, &extents, aColor, nX, nY);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 Color X11CairoSalGraphicsImpl::getPixel(tools::Long nX, tools::Long nY)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-
-    Color aRet = CairoCommon::getPixel(cairo_get_target(cr), nX, nY);
-
-    X11Common::releaseCairoContext(cr);
-
-    return aRet;
+    return CairoCommon::getPixel(mrCairoCommon.m_pSurface, nX, nY);
 }
 
 void X11CairoSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                        tools::Long nY2)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawLine(cr, nullptr, *moPenColor, getAntiAlias(), nX1, nY1, nX2, nY2);
+    CairoCommon::drawLine(cr, &extents, *mrCairoCommon.m_oLineColor, getAntiAlias(), nX1, nY1, nX2,
+                          nY2);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, false, extents);
 }
 
 void X11CairoSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange aExtents;
+    mrCairoCommon.clipRegion(cr);
 
-    CairoCommon::drawPolyLine(cr, nullptr, *moPenColor, getAntiAlias(), nPoints, pPtAry);
+    CairoCommon::drawPolyLine(cr, &aExtents, *mrCairoCommon.m_oLineColor, getAntiAlias(), nPoints,
+                              pPtAry);
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, false, aExtents);
 }
 
 bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -137,16 +142,18 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
     if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
         return true;
 
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange aExtents;
+    mrCairoCommon.clipRegion(cr);
 
     // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
     // that will take care of all needed stuff
-    const bool bRetval(CairoCommon::drawPolyLine(
-        cr, nullptr, *moPenColor, getAntiAlias(), rObjectToDevice, rPolyLine, fTransparency,
-        fLineWidth, pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline));
+    bool bRetval(CairoCommon::drawPolyLine(cr, &aExtents, *mrCairoCommon.m_oLineColor,
+                                           getAntiAlias(), rObjectToDevice, rPolyLine,
+                                           fTransparency, fLineWidth, pStroke, eLineJoin, eLineCap,
+                                           fMiterMinimumAngle, bPixelSnapHairline));
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, false, aExtents);
 
     return bRetval;
 }
@@ -154,13 +161,14 @@ bool X11CairoSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectT
 bool X11CairoSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                             tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    const bool bRetval(CairoCommon::drawAlphaRect(cr, nullptr, *moPenColor, *moFillColor, nX, nY,
-                                                  nWidth, nHeight, nTransparency));
-
-    X11Common::releaseCairoContext(cr);
+    const bool bRetval(CairoCommon::drawAlphaRect(cr, &extents, *mrCairoCommon.m_oLineColor,
+                                                  *mrCairoCommon.m_oFillColor, nX, nY, nWidth,
+                                                  nHeight, nTransparency));
+    mrCairoCommon.releaseCairoContext(cr, false, extents);
 
     return bRetval;
 }
@@ -168,13 +176,14 @@ bool X11CairoSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tool
 bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                            const Gradient& rGradient)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
     const bool bRetval(
-        CairoCommon::drawGradient(cr, nullptr, getAntiAlias(), rPolyPolygon, rGradient));
+        CairoCommon::drawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 
     return bRetval;
 }
@@ -182,15 +191,16 @@ bool X11CairoSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygo
 bool X11CairoSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                                                SalGradient const& rGradient)
 {
-    cairo_t* cr = mrX11Common.getCairoContext();
-    clipRegion(cr);
+    cairo_t* cr = mrCairoCommon.getCairoContext(true, getAntiAlias());
+    basegfx::B2DRange extents;
+    mrCairoCommon.clipRegion(cr);
 
-    const bool bRetval(
-        CairoCommon::implDrawGradient(cr, nullptr, getAntiAlias(), rPolyPolygon, rGradient));
+    bool bRetVal(
+        CairoCommon::implDrawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
 
-    X11Common::releaseCairoContext(cr);
+    mrCairoCommon.releaseCairoContext(cr, true, extents);
 
-    return bRetval;
+    return bRetVal;
 }
 
 bool X11CairoSalGraphicsImpl::hasFastDrawTransformedBitmap() const

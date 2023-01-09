@@ -66,19 +66,7 @@
 X11Common::X11Common()
     : m_hDrawable(None)
     , m_pColormap(nullptr)
-    , m_pExternalSurface(nullptr)
 {}
-
-cairo_t* X11Common::getCairoContext()
-{
-    assert(m_pExternalSurface && "must be already set");
-    return cairo_create(m_pExternalSurface);
-}
-
-void X11Common::releaseCairoContext(cairo_t* cr)
-{
-   cairo_destroy(cr);
-}
 
 bool X11Common::SupportsCairo() const
 {
@@ -113,7 +101,7 @@ X11SalGraphics::X11SalGraphics():
 #endif
     {
         mxTextRenderImpl.reset(new X11CairoTextRender(*this));
-        mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maX11Common));
+        mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maCairoCommon));
     }
 }
 
@@ -158,9 +146,15 @@ SalGraphicsImpl* X11SalGraphics::GetImpl() const
     return mxImpl.get();
 }
 
-void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pExternalSurface, SalX11Screen nXScreen)
+void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, SalX11Screen nXScreen)
 {
-    maX11Common.m_pExternalSurface = pExternalSurface;
+    maCairoCommon.m_pSurface = pSurface;
+    if (maCairoCommon.m_pSurface)
+    {
+        maCairoCommon.m_aFrameSize.setX(cairo_xlib_surface_get_width(pSurface));
+        maCairoCommon.m_aFrameSize.setY(cairo_xlib_surface_get_height(pSurface));
+        dl_cairo_surface_get_device_scale(pSurface, &maCairoCommon.m_fScale, nullptr);
+    }
 
     // shortcut if nothing changed
     if( maX11Common.m_hDrawable == aDrawable )
@@ -455,16 +449,6 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pFrame);
     else
         return static_cast< SalGeometryProvider * >(m_pVDev);
-}
-
-cairo_t* X11SalGraphics::getCairoContext()
-{
-    return maX11Common.getCairoContext();
-}
-
-void X11SalGraphics::releaseCairoContext(cairo_t* cr)
-{
-   X11Common::releaseCairoContext(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

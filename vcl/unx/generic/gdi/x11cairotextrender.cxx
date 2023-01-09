@@ -60,7 +60,7 @@ void X11CairoTextRender::clipRegion(cairo_t* cr)
 
 void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
-    X11SalGraphics::releaseCairoContext(cr);
+    mrParent.releaseCairoContext(cr, basegfx::B2DRange());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

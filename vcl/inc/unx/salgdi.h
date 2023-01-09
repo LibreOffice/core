@@ -35,6 +35,8 @@
 #include <vclpluginapi.h>
 #include <ControlCacheKey.hxx>
 
+#include <headless/CairoCommon.hxx>
+
 #include "saltype.h"
 #include "saldisp.hxx"
 
@@ -68,13 +70,8 @@ class X11Common
 public:
     Drawable m_hDrawable;
     const SalColormap* m_pColormap;
-    cairo_surface_t* m_pExternalSurface;
 
     X11Common();
-
-    cairo_t* getCairoContext();
-
-    static void releaseCairoContext(cairo_t* cr);
 
     bool SupportsCairo() const;
 
@@ -146,9 +143,15 @@ public:
      */
     void                            YieldGraphicsExpose();
 
-    cairo_t* getCairoContext();
-    static void releaseCairoContext(cairo_t* cr);
+    cairo_t* getCairoContext() const
+    {
+        return maCairoCommon.getCairoContext(/*bXorModeAllowed*/false, getAntiAlias());
+    }
 
+    void releaseCairoContext(cairo_t* cr, const basegfx::B2DRange& rExtents) const
+    {
+        return maCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, rExtents);
+    }
 
 private:
     using SalGraphics::GetPixel;
@@ -176,6 +179,7 @@ private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;
     std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
     X11Common maX11Common;
+    CairoCommon maCairoCommon;
 
 public:
     Drawable GetDrawable() const { return maX11Common.GetDrawable(); }
