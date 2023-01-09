@@ -153,58 +153,40 @@ struct VCL_DLLPUBLIC CairoCommon
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
-    static void drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents,
-                          const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY);
+    void drawPixel(const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY,
+                   bool bAntiAlias);
 
     static Color getPixel(cairo_surface_t* pSurface, tools::Long nX, tools::Long nY);
 
-    static void drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                         bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
-                         tools::Long nY2);
+    void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2,
+                  bool bAntiAlias);
 
-    static void drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
-                         const std::optional<Color>& rLineColor,
-                         const std::optional<Color>& rFillColor, bool bAntiAlias, double nX,
-                         double nY, double nWidth, double nHeight);
+    void drawRect(double nX, double nY, double nWidth, double nHeight, bool bAntiAlias);
 
-    static void drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                            const std::optional<Color>& rLineColor,
-                            const std::optional<Color>& rFillColor, bool bAntiAlias,
-                            sal_uInt32 nPoints, const Point* pPtAry);
+    void drawPolygon(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias);
 
-    static void drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                                const std::optional<Color>& rLineColor,
-                                const std::optional<Color>& rFillColor, bool bAntiAlias,
-                                sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry);
+    void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry,
+                         bool bAntiAlias);
 
-    static bool drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                                const std::optional<Color>& rLineColor,
-                                const std::optional<Color>& rFillColor, bool bAntiAlias,
-                                const basegfx::B2DHomMatrix& rObjectToDevice,
-                                const basegfx::B2DPolyPolygon&, double fTransparency);
+    bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+                         const basegfx::B2DPolyPolygon&, double fTransparency, bool bAntiAlias);
 
-    static void drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                             bool bAntiAlias, sal_uInt32 nPoints, const Point* pPtAry);
+    void drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias);
 
-    static bool drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                             bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
-                             const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                             double fLineWidth, const std::vector<double>* pStroke,
-                             basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
-                             double fMiterMinimumAngle, bool bPixelSnapHairline);
+    bool drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
+                      const basegfx::B2DPolygon& rPolyLine, double fTransparency, double fLineWidth,
+                      const std::vector<double>* pStroke, basegfx::B2DLineJoin eLineJoin,
+                      css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
+                      bool bPixelSnapHairline, bool bAntiAlias);
 
-    static bool drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents,
-                              const std::optional<Color>& rLineColor,
-                              const std::optional<Color>& rFillColor, tools::Long nX,
-                              tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                              sal_uInt8 nTransparency);
+    bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                       sal_uInt8 nTransparency, bool bAntiAlias);
 
-    static bool drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
-                             const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient);
+    bool drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient,
+                      bool bAntiAlias);
 
-    static bool implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
-                                 basegfx::B2DPolyPolygon const& rPolyPolygon,
-                                 SalGradient const& rGradient);
+    bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon, SalGradient const& rGradient,
+                          bool bAntiAlias);
 
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source, cairo_operator_t eOp,
                           bool bAntiAlias);

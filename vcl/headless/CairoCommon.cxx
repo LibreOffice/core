@@ -609,18 +609,21 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
 
-void CairoCommon::drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents,
-                            const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY)
+void CairoCommon::drawPixel(const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY,
+                            bool bAntiAlias)
 {
     if (!rLineColor)
         return;
+
+    cairo_t* cr = getCairoContext(true, bAntiAlias);
+    clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
     CairoCommon::applyColor(cr, *rLineColor, 0.0);
     cairo_fill(cr);
 
-    if (pExtents)
-        *pExtents = getClippedFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+    releaseCairoContext(cr, true, extents);
 }
 
 Color CairoCommon::getPixel(cairo_surface_t* pSurface, tools::Long nX, tools::Long nY)
@@ -656,10 +659,12 @@ Color CairoCommon::getPixel(cairo_surface_t* pSurface, tools::Long nX, tools::Lo
     return aColor;
 }
 
-void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                           bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
-                           tools::Long nY2)
+void CairoCommon::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2,
+                           bool bAntiAlias)
 {
+    cairo_t* cr = getCairoContext(false, bAntiAlias);
+    clipRegion(cr);
+
     basegfx::B2DPolygon aPoly;
 
     // PixelOffset used: To not mix with possible PixelSnap, cannot do
@@ -676,29 +681,29 @@ void CairoCommon::drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color
 
     AddPolygonToPath(cr, aPoly, basegfx::B2DHomMatrix(), !bAntiAlias, false);
 
-    CairoCommon::applyColor(cr, rLineColor);
+    CairoCommon::applyColor(cr, *m_oLineColor);
 
-    if (pExtents)
-    {
-        *pExtents = getClippedStrokeDamage(cr);
-        pExtents->transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-    }
+    basegfx::B2DRange extents = getClippedStrokeDamage(cr);
+    extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
 
     cairo_stroke(cr);
+
+    releaseCairoContext(cr, false, extents);
 }
 
-void CairoCommon::drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
-                           const std::optional<Color>& rLineColor,
-                           const std::optional<Color>& rFillColor, bool bAntiAlias, double nX,
-                           double nY, double nWidth, double nHeight)
+void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, bool bAntiAlias)
 {
     // fast path for the common case of simply creating a solid block of color
-    if (rFillColor && rLineColor && rFillColor == rLineColor)
+    if (m_oFillColor && m_oLineColor && m_oFillColor == m_oLineColor)
     {
         double fTransparency = 0;
         // don't bother trying to draw stuff which is effectively invisible
         if (nWidth < 0.1 || nHeight < 0.1)
             return;
+
+        cairo_t* cr = getCairoContext(true, bAntiAlias);
+        clipRegion(cr);
+
         bool bPixelSnap = !bAntiAlias;
         if (bPixelSnap)
         {
@@ -709,52 +714,60 @@ void CairoCommon::drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
             nHeight = basegfx::fround(nHeight);
         }
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-        CairoCommon::applyColor(cr, *rFillColor, fTransparency);
-        if (pExtents)
-        {
-            // Get FillDamage
-            *pExtents = getClippedFillDamage(cr);
-        }
+
+        CairoCommon::applyColor(cr, *m_oFillColor, fTransparency);
+        // Get FillDamage
+        basegfx::B2DRange extents = getClippedFillDamage(cr);
+
         cairo_fill(cr);
+
+        releaseCairoContext(cr, true, extents);
+
         return;
     }
     // because of the -1 hack we have to do fill and draw separately
-    if (rFillColor)
+    std::optional<Color> aOrigFillColor = m_oFillColor;
+    std::optional<Color> aOrigLineColor = m_oLineColor;
+    m_oFillColor = std::nullopt;
+    m_oLineColor = std::nullopt;
+
+    if (aOrigFillColor)
     {
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
-        drawPolyPolygon(cr, pExtents, std::nullopt, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
-                        basegfx::B2DPolyPolygon(aRect), 0.0);
+
+        m_oFillColor = aOrigFillColor;
+        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0, bAntiAlias);
+        m_oFillColor = std::nullopt;
     }
-    if (rLineColor)
+
+    if (aOrigLineColor)
     {
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
-        drawPolyPolygon(cr, pExtents, rLineColor, std::nullopt, bAntiAlias, basegfx::B2DHomMatrix(),
-                        basegfx::B2DPolyPolygon(aRect), 0.0);
+
+        m_oLineColor = aOrigLineColor;
+        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0, bAntiAlias);
+        m_oLineColor = std::nullopt;
     }
+
+    m_oFillColor = aOrigFillColor;
+    m_oLineColor = aOrigLineColor;
 }
 
-void CairoCommon::drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                              const std::optional<Color>& rLineColor,
-                              const std::optional<Color>& rFillColor, bool bAntiAlias,
-                              sal_uInt32 nPoints, const Point* pPtAry)
+void CairoCommon::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
 
-    drawPolyPolygon(cr, pExtents, rLineColor, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
-                    basegfx::B2DPolyPolygon(aPoly), 0.0);
+    drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aPoly), 0.0, bAntiAlias);
 }
 
-void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                                  const std::optional<Color>& rLineColor,
-                                  const std::optional<Color>& rFillColor, bool bAntiAlias,
-                                  sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
-                                  const Point** pPtAry)
+void CairoCommon::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
+                                  const Point** pPtAry, bool bAntiAlias)
 {
     basegfx::B2DPolyPolygon aPolyPoly;
     for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
@@ -772,18 +785,15 @@ void CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
         }
     }
 
-    drawPolyPolygon(cr, pExtents, rLineColor, rFillColor, bAntiAlias, basegfx::B2DHomMatrix(),
-                    aPolyPoly, 0.0);
+    drawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPoly, 0.0, bAntiAlias);
 }
 
-bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
-                                  const std::optional<Color>& rLineColor,
-                                  const std::optional<Color>& rFillColor, bool bAntiAlias,
-                                  const basegfx::B2DHomMatrix& rObjectToDevice,
-                                  const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
+bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+                                  const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
+                                  bool bAntiAlias)
 {
-    const bool bHasFill(rFillColor.has_value());
-    const bool bHasLine(rLineColor.has_value());
+    const bool bHasFill(m_oFillColor.has_value());
+    const bool bHasLine(m_oLineColor.has_value());
 
     if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
         || fTransparency >= 1.0)
@@ -797,6 +807,9 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
     if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
         return true;
 
+    cairo_t* cr = getCairoContext(true, bAntiAlias);
+    clipRegion(cr);
+
     // Set full (Object-to-Device) transformation - if used
     if (!rObjectToDevice.isIdentity())
     {
@@ -808,16 +821,16 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
         cairo_set_matrix(cr, &aMatrix);
     }
 
+    // To make releaseCairoContext work, use empty extents
+    basegfx::B2DRange extents;
+
     if (bHasFill)
     {
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
 
-        CairoCommon::applyColor(cr, *rFillColor, fTransparency);
-        if (pExtents)
-        {
-            // Get FillDamage (will be extended for LineDamage below)
-            *pExtents = getClippedFillDamage(cr);
-        }
+        CairoCommon::applyColor(cr, *m_oFillColor, fTransparency);
+        // Get FillDamage (will be extended for LineDamage below)
+        extents = getClippedFillDamage(cr);
 
         cairo_fill(cr);
     }
@@ -831,31 +844,25 @@ bool CairoCommon::drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
 
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !bAntiAlias);
 
-        CairoCommon::applyColor(cr, *rLineColor, fTransparency);
+        CairoCommon::applyColor(cr, *m_oLineColor, fTransparency);
 
-        if (pExtents)
-        {
-            // expand with possible StrokeDamage
-            basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-            stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-            pExtents->expand(stroke_extents);
-        }
+        // expand with possible StrokeDamage
+        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        extents.expand(stroke_extents);
 
         cairo_stroke(cr);
     }
 
-    if (pExtents)
-    {
-        // if transformation has been applied, transform also extents (ranges)
-        // of damage so they can be correctly redrawn
-        pExtents->transform(rObjectToDevice);
-    }
+    // if transformation has been applied, transform also extents (ranges)
+    // of damage so they can be correctly redrawn
+    extents.transform(rObjectToDevice);
+    releaseCairoContext(cr, true, extents);
 
     return true;
 }
 
-void CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                               bool bAntiAlias, sal_uInt32 nPoints, const Point* pPtAry)
+void CairoCommon::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
@@ -863,17 +870,15 @@ void CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
     aPoly.setClosed(false);
 
-    drawPolyLine(cr, pExtents, rLineColor, bAntiAlias, basegfx::B2DHomMatrix(), aPoly, 0.0, 1.0,
-                 nullptr, basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
-                 basegfx::deg2rad(15.0) /*default*/, false);
+    drawPolyLine(basegfx::B2DHomMatrix(), aPoly, 0.0, 1.0, nullptr, basegfx::B2DLineJoin::Miter,
+                 css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/, false, bAntiAlias);
 }
 
-bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
-                               bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
+bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,
                                double fLineWidth, const std::vector<double>* pStroke,
                                basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
-                               double fMiterMinimumAngle, bool bPixelSnapHairline)
+                               double fMiterMinimumAngle, bool bPixelSnapHairline, bool bAntiAlias)
 {
     // short circuit if there is nothing to do
     if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
@@ -893,6 +898,9 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
             return true;
         }
     }
+
+    cairo_t* cr = getCairoContext(false, bAntiAlias);
+    clipRegion(cr);
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
@@ -975,8 +983,8 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
         }
     }
 
-    cairo_set_source_rgba(cr, rLineColor.GetRed() / 255.0, rLineColor.GetGreen() / 255.0,
-                          rLineColor.GetBlue() / 255.0, 1.0 - fTransparency);
+    cairo_set_source_rgba(cr, m_oLineColor->GetRed() / 255.0, m_oLineColor->GetGreen() / 255.0,
+                          m_oLineColor->GetBlue() / 255.0, 1.0 - fTransparency);
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
@@ -1134,44 +1142,43 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     }
 
     // extract extents
-    if (pExtents)
-    {
-        *pExtents = getClippedStrokeDamage(cr);
-        // transform also extents (ranges) of damage so they can be correctly redrawn
-        pExtents->transform(aDamageMatrix);
-    }
+    basegfx::B2DRange extents = getClippedStrokeDamage(cr);
+    // transform also extents (ranges) of damage so they can be correctly redrawn
+    extents.transform(aDamageMatrix);
 
     // draw and consume
     cairo_stroke(cr);
 
+    releaseCairoContext(cr, false, extents);
+
     return true;
 }
 
-bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents,
-                                const std::optional<Color>& rLineColor,
-                                const std::optional<Color>& rFillColor, tools::Long nX,
-                                tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                sal_uInt8 nTransparency)
+bool CairoCommon::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                tools::Long nHeight, sal_uInt8 nTransparency, bool bAntiAlias)
 {
-    const bool bHasFill(rFillColor.has_value());
-    const bool bHasLine(rLineColor.has_value());
+    const bool bHasFill(m_oFillColor.has_value());
+    const bool bHasLine(m_oLineColor.has_value());
 
     if (!bHasFill && !bHasLine)
         return true;
 
+    cairo_t* cr = getCairoContext(false, bAntiAlias);
+    clipRegion(cr);
+
     const double fTransparency = nTransparency * (1.0 / 100);
+
+    // To make releaseCairoContext work, use empty extents
+    basegfx::B2DRange extents;
 
     if (bHasFill)
     {
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, *rFillColor, fTransparency);
+        applyColor(cr, *m_oFillColor, fTransparency);
 
-        if (pExtents)
-        {
-            // set FillDamage
-            *pExtents = getClippedFillDamage(cr);
-        }
+        // set FillDamage
+        extents = getClippedFillDamage(cr);
 
         cairo_fill(cr);
     }
@@ -1186,30 +1193,32 @@ bool CairoCommon::drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents,
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, *rLineColor, fTransparency);
+        applyColor(cr, *m_oLineColor, fTransparency);
 
-        if (pExtents)
-        {
-            // expand with possible StrokeDamage
-            basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-            stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-            pExtents->expand(stroke_extents);
-        }
+        // expand with possible StrokeDamage
+        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        extents.expand(stroke_extents);
 
         cairo_stroke(cr);
     }
 
+    releaseCairoContext(cr, false, extents);
+
     return true;
 }
 
-bool CairoCommon::drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
-                               const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
+bool CairoCommon::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient,
+                               bool bAntiAlias)
 {
     if (rGradient.GetStyle() != GradientStyle::Linear
         && rGradient.GetStyle() != GradientStyle::Radial)
         return false; // unsupported
     if (rGradient.GetSteps() != 0)
         return false; // We can't tell cairo how many colors to use in the gradient.
+
+    cairo_t* cr = getCairoContext(true, bAntiAlias);
+    clipRegion(cr);
 
     tools::Rectangle aInputRect(rPolyPolygon.GetBoundRect());
     if (rPolyPolygon.IsRect())
@@ -1273,17 +1282,19 @@ bool CairoCommon::drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bA
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
 
-    if (pExtents)
-        *pExtents = getClippedFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
     cairo_fill_preserve(cr);
+
+    releaseCairoContext(cr, true, extents);
 
     return true;
 }
 
-bool CairoCommon::implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
-                                   basegfx::B2DPolyPolygon const& rPolyPolygon,
-                                   SalGradient const& rGradient)
+bool CairoCommon::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                   SalGradient const& rGradient, bool bAntiAlias)
 {
+    cairo_t* cr = getCairoContext(true, bAntiAlias);
+
     basegfx::B2DHomMatrix rObjectToDevice;
 
     for (auto const& rPolygon : rPolyPolygon)
@@ -1306,10 +1317,11 @@ bool CairoCommon::implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, boo
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
 
-    if (pExtents)
-        *pExtents = getClippedFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
 
     cairo_fill_preserve(cr);
+
+    releaseCairoContext(cr, true, extents);
 
     return true;
 }

@@ -100,99 +100,48 @@ void SvpGraphicsBackend::SetROPFillColor(SalROPColor nROPColor)
 
 void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
 {
-    drawPixel(nX, nY, *m_rCairoCommon.m_oLineColor);
+    m_rCairoCommon.drawPixel(m_rCairoCommon.m_oLineColor, nX, nY, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawPixel(cr, &extents, aColor, nX, nY);
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+    m_rCairoCommon.drawPixel(aColor, nX, nY, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
                                   tools::Long nY2)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawLine(cr, &extents, *m_rCairoCommon.m_oLineColor, getAntiAlias(), nX1, nY1, nX2,
-                          nY2);
-
-    m_rCairoCommon.releaseCairoContext(cr, false, extents);
+    m_rCairoCommon.drawLine(nX1, nY1, nX2, nY2, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                   tools::Long nHeight)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawRect(cr, &extents, m_rCairoCommon.m_oLineColor, m_rCairoCommon.m_oFillColor,
-                          getAntiAlias(), nX, nY, nWidth, nHeight);
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+    m_rCairoCommon.drawRect(nX, nY, nWidth, nHeight, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
-    basegfx::B2DRange aExtents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawPolyLine(cr, &aExtents, *m_rCairoCommon.m_oLineColor, getAntiAlias(), nPoints,
-                              pPtAry);
-
-    m_rCairoCommon.releaseCairoContext(cr, false, aExtents);
+    m_rCairoCommon.drawPolyLine(nPoints, pPtAry, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawPolygon(cr, &extents, m_rCairoCommon.m_oLineColor, m_rCairoCommon.m_oFillColor,
-                             getAntiAlias(), nPoints, pPtAry);
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+    m_rCairoCommon.drawPolygon(nPoints, pPtAry, getAntiAlias());
 }
 
 void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
                                          const Point** pPtAry)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_oLineColor,
-                                 m_rCairoCommon.m_oFillColor, getAntiAlias(), nPoly, pPointCounts,
-                                 pPtAry);
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+    m_rCairoCommon.drawPolyPolygon(nPoly, pPointCounts, pPtAry, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                                          double fTransparency)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    bool bRetVal(CairoCommon::drawPolyPolygon(cr, &extents, m_rCairoCommon.m_oLineColor,
-                                              m_rCairoCommon.m_oFillColor, getAntiAlias(),
-                                              rObjectToDevice, rPolyPolygon, fTransparency));
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
-
-    return bRetVal;
+    return m_rCairoCommon.drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency,
+                                          getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -202,28 +151,9 @@ bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevi
                                       css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                       bool bPixelSnapHairline)
 {
-    // short circuit if there is nothing to do
-    if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
-        return true;
-
-    // Wrap call to static version of ::drawPolyLine by
-    // preparing/getting some local data and parameters
-    // due to usage in vcl/unx/generic/gdi/salgdi.cxx.
-    // This is mainly about extended handling of extents
-    // and the way destruction of CairoContext is handled
-    // due to current XOR stuff
-    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
-    basegfx::B2DRange aExtents;
-    m_rCairoCommon.clipRegion(cr);
-
-    bool bRetval(CairoCommon::drawPolyLine(cr, &aExtents, *m_rCairoCommon.m_oLineColor,
-                                           getAntiAlias(), rObjectToDevice, rPolyLine,
-                                           fTransparency, fLineWidth, pStroke, eLineJoin, eLineCap,
-                                           fMiterMinimumAngle, bPixelSnapHairline));
-
-    m_rCairoCommon.releaseCairoContext(cr, false, aExtents);
-
-    return bRetval;
+    return m_rCairoCommon.drawPolyLine(rObjectToDevice, rPolyLine, fTransparency, fLineWidth,
+                                       pStroke, eLineJoin, eLineCap, fMiterMinimumAngle,
+                                       bPixelSnapHairline, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)
@@ -639,46 +569,19 @@ bool SvpGraphicsBackend::hasFastDrawTransformedBitmap() const
 bool SvpGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                        tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    const bool bRetval(CairoCommon::drawAlphaRect(cr, &extents, *m_rCairoCommon.m_oLineColor,
-                                                  *m_rCairoCommon.m_oFillColor, nX, nY, nWidth,
-                                                  nHeight, nTransparency));
-    m_rCairoCommon.releaseCairoContext(cr, false, extents);
-
-    return bRetval;
+    return m_rCairoCommon.drawAlphaRect(nX, nY, nWidth, nHeight, nTransparency, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                       const Gradient& rGradient)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    const bool bRetval(
-        CairoCommon::drawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
-
-    return bRetval;
+    return m_rCairoCommon.drawGradient(rPolyPolygon, rGradient, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                                           SalGradient const& rGradient)
 {
-    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
-    basegfx::B2DRange extents;
-    m_rCairoCommon.clipRegion(cr);
-
-    bool bRetVal(
-        CairoCommon::implDrawGradient(cr, &extents, getAntiAlias(), rPolyPolygon, rGradient));
-
-    m_rCairoCommon.releaseCairoContext(cr, true, extents);
-
-    return bRetVal;
+    return m_rCairoCommon.implDrawGradient(rPolyPolygon, rGradient, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::supportsOperation(OutDevSupportType eType) const
