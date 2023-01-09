@@ -3568,6 +3568,9 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // Disable field shadings: the result would depend on the cursor position.
     SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, false);
 
+    OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
+    OUString sAuthor;
+
     for (const beans::PropertyValue& rValue : rArguments)
     {
         if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
@@ -3576,8 +3579,9 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
             SwViewOption::SetAppearanceFlag(ViewOptFlags::Shadow , rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
         {
+            sAuthor = rValue.Value.get<OUString>();
             // Store the author name in the view.
-            pView->SetRedlineAuthor(rValue.Value.get<OUString>());
+            pView->SetRedlineAuthor(sAuthor);
             // Let the actual author name pick up the value from the current
             // view, which would normally happen only during the next view
             // switch.
@@ -3585,6 +3589,16 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         }
         else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
             aViewOption.SetOnlineSpell(rValue.Value.get<bool>());
+    }
+
+    if (!sAuthor.isEmpty() && sAuthor != sOrigAuthor)
+    {
+        SwView* pFirstView = static_cast<SwView*>(SfxViewShell::GetFirst());
+        if (pFirstView && SfxViewShell::GetNext(*pFirstView) == nullptr)
+        {
+            if (SwViewShell* pShell = &pFirstView->GetWrtShell())
+                pShell->UpdateFields(true);
+        }
     }
 
     // Set the initial zoom value to 1; usually it is set in setClientZoom and

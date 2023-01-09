@@ -3831,6 +3831,22 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
+{
+    SwXTextDocument* pXTextDocument = createDoc("savedauthorfield.odt");
+    const OUString sAuthor("XYZ ABCD");
+    uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::Any(sAuthor)},
+    }));
+    pXTextDocument->initializeForTiledRendering(aPropertyValues1);
+
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
