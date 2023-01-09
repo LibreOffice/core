@@ -862,6 +862,8 @@ FIELD_INSERT:
     break;
     case FN_UPDATE_TEXT_FORMFIELDS:
     {
+        // This updates multiple fieldmarks in a document, based on their field name & field command
+        // prefix.
         OUString aFieldType;
         const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if (pFieldType)
@@ -1013,6 +1015,7 @@ FIELD_INSERT:
     break;
     case FN_UPDATE_TEXT_FORMFIELD:
     {
+        // This updates a single fieldmarks under the current cursor.
         OUString aFieldType;
         const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if (pFieldType)
