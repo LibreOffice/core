@@ -61,7 +61,7 @@ static void openFile( OutData& out )
     curl_easy_getinfo(out.curl, CURLINFO_EFFECTIVE_URL, &effective_url);
 
     double fDownloadSize;
-    curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize);
+    curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &fDownloadSize);
 
     OString aURL(effective_url);
 
@@ -233,7 +233,7 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
         // enable redirection
         (void)curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
         // only allow redirect to http:// and https://
-        (void)curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        (void)curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
         // write function
         (void)curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
@@ -241,7 +241,7 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
 
         // progress handler - Condition::check unfortunately is not defined const
         (void)curl_easy_setopt(pCURL, CURLOPT_NOPROGRESS, 0);
-        (void)curl_easy_setopt(pCURL, CURLOPT_PROGRESSFUNCTION, &progress_callback);
+        (void)curl_easy_setopt(pCURL, CURLOPT_XFERINFOFUNCTION, &progress_callback);
         (void)curl_easy_setopt(pCURL, CURLOPT_PROGRESSDATA, &out);
 
         // proxy
@@ -275,7 +275,7 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
             // this sometimes happens, when a user throws away his user data, but has already
             // completed the download of an update.
             double fDownloadSize;
-            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize );
+            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &fDownloadSize );
             if ( -1 == fDownloadSize )
             {
                 out.Handler->downloadFinished(out.File);
