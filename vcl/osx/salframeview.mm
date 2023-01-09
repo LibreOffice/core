@@ -323,7 +323,7 @@ static AquaSalFrame* getMouseContainerFrame()
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        BOOL bInLiveResize = [self inLiveResize];
+        bool bInLiveResize = [self inLiveResize];
         if ( bInLiveResize || mbInLiveResize )
         {
             mbInLiveResize = bInLiveResize;
