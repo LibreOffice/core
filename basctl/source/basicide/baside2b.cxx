@@ -1476,7 +1476,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     aMarkerOff.setX( (aOutSz.Width() - aMarkerSz.Width()) / 2 );
     aMarkerOff.setY( (nLineHeight - aMarkerSz.Height()) / 2 );
 
-    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
+    tools::Long nY = nMarkerPos * nLineHeight - nCurYOffset;
     Point aPos(0, nY);
     aPos += aMarkerOff;
 
@@ -1531,7 +1531,7 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             tools::Long nYPos = aMousePos.Y() + nCurYOffset;
             tools::Long nLine = nYPos / nLineHeight + 1;
-            rModulWindow.ToggleBreakPoint( static_cast<sal_uLong>(nLine) );
+            rModulWindow.ToggleBreakPoint( static_cast<sal_uInt16>(nLine) );
             Invalidate();
         }
     }
