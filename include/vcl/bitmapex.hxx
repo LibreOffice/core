@@ -67,7 +67,7 @@ public:
     const Bitmap&       GetBitmap() const;
 
     bool                IsAlpha() const;
-    AlphaMask           GetAlphaMask() const;
+    const AlphaMask &   GetAlphaMask() const { return maAlphaMask; }
 
     const Size&         GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel(const Size& rNewSize);
@@ -462,7 +462,7 @@ private:
     void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;
-    Bitmap              maAlphaMask;
+    AlphaMask           maAlphaMask;
     Size                maBitmapSize;
 };
 

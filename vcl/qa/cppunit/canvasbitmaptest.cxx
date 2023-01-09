@@ -758,7 +758,8 @@ void CanvasBitmapTest::runTest()
     {
         Bitmap aBitmap = aBmp.GetBitmap();
         BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
-        BitmapReadAccess* pAlphaAcc = aBmp.GetAlphaMask().AcquireReadAccess();
+        AlphaMask aBitmapAlpha = aBmp.GetAlphaMask();
+        BitmapReadAccess* pAlphaAcc = aBitmapAlpha.AcquireReadAccess();
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc);
@@ -778,7 +779,7 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
                                BitmapColor(253), pAlphaAcc->GetPixel(2,9));
 
-        aBmp.GetAlphaMask().ReleaseAccess(pAlphaAcc);
+        aBitmapAlpha.ReleaseAccess(pAlphaAcc);
         Bitmap::ReleaseAccess(pBmpAcc);
     }
 }

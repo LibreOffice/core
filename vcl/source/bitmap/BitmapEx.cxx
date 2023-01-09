@@ -210,11 +210,6 @@ Bitmap BitmapEx::GetBitmap( Color aTransparentReplaceColor ) const
     return aRetBmp;
 }
 
-AlphaMask BitmapEx::GetAlphaMask() const
-{
-    return AlphaMask(maAlphaMask);
-}
-
 sal_Int64 BitmapEx::GetSizeBytes() const
 {
     sal_Int64 nSizeBytes = maBitmap.GetSizeBytes();
@@ -326,7 +321,7 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
             if( maAlphaMask.IsEmpty() )
             {
                 maAlphaMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                maAlphaMask.Erase( COL_BLACK );
+                maAlphaMask.Erase( 0 );
             }
 
             if( bRet && !maAlphaMask.IsEmpty() )
@@ -459,15 +454,9 @@ bool BitmapEx::Erase( const Color& rFillColor )
         {
             // Respect transparency on fill color
             if( rFillColor.IsTransparent() )
-            {
-                const Color aFill( 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha() );
-                maAlphaMask.Erase( aFill );
-            }
+                maAlphaMask.Erase( 255 - rFillColor.GetAlpha() );
             else
-            {
-                const Color aBlack( COL_BLACK );
-                maAlphaMask.Erase( aBlack );
-            }
+                maAlphaMask.Erase( 0 );
         }
     }
 
