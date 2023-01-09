@@ -1264,7 +1264,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
             ? pImp->GetPageView()
             : nullptr);
         // tdf#130951 caution - target may be Window, use the correct OutputDevice
-        OutputDevice* pTarget(pShell->isOutputToWindow()
+        OutputDevice* pTarget((pShell->isOutputToWindow() && pShell->GetWin())
             ? pShell->GetWin()->GetOutDev()
             : pShell->GetOut());
         SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget

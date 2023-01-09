@@ -198,7 +198,7 @@ public:
     virtual bool    DoSaveCompleted( SfxMedium * pNewStor=nullptr, bool bRegisterRecent=true ) override;     // SfxObjectShell
     virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId ) override;
 
-    virtual void    Draw( OutputDevice *, const JobSetup & rSetup, sal_uInt16 nAspect ) override;
+    virtual void    Draw(OutputDevice *, const JobSetup & rSetup, sal_uInt16 nAspect, bool bOutputForScreen) override;
 
     virtual void    SetVisArea( const tools::Rectangle & rVisArea ) override;
 

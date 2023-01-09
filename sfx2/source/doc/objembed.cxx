@@ -122,12 +122,12 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     rDesc.maDisplayName.clear();
 }
 
-
 void SfxObjectShell::DoDraw( OutputDevice* pDev,
                             const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
-                            sal_uInt16 nAspect )
+                            sal_uInt16 nAspect,
+                            bool bOutputForScreen )
 {
     if (!rSize.Width() || !rSize.Height())
         return;
@@ -141,17 +141,17 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
         Fraction aXF( rSize.Width(), aSize.Width() );
         Fraction aYF( rSize.Height(), aSize.Height() );
 
-        DoDraw_Impl( pDev, rObjPos, aXF, aYF, rSetup, nAspect );
+        DoDraw_Impl(pDev, rObjPos, aXF, aYF, rSetup, nAspect, bOutputForScreen);
     }
 }
-
 
 void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Point & rViewPos,
                                const Fraction & rScaleX,
                                const Fraction & rScaleY,
                                const JobSetup & rSetup,
-                               sal_uInt16 nAspect )
+                               sal_uInt16 nAspect,
+                               bool bOutputForScreen )
 {
     tools::Rectangle aVisArea  = GetVisArea( nAspect );
     // MapUnit of the target
@@ -194,7 +194,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     if( pMtf )
         pMtf->Record( pDev );
 
-    Draw( pDev, rSetup, nAspect );
+    Draw( pDev, rSetup, nAspect, bOutputForScreen );
 
     // Restore Device settings
     pDev->Pop();

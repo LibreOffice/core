@@ -574,7 +574,8 @@ bool SwViewShell::PrintOrPDFExport(
 }
 
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                           vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+                           vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
+                           bool bOutputForScreen )
 {
     // For printing a shell is needed. Either the Doc already has one, then we
     // create a new view, or it has none, then we create the first view.
@@ -583,6 +584,8 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         pSh.reset(new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), nullptr, &rRenderContext,VSHELLFLAG_SHARELAYOUT ));
     else
         pSh.reset(new SwViewShell( *pDoc, nullptr, pOpt, &rRenderContext));
+
+    pSh->setOutputToWindow(bOutputForScreen);
 
     {
         CurrShell aCurr( pSh.get() );

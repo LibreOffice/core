@@ -2134,7 +2134,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     bool bChgFntColor = false;
     bool bChgLineColor = false;
 
-    if (GetShell() && !GetShell()->GetWin() && GetShell()->GetViewOptions()->IsBlackFont())
+    const SwViewShell *pVSh = GetShell();
+    const bool bOutputToWindow(pVSh && (pVSh->GetWin() || pVSh->isOutputToWindow()));
+
+    if (pVSh && !bOutputToWindow && pVSh->GetViewOptions()->IsBlackFont())
     {
         if ( COL_BLACK != rFnt.GetColor() )
             bChgFntColor = true;
@@ -2150,8 +2153,8 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         // LineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
-        bChgLineColor = GetShell() && GetShell()->GetWin() &&
-                GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
+        bChgLineColor = pVSh && bOutputToWindow &&
+                pVSh->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
         bChgFntColor = COL_AUTO == rFnt.GetColor() || bChgLineColor;
 
@@ -2200,10 +2203,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
             if ( ! pCol )
                 pCol = aGlobalRetoucheColor;
 
-            if( GetShell() && GetShell()->GetWin() )
+            if (pVSh && bOutputToWindow)
             {
                 // here we determine the preferred window text color for painting
-                const SwViewOption* pViewOption = GetShell()->GetViewOptions();
+                const SwViewOption* pViewOption = pVSh->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
                         !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
                     nNewColor = COL_BLACK;

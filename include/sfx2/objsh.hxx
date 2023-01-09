@@ -650,9 +650,10 @@ public:
     void            DoDraw( OutputDevice *, const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
-                            sal_uInt16 nAspect = ASPECT_CONTENT );
+                            sal_uInt16 nAspect = ASPECT_CONTENT,
+                            bool bOutputForScreen = false );
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          sal_uInt16 nAspect ) = 0;
+                          sal_uInt16 nAspect, bool bOutputForScreen ) = 0;
 
 
     virtual void    FillClass( SvGlobalName * pClassName,
@@ -717,7 +718,8 @@ public:
                                             const Fraction & rScaleX,
                                             const Fraction & rScaleY,
                                             const JobSetup & rSetup,
-                                            sal_uInt16 nAspect );
+                                            sal_uInt16 nAspect,
+                                            bool bOutputForScreen );
 
     // Shell Interface
     SAL_DLLPRIVATE void ExecFile_Impl(SfxRequest &);

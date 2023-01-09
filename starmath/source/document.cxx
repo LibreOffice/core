@@ -1139,7 +1139,8 @@ void SmDocShell::SaveSymbols()
 
 void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,
-                      sal_uInt16 /*nAspect*/)
+                      sal_uInt16 /*nAspect*/,
+                      bool /*bOutputForScreen*/)
 {
     pDevice->IntersectClipRegion(GetVisArea());
     Point atmppoint;

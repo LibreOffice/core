@@ -53,6 +53,7 @@
 #include <comphelper/string.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
+#include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <TextCursorHelper.hxx>
 #include <doc.hxx>
@@ -169,7 +170,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
         tools::Rectangle aRect(Point(), m_xVirDev->PixelToLogic(aSize));
         pShell->SetVisArea(tools::Rectangle(Point(), Size(aRect.GetWidth() * fZoom,
                                                           aRect.GetHeight() * fZoom)));
-        pShell->DoDraw(m_xVirDev.get(), aRect.TopLeft(), aRect.GetSize(), JobSetup(), ASPECT_CONTENT);
+        pShell->DoDraw(m_xVirDev.get(), aRect.TopLeft(), aRect.GetSize(), JobSetup(), ASPECT_CONTENT, true);
         m_xVirDev->Pop();
     }
 
