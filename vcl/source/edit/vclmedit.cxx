@@ -724,8 +724,19 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
     }
     else if ( nCode == KEY_TAB )
     {
-        if ( !mbIgnoreTab || rKEvent.GetKeyCode().IsMod1() )
-            bDone = mpExtTextView->KeyInput( rKEvent  );
+        if (!mbIgnoreTab)
+        {
+            if (!rKEvent.GetKeyCode().IsMod1())
+                bDone = mpExtTextView->KeyInput(rKEvent);
+            else
+            {
+                // tdf#107625 make ctrl+tab act like tab when MultiLine Edit normally accepts tab as an input char
+                vcl::KeyCode aKeyCode(rKEvent.GetKeyCode().GetCode(), rKEvent.GetKeyCode().GetModifier() & ~KEY_MOD1);
+                KeyEvent aKEventWithoutMod1(rKEvent.GetCharCode(), aKeyCode, rKEvent.GetRepeat());
+                Window::KeyInput(aKEventWithoutMod1);
+                bDone = true;
+            }
+        }
     }
     else
     {
