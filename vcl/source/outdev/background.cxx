@@ -57,7 +57,7 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
     {
         BitmapEx bitmap = rBackground.GetBitmap();
         if( bitmap.IsAlpha())
-            mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
+            mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlphaMask()))));
         else
             mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
     }

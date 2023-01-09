@@ -634,7 +634,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                             // may be also a mask, not alpha). So BitmapEx::GetAlpha() returns
                             // a temporary, and direct access to the Bitmap wouldn't work
                             // with AlphaScopedBitmapAccess. *sigh*
-                            rContext.mAlphaMask = rBitmapEx.GetAlpha();
+                            rContext.mAlphaMask = rBitmapEx.GetAlphaMask();
                             rContext.m_pAlphaAccess = std::make_unique<AlphaScopedWriteAccess>(rContext.mAlphaMask);
                         }
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);

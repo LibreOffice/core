@@ -400,7 +400,7 @@ sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmap
 
     if (bAlpha)
     {
-        Bitmap aSrcAlpha(rBitmapEx.GetAlpha().GetBitmap());
+        Bitmap aSrcAlpha(rBitmapEx.GetAlphaMask().GetBitmap());
         Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
         Bitmap::ScopedReadAccess pAlphaReadAccess(aSrcAlpha.AcquireReadAccess(), aSrcAlpha);
         const tools::Long nHeight(pReadAccess->Height());
@@ -481,7 +481,7 @@ getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const 
         // check data validity for associated Alpha
         if (pSystemDependentData_ID2D1Bitmap
             && pSystemDependentData_ID2D1Bitmap->getAssociatedAlpha()
-                   != rBitmapEx.GetAlpha().GetBitmap().ImplGetSalBitmap())
+                   != rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap())
         {
             // AssociatedAlpha did change, data invalid
             pSystemDependentData_ID2D1Bitmap.reset();
@@ -497,7 +497,7 @@ getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const 
         {
             // creation worked, create SystemDependentData_ID2D1Bitmap
             pSystemDependentData_ID2D1Bitmap = std::make_shared<SystemDependentData_ID2D1Bitmap>(
-                pID2D1Bitmap, rBitmapEx.GetAlpha().GetBitmap().ImplGetSalBitmap());
+                pID2D1Bitmap, rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap());
 
             // only add if feasible
             if (nullptr != pHolder

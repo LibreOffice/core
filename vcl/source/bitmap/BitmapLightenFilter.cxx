@@ -61,7 +61,7 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
     pWrite.reset();
     pRead.reset();
 
-    return BitmapEx(aDarkBitmap, rBitmapEx.GetAlpha());
+    return BitmapEx(aDarkBitmap, rBitmapEx.GetAlphaMask());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

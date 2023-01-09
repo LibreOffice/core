@@ -615,7 +615,7 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
     Bitmap      aMask( rBitmapEx.GetBitmap().CreateMask( rColor, nTol ) );
 
     if( rBitmapEx.IsAlpha() )
-        aMask.CombineOr( rBitmapEx.GetAlpha() );
+        aMask.CombineOr( rBitmapEx.GetAlphaMask() );
 
     aBmpEx = BitmapEx( rBitmapEx.GetBitmap(), aMask );
     LeaveWait();
@@ -995,7 +995,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                         {
                             ImpMask( aBitmapEx );
                             if ( aGraphic.IsTransparent() )
-                                aGraphic = Graphic( BitmapEx( aBitmapEx.GetBitmap(), aBitmapEx.GetAlpha() ) );
+                                aGraphic = Graphic( BitmapEx( aBitmapEx.GetBitmap(), aBitmapEx.GetAlphaMask() ) );
                             else
                                 aGraphic = aBitmapEx;
                         }

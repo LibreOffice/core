@@ -70,7 +70,7 @@ void BitmapProcessorTest::testDisabledImage()
             Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
         }
-        AlphaMask aDisabledAlphaMask(aDisabledBitmapEx.GetAlpha());
+        AlphaMask aDisabledAlphaMask(aDisabledBitmapEx.GetAlphaMask());
         {
             AlphaMask::ScopedReadAccess pReadAccess(aDisabledAlphaMask);
             Color aColor(pReadAccess->GetPixel(0, 0));

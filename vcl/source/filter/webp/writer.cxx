@@ -95,7 +95,7 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
     Bitmap bitmap(bitmapEx.GetBitmap());
     AlphaMask bitmapAlpha;
     if (bitmapEx.IsAlpha())
-        bitmapAlpha = bitmapEx.GetAlpha();
+        bitmapAlpha = bitmapEx.GetAlphaMask();
     Bitmap::ScopedReadAccess access(bitmap);
     AlphaMask::ScopedReadAccess accessAlpha(bitmapAlpha);
     bool dataDone = false;

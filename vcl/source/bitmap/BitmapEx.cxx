@@ -212,7 +212,7 @@ Bitmap BitmapEx::GetBitmap( Color aTransparentReplaceColor ) const
     return aRetBmp;
 }
 
-AlphaMask BitmapEx::GetAlpha() const
+AlphaMask BitmapEx::GetAlphaMask() const
 {
     return AlphaMask(maAlphaMask);
 }
@@ -603,7 +603,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
 
     if (IsAlpha())
     {
-        AlphaMask aAlpha = GetAlpha();
+        AlphaMask aAlpha = GetAlphaMask();
         AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
         aColor.SetAlpha(255 - pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
@@ -765,7 +765,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
     // create mask
     if(IsAlpha())
     {
-        const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+        const Bitmap aAlpha(impTransformBitmap(GetAlphaMask().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
         return BitmapEx(aDestination, AlphaMask(aAlpha));
     }
 
@@ -988,7 +988,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     {
         if(IsAlpha())
         {
-            return BitmapEx(aChangedBitmap, GetAlpha());
+            return BitmapEx(aChangedBitmap, GetAlphaMask());
         }
         else
         {
@@ -1169,7 +1169,7 @@ void BitmapEx::ReplaceTransparency(const Color& rColor)
 {
     if( IsAlpha() )
     {
-        maBitmap.Replace( GetAlpha(), rColor );
+        maBitmap.Replace( GetAlphaMask(), rColor );
         maAlphaMask = Bitmap();
         maBitmapSize = maBitmap.GetSizePixel();
     }
@@ -1359,7 +1359,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 
 void BitmapEx::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
-    AlphaMask aAlphaMask(GetAlpha());
+    AlphaMask aAlphaMask(GetAlphaMask());
     BitmapScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
     Bitmap::ScopedReadAccess pReadAccess(maBitmap);
     assert( pReadAccess.get() && pAlphaWriteAccess.get() );
@@ -1390,7 +1390,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
     }
     else
     {
-        aAlpha = GetAlpha();
+        aAlpha = GetAlphaMask();
         BitmapScopedWriteAccess pA(aAlpha);
         assert(pA);
 

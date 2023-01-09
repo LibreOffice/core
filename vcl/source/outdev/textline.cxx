@@ -1066,7 +1066,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             // the alpha surface and use it to blend the original solid line color
             Bitmap aSolidColor(aBitmapEx.GetBitmap());
             aSolidColor.Erase(GetLineColor());
-            aBitmapEx = BitmapEx(aSolidColor, aBitmapEx.GetAlpha());
+            aBitmapEx = BitmapEx(aSolidColor, aBitmapEx.GetAlphaMask());
 
             rLineCache.insert( aBitmapEx, GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
         }

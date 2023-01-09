@@ -313,7 +313,7 @@ void PngFilterTest::testPng()
                 CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0x00, 0x00),
                                      pAccess->GetPixel(2, 2));
 
-                AlphaMask aAlpha = aBitmapEx.GetAlpha();
+                AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
                 {
                     AlphaMask::ScopedReadAccess pAlphaAccess(aAlpha);
                     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAlphaAccess->GetBitCount());

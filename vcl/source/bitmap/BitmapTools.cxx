@@ -358,7 +358,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     // vs. multi-level transparency)
     if( rBitmap.IsAlpha() )
     {
-        aSrcAlpha = rBitmap.GetAlpha().GetBitmap();
+        aSrcAlpha = rBitmap.GetAlphaMask().GetBitmap();
     }
 
     Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
@@ -496,7 +496,7 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
 
     if(rBitmapEx.IsAlpha())
     {
-        aOldMask = rBitmapEx.GetAlpha();
+        aOldMask = rBitmapEx.GetAlphaMask();
     }
 
     {
@@ -580,7 +580,7 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
         // the new masking in pVDev.
         // need to blend in AlphaMask quality (8Bit)
         AlphaMask fromVDev(aVDevMask);
-        AlphaMask fromBmpEx(aBmpEx.GetAlpha());
+        AlphaMask fromBmpEx(aBmpEx.GetAlphaMask());
         AlphaMask::ScopedReadAccess pR(fromVDev);
         AlphaScopedWriteAccess pW(fromBmpEx);
 
@@ -626,7 +626,7 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     if ( aBmpEx.IsAlpha() )
     {
         SvMemoryStream aMem;
-        WriteDIB(aBmpEx.GetAlpha().GetBitmap(), aMem, false, true);
+        WriteDIB(aBmpEx.GetAlphaMask().GetBitmap(), aMem, false, true);
         return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
 
@@ -679,7 +679,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
  **/
 void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight )
 {
-    AlphaMask aAlpha = aBmpEx.GetAlpha();
+    AlphaMask aAlpha = aBmpEx.GetAlphaMask();
 
     ::BitmapReadAccess* pBitmapReadAcc = aBitmap.AcquireReadAccess();
     ::BitmapReadAccess* pAlphaReadAcc = nullptr;
@@ -975,7 +975,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const geometry::IntegerRectangle2D& rect)
     {
         Bitmap aBitmap( rBitmapEx.GetBitmap() );
-        Bitmap aAlpha( rBitmapEx.GetAlpha().GetBitmap() );
+        Bitmap aAlpha( rBitmapEx.GetAlphaMask().GetBitmap() );
 
         Bitmap::ScopedReadAccess pReadAccess( aBitmap );
         Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
@@ -1225,7 +1225,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
         }
     }
     if (rInput.IsAlpha())
-        rResult = BitmapEx(aResultBitmap, rInput.GetAlpha());
+        rResult = BitmapEx(aResultBitmap, rInput.GetAlphaMask());
     else
         rResult = BitmapEx(aResultBitmap, aResultAlpha);
     return true;

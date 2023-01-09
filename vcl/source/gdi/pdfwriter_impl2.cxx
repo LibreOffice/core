@@ -202,7 +202,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             nZippedFileSize = aTemp.TellEnd();
         }
         if ( aBitmapEx.IsAlpha() )
-            aAlphaMask = aBitmapEx.GetAlpha();
+            aAlphaMask = aBitmapEx.GetAlphaMask();
         Graphic aGraphic(BitmapEx(aBitmapEx.GetBitmap()));
 
         Sequence< PropertyValue > aFilterData{

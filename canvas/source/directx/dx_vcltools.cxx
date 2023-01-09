@@ -165,7 +165,7 @@ namespace dxcanvas::tools
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "Unable to acquire read access to bitmap" );
 
-                Bitmap aAlpha( rBmpEx.GetAlpha().GetBitmap() );
+                Bitmap aAlpha( rBmpEx.GetAlphaMask().GetBitmap() );
 
                 Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha );
 

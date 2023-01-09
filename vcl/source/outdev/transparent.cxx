@@ -683,7 +683,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->EnableMapMode( false );
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    aAlpha.BlendWith(aPaint.GetAlpha());
+                    aAlpha.BlendWith(aPaint.GetAlphaMask());
 
                     xVDev.disposeAndClear();
 
@@ -851,7 +851,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         {
             // blend with alpha channel
             aBmp.Convert(BmpConversion::N24Bit);
-            aBmp.Blend(aBmpEx.GetAlpha(), aBgColor);
+            aBmp.Blend(aBmpEx.GetAlphaMask(), aBgColor);
         }
 
         // add corresponding action

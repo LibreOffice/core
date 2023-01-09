@@ -257,7 +257,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Not:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx);
-                            Bitmap aAlphaMask = rAnimationFrame.maBitmapEx.GetAlpha();
+                            Bitmap aAlphaMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
 
                             if (aAlphaMask.IsEmpty())
                             {
@@ -277,7 +277,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Back:
                         {
                             // #i70772# react on no mask, for primitives, too.
-                            const Bitmap & rMask(rAnimationFrame.maBitmapEx.GetAlpha());
+                            const Bitmap & rMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
                             const Bitmap & rContent(rAnimationFrame.maBitmapEx.GetBitmap());
 
                             maVirtualDeviceMask->Erase();
@@ -301,7 +301,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx);
-                            BitmapEx aExpandVisibilityMask(rAnimationFrame.maBitmapEx.GetAlpha(), rAnimationFrame.maBitmapEx.GetAlpha());
+                            BitmapEx aExpandVisibilityMask(rAnimationFrame.maBitmapEx.GetAlphaMask(), rAnimationFrame.maBitmapEx.GetAlphaMask());
                             maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }

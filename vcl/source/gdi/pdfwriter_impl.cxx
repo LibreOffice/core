@@ -9209,13 +9209,13 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     {
         if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha());
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask());
             aBitmap.Convert( BmpConversion::N1BitThreshold );
             SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N1_BPP, "vcl.pdfwriter", "mask conversion failed" );
         }
         else if (aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP)
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha().GetBitmap());
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask().GetBitmap());
             aBitmap.Convert( BmpConversion::N8BitGreys );
             SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "alpha mask conversion failed" );
         }
@@ -9624,7 +9624,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const BitmapEx& i_rBitmap, con
     aID.m_nChecksum         = aBitmap.GetBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.IsAlpha() )
-        aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
+        aID.m_nMaskChecksum = aBitmap.GetAlphaMask().GetChecksum();
     std::list<BitmapEmit>::const_iterator it = std::find_if(rBitmaps.begin(), rBitmaps.end(),
                                              [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
     if (it == rBitmaps.end())

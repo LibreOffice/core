@@ -95,7 +95,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     png_set_write_fn(pPng, &rStream, lclWriteStream, nullptr);
 
     aBitmap = aBitmapEx.GetBitmap();
-    aAlphaMask = aBitmapEx.GetAlpha();
+    aAlphaMask = aBitmapEx.GetAlphaMask();
 
     {
         bool bCombineChannels = false;

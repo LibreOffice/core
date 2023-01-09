@@ -152,7 +152,7 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     {
         CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmapEx.GetBitmap().getPixelFormat());
         CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
-        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlpha().getPixelFormat());
+        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlphaMask().getPixelFormat());
     }
 
     // Check the bitmap has pixels we expect

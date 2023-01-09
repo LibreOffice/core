@@ -172,7 +172,7 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
 
     if (rBitmapEx.IsAlpha())
     {
-        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlphaMask(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
     }
     else if (!rBitmapEx.IsEmpty())
     {
@@ -274,8 +274,8 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
                 if (mpAlphaVDev)
                     mpAlphaVDev->DrawBitmapEx(rDestPt,
                                               rDestSize,
-                                              BitmapEx(rBitmapEx.GetAlpha(),
-                                                       rBitmapEx.GetAlpha()));
+                                              BitmapEx(rBitmapEx.GetAlphaMask(),
+                                                       rBitmapEx.GetAlphaMask()));
             }
             else
             {
@@ -309,7 +309,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
 
     if(rBitmapEx.IsAlpha())
     {
-        aAlphaBitmap = rBitmapEx.GetAlpha();
+        aAlphaBitmap = rBitmapEx.GetAlphaMask();
     }
     else if (mpAlphaVDev)
     {
@@ -519,7 +519,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
         AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
         if( bitmapEx.IsAlpha())
-            aAlpha.BlendWith( bitmapEx.GetAlpha());
+            aAlpha.BlendWith( bitmapEx.GetAlphaMask());
         bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
     }
     if(rtl::math::approxEqual( fAlpha, 1.0 ))

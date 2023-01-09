@@ -74,7 +74,7 @@ namespace drawinglayer::texture
 
             if(mbIsAlpha)
             {
-                maTransparence = rBitmapEx.GetAlpha().GetBitmap();
+                maTransparence = rBitmapEx.GetAlphaMask().GetBitmap();
                 mpReadTransparence = Bitmap::ScopedReadAccess(maTransparence);
             }
 

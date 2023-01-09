@@ -621,7 +621,7 @@ BitmapEx BitmapFilterStackBlur::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap = rBitmapEx.GetBitmap();
     Bitmap result = filter(aBitmap);
-    return BitmapEx(result, rBitmapEx.GetAlpha());
+    return BitmapEx(result, rBitmapEx.GetAlphaMask());
 }
 
 Bitmap BitmapFilterStackBlur::filter(Bitmap const& rBitmap) const

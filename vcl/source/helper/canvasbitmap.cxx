@@ -127,7 +127,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 {
     if( m_aBmpEx.IsAlpha() )
     {
-        m_aAlpha = m_aBmpEx.GetAlpha().GetBitmap();
+        m_aAlpha = m_aBmpEx.GetAlphaMask().GetBitmap();
         m_pAlphaAcc = Bitmap::ScopedInfoAccess(m_aAlpha);
     }
 

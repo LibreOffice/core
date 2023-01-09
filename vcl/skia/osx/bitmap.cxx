@@ -61,7 +61,7 @@ CGImageRef createCGImage(const Image& rImage)
     }
     else
     {
-        AlphaMask alpha(bitmapEx.GetAlpha());
+        AlphaMask alpha(bitmapEx.GetAlphaMask());
         Bitmap alphaBitmap(alpha.GetBitmap());
         assert(dynamic_cast<SkiaSalBitmap*>(alphaBitmap.ImplGetSalBitmap().get()) != nullptr);
         SkiaSalBitmap* skiaAlpha

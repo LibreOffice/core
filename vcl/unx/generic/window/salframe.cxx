@@ -267,7 +267,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
             continue;
         vcl::bitmap::convertBitmap32To24Plus8(aIcon, aIcon);
         Bitmap icon = aIcon.GetBitmap();
-        AlphaMask mask = aIcon.GetAlpha();
+        AlphaMask mask = aIcon.GetAlphaMask();
         BitmapReadAccess* iconData = icon.AcquireReadAccess();
         BitmapReadAccess* maskData = mask.AcquireReadAccess();
         netwm_icon[ pos++ ] = size; // width
@@ -344,7 +344,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
         GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
             GCFunction|GCForeground|GCBackground, &aValues );
 
-        Bitmap aMask = aIcon.GetAlpha();
+        Bitmap aMask = aIcon.GetAlphaMask();
         aMask.Invert();
 
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >

@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
-    AlphaMask aAlpha = aBMPEx.GetAlpha();
+    AlphaMask aAlpha = aBMPEx.GetAlphaMask();
     AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
 
     // Without the fix in place, this test would have failed here
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
 
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    AlphaMask aAlpha = aBMPEx.GetAlpha();
+    AlphaMask aAlpha = aBMPEx.GetAlphaMask();
     {
         AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)

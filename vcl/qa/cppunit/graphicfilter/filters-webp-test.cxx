@@ -139,7 +139,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(19, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLUE, Color(pAccess->GetPixel(19, 19)));
         }
-        AlphaMask tmpAlpha = aResultBitmap.GetAlpha();
+        AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
         AlphaMask::ScopedReadAccess pAccessAlpha(tmpAlpha);
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 19));
@@ -191,7 +191,7 @@ void WebpFilterTest::testRead(bool lossy, bool alpha)
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(pAccess->GetPixel(9, 9)));
         if (alpha)
         {
-            AlphaMask tmpAlpha = aResultBitmap.GetAlpha();
+            AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
             AlphaMask::ScopedReadAccess pAccessAlpha(tmpAlpha);
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 9));

@@ -146,7 +146,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         {
             if (aTempBitmapEx.IsAlpha())
             {
-                Bitmap aAlphaBmp(aTempBitmapEx.GetAlpha().GetBitmap());
+                Bitmap aAlphaBmp(aTempBitmapEx.GetAlphaMask().GetBitmap());
                 aAlphaBmp.Adjust(50);
                 aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aAlphaBmp));
             }

@@ -49,7 +49,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (rBitmapEx.IsAlpha())
     {
-        aReturnBitmap = BitmapEx(aGrey, rBitmapEx.GetAlpha());
+        aReturnBitmap = BitmapEx(aGrey, rBitmapEx.GetAlphaMask());
     }
     else
         aReturnBitmap = BitmapEx(aGrey);

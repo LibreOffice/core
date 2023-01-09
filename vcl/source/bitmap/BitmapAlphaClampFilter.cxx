@@ -18,7 +18,7 @@ BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
     if (!rBitmapEx.IsAlpha())
         return rBitmapEx;
 
-    AlphaMask aBitmapAlpha(rBitmapEx.GetAlpha());
+    AlphaMask aBitmapAlpha(rBitmapEx.GetAlphaMask());
     {
         AlphaScopedWriteAccess pWriteAlpha(aBitmapAlpha);
         const Size aSize(rBitmapEx.GetSizePixel());

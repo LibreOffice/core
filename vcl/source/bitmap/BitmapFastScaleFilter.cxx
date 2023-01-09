@@ -112,7 +112,7 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    AlphaMask aMask(rBitmapEx.GetAlpha());
+    AlphaMask aMask(rBitmapEx.GetAlphaMask());
 
     if (bRet && !aMask.IsEmpty())
         bRet = aMask.Scale(maSize, BmpScaleFlag::Fast);

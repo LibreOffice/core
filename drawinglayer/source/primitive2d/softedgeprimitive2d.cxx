@@ -196,7 +196,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         }
 
         // Get the Alpha and use as base to blur and apply the effect
-        AlphaMask aMask(aBitmapEx.GetAlpha());
+        AlphaMask aMask(aBitmapEx.GetAlphaMask());
         const AlphaMask blurMask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
             aMask, -fDiscreteSoftRadius * fScale, fDiscreteSoftRadius * fScale, 0));
         aMask.BlendWith(blurMask);
