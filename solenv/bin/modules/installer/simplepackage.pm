@@ -494,13 +494,14 @@ sub create_package
     if ( $makesystemcall )
     {
         print "... $systemcall ...\n";
-        my $returnvalue = system($systemcall);
+        my $systemcall_output = `$systemcall`;
+        my $returnvalue = $? >> 8;
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute \"$systemcall\": $returnvalue\n";
+            $infoline = "ERROR: Could not execute \"$systemcall\" - exitcode: $returnvalue - output:\n$systemcall_output\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
         else
