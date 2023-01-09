@@ -371,7 +371,7 @@ public:
     virtual void setPaintTextEdit(bool) {}
 
     /// Decides if it's OK to call getCommandValues(rCommand).
-    virtual bool supportsCommandValues(const OUString& /*rCommand*/) { return false; }
+    virtual bool supportsCommand(const OUString& /*rCommand*/) { return false; }
 
     /// Returns a json mapping of the possible values for the given command.
     virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, const OString& /*rCommand*/)

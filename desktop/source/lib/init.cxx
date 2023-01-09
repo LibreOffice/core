@@ -5890,7 +5890,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getFontSubset(std::string_view(pCommand + aFontSubset.getLength()));
     }
-    else if (pDoc->supportsCommandValues(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
+    else if (pDoc->supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
     {
         tools::JsonWriter aJsonWriter;
         pDoc->getCommandValues(aJsonWriter, aCommand);
