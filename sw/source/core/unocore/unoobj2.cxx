@@ -1191,6 +1191,9 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
         if (pHeadFootFormat)
         {
             const SwFormatContent& rFlyContent = pHeadFootFormat->GetContent();
+            // tdf#146248 avoid Undo crash at shared first page
+            if ( !rFlyContent.GetContentIdx() )
+                return false;
             const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
             SwStartNode const*const pCurSttNode = rNode.FindSttNodeByType(
                 bHeader ? SwHeaderStartNode : SwFooterStartNode);
