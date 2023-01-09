@@ -7,11 +7,28 @@
 
 Option Explicit
 
-Function doUnitTest as String
-    ' ConvertFromUrl ConvertToUrl
-    If ( ConvertToUrl( ConvertFromUrl("") ) <> "") Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
+Function doUnitTest() As String
+    TestUtil.TestInit
+    verify_testConvertToFromUrl
+    doUnitTest = TestUtil.GetResult()
 End Function
+
+Sub verify_testConvertToFromUrl
+    On Error GoTo errorHandler
+
+    TestUtil.AssertEqual( ConvertToUrl( ConvertFromUrl("") ), "", "ConvertToUrl( ConvertFromUrl("") )")
+
+    ' tdf#152917: Without the fix in place, this test would have failed with
+    ' Failed: ConvertFromUrl("file:///foo/bar/test.txt") returned , expected /foo/bar/test.txt
+    If (GetGUIType() <> 1) Then
+        'Linux
+        TestUtil.AssertEqual( ConvertFromUrl("file:///foo/bar/test.txt"), "/foo/bar/test.txt", "ConvertFromUrl(""file:///foo/bar/test.txt"")")
+    Else
+        'Windows
+        TestUtil.AssertEqual( ConvertFromUrl("file://foo/bar/test.txt"), "\\foo\bar\test.txt", "ConvertFromUrl(""file://foo/bar/test.txt"")")
+    End If
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_testConvertToFromUrl", Err, Error$, Erl)
+End Sub
