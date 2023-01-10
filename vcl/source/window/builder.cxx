@@ -9,6 +9,7 @@
 
 #include <config_feature_desktop.h>
 #include <config_options.h>
+#include <config_vclplug.h>
 
 #include <memory>
 #include <string_view>
@@ -1477,7 +1478,42 @@ void VclBuilderPreload()
 }
 
 #if defined DISABLE_DYNLOADING && !HAVE_FEATURE_DESKTOP
+
+// This ifdef branch is mainly for building for the Collabora Online
+// -based mobile apps for Android and iOS.
+
 extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
+
+#elif defined EMSCRIPTEN && !ENABLE_QT5
+
+// This branch is mainly for building for WASM, and especially for
+// Collabora Online in the browser, where code from core and Collabora
+// Online is compiled to WASM and linked into a single WASM binary.
+// (Not for Allotropia's Qt-based LibreOffice in the browser.)
+
+// When building core for WASM it doesn't use the same
+// solenv/bin/native-code.py thing as the mobile apps, even if in both
+// cases everything is linked statically. So there is no generated
+// native-code.h, and we can't use lo_get_custom_widget_func() from
+// that. So cheat and duplicate the code from an existing generated
+// native-code.h. It's just a handful of lines anyway.
+
+extern "C" void makeNotebookbarTabControl(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
+extern "C" void makeNotebookbarToolBox(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
+
+static struct { const char *name; VclBuilder::customMakeWidget func; } custom_widgets[] = {
+    { "makeNotebookbarTabControl", makeNotebookbarTabControl },
+    { "makeNotebookbarToolBox", makeNotebookbarToolBox },
+};
+
+static VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name)
+{
+    for (size_t i = 0; i < sizeof(custom_widgets) / sizeof(custom_widgets[0]); i++)
+        if (strcmp(name, custom_widgets[i].name) == 0)
+            return custom_widgets[i].func;
+    return nullptr;
+}
+
 #endif
 
 namespace
@@ -1537,7 +1573,9 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& rName)
         else
             pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
                 aI->second->getFunctionSymbol(sFunction));
-#elif !HAVE_FEATURE_DESKTOP
+#elif !HAVE_FEATURE_DESKTOP || (defined EMSCRIPTEN && !ENABLE_QT5)
+        // This ifdef branch is mainly for building for either the
+        // Android or iOS apps, or the Collabora Online as WASM thing.
         pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
         SAL_WARN_IF(!pFunction, "vcl.builder", "Could not find " << sFunction);
         assert(pFunction);
