@@ -77,8 +77,6 @@ public:
 
     virtual ~X11SalGraphicsImpl() override;
 
-    virtual OUString getRenderBackendName() const override { return "gen"; }
-
     virtual void setClipRegion( const vcl::Region& ) override;
     //
     // get the depth of the device

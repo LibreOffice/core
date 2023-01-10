@@ -32,6 +32,8 @@ private:
 public:
     X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon);
 
+    virtual OUString getRenderBackendName() const override { return "gen"; }
+
     void ResetClipRegion() override
     {
         mrCairoCommon.m_aClipRegion.SetNull();
