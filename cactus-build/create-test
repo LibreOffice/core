@@ -54,22 +54,23 @@ do
 	if [[ "X$1" == "Xbuild" ]]
 	then
 		echo
-		echo building release file
-		cd $BASE
-		rm lo.* soffice.tar.br.zip
-		echo tar
-		tar -cf lo.tar instdir
-		echo for interest zipped
-		zip -9 ilo.tar.zip lo.tar
-		echo for interest gzipped
-		gzip -k -v lo.tar
-		echo brotli zip
-		brotli -Z -v lo.tar
-		echo zip
-		zip -9 soffice.tar.br.zip lo.tar.br
-		echo Sizes of produced files
-		du -s --apparent-size lo* soffice.tar.br.zip
-		echo
+		rm soffice.tar.br.zip
+		(
+			echo building release file
+			cd $BASE
+			rm lo.* soffice.tar.br.zip
+			echo tar
+			tar -cf lo.tar instdir
+			echo brotli zip
+			brotli -Z -v lo.tar
+			echo zip
+			zip -9 soffice.tar.br.zip lo.tar.br
+			echo Sizes of produced files
+			du -s --apparent-size lo* soffice.tar.br.zip
+			rm lo.*
+			echo
+		)
+		mv $BASE/soffice.tar.br.zip .
 		exit 
 	fi
 	if [[ "X$1" == "Xbase" ]]
