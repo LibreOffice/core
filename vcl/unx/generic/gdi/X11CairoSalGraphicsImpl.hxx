@@ -124,6 +124,32 @@ public:
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
 
+    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
+
+    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+                    const SalBitmap& rMaskBitmap) override;
+
+    /** Render bitmap with alpha channel
+
+        @param rSourceBitmap
+        Source bitmap to blit
+
+        @param rAlphaBitmap
+        Alpha channel to use for blitting
+
+        @return true, if the operation succeeded, and false
+        otherwise. In this case, clients should try to emulate alpha
+        compositing themselves
+     */
+    bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap,
+                         const SalBitmap& rAlphaBitmap) override;
+
+    void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+                  Color nMaskColor) override;
+
+    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                         tools::Long nHeight) override;
+
     bool drawPolyLineBezier(sal_uInt32 nPoints, const Point* pPtAry,
                             const PolyFlags* pFlgAry) override;
 

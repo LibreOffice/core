@@ -159,6 +159,36 @@ void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcG
     mrCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
 }
 
+void X11CairoSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+{
+    mrCairoCommon.drawBitmap(rPosAry, rSalBitmap, getAntiAlias());
+}
+
+void X11CairoSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+                                         const SalBitmap& rTransparentBitmap)
+{
+    drawAlphaBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
+}
+
+bool X11CairoSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap,
+                                              const SalBitmap& rAlphaBmp)
+{
+    return mrCairoCommon.drawAlphaBitmap(rTR, rSrcBitmap, rAlphaBmp, getAntiAlias());
+}
+
+void X11CairoSalGraphicsImpl::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap,
+                                       Color nMaskColor)
+{
+    mrCairoCommon.drawMask(rTR, rSalBitmap, nMaskColor, getAntiAlias());
+}
+
+std::shared_ptr<SalBitmap> X11CairoSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
+                                                              tools::Long nWidth,
+                                                              tools::Long nHeight)
+{
+    return mrCairoCommon.getBitmap(nX, nY, nWidth, nHeight);
+}
+
 bool X11CairoSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)
 {
     return false;

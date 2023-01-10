@@ -47,6 +47,7 @@ typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
 class Gradient;
+class SalBitmap;
 struct SalGradient;
 
 VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale,
@@ -210,6 +211,17 @@ struct VCL_DLLPUBLIC CairoCommon
                 SalInvert nFlags, bool bAntiAlias);
 
     void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags, bool bAntiAlias);
+
+    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, bool bAntiAlias);
+
+    bool drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap,
+                         const SalBitmap& rAlphaBitmap, bool bAntiAlias);
+
+    void drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap, Color nMaskColor,
+                  bool bAntiAlias);
+
+    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                         tools::Long nHeight);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 

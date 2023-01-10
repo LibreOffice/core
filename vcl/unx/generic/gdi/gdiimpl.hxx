@@ -65,10 +65,6 @@ private:
 
     tools::Long GetGraphicsHeight() const;
 
-    void drawMaskedBitmap( const SalTwoRect& rPosAry,
-                                              const SalBitmap& rSalBitmap,
-                                              const SalBitmap& rTransparentBitmap );
-
 public:
 
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
@@ -90,38 +86,6 @@ public:
 
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) override;
-
-    virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
-
-    virtual void drawBitmap(
-                const SalTwoRect& rPosAry,
-                const SalBitmap& rSalBitmap,
-                const SalBitmap& rMaskBitmap ) override;
-
-    virtual void drawMask(
-                const SalTwoRect& rPosAry,
-                const SalBitmap& rSalBitmap,
-                Color nMaskColor ) override;
-
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    /** Render bitmap with alpha channel
-
-        @param rSourceBitmap
-        Source bitmap to blit
-
-        @param rAlphaBitmap
-        Alpha channel to use for blitting
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
-     */
-    virtual bool drawAlphaBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rSourceBitmap,
-                const SalBitmap& rAlphaBitmap ) override;
-
 public:
     void Init() override;
 };

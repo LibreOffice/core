@@ -27,6 +27,7 @@
 #include <skia/salbmp.hxx>
 #endif
 
+#include <headless/svpbmp.hxx>
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salinst.h>
@@ -35,7 +36,6 @@
 #include <unx/salframe.h>
 #include <unx/sm.hxx>
 #include <unx/i18n_im.hxx>
-#include <unx/salbmp.h>
 
 #include <vcl/inputtypes.hxx>
 
@@ -246,9 +246,8 @@ std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
         return std::make_shared<SkiaSalBitmap>();
-    else
 #endif
-        return std::make_shared<X11SalBitmap>();
+    return std::make_shared<SvpSalBitmap>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
