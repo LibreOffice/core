@@ -125,9 +125,6 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
 
     switch(ePixelFormat)
     {
-        case vcl::PixelFormat::N1_BPP:
-            pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal;
-            break;
         case vcl::PixelFormat::N8_BPP:
             pDIB->mnFormat |= ScanlineFormat::N8BitPal;
             break;

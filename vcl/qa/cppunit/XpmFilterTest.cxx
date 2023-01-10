@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_1bit)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N1_BPP, aBitmap.getPixelFormat());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(Color(0xffffff), aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(1, 1));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(8, 8));

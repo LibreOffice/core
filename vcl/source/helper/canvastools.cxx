@@ -267,12 +267,9 @@ namespace vcl::unotools
 
                 // normalize bitcount
                 auto ePixelFormat =
-                    ( nDepth <= 1 ) ? vcl::PixelFormat::N1_BPP :
                     ( nDepth <= 8 ) ? vcl::PixelFormat::N8_BPP :
                                       vcl::PixelFormat::N24_BPP;
-                auto eAlphaPixelFormat =
-                    ( nAlphaDepth <= 1 ) ? vcl::PixelFormat::N1_BPP :
-                                           vcl::PixelFormat::N8_BPP;
+                auto eAlphaPixelFormat = vcl::PixelFormat::N8_BPP;
 
                 ::Bitmap aBitmap( aPixelSize,
                                   ePixelFormat,

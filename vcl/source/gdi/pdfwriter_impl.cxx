@@ -9209,9 +9209,12 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     {
         if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask());
-            aBitmap.Convert( BmpConversion::N1BitThreshold );
-            SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N1_BPP, "vcl.pdfwriter", "mask conversion failed" );
+            if( rObject.m_aBitmap.IsAlpha() )
+            {
+                aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask());
+                aBitmap.Convert( BmpConversion::N1BitThreshold );
+                SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "mask conversion failed" );
+            }
         }
         else if (aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP)
         {
@@ -9228,7 +9231,6 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     auto const ePixelFormat = aBitmap.getPixelFormat();
     switch (ePixelFormat)
     {
-        case vcl::PixelFormat::N1_BPP:
         case vcl::PixelFormat::N8_BPP:
             bTrueColor = false;
             nBitsPerComponent = vcl::pixelFormatBitCount(ePixelFormat);
@@ -9282,7 +9284,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         else if( aBitmap.HasGreyPaletteAny() )
         {
             aLine.append( "/DeviceGray\n" );
-            if (aBitmap.getPixelFormat() == vcl::PixelFormat::N1_BPP)
+            if (aBitmap.getPixelFormat() == vcl::PixelFormat::N8_BPP)
             {
                 // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
                 sal_uInt16 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_BLACK ) );
@@ -9355,21 +9357,8 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     }
     else
     {
-        if (aBitmap.getPixelFormat() == vcl::PixelFormat::N1_BPP)
-        {
-            aLine.append( "/ImageMask true\n" );
-            sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_BLACK ) );
-            SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl.pdfwriter", "wrong black index" );
-            if( nBlackIndex )
-                aLine.append( "/Decode[ 1 0 ]\n" );
-            else
-                aLine.append( "/Decode[ 0 1 ]\n" );
-        }
-        else if (aBitmap.getPixelFormat() == vcl::PixelFormat::N8_BPP)
-        {
-            aLine.append( "/ColorSpace/DeviceGray\n"
-                          "/Decode [ 1 0 ]\n" );
-        }
+        aLine.append( "/ColorSpace/DeviceGray\n"
+                      "/Decode [ 1 0 ]\n" );
     }
 
     if( ! bMask && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !m_bIsPDF_A1 )
@@ -9614,10 +9603,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const BitmapEx& i_rBitmap, con
     BitmapEx aBitmap( i_rBitmap );
     auto ePixelFormat = aBitmap.GetBitmap().getPixelFormat();
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
-    {
-        if (ePixelFormat != vcl::PixelFormat::N1_BPP)
-            aBitmap.Convert(BmpConversion::N8BitGreys);
-    }
+        aBitmap.Convert(BmpConversion::N8BitGreys);
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
     aID.m_nSize             = vcl::pixelFormatBitCount(ePixelFormat);

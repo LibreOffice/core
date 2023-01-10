@@ -82,13 +82,6 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
 
     switch (ePixelFormat)
     {
-        case vcl::PixelFormat::N1_BPP:
-        {
-            static const BitmapPalette aPalN1_BPP = { COL_BLACK, COL_WHITE };
-            if (!pPal)
-                pPal = &aPalN1_BPP;
-            break;
-        }
         case vcl::PixelFormat::N8_BPP:
         {
             static const BitmapPalette aPalN8_BPP = [] {
@@ -268,8 +261,6 @@ vcl::PixelFormat Bitmap::getPixelFormat() const
         return vcl::PixelFormat::INVALID;
 
     sal_uInt16 nBitCount = mxSalBmp->GetBitCount();
-    if (nBitCount <= 1)
-        return vcl::PixelFormat::N1_BPP;
     if (nBitCount <= 8)
         return vcl::PixelFormat::N8_BPP;
     if (nBitCount <= 24)
@@ -282,7 +273,7 @@ vcl::PixelFormat Bitmap::getPixelFormat() const
 
 bool Bitmap::HasGreyPaletteAny() const
 {
-    bool bRet = getPixelFormat() == vcl::PixelFormat::N1_BPP;
+    bool bRet = false;
 
     ScopedInfoAccess pIAcc(const_cast<Bitmap&>(*this));
 
@@ -1299,22 +1290,6 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         }
     }
 
-    // fdo#33455
-    //
-    // If we start with a 1 bit image, then after scaling it in any mode except
-    // BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
-    // are going to down-shift it to mono again and Bitmap::MakeMonochrome just
-    // has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
-    // will default to black/white and the colors mapped to which ever is closer
-    // to black/white
-    //
-    // So the easiest thing to do to retain the colors of 1 bit bitmaps is to
-    // just use the fast scale rather than attempting to count unique colors in
-    // the other converters and pass all the info down through
-    // Bitmap::MakeMonochrome
-    if (eStartPixelFormat == vcl::PixelFormat::N1_BPP)
-        nScaleFlag = BmpScaleFlag::Fast;
-
     BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
@@ -1391,11 +1366,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
 
     switch (getPixelFormat())
     {
-        case vcl::PixelFormat::N1_BPP:
-        {
-            rNew.Convert(BmpConversion::N1BitThreshold);
-            break;
-        }
         case vcl::PixelFormat::N8_BPP:
         {
             if(HasGreyPaletteAny())

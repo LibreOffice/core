@@ -64,9 +64,6 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
 
     switch (ePixelFormat)
     {
-        case vcl::PixelFormat::N1_BPP:
-            pDIB->mnFormat = ScanlineFormat::N1BitLsbPal;
-            break;
         case vcl::PixelFormat::N8_BPP:
             pDIB->mnFormat = ScanlineFormat::N8BitPal;
             break;

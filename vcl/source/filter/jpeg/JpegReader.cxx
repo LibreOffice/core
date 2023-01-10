@@ -249,7 +249,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
 
     if (!mnLastLines)
     {
-        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, vcl::PixelFormat::N1_BPP));
+        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256)));
         mpIncompleteAlpha->Erase(COL_WHITE);
     }
 

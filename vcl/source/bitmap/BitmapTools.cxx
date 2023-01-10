@@ -130,15 +130,31 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     In case the endianness of pData is wrong, you could reverse colors
 */
 BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight,
-                        sal_Int32 nStride, vcl::PixelFormat ePixelFormat,
+                        sal_Int32 nStride, sal_Int8 nBitCount,
                         bool bReversColors, bool bReverseAlpha)
 {
-    auto nBitCount = sal_uInt16(ePixelFormat);
-
     assert(nStride >= (nWidth * nBitCount / 8));
-    assert(nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
+    assert(nBitCount == 1 || nBitCount == 8 || nBitCount == 24 || nBitCount == 32);
 
-    Bitmap aBmp(Size(nWidth, nHeight), ePixelFormat);
+    PixelFormat ePixelFormat;
+    if (nBitCount == 1)
+        ePixelFormat = PixelFormat::N8_BPP; // we convert 1-bit input data to 8-bit format
+    else if (nBitCount == 8)
+        ePixelFormat = PixelFormat::N8_BPP;
+    else if (nBitCount == 24)
+        ePixelFormat = PixelFormat::N24_BPP;
+    else if (nBitCount == 32)
+        ePixelFormat = PixelFormat::N32_BPP;
+    else
+        std::abort();
+    Bitmap aBmp;
+    if (nBitCount == 1)
+    {
+        BitmapPalette aBiLevelPalette { COL_BLACK, COL_WHITE };
+        aBmp = Bitmap(Size(nWidth, nHeight), PixelFormat::N8_BPP, &aBiLevelPalette);
+    }
+    else
+        aBmp = Bitmap(Size(nWidth, nHeight), ePixelFormat);
 
     BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
@@ -174,7 +190,9 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
             for (tools::Long x = 0; x < nWidth; ++x)
             {
                 BitmapColor col;
-                if ( bReversColors )
+                if (nBitCount == 8)
+                    col = BitmapColor( *p );
+                else if ( bReversColors )
                     col = BitmapColor( p[2], p[1], p[0] );
                 else
                     col = BitmapColor( p[0], p[1], p[2] );
@@ -1032,7 +1050,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         aPalette[0] = BitmapColor(aColorBack);
         aPalette[1] = BitmapColor(aColorPix);
 
-        Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N1_BPP, &aPalette);
+        Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N8_BPP, &aPalette);
         BitmapScopedWriteAccess pContent(aBitmap);
 
         for(sal_uInt16 a(0); a < 8; a++)
@@ -1063,58 +1081,37 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
             if(8 == aBitmap.GetSizePixel().Width() && 8 == aBitmap.GetSizePixel().Height())
             {
-                if (aBitmap.getPixelFormat() == vcl::PixelFormat::N1_BPP)
-                {
-                    BitmapReadAccess* pRead = aBitmap.AcquireReadAccess();
-
-                    if(pRead)
+                // Historical 1bpp images are getting really historical,
+                // even to the point that e.g. the png loader actually loads
+                // them as RGB. But the pattern code in svx relies on this
+                // assumption that any 2-color 1bpp bitmap is a pattern, and so it would
+                // get confused by RGB. Try to detect if this image is really
+                // just two colors and say it's a pattern bitmap if so.
+                Bitmap::ScopedReadAccess access(aBitmap);
+                o_rBack = access->GetColor(0,0);
+                bool foundSecondColor = false;;
+                for(tools::Long y = 0; y < access->Height(); ++y)
+                    for(tools::Long x = 0; x < access->Width(); ++x)
                     {
-                        if(pRead->HasPalette() && 2 == pRead->GetPaletteEntryCount())
+                        if(!foundSecondColor)
                         {
-                            const BitmapPalette& rPalette = pRead->GetPalette();
-                            o_rFront = rPalette[1];
-                            o_rBack = rPalette[0];
-
-                            bRet = true;
+                            if( access->GetColor(y,x) != o_rBack )
+                            {
+                                o_rFront = access->GetColor(y,x);
+                                foundSecondColor = true;
+                                // Hard to know which of the two colors is the background,
+                                // select the lighter one.
+                                if( o_rFront.GetLuminance() > o_rBack.GetLuminance())
+                                    std::swap( o_rFront, o_rBack );
+                            }
                         }
-
-                        Bitmap::ReleaseAccess(pRead);
+                        else
+                        {
+                            if( access->GetColor(y,x) != o_rBack && access->GetColor(y,x) != o_rFront)
+                                return false;
+                        }
                     }
-                }
-                else
-                {
-                    // Historical 1bpp images are getting really historical,
-                    // even to the point that e.g. the png loader actually loads
-                    // them as RGB. But the pattern code in svx relies on this
-                    // assumption that any 2-color 1bpp bitmap is a pattern, and so it would
-                    // get confused by RGB. Try to detect if this image is really
-                    // just two colors and say it's a pattern bitmap if so.
-                    Bitmap::ScopedReadAccess access(aBitmap);
-                    o_rBack = access->GetColor(0,0);
-                    bool foundSecondColor = false;;
-                    for(tools::Long y = 0; y < access->Height(); ++y)
-                        for(tools::Long x = 0; x < access->Width(); ++x)
-                        {
-                            if(!foundSecondColor)
-                            {
-                                if( access->GetColor(y,x) != o_rBack )
-                                {
-                                    o_rFront = access->GetColor(y,x);
-                                    foundSecondColor = true;
-                                    // Hard to know which of the two colors is the background,
-                                    // select the lighter one.
-                                    if( o_rFront.GetLuminance() > o_rBack.GetLuminance())
-                                        std::swap( o_rFront, o_rBack );
-                                }
-                            }
-                            else
-                            {
-                                if( access->GetColor(y,x) != o_rBack && access->GetColor(y,x) != o_rFront)
-                                    return false;
-                            }
-                        }
-                    return true;
-                }
+                return true;
             }
         }
 

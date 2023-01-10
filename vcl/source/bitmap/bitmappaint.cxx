@@ -837,11 +837,6 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
         }
     }
 
-    // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
-    // in their palette
-    if (getPixelFormat() == vcl::PixelFormat::N1_BPP)
-        Convert(BmpConversion::N8BitColors);
-
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
@@ -900,11 +895,6 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
 bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, size_t nColorCount,
                      sal_uInt8 const* pTols)
 {
-    // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
-    // in their palette
-    if (getPixelFormat() == vcl::PixelFormat::N1_BPP)
-        Convert(BmpConversion::N8BitColors);
-
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 

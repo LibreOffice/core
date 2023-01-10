@@ -38,8 +38,6 @@ bool QtBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const Bi
     if (ePixelFormat == vcl::PixelFormat::INVALID)
         return false;
 
-    if (ePixelFormat == vcl::PixelFormat::N1_BPP)
-        assert(2 >= rPal.GetEntryCount());
     if (ePixelFormat == vcl::PixelFormat::N8_BPP)
         assert(256 >= rPal.GetEntryCount());
 

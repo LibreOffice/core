@@ -1412,7 +1412,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                         Bitmap aBmp( aGraf.GetBitmapEx().GetBitmap() );
                         if (aBmp.GetSizePixel().Width() == 8 &&
                             aBmp.GetSizePixel().Height() == 8 &&
-                            aBmp.getPixelFormat() == vcl::PixelFormat::N1_BPP)
+                            aBmp.getPixelFormat() == vcl::PixelFormat::N8_BPP)
                         {
                             Color aCol1( COL_WHITE ), aCol2( COL_WHITE );
 

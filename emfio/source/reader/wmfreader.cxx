@@ -837,8 +837,8 @@ namespace emfio
                     SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record. Please fill a bug.");
                     break;
                 }
-                const vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat( nBitCount );
-                bool bOk = nWidth > 0 && nHeight > 0 && nBytesPerScan > 0 && ePixelFormat != vcl::PixelFormat::INVALID;
+                bool bOk = nWidth > 0 && nHeight > 0 && nBytesPerScan > 0
+                    && (nBitCount == 1 || nBitCount == 8 || nBitCount == 24 || nBitCount == 32);
                 if (bOk)
                 {
                     // must be enough data to fulfil the request
@@ -854,7 +854,7 @@ namespace emfio
                     std::unique_ptr< sal_uInt8[] > pData;
                     pData.reset( new sal_uInt8[ nHeight * nBytesPerScan ] );
                     mpInputStream->ReadBytes( pData.get(), nHeight * nBytesPerScan );
-                    BitmapEx aBitmap = vcl::bitmap::CreateFromData( pData.get(), nWidth, nHeight, nBytesPerScan, ePixelFormat, true );
+                    BitmapEx aBitmap = vcl::bitmap::CreateFromData( pData.get(), nWidth, nHeight, nBytesPerScan, nBitCount, true );
                     if ( nSye && nSxe &&
                          ( nXSrc + nSxe <= nWidth ) &&
                          ( nYSrc + nSye <= nHeight ) )

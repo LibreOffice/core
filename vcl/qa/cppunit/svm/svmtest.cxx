@@ -116,7 +116,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkBitmaps(const GDIMetaFile& rMetaFile);
     void testBitmaps();
 
-    void checkBitmapExs(const GDIMetaFile& rMetaFile);
+    void checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile);
     void testBitmapExs();
 
     void checkMasks(const GDIMetaFile& rMetaFile);
@@ -998,7 +998,7 @@ void SvmTest::testBitmaps()
     }
 }
 
-void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
+void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
@@ -1013,7 +1013,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "281fc589",
         "b8dee5da",
         "4df0e464",
-        "186ff868",
+        "186ff868", // 1-bit
         "33b4a07c", // 4-bit color bitmap - same as 8-bit color bitmap
         "33b4a07c",
         "742c3e35",
@@ -1022,7 +1022,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "281fc589",
         "5e01ddcc",
         "4df0e464",
-        "4322ee3a",
+        "17df308f", // 1-bit
         "3c80d829", // 4-bit color bitmap - same as 8-bit color bitmap
         "3c80d829",
         "71efc447",
@@ -1046,9 +1046,12 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/bmpex[2]", {
         {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
-        {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
-    });
+    if (!bIsSvmFile)
+    {
+        assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
+            {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
+        });
+    }
     assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
         {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
     });
@@ -1058,6 +1061,8 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
         {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
     });
+#else
+    (void)bIsSvmFile;
 #endif
 }
 
@@ -1158,12 +1163,12 @@ void SvmTest::testBitmapExs()
 
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
-        checkBitmapExs(aReloadedGDIMetaFile);
+        checkBitmapExs(aReloadedGDIMetaFile, /*bIsSvmFile*/false);
         checkRendering(pVirtualDev, aReloadedGDIMetaFile);
     }
     {
         GDIMetaFile aFileGDIMetaFile = readFile(u"bitmapexs.svm");
-        checkBitmapExs(aFileGDIMetaFile);
+        checkBitmapExs(aFileGDIMetaFile, /*bIsSvmFile*/true);
         checkRendering(pVirtualDev, aFileGDIMetaFile);
     }
 }

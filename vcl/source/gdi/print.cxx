@@ -110,7 +110,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     Bitmap  aPaint( rBmp ), aMask( rMask );
     BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
-    if (aMask.getPixelFormat() > vcl::PixelFormat::N1_BPP)
+    if (aMask.getPixelFormat() >= vcl::PixelFormat::N8_BPP)
         aMask.Convert( BmpConversion::N1BitThreshold );
 
     // mirrored horizontally
@@ -146,7 +146,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     // we always want to have a mask
     if( aMask.IsEmpty() )
     {
-        aMask = Bitmap(aSrcRect.GetSize(), vcl::PixelFormat::N1_BPP);
+        aMask = Bitmap(aSrcRect.GetSize(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
         aMask.Erase( COL_BLACK );
     }
 
@@ -703,7 +703,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     Bitmap  aMask( rMask );
     BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
-    if (aMask.getPixelFormat() > vcl::PixelFormat::N1_BPP)
+    if (aMask.getPixelFormat() >= vcl::PixelFormat::N8_BPP)
         aMask.Convert( BmpConversion::N1BitThreshold );
 
     // mirrored horizontally

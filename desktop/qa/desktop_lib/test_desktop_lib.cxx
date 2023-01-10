@@ -3357,7 +3357,7 @@ void DesktopLOKTest::testRenderSearchResult_WriterNode()
     CPPUNIT_ASSERT_EQUAL(size_t(1440648), nByteSize);
 
     const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
-    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, vcl::PixelFormat::N32_BPP, true, true);
+    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, /*nBitsPerPixel*/32, true, true);
 
     if (bDumpBitmap)
     {
@@ -3402,7 +3402,7 @@ void DesktopLOKTest::testRenderSearchResult_CommonNode()
     CPPUNIT_ASSERT_EQUAL(size_t(73728), nByteSize);
 
     const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
-    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, vcl::PixelFormat::N32_BPP, true, true);
+    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, /*nBitsPerPixel*/32, true, true);
 
     if (bDumpBitmap)
     {

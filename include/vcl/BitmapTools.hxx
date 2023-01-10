@@ -52,7 +52,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 */
 BitmapEx VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
                                       sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride,
-                                      vcl::PixelFormat ePixelFormat,
+                                      sal_Int8 nBitsPerPixel,
                                       bool bReversColors = false, bool bReverseAlpha = false);
 
 BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );

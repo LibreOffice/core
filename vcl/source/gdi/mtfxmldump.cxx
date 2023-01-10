@@ -429,7 +429,6 @@ OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
     switch (ePixelFormat)
     {
         case vcl::PixelFormat::INVALID: return "INVALID";
-        case vcl::PixelFormat::N1_BPP: return "1BPP";
         case vcl::PixelFormat::N8_BPP: return "8BPP";
         case vcl::PixelFormat::N24_BPP: return "24BPP";
         case vcl::PixelFormat::N32_BPP: return "32BPP";

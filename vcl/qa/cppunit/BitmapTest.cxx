@@ -94,19 +94,6 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N1_BPP);
-        Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
-        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N1_BPP,
-                                     aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_Int64>(12),
-                                     aBmp.GetSizeBytes());
-    }
-
-    {
         Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N8_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());

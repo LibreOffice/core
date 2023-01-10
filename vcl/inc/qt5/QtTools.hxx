@@ -111,8 +111,6 @@ inline QImage::Format getBitFormat(vcl::PixelFormat ePixelFormat)
 {
     switch (ePixelFormat)
     {
-        case vcl::PixelFormat::N1_BPP:
-            return QImage::Format_Mono;
         case vcl::PixelFormat::N8_BPP:
             return QImage::Format_Indexed8;
         case vcl::PixelFormat::N24_BPP:

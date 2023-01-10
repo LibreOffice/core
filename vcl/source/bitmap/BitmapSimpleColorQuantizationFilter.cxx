@@ -28,11 +28,7 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
         return BitmapEx();
 
     const sal_uInt16 nColorCount = std::min(mnNewColorCount, sal_uInt16(256));
-    auto ePixelFormat = vcl::PixelFormat::INVALID;
-    if (nColorCount <= 2)
-        ePixelFormat = vcl::PixelFormat::N1_BPP;
-    else
-        ePixelFormat = vcl::PixelFormat::N8_BPP;
+    auto ePixelFormat = vcl::PixelFormat::N8_BPP;
 
     Octree aOct(*pRAcc, nColorCount);
     const BitmapPalette& rPal = aOct.GetPalette();

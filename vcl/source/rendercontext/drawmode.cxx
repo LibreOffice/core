@@ -245,7 +245,8 @@ BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode)
 
     if (nDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
     {
-        Bitmap aColorBmp(aBmpEx.GetSizePixel(), vcl::PixelFormat::N1_BPP);
+        Bitmap aColorBmp(aBmpEx.GetSizePixel(), vcl::PixelFormat::N8_BPP,
+                         &Bitmap::GetGreyPalette(256));
         sal_uInt8 cCmpVal;
 
         if (nDrawMode & DrawModeFlags::BlackBitmap)

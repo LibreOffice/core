@@ -219,7 +219,7 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
     {
         const Color aWhite(COL_WHITE);
 
-        aBmp1 = Bitmap(aSize, vcl::PixelFormat::N1_BPP);
+        aBmp1 = Bitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
         if (!aAnimation.Count())
             aBmp1.Erase(aWhite);

@@ -642,7 +642,7 @@ namespace wmfemfhelper
         };
 
         Bitmap aMask(rBitmap.CreateMask(aWhite));
-        Bitmap aSolid(rBitmap.GetSizePixel(), vcl::PixelFormat::N1_BPP, &aBiLevelPalette);
+        Bitmap aSolid(rBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aBiLevelPalette);
 
         aSolid.Erase(rMaskColor);
 
