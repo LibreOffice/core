@@ -8330,6 +8330,20 @@ SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxVoidItem DeleteTextFormFields FN_DELETE_TEXT_FORMFIELDS
+(SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxVoidItem UpdateTextFormField FN_UPDATE_TEXT_FORMFIELD
 (SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2, SfxUnoAnyItem Field FN_PARAM_3)
 [

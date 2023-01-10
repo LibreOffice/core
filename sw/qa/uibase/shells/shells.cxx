@@ -713,6 +713,51 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
     CPPUNIT_ASSERT_EQUAL(OUString("new content"), aActualResult);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
+{
+    // Given a document with 2 fieldmarks:
+    createSwDoc();
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldCommand",
+                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
+            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result 1"))),
+        };
+        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    }
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldCommand",
+                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 2"))),
+            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result 2"))),
+        };
+        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    }
+
+    // When deleting those fieldmarks:
+    uno::Sequence<css::beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldCommandPrefix",
+                                          uno::Any(OUString("ADDIN ZOTERO_ITEM"))) };
+    dispatchCommand(mxComponent, ".uno:DeleteTextFormFields", aArgs);
+
+    // Then make sure that the document doesn't contain fields anymore:
+    SwDoc* pDoc = getSwDoc();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. the fieldmarks were not deleted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         pDoc->getIDocumentMarkAccess()->getAllMarksCount());
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(OUString("result 1result 2"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
