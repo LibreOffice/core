@@ -479,7 +479,20 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
     {
         //in the unlikely case we can't use m_pSurface directly, copy contents
         //to another temp image surface
-        target_surface = cairo_surface_map_to_image(target_surface, nullptr);
+        if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
+            target_surface = cairo_surface_map_to_image(target_surface, nullptr);
+        else
+        {
+            // for gen, which is CAIRO_FORMAT_RGB24/CAIRO_CONTENT_COLOR I'm getting
+            // visual corruption in vcldemo with cairo_surface_map_to_image
+            cairo_t* copycr = createTmpCompatibleCairoContext();
+            cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
+                            nExtentsBottom - nExtentsTop);
+            cairo_set_source_surface(copycr, m_pSurface, 0, 0);
+            cairo_fill(copycr);
+            target_surface = cairo_get_target(copycr);
+            cairo_destroy(copycr);
+        }
     }
 
     cairo_surface_flush(target_surface);
@@ -549,7 +562,19 @@ void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
 
     if (target_surface != m_pSurface)
     {
-        cairo_surface_unmap_image(m_pSurface, target_surface);
+        if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
+            cairo_surface_unmap_image(m_pSurface, target_surface);
+        else
+        {
+            cairo_t* copycr = cairo_create(m_pSurface);
+            //copy contents back from image surface
+            cairo_rectangle(copycr, nExtentsLeft, nExtentsTop, nExtentsRight - nExtentsLeft,
+                            nExtentsBottom - nExtentsTop);
+            cairo_set_source_surface(copycr, target_surface, 0, 0);
+            cairo_fill(copycr);
+            cairo_destroy(copycr);
+            cairo_surface_destroy(target_surface);
+        }
     }
 
     cairo_surface_destroy(surface);
