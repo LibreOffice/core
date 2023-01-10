@@ -476,6 +476,7 @@ void SidebarController::NotifyResize()
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
             mpCurrentDeck->Show();
             mpCurrentDeck->RequestLayout();
+            mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
         }
         else
             mpCurrentDeck->Hide();
@@ -598,10 +599,6 @@ void SidebarController::UpdateConfigurations()
         RequestCloseDeck();
         return;
     }
-
-    // Tell the tab bar to highlight the button associated
-    // with the deck.
-    mpTabBar->HighlightDeck(sNewDeckId);
 
     std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
 
@@ -829,8 +826,6 @@ void SidebarController::SwitchToDeck (
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }
-
-    mpTabBar->HighlightDeck(msCurrentDeckId);
 
     // Determine the panels to display in the deck.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
@@ -1255,8 +1250,7 @@ void SidebarController::RequestCloseDeck()
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
-    if (!mpCurrentDeck)
-        mpTabBar->RemoveDeckHighlight();
+    mpTabBar->RemoveDeckHighlight();
 }
 
 void SidebarController::RequestOpenDeck()
@@ -1376,9 +1370,6 @@ void SidebarController::UpdateDeckOpenState()
         mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
     }
 
-    mbIsDeckOpen = *mbIsDeckRequestedOpen;
-    if (*mbIsDeckOpen && mpCurrentDeck)
-        mpCurrentDeck->Show();
     NotifyResize();
 }
 
