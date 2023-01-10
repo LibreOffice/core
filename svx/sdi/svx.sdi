@@ -12529,6 +12529,23 @@ SfxVoidItem GraphicSizeCheck SID_GRAPHIC_SIZE_CHECK
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem ThemeDialog SID_THEME_DIALOG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem AccessibilityCheck SID_ACCESSIBILITY_CHECK
 ()
 [

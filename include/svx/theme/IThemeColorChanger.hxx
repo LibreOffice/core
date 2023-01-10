@@ -5,32 +5,22 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  */
+
 #pragma once
 
-#include <docsh.hxx>
+#include <svx/svxdllapi.h>
 #include <svx/ColorSets.hxx>
-#include <svx/theme/IThemeColorChanger.hxx>
 
-namespace sw
+namespace svx
 {
-class ThemeColorChanger : public svx::IThemeColorChanger
+class SVX_DLLPUBLIC IThemeColorChanger
 {
-private:
-    SwDocShell* mpDocSh;
-
 public:
-    ThemeColorChanger(SwDocShell* pDocSh)
-        : mpDocSh(pDocSh)
-    {
-    }
-
-    virtual ~ThemeColorChanger() override;
-
-    void apply(svx::ColorSet const& rColorSet) override;
+    virtual ~IThemeColorChanger() = default;
+    virtual void apply(svx::ColorSet const& rColorSet) = 0;
 };
 
-} // end sw namespace
+} // end svx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
