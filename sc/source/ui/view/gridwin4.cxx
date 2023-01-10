@@ -1176,7 +1176,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // Get top-left offset because of margin and indent.
                             lcl_GetEditAreaTLOffset(nOffsetX, nOffsetY, ScAddress(nCol1, nRow1, nTab), mrViewData, rDoc);
                             aEditRect.AdjustLeft(nOffsetX + 1);
+                            aEditRect.AdjustRight(1);
                             aEditRect.AdjustTop(nOffsetY + 1);
+                            aEditRect.AdjustBottom(1);
 
                             // EditView has an 'output area' which is used to clip the 'paint area' we provide below.
                             // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
@@ -1308,13 +1310,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // paint the editeng text
         if (bIsTiledRendering)
         {
-            tools::Rectangle aEditRect(aBackground);
-            tools::Long nOffsetX = 0, nOffsetY = 0;
-            // Get top-left offset because of margin and indent.
-            lcl_GetEditAreaTLOffset(nOffsetX, nOffsetY, ScAddress(nCol1, nRow1, mrViewData.GetTabNo()), mrViewData, rDoc);
-            aEditRect.AdjustLeft(nOffsetX + 1);
-            aEditRect.AdjustTop(nOffsetY + 1);
-
             // EditView has an 'output area' which is used to clip the paint area we provide below.
             // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
             // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
