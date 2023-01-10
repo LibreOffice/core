@@ -204,6 +204,11 @@ struct VCL_DLLPUBLIC CairoCommon
 
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 
+    void invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                SalInvert nFlags, bool bAntiAlias);
+
+    void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags, bool bAntiAlias);
+
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 
     static bool supportsOperation(OutDevSupportType eType);

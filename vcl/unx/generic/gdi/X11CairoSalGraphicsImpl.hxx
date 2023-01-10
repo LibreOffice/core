@@ -127,6 +127,11 @@ public:
     bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                           SalGradient const& rGradient) override;
 
+    void invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                SalInvert nFlags) override;
+
+    void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override;
+
     virtual bool hasFastDrawTransformedBitmap() const override;
 
     virtual bool supportsOperation(OutDevSupportType eType) const override;

@@ -66,32 +66,6 @@
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
-class SalPolyLine
-{
-    std::vector<XPoint> Points_;
-public:
-    SalPolyLine(sal_uLong nPoints, const Point *p)
-        : Points_(nPoints+1)
-    {
-        for (sal_uLong i = 0; i < nPoints; ++i)
-        {
-            Points_[i].x = static_cast<short>(p[i].getX());
-            Points_[i].y = static_cast<short>(p[i].getY());
-        }
-        Points_[nPoints] = Points_[0]; // close polyline
-    }
-
-    const XPoint &operator[](sal_uLong n) const
-    {
-        return Points_[n];
-    }
-
-    XPoint &operator[](sal_uLong n)
-    {
-        return Points_[n];
-    }
-};
-
 namespace
 {
     void setForeBack(XGCValues& rValues, const SalColormap& rColMap, const SalBitmap& rSalBitmap)
@@ -140,9 +114,7 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mpCopyGC(nullptr),
     mpMaskGC(nullptr),
     mpInvertGC(nullptr),
-    mpInvert50GC(nullptr),
-    mpStippleGC(nullptr),
-    mpTrackingGC(nullptr)
+    mpStippleGC(nullptr)
 {
 }
 
@@ -197,11 +169,9 @@ void X11SalGraphicsImpl::freeResources()
     freeGC( pDisplay, mpPenGC );
     freeGC( pDisplay, mpBrushGC );
     freeGC( pDisplay, mpMonoGC );
-    freeGC( pDisplay, mpTrackingGC );
     freeGC( pDisplay, mpCopyGC );
     freeGC( pDisplay, mpMaskGC );
     freeGC( pDisplay, mpInvertGC );
-    freeGC( pDisplay, mpInvert50GC );
     freeGC( pDisplay, mpStippleGC );
     mbTrackingGC = mbPenGC = mbBrushGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
 }
@@ -237,36 +207,6 @@ inline GC X11SalGraphicsImpl::GetCopyGC()
     return mpCopyGC;
 }
 
-GC X11SalGraphicsImpl::GetTrackingGC()
-{
-    if( !mpTrackingGC )
-    {
-        XGCValues     values;
-
-        values.graphics_exposures   = False;
-        values.foreground           = mrParent.GetColormap().GetBlackPixel()
-                                      ^ mrParent.GetColormap().GetWhitePixel();
-        values.function             = GXxor;
-        values.line_width           = 1;
-        values.line_style           = LineOnOffDash;
-
-        mpTrackingGC = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
-                                  GCGraphicsExposures | GCForeground | GCFunction
-                                  | GCLineWidth | GCLineStyle,
-                                  &values );
-        const char dash_list[2] = {2, 2};
-        XSetDashes( mrParent.GetXDisplay(), mpTrackingGC, 0, dash_list, 2 );
-    }
-
-    if( !mbTrackingGC )
-    {
-        mrParent.SetClipRegion( mpTrackingGC );
-        mbTrackingGC = true;
-    }
-
-    return mpTrackingGC;
-}
-
 GC X11SalGraphicsImpl::GetInvertGC()
 {
     if( !mpInvertGC )
@@ -282,44 +222,6 @@ GC X11SalGraphicsImpl::GetInvertGC()
         mbInvertGC = true;
     }
     return mpInvertGC;
-}
-
-GC X11SalGraphicsImpl::GetInvert50GC()
-{
-    if( !mpInvert50GC )
-    {
-        XGCValues values;
-
-        values.graphics_exposures   = False;
-        values.foreground           = mrParent.GetColormap().GetWhitePixel();
-        values.background           = mrParent.GetColormap().GetBlackPixel();
-        values.function             = GXinvert;
-        values.line_width           = 1;
-        values.line_style           = LineSolid;
-        unsigned long const nValueMask =
-                                  GCGraphicsExposures
-                                  | GCForeground
-                                  | GCBackground
-                                  | GCFunction
-                                  | GCLineWidth
-                                  | GCLineStyle
-                                  | GCFillStyle
-                                  | GCStipple;
-
-        values.fill_style           = FillStippled;
-        values.stipple              = mrParent.GetDisplay()->GetInvert50( mrParent.m_nXScreen );
-
-        mpInvert50GC = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
-                                  nValueMask,
-                                  &values );
-    }
-
-    if( !mbInvert50GC )
-    {
-        mrParent.SetClipRegion( mpInvert50GC );
-        mbInvert50GC = true;
-    }
-    return mpInvert50GC;
 }
 
 inline GC X11SalGraphicsImpl::GetStippleGC()
@@ -405,40 +307,6 @@ GC X11SalGraphicsImpl::SelectPen()
     }
 
     return mpPenGC;
-}
-
-void X11SalGraphicsImpl::DrawLines(sal_uInt32              nPoints,
-                                   const SalPolyLine &rPoints,
-                                   GC                 pGC,
-                                   bool               bClose)
-{
-    // calculate how many lines XWindow can draw in one go
-    sal_uLong nMaxLines = (mrParent.GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
-                      / sizeof(xPoint);
-    if( nMaxLines > nPoints ) nMaxLines = nPoints;
-
-    // print all lines that XWindows can draw
-    sal_uLong n;
-    for( n = 0; nPoints - n > nMaxLines; n += nMaxLines - 1 )
-        XDrawLines( mrParent.GetXDisplay(),
-                    mrParent.GetDrawable(),
-                    pGC,
-                    const_cast<XPoint*>(&rPoints[n]),
-                    nMaxLines,
-                    CoordModeOrigin );
-
-    if( n < nPoints )
-        XDrawLines( mrParent.GetXDisplay(),
-                    mrParent.GetDrawable(),
-                    pGC,
-                    const_cast<XPoint*>(&rPoints[n]),
-                    nPoints - n,
-                    CoordModeOrigin );
-    if( bClose )
-    {
-        if( rPoints[nPoints-1].x != rPoints[0].x || rPoints[nPoints-1].y != rPoints[0].y )
-            internalDrawLine( rPoints[nPoints-1].x, rPoints[nPoints-1].y, rPoints[0].x, rPoints[0].y );
-    }
 }
 
 void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
@@ -1087,15 +955,6 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     }
 }
 
-void X11SalGraphicsImpl::internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
-{
-    if( moPenColor )
-    {
-        XDrawLine( mrParent.GetXDisplay(), mrParent.GetDrawable(),SelectPen(),
-                   nX1, nY1, nX2, nY2 );
-    }
-}
-
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
 {
     return false;
@@ -1110,58 +969,6 @@ bool X11SalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
                                                 const Point* const*, const PolyFlags* const* )
 {
     return false;
-}
-
-void X11SalGraphicsImpl::invert( tools::Long       nX,
-                                tools::Long        nY,
-                                tools::Long        nDX,
-                                tools::Long        nDY,
-                                SalInvert   nFlags )
-{
-    GC pGC;
-    if( SalInvert::N50 & nFlags )
-    {
-        pGC = GetInvert50GC();
-        XFillRectangle( mrParent.GetXDisplay(), mrParent.GetDrawable(), pGC, nX, nY, nDX, nDY );
-    }
-    else
-    {
-        if ( SalInvert::TrackFrame & nFlags )
-        {
-            pGC = GetTrackingGC();
-            XDrawRectangle( mrParent.GetXDisplay(), mrParent.GetDrawable(),  pGC, nX, nY, nDX, nDY );
-        }
-        else
-        {
-            pGC = GetInvertGC();
-            XFillRectangle( mrParent.GetXDisplay(), mrParent.GetDrawable(),  pGC, nX, nY, nDX, nDY );
-        }
-    }
-}
-
-void X11SalGraphicsImpl::invert( sal_uInt32 nPoints,
-                             const Point* pPtAry,
-                             SalInvert nFlags )
-{
-    SalPolyLine Points ( nPoints, pPtAry );
-
-    GC pGC;
-    if( SalInvert::N50 & nFlags )
-        pGC = GetInvert50GC();
-    else
-        if ( SalInvert::TrackFrame & nFlags )
-            pGC = GetTrackingGC();
-        else
-            pGC = GetInvertGC();
-
-    if( SalInvert::TrackFrame & nFlags )
-        DrawLines ( nPoints, Points, pGC, true );
-    else
-        XFillPolygon( mrParent.GetXDisplay(),
-                      mrParent.GetDrawable(),
-                      pGC,
-                      &Points[0], nPoints,
-                      Complex, CoordModeOrigin );
 }
 
 bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Long,void*,sal_uInt32 )

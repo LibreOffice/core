@@ -348,21 +348,12 @@ Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
 void SvpGraphicsBackend::invert(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                 tools::Long nHeight, SalInvert nFlags)
 {
-    basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
-        basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
-
-    m_rCairoCommon.invert(aRect, nFlags, getAntiAlias());
+    m_rCairoCommon.invert(nX, nY, nWidth, nHeight, nFlags, getAntiAlias());
 }
 
 void SvpGraphicsBackend::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags)
 {
-    basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
-    for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
-    aPoly.setClosed(true);
-
-    m_rCairoCommon.invert(aPoly, nFlags, getAntiAlias());
+    m_rCairoCommon.invert(nPoints, pPtAry, nFlags, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,

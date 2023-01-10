@@ -110,6 +110,17 @@ bool X11CairoSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const& rP
     return mrCairoCommon.implDrawGradient(rPolyPolygon, rGradient, getAntiAlias());
 }
 
+void X11CairoSalGraphicsImpl::invert(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                     tools::Long nHeight, SalInvert nFlags)
+{
+    mrCairoCommon.invert(nX, nY, nWidth, nHeight, nFlags, getAntiAlias());
+}
+
+void X11CairoSalGraphicsImpl::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags)
+{
+    mrCairoCommon.invert(nPoints, pPtAry, nFlags, getAntiAlias());
+}
+
 bool X11CairoSalGraphicsImpl::hasFastDrawTransformedBitmap() const
 {
     return CairoCommon::hasFastDrawTransformedBitmap();

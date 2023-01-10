@@ -1557,6 +1557,26 @@ void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, boo
     releaseCairoContext(cr, false, extents);
 }
 
+void CairoCommon::invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                         SalInvert nFlags, bool bAntiAlias)
+{
+    basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
+        basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
+
+    invert(aRect, nFlags, bAntiAlias);
+}
+
+void CairoCommon::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags, bool bAntiAlias)
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
+    aPoly.setClosed(true);
+
+    invert(aPoly, nFlags, bAntiAlias);
+}
+
 cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
 {
     cairo_format_t nFormat;

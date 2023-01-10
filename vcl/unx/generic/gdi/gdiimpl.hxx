@@ -68,9 +68,7 @@ private:
     GC mpCopyGC;
     GC mpMaskGC;
     GC mpInvertGC;
-    GC mpInvert50GC;
     GC mpStippleGC;
-    GC mpTrackingGC;
 
     GC CreateGC( Drawable      hDrawable,
             unsigned long nMask = GCGraphicsExposures );
@@ -79,15 +77,7 @@ private:
     GC SelectPen();
     inline GC GetCopyGC();
     inline GC GetStippleGC();
-    GC GetTrackingGC();
     GC GetInvertGC();
-    GC GetInvert50GC();
-
-    void DrawLines( sal_uInt32              nPoints,
-                               const SalPolyLine &rPoints,
-                               GC                 pGC,
-                               bool bClose
-                               );
 
     XID GetXRenderPicture();
 
@@ -96,8 +86,6 @@ private:
     void drawMaskedBitmap( const SalTwoRect& rPosAry,
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
-
-    void internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
 
 public:
 
@@ -183,14 +171,6 @@ public:
                 Color nMaskColor ) override;
 
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void invert(
-                tools::Long nX, tools::Long nY,
-                tools::Long nWidth, tools::Long nHeight,
-                SalInvert nFlags) override;
-
-    virtual void invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
     virtual bool drawEPS(
                 tools::Long nX, tools::Long nY,
