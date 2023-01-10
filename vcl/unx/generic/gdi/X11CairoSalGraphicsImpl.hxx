@@ -44,29 +44,13 @@ public:
         X11SalGraphicsImpl::setClipRegion(i_rClip);
     }
 
-    void SetLineColor() override
-    {
-        mrCairoCommon.m_oLineColor = std::nullopt;
-        X11SalGraphicsImpl::SetLineColor();
-    }
+    void SetLineColor() override { mrCairoCommon.m_oLineColor = std::nullopt; }
 
-    void SetLineColor(Color nColor) override
-    {
-        mrCairoCommon.m_oLineColor = nColor;
-        X11SalGraphicsImpl::SetLineColor(nColor);
-    }
+    void SetLineColor(Color nColor) override { mrCairoCommon.m_oLineColor = nColor; }
 
-    void SetFillColor() override
-    {
-        mrCairoCommon.m_oFillColor = std::nullopt;
-        X11SalGraphicsImpl::SetFillColor();
-    }
+    void SetFillColor() override { mrCairoCommon.m_oFillColor = std::nullopt; }
 
-    void SetFillColor(Color nColor) override
-    {
-        mrCairoCommon.m_oFillColor = nColor;
-        X11SalGraphicsImpl::SetFillColor(nColor);
-    }
+    void SetFillColor(Color nColor) override { mrCairoCommon.m_oFillColor = nColor; }
 
     void SetXORMode(bool bSet, bool bInvertOnly) override
     {
@@ -77,13 +61,11 @@ public:
     void SetROPLineColor(SalROPColor nROPColor) override
     {
         mrCairoCommon.SetROPLineColor(nROPColor);
-        X11SalGraphicsImpl::SetROPLineColor(nROPColor);
     }
 
     void SetROPFillColor(SalROPColor nROPColor) override
     {
         mrCairoCommon.SetROPFillColor(nROPColor);
-        X11SalGraphicsImpl::SetROPFillColor(nROPColor);
     }
 
     void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, mrCairoCommon.m_aClipRegion); }

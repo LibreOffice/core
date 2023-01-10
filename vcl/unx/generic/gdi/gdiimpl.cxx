@@ -95,21 +95,10 @@ namespace
 
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mrParent(rParent),
-    moBrushColor( std::in_place, 0xFF, 0xFF, 0XFF ),
-    mpBrushGC(nullptr),
-    mnBrushPixel(0),
-    mbPenGC(false),
-    mbBrushGC(false),
     mbCopyGC(false),
     mbInvertGC(false),
-    mbInvert50GC(false),
     mbStippleGC(false),
-    mbTrackingGC(false),
-    mbDitherBrush(false),
     mbXORMode(false),
-    mpPenGC(nullptr),
-    moPenColor( std::in_place, 0x00, 0x00, 0x00 ),
-    mnPenPixel(0),
     mpCopyGC(nullptr),
     mpInvertGC(nullptr),
     mpStippleGC(nullptr)
@@ -122,8 +111,6 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 
 void X11SalGraphicsImpl::Init()
 {
-    mnPenPixel = moPenColor ? mrParent.GetPixel(*moPenColor) : 0;
-    mnBrushPixel = moBrushColor ? mrParent.GetPixel(*moBrushColor) : 0;
 }
 
 XID X11SalGraphicsImpl::GetXRenderPicture()
@@ -164,12 +151,10 @@ void X11SalGraphicsImpl::freeResources()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    freeGC( pDisplay, mpPenGC );
-    freeGC( pDisplay, mpBrushGC );
     freeGC( pDisplay, mpCopyGC );
     freeGC( pDisplay, mpInvertGC );
     freeGC( pDisplay, mpStippleGC );
-    mbTrackingGC = mbPenGC = mbBrushGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
+    mbCopyGC = mbInvertGC = mbStippleGC = false;
 }
 
 GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
@@ -236,73 +221,6 @@ inline GC X11SalGraphicsImpl::GetStippleGC()
     }
 
     return mpStippleGC;
-}
-
-GC X11SalGraphicsImpl::SelectBrush()
-{
-    Display *pDisplay = mrParent.GetXDisplay();
-
-    SAL_WARN_IF( !moBrushColor, "vcl", "Brush Transparent" );
-
-    if( !mpBrushGC )
-    {
-        XGCValues values;
-        values.subwindow_mode       = ClipByChildren;
-        values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
-        values.graphics_exposures   = False;
-
-        mpBrushGC = XCreateGC( pDisplay, mrParent.GetDrawable(),
-                               GCSubwindowMode | GCFillRule | GCGraphicsExposures,
-                               &values );
-    }
-
-    if( !mbBrushGC )
-    {
-        if( !mbDitherBrush )
-        {
-            XSetFillStyle ( pDisplay, mpBrushGC, FillSolid );
-            XSetForeground( pDisplay, mpBrushGC, mnBrushPixel );
-        }
-        else
-        {
-            XSetFillStyle ( pDisplay, mpBrushGC, FillTiled );
-            XSetTile      ( pDisplay, mpBrushGC, mrParent.hBrush_ );
-        }
-        XSetFunction  ( pDisplay, mpBrushGC, mbXORMode ? GXxor : GXcopy );
-        mrParent.SetClipRegion( mpBrushGC );
-
-        mbBrushGC = true;
-    }
-
-    return mpBrushGC;
-}
-
-GC X11SalGraphicsImpl::SelectPen()
-{
-    Display *pDisplay = mrParent.GetXDisplay();
-
-    if( !mpPenGC )
-    {
-        XGCValues values;
-        values.subwindow_mode       = ClipByChildren;
-        values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
-        values.graphics_exposures   = False;
-
-        mpPenGC = XCreateGC( pDisplay, mrParent.GetDrawable(),
-                             GCSubwindowMode | GCFillRule | GCGraphicsExposures,
-                             &values );
-    }
-
-    if( !mbPenGC )
-    {
-        if( moPenColor )
-            XSetForeground( pDisplay, mpPenGC, mnPenPixel );
-        XSetFunction  ( pDisplay, mpPenGC, mbXORMode ? GXxor : GXcopy );
-        mrParent.SetClipRegion( mpPenGC );
-        mbPenGC = true;
-    }
-
-    return mpPenGC;
 }
 
 void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
@@ -653,13 +571,9 @@ void X11SalGraphicsImpl::ResetClipRegion()
     if( !mrParent.mpClipRegion )
         return;
 
-    mbPenGC         = false;
-    mbBrushGC       = false;
     mbCopyGC        = false;
     mbInvertGC      = false;
-    mbInvert50GC    = false;
     mbStippleGC     = false;
-    mbTrackingGC    = false;
 
     XDestroyRegion( mrParent.mpClipRegion );
     mrParent.mpClipRegion    = nullptr;
@@ -714,13 +628,9 @@ void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     //}
 
     // done, invalidate GCs
-    mbPenGC         = false;
-    mbBrushGC       = false;
     mbCopyGC        = false;
     mbInvertGC      = false;
-    mbInvert50GC    = false;
     mbStippleGC     = false;
-    mbTrackingGC    = false;
 
     if( XEmptyRegion( mrParent.mpClipRegion ) )
     {
@@ -729,114 +639,14 @@ void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     }
 }
 
-void X11SalGraphicsImpl::SetLineColor()
-{
-    if( moPenColor )
-    {
-        moPenColor      = std::nullopt;
-        mbPenGC         = false;
-    }
-}
-
-void X11SalGraphicsImpl::SetLineColor( Color nColor )
-{
-    if( moPenColor != nColor )
-    {
-        moPenColor      = nColor;
-        mnPenPixel      = mrParent.GetPixel( nColor );
-        mbPenGC         = false;
-    }
-}
-
-void X11SalGraphicsImpl::SetFillColor()
-{
-    if( moBrushColor )
-    {
-        mbDitherBrush   = false;
-        moBrushColor    = std::nullopt;
-        mbBrushGC       = false;
-    }
-}
-
-void X11SalGraphicsImpl::SetFillColor( Color nColor )
-{
-    if( moBrushColor == nColor )
-        return;
-
-    mbDitherBrush   = false;
-    moBrushColor    = nColor;
-    mnBrushPixel    = mrParent.GetPixel( nColor );
-    if( TrueColor != mrParent.GetColormap().GetVisual().GetClass()
-        && mrParent.GetColormap().GetColor( mnBrushPixel ) != moBrushColor
-        && nColor != Color( 0x00, 0x00, 0x00 ) // black
-        && nColor != Color( 0x00, 0x00, 0x80 ) // blue
-        && nColor != Color( 0x00, 0x80, 0x00 ) // green
-        && nColor != Color( 0x00, 0x80, 0x80 ) // cyan
-        && nColor != Color( 0x80, 0x00, 0x00 ) // red
-        && nColor != Color( 0x80, 0x00, 0x80 ) // magenta
-        && nColor != Color( 0x80, 0x80, 0x00 ) // brown
-        && nColor != Color( 0x80, 0x80, 0x80 ) // gray
-        && nColor != Color( 0xC0, 0xC0, 0xC0 ) // light gray
-        && nColor != Color( 0x00, 0x00, 0xFF ) // light blue
-        && nColor != Color( 0x00, 0xFF, 0x00 ) // light green
-        && nColor != Color( 0x00, 0xFF, 0xFF ) // light cyan
-        && nColor != Color( 0xFF, 0x00, 0x00 ) // light red
-        && nColor != Color( 0xFF, 0x00, 0xFF ) // light magenta
-        && nColor != Color( 0xFF, 0xFF, 0x00 ) // light brown
-        && nColor != Color( 0xFF, 0xFF, 0xFF ) )
-        mbDitherBrush = mrParent.GetDitherPixmap(nColor);
-    mbBrushGC       = false;
-}
-
-void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
-{
-    switch( nROPColor )
-    {
-        case SalROPColor::N0 : // 0
-            mnPenPixel = Pixel(0);
-            break;
-        case SalROPColor::N1 : // 1
-            mnPenPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
-            break;
-        case SalROPColor::Invert : // 2
-            mnPenPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
-            break;
-    }
-    moPenColor  = mrParent.GetColormap().GetColor( mnPenPixel );
-    mbPenGC     = false;
-}
-
-void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
-{
-    switch( nROPColor )
-    {
-        case SalROPColor::N0 : // 0
-            mnBrushPixel = Pixel(0);
-            break;
-        case SalROPColor::N1 : // 1
-            mnBrushPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
-            break;
-        case SalROPColor::Invert : // 2
-            mnBrushPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
-            break;
-    }
-    mbDitherBrush   = false;
-    moBrushColor    = mrParent.GetColormap().GetColor( mnBrushPixel );
-    mbBrushGC       = false;
-}
-
 void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
     if (mbXORMode != bSet)
     {
         mbXORMode   = bSet;
-        mbPenGC     = false;
-        mbBrushGC   = false;
         mbCopyGC        = false;
         mbInvertGC  = false;
-        mbInvert50GC    = false;
         mbStippleGC = false;
-        mbTrackingGC    = false;
     }
 }
 

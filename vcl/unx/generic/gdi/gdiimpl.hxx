@@ -44,25 +44,11 @@ class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 private:
     X11SalGraphics& mrParent;
 
-    std::optional<Color> moBrushColor;
-    GC mpBrushGC;      // Brush attributes
-    Pixel mnBrushPixel;
-
-    bool mbPenGC : 1;        // is Pen GC valid
-    bool mbBrushGC : 1;      // is Brush GC valid
     bool mbCopyGC : 1;       // is Copy GC valid
     bool mbInvertGC : 1;     // is Invert GC valid
-    bool mbInvert50GC : 1;   // is Invert50 GC valid
     bool mbStippleGC : 1;    // is Stipple GC valid
-    bool mbTrackingGC : 1;   // is Tracking GC valid
-    bool mbDitherBrush : 1;  // is solid or tile
 
     bool mbXORMode : 1;      // is ROP XOR Mode set
-
-    GC mpPenGC;        // Pen attributes
-    std::optional<Color> moPenColor;
-    Pixel mnPenPixel;
-
 
     GC mpCopyGC;
     GC mpInvertGC;
@@ -71,8 +57,6 @@ private:
     GC CreateGC( Drawable      hDrawable,
             unsigned long nMask = GCGraphicsExposures );
 
-    GC SelectBrush();
-    GC SelectPen();
     inline GC GetCopyGC();
     inline GC GetStippleGC();
     GC GetInvertGC();
@@ -106,28 +90,8 @@ public:
     // set the clip region to empty
     virtual void ResetClipRegion() override;
 
-    // set the line color to transparent (= don't draw lines)
-
-    virtual void SetLineColor() override;
-
-    // set the line color to a specific color
-    virtual void SetLineColor( Color nColor ) override;
-
-    // set the fill color to transparent (= don't fill)
-    virtual void SetFillColor() override;
-
-    // set the fill color to a specific color, shapes will be
-    // filled accordingly
-    virtual void SetFillColor( Color nColor ) override;
-
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) override;
-
-    // set line color for raster operations
-    virtual void SetROPLineColor( SalROPColor nROPColor ) override;
-
-    // set fill color for raster operations
-    virtual void SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
 
