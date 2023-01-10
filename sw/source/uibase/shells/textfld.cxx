@@ -933,6 +933,60 @@ FIELD_INSERT:
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
     }
     break;
+    case FN_DELETE_TEXT_FORMFIELDS:
+    {
+        // This deletes all fieldmarks that match the provided field type & field command prefix.
+        OUString aFieldType;
+        const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pFieldType)
+        {
+            aFieldType = pFieldType->GetValue();
+        }
+        OUString aFieldCommandPrefix;
+        const SfxStringItem* pFieldCommandPrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        if (pFieldCommandPrefix)
+        {
+            aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
+        }
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.StartAction();
+
+        IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+        std::vector<sw::mark::IMark*> aRemovals;
+        for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+        {
+            auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+            assert(pFieldmark);
+            if (pFieldmark->GetFieldname() != aFieldType)
+            {
+                continue;
+            }
+
+            auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+            if (itParam == pFieldmark->GetParameters()->end())
+            {
+                continue;
+            }
+
+            OUString aCommand;
+            itParam->second >>= aCommand;
+            if (!aCommand.startsWith(aFieldCommandPrefix))
+            {
+                continue;
+            }
+
+            aRemovals.push_back(pFieldmark);
+        }
+
+        for (const auto& pMark : aRemovals)
+        {
+            pMarkAccess->deleteMark(pMark);
+        }
+
+        rSh.EndAction();
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+    }
+    break;
     case FN_PGNUMBER_WIZARD:
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
