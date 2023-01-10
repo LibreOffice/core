@@ -62,21 +62,6 @@ public:
     {
     }
 
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        m_aSavedSettings = Application::GetSettings();
-        if (OString(filename).indexOf("LocaleArabic") != -1)
-        {
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
-            AllSettings aSettings(m_aSavedSettings);
-            aSettings.SetLanguageTag(LanguageTag("ar"));
-            Application::SetSettings(aSettings);
-            return pResetter;
-        }
-        return nullptr;
-    }
-
 protected:
     AllSettings m_aSavedSettings;
 };
