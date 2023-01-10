@@ -67,6 +67,7 @@ public:
     void testBookmarkDeleteAndJoin();
     void testBookmarkDeleteTdf90816();
     void testControlShapeGrouping();
+    void testTdf151846();
     void testFdo55289();
     void testFdo68983();
     void testFdo87530();
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
     CPPUNIT_TEST(testBookmarkDeleteTdf90816);
     CPPUNIT_TEST(testControlShapeGrouping);
+    CPPUNIT_TEST(testTdf151846);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
     CPPUNIT_TEST(testFdo87530);
@@ -337,6 +339,22 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT_EQUAL(xTS->getControl(), xTimeControlModel);
     }
 #endif
+}
+
+void SwMacrosTest::testTdf151846()
+{
+    loadFromURL(u"odt/tdf151846.odt");
+
+    // Without the fix in place, this test would have failed with
+    // Property or method not found: createDiagramByDataSource.
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
+
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
+    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+
+    // Check number of embedded objects.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
 }
 
 void SwMacrosTest::testFdo55289()
