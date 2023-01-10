@@ -1,7 +1,105 @@
+# LibreOffice for Cactus Analytics Ltd.
+This version of LibreOffice was produced specifically for Cactus Analytics
+to use as a file type converter mainly for the conversion of
+__xlsx__(Microsoft Excel spreadsheet files since 2007) to __HTML__ for
+display within the website. And secondarily to converting older
+__xls__(Microsoft Excel spreadsheet files pre-2007) to __xlsx__ files.
+
+__LibreOffice__ as delivered contains a bug which effects the conversion
+of __xlsx__ to __HTML__ this produces bad formatting where a hidden row
+crosses a group of merged cells.
+
+This version of LibreOffice has this issue fixed, except for one
+particular rare case.
+
+Secondarily there is a problem with the size of the delivered executable
+for the cactus use case.
+
+LibreOffice is intended to be deployed as an AWS Layer file, these
+files are zip files with a maximum size of 128MBytes, the standard
+deployment of LibreOffice is in excess of 280MBytes when
+compressed, so this version contains the necessary scripts to remove the
+unused parts of the application, these being help files,
+scripting facilities and the GUI.
+
+## Building Cactus version of LibreOffice.
+
+This is a fork of the GitHub mirror of LibreOffice and as such
+follows the same initial build as LibreOffice.
+
+* Download this repository
+* run autogen and make (As autogen requires a lot of parameters
+a script is available for this cactus-make, this calls autogen,
+make clean and make)
+
+```bash
+$ git clone git@github.com:cactus-bm/libreoffice-core.git libreoffice
+$ cd libreoffice
+$ ./cactus-make
+```
+* Note that cactus make can take a very long time to run so is only
+really only suitable for an initial build, if you
+make changes you should just run make at the top level.
+
+This build process produces a standard libreoffice deliverable archive
+__LibreOfficeDev_7.6.0.0.alpha0_Linux_x86-64_archive.tar.gz__
+at __workdir/installation/LibreOfficeDev/archive/install/en-US__
+
+The part of the file name __7.6.0.0.alpha0_Linux_x86-64__ is
+the LibreOffice version number and may change if
+
+to produce an AWS Layers compatible version and simplify some
+manual testing another script is available:
+
+The directory __cactus-build__ contains a number of example files that
+need to be converted and a script that will extract the needed parts of
+LibreOffice into a directory and compress to the form needed for use
+by Cactus Analytics.
+
+There main test files are .xlsx files containing various types of
+overlapping merged calls hidden columns and hidden rows, but there are
+also __xls__, __ppt__ and __doc__ files which can be converted to
+__xlsx__ or __HTML__, __pptx__ or __docx__.
+
+The test script allow you to pick which tests you wish to run.
+
+to run tests:
+```bash
+$ cd cactus-build
+$ ./create-test # this will display use case.
+$ ./create-test html # will run conversions from xlsx to html.
+$ ./create-test doc # will convert doc files to docx.
+$ ./create-test xls-html # will convert xls directly to html.
+```
+
+There is no automatic testing of these files the conversions
+are just executed producing files in the subdirectory __converted__,
+these can be manually checked.
+
+Note that the output files have the same name as the input files with
+change file types extensions, one exception to this is when converting
+__HTML__ if the source contains images these are separately extracted
+but charts are not, for example:
+
+the file spreadsheet-with-chart-image.xlsx contains a small data set
+a graph of that data set and an image (a screenshot of the graph)
+when converted to html is two files:
+```
+converted/spreadsheet-with-chart-image.html
+converted/spreadsheet-with-chart-image_html_18b2813506ec3b97.png
+converted/spreadsheet-with-chart-image_html_75cc8254b4b2486c.png
+```
+The first of these is the spreadsheet cells and incorporates
+references to the others which are the images that were in the
+original, note that they are both __png__ files, in the original one
+was a __jpg__.
+Note also that the chart is lost in the conversion.
+
+
 # LibreOffice
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/211/badge.svg)](https://scan.coverity.com/projects/211) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/307/badge)](https://bestpractices.coreinfrastructure.org/projects/307) [![Translation status](https://weblate.documentfoundation.org/widgets/libo_ui-master/-/svg-badge.svg)](https://weblate.documentfoundation.org/engage/libo_ui-master/?utm_source=widget)
 
-<img align="right" width="150" height="200" src="https://opensource.org/files/OSIApproved.png">
+<img alt="OSIApproved" width="150" height="200" src="https://opensource.org/files/OSIApproved.png">
 
 LibreOffice is an integrated office suite based on copyleft licenses
 and compatible with most document formats and standards. Libreoffice
@@ -24,7 +122,7 @@ This re-uses the (extremely generic) UNO APIs that are also used by
 macro scripting in StarBasic.
 
 The best way to add a generally useful feature to LibreOffice
-is to work on the code base however. Overall this way makes it easier
+is to work on the code base. Overall this way makes it easier
 to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
 if you are a reasonably able C++ programmer.
@@ -67,7 +165,7 @@ headers, you have to compile your own Clang to use them on macOS.
 
 You can find the TDF configure switches in the `distro-configs/` directory.
 
-To setup your initial build environment on Windows and macOS, we provide
+To set up your initial build environment on Windows and macOS, we provide
 the LibreOffice Development Environment
 ([LODE](https://wiki.documentfoundation.org/Development/lode)) scripts.
 
@@ -87,32 +185,32 @@ peripheral interest for a specialist audience. So - where is the
 good stuff, the code that is most useful. Here is a quick overview of
 the most important ones:
 
-Module    | Description
-----------|-------------------------------------------------
-[sal/](sal)             | this provides a simple System Abstraction Layer
-[tools/](tools)         | this provides basic internal types: `Rectangle`, `Color` etc.
-[vcl/](vcl)             | this is the widget toolkit library and one rendering abstraction
-[framework/](framework) | UNO framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from `/uiconfig/` files
-[sfx2/](sfx2)           | legacy core framework used by Writer/Calc/Draw: document model / load/save / signals for actions etc.
-[svx/](svx)             | drawing model related helper code, including much of Draw/Impress
+| Module                  | Description|
+|-------------------------|-------------------------------------------------|
+| [sal/](sal)             | this provides a simple System Abstraction Layer|
+| [tools/](tools)         | this provides basic internal types: `Rectangle`, `Color` etc.|
+| [vcl/](vcl)             | this is the widget toolkit library and one rendering abstraction|
+| [framework/](framework) | UNO framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from `/uiconfig/` files|
+| [sfx2/](sfx2)           | legacy core framework used by Writer/Calc/Draw: document model / load/save / signals for actions etc.|
+| [svx/](svx)             | drawing model related helper code, including much of Draw/Impress|
 
 Then applications
 
-Module    | Description
-----------|-------------------------------------------------
-[desktop/](desktop)  | this is where the `main()` for the application lives, init / bootstrap. the name dates back to an ancient StarOffice that also drew a desktop
-[sw/](sw/)           | Writer
-[sc/](sc/)           | Calc
-[sd/](sd/)           | Draw / Impress
+| Module              | Description                                                                                                                                   |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| [desktop/](desktop) | this is where the `main()` for the application lives, init / bootstrap. the name dates back to an ancient StarOffice that also drew a desktop |
+| [sw/](sw)          | Writer                                                                                                                                        |
+| [sc/](sc)          | Calc                                                                                                                                          |
+| [sd/](sd)          | Draw / Impress                                                                                                                                |
 
 There are several other libraries that are helpful from a graphical perspective:
 
-Module    | Description
-----------|-------------------------------------------------
-[basegfx/](basegfx)  | algorithms and data-types for graphics as used in the canvas
-[canvas/](canvas)   | new (UNO) canvas rendering model with various backends
-[cppcanvas/](cppcanvas) | C++ helper classes for using the UNO canvas
-[drawinglayer/](drawinglayer) | View code to render drawable objects and break them down into primitives we can render more easily.
+| Module                        | Description|
+|-------------------------------|-------------------------------------------------|
+| [basegfx/](basegfx)           | algorithms and data-types for graphics as used in the canvas|
+| [canvas/](canvas)             | new (UNO) canvas rendering model with various backends|
+| [cppcanvas/](cppcanvas)       | C++ helper classes for using the UNO canvas|
+| [drawinglayer/](drawinglayer) | View code to render drawable objects and break them down into primitives we can render more easily.|
 
 ## Rules for #include Directives (C/C++)
 
