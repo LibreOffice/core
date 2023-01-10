@@ -59,6 +59,8 @@
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 
+#include <cairo-xlib.h>
+
 #include <optional>
 
 #include <algorithm>
@@ -634,6 +636,10 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                               rVis.GetVisual(),
                               nAttrMask,
                               &Attributes );
+    mpSurface = cairo_xlib_surface_create(GetXDisplay(), mhWindow,
+                                          rVis.GetVisual(),
+                                          w, h);
+
     // FIXME: see above: fake shell window for now to own window
     if( pParentData == nullptr )
     {
@@ -799,6 +805,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     pDisplay_->registerFrame( this );
 
     mhWindow                    = None;
+    mpSurface                   = nullptr;
     mhShellWindow               = None;
     mhStackingWindow            = None;
     mhForeignParent             = None;
@@ -910,6 +917,9 @@ X11SalFrame::~X11SalFrame()
         pContext = pContext->mpPrevContext;
     }
 
+    if (mpSurface)
+        cairo_surface_destroy(mpSurface);
+
     XDestroyWindow( GetXDisplay(), mhWindow );
 }
 
@@ -949,7 +959,7 @@ SalGraphics *X11SalFrame::AcquireGraphics()
     else
     {
         pGraphics_.reset(new X11SalGraphics());
-        pGraphics_->Init( this, GetWindow(), m_nXScreen );
+        pGraphics_->Init(*this, GetWindow(), m_nXScreen);
     }
 
     return pGraphics_.get();
@@ -969,9 +979,9 @@ void X11SalFrame::updateGraphics( bool bClear )
 {
     Drawable aDrawable = bClear ? None : GetWindow();
     if( pGraphics_ )
-        pGraphics_->SetDrawable( aDrawable, nullptr, m_nXScreen );
+        pGraphics_->SetDrawable( aDrawable, mpSurface, m_nXScreen );
     if( pFreeGraphics_ )
-        pFreeGraphics_->SetDrawable( aDrawable, nullptr, m_nXScreen );
+        pFreeGraphics_->SetDrawable( aDrawable, mpSurface, m_nXScreen );
 }
 
 void X11SalFrame::SetIcon( sal_uInt16 nIcon )
@@ -1637,6 +1647,7 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
             // guess maximized geometry from last time
             maGeometry.setPos({ pState->GetMaximizedX(), pState->GetMaximizedY() });
             maGeometry.setSize({ pState->GetMaximizedWidth(), pState->GetMaximizedHeight() });
+            cairo_xlib_surface_set_size(mpSurface,  pState->GetMaximizedWidth(), pState->GetMaximizedHeight());
             updateScreenNumber();
         }
         else
@@ -1833,6 +1844,7 @@ void X11SalFrame::SetSize( const Size &rSize )
             XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
     }
 
+    cairo_xlib_surface_set_size(mpSurface, rSize.Width(), rSize.Height());
     maGeometry.setSize(rSize);
 
     // allow the external status window to reposition
@@ -1929,6 +1941,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
             XMoveResizeWindow( GetXDisplay(), GetWindow(), values.x, values.y, values.width, values.height );
     }
 
+    cairo_xlib_surface_set_size(mpSurface, values.width, values.height);
     maGeometry.setPosSize({ values.x, values.y }, { values.width, values.height });
     if( IsSysChildWindow() && mpParent )
         // translate back to root coordinates
@@ -2374,6 +2387,11 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     {
         hPresentationWindow = None;
         doReparentPresentationDialogues( GetDisplay() );
+    }
+    if (mpSurface)
+    {
+        cairo_surface_destroy(mpSurface);
+        mpSurface = nullptr;
     }
     XDestroyWindow( GetXDisplay(), mhWindow );
     mhWindow = None;
@@ -3421,10 +3439,13 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     }
 
     if( pEvent->window == GetForeignParent() )
+    {
         XResizeWindow( GetXDisplay(),
                        GetWindow(),
                        pEvent->width,
                        pEvent->height );
+        cairo_xlib_surface_set_size(mpSurface, pEvent->width, pEvent->height);
+    }
 
     ::Window hDummy;
     XTranslateCoordinates( GetXDisplay(),
@@ -3464,6 +3485,7 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     bool bMoved = ( pEvent->x != maGeometry.x() || pEvent->y != maGeometry.y() );
     bool bSized = ( pEvent->width != static_cast<int>(maGeometry.width()) || pEvent->height != static_cast<int>(maGeometry.height()) );
 
+    cairo_xlib_surface_set_size(mpSurface, pEvent->width, pEvent->height);
     maGeometry.setPosSize({ pEvent->x, pEvent->y }, { pEvent->width, pEvent->height });
     updateScreenNumber();
 

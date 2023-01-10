@@ -30,6 +30,7 @@
 
 class SalDisplay;
 class X11SalGraphics;
+typedef struct _cairo_surface cairo_surface_t;
 
 class X11SalVirtualDevice final : public SalVirtualDevice
 {
@@ -44,6 +45,8 @@ class X11SalVirtualDevice final : public SalVirtualDevice
     sal_uInt16      nDepth_;
     bool        bGraphics_;         // is Graphics used
     bool        bExternPixmap_;
+    cairo_surface_t* m_pSurface;
+    bool m_bOwnsSurface; // nearly always true, except for edge case of tdf#127529
 
 public:
     X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
@@ -60,6 +63,7 @@ public:
         return pDisplay_;
     }
     Pixmap          GetDrawable() const { return hDrawable_; }
+    cairo_surface_t* GetSurface() const { return m_pSurface; }
     sal_uInt16      GetDepth() const { return nDepth_; }
     const SalX11Screen&     GetXScreenNumber() const { return m_nXScreen; }
 

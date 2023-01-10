@@ -41,10 +41,9 @@ class Gradient;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
-protected:
+private:
     X11SalGraphics& mrParent;
 
-private:
     std::optional<Color> moBrushColor;
     GC mpBrushGC;      // Brush attributes
     Pixel mnBrushPixel;

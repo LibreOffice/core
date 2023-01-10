@@ -35,6 +35,8 @@
 #include <vclpluginapi.h>
 #include <ControlCacheKey.hxx>
 
+#include <headless/CairoCommon.hxx>
+
 #include "saltype.h"
 #include "saldisp.hxx"
 
@@ -47,6 +49,7 @@ class SalBitmap;
 class SalColormap;
 class SalDisplay;
 class SalFrame;
+class X11SalFrame;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
@@ -67,13 +70,8 @@ class X11Common
 public:
     Drawable m_hDrawable;
     const SalColormap* m_pColormap;
-    cairo_surface_t* m_pExternalSurface;
 
     X11Common();
-
-    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
-
-    static void releaseCairoContext(cairo_t* cr);
 
     bool SupportsCairo() const;
 
@@ -94,9 +92,9 @@ public:
                                     X11SalGraphics();
     virtual                         ~X11SalGraphics() COVERITY_NOEXCEPT_FALSE override;
 
-    void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
-    void                            Init( X11SalVirtualDevice *pVirtualDevice, cairo_surface_t* pPreExistingTarget = nullptr,
-                                          SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
+    void                            Init(X11SalFrame& rFrame, Drawable aDrawable, SalX11Screen nXScreen);
+    void                            Init(X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr,
+                                         bool bDeleteColormap = false);
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
@@ -145,9 +143,15 @@ public:
      */
     void                            YieldGraphicsExpose();
 
-    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
-    static void releaseCairoContext(cairo_t* cr);
+    cairo_t* getCairoContext() const
+    {
+        return maCairoCommon.getCairoContext(/*bXorModeAllowed*/false, getAntiAlias());
+    }
 
+    void releaseCairoContext(cairo_t* cr, const basegfx::B2DRange& rExtents) const
+    {
+        return maCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, rExtents);
+    }
 
 private:
     using SalGraphics::GetPixel;
@@ -175,6 +179,7 @@ private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;
     std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
     X11Common maX11Common;
+    CairoCommon maCairoCommon;
 
 public:
     Drawable GetDrawable() const { return maX11Common.GetDrawable(); }

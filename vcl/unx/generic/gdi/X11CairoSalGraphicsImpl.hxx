@@ -27,51 +27,48 @@
 class X11CairoSalGraphicsImpl : public X11SalGraphicsImpl
 {
 private:
-    X11Common& mrX11Common;
-    vcl::Region maClipRegion;
-    std::optional<Color> moPenColor;
-    std::optional<Color> moFillColor;
+    CairoCommon& mrCairoCommon;
 
 public:
-    X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Common& rX11Common);
+    X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon);
 
     void ResetClipRegion() override
     {
-        maClipRegion.SetNull();
+        mrCairoCommon.m_aClipRegion.SetNull();
         X11SalGraphicsImpl::ResetClipRegion();
     }
 
     void setClipRegion(const vcl::Region& i_rClip) override
     {
-        maClipRegion = i_rClip;
+        mrCairoCommon.m_aClipRegion = i_rClip;
         X11SalGraphicsImpl::setClipRegion(i_rClip);
     }
 
     void SetLineColor() override
     {
-        moPenColor = std::nullopt;
+        mrCairoCommon.m_oLineColor = std::nullopt;
         X11SalGraphicsImpl::SetLineColor();
     }
 
     void SetLineColor(Color nColor) override
     {
-        moPenColor = nColor;
+        mrCairoCommon.m_oLineColor = nColor;
         X11SalGraphicsImpl::SetLineColor(nColor);
     }
 
     void SetFillColor() override
     {
-        moFillColor = std::nullopt;
+        mrCairoCommon.m_oFillColor = std::nullopt;
         X11SalGraphicsImpl::SetFillColor();
     }
 
     void SetFillColor(Color nColor) override
     {
-        moFillColor = nColor;
+        mrCairoCommon.m_oFillColor = nColor;
         X11SalGraphicsImpl::SetFillColor(nColor);
     }
 
-    void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, maClipRegion); }
+    void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, mrCairoCommon.m_aClipRegion); }
 
     void drawPixel(tools::Long nX, tools::Long nY) override;
     void drawPixel(tools::Long nX, tools::Long nY, Color nColor) override;

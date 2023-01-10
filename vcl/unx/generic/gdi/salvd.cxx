@@ -33,6 +33,7 @@
 #if HAVE_FEATURE_SKIA
 #include <skia/x11/salvd.hxx>
 #endif
+#include <cairo-xlib.h>
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics,
         tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
@@ -53,8 +54,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
     return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
 
-void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreExistingTarget, SalColormap* pColormap,
-                           bool bDeleteColormap )
+void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap)
 {
     SalDisplay *pDisplay  = pDevice->GetDisplay();
     m_nXScreen = pDevice->GetXScreenNumber();
@@ -82,7 +82,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
 
-    SetDrawable(pDevice->GetDrawable(), pPreExistingTarget, m_nXScreen);
+    SetDrawable(pDevice->GetDrawable(), pDevice->GetSurface(), m_nXScreen);
     mxImpl->Init();
 }
 
@@ -155,13 +155,28 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
 
     // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
     cairo_surface_t* pPreExistingTarget = pData ? static_cast<cairo_surface_t*>(pData->pSurface) : nullptr;
+    if (pPreExistingTarget)
+    {
+        m_bOwnsSurface = false;
+        m_pSurface = pPreExistingTarget;
+    }
+    else
+    {
+        m_bOwnsSurface = true;
+        m_pSurface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
+                                               pDisplay_->GetColormap(m_nXScreen).GetVisual().visual,
+                                               nDX_, nDY_);
+    }
 
-    pGraphics_->Init( this, pPreExistingTarget, pColormap, bDeleteColormap );
+    pGraphics_->Init(this, pColormap, bDeleteColormap);
 }
 
 X11SalVirtualDevice::~X11SalVirtualDevice()
 {
     pGraphics_.reset();
+
+    if (m_bOwnsSurface)
+        cairo_surface_destroy(m_pSurface);
 
     if( GetDrawable() && !bExternPixmap_ )
         XFreePixmap( GetXDisplay(), GetDrawable() );
@@ -189,6 +204,9 @@ bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;
 
+    if (m_bOwnsSurface)
+        cairo_surface_destroy(m_pSurface);
+
     Pixmap h = limitXCreatePixmap( GetXDisplay(),
                               pDisplay_->GetDrawable( m_nXScreen ),
                               nDX, nDY, nDepth_ );
@@ -203,6 +221,14 @@ bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
             nDX_ = 1;
             nDY_ = 1;
         }
+
+        if (m_bOwnsSurface)
+        {
+            m_pSurface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
+                                                   pDisplay_->GetColormap(m_nXScreen).GetVisual().visual,
+                                                   nDX_, nDY_);
+        }
+
         return false;
     }
 
@@ -212,6 +238,13 @@ bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
 
     nDX_ = nDX;
     nDY_ = nDY;
+
+    if (m_bOwnsSurface)
+    {
+        m_pSurface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
+                                               pDisplay_->GetColormap(m_nXScreen).GetVisual().visual,
+                                               nDX_, nDY_);
+    }
 
     if( pGraphics_ )
         pGraphics_->Init( this );

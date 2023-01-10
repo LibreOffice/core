@@ -47,8 +47,11 @@
 #include <vcl/svapp.hxx>
 #include "redlnitr.hxx"
 #include <extinput.hxx>
+#include <fmtpdsc.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/udlnitem.hxx>
 
 using namespace ::com::sun::star;
@@ -62,12 +65,15 @@ private:
     IDocumentMarkAccess const& m_rIDMA;
     bool const m_isHideRedlines;
     sw::FieldmarkMode const m_eFieldmarkMode;
+    bool const m_isHideParagraphBreaks;
     SwPosition const m_Start;
     /// next redline
     SwRedlineTable::size_type m_RedlineIndex;
     /// next fieldmark
     std::pair<sw::mark::IFieldmark const*, std::optional<SwPosition>> m_Fieldmark;
     std::optional<SwPosition> m_oNextFieldmarkHide;
+    /// previous paragraph break - because m_pStartPos/EndPos are non-owning
+    std::optional<std::pair<SwPosition, SwPosition>> m_oParagraphBreak;
     /// current start/end pair
     SwPosition const* m_pStartPos;
     SwPosition const* m_pEndPos;
@@ -77,11 +83,13 @@ public:
     SwPosition const* GetEndPos() const { return m_pEndPos; }
 
     HideIterator(SwTextNode & rTextNode,
-            bool const isHideRedlines, sw::FieldmarkMode const eMode)
+            bool const isHideRedlines, sw::FieldmarkMode const eMode,
+            sw::ParagraphBreakMode const ePBMode)
         : m_rIDRA(rTextNode.getIDocumentRedlineAccess())
         , m_rIDMA(*rTextNode.getIDocumentMarkAccess())
         , m_isHideRedlines(isHideRedlines)
         , m_eFieldmarkMode(eMode)
+        , m_isHideParagraphBreaks(ePBMode == sw::ParagraphBreakMode::Hidden)
         , m_Start(rTextNode, 0)
         , m_RedlineIndex(isHideRedlines ? m_rIDRA.GetRedlinePos(rTextNode, RedlineType::Any) : SwRedlineTable::npos)
         , m_pStartPos(nullptr)
@@ -188,12 +196,65 @@ public:
             m_pEndPos = &*m_Fieldmark.second;
             return true;
         }
-        else // nothing
+        else
         {
             assert(!pNextRedlineHide && !m_oNextFieldmarkHide);
-            m_pStartPos = nullptr;
-            m_pEndPos = nullptr;
-            return false;
+            auto const hasHiddenItem = [](auto const& rNode) {
+                auto const& rpSet(rNode.GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle());
+                return rpSet ? rpSet->Get(RES_CHRATR_HIDDEN).GetValue() : false;
+            };
+            auto const hasBreakBefore = [](SwTextNode const& rNode) {
+                if (rNode.GetAttr(RES_PAGEDESC).GetPageDesc())
+                {
+                    return true;
+                }
+                switch (rNode.GetAttr(RES_BREAK).GetBreak())
+                {
+                    case SvxBreak::ColumnBefore:
+                    case SvxBreak::ColumnBoth:
+                    case SvxBreak::PageBefore:
+                    case SvxBreak::PageBoth:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            };
+            auto const hasBreakAfter = [](SwTextNode const& rNode) {
+                switch (rNode.GetAttr(RES_BREAK).GetBreak())
+                {
+                    case SvxBreak::ColumnAfter:
+                    case SvxBreak::ColumnBoth:
+                    case SvxBreak::PageAfter:
+                    case SvxBreak::PageBoth:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            };
+            if (m_isHideParagraphBreaks
+                // only merge if next node is also text node
+                && m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->IsTextNode()
+                && hasHiddenItem(*m_pEndPos->GetNode().GetTextNode())
+                // no merge if there's a page break on any node
+                && !hasBreakBefore(*m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->GetTextNode())
+                // first node, see SwTextFrame::GetBreak()
+                && !hasBreakAfter(*m_Start.GetNode().GetTextNode()))
+            {
+                m_oParagraphBreak.emplace(
+                    SwPosition(*m_pEndPos->GetNode().GetTextNode(), m_pEndPos->GetNode().GetTextNode()->Len()),
+                    SwPosition(*m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->GetTextNode(), 0));
+                m_pStartPos = &m_oParagraphBreak->first;
+                m_pEndPos = &m_oParagraphBreak->second;
+                return true;
+            }
+            else // nothing
+            {
+                m_pStartPos = nullptr;
+                m_pEndPos = nullptr;
+                return false;
+            }
         }
     }
 };
@@ -221,7 +282,9 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     sal_Int32 nLastEnd(0);
     for (auto iter = HideIterator(rTextNode,
                 rFrame.getRootFrame()->IsHideRedlines(),
-                rFrame.getRootFrame()->GetFieldmarkMode()); iter.Next(); )
+                rFrame.getRootFrame()->GetFieldmarkMode(),
+                rFrame.getRootFrame()->GetParagraphBreakMode());
+            iter.Next(); )
     {
         SwPosition const*const pStart(iter.GetStartPos());
         SwPosition const*const pEnd(iter.GetEndPos());
