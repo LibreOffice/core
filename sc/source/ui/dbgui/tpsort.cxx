@@ -813,6 +813,8 @@ void ScTabPageSortOptions::EdOutPosModHdl()
 
 void ScTabPageSortOptions::FillAlgor()
 {
+    tools::Long nCount = 0;
+
     m_xLbAlgorithm->freeze();
     m_xLbAlgorithm->clear();
 
@@ -830,18 +832,19 @@ void ScTabPageSortOptions::FillAlgor()
         lang::Locale aLocale( LanguageTag::convertToLocale( eLang ));
         const uno::Sequence<OUString> aAlgos = m_xColWrap->listCollatorAlgorithms( aLocale );
 
-        tools::Long nCount = aAlgos.getLength();
+        nCount = aAlgos.getLength();
         for (const OUString& sAlg : aAlgos)
         {
             OUString sUser = m_xColRes->GetTranslation( sAlg );
             m_xLbAlgorithm->append_text(sUser);
         }
-        m_xLbAlgorithm->set_active(0);       // first entry is default
-        m_xFtAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
-        m_xLbAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
     }
 
     m_xLbAlgorithm->thaw();
+
+    m_xLbAlgorithm->set_active(nCount ? 0 : -1);    // first entry is default
+    m_xFtAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
+    m_xLbAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
 }
 
 IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, weld::ComboBox&, void)
