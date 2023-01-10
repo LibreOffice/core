@@ -230,9 +230,8 @@ public:
     struct RenderEntry
     {
         Pixmap      m_aPixmap;
-        Picture     m_aPicture;
 
-        RenderEntry() : m_aPixmap( 0 ), m_aPicture( 0 ) {}
+        RenderEntry() : m_aPixmap( 0 ) {}
     };
 
     typedef std::unordered_map<int,RenderEntry> RenderEntryMap;

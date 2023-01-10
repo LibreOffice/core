@@ -44,32 +44,11 @@ class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 private:
     X11SalGraphics& mrParent;
 
-    bool mbCopyGC : 1;       // is Copy GC valid
-    bool mbInvertGC : 1;     // is Invert GC valid
-    bool mbStippleGC : 1;    // is Stipple GC valid
-
-    bool mbXORMode : 1;      // is ROP XOR Mode set
-
-    GC mpCopyGC;
-    GC mpInvertGC;
-    GC mpStippleGC;
-
-    GC CreateGC( Drawable      hDrawable,
-            unsigned long nMask = GCGraphicsExposures );
-
-    inline GC GetCopyGC();
-    inline GC GetStippleGC();
-    GC GetInvertGC();
-
-    XID GetXRenderPicture();
-
     tools::Long GetGraphicsHeight() const;
 
 public:
 
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
-
-    virtual void freeResources() override;
 
     virtual ~X11SalGraphicsImpl() override;
 
@@ -83,11 +62,6 @@ public:
 
     // set the clip region to empty
     virtual void ResetClipRegion() override;
-
-    // enable/disable XOR drawing
-    virtual void SetXORMode( bool bSet, bool bInvertOnly ) override;
-public:
-    void Init() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

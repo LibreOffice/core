@@ -101,7 +101,6 @@ public:
     virtual SalGraphicsImpl*        GetImpl() const override;
     SalGeometryProvider*            GetGeometryProvider() const;
     void                            SetDrawable(Drawable d, cairo_surface_t* surface, SalX11Screen nXScreen);
-    XRenderPictFormat*              GetXRenderFormat() const;
     void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
 
     const SalX11Screen&             GetScreenNumber() const { return m_nXScreen; }
@@ -168,7 +167,6 @@ private:
 
     SalX11Screen                    m_nXScreen;
     mutable XRenderPictFormat*      m_pXRenderFormat;
-    XID                             m_aXRenderPicture;
 
     Region                          mpClipRegion;
     Pixmap                          hBrush_;        // Dither

@@ -63,7 +63,6 @@
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
-#include <unx/x11/xrender_peer.hxx>
 #include <unx/glyphcache.hxx>
 
 #include <poll.h>
@@ -289,7 +288,6 @@ void SalDisplay::doDestruct()
         SalDisplay* pSalDisp = vcl_sal::getSalDisplay(pData);
         Display* const pX11Disp = pSalDisp->GetDisplay();
         int nMaxScreens = pSalDisp->GetXScreenCount();
-        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
 
         for (int i = 0; i < nMaxScreens; i++)
         {
@@ -298,8 +296,6 @@ void SalDisplay::doDestruct()
             {
                 if (elem.second.m_aPixmap)
                     ::XFreePixmap(pX11Disp, elem.second.m_aPixmap);
-                if (elem.second.m_aPicture)
-                    rRenderPeer.FreePicture(elem.second.m_aPicture);
             }
             rMap.clear();
         }

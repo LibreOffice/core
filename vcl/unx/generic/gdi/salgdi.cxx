@@ -54,7 +54,6 @@
 
 #include <unx/salframe.h>
 #include <unx/x11/x11cairotextrender.hxx>
-#include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
@@ -85,7 +84,6 @@ X11SalGraphics::X11SalGraphics():
     m_pVDev(nullptr),
     m_nXScreen( 0 ),
     m_pXRenderFormat(nullptr),
-    m_aXRenderPicture(0),
     mpClipRegion(nullptr),
     hBrush_(None),
     bWindow_(false),
@@ -134,11 +132,6 @@ void X11SalGraphics::freeResources()
         m_pDeleteColormap.reset();
         maX11Common.m_pColormap = nullptr;
     }
-    if( m_aXRenderPicture )
-    {
-        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
-        m_aXRenderPicture = 0;
-    }
 }
 
 SalGraphicsImpl* X11SalGraphics::GetImpl() const
@@ -170,11 +163,6 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, 
 
     maX11Common.m_hDrawable = aDrawable;
     SetXRenderFormat( nullptr );
-    if( m_aXRenderPicture )
-    {
-        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
-        m_aXRenderPicture = 0;
-    }
 }
 
 void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
@@ -342,13 +330,6 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         << std::dec << rDPIY);
 #endif
     rDPIX = rDPIY; // y-resolution is more trustworthy
-}
-
-XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
-{
-    if( m_pXRenderFormat == nullptr )
-        m_pXRenderFormat = XRenderPeer::GetInstance().FindVisualFormat( GetVisual().visual );
-    return m_pXRenderFormat;
 }
 
 SystemGraphicsData X11SalGraphics::GetGraphicsData() const

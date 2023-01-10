@@ -36,7 +36,6 @@
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
 #include <salframe.hxx>
-#include <unx/x11/xrender_peer.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -53,14 +52,7 @@
 typedef unsigned long Pixel;
 
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
-    mrParent(rParent),
-    mbCopyGC(false),
-    mbInvertGC(false),
-    mbStippleGC(false),
-    mbXORMode(false),
-    mpCopyGC(nullptr),
-    mpInvertGC(nullptr),
-    mpStippleGC(nullptr)
+    mrParent(rParent)
 {
 }
 
@@ -68,128 +60,10 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-void X11SalGraphicsImpl::Init()
-{
-}
-
-XID X11SalGraphicsImpl::GetXRenderPicture()
-{
-    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-
-    if( !mrParent.m_aXRenderPicture )
-    {
-        // check xrender support for matching visual
-        XRenderPictFormat* pXRenderFormat = mrParent.GetXRenderFormat();
-        if( !pXRenderFormat )
-            return 0;
-        // get the matching xrender target for drawable
-        mrParent.m_aXRenderPicture = rRenderPeer.CreatePicture( mrParent.GetDrawable(), pXRenderFormat, 0, nullptr );
-    }
-
-    {
-        // reset clip region
-        // TODO: avoid clip reset if already done
-        XRenderPictureAttributes aAttr;
-        aAttr.clip_mask = None;
-        rRenderPeer.ChangePicture( mrParent.m_aXRenderPicture, CPClipMask, &aAttr );
-    }
-
-    return mrParent.m_aXRenderPicture;
-}
-
-static void freeGC(Display *pDisplay, GC& rGC)
-{
-    if( rGC )
-    {
-        XFreeGC( pDisplay, rGC );
-        rGC = None;
-    }
-}
-
-void X11SalGraphicsImpl::freeResources()
-{
-    Display *pDisplay = mrParent.GetXDisplay();
-
-    freeGC( pDisplay, mpCopyGC );
-    freeGC( pDisplay, mpInvertGC );
-    freeGC( pDisplay, mpStippleGC );
-    mbCopyGC = mbInvertGC = mbStippleGC = false;
-}
-
-GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
-{
-    XGCValues values;
-
-    values.graphics_exposures   = False;
-    values.foreground           = mrParent.GetColormap().GetBlackPixel()
-                                  ^ mrParent.GetColormap().GetWhitePixel();
-    values.function             = GXxor;
-    values.line_width           = 1;
-    values.fill_style           = FillStippled;
-    values.stipple              = mrParent.GetDisplay()->GetInvert50( mrParent.m_nXScreen );
-    values.subwindow_mode       = ClipByChildren;
-
-    return XCreateGC( mrParent.GetXDisplay(), hDrawable, nMask | GCSubwindowMode, &values );
-}
-
-inline GC X11SalGraphicsImpl::GetCopyGC()
-{
-    if( mbXORMode ) return GetInvertGC();
-
-    if( !mpCopyGC )
-        mpCopyGC = CreateGC( mrParent.GetDrawable() );
-
-    if( !mbCopyGC )
-    {
-        mrParent.SetClipRegion( mpCopyGC );
-        mbCopyGC = true;
-    }
-    return mpCopyGC;
-}
-
-GC X11SalGraphicsImpl::GetInvertGC()
-{
-    if( !mpInvertGC )
-        mpInvertGC = CreateGC( mrParent.GetDrawable(),
-                               GCGraphicsExposures
-                               | GCForeground
-                               | GCFunction
-                               | GCLineWidth );
-
-    if( !mbInvertGC )
-    {
-        mrParent.SetClipRegion( mpInvertGC );
-        mbInvertGC = true;
-    }
-    return mpInvertGC;
-}
-
-inline GC X11SalGraphicsImpl::GetStippleGC()
-{
-    if( !mpStippleGC )
-        mpStippleGC = CreateGC( mrParent.GetDrawable(),
-                                GCGraphicsExposures
-                                | GCFillStyle
-                                | GCLineWidth );
-
-    if( !mbStippleGC )
-    {
-        XSetFunction( mrParent.GetXDisplay(), mpStippleGC, mbXORMode ? GXxor : GXcopy );
-        mrParent.SetClipRegion( mpStippleGC );
-        mbStippleGC = true;
-    }
-
-    return mpStippleGC;
-}
-
 void X11SalGraphicsImpl::ResetClipRegion()
 {
     if( !mrParent.mpClipRegion )
         return;
-
-    mbCopyGC        = false;
-    mbInvertGC      = false;
-    mbStippleGC     = false;
 
     XDestroyRegion( mrParent.mpClipRegion );
     mrParent.mpClipRegion    = nullptr;
@@ -225,44 +99,10 @@ void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
         }
     }
 
-    //ImplRegionInfo aInfo;
-    //long nX, nY, nW, nH;
-    //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    //while( bRegionRect )
-    //{
-    //    if ( nW && nH )
-    //    {
-    //        XRectangle aRect;
-    //        aRect.x           = (short)nX;
-    //        aRect.y           = (short)nY;
-    //        aRect.width       = (unsigned short)nW;
-    //        aRect.height  = (unsigned short)nH;
-
-    //        XUnionRectWithRegion( &aRect, mrParent.mpClipRegion, mrParent.mpClipRegion );
-    //    }
-    //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
-    //}
-
-    // done, invalidate GCs
-    mbCopyGC        = false;
-    mbInvertGC      = false;
-    mbStippleGC     = false;
-
     if( XEmptyRegion( mrParent.mpClipRegion ) )
     {
         XDestroyRegion( mrParent.mpClipRegion );
         mrParent.mpClipRegion= nullptr;
-    }
-}
-
-void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
-{
-    if (mbXORMode != bSet)
-    {
-        mbXORMode   = bSet;
-        mbCopyGC        = false;
-        mbInvertGC  = false;
-        mbStippleGC = false;
     }
 }
 

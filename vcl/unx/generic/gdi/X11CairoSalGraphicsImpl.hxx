@@ -32,6 +32,8 @@ private:
 public:
     X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon);
 
+    void Init() override;
+
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
     void ResetClipRegion() override
@@ -57,7 +59,6 @@ public:
     void SetXORMode(bool bSet, bool bInvertOnly) override
     {
         mrCairoCommon.SetXORMode(bSet, bInvertOnly);
-        X11SalGraphicsImpl::SetXORMode(bSet, bInvertOnly);
     }
 
     void SetROPLineColor(SalROPColor nROPColor) override
@@ -178,6 +179,8 @@ public:
                           const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override;
 
     bool supportsOperation(OutDevSupportType eType) const override;
+
+    void freeResources() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

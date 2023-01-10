@@ -23,7 +23,6 @@
 
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <unx/x11/xrender_peer.hxx>
 #include <salframe.hxx>
 
 extern "C"
