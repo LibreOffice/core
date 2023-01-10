@@ -1069,7 +1069,7 @@ FIELD_INSERT:
     break;
     case FN_UPDATE_TEXT_FORMFIELD:
     {
-        // This updates a single fieldmarks under the current cursor.
+        // This updates a single fieldmark under the current cursor.
         OUString aFieldType;
         const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if (pFieldType)
