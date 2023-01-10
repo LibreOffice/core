@@ -64,9 +64,7 @@ private:
     Pixel mnPenPixel;
 
 
-    GC mpMonoGC;
     GC mpCopyGC;
-    GC mpMaskGC;
     GC mpInvertGC;
     GC mpStippleGC;
 

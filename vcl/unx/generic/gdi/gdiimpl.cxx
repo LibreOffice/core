@@ -110,9 +110,7 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mpPenGC(nullptr),
     moPenColor( std::in_place, 0x00, 0x00, 0x00 ),
     mnPenPixel(0),
-    mpMonoGC(nullptr),
     mpCopyGC(nullptr),
-    mpMaskGC(nullptr),
     mpInvertGC(nullptr),
     mpStippleGC(nullptr)
 {
@@ -168,9 +166,7 @@ void X11SalGraphicsImpl::freeResources()
 
     freeGC( pDisplay, mpPenGC );
     freeGC( pDisplay, mpBrushGC );
-    freeGC( pDisplay, mpMonoGC );
     freeGC( pDisplay, mpCopyGC );
-    freeGC( pDisplay, mpMaskGC );
     freeGC( pDisplay, mpInvertGC );
     freeGC( pDisplay, mpStippleGC );
     mbTrackingGC = mbPenGC = mbBrushGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
