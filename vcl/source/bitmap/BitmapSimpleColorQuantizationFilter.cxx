@@ -19,92 +19,75 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
 
-    bool bRet = false;
+    if (vcl::numberOfColors(aBitmap.getPixelFormat()) > sal_Int64(mnNewColorCount))
+        return BitmapEx(aBitmap);
 
-    if (vcl::numberOfColors(aBitmap.getPixelFormat()) <= sal_Int64(mnNewColorCount))
+    Bitmap aNewBmp;
+    Bitmap::ScopedReadAccess pRAcc(aBitmap);
+    if (!pRAcc)
+        return BitmapEx();
+
+    const sal_uInt16 nColorCount = std::min(mnNewColorCount, sal_uInt16(256));
+    auto ePixelFormat = vcl::PixelFormat::INVALID;
+    if (nColorCount <= 2)
+        ePixelFormat = vcl::PixelFormat::N1_BPP;
+    else
+        ePixelFormat = vcl::PixelFormat::N8_BPP;
+
+    Octree aOct(*pRAcc, nColorCount);
+    const BitmapPalette& rPal = aOct.GetPalette();
+
+    aNewBmp = Bitmap(aBitmap.GetSizePixel(), ePixelFormat, &rPal);
+    BitmapScopedWriteAccess pWAcc(aNewBmp);
+    if (!pWAcc)
+        return BitmapEx();
+
+    const sal_Int32 nWidth = pRAcc->Width();
+    const sal_Int32 nHeight = pRAcc->Height();
+
+    if (pRAcc->HasPalette())
     {
-        bRet = true;
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWAcc->GetScanline(nY);
+            Scanline pScanlineRead = pRAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
+            {
+                auto c = pRAcc->GetPaletteColor(pRAcc->GetIndexFromData(pScanlineRead, nX));
+                pWAcc->SetPixelOnData(
+                    pScanline, nX,
+                    BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
+            }
+        }
     }
     else
     {
-        Bitmap aNewBmp;
-        Bitmap::ScopedReadAccess pRAcc(aBitmap);
-        const sal_uInt16 nColorCount = std::min(mnNewColorCount, sal_uInt16(256));
-        auto ePixelFormat = vcl::PixelFormat::INVALID;
-
-        if (nColorCount <= 2)
-            ePixelFormat = vcl::PixelFormat::N1_BPP;
-        else
-            ePixelFormat = vcl::PixelFormat::N8_BPP;
-
-        if (pRAcc)
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
         {
-            Octree aOct(*pRAcc, nColorCount);
-            const BitmapPalette& rPal = aOct.GetPalette();
-
-            aNewBmp = Bitmap(aBitmap.GetSizePixel(), ePixelFormat, &rPal);
-            BitmapScopedWriteAccess pWAcc(aNewBmp);
-
-            if (pWAcc)
+            Scanline pScanline = pWAcc->GetScanline(nY);
+            Scanline pScanlineRead = pRAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
             {
-                const sal_Int32 nWidth = pRAcc->Width();
-                const sal_Int32 nHeight = pRAcc->Height();
-
-                if (pRAcc->HasPalette())
-                {
-                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                    {
-                        Scanline pScanline = pWAcc->GetScanline(nY);
-                        Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                        for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                        {
-                            auto c = pRAcc->GetPaletteColor(
-                                pRAcc->GetIndexFromData(pScanlineRead, nX));
-                            pWAcc->SetPixelOnData(
-                                pScanline, nX,
-                                BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
-                        }
-                    }
-                }
-                else
-                {
-                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                    {
-                        Scanline pScanline = pWAcc->GetScanline(nY);
-                        Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                        for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                        {
-                            auto c = pRAcc->GetPixelFromData(pScanlineRead, nX);
-                            pWAcc->SetPixelOnData(
-                                pScanline, nX,
-                                BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
-                        }
-                    }
-                }
-
-                pWAcc.reset();
-                bRet = true;
+                auto c = pRAcc->GetPixelFromData(pScanlineRead, nX);
+                pWAcc->SetPixelOnData(
+                    pScanline, nX,
+                    BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
             }
-
-            pRAcc.reset();
-        }
-
-        if (bRet)
-        {
-            const MapMode aMap(aBitmap.GetPrefMapMode());
-            const Size aSize(aBitmap.GetPrefSize());
-
-            aBitmap = aNewBmp;
-
-            aBitmap.SetPrefMapMode(aMap);
-            aBitmap.SetPrefSize(aSize);
         }
     }
 
-    if (bRet)
-        return BitmapEx(aBitmap);
+    pWAcc.reset();
+    pRAcc.reset();
 
-    return BitmapEx();
+    const MapMode aMap(aBitmap.GetPrefMapMode());
+    const Size aSize(aBitmap.GetPrefSize());
+
+    aBitmap = aNewBmp;
+
+    aBitmap.SetPrefMapMode(aMap);
+    aBitmap.SetPrefSize(aSize);
+
+    return BitmapEx(aBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

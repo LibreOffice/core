@@ -233,6 +233,7 @@ enum SwDateTimeSubType {
 
 /// General tools.
 OUString  FormatNumber(sal_uInt32 nNum, SvxNumType nFormat, LanguageType nLang = LANGUAGE_NONE);
+SwFieldTypesEnum SwFieldTypeFromString(std::u16string_view rString);
 
 /** Instances of SwFields and those derived from it occur 0 to n times.
  For each class there is one instance of the associated type class.

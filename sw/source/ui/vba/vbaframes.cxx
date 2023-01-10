@@ -34,22 +34,22 @@ private:
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< container::XIndexAccess> mxIndexAccess;
     uno::Reference< frame::XModel > mxModel;
-    sal_Int32 nCurrentPos;
+    sal_Int32 mnCurrentPos;
 public:
     /// @throws uno::RuntimeException
-    FramesEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< container::XIndexAccess >  xIndexAccess,  uno::Reference< frame::XModel >  xModel  ) : mxParent(std::move( xParent )), mxContext(std::move( xContext)), mxIndexAccess(std::move( xIndexAccess )), mxModel(std::move( xModel )), nCurrentPos(0)
+    FramesEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< container::XIndexAccess >  xIndexAccess,  uno::Reference< frame::XModel >  xModel  ) : mxParent(std::move( xParent )), mxContext(std::move( xContext)), mxIndexAccess(std::move( xIndexAccess )), mxModel(std::move( xModel )), mnCurrentPos(0)
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nCurrentPos < mxIndexAccess->getCount() );
+        return ( mnCurrentPos < mxIndexAccess->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
-        uno::Reference< text::XTextFrame > xTextFrame( mxIndexAccess->getByIndex( nCurrentPos++ ), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextFrame > xTextFrame( mxIndexAccess->getByIndex( mnCurrentPos++ ), uno::UNO_QUERY_THROW );
         return uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( mxParent, mxContext, mxModel, xTextFrame ) ) );
     }
 

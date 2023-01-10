@@ -1018,6 +1018,7 @@ StringMap RadioButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     aMap["Checked"] = OUString::boolean(mxRadioButton->IsChecked());
+    aMap["Enabled"] = OUString::boolean(mxRadioButton->IsEnabled());
 
     return aMap;
 }

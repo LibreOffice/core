@@ -1196,7 +1196,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 }
                 if( pAnchorNode->GetTextNode() )
                 {
-                    int nIndex = rAnchor.GetContentAnchor()->GetContentIndex();
+                    sal_Int32 nIndex = rAnchor.GetAnchorContentOffset();
                     bool bMarked = false;
                     if( pCursor != nullptr )
                     {

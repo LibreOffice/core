@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XControl.hpp>
@@ -145,16 +146,11 @@ namespace drawinglayer::primitive2d
                                 if(xControl.is())
                                 {
                                     uno::Reference<awt::XWindowPeer> xWindowPeer(xControl->getPeer());
-
-                                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindowPeer);
-                                    if (pWindow)
+                                    if (xWindowPeer)
                                     {
-                                        pWindow = pWindow->GetParent();
-
-                                        if(pWindow && MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
-                                        {
-                                            bUserIs100thmm = true;
-                                        }
+                                        uno::Reference<awt::XVclWindowPeer> xPeerProps(xWindowPeer, uno::UNO_QUERY_THROW);
+                                        uno::Any aAny = xPeerProps->getProperty("ParentIs100thmm"); // see VCLXWindow::getProperty
+                                        aAny >>= bUserIs100thmm;
                                     }
                                 }
 

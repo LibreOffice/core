@@ -2767,11 +2767,13 @@ bool SalColormap::GetXPixels( XColor &rColor,
     return GetXPixel( rColor, r^0xFF, g^0xFF, b^0xFF );
 }
 
-Pixel SalColormap::GetPixel( Color nColor ) const
+Pixel SalColormap::GetPixel( std::optional<Color> oColor ) const
 {
-    if( SALCOLOR_NONE == nColor )  return 0;
-    if( COL_BLACK == nColor ) return m_nBlackPixel;
-    if( COL_WHITE == nColor ) return m_nWhitePixel;
+    if( !oColor )  return 0;
+    if( COL_BLACK == oColor ) return m_nBlackPixel;
+    if( COL_WHITE == oColor ) return m_nWhitePixel;
+
+    Color nColor = *oColor;
 
     if( m_aVisual.GetClass() == TrueColor )
         return m_aVisual.GetTCPixel( nColor );

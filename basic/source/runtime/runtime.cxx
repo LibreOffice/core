@@ -114,11 +114,8 @@ private:
 
 bool SbiRuntime::isVBAEnabled()
 {
-    bool bResult = false;
     SbiInstance* pInst = GetSbData()->pInst;
-    if ( pInst && GetSbData()->pInst->pRun )
-        bResult = pInst->pRun->bVBAEnabled;
-    return bResult;
+    return pInst && pInst->pRun && pInst->pRun->bVBAEnabled;
 }
 
 void StarBASIC::SetVBAEnabled( bool bEnabled )
@@ -131,13 +128,7 @@ void StarBASIC::SetVBAEnabled( bool bEnabled )
 
 bool StarBASIC::isVBAEnabled() const
 {
-    if ( bDocBasic )
-    {
-        if( SbiRuntime::isVBAEnabled() )
-            return true;
-        return bVBAEnabled;
-    }
-    return false;
+    return bDocBasic && (bVBAEnabled || SbiRuntime::isVBAEnabled());
 }
 
 struct SbiArgv {                   // Argv stack:

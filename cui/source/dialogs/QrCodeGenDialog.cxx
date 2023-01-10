@@ -27,7 +27,6 @@
 #endif
 
 #include <BarcodeFormat.h>
-#include <BitArray.h>
 #include <BitMatrix.h>
 #include <MultiFormatWriter.h>
 #include <TextUtfEncoding.h>
@@ -79,7 +78,6 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     OStringBuffer sb;
     const int width = bitmatrix.width();
     const int height = bitmatrix.height();
-    ZXing::BitArray row(width);
     sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
               "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 "
               + OString::number(width) + " " + OString::number(height)
@@ -87,10 +85,9 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
                 "<path d=\"");
     for (int i = 0; i < height; ++i)
     {
-        bitmatrix.getRow(i, row);
         for (int j = 0; j < width; ++j)
         {
-            if (row.get(j))
+            if (bitmatrix.get(j, i))
             {
                 sb.append("M" + OString::number(j) + "," + OString::number(i) + "h1v1h-1z");
             }

@@ -155,7 +155,7 @@ public:
                                            int      r,
                                            int      g,
                                            int      b ) const;
-    Pixel           GetPixel( Color nColor ) const;
+    Pixel           GetPixel( std::optional<Color> nColor ) const;
     Color           GetColor( Pixel nPixel ) const;
 };
 

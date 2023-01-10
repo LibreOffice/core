@@ -145,7 +145,7 @@ void TextPropertyPanel::HandleContextChange (
 
     mxToolBoxFontColor->set_visible(!bWriterText);
     mxToolBoxFontColorSw->set_visible(bWriterText);
-    mxToolBoxBackgroundColor->set_visible(bDrawText);
+    mxToolBoxBackgroundColor->set_visible(bWriterText || bDrawText);
     mxResetBar->set_visible(bWriterText || bCalcText);
     mxDefaultBar->set_visible(bDrawText);
 }

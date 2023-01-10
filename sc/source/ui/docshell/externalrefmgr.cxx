@@ -1482,7 +1482,11 @@ void ScExternalRefLink::Closed()
     else
     {
         // The source document has changed.
-        ScDocShell* pDocShell = ScDocShell::GetViewData()->GetDocShell();
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        if (!pViewData)
+            return ERROR_GENERAL;
+
+        ScDocShell* pDocShell = pViewData->GetDocShell();
         ScDocShellModificator aMod(*pDocShell);
         pMgr->switchSrcFile(mnFileId, aFile, aFilter);
         aMod.SetDocumentModified();

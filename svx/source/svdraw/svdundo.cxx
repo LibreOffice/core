@@ -560,7 +560,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      , mbSkipChangeLayout(false)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
-    if (pOL!=nullptr && pOL->GetObjCount() && DynCastE3dScene(&rNewObj))
+    if (pOL!=nullptr && pOL->GetObjCount() && !DynCastE3dScene(&rNewObj))
     {
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself

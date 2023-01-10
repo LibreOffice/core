@@ -20,7 +20,6 @@
 #pragma once
 
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <rtl/ref.hxx>
@@ -48,8 +47,7 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext final
-            :public ::comphelper::OAccessibleImplementationAccess
-            ,public OAccessibleControlContext_Base
+            :public OAccessibleControlContext_Base
             ,public OAccessibleControlContext_IBase
     {
     public:
@@ -84,7 +82,7 @@ namespace toolkit
         virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
         // XEventListener
-        using comphelper::OAccessibleContextHelper::disposing;
+        using comphelper::OCommonAccessibleComponent::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // retrieves the value of a string property from the model, if the property is present

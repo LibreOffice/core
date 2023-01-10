@@ -24,6 +24,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <sal/log.hxx>
+#include <svx/unopage.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/ColorSets.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace com::sun::star;
 
@@ -103,18 +108,84 @@ const TextFont* Theme::resolveFont( std::u16string_view rName ) const
     return nullptr;
 }
 
+std::unique_ptr<svx::Theme> Theme::createSvxTheme() const
+{
+    auto pTheme = std::make_unique<svx::Theme>(maThemeName);
+    auto pColorSet = std::make_unique<svx::ColorSet>(maClrScheme.GetName());
+    maClrScheme.fill(*pColorSet);
+    pTheme->SetColorSet(std::move(pColorSet));
+
+    svx::FontScheme aFontScheme(maFontSchemeName);
+
+    if (auto* pCharProps = getFontStyle(XML_minor))
+    {
+        svx::ThemeFont aMinorLatin;
+        pCharProps->maLatinFont.fillThemeFont(aMinorLatin);
+        aFontScheme.setMinorLatin(aMinorLatin);
+
+        svx::ThemeFont aMinorAsian;
+        pCharProps->maAsianFont.fillThemeFont(aMinorAsian);
+        aFontScheme.setMinorAsian(aMinorAsian);
+
+        svx::ThemeFont aMinorComplex;
+        pCharProps->maComplexFont.fillThemeFont(aMinorComplex);
+        aFontScheme.setMinorComplex(aMinorComplex);
+    }
+
+    if (auto* pCharProps = getFontStyle(XML_major))
+    {
+        svx::ThemeFont aMajorLatin;
+        pCharProps->maLatinFont.fillThemeFont(aMajorLatin);
+        aFontScheme.setMajorLatin(aMajorLatin);
+
+        svx::ThemeFont aMajorAsian;
+        pCharProps->maAsianFont.fillThemeFont(aMajorAsian);
+        aFontScheme.setMajorAsian(aMajorAsian);
+
+        svx::ThemeFont aMajorComplex;
+        pCharProps->maComplexFont.fillThemeFont(aMajorComplex);
+        aFontScheme.setMajorComplex(aMajorComplex);
+    }
+
+    if (maSupplementalFontMap.find(XML_minor) != maSupplementalFontMap.cend())
+    {
+        std::vector<svx::ThemeSupplementalFont> aList;
+        for (auto const& [rScript, rTypeface] : maSupplementalFontMap.at(XML_minor))
+        {
+            aList.push_back(svx::ThemeSupplementalFont{rScript, rTypeface});
+        }
+        aFontScheme.setMinorSupplementalFontList(aList);
+    }
+
+    if (maSupplementalFontMap.find(XML_major) != maSupplementalFontMap.cend())
+    {
+        std::vector<svx::ThemeSupplementalFont> aList;
+        for (auto const& [rScript, rTypeface] : maSupplementalFontMap.at(XML_major))
+        {
+            aList.push_back(svx::ThemeSupplementalFont{rScript, rTypeface});
+        }
+        aFontScheme.setMajorSupplementalFontList(aList);
+    }
+
+    pTheme->setFontScheme(aFontScheme);
+
+    return pTheme;
+}
+
 void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
 {
-    beans::PropertyValue aColorScheme;
-    aColorScheme.Name = "ColorScheme";
-    maClrScheme.ToAny(aColorScheme.Value);
-    beans::PropertyValues aValues = {
-        comphelper::makePropertyValue("Name", maThemeName),
-        comphelper::makePropertyValue("ColorSchemeName", maClrScheme.GetName()),
-        aColorScheme,
-    };
-    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("Theme", uno::Any(aValues));
+    SAL_WARN_IF(!xDrawPage.is(), "oox", "DrawPage is not set");
+
+    SdrPage* pPage = GetSdrPageFromXDrawPage(xDrawPage);
+
+    SAL_WARN_IF(!pPage, "oox", "Can't get SdrPage from XDrawPage");
+
+    if (!pPage)
+        return;
+
+    std::unique_ptr<svx::Theme> pTheme = createSvxTheme();
+
+    pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
 }
 
 } // namespace oox::drawingml

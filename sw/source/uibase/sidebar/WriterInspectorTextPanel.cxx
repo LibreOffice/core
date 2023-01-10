@@ -49,8 +49,8 @@
 
 namespace sw::sidebar
 {
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
-                       sal_Int32& rParIdx);
+static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+                       std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx);
 
 std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
 {
@@ -74,8 +74,9 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
-        UpdateTree(pDocSh, aStore, m_nParIdx);
+    SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
+    if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
+        UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
     updateEntries(aStore, m_nParIdx);
 }
 
@@ -518,11 +519,11 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
         });
 }
 
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
-                       sal_Int32& rParIdx)
+static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+                       std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx)
 {
-    SwDoc* pDoc = pDocSh->GetDoc();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwDoc* pDoc = rDocSh.GetDoc();
+    SwPaM* pCursor = rEditSh.GetCursor();
     svx::sidebar::TreeNode aCharDFNode;
     svx::sidebar::TreeNode aCharNode;
     svx::sidebar::TreeNode aParaNode;
@@ -561,11 +562,16 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                                                    UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
                                                    UNO_NAME_CHAR_STYLE_NAME,
                                                    UNO_NAME_NUMBERING_LEVEL,
-                                                   UNO_NAME_PARRSID };
+                                                   UNO_NAME_PARRSID,
+                                                   UNO_NAME_CHAR_COLOR_THEME,
+                                                   UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
+
+    const std::vector<OUString> aHiddenCharacterProperties{ UNO_NAME_CHAR_COLOR_THEME,
+                                                            UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
 
     InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties, aFieldsNode);
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(rDocSh.GetBaseModel(),
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -584,7 +590,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, {}, aFieldsNode);
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, aHiddenCharacterProperties,
+                     aFieldsNode);
 
         aCharNode.children.push_back(aCurrentChild);
     }
@@ -614,8 +621,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(), {},
-                     aFieldsNode);
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(),
+                     aHiddenCharacterProperties, aFieldsNode);
 
         aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
@@ -625,7 +632,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(rDocSh.GetBaseModel(),
                                                                 uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
@@ -661,7 +668,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     }
 
     // Collect sections at character position
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(rDocSh.GetBaseModel(),
                                                                       uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
@@ -737,8 +744,9 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
     std::vector<svx::sidebar::TreeNode> aStore;
 
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
-        UpdateTree(pDocSh, aStore, m_nParIdx);
+    SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
+    if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
+        UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
 
     updateEntries(aStore, m_nParIdx);
 }

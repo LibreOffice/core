@@ -32,6 +32,8 @@
 #include <ZipOutputEntry.hxx>
 #include <ZipPackageStream.hxx>
 
+#include <thread>
+
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -151,7 +153,7 @@ void ZipOutputStream::reduceScheduledThreadTasksToGivenNumberOrLess(std::size_t 
 
         if(m_aEntries.size() > nThreadTasks)
         {
-            osl::Thread::wait(std::chrono::microseconds(100));
+            std::this_thread::sleep_for(std::chrono::microseconds(100));
         }
     }
 }

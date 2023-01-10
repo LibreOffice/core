@@ -117,9 +117,13 @@ SvtLinguOptions::SvtLinguOptions()
     , bIsSpellWithDigits(false)
     , bIsSpellUpperCase(false)
     , bIsSpellCapitalization(true)
+    , bIsSpellClosedCompound(true)
+    , bIsSpellHyphenatedCompound(true)
     , bROIsSpellWithDigits(false)
     , bROIsSpellUpperCase(false)
     , bROIsSpellCapitalization(false)
+    , bROIsSpellClosedCompound(false)
+    , bROIsSpellHyphenatedCompound(false)
     , bIsIgnorePostPositionalWord(true)
     , bIsAutoCloseDialog(false)
     , bIsShowEntriesRecentlyUsedFirst(false)
@@ -238,6 +242,8 @@ NamesToHdl const aNamesToHdl[] =
 {/*  9 */    "SpellChecking/IsSpellCapitalization",           UPN_IS_SPELL_CAPITALIZATION,           UPH_IS_SPELL_CAPITALIZATION},
 {/* 10 */    "SpellChecking/IsSpellAuto",                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
 {/* 11 */    "SpellChecking/IsSpellSpecial",                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
+{/* 12 */    "SpellChecking/IsSpellClosedCompound",           UPN_IS_SPELL_CLOSED_COMPOUND,          UPH_IS_SPELL_CLOSED_COMPOUND},
+{/* 13 */    "SpellChecking/IsSpellHyphenatedCompound",       UPN_IS_SPELL_HYPHENATED_COMPOUND,      UPH_IS_SPELL_HYPHENATED_COMPOUND},
 {/* 14 */    "SpellChecking/IsReverseDirection",              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
 
 {/* 15 */    "Hyphenation/MinLeading",                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
@@ -348,6 +354,8 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse;  break;
         case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage; break;
         case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;       break;
+        case UPH_IS_SPELL_CLOSED_COMPOUND:  pbVal = &rOpt.bIsSpellClosedCompound;       break;
+        case UPH_IS_SPELL_HYPHENATED_COMPOUND:  pbVal = &rOpt.bIsSpellHyphenatedCompound;    break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;   break;
         case UPH_IS_SPELL_UPPER_CASE :      pbVal = &rOpt.bIsSpellUpperCase;        break;
         case UPH_HYPH_MIN_LEADING :         pnVal = &rOpt.nHyphMinLeading;      break;
@@ -443,6 +451,8 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse; break;
         case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage;    break;
         case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;      break;
+        case UPH_IS_SPELL_CLOSED_COMPOUND:  pbVal = &rOpt.bIsSpellClosedCompound;      break;
+        case UPH_IS_SPELL_HYPHENATED_COMPOUND:  pbVal = &rOpt.bIsSpellHyphenatedCompound;    break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;  break;
         case UPH_IS_SPELL_UPPER_CASE :      pbVal = &rOpt.bIsSpellUpperCase;       break;
         case UPH_HYPH_MIN_LEADING :         pnVal = &rOpt.nHyphMinLeading;     break;
@@ -603,6 +613,11 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                     { rOpt.bROIsSpellWithDigits = pROStates[i]; rVal >>= rOpt.bIsSpellWithDigits;    } break;
                 case UPH_IS_SPELL_CAPITALIZATION :
                     { rOpt.bROIsSpellCapitalization = pROStates[i]; rVal >>= rOpt.bIsSpellCapitalization;    } break;
+                case UPH_IS_SPELL_CLOSED_COMPOUND :
+                    { rOpt.bROIsSpellClosedCompound = pROStates[i]; rVal >>= rOpt.bIsSpellClosedCompound;    } break;
+                case UPH_IS_SPELL_HYPHENATED_COMPOUND :
+                    { rOpt.bROIsSpellHyphenatedCompound = pROStates[i]; rVal >>= rOpt.bIsSpellHyphenatedCompound;    } break;
+
                 case UPH_IS_SPELL_AUTO :
                     { rOpt.bROIsSpellAuto = pROStates[i]; rVal >>= rOpt.bIsSpellAuto;  } break;
                 case UPH_IS_SPELL_SPECIAL :
@@ -707,6 +722,8 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         *pValue++ <<= rOpt.bIsSpellCapitalization;     //   9
         *pValue++ <<= rOpt.bIsSpellAuto;               //  10
         *pValue++ <<= rOpt.bIsSpellSpecial;            //  11
+        *pValue++ <<= rOpt.bIsSpellClosedCompound;     //  12
+        *pValue++ <<= rOpt.bIsSpellHyphenatedCompound; //  13
         *pValue++ <<= rOpt.bIsSpellReverse;            //  14
 
         *pValue++ <<= rOpt.nHyphMinLeading;            //  15
@@ -767,6 +784,8 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
         case UPH_IS_WRAP_REVERSE                : bReadOnly = rOpt.bROIsSpellReverse; break;
         case UPH_DEFAULT_LANGUAGE               : bReadOnly = rOpt.bRODefaultLanguage; break;
         case UPH_IS_SPELL_CAPITALIZATION        : bReadOnly = rOpt.bROIsSpellCapitalization; break;
+        case UPH_IS_SPELL_CLOSED_COMPOUND       : bReadOnly = rOpt.bROIsSpellClosedCompound; break;
+        case UPH_IS_SPELL_HYPHENATED_COMPOUND   : bReadOnly = rOpt.bROIsSpellHyphenatedCompound; break;
         case UPH_IS_SPELL_WITH_DIGITS           : bReadOnly = rOpt.bROIsSpellWithDigits; break;
         case UPH_IS_SPELL_UPPER_CASE            : bReadOnly = rOpt.bROIsSpellUpperCase; break;
         case UPH_HYPH_MIN_LEADING               : bReadOnly = rOpt.bROHyphMinLeading; break;

@@ -112,6 +112,7 @@
 #include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <fmtcntnt.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -379,6 +380,73 @@ OUString GetLocalURL(const SwWrtShell& rSh)
     return rLocalURL;
 }
 
+void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    OUString aSectionNamePrefix;
+    const SfxStringItem* pSectionNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (pSectionNamePrefix)
+    {
+        aSectionNamePrefix = pSectionNamePrefix->GetValue();
+    }
+
+    uno::Sequence<beans::PropertyValues> aSections;
+    const SfxUnoAnyItem* pSections = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
+    if (pSections)
+    {
+        pSections->GetValue() >>= aSections;
+    }
+
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSSECTION, nullptr);
+    rWrtSh.StartAction();
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    sal_Int32 nSectionIndex = 0;
+    const SwSectionFormats& rFormats = pDoc->GetSections();
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    for (size_t i = 0; i < rFormats.size(); ++i)
+    {
+        const SwSectionFormat* pFormat = rFormats[i];
+        if (!pFormat->GetName().startsWith(aSectionNamePrefix))
+        {
+            continue;
+        }
+
+        if (nSectionIndex >= aSections.getLength())
+        {
+            break;
+        }
+
+        comphelper::SequenceAsHashMap aMap(aSections[nSectionIndex++]);
+        OUString aSectionName = aMap["Section"].get<OUString>();
+        if (aSectionName != pFormat->GetName())
+        {
+            const_cast<SwSectionFormat*>(pFormat)->SetFormatName(aSectionName, /*bBroadcast=*/true);
+            SwSectionData aSectionData(*pFormat->GetSection());
+            aSectionData.SetSectionName(aSectionName);
+            pDoc->UpdateSection(i, aSectionData);
+        }
+
+        const SwFormatContent& rContent = pFormat->GetContent();
+        const SwNodeIndex* pContentNodeIndex = rContent.GetContentIdx();
+        if (pContentNodeIndex)
+        {
+            SwPaM aSectionStart(SwPosition{*pContentNodeIndex});
+            aSectionStart.Move(fnMoveForward, GoInContent);
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
+            *pCursorPos = aSectionStart;
+            rWrtSh.EndOfSection(/*bSelect=*/true);
+            rIDCO.DeleteAndJoin(*pCursorPos);
+            rWrtSh.EndSelect();
+
+            OUString aSectionText = aMap["SectionText"].get<OUString>();
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8(), true);
+        }
+    }
+
+    rWrtSh.EndAction();
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSSECTION, nullptr);
+}
+
 void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
@@ -423,7 +491,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         comphelper::SequenceAsHashMap aMap(aBookmarks[nBookmarkIndex++]);
         if (aMap["Bookmark"].get<OUString>() != pMark->GetName())
         {
-            continue;
+            rIDMA.renameMark(pMark, aMap["Bookmark"].get<OUString>());
         }
 
         OUString aBookmarkText = aMap["BookmarkText"].get<OUString>();
@@ -856,6 +924,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
                 pMarkAccess->deleteMark(pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()), false);
             }
+            break;
+        }
+        case FN_UPDATE_SECTIONS:
+        {
+            UpdateSections(rReq, rWrtSh);
             break;
         }
         case FN_SET_REMINDER:
@@ -1344,18 +1417,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR2:
         {
             Color aSet;
-            const SfxStringItem* pColorStringItem = nullptr;
             bool bHasItem = false;
 
             if(pItem)
             {
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
-                bHasItem = true;
-            }
-            else if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
-            {
-                OUString sColor = pColorStringItem->GetValue();
-                aSet = Color(ColorTransparency, sColor.toInt32(16));
                 bHasItem = true;
             }
 
@@ -1376,21 +1442,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_ATTR_CHAR_COLOR_BACKGROUND: // deprecated
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
-            const SfxStringItem* pColorStringItem = nullptr;
 
-            if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
-            {
-                OUString sColor = pColorStringItem->GetValue();
-                if (sColor == "transparent")
-                    aSet = COL_TRANSPARENT;
-                else
-                    aSet = Color(ColorTransparency, sColor.toInt32(16));
-            }
-            else if (pItem)
+            if (pItem)
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
             else
                 aSet = COL_TRANSPARENT;
@@ -1755,7 +1813,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         SwRewriter aRewriter;
 
-        aRewriter.AddRule(UndoArg1, rWrtSh.GetCursorDescr());
+        aRewriter.AddRule(UndoArg1, rWrtSh.GetCursorDescr()
+            // don't show the hidden control character of the comment
+            .replaceAll(OUStringChar(CH_TXTATR_INWORD), "") );
         aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
 
         OUString aTmpStr = SwResId(STR_START_QUOTE) +
@@ -1764,6 +1824,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
         rWrtSh.StartAction();
+
+        // if there is a comment inside the original word, don't delete it:
+        // but keep it at the end of the replacement
+        // TODO: keep all the comments with a recursive function
+
+        if (SwPaM *pPaM = rWrtSh.GetCursor())
+        {
+            sal_Int32 nCommentPos(pPaM->GetText().indexOf(OUStringChar(CH_TXTATR_INWORD)));
+            if ( nCommentPos > -1 )
+            {
+
+                // delete the original word after the comment
+                pPaM->GetPoint()->AdjustContent(nCommentPos + 1);
+                rWrtSh.Replace(OUString(), false);
+                // and select only the remaining part before the comment
+                pPaM->GetPoint()->AdjustContent(-(nCommentPos + 1));
+                pPaM->GetMark()->AdjustContent(-1);
+            }
+        }
 
         rWrtSh.Replace(aTmp, false);
 
@@ -1995,6 +2074,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put( aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2) );
             }
             break;
+        case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
                 // Always use the visible background
@@ -2016,7 +2096,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SwEditWin& rEdtWin = GetView().GetEditWin();
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == SID_ATTR_CHAR_COLOR_BACKGROUND));
+                const sal_uInt32 nColWhich = pApply ? pApply->nColor : 0;
+                const bool bUseTemplate = nColWhich == SID_ATTR_CHAR_BACK_COLOR
+                                          || nColWhich == SID_ATTR_CHAR_COLOR_BACKGROUND;
+                rSet.Put(SfxBoolItem(nWhich, bUseTemplate));
             }
             break;
         case SID_ATTR_CHAR_COLOR_EXT:
@@ -2277,10 +2360,22 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
 
             case FN_NUM_BULLET_OFF:
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_OFF,(!rSh.SelectionHasBullet() &&
-                    !rSh.SelectionHasNumber())));
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_OFF, !rSh.GetNumRuleAtCurrCursorPos() &&
+                                     !rSh.GetNumRuleAtCurrentSelection()));
             break;
 
+            case FN_SVX_SET_OUTLINE:
+            {
+                NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(NBOType::Outline);
+                auto pCurRule = const_cast<SwNumRule*>(rSh.GetNumRuleAtCurrCursorPos());
+                if (pOutline && pCurRule)
+                {
+                    SvxNumRule aSvxRule = pCurRule->MakeSvxNumRule();
+                    const sal_uInt16 nIndex = pOutline->GetNBOIndexForNumRule(aSvxRule, 0);
+                    rSet.Put(SfxBoolItem(FN_SVX_SET_OUTLINE, nIndex < USHRT_MAX));
+                }
+                break;
+            }
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
             case FN_OUTLINE_RULE_INDEX:

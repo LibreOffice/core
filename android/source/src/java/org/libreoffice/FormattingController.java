@@ -48,6 +48,8 @@ class FormattingController implements View.OnClickListener {
 
         mContext.findViewById(R.id.button_insertFormatListBullets).setOnClickListener(this);
         mContext.findViewById(R.id.button_insertFormatListNumbering).setOnClickListener(this);
+        mContext.findViewById(R.id.button_increaseIndent).setOnClickListener(this);
+        mContext.findViewById(R.id.button_decreaseIndent).setOnClickListener(this);
 
         mContext.findViewById(R.id.button_bold).setOnClickListener(this);
         mContext.findViewById(R.id.button_italic).setOnClickListener(this);
@@ -89,6 +91,10 @@ class FormattingController implements View.OnClickListener {
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultBullet"));
         } else if (buttonId == R.id.button_insertFormatListNumbering) {
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultNumbering"));
+        } else if (buttonId == R.id.button_increaseIndent) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:IncrementIndent"));
+        } else if (buttonId == R.id.button_decreaseIndent) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DecrementIndent"));
         } else if (buttonId == R.id.button_bold) {
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
         } else if (buttonId == R.id.button_italic) {

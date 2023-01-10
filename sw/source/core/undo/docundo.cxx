@@ -666,8 +666,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
 
     UnoActionContext c(& rDoc); // exception-safe StartAllAction/EndAllAction
 
-    SwEditShell *const pEditShell( rDoc.GetEditShell() );
-
+    SwEditShell *const pEditShell(rDoc.GetEditShell());
     OSL_ENSURE(pEditShell, "sw::UndoManager needs a SwEditShell!");
     if (!pEditShell)
     {

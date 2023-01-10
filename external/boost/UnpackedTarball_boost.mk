@@ -27,17 +27,13 @@ boost_patches += clang-cl.patch.0
 
 boost_patches += boost_1_63_0.undef.warning.patch.1
 
-boost_patches += windows-no-utf8-locales.patch.0
-
 boost_patches += msvc2017.patch.0
-
-boost_patches += libc++.patch.0
 
 boost_patches += boost-ios.patch.0
 
-# <https://github.com/boostorg/numeric_conversion/pull/25> "Fix ill-formed constant expression
-# errors":
-boost_patches += 0001-Change-mpl-integral_c-to-boost-integral_constant-to-.patch.2
+# <https://github.com/boostorg/phoenix/pull/116> "Avoid boost::phoenix::placeholders::uarg1..10 ODR
+# violations":
+boost_patches += 0001-Avoid-boost-phoenix-placeholders-uarg1.10-ODR-violat.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 

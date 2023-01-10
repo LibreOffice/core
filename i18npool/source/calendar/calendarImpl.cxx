@@ -21,7 +21,6 @@
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -91,7 +90,7 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
             /* XXX NOTE: currently (2019-06-19) calendar implementations derive
              * from Calendar_gregorian, even Hijri and Jewish. If that should
              * change in future this should be adapted. */
-            Calendar_gregorian* pCal = comphelper::getFromUnoTunnel<Calendar_gregorian>(xCalendar);
+            Calendar_gregorian* pCal = dynamic_cast<Calendar_gregorian*>(xCalendar.get());
             bTimeZone = (pCal && pCal->setTimeZone(rTimeZone));
         }
 

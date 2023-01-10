@@ -9,6 +9,7 @@
 
 #include <chrono>
 
+#include <thread>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
@@ -458,7 +459,7 @@ void OpenGLContext::BuffersSwapped()
     if (bSleep)
     {
         // half a second.
-        osl::Thread::wait( std::chrono::milliseconds(500) );
+        std::this_thread::sleep_for(std::chrono::milliseconds(500) );
     }
 }
 

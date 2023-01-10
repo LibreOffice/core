@@ -80,6 +80,16 @@ bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, ::Color& rColor ) const
         case XML_bg2 : nSchemeClrToken = XML_lt2; break;
         case XML_tx1 : nSchemeClrToken = XML_dk1; break;
         case XML_tx2 : nSchemeClrToken = XML_dk2; break;
+        case XML_background1 : nSchemeClrToken = XML_lt1; break;
+        case XML_background2 : nSchemeClrToken = XML_lt2; break;
+        case XML_text1 : nSchemeClrToken = XML_dk1; break;
+        case XML_text2 : nSchemeClrToken = XML_dk2; break;
+        case XML_light1 : nSchemeClrToken = XML_lt1; break;
+        case XML_light2 : nSchemeClrToken = XML_lt2; break;
+        case XML_dark1 : nSchemeClrToken = XML_dk1; break;
+        case XML_dark2 : nSchemeClrToken = XML_dk2; break;
+        case XML_hyperlink : nSchemeClrToken = XML_hlink; break;
+        case XML_followedHyperlink: nSchemeClrToken = XML_folHlink; break;
     }
 
     auto aIter = std::find_if(maClrScheme.begin(), maClrScheme.end(), find_by_token(nSchemeClrToken) );
@@ -118,6 +128,33 @@ void ClrScheme::ToAny(css::uno::Any& rVal) const
     }
 
     rVal <<= comphelper::containerToSequence(aRet);
+}
+
+void ClrScheme::fill(svx::ColorSet& rColorSet) const
+{
+    for (const auto& [nToken, rColor] : maClrScheme)
+    {
+        switch (nToken)
+        {
+            case XML_tx1:
+            case XML_dk1: rColorSet.add(0, rColor); break;
+            case XML_bg1:
+            case XML_lt1: rColorSet.add(1, rColor); break;
+            case XML_tx2:
+            case XML_dk2: rColorSet.add(2, rColor); break;
+            case XML_bg2:
+            case XML_lt2: rColorSet.add(3, rColor); break;
+            case XML_accent1: rColorSet.add(4, rColor); break;
+            case XML_accent2: rColorSet.add(5, rColor); break;
+            case XML_accent3: rColorSet.add(6, rColor); break;
+            case XML_accent4: rColorSet.add(7, rColor); break;
+            case XML_accent5: rColorSet.add(8, rColor); break;
+            case XML_accent6: rColorSet.add(9, rColor); break;
+            case XML_hlink: rColorSet.add(10, rColor); break;
+            case XML_folHlink: rColorSet.add(11, rColor); break;
+            default: break;
+        }
+    }
 }
 
 }

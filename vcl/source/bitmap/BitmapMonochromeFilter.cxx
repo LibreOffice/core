@@ -18,83 +18,71 @@ BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
-    bool bRet = false;
+    if (!pReadAcc)
+        return BitmapEx();
 
-    if (pReadAcc)
+    Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N1_BPP);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return BitmapEx();
+
+    const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
+    const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
+    const sal_Int32 nWidth = pWriteAcc->Width();
+    const sal_Int32 nHeight = pWriteAcc->Height();
+
+    if (pReadAcc->HasPalette())
     {
-        Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N1_BPP);
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if (pWriteAcc)
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
         {
-            const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
-            const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
-            const sal_Int32 nWidth = pWriteAcc->Width();
-            const sal_Int32 nHeight = pWriteAcc->Height();
-
-            if (pReadAcc->HasPalette())
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
             {
-                for (sal_Int32 nY = 0; nY < nHeight; nY++)
+                const sal_uInt8 cIndex = pReadAcc->GetIndexFromData(pScanlineRead, nX);
+                if (pReadAcc->GetPaletteColor(cIndex).GetLuminance() >= mcThreshold)
                 {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                    {
-                        const sal_uInt8 cIndex = pReadAcc->GetIndexFromData(pScanlineRead, nX);
-                        if (pReadAcc->GetPaletteColor(cIndex).GetLuminance() >= mcThreshold)
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
                 }
             }
-            else
-            {
-                for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                    {
-                        if (pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance()
-                            >= mcThreshold)
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
         }
-
-        pReadAcc.reset();
-
-        if (bRet)
+    }
+    else
+    {
+        for (sal_Int32 nY = 0; nY < nHeight; nY++)
         {
-            const MapMode aMap(aBitmap.GetPrefMapMode());
-            const Size aSize(aBitmap.GetPrefSize());
-
-            aBitmap = aNewBmp;
-
-            aBitmap.SetPrefMapMode(aMap);
-            aBitmap.SetPrefSize(aSize);
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (sal_Int32 nX = 0; nX < nWidth; nX++)
+            {
+                if (pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance() >= mcThreshold)
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aWhite);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBlack);
+                }
+            }
         }
     }
 
-    if (bRet)
-        return BitmapEx(aBitmap);
+    pWriteAcc.reset();
+    pReadAcc.reset();
 
-    return BitmapEx();
+    const MapMode aMap(aBitmap.GetPrefMapMode());
+    const Size aSize(aBitmap.GetPrefSize());
+
+    aBitmap = aNewBmp;
+
+    aBitmap.SetPrefMapMode(aMap);
+    aBitmap.SetPrefSize(aSize);
+
+    return BitmapEx(aBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

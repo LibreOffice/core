@@ -2625,9 +2625,14 @@ SfxItemPool& EditEngine::GetGlobalItemPool()
     if ( !pGlobalPool )
     {
         pGlobalPool = CreatePool();
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+        // TerminateListener option not available, force it to leak
+        pGlobalPool->acquire();
+#else
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
         uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
         xDesktop->addTerminateListener( xListener );
+#endif
     }
     return *pGlobalPool;
 }

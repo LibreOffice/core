@@ -34,6 +34,8 @@ class EDITENG_DLLPUBLIC SvxThemeColor
     /// Luminance Offset: 100th percentage, defaults to 0%.
     sal_Int16 mnLumOff;
 
+    sal_Int16 mnTintOrShade;
+
 public:
     explicit SvxThemeColor();
     bool operator==(const SvxThemeColor& rThemeColor) const;
@@ -46,8 +48,8 @@ public:
     void SetThemeIndex(sal_Int16 nIndex)
     {
         maThemeIndex = nIndex;
-    }
 
+    }
     void SetLumMod(sal_Int16 nLumMod) { mnLumMod = nLumMod; }
 
     sal_Int16 GetLumMod() const { return mnLumMod; }
@@ -55,6 +57,16 @@ public:
     void SetLumOff(sal_Int16 nLumOff) { mnLumOff = nLumOff; }
 
     sal_Int16 GetLumOff() const { return mnLumOff; }
+
+    sal_Int16 GetTintOrShade() const
+    {
+        return mnTintOrShade;
+    }
+
+    void SetTintOrShade(sal_Int16 nTintOrShade)
+    {
+        mnTintOrShade = nTintOrShade;
+    }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
@@ -66,7 +78,7 @@ class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 private:
     Color mColor;
     SvxThemeColor maThemeColor;
-    sal_Int16 maTintShade;
+
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -92,16 +104,6 @@ public:
         return mColor;
     }
     void SetValue(const Color& rNewColor);
-
-    sal_Int16 GetTintOrShade() const
-    {
-        return maTintShade;
-    }
-
-    void SetTintOrShade(sal_Int16 nTintOrShade)
-    {
-        maTintShade = nTintOrShade;
-    }
 
     SvxThemeColor& GetThemeColor() { return maThemeColor; }
 

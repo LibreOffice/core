@@ -155,7 +155,7 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 40);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 40);
 }
 
 void ScShapeTest::testTdf144242_Line_noSwapWH()
@@ -188,7 +188,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 40);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 40);
 }
 
 void ScShapeTest::testTdf143619_validation_circle_pos()
@@ -214,7 +214,7 @@ void ScShapeTest::testTdf143619_validation_circle_pos()
 
     // Without fix in place the position was (2007, 833)
     Point aPos = pObj->GetSnapRect().TopLeft();
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(6523, 1736), aPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(6523, 1736), aPos, 1);
 }
 
 void ScShapeTest::testTdf140252_DragCreateFormControl()
@@ -379,9 +379,9 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
 
     // Test reading was correct
     SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectA, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectA, pObj->GetSnapRect(), 1);
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectB, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectB, pObj->GetSnapRect(), 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -391,9 +391,9 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
 
     // And test again
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectA, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectA, pObj->GetSnapRect(), 1);
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectB, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectB, pObj->GetSnapRect(), 1);
 }
 
 void ScShapeTest::testTdf137081_RTL_page_anchored()
@@ -419,18 +419,18 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     // Test reading was correct
     SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     // Measure line
-    CPPUNIT_ASSERT_POINT_EQUAL(aStart, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aEnd, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aStart, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEnd, pObj->GetPoint(1), 1);
     // Polyline
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aFirst, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aSecond, pObj->GetPoint(1), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aThird, pObj->GetPoint(2), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aFirst, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aSecond, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aThird, pObj->GetPoint(2), 1);
     //Custom shape
     SdrObjCustomShape* pObjCS
         = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(*pDoc, 2));
     CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
-    CPPUNIT_ASSERT_POINT_EQUAL(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -441,17 +441,17 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     // And test again
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     // Measure line
-    CPPUNIT_ASSERT_POINT_EQUAL(aStart, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aEnd, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aStart, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEnd, pObj->GetPoint(1), 1);
     // Polyline
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aFirst, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aSecond, pObj->GetPoint(1), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aThird, pObj->GetPoint(2), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aFirst, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aSecond, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aThird, pObj->GetPoint(2), 1);
     //Custom shape
     pObjCS = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(*pDoc, 2));
     CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
-    CPPUNIT_ASSERT_POINT_EQUAL(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 }
 
 void ScShapeTest::testTdf139583_Rotate180deg()
@@ -485,7 +485,7 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     pObj = static_cast<SdrRectObj*>(lcl_getSdrObjectWithAssert(*pDoc, 0));
 
     //  Without the fix in place, the shape would have nearly zero size.
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aRect, pObj->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, pObj->GetSnapRect(), 1);
 }
 
 void ScShapeTest::testTdf137033_FlipHori_Resize()
@@ -501,7 +501,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     // Verify shape is correctly loaded. Then set shape to "resize with cell".
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     const tools::Rectangle aExpectRect(Point(4998, 7000), Size(9644, 6723));
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
 
     // Save and reload.
@@ -513,7 +513,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
 
     // Check shape has the original geometry, besides rounding and unit conversion errors
     aSnapRect = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testTdf137033_RotShear_ResizeHide()
@@ -548,7 +548,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
                            abs(aShearAngle - aExpectShearAngle) <= 1_deg100);
     CPPUNIT_ASSERT_MESSAGE("Hide rows, rotate angle: ",
                            abs(aRotateAngle - aExpectRotateAngle) <= 1_deg100);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 
     // Save and reload.
     saveAndReload("calc8");
@@ -565,7 +565,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
                            abs(aShearAngle - aExpectShearAngle) <= 3_deg100);
     CPPUNIT_ASSERT_MESSAGE("Reload, rotate angle: ",
                            abs(aRotateAngle - aExpectRotateAngle) <= 3_deg100);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 7);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 7);
 }
 
 void ScShapeTest::testTdf137033_RotShear_Hide()
@@ -598,7 +598,7 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     // Values are manually taken from shape before hiding column C.
     const tools::Rectangle aExpectRect(Point(4500, 3500), Size(15143, 5187));
     const tools::Rectangle aSnapRect = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
@@ -644,7 +644,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     // Assert object position is unchanged, besides Twips<->Hmm inaccuracy.
     Point aNewPos = pObj->GetRelativePos();
-    CPPUNIT_ASSERT_POINT_EQUAL(aOldPos, aNewPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aOldPos, aNewPos, 1);
 }
 
 void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
@@ -695,8 +695,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     // Make sure loading is correct
     Point aStartPoint(7500, 15000); // according UI
     Point aEndPoint(17500, 8000);
-    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aStartPoint, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEndPoint, pObj->GetPoint(1), 1);
 
     // Hide column A
     pDoc->SetColHidden(0, 0, 0, true);
@@ -704,8 +704,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     // Shape should move by column width, here 3000
     aStartPoint.Move(-3000, 0);
     aEndPoint.Move(-3000, 0);
-    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aStartPoint, pObj->GetPoint(0), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEndPoint, pObj->GetPoint(1), 1);
 
     // save and reload
     saveAndReload("calc8");
@@ -715,8 +715,8 @@ void ScShapeTest::testMeasurelineHideColSave()
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
 
     // Check that start and end point are unchanged besides rounding and unit conversion errors
-    CPPUNIT_ASSERT_POINT_EQUAL(aStartPoint, pObj->GetPoint(0), 2);
-    CPPUNIT_ASSERT_POINT_EQUAL(aEndPoint, pObj->GetPoint(1), 2);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aStartPoint, pObj->GetPoint(0), 2);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEndPoint, pObj->GetPoint(1), 2);
 }
 
 void ScShapeTest::testHideColsShow()
@@ -756,7 +756,7 @@ void ScShapeTest::testHideColsShow()
     // Check object is visible and has old size
     CPPUNIT_ASSERT_MESSAGE("Show: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectShow(pObj->GetSnapRect());
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectShow, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectShow, 1);
 }
 
 void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
@@ -772,7 +772,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     // Check anchor and position of shape. The expected values are taken from UI.
     tools::Rectangle aSnapRect = pObj->GetSnapRect();
     tools::Rectangle aExpectedRect(Point(10000, 3000), Size(1000, 7500));
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 
     // Insert two columns after column B
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
@@ -784,7 +784,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
     aExpectedRect = tools::Rectangle(Point(16000, 3000), Size(1000, 7500)); // col width 3000
     aSnapRect = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -795,7 +795,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
 
     // Assert objects size is unchanged, position is shifted.
     aSnapRect = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect, aSnapRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 }
 
 void ScShapeTest::testLoadVerticalFlip()
@@ -833,10 +833,10 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // Check anchor and position of shape. The expected values are taken from UI before saving.
     tools::Rectangle aSnapRect0Collapse = pObj0->GetSnapRect();
     tools::Rectangle aExpectedRect0(Point(4672, 1334), Size(1787, 1723));
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect0, aSnapRect0Collapse, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect0, aSnapRect0Collapse, 1);
     tools::Rectangle aSnapRect1Collapse = pObj1->GetSnapRect();
     tools::Rectangle aExpectedRect1(Point(5647, 4172), Size(21, 3441));
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect1, aSnapRect1Collapse, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect1, aSnapRect1Collapse, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -849,10 +849,10 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // Assert objects size and position are not changed. Actual values differ a little bit
     // because of cumulated Twips-Hmm conversion errors.
     tools::Rectangle aSnapRect0Reload = pObj0->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect0, aSnapRect0Reload, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect0, aSnapRect0Reload, 2);
 
     tools::Rectangle aSnapRect1Reload = pObj1->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpectedRect1, aSnapRect1Reload, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect1, aSnapRect1Reload, 2);
 }
 
 void ScShapeTest::testTdf137355_UndoHideRows()
@@ -888,7 +888,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     CPPUNIT_ASSERT_MESSAGE("Undo: Object should exist", pObj);
     CPPUNIT_ASSERT_MESSAGE("Undo: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectUndo(pObj->GetSnapRect());
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectUndo, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectUndo, 1);
 }
 
 void ScShapeTest::testTdf152081_UndoHideColsWithNotes()
@@ -962,7 +962,7 @@ void ScShapeTest::testTdf115655_HideDetail()
 
     // Assert image size is not changed
     tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectReload, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectReload, 1);
 }
 
 void ScShapeTest::testFitToCellSize()
@@ -991,7 +991,7 @@ void ScShapeTest::testFitToCellSize()
 
     const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
     const tools::Rectangle aCellRect = pDoc->GetMMRect(1, 1, 1, 1, 0);
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aCellRect, rShapeRect, 2);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aCellRect, rShapeRect, 2);
 }
 
 void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
@@ -1010,7 +1010,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     pDoc->SetDrawPageSize(0); // trigger recalcpos
     tools::Rectangle aRect(2400, 751, 5772, 3694); // expected snap rect from values in file
     const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aRect, rShapeRect, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, rShapeRect, 1);
 
     // Check anchor
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
@@ -1035,7 +1035,7 @@ void ScShapeTest::testLargeAnchorOffset()
 
     const Point aOldPos = pObj->GetRelativePos();
     // Just to check that it imports correctly
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(9504, 9089), aOldPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(9504, 9089), aOldPos, 1);
 
     saveAndReload("calc8");
 
@@ -1048,7 +1048,7 @@ void ScShapeTest::testLargeAnchorOffset()
     //   - Expression: std::abs(rExpected.Y() - rActual.Y()) <= nTolerance
     //   - after reload Y expected 9089 actual 9643 Tolerance 1
     const Point aNewPos = pObj->GetRelativePos();
-    CPPUNIT_ASSERT_POINT_EQUAL(aOldPos, aNewPos, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aOldPos, aNewPos, 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeTest);

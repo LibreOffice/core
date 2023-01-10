@@ -106,6 +106,20 @@ published interface XLinguProperties
     */
     [attribute] com::sun::star::lang::Locale DefaultLocale_CTL;
 
+    /** defines whether spell checking should be accept rule-based
+         closed compounding of dictionary words.
+
+        @since LibreOffice 7.6
+    */
+    [attribute] boolean IsSpellClosedCompound;
+
+    /** defines whether spell checking should be accept rule-based
+         hyphenated compounding of dictionary words.
+
+        @since LibreOffice 7.6
+    */
+    [attribute] boolean IsSpellHyphenatedCompound;
+
 };
 
 

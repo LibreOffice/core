@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <xmlsec-wrapper.h>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>
 
@@ -77,7 +78,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     }
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
+        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -94,7 +95,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     //Get Keys Manager
     SecurityEnvironmentGpg* pSecEnv =
-        dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
+        comphelper::getFromUnoTunnel<SecurityEnvironmentGpg>(aEnvironment);
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -281,7 +282,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         throw RuntimeException() ;
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
+        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr )
         throw RuntimeException() ;
 
@@ -305,7 +306,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
         SecurityEnvironmentGpg* pSecEnv =
-            dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
+            comphelper::getFromUnoTunnel<SecurityEnvironmentGpg>(aEnvironment);
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
 

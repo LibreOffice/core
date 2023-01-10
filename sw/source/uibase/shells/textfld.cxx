@@ -66,6 +66,7 @@
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
 #include <translatehelper.hxx>
+#include <sfx2/dispatch.hxx>
 
 
 using namespace nsSwDocInfoSubType;
@@ -277,6 +278,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if( const SfxUInt16Item* pTypeItem = pArgs->GetItemIfSet( FN_PARAM_FIELD_TYPE,
                                                             false ))
                     nType = static_cast<SwFieldTypesEnum>(pTypeItem->GetValue());
+                else if (pArgs->GetItemState(FN_PARAM_4, false, &pItem) == SfxItemState::SET)
+                {
+                    const OUString& rTypeName = static_cast<const SfxStringItem *>(pItem)->GetValue();
+                    nType = SwFieldTypeFromString(rTypeName);
+                }
                 if( const SfxUInt16Item* pSubtypeItem = pArgs->GetItemIfSet( FN_PARAM_FIELD_SUBTYPE,
                                                             false ))
                     nSubType = pSubtypeItem->GetValue();
@@ -714,6 +720,16 @@ FIELD_INSERT:
                 aFieldCode = pFieldCode->GetValue();
             }
 
+            if (rSh.HasReadonlySel())
+            {
+                // Inform the user that the request has been ignored.
+                auto xInfo = std::make_shared<weld::GenericDialogController>(
+                    GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui",
+                    "InfoReadonlyDialog");
+                weld::DialogController::runAsync(xInfo, [](sal_Int32 /*nResult*/) {});
+                break;
+            }
+
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
             // Don't update the layout after inserting content and before deleting temporary
             // text nodes.
@@ -846,6 +862,8 @@ FIELD_INSERT:
     break;
     case FN_UPDATE_TEXT_FORMFIELDS:
     {
+        // This updates multiple fieldmarks in a document, based on their field name & field command
+        // prefix.
         OUString aFieldType;
         const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if (pFieldType)
@@ -910,6 +928,153 @@ FIELD_INSERT:
             aMap["FieldResult"] >>= aFieldResult;
             SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
         }
+
+        rSh.EndAction();
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+    }
+    break;
+    case FN_PGNUMBER_WIZARD:
+    {
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        VclPtr<AbstractSwPageNumberDlg> pDlg(
+                pFact->CreateSwPageNumberDlg(GetView().GetFrameWeld()));
+        auto pShell = GetShellPtr();
+        pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
+            if ( nResult == RET_OK )
+            {
+                auto rDoc = rSh.GetDoc();
+
+                rSh.LockView(true);
+                rSh.StartAllAction();
+                rSh.SwCursorShell::Push();
+                rDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+
+                // Insert header/footer
+                bool bFooter = (pDlg->GetPageNumberPosition() == 1);
+                sal_uInt16 nPageNumberPosition = bFooter ?
+                    FN_INSERT_PAGEFOOTER : FN_INSERT_PAGEHEADER;
+                SfxBoolItem aItem(FN_PARAM_1, true);
+                rSh.GetView().GetDispatcher().ExecuteList(
+                    nPageNumberPosition,
+                    SfxCallMode::API | SfxCallMode::SYNCHRON,
+                    {&aItem}
+                );
+
+                SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
+
+                // Insert new line if there is already text in header/footer
+                if (pTextNode && !pTextNode->GetText().isEmpty())
+                {
+                    rDoc->getIDocumentContentOperations().SplitNode(*rSh.GetCursor()->GetPoint(), false);
+                }
+
+                // Go back to start of header/footer
+                if (bFooter)
+                    rSh.GotoFooterText();
+                else
+                    rSh.GotoHeaderText();
+
+                // Set alignment for the new line
+                switch (pDlg->GetPageNumberAlignment())
+                {
+                    case 0:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Left, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                    case 1:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                    case 2:
+                    {
+                        SvxAdjustItem aAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST);
+                        rSh.SetAttrItem(aAdjustItem);
+                        break;
+                    }
+                }
+
+                // Insert page number
+                SwFieldMgr aMgr(pShell);
+                SwInsertField_Data aData(SwFieldTypesEnum::PageNumber, 0,
+                            OUString(), OUString(), SVX_NUM_PAGEDESC);
+                aMgr.InsertField(aData);
+
+                rSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
+                rSh.EndAllAction();
+                rSh.LockView(false);
+                rDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+            }
+            pDlg->disposeOnce();
+        });
+        rReq.Done();
+    }
+    break;
+    case FN_UPDATE_TEXT_FORMFIELD:
+    {
+        // This updates a single fieldmarks under the current cursor.
+        OUString aFieldType;
+        const SfxStringItem* pFieldType = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pFieldType)
+        {
+            aFieldType = pFieldType->GetValue();
+        }
+        OUString aFieldCommandPrefix;
+        const SfxStringItem* pFieldCommandPrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        if (pFieldCommandPrefix)
+        {
+            aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
+        }
+        uno::Sequence<beans::PropertyValue> aField;
+        const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+        if (pFields)
+        {
+            pFields->GetValue() >>= aField;
+        }
+
+        IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
+        SwPosition& rCursor = *rSh.GetCursor()->GetPoint();
+        sw::mark::IFieldmark* pFieldmark = rIDMA.getFieldmarkFor(rCursor);
+        if (!pFieldmark)
+        {
+            break;
+        }
+
+        if (pFieldmark->GetFieldname() != aFieldType)
+        {
+            break;
+        }
+
+        auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+        if (itParam == pFieldmark->GetParameters()->end())
+        {
+            break;
+        }
+
+        OUString aCommand;
+        itParam->second >>= aCommand;
+        if (!aCommand.startsWith(aFieldCommandPrefix))
+        {
+            break;
+        }
+
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.StartAction();
+        comphelper::SequenceAsHashMap aMap(aField);
+        itParam->second = aMap["FieldCommand"];
+        SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
+        aPaM.Normalize();
+        // Skip field start & separator.
+        aPaM.GetPoint()->AdjustContent(2);
+        // Skip field end.
+        aPaM.GetMark()->AdjustContent(-1);
+        rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
+        OUString aFieldResult;
+        aMap["FieldResult"] >>= aFieldResult;
+        SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
 
         rSh.EndAction();
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);

@@ -8968,6 +8968,8 @@ module com {
      [attribute] boolean IsWrapReverse;
      [attribute] ::com::sun::star::lang::Locale DefaultLocale_CJK;
      [attribute] ::com::sun::star::lang::Locale DefaultLocale_CTL;
+     [attribute] boolean IsSpellClosedCompound;
+     [attribute] boolean IsSpellHyphenatedCompound;
     };
     published service LinguProperties: ::com::sun::star::linguistic2::XLinguProperties;
     published struct LinguServiceEvent: ::com::sun::star::lang::EventObject {

@@ -29,6 +29,12 @@
 #include <docstyle.hxx>
 #include <fmtcol.hxx>
 #include <format.hxx>
+#include <svx/ColorSets.hxx>
+#include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
+
 
 namespace
 {
@@ -74,21 +80,6 @@ public:
     void setColorVariable(ColorVariable aVariable)
     {
         maVariable = aVariable;
-    }
-
-    Color getColor(svx::ColorSet const & rColorSet)
-    {
-        Color aColor;
-        if (maVariable.mnIndex > -1)
-        {
-            aColor = rColorSet.getColor(maVariable.mnIndex);
-            aColor.ApplyTintOrShade(maVariable.mnTintShade);
-        }
-        else
-        {
-            aColor = COL_BLACK;
-        }
-        return aColor;
     }
 };
 
@@ -229,13 +220,17 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const & rColorSet, StyleRedefinition* pRedefinition)
+void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
-    Color aColor = pRedefinition->getColor(rColorSet);
-
     SvxColorItem aColorItem(pCollection->GetColor());
-    aColorItem.SetValue(aColor);
-    pCollection->SetFormatAttr(aColorItem);
+    auto nThemeIndex = aColorItem.GetThemeColor().GetThemeIndex();
+    if (nThemeIndex >= 0)
+    {
+        Color aColor = rColorSet.getColor(svx::convertToThemeColorType(nThemeIndex));
+        aColor.ApplyTintOrShade(aColorItem.GetThemeColor().GetTintOrShade());
+        aColorItem.SetValue(aColor);
+        pCollection->SetFormatAttr(aColorItem);
+    }
 }
 
 std::vector<FontSet> initFontSets()
@@ -278,7 +273,7 @@ std::vector<FontSet> initFontSets()
         aFontSet.maName = "Source Sans Family";
         aFontSet.msHeadingFont = "Source Sans Pro";
         aFontSet.msBaseFont = "Source Sans Pro";
-        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSet.msMonoFont = "Source Code Pro";
         aFontSets.push_back(aFontSet);
     }
     {
@@ -286,7 +281,7 @@ std::vector<FontSet> initFontSets()
         aFontSet.maName = "Source Sans Family 2";
         aFontSet.msHeadingFont = "Source Sans Pro";
         aFontSet.msBaseFont = "Source Sans Pro Light";
-        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSet.msMonoFont = "Source Code Pro";
         aFontSets.push_back(aFontSet);
     }
     {
@@ -404,10 +399,10 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
-        pVirtualDev->SetFillColor(rColorSet.getColor(i));
+        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y1, x + SIZE, y1 + SIZE));
 
-        pVirtualDev->SetFillColor(rColorSet.getColor(i + 1));
+        pVirtualDev->SetFillColor(rColorSet.getColor(svx::convertToThemeColorType(i + 1)));
         pVirtualDev->DrawRect(tools::Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;
@@ -451,6 +446,16 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     mxListBoxFonts->set_size_request(-1, mxListBoxFonts->get_height_rows(aFontSets.size()));
 
     maColorSets.init();
+
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwDoc* pDocument = pDocSh->GetDoc();
+    if (pDocument)
+    {
+        SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        if (pTheme)
+            maColorSets.insert(*pTheme->GetColorSet());
+    }
 
     const std::vector<svx::ColorSet>& aColorSets = maColorSets.getColorSets();
     for (size_t i = 0; i < aColorSets.size(); ++i)

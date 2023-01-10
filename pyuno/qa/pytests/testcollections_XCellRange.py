@@ -8,10 +8,8 @@
 #
 
 import unittest
-import uno
 
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
 from com.sun.star.table import CellAddress
 
 # TextTable instance factory

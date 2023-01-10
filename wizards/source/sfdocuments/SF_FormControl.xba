@@ -13,7 +13,8 @@ Option Explicit
 
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_FormControl
-&apos;&apos;&apos;	================
+&apos;&apos;&apos;	==============
+&apos;&apos;&apos;
 &apos;&apos;&apos;		Manage the controls belonging to a form or subform stored in a document
 &apos;&apos;&apos;		Each instance of the current class represents a single control within a form, a subform or a tablecontrol
 &apos;&apos;&apos;		A prerequisite is that all controls within the same form, subform or tablecontrol must have
@@ -1131,7 +1132,7 @@ Try:
 	End With
 
 	&apos;	Store  the SF_FormControl object in the parent cache
-	Set _Parent._ControlCache(_IndexOfNames) = [Me]
+	Set [_Parent]._ControlCache(_IndexOfNames) = [Me]
 
 Finally:
 	Exit Sub

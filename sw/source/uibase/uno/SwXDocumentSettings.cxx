@@ -490,8 +490,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bIsKern = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, bIsKern);
-            SwEditShell* pEditSh = mpDoc->GetEditShell();
-            if(pEditSh)
+            if (SwEditShell* pEditSh = mpDoc->GetEditShell())
                 pEditSh->ChgHyphenation();
         }
         break;

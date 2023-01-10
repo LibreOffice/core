@@ -25,14 +25,20 @@
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+namespace oox::vml { class DrawingFragment; }
+
 namespace oox::shape {
 
+class LockedCanvasContext;
 class ShapeFilterBase;
+class WpgContext;
+class WpsContext;
 
 class ShapeFragmentHandler final : public core::FragmentHandler2
 {
@@ -128,14 +134,14 @@ private:
 
     typedef rtl::Reference<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
-    css::uno::Reference<XFastContextHandler> mxDrawingFragmentHandler;
+    rtl::Reference<vml::DrawingFragment> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
-    css::uno::Reference<XFastContextHandler> mxDiagramShapeContext;
-    css::uno::Reference<XFastContextHandler> mxLockedCanvasContext;
-    css::uno::Reference<XFastContextHandler> mxWpsContext;
+    rtl::Reference<drawingml::DiagramGraphicDataContext> mxDiagramShapeContext;
+    rtl::Reference<LockedCanvasContext> mxLockedCanvasContext;
+    rtl::Reference<WpsContext> mxWpsContext;
     css::uno::Reference<css::drawing::XShape> mxSavedShape;
-    css::uno::Reference<XFastContextHandler> mxWpgContext;
-    css::uno::Reference<XFastContextHandler> mxChartShapeContext;
+    rtl::Reference<WpgContext> mxWpgContext;
+    rtl::Reference<drawingml::ChartGraphicDataContext> mxChartShapeContext;
     css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
     css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
 
@@ -145,12 +151,12 @@ private:
     OUString msRelationFragmentPath;
 
     css::uno::Reference<XFastContextHandler> const & getGraphicShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> const & getChartShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> const & getDrawingShapeContext();
-    css::uno::Reference<XFastContextHandler> const & getDiagramShapeContext();
-    css::uno::Reference<XFastContextHandler> const & getLockedCanvasContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> const & getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> const & getWpgContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> getChartShapeContext(::sal_Int32 Element);
+    css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
+    css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
+    css::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
 
     void applyFontRefColor(const oox::drawingml::ShapePtr& pShape,

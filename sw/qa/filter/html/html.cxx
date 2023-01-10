@@ -15,6 +15,9 @@
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
+#include <itabenum.hxx>
+#include <wrtsh.hxx>
+#include <cellatr.hxx>
 
 namespace
 {
@@ -125,6 +128,39 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     // - XPath '//reqif-xhtml:object' number of nodes is incorrect
     // i.e. we wrote both GIF and PNG, not just PNG for SVM images.
     assertXPath(pXmlDoc, "//reqif-xhtml:object", "type", "image/png");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
+{
+    // Given a document with a single table cell, its cell value is set to double:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 1, 1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SwTableNode* pTableNode = pWrtShell->GetCursor()->GetPointNode().FindTableNode();
+    SwTable& rTable = pTableNode->GetTable();
+    auto pBox = const_cast<SwTableBox*>(rTable.GetTableBox("A1"));
+    SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
+    SwAttrSet aSet(pBoxFormat->GetAttrSet());
+    SwTableBoxValue aBoxValue(42.0);
+    aSet.Put(aBoxValue);
+    pBoxFormat->GetDoc()->SetAttr(aSet, *pBoxFormat);
+
+    // When exporting to XHTML:
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save("HTML (StarWriter)");
+
+    // Then make sure that the sdval attribute is omitted, which is not in the XHTML spec:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//reqif-xhtml:td' unexpected 'sdval' attribute
+    // i.e. sdval was written in XHTML mode.
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdval");
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdnum");
 }
 }
 

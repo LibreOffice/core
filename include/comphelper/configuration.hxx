@@ -12,15 +12,16 @@
 
 #include <sal/config.h>
 
-#include <optional>
-#include <string_view>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
 #include <memory>
+#include <mutex>
+#include <optional>
+#include <string_view>
+#include <unordered_map>
 
 namespace com::sun::star {
     namespace configuration { class XReadWriteAccess; }
@@ -31,6 +32,10 @@ namespace com::sun::star {
         class XNameContainer;
     }
     namespace uno { class XComponentContext; }
+    namespace util {
+        class XChangesListener;
+        class XChangesNotifier;
+    }
 }
 
 namespace comphelper {
@@ -80,8 +85,11 @@ private:
 
 namespace detail {
 
+class ConfigurationChangesListener;
+
 /// @internal
 class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
+friend class ConfigurationChangesListener;
 public:
     static ConfigurationWrapper const & get();
 
@@ -135,6 +143,12 @@ private:
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
         // READONLY, so isReadOnly() would not work
+
+    mutable std::mutex maMutex;
+    bool mbDisposed;
+    mutable std::unordered_map<OUString, css::uno::Any> maPropertyCache;
+    css::uno::Reference< css::util::XChangesNotifier > maNotifier;
+    css::uno::Reference< css::util::XChangesListener > maListener;
 };
 
 /// @internal

@@ -1110,7 +1110,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     }
 }
 
-void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
+void OutputDevice::DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
                                     const OUString& rStr,
                                     sal_Int32 nIndex, sal_Int32 nLen)
 {

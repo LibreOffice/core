@@ -36,6 +36,7 @@
 #include <colwd.hxx>
 #include <contentcontroldlg.hxx>
 #include <contentcontrollistitemdlg.hxx>
+#include <pagenumberdlg.hxx>
 #include <convert.hxx>
 #include <cption.hxx>
 #include <dbinsdlg.hxx>
@@ -149,6 +150,16 @@ short AbstractSwTableHeightDlg_Impl::Execute()
 short AbstractSwMergeTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+short AbstractSwPageNumberDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractSwPageNumberDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractGenericDialog_Impl::Execute()
@@ -621,6 +632,16 @@ OUString AbstractInsFootNoteDlg_Impl::GetFontName()
     return m_xDlg->GetFontName();
 }
 
+int AbstractSwPageNumberDlg_Impl::GetPageNumberPosition() const
+{
+    return m_xDlg->GetPageNumberPosition();
+}
+
+int AbstractSwPageNumberDlg_Impl::GetPageNumberAlignment() const
+{
+    return m_xDlg->GetPageNumberAlignment();
+}
+
 bool AbstractInsFootNoteDlg_Impl::IsEndNote()
 {
     return m_xDlg->IsEndNote();
@@ -1076,6 +1097,11 @@ VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXN
 VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(weld::Window *pParent)
 {
     return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create(std::make_unique<SwModalRedlineAcceptDlg>(pParent));
+}
+
+VclPtr<AbstractSwPageNumberDlg> SwAbstractDialogFactory_Impl::CreateSwPageNumberDlg(weld::Window *pParent)
+{
+    return VclPtr<AbstractSwPageNumberDlg_Impl>::Create(std::make_shared<SwPageNumberDlg>(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev)

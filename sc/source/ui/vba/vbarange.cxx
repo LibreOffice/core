@@ -19,6 +19,7 @@
 
 #include "vbarange.hxx"
 
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
@@ -872,7 +873,8 @@ protected:
             if ( m_eGrammar != formula::FormulaGrammar::GRAM_API && ( o3tl::starts_with(o3tl::trim(sFormula), u"=") ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
-                ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
+                ScCellRangesBase* pUnoRangesBase
+                    = comphelper::getFromUnoTunnel< ScCellRangesBase >( xIf );
                 if ( pUnoRangesBase )
                 {
                     const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
@@ -920,7 +922,8 @@ public:
                 && m_eGrammar != formula::FormulaGrammar::GRAM_API)
         {
             uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
-            ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
+            ScCellRangesBase* pUnoRangesBase
+                = comphelper::getFromUnoTunnel< ScCellRangesBase >( xIf );
             if (pUnoRangesBase)
             {
                 OUString sVal;
@@ -1831,11 +1834,12 @@ ScVbaRange::HasFormula()
         return aResult;
     }
     uno::Reference< uno::XInterface > xIf( mxRange, uno::UNO_QUERY_THROW );
-    ScCellRangesBase* pThisRanges = dynamic_cast< ScCellRangesBase * > ( xIf.get() );
+    ScCellRangesBase* pThisRanges = comphelper::getFromUnoTunnel< ScCellRangesBase > ( xIf );
     if ( pThisRanges )
     {
         uno::Reference<uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE | sheet::FormulaResult::STRING ), uno::UNO_QUERY_THROW );
-        ScCellRangesBase* pFormulaRanges = dynamic_cast< ScCellRangesBase * > ( xRanges.get() );
+        ScCellRangesBase* pFormulaRanges
+            = comphelper::getFromUnoTunnel< ScCellRangesBase > ( xRanges );
         assert(pFormulaRanges);
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )

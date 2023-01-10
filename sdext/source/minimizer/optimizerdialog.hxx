@@ -231,6 +231,12 @@ public:
 
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
+    void SetIntroPage(IntroPage* pPage0) { mpPage0 = pPage0; }
+    void SetSlidesPage(SlidesPage* pPage1) { mpPage1 = pPage1; }
+    void SetImagesPage(ImagesPage* pPage2) { mpPage2 = pPage2; }
+    void SetObjectsPage(ObjectsPage* pPage3) { mpPage3 = pPage3; }
+    void SetSummaryPage(SummaryPage* pPage4) { mpPage4 = pPage4; }
+
     css::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
 };

@@ -55,6 +55,7 @@
 #include <charfmt.hxx>
 #include <calbck.hxx>
 #include <frameformats.hxx>
+#include <editsh.hxx>
 
 SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
     : SwClient(&rFormat)
@@ -571,6 +572,10 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pTNd )
             pTNd->DontExpandFormat( m_nSttContent, false );
     }
+    else if (m_nFormatId == RES_TXTATR_REFMARK)
+    {
+        rDoc.GetEditShell()->SwViewShell::UpdateFields();
+    }
 
     AddUndoRedoPaM(rContext);
 }
@@ -617,6 +622,27 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
             // found one, thus delete it
             if( nCnt-- ) {
                 rDoc.DeleteTOXMark( aArr[ nCnt ] );
+            }
+        }
+    }
+    break;
+    case RES_TXTATR_REFMARK:
+    {
+        SfxItemPool::Item2Range aRange = rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK);
+        SwHistoryHint* pHistoryHint = GetHistory()[0];
+        if (pHistoryHint && HSTRY_SETREFMARKHNT == pHistoryHint->Which())
+        {
+            for (const SfxPoolItem* pItem : aRange)
+            {
+                assert(dynamic_cast<const SwFormatRefMark*>(pItem));
+                const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
+                if (static_cast<SwHistorySetRefMark*>(pHistoryHint)->GetRefName() ==
+                        pFormatRefMark->GetRefName())
+                {
+                    rDoc.DeleteFormatRefMark(pFormatRefMark);
+                    rDoc.GetEditShell()->SwViewShell::UpdateFields();
+                    break;
+                }
             }
         }
     }

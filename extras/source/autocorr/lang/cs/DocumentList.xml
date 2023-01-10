@@ -224,7 +224,6 @@
   <block-list:block block-list:abbreviated-name="na příč" block-list:name="napříč"/>
   <block-list:block block-list:abbreviated-name="na přikl." block-list:name="např."/>
   <block-list:block block-list:abbreviated-name="na proti" block-list:name="naproti"/>
-  <block-list:block block-list:abbreviated-name="na úseku" block-list:name="na úseku"/>
   <block-list:block block-list:abbreviated-name="na vzdory" block-list:name="navzdory"/>
   <block-list:block block-list:abbreviated-name="nabo" block-list:name="nebo"/>
   <block-list:block block-list:abbreviated-name="naboť" block-list:name="neboť"/>
@@ -461,7 +460,6 @@
   <block-list:block block-list:abbreviated-name="u prostřed" block-list:name="uprostřed"/>
   <block-list:block block-list:abbreviated-name="u tě" block-list:name="u tebe"/>
   <block-list:block block-list:abbreviated-name="u vnitř" block-list:name="uvnitř"/>
-  <block-list:block block-list:abbreviated-name="účinný" block-list:name="účinný"/>
   <block-list:block block-list:abbreviated-name="úhemí" block-list:name="území"/>
   <block-list:block block-list:abbreviated-name="ukol" block-list:name="úkol"/>
   <block-list:block block-list:abbreviated-name="úměrněk" block-list:name="úměrně k"/>
@@ -516,15 +514,12 @@
   <block-list:block block-list:abbreviated-name="vrozporu" block-list:name="v rozporu"/>
   <block-list:block block-list:abbreviated-name="vsak" block-list:name="však"/>
   <block-list:block block-list:abbreviated-name="vsech" block-list:name="všech"/>
-  <block-list:block block-list:abbreviated-name="všechny" block-list:name="všechny"/>
   <block-list:block block-list:abbreviated-name="všoch" block-list:name="všech"/>
   <block-list:block block-list:abbreviated-name="všochen" block-list:name="všechen"/>
   <block-list:block block-list:abbreviated-name="vsouhlase" block-list:name="v souhlase"/>
   <block-list:block block-list:abbreviated-name="vsouladu" block-list:name="v souladu"/>
   <block-list:block block-list:abbreviated-name="vsouvislosti" block-list:name="v souvislosti"/>
   <block-list:block block-list:abbreviated-name="všyk" block-list:name="však"/>
-  <block-list:block block-list:abbreviated-name="vůbec" block-list:name="vůbec"/>
-  <block-list:block block-list:abbreviated-name="vůči" block-list:name="vůči"/>
   <block-list:block block-list:abbreviated-name="vyjímka" block-list:name="výjimka"/>
   <block-list:block block-list:abbreviated-name="vytovřeno" block-list:name="vytvořeno"/>
   <block-list:block block-list:abbreviated-name="vzájmu" block-list:name="v zájmu"/>
@@ -552,7 +547,6 @@
   <block-list:block block-list:abbreviated-name="zeme" block-list:name="země"/>
   <block-list:block block-list:abbreviated-name="ževota" block-list:name="života"/>
   <block-list:block block-list:abbreviated-name="zhlediska" block-list:name="z hlediska"/>
-  <block-list:block block-list:abbreviated-name="zítra" block-list:name="zítra"/>
   <block-list:block block-list:abbreviated-name="zivot" block-list:name="život"/>
   <block-list:block block-list:abbreviated-name="žívot" block-list:name="život"/>
   <block-list:block block-list:abbreviated-name="zlavní" block-list:name="hlavní"/>

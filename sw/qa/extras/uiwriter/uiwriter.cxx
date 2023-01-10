@@ -1809,7 +1809,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
     for(const auto& rIndexAccess : aIndexAccess)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rIndexAccess->getCount());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rIndexAccess->getCount());
         for(int j=0;j<rIndexAccess->getCount();j++)
         {
             uno::Sequence<beans::PropertyValue> aProps;

@@ -146,7 +146,7 @@ GenPspGfxBackend::~GenPspGfxBackend() {}
 void GenPspGfxBackend::Init() {}
 void GenPspGfxBackend::freeResources() {}
 
-bool GenPspGfxBackend::setClipRegion(vcl::Region const& rRegion)
+void GenPspGfxBackend::setClipRegion(vcl::Region const& rRegion)
 {
     // TODO: support polygonal clipregions here
     RectangleVector aRectangles;
@@ -165,8 +165,6 @@ bool GenPspGfxBackend::setClipRegion(vcl::Region const& rRegion)
     }
 
     m_pPrinterGfx->EndSetClipRegion();
-
-    return true;
 }
 
 void GenPspGfxBackend::ResetClipRegion() { m_pPrinterGfx->ResetClipRegion(); }

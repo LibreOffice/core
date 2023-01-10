@@ -1103,6 +1103,8 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
     SwEditShell *pEditShell = GetDoc().GetEditShell();
+    if (!pEditShell)
+        return;
     SfxItemSet aSet(pEditShell->GetAttrPool(), nLangWhichId, nLangWhichId );
     if (pFont)
         aSet.MergeRange(nFontWhichId, nFontWhichId); // Keep it sorted
@@ -1207,16 +1209,18 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
                 aCurPaM.GetPoint()->SetContent(nBegin + nLen);
 
                 // check script type of selected text
-                SwEditShell *pEditShell = GetDoc().GetEditShell();
-                pEditShell->Push();             // save current cursor on stack
-                pEditShell->SetSelection( aCurPaM );
-                bool bIsAsianScript = (SvtScriptType::ASIAN == pEditShell->GetScriptType());
-                pEditShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor from stack
-
-                if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
+                if (SwEditShell *pEditShell = GetDoc().GetEditShell())
                 {
-                    // Store for later use
-                    aImplicitChanges.emplace_back(nBegin, nBegin+nLen);
+                    pEditShell->Push();             // save current cursor on stack
+                    pEditShell->SetSelection( aCurPaM );
+                    bool bIsAsianScript = (SvtScriptType::ASIAN == pEditShell->GetScriptType());
+                    pEditShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor from stack
+
+                    if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
+                    {
+                        // Store for later use
+                        aImplicitChanges.emplace_back(nBegin, nBegin+nLen);
+                    }
                 }
                 nBegin = nChPos;    // start of next language portion
             }

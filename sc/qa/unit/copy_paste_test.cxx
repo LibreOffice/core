@@ -14,6 +14,7 @@
 #include <test/unoapi_test.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <docsh.hxx>
 #include <docfunc.hxx>
@@ -76,7 +77,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
 {
     loadFromURL(u"xls/chartx2.xls");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -148,7 +149,7 @@ void ScCopyPasteTest::testTdf84411()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -190,7 +191,7 @@ void ScCopyPasteTest::testTdf124565()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -229,7 +230,7 @@ void ScCopyPasteTest::testTdf126421()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -257,7 +258,7 @@ void ScCopyPasteTest::testTdf107394()
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -315,7 +316,7 @@ static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCRO
 void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
 {
     loadFromURL(u"ods/tdf53431_autofilterFilldown.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -376,7 +377,7 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
 void ScCopyPasteTest::testTdf40993_fillMergedCells()
 {
     loadFromURL(u"ods/tdf40993_fillMergedCells.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -485,7 +486,7 @@ void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
 void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
 {
     loadFromURL(u"ods/tdf88782_AutofillLinearNumbersInMergedCells.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -547,7 +548,7 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
 void ScCopyPasteTest::tdf137621_autofillMergedBool()
 {
     loadFromURL(u"ods/tdf137621_autofillMergedBool.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -580,7 +581,7 @@ void ScCopyPasteTest::tdf137621_autofillMergedBool()
 void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
 {
     loadFromURL(u"ods/tdf137205_AutofillDatesInMergedCells.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -619,7 +620,7 @@ void ScCopyPasteTest::addToUserList(const OUString& rStr)
 void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
 {
     loadFromURL(u"ods/tdf137653_137654_autofillUserlist.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -679,7 +680,7 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
 void ScCopyPasteTest::tdf113500_autofillMixed()
 {
     loadFromURL(u"ods/tdf113500_autofillMixed.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -729,7 +730,7 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
 void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 {
     loadFromURL(u"ods/tdf137625_autofillMergedUserlist.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
@@ -789,7 +790,7 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 void ScCopyPasteTest::tdf137624_autofillMergedMixed()
 {
     loadFromURL(u"ods/tdf137624_autofillMergedMixed.ods");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 

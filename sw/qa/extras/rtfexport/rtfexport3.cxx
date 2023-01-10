@@ -514,6 +514,45 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf148578, "tdf148578.rtf")
+{
+    // \trgaph567 should affect only table cell margins (~1cm),
+    // but do not shift table, since \trleft is not provided
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+
+    xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000),
+                         getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+}
+
+DECLARE_RTFEXPORT_TEST(testInvalidParagraphStyle, "invalidParagraphStyle.rtf")
+{
+    // Given test has character style #30, but referred as paragraph style #30
+    // This was causing exception in finishParagraph(), so numbering and other
+    // properties were not applied. Ensure numbering is still here
+    sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, numFormat);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf152784_1, "tdf152784_1.rtf")
+{
+    // Ensure that paragraph having style with numbering does not have numbering
+    // since it is not explicitly defined in paragraph properties
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Here should be no numbering!"),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<OUString>(xPara, "NumberingStyleName").isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

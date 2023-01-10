@@ -17,6 +17,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
@@ -86,7 +87,7 @@ void ScUiCalcTest::goToCell(const OUString& rCell)
 
 void ScUiCalcTest::typeString(const std::u16string_view& rStr)
 {
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const char16_t c : rStr)
     {
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
@@ -101,7 +102,7 @@ void ScUiCalcTest::insertStringToCell(const OUString& rCell, const std::u16strin
 
     typeString(rStr);
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -113,7 +114,7 @@ void ScUiCalcTest::insertArrayToCell(const OUString& rCell, const std::u16string
 
     typeString(rStr);
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -635,7 +636,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
     typeString(u"=SUM( 1 + 2 ");
 
     // Insert Newline
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -662,7 +663,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
     typeString(u"Test");
 
     // Insert Newline
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -781,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
     Scheduler::ProcessEventsToIdle();
 
     // Move to B3
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
@@ -827,7 +828,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
     Scheduler::ProcessEventsToIdle();
 
     // Move to A3
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
@@ -881,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
     dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -947,7 +948,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
     createScDoc("tdf144244.ods");
     ScDocument* pDoc = getScDoc();
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
@@ -965,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
 
     // Without the fix in place, this test would have crashed
     saveAndReload("calc8");
-    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pDoc->GetString(ScAddress(0, 0, 0)));
@@ -1121,7 +1122,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
     ScDocShell* pDocSh = getScDocShell();
 
     // Focus is already on the button
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -1138,7 +1139,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
 
     const std::vector<OUString> aExpectedAddresses{ "L3", "L6", "L9", "L10", "L11", "L13", "L15" };
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const auto& rAddress : aExpectedAddresses)
     {
         lcl_AssertCurrentCursorPosition(*pDocSh, rAddress);
@@ -1157,7 +1158,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132057)
 
     lcl_AssertCurrentCursorPosition(*pDocSh, u"AU43");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -1173,7 +1174,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     //Start with from C6. Press tabulator to reach G6.
     lcl_AssertCurrentCursorPosition(*pDocSh, u"C6");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
@@ -1192,7 +1193,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
 
     std::vector<OUString> aExpectedAddresses{ "F3", "D5", "E5", "F6", "A8", "E9" };
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const auto& rAddress : aExpectedAddresses)
     {
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
@@ -1279,7 +1280,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
@@ -1314,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
 
     goToCell("A1");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
@@ -1633,7 +1634,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     aInputOption.SetMoveDir(DIR_BOTTOM);
     pMod->SetInputOptions(aInputOption);
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -1886,7 +1887,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
 {
     createScDoc("tdf119793.ods");
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -2385,7 +2386,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf136113)
     lcl_SelectObjectByName(*getViewShell(), u"Arrow");
 
     // Move the shape up
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::UP);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::UP);
     Scheduler::ProcessEventsToIdle();
@@ -2520,7 +2521,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116421)
     dispatchCommand(mxComponent, ".uno:AutoSum", {});
 
     // Use RETURN key to exit autosum edit view
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -2927,7 +2928,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152014)
     dispatchCommand(mxComponent2, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
-    ScModelObj* pModelObj2 = dynamic_cast<ScModelObj*>(mxComponent2.get());
+    ScModelObj* pModelObj2 = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent2);
     CPPUNIT_ASSERT(pModelObj2);
     ScDocument* pDoc2 = pModelObj2->GetDocument();
 

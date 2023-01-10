@@ -1231,6 +1231,7 @@ disable_x11_tests()
 test "$using_x11" = yes && USING_X11=TRUE
 
 if test "$using_freetype_fontconfig" = yes; then
+    AC_DEFINE(USE_HEADLESS_CODE)
     USE_HEADLESS_CODE=TRUE
     if test "$using_headless_plugin" = yes; then
         AC_DEFINE(ENABLE_HEADLESS)
@@ -3975,7 +3976,7 @@ map_vs_year_to_version()
     2022)
         vsversion=17;;
     2022preview)
-        vsversion=17.4;;
+        vsversion=17.5;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3997,11 +3998,9 @@ vs_versions_to_check()
     fi
 }
 
-win_get_env_from_vsvars32bat()
+win_get_env_from_vsdevcmdbat()
 {
     local WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
-    # Also seems to be located in another directory under the same name: vsvars32.bat
-    # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
     printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
     printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
@@ -4033,9 +4032,9 @@ find_ucrt()
         ide_env_dir="$VC_PRODUCT_DIR/../Common7/Tools/"
         ide_env_file="${ide_env_dir}VsDevCmd.bat"
         if test -f "$ide_env_file"; then
-            PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
+            PathFormat "$(win_get_env_from_vsdevcmdbat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
-            UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
+            UCRTVERSION=$(win_get_env_from_vsdevcmdbat UCRTVersion)
             dnl Hack needed at least by tml:
             if test "$UCRTVERSION" = 10.0.15063.0 \
                 -a ! -f "${UCRTSDKDIR}Include/10.0.15063.0/um/sqlext.h" \
@@ -4096,7 +4095,7 @@ find_msvc()
             vcyear=2019
             vctoolset=v142
             ;;
-        17.0 | 17.4)
+        17.0 | 17.5)
             vcyear=2022
             vctoolset=v143
             ;;
@@ -4268,7 +4267,7 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case "$vcnumwithdot" in
-        16.0 | 17.0 | 17.4)
+        16.0 | 17.0 | 17.5)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
@@ -6621,7 +6620,7 @@ find_msms()
 
     msmdir=
     case "$VCVER" in
-    16.0 | 17.0 | 17.4)
+    16.0 | 17.0 | 17.5)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
             echo "$as_me:$LINENO: looking for $my_msm_dir${my_msm_file}])" >&5
@@ -6657,7 +6656,7 @@ find_msvc_x64_dlls()
 
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
-    16.0 | 17.0 | 17.4)
+    16.0 | 17.0 | 17.5)
         for crtver in 141 142 143; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT" >&5

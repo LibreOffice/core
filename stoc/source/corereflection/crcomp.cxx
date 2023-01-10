@@ -35,10 +35,8 @@ namespace stoc_corefl
 
 namespace {
 
-class IdlCompFieldImpl
-    : public IdlMemberImpl
-    , public XIdlField
-    , public XIdlField2
+typedef cppu::ImplInheritanceHelper<IdlMemberImpl, XIdlField, XIdlField2> IdlCompFieldImpl_Base;
+class IdlCompFieldImpl : public IdlCompFieldImpl_Base
 {
     sal_Int32                   _nOffset;
 
@@ -46,18 +44,9 @@ public:
     IdlCompFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                       typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr,
                       sal_Int32 nOffset )
-        : IdlMemberImpl( pReflection, rName, pTypeDescr, pDeclTypeDescr )
+        : IdlCompFieldImpl_Base( pReflection, rName, pTypeDescr, pDeclTypeDescr )
         , _nOffset( nOffset )
         {}
-
-    // XInterface
-    virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-
-    // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XIdlMember
     virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() override;
@@ -71,43 +60,6 @@ public:
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) override;
 };
 
-}
-
-// XInterface
-
-Any IdlCompFieldImpl::queryInterface( const Type & rType )
-{
-    Any aRet( ::cppu::queryInterface( rType,
-                                      static_cast< XIdlField * >( this ),
-                                      static_cast< XIdlField2 * >( this ) ) );
-    return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
-}
-
-void IdlCompFieldImpl::acquire() noexcept
-{
-    IdlMemberImpl::acquire();
-}
-
-void IdlCompFieldImpl::release() noexcept
-{
-    IdlMemberImpl::release();
-}
-
-// XTypeProvider
-
-Sequence< Type > IdlCompFieldImpl::getTypes()
-{
-    static cppu::OTypeCollection s_aTypes(
-        cppu::UnoType<XIdlField2>::get(),
-        cppu::UnoType<XIdlField>::get(),
-        IdlMemberImpl::getTypes() );
-
-    return s_aTypes.getTypes();
-}
-
-Sequence< sal_Int8 > IdlCompFieldImpl::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XIdlMember

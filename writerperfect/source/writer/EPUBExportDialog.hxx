@@ -54,6 +54,7 @@ private:
     std::unique_ptr<weld::Entry> m_xInitialCreator;
     std::unique_ptr<weld::Entry> m_xLanguage;
     std::unique_ptr<weld::Entry> m_xDate;
+    std::unique_ptr<weld::Frame> m_xCustomizeFrame;
 };
 
 } // namespace writerperfect

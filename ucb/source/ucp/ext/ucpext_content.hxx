@@ -21,9 +21,7 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/contenthelper.hxx>
 
 #include <optional>
@@ -47,8 +45,7 @@ namespace ucb::ucp::ext
 
     //= ContentProvider
 
-    typedef cppu::ImplInheritanceHelper<::ucbhelper::ContentImplHelper, css::lang::XUnoTunnel>
-        Content_Base;
+    typedef ::ucbhelper::ContentImplHelper  Content_Base;
     class Content : public Content_Base
     {
     public:
@@ -84,9 +81,6 @@ namespace ucb::ucp::ext
             returns E_ROOT.
         */
         OUString getPhysicalURL() const;
-
-        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
-        static css::uno::Sequence<sal_Int8> const & getUnoTunnelId();
 
     protected:
         virtual ~Content() override;

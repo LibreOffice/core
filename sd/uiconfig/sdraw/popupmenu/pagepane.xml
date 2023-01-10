@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertPage"/>
+  <menu:menuitem menu:id=".uno:DuplicatePage"/>
   <menu:menuitem menu:id=".uno:DeletePage"/>
   <menu:menuitem menu:id=".uno:RenamePage"/>
 </menu:menupopup>

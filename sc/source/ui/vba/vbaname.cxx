@@ -26,6 +26,8 @@
 #include <compiler.hxx>
 #include <tokenarray.hxx>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <memory>
 #include <utility>
 
@@ -85,7 +87,7 @@ ScVbaName::setVisible( sal_Bool /*bVisible*/ )
 
 OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar )
 {
-    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
+    ScNamedRangeObj* pNamedRange = comphelper::getFromUnoTunnel< ScNamedRangeObj >( mxNamedRange );
     OUString aContent;
     if ( pNamedRange )
     {
@@ -103,7 +105,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     OUString sContent( rContent );
     if (sContent.startsWith("="))
         sContent = sContent.copy(1);
-    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
+    ScNamedRangeObj* pNamedRange = comphelper::getFromUnoTunnel< ScNamedRangeObj >( mxNamedRange );
 
     // We should be able to do the below by just setting calling SetCode on pNamedRange
     // right?

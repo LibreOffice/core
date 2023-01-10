@@ -151,10 +151,6 @@ namespace cairocanvas
         return { getServiceName() };
     }
 
-    sal_Int64 SpriteCanvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
-    }
-
     SurfaceSharedPtr SpriteCanvas::getSurface()
     {
         return maDeviceHelper.getBufferSurface();

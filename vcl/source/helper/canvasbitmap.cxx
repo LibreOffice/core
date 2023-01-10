@@ -1099,7 +1099,6 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
     {
         const tools::Long      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
-        const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( std::size_t i=0; i<nLen; i+=nBytesPerPixel )
         {
             // if palette, index is guaranteed to be 8 bit
@@ -1109,7 +1108,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
                 pBmpAcc->GetPixelFromData(pIn,0);
 
             // TODO(F3): Convert result to sRGB color space
-            *pOut++ = rendering::ARGBColor(1.0 - toDoubleColor(nAlphaFactor*pIn[nNonAlphaBytes]),
+            *pOut++ = rendering::ARGBColor(1.0 - toDoubleColor(pIn[nNonAlphaBytes]),
                                            toDoubleColor(aCol.GetRed()),
                                            toDoubleColor(aCol.GetGreen()),
                                            toDoubleColor(aCol.GetBlue()));
@@ -1155,7 +1154,6 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
     {
         const tools::Long      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
-        const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( std::size_t i=0; i<nLen; i+=nBytesPerPixel )
         {
             // if palette, index is guaranteed to be 8 bit
@@ -1165,7 +1163,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
                 pBmpAcc->GetPixelFromData(pIn,0);
 
             // TODO(F3): Convert result to sRGB color space
-            const double nAlpha( 1.0 - toDoubleColor(nAlphaFactor*pIn[nNonAlphaBytes]) );
+            const double nAlpha( 1.0 - toDoubleColor(pIn[nNonAlphaBytes]) );
             *pOut++ = rendering::ARGBColor(nAlpha,
                                            nAlpha*toDoubleColor(aCol.GetRed()),
                                            nAlpha*toDoubleColor(aCol.GetGreen()),

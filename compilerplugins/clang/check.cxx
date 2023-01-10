@@ -202,7 +202,7 @@ TerminalCheck ContextCheck::GlobalNamespace() const {
 
 TerminalCheck ContextCheck::StdNamespace() const {
     return TerminalCheck(
-        context_ != nullptr && context_->isStdNamespace());
+        context_ != nullptr && lookThroughLinkageSpec()->isStdNamespace());
 }
 
 namespace {
@@ -224,13 +224,20 @@ bool isStdOrNestedNamespace(clang::DeclContext const * context) {
 }
 
 TerminalCheck ContextCheck::StdOrNestedNamespace() const {
-    return TerminalCheck(context_ != nullptr && isStdOrNestedNamespace(context_));
+    return TerminalCheck(context_ != nullptr && isStdOrNestedNamespace(lookThroughLinkageSpec()));
 }
 
 ContextCheck ContextCheck::AnonymousNamespace() const {
-    auto n = llvm::dyn_cast_or_null<clang::NamespaceDecl>(context_);
+    auto n = llvm::dyn_cast_or_null<clang::NamespaceDecl>(lookThroughLinkageSpec());
     return ContextCheck(
         n != nullptr && n->isAnonymousNamespace() ? n->getParent() : nullptr);
+}
+
+clang::DeclContext const * ContextCheck::lookThroughLinkageSpec() const {
+    if (context_ != nullptr && context_->getDeclKind() == clang::Decl::LinkageSpec) {
+        return context_->getParent();
+    }
+    return context_;
 }
 
 namespace {

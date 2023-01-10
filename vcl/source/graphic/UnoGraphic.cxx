@@ -211,7 +211,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
 
         if (aBitmapEx.IsAlpha())
         {
-            aBitmapEx.setAlphaFrom( cIndexFrom, 0xff - nAlphaTo );
+            aBitmapEx.ChangeColorAlpha( cIndexFrom, nAlphaTo );
             aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
             aReturnGraphic = ::Graphic(aBitmapEx);
         }
@@ -226,7 +226,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
             }
             else
             {
-                aBitmapEx.setAlphaFrom(cIndexFrom, nAlphaTo);
                 aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
                 aReturnGraphic = ::Graphic(aBitmapEx);
             }

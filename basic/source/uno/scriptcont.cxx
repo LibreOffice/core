@@ -30,7 +30,6 @@
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sal/log.hxx>
@@ -106,16 +105,6 @@ void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName
         }
     }
     catch(const NoSuchElementException& ) {}
-}
-
-sal_Int64 SfxScriptLibraryContainer::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier)
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & SfxScriptLibraryContainer::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 // Ctor for service

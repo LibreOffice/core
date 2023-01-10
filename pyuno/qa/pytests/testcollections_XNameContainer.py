@@ -8,10 +8,9 @@
 #
 
 import unittest
-import uno
 
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
+
 
 # SheetCellRanges instance factory
 def getSheetCellRangesInstance(spr):

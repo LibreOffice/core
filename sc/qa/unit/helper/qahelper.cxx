@@ -12,6 +12,7 @@
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
 #include <stlsheet.hxx>
@@ -470,7 +471,7 @@ void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool
 
 ScDocument* ScModelTestBase::getScDoc()
 {
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj->GetDocument();
 }

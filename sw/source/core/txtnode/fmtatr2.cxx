@@ -113,6 +113,17 @@ bool SwFormatCharFormat::PutValue( const uno::Any& , sal_uInt8   )
     return false;
 }
 
+void SwFormatCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatCharFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("text-attribute"), "%p", m_pTextAttribute);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("char-format"), "%p", GetCharFormat());
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("char-format-name"),
+                                      BAD_CAST(GetCharFormat()->GetName().toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwFormatAutoFormat::SwFormatAutoFormat( sal_uInt16 nInitWhich )
     : SfxPoolItem( nInitWhich )
 {

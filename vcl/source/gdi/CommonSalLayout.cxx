@@ -727,7 +727,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
 
     // Map of Kashida insertion points (in the glyph items vector) and the
     // requested width.
-    std::map<size_t, DeviceCoordinate> pKashidas;
+    std::map<size_t, std::pair<DeviceCoordinate, DeviceCoordinate>> pKashidas;
 
     // The accumulated difference in X position.
     double nDelta = 0;
@@ -772,26 +772,15 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
             m_GlyphItems[i].addNewWidth(nDiff);
             m_GlyphItems[i].adjustLinearPosX(nDelta + nDiff);
 
-            // Warning:
-            // If you are tempted to improve the two loops below, think again.
-            // Even though I wrote this code, I no longer understand how it
-            // works, and every time I think I finally got it, I introduce a
-            // bug. - Khaled
-
             // Adjust the X position of the rest of the glyphs in the cluster.
-            size_t j = i;
-            while (j > 0)
-            {
-                --j;
-                if (!m_GlyphItems[j].IsInCluster())
-                    break;
+            // We iterate backwards since this is an RTL glyph.
+            for (int j = i - 1; j >= 0 && m_GlyphItems[j].IsInCluster(); j--)
                 m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
-            }
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
             // will be inserted below.
             if (pKashidaArray && pKashidaArray[nCharPos])
-                pKashidas[i] = nDiff;
+                pKashidas[i] = { nDiff, pNewCharWidths[nCharPos] };
 
             i++;
         }
@@ -823,7 +812,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
         auto pGlyphIter = m_GlyphItems.begin() + nInserted + pKashida.first;
 
         // The total Kashida width.
-        double nTotalWidth = pKashida.second;
+        auto const& [nTotalWidth, nClusterWidth] = pKashida.second;
 
         // Number of times to repeat each Kashida.
         int nCopies = 1;
@@ -842,9 +831,12 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
                 nOverlap = nExcess / (nCopies - 1);
         }
 
-        DevicePoint aPos(pGlyphIter->linearPos().getX() - nTotalWidth, 0);
+        DevicePoint aPos = pGlyphIter->linearPos();
         int nCharPos = pGlyphIter->charPos();
         GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
+        // Move to the left side of the adjusted width and start inserting
+        // glyphs there.
+        aPos.adjustX(-nClusterWidth + pGlyphIter->origWidth());
         while (nCopies--)
         {
             GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, 0);

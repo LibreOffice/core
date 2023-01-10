@@ -15,7 +15,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
     }
 }
 
@@ -26,12 +26,14 @@ dependencies {
             "libreoffice.jar",
             "unoloader.jar"
     ])
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.multidex:multidex:2.0.1"
 }
 
 android {
-    compileSdkVersion 32
+    namespace 'org.libreoffice'
+    compileSdkVersion 33
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
@@ -47,7 +49,10 @@ android {
     }
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 32
+        targetSdkVersion 33
+        // multidex needed when > 65,536 methods referenced with minSdKVersion < 21
+        // s. https://developer.android.com/studio/build/multidex
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -139,11 +144,12 @@ task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'assets'
 
-    // include icons
+    // include icons and Impress styles
     into ('share') {
         into ('config') {
             from ("${liboInstdir}/share/config")
-            includes = ['images_**.zip']
+            includes = ['images_**.zip',
+                        '**/simpress/styles.xml']
         }
     }
 

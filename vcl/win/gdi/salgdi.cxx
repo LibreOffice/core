@@ -814,9 +814,9 @@ void WinSalGraphics::ResetClipRegion()
     mpImpl->ResetClipRegion();
 }
 
-bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
+void WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
-    return mpImpl->setClipRegion( i_rClip );
+    mpImpl->setClipRegion( i_rClip );
 }
 
 void WinSalGraphics::SetLineColor()

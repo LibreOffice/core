@@ -187,9 +187,9 @@ SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
 
 SwContentControl::~SwContentControl() {}
 
-void SwContentControl::SetXContentControl(const rtl::Reference<SwXContentControl>& xContentCnotrol)
+void SwContentControl::SetXContentControl(const rtl::Reference<SwXContentControl>& xContentControl)
 {
-    m_wXContentControl = xContentCnotrol.get();
+    m_wXContentControl = xContentControl.get();
 }
 
 SwTextContentControl* SwContentControl::GetTextAttr() const
@@ -557,6 +557,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aDataBindingStoreItemID.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"),
                                       BAD_CAST(m_aColor.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("appearance"),
+                                      BAD_CAST(m_aAppearance.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("alias"),
                                       BAD_CAST(m_aAlias.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("tag"), BAD_CAST(m_aTag.toUtf8().getStr()));
@@ -720,13 +722,11 @@ void SwTextContentControl::Delete(bool bSaveContents)
     if (!GetTextNode())
         return;
 
+    SwPaM aPaM(*GetTextNode(), GetStart(), *GetTextNode(), *End());
     if (bSaveContents)
-        GetTextNode()->RstTextAttr(GetStart(), *End() - GetStart(), RES_TXTATR_CONTENTCONTROL);
+        GetTextNode()->GetDoc().ResetAttrs(aPaM, /*bTextAttr=*/true, { RES_TXTATR_CONTENTCONTROL });
     else
-    {
-        SwPaM aPaM(*GetTextNode(), GetStart(), *GetTextNode(), *End());
         GetTextNode()->GetDoc().getIDocumentContentOperations().DeleteAndJoin(aPaM);
-    }
 }
 
 SwTextNode* SwTextContentControl::GetTextNode() const

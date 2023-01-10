@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonWavePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -31,6 +32,26 @@
 #include <utility>
 
 using namespace com::sun::star;
+
+namespace
+{
+void implGrowHairline(basegfx::B2DRange& rRange,
+                      const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+{
+    if (!rRange.isEmpty())
+    {
+        // Calculate view-dependent hairline width
+        const basegfx::B2DVector aDiscreteSize(
+            rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+        const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
+
+        if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+        {
+            rRange.grow(fDiscreteHalfLineWidth);
+        }
+    }
+}
+}
 
 namespace drawinglayer::primitive2d
 {
@@ -61,18 +82,8 @@ PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rView
     // as base size
     basegfx::B2DRange aRetval(getB2DPolygon().getB2DRange());
 
-    if (!aRetval.isEmpty())
-    {
-        // Calculate view-dependent hairline width
-        const basegfx::B2DVector aDiscreteSize(
-            rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
-        const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
-
-        if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
-        {
-            aRetval.grow(fDiscreteHalfLineWidth);
-        }
-    }
+    // Calculate and grow by view-dependent hairline width
+    implGrowHairline(aRetval, rViewInformation);
 
     // return range
     return aRetval;
@@ -82,6 +93,119 @@ PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rView
 sal_uInt32 PolygonHairlinePrimitive2D::getPrimitive2DID() const
 {
     return PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D;
+}
+
+SingleLinePrimitive2D::SingleLinePrimitive2D(const basegfx::B2DPoint& rStart,
+                                             const basegfx::B2DPoint& rEnd,
+                                             const basegfx::BColor& rBColor)
+    : BasePrimitive2D()
+    , maStart(rStart)
+    , maEnd(rEnd)
+    , maBColor(rBColor)
+{
+}
+
+bool SingleLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (BasePrimitive2D::operator==(rPrimitive))
+    {
+        const SingleLinePrimitive2D& rCompare(
+            static_cast<const SingleLinePrimitive2D&>(rPrimitive));
+
+        return (getStart() == rCompare.getStart() && getEnd() == rCompare.getEnd()
+                && getBColor() == rCompare.getBColor());
+    }
+
+    return false;
+}
+
+basegfx::B2DRange
+SingleLinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+{
+    basegfx::B2DRange aRetval(getStart(), getEnd());
+
+    // Calculate and grow by view-dependent hairline width
+    implGrowHairline(aRetval, rViewInformation);
+
+    return aRetval;
+}
+
+sal_uInt32 SingleLinePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D;
+}
+
+void SingleLinePrimitive2D::get2DDecomposition(
+    Primitive2DDecompositionVisitor& rVisitor,
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    if (getStart() == getEnd())
+    {
+        // single point
+        std::vector<basegfx::B2DPoint> aPoints = { getStart() };
+        Primitive2DContainer aSequence
+            = { new PointArrayPrimitive2D(std::move(aPoints), getBColor()) };
+        rVisitor.visit(aSequence);
+    }
+    else
+    {
+        // line
+        basegfx::B2DPolygon aPolygon{ getStart(), getEnd() };
+        Primitive2DContainer aSequence = { new PolygonHairlinePrimitive2D(aPolygon, getBColor()) };
+        rVisitor.visit(aSequence);
+    }
+}
+
+LineRectanglePrimitive2D::LineRectanglePrimitive2D(const basegfx::B2DRange& rB2DRange,
+                                                   const basegfx::BColor& rBColor)
+    : BasePrimitive2D()
+    , maB2DRange(rB2DRange)
+    , maBColor(rBColor)
+{
+}
+
+bool LineRectanglePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (BasePrimitive2D::operator==(rPrimitive))
+    {
+        const LineRectanglePrimitive2D& rCompare(
+            static_cast<const LineRectanglePrimitive2D&>(rPrimitive));
+
+        return (getB2DRange() == rCompare.getB2DRange() && getBColor() == rCompare.getBColor());
+    }
+
+    return false;
+}
+
+basegfx::B2DRange
+LineRectanglePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+{
+    basegfx::B2DRange aRetval(getB2DRange());
+
+    // Calculate and grow by view-dependent hairline width
+    implGrowHairline(aRetval, rViewInformation);
+
+    return aRetval;
+}
+
+sal_uInt32 LineRectanglePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D;
+}
+
+void LineRectanglePrimitive2D::get2DDecomposition(
+    Primitive2DDecompositionVisitor& rVisitor,
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    if (getB2DRange().isEmpty())
+    {
+        // no geometry, done
+        return;
+    }
+
+    const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(getB2DRange()));
+    Primitive2DContainer aSequence = { new PolygonHairlinePrimitive2D(aPolygon, getBColor()) };
+    rVisitor.visit(aSequence);
 }
 
 void PolygonMarkerPrimitive2D::create2DDecomposition(

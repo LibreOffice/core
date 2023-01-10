@@ -29,6 +29,8 @@
 #include <unx/genprn.h>
 
 #include <condition_variable>
+#include <mutex>
+#include <queue>
 
 #include <sys/time.h>
 
@@ -66,7 +68,9 @@ private:
     // at least one subclass of SvpSalInstance (GTK3) that doesn't use them.
     friend class SvpSalInstance;
     // members for communication from main thread to non-main thread
-    int                     m_FeedbackFDs[2];
+    std::mutex              m_FeedbackMutex;
+    std::queue<bool>        m_FeedbackPipe;
+    std::condition_variable m_FeedbackCV;
     osl::Condition          m_NonMainWaitingYieldCond;
     // members for communication from non-main thread to main thread
     bool                    m_bNoYieldLock = false; // accessed only on main thread
@@ -104,8 +108,7 @@ public:
     SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~SvpSalInstance() override;
 
-    void                    CloseWakeupPipe(bool log);
-    void                    CreateWakeupPipe(bool log);
+    void                    CloseWakeupPipe();
     void                    Wakeup(SvpRequest request = SvpRequest::NONE);
 
     void                    StartTimer( sal_uInt64 nMS );

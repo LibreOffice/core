@@ -106,9 +106,9 @@ void ScFiltersTest::testTdf137576_Measureline()
 
     // Check start and end point of measureline
     const Point aStart = pObj->GetPoint(0);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 1500), aStart, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 1500), aStart, 1);
     const Point aEnd = pObj->GetPoint(1);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 5200), aEnd, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -124,9 +124,9 @@ void ScFiltersTest::testTdf137576_Measureline()
 
     // Check start and end point of measureline, should be unchanged
     const Point aStart2 = pObj->GetPoint(0);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 1500), aStart2, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 1500), aStart2, 1);
     const Point aEnd2 = pObj->GetPoint(1);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(4800, 5200), aEnd2, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd2, 1);
 }
 
 void ScFiltersTest::testTdf137216_HideCol()
@@ -173,9 +173,9 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // Get original object values
     tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
     Point aOriginalEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(tools::Rectangle(Point(500, 3500), Size(1501, 11001)),
-                                   aSnapRectOrig, 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aOriginalEndOffset, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
+        tools::Rectangle(Point(500, 3500), Size(1501, 11001)), aSnapRectOrig, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aOriginalEndOffset, 1);
 
     // Hide rows 5 and 6 in UI = row index 4 to 5.
     pDoc->SetRowHidden(4, 5, 0, true);
@@ -195,9 +195,9 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // Get new values and compare. End offset should be the same, height should be 6000 smaller.
     tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
     Point aReloadEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(tools::Rectangle(Point(500, 3500), Size(1501, 5001)),
-                                   aSnapRectReload, 1);
-    CPPUNIT_ASSERT_POINT_EQUAL(Point(2000, 2499), aReloadEndOffset, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
+        tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aReloadEndOffset, 1);
 }
 
 void ScFiltersTest::testTdf137020_FlipVertical()
@@ -219,7 +219,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     // Vertical mirror on center should not change the snap rect.
     pObj->Mirror(aSnapRectOrig.LeftCenter(), aSnapRectOrig.RightCenter());
     const tools::Rectangle aSnapRectFlip = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectFlip, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
     saveAndReload("calc8");
@@ -235,7 +235,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
 
     // Check pos and size of shape again, should be unchanged
     const tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
-    CPPUNIT_ASSERT_RECTANGLE_EQUAL(aSnapRectOrig, aSnapRectReload, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectReload, 1);
 }
 
 void ScFiltersTest::testTdf64229()

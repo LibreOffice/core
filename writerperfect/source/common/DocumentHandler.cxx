@@ -15,7 +15,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-#include <comphelper/servicehelper.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -116,7 +115,7 @@ using com::sun::star::xml::sax::XDocumentHandler;
 DocumentHandler::DocumentHandler(Reference<XDocumentHandler> const& xHandler)
     : mxHandler(xHandler)
 {
-    if (SvXMLImport* pFastHandler = comphelper::getFromUnoTunnel<SvXMLImport>(mxHandler))
+    if (SvXMLImport* pFastHandler = dynamic_cast<SvXMLImport*>(mxHandler.get()))
         mxHandler.set(new SvXMLLegacyToFastDocHandler(pFastHandler));
 }
 

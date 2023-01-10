@@ -813,7 +813,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
         throw RuntimeException();
 
     // Adopt the private key of the signing certificate, if it has any.
-    if (auto pCertificate = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
+    if (auto pCertificate
+            = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(m_xSigningCertificate))
     {
         SECKEYPrivateKey* pPrivateKey = SECKEY_CopyPrivateKey(pCertificate->getPrivateKey());
         if (pPrivateKey)

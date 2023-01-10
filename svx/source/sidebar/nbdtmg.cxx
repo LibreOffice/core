@@ -103,6 +103,12 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
             rValue.Value >>= pNew->sPrefix;
         else if(rValue.Name == "Suffix")
             rValue.Value >>= pNew->sSuffix;
+        else if (rValue.Name == "Adjust")
+        {
+            sal_Int16 nTmp;
+            if (rValue.Value >>= nTmp)
+                pNew->eNumAlign = static_cast<SvxAdjust>(nTmp);
+        }
         else if(rValue.Name == "ParentNumbering")
             rValue.Value >>= pNew->nParentNumbering;
         else if(rValue.Name == "BulletChar")
@@ -590,17 +596,23 @@ void OutlineTypeMgr::Init()
             pItemArr->sDescription = SvxResId( TranslateId(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpContext, id.getStr()) );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
+            for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
-                Any aValueAny = xLevel->getByIndex(nLevel);
+                // use the last locale-defined level for all remaining levels.
+                sal_Int32 nLocaleLevel = std::min(nLevel, xLevel->getCount() - 1);
                 Sequence<PropertyValue> aLevelProps;
-                aValueAny >>= aLevelProps;
+                if (nLocaleLevel >= 0)
+                    xLevel->getByIndex(nLocaleLevel) >>= aLevelProps;
+
                 NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
                 const SvxNumberFormat& aNumFmt( aDefNumRule.GetLevel( nLevel) );
+                assert(aNumFmt.GetNumAdjust() == SvxAdjust::Left && "new entry was previously defined by default, now defaults to Left");
                 pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
                 pNew->nTabValue = aNumFmt.GetListtabPos();
-                pNew->eNumAlign = aNumFmt.GetNumAdjust();
-                pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
+                if (pNew->eNumAlign == SvxAdjust::Right)
+                    pNew->nNumAlignAt = -174; // number borrowed from RES_POOLNUMRULE_NUM4
+                else
+                    pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
                 pNew->nNumIndentAt = aNumFmt.GetIndentAt();
                 pItemArr->pNumSettingsArr->push_back(std::shared_ptr<NumSettings_Impl>(pNew));
             }
@@ -618,7 +630,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     {
         bool bNotMatch = false;
         OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[iDex];
-        sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
+        sal_uInt16 nCount = pItemArr ? pItemArr->pNumSettingsArr->size() : 0;
         for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
         {
             NumSettings_Impl* _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
@@ -633,7 +645,9 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                 sal_UCS4 cChar = aFmt.GetBulletChar();
 
                 sal_UCS4 ccChar
-                    = _pSet->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
+                    = _pSet->sBulletChar.isEmpty()
+                          ? 0
+                          : _pSet->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 
                 if ( !((cChar == ccChar) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&

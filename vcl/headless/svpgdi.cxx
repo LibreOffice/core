@@ -90,7 +90,9 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 {
-    return SystemGraphicsData();
+    SystemGraphicsData aGraphicsData;
+    aGraphicsData.pSurface = m_aCairoCommon.m_pSurface;
+    return aGraphicsData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

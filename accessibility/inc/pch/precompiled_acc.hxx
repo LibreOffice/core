@@ -261,7 +261,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>

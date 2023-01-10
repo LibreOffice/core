@@ -34,11 +34,12 @@ using namespace ::com::sun::star;
 SwVbaContentControl::SwVbaContentControl(const uno::Reference<XHelperInterface>& rParent,
                                          const uno::Reference<uno::XComponentContext>& rContext,
                                          const uno::Reference<text::XTextDocument>& xTextDocument,
-                                         SwTextContentControl& rContentControl)
+                                         std::shared_ptr<SwContentControl> pContentControl)
     : SwVbaContentControl_BASE(rParent, rContext)
     , mxTextDocument(xTextDocument)
-    , m_rCC(rContentControl)
+    , m_pCC(pContentControl)
 {
+    assert(m_pCC && "SwVbaContentControl created without a shared_ptr. Why would you do that?");
 }
 
 SwVbaContentControl::~SwVbaContentControl() {}
@@ -89,11 +90,7 @@ void SwVbaContentControl::setBuildingBlockType(sal_Int32 nSet)
     SAL_INFO("sw.vba", "SwVbaContentControl::setBuildingBlockType[" << nSet << "] stub");
 }
 
-sal_Bool SwVbaContentControl::getChecked()
-{
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->GetCheckbox() && pCC->GetChecked();
-}
+sal_Bool SwVbaContentControl::getChecked() { return m_pCC->GetCheckbox() && m_pCC->GetChecked(); }
 
 void SwVbaContentControl::setChecked(sal_Bool bSet)
 {
@@ -104,20 +101,19 @@ void SwVbaContentControl::setChecked(sal_Bool bSet)
     if (getLockContents())
         return;
 
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    if (pCC->GetCheckbox() && pCC->GetChecked() != static_cast<bool>(bSet))
+    if (m_pCC->GetCheckbox() && m_pCC->GetChecked() != static_cast<bool>(bSet))
     {
-        pCC->SetChecked(bSet);
-        pCC->SetShowingPlaceHolder(false);
-        m_rCC.Invalidate();
+        m_pCC->SetChecked(bSet);
+        m_pCC->SetShowingPlaceHolder(false);
+        if (m_pCC->GetTextAttr())
+            m_pCC->GetTextAttr()->Invalidate();
     }
 }
 
 sal_Int32 SwVbaContentControl::getColor()
 {
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
     //This is just an assumed implementation - I have no testing environment to confirm.
-    OUString sColor = pCC->GetColor();
+    OUString sColor = m_pCC->GetColor();
     if (sColor == "wdColorAutomatic")
         return word::WdColor::wdColorAutomatic;
     if (sColor == "wdColorBlack")
@@ -242,186 +238,184 @@ sal_Int32 SwVbaContentControl::getColor()
 
 void SwVbaContentControl::setColor(sal_Int32 nWdColor)
 {
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-
     switch (nWdColor)
     {
         case word::WdColor::wdColorAqua:
-            pCC->SetColor("wdColorAqua");
+            m_pCC->SetColor("wdColorAqua");
             break;
         case word::WdColor::wdColorAutomatic:
-            pCC->SetColor("wdColorAutomatic");
+            m_pCC->SetColor("wdColorAutomatic");
             break;
         case word::WdColor::wdColorBlack:
-            pCC->SetColor("wdColorBlack");
+            m_pCC->SetColor("wdColorBlack");
             break;
         case word::WdColor::wdColorBlue:
-            pCC->SetColor("wdColorBlue");
+            m_pCC->SetColor("wdColorBlue");
             break;
         case word::WdColor::wdColorBlueGray:
-            pCC->SetColor("wdColorBlueGray");
+            m_pCC->SetColor("wdColorBlueGray");
             break;
         case word::WdColor::wdColorBrightGreen:
-            pCC->SetColor("wdColorBrightGreen");
+            m_pCC->SetColor("wdColorBrightGreen");
             break;
         case word::WdColor::wdColorBrown:
-            pCC->SetColor("wdColorBrown");
+            m_pCC->SetColor("wdColorBrown");
             break;
         case word::WdColor::wdColorDarkBlue:
-            pCC->SetColor("wdColorDarkBlue");
+            m_pCC->SetColor("wdColorDarkBlue");
             break;
         case word::WdColor::wdColorDarkGreen:
-            pCC->SetColor("wdColorDarkGreen");
+            m_pCC->SetColor("wdColorDarkGreen");
             break;
         case word::WdColor::wdColorDarkRed:
-            pCC->SetColor("wdColorDarkRed");
+            m_pCC->SetColor("wdColorDarkRed");
             break;
         case word::WdColor::wdColorDarkTeal:
-            pCC->SetColor("wdColorDarkTeal");
+            m_pCC->SetColor("wdColorDarkTeal");
             break;
         case word::WdColor::wdColorDarkYellow:
-            pCC->SetColor("wdColorDarkYellow");
+            m_pCC->SetColor("wdColorDarkYellow");
             break;
         case word::WdColor::wdColorGold:
-            pCC->SetColor("wdColorGold");
+            m_pCC->SetColor("wdColorGold");
             break;
         case word::WdColor::wdColorGray05:
-            pCC->SetColor("wdColorGray05");
+            m_pCC->SetColor("wdColorGray05");
             break;
         case word::WdColor::wdColorGray10:
-            pCC->SetColor("wdColorGray10");
+            m_pCC->SetColor("wdColorGray10");
             break;
         case word::WdColor::wdColorGray125:
-            pCC->SetColor("wdColorGray125");
+            m_pCC->SetColor("wdColorGray125");
             break;
         case word::WdColor::wdColorGray15:
-            pCC->SetColor("wdColorGray15");
+            m_pCC->SetColor("wdColorGray15");
             break;
         case word::WdColor::wdColorGray20:
-            pCC->SetColor("wdColorGray20");
+            m_pCC->SetColor("wdColorGray20");
             break;
         case word::WdColor::wdColorGray25:
-            pCC->SetColor("wdColorGray25");
+            m_pCC->SetColor("wdColorGray25");
             break;
         case word::WdColor::wdColorGray30:
-            pCC->SetColor("wdColorGray30");
+            m_pCC->SetColor("wdColorGray30");
             break;
         case word::WdColor::wdColorGray35:
-            pCC->SetColor("wdColorGray35");
+            m_pCC->SetColor("wdColorGray35");
             break;
         case word::WdColor::wdColorGray375:
-            pCC->SetColor("wdColorGray375");
+            m_pCC->SetColor("wdColorGray375");
             break;
         case word::WdColor::wdColorGray40:
-            pCC->SetColor("wdColorGray40");
+            m_pCC->SetColor("wdColorGray40");
             break;
         case word::WdColor::wdColorGray45:
-            pCC->SetColor("wdColorGray45");
+            m_pCC->SetColor("wdColorGray45");
             break;
         case word::WdColor::wdColorGray50:
-            pCC->SetColor("wdColorGray50");
+            m_pCC->SetColor("wdColorGray50");
             break;
         case word::WdColor::wdColorGray55:
-            pCC->SetColor("wdColorGray55");
+            m_pCC->SetColor("wdColorGray55");
             break;
         case word::WdColor::wdColorGray60:
-            pCC->SetColor("wdColorGray60");
+            m_pCC->SetColor("wdColorGray60");
             break;
         case word::WdColor::wdColorGray625:
-            pCC->SetColor("wdColorGray625");
+            m_pCC->SetColor("wdColorGray625");
             break;
         case word::WdColor::wdColorGray65:
-            pCC->SetColor("wdColorGray65");
+            m_pCC->SetColor("wdColorGray65");
             break;
         case word::WdColor::wdColorGray70:
-            pCC->SetColor("wdColorGray70");
+            m_pCC->SetColor("wdColorGray70");
             break;
         case word::WdColor::wdColorGray75:
-            pCC->SetColor("wdColorGray75");
+            m_pCC->SetColor("wdColorGray75");
             break;
         case word::WdColor::wdColorGray80:
-            pCC->SetColor("wdColorGray80");
+            m_pCC->SetColor("wdColorGray80");
             break;
         case word::WdColor::wdColorGray85:
-            pCC->SetColor("wdColorGray85");
+            m_pCC->SetColor("wdColorGray85");
             break;
         case word::WdColor::wdColorGray875:
-            pCC->SetColor("wdColorGray875");
+            m_pCC->SetColor("wdColorGray875");
             break;
         case word::WdColor::wdColorGray90:
-            pCC->SetColor("wdColorGray90");
+            m_pCC->SetColor("wdColorGray90");
             break;
         case word::WdColor::wdColorGray95:
-            pCC->SetColor("wdColorGray95");
+            m_pCC->SetColor("wdColorGray95");
             break;
         case word::WdColor::wdColorGreen:
-            pCC->SetColor("wdColorGreen");
+            m_pCC->SetColor("wdColorGreen");
             break;
         case word::WdColor::wdColorIndigo:
-            pCC->SetColor("wdColorIndigo");
+            m_pCC->SetColor("wdColorIndigo");
             break;
         case word::WdColor::wdColorLavender:
-            pCC->SetColor("wdColorLavender");
+            m_pCC->SetColor("wdColorLavender");
             break;
         case word::WdColor::wdColorLightBlue:
-            pCC->SetColor("wdColorLightBlue");
+            m_pCC->SetColor("wdColorLightBlue");
             break;
         case word::WdColor::wdColorLightGreen:
-            pCC->SetColor("wdColorLightGreen");
+            m_pCC->SetColor("wdColorLightGreen");
             break;
         case word::WdColor::wdColorLightOrange:
-            pCC->SetColor("wdColorLightOrange");
+            m_pCC->SetColor("wdColorLightOrange");
             break;
         case word::WdColor::wdColorLightTurquoise:
-            pCC->SetColor("wdColorLightTurquoise");
+            m_pCC->SetColor("wdColorLightTurquoise");
             break;
         case word::WdColor::wdColorLightYellow:
-            pCC->SetColor("wdColorLightYellow");
+            m_pCC->SetColor("wdColorLightYellow");
             break;
         case word::WdColor::wdColorLime:
-            pCC->SetColor("wdColorLime");
+            m_pCC->SetColor("wdColorLime");
             break;
         case word::WdColor::wdColorOliveGreen:
-            pCC->SetColor("wdColorOliveGreen");
+            m_pCC->SetColor("wdColorOliveGreen");
             break;
         case word::WdColor::wdColorOrange:
-            pCC->SetColor("wdColorOrange");
+            m_pCC->SetColor("wdColorOrange");
             break;
         case word::WdColor::wdColorPaleBlue:
-            pCC->SetColor("wdColorPaleBlue");
+            m_pCC->SetColor("wdColorPaleBlue");
             break;
         case word::WdColor::wdColorPink:
-            pCC->SetColor("wdColorPink");
+            m_pCC->SetColor("wdColorPink");
             break;
         case word::WdColor::wdColorPlum:
-            pCC->SetColor("wdColorPlum");
+            m_pCC->SetColor("wdColorPlum");
             break;
         case word::WdColor::wdColorRed:
-            pCC->SetColor("wdColorRed");
+            m_pCC->SetColor("wdColorRed");
             break;
         case word::WdColor::wdColorRose:
-            pCC->SetColor("wdColorRose");
+            m_pCC->SetColor("wdColorRose");
             break;
         case word::WdColor::wdColorSeaGreen:
-            pCC->SetColor("wdColorSeaGreen");
+            m_pCC->SetColor("wdColorSeaGreen");
             break;
         case word::WdColor::wdColorSkyBlue:
-            pCC->SetColor("wdColorSkyBlue");
+            m_pCC->SetColor("wdColorSkyBlue");
             break;
         case word::WdColor::wdColorTan:
-            pCC->SetColor("wdColorTan");
+            m_pCC->SetColor("wdColorTan");
             break;
         case word::WdColor::wdColorTeal:
-            pCC->SetColor("wdColorTeal");
+            m_pCC->SetColor("wdColorTeal");
             break;
         case word::WdColor::wdColorTurquoise:
-            pCC->SetColor("wdColorTurquoise");
+            m_pCC->SetColor("wdColorTurquoise");
             break;
         case word::WdColor::wdColorViolet:
-            pCC->SetColor("wdColorViolet");
+            m_pCC->SetColor("wdColorViolet");
             break;
         case word::WdColor::wdColorWhite:
-            pCC->SetColor("wdColorWhite");
+            m_pCC->SetColor("wdColorWhite");
             break;
         default:;
     }
@@ -439,17 +433,9 @@ void SwVbaContentControl::setDateCalendarType(sal_Int32 nSet)
     SAL_INFO("sw.vba", "SwVbaContentControl::setDateCalendarType[" << nSet << "] stub");
 }
 
-OUString SwVbaContentControl::getDateDisplayFormat()
-{
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->GetDateFormat();
-}
+OUString SwVbaContentControl::getDateDisplayFormat() { return m_pCC->GetDateFormat(); }
 
-void SwVbaContentControl::setDateDisplayFormat(const OUString& sSet)
-{
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    pCC->SetDateFormat(sSet);
-}
+void SwVbaContentControl::setDateDisplayFormat(const OUString& sSet) { m_pCC->SetDateFormat(sSet); }
 
 sal_Int32 SwVbaContentControl::getDateStorageFormat()
 {
@@ -472,19 +458,17 @@ sal_Int32 SwVbaContentControl::getDateDisplayLocale()
 
 uno::Any SwVbaContentControl::getDropdownListEntries()
 {
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    if (!pCC->GetDropDown() && !pCC->GetComboBox())
+    if (!m_pCC->GetDropDown() && !m_pCC->GetComboBox())
         return uno::Any();
 
     return uno::Any(
-        uno::Reference<XCollection>(new SwVbaContentControlListEntries(this, mxContext, m_rCC)));
+        uno::Reference<XCollection>(new SwVbaContentControlListEntries(this, mxContext, m_pCC)));
 }
 
 OUString SwVbaContentControl::getID()
 {
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
     // This signed integer is treated in VBA as if it was an unsigned int.
-    return OUString::number(static_cast<sal_uInt32>(pCC->GetId()));
+    return OUString::number(static_cast<sal_uInt32>(m_pCC->GetId()));
 }
 
 sal_Int32 SwVbaContentControl::getLevel()
@@ -496,53 +480,49 @@ sal_Int32 SwVbaContentControl::getLevel()
 
 sal_Bool SwVbaContentControl::getLockContentControl()
 {
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/true);
+    std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
     return oLock && *oLock;
 }
 
 void SwVbaContentControl::setLockContentControl(sal_Bool bSet)
 {
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/false);
-    pCC->SetLock(/*bContents=*/oLock && *oLock, /*bControl=*/bSet);
+    std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
+    m_pCC->SetLock(/*bContents=*/oLock && *oLock, /*bControl=*/bSet);
 }
 
 sal_Bool SwVbaContentControl::getLockContents()
 {
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
     // If the theoretical design model says it is locked, then report as locked.
-    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/false);
+    std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
     if (oLock && *oLock)
         return true;
 
     // Now check the real implementation.
     // Checkbox/DropDown/Picture are normally locked - but not in this sense. Report as unlocked.
-    if (pCC->GetType() == SwContentControlType::CHECKBOX
-        || pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
-        || pCC->GetType() == SwContentControlType::PICTURE)
+    if (m_pCC->GetType() == SwContentControlType::CHECKBOX
+        || m_pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
+        || m_pCC->GetType() == SwContentControlType::PICTURE)
     {
         return false;
     }
 
-    return pCC->GetReadWrite();
+    return m_pCC->GetReadWrite();
 }
 
 void SwVbaContentControl::setLockContents(sal_Bool bSet)
 {
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     // Set the lock both theoretically and actually.
-    std::optional<bool> oLock = pCC->GetLock(/*bControl=*/true);
-    pCC->SetLock(/*bContents=*/bSet, /*bControl=*/oLock && *oLock);
+    std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
+    m_pCC->SetLock(/*bContents=*/bSet, /*bControl=*/oLock && *oLock);
 
     // Checkbox/DropDown/Picture are normally locked in LO implementation - don't unlock them.
-    if (pCC->GetType() == SwContentControlType::CHECKBOX
-        || pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
-        || pCC->GetType() == SwContentControlType::PICTURE)
+    if (m_pCC->GetType() == SwContentControlType::CHECKBOX
+        || m_pCC->GetType() == SwContentControlType::DROP_DOWN_LIST
+        || m_pCC->GetType() == SwContentControlType::PICTURE)
     {
         return;
     }
-    pCC->SetReadWrite(bSet);
+    m_pCC->SetReadWrite(bSet);
 }
 
 sal_Bool SwVbaContentControl::getMultiLine()
@@ -558,27 +538,23 @@ void SwVbaContentControl::setMultiLine(sal_Bool /*bSet*/)
 
 OUString SwVbaContentControl::getPlaceholderText()
 {
-    // return pCC->GetPlaceholderDocPart(); // This is not correct. Much more complex than this...
+    // return m_pCC->GetPlaceholderDocPart(); // This is not correct. Much more complex than this...
     SAL_INFO("sw.vba", "SwVbaContentControl::getPlaceholderText stub");
     return OUString();
 }
 
-sal_Bool SwVbaContentControl::getShowingPlaceholderText()
-{
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->GetShowingPlaceHolder();
-}
+sal_Bool SwVbaContentControl::getShowingPlaceholderText() { return m_pCC->GetShowingPlaceHolder(); }
 
 uno::Reference<word::XRange> SwVbaContentControl::getRange()
 {
     uno::Reference<word::XRange> xRet;
-    SwTextNode* pTextNode = m_rCC.GetTextNode();
-    if (pTextNode)
+    SwTextNode* pTextNode = m_pCC->GetTextNode();
+    if (pTextNode && m_pCC->GetTextAttr())
     {
         // Don't select the text attribute itself at the start.
-        SwPosition aStart(*pTextNode, m_rCC.GetStart() + 1);
+        SwPosition aStart(*pTextNode, m_pCC->GetTextAttr()->GetStart() + 1);
         // Don't select the CH_TXTATR_BREAKWORD itself at the end.
-        SwPosition aEnd(*pTextNode, *m_rCC.End() - 1);
+        SwPosition aEnd(*pTextNode, *m_pCC->GetTextAttr()->End() - 1);
         uno::Reference<text::XTextRange> xText(
             SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), aStart, &aEnd));
         if (xText.is())
@@ -599,17 +575,9 @@ void SwVbaContentControl::setRepeatingSectionItemTitle(const OUString& rSet)
     SAL_INFO("sw.vba", "SwVbaContentControl::setRepeatingSectionItemTitle[" << rSet << "] stub");
 }
 
-OUString SwVbaContentControl::getTag()
-{
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->GetTag();
-}
+OUString SwVbaContentControl::getTag() { return m_pCC->GetTag(); }
 
-void SwVbaContentControl::setTag(const OUString& rSet)
-{
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->SetTag(rSet);
-}
+void SwVbaContentControl::setTag(const OUString& rSet) { return m_pCC->SetTag(rSet); }
 
 sal_Bool SwVbaContentControl::getTemporary()
 {
@@ -623,22 +591,13 @@ void SwVbaContentControl::setTemporary(sal_Bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaContentControl::setTemporary stub");
 }
 
-OUString SwVbaContentControl::getTitle()
-{
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->GetAlias();
-}
+OUString SwVbaContentControl::getTitle() { return m_pCC->GetAlias(); }
 
-void SwVbaContentControl::setTitle(const OUString& rSet)
-{
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    return pCC->SetAlias(rSet);
-}
+void SwVbaContentControl::setTitle(const OUString& rSet) { return m_pCC->SetAlias(rSet); }
 
 sal_Int32 SwVbaContentControl::getType()
 {
-    const std::shared_ptr<SwContentControl>& pCC = m_rCC.GetContentControl().GetContentControl();
-    SwContentControlType eType = pCC->GetType();
+    SwContentControlType eType = m_pCC->GetType();
     sal_Int32 eVbaType = word::WdContentControlType::wdContentControlRichText;
 
     switch (eType)
@@ -670,7 +629,6 @@ sal_Int32 SwVbaContentControl::getType()
 void SwVbaContentControl::setType(sal_Int32 nSet)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::setType[" << nSet << "] stub");
-    //     std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     //     SwContentControlType eType = SwContentControlType::RICH_TEXT;
     //     switch(nSet)
     //     {
@@ -695,7 +653,7 @@ void SwVbaContentControl::setType(sal_Int32 nSet)
     //         case word::WdContentControlType::wdContentControlRichText:
     //         default:;
     //     }
-    //     pCC->SetType(eType);
+    //     m_pCC->SetType(eType);
 }
 
 void SwVbaContentControl::Copy()
@@ -705,57 +663,60 @@ void SwVbaContentControl::Copy()
 
 void SwVbaContentControl::Cut()
 {
-    if (getLockContentControl())
+    if (getLockContentControl() || !m_pCC->GetTextAttr())
         return;
 
     SAL_INFO("sw.vba",
              "SwVbaContentControl::Cut[" << getID() << "], but missing sending to clipboard");
 
-    m_rCC.Delete(/*bSaveContents=*/getLockContents());
+    m_pCC->GetTextAttr()->Delete(/*bSaveContents=*/getLockContents());
 }
 
 void SwVbaContentControl::Delete(const uno::Any& DeleteContents)
 {
-    if (getLockContentControl())
+    if (getLockContentControl() || !m_pCC->GetTextAttr())
         return;
 
     bool bDeleteContents = false;
     DeleteContents >>= bDeleteContents;
 
-    m_rCC.Delete(/*bSaveContents=*/!bDeleteContents || getLockContents());
+    m_pCC->GetTextAttr()->Delete(/*bSaveContents=*/!bDeleteContents || getLockContents());
 }
 
 void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
 {
+    if (!m_pCC->GetTextAttr())
+        return;
+
     SAL_INFO_IF(Font.hasValue(), "sw.vba", "SetCheckedSymbol Font[" << Font << "] stub");
     if (Character < 31 || Character > SAL_MAX_UINT16)
         return; // unsupported character. Would such a thing exist in VBA?
 
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    pCC->SetCheckedState(OUString(static_cast<sal_Unicode>(Character)));
+    m_pCC->SetCheckedState(OUString(static_cast<sal_Unicode>(Character)));
 
-    if (pCC->GetCheckbox() && pCC->GetChecked() && !pCC->GetShowingPlaceHolder())
-        m_rCC.Invalidate();
+    if (m_pCC->GetCheckbox() && m_pCC->GetChecked() && !m_pCC->GetShowingPlaceHolder())
+        m_pCC->GetTextAttr()->Invalidate();
 }
 
 void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
 {
+    if (!m_pCC->GetTextAttr())
+        return;
+
     SAL_INFO_IF(Font.hasValue(), "sw.vba", "SetUnCheckedSymbol Font[" << Font << "] stub");
     if (Character < 31 || Character > SAL_MAX_UINT16)
         return; // unsupported character. Would such a thing exist in VBA?
 
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    pCC->SetUncheckedState(OUString(static_cast<sal_Unicode>(Character)));
+    m_pCC->SetUncheckedState(OUString(static_cast<sal_Unicode>(Character)));
 
-    if (pCC->GetCheckbox() && !pCC->GetChecked() && !pCC->GetShowingPlaceHolder())
-        m_rCC.Invalidate();
+    if (m_pCC->GetCheckbox() && !m_pCC->GetChecked() && !m_pCC->GetShowingPlaceHolder())
+        m_pCC->GetTextAttr()->Invalidate();
 }
 
 void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, const uno::Any& Range,
                                              const uno::Any& Text)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::SetPlaceholderText stub");
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
     if (BuildingBlock.hasValue())
     {
         // Set placeholder text to the building block - whatever that is.
@@ -771,9 +732,9 @@ void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, cons
     else
     {
         // Remove placeholder text.
-        pCC->SetPlaceholderDocPart("");
+        m_pCC->SetPlaceholderDocPart("");
     }
-    if (pCC->GetShowingPlaceHolder() && !getLockContents())
+    if (m_pCC->GetShowingPlaceHolder() && !getLockContents() && m_pCC->GetTextAttr())
     {
         //replace the text and ensure showing placeholder is still set
     }

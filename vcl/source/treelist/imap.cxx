@@ -320,15 +320,8 @@ IMapObjectType IMapCircleObject::GetType() const
 bool IMapCircleObject::IsHit( const Point& rPoint ) const
 {
     const Point aPoint( aCenter - rPoint );
-    bool        bRet = false;
 
-    if ( static_cast<sal_Int32>(sqrt( static_cast<double>(aPoint.X()) * aPoint.X() +
-                       aPoint.Y() * aPoint.Y() )) <= nRadius )
-    {
-        bRet = true;
-    }
-
-    return bRet;
+    return static_cast<sal_Int32>( std::hypot( aPoint.X(), aPoint.Y() ) ) <= nRadius;
 }
 
 Point IMapCircleObject::GetCenter( bool bPixelCoords ) const

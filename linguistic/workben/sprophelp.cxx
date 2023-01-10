@@ -167,7 +167,9 @@ static const char *aSP[] =
     UPN_IS_USE_DICTIONARY_LIST,
     UPN_IS_SPELL_UPPER_CASE,
     UPN_IS_SPELL_WITH_DIGITS,
-    UPN_IS_SPELL_CAPITALIZATION
+    UPN_IS_SPELL_CAPITALIZATION,
+    UPN_IS_SPELL_CLOSED_COMPOUND,
+    UPN_IS_SPELL_HYPHENATED_COMPOUND
 };
 
 
@@ -216,6 +218,16 @@ PropertyHelper_Spell::PropertyHelper_Spell(
                 pbVal    = &bIsSpellCapitalization;
                 pbResVal = &bResIsSpellCapitalization;
             }
+            else if (OUString( UPN_IS_SPELL_CLOSED_COMPOUND ) == pPropName[i])
+            {
+                pbVal    = &bIsSpellClosedCompound;
+                pbResVal = &bResIsSpellClosedCompound;
+            }
+            else if (OUString( UPN_IS_SPELL_HYPHENATED_COMPOUND ) == pPropName[i])
+            {
+                pbVal    = &bIsSpellHyphenatedCompound;
+                pbResVal = &bResIsSpellHyphenatedCompound;
+            }
 
             if (pbVal && pbResVal)
             {
@@ -240,6 +252,8 @@ void PropertyHelper_Spell::SetDefault()
     bResIsSpellUpperCase            = bIsSpellUpperCase             = sal_False;
     bResIsSpellWithDigits           = bIsSpellWithDigits            = sal_False;
     bResIsSpellCapitalization       = bIsSpellCapitalization        = sal_True;
+    bResIsSpellClosedCompound       = bIsSpellClosedCompound        = sal_True;
+    bResIsSpellHyphenatedCompound   = bIsSpellHyphenatedCompound    = sal_True;
 }
 
 
@@ -296,6 +310,21 @@ void SAL_CALL
                 bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
+            case UPH_IS_SPELL_CLOSED_COMPOUND     :
+            {
+                pbVal = &bIsSpellClosedCompound;
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                break;
+            }
+            case UPH_IS_SPELL_HYPHENATED_COMPOUND     :
+            {
+                pbVal = &bIsSpellHyphenatedCompound;
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                break;
+            }
+
             default:
                 OSL_FAIL( "unknown property" );
         }
@@ -325,6 +354,8 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellUpperCase            = bIsSpellUpperCase;
     bResIsSpellWithDigits           = bIsSpellWithDigits;
     bResIsSpellCapitalization       = bIsSpellCapitalization;
+    bResIsSpellClosedCompound       = bIsSpellClosedCompound;
+    bResIsSpellHyphenatedCompound   = bIsSpellHyphenatedCompound;
 
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
@@ -341,6 +372,8 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_IS_SPELL_UPPER_CASE          : pbResVal = &bResIsSpellUpperCase; break;
                 case UPH_IS_SPELL_WITH_DIGITS         : pbResVal = &bResIsSpellWithDigits; break;
                 case UPH_IS_SPELL_CAPITALIZATION      : pbResVal = &bResIsSpellCapitalization; break;
+                case UPH_IS_SPELL_CLOSED_COMPOUND     : pbResVal = &bResIsSpellClosedCompound; break;
+                case UPH_IS_SPELL_HYPHENATED_COMPOUND : pbResVal = &bResIsSpellHyphenatedCompound; break;
                 default:
                     OSL_FAIL( "unknown property" );
             }

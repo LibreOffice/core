@@ -3204,12 +3204,13 @@ void FmXGridCell::init()
     svt::ControlBase* pEventWindow( getEventWindow() );
     if ( pEventWindow )
     {
-        pEventWindow->AddEventListener( LINK( this, FmXGridCell, OnWindowEvent ) );
         pEventWindow->SetFocusInHdl(LINK( this, FmXGridCell, OnFocusGained));
         pEventWindow->SetFocusOutHdl(LINK( this, FmXGridCell, OnFocusLost));
         pEventWindow->SetMousePressHdl(LINK( this, FmXGridCell, OnMousePress));
         pEventWindow->SetMouseReleaseHdl(LINK( this, FmXGridCell, OnMouseRelease));
         pEventWindow->SetMouseMoveHdl(LINK( this, FmXGridCell, OnMouseMove));
+        pEventWindow->SetKeyInputHdl( LINK( this, FmXGridCell, OnKeyInput) );
+        pEventWindow->SetKeyReleaseHdl( LINK( this, FmXGridCell, OnKeyRelease) );
     }
 }
 
@@ -3441,12 +3442,6 @@ void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintList
     OSL_FAIL( "FmXGridCell::removePaintListener: not implemented" );
 }
 
-IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent&, _rEvent, void )
-{
-    ENSURE_OR_THROW( _rEvent.GetWindow(), "illegal window" );
-    onWindowEvent(_rEvent.GetId(), _rEvent.GetData());
-}
-
 void FmXGridCell::onFocusGained( const awt::FocusEvent& _rEvent )
 {
     checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -3523,25 +3518,23 @@ IMPL_LINK(FmXGridCell, OnMouseMove, const MouseEvent&, rMouseEvent, void)
     }
 }
 
-void FmXGridCell::onWindowEvent(const VclEventId _nEventId, const void* _pEventData)
+IMPL_LINK(FmXGridCell, OnKeyInput, const KeyEvent&, rEventData, void)
 {
-    switch ( _nEventId )
-    {
-    case VclEventId::WindowKeyInput:
-    case VclEventId::WindowKeyUp:
-    {
-        if ( !m_aKeyListeners.getLength() )
-            break;
+    if (!m_aKeyListeners.getLength())
+        return;
 
-        const bool bKeyPressed = ( _nEventId == VclEventId::WindowKeyInput );
-        awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent( *static_cast< const ::KeyEvent* >( _pEventData ), *this ) );
-        m_aKeyListeners.notifyEach( bKeyPressed ? &awt::XKeyListener::keyPressed: &awt::XKeyListener::keyReleased, aEvent );
-    }
-    break;
-    default: break;
-    }
+    awt::KeyEvent aEvent(VCLUnoHelper::createKeyEvent(rEventData, *this));
+    m_aKeyListeners.notifyEach(&awt::XKeyListener::keyPressed, aEvent);
 }
 
+IMPL_LINK(FmXGridCell, OnKeyRelease, const KeyEvent&, rEventData, void)
+{
+    if (!m_aKeyListeners.getLength())
+        return;
+
+    awt::KeyEvent aEvent(VCLUnoHelper::createKeyEvent(rEventData, *this));
+    m_aKeyListeners.notifyEach(&awt::XKeyListener::keyReleased, aEvent);
+}
 
 void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                         const Reference< css::sdb::XColumn >& _rxField,
@@ -3550,7 +3543,6 @@ void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& r
     m_pCellControl->PaintFieldToCell( rDev, rRect, _rxField, xFormatter );
 }
 
-
 void FmXDataCell::UpdateFromColumn()
 {
     Reference< css::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
@@ -3558,13 +3550,11 @@ void FmXDataCell::UpdateFromColumn()
         m_pCellControl->UpdateFromField(xField, m_pColumn->GetParent().getNumberFormatter());
 }
 
-
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl )
     :FmXDataCell( pColumn, std::move(pControl) )
     ,m_bIsMultiLineText(false)
 {
 }
-
 
 void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
                         const tools::Rectangle& rRect,

@@ -90,6 +90,7 @@
 #include <svx/galleryitem.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <memory>
 
 #include <svx/unobrushitemhelper.hxx>
@@ -98,12 +99,16 @@
 #include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <shellres.hxx>
 #include <UndoTable.hxx>
 
 #include <ndtxt.hxx>
 #include <UndoManager.hxx>
+#include <fmtrfmrk.hxx>
+#include <txtrfmrk.hxx>
+#include <translatehelper.hxx>
 
 FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;
 
@@ -586,7 +591,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
+    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc(), true);
 
     SwWrtShell &rWrtShell = GetShell();
 
@@ -765,6 +770,120 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
     }
 }
 
+namespace
+{
+/// Searches for the specified field type and field name prefix and update the matching fields to
+/// have the provided new name and content.
+bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (!pTypeName || pTypeName->GetValue() != "SetRef")
+    {
+        // This is implemented so far only for reference marks.
+        return false;
+    }
+
+    const SfxStringItem* pNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    if (!pNamePrefix)
+    {
+        return false;
+    }
+    const OUString& rNamePrefix = pNamePrefix->GetValue();
+
+    const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+    if (!pFields)
+    {
+        return false;
+    }
+    uno::Sequence<beans::PropertyValues> aFields;
+    pFields->GetValue() >>= aFields;
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+
+    std::vector<const SwFormatRefMark*> aRefMarks;
+
+    for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
+    {
+        aRefMarks.push_back(pDoc->GetRefMark(i));
+    }
+
+    std::sort(aRefMarks.begin(), aRefMarks.end(),
+              [](const SwFormatRefMark* pMark1, const SwFormatRefMark* pMark2) -> bool {
+                  const SwTextRefMark* pTextRefMark1 = pMark1->GetTextRefMark();
+                  const SwTextRefMark* pTextRefMark2 = pMark2->GetTextRefMark();
+                  SwPosition aPos1(pTextRefMark1->GetTextNode(), pTextRefMark1->GetStart());
+                  SwPosition aPos2(pTextRefMark2->GetTextNode(), pTextRefMark2->GetStart());
+                  return aPos1 < aPos2;
+              });
+
+    sal_uInt16 nFieldIndex = 0;
+    for (auto& pIntermediateRefMark : aRefMarks)
+    {
+        auto pRefMark = const_cast<SwFormatRefMark*>(pIntermediateRefMark);
+        if (!pRefMark->GetRefName().startsWith(rNamePrefix))
+        {
+            continue;
+        }
+
+        if (nFieldIndex >= aFields.getLength())
+        {
+            break;
+        }
+        comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
+        auto aName = aMap["Name"].get<OUString>();
+        pRefMark->GetRefName() = aName;
+
+        OUString aContent = aMap["Content"].get<OUString>();
+        auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
+        if (!pTextRefMark->End())
+        {
+            continue;
+        }
+
+        // Insert markers to remember where the paste positions are.
+        const SwTextNode& rTextNode = pTextRefMark->GetTextNode();
+        SwPaM aMarkers(SwPosition(rTextNode, *pTextRefMark->End()));
+        IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+        pTextRefMark->SetDontExpand(false);
+        bool bSuccess = rIDCO.InsertString(aMarkers, "XY");
+        if (bSuccess)
+        {
+            SwPaM aPasteEnd(SwPosition(rTextNode, *pTextRefMark->End()));
+            aPasteEnd.Move(fnMoveBackward, GoInContent);
+
+            // Paste HTML content.
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
+            *pCursorPos = aPasteEnd;
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
+
+            // Update the refmark to point to the new content.
+            sal_Int32 nOldStart = pTextRefMark->GetStart();
+            sal_Int32 nNewStart = *pTextRefMark->End();
+            // First grow it to include text till the end of the paste position.
+            pTextRefMark->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
+            // Then shrink it to only start at the paste start: we know that the refmark was
+            // truncated to the paste start, as the refmark has to stay inside a single text node
+            pTextRefMark->SetStart(nNewStart);
+            rTextNode.GetSwpHints().SortIfNeedBe();
+            SwPaM aEndMarker(*aPasteEnd.GetPoint());
+            aEndMarker.SetMark();
+            aEndMarker.GetMark()->AdjustContent(1);
+            SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
+
+            // Remove markers. The start marker includes the old content as well.
+            rIDCO.DeleteAndJoin(aStartMarker);
+            rIDCO.DeleteAndJoin(aEndMarker);
+        }
+    }
+
+    rWrtSh.EndAction();
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+    return true;
+}
+}
+
 // Evaluate respectively dispatching the slot Id
 
 void SwBaseShell::Execute(SfxRequest &rReq)
@@ -787,6 +906,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
         case FN_UPDATE_FIELDS:
             {
+                if (UpdateFieldContents(rReq, rSh))
+                {
+                    // Parameters indicated that the name / content of fields has to be updated to
+                    // the provided values, don't do an actual fields update.
+                    break;
+                }
+
                 rSh.UpdateDocStat();
                 rSh.EndAllTableBoxEdit();
                 rSh.SwViewShell::UpdateFields(true);
@@ -2491,32 +2617,12 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_BACKGROUND_COLOR:
         case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
-            const SfxPoolItem* pColorStringItem = nullptr;
             bool bIsTransparent = false;
 
             aBrushItem->SetGraphicPos(GPOS_NONE);
 
             sal_uInt16 nSlotId = (nSlot == SID_BACKGROUND_COLOR) ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR;
-            if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
-            {
-                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                if (sColor == "transparent")
-                {
-                    bIsTransparent = true;
-                }
-                else
-                {
-                    Color aColor(ColorTransparency, sColor.toInt32(16));
-
-                    aBrushItem->SetColor(aColor);
-
-                    SvxColorItem aNewColorItem(nSlotId);
-                    aNewColorItem.SetValue(aColor);
-
-                    GetView().GetViewFrame()->GetBindings().SetState(aNewColorItem);
-                }
-            }
-            else if (pArgs)
+            if (pArgs)
             {
                 const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(nSlotId));
                 const Color& rNewColor = rNewColorItem.GetValue();

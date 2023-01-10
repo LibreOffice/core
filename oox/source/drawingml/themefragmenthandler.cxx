@@ -38,39 +38,39 @@ ThemeFragmentHandler::~ThemeFragmentHandler()
 {
 }
 
-ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
+ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/)
 {
     // CT_OfficeStyleSheet
-    switch( getCurrentElement() )
+    if (getCurrentElement() == A_TOKEN(theme))
     {
-        case XML_ROOT_CONTEXT:
-            switch( nElement )
-            {
-                case A_TOKEN( theme ):
-                {
-                    mrTheme.setThemeName(rAttribs.getStringDefaulted(XML_name));
-                    return this;
-                }
-            }
-        break;
-
-        case A_TOKEN( theme ):
-            switch( nElement )
-            {
-                case A_TOKEN( themeElements ):              // CT_BaseStyles
-                    return new ThemeElementsContext( *this, mrTheme );
-                case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
-                    return new objectDefaultContext( *this, mrTheme );
-                case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
-                    return nullptr;
-                case A_TOKEN( custClrLst ):                 // CustomColorList
-                    return nullptr;
-                case A_TOKEN( ext ):                        // CT_OfficeArtExtension
-                    return nullptr;
-            }
-        break;
+        switch(nElement)
+        {
+            case A_TOKEN( themeElements ):              // CT_BaseStyles
+                return new ThemeElementsContext( *this, mrTheme );
+            case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
+                return new objectDefaultContext( *this, mrTheme );
+            case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
+                return nullptr;
+            case A_TOKEN( custClrLst ):                 // CustomColorList
+                return nullptr;
+            case A_TOKEN( ext ):                        // CT_OfficeArtExtension
+                return nullptr;
+        }
     }
+    else if (getCurrentElement() == XML_ROOT_CONTEXT)
+    {
+        return this;
+    }
+
     return nullptr;
+}
+
+void ThemeFragmentHandler::onStartElement(const AttributeList& rAttribs)
+{
+    if (getCurrentElement() == A_TOKEN(theme))
+    {
+        mrTheme.setThemeName(rAttribs.getStringDefaulted(XML_name));
+    }
 }
 
 } // namespace oox::drawingml

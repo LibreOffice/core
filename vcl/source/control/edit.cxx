@@ -1307,6 +1307,19 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
         OUString aText;
         aData >>= aText;
 
+        // tdf#127588 - extend selection to the entire field or paste the text
+        // from the clipboard to the current position if there is no selection
+        if (mnMaxTextLen < EDIT_NOLIMIT && maSelection.Len() == 0)
+        {
+            const sal_Int32 aTextLen = aText.getLength();
+            if (aTextLen == mnMaxTextLen)
+            {
+                maSelection.Min() = 0;
+                maSelection.Max() = mnMaxTextLen;
+            } else
+                maSelection.Max() = std::min<sal_Int32>(maSelection.Min() + aTextLen, mnMaxTextLen);
+        }
+
         Selection aSelection(maSelection);
         aSelection.Normalize();
         if (ImplTruncateToMaxLen(aText, aSelection.Len()))

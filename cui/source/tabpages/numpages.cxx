@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
 #include <numpages.hxx>
@@ -509,11 +508,14 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
             SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
 
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
+            for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
-                Any aValueAny = xLevel->getByIndex(nLevel);
+                // use the last locale-defined level for all remaining levels.
+                sal_Int32 nLocaleLevel = std::min(nLevel, xLevel->getCount() - 1);
                 Sequence<PropertyValue> aLevelProps;
-                aValueAny >>= aLevelProps;
+                if (nLocaleLevel >= 0)
+                    xLevel->getByIndex(nLocaleLevel) >>= aLevelProps;
+
                 SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
                 rItemArr.push_back( std::unique_ptr<SvxNumSettings_Impl>(pNew) );
             }
@@ -688,6 +690,11 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 1));
             aFmt.SetCharFormatName(sNumCharFmtName);
             aFmt.SetBulletRelSize(100);
+
+            // Completely ignore the Left/Right value provided by the locale outline definition,
+            // because this function doesn't actually modify the indents at all,
+            // and right-adjusted numbering definitely needs a different FirstLineIndent.
+
             // #i93908#
             aFmt.SetListFormat(pLevelSettings->sPrefix, pLevelSettings->sSuffix, i);
         }

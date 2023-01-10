@@ -1317,7 +1317,7 @@
                           <object class="GtkMenuToolButton" id="highlight">
                             <property name="visible">True</property>
                             <property name="is_important">True</property>
-                            <property name="action_name">.uno:BackColor</property>
+                            <property name="action_name">.uno:CharBackColor</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>

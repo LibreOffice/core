@@ -115,7 +115,9 @@ WID_Name const aWID_Name[] =
     { 0,                                  "" },
     { UPH_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE },
     { UPH_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK },
-    { UPH_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL }
+    { UPH_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL },
+    { UPH_IS_SPELL_CLOSED_COMPOUND,       UPN_IS_SPELL_CLOSED_COMPOUND },
+    { UPH_IS_SPELL_HYPHENATED_COMPOUND,   UPN_IS_SPELL_HYPHENATED_COMPOUND }
 };
 
 
@@ -166,9 +168,9 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetLinguProps()
                 cppu::UnoType<bool>::get(),            0, 0 },
         { UPN_IS_SPELL_CAPITALIZATION,    UPH_IS_SPELL_CAPITALIZATION,
                 cppu::UnoType<bool>::get(),            0, 0 },
-        { UPN_IS_SPELL_HIDE,              UPH_IS_SPELL_HIDE,              /*! deprecated !*/
+        { UPN_IS_SPELL_CLOSED_COMPOUND,   UPH_IS_SPELL_CLOSED_COMPOUND,
                 cppu::UnoType<bool>::get(),            0, 0 },
-        { UPN_IS_SPELL_IN_ALL_LANGUAGES,  UPH_IS_SPELL_IN_ALL_LANGUAGES,  /*! deprecated !*/
+        { UPN_IS_SPELL_HYPHENATED_COMPOUND,   UPH_IS_SPELL_HYPHENATED_COMPOUND,
                 cppu::UnoType<bool>::get(),            0, 0 },
         { UPN_IS_SPELL_SPECIAL,           UPH_IS_SPELL_SPECIAL,
                 cppu::UnoType<bool>::get(),            0, 0 },

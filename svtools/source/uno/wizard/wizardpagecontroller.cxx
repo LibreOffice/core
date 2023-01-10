@@ -50,7 +50,16 @@ namespace svt::uno
         try
         {
             // Plug a toplevel SalFrame into the native page which can host our awt widgetry
-            m_xWizardPage.set(m_xController->createPage(pParent->CreateChildFrame(), i_nPageId), UNO_SET_THROW);
+            css::uno::Reference<css::awt::XWindow> xChildFrame = pParent->CreateChildFrame();
+            // If size of page is changed by createPage, then the requested size of the container
+            // should also be set to this size, to avoid annoying resizings.
+            com::sun::star::awt::Rectangle r0 = xChildFrame->getPosSize();
+            m_xWizardPage.set(m_xController->createPage(xChildFrame, i_nPageId), UNO_SET_THROW);
+            com::sun::star::awt::Rectangle r1 = xChildFrame->getPosSize();
+            if (r0.Width != r1.Width || r0.Height != r1.Height)
+            {
+                pParent->set_size_request(r1.Width, r1.Height);
+            }
 
             Reference< XWindow > xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
             xPageWindow->setVisible( true );

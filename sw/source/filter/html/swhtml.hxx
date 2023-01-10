@@ -1031,25 +1031,25 @@ class SwTextFootnote;
 class SwHTMLTextFootnote
 {
 private:
-    OUString sName;
-    SwTextFootnote* pTextFootnote;
-    std::unique_ptr<SvtDeleteListener> xDeleteListener;
+    OUString m_sName;
+    SwTextFootnote* m_pTextFootnote;
+    std::unique_ptr<SvtDeleteListener> m_xDeleteListener;
 public:
     SwHTMLTextFootnote(OUString rName, SwTextFootnote* pInTextFootnote)
-        : sName(std::move(rName))
-        , pTextFootnote(pInTextFootnote)
-        , xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr()).GetNotifier()))
+        : m_sName(std::move(rName))
+        , m_pTextFootnote(pInTextFootnote)
+        , m_xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr()).GetNotifier()))
     {
     }
     const OUString& GetName() const
     {
-        return sName;
+        return m_sName;
     }
     const SwNodeIndex* GetStartNode() const
     {
-        if (xDeleteListener->WasDeleted())
+        if (m_xDeleteListener->WasDeleted())
             return nullptr;
-        return pTextFootnote->GetStartNode();
+        return m_pTextFootnote->GetStartNode();
     }
 };
 

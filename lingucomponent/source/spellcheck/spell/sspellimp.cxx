@@ -243,7 +243,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
-sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale)
+sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale, int& rInfo)
 {
     if (rWord.getLength() > MAXWORDLEN)
         return -1;
@@ -332,9 +332,9 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
 
                 OString aWrd(OU2ENC(nWord,eEnc));
 #if defined(H_DEPRECATED)
-                bool bVal = pMS->spell(std::string(aWrd.getStr()));
+                bool bVal = pMS->spell(std::string(aWrd.getStr()), &rInfo);
 #else
-                bool bVal = pMS->spell(aWrd.getStr()) != 0;
+                bool bVal = pMS->spell(aWrd.getStr(), &rInfo) != 0;
 #endif
                 if (!bVal) {
                     if (extrachar && (eEnc != RTL_TEXTENCODING_UTF8)) {
@@ -355,9 +355,9 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
                         OUString aWord(aBuf.makeStringAndClear());
                         OString bWrd(OU2ENC(aWord, eEnc));
 #if defined(H_DEPRECATED)
-                        bVal = pMS->spell(std::string(bWrd.getStr()));
+                        bVal = pMS->spell(std::string(bWrd.getStr()), &rInfo);
 #else
-                        bVal = pMS->spell(bWrd.getStr()) != 0;
+                        bVal = pMS->spell(bWrd.getStr(), &rInfo) != 0;
 #endif
                         if (bVal) return -1;
                     }
@@ -396,7 +396,8 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
+    int nInfo = 0;
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale, nInfo );
     if (nFailure != -1 && !rWord.match(SPELL_XML, 0))
     {
         LanguageType nLang = LinguLocaleToLanguage( rLocale );
@@ -407,6 +408,18 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
                 (!rHelper.IsSpellCapitalization()  &&  nFailure == SpellFailure::CAPTION_ERROR);
         if (bIgnoreError)
             nFailure = -1;
+    }
+//#define SPELL_COMPOUND 1 << 0
+
+    // valid word, but it's a rule-based compound word
+    if ( nFailure == -1 && (nInfo & SPELL_COMPOUND) )
+    {
+        bool bHasHyphen = rWord.indexOf('-') > -1;
+        if ( (bHasHyphen && !rHelper.IsSpellHyphenatedCompound()) ||
+             (!bHasHyphen && !rHelper.IsSpellClosedCompound()) )
+        {
+            return false;
+        }
     }
 
     return (nFailure == -1);

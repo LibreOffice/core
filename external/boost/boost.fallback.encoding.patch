@@ -5,9 +5,9 @@
          country.clear();
          variant.clear();
 -        encoding = "us-ascii";
--        utf8=false;
+-        utf8 = false;
 +        encoding = "UTF-8";
-+        utf8=true;
++        utf8 = true;
          parse_from_lang(locale_name);
      }
  

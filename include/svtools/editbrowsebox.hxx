@@ -202,8 +202,19 @@ namespace svt
             m_aMouseMoveHdl = rHdl;
         }
 
+        void SetKeyInputHdl(const Link<const KeyEvent&,void>& rHdl)
+        {
+            m_aKeyInputHdl = rHdl;
+        }
+
+        void SetKeyReleaseHdl(const Link<const KeyEvent&,void>& rHdl)
+        {
+            m_aKeyReleaseHdl = rHdl;
+        }
+
     protected:
         DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_DLLPRIVATE_LINK(KeyReleaseHdl, const KeyEvent&, bool);
         DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
         DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
         DECL_DLLPRIVATE_LINK(MousePressHdl, const MouseEvent&, bool);
@@ -215,6 +226,8 @@ namespace svt
         Link<const MouseEvent&,void> m_aMousePressHdl;
         Link<const MouseEvent&,void> m_aMouseReleaseHdl;
         Link<const MouseEvent&,void> m_aMouseMoveHdl;
+        Link<const KeyEvent&,void> m_aKeyInputHdl;
+        Link<const KeyEvent&,void> m_aKeyReleaseHdl;
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase

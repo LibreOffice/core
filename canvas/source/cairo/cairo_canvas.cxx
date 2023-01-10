@@ -128,10 +128,6 @@ namespace cairocanvas
         return { getServiceName() };
     }
 
-    sal_Int64 Canvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return RepaintTarget::getSomething(aIdentifier);
-    }
-
     bool Canvas::repaint( const SurfaceSharedPtr&       pSurface,
                           const rendering::ViewState&   viewState,
                           const rendering::RenderState& renderState )

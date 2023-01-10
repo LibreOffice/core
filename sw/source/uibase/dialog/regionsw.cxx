@@ -32,6 +32,9 @@
 #include <fmtfsize.hxx>
 #include <cmdid.h>
 #include <swabstdlg.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <translatehelper.hxx>
+#include <IDocumentUndoRedo.hxx>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
@@ -147,7 +150,31 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             aSection.SetType( SectionType::FileLink );
             aSection.SetLinkFileName(sLinkFileName);
         }
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSSECTION, nullptr);
+        rSh.StartAction();
         rSh.InsertSection(aSection, aSet.Count() ? &aSet : nullptr);
+
+        const SfxStringItem* pSectionContent = rReq.GetArg<SfxStringItem>(FN_PARAM_4);
+        if (pSectionContent)
+        {
+            OUString aSectionContent = pSectionContent->GetValue();
+            SwPaM* pCursorPos = rSh.GetCursor();
+            pCursorPos->Move(fnMoveBackward, GoInContent);
+            // Paste HTML content.
+            SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aSectionContent.toUtf8(),
+                                              /*bSetSelection=*/true);
+            if (pCursorPos->GetPoint()->GetContentIndex() == 0)
+            {
+                // The paste created a last empty text node, remove it.
+                SwPaM aPam(*pCursorPos->GetPoint());
+                aPam.SetMark();
+                aPam.Move(fnMoveBackward, GoInContent);
+                rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPam);
+            }
+        }
+        rSh.EndAction();
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSSECTION, nullptr);
+
         rReq.Done();
     }
 }

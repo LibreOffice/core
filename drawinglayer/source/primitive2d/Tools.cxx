@@ -225,6 +225,12 @@ OUString idToString(sal_uInt32 nId)
             return "GLOWPRIMITIVE";
         case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
             return "SOFTEDGEPRIMITIVE";
+        case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
+            return "LINERECTANGLEPRIMITIVE";
+        case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
+            return "FILLEDRECTANGLEPRIMITIVE";
+        case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
+            return "SINGLELINEPRIMITIVE";
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

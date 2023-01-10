@@ -17,6 +17,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -233,7 +234,7 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 {
     loadFromURL(OUString::createFromAscii(pName));
 
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pModelObj;
@@ -2927,7 +2928,7 @@ void ScTiledRenderingTest::testInvalidEntrySave()
 
     // .uno:Save modifies the original file, make a copy first
     saveAndReload("Calc Office Open XML");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     const ScDocument* pDoc = pModelObj->GetDocument();

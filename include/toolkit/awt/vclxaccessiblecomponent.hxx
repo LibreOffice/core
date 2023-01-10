@@ -23,7 +23,6 @@
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
 
@@ -47,7 +46,6 @@ typedef ::cppu::ImplHelper1<
 
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public comphelper::OAccessibleExtendedComponentHelper
-        ,public ::comphelper::OAccessibleImplementationAccess
         ,public VCLXAccessibleComponent_BASE
 {
 private:
@@ -117,16 +115,6 @@ public:
 protected:
     // base class overridables
     css::awt::Rectangle implGetBounds(  ) override;
-
-private:
-    /** we may be reparented (if external components use OAccessibleImplementationAccess base class),
-        so this method here returns the parent in the VCL world, in opposite to the parent
-        an external component gave us
-    @precond
-        the caller must ensure thread safety, i.e. our mutex must be locked
-    */
-    css::uno::Reference< css::accessibility::XAccessible >
-            getVclParent() const;
 };
 
 /* ----------------------------------------------------------

@@ -71,7 +71,7 @@ public:
 
     X11Common();
 
-    cairo_t* getCairoContext();
+    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
 
     static void releaseCairoContext(cairo_t* cr);
 
@@ -145,7 +145,7 @@ public:
      */
     void                            YieldGraphicsExpose();
 
-    cairo_t* getCairoContext();
+    cairo_t* getCairoContext(const SalGeometryProvider* pGeom);
     static void releaseCairoContext(cairo_t* cr);
 
 

@@ -591,7 +591,7 @@ static bool AllowRect(const tools::Rectangle& rRect)
 
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowY(maPt.Y()))
+    if (!AllowY(pOut->LogicToPixel(maPt).Y()))
         return;
 
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
@@ -724,6 +724,9 @@ MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidt
 
 void MetaStretchTextAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowY(pOut->LogicToPixel(maPt).Y()))
+        return;
+
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
 }
 
@@ -760,7 +763,7 @@ MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
 
 void MetaTextRectAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowRect(maRect))
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
         return;
 
     pOut->DrawText( maRect, maStr, mnStyle );
@@ -1149,6 +1152,8 @@ MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
 
 void MetaMaskScaleAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, maSz))))
+        return;
     pOut->DrawMask( maPt, maSz, maBmp, maColor );
 }
 

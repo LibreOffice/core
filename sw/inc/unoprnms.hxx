@@ -531,6 +531,7 @@ inline constexpr OUStringLiteral UNO_NAME_IS_SKIP_HIDDEN_TEXT = u"IsSkipHiddenTe
 inline constexpr OUStringLiteral UNO_NAME_IS_SKIP_PROTECTED_TEXT = u"IsSkipProtectedText";
 inline constexpr OUStringLiteral UNO_NAME_RESET_PARAGRAPH_LIST_ATTRIBUTES
     = u"ResetParagraphListAttributes";
+inline constexpr OUStringLiteral UNO_NAME_NO_FORMAT_ATTR = u"NoFormatAttr";
 inline constexpr OUStringLiteral UNO_NAME_DOCUMENT_INDEX_MARKS = u"DocumentIndexMarks";
 inline constexpr OUStringLiteral UNO_NAME_FOOTNOTE_IS_COLLECT_AT_TEXT_END
     = u"FootnoteIsCollectAtTextEnd";
@@ -914,6 +915,7 @@ inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_PREFIX_MAPPINGS
 inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_XPATH = u"DataBindingXpath";
 inline constexpr OUStringLiteral UNO_NAME_DATA_BINDING_STORE_ITEM_ID = u"DataBindingStoreItemID";
 inline constexpr OUStringLiteral UNO_NAME_COLOR = u"Color";
+inline constexpr OUStringLiteral UNO_NAME_APPEARANCE = u"Appearance";
 inline constexpr OUStringLiteral UNO_NAME_ALIAS = u"Alias";
 inline constexpr OUStringLiteral UNO_NAME_TAG = u"Tag";
 inline constexpr OUStringLiteral UNO_NAME_ID = u"Id";

@@ -504,8 +504,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     {
         dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator();
         m_pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
-        SwEditShell* pSh = m_rDoc.GetEditShell();
-        if (pSh)
+        if (SwEditShell* pSh = m_rDoc.GetEditShell())
             pSh->CallChgLnk();
     }
 }
@@ -615,8 +614,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
         // calling pPool->First() here would be quite slow...
         dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator(); // internal list has to be updated
         m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
-        SwEditShell* pSh = m_rDoc.GetEditShell();
-        if( pSh )
+        if (SwEditShell* pSh = m_rDoc.GetEditShell())
             pSh->CallChgLnk();
     }
 }
@@ -1148,8 +1146,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
     {
         m_pPool->First(nFamily);  // internal list has to be updated
         m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
-        SwEditShell* pSh = m_rDoc.GetEditShell();
-        if( pSh )
+        if (SwEditShell* pSh = m_rDoc.GetEditShell())
             pSh->CallChgLnk();
     }
     return true;

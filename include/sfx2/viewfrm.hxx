@@ -96,11 +96,11 @@ public:
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell const & i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
-    static SfxViewFrame*    Current();
-    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
-    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
+    SAL_WARN_UNUSED_RESULT static SfxViewFrame* Current();
+    SAL_WARN_UNUSED_RESULT static SfxViewFrame* GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
+    SAL_WARN_UNUSED_RESULT static SfxViewFrame* GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
 
-    static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc );
+    SAL_WARN_UNUSED_RESULT static SfxViewFrame* Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc );
 
             void            DoActivate(bool bMDI);
             void            DoDeactivate(bool bMDI, SfxViewFrame const *pOld);

@@ -26,6 +26,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
+#include <o3tl/enumrange.hxx>
 #include <utility>
 
 using namespace com::sun::star;
@@ -38,12 +39,12 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
 {
     sal_Int16 nCharColorTheme = -1;
     xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
-    if (nCharColorTheme < 0 || nCharColorTheme > 11)
-    {
-        return;
-    }
+    svx::ThemeColorType eColorThemeType = svx::convertToThemeColorType(nCharColorTheme);
 
-    Color aColor = rColorSet.getColor(nCharColorTheme);
+    if (eColorThemeType == svx::ThemeColorType::Unknown)
+        return;
+
+    Color aColor = rColorSet.getColor(eColorThemeType);
     sal_Int32 nCharColorLumMod{};
     xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD) >>= nCharColorLumMod;
     sal_Int32 nCharColorLumOff{};
@@ -73,12 +74,11 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const
 
     sal_Int16 nFillColorTheme = -1;
     xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME) >>= nFillColorTheme;
-    if (nFillColorTheme < 0 || nFillColorTheme > 11)
-    {
+    svx::ThemeColorType eColorThemeType = svx::convertToThemeColorType(nFillColorTheme);
+    if (eColorThemeType == svx::ThemeColorType::Unknown)
         return;
-    }
 
-    Color aColor = rColorSet.getColor(nFillColorTheme);
+    Color aColor = rColorSet.getColor(eColorThemeType);
     sal_Int32 nFillColorLumMod{};
     xShape->getPropertyValue(UNO_NAME_FILLCOLOR_LUM_MOD) >>= nFillColorLumMod;
     sal_Int32 nFillColorLumOff{};
@@ -93,7 +93,7 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const
 
 void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 {
-    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    const svx::ColorSet* pColorSet = pTheme->GetColorSet();
     if (!pColorSet)
     {
         return;
@@ -126,20 +126,21 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 namespace svx
 {
 
-ColorSet::ColorSet(OUString aColorSetName)
-    : maColorSetName(std::move(aColorSetName))
-    , maColors(12)
+ColorSet::ColorSet(OUString const& rName)
+    : maName(rName)
 {}
 
-ColorSets::ColorSets()
-{}
+void ColorSet::add(sal_uInt32 nIndex, Color aColorData)
+{
+    maColors[nIndex] = aColorData;
+}
 
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maColorSetName"),
-                                      BAD_CAST(maColorSetName.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maName"),
+                                      BAD_CAST(maName.toUtf8().getStr()));
 
     for (const auto& rColor : maColors)
     {
@@ -152,6 +153,9 @@ void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterEndElement(pWriter);
 }
+
+ColorSets::ColorSets()
+{}
 
 ColorSets::~ColorSets()
 {}
@@ -234,14 +238,19 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
     return maColorSets[0];
 }
 
-Theme::Theme(OUString aName)
-    : maName(std::move(aName))
+void ColorSets::insert(ColorSet const& rColorSet)
+{
+    maColorSets.push_back(rColorSet);
+}
+
+Theme::Theme(OUString const& rName)
+    : maName(rName)
 {
 }
 
-Theme::~Theme() {}
-
 void Theme::SetColorSet(std::unique_ptr<ColorSet> pColorSet) { mpColorSet = std::move(pColorSet); }
+
+const ColorSet* Theme::GetColorSet() const { return mpColorSet.get(); }
 
 ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
 
@@ -272,9 +281,10 @@ void Theme::ToAny(css::uno::Any& rVal) const
     if (mpColorSet)
     {
         std::vector<util::Color> aColorScheme;
-        for (size_t i = 0; i < 12; ++i)
+        for (auto eThemeColorType : o3tl::enumrange<svx::ThemeColorType>())
         {
-            aColorScheme.push_back(static_cast<sal_Int32>(mpColorSet->getColor(i)));
+            Color aColor = mpColorSet->getColor(eThemeColorType);
+            aColorScheme.push_back(sal_Int32(aColor));
         }
 
         aMap["ColorSchemeName"] <<= mpColorSet->getName();
@@ -349,14 +359,12 @@ void Theme::UpdateSdrPage(const SdrPage* pPage)
 std::vector<Color> Theme::GetColors() const
 {
     if (!mpColorSet)
-    {
         return {};
-    }
 
     std::vector<Color> aColors;
-    for (size_t i = 0; i < 12; ++i)
+    for (auto eThemeColorType : o3tl::enumrange<svx::ThemeColorType>())
     {
-        aColors.push_back(mpColorSet->getColor(i));
+        aColors.push_back(mpColorSet->getColor(eThemeColorType));
     }
     return aColors;
 }
@@ -364,11 +372,9 @@ std::vector<Color> Theme::GetColors() const
 Color Theme::GetColor(ThemeColorType eType) const
 {
     if (!mpColorSet)
-    {
         return {};
-    }
 
-    return mpColorSet->getColor(static_cast<size_t>(eType));
+    return mpColorSet->getColor(eType);
 }
 
 } // end of namespace svx

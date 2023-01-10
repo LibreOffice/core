@@ -16,7 +16,6 @@ import _thread
 import io
 import os
 import subprocess
-import time
 import re
 
 # search for all the class names in the file produced by the unusedfields loplugin

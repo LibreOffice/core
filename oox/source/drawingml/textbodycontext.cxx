@@ -31,7 +31,7 @@
 #include <sax/fastattribs.hxx>
 #include "hyperlinkcontext.hxx"
 
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 
 #include <sal/log.hxx>
 #include <utility>

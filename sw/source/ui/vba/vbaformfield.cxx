@@ -26,9 +26,6 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 /**
- * Information about the method and properties of FormFields was gathered from
- * https://www.codevba.com/Word/FormField.htm
- *
  * FormFields are inline text objects that are only found in MS Word.
  * They cannot be created in Excel or in Calc.
  *
@@ -46,25 +43,25 @@ SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>&
 
 SwVbaFormField::~SwVbaFormField() {}
 
-uno::Any SAL_CALL SwVbaFormField::CheckBox()
+uno::Any SwVbaFormField::CheckBox()
 {
     return uno::Any(uno::Reference<word::XCheckBox>(
         new SwVbaFormFieldCheckBox(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SAL_CALL SwVbaFormField::DropDown()
+uno::Any SwVbaFormField::DropDown()
 {
     return uno::Any(uno::Reference<word::XDropDown>(
         new SwVbaFormFieldDropDown(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SAL_CALL SwVbaFormField::TextInput()
+uno::Any SwVbaFormField::TextInput()
 {
     return uno::Any(uno::Reference<word::XTextInput>(
         new SwVbaFormFieldTextInput(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SAL_CALL SwVbaFormField::Previous()
+uno::Any SwVbaFormField::Previous()
 {
     SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
     if (!pDoc)
@@ -91,7 +88,7 @@ uno::Any SAL_CALL SwVbaFormField::Previous()
         new SwVbaFormField(mxParent, mxContext, m_xTextDocument, *pFieldMark)));
 }
 
-uno::Any SAL_CALL SwVbaFormField::Next()
+uno::Any SwVbaFormField::Next()
 {
     SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
     if (!pDoc)

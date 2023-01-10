@@ -22,7 +22,6 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -45,8 +44,7 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::lang::XServiceInfo,
-                                             css::beans::XFastPropertySet,
-                                             css::lang::XUnoTunnel>    CanvasBitmapBase_Base;
+                                             css::beans::XFastPropertySet >    CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
@@ -83,9 +81,6 @@ namespace vclcanvas
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-        // XUnoTunnel
-        sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) override;
 
         // RepaintTarget interface
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,

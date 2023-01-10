@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
 {
-    // Given a document with 3 custom properties: 2 zotero ones and an other one:
+    // Given a document with 3 custom properties: 2 Zotero ones and one other:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -316,6 +316,129 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
     // - No such node (bookmarks)
     // i.e. the returned JSON was just empty.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("bookmarks").count(""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString aName("ZOTERO_ITEM CSL_CITATION {} ");
+    for (int i = 0; i < 5; ++i)
+    {
+        uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+            comphelper::makePropertyValue("Name", uno::Any(aName + OUString::number(i + 1))),
+            comphelper::makePropertyValue("Content", uno::Any(OUString("mycontent"))),
+        };
+        dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+        pWrtShell->SplitNode();
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+    }
+
+    // When getting the refmarks:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Fields?typeName=SetRef&namePrefix=ZOTERO_ITEM%20CSL_CITATION");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we get the 1 refmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (setRefs)
+    // i.e. the returned JSON was just empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("setRefs").count(""));
+    auto it = aTree.get_child("setRefs").begin();
+    boost::property_tree::ptree aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 1"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 2"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ZOTERO_ITEM CSL_CITATION {} 3
+    // - Actual  : ZOTERO_ITEM CSL_CITATION {} 4
+    // i.e. the output was unsorted.
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 3"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 4"),
+                         aRef.get<std::string>("name"));
+    aRef = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} 5"),
+                         aRef.get<std::string>("name"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
+{
+    // Given a document with a fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // When stepping into the fieldmark with the cursor and getting the command value for
+    // uno:TextFormField:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:TextFormField?type=vnd.oasis.opendocument.field.UNHANDLED&"
+                              "commandPrefix=ADDIN%20ZOTERO_ITEM");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the inserted fieldmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (type)
+    // i.e. the returned JSON was just an empty object.
+    CPPUNIT_ASSERT_EQUAL(std::string("vnd.oasis.opendocument.field.UNHANDLED"),
+                         aTree.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string("ADDIN ZOTERO_ITEM foo bar"),
+                         aTree.get<std::string>("command"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
+{
+    // Given a document with a section:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            "RegionName", uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+
+    // When asking for a list of section names:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Sections?namePrefix=ZOTERO_BIBL");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Make sure we find our just inserted section:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (sections)
+    // i.e. the returned JSON was an empty object.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("sections").count(""));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -99,7 +99,6 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     pContent->Erase();
 
     basegfx::BColorModifierSharedPtr aBColorModifier;
-
     if (bUseLuminance)
     {
         // new mode: bUseLuminance allows simple creation of alpha channels
@@ -112,7 +111,6 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
         aBColorModifier
             = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0, 0.0, 0.0));
     }
-    // embed primitives to paint them black
     const drawinglayer::primitive2d::Primitive2DReference xRef(
         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(rSequence),
                                                                 aBColorModifier));

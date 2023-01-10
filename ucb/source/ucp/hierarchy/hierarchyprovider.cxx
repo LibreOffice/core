@@ -49,7 +49,7 @@ using namespace hierarchy_ucp;
 
 HierarchyContentProvider::HierarchyContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
-: ::ucbhelper::ContentProviderImplHelper( rxContext )
+: HierarchyContentProvider_Base( rxContext )
 {
 }
 
@@ -58,42 +58,6 @@ HierarchyContentProvider::HierarchyContentProvider(
 HierarchyContentProvider::~HierarchyContentProvider()
 {
 }
-
-
-// XInterface methods.
-
-void SAL_CALL HierarchyContentProvider::acquire()
-    noexcept
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL HierarchyContentProvider::release()
-    noexcept
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL HierarchyContentProvider::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< lang::XTypeProvider* >(this),
-                                               static_cast< lang::XServiceInfo* >(this),
-                                               static_cast< ucb::XContentProvider* >(this),
-                                               static_cast< lang::XInitialization* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
-                      lang::XTypeProvider,
-                      lang::XServiceInfo,
-                      ucb::XContentProvider,
-                      lang::XInitialization );
-
 
 // XServiceInfo methods.
 

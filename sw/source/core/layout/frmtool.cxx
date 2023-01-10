@@ -3897,12 +3897,17 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModif
 bool IsExtraData( const SwDoc *pDoc )
 {
     const SwLineNumberInfo &rInf = pDoc->GetLineNumberInfo();
-    return rInf.IsPaintLineNumbers() ||
+    if (rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
            (static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos()) != text::HoriOrientation::NONE &&
-            !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty()) ||
-            (pDoc->GetEditShell() && pDoc->GetEditShell()->GetViewOptions() &&
-             pDoc->GetEditShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton());
+            !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty()))
+    {
+        return true;
+    }
+
+    const SwEditShell* pSh = pDoc->GetEditShell();
+    const SwViewOption* pViewOptions = pSh ? pSh->GetViewOptions() : nullptr;
+    return pViewOptions && pViewOptions->IsShowOutlineContentVisibilityButton();
 }
 
 // OD 22.09.2003 #110978#

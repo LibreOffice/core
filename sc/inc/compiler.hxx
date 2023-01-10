@@ -258,7 +258,6 @@ public:
 
 private:
 
-    static osl::Mutex           maMutex;
     static const CharClass      *pCharClassEnglish;     // character classification for en_US locale
     static const CharClass      *pCharClassLocalized;   // character classification for UI locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];

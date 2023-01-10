@@ -22,9 +22,6 @@
 
 #include <mutex>
 
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <pthread.h>
 #include <sys/time.h>
 #include <poll.h>
@@ -76,14 +73,13 @@ do { \
 #define DBG_TESTSVPYIELDMUTEX() ((void)0)
 #endif
 
-#if !defined(ANDROID) && !defined(IOS)
+#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
 
 static void atfork_child()
 {
     if (SvpSalInstance::s_pDefaultInstance != nullptr)
     {
-        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe(false);
-        SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe(false);
+        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe();
     }
 }
 
@@ -97,10 +93,9 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     m_nTimeoutMS            = 0;
 
     m_MainThread = osl::Thread::getCurrentIdentifier();
-    CreateWakeupPipe(true);
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
-#if !defined(ANDROID) && !defined(IOS)
+#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
     pthread_atfork(nullptr, nullptr, atfork_child);
 #endif
 }
@@ -109,62 +104,16 @@ SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = nullptr;
-    CloseWakeupPipe(true);
+    CloseWakeupPipe();
 }
 
-void SvpSalInstance::CloseWakeupPipe(bool log)
+void SvpSalInstance::CloseWakeupPipe()
 {
     SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     if (!pMutex)
         return;
-    if (pMutex->m_FeedbackFDs[0] != -1)
-    {
-        if (log)
-        {
-            SAL_INFO("vcl.headless", "CloseWakeupPipe: Closing inherited feedback pipe: [" << pMutex->m_FeedbackFDs[0] << "," << pMutex->m_FeedbackFDs[1] << "]");
-        }
-        close (pMutex->m_FeedbackFDs[0]);
-        close (pMutex->m_FeedbackFDs[1]);
-        pMutex->m_FeedbackFDs[0] = pMutex->m_FeedbackFDs[1] = -1;
-    }
-}
-
-void SvpSalInstance::CreateWakeupPipe(bool log)
-{
-    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    if (!pMutex)
-        return;
-    if (pipe (pMutex->m_FeedbackFDs) == -1)
-    {
-        if (log)
-        {
-            SAL_WARN("vcl.headless", "Could not create feedback pipe: " << strerror(errno));
-            std::abort();
-        }
-    }
-    else
-    {
-        if (log)
-        {
-            SAL_INFO("vcl.headless", "CreateWakeupPipe: Created feedback pipe: [" << pMutex->m_FeedbackFDs[0] << "," << pMutex->m_FeedbackFDs[1] << "]");
-        }
-
-        int flags;
-
-        // set close-on-exec descriptor flag.
-        if ((flags = fcntl (pMutex->m_FeedbackFDs[0], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void) fcntl(pMutex->m_FeedbackFDs[0], F_SETFD, flags);
-        }
-        if ((flags = fcntl (pMutex->m_FeedbackFDs[1], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void) fcntl(pMutex->m_FeedbackFDs[1], F_SETFD, flags);
-        }
-
-        // retain the default blocking I/O for feedback pipe
-    }
+    while (!pMutex->m_FeedbackPipe.empty())
+        pMutex->m_FeedbackPipe.pop();
 }
 
 void SvpSalInstance::TriggerUserEventProcessing()
@@ -328,9 +277,6 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
-#ifndef IOS
-    m_FeedbackFDs[0] = m_FeedbackFDs[1] = -1;
-#endif
 }
 
 SvpSalYieldMutex::~SvpSalYieldMutex()
@@ -367,11 +313,11 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
                 m_bNoYieldLock = true;
                 bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
                 m_bNoYieldLock = false;
-                if (write(m_FeedbackFDs[1], &bEvents, sizeof(bool)) != sizeof(bool))
                 {
-                    SAL_WARN("vcl.headless", "Could not write: " << strerror(errno));
-                    std::abort();
+                    std::lock_guard lock(m_FeedbackMutex);
+                    m_FeedbackPipe.push(bEvents);
                 }
+                m_FeedbackCV.notify_all();
             }
         }
         while (true);
@@ -534,8 +480,12 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 : SvpRequest::MainThreadDispatchOneEvent);
 
         // blocking read (for synchronisation)
-        auto const nRet = read(pMutex->m_FeedbackFDs[0], &bWasEvent, sizeof(bool));
-        assert(nRet == 1); (void) nRet;
+        {
+            std::unique_lock lock(pMutex->m_FeedbackMutex);
+            pMutex->m_FeedbackCV.wait(lock, [pMutex] { return !pMutex->m_FeedbackPipe.empty(); });
+            bWasEvent = pMutex->m_FeedbackPipe.front();
+            pMutex->m_FeedbackPipe.pop();
+        }
         if (!bWasEvent && bWait)
         {
             // block & release YieldMutex until the main thread does something

@@ -25,15 +25,15 @@ SwVbaFormFieldDropDownListEntry::SwVbaFormFieldDropDownListEntry(
 SwVbaFormFieldDropDownListEntry::~SwVbaFormFieldDropDownListEntry() {}
 
 // XListEntry
-sal_Int32 SAL_CALL SwVbaFormFieldDropDownListEntry::getIndex() { return m_nZIndex + 1; }
+sal_Int32 SwVbaFormFieldDropDownListEntry::getIndex() { return m_nZIndex + 1; }
 
-OUString SAL_CALL SwVbaFormFieldDropDownListEntry::getName()
+OUString SwVbaFormFieldDropDownListEntry::getName()
 {
     sal_Int32 nZIndex = m_nZIndex;
     return m_rDropDown.GetContent(&nZIndex);
 }
 
-void SAL_CALL SwVbaFormFieldDropDownListEntry::setName(const OUString& rSet)
+void SwVbaFormFieldDropDownListEntry::setName(const OUString& rSet)
 {
     sal_Int32 nZIndex = m_nZIndex;
     m_rDropDown.ReplaceContent(&rSet, &nZIndex);

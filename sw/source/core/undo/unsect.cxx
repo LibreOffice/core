@@ -249,8 +249,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     if( pUpdateTOX )
     {
         // initiate formatting
-        SwEditShell* pESh = rDoc.GetEditShell();
-        if( pESh )
+        if (SwEditShell* pESh = rDoc.GetEditShell())
             pESh->CalcLayout();
 
         // insert page numbers

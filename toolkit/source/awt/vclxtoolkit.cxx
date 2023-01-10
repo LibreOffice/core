@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <thread>
 
 #ifdef _WIN32
 #include <prewin.h>
@@ -417,7 +418,7 @@ public:
     virtual void Invoke() override
     {
         SolarMutexGuard aSolarGuard;
-        osl::Thread::wait(std::chrono::milliseconds(m_nPauseMilliseconds));
+        std::this_thread::sleep_for(std::chrono::milliseconds(m_nPauseMilliseconds));
         Stop();
         delete this;
     }

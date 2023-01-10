@@ -50,7 +50,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SmallCaps" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
@@ -64,7 +64,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
- <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>

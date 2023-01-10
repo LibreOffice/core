@@ -83,9 +83,9 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapLogicalSize, True)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeX, 0)
+                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeX, 1000)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 0)
+                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 1000)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapName, 'Painted White')
         elif btn == 'btnpattern':
@@ -108,9 +108,9 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapLogicalSize, True)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeX, 0)
+                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeX, 1000)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 0)
+                document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 1000)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapName, '5 Percent')
 

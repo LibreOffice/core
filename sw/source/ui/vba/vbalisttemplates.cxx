@@ -28,19 +28,19 @@ namespace {
 
 class ListTemplatesEnumWrapper : public EnumerationHelper_BASE
 {
-    SwVbaListTemplates* pListTemplates;
-    sal_Int32 nIndex;
+    SwVbaListTemplates* m_pListTemplates;
+    sal_Int32 m_nIndex;
 public:
-    explicit ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : pListTemplates( pTemplates ), nIndex( 1 ) {}
+    explicit ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : m_pListTemplates( pTemplates ), m_nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex <= pListTemplates->getCount() );
+        return ( m_nIndex <= m_pListTemplates->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if ( nIndex <= pListTemplates->getCount() )
-            return pListTemplates->Item( uno::Any( nIndex++ ), uno::Any() );
+        if ( m_nIndex <= m_pListTemplates->getCount() )
+            return m_pListTemplates->Item( uno::Any( m_nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };

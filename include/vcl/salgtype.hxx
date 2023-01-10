@@ -33,8 +33,6 @@ enum class DeviceFormat {
 #endif
                         };
 
-constexpr ::Color SALCOLOR_NONE ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
-
 struct SalTwoRect
 {
     tools::Long        mnSrcX;

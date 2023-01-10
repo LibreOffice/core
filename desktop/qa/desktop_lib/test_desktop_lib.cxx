@@ -1133,11 +1133,11 @@ void DesktopLOKTest::testSheetSelections()
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
         std::vector<long> aExpected = {5, 6, 7, 8, 9};
         std::istringstream iss(pCopiedContent);
-        for (size_t i = 0; i < aExpected.size(); i++)
+        for (const long nIndex : aExpected)
         {
             std::string token;
             iss >> token;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+            CPPUNIT_ASSERT_EQUAL(nIndex, strtol(token.c_str(), nullptr, 10));
         }
 
         free(pUsedMimeType);
@@ -1166,11 +1166,11 @@ void DesktopLOKTest::testSheetSelections()
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
         std::vector<long> aExpected = { 8 };
         std::istringstream iss(pCopiedContent);
-        for (size_t i = 0; i < aExpected.size(); i++)
+        for (const long nIndex : aExpected)
         {
             std::string token;
             iss >> token;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+            CPPUNIT_ASSERT_EQUAL(nIndex, strtol(token.c_str(), nullptr, 10));
         }
 
         free(pUsedMimeType);
@@ -1237,10 +1237,10 @@ void DesktopLOKTest::testSheetDragDrop()
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(pContent);
         std::string token;
-        for (size_t i = 0; i < aExpected.size(); i++)
+        for (const long nIndex : aExpected)
         {
             aContent >> token;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+            CPPUNIT_ASSERT_EQUAL(nIndex, strtol(token.c_str(), nullptr, 10));
         }
 
         free(pMimeType);
@@ -1293,10 +1293,10 @@ void DesktopLOKTest::testSheetDragDrop()
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(pContent);
         std::string token;
-        for (size_t i = 0; i < aExpected.size(); i++)
+        for (const long nIndex : aExpected)
         {
             aContent >> token;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+            CPPUNIT_ASSERT_EQUAL(nIndex, strtol(token.c_str(), nullptr, 10));
         }
 
         free(pMimeType);

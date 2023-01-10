@@ -70,6 +70,7 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <memory>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <externalrefmgr.hxx>
@@ -994,7 +995,7 @@ ScDocShell* XclExpXmlStream::getDocShell()
 {
     uno::Reference< XInterface > xModel( getModel(), UNO_QUERY );
 
-    ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
+    ScModelObj *pObj = comphelper::getFromUnoTunnel < ScModelObj >( xModel );
 
     if ( pObj )
         return static_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
@@ -1049,15 +1050,15 @@ bool XclExpXmlStream::exportDocument()
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
     // Get the viewsettings before processing
-    if( ScDocShell::GetViewData() )
-        ScDocShell::GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
+        pViewData->WriteExtOptions( mpRoot->GetExtDocOptions() );
     else
     {
         // Try to get ScViewData through the current ScDocShell
         ScTabViewShell* pTabViewShell = pShell->GetBestViewShell( false );
         if ( pTabViewShell )
         {
-            ScViewData* pViewData = &pTabViewShell->GetViewData();
+            pViewData = &pTabViewShell->GetViewData();
             pViewData->WriteExtOptions( mpRoot->GetExtDocOptions() );
         }
     }

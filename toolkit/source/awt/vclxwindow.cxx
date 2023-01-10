@@ -1953,6 +1953,21 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
     css::uno::Any aProp;
     if ( GetWindow() )
     {
+        if (PropertyName == "ParentIs100thmm")
+        {
+            bool bParentIs100thmm = false;
+            VclPtr<vcl::Window> pWindow = GetWindow();
+            if (pWindow)
+            {
+                pWindow = pWindow->GetParent();
+                if(pWindow && MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
+                {
+                    bParentIs100thmm = true;
+                }
+            }
+            aProp <<= bParentIs100thmm;
+            return aProp;
+        }
         WindowType eWinType = GetWindow()->GetType();
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )

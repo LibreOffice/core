@@ -20,6 +20,7 @@
 #include <standard/vclxaccessiblepopupmenu.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

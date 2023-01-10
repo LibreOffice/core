@@ -58,25 +58,15 @@ inline constexpr OUStringLiteral TDOC_STREAM_CONTENT_TYPE =
 
 class StorageElementFactory;
 
-class ContentProvider
-    : public ::ucbhelper::ContentProviderImplHelper
-    , public css::frame::XTransientDocumentsDocumentContentIdentifierFactory
-    , public css::frame::XTransientDocumentsDocumentContentFactory
+typedef cppu::ImplInheritanceHelper<
+    ::ucbhelper::ContentProviderImplHelper,
+    css::frame::XTransientDocumentsDocumentContentIdentifierFactory,
+    css::frame::XTransientDocumentsDocumentContentFactory > ContentProvider_Base;
+class ContentProvider : public ContentProvider_Base
 {
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        noexcept override;
-    virtual void SAL_CALL release()
-        noexcept override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

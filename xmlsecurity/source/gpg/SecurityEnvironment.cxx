@@ -203,7 +203,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::createCertificateFromAscii( co
 sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertificate >& aCert,
                                                   const Sequence< Reference< XCertificate > >&  /*intermediateCerts*/ )
 {
-    const CertificateImpl* xCert = dynamic_cast<CertificateImpl*>(aCert.get());
+    const CertificateImpl* xCert = comphelper::getFromUnoTunnel<CertificateImpl>(aCert);
     if (xCert == nullptr) {
          // Can't find the key locally -> unknown owner
         return security::CertificateValidity::ISSUER_UNKNOWN;

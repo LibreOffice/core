@@ -22,7 +22,6 @@
 
 #include <viewsh.hxx>
 #include <accmap.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -39,7 +38,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         explicit SidebarWinAccessibleContext( sw::annotation::SwAnnotationWin& rSidebarWin,
                                               SwViewShell& rViewShell,
                                               const SwFrame* pAnchorFrame )
-            : VCLXAccessibleComponent( comphelper::getFromUnoTunnel<VCLXWindow>(rSidebarWin.CreateAccessible()) )
+            : VCLXAccessibleComponent( dynamic_cast<VCLXWindow*>(rSidebarWin.CreateAccessible().get()) )
             , mrViewShell( rViewShell )
             , mpAnchorFrame( pAnchorFrame )
         {

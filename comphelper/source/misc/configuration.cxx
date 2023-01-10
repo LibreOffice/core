@@ -10,9 +10,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <mutex>
-#include <string_view>
-#include <unordered_map>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -24,11 +21,12 @@
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/XChangesListener.hpp>
-#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
@@ -109,37 +107,32 @@ comphelper::detail::ConfigurationWrapper::get()
     return WRAPPER;
 }
 
-namespace
-{
-std::mutex gMutex;
-std::unordered_map<OUString, css::uno::Any> gPropertyCache;
-css::uno::Reference< css::util::XChangesNotifier > gNotifier;
-css::uno::Reference< css::util::XChangesListener > gListener;
-
-class ConfigurationChangesListener
+class comphelper::detail::ConfigurationChangesListener
     : public ::cppu::WeakImplHelper<css::util::XChangesListener>
 {
+     comphelper::detail::ConfigurationWrapper& mrConfigurationWrapper;
 public:
-    ConfigurationChangesListener()
+    ConfigurationChangesListener(comphelper::detail::ConfigurationWrapper& rWrapper)
+        : mrConfigurationWrapper(rWrapper)
     {}
     // util::XChangesListener
     virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& ) override
     {
-        std::scoped_lock aGuard(gMutex);
-        gPropertyCache.clear();
+        std::scoped_lock aGuard(mrConfigurationWrapper.maMutex);
+        mrConfigurationWrapper.maPropertyCache.clear();
     }
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override
     {
-        std::scoped_lock aGuard(gMutex);
-        gPropertyCache.clear();
+        std::scoped_lock aGuard(mrConfigurationWrapper.maMutex);
+        mrConfigurationWrapper.mbDisposed = true;
+        mrConfigurationWrapper.maPropertyCache.clear();
     }
 };
 
-} // namespace
-
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
     context_(comphelper::getProcessComponentContext()),
-    access_(css::configuration::ReadWriteAccess::create(context_, "*"))
+    access_(css::configuration::ReadWriteAccess::create(context_, "*")),
+    mbDisposed(false)
 {
     // Set up a configuration notifier to invalidate the cache as needed.
     try
@@ -156,10 +149,10 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
             = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess",
                 params);
 
-        gNotifier = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);
-        assert(gNotifier.is());
-        gListener = css::uno::Reference< ConfigurationChangesListener >(new ConfigurationChangesListener());
-        gNotifier->addChangesListener(gListener);
+        maNotifier = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);
+        assert(maNotifier.is());
+        maListener = css::uno::Reference< ConfigurationChangesListener >(new ConfigurationChangesListener(*this));
+        maNotifier->addChangesListener(maListener);
     }
     catch(const css::uno::Exception&)
     {
@@ -169,9 +162,9 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
 
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper()
 {
-    gPropertyCache.clear();
-    gNotifier.clear();
-    gListener.clear();
+    maPropertyCache.clear();
+    maNotifier.clear();
+    maListener.clear();
 }
 
 bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
@@ -185,10 +178,12 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
 
 css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUString const& path) const
 {
-    std::scoped_lock aGuard(gMutex);
+    std::scoped_lock aGuard(maMutex);
+    if (mbDisposed)
+        throw css::lang::DisposedException();
     // Cache the configuration access, since some of the keys are used in hot code.
-    auto it = gPropertyCache.find(path);
-    if( it != gPropertyCache.end())
+    auto it = maPropertyCache.find(path);
+    if( it != maPropertyCache.end())
         return it->second;
 
     sal_Int32 idx = path.lastIndexOf("/");
@@ -199,7 +194,7 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUStrin
     css::uno::Reference<css::container::XNameAccess> access(
         access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
     css::uno::Any property = access->getByName(childName);
-    gPropertyCache.emplace(path, property);
+    maPropertyCache.emplace(path, property);
     return property;
 }
 

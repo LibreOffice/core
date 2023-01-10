@@ -89,11 +89,11 @@ public:
     void                SetPresentationMode( bool bSet );
     SystemWindow*       GetSystemWindow() const;
 
-    static SfxFrame*    GetFirst();
-    static SfxFrame*    GetNext( SfxFrame& );
+    SAL_WARN_UNUSED_RESULT static SfxFrame* GetFirst();
+    SAL_WARN_UNUSED_RESULT static SfxFrame* GetNext( SfxFrame& );
 
-    SfxObjectShell*     GetCurrentDocument() const;
-    SfxViewFrame*       GetCurrentViewFrame() const;
+    SAL_WARN_UNUSED_RESULT SfxObjectShell* GetCurrentDocument() const;
+    SAL_WARN_UNUSED_RESULT SfxViewFrame* GetCurrentViewFrame() const;
 
     bool                GetHasTitle() const;
     static void         GetDefaultTargetList( TargetList& );

@@ -24,137 +24,120 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    bool bRet = aBitmap.ImplMakeGreyscales();
+    if (!aBitmap.ImplMakeGreyscales())
+        return BitmapEx();
 
-    if (bRet)
+    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    if (!pReadAcc)
+        return BitmapEx();
+
+    Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &pReadAcc->GetPalette());
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return BitmapEx();
+
+    BitmapColor aGrey(sal_uInt8(0));
+    const sal_Int32 nWidth = pWriteAcc->Width();
+    const sal_Int32 nHeight = pWriteAcc->Height();
+    sal_Int32 nGrey11, nGrey12, nGrey13;
+    sal_Int32 nGrey21, nGrey22, nGrey23;
+    sal_Int32 nGrey31, nGrey32, nGrey33;
+    double fAzim = basegfx::deg2rad<100>(mnAzimuthAngle100);
+    double fElev = basegfx::deg2rad<100>(mnElevationAngle100);
+    std::unique_ptr<sal_Int32[]> pHMap(new sal_Int32[nWidth + 2]);
+    std::unique_ptr<sal_Int32[]> pVMap(new sal_Int32[nHeight + 2]);
+    sal_Int32 nX, nY, nNx, nNy, nDotL;
+    const sal_Int32 nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
+    const sal_Int32 nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
+    const sal_Int32 nLz = FRound(sin(fElev) * 255.0);
+    const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
+    const sal_Int32 nNzLz = ((6 * 255) / 4) * nLz;
+    const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, sal_Int32(0), sal_Int32(255)));
+
+    // fill mapping tables
+    pHMap[0] = 0;
+
+    for (nX = 1; nX <= nWidth; nX++)
     {
-        bRet = false;
+        pHMap[nX] = nX - 1;
+    }
 
-        Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    pHMap[nWidth + 1] = nWidth - 1;
 
-        if (pReadAcc)
+    pVMap[0] = 0;
+
+    for (nY = 1; nY <= nHeight; nY++)
+    {
+        pVMap[nY] = nY - 1;
+    }
+
+    pVMap[nHeight + 1] = nHeight - 1;
+
+    for (nY = 0; nY < nHeight; nY++)
+    {
+        nGrey11 = pReadAcc->GetPixel(pVMap[nY], pHMap[0]).GetIndex();
+        nGrey12 = pReadAcc->GetPixel(pVMap[nY], pHMap[1]).GetIndex();
+        nGrey13 = pReadAcc->GetPixel(pVMap[nY], pHMap[2]).GetIndex();
+        nGrey21 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[0]).GetIndex();
+        nGrey22 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[1]).GetIndex();
+        nGrey23 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[2]).GetIndex();
+        nGrey31 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[0]).GetIndex();
+        nGrey32 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[1]).GetIndex();
+        nGrey33 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[2]).GetIndex();
+
+        Scanline pScanline = pWriteAcc->GetScanline(nY);
+        for (nX = 0; nX < nWidth; nX++)
         {
-            Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP,
-                           &pReadAcc->GetPalette());
-            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+            nNx = nGrey11 + nGrey21 + nGrey31 - nGrey13 - nGrey23 - nGrey33;
+            nNy = nGrey31 + nGrey32 + nGrey33 - nGrey11 - nGrey12 - nGrey13;
 
-            if (pWriteAcc)
+            if (!nNx && !nNy)
             {
-                BitmapColor aGrey(sal_uInt8(0));
-                const sal_Int32 nWidth = pWriteAcc->Width();
-                const sal_Int32 nHeight = pWriteAcc->Height();
-                sal_Int32 nGrey11, nGrey12, nGrey13;
-                sal_Int32 nGrey21, nGrey22, nGrey23;
-                sal_Int32 nGrey31, nGrey32, nGrey33;
-                double fAzim = basegfx::deg2rad<100>(mnAzimuthAngle100);
-                double fElev = basegfx::deg2rad<100>(mnElevationAngle100);
-                std::unique_ptr<sal_Int32[]> pHMap(new sal_Int32[nWidth + 2]);
-                std::unique_ptr<sal_Int32[]> pVMap(new sal_Int32[nHeight + 2]);
-                sal_Int32 nX, nY, nNx, nNy, nDotL;
-                const sal_Int32 nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
-                const sal_Int32 nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
-                const sal_Int32 nLz = FRound(sin(fElev) * 255.0);
-                const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
-                const sal_Int32 nNzLz = ((6 * 255) / 4) * nLz;
-                const sal_uInt8 cLz
-                    = static_cast<sal_uInt8>(std::clamp(nLz, sal_Int32(0), sal_Int32(255)));
-
-                // fill mapping tables
-                pHMap[0] = 0;
-
-                for (nX = 1; nX <= nWidth; nX++)
-                {
-                    pHMap[nX] = nX - 1;
-                }
-
-                pHMap[nWidth + 1] = nWidth - 1;
-
-                pVMap[0] = 0;
-
-                for (nY = 1; nY <= nHeight; nY++)
-                {
-                    pVMap[nY] = nY - 1;
-                }
-
-                pVMap[nHeight + 1] = nHeight - 1;
-
-                for (nY = 0; nY < nHeight; nY++)
-                {
-                    nGrey11 = pReadAcc->GetPixel(pVMap[nY], pHMap[0]).GetIndex();
-                    nGrey12 = pReadAcc->GetPixel(pVMap[nY], pHMap[1]).GetIndex();
-                    nGrey13 = pReadAcc->GetPixel(pVMap[nY], pHMap[2]).GetIndex();
-                    nGrey21 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[0]).GetIndex();
-                    nGrey22 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[1]).GetIndex();
-                    nGrey23 = pReadAcc->GetPixel(pVMap[nY + 1], pHMap[2]).GetIndex();
-                    nGrey31 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[0]).GetIndex();
-                    nGrey32 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[1]).GetIndex();
-                    nGrey33 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[2]).GetIndex();
-
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    for (nX = 0; nX < nWidth; nX++)
-                    {
-                        nNx = nGrey11 + nGrey21 + nGrey31 - nGrey13 - nGrey23 - nGrey33;
-                        nNy = nGrey31 + nGrey32 + nGrey33 - nGrey11 - nGrey12 - nGrey13;
-
-                        if (!nNx && !nNy)
-                        {
-                            aGrey.SetIndex(cLz);
-                        }
-                        else if ((nDotL = nNx * nLx + nNy * nLy + nNzLz) < 0)
-                        {
-                            aGrey.SetIndex(0);
-                        }
-                        else
-                        {
-                            const double fGrey
-                                = nDotL / sqrt(static_cast<double>(nNx * nNx + nNy * nNy + nZ2));
-                            aGrey.SetIndex(static_cast<sal_uInt8>(std::clamp(fGrey, 0.0, 255.0)));
-                        }
-
-                        pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);
-
-                        if (nX < (nWidth - 1))
-                        {
-                            const sal_Int32 nNextX = pHMap[nX + 3];
-
-                            nGrey11 = nGrey12;
-                            nGrey12 = nGrey13;
-                            nGrey13 = pReadAcc->GetPixel(pVMap[nY], nNextX).GetIndex();
-                            nGrey21 = nGrey22;
-                            nGrey22 = nGrey23;
-                            nGrey23 = pReadAcc->GetPixel(pVMap[nY + 1], nNextX).GetIndex();
-                            nGrey31 = nGrey32;
-                            nGrey32 = nGrey33;
-                            nGrey33 = pReadAcc->GetPixel(pVMap[nY + 2], nNextX).GetIndex();
-                        }
-                    }
-                }
-
-                pHMap.reset();
-                pVMap.reset();
-                pWriteAcc.reset();
-                bRet = true;
+                aGrey.SetIndex(cLz);
+            }
+            else if ((nDotL = nNx * nLx + nNy * nLy + nNzLz) < 0)
+            {
+                aGrey.SetIndex(0);
+            }
+            else
+            {
+                const double fGrey = nDotL / sqrt(static_cast<double>(nNx * nNx + nNy * nNy + nZ2));
+                aGrey.SetIndex(static_cast<sal_uInt8>(std::clamp(fGrey, 0.0, 255.0)));
             }
 
-            pReadAcc.reset();
+            pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);
 
-            if (bRet)
+            if (nX < (nWidth - 1))
             {
-                const MapMode aMap(aBitmap.GetPrefMapMode());
-                const Size aPrefSize(aBitmap.GetPrefSize());
+                const sal_Int32 nNextX = pHMap[nX + 3];
 
-                aBitmap = aNewBmp;
-
-                aBitmap.SetPrefMapMode(aMap);
-                aBitmap.SetPrefSize(aPrefSize);
+                nGrey11 = nGrey12;
+                nGrey12 = nGrey13;
+                nGrey13 = pReadAcc->GetPixel(pVMap[nY], nNextX).GetIndex();
+                nGrey21 = nGrey22;
+                nGrey22 = nGrey23;
+                nGrey23 = pReadAcc->GetPixel(pVMap[nY + 1], nNextX).GetIndex();
+                nGrey31 = nGrey32;
+                nGrey32 = nGrey33;
+                nGrey33 = pReadAcc->GetPixel(pVMap[nY + 2], nNextX).GetIndex();
             }
         }
     }
 
-    if (bRet)
-        return BitmapEx(aBitmap);
+    pHMap.reset();
+    pVMap.reset();
+    pWriteAcc.reset();
+    pReadAcc.reset();
 
-    return BitmapEx();
+    const MapMode aMap(aBitmap.GetPrefMapMode());
+    const Size aPrefSize(aBitmap.GetPrefSize());
+
+    aBitmap = aNewBmp;
+
+    aBitmap.SetPrefMapMode(aMap);
+    aBitmap.SetPrefSize(aPrefSize);
+
+    return BitmapEx(aBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

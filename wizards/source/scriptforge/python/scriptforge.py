@@ -1751,6 +1751,9 @@ class SFDatabases:
         def GetRows(self, sqlcommand, directsql = False, header = False, maxrows = 0):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRows', sqlcommand, directsql, header, maxrows)
 
+        def OpenFormDocument(self, formdocument):
+            return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument)
+
         def OpenQuery(self, queryname):
             return self.ExecMethod(self.vbMethod, 'OpenQuery', queryname)
 
@@ -1968,9 +1971,9 @@ class SFDocuments:
         servicename = 'SFDocuments.Document'
         servicesynonyms = ('document', 'sfdocuments.document')
         serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
-                                 XComponent = False)
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
+                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
+                                 Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2029,8 +2032,8 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Base'
         servicesynonyms = ('base', 'scriptforge.base')
-        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
+        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False, IsDraw = False,
+                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  XComponent = False)
 
         @classmethod
@@ -2088,9 +2091,9 @@ class SFDocuments:
         servicesynonyms = ('calc', 'sfdocuments.calc')
         serviceproperties = dict(CurrentSelection = True, Sheets = False,
                                  Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
-                                 XComponent = False)
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
+                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
+                                 Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2343,7 +2346,7 @@ class SFDocuments:
             It includes the management of subforms
             Each instance of the current class represents a single form or a single subform
             A form may optionally be (understand "is often") linked to a data source manageable with
-            the SFDatabases.Database service. The current service offers a rapid access to that service.
+            the SFDatabases.Database service. The current service offers rapid access to that service.
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
@@ -2427,6 +2430,46 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'SetFocus')
 
     # #########################################################################
+    # SF_FormDocument CLASS
+    # #########################################################################
+    class SF_FormDocument(SF_Document, SFServices):
+        """
+            The orchestration of Base form documents (aka Base Forms, but this is confusing)
+            and the identification of and the access to their controls.
+            Form documents are always contained in a Base document.
+            They should not be confused with Writer documents containing forms,
+            even if it is easy to convert the former to the latter.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.FormDocument'
+        servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
+        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False, IsDraw = False,
+                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Readonly = False, XComponent = False)
+
+        @classmethod
+        def ReviewServiceArgs(cls, windowname = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return windowname,
+
+        def CloseDocument(self):
+            return self.ExecMethod(self.vbMethod, 'CloseDocument')
+
+        def Forms(self, form = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
+
+        def GetDatabase(self, user = '', password = ''):
+            return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
+
+        def PrintOut(self, pages = '', copies = 1, printbackground = True, printblankpages = False,
+                     printevenpages = True, printoddpages = True, printimages = True):
+            return self.ExecMethod(self.vbMethod, 'PrintOut', pages, copies, printbackground, printblankpages,
+                                   printevenpages, printoddpages, printimages)
+
+    # #########################################################################
     # SF_Writer CLASS
     # #########################################################################
     class SF_Writer(SF_Document, SFServices):
@@ -2439,9 +2482,9 @@ class SFDocuments:
         servicename = 'SFDocuments.Writer'
         servicesynonyms = ('writer', 'sfdocuments.writer')
         serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
-                                 XComponent = False)
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
+                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
+                                 Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 

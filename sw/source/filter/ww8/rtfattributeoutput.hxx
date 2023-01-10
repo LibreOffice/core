@@ -85,7 +85,8 @@ public:
     void EndRunProperties(const SwRedlineData* pRedlineData) override;
 
     /// Output text (inside a run).
-    void RunText(const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8) override;
+    void RunText(const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8,
+                 const OUString& rSymbolFont = OUString()) override;
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();

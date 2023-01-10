@@ -252,7 +252,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
         {
             // Make sure that we own the solar mutex, otherwise later
             // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
-            // an other thread, leading to an std::abort() at the end.
+            // another thread, leading to an std::abort() at the end.
             SolarMutexGuard aGuard;
             vcl::solarthread::syncExecute([this, &aURL, &aArgs]() {
                 pImpl->dispatch(aURL, aArgs,
@@ -1088,6 +1088,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertAuthoritiesEntry" ||
              aEvent.FeatureURL.Path == "InsertMultiIndex" ||
              aEvent.FeatureURL.Path == "InsertField" ||
+             aEvent.FeatureURL.Path == "PageNumberWizard" ||
              aEvent.FeatureURL.Path == "InsertPageNumberField" ||
              aEvent.FeatureURL.Path == "InsertPageCountField" ||
              aEvent.FeatureURL.Path == "InsertDateField" ||

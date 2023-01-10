@@ -2,7 +2,6 @@
 # execute run procedure as Python macro for testing
 
 import uno
-import sys
 import unittest
 
 from com.sun.star.awt.FontSlant import ITALIC

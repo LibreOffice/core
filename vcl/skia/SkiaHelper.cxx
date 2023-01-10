@@ -286,6 +286,13 @@ bool isVCLSkiaEnabled()
     static bool bEnable = false;
     static bool bForceSkia = false;
 
+    // allow global disable when testing SystemPrimitiveRenderer since current Skia on Win does not
+    // harmonize with using Direct2D and D2DPixelProcessor2D
+    static const bool bTestSystemPrimitiveRenderer(
+        nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
+    if (bTestSystemPrimitiveRenderer)
+        return false;
+
     // No hardware rendering, so no Skia
     // TODO SKIA
     if (Application::IsBitmapRendering())

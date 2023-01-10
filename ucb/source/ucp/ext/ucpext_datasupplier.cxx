@@ -30,7 +30,6 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -205,7 +204,7 @@ namespace ucb::ucp::ext
             try
             {
                 Reference< XContent > xContent( m_xContent->getProvider()->queryContent( xId ) );
-                pContent.set( comphelper::getFromUnoTunnel< Content >( xContent ) );
+                pContent.set( dynamic_cast< Content* >( xContent.get() ) );
                 OSL_ENSURE( pContent.is() || !xContent.is(), "DataSupplier::queryContent: invalid content implementation!" );
                 m_aResults[ i_nIndex ].pContent = pContent;
                 return pContent;

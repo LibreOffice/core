@@ -37,7 +37,7 @@ constexpr bool has_value(llvm::Optional<T> const & o) {
 template<typename T>
 constexpr T const & value(llvm::Optional<T> const & o) {
 #if CLANG_VERSION >= 150000
-    return o.value();
+    return *o;
 #else
     return o.getValue();
 #endif

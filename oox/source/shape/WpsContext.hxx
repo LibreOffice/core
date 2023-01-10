@@ -33,6 +33,7 @@ public:
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken,
                                                  const oox::AttributeList& rAttribs) override;
+    virtual void onEndElement() override;
 
 private:
     css::uno::Reference<css::drawing::XShape> mxShape;

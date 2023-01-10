@@ -1175,11 +1175,15 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
 
         std::string sWindowId = std::to_string(xMessageDialog->GetLOKWindowId());
         InsertWindowToMap(sWindowId);
+        xMessageDialog->SetLOKTunnelingState(false);
+
+        return new JSMessageDialog(xMessageDialog, nullptr, true);
     }
+    else
+        SAL_WARN("vcl", "No notifier in JSInstanceBuilder::CreateMessageDialog");
 
-    xMessageDialog->SetLOKTunnelingState(false);
-
-    return new JSMessageDialog(xMessageDialog, nullptr, true);
+    // fallback
+    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
@@ -1889,6 +1893,18 @@ JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder
                  bool bTakeOwnership)
     : JSWidget<SalInstanceImage, FixedImage>(pSender, pImage, pBuilder, bTakeOwnership)
 {
+}
+
+void JSImage::set_image(VirtualDevice* pDevice)
+{
+    SalInstanceImage::set_image(pDevice);
+    sendUpdate();
+}
+
+void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    SalInstanceImage::set_image(rImage);
+    sendUpdate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

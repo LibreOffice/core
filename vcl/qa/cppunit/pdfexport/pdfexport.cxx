@@ -15,6 +15,7 @@
 
 #include <config_features.h>
 #include <config_fonts.h>
+#include <osl/process.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -4098,6 +4099,200 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
                                  / aRect[jehtatweel].getWidth());
 #endif
 }
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportRefToKids)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+
+    auto pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+
+    // Without the fix LookupObject for all /Im's will fail.
+    for (auto const& rPair : pXObjects->GetItems())
+    {
+        if (rPair.first.startsWith("Im"))
+            CPPUNIT_ASSERT(pXObjects->LookupObject(rPair.first));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im5 that contains the rectangle drawings.
+    auto pInnerIm = aDocument.LookupObject(5);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    auto pFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pInnerIm->Lookup("Filter"));
+    CPPUNIT_ASSERT(pFilter);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Filter must be FlateDecode", OString("FlateDecode"),
+                                 pFilter->GetValue());
+
+    vcl::filter::PDFStreamElement* pStream = pInnerIm->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Without the fix, the stream is doubly compressed,
+    // hence one decompression will not yield the "re" expressions.
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    OString aImage = "100 0 30 50 re B*\n70 67 50 30 re B*\n";
+    auto it = std::search(pStart, pEnd, aImage.getStr(), aImage.getStr() + aImage.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im10 that contains the rectangle drawings in page 2.
+    auto pInnerIm = aDocument.LookupObject(10);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    constexpr sal_Int32 aOrigin[2] = { -800, -600 };
+    sal_Int32 aSize[2] = { 0, 0 };
+
+    auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("BBox"));
+    CPPUNIT_ASSERT(pBBox);
+    const auto& rElements2 = pBBox->GetElements();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements2.size());
+    for (sal_Int32 nIdx = 0; nIdx < 4; ++nIdx)
+    {
+        const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements2[nIdx]);
+        CPPUNIT_ASSERT(pNumElement);
+        if (nIdx < 2)
+            CPPUNIT_ASSERT_EQUAL(aOrigin[nIdx], static_cast<sal_Int32>(pNumElement->GetValue()));
+        else
+            aSize[nIdx - 2] = static_cast<sal_Int32>(pNumElement->GetValue()) - aOrigin[nIdx - 2];
+    }
+
+    auto pMatrix = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("Matrix"));
+    CPPUNIT_ASSERT(pMatrix);
+    const auto& rElements = pMatrix->GetElements();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), rElements.size());
+    sal_Int32 aMatTranslate[6]
+        = { // Rotation by $\theta$ $cos(\theta), sin(\theta), -sin(\theta), cos(\theta)$
+            0, -1, 1, 0,
+            // Translate x,y
+            -aOrigin[1] - aSize[1] / 2 + aSize[0] / 2, aOrigin[0] + aSize[0] / 2 + aSize[1] / 2
+          };
+
+    for (sal_Int32 nIdx = 0; nIdx < 6; ++nIdx)
+    {
+        const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[nIdx]);
+        CPPUNIT_ASSERT(pNumElement);
+        CPPUNIT_ASSERT_EQUAL(aMatTranslate[nIdx], static_cast<sal_Int32>(pNumElement->GetValue()));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"ref-to-kids.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
+
+    // Directly go to the inner XObject Im10 that has reference to Font in page 2.
+    auto pInnerIm = aDocument.LookupObject(10);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    auto pResources
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerIm->Lookup("Resources"));
+    CPPUNIT_ASSERT(pResources);
+    auto pFontsReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pResources->LookupElement("Font"));
+    CPPUNIT_ASSERT(pFontsReference);
+
+    auto pFontsObject = pFontsReference->LookupObject();
+    CPPUNIT_ASSERT(pFontsObject);
+
+    auto pFontDict
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pFontsObject->Lookup("FF132"));
+    CPPUNIT_ASSERT(pFontDict);
+
+    auto pFontDescriptor = pFontDict->LookupObject("FontDescriptor");
+    CPPUNIT_ASSERT(pFontDescriptor);
+
+    auto pFontWidths = pFontDict->LookupObject("Widths");
+    CPPUNIT_ASSERT(pFontWidths);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -88,7 +88,10 @@ Try:
 	End With
 	
 	If Len(sCommand) &gt; 0 Then
-		Set oFrame = StarDesktop.ActiveFrame	&apos;	A menu has been clicked necessarily in the current window
+		&apos;	A menu has been clicked necessarily in the current window (Document) or one of its subcomponents (FormDocument)
+		Set oFrame = StarDesktop.ActiveFrame
+		If oFrame.Frames.Count &gt; 0 Then Set oFrame = oFrame.getActiveFrame()
+		&apos;	Command or script ?
 		If Left(sCommand, Len(cstUnoPrefix)) = cstUnoPrefix Then
 			&apos;	Execute uno command
 			Set oDispatcher = ScriptForge.SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
@@ -124,5 +127,5 @@ Sub _SFMENU_disposing(Optional poEvent As Object)			&apos;	com.sun.star.awt.Menu
 	Exit Sub
 End Sub			&apos;	SFWidgets.SF_MenuListener._SFMENU_disposing
 
-REM ============================================ END OF SFDIALOGS.SF_DIALOGLISTENER
+REM ============================================ END OF SFWIDGETS.SF_MENULISTENER
 </script:module>

@@ -1132,7 +1132,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
     sal_uLong nTotalCount = m_pView->GetVisibleCount();
 
     // number of entries visible within the view
-    m_nVisibleCount = aOSize.Height() / nEntryHeight;
+    m_nVisibleCount = o3tl::make_unsigned(aOSize.Height() / nEntryHeight);
 
     // do we need a vertical scrollbar?
     if( bVerSBar || nTotalCount > m_nVisibleCount )
@@ -1153,7 +1153,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
         nResult |= 0x0002;
         // the number of entries visible within the view has to be recalculated
         // because the horizontal scrollbar is now visible.
-        m_nVisibleCount =  (aOSize.Height() - m_nHorSBarHeight) / nEntryHeight;
+        m_nVisibleCount = o3tl::make_unsigned(std::max<tools::Long>(0, aOSize.Height() - m_nHorSBarHeight) / nEntryHeight);
         // we might actually need a vertical scrollbar now
         if( !(nResult & 0x0001) &&
             ((nTotalCount > m_nVisibleCount) || bVerSBar) )
