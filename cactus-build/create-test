@@ -1,0 +1,289 @@
+#! /bin/bash
+
+BASE="../workdir/installation/LibreOfficeDev/archive/install/en-US"
+ONLY_ONE=0
+DO_PPT=0
+DO_XLS=0
+DO_XLS_HTML=0
+DO_HTML=0
+DO_DOC=0
+DO_DOC_PDF=0
+PARS=""
+while [[ $# > 0 ]]
+do
+	if [[ "X$1" == "Xclean" ]]
+	then
+		PARS=$PARS" "$1
+		rm -r -f ../workdir/installation/LibreOfficeDev/archive/install/en-US/instdir
+	fi
+	if [[ "X$1" == "Xhtml" ]]
+	then
+		PARS=$PARS" "$1
+		DO_HTML=1
+	fi
+	if [[ "X$1" == "Xdoc" ]]
+	then
+		PARS=$PARS" "$1
+		DO_DOC=1
+	fi
+	if [[ "X$1" == "Xdoc-pdf" ]]
+	then
+		PARS=$PARS" "$1
+		DO_DOC_PDF=1
+	fi
+	if [[ "X$1" == "Xxls" ]]
+	then
+		PARS=$PARS" "$1
+		DO_XLS=1
+	fi
+	if [[ "X$1" == "Xxls-html" ]]
+	then
+		PARS=$PARS" "$1
+		DO_XLS_HTML=1
+	fi
+	if [[ "X$1" == "Xppt" ]]
+	then
+		PARS=$PARS" "$1
+		DO_PPT=1
+	fi
+	if [[ "X$1" == "Xone" ]]
+	then
+		PARS=$PARS" "$1
+		ONLY_ONE=1
+	fi
+	if [[ "X$1" == "Xbuild" ]]
+	then
+		echo
+		rm soffice.tar.br.zip
+		(
+			echo building release file
+			cd $BASE
+			rm lo.* soffice.tar.br.zip
+			echo tar
+			tar -cf lo.tar instdir
+			echo brotli zip
+			brotli -Z -v lo.tar
+			echo zip
+			zip -9 soffice.tar.br.zip lo.tar.br
+			echo Sizes of produced files
+			du -s --apparent-size lo* soffice.tar.br.zip
+			rm lo.*
+			echo
+		)
+		mv $BASE/soffice.tar.br.zip .
+		exit 
+	fi
+	if [[ "X$1" == "Xbase" ]]
+	then
+		PARS=$PARS" "$1
+		if [[ $# == 1 ]]
+		then
+			echo A parameter must be provide with base
+			exit 1
+		fi
+		shift
+		BASE=$1
+		PARS=$PARS" "$1
+	fi
+	shift
+done
+
+if [[ -z "$PARS" ]]
+then
+	echo Must provide at least 1 valid parameter, none were provided
+	echo useage:
+	echo create-test OPTIONS
+	echo where OPTIONS is at least one of:
+	echo "There are two groups of options conversion tests and "
+	echo "library processing tasks:"
+	echo
+	echo "   Conversion tasks which take file from the current"
+	echo "   directory and process them putting the result into"
+	echo "   the 'converted' subdirectory."
+	echo
+       	echo "      html:  meaning run the tests of xlsx to html files."
+       	echo "      doc:   meaning run the tests of doc to docx files."
+       	echo "      ppt:   meaning run the tests of ppt to pptx files."
+       	echo "      xls:   meaning run the tests of xls to xlsx files."
+       	echo "      xls-html:   meaning run the tests of xls to html files."
+	echo "      one:   means just run one test of any type specified"
+	echo "             The test run is the one named alphabtically"
+        echo "             as the first."
+	echo
+	echo "   Processing tasks:"
+	echo "      clean: meaning extract the from the LibreOff*.tar.gz"
+	echo "            built by the standard make."
+       	echo "      build: means construct the layer file. Note if this"
+	echo "             is provided no other options are taken into"
+	echo "             account."
+	echo "      base directory: Sets base to directory, directory is the"
+	echo "                      place contraining the instdir"
+	echo "                      directory. Note this option cannot be"
+	echo "                      provided alone, it would perform no"
+	echo "                      useful activity."
+	exit 1
+fi
+
+echo Active command line is : $PARS
+rm -r -f converted
+mkdir -p converted
+
+if [ ! -f $BASE/instdir/program/soffice.bin ]
+then
+	echo soffice.bin does not exist
+	if [ -f $BASE/LibreOffice*tar.gz ]
+	then
+		echo tar does, expanding
+		./expand.sh
+		echo tar expanded
+	else
+		echo no tar aborting
+		exit 1
+	fi
+fi
+
+if [[ $DO_HTML == 1 ]]
+then
+	echo testing xlsx and ods files
+	for FILE in $(ls *.xlsx *.ods)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "html" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+
+if [[ $DO_DOC == 1 ]]
+then
+	echo testing doc to docx
+	for FILE in $(ls *.doc)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "docx" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+
+if [[ $DO_DOC_PDF == 1 ]]
+then
+	echo testing doc ior docx to pdf
+	for FILE in $(ls *.doc *.docx)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "pdf" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+
+if [[ $DO_PPT == 1 ]]
+then
+	echo testing ppt to pptx
+	for FILE in $(ls *.ppt)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "pptx" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+
+if [[ $DO_XLS == 1 ]]
+then
+	echo testing xls to xlsx
+	for FILE in $(ls *.xls)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "xlsx" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+
+
+if [[ $DO_XLS_HTML == 1 ]]
+then
+	echo testing xls to xlsx
+	for FILE in $(ls *.xls)
+	do
+		echo processing $FILE
+		$BASE/instdir/program/soffice.bin \
+       			--headless \
+       			--norestore \
+       			--invisible \
+       			--nodefault \
+       			--nofirststartwizard \
+       			--nolockcheck \
+       			--nologo \
+       			--convert-to "html" \
+       			--outdir converted $FILE
+		if [[ $ONLY_ONE == 1 ]]
+		then
+			break
+		fi
+	done
+	echo
+fi
+

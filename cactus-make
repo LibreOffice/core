@@ -1,0 +1,3 @@
+#! /bin/bash
+./autogen.sh  --with-distro=LibreOfficeCactus && make clean && make
+
