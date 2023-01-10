@@ -41,12 +41,7 @@ void SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
 
 void SvpGraphicsBackend::ResetClipRegion() { m_rCairoCommon.m_aClipRegion.SetNull(); }
 
-sal_uInt16 SvpGraphicsBackend::GetBitCount() const
-{
-    if (cairo_surface_get_content(m_rCairoCommon.m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
-        return 1;
-    return 32;
-}
+sal_uInt16 SvpGraphicsBackend::GetBitCount() const { return m_rCairoCommon.GetBitCount(); }
 
 tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
 {

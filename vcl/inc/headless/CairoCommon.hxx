@@ -143,6 +143,8 @@ struct VCL_DLLPUBLIC CairoCommon
 
     cairo_surface_t* getSurface() const { return m_pSurface; }
 
+    sal_uInt16 GetBitCount() const;
+
     cairo_t* getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const;
     void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
                              const basegfx::B2DRange& rExtents) const;

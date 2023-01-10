@@ -400,6 +400,13 @@ cairo_user_data_key_t* CairoCommon::getDamageKey()
     return &aDamageKey;
 }
 
+sal_uInt16 CairoCommon::GetBitCount() const
+{
+    if (cairo_surface_get_content(m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
+        return 1;
+    return 32;
+}
+
 cairo_t* CairoCommon::getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const
 {
     cairo_t* cr;
