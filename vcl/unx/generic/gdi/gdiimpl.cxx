@@ -840,27 +840,6 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     }
 }
 
-bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
-{
-    return false;
-}
-
-bool X11SalGraphicsImpl::drawPolygonBezier( sal_uInt32, const Point*, const PolyFlags* )
-{
-    return false;
-}
-
-bool X11SalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
-                                                const Point* const*, const PolyFlags* const* )
-{
-    return false;
-}
-
-bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Long,void*,sal_uInt32 )
-{
-    return false;
-}
-
 tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
 {
     if( mrParent.m_pFrame )

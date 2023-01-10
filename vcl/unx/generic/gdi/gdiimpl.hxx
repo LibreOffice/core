@@ -129,22 +129,6 @@ public:
     // set fill color for raster operations
     virtual void SetROPFillColor( SalROPColor nROPColor ) override;
 
-    virtual bool drawPolyLineBezier(
-                sal_uInt32 nPoints,
-                const Point* pPtAry,
-                const PolyFlags* pFlgAry ) override;
-
-    virtual bool drawPolygonBezier(
-                sal_uInt32 nPoints,
-                const Point* pPtAry,
-                const PolyFlags* pFlgAry ) override;
-
-    virtual bool drawPolyPolygonBezier(
-                sal_uInt32 nPoly,
-                const sal_uInt32* pPoints,
-                const Point* const* pPtAry,
-                const PolyFlags* const* pFlgAry ) override;
-
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
 
     virtual void drawBitmap(
@@ -158,12 +142,6 @@ public:
                 Color nMaskColor ) override;
 
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual bool drawEPS(
-                tools::Long nX, tools::Long nY,
-                tools::Long nWidth, tools::Long nHeight,
-                void* pPtr,
-                sal_uInt32 nSize ) override;
 
     /** Blend bitmap with color channels */
     virtual bool blendBitmap(

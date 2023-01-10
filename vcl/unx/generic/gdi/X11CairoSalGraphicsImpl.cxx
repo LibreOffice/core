@@ -159,4 +159,26 @@ void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcG
     mrCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
 }
 
+bool X11CairoSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)
+{
+    return false;
+}
+
+bool X11CairoSalGraphicsImpl::drawPolygonBezier(sal_uInt32, const Point*, const PolyFlags*)
+{
+    return false;
+}
+
+bool X11CairoSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
+                                                    const Point* const*, const PolyFlags* const*)
+{
+    return false;
+}
+
+bool X11CairoSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*,
+                                      sal_uInt32)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

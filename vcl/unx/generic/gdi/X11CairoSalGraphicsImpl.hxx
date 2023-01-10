@@ -140,6 +140,19 @@ public:
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
 
+    bool drawPolyLineBezier(sal_uInt32 nPoints, const Point* pPtAry,
+                            const PolyFlags* pFlgAry) override;
+
+    bool drawPolygonBezier(sal_uInt32 nPoints, const Point* pPtAry,
+                           const PolyFlags* pFlgAry) override;
+
+    bool drawPolyPolygonBezier(sal_uInt32 nPoly, const sal_uInt32* pPoints,
+                               const Point* const* pPtAry,
+                               const PolyFlags* const* pFlgAry) override;
+
+    bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                 void* pPtr, sal_uInt32 nSize) override;
+
     bool hasFastDrawTransformedBitmap() const override;
 
     bool supportsOperation(OutDevSupportType eType) const override;
