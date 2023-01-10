@@ -313,6 +313,7 @@
 #define FN_TABLE_PASTE_COL_BEFORE   (FN_INSERT2 + 32)  /* paste table as new table columns */
 #define FN_UPDATE_BOOKMARKS (FN_INSERT2 + 34)
 #define FN_UPDATE_SECTIONS (FN_INSERT2 + 35)
+#define FN_DELETE_TEXT_FORMFIELDS (FN_INSERT2 + 36)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

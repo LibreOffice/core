@@ -1803,6 +1803,11 @@ interface BaseText
         StateMethod = StateField ;
     ]
 
+    FN_DELETE_TEXT_FORMFIELDS
+    [
+        ExecMethod = ExecField ;
+    ]
+
     FN_PROTECT_FIELDS
     [
         ExecMethod = Execute ;
