@@ -80,8 +80,11 @@
 #include <strings.hrc>
 #include <unotxdoc.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <ThemeColorChanger.hxx>
 #include <swabstdlg.hxx>
 #include <modcfg.hxx>
 #include <svx/fmshell.hxx>
@@ -94,6 +97,7 @@
 #include <memory>
 
 #include <svx/unobrushitemhelper.hxx>
+#include <svx/dialog/ThemeDialog.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
@@ -2203,6 +2207,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
             }
             break;
+            case SID_THEME_DIALOG:
+            {
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -3025,6 +3033,24 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             sw::GraphicSizeCheckGUIResult aResult(rSh.GetDoc());
             svx::GenericCheckDialog aDialog(pMDI, aResult);
             aDialog.run();
+        }
+        break;
+
+        case SID_THEME_DIALOG:
+        {
+            auto* pDocument = rSh.GetDoc();
+            auto* pDocumentShell = pDocument->GetDocShell();
+            if (pDocumentShell)
+            {
+                SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+                svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+                if (pTheme)
+                {
+                    std::shared_ptr<svx::IThemeColorChanger> pChanger(new sw::ThemeColorChanger(pDocumentShell));
+                    auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme, pChanger);
+                    weld::DialogController::runAsync(pDialog, [](int) {});
+                }
+            }
         }
         break;
 

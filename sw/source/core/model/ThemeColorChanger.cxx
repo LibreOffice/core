@@ -229,6 +229,8 @@ void changeColor(SwFormat* pFormat, svx::ColorSet const& rColorSet, SwDoc* pDocu
 
 } // end anonymous namespace
 
+ThemeColorChanger::~ThemeColorChanger() {}
+
 void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
 {
     SwDoc* pDocument = mpDocSh->GetDoc();
