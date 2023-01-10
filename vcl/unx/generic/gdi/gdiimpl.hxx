@@ -145,17 +145,6 @@ public:
                 const Point* const* pPtAry,
                 const PolyFlags* const* pFlgAry ) override;
 
-    // CopyArea --> No RasterOp, but ClipRegion
-    virtual void copyArea(
-                tools::Long nDestX, tools::Long nDestY,
-                tools::Long nSrcX, tools::Long nSrcY,
-                tools::Long nSrcWidth, tools::Long nSrcHeight,
-                bool bWindowInvalidate ) override;
-
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
-
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
 
     virtual void drawBitmap(

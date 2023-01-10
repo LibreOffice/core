@@ -131,4 +131,32 @@ bool X11CairoSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
     return CairoCommon::supportsOperation(eType);
 }
 
+void X11CairoSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                                       tools::Long nSrcY, tools::Long nSrcWidth,
+                                       tools::Long nSrcHeight, bool /*bWindowInvalidate*/)
+{
+    SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
+
+    cairo_surface_t* source = mrCairoCommon.m_pSurface;
+    mrCairoCommon.copyBitsCairo(aTR, source, getAntiAlias());
+}
+
+void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics)
+{
+    cairo_surface_t* source = nullptr;
+
+    if (pSrcGraphics)
+    {
+        X11CairoSalGraphicsImpl* pSrc
+            = static_cast<X11CairoSalGraphicsImpl*>(pSrcGraphics->GetImpl());
+        source = pSrc->mrCairoCommon.m_pSurface;
+    }
+    else
+    {
+        source = mrCairoCommon.m_pSurface;
+    }
+
+    mrCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

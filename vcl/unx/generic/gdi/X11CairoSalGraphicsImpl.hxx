@@ -132,9 +132,17 @@ public:
 
     void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override;
 
-    virtual bool hasFastDrawTransformedBitmap() const override;
+    // CopyArea --> No RasterOp, but ClipRegion
+    void copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
+                  tools::Long nSrcWidth, tools::Long nSrcHeight, bool bWindowInvalidate) override;
 
-    virtual bool supportsOperation(OutDevSupportType eType) const override;
+    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
+    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
+    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
+
+    bool hasFastDrawTransformedBitmap() const override;
+
+    bool supportsOperation(OutDevSupportType eType) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
