@@ -112,6 +112,7 @@
 #include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <fmtcntnt.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -377,6 +378,73 @@ OUString GetLocalURL(const SwWrtShell& rSh)
 
     const OUString& rLocalURL = pAuthEntry->GetAuthorField(AUTH_FIELD_LOCAL_URL);
     return rLocalURL;
+}
+
+void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    OUString aSectionNamePrefix;
+    const SfxStringItem* pSectionNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (pSectionNamePrefix)
+    {
+        aSectionNamePrefix = pSectionNamePrefix->GetValue();
+    }
+
+    uno::Sequence<beans::PropertyValues> aSections;
+    const SfxUnoAnyItem* pSections = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
+    if (pSections)
+    {
+        pSections->GetValue() >>= aSections;
+    }
+
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSSECTION, nullptr);
+    rWrtSh.StartAction();
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    sal_Int32 nSectionIndex = 0;
+    const SwSectionFormats& rFormats = pDoc->GetSections();
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    for (size_t i = 0; i < rFormats.size(); ++i)
+    {
+        const SwSectionFormat* pFormat = rFormats[i];
+        if (!pFormat->GetName().startsWith(aSectionNamePrefix))
+        {
+            continue;
+        }
+
+        if (nSectionIndex >= aSections.getLength())
+        {
+            break;
+        }
+
+        comphelper::SequenceAsHashMap aMap(aSections[nSectionIndex++]);
+        OUString aSectionName = aMap["Section"].get<OUString>();
+        if (aSectionName != pFormat->GetName())
+        {
+            const_cast<SwSectionFormat*>(pFormat)->SetFormatName(aSectionName, /*bBroadcast=*/true);
+            SwSectionData aSectionData(*pFormat->GetSection());
+            aSectionData.SetSectionName(aSectionName);
+            pDoc->UpdateSection(i, aSectionData);
+        }
+
+        const SwFormatContent& rContent = pFormat->GetContent();
+        const SwNodeIndex* pContentNodeIndex = rContent.GetContentIdx();
+        if (pContentNodeIndex)
+        {
+            SwPaM aSectionStart(SwPosition{*pContentNodeIndex});
+            aSectionStart.Move(fnMoveForward, GoInContent);
+            SwPaM* pCursorPos = rWrtSh.GetCursor();
+            *pCursorPos = aSectionStart;
+            rWrtSh.EndOfSection(/*bSelect=*/true);
+            rIDCO.DeleteAndJoin(*pCursorPos);
+            rWrtSh.EndSelect();
+
+            OUString aSectionText = aMap["SectionText"].get<OUString>();
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8(), true);
+        }
+    }
+
+    rWrtSh.EndAction();
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSSECTION, nullptr);
 }
 
 void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
@@ -856,6 +924,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
                 pMarkAccess->deleteMark(pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()), false);
             }
+            break;
+        }
+        case FN_UPDATE_SECTIONS:
+        {
+            UpdateSections(rReq, rWrtSh);
             break;
         }
         case FN_SET_REMINDER:

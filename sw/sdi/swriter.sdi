@@ -2600,6 +2600,20 @@ SfxVoidItem UpdateBookmarks FN_UPDATE_BOOKMARKS
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem UpdateSections FN_UPDATE_SECTIONS
+(SfxStringItem SectionNamePrefix FN_PARAM_1, SfxUnoAnyItem Sections FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem SetReminder FN_SET_REMINDER
 
 [

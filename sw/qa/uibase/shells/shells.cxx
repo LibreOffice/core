@@ -662,6 +662,57 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
     CPPUNIT_ASSERT_EQUAL(OUString("new result 1"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
+{
+    // Given a document with a section:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("RegionName",
+                                      uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDold"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+
+    // When updating that section:
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "SectionNamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_BIBL"
+    },
+    "Sections": {
+        "type": "[][]com.sun.star.beans.PropertyValue",
+        "value": [
+            {
+                "Section": {
+                    "type": "string",
+                    "value": "ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDnew"
+                },
+                "SectionText": {
+                    "type": "string",
+                    "value": "new content"
+                }
+            }
+        ]
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateSections", aArgs);
+
+    // Then make sure that the section is updated:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->EndOfSection(/*bSelect=*/true);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActualResult = pCursor->GetText();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new content
+    // - Actual  : old content
+    // i.e. the content wasn't updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new content"), aActualResult);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
