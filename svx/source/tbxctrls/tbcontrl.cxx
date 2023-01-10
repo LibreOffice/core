@@ -3180,38 +3180,12 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
     std::vector<OUString> aStyles;
 
+    // add used styles
+    pStyle = xIter->Next();
+    while ( pStyle )
     {
+        aStyles.push_back(pStyle->GetName());
         pStyle = xIter->Next();
-
-        if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
-        {
-            while ( pStyle )
-            {
-                // sort out default styles
-                bool bInsert = true;
-                OUString aName( pStyle->GetName() );
-                for( auto const & _i: pImpl->aDefaultStyles )
-                {
-                    if( _i.first == aName || _i.second == aName )
-                    {
-                        bInsert = false;
-                        break;
-                    }
-                }
-
-                if( bInsert )
-                    aStyles.push_back(aName);
-                pStyle = xIter->Next();
-            }
-        }
-        else
-        {
-            while ( pStyle )
-            {
-                aStyles.push_back(pStyle->GetName());
-                pStyle = xIter->Next();
-            }
-        }
     }
 
     if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
@@ -3219,11 +3193,16 @@ void SvxStyleToolBoxControl::FillStyleBox()
         pBox->append_text(pImpl->aClearForm);
         pBox->insert_separator(1, "separator");
 
-        // insert default styles
-        for (const auto &rStyle : pImpl->aDefaultStyles)
-            pBox->append_text(rStyle.second);
+        // add default styles if less than 12 items
+        for( const auto &rStyle : pImpl->aDefaultStyles )
+        {
+            if ( aStyles.size() + pBox->get_count() > 12)
+                break;
+            // insert default style only if not used (and added to rStyle before)
+            if (std::find(aStyles.begin(), aStyles.end(), rStyle.second) >= aStyles.end())
+                pBox->append_text(rStyle.second);
+        }
     }
-
     std::sort(aStyles.begin(), aStyles.end());
 
     for (const auto& rStyle : aStyles)
