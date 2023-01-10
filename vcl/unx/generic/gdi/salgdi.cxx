@@ -84,7 +84,6 @@ X11SalGraphics::X11SalGraphics():
     m_pVDev(nullptr),
     m_nXScreen( 0 ),
     mpClipRegion(nullptr),
-    hBrush_(None),
     bWindow_(false),
     bVirDev_(false)
 {
@@ -111,8 +110,6 @@ X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
 
 void X11SalGraphics::freeResources()
 {
-    Display *pDisplay = GetXDisplay();
-
     if( mpClipRegion )
     {
         XDestroyRegion( mpClipRegion );
@@ -121,11 +118,6 @@ void X11SalGraphics::freeResources()
 
     mxImpl->freeResources();
 
-    if( hBrush_ )
-    {
-        XFreePixmap( pDisplay, hBrush_ );
-        hBrush_ = None;
-    }
     if( m_pDeleteColormap )
     {
         m_pDeleteColormap.reset();
@@ -210,79 +202,6 @@ void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
         XSetRegion( pDisplay, pGC, pTmpRegion );
         XDestroyRegion( pTmpRegion );
     }
-}
-
-// Calculate a dither-pixmap and make a brush of it
-#define P_DELTA         51
-#define DMAP( v, m )    ((v % P_DELTA) > m ? (v / P_DELTA) + 1 : (v / P_DELTA))
-
-bool X11SalGraphics::GetDitherPixmap( Color nColor )
-{
-    static const short nOrdDither8Bit[ 8 ][ 8 ] =
-    {
-        { 0, 38,  9, 48,  2, 40, 12, 50},
-        {25, 12, 35, 22, 28, 15, 37, 24},
-        { 6, 44,  3, 41,  8, 47,  5, 44},
-        {32, 19, 28, 16, 34, 21, 31, 18},
-        { 1, 40, 11, 49,  0, 39, 10, 48},
-        {27, 14, 36, 24, 26, 13, 36, 23},
-        { 8, 46,  4, 43,  7, 45,  4, 42},
-        {33, 20, 30, 17, 32, 20, 29, 16}
-    };
-
-    // test for correct depth (8bit)
-    if( GetColormap().GetVisual().GetDepth() != 8 )
-        return false;
-
-    char    pBits[64];
-    char   *pBitsPtr = pBits;
-
-    // Set the palette-entries for the dithering tile
-    sal_uInt8 nColorRed   = nColor.GetRed();
-    sal_uInt8 nColorGreen = nColor.GetGreen();
-    sal_uInt8 nColorBlue  = nColor.GetBlue();
-
-    for(auto & nY : nOrdDither8Bit)
-    {
-        for( int nX = 0; nX < 8; nX++ )
-        {
-            short nMagic = nY[nX];
-            sal_uInt8 nR   = P_DELTA * DMAP( nColorRed,   nMagic );
-            sal_uInt8 nG   = P_DELTA * DMAP( nColorGreen, nMagic );
-            sal_uInt8 nB   = P_DELTA * DMAP( nColorBlue,  nMagic );
-
-            *pBitsPtr++ = GetColormap().GetPixel( Color( nR, nG, nB ) );
-        }
-    }
-
-    // create the tile as ximage and an according pixmap -> caching
-    XImage *pImage = XCreateImage( GetXDisplay(),
-                                   GetColormap().GetXVisual(),
-                                   8,
-                                   ZPixmap,
-                                   0,               // offset
-                                   pBits,           // data
-                                   8, 8,            // width & height
-                                   8,               // bitmap_pad
-                                   0 );             // (default) bytes_per_line
-
-    if( !hBrush_ )
-        hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
-
-    // put the ximage to the pixmap
-    XPutImage( GetXDisplay(),
-               hBrush_,
-               GetDisplay()->GetCopyGC( m_nXScreen ),
-               pImage,
-               0, 0,                        // Source
-               0, 0,                        // Destination
-               8, 8 );                      // width & height
-
-    // destroy image-frame but not palette-data
-    pImage->data = nullptr;
-    XDestroyImage( pImage );
-
-    return true;
 }
 
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const

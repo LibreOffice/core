@@ -154,7 +154,6 @@ public:
 private:
     using SalGraphics::GetPixel;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
-    bool                            GetDitherPixmap ( Color nColor );
 
     void                            freeResources();
 
@@ -167,7 +166,6 @@ private:
     SalX11Screen                    m_nXScreen;
 
     Region                          mpClipRegion;
-    Pixmap                          hBrush_;        // Dither
 
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
