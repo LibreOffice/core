@@ -4094,15 +4094,9 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( rFieldmark.GetFieldname() == ODF_FORMDROPDOWN )
         type=2;
 
-    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter = rFieldmark.GetParameters()->find("name");
-    OUString ffname;
-    if ( pParameter != rFieldmark.GetParameters()->end() )
-    {
-        OUString aName;
-        pParameter->second >>= aName;
-        const sal_Int32 nLen = std::min( sal_Int32(20), aName.getLength() );
-        ffname = aName.copy(0, nLen);
-    }
+    OUString ffname = rFieldmark.GetName();
+    if (ffname.getLength() > 20)
+        ffname = ffname.copy(0, 20);
 
     sal_uInt64 nDataStt = m_pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry(Strm().Tell());
@@ -4154,10 +4148,12 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     OUString ffstattext;
     OUString ffentrymcr;
     OUString ffexitmcr;
+
+    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter
+        = rFieldmark.GetParameters()->find("Type");
     if (type == 0) // iTypeText
     {
         sal_uInt16 nType = 0;
-        pParameter = rFieldmark.GetParameters()->find("Type");
         if ( pParameter != rFieldmark.GetParameters()->end() )
         {
             OUString aType;

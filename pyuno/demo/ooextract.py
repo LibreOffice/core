@@ -19,13 +19,12 @@
 
 import getopt,sys
 import uno
-from unohelper import Base,systemPathToFileUrl, absolutize
-from os import getcwd
 
+from unohelper import Base,systemPathToFileUrl
+from os import getcwd
 from com.sun.star.beans import PropertyValue
-from com.sun.star.beans.PropertyState import DIRECT_VALUE
 from com.sun.star.uno import Exception as UnoException
-from com.sun.star.io import IOException,XInputStream, XOutputStream
+from com.sun.star.io import IOException, XOutputStream
 
 class OutputStream(Base, XOutputStream):
     def __init__(self):

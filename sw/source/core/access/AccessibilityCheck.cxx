@@ -464,7 +464,7 @@ private:
         // If not character background color, try paragraph background color
         if (aBackgroundColor == COL_AUTO)
             aBackgroundColor = nParaBackColor;
-        else
+        else if (!xTextRange->getString().isEmpty())
         {
             auto pIssue
                 = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),

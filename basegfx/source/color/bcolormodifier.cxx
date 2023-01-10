@@ -18,10 +18,10 @@
  */
 
 #include <sal/config.h>
-
 #include <algorithm>
-
+#include <float.h>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <comphelper/random.hxx>
 
 namespace basegfx
 {
@@ -268,6 +268,57 @@ namespace basegfx
         {
             return aSourceColor;
         }
+    }
+
+    BColorModifier_randomize::BColorModifier_randomize(double fRandomPart)
+    : mfRandomPart(fRandomPart)
+    {
+    }
+
+    BColorModifier_randomize::~BColorModifier_randomize()
+    {
+    }
+
+    // compare operator
+    bool BColorModifier_randomize::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_randomize* pCompare = dynamic_cast< const BColorModifier_randomize* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return mfRandomPart == pCompare->mfRandomPart;
+    }
+
+    // compute modified color
+    ::basegfx::BColor BColorModifier_randomize::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        if(0.0 >= mfRandomPart)
+        {
+            // no randomizing, use orig color
+            return aSourceColor;
+        }
+
+        if(1.0 <= mfRandomPart)
+        {
+            // full randomized color
+            return basegfx::BColor(
+                    comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX)),
+                    comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX)),
+                    comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX)));
+        }
+
+        // mixed color
+        const double fMulA(1.0 - mfRandomPart);
+        return basegfx::BColor(
+            aSourceColor.getRed() * fMulA +
+                comphelper::rng::uniform_real_distribution(0.0, nextafter(mfRandomPart, DBL_MAX)),
+            aSourceColor.getGreen() * fMulA +
+                comphelper::rng::uniform_real_distribution(0.0, nextafter(mfRandomPart, DBL_MAX)),
+            aSourceColor.getBlue() * fMulA +
+                comphelper::rng::uniform_real_distribution(0.0, nextafter(mfRandomPart, DBL_MAX)));
     }
 
     ::basegfx::BColor BColorModifierStack::getModifiedColor(const ::basegfx::BColor& rSource) const

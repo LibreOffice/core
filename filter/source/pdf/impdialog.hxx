@@ -232,6 +232,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::Toggleable&, void);
 
+    std::shared_ptr<weld::MessageDialog> mxPasswordUnusedWarnDialog;
+
 public:
 
     ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

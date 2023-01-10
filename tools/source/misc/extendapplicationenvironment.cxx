@@ -38,7 +38,7 @@ namespace tools
 {
 void extendApplicationEnvironment()
 {
-#if defined UNX
+#if defined UNX && !defined EMSCRIPTEN
     // Try to set RLIMIT_NOFILE as large as possible (failure is harmless):
     rlimit lim;
     if (getrlimit(RLIMIT_NOFILE, &lim) == 0)

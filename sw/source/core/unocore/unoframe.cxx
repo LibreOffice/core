@@ -2136,8 +2136,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 SwDoc* pDoc = pFormat->GetDoc();
                 if (pDoc)
                 {
-                    const SwEditShell* pEditShell = pDoc->GetEditShell();
-                    if (pEditShell)
+                    if (const SwEditShell* pEditShell = pDoc->GetEditShell())
                     {
                         SwFrame* pCurrFrame = pEditShell->GetCurrFrame(false);
                         GraphicAttr aGraphicAttr;

@@ -83,6 +83,7 @@ public:
     }
 
     void testDocumentLayout();
+    void testTdf152434();
     void testConnectors();
     void testTdf150719();
     void testTdf149314();
@@ -153,10 +154,12 @@ public:
     void testTdf89927();
     void testTdf103800();
     void testTdf151767();
+    void testTdf152070();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testConnectors);
     CPPUNIT_TEST(testTdf150719);
     CPPUNIT_TEST(testTdf149314);
@@ -227,6 +230,7 @@ public:
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf103800);
     CPPUNIT_TEST(testTdf151767);
+    CPPUNIT_TEST(testTdf152070);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -336,6 +340,17 @@ void SdImportTest::testDocumentLayout()
             }
         }
     }
+}
+
+void SdImportTest::testTdf152434()
+{
+    createSdImpressDoc("pptx/tdf152434.pptx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const SdrPage* pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
 void SdImportTest::testConnectors()
@@ -1913,6 +1928,24 @@ void SdImportTest::testTdf151767()
     table::BorderLine2 aBottom;
     xCell->getPropertyValue("BottomBorder") >>= aBottom;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The bottom border is missing!", true, aBottom.LineWidth > 0);
+}
+
+void SdImportTest::testTdf152070()
+{
+    createSdImpressDoc("pptx/tdf152070.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackgroundProps(
+        xPropSet->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(50), // 50%
+        xBackgroundProps->getPropertyValue("FillBitmapPositionOffsetX").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(83), // 83%
+        xBackgroundProps->getPropertyValue("FillBitmapPositionOffsetY").get<sal_Int32>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

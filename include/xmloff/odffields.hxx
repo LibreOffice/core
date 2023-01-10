@@ -27,7 +27,6 @@ inline constexpr OUStringLiteral ODF_FORMTEXT = u"vnd.oasis.opendocument.field.F
 
 inline constexpr OUStringLiteral ODF_FORMCHECKBOX = u"vnd.oasis.opendocument.field.FORMCHECKBOX";
 inline constexpr OUStringLiteral ODF_FORMCHECKBOX_HELPTEXT = u"Checkbox_HelpText";
-inline constexpr OUStringLiteral ODF_FORMCHECKBOX_NAME = u"Checkbox_Name";
 inline constexpr OUStringLiteral ODF_FORMCHECKBOX_RESULT = u"Checkbox_Checked";
 
 inline constexpr OUStringLiteral ODF_FORMDROPDOWN = u"vnd.oasis.opendocument.field.FORMDROPDOWN";

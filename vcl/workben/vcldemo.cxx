@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <thread>
 
 #include <config_features.h>
 
@@ -1730,7 +1731,7 @@ class DemoWin : public WorkWindow
         }
         virtual void execute() override
         {
-            wait(std::chrono::seconds(mnDelaySecs));
+            std::this_thread::sleep_for(std::chrono::seconds(mnDelaySecs));
 
             SolarMutexGuard aGuard;
             fprintf (stderr, "render from a different thread\n");

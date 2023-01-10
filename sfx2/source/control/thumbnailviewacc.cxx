@@ -131,7 +131,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "sfx", "OAccessibleContextHelper::getAccessibleIndexInParent" );
+        TOOLS_WARN_EXCEPTION( "sfx", "ThumbnailViewAcc::getAccessibleIndexInParent" );
     }
 
     return nRet;

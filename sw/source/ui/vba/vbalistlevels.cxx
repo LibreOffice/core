@@ -28,32 +28,32 @@ namespace {
 
 class ListLevelsEnumWrapper : public EnumerationHelper_BASE
 {
-    SwVbaListLevels* pListLevels;
-    sal_Int32 nIndex;
+    SwVbaListLevels* m_pListLevels;
+    sal_Int32 m_nIndex;
 public:
-    explicit ListLevelsEnumWrapper( SwVbaListLevels* pLevels ) : pListLevels( pLevels ), nIndex( 1 ) {}
+    explicit ListLevelsEnumWrapper( SwVbaListLevels* pLevels ) : m_pListLevels( pLevels ), m_nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex <= pListLevels->getCount() );
+        return ( m_nIndex <= m_pListLevels->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if ( nIndex <= pListLevels->getCount() )
-            return pListLevels->Item( uno::Any( nIndex++ ), uno::Any() );
+        if ( m_nIndex <= m_pListLevels->getCount() )
+            return m_pListLevels->Item( uno::Any( m_nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
 
 }
 
-SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef  pHelper ) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), pListHelper(std::move( pHelper ))
+SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef  pHelper ) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), m_pListHelper(std::move( pHelper ))
 {
 }
 
 ::sal_Int32 SAL_CALL SwVbaListLevels::getCount()
 {
-    sal_Int32 nGalleryType = pListHelper->getGalleryType();
+    sal_Int32 nGalleryType = m_pListHelper->getGalleryType();
     if( nGalleryType == word::WdListGalleryType::wdBulletGallery
         || nGalleryType == word::WdListGalleryType::wdNumberGallery )
         return 1;
@@ -70,7 +70,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException("Index out of bounds" );
 
-    return uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, pListHelper, nIndex - 1 ) ) );
+    return uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, m_pListHelper, nIndex - 1 ) ) );
 }
 
 // XEnumerationAccess

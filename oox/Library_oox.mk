@@ -165,6 +165,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/effectpropertiescontext \
     oox/source/drawingml/embeddedwavaudiofile \
     oox/source/drawingml/fillproperties \
+    oox/source/drawingml/fontworkhelpers \
     oox/source/drawingml/misccontexts \
     oox/source/drawingml/graphicshapecontext \
     oox/source/drawingml/guidcontext \
@@ -219,6 +220,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/themeelementscontext \
     oox/source/drawingml/themefragmenthandler \
     oox/source/drawingml/ThemeOverrideFragmentHandler \
+    oox/source/drawingml/ThemeFilterBase \
     oox/source/drawingml/transform2dcontext \
     oox/source/dump/dffdumper \
     oox/source/dump/dumperbase \
@@ -229,6 +231,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/DMLPresetShapeExport \
     oox/source/export/shapes \
     oox/source/export/vmlexport \
+    oox/source/export/ThemeExport \
     oox/source/helper/attributelist \
     oox/source/helper/binaryinputstream \
     oox/source/helper/binaryoutputstream \
@@ -244,8 +247,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/storagebase \
     oox/source/helper/textinputstream \
     oox/source/helper/zipstorage \
-    oox/source/mathml/export \
-    oox/source/mathml/import \
+    oox/source/mathml/imexport \
     oox/source/mathml/importutils \
     oox/source/ole/axbinaryreader \
     oox/source/ole/axbinarywriter \

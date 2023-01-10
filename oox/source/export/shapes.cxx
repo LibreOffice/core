@@ -81,7 +81,7 @@
 #include <svx/svdoole2.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <oox/export/chartexport.hxx>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <oox/export/DMLPresetShapeExport.hxx>
 
@@ -2472,10 +2472,11 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->startElementNS(XML_a, XML_p);
     mpFS->startElementNS(XML_a14, XML_m);
 
-    oox::FormulaExportBase *const pMagic(dynamic_cast<oox::FormulaExportBase*>(xMathModel.get()));
+    oox::FormulaImExportBase *const pMagic(
+        dynamic_cast<oox::FormulaImExportBase*>(xMathModel.get()));
     assert(pMagic);
     pMagic->writeFormulaOoxml(GetFS(), GetFB()->getVersion(), GetDocumentType(),
-        FormulaExportBase::eFormulaAlign::INLINE);
+        FormulaImExportBase::eFormulaAlign::INLINE);
 
     mpFS->endElementNS(XML_a14, XML_m);
     mpFS->endElementNS(XML_a, XML_p);
@@ -2537,6 +2538,16 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     if (!xObj.is())
     {
         SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: no object");
+
+        // tdf#152436 Export the preview graphic of the object if the object is missing.
+        SdrObject* pSdrOLE2(SdrObject::getSdrObjectFromXShape(xShape));
+        if (auto pOle2Obj = dynamic_cast<SdrOle2Obj*>(pSdrOLE2))
+        {
+            const Graphic* pGraphic = pOle2Obj->GetGraphic();
+            if (pGraphic)
+                WriteGraphicObjectShapePart(xShape, pGraphic);
+        }
+
         return *this;
     }
 

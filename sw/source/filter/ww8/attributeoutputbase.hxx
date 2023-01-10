@@ -191,7 +191,7 @@ public:
     virtual void WritePostitFieldReference() {};
 
     /// Output text (inside a run).
-    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 ) = 0;
+    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8, const OUString& rSymbolFont = OUString() ) = 0;
 
     /// Output text (without markup).
     virtual void RawText(const OUString& rText, rtl_TextEncoding eCharSet) = 0;

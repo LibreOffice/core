@@ -12,6 +12,7 @@
 
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -537,7 +538,7 @@ void ScOpenCLTest::initTestEnv(std::u16string_view fileName)
 
 ScDocument* ScOpenCLTest::getScDoc2()
 {
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent2.get());
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent2);
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj->GetDocument();
 }

@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 #include "gtv-calc-header-bar.hxx"
 

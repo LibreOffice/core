@@ -784,6 +784,43 @@ DECLARE_RTFEXPORT_TEST(testTdf139948, "tdf139948.rtf")
         sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(5), "BottomBorder").LineWidth);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf103956, "tdf103956.rtf")
+{
+    // Ensure that RTF tables without column width (\cellx or \cellx0) are displayed with some
+    // suitable width. Currently there is no good support for autofit for RTF docs, so ensure
+    // that table cells are somehow visible. Width for it is not clear, so here we will check
+    // table & cell widths are more than default minimal value of 41.
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #1 is too narrow!",
+        82 < parseDump("/root/page/body/tab[1]/row/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #1 cell#1 is too narrow!",
+        41 < parseDump("/root/page/body/tab[1]/row/cell[1]/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #1 cell#2 is too narrow!",
+        41 < parseDump("/root/page/body/tab[1]/row/cell[2]/infos/bounds", "width").toInt32());
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #2 is too narrow!",
+        82 < parseDump("/root/page/body/tab[2]/row/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #2 cell#1 is too narrow!",
+        41 < parseDump("/root/page/body/tab[2]/row/cell[1]/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #2 cell#2 is too narrow!",
+        41 < parseDump("/root/page/body/tab[2]/row/cell[2]/infos/bounds", "width").toInt32());
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #3 is too narrow!",
+        82 < parseDump("/root/page/body/tab[3]/row/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #3 cell#1 is too narrow!",
+        41 < parseDump("/root/page/body/tab[3]/row/cell[1]/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Table #3 cell#2 is too narrow!",
+        41 < parseDump("/root/page/body/tab[3]/row/cell[2]/infos/bounds", "width").toInt32());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf148515, "tdf148515.rtf")
 {
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);

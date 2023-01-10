@@ -21,6 +21,7 @@
 
 #include <compiler.hxx>
 
+#include <mutex>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
@@ -77,7 +78,6 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
-osl::Mutex                          ScCompiler::maMutex;
 const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
 const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -167,7 +167,6 @@ void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& x
 
 void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const
 {
-    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     tools::Long nCount = pColl->GetFuncCount();
     for (tools::Long i=0; i < nCount; ++i)
@@ -175,8 +174,8 @@ void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr&
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
         {
-            OUString aName;
-            if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
+            const OUString aName( pFuncData->GetUpperEnglish());
+            if (!aName.isEmpty())
                 xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
                 xMap->putExternalSoftly( pFuncData->GetUpperName(),
@@ -222,11 +221,17 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
     return !aIntName.isEmpty();       // no valid function name
 }
 
+static std::mutex& getCharClassMutex()
+{
+    static std::mutex aMutex;
+    return aMutex;
+}
+
 const CharClass* ScCompiler::GetCharClassEnglish()
 {
     if (!pCharClassEnglish)
     {
-        osl::MutexGuard aGuard(maMutex);
+        std::scoped_lock aGuard(getCharClassMutex());
         if (!pCharClassEnglish)
         {
             pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
@@ -242,7 +247,7 @@ const CharClass* ScCompiler::GetCharClassLocalized()
     {
         // Switching UI language requires restart; if not, we would have to
         // keep track of that.
-        osl::MutexGuard aGuard(maMutex);
+        std::scoped_lock aGuard(getCharClassMutex());
         if (!pCharClassLocalized)
         {
             pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
@@ -2154,8 +2159,8 @@ std::vector<ScCompiler::Whitespace> ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
-    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0]);
-    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar());
+    sal_Unicode cDecSep = (mxSymbols->isEnglishLocale() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0]);
+    sal_Unicode cDecSepAlt = (mxSymbols->isEnglishLocale() ? 0 : ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar());
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -3168,7 +3173,7 @@ bool ScCompiler::ParseValue( const OUString& rSym )
     }
 
     double fVal;
-    sal_uInt32 nIndex = mxSymbols->isEnglish() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
+    sal_uInt32 nIndex = mxSymbols->isEnglishLocale() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
 
     if (!mpFormatter->IsNumberFormat(rSym, nIndex, fVal))
         return false;
@@ -3425,7 +3430,7 @@ bool ScCompiler::ParseReference( const OUString& rName, const OUString* pErrRef 
     mnCurrentSheetTab = -1;
 
     sal_Unicode ch1 = rName[0];
-    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0] );
+    sal_Unicode cDecSep = ( mxSymbols->isEnglishLocale() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
     // Code further down checks only if cDecSep=='.' so simply obtaining the
@@ -5523,6 +5528,10 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
         {
             if ( _bIsEnglish )
             {
+                // This is used with OOXML import, so GetExcelName() is really
+                // wanted here until we'll have a parameter to differentiate
+                // from the general css::sheet::XFormulaOpCodeMapper case and
+                // use pFuncData->GetUpperEnglish().
                 OUString aName;
                 if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
                     aEntry.Name = aName;
@@ -6465,89 +6474,178 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
     // OpCode of the "root" operator (which is already in RPN array).
     OpCode eOpCode = (*(pCode - 1))->GetOpCode();
     // eOpCode can be some operator which does not change with operands with or contains zero values.
-    if (eOpCode != ocSum)
-        return;
-
-    FormulaToken** ppTok = pCode - 2; // exclude the root operator.
-    // The following loop runs till a "pattern" is found or there is a mismatch
-    // and marks the push DoubleRef arguments as trimmable when there is a match.
-    // The pattern is
-    // SUM(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
-    // such that one of the operands of ocEqual is a double-ref.
-    // Examples of formula that matches this are:
-    //   SUM(IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)
-    //   SUM((IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)*$H$2*5/$G$3)
-    //   SUM(IF(E:E=16,F:F)*$H$1*100)
-    bool bTillClose = true;
-    bool bCloseTillIf = false;
-    sal_Int16 nToksTillIf = 0;
-    constexpr sal_Int16 MAXDIST_IF = 15;
-    while (*ppTok)
+    if (eOpCode == ocSum)
     {
-        FormulaToken* pTok = *ppTok;
-        OpCode eCurrOp = pTok->GetOpCode();
-        ++nToksTillIf;
-
-        // TODO : Is there a better way to handle this ?
-        // ocIf is too far off from the sum opcode.
-        if (nToksTillIf > MAXDIST_IF)
-            return;
-
-        switch (eCurrOp)
+        FormulaToken** ppTok = pCode - 2; // exclude the root operator.
+        // The following loop runs till a "pattern" is found or there is a mismatch
+        // and marks the push DoubleRef arguments as trimmable when there is a match.
+        // The pattern is
+        // SUM(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
+        // such that one of the operands of ocEqual is a double-ref.
+        // Examples of formula that matches this are:
+        //   SUM(IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)
+        //   SUM((IF(D:D=$A$1,F:F)*$H$1*2.3/$G$2)*$H$2*5/$G$3)
+        //   SUM(IF(E:E=16,F:F)*$H$1*100)
+        bool bTillClose = true;
+        bool bCloseTillIf = false;
+        sal_Int16 nToksTillIf = 0;
+        constexpr sal_Int16 MAXDIST_IF = 15;
+        while (*ppTok)
         {
-            case ocDiv:
-            case ocMul:
-                if (!bTillClose)
-                    return;
-                break;
-            case ocPush:
+            FormulaToken* pTok = *ppTok;
+            OpCode eCurrOp = pTok->GetOpCode();
+            ++nToksTillIf;
 
-                break;
-            case ocClose:
-                if (bTillClose)
-                {
-                    bTillClose = false;
-                    bCloseTillIf = true;
-                }
-                else
-                    return;
-                break;
-            case ocIf:
-                {
-                    if (!bCloseTillIf)
+            // TODO : Is there a better way to handle this ?
+            // ocIf is too far off from the sum opcode.
+            if (nToksTillIf > MAXDIST_IF)
+                return;
+
+            switch (eCurrOp)
+            {
+                case ocDiv:
+                case ocMul:
+                    if (!bTillClose)
                         return;
+                    break;
+                case ocPush:
 
-                    if (!pTok->IsInForceArray())
-                        return;
-
-                    const short nJumpCount = pTok->GetJump()[0];
-                    if (nJumpCount != 2) // Should have THEN but no ELSE.
-                        return;
-
-                    OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
-                    if (eCompOp != ocEqual)
-                        return;
-
-                    FormulaToken* pLHS = *(ppTok - 2);
-                    FormulaToken* pRHS = *(ppTok - 3);
-                    if (((pLHS->GetType() == svSingleRef || pLHS->GetType() == svDouble) && pRHS->GetType() == svDoubleRef) ||
-                        ((pRHS->GetType() == svSingleRef || pRHS->GetType() == svDouble) && pLHS->GetType() == svDoubleRef))
+                    break;
+                case ocClose:
+                    if (bTillClose)
                     {
-                        if (pLHS->GetType() == svDoubleRef)
+                        bTillClose = false;
+                        bCloseTillIf = true;
+                    }
+                    else
+                        return;
+                    break;
+                case ocIf:
+                    {
+                        if (!bCloseTillIf)
+                            return;
+
+                        if (!pTok->IsInForceArray())
+                            return;
+
+                        const short nJumpCount = pTok->GetJump()[0];
+                        if (nJumpCount != 2) // Should have THEN but no ELSE.
+                            return;
+
+                        OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
+                        if (eCompOp != ocEqual)
+                            return;
+
+                        FormulaToken* pLHS = *(ppTok - 2);
+                        FormulaToken* pRHS = *(ppTok - 3);
+                        if (((pLHS->GetType() == svSingleRef || pLHS->GetType() == svDouble) && pRHS->GetType() == svDoubleRef) ||
+                            ((pRHS->GetType() == svSingleRef || pRHS->GetType() == svDouble) && pLHS->GetType() == svDoubleRef))
+                        {
+                            if (pLHS->GetType() == svDoubleRef)
+                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                            else
+                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                            return;
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+            --ppTok;
+        }
+    }
+    else if (eOpCode == ocSumProduct)
+    {
+        FormulaToken** ppTok = pCode - 2; // exclude the root operator.
+        // The following loop runs till a "pattern" is found or there is a mismatch
+        // and marks the push DoubleRef arguments as trimmable when there is a match.
+        // The pattern is
+        // SUMPRODUCT(IF(<reference|double>=<reference|double>, <then-clause>)<a some operands with operators / or *>)
+        // such that one of the operands of ocEqual is a double-ref.
+        // Examples of formula that matches this are:
+        //   SUMPRODUCT(IF($A:$A=$L12;$D:$D*G:G))
+        bool bTillClose = true;
+        bool bCloseTillIf = false;
+        sal_Int16 nToksTillIf = 0;
+        constexpr sal_Int16 MAXDIST_IF = 15;
+        while (*ppTok)
+        {
+            FormulaToken* pTok = *ppTok;
+            OpCode eCurrOp = pTok->GetOpCode();
+            ++nToksTillIf;
+
+            // TODO : Is there a better way to handle this ?
+            // ocIf is too far off from the sum opcode.
+            if (nToksTillIf > MAXDIST_IF)
+                return;
+
+            switch (eCurrOp)
+            {
+                case ocDiv:
+                case ocMul:
+                    {
+                        if (!pTok->IsInForceArray())
+                            break;
+                        FormulaToken* pLHS = *(ppTok - 1);
+                        FormulaToken* pRHS = *(ppTok - 2);
+                        StackVar lhsType = pLHS->GetType();
+                        StackVar rhsType = pRHS->GetType();
+                        if (lhsType == svDoubleRef && rhsType == svDoubleRef)
+                        {
                             pLHS->GetDoubleRef()->SetTrimToData(true);
-                        else
                             pRHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                    }
+                    break;
+                case ocPush:
+                    break;
+                case ocClose:
+                    if (bTillClose)
+                    {
+                        bTillClose = false;
+                        bCloseTillIf = true;
+                    }
+                    else
+                        return;
+                    break;
+                case ocIf:
+                    {
+                        if (!bCloseTillIf)
+                            return;
+
+                        if (!pTok->IsInForceArray())
+                            return;
+
+                        const short nJumpCount = pTok->GetJump()[0];
+                        if (nJumpCount != 2) // Should have THEN but no ELSE.
+                            return;
+
+                        OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
+                        if (eCompOp != ocEqual)
+                            return;
+
+                        FormulaToken* pLHS = *(ppTok - 2);
+                        FormulaToken* pRHS = *(ppTok - 3);
+                        StackVar lhsType = pLHS->GetType();
+                        StackVar rhsType = pRHS->GetType();
+                        if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDouble))
+                        {
+                            pLHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                        if ((lhsType == svSingleRef || lhsType == svDouble) && rhsType == svDoubleRef)
+                        {
+                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                        }
                         return;
                     }
-                }
-                break;
-            default:
-                return;
+                    break;
+                default:
+                    return;
+            }
+            --ppTok;
         }
-        --ppTok;
     }
-
-    return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

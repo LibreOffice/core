@@ -197,7 +197,7 @@ inline void assertPointEqual(
     CPPUNIT_NS::assertDoubleEquals( rExpected.Y(), rActual.Y(), nTolerance, rSourceLine, "different Y" );
 }
 
-#define CPPUNIT_ASSERT_POINT_EQUAL(aExpected, aActual, aTolerance) \
+#define CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aExpected, aActual, aTolerance) \
         assertPointEqual( aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE() )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

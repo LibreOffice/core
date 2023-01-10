@@ -13,15 +13,12 @@
 #include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/compbase.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <utility>
 
-typedef comphelper::WeakComponentImplHelper<css::view::XSelectionChangeListener,
-                                            css::lang::XUnoTunnel>
+typedef comphelper::WeakComponentImplHelper<css::view::XSelectionChangeListener>
     SelectionChangeHandlerInterfaceBase;
 
 /** Selection change handler to listen to document selection changes.
@@ -69,17 +66,6 @@ public:
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& /*rEvent*/) override {}
     using comphelper::WeakComponentImplHelperBase::disposing;
-
-    sal_Int64 SAL_CALL getSomething(css::uno::Sequence<sal_Int8> const& aIdentifier) override
-    {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    static css::uno::Sequence<sal_Int8> const& getUnoTunnelId()
-    {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
-    }
 
 private:
     SelectionChangeHandler(const SelectionChangeHandler&) = delete;

@@ -242,6 +242,7 @@ class SwUINumRuleItem;
 #define FN_TOOL_ANCHOR_PAGE     (FN_INSERT + 50)    /* anchor Draw object to page */
 #define FN_TOOL_ANCHOR_PARAGRAPH (FN_INSERT + 51)   /* anchor Draw object to paragraph */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* change hierarchy */
+#define FN_PGNUMBER_WIZARD      (FN_INSERT + 53)    /* page number wizard */
 
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
 #define FN_TOOL_ANCHOR_FRAME    (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
@@ -313,6 +314,7 @@ class SwUINumRuleItem;
 #define FN_PROTECT_BOOKMARKS            (FN_INSERT2 + 27)
 
 #define FN_UPDATE_TEXT_FORMFIELDS       (FN_INSERT2 + 28)
+#define FN_UPDATE_TEXT_FORMFIELD        (FN_INSERT2 + 29)
 
 // clipboard table content
 #define FN_PASTE_NESTED_TABLE       (FN_INSERT2 + 30)  /* instead of the cell-by-cell copy between source and target tables */
@@ -321,6 +323,7 @@ class SwUINumRuleItem;
 
 #define FN_EDIT_BOOKMARK        (FN_INSERT2 + 33 )  /* Bookmark */
 #define FN_UPDATE_BOOKMARKS (FN_INSERT2 + 34)
+#define FN_UPDATE_SECTIONS (FN_INSERT2 + 35)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

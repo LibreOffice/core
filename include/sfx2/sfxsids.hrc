@@ -598,7 +598,7 @@ class SvxZoomItem;
 #define SID_ATTR_CHAR_COLOR_BACKGROUND      (SID_SVX_START + 489)
 #define SID_ATTR_CHAR_COLOR_BACKGROUND_EXT  (SID_SVX_START + 490)
 #define SID_ATTR_CHAR_COLOR2                (SID_SVX_START + 537)
-#define SID_ATTR_COLOR_STR                  TypedWhichId<SfxStringItem>(SID_SVX_START + 540)
+
 #define SID_COMP_BIBLIOGRAPHY               (SID_SVX_START + 880)
 #define SID_ADDRESS_DATA_SOURCE             (SID_SVX_START + 934)
 #define SID_OPEN_SMARTTAGOPTIONS            TypedWhichId<SfxBoolItem>(SID_SVX_START + 1062)

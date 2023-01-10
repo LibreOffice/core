@@ -18,6 +18,7 @@
  */
 
 #include <standard/svtaccessiblenumericfield.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

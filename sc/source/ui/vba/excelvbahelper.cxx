@@ -21,6 +21,7 @@
 
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
@@ -238,7 +239,7 @@ ScDocShell*
 getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
     uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
-    ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
+    ScModelObj* pModel = comphelper::getFromUnoTunnel< ScModelObj >( xIf );
     ScDocShell* pDocShell = nullptr;
     if ( pModel )
         pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());

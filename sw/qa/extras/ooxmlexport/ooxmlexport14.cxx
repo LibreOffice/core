@@ -129,6 +129,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c
     CPPUNIT_ASSERT_MESSAGE("Text must not wrap around header image", nRowHeight < 800);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf151704_thinColumnHeight, "tdf151704_thinColumnHeight.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nRowHeightT1 = getXPath(
+        pXmlDoc, "//page[1]/body/tab[1]/row/cell/tab[1]/row[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nRowHeightT2 = getXPath(
+        pXmlDoc, "//page[2]/body/tab/row[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Same row height in both tables", nRowHeightT1, nRowHeightT2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
@@ -1286,6 +1296,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
     CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg 6"), xLastFootnote->getString().trim() );
 
     uno::Reference<text::XTextRange> xLastButOne(xFootnotes->getByIndex(4), uno::UNO_QUERY);
+    // This was "Footnote for pg 6" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
+{
+    loadAndSave("tdf152506.docx");
+    xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XTextRange> xLastFootnote(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    // This was "Footnote for pg5" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg 6"), xLastFootnote->getString().trim() );
+
+    uno::Reference<text::XTextRange> xLastButOne(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // This was "Footnote for pg 6" (replaced footnotes)
     CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
 }

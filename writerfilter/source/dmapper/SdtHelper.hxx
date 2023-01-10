@@ -126,6 +126,9 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:sdtPr>'s <w15:color w:val="...">.
     OUString m_aColor;
 
+    /// <w:sdtPr>'s <w15:appearance w:val="...">.
+    OUString m_aAppearance;
+
     /// <w:sdtPr>'s <w:alias w:val="...">.
     OUString m_aAlias;
 
@@ -219,6 +222,9 @@ public:
 
     void SetColor(const OUString& rColor);
     const OUString& GetColor() const;
+
+    void SetAppearance(const OUString& rAppearance);
+    const OUString& GetAppearance() const;
 
     void SetAlias(const OUString& rAlias);
     const OUString& GetAlias() const;

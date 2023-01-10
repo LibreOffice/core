@@ -39,27 +39,14 @@ inline constexpr OUStringLiteral MYUCP_CONTENT_TYPE = u"application/vnd.sun.star
 
     class Databases;
 
-    class ContentProvider :
-        public ::ucbhelper::ContentProviderImplHelper,
-        public css::container::XContainerListener,
-        public css::lang::XComponent
+    typedef cppu::ImplInheritanceHelper< ::ucbhelper::ContentProviderImplHelper, css::container::XContainerListener, css::lang::XComponent> ContentProvider_Base;
+    class ContentProvider : public ContentProvider_Base
     {
     public:
         explicit ContentProvider(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         virtual ~ContentProvider() override;
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire()
-            noexcept override;
-        virtual void SAL_CALL release()
-            noexcept override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

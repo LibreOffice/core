@@ -74,7 +74,6 @@ void ScMoveTableDlg::SetForceCopyTable()
 {
     m_xBtnCopy->set_active(true);
     m_xBtnMove->set_sensitive(false);
-    m_xBtnCopy->set_sensitive(false);
     SetOkBtnLabel();
 }
 

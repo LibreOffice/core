@@ -963,10 +963,18 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
         if (!aSelectedValue.empty() || !aSelectedString.empty())
         {
-            if (aDoubleVal == aRDoubleVal)
-                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+            if (rEntry.GetStringType() == ScTypedStrData::Value)
+            {
+                if (aDoubleVal == aRDoubleVal)
+                    bSelected = aSelectedValue.count(aDoubleVal) > 0
+                                || aSelectedString.count(aStringVal) > 0;
+                else
+                    bSelected = aSelectedValue.count(aDoubleVal) > 0
+                                || aSelectedValue.count(aRDoubleVal) > 0
+                                || aSelectedString.count(aStringVal) > 0;
+            }
             else
-                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedValue.count(aRDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+                bSelected = aSelectedString.count(aStringVal) > 0;
         }
 
         if ( rEntry.IsDate() )

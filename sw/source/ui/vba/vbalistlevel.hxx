@@ -28,7 +28,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListLevel > SwVbaList
 class SwVbaListLevel : public SwVbaListLevel_BASE
 {
 private:
-    SwVbaListHelperRef pListHelper;
+    SwVbaListHelperRef m_pListHelper;
     sal_Int32 mnLevel;
 
 public:

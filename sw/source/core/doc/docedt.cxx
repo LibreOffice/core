@@ -110,15 +110,15 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
     {
         SwFrameFormat *const pFormat = rFormats[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        if (pAPos &&
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        if (pAnchorNode &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            rRg.aStart <= pAPos->GetNode() && pAPos->GetNode() < rRg.aEnd.GetNode() )
+            rRg.aStart <= *pAnchorNode && *pAnchorNode < rRg.aEnd.GetNode() )
         {
-            SaveFly aSave( pAPos->GetNodeIndex() - rRg.aStart.GetIndex(),
+            SaveFly aSave( pAnchorNode->GetIndex() - rRg.aStart.GetIndex(),
                             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
-                                ? pAPos->GetContentIndex()
+                                ? pAnchor->GetAnchorContentOffset()
                                 : 0,
                             pFormat, false );
             rArr.push_back( aSave );

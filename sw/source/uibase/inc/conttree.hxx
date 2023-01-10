@@ -138,7 +138,6 @@ class SwContentTree final : public SfxListener
 
     void OverlayObject(std::vector<basegfx::B2DRange>&& aRanges);
 
-    void BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr);
     void BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats);
     void BringBookmarksToAttention(const std::vector<OUString>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
@@ -147,6 +146,7 @@ class SwContentTree final : public SfxListener
     void BringDrawingObjectsToAttention(std::vector<const SdrObject*>& rDrawingObjectsArr);
     void BringTextFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
     void BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
+    void BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.

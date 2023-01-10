@@ -63,6 +63,19 @@ class moveCopySheet(UITestCase):
             self.assertEqual(document.Sheets[1].Name, "Sheet1")
             self.assertEqual(document.Sheets[2].Name, "moveName")
 
+    # tdf#56973 - copy/paste (single) sheet is checked but not enabled
+    def test_tdf56973_copy_paste_inactive(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                # A single sheet can only be copied
+                xCopyButton = xDialog.getChild("copy")
+                self.assertEqual(get_state_as_dict(xCopyButton)["Checked"], "true")
+                self.assertEqual(get_state_as_dict(xCopyButton)["Enabled"], "true")
+                # A single sheet can not be moved
+                xMoveButton = xDialog.getChild("move")
+                self.assertEqual(get_state_as_dict(xMoveButton)["Checked"], "false")
+                self.assertEqual(get_state_as_dict(xMoveButton)["Enabled"], "false")
+
     #tdf#139464 Set OK button label to selected action: Move or Copy
     def test_tdf139464_move_sheet(self):
         with self.ui_test.create_doc_in_start_center("calc"):

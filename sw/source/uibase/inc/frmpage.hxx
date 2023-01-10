@@ -192,6 +192,8 @@ public:
     void            EnableVerticalPositioning( bool bEnable );
 };
 
+/// Tabpage providing the functionality behind Format -> Image -> Properties and then the Rotation
+/// tabpage.
 class SwGrfExtPage final : public SfxTabPage
 {
     OUString        m_aFilterName;

@@ -190,7 +190,6 @@
   <block-list:block block-list:abbreviated-name="asessoria" block-list:name="assessoria"/>
   <block-list:block block-list:abbreviated-name="asessorias" block-list:name="assessorias"/>
   <block-list:block block-list:abbreviated-name="asim" block-list:name="assim"/>
-  <block-list:block block-list:abbreviated-name="aspeto" block-list:name="aspeto"/>
   <block-list:block block-list:abbreviated-name="assacina" block-list:name="assassina"/>
   <block-list:block block-list:abbreviated-name="assacinas" block-list:name="assassinas"/>
   <block-list:block block-list:abbreviated-name="assacino" block-list:name="assassino"/>
@@ -261,7 +260,6 @@
   <block-list:block block-list:abbreviated-name="ben" block-list:name="bem"/>
   <block-list:block block-list:abbreviated-name="ben" block-list:name="bem"/>
   <block-list:block block-list:abbreviated-name="beneficiência" block-list:name="beneficência"/>
-  <block-list:block block-list:abbreviated-name="beringela" block-list:name="beringela"/>
   <block-list:block block-list:abbreviated-name="bibkioteca" block-list:name="biblioteca"/>
   <block-list:block block-list:abbreviated-name="bibkiotecas" block-list:name="bibliotecas"/>
   <block-list:block block-list:abbreviated-name="biciclete" block-list:name="bicicleta"/>
@@ -443,16 +441,6 @@
   <block-list:block block-list:abbreviated-name="consciencias" block-list:name="consciências"/>
   <block-list:block block-list:abbreviated-name="consertesa" block-list:name="com certeza"/>
   <block-list:block block-list:abbreviated-name="conserteza" block-list:name="com certeza"/>
-  <block-list:block block-list:abbreviated-name="contactada" block-list:name="contactada"/>
-  <block-list:block block-list:abbreviated-name="contactadas" block-list:name="contactadas"/>
-  <block-list:block block-list:abbreviated-name="contactado" block-list:name="contactado"/>
-  <block-list:block block-list:abbreviated-name="contactados" block-list:name="contactados"/>
-  <block-list:block block-list:abbreviated-name="contactamos" block-list:name="contactamos"/>
-  <block-list:block block-list:abbreviated-name="contactar" block-list:name="contactar"/>
-  <block-list:block block-list:abbreviated-name="contactei" block-list:name="contactei"/>
-  <block-list:block block-list:abbreviated-name="contacto" block-list:name="contacto"/>
-  <block-list:block block-list:abbreviated-name="contactos" block-list:name="contactos"/>
-  <block-list:block block-list:abbreviated-name="contactou" block-list:name="contactou"/>
   <block-list:block block-list:abbreviated-name="contezto" block-list:name="contexto"/>
   <block-list:block block-list:abbreviated-name="conxa" block-list:name="concha"/>
   <block-list:block block-list:abbreviated-name="conzinha" block-list:name="cozinha"/>

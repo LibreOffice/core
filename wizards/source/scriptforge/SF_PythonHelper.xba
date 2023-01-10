@@ -814,6 +814,8 @@ Try:
 							End Select
 						Case &quot;SFDocuments.FormControl&quot;
 							If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
+						Case &quot;SFDocuments.FormDocument&quot;
+							If Script = &quot;Forms&quot; Then		vReturn = vBasicObject.Forms(vArgs(0))
 					End Select
 				End If
 			

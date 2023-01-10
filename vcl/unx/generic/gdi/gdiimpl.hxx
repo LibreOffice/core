@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <ControlCacheKey.hxx>
+#include <optional>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
@@ -40,10 +41,11 @@ class Gradient;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
-private:
+protected:
     X11SalGraphics& mrParent;
 
-    Color mnBrushColor;
+private:
+    std::optional<Color> moBrushColor;
     GC mpBrushGC;      // Brush attributes
     Pixel mnBrushPixel;
 
@@ -59,7 +61,7 @@ private:
     bool mbXORMode : 1;      // is ROP XOR Mode set
 
     GC mpPenGC;        // Pen attributes
-    Color mnPenColor;
+    std::optional<Color> moPenColor;
     Pixel mnPenPixel;
 
 
@@ -89,11 +91,6 @@ private:
                                );
 
     XID GetXRenderPicture();
-    bool drawFilledTrapezoids( const basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
-    bool drawFilledTriangles(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::triangulator::B2DTriangleVector& rTriangles,
-        double fTransparency);
 
     tools::Long GetGraphicsHeight() const;
 
@@ -101,7 +98,7 @@ private:
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
 
-    void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
+    void internalDrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
 
 public:
 
@@ -113,7 +110,7 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
-    virtual bool setClipRegion( const vcl::Region& ) override;
+    virtual void setClipRegion( const vcl::Region& ) override;
     //
     // get the depth of the device
     virtual sal_uInt16 GetBitCount() const override;
@@ -146,36 +143,6 @@ public:
 
     // set fill color for raster operations
     virtual void SetROPFillColor( SalROPColor nROPColor ) override;
-
-    // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void drawPixel( tools::Long nX, tools::Long nY ) override;
-    virtual void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
-
-    virtual void drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
-
-    virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
-
-    virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-
-    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
-
-    virtual bool drawPolyPolygon(
-                const basegfx::B2DHomMatrix& rObjectToDevice,
-                const basegfx::B2DPolyPolygon&,
-                double fTransparency) override;
-
-    virtual bool drawPolyLine(
-                const basegfx::B2DHomMatrix& rObjectToDevice,
-                const basegfx::B2DPolygon&,
-                double fTransparency,
-                double fLineWidth,
-                const std::vector< double >* pStroke, // MM01
-                basegfx::B2DLineJoin,
-                css::drawing::LineCap,
-                double fMiterMinimumAngle,
-                bool bPixelSnapHairline) override;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
@@ -217,8 +184,6 @@ public:
                 Color nMaskColor ) override;
 
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual Color getPixel( tools::Long nX, tools::Long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
@@ -271,24 +236,6 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) override;
-
-    virtual bool hasFastDrawTransformedBitmap() const override;
-
-    /** Render solid rectangle with given transparency
-
-        @param nTransparency
-        Transparency value (0-255) to use. 0 blits and opaque, 255 a
-        fully transparent rectangle
-     */
-    virtual bool drawAlphaRect(
-                    tools::Long nX, tools::Long nY,
-                    tools::Long nWidth, tools::Long nHeight,
-                    sal_uInt8 nTransparency ) override;
-
-    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
-    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
-
-    virtual bool supportsOperation(OutDevSupportType eType) const override;
 
 public:
     void Init() override;

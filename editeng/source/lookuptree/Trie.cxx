@@ -114,9 +114,8 @@ TrieNode* TrieNode::traversePath(std::u16string_view sPath)
 {
     TrieNode* pCurrent = this;
 
-    for ( size_t i = 0; i < sPath.size(); i++ )
+    for ( const auto aCurrentChar : sPath )
     {
-        sal_Unicode aCurrentChar = sPath[i];
         pCurrent = pCurrent->findChild(aCurrentChar);
         if ( pCurrent == nullptr )
             return nullptr;
@@ -145,11 +144,9 @@ void Trie::insert(std::u16string_view sInputString) const
     // traverse the input string and modify the tree with new nodes / characters
 
     TrieNode* pCurrent = mRoot.get();
-    sal_Unicode aCurrentChar;
 
-    for ( size_t i = 0; i < sInputString.size(); i++ )
+    for ( const auto aCurrentChar : sInputString )
     {
-        aCurrentChar = sInputString[i];
         TrieNode* pChild = pCurrent->findChild(aCurrentChar);
         if ( pChild == nullptr )
         {

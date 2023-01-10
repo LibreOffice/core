@@ -109,6 +109,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <node2lay.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -379,7 +380,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         break;
         case ContentTypeId::REFERENCE:
             m_bEdit = false;
-            m_bDelete = false;
+            m_bDelete = true;
         break;
         case ContentTypeId::URLFIELD:
             m_bEdit = true;
@@ -1187,18 +1188,20 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
-                    SwOutlineNodes aOutlineNodes;
-                    aOutlineNodes.insert(m_pActiveShell->GetNodes().
-                            GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]);
-                    BringHeadingsToAttention(aOutlineNodes);
+                    BringTypesWithFlowFramesToAttention({m_pActiveShell->GetNodes().
+                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]});
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
-                   if (const SwFrameFormats* pFrameFormats =
+                    if (const SwFrameFormats* pFrameFormats =
                             m_pActiveShell->GetDoc()->GetTableFrameFormats())
                         if (const SwFrameFormat* pFrameFormat =
                                 pFrameFormats->FindFormatByName(pCnt->GetName()))
-                            BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
+                        {
+                            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+                            if (pTable)
+                                BringTypesWithFlowFramesToAttention({pTable->GetTableNode()});
+                        }
                 }
                 else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
                          nType == ContentTypeId::OLE)
@@ -1216,12 +1219,12 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                 {
                     BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
                 }
-                else if (nType == ContentTypeId::REGION)
+                else if (nType == ContentTypeId::REGION|| nType == ContentTypeId::INDEX)
                 {
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
                     const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
                     if (pFormat)
-                        BringFramesToAttention(std::vector<const SwFrameFormat*> {pFormat});
+                        BringTypesWithFlowFramesToAttention({pFormat->GetSectionNode()});
                 }
                 else if (nType == ContentTypeId::URLFIELD)
                 {
@@ -1280,11 +1283,14 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
             {
                 if (nType == ContentTypeId::OUTLINE)
                 {
-                    BringHeadingsToAttention(m_pActiveShell->GetNodes().GetOutLineNds());
+                    std::vector<const SwNode*> aNodesArr(
+                                m_pActiveShell->GetNodes().GetOutLineNds().begin(),
+                                m_pActiveShell->GetNodes().GetOutLineNds().end());
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::TABLE)
                 {
-                    std::vector<const SwFrameFormat*> aTableFormatsArr;
+                    std::vector<const SwNode*> aNodesArr;
                     const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
                     const SwFrameFormats* pFrameFormats =
                             m_pActiveShell->GetDoc()->GetTableFrameFormats();
@@ -1294,9 +1300,13 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                         if (const SwTableFormat* pTableFormat =
                                 static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
                             if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
-                                aTableFormatsArr.push_back(pTableFormat);
+                            {
+                                SwTable* pTable = SwTable::FindTable(pTableFormat);
+                                if (pTable)
+                                    aNodesArr.push_back(pTable->GetTableNode());
+                            }
                     }
-                    BringFramesToAttention(aTableFormatsArr);
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
                          nType == ContentTypeId::OLE)
@@ -1320,30 +1330,33 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
                     }
                     BringBookmarksToAttention(aNames);
                 }
-                else if (nType == ContentTypeId::REGION)
+                else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
                 {
+                    std::vector<const SwNode*> aNodesArr;
                     const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
-                    if (const size_t nSize = rFormats.size())
+                    const size_t nSize = rFormats.size();
+                    for (SwSectionFormats::size_type n = nSize; n;)
                     {
-                        std::vector<const SwFrameFormat*> aSectionsFormatsArr;
-                        for (SwSectionFormats::size_type n = nSize; n;)
+                        const SwSectionFormat* pSectionFormat = rFormats[--n];
+                        if (pSectionFormat && pSectionFormat->IsInNodesArr())
                         {
-                            const SwSectionFormat* pFormat = rFormats[--n];
-                            if (pFormat && pFormat->IsInNodesArr())
+                            const SwSection* pSection = pSectionFormat->GetSection();
+                            if (pSection && !pSection->IsHiddenFlag())
                             {
-                                const SwSection* pSection = pFormat->GetSection();
-                                if (pSection && !pSection->IsHiddenFlag())
-                                {
-                                    if (SectionType eSectionType = pSection->GetType();
-                                            eSectionType == SectionType::ToxContent ||
-                                            eSectionType == SectionType::ToxHeader)
-                                        continue;
-                                    aSectionsFormatsArr.push_back(pFormat);
-                                }
+                                const SectionType eSectionType = pSection->GetType();
+                                if (nType == ContentTypeId::REGION &&
+                                        (eSectionType == SectionType::ToxContent ||
+                                         eSectionType == SectionType::ToxHeader))
+                                    continue;
+                                if (nType == ContentTypeId::INDEX &&
+                                        eSectionType != SectionType::ToxContent)
+                                    continue;
+                                if (const SwNode* pNode = pSectionFormat->GetSectionNode())
+                                    aNodesArr.push_back(pNode);
                             }
                         }
-                        BringFramesToAttention(aSectionsFormatsArr);
                     }
+                    BringTypesWithFlowFramesToAttention(aNodesArr);
                 }
                 else if (nType == ContentTypeId::URLFIELD)
                 {
@@ -1893,6 +1906,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
          bRemoveDeleteOLEObjectEntry = true,
          bRemoveDeleteBookmarkEntry = true,
          bRemoveDeleteHyperlinkEntry = true,
+         bRemoveDeleteReferenceEntry = true,
          bRemoveDeleteIndexEntry= true,
          bRemoveDeleteCommentEntry = true,
          bRemoveDeleteDrawingObjectEntry = true,
@@ -2050,6 +2064,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     case ContentTypeId::URLFIELD:
                         bRemoveDeleteHyperlinkEntry = false;
                     break;
+                    case ContentTypeId::REFERENCE:
+                        bRemoveDeleteReferenceEntry = false;
+                    break;
                     case ContentTypeId::INDEX:
                         bRemoveDeleteIndexEntry = false;
                     break;
@@ -2191,6 +2208,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("deletebookmark");
     if (bRemoveDeleteHyperlinkEntry)
         xPop->remove("deletehyperlink");
+    if (bRemoveDeleteReferenceEntry)
+        xPop->remove("deletereference");
     if (bRemoveDeleteIndexEntry)
         xPop->remove("deleteindex");
     if (bRemoveDeleteCommentEntry)
@@ -2208,6 +2227,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteOLEObjectEntry &&
             bRemoveDeleteBookmarkEntry &&
             bRemoveDeleteHyperlinkEntry &&
+            bRemoveDeleteReferenceEntry &&
             bRemoveDeleteIndexEntry &&
             bRemoveDeleteCommentEntry &&
             bRemoveDeleteDrawingObjectEntry &&
@@ -3579,9 +3599,10 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         }
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
-        pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
         if (bUpDown)
         {
+            // move outline position up/down (outline position promote/demote)
+            pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
             const size_t nEntryAbsPos(GetAbsPos(*pCurrentEntry));
             SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
             if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
@@ -3734,8 +3755,44 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         }
         else
         {
+            // move outline left/right (outline level promote/demote)
             if (!pShell->IsProtectedOutlinePara())
-                pShell->OutlineUpDown(bLeft ? -1 : 1);
+            {
+                bool bAllow = true;
+                const SwOutlineNodes& rOutlNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
+                const int nActLevel = rOutlNds[nActPos]->GetTextNode()->GetAttrOutlineLevel();
+                if (!bLeft)
+                {
+                    // disallow if any outline node to demote will exceed MAXLEVEL
+                    SwOutlineNodes::size_type nPos = nActPos;
+                    do
+                    {
+                        int nLevel = rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel();
+                        if (nLevel == MAXLEVEL)
+                        {
+                            bAllow = false;
+                            break;
+                        }
+                    } while (bOutlineWithChildren && ++nPos < rOutlNds.size() &&
+                             rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel() > nActLevel);
+                }
+                else
+                {
+                    // disallow if trying to promote outline of level 1
+                    if (nActLevel == 1)
+                        bAllow = false;
+                }
+                if (bAllow)
+                {
+                    SwOutlineNodes::size_type nPos = nActPos;
+                    do
+                    {
+                        pShell->SwCursorShell::GotoOutline(nPos);
+                        pShell->OutlineUpDown(bLeft ? -1 : 1);
+                    } while (bOutlineWithChildren && ++nPos < rOutlNds.size() &&
+                             rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel() > nActLevel);
+                }
+            }
         }
 
         pShell->ClearMark();
@@ -4853,6 +4910,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
              rSelectedPopupEntry == "deleteoleobject" ||
              rSelectedPopupEntry == "deletebookmark" ||
              rSelectedPopupEntry == "deletehyperlink" ||
+             rSelectedPopupEntry == "deletereference" ||
              rSelectedPopupEntry == "deleteindex" ||
              rSelectedPopupEntry == "deletecomment" ||
              rSelectedPopupEntry == "deletedrawingobject" ||
@@ -5383,6 +5441,28 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 nSlot = SID_EDIT_HYPERLINK;
         break;
         case ContentTypeId::REFERENCE:
+        {
+            if(nMode == EditEntryMode::DELETE)
+            {
+                const OUString& rName = pCnt->GetName();
+                for (SfxPoolItem* pItem :
+                     m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+                {
+                    assert(dynamic_cast<const SwFormatRefMark*>(pItem));
+                    const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
+                    if (!pFormatRefMark)
+                        continue;
+                    const SwTextRefMark* pTextRef = pFormatRefMark->GetTextRefMark();
+                    if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
+                            &m_pActiveShell->GetNodes() && rName == pFormatRefMark->GetRefName())
+                    {
+                        m_pActiveShell->GetDoc()->DeleteFormatRefMark(pFormatRefMark);
+                        m_pActiveShell->SwViewShell::UpdateFields();
+                        break;
+                    }
+                }
+            }
+        }
         break;
         case ContentTypeId::TEXTFIELD:
         {
@@ -5662,9 +5742,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
             !m_pActiveShell->IsObjSelected()))
     {
-        Point rPoint = m_pActiveShell->GetCursorDocPos();
-        rPoint.setX(0);
-        rView.SetVisArea(rPoint);
+        Point aPoint(rView.GetVisArea().getX(), m_pActiveShell->GetCursorDocPos().getY());
+        rView.SetVisArea(aPoint);
     }
 }
 
@@ -5775,28 +5854,6 @@ void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
     m_aOverlayObjectDelayTimer.Start();
 }
 
-void SwContentTree::BringHeadingsToAttention(const SwOutlineNodes& rOutlineNodesArr)
-{
-    std::vector<basegfx::B2DRange> aRanges;
-    for (const SwNode* p : rOutlineNodesArr)
-    {
-        if (!p || !p->GetTextNode())
-            continue;
-        const SwTextNode& rTextNode = *p->GetTextNode();
-        if (const SwTextFrame* pFrame = static_cast<const SwTextFrame*>(
-                    rTextNode.getLayoutFrame(m_pActiveShell->GetLayout())))
-        {
-            SwContentIndex nIndex(&rTextNode);
-            auto nStart = nIndex.GetIndex();
-            auto nEnd = nStart +  rTextNode.GetText().getLength();
-            SwPosition aStartPos(rTextNode, nStart), aEndPos(rTextNode, nEnd);
-            lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
-        }
-    }
-    if (aRanges.size())
-        OverlayObject(std::move(aRanges));
-}
-
 void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats)
 {
     std::vector<basegfx::B2DRange> aRanges;
@@ -5847,6 +5904,33 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
                 aMarkStart.AdjustContent(-1);
         }
         lcl_CalcOverlayRanges(pMarkStartFrame, pMarkEndFrame, aMarkStart, aMarkEnd, aRanges);
+    }
+    if (aRanges.size())
+        OverlayObject(std::move(aRanges));
+}
+
+void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes)
+{
+    std::vector<basegfx::B2DRange> aRanges;
+    for (const auto* pNode : rNodes)
+    {
+        if (!pNode)
+            continue;
+        SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
+        SwFrame* pFrame = aTmp.NextFrame();
+        while (pFrame)
+        {
+            const SwRect& rFrameRect = pFrame->getFrameArea();
+            if (!rFrameRect.IsEmpty())
+                aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(), rFrameRect.Right(),
+                                     rFrameRect.Bottom());
+            if (!pFrame->IsFlowFrame())
+                break;
+            SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+            if (!pFollow)
+                break;
+            pFrame = &pFollow->GetFrame();
+        }
     }
     if (aRanges.size())
         OverlayObject(std::move(aRanges));
@@ -5912,8 +5996,6 @@ void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>&
         assert(dynamic_cast<const SwTextAnnotationField*>(pTextField));
         const SwTextAnnotationField* pTextAnnotationField =
                 static_cast<const SwTextAnnotationField*>(pTextField);
-        if (!pTextAnnotationField)
-            continue;
         const ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField->GetAnnotationMark();
         const SwPosition aMarkStart = pAnnotationMark ? pAnnotationMark->GetMarkStart()
                                                 : SwPosition(rTextNode, p->GetStart());

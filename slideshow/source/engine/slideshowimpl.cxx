@@ -82,6 +82,7 @@
 #include "pointersymbol.hxx"
 
 #include <map>
+#include <thread>
 #include <utility>
 #include <vector>
 #include <algorithm>
@@ -2416,7 +2417,7 @@ void FrameSynchronization::Synchronize()
             // Try to sleep most of it.
             int remainingMilliseconds = remainingTime * 1000;
             if(remainingMilliseconds > 2)
-                osl::Thread::wait(std::chrono::milliseconds(remainingMilliseconds - 2));
+                std::this_thread::sleep_for(std::chrono::milliseconds(remainingMilliseconds - 2));
         }
     }
 

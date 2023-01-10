@@ -475,7 +475,7 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwFormatAnchor& rFlyFormat
                (nPamEndIndex > nFlyIndex));
         else
         {
-            const sal_Int32 nFlyContentIndex = rFlyFormatAnchor.GetContentAnchor()->GetContentIndex();
+            const sal_Int32 nFlyContentIndex = rFlyFormatAnchor.GetAnchorContentOffset();
             const sal_Int32 nPamEndContentIndex = pPaMEnd->GetContentIndex();
             bOk = (nPamStartIndex < nFlyIndex &&
                 (( nPamEndIndex > nFlyIndex )||
@@ -787,7 +787,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 {
                     SwTextNode *pTextNode = rAnchor.GetAnchorNode()->GetTextNode();
                     OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-                    const sal_Int32 nIdx = rAnchor.GetContentAnchor()->GetContentIndex();
+                    const sal_Int32 nIdx = rAnchor.GetAnchorContentOffset();
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
@@ -1105,7 +1105,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     {
         SwTextNode *pTextNode = rAnchor.GetAnchorNode()->GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = rAnchor.GetContentAnchor()->GetContentIndex();
+        const sal_Int32 nIdx = rAnchor.GetAnchorContentOffset();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 

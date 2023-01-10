@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/outdev.hxx>
 
 #include "outdevholder.hxx"
@@ -95,10 +94,6 @@ namespace vclcanvas
     OUString SAL_CALL Canvas::getServiceName(  )
     {
         return "com.sun.star.rendering.Canvas.VCL";
-    }
-
-    sal_Int64 Canvas::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl<RepaintTarget>(aIdentifier, this);
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,

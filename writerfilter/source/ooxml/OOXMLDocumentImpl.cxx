@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <ooxml/resourceids.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
@@ -484,6 +485,12 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
     mxThemeDom = importSubStream(OOXMLStream::THEME);
     resolveFastSubStream(rStream, OOXMLStream::THEME);
+    // Convert the oox::Theme to the draw page
+    {
+        auto pThemePtr = getTheme();
+        if (pThemePtr)
+            pThemePtr->addTheme(getDrawPage());
+    }
     mxGlossaryDocDom = importSubStream(OOXMLStream::GLOSSARY);
     if (mxGlossaryDocDom.is())
         resolveGlossaryStream(rStream);
@@ -883,6 +890,13 @@ const rtl::Reference<oox::shape::ShapeFilterBase>& OOXMLDocumentImpl::getShapeFi
     if (!mxShapeFilterBase)
         mxShapeFilterBase = new oox::shape::ShapeFilterBase(mpStream->getContext());
     return mxShapeFilterBase;
+}
+
+const rtl::Reference<oox::drawingml::ThemeFilterBase>& OOXMLDocumentImpl::getThemeFilterBase()
+{
+    if (!mxThemeFilterBase)
+        mxThemeFilterBase = new oox::drawingml::ThemeFilterBase(mpStream->getContext());
+    return mxThemeFilterBase;
 }
 
 OOXMLDocument *

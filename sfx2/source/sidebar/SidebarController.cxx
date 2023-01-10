@@ -41,7 +41,6 @@
 #include <vcl/svapp.hxx>
 #include <splitwin.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -187,10 +186,10 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
             ::comphelper::getProcessComponentContext(),
             xController,
             [] (uno::Reference<uno::XInterface> const& xRef)
-            { return nullptr != comphelper::getFromUnoTunnel<SidebarController>(xRef); }
+            { return nullptr != dynamic_cast<SidebarController*>(xRef.get()); }
         ));
 
-    return comphelper::getFromUnoTunnel<SidebarController>(xListener);
+    return dynamic_cast<SidebarController*>(xListener.get());
 }
 
 void SidebarController::registerSidebarForFrame(const css::uno::Reference<css::frame::XController>& xController)
@@ -1647,16 +1646,7 @@ sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView
     if (!xSidebar.is())
         return nullptr;
 
-    return comphelper::getFromUnoTunnel<sfx2::sidebar::SidebarController>(xSidebar);
-}
-
-sal_Int64 SidebarController::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & SidebarController::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
+    return dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
 }
 
 } // end of namespace sfx2::sidebar

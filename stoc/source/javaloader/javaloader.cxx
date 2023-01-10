@@ -46,7 +46,6 @@
 #include <rtl/random.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/security.hxx>
-#include <osl/thread.hxx>
 
 #include <cppuhelper/factory.hxx>
 
@@ -67,6 +66,8 @@
 
 // this one is header-only
 #include <comphelper/sequence.hxx>
+
+#include <thread>
 #include <utility>
 
 namespace com::sun::star::registry { class XRegistryKey; }
@@ -210,7 +211,7 @@ Reference<XComponentContext> raise_uno_process(
             }
             catch (const css::connection::NoConnectException &) {
                 if (i < 40) {
-                    ::osl::Thread::wait( std::chrono::milliseconds(500) );
+                    std::this_thread::sleep_for( std::chrono::milliseconds(500) );
                 }
                 else throw;
             }

@@ -65,8 +65,6 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::SubtractFlysAnchoredAtFlys, false );
     setValue<bool>( Index::EmptyDbFieldHidesPara, true );
     setValue<bool>( Index::AddTableLineSpacing, false );
-
-    setDefaultEntry( false );
 }
 
 OUString SvtCompatibilityEntry::getName( const Index rIdx )

@@ -48,6 +48,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <memory>
+#include <thread>
 
 #if ENABLE_DBUS
 #include <dbus/dbus.h>
@@ -792,10 +793,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
             else
             {
                 // Pipe connection failed (other office exited or crashed)
-                TimeValue tval;
-                tval.Seconds = 0;
-                tval.Nanosec = 500000000;
-                salhelper::Thread::wait( tval );
+                std::this_thread::sleep_for( std::chrono::milliseconds(500) );
             }
         }
         else
@@ -805,10 +803,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
                 return RequestHandler::IPC_STATUS_PIPE_ERROR;
 
             // Wait for second office to be ready
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 0;
-            aTimeValue.Nanosec = 10000000; // 10ms
-            salhelper::Thread::wait( aTimeValue );
+            std::this_thread::sleep_for( std::chrono::milliseconds(10) );
         }
 
     } while ( nPipeMode == PIPEMODE_DONTKNOW );
@@ -1206,10 +1201,7 @@ void PipeIpcThread::execute()
             }
 
             SAL_WARN( "desktop.app", "Error on accept: " << static_cast<int>(nError));
-            TimeValue tval;
-            tval.Seconds = 1;
-            tval.Nanosec = 0;
-            salhelper::Thread::wait( tval );
+            std::this_thread::sleep_for( std::chrono::seconds(1) );
         }
     } while( schedule() );
 }

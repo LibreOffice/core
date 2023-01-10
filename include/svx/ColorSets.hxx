@@ -11,9 +11,11 @@
 #ifndef INCLUDED_SVX_COLORSETS_HXX
 #define INCLUDED_SVX_COLORSETS_HXX
 
+#include <array>
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
@@ -24,25 +26,55 @@ class SdrPage;
 namespace svx
 {
 
-class ColorSet
+/// Offsets into the color list of a theme.
+enum class ThemeColorType : sal_Int32
 {
-    OUString maColorSetName;
-    std::vector<Color> maColors;
-public:
-    ColorSet(OUString aName);
+    Unknown = -1,
+    Dark1 = 0,
+    Light1 = 1,
+    Dark2 = 2,
+    Light2 = 3,
+    Accent1 = 4,
+    Accent2 = 5,
+    Accent3 = 6,
+    Accent4 = 7,
+    Accent5 = 8,
+    Accent6 = 9,
+    Hyperlink = 10,
+    FollowedHyperlink = 11,
+    LAST = FollowedHyperlink
+};
 
-    void add(sal_uInt32 nIndex, ::Color aColorData)
-    {
-        maColors[nIndex] = aColorData;
-    }
+constexpr ThemeColorType convertToThemeColorType(sal_Int32 nIndex)
+{
+    if (nIndex < 0 || nIndex > 11)
+        return ThemeColorType::Unknown;
+    return static_cast<ThemeColorType>(nIndex);
+}
+
+class SVXCORE_DLLPUBLIC ColorSet
+{
+    OUString maName;
+    std::array<Color, 12> maColors;
+
+public:
+    ColorSet(OUString const& rName);
+
+    void add(sal_uInt32 nIndex, Color aColorData);
 
     const OUString& getName() const
     {
-        return maColorSetName;
+        return maName;
     }
-    const Color& getColor(sal_uInt32 nIndex) const
+
+    Color getColor(ThemeColorType nType) const
     {
-        return maColors[nIndex];
+        if (nType == ThemeColorType::Unknown)
+        {
+            SAL_WARN("svx", "ColorSet::getColor with ThemeColorType::Unknown");
+            return COL_AUTO;
+        }
+        return maColors[size_t(nType)];
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -61,42 +93,177 @@ public:
         return maColorSets;
     }
 
-    const ColorSet& getColorSet(sal_uInt32 nIndex)
+    const ColorSet& getColorSet(sal_uInt32 nIndex) const
     {
         return maColorSets[nIndex];
     }
 
     const ColorSet& getColorSet(std::u16string_view rName);
+
+    void insert(ColorSet const& rColorSet);
 };
 
-/// Offsets into the color list of a theme.
-enum class ThemeColorType
+struct SVXCORE_DLLPUBLIC ThemeSupplementalFont
 {
-    DK1 = 0,
-    LT1 = 1,
-    DK2 = 2,
-    LT2 = 3,
-    ACCENT1 = 4,
-    ACCENT2 = 5,
-    ACCENT3 = 6,
-    ACCENT4 = 7,
-    ACCENT5 = 8,
-    ACCENT6 = 9,
-    HLINK = 10,
-    FOLHLINK = 11,
+    OUString maScript;
+    OUString maTypeface;
+};
+
+struct SVXCORE_DLLPUBLIC ThemeFont
+{
+    OUString maTypeface;
+    OUString maPanose;
+    sal_Int16 maPitch = 0;
+    sal_Int16 maFamily = 0;
+    sal_Int32 maCharset = 0;
+
+    sal_Int16 getPitchFamily() const
+    {
+        return (maPitch & 0x0F) | (maFamily & 0x0F) << 4;
+    }
+};
+
+class SVXCORE_DLLPUBLIC FontScheme
+{
+private:
+    OUString maName;
+
+    ThemeFont maMinorLatin;
+    ThemeFont maMinorAsian;
+    ThemeFont maMinorComplex;
+
+    ThemeFont maMajorLatin;
+    ThemeFont maMajorAsian;
+    ThemeFont maMajorComplex;
+
+    std::vector<ThemeSupplementalFont> maMinorSupplementalFontList;
+    std::vector<ThemeSupplementalFont> maMajorSupplementalFontList;
+
+public:
+    FontScheme() = default;
+    FontScheme(OUString const& rName)
+        : maName(rName)
+    {}
+
+    const OUString& getName() const
+    {
+        return maName;
+    }
+
+    ThemeFont const& getMinorLatin() const
+    {
+        return maMinorLatin;
+    }
+    void setMinorLatin(ThemeFont const& aMinor)
+    {
+        maMinorLatin = aMinor;
+    }
+
+    ThemeFont const& getMinorAsian() const
+    {
+        return maMinorAsian;
+    }
+    void setMinorAsian(ThemeFont const& aMinor)
+    {
+        maMinorAsian = aMinor;
+    }
+
+    ThemeFont const& getMinorComplex() const
+    {
+        return maMinorComplex;
+    }
+    void setMinorComplex(ThemeFont const& aMinor)
+    {
+        maMinorComplex = aMinor;
+    }
+
+    ThemeFont const& getMajorLatin() const
+    {
+        return maMajorLatin;
+    }
+    void setMajorLatin(ThemeFont const& aMajor)
+    {
+        maMajorLatin = aMajor;
+    }
+
+    ThemeFont const& getMajorAsian() const
+    {
+        return maMajorAsian;
+    }
+    void setMajorAsian(ThemeFont const& aMajor)
+    {
+        maMajorAsian = aMajor;
+    }
+
+    ThemeFont const& getMajorComplex() const
+    {
+        return maMajorComplex;
+    }
+    void setMajorComplex(ThemeFont const& aMajor)
+    {
+        maMajorComplex = aMajor;
+    }
+
+    OUString findMinorSupplementalTypeface(std::u16string_view rScript) const
+    {
+        for (auto const& rSupplementalFont : maMinorSupplementalFontList)
+        {
+            if (rSupplementalFont.maScript == rScript)
+                return rSupplementalFont.maTypeface;
+        }
+        return OUString();
+    }
+
+    std::vector<ThemeSupplementalFont> const& getMinorSupplementalFontList() const
+    {
+        return maMinorSupplementalFontList;
+    }
+    void setMinorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)
+    {
+        maMinorSupplementalFontList = rSupplementalFont;
+    }
+
+    OUString findMajorSupplementalTypeface(std::u16string_view rScript) const
+    {
+        for (auto const& rSupplementalFont : maMajorSupplementalFontList)
+        {
+            if (rSupplementalFont.maScript == rScript)
+                return rSupplementalFont.maTypeface;
+        }
+        return OUString();
+    }
+
+    std::vector<ThemeSupplementalFont> const& getMajorSupplementalFontList() const
+    {
+        return maMajorSupplementalFontList;
+    }
+    void setMajorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)
+    {
+        maMajorSupplementalFontList = rSupplementalFont;
+    }
 };
 
 /// A named theme has a named color set.
 class SVXCORE_DLLPUBLIC Theme
 {
+private:
     OUString maName;
     std::unique_ptr<ColorSet> mpColorSet;
 
+    FontScheme maFontScheme;
+
 public:
-    Theme(OUString sName);
-    ~Theme();
+    Theme(OUString const& rName);
+
+    void setFontScheme(FontScheme const& rFontScheme)
+    {
+        maFontScheme = rFontScheme;
+    }
+
+    FontScheme const& getFontScheme() const { return maFontScheme; }
 
     void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
+    const ColorSet* GetColorSet() const;
     ColorSet* GetColorSet();
 
     void SetName(const OUString& rName);

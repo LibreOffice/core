@@ -769,7 +769,7 @@ The following structure describes the permissions used in PDF security
                                        o3tl::span<const sal_Bool> pKashidaAry,
                                        sal_Int32 nIndex,
                                        sal_Int32 nLen );
-    void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
+    void                DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );
     void                DrawText( const tools::Rectangle& rRect,

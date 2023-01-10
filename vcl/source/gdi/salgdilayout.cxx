@@ -373,15 +373,15 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutD
     return m_aLastMirror;
 }
 
-bool SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice& rOutDev )
+void SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice& rOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
         vcl::Region aMirror( i_rClip );
         mirror( aMirror, rOutDev );
-        return setClipRegion( aMirror );
+        setClipRegion( aMirror );
     }
-    return setClipRegion( i_rClip );
+    setClipRegion( i_rClip );
 }
 
 void SalGraphics::DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice& rOutDev )

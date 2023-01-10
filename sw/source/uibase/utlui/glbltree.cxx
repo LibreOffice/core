@@ -317,7 +317,7 @@ MenuEnableFlags SwGlobalTree::GetEnableFlags() const
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
     bool bEntry = m_xTreeView->get_selected(xEntry.get());
 
-    sal_uLong nSelCount = m_xTreeView->count_selected_rows();
+    int nSelCount = m_xTreeView->count_selected_rows();
     size_t nEntryCount = m_xTreeView->n_children();
     std::unique_ptr<weld::TreeIter> xPrevEntry;
     bool bPrevEntry = false;
@@ -852,11 +852,11 @@ void SwGlobalTree::ExecCommand(std::string_view rCmd)
         if (m_xTreeView->count_selected_rows() == 1)
         {
             bool bMove = false;
-            sal_uLong nSource = nEntry;
-            sal_uLong nDest = nSource;
+            int nSource = nEntry;
+            int nDest = nSource;
             if (rCmd == "movedown")
             {
-                size_t nEntryCount = m_xTreeView->n_children();
+                int nEntryCount = m_xTreeView->n_children();
                 bMove = nEntryCount > nSource + 1;
                 nDest+= 2;
             }

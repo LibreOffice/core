@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_workdir,extras/gallsysstr)/%.str : \
                     $(SRCDIR)/solenv/bin/desktop-translate.py
 	mkdir -p $(@D)/$* && cp $(SRCDIR)/extras/source/gallery/gallery_system/dummy.str $(@D)/$*/$*.str && \
 	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/desktop-translate.py \
-            --ext "str" --key "name" -d $(@D)/$*/ $(@D)/extras_gallsystem.ulf && \
+            --ext "str" -d $(@D)/$*/ $(@D)/extras_gallsystem.ulf && \
 	mv $(@D)/$*/$*.str $@
 
 # vim: set noet sw=4 ts=4:

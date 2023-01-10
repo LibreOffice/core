@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
@@ -533,7 +534,7 @@ void WorkbookGlobals::initialize()
 
     if (mxDoc)
     {
-        ScModelObj* pModel = dynamic_cast<ScModelObj*>(mxDoc.get());
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(mxDoc);
         if (pModel)
             mpDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if (mpDocShell)

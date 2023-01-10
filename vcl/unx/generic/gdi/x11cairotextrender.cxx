@@ -32,7 +32,7 @@ X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
 
 cairo_t* X11CairoTextRender::getCairoContext()
 {
-    return mrParent.getCairoContext();
+    return mrParent.getCairoContext(mrParent.GetGeometryProvider());
 }
 
 void X11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )

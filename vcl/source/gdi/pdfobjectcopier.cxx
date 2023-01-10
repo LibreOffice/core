@@ -184,6 +184,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
 
     // Get the rKind subset of the resource dictionary.
     std::map<OString, filter::PDFElement*> aItems;
+    filter::PDFObjectElement* pKindObject = nullptr;
     if (auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources")))
     {
         // Resources is a direct dictionary.
@@ -202,6 +203,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
                 return {};
             }
 
+            pKindObject = pReferenced;
             aItems = pReferenced->GetDictionaryItems();
         }
     }
@@ -210,23 +212,37 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
         // Resources is an indirect object.
         filter::PDFElement* pValue = pPageResources->Lookup(rKind);
         if (auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pValue))
+        {
             // Kind is a direct dictionary.
             aItems = pDictionary->GetItems();
+        }
         else if (filter::PDFObjectElement* pObject = pPageResources->LookupObject(rKind))
+        {
             // Kind is an indirect object.
             aItems = pObject->GetDictionaryItems();
+            pKindObject = pObject;
+        }
     }
     if (aItems.empty())
         return {};
 
     SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
+    bool bHasDictValue = false;
 
     for (const auto& rItem : aItems)
     {
         // For each item copy it over to our output then insert it into aRet.
         auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
         if (!pReference)
+        {
+            if (pKindObject && dynamic_cast<filter::PDFDictionaryElement*>(rItem.second))
+            {
+                bHasDictValue = true;
+                break;
+            }
+
             continue;
+        }
 
         filter::PDFObjectElement* pValue = pReference->LookupObject();
         if (!pValue)
@@ -235,6 +251,12 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
         // Then copying over an object copy its dictionary and its stream.
         sal_Int32 nObject = copyExternalResource(rDocBuffer, *pValue, rCopiedResources);
         aRet[rItem.first] = nObject;
+    }
+
+    if (bHasDictValue && pKindObject)
+    {
+        sal_Int32 nObject = copyExternalResource(rDocBuffer, *pKindObject, rCopiedResources);
+        return "/" + rKind + " " + OString::number(nObject) + " 0 R";
     }
 
     // Build the dictionary entry string.
@@ -260,7 +282,7 @@ void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OString
 {
     rLine.append(" /Resources <<");
     static const std::initializer_list<OString> aKeys
-        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading" };
+        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading", "Pattern" };
     for (const auto& rKey : aKeys)
     {
         rLine.append(copyExternalResources(*pPage, rKey, rCopiedResources));
@@ -283,6 +305,14 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
         SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
         auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
+        auto pFilterArray = dynamic_cast<filter::PDFArrayElement*>(pContent->Lookup("Filter"));
+        if (!pFilter && pFilterArray)
+        {
+            auto& aElements = pFilterArray->GetElements();
+            if (!aElements.empty())
+                pFilter = dynamic_cast<filter::PDFNameElement*>(aElements[0]);
+        }
+
         if (pFilter)
         {
             if (pFilter->GetValue() != "FlateDecode")

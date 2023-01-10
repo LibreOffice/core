@@ -1032,7 +1032,7 @@ static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolyPolygon
     return true;
 }
 
-bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
+void WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 {
     if ( mrParent.mhRegion )
     {
@@ -1275,9 +1275,6 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
         // #i123585# See above, this is a valid case, execute it
         SelectClipRgn( mrParent.getHDC(), nullptr );
     }
-
-    // #i123585# retval no longer dependent of mrParent.mhRegion, see TaskId comments above
-    return true;
 }
 
 void WinSalGraphicsImpl::SetLineColor()

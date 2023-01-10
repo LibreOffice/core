@@ -273,7 +273,6 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SPANISH_NICARAGUA,           "es", "NI", k0    },
     { LANGUAGE_SPANISH_PUERTO_RICO,         "es", "PR", k0    },
     { LANGUAGE_SPANISH_UNITED_STATES,       "es", "US", k0    },
-    { LANGUAGE_SPANISH_LATIN_AMERICA,       "es", ""  , k0    },
     { LANGUAGE_TURKISH,                     "tr", "TR", k0    },
     { LANGUAGE_UKRAINIAN,                   "uk", "UA", k0    },
     { LANGUAGE_VIETNAMESE,                  "vi", "VN", k0    },
@@ -344,7 +343,9 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SINDHI,                      "sd", "IN", kSAME },    // Devanagari script
     { LANGUAGE_BELARUSIAN,                  "be", "BY", k0    },
     { LANGUAGE_CATALAN,                     "ca", "ES", k0    },    // Spain (default)
-    { LANGUAGE_CATALAN,                     "ca", "AD", k0    },    // Andorra
+    { LANGUAGE_USER_CATALAN_ANDORRA,        "ca", "AD", k0    },
+    { LANGUAGE_USER_CATALAN_FRANCE,         "ca", "FR", k0    },
+    { LANGUAGE_USER_CATALAN_ITALY,          "ca", "IT", k0    },
     //LANGUAGE_CATALAN_VALENCIAN ca-ES-valencia Bcp47CountryEntry takes precedence
     { LANGUAGE_CATALAN_VALENCIAN,           "ca", "XV", kSAME },    // XV: ISO 3166 user-assigned; old workaround for UI localization only, in case it escaped to document content
     { LANGUAGE_CATALAN_VALENCIAN,          "qcv", "ES", kSAME },    // qcv: ISO 639-3 reserved-for-local-use; old UI localization quirk only, in case it escaped to document content
@@ -675,6 +676,9 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ENGLISH_ISRAEL,         "en", "IL", k0    },
     { LANGUAGE_USER_PENNSYLVANIA_DUTCH,    "pdc", "US", k0    },
     { LANGUAGE_USER_PORTUGUESE_MOZAMBIQUE,  "pt", "MZ", k0    },
+    { LANGUAGE_USER_SPANISH_EQUATORIAL_GUINEA, "es", "GQ", k0    },
+    { LANGUAGE_USER_SPANISH_PHILIPPINES,    "es", "PH", k0    },
+    { LANGUAGE_USER_ENGLISH_ANTIGUA_BARBUDA,"en", "AG", k0    },
     // Add new languages ^^^ there.
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0    },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0    },    // undetermined language, language cannot be identified
@@ -791,6 +795,8 @@ Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_YIDDISH,                          "yi-001",   "", "", k0 },  // MS since rev.15, was "yi-Hebr" reserved, "001"="World"
     { LANGUAGE_FRENCH_WEST_INDIES,               "fr-029",   "", "", k0 },  // MS since rev.15, was "Neither defined nor reserved", "029"="Caribbean"
+    { LANGUAGE_SPANISH_LATIN_AMERICA,            "es-419",   "", "", k0 },  // MS reserved since rev.15, "419"="Latin America and the Caribbean"
+    { LANGUAGE_OBSOLETE_USER_SPANISH_LATIN_AMERICA, "es-419", "", "", LANGUAGE_SPANISH_LATIN_AMERICA },
     { LANGUAGE_USER_INTERSLAVIC_LATIN, "art-Latn-x-interslv", "", "", k0 },  // see discussion in tdf#145853
     { LANGUAGE_USER_INTERSLAVIC_CYRILLIC, "art-Cyrl-x-interslv", "", "", k0 },
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table

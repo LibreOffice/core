@@ -276,6 +276,7 @@ void XclExpRoot::InitializeSave()
 {
     GetPalette().Finalize();
     GetXFBuffer().Finalize();
+    GetDxfs().Finalize();
 }
 
 XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const

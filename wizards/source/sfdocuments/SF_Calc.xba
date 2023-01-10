@@ -2556,6 +2556,7 @@ Public Function Properties() As Variant
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
+					, &quot;IsFormDocument&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
@@ -3481,6 +3482,11 @@ REM ----------------------------------------------------------------------------
 Property Get IsDraw() As Boolean
 	IsDraw = [_Super].GetProperty(&quot;IsDraw&quot;)
 End Property	&apos;	SFDocuments.SF_Calc.IsDraw
+
+REM -----------------------------------------------------------------------------
+Property Get IsFormDocument() As Boolean
+	IsFormDocument = [_Super].GetProperty(&quot;IsFormDocument&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.IsFormDocument
 
 REM -----------------------------------------------------------------------------
 Property Get IsImpress() As Boolean

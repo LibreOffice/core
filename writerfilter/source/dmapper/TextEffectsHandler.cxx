@@ -771,7 +771,9 @@ sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::Proper
     it = aSolidFillMap.find("srgbClr");
     if (it == aSolidFillMap.end())
     {
-        return 0;
+        it = aSolidFillMap.find("schemeClr");
+        if (it == aSolidFillMap.end())
+            return 0;
     }
 
     comphelper::SequenceAsHashMap aSrgbClrMap(it->second);

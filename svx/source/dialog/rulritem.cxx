@@ -458,6 +458,10 @@ bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case 0:
+            // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this;
+            SAL_INFO("svx", "SvxColumnItem::QueryValue with nMemberId of 0");
+            return false;
         case MID_COLUMNARRAY:
             return false;
         case MID_RIGHT:
@@ -476,8 +480,7 @@ bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= bTable;
             break;
         default:
-            // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this;
-            OSL_FAIL("Wrong MemberId!");
+            SAL_WARN("svx", "Wrong MemberId!");
             return false;
     }
 

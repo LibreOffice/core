@@ -54,8 +54,9 @@
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
-#include <tools/stream.hxx>
+#include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -3152,7 +3153,22 @@ bool CompareSvxMSDffShapeInfoByTxBxComp::operator() (
 void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 {
     if ( bNeedMap )
+    {
+        if (rVal > nMaxAllowedVal)
+        {
+            SAL_WARN("filter.ms", "Cannot scale value: " << rVal);
+            rVal = SAL_MAX_INT32;
+            return;
+        }
+        else if (rVal < nMinAllowedVal)
+        {
+            SAL_WARN("filter.ms", "Cannot scale value: " << rVal);
+            rVal = SAL_MAX_INT32;
+            return;
+        }
+
         rVal = BigMulDiv( rVal, nMapMul, nMapDiv );
+    }
 }
 
 void SvxMSDffManager::Scale( Point& rPos ) const
@@ -3234,6 +3250,26 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, tools::Long nApplicationScale)
         pModel = nullptr;
         nMapMul = nMapDiv = nMapXOfs = nMapYOfs = nEmuMul = nEmuDiv = nPntMul = nPntDiv = 0;
         bNeedMap = false;
+    }
+
+    if (bNeedMap)
+    {
+        assert(nMapMul > nMapDiv);
+
+        BigInt aMinVal(SAL_MIN_INT32);
+        aMinVal /= nMapMul;
+        aMinVal *= nMapDiv;
+        nMinAllowedVal = aMinVal;
+
+        BigInt aMaxVal(SAL_MAX_INT32);
+        aMaxVal /= nMapMul;
+        aMaxVal *= nMapDiv;
+        nMaxAllowedVal = aMaxVal;
+    }
+    else
+    {
+        nMinAllowedVal = SAL_MIN_INT32;
+        nMaxAllowedVal = SAL_MAX_INT32;
     }
 }
 

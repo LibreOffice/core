@@ -407,9 +407,8 @@ void SvxNotebookbarConfigPage::SelectElement()
 
     if (m_xTopLevelListBox->get_count() == 1)
     {
-        for (std::size_t nIdx = 0; nIdx < aCategoryList.size(); nIdx++)
-            m_xTopLevelListBox->append(aCategoryList[nIdx].sUIItemId,
-                                       aCategoryList[nIdx].sDisplayName);
+        for (const auto& rCategory : aCategoryList)
+            m_xTopLevelListBox->append(rCategory.sUIItemId, rCategory.sDisplayName);
     }
     tools::ULong nStart = 0;
     if (aEntries[nStart].sClassId == "sfxlo-PriorityHBox"

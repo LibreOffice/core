@@ -56,6 +56,7 @@ class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
+class SfxStoringHelper;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
@@ -173,6 +174,9 @@ friend class SfxPrinterController;
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
 
+    /// Used for async export
+    std::shared_ptr<SfxStoringHelper> m_xHelper;
+
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
     virtual void                Deactivate(bool IsMDIActivate) override;
@@ -187,13 +191,13 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
-    static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
+    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
+    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetNext( const SfxViewShell& rPrev,
                                          bool bOnlyVisible = true,
                                          const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
-    static SfxViewShell*        Current();
+    SAL_WARN_UNUSED_RESULT static SfxViewShell* Current();
 
-    static SfxViewShell*        Get( const css::uno::Reference< css::frame::XController>& i_rController );
+    SAL_WARN_UNUSED_RESULT static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
@@ -416,6 +420,8 @@ public:
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);
     bool isBlockedCommand(OUString command);
+
+    void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
 };
 
 

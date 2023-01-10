@@ -22,6 +22,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclevent.hxx>

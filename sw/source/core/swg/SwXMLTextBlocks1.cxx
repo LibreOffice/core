@@ -313,7 +313,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "Tried to open non-existent folder or stream!");
+        SAL_WARN("sw", "Tried to open non-existent folder or stream: " << aStreamName << " derived from autocorr of: " << OUString(rShort));
     }
 
     return ERRCODE_NONE;

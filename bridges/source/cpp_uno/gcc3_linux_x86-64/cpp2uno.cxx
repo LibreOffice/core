@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <typeinfo>
 
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
@@ -445,7 +446,7 @@ static unsigned char * codeSnippet( unsigned char * code,
     return code + codeSnippetSize;
 }
 
-struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void const * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
@@ -459,17 +460,27 @@ std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
+#if ENABLE_RUNTIME_OPTIMIZATIONS
+namespace {
+// Some dummy type whose RTTI is used in the synthesized proxy vtables to make uses of dynamic_cast
+// on such proxy objects not crash:
+struct ProxyRtti {};
+}
+#endif
+
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount, sal_Int32 vtableNumber,
     typelib_InterfaceTypeDescription * type)
 {
     Slot * slots = mapBlockToVtable(block);
-    slots[-2].fn = reinterpret_cast<void *>(-(vtableNumber * sizeof (void *)));
 #if ENABLE_RUNTIME_OPTIMIZATIONS
-    slots[-1].fn = nullptr;
+    slots[-2].fn = nullptr;
+    slots[-1].fn = &typeid(ProxyRtti);
+    (void)vtableNumber;
     (void)type;
 #else
+    slots[-2].fn = reinterpret_cast<void *>(-(vtableNumber * sizeof (void *)));
     slots[-1].fn = x86_64::getRtti(type->aBase);
 #endif
     return slots + slotCount;

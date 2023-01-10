@@ -40,7 +40,7 @@ public:
 
     OUString getRenderBackendName() const override { return "svp"; }
 
-    bool setClipRegion(vcl::Region const& rRegion) override;
+    void setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;
 
     sal_uInt16 GetBitCount() const override;
@@ -134,9 +134,6 @@ public:
 
     void drawBitmapBuffer(const SalTwoRect& rPosAry, const BitmapBuffer* pBuffer,
                           cairo_operator_t eOp);
-
-private:
-    void implDrawRect(double nX, double nY, double nWidth, double nHeight);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

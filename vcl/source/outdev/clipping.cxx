@@ -82,9 +82,8 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
         pGraphics = mpGraphics;
     }
 
-    bool bClipRegion = pGraphics->SetClipRegion( rRegion, *this );
-    OSL_ENSURE( bClipRegion, "OutputDevice::SelectClipRegion() - can't create region" );
-    return bClipRegion;
+    pGraphics->SetClipRegion( rRegion, *this );
+    return true;
 }
 
 void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove )

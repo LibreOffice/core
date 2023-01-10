@@ -26,7 +26,6 @@
 #include <awt/vclxtopwindow.hxx>
 #include <awt/vclxwindows.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <toolkit/dllapi.h>
 #include <vcl/menu.hxx>
 
@@ -180,7 +179,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
         css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
         if( xPeer.is() )
         {
-            bool bSameInstance( pVCLXWindow == comphelper::getFromUnoTunnel< VCLXWindow >( xPeer ));
+            bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
             SAL_WARN_IF( !bSameInstance, "toolkit.helper", "UnoWrapper::SetWindowInterface: there is already a WindowPeer/ComponentInterface for this VCL window" );
             if ( bSameInstance )
                 return;

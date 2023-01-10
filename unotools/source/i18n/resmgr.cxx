@@ -36,7 +36,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined EMSCRIPTEN
 #   include <libintl.h>
 #endif
 
@@ -55,6 +55,10 @@
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
+#endif
+
+#ifdef EMSCRIPTEN
+#include <osl/detail/emscripten-bootstrap.h>
 #endif
 
 #if defined(_WIN32) && defined(DBG_UTIL)
@@ -134,7 +138,7 @@ namespace Translate
         gen.characters(boost::locale::char_facet_t::char_f);
         gen.categories(boost::locale::category_t::message | boost::locale::category_t::information);
 #endif
-#if defined(ANDROID)
+#if defined(ANDROID) || defined(EMSCRIPTEN)
         OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
 #else
         OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
@@ -151,7 +155,7 @@ namespace Translate
         OString sPath(OUStringToOString(path, eEncoding));
 #endif
         gen.add_messages_path(sPath.getStr());
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined EMSCRIPTEN
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
         bindtextdomain(aPrefixName.data(), sPath.getStr());
         // tdf#131069 gtk, and anything sane, always wants utf-8 strings as output

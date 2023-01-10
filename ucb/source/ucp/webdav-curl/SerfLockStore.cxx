@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <chrono>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/time.h>
@@ -24,6 +25,7 @@
 #include <salhelper/thread.hxx>
 
 #include <com/sun/star/ucb/LockScope.hpp>
+#include <thread>
 
 #include "CurlSession.hxx"
 #include "SerfLockStore.hxx"
@@ -71,10 +73,7 @@ void TickerThread::execute()
             nCount = nNth;
         }
 
-        TimeValue aTV;
-        aTV.Seconds = 0;
-        aTV.Nanosec = 1000000000 / nNth;
-        salhelper::Thread::wait( aTV );
+        std::this_thread::sleep_for( std::chrono::milliseconds(1000/25) );
     }
 
     SAL_INFO("ucb.ucp.webdav",  "TickerThread: stop." );

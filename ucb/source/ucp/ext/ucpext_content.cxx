@@ -37,7 +37,6 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <sal/macros.h>
@@ -433,16 +432,6 @@ namespace ucb::ucp::ext
         if ( m_sPathIntoExtension.isEmpty() )
             return sPackageLocation;
         return lcl_compose( sPackageLocation, m_sPathIntoExtension );
-    }
-
-
-    sal_Int64 Content::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-        return comphelper::getSomethingImpl(aIdentifier, this);
-    }
-
-    css::uno::Sequence<sal_Int8> const & Content::getUnoTunnelId() {
-        static comphelper::UnoIdInit const id;
-        return id.getSeq();
     }
 
 

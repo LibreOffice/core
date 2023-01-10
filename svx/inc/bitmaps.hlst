@@ -125,14 +125,6 @@ inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_6 = u"svx/res/galsnd6.
 inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_7 = u"svx/res/galsnd7.png";
 
 inline constexpr OUStringLiteral BMP_NONE_ICON = u"svx/res/symphony/blank.png";
-inline constexpr OUStringLiteral BMP_WIDTH1_ICON = u"svx/res/symphony/width1.png";
-inline constexpr OUStringLiteral BMP_WIDTH2_ICON = u"svx/res/symphony/width2.png";
-inline constexpr OUStringLiteral BMP_WIDTH3_ICON = u"svx/res/symphony/width3.png";
-inline constexpr OUStringLiteral BMP_WIDTH4_ICON = u"svx/res/symphony/width4.png";
-inline constexpr OUStringLiteral BMP_WIDTH5_ICON = u"svx/res/symphony/width5.png";
-inline constexpr OUStringLiteral BMP_WIDTH6_ICON = u"svx/res/symphony/width6.png";
-inline constexpr OUStringLiteral BMP_WIDTH7_ICON = u"svx/res/symphony/width7.png";
-inline constexpr OUStringLiteral BMP_WIDTH8_ICON = u"svx/res/symphony/width8.png";
 inline constexpr OUStringLiteral RID_SVXBMP_WIDTH_CUSTOM = u"svx/res/symphony/last_custom_common.png";
 inline constexpr OUStringLiteral RID_SVXBMP_WIDTH_CUSTOM_GRAY = u"svx/res/symphony/last_custom_common_grey.png";
 

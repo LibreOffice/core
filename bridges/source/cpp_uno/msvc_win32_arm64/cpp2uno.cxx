@@ -24,6 +24,8 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
+#include <typeinfo>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
@@ -41,6 +43,8 @@
 #include <msvc/arm64.hxx>
 
 #include "abi.hxx"
+
+extern "C" IMAGE_DOS_HEADER const __ImageBase;
 
 extern "C" void vtableSlotCall();
 
@@ -357,27 +361,110 @@ std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(sal_Int32 slot
     return (slotCount + 1) * sizeof(Slot) + slotCount * codeSnippetSize;
 }
 
+static sal_uInt32 imageRelative(void const* p)
+{
+    assert(reinterpret_cast<sal_uIntPtr>(p) >= reinterpret_cast<sal_uIntPtr>(&__ImageBase)
+           && reinterpret_cast<sal_uIntPtr>(p) - reinterpret_cast<sal_uIntPtr>(&__ImageBase)
+                  <= std::numeric_limits<sal_uInt32>::max());
+    return reinterpret_cast<sal_uIntPtr>(p) - reinterpret_cast<sal_uIntPtr>(&__ImageBase);
+}
+
+namespace
+{
+// Some dummy type whose RTTI is used in the synthesized proxy vtables to make uses of dynamic_cast
+// on such proxy objects not crash:
+struct ProxyRtti
+{
+};
+
+// The following vtable RTTI data is based on how the code at
+// <https://github.com/llvm/llvm-project/blob/main/clang/lib/CodeGen/MicrosoftCXXABI.cpp> computes
+// such data, and on how <https://devblogs.microsoft.com/oldnewthing/20041025-00/?p=37483>
+// "Accessing the current module’s HINSTANCE from a static library" obtians __ImageBase:
+
+struct RttiClassHierarchyDescriptor;
+
+#pragma warning(push)
+#pragma warning(disable : 4324) // "structure was padded due to alignment specifier"
+
+struct alignas(16) RttiBaseClassDescriptor
+{
+    sal_uInt32 n0 = imageRelative(&typeid(ProxyRtti));
+    sal_uInt32 n1 = 0;
+    sal_uInt32 n2 = 0;
+    sal_uInt32 n3 = 0xFFFFFFFF;
+    sal_uInt32 n4 = 0;
+    sal_uInt32 n5 = 0x40;
+    sal_uInt32 n6;
+    RttiBaseClassDescriptor(RttiClassHierarchyDescriptor const* chd)
+        : n6(imageRelative(chd))
+    {
+    }
+};
+
+struct alignas(4) RttiBaseClassArray
+{
+    sal_uInt32 n0;
+    sal_uInt32 n1 = 0;
+    RttiBaseClassArray(RttiBaseClassDescriptor const* bcd)
+        : n0(imageRelative(bcd))
+    {
+    }
+};
+
+struct alignas(8) RttiClassHierarchyDescriptor
+{
+    sal_uInt32 n0 = 0;
+    sal_uInt32 n1 = 0;
+    sal_uInt32 n2 = 1;
+    sal_uInt32 n3;
+    RttiClassHierarchyDescriptor(RttiBaseClassArray const* bca)
+        : n3(imageRelative(bca))
+    {
+    }
+};
+
+struct alignas(16) RttiCompleteObjectLocator
+{
+    sal_uInt32 n0 = 1;
+    sal_uInt32 n1 = 0;
+    sal_uInt32 n2 = 0;
+    sal_uInt32 n3 = imageRelative(&typeid(ProxyRtti));
+    sal_uInt32 n4;
+    sal_uInt32 n5 = imageRelative(this);
+    RttiCompleteObjectLocator(RttiClassHierarchyDescriptor const* chd)
+        : n4(imageRelative(chd))
+    {
+    }
+};
+
+struct Rtti
+{
+    RttiBaseClassDescriptor bcd;
+    RttiBaseClassArray bca;
+    RttiClassHierarchyDescriptor chd;
+    RttiCompleteObjectLocator col;
+    Rtti()
+        : bcd(&chd)
+        , bca(&bcd)
+        , chd(&bca)
+        , col(&chd)
+    {
+    }
+};
+
+#pragma warning(pop)
+}
+
 bridges::cpp_uno::shared::VtableFactory::Slot*
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(void* block, sal_Int32 slotCount,
                                                          sal_Int32,
                                                          typelib_InterfaceTypeDescription*)
 {
-    struct Rtti
-    {
-        sal_Int32 n0, n1, n2;
-        type_info* rtti;
-        Rtti()
-            : n0(0)
-            , n1(0)
-            , n2(0)
-            , rtti(RTTInfos::get("com.sun.star.uno.XInterface"))
-        {
-        }
-    };
     static Rtti rtti;
 
     Slot* slots = mapBlockToVtable(block);
-    slots[-1].fn = &rtti;
+    slots[-1].fn = &rtti.col;
     return slots + slotCount;
 }
 

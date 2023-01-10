@@ -3210,6 +3210,14 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxfs );
 }
 
+void XclExpDxfs::Finalize()
+{
+    for (auto& rxDxf : maDxf)
+    {
+        rxDxf->SetFinalColors();
+    }
+}
+
 XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> pAlign, std::unique_ptr<XclExpCellBorder> pBorder,
             std::unique_ptr<XclExpDxfFont> pFont, std::unique_ptr<XclExpNumFmt> pNumberFmt, std::unique_ptr<XclExpCellProt> pProt,
             std::unique_ptr<XclExpColor> pColor)
@@ -3231,6 +3239,14 @@ XclExpDxf::XclExpDxf(const XclExpRoot& rRoot, std::unique_ptr<XclExpCellArea> pC
 
 XclExpDxf::~XclExpDxf()
 {
+}
+
+void XclExpDxf::SetFinalColors()
+{
+    if (mpBorder)
+    {
+        mpBorder->SetFinalColors(GetPalette());
+    }
 }
 
 void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )

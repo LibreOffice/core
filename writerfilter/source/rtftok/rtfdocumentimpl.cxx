@@ -33,7 +33,7 @@
 #include <svl/lngmisc.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -2967,8 +2967,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             {
                 uno::Reference<util::XCloseable> xComponent(xObject->getComponent(),
                                                             uno::UNO_SET_THROW);
-                if (oox::FormulaImportBase* pImport
-                    = dynamic_cast<oox::FormulaImportBase*>(xComponent.get()))
+                if (oox::FormulaImExportBase* pImport
+                    = dynamic_cast<oox::FormulaImExportBase*>(xComponent.get()))
                     pImport->readFormulaOoxml(m_aMathBuffer);
 
                 auto pValue = new RTFValue(xObject);

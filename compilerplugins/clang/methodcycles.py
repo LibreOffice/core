@@ -4,7 +4,6 @@ from collections import defaultdict
 import io
 import re
 import subprocess
-import sys
 
 # --------------------------------------------------------------------------------------------
 # globals

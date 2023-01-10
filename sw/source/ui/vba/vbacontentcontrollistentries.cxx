@@ -17,26 +17,26 @@ namespace
 class ContentControlListEntriesEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference<container::XIndexAccess> mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 mnIndex;
 
 public:
     explicit ContentControlListEntriesEnumWrapper(
         uno::Reference<container::XIndexAccess> xIndexAccess)
         : mxIndexAccess(xIndexAccess)
-        , nIndex(0)
+        , mnIndex(0)
     {
     }
 
     virtual sal_Bool SAL_CALL hasMoreElements() override
     {
-        return (nIndex < mxIndexAccess->getCount());
+        return (mnIndex < mxIndexAccess->getCount());
     }
 
     virtual uno::Any SAL_CALL nextElement() override
     {
-        if (nIndex < mxIndexAccess->getCount())
+        if (mnIndex < mxIndexAccess->getCount())
         {
-            return mxIndexAccess->getByIndex(nIndex++);
+            return mxIndexAccess->getByIndex(mnIndex++);
         }
         throw container::NoSuchElementException();
     }
@@ -48,23 +48,20 @@ class ContentControlListEntryCollectionHelper
 private:
     uno::Reference<XHelperInterface> mxParent;
     uno::Reference<uno::XComponentContext> mxContext;
-    SwTextContentControl& m_rCC;
+    std::shared_ptr<SwContentControl> m_pCC;
 
 public:
     /// @throws css::uno::RuntimeException
     ContentControlListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                                             uno::Reference<uno::XComponentContext> xContext,
-                                            SwTextContentControl& rCC)
+                                            std::shared_ptr<SwContentControl> pCC)
         : mxParent(xParent)
         , mxContext(xContext)
-        , m_rCC(rCC)
+        , m_pCC(pCC)
     {
     }
 
-    sal_Int32 SAL_CALL getCount() override
-    {
-        return m_rCC.GetContentControl().GetContentControl()->GetListItems().size();
-    }
+    sal_Int32 SAL_CALL getCount() override { return m_pCC->GetListItems().size(); }
 
     uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
@@ -72,7 +69,7 @@ public:
             throw lang::IndexOutOfBoundsException();
 
         return uno::Any(uno::Reference<word::XContentControlListEntry>(
-            new SwVbaContentControlListEntry(mxParent, mxContext, m_rCC, Index)));
+            new SwVbaContentControlListEntry(mxParent, mxContext, m_pCC, Index)));
     }
 
     uno::Type SAL_CALL getElementType() override
@@ -96,12 +93,12 @@ public:
  */
 SwVbaContentControlListEntries::SwVbaContentControlListEntries(
     const uno::Reference<XHelperInterface>& xParent,
-    const uno::Reference<uno::XComponentContext>& xContext, SwTextContentControl& rCC)
+    const uno::Reference<uno::XComponentContext>& xContext, std::shared_ptr<SwContentControl> pCC)
     : SwVbaContentControlListEntries_BASE(
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(
-              new ContentControlListEntryCollectionHelper(xParent, xContext, rCC)))
-    , m_rCC(rCC)
+              new ContentControlListEntryCollectionHelper(xParent, xContext, pCC)))
+    , m_pCC(pCC)
 {
 }
 
@@ -110,8 +107,7 @@ SwVbaContentControlListEntries::Add(const OUString& rName, const uno::Any& rValu
                                     const uno::Any& rIndex)
 {
     // No duplicate Names allowed in VBA
-    std::shared_ptr<SwContentControl> pCC = m_rCC.GetContentControl().GetContentControl();
-    for (auto& rListItem : pCC->GetListItems())
+    for (auto& rListItem : m_pCC->GetListItems())
     {
         if (rListItem.ToString() == rName)
             return uno::Reference<word::XContentControlListEntry>();
@@ -122,28 +118,22 @@ SwVbaContentControlListEntries::Add(const OUString& rName, const uno::Any& rValu
     // rIndex is 1-based, nZIndex is 0-based. If rIndex is not given, then add as the last choice.
     assert(nZIndex > 0);
     --nZIndex;
-    nZIndex = std::min(static_cast<size_t>(nZIndex), pCC->GetListItems().size());
+    nZIndex = std::min(static_cast<size_t>(nZIndex), m_pCC->GetListItems().size());
 
     OUString sValue;
     rValue >>= sValue;
-    if (pCC->AddListItem(nZIndex, rName, sValue))
+    if (m_pCC->AddListItem(nZIndex, rName, sValue))
     {
         return uno::Reference<word::XContentControlListEntry>(
-            new SwVbaContentControlListEntry(mxParent, mxContext, m_rCC, nZIndex));
+            new SwVbaContentControlListEntry(mxParent, mxContext, m_pCC, nZIndex));
     }
 
     return uno::Reference<word::XContentControlListEntry>();
 }
 
-void SwVbaContentControlListEntries::Clear()
-{
-    m_rCC.GetContentControl().GetContentControl()->ClearListItems();
-}
+void SwVbaContentControlListEntries::Clear() { m_pCC->ClearListItems(); }
 
-sal_Int32 SwVbaContentControlListEntries::getCount()
-{
-    return m_rCC.GetContentControl().GetContentControl()->GetListItems().size();
-}
+sal_Int32 SwVbaContentControlListEntries::getCount() { return m_pCC->GetListItems().size(); }
 
 // XEnumerationAccess
 uno::Type SwVbaContentControlListEntries::getElementType()

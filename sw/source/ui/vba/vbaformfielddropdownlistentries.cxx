@@ -26,22 +26,22 @@ namespace
 class ListEntriesEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference<container::XIndexAccess> mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 mnIndex;
 
 public:
     explicit ListEntriesEnumWrapper(uno::Reference<container::XIndexAccess> xIndexAccess)
         : mxIndexAccess(xIndexAccess)
-        , nIndex(0)
+        , mnIndex(0)
     {
     }
 
-    sal_Bool SAL_CALL hasMoreElements() override { return (nIndex < mxIndexAccess->getCount()); }
+    sal_Bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
     uno::Any SAL_CALL nextElement() override
     {
-        if (nIndex < mxIndexAccess->getCount())
+        if (mnIndex < mxIndexAccess->getCount())
         {
-            return mxIndexAccess->getByIndex(nIndex++);
+            return mxIndexAccess->getByIndex(mnIndex++);
         }
         throw container::NoSuchElementException();
     }
@@ -102,8 +102,8 @@ SwVbaFormFieldDropDownListEntries::SwVbaFormFieldDropDownListEntries(
 }
 
 // XListEntries
-uno::Reference<word::XListEntry>
-    SAL_CALL SwVbaFormFieldDropDownListEntries::Add(const OUString& rName, const uno::Any& rIndex)
+uno::Reference<word::XListEntry> SwVbaFormFieldDropDownListEntries::Add(const OUString& rName,
+                                                                        const uno::Any& rIndex)
 {
     sal_Int32 nZIndex = 0;
     rIndex >>= nZIndex;
@@ -124,7 +124,7 @@ uno::Reference<word::XListEntry>
         new SwVbaFormFieldDropDownListEntry(mxParent, mxContext, m_rDropDown, nZIndex));
 }
 
-void SAL_CALL SwVbaFormFieldDropDownListEntries::Clear() { m_rDropDown.DelContent(); }
+void SwVbaFormFieldDropDownListEntries::Clear() { m_rDropDown.DelContent(); }
 
 sal_Int32 SwVbaFormFieldDropDownListEntries::getCount()
 {

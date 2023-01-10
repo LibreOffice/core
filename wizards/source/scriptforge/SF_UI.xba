@@ -69,6 +69,7 @@ Const WELCOMESCREEN				= &quot;WELCOMESCREEN&quot;
 Const BASEDOCUMENT				= &quot;Base&quot;
 Const CALCDOCUMENT				= &quot;Calc&quot;
 Const DRAWDOCUMENT				= &quot;Draw&quot;
+Const FORMDOCUMENT				= &quot;FormDocument&quot;
 Const IMPRESSDOCUMENT			= &quot;Impress&quot;
 Const MATHDOCUMENT				= &quot;Math&quot;
 Const WRITERDOCUMENT			= &quot;Writer&quot;
@@ -1303,6 +1304,7 @@ Dim FSO As Object					&apos;	Alias for SF_FileSystem
 					If SF_Session.HasUnoProperty(poComponent, &quot;Title&quot;) Then .WindowTitle = poComponent.Title
 					Select Case sIdentifier
 						Case &quot;com.sun.star.sdb.FormDesign&quot;							&apos;	Form
+							.DocumentType = FORMDOCUMENT
 						Case &quot;com.sun.star.sdb.TextReportDesign&quot;					&apos;	Report
 						Case &quot;com.sun.star.text.TextDocument&quot;						&apos;	Writer
 							.DocumentType = WRITERDOCUMENT

@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -78,12 +79,11 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     DisconnectEvents();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, VCLXAccessibleComponent_BASE )
 css::uno::Sequence< css::uno::Type > SAL_CALL VCLXAccessibleComponent::getTypes()
 {
     return ::comphelper::concatSequences(
         OAccessibleExtendedComponentHelper::getTypes(),
-        OAccessibleImplementationAccess::getTypes(),
         VCLXAccessibleComponent_BASE::getTypes()
     );
 }
@@ -552,8 +552,10 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclParent() const
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  )
 {
+    OExternalLockGuard aGuard( this );
+
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
@@ -561,16 +563,6 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
         if ( pParent )
             xAcc = pParent->GetAccessible();
     }
-    return xAcc;
-}
-
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    // we do _not_ have a foreign-controlled parent -> default to our VCL parent
-    uno::Reference< accessibility::XAccessible > xAcc = getVclParent();
-
     return xAcc;
 }
 

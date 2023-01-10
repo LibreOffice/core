@@ -347,7 +347,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertPageNumberField"/>
+      <menu:menuitem menu:id=".uno:PageNumberWizard"/>
       <menu:menuitem menu:id=".uno:InsertFieldCtrl" menu:style="text"/>
       <menu:menu menu:id=".uno:InsertHeaderFooterMenu">
         <menu:menupopup>

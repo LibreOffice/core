@@ -183,7 +183,7 @@ public:
 
     // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
-    bool                        SetClipRegion( const vcl::Region&, const OutputDevice& rOutDev );
+    void                        SetClipRegion( const vcl::Region&, const OutputDevice& rOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                        DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice& rOutDev );
@@ -426,7 +426,7 @@ protected:
 
     friend class vcl::FileDefinitionWidgetDraw;
 
-    virtual bool                setClipRegion( const vcl::Region& ) = 0;
+    virtual void                setClipRegion( const vcl::Region& ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void                drawPixel( tools::Long nX, tools::Long nY ) = 0;
@@ -661,9 +661,9 @@ public:
         GetImpl()->ResetClipRegion();
     }
 
-    bool setClipRegion( const vcl::Region& i_rClip ) override
+    void setClipRegion( const vcl::Region& i_rClip ) override
     {
-        return GetImpl()->setClipRegion(i_rClip);
+        GetImpl()->setClipRegion(i_rClip);
     }
 
     void SetLineColor() override

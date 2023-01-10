@@ -19,6 +19,8 @@
 
 #include <fmtrfmrk.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
@@ -76,6 +78,19 @@ void SwFormatRefMark::InvalidateRefMark()
     CallSwClientNotify(sw::LegacyModifyHint(&item, &item));
 }
 
+void SwFormatRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatRefMark"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pTextAttr"), "%p", m_pTextAttr);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ref-name"),
+                                      BAD_CAST(m_aRefName.toUtf8().getStr()));
+    SfxPoolItem::dumpAsXml(pWriter);
+
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 // attribute for content references in the text
 
 SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
@@ -109,6 +124,15 @@ void SwTextRefMark::SetEnd(sal_Int32 n)
     *m_pEnd = n;
     if (m_pHints)
         m_pHints->EndPosChanged();
+}
+
+void SwTextRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextRefMark"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    SwTextAttr::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

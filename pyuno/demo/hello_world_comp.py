@@ -17,7 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import uno
 import unohelper
 
 from com.sun.star.task import XJobExecutor

@@ -68,6 +68,8 @@ public:
         pFormat->Add(this);
     }
     SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 #endif
 

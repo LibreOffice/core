@@ -24,8 +24,8 @@
 #include <toolkit/awt/vclxwindow.hxx>
 
 class SvResizeWindow;
-class VCLXHatchWindow : public css::embed::XHatchWindow,
-                        public VCLXWindow
+typedef cppu::ImplInheritanceHelper< VCLXWindow, css::embed::XHatchWindow> VCLXHatchWindow_Base;
+class VCLXHatchWindow : public VCLXHatchWindow_Base
 {
     css::uno::Reference< css::embed::XHatchWindowController > m_xController;
     css::awt::Size aHatchBorderSize;
@@ -44,15 +44,6 @@ public:
     void InplaceDeactivate();
     void Activated();
     void Deactivated();
-
-    // XInterface
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-    void SAL_CALL acquire() noexcept override;
-    void SAL_CALL release() noexcept override;
-
-    // XTypeProvider
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XHatchWindow
     virtual void SAL_CALL setController( const css::uno::Reference< css::embed::XHatchWindowController >& xController ) override;

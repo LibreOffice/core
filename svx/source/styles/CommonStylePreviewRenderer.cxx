@@ -418,7 +418,9 @@ void CommonStylePreviewRenderer::CheckScript()
     for (sal_Int32 i = 1; i <= maScriptText.getLength(); i++)
     {
         auto aNextScript = aEditEngine.GetScriptType({ 0, i, 0, i });
-        if (aNextScript != aScript || i == maScriptText.getLength())
+        if (aNextScript != aScript)
+            maScriptChanges.emplace_back(aScript, i - 1);
+        else if (i == maScriptText.getLength())
             maScriptChanges.emplace_back(aScript, i);
         aScript = aNextScript;
     }

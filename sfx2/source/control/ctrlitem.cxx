@@ -314,8 +314,6 @@ MapUnit SfxControllerItem::GetCoreMetric() const
     if ( !pDispat )
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        if ( !pViewFrame )
-            SfxViewFrame::GetFirst();
         if ( pViewFrame )
             pDispat = pViewFrame->GetDispatcher();
     }

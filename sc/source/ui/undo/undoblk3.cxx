@@ -1241,7 +1241,8 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
 
         // Reset the spell checking results to re-check on paint, otherwise
         // we show the previous spelling markers (or lack thereof on misspellings).
-        ScDocShell::GetViewData()->GetActiveWin()->ResetAutoSpell();
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
+            pViewData->GetActiveWin()->ResetAutoSpell();
         pDocShell->PostPaintGridAll();
     }
     else

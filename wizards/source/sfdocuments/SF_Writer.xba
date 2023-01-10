@@ -47,7 +47,7 @@ Option Explicit
 &apos;&apos;&apos;			TBD
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
-&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/SF_Writer.html?DbPAR=BASIC
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_writer.html?DbPAR=BASIC
 &apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
@@ -67,6 +67,8 @@ Private ServiceName				As String
 Private _Component				As Object		&apos;	com.sun.star.lang.XComponent
 
 REM ============================================================ MODULE CONSTANTS
+
+Const ISDOCFORM = 1				&apos;	Form is stored in a Writer document
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -312,6 +314,7 @@ Public Function Properties() As Variant
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
+					, &quot;IsFormDocument&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
@@ -428,6 +431,11 @@ REM ----------------------------------------------------------------------------
 Property Get IsDraw() As Boolean
 	IsDraw = [_Super].GetProperty(&quot;IsDraw&quot;)
 End Property	&apos;	SFDocuments.SF_Writer.IsDraw
+
+REM -----------------------------------------------------------------------------
+Property Get IsFormDocument() As Boolean
+	IsFormDocument = [_Super].GetProperty(&quot;IsFormDocument&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.IsFormDocument
 
 REM -----------------------------------------------------------------------------
 Property Get IsImpress() As Boolean

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import sys
 import re
 import io
 

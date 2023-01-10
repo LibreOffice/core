@@ -2236,7 +2236,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     }
 
     // hardcode number of attributes per level
-    const int   nAttributes = 11;
+    const int nAttributes = 12;
     const char* attr[ nAttributes ] =
     {
         "Prefix",
@@ -2248,6 +2248,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
         "LeftMargin",
         "SymbolTextDistance",
         "FirstLineOffset",
+        "Adjust",
         "Transliteration",
         "NatNum",
     };

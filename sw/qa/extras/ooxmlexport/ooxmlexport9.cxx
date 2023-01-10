@@ -129,7 +129,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf108269)
+CPPUNIT_TEST_FIXTURE(DocmTest, testTdf108269)
 {
     loadAndReload("tdf108269.docm");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -137,6 +137,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108269)
     // grab-bag.
     CPPUNIT_ASSERT(xNameAccess->hasByName("word/vbaProject.bin"));
     CPPUNIT_ASSERT(xNameAccess->hasByName("word/vbaData.xml"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf125338)
+{
+    loadAndSave("tdf125338.docm");
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    // docm files should not retain macros when saved as docx
+    CPPUNIT_ASSERT(!xNameAccess->hasByName("word/vbaProject.bin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")

@@ -134,6 +134,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_uibase_docvw \
     CppunitTest_sw_uibase_frmdlg \
     CppunitTest_sw_uibase_uno \
+    CppunitTest_sw_uibase_dialog \
     CppunitTest_sw_uibase_wrtsh \
     CppunitTest_sw_core_accessibilitycheck \
     CppunitTest_sw_core_layout \
@@ -154,6 +155,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_filter_ww8 \
     CppunitTest_sw_filter_html \
     CppunitTest_sw_a11y \
+    CppunitTest_sw_core_theme \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)

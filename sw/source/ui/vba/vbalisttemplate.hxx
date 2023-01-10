@@ -29,7 +29,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListTemplate > SwVbaL
 class SwVbaListTemplate : public SwVbaListTemplate_BASE
 {
 private:
-    SwVbaListHelperRef pListHelper;
+    SwVbaListHelperRef m_pListHelper;
 
 public:
     /// @throws css::uno::RuntimeException

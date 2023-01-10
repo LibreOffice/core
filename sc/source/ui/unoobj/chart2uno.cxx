@@ -2583,14 +2583,14 @@ void ScChart2DataSequence::BuildDataCache()
                             // Excel behavior: if the last row is the totals row, the data
                             // is not added to the chart. If it's not the last row, the data
                             // is added like normal.
-                            const auto* rData = m_pDocument->GetDBAtCursor(
+                            const auto* pData = m_pDocument->GetDBAtCursor(
                                 nCol, nRow, nTab,
                                 ScDBDataPortion::AREA
                             );
-                            if (rData && rData->HasTotals())
+                            if (pData && pData->HasTotals())
                             {
                                 ScRange aTempRange;
-                                rData->GetArea(aTempRange);
+                                pData->GetArea(aTempRange);
                                 if (aTempRange.aEnd.Row() == nRow)
                                 {
                                     // Current row is totals row, skip

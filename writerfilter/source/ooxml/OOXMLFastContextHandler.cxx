@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
-#include <oox/mathml/import.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <sal/log.hxx>
@@ -2282,7 +2282,8 @@ void OOXMLFastContextHandlerMath::process()
     if (!ref.is())
         return;
     uno::Reference< uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
-    if( oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( component.get()))
+    if( oox::FormulaImExportBase* import
+        = dynamic_cast< oox::FormulaImExportBase* >( component.get()))
         import->readFormulaOoxml( buffer );
     if (!isForwardEvents())
         return;

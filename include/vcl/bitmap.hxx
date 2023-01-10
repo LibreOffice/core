@@ -352,6 +352,19 @@ public:
         @param rTransColor
         Color value where the bitmask should be transparent
 
+        @return the resulting bitmask.
+     */
+    Bitmap                  CreateMask( const Color& rTransColor ) const;
+
+    /** Create on-off mask from bitmap
+
+        This method creates a bitmask from the bitmap, where every
+        pixel that equals rTransColor is set transparent, the rest
+        opaque.
+
+        @param rTransColor
+        Color value where the bitmask should be transparent
+
         @param nTol
         Tolerance value. Specifies the maximal difference between
         rTransColor and the individual pixel values, such that the
@@ -359,7 +372,7 @@ public:
 
         @return the resulting bitmask.
      */
-    Bitmap                  CreateMask( const Color& rTransColor, sal_uInt8 nTol = 0 ) const;
+    Bitmap                  CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const;
 
     /** Create region of similar colors in a given rectangle
 

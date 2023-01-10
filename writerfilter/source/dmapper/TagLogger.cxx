@@ -175,6 +175,16 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
+    void TagLogger::attribute(const std::string & name, float value)
+    {
+        if (!pWriter)
+            return;
+        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
+        (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+               "%f", value );
+        xmlFree( xmlName );
+    }
+
     void TagLogger::attribute(const std::string & name, const uno::Any& aAny)
     {
         if (!pWriter)

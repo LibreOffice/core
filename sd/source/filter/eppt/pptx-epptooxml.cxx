@@ -2048,17 +2048,6 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
               </a:srgbClr>\
             </a:outerShdw>\
           </a:effectLst>\
-          <a:scene3d>\
-            <a:camera prst=\"orthographicFront\">\
-              <a:rot lat=\"0\" lon=\"0\" rev=\"0\"/>\
-            </a:camera>\
-            <a:lightRig rig=\"threePt\" dir=\"t\">\
-              <a:rot lat=\"0\" lon=\"0\" rev=\"1200000\"/>\
-            </a:lightRig>\
-          </a:scene3d>\
-          <a:sp3d>\
-            <a:bevelT w=\"63500\" h=\"25400\"/>\
-          </a:sp3d>\
         </a:effectStyle>\
       </a:effectStyleLst>\
       <a:bgFillStyleLst>\
@@ -2197,7 +2186,8 @@ bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme
     {
         sal_Int32 nToken = aPredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
         pFS->startElementNS(XML_a, nToken);
-        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(nId))));
+        svx::ThemeColorType eType = svx::convertToThemeColorType(nId);
+        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(eType))));
         pFS->endElementNS(XML_a, nToken);
     }
 

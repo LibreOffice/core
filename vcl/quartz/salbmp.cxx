@@ -35,6 +35,7 @@
 #include <vcl/Scanline.hxx>
 
 #include <bitmap/bmpfast.hxx>
+#include <quartz/cgutils.h>
 #include <quartz/salbmp.h>
 #include <quartz/utils.h>
 #include <bitmap/ScanlineTools.hxx>
@@ -114,66 +115,6 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPix
     }
     return false;
 }
-
-#if HAVE_FEATURE_SKIA
-
-bool QuartzSalBitmap::Create( const SkiaSalBitmap& rSalBmp, const SalTwoRect& rPosAry )
-{
-    bool bRet = false;
-
-    // Ugly but necessary to acquire the bitmap buffer because all of the
-    // SalBitmap instances that callers pass are already const. At least we
-    // only need to read, not write to the bitmap parameter.
-    SkiaSalBitmap& rSkiaSalBmp = const_cast<SkiaSalBitmap&>( rSalBmp );
-
-    BitmapBuffer *pSrcBuffer = rSkiaSalBmp.AcquireBuffer( BitmapAccessMode::Read );
-    if ( !pSrcBuffer )
-        return bRet;
-
-    if ( !pSrcBuffer->mpBits )
-    {
-        rSkiaSalBmp.ReleaseBuffer( pSrcBuffer, BitmapAccessMode::Read );
-        return bRet;
-    }
-
-    // Create only a 1 pixel buffer as it will always be discarded
-    mnBits = 32;
-    mnWidth = 1;
-    mnHeight = 1;
-    if( AllocateUserData() )
-    {
-        BitmapBuffer *pDestBuffer = AcquireBuffer( BitmapAccessMode::Read );
-        if ( pDestBuffer )
-        {
-            std::unique_ptr<BitmapBuffer> pConvertedBuffer = StretchAndConvert( *pSrcBuffer, rPosAry, pDestBuffer->mnFormat, pDestBuffer->maPalette, &pDestBuffer->maColorMask );
-            bool bUseDestBuffer = ( pConvertedBuffer &&
-                 pConvertedBuffer->mpBits &&
-                 pConvertedBuffer->mnFormat == pDestBuffer->mnFormat &&
-                 pConvertedBuffer->mnWidth == rPosAry.mnDestWidth &&
-                 pConvertedBuffer->mnHeight == rPosAry.mnDestHeight );
-
-            ReleaseBuffer( pDestBuffer, BitmapAccessMode::Read );
-
-            if ( bUseDestBuffer )
-            {
-                // Surprisingly, BitmapBuffer does not delete the bits so
-                // discard our 1 pixel buffer and take ownership of the bits
-                DestroyContext();
-                m_pUserBuffer.reset( pConvertedBuffer->mpBits );
-                mnWidth = pConvertedBuffer->mnWidth;
-                mnHeight = pConvertedBuffer->mnHeight;
-                mnBytesPerRow = pConvertedBuffer->mnScanlineSize;
-                bRet = true;
-            }
-        }
-    }
-
-    rSkiaSalBmp.ReleaseBuffer( pSrcBuffer, BitmapAccessMode::Read );
-
-    return bRet;
-}
-
-#endif
 
 bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
                               Size& /*rSize*/, bool /*bMask*/ )
@@ -576,48 +517,10 @@ static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
     std::free( const_cast<void*>(data) );
 }
 
-CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
+CGImageRef QuartzSalBitmap::CreateWithMask( const SalBitmap& rMask,
     int nX, int nY, int nWidth, int nHeight ) const
 {
-    CGImageRef xImage( CreateCroppedImage( nX, nY, nWidth, nHeight ) );
-    if( !xImage )
-        return nullptr;
-
-    CGImageRef xMask = rMask.CreateCroppedImage( nX, nY, nWidth, nHeight );
-    if( !xMask )
-        return xImage;
-
-    // CGImageCreateWithMask() only likes masks or greyscale images => convert if needed
-    // TODO: isolate in an extra method?
-    if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
-    {
-        const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
-
-        // create the alpha mask image fitting our image
-        // TODO: is caching the full mask or the subimage mask worth it?
-        int nMaskBytesPerRow = ((nWidth + 3) & ~3);
-        void* pMaskMem = std::malloc( nMaskBytesPerRow * nHeight );
-        CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
-            nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        CGContextDrawImage( xMaskContext, xImageRect, xMask );
-        CFRelease( xMask );
-        CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
-        pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
-
-        static const CGFloat* pDecode = nullptr;
-        xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
-        CFRelease( xDataProvider );
-        CFRelease( xMaskContext );
-    }
-
-    if( !xMask )
-        return xImage;
-
-    // combine image and alpha mask
-    CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
-    CFRelease( xMask );
-    CFRelease( xImage );
-    return xMaskedImage;
+    return CreateWithSalBitmapAndMask( *this, rMask, nX, nY, nWidth, nHeight );
 }
 
 /** creates an image from the given rectangle, replacing all black pixels
@@ -628,13 +531,14 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
     CGImageRef xMask = nullptr;
     if (m_pUserBuffer && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
     {
+        auto pSourcePixels = vcl::bitmap::getScanlineTransformer(mnBits, maPalette);
+        // Don't allocate destination buffer if there is no scanline transformer
+        if( !pSourcePixels )
+            return xMask;
+
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
         std::unique_ptr<sal_uInt32[]> pMaskBuffer(new (std::nothrow) sal_uInt32[ nHeight * nDestBytesPerRow / 4] );
-        sal_uInt32* pDest = pMaskBuffer.get();
-
-        auto pSourcePixels = vcl::bitmap::getScanlineTransformer(mnBits, maPalette);
-
-        if( pMaskBuffer && pSourcePixels )
+        if( pMaskBuffer )
         {
             sal_uInt32 nColor;
             reinterpret_cast<sal_uInt8*>(&nColor)[0] = 0xff;
@@ -643,6 +547,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
             reinterpret_cast<sal_uInt8*>(&nColor)[3] = nMaskColor.GetBlue();
 
             sal_uInt8* pSource = m_pUserBuffer.get();
+            sal_uInt32* pDest = pMaskBuffer.get();
             // First to nY on y-axis, as that is our starting point (sub-image)
             if( nY )
                 pSource += nY * mnBytesPerRow;

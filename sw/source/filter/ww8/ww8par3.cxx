@@ -231,7 +231,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         if (pFieldmark!=nullptr) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[ODF_FORMCHECKBOX_NAME] <<= aFormula.msTitle;
             (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] <<= aFormula.msToolTip;
 
             if(pCheckboxFm)
@@ -488,32 +487,6 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     if (aResult == maLSTInfos.end())
         return nullptr;
     return aResult->get();
-}
-
-static OUString sanitizeString(const OUString& rString)
-{
-    sal_Int32 i=0;
-    while (i < rString.getLength())
-    {
-        sal_Unicode c = rString[i];
-        if (rtl::isHighSurrogate(c))
-        {
-            if (i+1 == rString.getLength()
-                || !rtl::isLowSurrogate(rString[i+1]))
-            {
-                SAL_WARN("sw.ww8", "Surrogate error: high without low");
-                return rString.copy(0, i);
-            }
-            ++i;    //skip correct low
-        }
-        if (rtl::isLowSurrogate(c)) //bare low without preceding high
-        {
-            SAL_WARN("sw.ww8", "Surrogate error: low without high");
-            return rString.copy(0, i);
-        }
-        ++i;
-    }
-    return rString;
 }
 
 SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
@@ -874,7 +847,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     // 4. Read numbering String. Results in prefix and postfix
 
-    OUString sNumString(sanitizeString(read_uInt16_PascalString(m_rSt)));
+    OUString sNumString(comphelper::string::sanitizeStringSurrogates(read_uInt16_PascalString(m_rSt)));
 
     // 5. convert read values into Writer syntax
 

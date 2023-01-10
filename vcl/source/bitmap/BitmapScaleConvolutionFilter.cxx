@@ -188,79 +188,71 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     }
 
     Bitmap::ScopedReadAccess pReadAcc(rSource);
+    if(!pReadAcc)
+        return false;
 
-    if(pReadAcc)
+    std::vector<sal_Int16> aWeights;
+    std::vector<sal_Int32> aPixels;
+    std::vector<sal_Int32> aCounts;
+    sal_Int32 aNumberOfContributions(0);
+
+    const sal_Int32 nWidth(rSource.GetSizePixel().Width());
+    ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
+    rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
+    BitmapScopedWriteAccess pWriteAcc(rTarget);
+    if(!pWriteAcc)
+        return false;
+
+    std::vector<BitmapColor> aScanline(nHeight);
+    for(sal_Int32 x(0); x < nWidth; x++)
     {
-        std::vector<sal_Int16> aWeights;
-        std::vector<sal_Int32> aPixels;
-        std::vector<sal_Int32> aCounts;
-        sal_Int32 aNumberOfContributions(0);
-
-        const sal_Int32 nWidth(rSource.GetSizePixel().Width());
-        ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
-        rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
-        BitmapScopedWriteAccess pWriteAcc(rTarget);
-        bool bResult(pWriteAcc);
-
-        if(pWriteAcc)
+        for(sal_Int32 y(0); y < nHeight; y++)
+                if(pReadAcc->HasPalette())
+                    aScanline[y] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(y, x));
+                else
+                    aScanline[y] = pReadAcc->GetPixel(y, x);
+        for(sal_Int32 y(0); y < nNewHeight; y++)
         {
-            std::vector<BitmapColor> aScanline(nHeight);
-            for(sal_Int32 x(0); x < nWidth; x++)
+            const sal_Int32 aBaseIndex(y * aNumberOfContributions);
+            sal_Int32 aSum(0);
+            sal_Int32 aValueRed(0);
+            sal_Int32 aValueGreen(0);
+            sal_Int32 aValueBlue(0);
+
+            for(sal_Int32 j(0); j < aCounts[y]; j++)
             {
-                for(sal_Int32 y(0); y < nHeight; y++)
-                        if(pReadAcc->HasPalette())
-                            aScanline[y] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(y, x));
-                        else
-                            aScanline[y] = pReadAcc->GetPixel(y, x);
-                for(sal_Int32 y(0); y < nNewHeight; y++)
-                {
-                    const sal_Int32 aBaseIndex(y * aNumberOfContributions);
-                    sal_Int32 aSum(0);
-                    sal_Int32 aValueRed(0);
-                    sal_Int32 aValueGreen(0);
-                    sal_Int32 aValueBlue(0);
-
-                    for(sal_Int32 j(0); j < aCounts[y]; j++)
-                    {
-                        const sal_Int32 aIndex(aBaseIndex + j);
-                        const sal_Int16 aWeight(aWeights[aIndex]);
-                        aSum += aWeight;
-                        const BitmapColor & aColor = aScanline[aPixels[aIndex]];
-                        aValueRed += aWeight * aColor.GetRed();
-                        aValueGreen += aWeight * aColor.GetGreen();
-                        aValueBlue += aWeight * aColor.GetBlue();
-                    }
-
-                    assert(aSum != 0);
-
-                    const BitmapColor aResultColor(
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
-
-                    if(pWriteAcc->HasPalette())
-                    {
-                        pWriteAcc->SetPixelIndex(y, x, static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(aResultColor)));
-                    }
-                    else
-                    {
-                        pWriteAcc->SetPixel(y, x, aResultColor);
-                    }
-                }
+                const sal_Int32 aIndex(aBaseIndex + j);
+                const sal_Int16 aWeight(aWeights[aIndex]);
+                aSum += aWeight;
+                const BitmapColor & aColor = aScanline[aPixels[aIndex]];
+                aValueRed += aWeight * aColor.GetRed();
+                aValueGreen += aWeight * aColor.GetGreen();
+                aValueBlue += aWeight * aColor.GetBlue();
             }
-        }
 
-        aWeights.clear();
-        aCounts.clear();
-        aPixels.clear();
+            assert(aSum != 0);
 
-        if(bResult)
-        {
-            return true;
+            const BitmapColor aResultColor(
+                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
+                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
+                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+
+            if(pWriteAcc->HasPalette())
+            {
+                pWriteAcc->SetPixelIndex(y, x, static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(aResultColor)));
+            }
+            else
+            {
+                pWriteAcc->SetPixel(y, x, aResultColor);
+            }
         }
     }
 
-    return false;
+    aWeights.clear();
+    aCounts.clear();
+    aPixels.clear();
+
+    return true;
 }
 
 bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& rScaleY, const Kernel& aKernel)

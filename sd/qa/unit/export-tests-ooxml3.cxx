@@ -130,6 +130,7 @@ public:
     void testTdf124333();
     void testAutofittedTextboxIndent();
     void testTdf151622_oleIcon();
+    void testTdf152436();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -221,6 +222,7 @@ public:
     CPPUNIT_TEST(testTdf124333);
     CPPUNIT_TEST(testAutofittedTextboxIndent);
     CPPUNIT_TEST(testTdf151622_oleIcon);
+    CPPUNIT_TEST(testTdf152436);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2103,6 +2105,15 @@ void SdOOXMLExportTest3::testTdf151622_oleIcon()
     // - In ..., XPath '//p:oleObj' no attribute 'showAsIcon' exist
     // i.e. show as icon option wasn't exported.
     assertXPath(pXml, "//p:oleObj", "showAsIcon", "1");
+}
+
+void SdOOXMLExportTest3::testTdf152436()
+{
+    createSdImpressDoc("pptx/ole-emf_min.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    // Check number of shapes after export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);

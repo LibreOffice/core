@@ -79,7 +79,7 @@
 #include "accessibility.hxx"
 #include <cfgitem.hxx>
 #include <utility>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <ElementsDockingWindow.hxx>
 #include <smediteng.hxx>
 
@@ -802,7 +802,7 @@ void SmDocShell::writeFormulaOoxml(
     if(documentType == oox::drawingml::DOCUMENT_DOCX)
         aEquation.ConvertFromStarMath( pSerializer, nAlign);
     else
-        aEquation.ConvertFromStarMath(pSerializer, oox::FormulaExportBase::eFormulaAlign::INLINE);
+        aEquation.ConvertFromStarMath(pSerializer, oox::FormulaImExportBase::eFormulaAlign::INLINE);
 }
 
 void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)

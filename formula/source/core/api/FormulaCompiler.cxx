@@ -1313,7 +1313,17 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
         maExternalHashMap = r.maExternalHashMap;
         maReverseExternalHashMap = r.maReverseExternalHashMap;
         mbCore = r.mbCore;
-        mbEnglish = r.mbEnglish;
+        if (mbEnglish != r.mbEnglish)
+        {
+            // For now keep mbEnglishLocale setting, which is false for a
+            // non-English native map we're copying to.
+            /* TODO:
+            if (!mbEnglish && r.mbEnglish)
+                mbEnglishLocale = "getUseEnglishLocaleFromConfiguration()";
+            or set from outside i.e. via ScCompiler.
+            */
+            mbEnglish = r.mbEnglish;
+        }
     }
 }
 
@@ -2658,7 +2668,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
 void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal ) const
 {
-    if ( mxSymbols->isEnglish() )
+    if ( mxSymbols->isEnglishLocale() )
     {
         ::rtl::math::doubleToUStringBuffer( rBuffer, fVal,
                 rtl_math_StringFormat_Automatic,

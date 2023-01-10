@@ -46,6 +46,7 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <memory>
 #include <string_view>
+#include <thread>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
@@ -447,7 +448,7 @@ Reference<XInterface> resolveUnoURL(
         catch (const connection::NoConnectException &) {
             if (i < 40)
             {
-                ::osl::Thread::wait( std::chrono::milliseconds(500) );
+                std::this_thread::sleep_for( std::chrono::milliseconds(500) );
             }
             else throw;
         }

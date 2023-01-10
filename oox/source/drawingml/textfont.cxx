@@ -24,6 +24,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/ColorSets.hxx>
 
 using ::oox::core::XmlFilterBase;
 
@@ -48,7 +49,7 @@ sal_Int16 lclGetFontFamily( sal_Int32 nOoxValue )
 } // namespace
 
 TextFont::TextFont() :
-    mnPitch( 0 ),
+    mnPitchFamily(0),
     mnCharset( WINDOWS_CHARSET_ANSI )
 {
 }
@@ -56,16 +57,16 @@ TextFont::TextFont() :
 void TextFont::setAttributes( const AttributeList& rAttribs )
 {
     maTypeface = rAttribs.getStringDefaulted( XML_typeface);
-    maPanose   = rAttribs.getStringDefaulted( XML_panose);
-    mnPitch    = rAttribs.getInteger( XML_pitchFamily, 0 );
-    mnCharset  = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
+    maPanose = rAttribs.getStringDefaulted( XML_panose);
+    mnPitchFamily = rAttribs.getInteger( XML_pitchFamily, 0 );
+    mnCharset = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
 }
 
 void TextFont::setAttributes( const OUString& sFontName )
 {
     maTypeface = sFontName;
     maPanose.clear();
-    mnPitch = 0;
+    mnPitchFamily = 0;
     mnCharset = WINDOWS_CHARSET_DEFAULT;
 }
 
@@ -86,10 +87,24 @@ bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int
 bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily ) const
 {
     rFontName = maTypeface;
-    rnFontPitch = lclGetFontPitch( extractValue< sal_Int16 >( mnPitch, 0, 4 ) );
-    rnFontFamily = lclGetFontFamily( extractValue< sal_Int16 >( mnPitch, 4, 4 ) );
+    resolvePitch(mnPitchFamily, rnFontPitch, rnFontFamily);
     return !rFontName.isEmpty();
 }
+
+void TextFont::fillThemeFont(svx::ThemeFont& rThemeFont) const
+{
+    rThemeFont.maTypeface = maTypeface;
+    rThemeFont.maPanose = maPanose;
+    rThemeFont.maCharset = mnCharset;
+    resolvePitch(mnPitchFamily, rThemeFont.maPitch, rThemeFont.maFamily);
+}
+
+void TextFont::resolvePitch(sal_Int32 nOoxPitchFamily, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily)
+{
+    rnFontPitch = lclGetFontPitch(extractValue<sal_Int16>(nOoxPitchFamily, 0, 4));
+    rnFontFamily = lclGetFontFamily(extractValue<sal_Int16>(nOoxPitchFamily, 4, 4));
+}
+
 
 } // namespace oox::drawingml
 

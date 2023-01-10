@@ -1,8 +1,5 @@
 import pathlib
-import re
 import unittest
-
-from os import getenv, path
 
 from org.libreoffice.unotest import pyuno, mkPropertyValue, makeCopyFromTDOC
 

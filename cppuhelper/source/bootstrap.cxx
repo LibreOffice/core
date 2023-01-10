@@ -21,6 +21,7 @@
 
 #include <chrono>
 #include <cstring>
+#include <thread>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/random.h>
@@ -215,7 +216,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             catch ( connection::NoConnectException & )
             {
                 // wait 500 ms, then try to connect again
-                ::osl::Thread::wait( std::chrono::milliseconds(500) );
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
         }
     }

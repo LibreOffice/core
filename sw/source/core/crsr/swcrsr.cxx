@@ -1782,9 +1782,10 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         if ( !Move( fnMove, fnGo ) )
         {
-            SwEditShell* rSh = GetDoc().GetEditShell();
-            if (rSh && rSh->GetViewOptions() &&
-                    rSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            const SwEditShell* pSh = GetDoc().GetEditShell();
+            const SwViewOption* pViewOptions = pSh ? pSh->GetViewOptions() : nullptr;
+            if (pViewOptions && pViewOptions->IsShowOutlineContentVisibilityButton())
+            {
                 // Fixes crash that occurs in documents with outline content folded at the end of
                 // the document. When the cursor is at the end of the visible document and
                 // right arrow key is pressed Move fails after moving the cursor to the
@@ -1792,6 +1793,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                 // weird numbers to be displayed in the statusbar page number count. Left
                 // arrow, when in this state, causes a crash without RestoredSavePos() added here.
                 RestoreSavePos();
+            }
             break;
         }
 
@@ -2103,7 +2105,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             //Update cursor to change nUpDownX.
             if ( aOldPos.GetContentIndex() == nOffset )
             {
-                GetDoc().GetEditShell()->UpdateCursor();
+                if (SwEditShell* pSh = GetDoc().GetEditShell())
+                    pSh->UpdateCursor();
                 bRet = false;
             }
             else{

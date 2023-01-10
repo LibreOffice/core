@@ -48,7 +48,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -622,6 +622,8 @@ void SdtBlockHelper::DeleteAndResetTheLists()
         m_aPlaceHolderDocPart.clear();
     if (!m_aColor.isEmpty())
         m_aColor.clear();
+    if (!m_aAppearance.isEmpty())
+        m_aAppearance.clear();
     m_bShowingPlaceHolder = false;
     m_nId = 0;
     m_nTabIndex = 0;
@@ -719,6 +721,11 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
     if (!m_aColor.isEmpty())
     {
         pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val), m_aColor);
+    }
+
+    if (!m_aAppearance.isEmpty())
+    {
+        pSerializer->singleElementNS(XML_w15, XML_appearance, FSNS(XML_w15, XML_val), m_aAppearance);
     }
 
     if (!m_aAlias.isEmpty())
@@ -831,6 +838,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
                 if (rProp.Name == "ooxml:CT_SdtColor_val")
                     m_aColor = sValue;
             }
+        }
+        else if (aPropertyValue.Name == "ooxml:CT_SdtPr_appearance")
+        {
+            if (!(aPropertyValue.Value >>= m_aAppearance))
+                SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt appearance value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_showingPlcHdr")
         {
@@ -1544,7 +1556,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_pSerializer->endElementNS(XML_w, XML_smartTag);
     }
 
-    if ( m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE )
+    if ((m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE)
+        && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         m_pSerializer->startElementNS(XML_w, XML_r);
         m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "column");
@@ -1556,7 +1569,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
             m_nColBreakStatus = COLBRK_NONE;
     }
 
-    if ( m_bPostponedPageBreak && !m_bWritingHeaderFooter )
+    if (m_bPostponedPageBreak && !m_bWritingHeaderFooter
+        && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         m_pSerializer->startElementNS(XML_w, XML_r);
         m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
@@ -2260,10 +2274,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        OUString sName;
+        const OUString sName = params.getName();
         bool bChecked = false;
-
-        params.extractParam( ODF_FORMCHECKBOX_NAME, sName );
 
         const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )
@@ -2400,6 +2412,12 @@ void DocxAttributeOutput::WriteContentControlStart()
     {
         m_pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val),
                                        m_pContentControl->GetColor());
+    }
+
+    if (!m_pContentControl->GetAppearance().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w15, XML_appearance, FSNS(XML_w15, XML_val),
+                                       m_pContentControl->GetAppearance());
     }
 
     if (!m_pContentControl->GetAlias().isEmpty())
@@ -3459,7 +3477,8 @@ bool DocxAttributeOutput::FootnoteEndnoteRefTag()
     the switch in DocxAttributeOutput::RunText() nicer ;-)
  */
 static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextToken,
-        const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true )
+        const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true,
+        const OUString& rSymbolFont = OUString() )
 {
     const sal_Unicode *pBegin = rBegin;
 
@@ -3470,22 +3489,34 @@ static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextT
     if ( pBegin >= pEnd )
         return false; // we want to write at least one character
 
-    // we have to add 'preserve' when starting/ending with space
-    if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
+    bool bIsSymbol = !rSymbolFont.isEmpty();
+
+    std::u16string_view aView( pBegin, pEnd - pBegin );
+    if (bIsSymbol)
     {
-        pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
+        for (char16_t aChar : aView)
+        {
+            pSerializer->singleElementNS(XML_w, XML_sym,
+                FSNS(XML_w, XML_font), rSymbolFont,
+                FSNS(XML_w, XML_char), OString::number(aChar, 16));
+        }
     }
     else
-        pSerializer->startElementNS(XML_w, nTextToken);
+    {
+        // we have to add 'preserve' when starting/ending with space
+        if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
+            pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
+        else
+            pSerializer->startElementNS(XML_w, nTextToken);
 
-    pSerializer->writeEscaped( std::u16string_view( pBegin, pEnd - pBegin ) );
-
-    pSerializer->endElementNS( XML_w, nTextToken );
+        pSerializer->writeEscaped( aView );
+        pSerializer->endElementNS( XML_w, nTextToken );
+    }
 
     return true;
 }
 
-void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
+void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/, const OUString& rSymbolFont )
 {
     if( m_closeHyperlinkInThisRun )
     {
@@ -3550,7 +3581,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
         }
     }
 
-    impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false );
+    impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false, rSymbolFont );
 }
 
 void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
@@ -5985,7 +6016,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         SAL_WARN("sw.ww8", "Broken math object");
         return;
     }
-    if( oox::FormulaExportBase* formulaexport = dynamic_cast< oox::FormulaExportBase* >( xInterface.get()))
+    if( oox::FormulaImExportBase* formulaexport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
                 oox::drawingml::DOCUMENT_DOCX, nAlign);
     else
@@ -6755,7 +6786,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
 
                     //output variable for the formula alignment (default inline)
-                    sal_Int8 nAlign(FormulaExportBase::eFormulaAlign::INLINE);
+                    sal_Int8 nAlign(FormulaImExportBase::eFormulaAlign::INLINE);
                     auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the formula
 
                     //tdf133030: Export formula position
@@ -6773,11 +6804,11 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                                 auto aParaAdjust = pTextNode->GetSwAttrSet().GetAdjust().GetAdjust();
                                 //And set the formula according to the paragraph alignment
                                 if (aParaAdjust == SvxAdjust::Center)
-                                    nAlign = FormulaExportBase::eFormulaAlign::CENTER;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::CENTER;
                                 else if (aParaAdjust == SvxAdjust::Right)
-                                    nAlign = FormulaExportBase::eFormulaAlign::RIGHT;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::RIGHT;
                                 else // left in the case of left and justified paragraph alignments
-                                    nAlign = FormulaExportBase::eFormulaAlign::LEFT;
+                                    nAlign = FormulaImExportBase::eFormulaAlign::LEFT;
                             }
                         }
                     }

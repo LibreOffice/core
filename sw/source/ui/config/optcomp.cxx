@@ -205,10 +205,11 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     {
         const OUString sEntryName = rEntry.getValue<OUString>( SvtCompatibilityEntry::Index::Name );
         const bool bIsUserEntry    = ( sEntryName == SvtCompatibilityEntry::USER_ENTRY_NAME );
+        const bool bIsDefaultEntry = ( sEntryName == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME );
 
         m_pImpl->m_aList.push_back( rEntry );
 
-        if ( rEntry.isDefaultEntry() )
+        if ( bIsDefaultEntry )
             continue;
 
         OUString sNewEntry;
@@ -260,7 +261,12 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
         return;
 
     auto pItem = std::find_if(m_pImpl->m_aList.begin(), m_pImpl->m_aList.end(),
-        [](const SvtCompatibilityEntry& rItem) { return rItem.isDefaultEntry(); });
+        [](const SvtCompatibilityEntry& rItem)
+        {
+            const OUString sEntryName = rItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name );
+            const bool bIsDefaultEntry = ( sEntryName == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME );
+            return bIsDefaultEntry;
+        });
     if (pItem != m_pImpl->m_aList.end())
     {
         const sal_Int32 nCount = m_xOptionsLB->n_children();

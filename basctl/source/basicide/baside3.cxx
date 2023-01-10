@@ -1234,7 +1234,7 @@ void DialogWindow::InitSettings()
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
 
-    SetBackground( rStyleSettings.GetFieldColor() );
+    SetBackground(rStyleSettings.GetFaceColor());
 }
 
 css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAccessible()
@@ -1246,6 +1246,7 @@ OString DialogWindow::GetHid () const
 {
     return HID_BASICIDE_DIALOGWINDOW;
 }
+
 ItemType DialogWindow::GetType () const
 {
     return TYPE_DIALOG;

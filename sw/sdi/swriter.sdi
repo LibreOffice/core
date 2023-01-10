@@ -377,8 +377,8 @@ SfxVoidItem AutoSum FN_TABLE_AUTOSUM
     GroupId = SfxGroupId::Table;
 ]
 
-SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
-(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND)
+SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND // deprecated - use CHAR_BACK_COLOR
+(SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND)
 
 [
     AutoUpdate = TRUE,
@@ -1281,7 +1281,7 @@ SfxBoolItem Fields FN_VIEW_FIELDS
 ]
 
 SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
-(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem FontColor SID_ATTR_CHAR_COLOR2)
+(SvxColorItem FontColor SID_ATTR_CHAR_COLOR2)
 
 [
     AutoUpdate = TRUE,
@@ -2600,6 +2600,20 @@ SfxVoidItem UpdateBookmarks FN_UPDATE_BOOKMARKS
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem UpdateSections FN_UPDATE_SECTIONS
+(SfxStringItem SectionNamePrefix FN_PARAM_1, SfxUnoAnyItem Sections FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem SetReminder FN_SET_REMINDER
 
 [
@@ -2799,7 +2813,7 @@ SfxVoidItem PasteColumnsBefore FN_TABLE_PASTE_COL_BEFORE
 ]
 
 SfxUInt16Item InsertSection FN_INSERT_REGION
-(SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
+(SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3, SfxStringItem Content FN_PARAM_4)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -2887,7 +2901,7 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
 ]
 
 SfxVoidItem InsertField FN_INSERT_FIELD
-(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3)
+(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3, SfxStringItem TypeName FN_PARAM_4)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -3374,6 +3388,24 @@ SfxObjectShellItem InsertPageHeader FN_INSERT_PAGEHEADER
 ]
 
 SfxVoidItem InsertPageNumberField FN_INSERT_FLD_PGNUMBER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
+SfxVoidItem PageNumberWizard FN_PGNUMBER_WIZARD
 ()
 [
     AutoUpdate = FALSE,
@@ -6514,7 +6546,7 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
 ]
 
 SfxVoidItem UpdateFields FN_UPDATE_FIELDS
-()
+(SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -8294,6 +8326,20 @@ SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+
+    GroupId = SfxGroupId::Controls;
+]
+
+SfxVoidItem UpdateTextFormField FN_UPDATE_TEXT_FORMFIELD
+(SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2, SfxUnoAnyItem Field FN_PARAM_3)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
     GroupId = SfxGroupId::Controls;
 ]

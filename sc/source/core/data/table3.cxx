@@ -2058,6 +2058,30 @@ static TranslateId lcl_GetSubTotalStrId(int id)
     }
 }
 
+// Gets the string used for "Grand" results
+static TranslateId lcl_GetGrandSubTotalStrId(int id)
+{
+    switch ( id )
+    {
+        case SUBTOTAL_FUNC_AVE:     return STR_TABLE_GRAND_AVG;
+        case SUBTOTAL_FUNC_CNT:
+        case SUBTOTAL_FUNC_CNT2:    return STR_TABLE_GRAND_COUNT;
+        case SUBTOTAL_FUNC_MAX:     return STR_TABLE_GRAND_MAX;
+        case SUBTOTAL_FUNC_MIN:     return STR_TABLE_GRAND_MIN;
+        case SUBTOTAL_FUNC_PROD:    return STR_TABLE_GRAND_PRODUCT;
+        case SUBTOTAL_FUNC_STD:
+        case SUBTOTAL_FUNC_STDP:    return STR_TABLE_GRAND_STDDEV;
+        case SUBTOTAL_FUNC_SUM:     return STR_TABLE_GRAND_SUM;
+        case SUBTOTAL_FUNC_VAR:
+        case SUBTOTAL_FUNC_VARP:    return STR_TABLE_GRAND_VAR;
+        default:
+        {
+             return STR_EMPTYDATA;
+            // added to avoid warnings
+        }
+    }
+}
+
 //      new intermediate results
 //      rParam.nRow2 is changed!
 
@@ -2264,7 +2288,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 DBShowRow(aRowEntry.nDestRow, true);
 
                 // insert label
-                OUString label = ScResId(STR_TABLE_GRAND) + " " + ScResId(lcl_GetSubTotalStrId(pResFunc[0]));
+                OUString label = ScResId(lcl_GetGrandSubTotalStrId(pResFunc[0]));
                 SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
                 ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
             }

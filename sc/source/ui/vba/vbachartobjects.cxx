@@ -33,6 +33,7 @@
 #include <vector>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
@@ -102,7 +103,7 @@ ScVbaChartObjects::getChartObjectNames() const
     {
         // c++ hackery
         uno::Reference< uno::XInterface > xIf( xDrawPageSupplier, uno::UNO_QUERY_THROW );
-        ScCellRangesBase* pUno= dynamic_cast< ScCellRangesBase* >( xIf.get() );
+        ScCellRangesBase* pUno= comphelper::getFromUnoTunnel< ScCellRangesBase >( xIf );
         ScDocShell* pDocShell = nullptr;
         if ( !pUno )
             throw uno::RuntimeException("Failed to obtain the impl class from the drawpage" );

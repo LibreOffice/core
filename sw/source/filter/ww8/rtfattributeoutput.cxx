@@ -87,7 +87,7 @@
 #include <rtf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <oox/mathml/export.hxx>
+#include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svl/grabbagitem.hxx>
 #include <frmatr.hxx>
@@ -514,7 +514,8 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
     return aBuf.makeStringAndClear();
 }
 
-void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
+void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/,
+                                 const OUString& /*rSymbolFont*/)
 {
     SAL_INFO("sw.rtf", __func__ << ", rText: " << rText);
     RawText(rText, m_rExport.GetCurrentEncoding());
@@ -4187,7 +4188,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
     uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
     if (!xClosable.is())
         return false;
-    auto pBase = dynamic_cast<oox::FormulaExportBase*>(xClosable.get());
+    auto pBase = dynamic_cast<oox::FormulaImExportBase*>(xClosable.get());
     SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)
     {

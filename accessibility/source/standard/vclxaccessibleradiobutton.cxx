@@ -22,6 +22,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

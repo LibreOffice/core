@@ -36,8 +36,8 @@
 QtGraphicsBackend::QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage)
     : m_pFrame(pFrame)
     , m_pQImage(pQImage)
-    , m_aLineColor(0x00, 0x00, 0x00)
-    , m_aFillColor(0xFF, 0xFF, 0XFF)
+    , m_oLineColor(std::in_place, 0x00, 0x00, 0x00)
+    , m_oFillColor(std::in_place, 0xFF, 0xFF, 0XFF)
     , m_eCompositionMode(QPainter::CompositionMode_SourceOver)
 {
     ResetClipRegion();
@@ -125,7 +125,7 @@ static bool AddPolyPolygonToPath(QPainterPath& rPath, const basegfx::B2DPolyPoly
     return true;
 }
 
-bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
+void QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
 {
     if (rRegion.IsRectangle())
     {
@@ -162,7 +162,6 @@ bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
             m_aClipRegion.swap(aRegion);
         }
     }
-    return true;
 }
 
 void QtGraphicsBackend::ResetClipRegion()
@@ -218,13 +217,13 @@ void QtGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long n
 void QtGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                  tools::Long nHeight)
 {
-    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+    if (!m_oFillColor && !m_oLineColor)
         return;
 
     QtPainter aPainter(*this, true);
-    if (SALCOLOR_NONE != m_aFillColor)
+    if (m_oFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
-    if (SALCOLOR_NONE != m_aLineColor)
+    if (m_oLineColor)
         aPainter.drawRect(nX, nY, nWidth - 1, nHeight - 1);
     aPainter.update(nX, nY, nWidth, nHeight);
 }
@@ -269,7 +268,7 @@ void QtGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32*
                                         const Point** ppPtAry)
 {
     // ignore invisible polygons
-    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+    if (!m_oFillColor && !m_oLineColor)
         return;
 
     QPainterPath aPath;
@@ -297,7 +296,7 @@ bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDe
                                         double fTransparency)
 {
     // ignore invisible polygons
-    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+    if (!m_oFillColor && !m_oLineColor)
         return true;
     if ((fTransparency >= 1.0) || (fTransparency < 0))
         return true;
@@ -308,7 +307,7 @@ bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDe
 
     QPainterPath aPath;
     // ignore empty polygons
-    if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_aLineColor != SALCOLOR_NONE))
+    if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_oLineColor.has_value()))
         return true;
 
     QtPainter aPainter(*this, true, 255 * (1.0 - fTransparency));
@@ -343,7 +342,7 @@ bool QtGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevic
                                      basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                                      double fMiterMinimumAngle, bool bPixelSnapHairline)
 {
-    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+    if (!m_oFillColor && !m_oLineColor)
     {
         return true;
     }
@@ -652,15 +651,15 @@ bool QtGraphicsBackend::hasFastDrawTransformedBitmap() const { return false; }
 bool QtGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                       tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+    if (!m_oFillColor && !m_oLineColor)
         return true;
     assert(nTransparency <= 100);
     if (nTransparency > 100)
         nTransparency = 100;
     QtPainter aPainter(*this, true, (100 - nTransparency) * (255.0 / 100));
-    if (SALCOLOR_NONE != m_aFillColor)
+    if (m_oFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
-    if (SALCOLOR_NONE != m_aLineColor)
+    if (m_oLineColor)
         aPainter.drawRect(nX, nY, nWidth - 1, nHeight - 1);
     aPainter.update(nX, nY, nWidth, nHeight);
     return true;
@@ -670,13 +669,13 @@ sal_uInt16 QtGraphicsBackend::GetBitCount() const { return getFormatBits(m_pQIma
 
 tools::Long QtGraphicsBackend::GetGraphicsWidth() const { return m_pQImage->width(); }
 
-void QtGraphicsBackend::SetLineColor() { m_aLineColor = SALCOLOR_NONE; }
+void QtGraphicsBackend::SetLineColor() { m_oLineColor = std::nullopt; }
 
-void QtGraphicsBackend::SetLineColor(Color nColor) { m_aLineColor = nColor; }
+void QtGraphicsBackend::SetLineColor(Color nColor) { m_oLineColor = nColor; }
 
-void QtGraphicsBackend::SetFillColor() { m_aFillColor = SALCOLOR_NONE; }
+void QtGraphicsBackend::SetFillColor() { m_oFillColor = std::nullopt; }
 
-void QtGraphicsBackend::SetFillColor(Color nColor) { m_aFillColor = nColor; }
+void QtGraphicsBackend::SetFillColor(Color nColor) { m_oFillColor = nColor; }
 
 void QtGraphicsBackend::SetXORMode(bool bSet, bool)
 {

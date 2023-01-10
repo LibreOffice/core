@@ -97,7 +97,7 @@ inline void assertRectangleEqual(const tools::Rectangle& rExpected, const tools:
                                    rSourceLine, "different Height");
 }
 
-#define CPPUNIT_ASSERT_RECTANGLE_EQUAL(aExpected, aActual, aTolerance)                             \
+#define CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpected, aActual, aTolerance)              \
     assertRectangleEqual(aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE())
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

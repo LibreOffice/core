@@ -467,7 +467,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
             {
                 "Bookmark": {
                     "type": "string",
-                    "value": "ZOTERO_BREF_GiQ7DAWQYWLy"
+                    "value": "ZOTERO_BREF_new1"
                 },
                 "BookmarkText": {
                     "type": "string",
@@ -477,7 +477,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
             {
                 "Bookmark": {
                     "type": "string",
-                    "value": "ZOTERO_BREF_PRxDGUb4SWXF"
+                    "value": "ZOTERO_BREF_new2"
                 },
                 "BookmarkText": {
                     "type": "string",
@@ -499,6 +499,218 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     // - Actual  : ABCDE
     // i.e. the content was not updated.
     CPPUNIT_ASSERT_EQUAL(OUString("Anew result 1Cnew result 2E"), aActual);
+
+    // Without the accompanying fix in place, this test would have failed, ZOTERO_BREF_GiQ7DAWQYWLy
+    // was not renamed to ZOTERO_BREF_new1.
+    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_new1");
+    CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
+{
+    // Given a document with a fieldmark, the cursor inside the fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand", uno::Any(OUString("my command"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("my result"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    pCursor->SttEndDoc(/*bSttDoc=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // When trying to insert an inner fieldmark:
+    // Without the accompanying fix in place, this test would have crashed.
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // Then make sure the read-only content refuses to accept that inner fieldmark, so we still have
+    // just one:
+    size_t nActual = 0;
+    IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
+    for (auto it = rIDMA.getFieldmarksBegin(); it != rIDMA.getFieldmarksEnd(); ++it)
+    {
+        ++nActual;
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
+{
+    // Given a document with two refmarks, one is not interesting the other is a citation:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue("Name", uno::Any(OUString("some other old refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("some other old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->SplitNode();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When updating that refmark:
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "TypeName": {
+        "type": "string",
+        "value": "SetRef"
+    },
+    "NamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_ITEM CSL_CITATION"
+    },
+    "Fields": {
+        "type": "[][]com.sun.star.beans.PropertyValue",
+        "value": [
+            {
+                "Name": {
+                    "type": "string",
+                    "value": "ZOTERO_ITEM CSL_CITATION {} new refmark"
+                },
+                "Content": {
+                    "type": "string",
+                    "value": "new content"
+                }
+            }
+        ]
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateFields", aArgs);
+
+    // Then make sure that the document text features the new content:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new content
+    // - Actual  : old content
+    // i.e. the doc content was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
+{
+    // Given a document with a fieldmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("old result 1"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // When updating that fieldmark to have new field command & result:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "FieldType": {
+        "type": "string",
+        "value": "vnd.oasis.opendocument.field.UNHANDLED"
+    },
+    "FieldCommandPrefix": {
+        "type": "string",
+        "value": "ADDIN ZOTERO_ITEM"
+    },
+    "Field": {
+        "type": "[]com.sun.star.beans.PropertyValue",
+        "value": {
+            "FieldType": {
+                "type": "string",
+                "value": "vnd.oasis.opendocument.field.UNHANDLED"
+            },
+            "FieldCommand": {
+                "type": "string",
+                "value": "ADDIN ZOTERO_ITEM new command 1"
+            },
+            "FieldResult": {
+                "type": "string",
+                "value": "new result 1"
+            }
+        }
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateTextFormField", aArgs);
+
+    // Then make sure that the document text is updated accordingly:
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
+    static sal_Unicode const aForbidden[]
+        = { CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_FIELDEND, 0 };
+    aActual = comphelper::string::removeAny(aActual, aForbidden);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new result 1
+    // - Actual  : old result 1
+    // i.e. the document text was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new result 1"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
+{
+    // Given a document with a section:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("RegionName",
+                                      uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDold"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+
+    // When updating that section:
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "SectionNamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_BIBL"
+    },
+    "Sections": {
+        "type": "[][]com.sun.star.beans.PropertyValue",
+        "value": [
+            {
+                "Section": {
+                    "type": "string",
+                    "value": "ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDnew"
+                },
+                "SectionText": {
+                    "type": "string",
+                    "value": "new content"
+                }
+            }
+        ]
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateSections", aArgs);
+
+    // Then make sure that the section is updated:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->EndOfSection(/*bSelect=*/true);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActualResult = pCursor->GetText();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new content
+    // - Actual  : old content
+    // i.e. the content wasn't updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new content"), aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

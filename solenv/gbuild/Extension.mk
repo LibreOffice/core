@@ -435,7 +435,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
 			) \
 		) \
 	)
-	$$(call gb_Trace_EndRange,$(1) $(3) $(5),XHP)
+	$$(call gb_Trace_EndRange,$(1) $(3) $(5),TRE)
 
 endef
 

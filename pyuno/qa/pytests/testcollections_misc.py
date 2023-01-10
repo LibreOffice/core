@@ -8,10 +8,8 @@
 #
 
 import unittest
-import uno
 
 from testcollections_base import CollectionsTestBase
-from com.sun.star.beans import PropertyValue
 
 
 # Miscellaneous tests of the behaviour of UNO objects using the new-style

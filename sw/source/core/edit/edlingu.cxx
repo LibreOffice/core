@@ -1164,6 +1164,22 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
                 // ... and apply language if necessary
                 if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                     SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
+
+                // if there is a comment inside the original word, don't delete it:
+                // but keep it at the end of the replacement
+                // TODO: keep all the comments with a recursive function
+                sal_Int32 nCommentPos(pCursor->GetText().indexOf(OUStringChar(CH_TXTATR_INWORD)));
+                if ( nCommentPos > -1 )
+                {
+                    // delete the original word after the comment
+                    pCursor->GetPoint()->AdjustContent(nCommentPos + 1);
+
+                    mxDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, OUString(), false);
+                    // and select only the remaining part before the comment
+                    pCursor->GetPoint()->AdjustContent(-(nCommentPos + 1));
+                    pCursor->GetMark()->AdjustContent(-1);
+                }
+
                 mxDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, aCurrentNewPortion->sText, false);
             }
             else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)

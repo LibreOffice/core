@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>

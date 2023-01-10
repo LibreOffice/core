@@ -69,6 +69,7 @@ Public Sub RegisterScriptServices() As Variant
 		.RegisterService(&quot;Base&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterService(&quot;Writer&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
+		.RegisterService(&quot;FormDocument&quot;,		&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterEventManager(&quot;DocumentEvent&quot;,	&quot;SFDocuments.SF_Register._EventManager&quot;)	&apos;	Reference to the events manager
 		.RegisterEventManager(&quot;FormEvent&quot;,		&quot;SFDocuments.SF_Register._FormEventManager&quot;)&apos;	Reference to the form and controls events manager
 	End With
@@ -408,6 +409,11 @@ Try:
 				Set oSuperDocument = New SF_Document
 				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
 				Set oSuperDocument.[_SubClass] = oDocument
+			Case &quot;FormDocument&quot;
+				Set oDocument = New SF_FormDocument
+				Set oSuperDocument = New SF_Document
+				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
+				Set oSuperDocument.[_SubClass] = oDocument
 			Case &quot;Writer&quot;
 				Set oDocument = New SF_Writer
 				Set oSuperDocument = New SF_Document
@@ -424,6 +430,8 @@ Try:
 			Select Case vWindow.DocumentType
 				Case &quot;Base&quot;
 					Set ._DataSource = ._Component.DataSource
+				Case &quot;FormDocument&quot;
+					._Initialize()
 				Case Else
 			End Select
 		End With

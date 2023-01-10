@@ -877,7 +877,7 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="brackets-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|brackets">Select the brackets that you want to enclose bibliography entries.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|brackets">Select the brackets used to enclose bibliography entries.</property>
                       </object>
                     </child>
                   </object>

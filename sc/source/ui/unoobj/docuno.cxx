@@ -568,19 +568,18 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    ScTabView* pTabView = nullptr;
+    if (!pViewData)
+        return;
 
-    if (pViewData)
-        pTabView = pViewData->GetView();
+    ScTabView* pTabView = pViewData->GetView();
+    if (!pTabView)
+        return;
 
-    if (pTabView)
-    {
-        if (SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView())
-            pDrawView->SetNegativeX(comphelper::LibreOfficeKit::isActive() &&
-                pViewData->GetDocument().IsLayoutRTL(nPart));
+    if (SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView())
+        pDrawView->SetNegativeX(comphelper::LibreOfficeKit::isActive() &&
+            pViewData->GetDocument().IsLayoutRTL(nPart));
 
-        pTabView->SelectTabPage(nPart + 1);
-    }
+    pTabView->SelectTabPage(nPart + 1);
 }
 
 int ScModelObj::getParts()
@@ -600,6 +599,7 @@ OUString ScModelObj::getPartInfo( int nPart )
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return OUString();
+
     const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
@@ -617,20 +617,22 @@ OUString ScModelObj::getPartInfo( int nPart )
 
 OUString ScModelObj::getPartName( int nPart )
 {
-    OUString sTabName;
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return OUString();
+
+    OUString sTabName;
     pViewData->GetDocument().GetName(nPart, sTabName);
     return sTabName;
 }
 
 OUString ScModelObj::getPartHash( int nPart )
 {
-    sal_Int64 nHashCode;
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return OUString();
+
+    sal_Int64 nHashCode;
     return (pViewData->GetDocument().GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
 }
 
@@ -789,7 +791,11 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
+
     ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     LokChartHelper aChartHelper(pViewShell);
@@ -871,22 +877,24 @@ uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
     SolarMutexGuard aGuard;
 
     TransferableDataHelper aDataHelper;
-    ScViewData* pViewData = ScDocShell::GetViewData();
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
-    if ( ScEditShell * pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
-        xTransferable = pShell->GetEditView()->GetTransferable();
-    else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
     {
-        ScDrawView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        if (pOutView)
-            xTransferable = pOutView->GetEditView().GetTransferable();
+        if ( ScEditShell * pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
+            xTransferable = pShell->GetEditView()->GetTransferable();
+        else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
+        {
+            ScDrawView* pView = pViewData->GetScDrawView();
+            OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+            if (pOutView)
+                xTransferable = pOutView->GetEditView().GetTransferable();
+        }
+        else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
+            xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
+        else
+            xTransferable = pViewData->GetViewShell()->CopyToTransferable();
     }
-    else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
-        xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
-    else
-        xTransferable = pViewData->GetViewShell()->CopyToTransferable();
 
     if (!xTransferable.is())
         xTransferable.set( aDataHelper.GetTransferable() );
@@ -948,6 +956,9 @@ void ScModelObj::resetSelection()
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // deselect the shapes & texts
@@ -1005,7 +1016,6 @@ static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-
     if (!pViewData)
         return;
 
@@ -1037,7 +1047,6 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
 void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-
     if (!pViewData)
         return;
 
@@ -1052,7 +1061,6 @@ OString ScModelObj::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes,
                                          bool bFiltered, bool bGroups)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-
     if (!pViewData)
         return "";
 
@@ -1068,7 +1076,6 @@ void ScModelObj::getCellCursor(tools::JsonWriter& rJsonWriter)
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
-
     if (!pViewData)
         return;
 
@@ -1128,7 +1135,6 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
 void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-
     if (!pViewData)
         return;
 
@@ -1159,23 +1165,25 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("text", aNote.mpNote->GetText());
 
         // Calculating the cell cursor position
-        ScViewData* pViewData = ScDocShell::GetViewData();
-        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-        if (pGridWindow)
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
         {
-            SCCOL nX = aNote.maPos.Col();
-            SCROW nY = aNote.maPos.Row();
-            Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-            tools::Long nSizeXPix;
-            tools::Long nSizeYPix;
-            pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
+            ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+            if (pGridWindow)
+            {
+                SCCOL nX = aNote.maPos.Col();
+                SCROW nY = aNote.maPos.Row();
+                Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
+                tools::Long nSizeXPix;
+                tools::Long nSizeYPix;
+                pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
 
-            double fPPTX = pViewData->GetPPTX();
-            double fPPTY = pViewData->GetPPTY();
-            tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+                double fPPTX = pViewData->GetPPTX();
+                double fPPTY = pViewData->GetPPTY();
+                tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                                Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
-            rJsonWriter.put("cellPos", aRect.toString());
+                rJsonWriter.put("cellPos", aRect.toString());
+            }
         }
     }
 }
@@ -1198,23 +1206,25 @@ void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("tab", aNote.maPos.Tab());
 
         // Calculating the cell cursor position
-        ScViewData* pViewData = ScDocShell::GetViewData();
-        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-        if (pGridWindow)
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
         {
-            SCCOL nX = aNote.maPos.Col();
-            SCROW nY = aNote.maPos.Row();
-            Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-            tools::Long nSizeXPix;
-            tools::Long nSizeYPix;
-            pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
+            ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+            if (pGridWindow)
+            {
+                SCCOL nX = aNote.maPos.Col();
+                SCROW nY = aNote.maPos.Row();
+                Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
+                tools::Long nSizeXPix;
+                tools::Long nSizeYPix;
+                pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
 
-            double fPPTX = pViewData->GetPPTX();
-            double fPPTY = pViewData->GetPPTY();
-            tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+                double fPPTX = pViewData->GetPPTX();
+                double fPPTY = pViewData->GetPPTY();
+                tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                                Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
-            rJsonWriter.put("cellPos", aRect.toString());
+                rJsonWriter.put("cellPos", aRect.toString());
+            }
         }
     }
 }

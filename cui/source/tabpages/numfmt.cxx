@@ -135,6 +135,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     svtools::ColorConfig aColorConfig;
     rRenderContext.SetTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
     rRenderContext.SetBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    rRenderContext.Erase();
 
     vcl::Font aDrawFont = rRenderContext.GetFont();
     Size aSzWnd(GetOutputSizePixel());

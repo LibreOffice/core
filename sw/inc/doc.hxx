@@ -1312,6 +1312,8 @@ public:
      If array pointer is 0 return only whether a RefMark is set in document. */
     sal_uInt16 GetRefMarks( std::vector<OUString>* = nullptr ) const;
 
+    void DeleteFormatRefMark(const SwFormatRefMark* pFormatRefMark);
+
     // Insert label. If a FlyFormat is created, return it.
     SwFlyFrameFormat* InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                     const OUString& rNumberingSeparator,

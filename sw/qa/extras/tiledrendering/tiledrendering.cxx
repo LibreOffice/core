@@ -19,6 +19,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <test/helper/transferable.hxx>
@@ -3788,6 +3790,45 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
     // - Actual  : choose a date
     // i.e. the document text was not updated.
     CPPUNIT_ASSERT_EQUAL(OUString("2022-05-30"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
+{
+    SwXTextDocument* pXTextDocument = createDoc();
+    const OUString sAuthor("Abcd Xyz");
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::Any(sAuthor)},
+    }));
+    pXTextDocument->initializeForTiledRendering(aPropertyValues1);
+
+    auto insertAuthorField = [this]()
+    {
+        uno::Reference<lang::XMultiServiceFactory> const xMSF(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextDocument> const xTD(mxComponent, uno::UNO_QUERY_THROW);
+
+        auto const xText = xTD->getText();
+        auto const xTextCursor = xText->createTextCursor();
+        CPPUNIT_ASSERT(xTextCursor.is());
+
+        xTextCursor->gotoEnd(false);
+
+        uno::Reference<text::XTextField> const xTextField(
+            xMSF->createInstance("com.sun.star.text.textfield.Author"), uno::UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySet> xTextFieldProps(xTextField, uno::UNO_QUERY_THROW);
+        xTextFieldProps->setPropertyValue("FullName", uno::Any(true));
+
+        xText->insertTextContent(xTextCursor, xTextField, false);
+    };
+
+    insertAuthorField();
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

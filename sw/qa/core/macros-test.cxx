@@ -63,6 +63,7 @@ public:
     SwMacrosTest();
 
     void testVba();
+    void testModernVBADelete();
     void testBookmarkDeleteAndJoin();
     void testBookmarkDeleteTdf90816();
     void testControlShapeGrouping();
@@ -73,6 +74,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SwMacrosTest);
     CPPUNIT_TEST(testVba);
+    CPPUNIT_TEST(testModernVBADelete);
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
     CPPUNIT_TEST(testBookmarkDeleteTdf90816);
     CPPUNIT_TEST(testControlShapeGrouping);
@@ -141,6 +143,30 @@ void SwMacrosTest::testVba()
         CPPUNIT_ASSERT(aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
     }
+}
+
+void SwMacrosTest::testModernVBADelete()
+{
+    TestMacroInfo testInfo =
+        {
+            OUString("testModernVBADelete.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+        };
+
+    OUString sFileName("docm/" + testInfo.sFileBaseName);
+    loadFromURL(sFileName);
+
+    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->GetIDocumentUndoRedo().DoUndo(true);
+    CPPUNIT_ASSERT(!pDoc->GetIDocumentUndoRedo().GetUndoActionCount());
+
+    uno::Any aRet = executeMacro(testInfo.sMacroUrl);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetIDocumentUndoRedo().GetUndoActionCount());
+
+    OUString aStringRes;
+    CPPUNIT_ASSERT(aRet >>= aStringRes);
+    CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
 }
 
 void SwMacrosTest::testBookmarkDeleteAndJoin()

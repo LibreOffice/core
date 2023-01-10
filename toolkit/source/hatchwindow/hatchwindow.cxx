@@ -109,47 +109,6 @@ void VCLXHatchWindow::InplaceDeactivate()
 }
 
 
-uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
-{
-    // Attention:
-    //    Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    uno::Any aReturn( ::cppu::queryInterface( rType,
-                                           static_cast< embed::XHatchWindow* >( this ) ) );
-
-    if ( aReturn.hasValue() )
-    {
-        return aReturn ;
-    }
-
-    return VCLXWindow::queryInterface( rType ) ;
-}
-
-void SAL_CALL VCLXHatchWindow::acquire()
-    noexcept
-{
-    VCLXWindow::acquire();
-}
-
-void SAL_CALL VCLXHatchWindow::release()
-    noexcept
-{
-    VCLXWindow::release();
-}
-
-uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
-{
-    static cppu::OTypeCollection aTypeCollection(cppu::UnoType<embed::XHatchWindow>::get(),
-                                                 VCLXWindow::getTypes());
-
-    return aTypeCollection.getTypes();
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 css::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize()
 {
     return aHatchBorderSize;

@@ -28,19 +28,19 @@ namespace {
 
 class ListGalleriesEnumWrapper : public EnumerationHelper_BASE
 {
-    SwVbaListGalleries* pListGalleries;
-    sal_Int32 nIndex;
+    SwVbaListGalleries* m_pListGalleries;
+    sal_Int32 m_nIndex;
 public:
-    explicit ListGalleriesEnumWrapper( SwVbaListGalleries* pGalleries ) : pListGalleries( pGalleries ), nIndex( 1 ) {}
+    explicit ListGalleriesEnumWrapper( SwVbaListGalleries* pGalleries ) : m_pListGalleries( pGalleries ), m_nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex <= pListGalleries->getCount() );
+        return ( m_nIndex <= m_pListGalleries->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if ( nIndex <= pListGalleries->getCount() )
-            return pListGalleries->Item( uno::Any( nIndex++ ), uno::Any() );
+        if ( m_nIndex <= m_pListGalleries->getCount() )
+            return m_pListGalleries->Item( uno::Any( m_nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };

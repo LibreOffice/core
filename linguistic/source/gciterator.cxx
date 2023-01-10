@@ -50,7 +50,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -1165,16 +1164,6 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     if (!aImplName.isEmpty())
         return { aImplName };
     return {};
-}
-
-
-sal_Int64 GrammarCheckingIterator::getSomething(css::uno::Sequence<sal_Int8> const & aIdentifier) {
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-css::uno::Sequence<sal_Int8> const & GrammarCheckingIterator::getUnoTunnelId() {
-    static comphelper::UnoIdInit const id;
-    return id.getSeq();
 }
 
 

@@ -27,6 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/BitmapBuffer.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -38,39 +39,15 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
+#include <optional>
 #include <unordered_map>
-
-//Using formats that match cairo's formats. For android we patch cairo,
-//which is internal in that case, to swap the rgb components so that
-//cairo then matches the OpenGL GL_RGBA format so we can use it there
-//where we don't have GL_BGRA support.
-// SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
-#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
-#define SVP_CAIRO_BLUE 1
-#define SVP_CAIRO_GREEN 2
-#define SVP_CAIRO_RED 0
-#define SVP_CAIRO_ALPHA 3
-#elif defined OSL_BIGENDIAN
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown)
-#define SVP_CAIRO_BLUE 3
-#define SVP_CAIRO_GREEN 2
-#define SVP_CAIRO_RED 1
-#define SVP_CAIRO_ALPHA 0
-#else
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcBgr | ScanlineFormat::TopDown)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown)
-#define SVP_CAIRO_BLUE 0
-#define SVP_CAIRO_GREEN 1
-#define SVP_CAIRO_RED 2
-#define SVP_CAIRO_ALPHA 3
-#endif
 
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
+
+class Gradient;
+struct SalGradient;
 
 VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale,
                                                      double y_scale);
@@ -148,15 +125,15 @@ struct VCL_DLLPUBLIC CairoCommon
     cairo_surface_t* m_pSurface;
     basegfx::B2IVector m_aFrameSize;
     vcl::Region m_aClipRegion;
-    Color m_aLineColor;
-    Color m_aFillColor;
+    std::optional<Color> m_oLineColor;
+    std::optional<Color> m_oFillColor;
     PaintMode m_ePaintMode;
     double m_fScale;
 
     CairoCommon()
         : m_pSurface(nullptr)
-        , m_aLineColor(Color(0x00, 0x00, 0x00))
-        , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
+        , m_oLineColor(Color(0x00, 0x00, 0x00))
+        , m_oFillColor(Color(0xFF, 0xFF, 0XFF))
         , m_ePaintMode(PaintMode::Over)
         , m_fScale(1.0)
     {
@@ -172,19 +149,62 @@ struct VCL_DLLPUBLIC CairoCommon
 
     cairo_t* createTmpCompatibleCairoContext() const;
 
-    void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
+    static void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
-    // need this static version of ::drawPolyLine for usage from
-    // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
-    // ::drawPolyLine with some added parameters (see there)
+    static void drawPixel(cairo_t* cr, basegfx::B2DRange* pExtents,
+                          const std::optional<Color>& rLineColor, tools::Long nX, tools::Long nY);
+
+    static Color getPixel(cairo_surface_t* pSurface, tools::Long nX, tools::Long nY);
+
+    static void drawLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                         bool bAntiAlias, tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                         tools::Long nY2);
+
+    static void drawRect(cairo_t* cr, basegfx::B2DRange* pExtents,
+                         const std::optional<Color>& rLineColor,
+                         const std::optional<Color>& rFillColor, bool bAntiAlias, double nX,
+                         double nY, double nWidth, double nHeight);
+
+    static void drawPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                            const std::optional<Color>& rLineColor,
+                            const std::optional<Color>& rFillColor, bool bAntiAlias,
+                            sal_uInt32 nPoints, const Point* pPtAry);
+
+    static void drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                                const std::optional<Color>& rLineColor,
+                                const std::optional<Color>& rFillColor, bool bAntiAlias,
+                                sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry);
+
+    static bool drawPolyPolygon(cairo_t* cr, basegfx::B2DRange* pExtents,
+                                const std::optional<Color>& rLineColor,
+                                const std::optional<Color>& rFillColor, bool bAntiAlias,
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolyPolygon&, double fTransparency);
+
+    static void drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                             bool bAntiAlias, sal_uInt32 nPoints, const Point* pPtAry);
+
     static bool drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
                              bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
                              const basegfx::B2DPolygon& rPolyLine, double fTransparency,
                              double fLineWidth, const std::vector<double>* pStroke,
                              basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                              double fMiterMinimumAngle, bool bPixelSnapHairline);
+
+    static bool drawAlphaRect(cairo_t* cr, basegfx::B2DRange* pExtents,
+                              const std::optional<Color>& rLineColor,
+                              const std::optional<Color>& rFillColor, tools::Long nX,
+                              tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                              sal_uInt8 nTransparency);
+
+    static bool drawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
+                             const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient);
+
+    static bool implDrawGradient(cairo_t* cr, basegfx::B2DRange* pExtents, bool bAntiAlias,
+                                 basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                 SalGradient const& rGradient);
 
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source, cairo_operator_t eOp,
                           bool bAntiAlias);
@@ -199,6 +219,9 @@ struct VCL_DLLPUBLIC CairoCommon
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
+
+    static bool supportsOperation(OutDevSupportType eType);
+    static bool hasFastDrawTransformedBitmap();
 
 private:
     void doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop, sal_Int32 nExtentsRight,

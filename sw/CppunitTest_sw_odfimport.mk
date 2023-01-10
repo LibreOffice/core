@@ -49,6 +49,10 @@ $(eval $(call gb_CppunitTest_set_include,sw_odfimport,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_system_win32_libs,sw_odfimport,\
+	ole32 \
+))
+
 $(eval $(call gb_CppunitTest_use_api,sw_odfimport,\
 	udkapi \
 	offapi \
@@ -64,6 +68,10 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_odfimport))
 
 $(eval $(call gb_CppunitTest_add_arguments,sw_odfimport, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_odfimport,\
+	officecfg/registry \
 ))
 
 # vim: set noet sw=4 ts=4:

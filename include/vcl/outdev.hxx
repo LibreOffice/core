@@ -1050,7 +1050,7 @@ public:
     void                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               const SalLayoutGlyphs* pGlyphs = nullptr ) const;
-    void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
+    void                        DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
     sal_Int32                   GetTextBreak( const OUString& rStr, tools::Long nTextWidth,

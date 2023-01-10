@@ -171,12 +171,9 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             if(mActivity.getTileProvider().isSpreadsheet()){
                 json.put("BackgroundColor", valueJson);
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackgroundColor", json.toString()));
-            }else if(mActivity.getTileProvider().isPresentation()){
+            }else {
                 json.put("CharBackColor", valueJson);
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:CharBackColor", json.toString()));
-            }else {
-                json.put("BackColor", valueJson);
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackColor", json.toString()));
             }
 
             changeFontBackColorBoxColor(color);

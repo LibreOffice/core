@@ -152,6 +152,12 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_UPDATE_SECTIONS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_SET_REMINDER
     [
         ExecMethod = Execute ;
@@ -883,6 +889,7 @@ interface BaseText
     FN_SVX_SET_OUTLINE
     [
         ExecMethod = ExecSetNumber;
+        StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_OUTLINE_BULLET // status(final|play)
@@ -925,6 +932,13 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_PGNUMBER_WIZARD
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        ReadOnlyDoc = FALSE ;
+    ]
     FN_INSERT_FLD_PGNUMBER
     [
         ExecMethod = ExecField ;
@@ -1411,7 +1425,13 @@ interface BaseText
         StateMethod = GetTextFontCtrlState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_ATTR_CHAR_COLOR_BACKGROUND // status()
+    SID_ATTR_CHAR_BACK_COLOR // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ATTR_CHAR_COLOR_BACKGROUND // status() deprecated - use CHAR_BACK_COLOR
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -1789,6 +1809,12 @@ interface BaseText
     ]
 
     FN_UPDATE_TEXT_FORMFIELDS
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+    ]
+
+    FN_UPDATE_TEXT_FORMFIELD
     [
         ExecMethod = ExecField ;
         StateMethod = StateField ;

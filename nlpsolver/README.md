@@ -1,4 +1,4 @@
-# New Linear Programming Solver (nlpsolver)
+# Nonlinear Programming Solver (nlpsolver)
 
 This extension integrates into LibreOffice Calc and offers new Solver engines to use for optimizing
 nonlinear programming models.

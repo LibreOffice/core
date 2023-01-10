@@ -43,7 +43,7 @@ using namespace chelp;
 // ContentProvider Implementation.
 
 ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >& rxContext )
-    : ::ucbhelper::ContentProviderImplHelper( rxContext )
+    : ContentProvider_Base( rxContext )
     , isInitialized( false )
 {
 }
@@ -52,53 +52,6 @@ ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >
 ContentProvider::~ContentProvider()
 {
 }
-
-// XInterface methods.
-void SAL_CALL ContentProvider::acquire()
-    noexcept
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ContentProvider::release()
-    noexcept
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< lang::XTypeProvider* >(this),
-                                               static_cast< lang::XServiceInfo* >(this),
-                                               static_cast< ucb::XContentProvider* >(this),
-                                               static_cast< lang::XComponent* >(this),
-                                               static_cast< lang::XEventListener* >(this),
-                                               static_cast< container::XContainerListener* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-css::uno::Sequence< sal_Int8 > SAL_CALL ContentProvider::getImplementationId()
-{
-      return css::uno::Sequence<sal_Int8>();
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
-{
-    static cppu::OTypeCollection ourTypeCollection(
-                    cppu::UnoType<lang::XTypeProvider>::get(),
-                    cppu::UnoType<lang::XServiceInfo>::get(),
-                    cppu::UnoType<ucb::XContentProvider>::get(),
-                    cppu::UnoType<lang::XComponent>::get(),
-                    cppu::UnoType<container::XContainerListener>::get()
-                );
-
-    return ourTypeCollection.getTypes();
-}
-
 
 // XServiceInfo methods.
 

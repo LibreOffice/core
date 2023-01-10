@@ -1005,9 +1005,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         else
         {
             render_common(mpListboxStyle, cr, aRect, flags);
-            render_common(mpListboxBoxStyle, cr, aRect, flags);
-
             render_common(mpListboxButtonStyle, cr, aRect, flags);
+            render_common(mpListboxBoxStyle, cr, aRect, flags);
 
             gtk_render_arrow(mpListboxButtonArrowStyle, cr,
                              G_PI,
@@ -1882,13 +1881,24 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case RenderType::Combobox:
         if (pBgCssProvider)
         {
-            gtk_style_context_add_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider),
-                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            if (nType == ControlType::Combobox)
+            {
+                gtk_style_context_add_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider),
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            }
+            else if (nType == ControlType::Listbox)
+            {
+                gtk_style_context_add_provider(mpListboxBoxStyle, GTK_STYLE_PROVIDER(pBgCssProvider),
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            }
         }
         PaintCombobox(flags, cr, rControlRegion, nType, nPart);
         if (pBgCssProvider)
         {
-            gtk_style_context_remove_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider));
+            if (nType == ControlType::Combobox)
+                gtk_style_context_remove_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider));
+            else if (nType == ControlType::Listbox)
+                gtk_style_context_remove_provider(mpListboxBoxStyle, GTK_STYLE_PROVIDER(pBgCssProvider));
         }
         break;
     case RenderType::Icon:

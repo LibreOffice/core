@@ -47,21 +47,6 @@ public:
     {
     }
 
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        m_aSavedSettings = Application::GetSettings();
-        if (OString(filename).indexOf("LocaleArabic") != -1)
-        {
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
-            AllSettings aSettings(m_aSavedSettings);
-            aSettings.SetLanguageTag(LanguageTag("ar"));
-            Application::SetSettings(aSettings);
-            return pResetter;
-        }
-        return nullptr;
-    }
-
 protected:
     AllSettings m_aSavedSettings;
 };
@@ -2629,8 +2614,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
 {
     // New documents, created in RTL locales, were not round-tripping the paragraph style as RTL.
-    // Set the locale to "ar" for this test - see preTest() at the top of this file.
-    std::unique_ptr<Resetter> const pChanges(preTest("LocaleArabic"));
+    // Set the locale to "ar" for this test.
+    m_aSavedSettings = Application::GetSettings();
+    AllSettings aSettings(m_aSavedSettings);
+    aSettings.SetLanguageTag(LanguageTag("ar"));
+    Application::SetSettings(aSettings);
+    comphelper::ScopeGuard g([this] { Application::SetSettings(this->m_aSavedSettings); });
 
     createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 

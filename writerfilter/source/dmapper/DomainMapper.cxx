@@ -376,36 +376,36 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
                 // note: overwrite Fonts_ascii with Fonts_asciiTheme *even if*
                 // theme font is empty - this is apparently what Word 2013 does
-                uno::Any aPropValue( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_ASCII, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_ASCII, uno::Any( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_ASCII, uno::Any( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
             break;
         case NS_ooxml::LN_CT_Fonts_hAnsi:
             break;//unsupported
         case NS_ooxml::LN_CT_Fonts_hAnsiTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "hAnsiTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "hAnsiTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_H_ANSI, uno::Any( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_H_ANSI, uno::Any( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::Any( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsiaTheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsiaTheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
-                uno::Any aPropValue( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_EAST_ASIA, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_EAST_ASIA, uno::Any( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_EAST_ASIA, uno::Any( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
             break;
         case NS_ooxml::LN_CT_Fonts_cs:
@@ -413,13 +413,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::Any( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_cstheme:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "cstheme", ThemeTable::getStringForTheme(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "cstheme", ThemeHandler::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
-                uno::Any aPropValue( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
+                uno::Any aPropValue( m_pImpl->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_CS, aPropValue, true, CHAR_GRAB_BAG );
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_CS, uno::Any( ThemeTable::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_NAME_CS, uno::Any( ThemeHandler::getStringForTheme(nIntValue) ), true, CHAR_GRAB_BAG);
             }
         break;
         case NS_ooxml::LN_CT_Spacing_before:
@@ -1031,12 +1031,28 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             // footnote or endnote reference id - not needed
         break;
         case NS_ooxml::LN_CT_Color_themeColor:
+            if (m_pImpl->GetTopContext())
+            {
+                sal_Int16 nIndex = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
+                if (nIndex >= 0 && nIndex <= 11)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_INDEX, uno::Any(nIndex));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Color_themeTint:
+            if (m_pImpl->GetTopContext())
+            {
+                if (nIntValue != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((256 - nIntValue) * 10000 / 256)));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_Color_themeShade:
+            if (m_pImpl->GetTopContext())
+            {
+                if (nIntValue != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((nIntValue - 256) * 10000 / 256)));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeShade", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_DocGrid_linePitch:
@@ -1217,6 +1233,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtColor_val", sStringValue);
             m_pImpl->m_pSdtHelper->SetColor(sStringValue);
             break;
+        case NS_ooxml::LN_CT_SdtAppearance_val:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtAppearance_val", sStringValue);
+            m_pImpl->m_pSdtHelper->SetAppearance(sStringValue);
+        break;
         case NS_ooxml::LN_CT_SdtText_multiLine:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtText_multiLine", sStringValue);
             break;
@@ -2847,6 +2867,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
     case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
     case NS_ooxml::LN_CT_SdtPr_color:
+    case NS_ooxml::LN_CT_SdtPr_appearance:
     case NS_ooxml::LN_CT_SdtPr_tag:
     case NS_ooxml::LN_CT_SdtPr_tabIndex:
     case NS_ooxml::LN_CT_SdtPr_lock:
@@ -2860,6 +2881,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
 
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_appearance)
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if (pProperties)
@@ -2951,6 +2982,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
             case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
             case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
+            case NS_ooxml::LN_CT_SdtPr_appearance:  sName = "ooxml:CT_SdtPr_appearance"; break;
             default: assert(false);
         };
         if (
@@ -3773,11 +3805,18 @@ void DomainMapper::lcl_checkId(const sal_Int32 nId)
 {
     if (m_pImpl->IsInFootnote())
     {
-        if (m_pImpl->GetFootnoteCount() > -1)
-            m_pImpl->m_aFootnoteIds.push_back(nId);
+        m_pImpl->m_aFootnoteIds.push_back(nId);
+        // keep only the first real footnote
+        if (m_pImpl->GetFootnoteCount() == -1 && m_pImpl->m_aFootnoteIds.size() == 2)
+            m_pImpl->m_aFootnoteIds.pop_front();
     }
-    else if (m_pImpl->GetEndnoteCount() > -1)
+    else
+    {
         m_pImpl->m_aEndnoteIds.push_back(nId);
+        // keep only the first real endnote
+        if (m_pImpl->GetEndnoteCount() == -1 && m_pImpl->m_aEndnoteIds.size() == 2)
+            m_pImpl->m_aEndnoteIds.pop_front();
+    }
 }
 
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
@@ -4180,11 +4219,6 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
             m_pImpl->SetNumberingImport(false);
         }
         break;
-    case NS_ooxml::LN_THEMETABLE:
-        m_pImpl->GetThemeTable()->setThemeFontLangProperties(
-                m_pImpl->GetSettingsTable()->GetThemeFontLangProperties() );
-        ref->resolve ( *m_pImpl->GetThemeTable() );
-    break;
     case NS_ooxml::LN_settings_settings:
         ref->resolve ( *m_pImpl->GetSettingsTable() );
         m_pImpl->ApplySettingsTable();

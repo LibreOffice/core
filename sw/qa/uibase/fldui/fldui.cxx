@@ -19,6 +19,7 @@
 #include <wrtsh.hxx>
 #include <fldmgr.hxx>
 #include <authfld.hxx>
+#include <ndtxt.hxx>
 
 using namespace com::sun::star;
 
@@ -91,6 +92,33 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     // - Actual  : http://www.example.com/test.pdf#page=2
     // i.e. the second biblio field's URL was not updated.
     CPPUNIT_ASSERT_EQUAL(aNewUrl, pEntry->GetAuthorField(AUTH_FIELD_URL));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
+{
+    // Given an empty document:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // When inserting a refmark with text:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("aaa<b>bbb</b>ccc"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // Then make sure that we create a refmark that covers that text:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    std::vector<SwTextAttr*> aAttrs = pTextNode->GetTextAttrsAt(0, RES_TXTATR_REFMARK);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no refmark was created, only the hard to read Type=12 created a refmark.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("aaabbbccc"), pTextNode->GetText());
 }
 }
 

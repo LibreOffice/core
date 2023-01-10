@@ -56,6 +56,8 @@
 #include <postmac.h>
 
 
+const int nMinBlinkCursorDelay = 500;
+
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
 
 AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle ) :
@@ -85,7 +87,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnTrackingRectTag( 0 ),
     mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE ),
-    mnBlinkCursorDelay ( 500 )
+    mnBlinkCursorDelay ( nMinBlinkCursorDelay )
 {
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
@@ -94,17 +96,24 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     SalData* pSalData = GetSalData();
     pSalData->mpInstance->insertFrame( this );
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+    // tdf#150177 Limit minimum blink cursor rate
+    // This bug occurs when the values for NSTextInsertionPointBlinkPeriodOn or
+    // NSTextInsertionPointBlinkPeriodOff are set to zero or close to zero.
+    // LibreOffice becomes very sluggish opening documents when either is set
+    // at 100 milliseconds or less so set the blink rate to the maximum of
+    // nMinBlinkCursorDelay, NSTextInsertionPointBlinkPeriodOn, and
+    // NSTextInsertionPointBlinkPeriodOff.
+    mnBlinkCursorDelay = nMinBlinkCursorDelay;
     if (userDefaults != nil)
     {
         id setting = [userDefaults objectForKey: @"NSTextInsertionPointBlinkPeriodOn"];
-        if (setting)
-            mnBlinkCursorDelay = [setting intValue];
-        else
-        {
-            setting = [userDefaults objectForKey: @"NSTextInsertionPointBlinkPeriodOff"];
-            if (setting)
-                mnBlinkCursorDelay = [setting intValue];
-        }
+        if (setting && [setting isKindOfClass:[NSNumber class]])
+            mnBlinkCursorDelay = std::max(mnBlinkCursorDelay, [setting intValue]);
+
+        setting = [userDefaults objectForKey: @"NSTextInsertionPointBlinkPeriodOff"];
+        if (setting && [setting isKindOfClass:[NSNumber class]])
+            mnBlinkCursorDelay = std::max(mnBlinkCursorDelay, [setting intValue]);
     }
 }
 

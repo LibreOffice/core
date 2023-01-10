@@ -19,7 +19,7 @@ class tdf145093(UITestCase):
 
             # Move Up/Down a list item over a tracked paragraph insertion resulted a crash
             # (Note: not only at the end of the document, but check the original
-            # bug report temporarily, where the problem is triggered by an other problem).
+            # bug report temporarily, where the problem is triggered by another problem).
 
             self.xUITest.executeCommand(".uno:MoveDown")
             self.xUITest.executeCommand(".uno:MoveDown")

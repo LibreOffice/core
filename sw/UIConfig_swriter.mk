@@ -253,6 +253,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/notebookbar_online \
 	sw/uiconfig/swriter/ui/pagecolumncontrol \
 	sw/uiconfig/swriter/ui/pagemargincontrol \
+	sw/uiconfig/swriter/ui/pagenumberdlg \
 	sw/uiconfig/swriter/ui/pageorientationcontrol \
 	sw/uiconfig/swriter/ui/pagesizecontrol \
 	sw/uiconfig/swriter/ui/pagestylemenu \

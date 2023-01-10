@@ -32,6 +32,8 @@
 class SwAttrPool;
 namespace sw{ class DocumentStylePoolManager; }
 
+/// SwFormatColl is just an SwFormat subclass that defaults to m_bAutoFormat=false, expressing that
+/// this set of formatting is a style, not direct formatting.
 class SAL_DLLPUBLIC_RTTI SwFormatColl: public SwFormat
 {
 protected:

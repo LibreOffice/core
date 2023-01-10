@@ -807,15 +807,16 @@ void DomainMapperTableManager::endOfRowAction()
                     nFullWidthRelative += nFixLastCellWidth - (*pCellWidths)[nWidthsBound];
             }
 
-            if (nFullWidthRelative == 0)
-                throw o3tl::divide_by_zero();
-
-            for (size_t i = 0; i < nWidthsBound; ++i)
+            // tdf#131203 handle missing w:tblGrid
+            if (nFullWidthRelative > 0)
             {
-                nSum += (*pCellWidths)[i];
-                pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
-                pSeparators[nPos].IsVisible = true;
-                nPos++;
+                for (size_t i = 0; i < nWidthsBound; ++i)
+                {
+                    nSum += (*pCellWidths)[i];
+                    pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
+                    pSeparators[nPos].IsVisible = true;
+                    nPos++;
+                }
             }
         }
 

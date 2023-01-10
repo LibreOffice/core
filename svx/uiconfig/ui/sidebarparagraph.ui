@@ -659,6 +659,17 @@
               </packing>
             </child>
             <child>
+              <object class="GtkMenuToolButton" id=".uno:SetOutline">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id=".uno:RemoveBullets">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
