@@ -402,7 +402,7 @@ cairo_user_data_key_t* CairoCommon::getDamageKey()
 
 sal_uInt16 CairoCommon::GetBitCount() const
 {
-    if (cairo_surface_get_content(m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
+    if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_ALPHA)
         return 1;
     return 32;
 }
