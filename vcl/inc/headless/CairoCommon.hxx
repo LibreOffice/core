@@ -234,7 +234,7 @@ private:
                         sal_Int32 nWidth) const;
 };
 
-class SurfaceHelper
+class VCL_DLLPUBLIC SurfaceHelper
 {
 private:
     cairo_surface_t* pSurface;

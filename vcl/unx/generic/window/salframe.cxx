@@ -38,11 +38,12 @@
 #include <X11/keysym.h>
 #include <X11/extensions/shape.h>
 
+#include <headless/BitmapHelper.hxx>
+#include <headless/svpbmp.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
 #include <unx/wmadaptor.hxx>
-#include <unx/salbmp.h>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_keysym.hxx>
 #include <opengl/zone.hxx>
@@ -307,11 +308,12 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
     if( aIcon.IsEmpty() )
         return false;
 
-    X11SalBitmap *pBitmap = dynamic_cast < X11SalBitmap * >
+    SvpSalBitmap* pBitmap = dynamic_cast<SvpSalBitmap*>
         (aIcon.ImplGetBitmapSalBitmap().get());
-    if (!pBitmap) // FIXME: opengl , TODO SKIA
+    if (!pBitmap) // FIXME: TODO SKIA
         return false;
 
+    // Note: can't find a working environment where this seems to matter anymore,
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
                                  pDisplay->GetRootWindow( nXScreen ),
                                  iconSize, iconSize,
@@ -319,39 +321,52 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
                                                nXScreen.getXScreen() )
                                  );
 
-    SalTwoRect aRect(0, 0, iconSize, iconSize, 0, 0, iconSize, iconSize);
+    {
+        cairo_surface_t* pSurface = cairo_xlib_surface_create(pDisplay->GetDisplay(), icon_pixmap,
+                                                   pDisplay->GetColormap(nXScreen).GetVisual().visual,
+                                                   iconSize, iconSize);
 
-    pBitmap->ImplDraw( icon_pixmap,
-                       nXScreen,
-                       DefaultDepth( pDisplay->GetDisplay(),
-                                     nXScreen.getXScreen() ),
-                       aRect,
-                       DefaultGC( pDisplay->GetDisplay(),
-                                  nXScreen.getXScreen() ) );
+        cairo_t* cr = cairo_create(pSurface);
+
+        BitmapHelper aBitmapHelper(*pBitmap);
+        cairo_surface_t* source = aBitmapHelper.getSurface(iconSize, iconSize);
+
+        cairo_rectangle(cr, 0, 0, iconSize, iconSize);
+        cairo_set_source_surface(cr, source, 0, 0);
+        cairo_paint(cr);
+
+        cairo_destroy(cr);
+        cairo_surface_destroy(pSurface);
+    }
 
     icon_mask = None;
 
     if( aIcon.IsAlpha() )
     {
         icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
-                                   pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
+                                   pDisplay->GetRootWindow(nXScreen),
                                    iconSize, iconSize, 1);
 
-        XGCValues aValues;
-        aValues.foreground = 0xffffffff;
-        aValues.background = 0;
-        aValues.function = GXcopy;
-        GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
-            GCFunction|GCForeground|GCBackground, &aValues );
-
         Bitmap aMask = aIcon.GetAlphaMask();
-        aMask.Invert();
 
-        X11SalBitmap *pMask = static_cast < X11SalBitmap * >
+        SvpSalBitmap* pMask = static_cast<SvpSalBitmap*>
             (aMask.ImplGetSalBitmap().get());
 
-        pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
-        XFreeGC( pDisplay->GetDisplay(), aMonoGC );
+        cairo_surface_t* pSurface = cairo_xlib_surface_create_for_bitmap(pDisplay->GetDisplay(), icon_mask,
+                                                   ScreenOfDisplay(pDisplay->GetDisplay(), nXScreen.getXScreen()),
+                                                   iconSize, iconSize);
+
+        cairo_t* cr = cairo_create(pSurface);
+
+        MaskHelper aMaskHelper(*pMask);
+        cairo_surface_t* source = aMaskHelper.getSurface(iconSize, iconSize);
+
+        cairo_rectangle(cr, 0, 0, iconSize, iconSize);
+        cairo_set_source_surface(cr, source, 0, 0);
+        cairo_paint(cr);
+
+        cairo_destroy(cr);
+        cairo_surface_destroy(pSurface);
     }
 
     return true;

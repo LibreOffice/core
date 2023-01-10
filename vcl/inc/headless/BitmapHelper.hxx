@@ -23,7 +23,7 @@
 #include <headless/svpbmp.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 
-class BitmapHelper : public SurfaceHelper
+class VCL_DLLPUBLIC BitmapHelper : public SurfaceHelper
 {
 private:
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
@@ -37,7 +37,7 @@ public:
     unsigned char* getBits(sal_Int32& rStride);
 };
 
-class MaskHelper : public SurfaceHelper
+class VCL_DLLPUBLIC MaskHelper : public SurfaceHelper
 {
 private:
     std::unique_ptr<unsigned char[]> pAlphaBits;
