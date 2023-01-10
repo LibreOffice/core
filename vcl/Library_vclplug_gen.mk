@@ -101,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/gdi/x11cairotextrender \
     vcl/unx/generic/gdi/X11CairoSalGraphicsImpl \
     vcl/unx/generic/gdi/gdiimpl \
-    vcl/unx/generic/gdi/salbmp \
     vcl/unx/generic/gdi/salgdi2 \
     vcl/unx/generic/gdi/font \
     vcl/unx/generic/gdi/salgdi \

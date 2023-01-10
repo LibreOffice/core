@@ -31,7 +31,6 @@
 #include <sal/log.hxx>
 
 #include <unx/saldisp.hxx>
-#include <unx/salbmp.h>
 #include <unx/salgdi.h>
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>

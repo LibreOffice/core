@@ -58,7 +58,6 @@
 #include <salinst.hxx>
 #include <unx/salframe.h>
 #include <vcl/keycodes.hxx>
-#include <unx/salbmp.h>
 #include <osl/diagnose.h>
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
@@ -281,7 +280,6 @@ void SalDisplay::doDestruct()
     GenericUnixSalData *pData = GetGenericUnixSalData();
 
     m_pWMAdaptor.reset();
-    X11SalBitmap::ImplDestroyCache();
 
     if (ImplGetSVData())
     {
@@ -597,7 +595,6 @@ void SalDisplay::Init()
         nMaxRequestSize_ = XMaxRequestSize( pDisp_ ) * 4;
 
     meServerVendor = sal_GetServerVendor(pDisp_);
-    X11SalBitmap::ImplCreateCache();
 
     // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
     if( getenv( "SAL_SYNCHRONIZE" ) )
