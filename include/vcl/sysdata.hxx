@@ -156,7 +156,6 @@ struct SystemGraphicsData
     sal_uIntPtr     hDrawable;      // a drawable
     void*           pVisual;        // the visual in use
     int             nScreen;        // the current screen of the drawable
-    void*           pXRenderFormat; // render format for drawable
 #endif
 #if USE_HEADLESS_CODE
     void*           pSurface;       // the cairo surface when using svp-based backends, which includes gtk[3|4]
@@ -177,7 +176,6 @@ struct SystemGraphicsData
         , hDrawable( 0 )
         , pVisual( nullptr )
         , nScreen( 0 )
-        , pXRenderFormat( nullptr )
 #endif
 #if USE_HEADLESS_CODE
         , pSurface( nullptr )

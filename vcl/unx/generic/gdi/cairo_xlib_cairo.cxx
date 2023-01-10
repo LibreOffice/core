@@ -65,8 +65,7 @@ namespace cairo
         pDisplay(pSysDat.pDisplay),
         hDrawable(pSysDat.hDrawable),
         pVisual(pSysDat.pVisual),
-        nScreen(pSysDat.nScreen),
-        pRenderFormat(pSysDat.pXRenderFormat)
+        nScreen(pSysDat.nScreen)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat, const SalFrame* pReference ) :
@@ -248,7 +247,6 @@ namespace cairo
 
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable;
-        aSystemGraphicsData.pXRenderFormat = maSysData.pRenderFormat;
         aSystemGraphicsData.pSurface = pSurface;
 
         int width = cairo_xlib_surface_get_width(pSurface);

@@ -135,17 +135,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
         bExternPixmap_ = false;
     }
 
-    XRenderPictFormat* pXRenderFormat = pData ? static_cast<XRenderPictFormat*>(pData->pXRenderFormat) : nullptr;
-    if( pXRenderFormat )
-    {
-        pGraphics_->SetXRenderFormat( pXRenderFormat );
-        if( pXRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay_, pXRenderFormat->colormap, m_nXScreen );
-        else
-            pColormap = new SalColormap( nBitCount );
-        bDeleteColormap = true;
-    }
-    else if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
+    if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
     {
         pColormap = new SalColormap( nBitCount );
         bDeleteColormap = true;

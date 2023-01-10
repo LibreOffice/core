@@ -83,7 +83,6 @@ X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
     m_pVDev(nullptr),
     m_nXScreen( 0 ),
-    m_pXRenderFormat(nullptr),
     mpClipRegion(nullptr),
     hBrush_(None),
     bWindow_(false),
@@ -162,7 +161,6 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, 
     }
 
     maX11Common.m_hDrawable = aDrawable;
-    SetXRenderFormat( nullptr );
 }
 
 void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
@@ -341,7 +339,6 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.hDrawable = maX11Common.m_hDrawable;
     aRes.pVisual   = GetVisual().visual;
     aRes.nScreen   = m_nXScreen.getXScreen();
-    aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
 
