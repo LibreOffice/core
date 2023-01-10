@@ -407,10 +407,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
     // Without the accompanying fix in place, this test would have failed with:
     // - No such node (type)
     // i.e. the returned JSON was just an empty object.
+    auto field = aTree.get_child("field");
     CPPUNIT_ASSERT_EQUAL(std::string("vnd.oasis.opendocument.field.UNHANDLED"),
-                         aTree.get<std::string>("type"));
+                         field.get<std::string>("type"));
     CPPUNIT_ASSERT_EQUAL(std::string("ADDIN ZOTERO_ITEM foo bar"),
-                         aTree.get<std::string>("command"));
+                         field.get<std::string>("command"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
