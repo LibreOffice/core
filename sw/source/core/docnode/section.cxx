@@ -177,6 +177,14 @@ bool SwSectionData::operator==(SwSectionData const& rOther) const
     // FIXME: old code ignored m_bCondHiddenFlag m_bHiddenFlag m_bConnectFlag
 }
 
+void SwSectionData::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionData"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("section-name"), BAD_CAST(m_sSectionName.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwSection::SwSection(
         SectionType const eType, OUString const& rName, SwSectionFormat & rFormat)
     : SwClient(& rFormat)
@@ -1494,6 +1502,7 @@ void SwSection::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("registered-in"), "%p",
                                             GetRegisteredIn());
+    m_Data.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
