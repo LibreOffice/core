@@ -105,18 +105,6 @@ public:
 
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
-    /** Blend bitmap with color channels */
-    virtual bool blendBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rBitmap ) override;
-
-    /** Render bitmap by blending using the mask and alpha channel */
-    virtual bool blendAlphaBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rSrcBitmap,
-                const SalBitmap& rMaskBitmap,
-                const SalBitmap& rAlphaBitmap ) override;
-
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap
@@ -133,15 +121,6 @@ public:
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap& rAlphaBitmap ) override;
-
-    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
-    virtual bool drawTransformedBitmap(
-                const basegfx::B2DPoint& rNull,
-                const basegfx::B2DPoint& rX,
-                const basegfx::B2DPoint& rY,
-                const SalBitmap& rSourceBitmap,
-                const SalBitmap* pAlphaBitmap,
-                double fAlpha) override;
 
 public:
     void Init() override;

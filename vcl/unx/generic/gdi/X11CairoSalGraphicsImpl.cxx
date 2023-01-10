@@ -181,4 +181,21 @@ bool X11CairoSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, too
     return false;
 }
 
+bool X11CairoSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap&) { return false; }
+
+bool X11CairoSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect&, const SalBitmap&,
+                                               const SalBitmap&, const SalBitmap&)
+{
+    return false;
+}
+
+bool X11CairoSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint&,
+                                                    const basegfx::B2DPoint&,
+                                                    const basegfx::B2DPoint&, const SalBitmap&,
+                                                    const SalBitmap*, double)
+{
+    // here direct support for transformed bitmaps can be implemented
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

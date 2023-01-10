@@ -367,18 +367,6 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         XFreePixmap( pXDisp, aBG );
 }
 
-bool X11SalGraphicsImpl::blendBitmap( const SalTwoRect&,
-    const SalBitmap& )
-{
-    return false;
-}
-
-bool X11SalGraphicsImpl::blendAlphaBitmap( const SalTwoRect&,
-    const SalBitmap&, const SalBitmap&, const SalBitmap& )
-{
-    return false;
-}
-
 bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {
@@ -509,18 +497,6 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     XFreePixmap(pXDisplay, aAlphaPM);
     rPeer.FreePicture( aSrcPic );
     return true;
-}
-
-bool X11SalGraphicsImpl::drawTransformedBitmap(
-    const basegfx::B2DPoint&,
-    const basegfx::B2DPoint&,
-    const basegfx::B2DPoint&,
-    const SalBitmap&,
-    const SalBitmap*,
-    double)
-{
-    // here direct support for transformed bitmaps can be implemented
-    return false;
 }
 
 void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
