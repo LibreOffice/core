@@ -15,21 +15,20 @@ particular rare case.
 Secondarily there is a problem with the size of the delivered executable
 for the cactus use case.
 
-LibreOffice is intended to be deployed as an AWS Layer file, these
+At Cactus we need to deploy LibreOffice as an AWS Layer file, these
 files are zip files with a maximum size of 128MBytes, the standard
 deployment of LibreOffice is in excess of 280MBytes when
 compressed, so this version contains the necessary scripts to remove the
 unused parts of the application, these being help files,
-scripting facilities and the GUI.
+scripting facilities, dictionaries  and GUI specific libraries.
 
 ## Building Cactus version of LibreOffice.
 
-This is a fork of the GitHub mirror of LibreOffice and as such
-follows the same initial build as LibreOffice.
+This is a fork of the GitHub mirror of LibreOffice/core and also requires two other LibrOffice fors one called libreoffice-dictionaries and the other libreoffice-help. The build process is as for standard LibeOffice but then we have scripts to cut the output down to a minimum size so that we can use it.
 
 * Download this repository
 * run autogen and make (As autogen requires a lot of parameters
-a script is available for this cactus-make, this calls autogen,
+a script is available for this, __cactus-make__, this calls autogen,
 make clean and make)
 
 ```bash
@@ -37,53 +36,56 @@ $ git clone git@github.com:cactus-bm/libreoffice-core.git libreoffice
 $ cd libreoffice
 $ ./cactus-make
 ```
-* Note that cactus make can take a very long time to run so is only
-really only suitable for an initial build, if you
-make changes you should just run make at the top level. If you have multiple machines available a full build can be speeded up by configuring icecc and starting the scheduler this is enabled in the build.
+> Note __cactus-make__ can take a very long time to run (a day if running on a single core) LibreOffice notes suggest 8 core hours, in my experience this is optimistic, a recent build on a 6 core 3.5 Ghz machine took over 3 hours, if you have multiple machines available on your network installing icecc and starting the ice-scheduler can have a significant effect.
 
-This build process produces a standard libreoffice deliverable archive
+Though the build time is long for the first build it will generally by much much quicker on subsequent builds, though when rebuilding just running `make` rather than `./cactus-make` will avoid the __make clean__ and make a significant difference.  
+
+This build process produces a standard LibreOffice deliverable archive
 __LibreOfficeDev_7.6.0.0.alpha0_Linux_x86-64_archive.tar.gz__
 at __workdir/installation/LibreOfficeDev/archive/install/en-US__
 
 The part of the file name __7.6.0.0.alpha0_Linux_x86-64__ is
 the LibreOffice version number and may change if the LibreOffice is pulled into this fork.
 
+## Testing the release
 To produce an AWS Layer compatible version and simplify some
 manual testing another script is available:
 
 In the directory __cactus-build__ there are a number of example files 
 of the type that need to be converted and a script that will extract the needed parts of LibreOffice into a directory and compress to the form needed for use by Cactus Analytics.
 
-There main test files are .xlsx files containing various types of
+The main test files are .xlsx files containing various types of
 overlapping merged calls hidden columns and hidden rows, but there are
 also __xls__, __ppt__ and __doc__ files which can be converted to
 __xlsx__ or __HTML__, __pptx__ or __docx__.
 
 The test script allow you to pick which tests you wish to run.
 
-This script starts by extracting from the standard build produced by __catcus-make__ a reduced program that should be small enough to use as
-an AWS layer file, however in test mode it does not compress this into 
-a standard AWS layer file see __Build AWS Layer file__.
+This script starts by extracting from the standard build produced by __catcus-make__, a reduced directory tree that should be small enough to use as an AWS layer file, however in test mode it does not compress this into a standard AWS layer file see __Build AWS Layer file__.
 
 to run tests:
 ```bash
 $ cd cactus-build
 $ ./create-test # this will display useage information.
-$ ./create-test html # will run conversions from xlsx to html for all xlsx files in the catcus-build directory.
-$ ./create-test doc # will convert doc files to docx for all doc files in the catcus-build directory.
-$ ./create-test xls-html # will convert xls directly to html for all xls files in the catcus-build directory.
+$ ./create-test html # will run conversions from xlsx to
+                     # html for all xlsx files in the
+                     # catcus-build directory.
+$ ./create-test doc # will convert doc files to docx for
+                    # all doc files in the catcus-build directory.
+$ ./create-test xls-html # will convert xls directly to html
+                         # for all xls files in the 
+                         # catcus-build directory.
 ```
 
 There is no automatic testing of these files the conversions
 are just executed producing files in the subdirectory __converted__,
 these can be manually checked.
 
-Note that the output files have the same name as the input files with
-change file types extensions, one exception to this is when converting to
-__HTML__ if the source contains images these are separately extracted, for example:
+> Note that the output files have the same name as the input files with changed file types extensions.
 
-The file __spreadsheet-with-chart-image.xlsx__ contains a small data set
-a graph of that data set and a pair of images, when converted to html is three files:
+__HTML__ files are generated, and if they should incorporate images then those are stored separately, for example:
+
+The file __spreadsheet-with-chart-image.xlsx__ contains a small data set a graph of that data set and a pair of images, when converted to __HTML__ there are three files:
 ```
 converted/spreadsheet-with-chart-image.html
 converted/spreadsheet-with-chart-image_html_18b2813506ec3b97.png
@@ -95,8 +97,8 @@ original, note that they are both __png__ files, in the original one
 was a __jpg__.
 Note also that the chart is lost in the conversion.
 
-## Build AWS LAYER file
-Standard zip or gzip compression does not produce a file small enough to use for an AWS Layer file even with the cut down version of LibreOffice, so a compression tool called Brotli is used, to perform the compression you will need to have brotli installed in your system.
+## Build AWS Layer file
+Standard zip or gzip compression does not produce a file small enough to use for an AWS Layer file even with the cut down version of LibreOffice, so a compression tool called __brotli__ is used, to perform the compression you will need to have __brotli__ installed in your system.
 
 From within the __catcus-build__ directory run
 ```
@@ -109,10 +111,11 @@ __soffice.tar.br.zip__ in the __cactus-build__ directory, this should be a file 
 * Brotli zipped into a file called __lo.tar.br__.
 * Zipped into a file called __soffice.tar.br.zip__.
 
-Note this process can take a while as Brotli compression is quite slow.
+> Note this process can take a while as __brotli__ compression is quite slow, though decompression is not.
 
-When unzipping this file the executable is __instdir/program/soffice.bin__.
+When this file is decompressed and unzipped the executable is __instdir/program/soffice.bin__.
 
+---
 # LibreOffice
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/211/badge.svg)](https://scan.coverity.com/projects/211) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/307/badge)](https://bestpractices.coreinfrastructure.org/projects/307) [![Translation status](https://weblate.documentfoundation.org/widgets/libo_ui-master/-/svg-badge.svg)](https://weblate.documentfoundation.org/engage/libo_ui-master/?utm_source=widget)
 
