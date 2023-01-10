@@ -1418,6 +1418,14 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
+
+            // Disable DeepL translation settings, if experimental mode is not enabled
+            if( RID_SVXPAGE_DEEPL_OPTIONS == nPageId )
+            {
+                if( ! officecfg::Office::Common::Misc::ExperimentalMode::get() )
+                    continue;
+            }
+
             if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || SvtCJKOptions::IsJapaneseFindEnabled() ) &&
                  ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || SvtCJKOptions::IsAsianTypographyEnabled() ) &&
                  ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || aCTLLanguageOptions.IsCTLFontEnabled() ) )

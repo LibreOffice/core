@@ -32,7 +32,7 @@ X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
 
 cairo_t* X11CairoTextRender::getCairoContext()
 {
-    return mrParent.getCairoContext(mrParent.GetGeometryProvider());
+    return mrParent.getCairoContext();
 }
 
 void X11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
@@ -60,7 +60,7 @@ void X11CairoTextRender::clipRegion(cairo_t* cr)
 
 void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
-    X11SalGraphics::releaseCairoContext(cr);
+    mrParent.releaseCairoContext(cr, basegfx::B2DRange());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

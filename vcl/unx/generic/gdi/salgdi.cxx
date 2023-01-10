@@ -52,6 +52,7 @@
 #include <salvd.hxx>
 #include "gdiimpl.hxx"
 
+#include <unx/salframe.h>
 #include <unx/x11/x11cairotextrender.hxx>
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
@@ -65,29 +66,7 @@
 X11Common::X11Common()
     : m_hDrawable(None)
     , m_pColormap(nullptr)
-    , m_pExternalSurface(nullptr)
 {}
-
-cairo_t* X11Common::getCairoContext(const SalGeometryProvider* pGeom)
-{
-    if (m_pExternalSurface)
-        return cairo_create(m_pExternalSurface);
-
-    SAL_WARN_IF(!pGeom, "vcl", "No geometry available");
-    int nWidth = pGeom ? pGeom->GetWidth() : SAL_MAX_INT16;
-    int nHeight = pGeom ? pGeom->GetHeight() : SAL_MAX_INT16;
-    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), m_hDrawable, GetVisual().visual, nWidth, nHeight);
-
-    cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    return cr;
-}
-
-void X11Common::releaseCairoContext(cairo_t* cr)
-{
-   cairo_destroy(cr);
-}
 
 bool X11Common::SupportsCairo() const
 {
@@ -122,7 +101,7 @@ X11SalGraphics::X11SalGraphics():
 #endif
     {
         mxTextRenderImpl.reset(new X11CairoTextRender(*this));
-        mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maX11Common));
+        mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maCairoCommon));
     }
 }
 
@@ -167,9 +146,15 @@ SalGraphicsImpl* X11SalGraphics::GetImpl() const
     return mxImpl.get();
 }
 
-void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pExternalSurface, SalX11Screen nXScreen)
+void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, SalX11Screen nXScreen)
 {
-    maX11Common.m_pExternalSurface = pExternalSurface;
+    maCairoCommon.m_pSurface = pSurface;
+    if (maCairoCommon.m_pSurface)
+    {
+        maCairoCommon.m_aFrameSize.setX(cairo_xlib_surface_get_width(pSurface));
+        maCairoCommon.m_aFrameSize.setY(cairo_xlib_surface_get_height(pSurface));
+        dl_cairo_surface_get_device_scale(pSurface, &maCairoCommon.m_fScale, nullptr);
+    }
 
     // shortcut if nothing changed
     if( maX11Common.m_hDrawable == aDrawable )
@@ -192,19 +177,19 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pExternalS
     }
 }
 
-void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
+void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
                            SalX11Screen nXScreen )
 {
     maX11Common.m_pColormap = &vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetColormap(nXScreen);
     m_nXScreen  = nXScreen;
 
-    m_pFrame    = pFrame;
+    m_pFrame    = &rFrame;
     m_pVDev     = nullptr;
 
     bWindow_    = true;
     bVirDev_    = false;
 
-    SetDrawable(aTarget, nullptr, nXScreen);
+    SetDrawable(aTarget, rFrame.GetSurface(), nXScreen);
     mxImpl->Init();
 }
 
@@ -464,16 +449,6 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pFrame);
     else
         return static_cast< SalGeometryProvider * >(m_pVDev);
-}
-
-cairo_t* X11SalGraphics::getCairoContext(const SalGeometryProvider* pGeom)
-{
-    return maX11Common.getCairoContext(pGeom);
-}
-
-void X11SalGraphics::releaseCairoContext(cairo_t* cr)
-{
-   X11Common::releaseCairoContext(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,6 +74,7 @@ class X11SalFrame final : public SalFrame
     SalDisplay     *pDisplay_;
     SalX11Screen    m_nXScreen;
     ::Window        mhWindow;
+    cairo_surface_t* mpSurface;
     ::Window        mhShellWindow;
     ::Window        mhForeignParent;
     // window to fall back to when no longer in fullscreen mode
@@ -179,6 +180,7 @@ public:
     }
     const SalX11Screen&     GetScreenNumber() const { return m_nXScreen; }
     ::Window                GetWindow() const { return mhWindow; }
+    cairo_surface_t*        GetSurface() const { return mpSurface; }
     ::Window                GetShellWindow() const { return mhShellWindow; }
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }

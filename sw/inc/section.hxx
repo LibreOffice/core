@@ -132,6 +132,8 @@ public:
 
     bool IsConnectFlag() const                  { return m_bConnectFlag; }
     void SetConnectFlag(bool const bFlag){ m_bConnectFlag = bFlag; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SW_DLLPUBLIC SwSection

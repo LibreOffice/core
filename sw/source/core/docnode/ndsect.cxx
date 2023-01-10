@@ -152,7 +152,7 @@ static void lcl_CheckEmptyLayFrame( SwNodes const & rNds, SwSectionData& rSectio
 
 SwSection *
 SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
-       std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const*const pTOXBaseAndMode,
+       std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode> const*const pTOXBaseAndMode,
                        SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = nullptr;

@@ -4706,23 +4706,26 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
     // TODO: remove temporary ShowBoth
     sw::FieldmarkMode const eMode(m_FieldmarkMode);
+    sw::ParagraphBreakMode const ePBMode(m_ParagraphBreakMode);
     if (HasMergedParas())
     {
         m_FieldmarkMode = sw::FieldmarkMode::ShowBoth;
+        m_ParagraphBreakMode = sw::ParagraphBreakMode::Shown;
         mbHideRedlines = false;
         UnHide(*this);
     }
-    if (bHideRedlines || eMode != m_FieldmarkMode)
+    if (bHideRedlines || eMode != m_FieldmarkMode || ePBMode != m_ParagraphBreakMode)
     {
         m_FieldmarkMode = eMode;
+        m_ParagraphBreakMode = ePBMode;
         mbHideRedlines = bHideRedlines;
         UnHide(*this);
     }
 }
 
-void SwRootFrame::SetFieldmarkMode(sw::FieldmarkMode const eMode)
+void SwRootFrame::SetFieldmarkMode(sw::FieldmarkMode const eFMMode, sw::ParagraphBreakMode const ePBMode)
 {
-    if (eMode == m_FieldmarkMode)
+    if (eFMMode == m_FieldmarkMode && ePBMode == m_ParagraphBreakMode)
     {
         return;
     }
@@ -4732,14 +4735,23 @@ void SwRootFrame::SetFieldmarkMode(sw::FieldmarkMode const eMode)
     {
         mbHideRedlines = false;
         m_FieldmarkMode = sw::FieldmarkMode::ShowBoth;
+        m_ParagraphBreakMode = sw::ParagraphBreakMode::Shown;
         UnHide(*this);
     }
-    if (eMode != sw::FieldmarkMode::ShowBoth || isHideRedlines)
+    if (isHideRedlines || eFMMode != sw::FieldmarkMode::ShowBoth || ePBMode == sw::ParagraphBreakMode::Hidden)
     {
         mbHideRedlines = isHideRedlines;
-        m_FieldmarkMode = eMode;
+        m_FieldmarkMode = eFMMode;
+        m_ParagraphBreakMode = ePBMode;
         UnHide(*this);
     }
+}
+
+bool SwRootFrame::HasMergedParas() const
+{
+    return IsHideRedlines()
+        || GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth
+        || GetParagraphBreakMode() == sw::ParagraphBreakMode::Hidden;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
