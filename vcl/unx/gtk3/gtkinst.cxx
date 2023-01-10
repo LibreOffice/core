@@ -21571,6 +21571,8 @@ private:
 
     void set_active_including_mru(int pos, bool bInteractive)
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't set_active when frozen, set_active after thaw. Note selection doesn't survive a freeze");
+
         disable_notify_events();
 
         tree_view_set_cursor(pos);

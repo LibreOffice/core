@@ -734,6 +734,10 @@ public:
 
     virtual void set_active(int pos) override
     {
+        assert(m_xComboBox->IsUpdateMode()
+               && "don't set_active when frozen, set_active after thaw. Note selection doesn't "
+                  "survive a "
+                  "freeze");
         if (pos == -1)
         {
             m_xComboBox->SetNoSelection();
