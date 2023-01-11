@@ -143,7 +143,6 @@ public:
 
 private:
     using SalGraphics::GetPixel;
-    void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
 
     void                            freeResources();
 

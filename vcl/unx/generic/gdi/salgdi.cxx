@@ -177,33 +177,6 @@ void X11SalGraphics::DeInit()
     SetDrawable(None, nullptr, m_nXScreen);
 }
 
-void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
-{
-    Display *pDisplay = GetXDisplay();
-
-    int n = 0;
-    Region Regions[3];
-
-    if( mpClipRegion )
-        Regions[n++] = mpClipRegion;
-
-    if( pXReg && !XEmptyRegion( pXReg ) )
-        Regions[n++] = pXReg;
-
-    if( 0 == n )
-        XSetClipMask( pDisplay, pGC, None );
-    else if( 1 == n )
-        XSetRegion( pDisplay, pGC, Regions[0] );
-    else
-    {
-        Region pTmpRegion = XCreateRegion();
-        XIntersectRegion( Regions[0], Regions[1], pTmpRegion );
-
-        XSetRegion( pDisplay, pGC, pTmpRegion );
-        XDestroyRegion( pTmpRegion );
-    }
-}
-
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     char* pForceDpi;
