@@ -23,7 +23,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/Xrender.h>
 
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>

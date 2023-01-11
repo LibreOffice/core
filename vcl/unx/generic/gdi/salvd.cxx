@@ -20,7 +20,6 @@
 #include <vcl/sysdata.hxx>
 
 #include <X11/Xlib.h>
-#include <X11/extensions/Xrender.h>
 
 #include <unx/saldisp.hxx>
 #include <unx/salinst.h>
