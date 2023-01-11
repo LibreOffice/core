@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -38,9 +38,9 @@ namespace comphelper
 
     //= OCommonAccessibleComponent
 
-    typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext2,
-                                                    css::accessibility::XAccessibleEventBroadcaster
-                                                >   OCommonAccessibleComponent_Base;
+    typedef ::cppu::WeakComponentImplHelper <   css::accessibility::XAccessibleContext2,
+                                                css::accessibility::XAccessibleEventBroadcaster
+                                            >   OCommonAccessibleComponent_Base;
 
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleComponent respectively XAccessibleExtendendComponent
