@@ -81,7 +81,9 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     m_xDialog->set_version(GetVersionString());
     m_xDialog->set_copyright(GetCopyrightString());
 
-    SetBuildIdLink();
+    //LHM specific: link is invalid, so hide it
+    m_xDialog->set_website_label(OUString());
+    m_xDialog->set_website(OUString());
 
     SetLogo();
 
