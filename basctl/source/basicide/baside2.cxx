@@ -1130,6 +1130,9 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                     if (!sProcName.isEmpty())
                         aTitle += "." + sProcName;
 
+                    if (IsReadOnly())
+                        aTitle += " (" + IDEResId(RID_STR_READONLY) + ")";
+
                     SfxStringItem aTitleItem( SID_BASICIDE_STAT_TITLE, aTitle );
                     rSet.Put( aTitleItem );
                 }

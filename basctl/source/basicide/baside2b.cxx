@@ -627,6 +627,13 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 pBindings->Update( SID_BASICIDE_STAT_POS );
                 pBindings->Update( SID_BASICIDE_STAT_TITLE );
             }
+            if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ||
+                 rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM )
+            {
+                // If the module is read-only, warn that it cannont be edited
+                if ( rModulWindow.IsReadOnly() )
+                    rModulWindow.ShowReadOnlyInfoBar();
+            }
             if ( !bWasModified && pEditEngine->IsModified() )
             {
                 pBindings->Invalidate( SID_SAVEDOC );

@@ -1019,6 +1019,8 @@ void Shell::GetState(SfxItemSet &rSet)
                 if ( pCurWin )
                 {
                     OUString aTitle = pCurWin->CreateQualifiedName();
+                    if (pCurWin->IsReadOnly())
+                        aTitle += " (" + IDEResId(RID_STR_READONLY) + ")";
                     SfxStringItem aItem( SID_BASICIDE_STAT_TITLE, aTitle );
                     rSet.Put( aItem );
                 }

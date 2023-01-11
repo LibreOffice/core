@@ -35,8 +35,10 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>
@@ -50,6 +52,9 @@
 
 namespace basctl
 {
+
+// ID used for the read-only infobar
+constexpr OUStringLiteral BASIC_IDE_READONLY_INFOBAR = u"readonly";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -87,6 +92,12 @@ void BaseWindow::Init()
         pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, VertScrollHdl ) );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, HorzScrollHdl ) );
+
+    // Show the read-only infobar if the module/dialog is read-only
+    GetShell()->GetViewFrame()->RemoveInfoBar(BASIC_IDE_READONLY_INFOBAR);
+    if (IsReadOnly())
+        ShowReadOnlyInfoBar();
+
     DoInit();   // virtual...
 }
 
@@ -218,6 +229,19 @@ void BaseWindow::SetReadOnly (bool)
 bool BaseWindow::IsReadOnly ()
 {
     return false;
+}
+
+// Show the read-only warning messages for module and dialog windows
+void BaseWindow::ShowReadOnlyInfoBar()
+{
+    OUString aMsg;
+    if (dynamic_cast<ModulWindow*>(this))
+        aMsg = IDEResId(RID_STR_MODULE_READONLY);
+    else
+        aMsg = IDEResId(RID_STR_DIALOG_READONLY);
+
+    GetShell()->GetViewFrame()->AppendInfoBar(BASIC_IDE_READONLY_INFOBAR, OUString(),
+                                              aMsg, InfobarType::INFO, true);
 }
 
 void BaseWindow::BasicStarted()

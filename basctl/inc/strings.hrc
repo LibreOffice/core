@@ -110,6 +110,9 @@
 #define RID_STR_EXPORTPACKAGE               NC_("RID_STR_EXPORTPACKAGE", "Export library as extension")
 #define RID_STR_EXPORTBASIC                 NC_("RID_STR_EXPORTBASIC", "Export as BASIC library")
 #define RID_STR_PACKAGE_BUNDLE              NC_("RID_STR_PACKAGE_BUNDLE", "Extension")
+#define RID_STR_READONLY                    NC_("RID_STR_READONLY", "Read-only")
+#define RID_STR_MODULE_READONLY             NC_("RID_STR_READONLY_WARNING", "This module is read-only and cannot be edited.")
+#define RID_STR_DIALOG_READONLY             NC_("RID_STR_READONLY_WARNING", "This dialog is read-only and cannot be edited.")
 
 #endif
 

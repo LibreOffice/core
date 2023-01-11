@@ -211,6 +211,7 @@ public:
 
     virtual void    SetReadOnly (bool bReadOnly);
     virtual bool    IsReadOnly();
+    void            ShowReadOnlyInfoBar();
 
     int GetStatus() const { return nStatus; }
     void SetStatus(int n) { nStatus = n; }
