@@ -33,7 +33,7 @@
 #include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
-#include "svpcairotextrender.hxx"
+#include <unx/cairotextrender.hxx>
 #include <impfontmetricdata.hxx>
 
 #include <headless/SvpGraphicsBackend.hxx>
@@ -45,7 +45,7 @@ class FreetypeFont;
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;
-    SvpCairoTextRender                  m_aTextRenderImpl;
+    CairoTextRender m_aTextRenderImpl;
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 public:
@@ -98,15 +98,11 @@ public:
         return m_aCairoCommon.getCairoContext(/*bXorModeAllowed*/false, getAntiAlias());
     }
 
-    void releaseCairoContext(cairo_t* cr, const basegfx::B2DRange& rExtents) const
-    {
-        return m_aCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, rExtents);
-    }
-
     void clipRegion(cairo_t* cr)
     {
         m_aCairoCommon.clipRegion(cr);
     }
+
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source)
     {
         m_aCairoCommon.copySource(rTR, source, getAntiAlias());

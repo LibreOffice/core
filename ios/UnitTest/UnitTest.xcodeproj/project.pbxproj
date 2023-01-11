@@ -98,7 +98,6 @@
 		BEA20D652166596F0032F67B /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BEA20D662166596F0032F67B /* svpframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = ../../vcl/headless/svpframe.cxx; sourceTree = "<group>"; };
 		BEA20D672166596F0032F67B /* svpbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
-		BEA20D682166596F0032F67B /* svpcairotextrender.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpcairotextrender.cxx; path = ../../vcl/headless/svpcairotextrender.cxx; sourceTree = "<group>"; };
 		BEA20D692166596F0032F67B /* svpgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpgdi.cxx; path = ../../vcl/headless/svpgdi.cxx; sourceTree = "<group>"; };
 		BEA20D6A2166596F0032F67B /* svpglyphcache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpglyphcache.cxx; path = ../../vcl/headless/svpglyphcache.cxx; sourceTree = "<group>"; };
 		BEA20D6B2166596F0032F67B /* svpinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
@@ -355,7 +354,6 @@
 			children = (
 				BEA20D6D2166596F0032F67B /* headlessinst.cxx */,
 				BEA20D672166596F0032F67B /* svpbmp.cxx */,
-				BEA20D682166596F0032F67B /* svpcairotextrender.cxx */,
 				BEA20D6E2166596F0032F67B /* svpdata.cxx */,
 				BEA20D6F2166596F0032F67B /* svpdummies.cxx */,
 				BEA20D662166596F0032F67B /* svpframe.cxx */,

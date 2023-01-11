@@ -220,9 +220,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
             && s != "_SurfaceCellRenderer" // vcl/unx/gtk4/surfacecellrenderer.cxx
             && s != "_SurfaceCellRendererClass" // vcl/unx/gtk4/surfacecellrenderer.cxx
             && s != "_TransferableContent" // vcl/unx/gtk4/transferableprovider.cxx
-            && s != "_TransferableContentClass" // vcl/unx/gtk4/transferableprovider.cxx
-            && s != "_XRegion" // vcl/unx/generic/gdi/x11cairotextrender.cxx
-            && s != "_XTrap") // vcl/unx/generic/gdi/xrender_peer.hxx
+            && s != "_TransferableContentClass") // vcl/unx/gtk4/transferableprovider.cxx
         {
             report(
                 DiagnosticsEngine::Warning,

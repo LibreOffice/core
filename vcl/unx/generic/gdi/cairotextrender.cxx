@@ -131,7 +131,8 @@ extern "C"
 }
 #endif
 
-CairoTextRender::CairoTextRender()
+CairoTextRender::CairoTextRender(CairoCommon& rCairoCommon)
+    : mrCairoCommon(rCairoCommon)
 {
     // https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/235
     // I don't want to have CAIRO_ROUND_GLYPH_POS_ON set in the cairo surfaces
@@ -309,10 +310,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             cairo_set_font_options(cr, pFontOptions);
     }
 
-    double nDX, nDY;
-    getSurfaceOffset(nDX, nDY);
-    cairo_translate(cr, nDX, nDY);
-
     clipRegion(cr);
 
     cairo_set_source_rgb(cr,
@@ -410,6 +407,23 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (__lsan_enable)
         __lsan_enable();
 #endif
+}
+
+cairo_t* CairoTextRender::getCairoContext()
+{
+    // Note that cairo_set_antialias (bAntiAlias property) doesn't affect cairo
+    // text rendering.  That's affected by cairo_font_options_set_antialias instead.
+    return mrCairoCommon.getCairoContext(/*bXorModeAllowed*/false, /*bAntiAlias*/true);
+}
+
+void CairoTextRender::clipRegion(cairo_t* cr)
+{
+    mrCairoCommon.clipRegion(cr);
+}
+
+void CairoTextRender::releaseCairoContext(cairo_t* cr)
+{
+    mrCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, basegfx::B2DRange());
 }
 
 void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)

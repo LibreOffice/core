@@ -26,7 +26,7 @@
 #include <comphelper/lok.hxx>
 
 SvpSalGraphics::SvpSalGraphics()
-    : m_aTextRenderImpl(*this)
+    : m_aTextRenderImpl(m_aCairoCommon)
     , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
 {
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();

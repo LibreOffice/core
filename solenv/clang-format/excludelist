@@ -14380,7 +14380,6 @@ vcl/inc/unx/sm.hxx
 vcl/inc/unx/wmadaptor.hxx
 vcl/inc/unx/x11/x11sys.hxx
 vcl/inc/unx/x11/xlimits.hxx
-vcl/inc/unx/x11/xrender_peer.hxx
 vcl/inc/unx/x11_cursors/ase_curs.h
 vcl/inc/unx/x11_cursors/ase_mask.h
 vcl/inc/unx/x11_cursors/asn_curs.h
@@ -14981,8 +14980,6 @@ vcl/unx/generic/gdi/salbmp.cxx
 vcl/unx/generic/gdi/salgdi.cxx
 vcl/unx/generic/gdi/salgdi2.cxx
 vcl/unx/generic/gdi/salvd.cxx
-vcl/unx/generic/gdi/x11cairotextrender.cxx
-vcl/unx/generic/gdi/xrender_peer.cxx
 vcl/unx/generic/glyphs/freetype_glyphcache.cxx
 vcl/unx/generic/glyphs/glyphcache.cxx
 vcl/unx/generic/print/bitmap_gfx.cxx

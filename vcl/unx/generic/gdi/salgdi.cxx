@@ -53,7 +53,7 @@
 #include "gdiimpl.hxx"
 
 #include <unx/salframe.h>
-#include <unx/x11/x11cairotextrender.hxx>
+#include <unx/cairotextrender.hxx>
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
@@ -96,8 +96,8 @@ X11SalGraphics::X11SalGraphics():
     else
 #endif
     {
-        mxTextRenderImpl.reset(new X11CairoTextRender(*this));
         mxImpl.reset(new X11CairoSalGraphicsImpl(*this, maCairoCommon));
+        mxTextRenderImpl.reset(new CairoTextRender(maCairoCommon));
     }
 }
 

@@ -141,16 +141,6 @@ public:
      */
     void                            YieldGraphicsExpose();
 
-    cairo_t* getCairoContext() const
-    {
-        return maCairoCommon.getCairoContext(/*bXorModeAllowed*/false, getAntiAlias());
-    }
-
-    void releaseCairoContext(cairo_t* cr, const basegfx::B2DRange& rExtents) const
-    {
-        return maCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, rExtents);
-    }
-
 private:
     using SalGraphics::GetPixel;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
