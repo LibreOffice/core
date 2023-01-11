@@ -83,7 +83,6 @@ X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
     m_pVDev(nullptr),
     m_nXScreen( 0 ),
-    mpClipRegion(nullptr),
     bWindow_(false),
     bVirDev_(false)
 {
@@ -110,12 +109,6 @@ X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
 
 void X11SalGraphics::freeResources()
 {
-    if( mpClipRegion )
-    {
-        XDestroyRegion( mpClipRegion );
-        mpClipRegion = nullptr;
-    }
-
     mxImpl->freeResources();
 
     if( m_pDeleteColormap )

@@ -36,16 +36,11 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
-    void ResetClipRegion() override
-    {
-        mrCairoCommon.m_aClipRegion.SetNull();
-        X11SalGraphicsImpl::ResetClipRegion();
-    }
+    void ResetClipRegion() override { mrCairoCommon.m_aClipRegion.SetNull(); }
 
     void setClipRegion(const vcl::Region& i_rClip) override
     {
         mrCairoCommon.m_aClipRegion = i_rClip;
-        X11SalGraphicsImpl::setClipRegion(i_rClip);
     }
 
     void SetLineColor() override { mrCairoCommon.m_oLineColor = std::nullopt; }

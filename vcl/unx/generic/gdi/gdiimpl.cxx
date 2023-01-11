@@ -59,52 +59,6 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-void X11SalGraphicsImpl::ResetClipRegion()
-{
-    if( !mrParent.mpClipRegion )
-        return;
-
-    XDestroyRegion( mrParent.mpClipRegion );
-    mrParent.mpClipRegion    = nullptr;
-}
-
-void X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
-{
-    if( mrParent.mpClipRegion )
-        XDestroyRegion( mrParent.mpClipRegion );
-    mrParent.mpClipRegion = XCreateRegion();
-
-    RectangleVector aRectangles;
-    i_rClip.GetRegionRectangles(aRectangles);
-
-    for (auto const& rectangle : aRectangles)
-    {
-        const tools::Long nW(rectangle.GetWidth());
-
-        if(nW)
-        {
-            const tools::Long nH(rectangle.GetHeight());
-
-            if(nH)
-            {
-                XRectangle aRect;
-
-                aRect.x = static_cast<short>(rectangle.Left());
-                aRect.y = static_cast<short>(rectangle.Top());
-                aRect.width = static_cast<unsigned short>(nW);
-                aRect.height = static_cast<unsigned short>(nH);
-                XUnionRectWithRegion(&aRect, mrParent.mpClipRegion, mrParent.mpClipRegion);
-            }
-        }
-    }
-
-    if( XEmptyRegion( mrParent.mpClipRegion ) )
-    {
-        XDestroyRegion( mrParent.mpClipRegion );
-        mrParent.mpClipRegion= nullptr;
-    }
-}
-
 tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
 {
     if( mrParent.m_pFrame )

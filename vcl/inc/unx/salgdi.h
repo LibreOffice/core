@@ -154,8 +154,6 @@ private:
 
     SalX11Screen                    m_nXScreen;
 
-    Region                          mpClipRegion;
-
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
 
