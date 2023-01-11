@@ -758,6 +758,57 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
     CPPUNIT_ASSERT_EQUAL(OUString("result 1result 2"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
+{
+    // Given a document with a bookmarks, covering "BC":
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("ABCD");
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_old");
+
+    // When updating the content of the bookmark under the cursor:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "BookmarkNamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_BREF_"
+    },
+    "Bookmark": {
+        "type": "[]com.sun.star.beans.PropertyValue",
+        "value": {
+            "Bookmark": {
+                "type": "string",
+                "value": "ZOTERO_BREF_new"
+            },
+            "BookmarkText": {
+                "type": "string",
+                "value": "new result"
+            }
+        }
+    }
+}
+)json");
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateBookmark", aArgs);
+
+    // Then make sure that the only paragraph is updated correctly:
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActual = pCursor->GetPointNode().GetTextNode()->GetText();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Anew resultD
+    // - Actual  : ABCD
+    // i.e. it was not possible to update just the bookmark under cursor.
+    CPPUNIT_ASSERT_EQUAL(OUString("Anew resultD"), aActual);
+    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_new");
+    CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
