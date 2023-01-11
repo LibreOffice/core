@@ -628,6 +628,9 @@ void Shell::UpdateWindows()
 {
     // remove all windows that may not be displayed
     bool bChangeCurWindow = pCurWin == nullptr;
+    // stores the total number of modules and dialogs visible
+    sal_uInt16 nTotalTabs = 0;
+
     if ( !m_aCurLibName.isEmpty() )
     {
         std::vector<VclPtr<BaseWindow> > aDeleteVec;
@@ -704,6 +707,7 @@ void Shell::UpdateWindows()
                             Sequence< OUString > aModNames( doc.getObjectNames( E_SCRIPTS, aLibName ) );
                             sal_Int32 nModCount = aModNames.getLength();
                             const OUString* pModNames = aModNames.getConstArray();
+                            nTotalTabs += nModCount;
 
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
@@ -733,6 +737,7 @@ void Shell::UpdateWindows()
                             Sequence< OUString > aDlgNames = doc.getObjectNames( E_DIALOGS, aLibName );
                             sal_Int32 nDlgCount = aDlgNames.getLength();
                             const OUString* pDlgNames = aDlgNames.getConstArray();
+                            nTotalTabs += nDlgCount;
 
                             for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
                             {
@@ -761,7 +766,12 @@ void Shell::UpdateWindows()
 
     if ( bChangeCurWindow )
     {
-        if ( !pNextActiveWindow )
+        if ( nTotalTabs == 0 )
+        {
+            // If no tabs are opened, create a generic module and make it visible
+            pNextActiveWindow = CreateBasWin( m_aCurDocument, m_aCurLibName, OUString() );
+        }
+        else if ( !pNextActiveWindow )
         {
             pNextActiveWindow = FindApplicationWindow().get();
         }
