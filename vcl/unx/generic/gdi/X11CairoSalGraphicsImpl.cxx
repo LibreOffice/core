@@ -228,13 +228,14 @@ bool X11CairoSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect&, const SalBitma
     return false;
 }
 
-bool X11CairoSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint&,
-                                                    const basegfx::B2DPoint&,
-                                                    const basegfx::B2DPoint&, const SalBitmap&,
-                                                    const SalBitmap*, double)
+bool X11CairoSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
+                                                    const basegfx::B2DPoint& rX,
+                                                    const basegfx::B2DPoint& rY,
+                                                    const SalBitmap& rSourceBitmap,
+                                                    const SalBitmap* pAlphaBitmap, double fAlpha)
 {
-    // here direct support for transformed bitmaps can be implemented
-    return false;
+    return mrCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha,
+                                               getAntiAlias());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

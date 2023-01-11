@@ -253,77 +253,8 @@ bool SvpGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                const SalBitmap& rSourceBitmap,
                                                const SalBitmap* pAlphaBitmap, double fAlpha)
 {
-    if (pAlphaBitmap && pAlphaBitmap->GetBitCount() != 8 && pAlphaBitmap->GetBitCount() != 1)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap alpha depth case: "
-                                << pAlphaBitmap->GetBitCount());
-        return false;
-    }
-
-    if (fAlpha != 1.0)
-        return false;
-
-    // MM02 try to access buffered BitmapHelper
-    std::shared_ptr<BitmapHelper> aSurface;
-    tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    const tools::Long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-    const tools::Long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
-    cairo_surface_t* source(aSurface->getSurface(nDestWidth, nDestHeight));
-
-    if (!source)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
-        return false;
-    }
-
-    // MM02 try to access buffered MaskHelper
-    std::shared_ptr<MaskHelper> aMask;
-    if (nullptr != pAlphaBitmap)
-    {
-        tryToUseMaskBuffer(*pAlphaBitmap, aMask);
-    }
-
-    // access cairo_surface_t from MaskHelper
-    cairo_surface_t* mask(nullptr);
-    if (aMask)
-    {
-        mask = aMask->getSurface(nDestWidth, nDestHeight);
-    }
-
-    if (nullptr != pAlphaBitmap && nullptr == mask)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
-        return false;
-    }
-
-    const Size aSize = rSourceBitmap.GetSize();
-    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
-    m_rCairoCommon.clipRegion(cr);
-
-    // setup the image transformation
-    // using the rNull,rX,rY points as destinations for the (0,0),(0,Width),(Height,0) source points
-    const basegfx::B2DVector aXRel = rX - rNull;
-    const basegfx::B2DVector aYRel = rY - rNull;
-    cairo_matrix_t matrix;
-    cairo_matrix_init(&matrix, aXRel.getX() / aSize.Width(), aXRel.getY() / aSize.Width(),
-                      aYRel.getX() / aSize.Height(), aYRel.getY() / aSize.Height(), rNull.getX(),
-                      rNull.getY());
-
-    cairo_transform(cr, &matrix);
-
-    cairo_rectangle(cr, 0, 0, aSize.Width(), aSize.Height());
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-    cairo_clip(cr);
-
-    cairo_set_source_surface(cr, source, 0, 0);
-    if (mask)
-        cairo_mask_surface(cr, mask, 0, 0);
-    else
-        cairo_paint(cr);
-
-    m_rCairoCommon.releaseCairoContext(cr, false, extents);
-
-    return true;
+    return m_rCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha,
+                                                getAntiAlias());
 }
 
 bool SvpGraphicsBackend::hasFastDrawTransformedBitmap() const
