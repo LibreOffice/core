@@ -201,6 +201,8 @@ namespace framework
     {
     private:
         ::osl::Mutex                        m_aMutex;
+        /// Use different mutex for listeners to prevent ABBA deadlocks
+        ::osl::Mutex                        m_aListenerMutex;
         std::mutex                          m_aQueueMutex;
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
@@ -224,8 +226,8 @@ namespace framework
             :m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
             ,m_nLockCount( 0 )
-            ,m_aUndoListeners( m_aMutex )
-            ,m_aModifyListeners( m_aMutex )
+            ,m_aUndoListeners( m_aListenerMutex )
+            ,m_aModifyListeners( m_aListenerMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
         {
             getUndoManager().AddUndoListener( *this );
