@@ -28,7 +28,8 @@ published enum LineJoint
     /** the joint between lines will not be connected
      */
     NONE,
-    /** the middle value between the joints is used
+    /**
+        @deprecated - now the same as MITER
      */
     MIDDLE,
     /** the edges of the thick lines will be joined by lines
