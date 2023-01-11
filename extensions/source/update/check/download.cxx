@@ -232,11 +232,11 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
 
         // enable redirection
         (void)curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
-        // only allow redirect to http:// and https://
+        // only allow redirect to https://
 #if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
-    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "https");
 #else
-    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTPS);
 #endif
 
         // write function
