@@ -41,6 +41,8 @@
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
 
 #include <o3tl/any.hxx>
+#include <tools/stream.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
@@ -1480,6 +1482,16 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
     rnWidth = pReadAccess->Width();
     rnHeight = pReadAccess->Height();
     rnBitCount = pReadAccess->GetBitCount();
+}
+
+void BitmapEx::DumpAsPng(const char* pFileName) const
+{
+    SvFileStream aStream(pFileName ? OUString::fromUtf8(pFileName)
+                                   : OUString("file:///tmp/bitmap.png"),
+                         StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    assert(aStream.good());
+    vcl::PngImageWriter aWriter(aStream);
+    aWriter.write(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

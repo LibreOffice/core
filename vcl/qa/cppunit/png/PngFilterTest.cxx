@@ -176,6 +176,7 @@ public:
     void testPngRoundtrip24_8();
     void testPngRoundtrip32();
     void testPngWrite8BitRGBPalette();
+    void testDump();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testPngRoundtrip24_8);
     CPPUNIT_TEST(testPngRoundtrip32);
     CPPUNIT_TEST(testPngWrite8BitRGBPalette);
+    CPPUNIT_TEST(testDump);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1954,6 +1956,20 @@ void PngFilterTest::testPngWrite8BitRGBPalette()
             }
         }
     }
+}
+
+void PngFilterTest::testDump()
+{
+    utl::TempFileNamed aTempFile;
+    Bitmap aBitmap(Size(1, 1), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
+        pWriteAccessBitmap->SetPixel(0, 0, BitmapColor());
+    }
+    BitmapEx aBitmapEx(aBitmap);
+    aBitmapEx.DumpAsPng(aTempFile.GetURL().toUtf8().getStr());
+    SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), pStream->remainingSize());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PngFilterTest);

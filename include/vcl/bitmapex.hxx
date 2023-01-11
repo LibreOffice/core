@@ -449,6 +449,8 @@ public:
 
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
 
+    /// Dumps the pixels as PNG in bitmap.png.
+    void DumpAsPng(const char* pFileName = nullptr) const;
 
 private:
     friend class ImpGraphic;
