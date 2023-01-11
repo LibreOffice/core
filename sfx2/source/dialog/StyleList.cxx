@@ -926,7 +926,7 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
         return;
 
     StyleTreeArr_Impl aArr;
-    SfxStyleSheetBase* pStyle = m_pStyleSheetPool->First(eFam, SfxStyleSearchBits::AllVisible);
+    SfxStyleSheetBase* pStyle = m_pStyleSheetPool->First(eFam, SfxStyleSearchBits::All);
 
     m_bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && m_bTreeDrag;
 
@@ -1564,6 +1564,10 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
         if (pStyleSheet)
         {
             rRenderContext.Push(vcl::PushFlags::ALL);
+            // tdf#119919 - show "hidden" styles as disabled to not move children onto root node
+            if (pStyleSheet->IsHidden())
+                rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+
             sal_Int32 nSize = aRect.GetHeight();
             std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
                 pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
