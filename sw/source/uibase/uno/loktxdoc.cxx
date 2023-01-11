@@ -230,6 +230,41 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 }
 
+/// Implements getCommandValues(".uno:Bookmark").
+///
+/// Parameters:
+///
+/// - namePrefix: bookmark name prefix to not return all bookmarks
+void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                 const std::map<OUString, OUString>& rArguments)
+{
+    OUString aNamePrefix;
+    {
+        auto it = rArguments.find("namePrefix");
+        if (it != rArguments.end())
+        {
+            aNamePrefix = it->second;
+        }
+    }
+
+    IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
+    sw::mark::IMark* pBookmark = rIDMA.getBookmarkFor(rCursor);
+    tools::ScopedJsonWriterNode aBookmark = rJsonWriter.startNode("bookmark");
+    if (!pBookmark)
+    {
+        return;
+    }
+
+    if (!pBookmark->GetName().startsWith(aNamePrefix))
+    {
+        return;
+    }
+
+    rJsonWriter.put("name", pBookmark->GetName());
+}
+
 /// Implements getCommandValues(".uno:Fields").
 ///
 /// Parameters:
@@ -326,8 +361,8 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
-        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties",
-            u"Bookmarks",      u"Fields",        u"Sections" };
+        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties", u"Bookmarks", u"Fields",
+            u"Sections",       u"Bookmark" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
@@ -342,6 +377,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     static constexpr OStringLiteral aBookmarks(".uno:Bookmarks");
     static constexpr OStringLiteral aFields(".uno:Fields");
     static constexpr OStringLiteral aSections(".uno:Sections");
+    static constexpr OStringLiteral aBookmark(".uno:Bookmark");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -388,6 +424,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     else if (o3tl::starts_with(rCommand, aSections))
     {
         GetSections(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aBookmark))
+    {
+        GetBookmark(rJsonWriter, m_pDocShell, aMap);
     }
 }
 
