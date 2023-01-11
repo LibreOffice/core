@@ -23,7 +23,7 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
 X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon)
-    : X11SalGraphicsImpl(rParent)
+    : mrParent(rParent)
     , mrCairoCommon(rCairoCommon)
 {
 }

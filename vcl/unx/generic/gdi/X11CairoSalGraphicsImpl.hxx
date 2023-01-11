@@ -24,9 +24,10 @@
 
 #include <headless/CairoCommon.hxx>
 
-class X11CairoSalGraphicsImpl : public X11SalGraphicsImpl
+class X11CairoSalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
 private:
+    X11SalGraphics& mrParent;
     CairoCommon& mrCairoCommon;
 
 public:
