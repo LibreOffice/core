@@ -34,10 +34,13 @@ public:
 
     void Init() override;
 
-    virtual OUString getRenderBackendName() const override { return "gen"; }
+    OUString getRenderBackendName() const override { return "gen"; }
 
     // get the depth of the device
-    virtual sal_uInt16 GetBitCount() const override { return mrParent.GetVisual().GetDepth(); }
+    sal_uInt16 GetBitCount() const override { return mrParent.GetVisual().GetDepth(); }
+
+    // get the width of the device
+    tools::Long GetGraphicsWidth() const override;
 
     void ResetClipRegion() override { mrCairoCommon.m_aClipRegion.SetNull(); }
 

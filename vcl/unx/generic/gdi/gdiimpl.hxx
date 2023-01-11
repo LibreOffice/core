@@ -49,9 +49,6 @@ public:
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
 
     virtual ~X11SalGraphicsImpl() override;
-
-    // get the width of the device
-    virtual tools::Long GetGraphicsWidth() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

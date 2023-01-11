@@ -59,14 +59,4 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-tools::Long X11SalGraphicsImpl::GetGraphicsWidth() const
-{
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.width();
-    else if( mrParent.m_pVDev )
-        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
-    else
-        return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

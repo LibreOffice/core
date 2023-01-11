@@ -28,6 +28,11 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoC
 {
 }
 
+tools::Long X11CairoSalGraphicsImpl::GetGraphicsWidth() const
+{
+    return mrCairoCommon.m_pSurface ? mrCairoCommon.m_aFrameSize.getX() : 0;
+}
+
 void X11CairoSalGraphicsImpl::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                        tools::Long nHeight)
 {
