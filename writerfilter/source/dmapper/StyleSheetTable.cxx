@@ -1420,129 +1420,141 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
         auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(rWWName);
         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
+        {
+            if (!findIt->second->sConvertedStyleName.isEmpty())
+                return findIt->second->sConvertedStyleName;
             sRet = findIt->second->sStyleName;
+        }
     }
 
     // create a map only once
+    // This maps Word's special style manes to Writer's (the opposite to what MSWordStyles::GetWWId
+    // and ww::GetEnglishNameFromSti do on export). The mapping gives a Writer's style name, which
+    // will point to a style with specific RES_POOL* in its m_nPoolFormatId. Then on export, the
+    // pool format id will map to a ww::sti enum value, and finally to a Word style name. Keep this
+    // part in sync with the export functions mentioned above!
+    // In addition to "standard" names, some case variations are handled here; and also there are
+    // a number of strange mappings like "BodyTextIndentItalic" -> "Text body indent italic", which
+    // map something unused in Word to something unused in Writer :-/
     static const std::map< OUString, OUString> StyleNameMap {
-        { "Normal", "Standard" },
-        { "heading 1", "Heading 1" },
-        { "heading 2", "Heading 2" },
-        { "heading 3", "Heading 3" },
-        { "heading 4", "Heading 4" },
-        { "heading 5", "Heading 5" },
-        { "heading 6", "Heading 6" },
-        { "heading 7", "Heading 7" },
-        { "heading 8", "Heading 8" },
-        { "heading 9", "Heading 9" },
-        { "Heading 1", "Heading 1" },
-        { "Heading 2", "Heading 2" },
-        { "Heading 3", "Heading 3" },
-        { "Heading 4", "Heading 4" },
-        { "Heading 5", "Heading 5" },
-        { "Heading 6", "Heading 6" },
-        { "Heading 7", "Heading 7" },
-        { "Heading 8", "Heading 8" },
-        { "Heading 9", "Heading 9" },
-        { "Index 1", "Index 1" },
-        { "Index 2", "Index 2" },
-        { "Index 3", "Index 3" },
+        { "Normal", "Standard" }, // RES_POOLCOLL_STANDARD
+        { "heading 1", "Heading 1" }, // RES_POOLCOLL_HEADLINE1
+        { "heading 2", "Heading 2" }, // RES_POOLCOLL_HEADLINE2
+        { "heading 3", "Heading 3" }, // RES_POOLCOLL_HEADLINE3
+        { "heading 4", "Heading 4" }, // RES_POOLCOLL_HEADLINE4
+        { "heading 5", "Heading 5" }, // RES_POOLCOLL_HEADLINE5
+        { "heading 6", "Heading 6" }, // RES_POOLCOLL_HEADLINE6
+        { "heading 7", "Heading 7" }, // RES_POOLCOLL_HEADLINE7
+        { "heading 8", "Heading 8" }, // RES_POOLCOLL_HEADLINE8
+        { "heading 9", "Heading 9" }, // RES_POOLCOLL_HEADLINE9
+        { "Heading 1", "Heading 1" }, // RES_POOLCOLL_HEADLINE1
+        { "Heading 2", "Heading 2" }, // RES_POOLCOLL_HEADLINE2
+        { "Heading 3", "Heading 3" }, // RES_POOLCOLL_HEADLINE3
+        { "Heading 4", "Heading 4" }, // RES_POOLCOLL_HEADLINE4
+        { "Heading 5", "Heading 5" }, // RES_POOLCOLL_HEADLINE5
+        { "Heading 6", "Heading 6" }, // RES_POOLCOLL_HEADLINE6
+        { "Heading 7", "Heading 7" }, // RES_POOLCOLL_HEADLINE7
+        { "Heading 8", "Heading 8" }, // RES_POOLCOLL_HEADLINE8
+        { "Heading 9", "Heading 9" }, // RES_POOLCOLL_HEADLINE9
+        { "Index 1", "Index 1" }, // RES_POOLCOLL_TOX_IDX1
+        { "Index 2", "Index 2" }, // RES_POOLCOLL_TOX_IDX2
+        { "Index 3", "Index 3" }, // RES_POOLCOLL_TOX_IDX3
 //        { "Index 4", "" },
 //        { "Index 5", "" },
 //        { "Index 6", "" },
 //        { "Index 7", "" },
 //        { "Index 8", "" },
 //        { "Index 9", "" },
-        { "TOC 1", "Contents 1" },
-        { "TOC 2", "Contents 2" },
-        { "TOC 3", "Contents 3" },
-        { "TOC 4", "Contents 4" },
-        { "TOC 5", "Contents 5" },
-        { "TOC 6", "Contents 6" },
-        { "TOC 7", "Contents 7" },
-        { "TOC 8", "Contents 8" },
-        { "TOC 9", "Contents 9" },
-        { "TOC Heading", "Contents Heading" },
-        { "TOCHeading", "Contents Heading" },
-        { "toc 1", "Contents 1" },
-        { "toc 2", "Contents 2" },
-        { "toc 3", "Contents 3" },
-        { "toc 4", "Contents 4" },
-        { "toc 5", "Contents 5" },
-        { "toc 6", "Contents 6" },
-        { "toc 7", "Contents 7" },
-        { "toc 8", "Contents 8" },
-        { "toc 9", "Contents 9" },
-        { "TOC1", "Contents 1" },
-        { "TOC2", "Contents 2" },
-        { "TOC3", "Contents 3" },
-        { "TOC4", "Contents 4" },
-        { "TOC5", "Contents 5" },
-        { "TOC6", "Contents 6" },
-        { "TOC7", "Contents 7" },
-        { "TOC8", "Contents 8" },
-        { "TOC9", "Contents 9" },
+        { "TOC 1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
+        { "TOC 2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
+        { "TOC 3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
+        { "TOC 4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
+        { "TOC 5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
+        { "TOC 6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
+        { "TOC 7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
+        { "TOC 8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
+        { "TOC 9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
+        { "TOC Heading", "Contents Heading" }, // RES_POOLCOLL_TOX_CNTNTH
+        { "TOCHeading", "Contents Heading" }, // RES_POOLCOLL_TOX_CNTNTH
+        { "toc 1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
+        { "toc 2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
+        { "toc 3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
+        { "toc 4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
+        { "toc 5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
+        { "toc 6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
+        { "toc 7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
+        { "toc 8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
+        { "toc 9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
+        { "TOC1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
+        { "TOC2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
+        { "TOC3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
+        { "TOC4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
+        { "TOC5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
+        { "TOC6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
+        { "TOC7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
+        { "TOC8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
+        { "TOC9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
 //        { "Normal Indent", "" },
-        { "footnote text", "Footnote" },
-        { "Footnote Text", "Footnote" },
-//        { "Annotation Text", "" },
-        { "Header", "Header" },
-        { "header", "Header" },
-        { "Footer", "Footer" },
-        { "footer", "Footer" },
-        { "Index Heading", "Index Heading" },
-//        { "Caption", "" },
-//        { "Table of Figures", "" },
-        { "Envelope Address", "Addressee" },
-        { "Envelope Return", "Sender" },
-        { "footnote reference", "Footnote Symbol" },
-        { "Footnote Reference", "Footnote Symbol" },
+        { "footnote text", "Footnote" }, // RES_POOLCOLL_FOOTNOTE
+        { "Footnote Text", "Footnote" }, // RES_POOLCOLL_FOOTNOTE
+        { "Annotation Text", "Marginalia" }, // RES_POOLCOLL_MARGINAL
+        { "Header", "Header" }, // RES_POOLCOLL_HEADER
+        { "header", "Header" }, // RES_POOLCOLL_HEADER
+        { "Footer", "Footer" }, // RES_POOLCOLL_FOOTER
+        { "footer", "Footer" }, // RES_POOLCOLL_FOOTER
+        { "Index Heading", "Index Heading" }, // RES_POOLCOLL_TOX_IDXH
+        { "Caption", "Caption" }, // RES_POOLCOLL_LABEL
+        { "Table of Figures", "Drawing" }, // RES_POOLCOLL_LABEL_DRAWING
+        { "Envelope Address", "Addressee" }, // RES_POOLCOLL_ENVELOPE_ADDRESS
+        { "Envelope Return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
+        { "footnote reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173
+        { "Footnote Reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173
 //        { "Annotation Reference", "" },
-        { "Line Number", "Line numbering" },
-        { "Page Number", "Page Number" },
-        { "endnote reference", "Endnote Symbol" },
-        { "Endnote Reference", "Endnote Symbol" },
-        { "endnote text", "Endnote" },
-        { "Endnote Text", "Endnote" },
-//        { "Table of Authorities", "" },
+        { "Line Number", "Line numbering" }, // RES_POOLCHR_LINENUM
+        { "Page Number", "Page Number" }, // RES_POOLCHR_PAGENO
+        { "endnote reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173
+        { "Endnote Reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173
+        { "endnote text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
+        { "Endnote Text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
+        { "Table of Authorities", "Bibliography Heading" }, // RES_POOLCOLL_TOX_AUTHORITIESH
 //        { "Macro Text", "" },
 //        { "TOA Heading", "" },
-        { "List", "List" },
+        { "List", "List" }, // RES_POOLCOLL_NUMBER_BULLET_BASE
 //        { "List 2", "" },
 //        { "List 3", "" },
 //        { "List 4", "" },
 //        { "List 5", "" },
-//        { "List Bullet", "" },
-//        { "List Bullet 2", "" },
-//        { "List Bullet 3", "" },
-//        { "List Bullet 4", "" },
-//        { "List Bullet 5", "" },
-//        { "List Number", "" },
-//        { "List Number 2", "" },
-//        { "List Number 3", "" },
-//        { "List Number 4", "" },
-//        { "List Number 5", "" },
-        { "Title", "Title" },
-//        { "Closing", "" },
-        { "Signature", "Signature" },
+        { "List Bullet", "List 1" }, // RES_POOLCOLL_BULLET_LEVEL1
+        { "List Bullet 2", "List 2" }, // RES_POOLCOLL_BULLET_LEVEL2
+        { "List Bullet 3", "List 3" }, // RES_POOLCOLL_BULLET_LEVEL3
+        { "List Bullet 4", "List 4" }, // RES_POOLCOLL_BULLET_LEVEL4
+        { "List Bullet 5", "List 5" }, // RES_POOLCOLL_BULLET_LEVEL5
+        { "List Number", "Numbering 1" }, // RES_POOLCOLL_NUM_LEVEL1
+        { "List Number 2", "Numbering 2" }, // RES_POOLCOLL_NUM_LEVEL2
+        { "List Number 3", "Numbering 3" }, // RES_POOLCOLL_NUM_LEVEL3
+        { "List Number 4", "Numbering 4" }, // RES_POOLCOLL_NUM_LEVEL4
+        { "List Number 5", "Numbering 5" }, // RES_POOLCOLL_NUM_LEVEL5
+        { "Title", "Title" }, // RES_POOLCOLL_DOC_TITLE
+        { "Closing", "Appendix" }, // RES_POOLCOLL_DOC_APPENDIX
+        { "Signature", "Signature" }, // RES_POOLCOLL_SIGNATURE
 //        { "Default Paragraph Font", "" },
         { "DefaultParagraphFont", "Default Paragraph Font" },
-        { "Body Text", "Text body" },
-        { "BodyText", "Text body" },
+        { "Body Text", "Text body" }, // RES_POOLCOLL_TEXT
+        { "BodyText", "Text body" }, // RES_POOLCOLL_TEXT
         { "BodyTextIndentItalic", "Text body indent italic" },
-        { "Body Text Indent", "Text body indent" },
-        { "BodyTextIndent", "Text body indent" },
+        { "Body Text Indent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
+        { "BodyTextIndent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
         { "BodyTextIndent2", "Text body indent2" },
-//        { "List Continue", "" },
-//        { "List Continue 2", "" },
-//        { "List Continue 3", "" },
-//        { "List Continue 4", "" },
-//        { "List Continue 5", "" },
+        { "List Continue", "List 1 Cont." }, // RES_POOLCOLL_BULLET_NONUM1
+        { "List Continue 2", "List 2 Cont." }, // RES_POOLCOLL_BULLET_NONUM2
+        { "List Continue 3", "List 3 Cont." }, // RES_POOLCOLL_BULLET_NONUM3
+        { "List Continue 4", "List 4 Cont." }, // RES_POOLCOLL_BULLET_NONUM4
+        { "List Continue 5", "List 5 Cont." }, // RES_POOLCOLL_BULLET_NONUM5
 //        { "Message Header", "" },
-        { "Subtitle", "Subtitle" },
-//        { "Salutation", "" },
+        { "Subtitle", "Subtitle" }, // RES_POOLCOLL_DOC_SUBTITLE
+        { "Salutation", "Salutation" }, // RES_POOLCOLL_GREETING
 //        { "Date", "" },
-        { "Body Text First Indent", "Body Text Indent" },
+        { "Body Text First Indent", "First line indent" }, // RES_POOLCOLL_TEXT_IDENT
 //        { "Body Text First Indent 2", "" },
 //        { "Note Heading", "" },
 //        { "Body Text 2", "" },
@@ -1550,15 +1562,16 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
 //        { "Body Text Indent 2", "" },
 //        { "Body Text Indent 3", "" },
 //        { "Block Text", "" },
-        { "Hyperlink", "Internet link" },
-        { "FollowedHyperlink", "Visited Internet Link" },
-        { "Emphasis", "Emphasis" },
+        { "Hyperlink", "Internet link" }, // RES_POOLCHR_INET_NORMAL
+        { "FollowedHyperlink", "Visited Internet Link" }, // RES_POOLCHR_INET_VISIT
+        { "Strong", "Strong Emphasis" }, // RES_POOLCHR_HTML_STRONG
+        { "Emphasis", "Emphasis" }, // RES_POOLCHR_HTML_EMPHASIS
 //        { "Document Map", "" },
 //        { "Plain Text", "" },
         { "NoList", "No List" },
         { "AbstractHeading", "Abstract Heading" },
         { "AbstractBody", "Abstract Body" },
-        { "PageNumber", "page number" },
+        { "PageNumber", "Page Number" }, // RES_POOLCHR_PAGENO
         { "TableNormal", "Normal Table" },
         { "DocumentMap", "Document Map" },
     };
@@ -1577,10 +1590,17 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
                 set.insert(pair.second);
             return set;
         }();
-        // SwStyleNameMapper doc says: If the UI style name equals a
-        // programmatic name, then it must append " (user)" to the end.
-        if (ReservedStyleNames.find(sRet) != ReservedStyleNames.end())
-            sRet += " (user)";
+        // Similar to SwStyleNameMapper convention (where a " (user)" suffix is used to
+        // disambiguate user styles with reserved names in localization where respective
+        // built-in styles have different UI names), we add a " (WW)" suffix here. Unlike
+        // the " (user)" suffix, it is not hidden from the UI; it will be handled when
+        // exported to Word formats - see MSWordStyles::BuildWwNames.
+        // We can't use the " (user)" suffix, because that system is built upon the assumption
+        // that UI names of respective built-in styles are different from the user style name.
+        // That is not necessarily true here, since the current localization may not change
+        // the UI names of built-in styles.
+        if (ReservedStyleNames.find(sRet) != ReservedStyleNames.end() || sRet.endsWith(" (WW)"))
+            sRet += " (WW)";
     }
 
     return sRet;

@@ -264,17 +264,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
 
     // Check that "List Number" and "List 5" styles don't get merged
     const OUString Para3Style = getProperty<OUString>(getParagraph(3), "ParaStyleName");
-    CPPUNIT_ASSERT_EQUAL(OUString("List Number"), Para3Style);
+    CPPUNIT_ASSERT_EQUAL(OUString("Numbering 1"), Para3Style);
     const OUString Para4Style = getProperty<OUString>(getParagraph(4), "ParaStyleName");
-    // Eventually, we need to check this:
-    // CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para4Style);
-    // But for now, just make sure that the style names differ
-    CPPUNIT_ASSERT(Para4Style != Para3Style);
+    CPPUNIT_ASSERT_EQUAL(OUString("List 5 (WW)"), Para4Style);
+    // Also check that "List 5" and "List Bullet 5" styles don't get merged
     const OUString Para5Style = getProperty<OUString>(getParagraph(5), "ParaStyleName");
-    // Eventually, we need to check this:
-    // CPPUNIT_ASSERT_EQUAL(OUString("List Bullet 5"), Para5Style);
-    // But for now, just make sure that the style names differ
-    CPPUNIT_ASSERT(Para5Style != Para4Style);
+    CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para5Style);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -200,6 +200,7 @@ static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
 }
 
 
+// Keep in sync with StyleSheetTable::ConvertStyleName
 sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
 {
     sal_uInt16 nRet = ww::stiUser;    // user style as default
@@ -319,6 +320,14 @@ void MSWordStyles::BuildStylesTable()
     }
 }
 
+// StyleSheetTable::ConvertStyleName appends the suffix do disambiguate conflicting style names
+static OUString StripWWSuffix(const OUString& s)
+{
+    OUString ret = s;
+    ret.endsWith(" (WW)", &ret);
+    return ret;
+}
+
 void MSWordStyles::BuildWwNames()
 {
     std::unordered_set<OUString> aUsed;
@@ -363,9 +372,9 @@ void MSWordStyles::BuildWwNames()
         if (!entry.ww_name.isEmpty())
             continue;
         if (entry.format)
-            entry.ww_name = entry.format->GetName();
+            entry.ww_name = StripWWSuffix(entry.format->GetName());
         else if (entry.num_rule)
-            entry.ww_name = entry.num_rule->GetName();
+            entry.ww_name = StripWWSuffix(entry.num_rule->GetName());
         else
             continue;
         makeUniqueName(entry.ww_name);
