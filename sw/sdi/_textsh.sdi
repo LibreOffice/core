@@ -152,6 +152,11 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_UPDATE_BOOKMARK
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_UPDATE_SECTIONS
     [
         ExecMethod = Execute ;
