@@ -38,11 +38,6 @@ class MasterPageObserver::Implementation
     : public SfxListener
 {
 public:
-    /** The single instance of this class.  It is created on demand when
-        Instance() is called for the first time.
-    */
-    static MasterPageObserver* mpInstance;
-
     /** The master page observer will listen to events of this document and
         detect changes of the use of master pages.
     */
@@ -91,33 +86,18 @@ private:
     void SendEvent (MasterPageObserverEvent& rEvent);
 };
 
-MasterPageObserver* MasterPageObserver::Implementation::mpInstance = nullptr;
-
 //===== MasterPageObserver ====================================================
 
 MasterPageObserver&  MasterPageObserver::Instance()
 {
-    if (Implementation::mpInstance == nullptr)
+    static MasterPageObserver* gInstance = []()
     {
-        ::osl::GetGlobalMutex aMutexFunctor;
-        ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (Implementation::mpInstance == nullptr)
-        {
-            MasterPageObserver* pInstance = new MasterPageObserver ();
-            SdGlobalResourceContainer::Instance().AddResource (
-                ::std::unique_ptr<SdGlobalResource>(pInstance));
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            Implementation::mpInstance = pInstance;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-
-    DBG_ASSERT(Implementation::mpInstance!=nullptr,
-        "MasterPageObserver::Instance(): instance is NULL");
-    return *Implementation::mpInstance;
+        MasterPageObserver* pInstance = new MasterPageObserver ();
+        SdGlobalResourceContainer::Instance().AddResource (
+            ::std::unique_ptr<SdGlobalResource>(pInstance));
+        return pInstance;
+    }();
+    return *gInstance;
 }
 
 void MasterPageObserver::RegisterDocument (SdDrawDocument& rDocument)
