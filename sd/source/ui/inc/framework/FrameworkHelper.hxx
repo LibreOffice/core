@@ -293,6 +293,7 @@ private:
     static InstanceMap maInstanceMap;
     class ViewURLMap;
     static ViewURLMap maViewURLMap;
+    static osl::Mutex maInstanceMapMutex;
 
     ViewShellBase& mrBase;
     css::uno::Reference<css::drawing::framework::XConfigurationController>

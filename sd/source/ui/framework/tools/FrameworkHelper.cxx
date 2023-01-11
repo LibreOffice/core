@@ -39,8 +39,6 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <osl/doublecheckedlocking.h>
-#include <osl/getglobalmutex.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <memory>
 #include <unordered_map>
@@ -282,32 +280,21 @@ public:
 FrameworkHelper::ViewURLMap FrameworkHelper::maViewURLMap;
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
+osl::Mutex FrameworkHelper::maInstanceMapMutex;
 
 ::std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
-
-    ::std::shared_ptr<FrameworkHelper> pHelper;
+    ::osl::MutexGuard aGuard(maInstanceMapMutex);
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
-    if (iHelper == maInstanceMap.end())
-    {
-        ::osl::GetGlobalMutex aMutexFunctor;
-        ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (iHelper == maInstanceMap.end())
-        {
-            pHelper = ::std::shared_ptr<FrameworkHelper>(
-                new FrameworkHelper(rBase),
-                FrameworkHelper::Deleter());
-            pHelper->Initialize();
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            maInstanceMap[&rBase] = pHelper;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        pHelper = iHelper->second;
-    }
+    if (iHelper != maInstanceMap.end())
+        return iHelper->second;
+
+    ::std::shared_ptr<FrameworkHelper> pHelper(
+        new FrameworkHelper(rBase),
+        FrameworkHelper::Deleter());
+    pHelper->Initialize();
+    maInstanceMap[&rBase] = pHelper;
 
     return pHelper;
 }
