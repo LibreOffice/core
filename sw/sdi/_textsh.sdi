@@ -160,7 +160,6 @@ interface BaseText
     FN_UPDATE_SECTIONS
     [
         ExecMethod = Execute ;
-        StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_SET_REMINDER
