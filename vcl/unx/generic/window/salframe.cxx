@@ -286,92 +286,6 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
     netwm_icon.resize( pos );
 }
 
-static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nXScreen,
-                                         sal_uInt16 nIcon, sal_uInt16 iconSize,
-                                         Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
-{
-    CreateNetWmAppIcon( nIcon, netwm_icon );
-
-    OUString sIcon;
-
-    if( iconSize >= 48 )
-        sIcon = SV_ICON_SIZE48[nIcon];
-    else if( iconSize >= 32 )
-        sIcon = SV_ICON_SIZE32[nIcon];
-    else if( iconSize >= 16 )
-         sIcon = SV_ICON_SIZE16[nIcon];
-    else
-        return false;
-
-    BitmapEx aIcon = vcl::bitmap::loadFromName(sIcon, ImageLoadFlags::IgnoreScalingFactor);
-
-    if( aIcon.IsEmpty() )
-        return false;
-
-    SvpSalBitmap* pBitmap = dynamic_cast<SvpSalBitmap*>
-        (aIcon.ImplGetBitmapSalBitmap().get());
-    if (!pBitmap) // FIXME: TODO SKIA
-        return false;
-
-    // Note: can't find a working environment where this seems to matter anymore,
-    icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
-                                 pDisplay->GetRootWindow( nXScreen ),
-                                 iconSize, iconSize,
-                                 DefaultDepth( pDisplay->GetDisplay(),
-                                               nXScreen.getXScreen() )
-                                 );
-
-    {
-        cairo_surface_t* pSurface = cairo_xlib_surface_create(pDisplay->GetDisplay(), icon_pixmap,
-                                                   pDisplay->GetColormap(nXScreen).GetVisual().visual,
-                                                   iconSize, iconSize);
-
-        cairo_t* cr = cairo_create(pSurface);
-
-        BitmapHelper aBitmapHelper(*pBitmap);
-        cairo_surface_t* source = aBitmapHelper.getSurface(iconSize, iconSize);
-
-        cairo_rectangle(cr, 0, 0, iconSize, iconSize);
-        cairo_set_source_surface(cr, source, 0, 0);
-        cairo_paint(cr);
-
-        cairo_destroy(cr);
-        cairo_surface_destroy(pSurface);
-    }
-
-    icon_mask = None;
-
-    if( aIcon.IsAlpha() )
-    {
-        icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
-                                   pDisplay->GetRootWindow(nXScreen),
-                                   iconSize, iconSize, 1);
-
-        Bitmap aMask = aIcon.GetAlphaMask();
-
-        SvpSalBitmap* pMask = static_cast<SvpSalBitmap*>
-            (aMask.ImplGetSalBitmap().get());
-
-        cairo_surface_t* pSurface = cairo_xlib_surface_create_for_bitmap(pDisplay->GetDisplay(), icon_mask,
-                                                   ScreenOfDisplay(pDisplay->GetDisplay(), nXScreen.getXScreen()),
-                                                   iconSize, iconSize);
-
-        cairo_t* cr = cairo_create(pSurface);
-
-        MaskHelper aMaskHelper(*pMask);
-        cairo_surface_t* source = aMaskHelper.getSurface(iconSize, iconSize);
-
-        cairo_rectangle(cr, 0, 0, iconSize, iconSize);
-        cairo_set_source_surface(cr, source, 0, 0);
-        cairo_paint(cr);
-
-        cairo_destroy(cr);
-        cairo_surface_destroy(pSurface);
-    }
-
-    return true;
-}
-
 void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen, SystemParentData const * pParentData, bool bUseGeometry )
 {
     if( nXScreen.getXScreen() >= GetDisplay()->GetXScreenCount() )
@@ -581,23 +495,14 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         // default icon
         if( !(nStyle_ & SalFrameStyleFlags::INTRO) && !(nStyle_ & SalFrameStyleFlags::NOICON))
         {
-            bool bOk=false;
             try
             {
-                bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
-                                               mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
-                                               (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
-                                               Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
+                CreateNetWmAppIcon( mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
+                                    (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), netwm_icon );
             }
             catch( css::uno::Exception& )
             {
                 // can happen - no ucb during early startup
-            }
-            if( bOk )
-            {
-                Hints.flags     |= IconPixmapHint;
-                if( Hints.icon_mask )
-                    Hints.flags |= IconMaskHint;
             }
         }
 
@@ -1078,40 +983,13 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
             iconSize = 48;
     }
 
-    XWMHints Hints;
-    Hints.flags = 0;
-    XWMHints *pHints = XGetWMHints( GetXDisplay(), GetShellWindow() );
-    if( pHints )
-    {
-        memcpy(&Hints, pHints, sizeof( XWMHints ));
-        XFree( pHints );
-    }
-    pHints = &Hints;
-
     NetWmIconData netwm_icon;
-    bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                            nIcon, iconSize,
-                                            pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
-    if ( !bOk )
-    {
-        // load default icon (0)
-        bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                       0, iconSize,
-                                       pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
-    }
-    if( bOk )
-    {
-        pHints->flags    |= IconPixmapHint;
-        if( pHints->icon_mask )
-            pHints->flags |= IconMaskHint;
+    CreateNetWmAppIcon( nIcon, netwm_icon );
 
-        XSetWMHints( GetXDisplay(), GetShellWindow(), pHints );
-        if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
-            XChangeProperty( GetXDisplay(), mhWindow,
-                GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
-    }
-
+    if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
+        XChangeProperty( GetXDisplay(), mhWindow,
+            GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
+            XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
 }
 
 void X11SalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
