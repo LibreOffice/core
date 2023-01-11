@@ -50,7 +50,6 @@
 #include <salgdiimpl.hxx>
 #include <textrender.hxx>
 #include <salvd.hxx>
-#include "gdiimpl.hxx"
 
 #include <unx/salframe.h>
 #include <unx/cairotextrender.hxx>

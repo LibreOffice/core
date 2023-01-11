@@ -51,7 +51,6 @@ class SalDisplay;
 class SalFrame;
 class X11SalFrame;
 class X11SalVirtualDevice;
-class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
 namespace vcl::font
 {
@@ -85,7 +84,6 @@ public:
 
 class X11SalGraphics final : public SalGraphicsAutoDelegateToImpl
 {
-    friend class X11SalGraphicsImpl;
     friend class X11CairoTextRender;
 
 public:

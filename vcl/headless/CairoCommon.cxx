@@ -813,7 +813,8 @@ void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, 
 
     if (aOrigLineColor)
     {
-        // need same -1 hack as X11SalGraphicsImpl::drawRect
+        // need -1 hack to exclude the bottom and right edges to act like wingdi "Rectangle"
+        // function which is what this was probably the ultimate origin of this behavior
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
 

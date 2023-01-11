@@ -43,7 +43,7 @@ Implementation class for SalGraphics.
 
 This class allows having an implementation of drawing calls that is separate from SalGraphics,
 and SalGraphics can forward all such calls to SalGraphicsImpl. For example X11SalGraphics
-may internally use either Xlib-based X11SalGraphicsImpl or Skia-based SkiaSalGraphicsImpl,
+may internally use either Cairo-based X11CairoSalGraphicsImpl or Skia-based SkiaSalGraphicsImpl,
 and the latter may be used also by other SalGraphics implementations. All the functions
 here should be implementations of the relevant SalGraphics functions.
 */
