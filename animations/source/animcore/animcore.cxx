@@ -2010,22 +2010,23 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
 {
-    Guard< Mutex > aGuard( m_aMutex );
-
-    if( !newChild.is() )
-        throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
-
-    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
-        throw ElementExistException();
-
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
-    Reference< XInterface > xChild( newChild );
+    {
+        Guard< Mutex > aGuard( m_aMutex );
 
-    if( xThis == xChild )
-        throw IllegalArgumentException("cannot append self", static_cast<cppu::OWeakObject*>(this), -1);
+        if( !newChild.is() )
+            throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
 
-    maChildren.push_back( newChild );
+        if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+            throw ElementExistException();
 
+        Reference< XInterface > xChild( newChild );
+
+        if( xThis == xChild )
+            throw IllegalArgumentException("cannot append self", static_cast<cppu::OWeakObject*>(this), -1);
+
+        maChildren.push_back( newChild );
+    }
     newChild->setParent( xThis );
 
     return newChild;
