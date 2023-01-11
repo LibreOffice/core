@@ -442,6 +442,39 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("sections").count(""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
+{
+    // Given a document with a bookmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_1"))),
+        comphelper::makePropertyValue("BookmarkText", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+
+    // When stepping into the bookmark with the cursor and getting the command value for
+    // .uno:Bookmark:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Bookmark?namePrefix=ZOTERO_BREF_");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the inserted bookmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree aBookmark = aTree.get_child("bookmark");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (bookmark)
+    // i.e. the returned JSON was an empty object.
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_BREF_1"), aBookmark.get<std::string>("name"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

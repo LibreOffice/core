@@ -1437,6 +1437,29 @@ namespace sw::mark
         return dynamic_cast<IFieldmark*>(pFieldmark);
     }
 
+    IMark* MarkManager::getBookmarkFor(const SwPosition& rPos) const
+    {
+        auto it = std::find_if(m_vBookmarks.begin(), m_vBookmarks.end(),
+                               [&rPos](const sw::mark::MarkBase* pMark)
+                               { return pMark->IsCoveringPosition(rPos); });
+        if (it == m_vBookmarks.end())
+        {
+            return nullptr;
+        }
+        sw::mark::IMark* pBookmark = *it;
+        for (; it != m_vBookmarks.end() && (*it)->GetMarkStart() <= rPos; ++it)
+        {
+            // Find the innermost bookmark.
+            if (rPos < (*it)->GetMarkEnd()
+                && (pBookmark->GetMarkStart() < (*it)->GetMarkStart()
+                    || (*it)->GetMarkEnd() < pBookmark->GetMarkEnd()))
+            {
+                pBookmark = *it;
+            }
+        }
+        return pBookmark;
+    }
+
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
     {
         auto const pFieldmark = dynamic_cast<Fieldmark*>(getFieldmarkAt(rPos));
