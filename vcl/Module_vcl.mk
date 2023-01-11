@@ -37,7 +37,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP FUZZERS,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)), \
-            $(if $(filter EMSCRIPTEN,$(OS)),Executable_vcldemo) \
+            $(if $(filter EMSCRIPTEN,$(OS)), \
+                $(if $(ENABLE_QT5),Executable_vcldemo) \
+            ) \
         , \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
