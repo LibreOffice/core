@@ -419,7 +419,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         }
 
         comphelper::SequenceAsHashMap aMap(aSections[nSectionIndex++]);
-        OUString aSectionName = aMap["Section"].get<OUString>();
+        OUString aSectionName = aMap["RegionName"].get<OUString>();
         if (aSectionName != pFormat->GetName())
         {
             const_cast<SwSectionFormat*>(pFormat)->SetFormatName(aSectionName, /*bBroadcast=*/true);
@@ -440,7 +440,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
             rIDCO.DeleteAndJoin(*pCursorPos);
             rWrtSh.EndSelect();
 
-            OUString aSectionText = aMap["SectionText"].get<OUString>();
+            OUString aSectionText = aMap["Content"].get<OUString>();
             SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8(), true);
         }
     }
