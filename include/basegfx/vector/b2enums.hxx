@@ -50,6 +50,9 @@ namespace basegfx
     };
 
     /** Descriptor for possible line joins between two line segments
+     *
+     * Note: WriteLineInfo/ReadLineInfo stream these values for svm
+     * file format
     */
     enum class B2DLineJoin
     {
