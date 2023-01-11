@@ -23,6 +23,7 @@
 
 namespace
 {
+    // Keep in sync with StyleSheetTable::ConvertStyleName
     const char **GetStiNames() noexcept
     {
         // Matches enum ww::sti in sw/source/filter/inc/wwstyles.hxx
