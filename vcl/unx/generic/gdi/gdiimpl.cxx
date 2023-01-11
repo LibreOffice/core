@@ -59,11 +59,6 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-sal_uInt16 X11SalGraphicsImpl::GetBitCount() const
-{
-    return mrParent.GetVisual().GetDepth();
-}
-
 tools::Long X11SalGraphicsImpl::GetGraphicsWidth() const
 {
     if( mrParent.m_pFrame )

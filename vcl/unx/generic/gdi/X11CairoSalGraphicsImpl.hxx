@@ -36,6 +36,9 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
+    // get the depth of the device
+    virtual sal_uInt16 GetBitCount() const override { return mrParent.GetVisual().GetDepth(); }
+
     void ResetClipRegion() override { mrCairoCommon.m_aClipRegion.SetNull(); }
 
     void setClipRegion(const vcl::Region& i_rClip) override

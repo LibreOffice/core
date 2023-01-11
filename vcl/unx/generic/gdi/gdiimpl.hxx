@@ -41,7 +41,7 @@ class Gradient;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
-private:
+protected:
     X11SalGraphics& mrParent;
 
 public:
@@ -49,9 +49,6 @@ public:
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
 
     virtual ~X11SalGraphicsImpl() override;
-
-    // get the depth of the device
-    virtual sal_uInt16 GetBitCount() const override;
 
     // get the width of the device
     virtual tools::Long GetGraphicsWidth() const override;
