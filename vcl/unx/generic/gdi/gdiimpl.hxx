@@ -44,8 +44,6 @@ class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 private:
     X11SalGraphics& mrParent;
 
-    tools::Long GetGraphicsHeight() const;
-
 public:
 
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);

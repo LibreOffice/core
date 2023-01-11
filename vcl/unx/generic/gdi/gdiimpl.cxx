@@ -59,16 +59,6 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
-{
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.height();
-    else if( mrParent.m_pVDev )
-        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
-    else
-        return 0;
-}
-
 sal_uInt16 X11SalGraphicsImpl::GetBitCount() const
 {
     return mrParent.GetVisual().GetDepth();
