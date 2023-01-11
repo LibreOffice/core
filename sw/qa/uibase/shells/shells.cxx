@@ -684,11 +684,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
         "type": "[][]com.sun.star.beans.PropertyValue",
         "value": [
             {
-                "Section": {
+                "RegionName": {
                     "type": "string",
                     "value": "ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDnew"
                 },
-                "SectionText": {
+                "Content": {
                     "type": "string",
                     "value": "new content"
                 }
