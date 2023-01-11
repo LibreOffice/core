@@ -14,7 +14,7 @@ do
 	if [[ "X$1" == "Xclean" ]]
 	then
 		PARS=$PARS" "$1
-		rm -r -f ../workdir/installation/LibreOfficeDev/archive/install/en-US/instdir
+		rm -r -f $BASE/instdir
 	fi
 	if [[ "X$1" == "Xhtml" ]]
 	then
@@ -54,23 +54,33 @@ do
 	if [[ "X$1" == "Xbuild" ]]
 	then
 		echo
-		rm soffice.tar.br.zip
+		rm cactus-libreoffice*.zip
+		echo tar does, expanding
+		./expand.sh $BASE
+		echo tar expanded
 		(
 			echo building release file
+			VERSION=`ls $BASE/Libre*archive*.gz| awk -F_ '{print $2}'`
+			CV=`git tag | sort -V | tail -1`
+			if [[ "X$CV" == "X" ]]
+			then
+				CV=1
+			fi
+
 			cd $BASE
-			rm lo.* soffice.tar.br.zip
+			rm lo.* cactus-libreoffice*.zip
 			echo tar
 			tar -cf lo.tar instdir
 			echo brotli zip
 			brotli -Z -v lo.tar
 			echo zip
-			zip -9 soffice.tar.br.zip lo.tar.br
+			zip -9 cactus-libreoffice_${VERSION}_${CV}.zip lo.tar.br
 			echo Sizes of produced files
-			du -s --apparent-size lo* soffice.tar.br.zip
+			du -s --apparent-size lo* cactus*
 			rm lo.*
 			echo
 		)
-		mv $BASE/soffice.tar.br.zip .
+		mv $BASE/cactus-libreoffice*.zip .
 		exit 
 	fi
 	if [[ "X$1" == "Xbase" ]]
@@ -134,7 +144,7 @@ then
 	if [ -f $BASE/LibreOffice*tar.gz ]
 	then
 		echo tar does, expanding
-		./expand.sh
+		./expand.sh $BASE
 		echo tar expanded
 	else
 		echo no tar aborting

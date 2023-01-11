@@ -1,5 +1,10 @@
 #!/bin/bash
-cd ../workdir/installation/LibreOfficeDev/archive/install/en-US/
+BASE=../workdir/installation/LibreOfficeDev/archive/install/en-US/
+if [[ $# > 0 ]]
+then
+        BASE=$1
+fi
+cd $BASE
 tar -xzf LibreOff*.tar.gz
 
 mv LibreOffice*archive instdir

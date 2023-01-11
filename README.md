@@ -15,7 +15,7 @@ particular rare case.
 Secondarily there is a problem with the size of the delivered executable
 for the cactus use case.
 
-At Cactus we need to deploy LibreOffice as an AWS Layer file, these
+At Cactus we need to deploy LibreOffice as an AWS Lambda Layer file, these
 files are zip files with a maximum size of 128MBytes, the standard
 deployment of LibreOffice is in excess of 280MBytes when
 compressed, so this version contains the necessary scripts to remove the
@@ -38,7 +38,7 @@ $ ./cactus-make
 ```
 > Note __cactus-make__ can take a very long time to run (a day if running on a single core) LibreOffice notes suggest 8 core hours, in my experience this is optimistic, a recent build on a 6 core 3.5 Ghz machine took over 3 hours, if you have multiple machines available on your network installing icecc and starting the ice-scheduler can have a significant effect.
 
-Though the build time is long for the first build it will generally by much much quicker on subsequent builds, though when rebuilding just running `make` rather than `./cactus-make` will avoid the __make clean__ and make a significant difference.  
+Though the build time is long for the first build it will generally by much much quicker on subsequent builds, though when rebuilding just running `make` rather than `./cactus-make` will avoid the __make clean__ and significantly improve the build time.  
 
 This build process produces a standard LibreOffice deliverable archive
 __LibreOfficeDev_7.6.0.0.alpha0_Linux_x86-64_archive.tar.gz__
@@ -48,7 +48,7 @@ The part of the file name __7.6.0.0.alpha0_Linux_x86-64__ is
 the LibreOffice version number and may change if the LibreOffice is pulled into this fork.
 
 ## Testing the release
-To produce an AWS Layer compatible version and simplify some
+To produce an AWS Lambda Layer compatible version and simplify some
 manual testing another script is available:
 
 In the directory __cactus-build__ there are a number of example files 
@@ -61,7 +61,7 @@ __xlsx__ or __HTML__, __pptx__ or __docx__.
 
 The test script allow you to pick which tests you wish to run.
 
-This script starts by extracting from the standard build produced by __catcus-make__, a reduced directory tree that should be small enough to use as an AWS layer file, however in test mode it does not compress this into a standard AWS layer file see __Build AWS Layer file__.
+This script starts by extracting from the standard build produced by __catcus-make__, a reduced directory tree that should be small enough to use as an AWS Lambda Layer file, however in test mode it does not compress this into a standard AWS Lambda Layer file see __Build AWS Lambda Layer file__.
 
 to run tests:
 ```bash
@@ -97,19 +97,19 @@ original, note that they are both __png__ files, in the original one
 was a __jpg__.
 Note also that the chart is lost in the conversion.
 
-## Build AWS Layer file
-Standard zip or gzip compression does not produce a file small enough to use for an AWS Layer file even with the cut down version of LibreOffice, so a compression tool called __brotli__ is used, to perform the compression you will need to have __brotli__ installed in your system.
+## Build AWS Lambda Layer file
+Standard zip or gzip compression does not produce a file small enough to use for an AWS Lambda Layer file even with the cut down version of LibreOffice, so a compression tool called __brotli__ is used, to perform the compression you will need to have __brotli__ installed in your system.
 
 From within the __catcus-build__ directory run
 ```
 $ ./create-test build
 ```
 This will extract the cut down LibreOffice program and create a file
-__soffice.tar.br.zip__ in the __cactus-build__ directory, this should be a file suitable for use as an AWS Layer file. It is:
+__cactus-libreoffice_7.6.0.0.alpha0_CACTUS_1.zip__ (where 7.6.0.0.alpha0 is a libreoffice build version-number and CACTUS_1 is largest (sort -V) git tag) in the __cactus-build__ directory, this should be a file suitable for use as an AWS Lambda Layer file. It is:
 * A directory containing the program called __instdir__.
 * Tared to a file called __lo.tar__.
 * Brotli zipped into a file called __lo.tar.br__.
-* Zipped into a file called __soffice.tar.br.zip__.
+* Zipped into a file called __cactus-libreoffice_7.6.0.0.alpha0_CACTUS_1.zip__.
 
 > Note this process can take a while as __brotli__ compression is quite slow, though decompression is not.
 
