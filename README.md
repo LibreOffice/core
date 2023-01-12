@@ -6,39 +6,40 @@ display within the website. And secondarily to converting older
 __xls__(Microsoft Excel spreadsheet files pre-2007) to __xlsx__ files.
 
 __LibreOffice__ as delivered contains a bug which effects the conversion
-of __xlsx__ to __HTML__ this produces bad formatting where a hidden row
-crosses a group of merged cells.
+of __xlsx__ to __HTML__ this produces bad formatting where a hidden column
+crosses a row of merged cells, a similar problem exists with a hidden row crossing a column of merged cells.
 
 This version of LibreOffice has this issue fixed, except for one
-particular rare case.
+particular rare case where the hidden row crosses the top cell or a column of merged cells.
 
 Secondarily there is a problem with the size of the delivered executable
-for the cactus use case.
+for the Cactus use case.
 
 At Cactus we need to deploy LibreOffice as an AWS Lambda Layer file, these
 files are zip files with a maximum size of 128MBytes, the standard
 deployment of LibreOffice is in excess of 280MBytes when
 compressed, so this version contains the necessary scripts to remove the
 unused parts of the application, these being help files,
-scripting facilities, dictionaries  and GUI specific libraries.
+scripting facilities, dictionaries  and GUI specific libraries, and together with extra compression brings the Layer File to less than 100MBytes.
 
 ## Building Cactus version of LibreOffice.
 
-This is a fork of the GitHub mirror of LibreOffice/core and also requires two other LibrOffice fors one called libreoffice-dictionaries and the other libreoffice-help. The build process is as for standard LibeOffice but then we have scripts to cut the output down to a minimum size so that we can use it.
+This is a fork of the GitHub mirror of LibreOffice/core and also requires two other LibrOffice forks one called libreoffice-dictionaries and the other libreoffice-help. The build process is as for standard LibeOffice but then we have scripts to cut the output down to a minimum size so that we can use it.
 
-* Download this repository
-* run autogen and make (As autogen requires a lot of parameters
-a script is available for this, __cactus-make__, this calls autogen,
-make clean and make)
+The process:
+* Download this repository.
+* run autogen.
+* run make.
+> As autogen requires a lot of parameters a script is available for this, __cactus-make__, this calls autogen, make clean and then make.
 
 ```bash
 $ git clone git@github.com:cactus-bm/libreoffice-core.git libreoffice
 $ cd libreoffice
 $ ./cactus-make
 ```
-> Note __cactus-make__ can take a very long time to run (a day if running on a single core) LibreOffice notes suggest 8 core hours, in my experience this is optimistic, a recent build on a 6 core 3.5 Ghz machine took over 3 hours, if you have multiple machines available on your network installing icecc and starting the ice-scheduler can have a significant effect.
+> Note __cactus-make__ can take a very long time to run (a day if running on a single core) LibreOffice notes suggest 8 core hours with a modern processor (whatever that means), in my experience this is optimistic, a recent build on a 6 core 3.5 Ghz machine (perhaps not modern enough) took over 3 hours, if you have multiple machines available on your network installing icecc and starting the ice-scheduler can have a significant effect, currently running on a cluster of 4 machines with a total of 22 cores cut build time to less than 1 hour. 
 
-Though the build time is long for the first build it will generally by much much quicker on subsequent builds, though when rebuilding just running `make` rather than `./cactus-make` will avoid the __make clean__ and significantly improve the build time.  
+Though the build time is long for the first build it will generally by much much quicker on subsequent builds, though when rebuilding just running `make` rather than `./cactus-make` will avoid the __make clean__ and again improve the build time.  
 
 This build process produces a standard LibreOffice deliverable archive
 __LibreOfficeDev_7.6.0.0.alpha0_Linux_x86-64_archive.tar.gz__
@@ -61,7 +62,7 @@ __xlsx__ or __HTML__, __pptx__ or __docx__.
 
 The test script allow you to pick which tests you wish to run.
 
-This script starts by extracting from the standard build produced by __catcus-make__, a reduced directory tree that should be small enough to use as an AWS Lambda Layer file, however in test mode it does not compress this into a standard AWS Lambda Layer file see __Build AWS Lambda Layer file__.
+This script starts by extracting from the standard build produced by __catcus-make__, a reduced directory tree that should be small enough to use as an __AWS Lambda Layer__ file, however in test mode it does not compress this into a standard AWS Lambda Layer file see __Build AWS Lambda Layer file__.
 
 to run tests:
 ```bash
@@ -79,7 +80,7 @@ $ ./create-test xls-html # will convert xls directly to html
 
 There is no automatic testing of these files the conversions
 are just executed producing files in the subdirectory __converted__,
-these can be manually checked.
+these must be manually checked.
 
 > Note that the output files have the same name as the input files with changed file types extensions.
 
@@ -111,7 +112,7 @@ __cactus-libreoffice_7.6.0.0.alpha0_CACTUS_1.zip__ (where 7.6.0.0.alpha0 is a li
 * Brotli zipped into a file called __lo.tar.br__.
 * Zipped into a file called __cactus-libreoffice_7.6.0.0.alpha0_CACTUS_1.zip__.
 
-> Note this process can take a while as __brotli__ compression is quite slow, though decompression is not.
+> Note this process can take a while as __brotli__ compression is quite slow, and is not amenable to using multiple threads (On Ubuntu 20.4), though decompression is fast.
 
 When this file is decompressed and unzipped the executable is __instdir/program/soffice.bin__.
 
