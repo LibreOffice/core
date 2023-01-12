@@ -116,6 +116,11 @@ protected:
     ComponentFactoryFunc             m_fptr;
     Sequence< OUString >             aServiceNames;
     OUString                         aImplementationName;
+
+private:
+    css::uno::Reference<css::uno::XInterface> createInstanceWithArgumentsEveryTime(
+        css::uno::Sequence<css::uno::Any> const & rArguments,
+        css::uno::Reference<css::uno::XComponentContext> const & xContext);
 };
 
 }
@@ -160,14 +165,14 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
 // XSingleServiceFactory
 Reference<XInterface > OSingleFactoryHelper::createInstance()
 {
-    return createInstanceWithContext( Reference< XComponentContext >() );
+    return createInstanceEveryTime( Reference< XComponentContext >() );
 }
 
 // XSingleServiceFactory
 Reference<XInterface > OSingleFactoryHelper::createInstanceWithArguments(
     const Sequence<Any>& Arguments )
 {
-    return createInstanceWithArgumentsAndContext(
+    return createInstanceWithArgumentsEveryTime(
         Arguments, Reference< XComponentContext >() );
 }
 
@@ -183,7 +188,15 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
     Sequence< Any > const & rArguments,
     Reference< XComponentContext > const & xContext )
 {
-    Reference< XInterface > xRet( createInstanceWithContext( xContext ) );
+    return createInstanceWithArgumentsEveryTime(rArguments, xContext);
+}
+
+css::uno::Reference<css::uno::XInterface>
+OSingleFactoryHelper::createInstanceWithArgumentsEveryTime(
+    css::uno::Sequence<css::uno::Any> const & rArguments,
+    css::uno::Reference<css::uno::XComponentContext> const & xContext)
+{
+    Reference< XInterface > xRet( createInstanceEveryTime( xContext ) );
 
     Reference< lang::XInitialization > xInit( xRet, UNO_QUERY );
     // always call initialize, even if there are no arguments. #i63511#
