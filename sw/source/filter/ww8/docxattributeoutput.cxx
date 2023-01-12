@@ -3874,14 +3874,18 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
-                    OString sStyleName;
-                    if (auto format = m_rExport.m_rDoc.FindTextFormatCollByName(sParaStyleName))
-                        if (auto slot = m_rExport.m_pStyles->GetSlot(format); slot != 0xfff)
-                            sStyleName = m_rExport.m_pStyles->GetStyleId(slot);
-                    if (sStyleName.isEmpty())
-                        sStyleName = MSWordStyles::CreateStyleId(sParaStyleName);
-                    if ( !sStyleName.isEmpty() )
-                        m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
+                    if (!sParaStyleName.isEmpty())
+                    {
+                        OString sStyleName;
+                        if (auto format = m_rExport.m_rDoc.FindTextFormatCollByName(sParaStyleName))
+                            if (auto slot = m_rExport.m_pStyles->GetSlot(format); slot != 0xfff)
+                                sStyleName = m_rExport.m_pStyles->GetStyleId(slot);
+                        // If the style name is empty at this point, this is a bug, meaning that we
+                        // failed to output the style to styles.xml properly
+                        assert(!sStyleName.isEmpty());
+                        if (!sStyleName.isEmpty())
+                            m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
+                    }
 
                     // The 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList' are used to hold information
                     // that should be collected by different properties in the core, and are all flushed together

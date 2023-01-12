@@ -381,7 +381,8 @@ void MSWordStyles::BuildWwNames()
     }
 }
 
-OString MSWordStyles::CreateStyleId(std::u16string_view aName)
+/// create style id using only ASCII characters of the style name
+static OString CreateStyleId(std::u16string_view aName)
 {
     OStringBuffer aStyleIdBuf(aName.size());
     for (size_t i = 0; i < aName.size(); ++i)
