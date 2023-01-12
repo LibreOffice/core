@@ -44,7 +44,7 @@ class AccessibleRelationSetHelper;
 typedef ::cppu::ImplHelper1<
     css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
-class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
+class TOOLKIT_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") VCLXAccessibleComponent
         :public comphelper::OAccessibleExtendedComponentHelper
         ,public VCLXAccessibleComponent_BASE
 {
