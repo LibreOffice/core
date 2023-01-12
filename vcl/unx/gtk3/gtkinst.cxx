@@ -5114,7 +5114,7 @@ namespace
 
     void picture_set_from_xgraphic(GtkPicture* pPicture, const css::uno::Reference<css::graphic::XGraphic>& rPicture)
     {
-        if (auto xTempFile = getImageFile(rPicture, false))
+        if (auto xTempFile = getImageFile(rPicture))
             gtk_picture_set_filename(pPicture, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
         else
             gtk_picture_set_pixbuf(pPicture, nullptr);
