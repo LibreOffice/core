@@ -116,6 +116,9 @@ public:
     void write( const OString& s, bool bEscape = false );
     void write( const char* pStr, sal_Int32 nLen, bool bEscape = false );
 
+    // strings with _xHHHH_ are escaped with _x005F unless this is disabled
+    void setAllowXEscape(bool bSet) { mbXescape = bSet; }
+
 public:
     /** From now on, don't write directly to the stream, but to top of a stack.
 
@@ -230,8 +233,7 @@ private:
     sal_Int32 mnDoubleStrCapacity;
     TokenValueList maTokenValues;
     bool mbXescape;     ///< whether to escape invalid XML characters as _xHHHH_ in write(const char*,sal_Int32,true)
-                        /* TODO: make that configurable from the outside for
-                         * some specific cases? */
+
 
 #ifdef DBG_UTIL
     std::stack<sal_Int32> m_DebugStartedElements;

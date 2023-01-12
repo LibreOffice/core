@@ -164,6 +164,10 @@ rtl::Reference<FastAttributeList> FastSerializerHelper::createAttrList()
     return new FastAttributeList( nullptr );
 }
 
+void FastSerializerHelper::setAllowXEscape(bool bSet)
+{
+    mpSerializer->setAllowXEscape(bSet);
+}
 
 }
 

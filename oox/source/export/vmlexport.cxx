@@ -1001,6 +1001,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     if (!IsWaterMarkShape(m_pSdrObject->GetName()) && !m_bSkipwzName)
                          m_pShapeAttrList->add(XML_ID, idStr);
 
+                    // note that XML_ID is different from XML_id (although it looks like a LO
+                    // implementation distinction without valid justification to me).
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
                 break;
@@ -1383,8 +1385,13 @@ sal_Int32 VMLExport::StartShape()
                 "_x0000_t" + OString::number( m_nShapeType ) );
     }
 
+    // allow legacy id (which in form controls and textboxes
+    // by definition seems to have this otherwise illegal name).
+    m_pSerializer->setAllowXEscape(!m_sShapeIDPrefix.startsWith("_x0000_"));
+
     // start of the shape
     m_pSerializer->startElementNS( XML_v, nShapeElement, m_pShapeAttrList );
+    m_pSerializer->setAllowXEscape(true);
 
     OString const textboxStyle(m_TextboxStyle.makeStringAndClear());
 
@@ -1492,7 +1499,7 @@ OString const & VMLExport::AddSdrObject( const SdrObject& rObj,
         bool const bIsFollowingTextFlow,
         sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel,
         FastAttributeList* pWrapAttrList,
-        const bool bOOxmlExport )
+        const bool bOOxmlExport, sal_uInt32 nId)
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
@@ -1502,7 +1509,7 @@ OString const & VMLExport::AddSdrObject( const SdrObject& rObj,
     m_pWrapAttrList = pWrapAttrList;
     m_bInline = false;
     m_IsFollowingTextFlow = bIsFollowingTextFlow;
-    EscherEx::AddSdrObject(rObj, bOOxmlExport);
+    EscherEx::AddSdrObject(rObj, bOOxmlExport, nId);
     return m_sShapeId;
 }
 

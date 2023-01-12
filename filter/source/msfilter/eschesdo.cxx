@@ -430,13 +430,17 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
 
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
-                if(bInline)
+                nShapeType = bInline ? ESCHER_ShpInst_PictureFrame : ESCHER_ShpInst_HostControl;
+                const ShapeFlag nFlags = ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor;
+                nShapeID = rObj.GetShapeId();
+                if (nShapeID)
                 {
-                    addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                    mpEscherEx->AddShape(nShapeType, nFlags, nShapeID );
+                    rSolverContainer.AddShape(rObj.GetShapeRef(), nShapeID);
                 }
                 else
                 {
-                    addShape( ESCHER_ShpInst_HostControl, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                    addShape(nShapeType, nFlags);
                 }
             }
             else
@@ -946,9 +950,9 @@ void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes, bool ooxmlExp
         mpImplEESdrWriter->ImplWriteCurrentPage(ooxmlExport);
 }
 
-sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj, bool ooxmlExport )
+sal_uInt32 EscherEx::AddSdrObject(const SdrObject& rObj, bool ooxmlExport, sal_uInt32 nId)
 {
-    ImplEESdrObject aObj( *mpImplEESdrWriter, rObj, mbOOXML );
+    ImplEESdrObject aObj(*mpImplEESdrWriter, rObj, mbOOXML , nId);
     if( aObj.IsValid() )
         return mpImplEESdrWriter->ImplWriteTheShape( aObj, ooxmlExport );
     return 0;
@@ -995,8 +999,8 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 
 
 ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
-                                    const SdrObject& rObj, bool bOOXML ) :
-    mnShapeId( 0 ),
+                                  const SdrObject& rObj, bool bOOXML, sal_uInt32 nId) :
+    mnShapeId(nId),
     mnTextSize( 0 ),
     mnAngle( 0 ),
     mbValid( false ),

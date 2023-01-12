@@ -1162,7 +1162,7 @@ public:
     void    AddUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes, bool ooxmlExport = false );
 
                 /// returns the ShapeID
-    sal_uInt32  AddSdrObject( const SdrObject& rObj, bool ooxmlExport = false );
+    sal_uInt32  AddSdrObject(const SdrObject& rObj, bool ooxmlExport = false, sal_uInt32 nId = 0);
     virtual void  AddSdrObjectVMLObject( const SdrObject& /*rObj*/)
     {
         // Required for Exporting VML shape

@@ -155,6 +155,8 @@ public:
     void mergeTopMarks(sal_Int32 nTag,
             MergeMarks eMergeType = MergeMarks::APPEND );
 
+    void setAllowXEscape(bool bSet);
+
 private:
     void pushAttributeValue( sal_Int32 attribute, const char* value );
     void pushAttributeValue( sal_Int32 attribute, const OString& value );

@@ -142,7 +142,7 @@ public:
             sal_Int16 eHOri = -1, sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1,
             sax_fastparser::FastAttributeList* pWrapAttrList = nullptr,
-            const bool bOOxmlExport = false );
+            const bool bOOxmlExport = false, sal_uInt32 nId = 0);
     OString const & AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(std::u16string_view rStr);
