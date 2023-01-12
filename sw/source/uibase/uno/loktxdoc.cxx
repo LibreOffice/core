@@ -250,7 +250,7 @@ void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
-    sw::mark::IMark* pBookmark = rIDMA.getBookmarkFor(rCursor);
+    sw::mark::IMark* pBookmark = rIDMA.getInnerBookmarkFor(rCursor);
     tools::ScopedJsonWriterNode aBookmark = rJsonWriter.startNode("bookmark");
     if (!pBookmark)
     {

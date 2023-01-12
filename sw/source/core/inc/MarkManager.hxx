@@ -88,7 +88,7 @@ namespace sw::mark {
             virtual sal_Int32 getBookmarksCount() const override;
             virtual const_iterator_t findBookmark(const OUString& rName) const override;
             virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
-            virtual ::sw::mark::IMark* getBookmarkFor(const SwPosition& rPos) const override;
+            virtual ::sw::mark::IMark* getInnerBookmarkFor(const SwPosition& rPos) const override;
 
             // Fieldmarks
             virtual const_iterator_t getFieldmarksBegin() const override;

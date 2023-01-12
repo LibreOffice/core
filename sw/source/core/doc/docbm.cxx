@@ -1437,7 +1437,7 @@ namespace sw::mark
         return dynamic_cast<IFieldmark*>(pFieldmark);
     }
 
-    IMark* MarkManager::getBookmarkFor(const SwPosition& rPos) const
+    IMark* MarkManager::getInnerBookmarkFor(const SwPosition& rPos) const
     {
         auto it = std::find_if(m_vBookmarks.begin(), m_vBookmarks.end(),
                                [&rPos](const sw::mark::MarkBase* pMark)
@@ -1447,6 +1447,10 @@ namespace sw::mark
             return nullptr;
         }
         sw::mark::IMark* pBookmark = *it;
+
+        // See if any bookmarks after the first hit are closer to rPos.
+        ++it;
+
         for (; it != m_vBookmarks.end() && (*it)->GetMarkStart() <= rPos; ++it)
         {
             // Find the innermost bookmark.
