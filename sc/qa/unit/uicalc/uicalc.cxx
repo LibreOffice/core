@@ -131,18 +131,6 @@ void ScUiCalcTest::insertNewSheet(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
-{
-    createScDoc();
-
-    // Save the document
-    save("calc8");
-
-    // Open a new document
-    createScDoc();
-    getScDoc();
-}
-
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode)
 {
     // Tests are running in Headless mode
