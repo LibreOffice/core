@@ -326,6 +326,58 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 }
 
+/// Implements getCommandValues(".uno:Field").
+///
+/// Parameters:
+///
+/// - typeName: field type condition to not return all fields
+/// - namePrefix: field name prefix to not return all fields
+void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+              const std::map<OUString, OUString>& rArguments)
+{
+    OUString aTypeName;
+    {
+        auto it = rArguments.find("typeName");
+        if (it != rArguments.end())
+        {
+            aTypeName = it->second;
+        }
+    }
+    // See SwFieldTypeFromString().
+    if (aTypeName != "SetRef")
+    {
+        return;
+    }
+
+    OUString aNamePrefix;
+    {
+        auto it = rArguments.find("namePrefix");
+        if (it != rArguments.end())
+        {
+            aNamePrefix = it->second;
+        }
+    }
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
+    SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
+    std::vector<SwTextAttr*> aAttrs
+        = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
+    tools::ScopedJsonWriterNode aRefmark = rJsonWriter.startNode("setRef");
+    if (aAttrs.empty())
+    {
+        return;
+    }
+
+    const SwFormatRefMark& rRefmark = aAttrs[0]->GetRefMark();
+    if (!rRefmark.GetRefName().startsWith(aNamePrefix))
+    {
+        return;
+    }
+
+    rJsonWriter.put("name", rRefmark.GetRefName());
+}
+
 /// Implements getCommandValues(".uno:Sections").
 ///
 /// Parameters:
@@ -361,8 +413,9 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
-        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties", u"Bookmarks", u"Fields",
-            u"Sections",       u"Bookmark" };
+        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties",
+            u"Bookmarks",      u"Fields",        u"Sections",
+            u"Bookmark",       u"Field" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
@@ -378,6 +431,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     static constexpr OStringLiteral aFields(".uno:Fields");
     static constexpr OStringLiteral aSections(".uno:Sections");
     static constexpr OStringLiteral aBookmark(".uno:Bookmark");
+    static constexpr OStringLiteral aField(".uno:Field");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -428,6 +482,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     else if (o3tl::starts_with(rCommand, aBookmark))
     {
         GetBookmark(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aField))
+    {
+        GetField(rJsonWriter, m_pDocShell, aMap);
     }
 }
 
