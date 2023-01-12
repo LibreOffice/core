@@ -28,18 +28,16 @@
 #include <sal/types.h>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <xmloff/xmlcnimp.hxx>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer final :
-    public ::cppu::WeakAggImplHelper3<
+    public ::cppu::WeakAggImplHelper2<
         css::lang::XServiceInfo,
-        css::lang::XUnoTunnel,
         css::container::XNameContainer >
 {
 private:
@@ -51,9 +49,6 @@ private:
 public:
     SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrContainerData> pContainer = nullptr );
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer.get(); }
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::container::XElementAccess
     virtual css::uno::Type  SAL_CALL getElementType() override;

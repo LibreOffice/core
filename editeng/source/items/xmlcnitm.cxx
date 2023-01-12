@@ -76,8 +76,8 @@ bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
 
 bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    Reference<XUnoTunnel> xTunnel(rVal, UNO_QUERY);
-    if (auto pContainer = comphelper::getFromUnoTunnel<SvUnoAttributeContainer>(xTunnel))
+    Reference<XInterface> xTunnel(rVal, UNO_QUERY);
+    if (auto pContainer = dynamic_cast<SvUnoAttributeContainer*>(xTunnel.get()))
     {
         maContainerData = *pContainer->GetContainerImpl();
     }
