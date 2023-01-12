@@ -2015,15 +2015,13 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
         Guard< Mutex > aGuard( m_aMutex );
 
         if( !newChild.is() )
-            throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
+            throw IllegalArgumentException("no child", xThis, 1);
 
         if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
-            throw ElementExistException();
+            throw ElementExistException({}, xThis);
 
-        Reference< XInterface > xChild( newChild );
-
-        if( xThis == xChild )
-            throw IllegalArgumentException("cannot append self", static_cast<cppu::OWeakObject*>(this), -1);
+        if( xThis == newChild )
+            throw IllegalArgumentException("cannot append self", xThis, -1);
 
         maChildren.push_back( newChild );
     }
