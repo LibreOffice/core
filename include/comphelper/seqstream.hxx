@@ -39,7 +39,7 @@ namespace comphelper
 
 
 class COMPHELPER_DLLPUBLIC SequenceInputStream final
-    : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable, css::lang::XUnoTunnel >,
+    : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >,
       public comphelper::ByteReader
 {
     std::mutex    m_aMutex;
@@ -63,9 +63,6 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) override;
     virtual sal_Int64 SAL_CALL getPosition(  ) override;
     virtual sal_Int64 SAL_CALL getLength(  ) override;
-
-// css::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead ) override;

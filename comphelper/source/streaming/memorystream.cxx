@@ -55,7 +55,7 @@ namespace comphelper
 namespace {
 
 class UNOMemoryStream :
-    public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate, XUnoTunnel>,
+    public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>,
     public comphelper::ByteWriter
 {
 public:
@@ -89,9 +89,6 @@ public:
 
     // XTruncate
     virtual void SAL_CALL truncate() override;
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // comphelper::ByteWriter
     virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
@@ -246,13 +243,6 @@ void SAL_CALL UNOMemoryStream::truncate()
 {
     maData.clear();
     mnCursor = 0;
-}
-
-sal_Int64 SAL_CALL UNOMemoryStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    if (rIdentifier == comphelper::ByteWriter::getUnoTunnelId())
-        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteWriter*>(this));
-    return 0;
 }
 
 } // namespace comphelper

@@ -43,8 +43,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XInputStream,
     css::io::XOutputStream,
     css::io::XTruncate,
-    css::io::XAsyncOutputMonitor,
-    css::lang::XUnoTunnel >,
+    css::io::XAsyncOutputMonitor >,
     public comphelper::ByteReader
     {
 
@@ -123,9 +122,6 @@ class XStream_impl :  public cppu::WeakImplHelper<
         closeOutput() override;
 
         virtual void SAL_CALL waitForCompletion() override;
-
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
 
         // utl::ByteReader
         virtual sal_Int32

@@ -90,10 +90,7 @@ static void CopyInputToOutput(
 {
     static const sal_Int32 nConstBufferSize = 32000;
 
-    uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xInput, uno::UNO_QUERY );
-    comphelper::ByteReader* pByteReader = nullptr;
-    if (xInputTunnel)
-        pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
+    comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() );
 
     if (pByteReader)
     {
@@ -1734,8 +1731,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
                     ,   static_cast<io::XSeekable*> ( this )
                     ,   static_cast<io::XTruncate*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
-                    ,   static_cast<beans::XPropertySet*> ( this )
-                    ,   static_cast<lang::XUnoTunnel*> ( this ) );
+                    ,   static_cast<beans::XPropertySet*> ( this ) );
 
     if ( aReturn.hasValue() )
         return aReturn ;
@@ -2160,9 +2156,7 @@ void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
         throw io::NotConnectedException();
 
     uno::Reference< css::lang::XUnoTunnel > xOutputTunnel( m_xOutStream, uno::UNO_QUERY );
-    comphelper::ByteWriter* pByteWriter = nullptr;
-    if (xOutputTunnel)
-        pByteWriter = reinterpret_cast< comphelper::ByteWriter* >( xOutputTunnel->getSomething( comphelper::ByteWriter::getUnoTunnelId() ) );
+    comphelper::ByteWriter* pByteWriter = dynamic_cast< comphelper::ByteWriter* >( m_xOutStream.get() );
     if (pByteWriter)
         pByteWriter->writeBytes(pData, nBytesToWrite);
     else
@@ -2173,13 +2167,6 @@ void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
     m_pImpl->m_bHasDataToFlush = true;
 
     ModifyParentUnlockMutex_Impl( aGuard );
-}
-
-sal_Int64 SAL_CALL OWriteStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    if (rIdentifier == comphelper::ByteWriter::getUnoTunnelId())
-        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteWriter*>(this));
-    return 0;
 }
 
 void SAL_CALL OWriteStream::flush()

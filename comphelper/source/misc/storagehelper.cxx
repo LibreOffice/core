@@ -175,17 +175,10 @@ void OStorageHelper::CopyInputToOutput(
 {
     static const sal_Int32 nConstBufferSize = 32000;
 
-    uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xInput, uno::UNO_QUERY );
-    comphelper::ByteReader* pByteReader = nullptr;
+    comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() );
     comphelper::ByteWriter* pByteWriter = nullptr;
-    if (xInputTunnel)
-        pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
     if (pByteReader)
-    {
-        uno::Reference< css::lang::XUnoTunnel > xOutputTunnel( xOutput, uno::UNO_QUERY );
-        if (xOutputTunnel)
-            pByteWriter = reinterpret_cast< comphelper::ByteWriter* >( xOutputTunnel->getSomething( comphelper::ByteWriter::getUnoTunnelId() ) );
-    }
+       pByteWriter = dynamic_cast< comphelper::ByteWriter* >( xOutput.get() );
 
     if (pByteWriter)
     {

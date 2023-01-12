@@ -548,10 +548,7 @@ public:
     XBufferedStream( const uno::Reference<XInputStream>& xSrcStream ) : mnPos(0)
     {
         sal_Int32 nRemaining = xSrcStream->available();
-        uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xSrcStream, uno::UNO_QUERY );
-        comphelper::ByteReader* pByteReader = nullptr;
-        if (xInputTunnel)
-            pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
+        comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xSrcStream.get() );
 
         if (pByteReader)
         {

@@ -1111,11 +1111,7 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
                 return ERRCODE_IO_PENDING;
         }
 
-        Reference< css::lang::XUnoTunnel > xTunnel( xStream, UNO_QUERY );
-        comphelper::ByteReader* pByteReader = nullptr;
-        if (xTunnel)
-            pByteReader = reinterpret_cast< comphelper::ByteReader* >( xTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
-
+        comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >(xStream.get());
         if (pByteReader)
         {
             nSize = pByteReader->readSomeBytes( static_cast<sal_Int8*>(pBuffer), sal_Int32(nCount) );

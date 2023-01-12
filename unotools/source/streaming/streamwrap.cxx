@@ -157,14 +157,6 @@ void OInputStreamWrapper::checkError() const
         throw css::io::NotConnectedException("utl::OInputStreamWrapper error " + e.toString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
 
-sal_Int64 SAL_CALL OInputStreamWrapper::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    if (rIdentifier == comphelper::ByteReader::getUnoTunnelId())
-        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteReader*>(this));
-    return 0;
-}
-
-
 //= OSeekableInputStreamWrapper
 
 OSeekableInputStreamWrapper::~OSeekableInputStreamWrapper() = default;
