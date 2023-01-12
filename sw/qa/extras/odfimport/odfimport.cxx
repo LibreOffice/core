@@ -1379,7 +1379,7 @@ CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
 
 #ifdef _WIN32
 template <class T>
-static void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> aDesktop,
+static void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & aDesktop,
                              const OUString& sFileName, sal_Int32 configValue, sal_Int32 zoneId,
                              bool expectedResult)
 {
