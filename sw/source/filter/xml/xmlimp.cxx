@@ -1306,6 +1306,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bEmptyDbFieldHidesPara = false;
     bool bCollapseEmptyCellPara = false;
     bool bAutoFirstLineIndentDisregardLineSpace = false;
+    bool bHyphenateURLs = false;
     bool bDropCapPunctuation = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
@@ -1400,6 +1401,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bCollapseEmptyCellPara = true;
                 else if (rValue.Name == "AutoFirstLineIndentDisregardLineSpace")
                     bAutoFirstLineIndentDisregardLineSpace = true;
+                else if (rValue.Name == "HyphenateURLs")
+                {
+                    bHyphenateURLs = true;
+                }
                 else if ( rValue.Name == "DropCapPunctuation" )
                     bDropCapPunctuation = true;
             }
@@ -1563,6 +1568,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bAutoFirstLineIndentDisregardLineSpace)
         xProps->setPropertyValue("AutoFirstLineIndentDisregardLineSpace", Any(false));
+
+    if (!bHyphenateURLs)
+    {
+        xProps->setPropertyValue("HyphenateURLs", Any(true));
+    }
 
     // LO 7.4 and previous versions had different drop cap punctuation: very long dashes.
     // In order to keep backwards compatibility, DropCapPunctuation option is written to .odt
