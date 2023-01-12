@@ -71,6 +71,7 @@ public:
     void testTdf107572();
     void testShapeLayerId();
     void testFunctionAccessIndirect();
+    void testTdf147122();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf107572);
     CPPUNIT_TEST(testShapeLayerId);
     CPPUNIT_TEST(testFunctionAccessIndirect);
+    CPPUNIT_TEST(testTdf147122);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -896,6 +898,38 @@ void ScMacrosTest::testFunctionAccessIndirect()
     // because of disallowed external link update (needed to obtain the cell value).
     css::uno::Any aResult = xFunc->callFunction("INDIRECT", {css::uno::Any(aReference)});
     CPPUNIT_ASSERT_EQUAL(css::uno::Any(OUString("a1")), aResult);
+}
+
+void ScMacrosTest::testTdf147122()
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(
+            OUString("Function TestMergedSelection\n"
+                     // Insert test string into cell A1
+                     "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
+                     "  oActiveCell = oActiveSheet.getCellRangeByName(\"A1\")\n"
+                     "  oActiveCell.setString(\"This is a test\")\n"
+                     // Merge A1:B2 cell range and return the content of the merged range
+                     "  oRange = oActiveSheet.getCellRangeByName(\"A1:B2\")\n"
+                     "  ThisComponent.getCurrentController.Select(oRange)\n"
+                     "  oActiveCell = ThisComponent.CurrentSelection\n"
+                     "  oActiveCell.Merge(True)\n"
+                     "  TestMergedSelection = ThisComponent.getCurrentSelection().getString()\n"
+                     "End Function\n")));
+
+    Any aRet = executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestMergedSelection?"
+                            "language=Basic&location=document");
+    // Without the fix in place, this test would have failed with
+    // - Expression: false
+    // - Unexpected dialog: Error: BASIC runtime error.
+    // Property or method not found: getString.
+    CPPUNIT_ASSERT_EQUAL(Any(OUString("This is a test")), aRet);
 }
 
 ScMacrosTest::ScMacrosTest()

@@ -70,6 +70,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <formatsh.hxx>
 #include <sfx2/app.hxx>
+#include <scitems.hxx>
 
 using namespace com::sun::star;
 
@@ -872,7 +873,13 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         ScMarkType eMarkType = rViewData.GetSimpleArea(aRange);
         if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE) )
         {
-            if (aRange.aStart == aRange.aEnd)
+            // tdf#147122 - return cell object when a simple selection is merged
+            ScDocument& rDoc = pDocSh->GetDocument();
+            const ScPatternAttr* pMarkPattern = rDoc.GetPattern(aRange.aStart);
+            if (aRange.aStart == aRange.aEnd
+                || (pMarkPattern
+                    && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false)
+                           == SfxItemState::SET))
                 pObj = new ScCellObj( pDocSh, aRange.aStart );
             else
                 pObj = new ScCellRangeObj( pDocSh, aRange );
