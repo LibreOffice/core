@@ -691,6 +691,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952)
+{
+    createSwDoc("Hyphenated-link.rtf");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // URL should not be hyphenated
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                " NNNNNNNNNN NNNNNNNNNNNNNNN ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                "https://example.com/xxxxxxx/eeeeeeeeeeeeeeeeeee/sssssssssssssssss ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("Hyphenated-link.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // URL hyphenated for backward compatibility
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                " NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/eeeeeeeeeeeeeeeeeee/ss");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                "sssssssssssssss ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");

@@ -1891,6 +1891,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, true);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES, true);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY, true);
+    // rely on default for HYPHENATE_URLS=false
 
     // COMPATIBILITY FLAGS END
 

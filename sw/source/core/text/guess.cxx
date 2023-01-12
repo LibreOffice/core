@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <unotools/charclass.hxx>
+#include <svl/urihelper.hxx>
 #include "porfld.hxx"
 #include <paratr.hxx>
 #include <doc.hxx>
@@ -231,6 +232,35 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 {
                     bHyph = false;
                 }
+            }
+        }
+
+        if (!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::HYPHENATE_URLS))
+        {
+            // check URL from preceding space - similar to what AutoFormat does
+            const CharClass& rCC = GetAppCharClass();
+            sal_Int32 begin(m_nCutPos == TextFrameIndex(COMPLETE_STRING) ? rInf.GetText().getLength() : sal_Int32(m_nCutPos));
+            sal_Int32 end(begin);
+            for (; 0 < begin; --begin)
+            {
+                sal_Unicode cChar = rInf.GetText()[begin - 1];
+                if (cChar == CH_BLANK || cChar == CH_FULL_BLANK || cChar == CH_SIX_PER_EM)
+                {
+                    break;
+                }
+            }
+            for (; end < rInf.GetText().getLength(); ++end)
+            {
+                sal_Unicode cChar = rInf.GetText()[end];
+                if (cChar == CH_BLANK || cChar == CH_FULL_BLANK || cChar == CH_SIX_PER_EM)
+                {
+                    break;
+                }
+            }
+            if (!URIHelper::FindFirstURLInText(rInf.GetText(), begin, end, rCC).isEmpty())
+            {
+                bHyph = false;
             }
         }
 
