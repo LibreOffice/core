@@ -223,17 +223,6 @@ static tools::Time setTime( util::DateTime const & rDate )
 
 
 
-const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSvxUnoTextFieldUnoTunnelId;
-    return theSvxUnoTextFieldUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) noexcept
 :   OComponentHelper( m_aMutex )
 ,   mpPropSet(nullptr)
@@ -547,7 +536,6 @@ uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
     else QUERYINT( text::XTextContent );
     else QUERYINT( text::XTextField );
     else QUERYINT( lang::XServiceInfo );
-    else QUERYINT( lang::XUnoTunnel );
     else
         return OComponentHelper::queryAggregation( rType );
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_UNOFIELD_HXX
 #define INCLUDED_EDITENG_UNOFIELD_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -46,8 +45,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
                         public ::cppu::OComponentHelper,
                         public css::text::XTextField,
                         public css::beans::XPropertySet,
-                        public css::lang::XServiceInfo,
-                        public css::lang::XUnoTunnel
+                        public css::lang::XServiceInfo
 {
     css::uno::Reference< css::text::XTextRange > mxAnchor;
     const SfxItemPropertySet*   mpPropSet;
@@ -62,9 +60,6 @@ public:
 
     // Internal
     std::unique_ptr<SvxFieldData> CreateFieldData() const noexcept;
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
