@@ -289,7 +289,6 @@ merge cppcanvas::PolyPolygon with cppcanvas::internal::ImplPolyPolygon
 merge cppcanvas::Renderer with cppcanvas::internal::ImplRenderer
 merge cppcanvas::SpriteCanvas with cppcanvas::internal::ImplSpriteCanvas
 merge cppcanvas::internal::ImplSprite with cppcanvas::internal::ImplCustomSprite
-merge cppu::(anonymous namespace)::OSingleFactoryHelper with cppu::(anonymous namespace)::OFactoryComponentHelper
 merge cppu::PropertySetMixinImpl with cppu::PropertySetMixin
 merge dbaccess::IPropertyContainer with dbaccess::OColumn
 merge dbaccess::IRefreshListener with dbaccess::OConnection
