@@ -46,6 +46,7 @@ public:
     void insertStringToCell(const OUString& rCell, const std::u16string_view& rStr);
     void insertArrayToCell(const OUString& rCell, const std::u16string_view& rStr);
     void insertNewSheet(ScDocument& rDoc);
+    void executeAutoSum();
 };
 
 ScUiCalcTest::ScUiCalcTest()
@@ -129,6 +130,17 @@ void ScUiCalcTest::insertNewSheet(ScDocument& rDoc)
     dispatchCommand(mxComponent, ".uno:Insert", aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
+}
+
+void ScUiCalcTest::executeAutoSum()
+{
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    // Use RETURN key to exit autosum edit view
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode)
@@ -2483,7 +2495,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
 
     goToCell("A1:A3");
 
-    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+    executeAutoSum();
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 3, 0)));
 
@@ -2506,13 +2518,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116421)
 
     goToCell("A4");
 
-    dispatchCommand(mxComponent, ".uno:AutoSum", {});
-
-    // Use RETURN key to exit autosum edit view
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-    Scheduler::ProcessEventsToIdle();
+    executeAutoSum();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 3
@@ -2687,7 +2693,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
     insertStringToCell("B1", u"1");
     insertStringToCell("B2", u"1");
     goToCell("A1:C3");
-    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    executeAutoSum();
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 2, 0)));
     OUString aFormula = pDoc->GetFormula(0, 2, 0);
@@ -2985,6 +2992,160 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
     pDoc->GetPattern(100, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testAutoSum)
+{
+    createScDoc("autosum.ods");
+    ScDocument* pDoc = getScDoc();
+
+    //Sum on range and Sum on Sum's
+    goToCell("B10");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B8:B9)"), pDoc->GetFormula(1, 9, 0));
+
+    goToCell("B13");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 12, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B11:B12)"), pDoc->GetFormula(1, 12, 0));
+
+    goToCell("B14");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(1, 13, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B13:B13,B10:B10)"), pDoc->GetFormula(1, 13, 0));
+
+    goToCell("F8:F14");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(5, 13, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(F13:F13,F10:F10)"), pDoc->GetFormula(5, 13, 0));
+
+    //Sum on Row and Column
+    goToCell("E25");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(4, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(E22:E24)"), pDoc->GetFormula(4, 24, 0));
+
+    goToCell("E26");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(4, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B26:D26)"), pDoc->GetFormula(4, 25, 0));
+
+    goToCell("E27");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(4, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B27:D27)"), pDoc->GetFormula(4, 26, 0));
+
+    goToCell("E28");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(4, 27, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B28:D28)"), pDoc->GetFormula(4, 27, 0));
+
+    goToCell("E29");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(9.0, pDoc->GetValue(ScAddress(4, 28, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(E26:E28)"), pDoc->GetFormula(4, 28, 0));
+
+    goToCell("E30");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(4, 29, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(E29:E29,E25:E25)"), pDoc->GetFormula(4, 29, 0));
+
+    //Subtotals on Autosum
+    goToCell("C49");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(2, 48, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUBTOTAL(9,C38:C48)"), pDoc->GetFormula(2, 48, 0));
+
+    //Autosum on column with selected empty cell for result
+    goToCell("B59:B64");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(1, 63, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B59:B63)"), pDoc->GetFormula(1, 63, 0));
+
+    //Autosum on rows with selected empty cell for result
+    goToCell("B76:E80");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(4, 75, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B76:D76)"), pDoc->GetFormula(4, 75, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, pDoc->GetValue(ScAddress(4, 76, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B77:D77)"), pDoc->GetFormula(4, 76, 0));
+    CPPUNIT_ASSERT_EQUAL(90.0, pDoc->GetValue(ScAddress(4, 77, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B78:D78)"), pDoc->GetFormula(4, 77, 0));
+    CPPUNIT_ASSERT_EQUAL(120.0, pDoc->GetValue(ScAddress(4, 78, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B79:D79)"), pDoc->GetFormula(4, 78, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(4, 79, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B80:D80)"), pDoc->GetFormula(4, 79, 0));
+
+    //Subtotal on column with selected empty cell for result
+    goToCell("C92:C101");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(19.0, pDoc->GetValue(ScAddress(2, 100, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUBTOTAL(9,C92:C100)"), pDoc->GetFormula(2, 100, 0));
+
+    //Autosum on column without selected empty cell for result
+    goToCell("B109:B113");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(1, 113, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B109:B113)"), pDoc->GetFormula(1, 113, 0));
+
+    //Subtotal on column without selected empty cell for result
+    goToCell("C142:C149");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(19.0, pDoc->GetValue(ScAddress(2, 150, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUBTOTAL(9,C142:C149)"), pDoc->GetFormula(2, 150, 0));
+
+    //Autosum on multiselected columns without selected empty cell for result
+    goToCell("B160:D164");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(1, 164, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B160:B164)"), pDoc->GetFormula(1, 164, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(2, 164, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C160:C164)"), pDoc->GetFormula(2, 164, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(3, 164, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(D160:D164)"), pDoc->GetFormula(3, 164, 0));
+
+    //Autosum on columns with formula results without selected empty cell for result
+    goToCell("B173:D177");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(2.54, std::floor(pDoc->GetValue(ScAddress(1, 177, 0)) * 100.0) / 100.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B173:B177)"), pDoc->GetFormula(1, 177, 0));
+    CPPUNIT_ASSERT_EQUAL(-4.91, std::floor(pDoc->GetValue(ScAddress(2, 177, 0)) * 100.0) / 100.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C173:C177)"), pDoc->GetFormula(2, 177, 0));
+    CPPUNIT_ASSERT_EQUAL(5500.0, pDoc->GetValue(ScAddress(3, 177, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(D173:D177)"), pDoc->GetFormula(3, 177, 0));
+
+    //Autosum on column with filled cell under selected area
+    goToCell("B186:D190");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(1, 191, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B186:B190)"), pDoc->GetFormula(1, 191, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(2, 191, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C186:C190)"), pDoc->GetFormula(2, 191, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(3, 191, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(D186:D190)"), pDoc->GetFormula(3, 191, 0));
+
+    //Autosum on column and rows with empty cells selected for row and column
+    goToCell("B203:E208");
+    executeAutoSum();
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(1, 207, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B203:B207)"), pDoc->GetFormula(1, 207, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(2, 207, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C203:C207)"), pDoc->GetFormula(2, 207, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(3, 207, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(D203:D207)"), pDoc->GetFormula(3, 207, 0));
+    CPPUNIT_ASSERT_EQUAL(450.0, pDoc->GetValue(ScAddress(4, 207, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B208:D208)"), pDoc->GetFormula(4, 207, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(4, 202, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B203:D203)"), pDoc->GetFormula(4, 202, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, pDoc->GetValue(ScAddress(4, 203, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B204:D204)"), pDoc->GetFormula(4, 203, 0));
+    CPPUNIT_ASSERT_EQUAL(90.0, pDoc->GetValue(ScAddress(4, 204, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B205:D205)"), pDoc->GetFormula(4, 204, 0));
+    CPPUNIT_ASSERT_EQUAL(120.0, pDoc->GetValue(ScAddress(4, 205, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B206:D206)"), pDoc->GetFormula(4, 205, 0));
+    CPPUNIT_ASSERT_EQUAL(150.0, pDoc->GetValue(ScAddress(4, 206, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B207:D207)"), pDoc->GetFormula(4, 206, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
