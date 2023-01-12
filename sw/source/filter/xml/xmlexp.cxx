@@ -508,18 +508,6 @@ void SwXMLExport::ExportContent_()
     GetTextParagraphExport()->exportText( xText, m_bShowProgress );
 }
 
-const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSwXMLExportUnoTunnelId;
-    return theSwXMLExportUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
-}
-
 SwDoc* SwXMLExport::getDoc()
 {
     if( m_pDoc != nullptr )

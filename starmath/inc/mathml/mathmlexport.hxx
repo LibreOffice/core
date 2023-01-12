@@ -109,10 +109,6 @@ public:
     SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
                 OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
-    // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_() override {}
     void ExportContent_() override;

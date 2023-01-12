@@ -271,9 +271,6 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
     virtual void DisposingModel() override;
 };
 

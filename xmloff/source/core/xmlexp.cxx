@@ -2017,9 +2017,6 @@ XMLImageMapExport& SvXMLExport::GetImageMapExport()
     return *mpImageMapExport;
 }
 
-// XUnoTunnel & co
-UNO3_GETIMPLEMENTATION_IMPL(SvXMLExport);
-
 void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp )
 {
     OUString sFilterService;

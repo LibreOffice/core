@@ -24,7 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/ustring.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/txtparae.hxx>
@@ -113,8 +112,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
              css::lang::XServiceInfo,
              css::document::XExporter,
              css::lang::XInitialization,
-             css::container::XNamed,
-             css::lang::XUnoTunnel>
+             css::container::XNamed>
 {
     std::unique_ptr<SvXMLExport_Impl>            mpImpl;            // dummy
 
@@ -310,9 +308,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) final override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
-
-    // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(SvXMLExport)
 
     /** ensures that the given namespace is in scope at the next started
         element.

@@ -331,7 +331,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     // filter
     if (nSyntaxVersion == 5)
     {
-        SmXMLExport* pFilter = comphelper::getFromUnoTunnel<SmXMLExport>(xFilter);
+        SmXMLExport* pFilter = dynamic_cast<SmXMLExport*>(xFilter.get());
         if (pFilter == nullptr)
         {
             SAL_WARN("starmath", "Failed to fetch SmMLExport");
@@ -342,7 +342,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     }
 
     // filter
-    SmMLExport* pFilter = comphelper::getFromUnoTunnel<SmMLExport>(xFilter);
+    SmMLExport* pFilter = dynamic_cast<SmMLExport*>(xFilter.get());
 
     // Setup filter
     if (pFilter == nullptr)
@@ -438,18 +438,6 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
 // SmMLExport technical
 /*************************************************************************************************/
-
-sal_Int64 SAL_CALL SmMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
-}
-
-const uno::Sequence<sal_Int8>& SmMLExport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSmMLExportUnoTunnelId;
-    return theSmMLExportUnoTunnelId.getSeq();
-}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLExporter_get_implementation(css::uno::XComponentContext* context,

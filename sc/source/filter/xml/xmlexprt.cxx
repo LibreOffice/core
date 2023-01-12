@@ -5449,13 +5449,6 @@ void SAL_CALL ScXMLExport::initialize( const css::uno::Sequence< css::uno::Any >
     SvXMLExport::initialize(aArguments);
 }
 
-// XUnoTunnel
-sal_Int64 SAL_CALL ScXMLExport::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-{
-    SolarMutexGuard aGuard;
-    return SvXMLExport::getSomething(aIdentifier);
-}
-
 void ScXMLExport::DisposingModel()
 {
     SvXMLExport::DisposingModel();

@@ -263,7 +263,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
     uno::Sequence<PropertyValue> aProps(0);
     xFilter->filter(aProps);
 
-    auto pFilter = comphelper::getFromUnoTunnel<SmXMLExport>(xFilter);
+    auto pFilter = dynamic_cast<SmXMLExport*>(xFilter.get());
     return pFilter == nullptr || pFilter->GetSuccess();
 }
 
@@ -321,18 +321,6 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
     , pTree(nullptr)
     , bSuccess(false)
 {
-}
-
-sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
-}
-
-const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSmXMLExportUnoTunnelId;
-    return theSmXMLExportUnoTunnelId.getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
