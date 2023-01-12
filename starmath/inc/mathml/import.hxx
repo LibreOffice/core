@@ -115,10 +115,6 @@ public:
     virtual ~SmMLImport() noexcept override { cleanup(); };
 
 public:
-    // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-
     /** End the document
     */
     void SAL_CALL endDocument() override;

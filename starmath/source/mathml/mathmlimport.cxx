@@ -294,7 +294,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
             xParser->parseStream(aParserInput);
         }
 
-        auto pFilter = comphelper::getFromUnoTunnel<SmXMLImport>(xFilter);
+        auto pFilter = dynamic_cast<SmXMLImport*>(xFilter.get());
         if (pFilter && pFilter->GetSuccess())
             nError = ERRCODE_NONE;
     }
@@ -404,12 +404,6 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 {
 }
 
-const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSmXMLImportUnoTunnelId;
-    return theSmXMLImportUnoTunnelId.getSeq();
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
                                     uno::Sequence<uno::Any> const& /*rSeq*/)
@@ -432,12 +426,6 @@ Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
 {
     return cppu::acquire(new SmXMLImport(pCtx, "com.sun.star.comp.Math.XMLOasisSettingsImporter",
                                          SvXMLImportFlags::SETTINGS));
-}
-
-sal_Int64 SAL_CALL SmXMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
 }
 
 void SmXMLImport::endDocument()

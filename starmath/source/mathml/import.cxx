@@ -429,7 +429,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
 
         if (nSyntaxVersion == 5)
         {
-            SmXMLImport* pXMlImport = comphelper::getFromUnoTunnel<SmXMLImport>(xFilter);
+            SmXMLImport* pXMlImport = dynamic_cast<SmXMLImport*>(xFilter.get());
             if (pXMlImport != nullptr && pXMlImport->GetSuccess())
                 return ERRCODE_NONE;
             else
@@ -442,7 +442,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
             }
         }
 
-        m_pMlImport = comphelper::getFromUnoTunnel<SmMLImport>(xFilter);
+        m_pMlImport = dynamic_cast<SmMLImport*>(xFilter.get());
         if (m_pMlImport != nullptr && m_pMlImport->getSuccess())
             return ERRCODE_NONE;
         else
@@ -1202,18 +1202,6 @@ void SmMLImportContext::endFastElement(sal_Int32) { inheritStyleEnd(); }
 
 // SmMLImport
 /*************************************************************************************************/
-
-const uno::Sequence<sal_Int8>& SmMLImport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSmMLImportUnoTunnelId;
-    return theSmMLImportUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SmMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
-}
 
 SvXMLImportContext*
 SmMLImport::CreateFastContext(sal_Int32 nElement,

@@ -31,7 +31,6 @@
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -182,7 +181,6 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
              css::lang::XInitialization,
              css::document::XImporter,
              css::document::XFilter,
-             css::lang::XUnoTunnel,
              css::xml::sax::XFastParser>
 {
     friend class SvXMLImportContext;
@@ -353,10 +351,6 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
-    // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;

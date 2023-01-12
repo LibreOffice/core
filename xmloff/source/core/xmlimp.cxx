@@ -46,6 +46,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -471,18 +472,6 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
     if (!mxEmbeddedFontHelper)
         mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
     return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
-}
-
-const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSvXMLImportUnoTunnelId;
-    return theSvXMLImportUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 namespace
@@ -1404,7 +1393,7 @@ void SvXMLImport::AddStyleDisplayName( XmlStyleFamily nFamily,
                 xPropertySetInfo->hasPropertyByName(sPrivateData) )
             {
                 Reference < XInterface > xIfc(
-                        static_cast< XUnoTunnel *>( mpStyleMap.get() ) );
+                        static_cast< css::lang::XUnoTunnel *>( mpStyleMap.get() ) );
                 mxImportInfo->setPropertyValue( sPrivateData, Any(xIfc) );
             }
         }

@@ -113,10 +113,6 @@ public:
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
 
-    // XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 

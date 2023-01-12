@@ -361,18 +361,6 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
     m_bLoadDoc = false;
 }
 
-const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theSwXMLImportUnoTunnelId;
-    return theSwXMLImportUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
-}
-
 static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
     OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(rTextCursor);
