@@ -63,12 +63,20 @@ class SwHTMLWrtTable : public SwWriteTable
     static void Pixelize( sal_uInt16& rValue );
     void PixelizeBorders();
 
+    /// Writes a single table cell.
+    ///
+    /// bCellRowSpan decides if the cell's row span should be written or not.
     void OutTableCell( SwHTMLWriter& rWrt, const SwWriteTableCell *pCell,
-                       bool bOutVAlign ) const;
+                       bool bOutVAlign,
+                       bool bCellRowSpan ) const;
 
+    /// Writes a single table row.
+    ///
+    /// rSkipRows decides if the next N rows should be skipped or written.
     void OutTableCells( SwHTMLWriter& rWrt,
                         const SwWriteTableCells& rCells,
-                        const SvxBrushItem *pBrushItem ) const;
+                        const SvxBrushItem *pBrushItem,
+                        sal_uInt16& rSkipRows ) const;
 
     virtual bool ShouldExpandSub( const SwTableBox *pBox,
                             bool bExpandedBefore, sal_uInt16 nDepth ) const override;
@@ -254,7 +262,8 @@ bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
 // Write a box as single cell
 void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
                                    const SwWriteTableCell *pCell,
-                                   bool bOutVAlign ) const
+                                   bool bOutVAlign,
+                                   bool bCellRowSpan ) const
 {
     const SwTableBox *pBox = pCell->GetBox();
     sal_uInt16 nRow = pCell->GetRow();
@@ -307,7 +316,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sOut.append(rWrt.GetNamespace() + aTag);
 
     // output ROW- and COLSPAN
-    if( nRowSpan>1 )
+    if (nRowSpan > 1 && bCellRowSpan)
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_rowspan
                 "=\"" + OString::number(nRowSpan) + "\"");
@@ -505,7 +514,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 // output a line as lines
 void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
                                     const SwWriteTableCells& rCells,
-                                    const SvxBrushItem *pBrushItem ) const
+                                    const SvxBrushItem *pBrushItem,
+                                    sal_uInt16& rSkipRows ) const
 {
     // If the line contains more the one cell and all cells have the same
     // alignment, then output the VALIGN at the line instead of the cell.
@@ -556,9 +566,26 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     rWrt.IncIndentLevel(); // indent content of <TR>...</TR>
 
+    bool bCellRowSpan = true;
+    if (!rCells.empty() && rCells[0]->GetRowSpan() > 1)
+    {
+        // Skip the rowspan attrs of <td> elements if they are the same for every cell of this row.
+        bCellRowSpan = std::adjacent_find(rCells.begin(), rCells.end(),
+                                          [](const std::unique_ptr<SwWriteTableCell>& pA,
+                                             const std::unique_ptr<SwWriteTableCell>& pB)
+                                          { return pA->GetRowSpan() != pB->GetRowSpan(); })
+                       != rCells.end();
+        if (!bCellRowSpan)
+        {
+            // If no rowspan is written, then skip rows which would only contain covered cells, but
+            // not the current row.
+            rSkipRows = rCells[0]->GetRowSpan() - 1;
+        }
+    }
+
     for (const auto &rpCell : rCells)
     {
-        OutTableCell(rWrt, rpCell.get(), text::VertOrientation::NONE == eRowVertOri);
+        OutTableCell(rWrt, rpCell.get(), text::VertOrientation::NONE == eRowVertOri, bCellRowSpan);
     }
 
     rWrt.DecIndentLevel(); // indent content of <TR>...</TR>
@@ -824,11 +851,19 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
     }
 
+    sal_uInt16 nSkipRows = 0;
     for( SwWriteTableRows::size_type nRow = 0; nRow < m_aRows.size(); ++nRow )
     {
         const SwWriteTableRow *pRow2 = m_aRows[nRow].get();
 
-        OutTableCells( rWrt, pRow2->GetCells(), pRow2->GetBackground() );
+        if (nSkipRows == 0)
+        {
+            OutTableCells(rWrt, pRow2->GetCells(), pRow2->GetBackground(), nSkipRows);
+        }
+        else
+        {
+            --nSkipRows;
+        }
         if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->m_bBottomBorder &&
             pRow2->m_nBottomBorder > SvxBorderLineWidth::Thin )
         {
