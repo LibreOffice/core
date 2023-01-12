@@ -212,7 +212,7 @@ void SwView_Impl::Invalidate()
     GetUNOObject_Impl()->Invalidate();
     for (const auto& xTransferable: mxTransferables)
     {
-        auto pTransferable = comphelper::getFromUnoTunnel<SwTransferable>(xTransferable.get());
+        auto pTransferable = xTransferable.get().get();
         if(pTransferable)
             pTransferable->Invalidate();
     }
@@ -225,9 +225,8 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     {
         // Remove previously added, but no longer existing weak references.
         mxTransferables.erase(std::remove_if(mxTransferables.begin(), mxTransferables.end(),
-            [](const css::uno::WeakReference<css::lang::XUnoTunnel>& rTunnel) {
-                uno::Reference<lang::XUnoTunnel> xTunnel(rTunnel.get(), uno::UNO_QUERY);
-                return !xTunnel.is();
+            [](const unotools::WeakReference<SwTransferable>& rTunnel) {
+                return !rTunnel.get();
             }), mxTransferables.end());
 
         mxTransferables.emplace_back(&rTransferable);

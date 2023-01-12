@@ -198,7 +198,7 @@ ScTransferObj::~ScTransferObj()
 
 ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
-    return comphelper::getFromUnoTunnel<ScTransferObj>(xTransferable);
+    return dynamic_cast<ScTransferObj*>(xTransferable.get());
 }
 
 void ScTransferObj::AddSupportedFormats()
@@ -901,18 +901,6 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
             }
         }
     }
-}
-
-const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theScTransferUnoTunnelId;
-    return theScTransferUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(
-        rId, this, comphelper::FallbackToGetSomethingOf<TransferDataContainer>{});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

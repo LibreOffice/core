@@ -506,12 +506,6 @@ void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& 
 }
 
 
-sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-
 void TransferableHelper::ImplFlush()
 {
     if( !mxClipboard.is() )
@@ -996,12 +990,6 @@ void TransferableHelper::ClearPrimarySelection()
 
     if( xSelection.is() )
         xSelection->setContents( nullptr, nullptr );
-}
-
-const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theTransferableHelperUnoTunnelId;
-    return theTransferableHelperUnoTunnelId.getSeq();
 }
 
 namespace {

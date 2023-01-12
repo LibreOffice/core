@@ -1717,7 +1717,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             Reference< datatransfer::XTransferable > xTrans( GetDoc()->GetModel(), uno::UNO_QUERY );
             if( xTrans.is() )
             {
-                auto pTrans = comphelper::getFromUnoTunnel<TransferableHelper>(xTrans);
+                auto pTrans = dynamic_cast<TransferableHelper*>(xTrans.get());
                 if (pTrans)
                 {
                     SmEditWindow *pEditWin = GetEditWindow();

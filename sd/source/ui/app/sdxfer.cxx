@@ -704,11 +704,6 @@ void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, 
     mbPageTransferablePersistent = bPersistent;
 }
 
-sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 void SdTransferable::AddUserData (const std::shared_ptr<UserData>& rpData)
 {
     maUserData.push_back(rpData);

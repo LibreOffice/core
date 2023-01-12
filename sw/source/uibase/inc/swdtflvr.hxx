@@ -237,9 +237,6 @@ public:
 
     // the related SwView is being closed and the SwTransferable is invalid now
     void    Invalidate() {m_pWrtShell = nullptr;}
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 
     static void SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
                                   SotClipboardFormatId& nFormat);

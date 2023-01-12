@@ -621,15 +621,13 @@ void ScViewFunc::PasteFromSystem()
 
 void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
-    uno::Reference<lang::XUnoTunnel> xTunnel( rxTransferable, uno::UNO_QUERY );
-
-    if (auto pOwnClip = comphelper::getFromUnoTunnel<ScTransferObj>(xTunnel))
+    if (auto pOwnClip = dynamic_cast<ScTransferObj*>(rxTransferable.get()))
     {
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         true );     // allow warning dialog
     }
-    else if (auto pDrawClip = comphelper::getFromUnoTunnel<ScDrawTransferObj>(xTunnel))
+    else if (auto pDrawClip = dynamic_cast<ScDrawTransferObj*>(rxTransferable.get()))
     {
         ScViewData& rViewData = GetViewData();
         SCCOL nPosX = rViewData.GetCurX();

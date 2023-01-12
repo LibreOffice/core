@@ -416,7 +416,6 @@ public:
         ::sd::DrawDocShell&     GetDocShell() const { return mrDocShell;}
         NavigatorDragType   GetDragType() const { return meDragType;}
 
-        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
         static SdPageObjsTransferable* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
         /** Return a temporary transferable data flavor that is used
             internally in the navigator for reordering entries.  Its
@@ -438,8 +437,6 @@ public:
         virtual void      AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void      DragFinished( sal_Int8 nDropAction ) override;
-
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     };
 
     friend class SdPageObjsTLV::SdPageObjsTransferable;

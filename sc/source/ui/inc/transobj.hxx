@@ -105,8 +105,6 @@ public:
     static  SC_DLLPUBLIC ScTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
 
     static SfxObjectShell* SetDrawClipDoc(bool bAnyOle, const std::shared_ptr<ScDocument>& = {} );     // update ScGlobal::xDrawClipDocShellRef
-    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) override;
-    static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

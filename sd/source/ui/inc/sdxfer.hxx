@@ -102,9 +102,6 @@ public:
     */
     std::shared_ptr<UserData> GetUserData (const sal_Int32 nIndex) const;
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL      getSomething(const css::uno::Sequence< sal_Int8 >& rId) override;
-
 protected:
 
     virtual void                    AddSupportedFormats() override;

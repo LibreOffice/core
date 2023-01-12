@@ -29,7 +29,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -130,8 +129,7 @@ struct ExecuteDropEvent
 
 class VCL_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datatransfer::XTransferable2,
                                                            css::datatransfer::clipboard::XClipboardOwner,
-                                                           css::datatransfer::dnd::XDragSourceListener,
-                                                           css::lang::XUnoTunnel >
+                                                           css::datatransfer::dnd::XDragSourceListener>
 {
 private:
 
@@ -265,12 +263,6 @@ public:
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions );
 
     static void         ClearPrimarySelection();
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-public:
-
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
 struct TransferableDataHelper_Impl;

@@ -231,7 +231,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
 ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
-    return comphelper::getFromUnoTunnel<ScDrawTransferObj>(xTransferable);
+    return dynamic_cast<ScDrawTransferObj*>(xTransferable.get());
 }
 
 static bool lcl_HasOnlyControls( SdrModel* pModel )
@@ -717,18 +717,6 @@ void ScDrawTransferObj::InitDocShell()
     aViewData.SetCurX( 0 );
     aViewData.SetCurY( 0 );
     pDocSh->UpdateOle(aViewData, true);
-}
-
-const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theScDrawTransferObjUnoTunnelId;
-    return theScDrawTransferObjUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(
-        rId, this, comphelper::FallbackToGetSomethingOf<TransferDataContainer>{});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

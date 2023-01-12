@@ -4351,21 +4351,9 @@ void SwTransferable::ClearSelection( const SwWrtShell& rSh,
     }
 }
 
-const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwTransferableUnoTunnelId;
-    return theSwTransferableUnoTunnelId.getSeq();
-}
-
-sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<TransferableHelper>{});
-}
-
 SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper& rData )
 {
-    return comphelper::getFromUnoTunnel<SwTransferable>(rData.GetTransferable());
+    return dynamic_cast<SwTransferable*>(rData.GetTransferable().get());
 }
 
 SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
