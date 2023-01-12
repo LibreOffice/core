@@ -148,6 +148,7 @@ public:
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 bool UseDarkMode();
+bool OSSupportsDarkMode();
 
 // get foreign key names
 namespace vcl_sal {

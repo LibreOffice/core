@@ -85,7 +85,6 @@ public:
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild );
-bool OSSupportsDarkMode();
 
 #endif // INCLUDED_VCL_INC_WIN_SALINST_H
 
