@@ -79,6 +79,13 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+// Avoid issues when colorized antialiasing generates slightly tinted rather than truly black
+// pixels:
+static bool isBlack(Color col)
+{
+    return col.GetRed() < 25 && col.GetGreen() < 25 && col.GetBlue() < 25;
+}
+
 // Return pixel width of the base of the given character located above
 // the starting position.
 // In other words, go up in y direction until a black pixel is found,
@@ -89,7 +96,7 @@ static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& sta
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
-    while (y >= 0 && access->GetColor(y, start.X()) != COL_BLACK)
+    while (y >= 0 && !isBlack(access->GetColor(y, start.X())))
         --y;
     if (y < 0)
         return -1;
@@ -108,7 +115,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
-    while (y < bitmap.GetSizePixel().Height() && access->GetColor(y, start.X()) != COL_BLACK)
+    while (y < bitmap.GetSizePixel().Height() && !isBlack(access->GetColor(y, start.X())))
         ++y;
     if (y >= bitmap.GetSizePixel().Height())
         return -1;
@@ -129,7 +136,7 @@ static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long x = start.X();
-    while (x < bitmap.GetSizePixel().Width() && access->GetColor(start.Y(), x) != COL_BLACK)
+    while (x < bitmap.GetSizePixel().Width() && !isBlack(access->GetColor(start.Y(), x)))
         ++x;
     if (x >= bitmap.GetSizePixel().Width())
         return -1;
@@ -148,7 +155,7 @@ static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Poin
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long x = start.X();
-    while (x >= 0 && access->GetColor(start.Y(), x) != COL_BLACK)
+    while (x >= 0 && !isBlack(access->GetColor(start.Y(), x)))
         --x;
     if (x < 0)
         return -1;
