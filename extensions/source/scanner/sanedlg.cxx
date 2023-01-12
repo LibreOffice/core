@@ -77,13 +77,11 @@ private:
 
     BitmapEx  maPreviewBitmapEx;
     tools::Rectangle maPreviewRect;
-    Point     maLastUL, maLastBR;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
     SaneDlg*  mpParentDialog;
     DragDirection meDragDirection;
     bool      mbDragEnable;
-    bool      mbDragDrawn;
     bool      mbIsDragging;
 
 public:
@@ -92,7 +90,6 @@ public:
         , mpParentDialog(nullptr)
         , meDragDirection(TopLeft)
         , mbDragEnable(false)
-        , mbDragDrawn(false)
         , mbIsDragging(false)
     {
     }
@@ -924,7 +921,6 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     // check for sane values
     rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmapEx);
 
-    mbDragDrawn = false;
     DrawDrag(rRenderContext);
 }
 
@@ -1189,14 +1185,8 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
     rRenderContext.SetRasterOp(RasterOp::Invert);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
-    if (mbDragDrawn)
-        DrawRectangles(rRenderContext, maLastUL, maLastBR);
-
-    maLastUL = maTopLeft;
-    maLastBR = maBottomRight;
     DrawRectangles(rRenderContext, maTopLeft, maBottomRight);
 
-    mbDragDrawn = true;
     rRenderContext.SetRasterOp(eROP);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
 }
