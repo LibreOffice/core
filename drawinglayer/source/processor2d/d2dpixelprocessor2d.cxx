@@ -72,8 +72,6 @@ public:
             mpD2DFactory.clear();
     }
 
-    ~ID2D1GlobalFactoryProvider() {}
-
     sal::systools::COMReference<ID2D1Factory>& getID2D1Factory() { return mpD2DFactory; }
 };
 
@@ -88,8 +86,6 @@ public:
         : mpID2D1DCRenderTarget()
     {
     }
-
-    ~ID2D1GlobalRenderTargetProvider() {}
 
     sal::systools::COMReference<ID2D1DCRenderTarget>& getID2D1DCRenderTarget()
     {
@@ -366,8 +362,6 @@ public:
         , maAssociatedAlpha(rAssociatedAlpha)
     {
     }
-
-    ~SystemDependentData_ID2D1Bitmap() {}
 
     const sal::systools::COMReference<ID2D1Bitmap>& getID2D1Bitmap() const { return mpD2DBitmap; }
     const std::shared_ptr<SalBitmap>& getAssociatedAlpha() const { return maAssociatedAlpha; }
