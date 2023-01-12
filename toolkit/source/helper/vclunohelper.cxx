@@ -250,7 +250,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
 vcl::Font VCLUnoHelper::CreateFont( const css::uno::Reference< css::awt::XFont >& rxFont )
 {
     vcl::Font aFont;
-    VCLXFont* pVCLXFont = comphelper::getFromUnoTunnel<VCLXFont>( rxFont );
+    VCLXFont* pVCLXFont = dynamic_cast<VCLXFont*>( rxFont.get() );
     if ( pVCLXFont )
         aFont = pVCLXFont->GetFont();
     return aFont;

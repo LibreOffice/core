@@ -64,9 +64,6 @@ bool VCLXFont::ImplAssertValidFontMetric()
     return mpFontMetric != nullptr;
 }
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXFont );
-
 css::awt::FontDescriptor VCLXFont::getFontDescriptor(  )
 {
     std::unique_lock aGuard( maMutex );

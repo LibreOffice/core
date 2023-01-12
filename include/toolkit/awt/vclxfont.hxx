@@ -23,7 +23,6 @@
 #include <memory>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XFont2.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
@@ -38,8 +37,7 @@ class FontMetric;
 
 class TOOLKIT_DLLPUBLIC VCLXFont final :
                         public cppu::WeakImplHelper<
-                            css::awt::XFont2,
-                            css::lang::XUnoTunnel>
+                            css::awt::XFont2>
 {
     std::mutex    maMutex;
     css::uno::Reference< css::awt::XDevice> mxDevice;
@@ -55,9 +53,6 @@ public:
 
     void            Init( css::awt::XDevice& rxDev, const vcl::Font& rFont );
     const vcl::Font&     GetFont() const { return maFont; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXFont)
 
     // css::lang::XFont
     css::awt::FontDescriptor           SAL_CALL getFontDescriptor(  ) override;
