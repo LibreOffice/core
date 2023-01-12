@@ -398,11 +398,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
                 if ( pFamilyItem && pNameItem )
                 {
-                    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), css::uno::UNO_QUERY);
                     try
                     {
                         css::uno::Reference< css::container::XNameAccess > xStyles;
-                        css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
+                        css::uno::Reference< css::container::XNameAccess > xCont = pDocSh->GetModel()->getStyleFamilies();
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
                         css::uno::Reference< css::beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;

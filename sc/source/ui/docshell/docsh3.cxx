@@ -175,7 +175,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     // the document size too - cell size affects that, obviously)
     if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::LibreOfficeKit::isActive())
     {
-        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetModel());
+        ScModelObj* pModel = GetModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
     }
 }
@@ -696,10 +696,8 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             //  (only if comparing different documents)
 
             using namespace ::com::sun::star;
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps(
-                xDPS->getDocumentProperties());
+                GetModel()->getDocumentProperties());
             OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
             OUString aDocUser = xDocProps->getModifiedBy();
 

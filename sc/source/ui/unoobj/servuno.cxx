@@ -95,7 +95,7 @@ public:
         uno::Sequence< uno::Any > aArgs{
             // access the application object ( parent for workbook )
             uno::Any(ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", {} )),
-            uno::Any(mpDocShell->GetModel())
+            uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(mpDocShell->GetModel())))
         };
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
@@ -182,8 +182,7 @@ public:
         OUString sCodeName;
 
         // need to find the page ( and index )  for this control
-        uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
-        uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndex(  mrDocShell.GetModel()->getDrawPages(), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = xIndex->getCount();
         bool bMatched = false;
         for ( sal_Int32 index = 0; index < nLen; ++index )
@@ -218,8 +217,7 @@ public:
     OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer ) override
     {
         SolarMutexGuard aGuard;
-        uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mrDocShell.GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xIndex(xSupplier->getDrawPages(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndex(mrDocShell.GetModel()->getDrawPages(), uno::UNO_QUERY_THROW);
 
         for (sal_Int32 i = 0, n = xIndex->getCount(); i < n; ++i)
         {
@@ -583,7 +581,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 uno::Any aGlobs;
                 if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
                 {
-                    uno::Sequence< uno::Any > aArgs{ uno::Any(pDocShell->GetModel()) };
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
                     xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.excel.Globals", aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
                     BasicManager* pAppMgr = SfxApplication::GetBasicManager();

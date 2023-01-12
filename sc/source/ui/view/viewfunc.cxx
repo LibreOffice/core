@@ -340,7 +340,7 @@ namespace HelperNotifyChanges
     static void NotifyIfChangesListeners(const ScDocShell &rDocShell, ScMarkData& rMark,
                                          SCCOL nCol, SCROW nRow, const OUString& rType = "cell-change")
     {
-        ScModelObj* pModelObj = getModel(rDocShell);
+        ScModelObj* pModelObj = rDocShell.GetModel();
 
         ScRangeList aChangeRanges;
         for (const auto& rTab : rMark)
@@ -1347,7 +1347,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         CellContentChanged();
     }
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+    ScModelObj* pModelObj = pDocSh->GetModel();
 
     if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
     {
@@ -2108,7 +2108,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 
     pDocSh->UpdateOle(GetViewData());
 
-    if (ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh))
+    if (ScModelObj* pModelObj = pDocSh->GetModel())
     {
         ScRangeList aChangeRanges;
         if ( bSimple )
@@ -2443,7 +2443,7 @@ void ScViewFunc::SetWidthOrHeight(
     if ( !bWidth )
         return;
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+    ScModelObj* pModelObj = pDocSh->GetModel();
 
     if (!HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
         return;

@@ -430,6 +430,8 @@ public:
     void SnapVisArea( tools::Rectangle& rRect ) const;
 
     void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
+
+    ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
 };
 
 void UpdateAcceptChangesDialog();
@@ -490,11 +492,6 @@ namespace HelperNotifyChanges
         return false;
     }
 
-    inline ScModelObj* getModel(const ScDocShell &rDocShell)
-    {
-        return comphelper::getFromUnoTunnel<ScModelObj>(rDocShell.GetModel());
-    }
-
     inline bool getMustPropagateChangesModel(ScModelObj* pModelObj)
     {
         return pModelObj && pModelObj->HasChangesListeners();
@@ -511,7 +508,7 @@ namespace HelperNotifyChanges
     inline void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScRange &rRange,
         const OUString &rType = OUString("cell-change"))
     {
-        ScModelObj* pModelObj = getModel(rDocShell);
+        ScModelObj* pModelObj = rDocShell.GetModel();
         ScRangeList aChangeRanges(rRange);
 
         if (getMustPropagateChangesModel(pModelObj))

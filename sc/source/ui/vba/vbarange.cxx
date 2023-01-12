@@ -1173,8 +1173,7 @@ ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, std::u16string_view 
 bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const ScRange& refRange, ScRangeList& aCellRanges, formula::FormulaGrammar::AddressConvention aConv )
 {
     // see if there is a match with a named range
-    uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xNameAccess( pDocSh->GetModel()->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
     // Strange enough you can have Range( "namedRange1, namedRange2, etc," )
     // loop around each ',' separated name
     std::vector< OUString > vNames;
@@ -5213,7 +5212,6 @@ ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange 
     ScVbaRange* pRange = static_cast< ScVbaRange* >( ChangingCell.get() );
     if ( pDocShell && pRange )
     {
-        uno::Reference< sheet::XGoalSeek > xGoalSeek(  pDocShell->GetModel(), uno::UNO_QUERY_THROW );
         RangeHelper thisRange( mxRange );
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         RangeHelper changingCellRange( pRange->mxRange );
@@ -5221,7 +5219,7 @@ ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange 
         OUString sGoal = getAnyAsString( Goal );
         table::CellAddress thisCell( thisAddress.Sheet, thisAddress.StartColumn, thisAddress.StartRow );
         table::CellAddress changingCell( changingCellAddr.Sheet, changingCellAddr.StartColumn, changingCellAddr.StartRow );
-        sheet::GoalResult res = xGoalSeek->seekGoal( thisCell, changingCell, sGoal );
+        sheet::GoalResult res = pDocShell->GetModel()->seekGoal( thisCell, changingCell, sGoal );
         ChangingCell->setValue( uno::Any( res.Result ) );
 
         // openoffice behaves differently, result is 0 if the divergence is too great

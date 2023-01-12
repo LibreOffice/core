@@ -403,7 +403,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     ScDocument& rDoc = aViewData.GetDocument();
     ScDocShell* pDocSh = aViewData.GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() ) : nullptr;
+    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();

@@ -196,8 +196,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         aUser += " " + m_aStrExclusiveAccess;
 
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+        uno::Reference<document::XDocumentProperties> xDocProps = mpDocShell->GetModel()->getDocumentProperties();
 
         util::DateTime uDT(xDocProps->getModificationDate());
         DateTime aDateTime(uDT);

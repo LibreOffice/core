@@ -1132,9 +1132,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                             EnableSharedSettings( false );
 
                                             // Do *not* use dispatch mechanism in this place - we don't want others (extensions etc.) to intercept this.
-                                            uno::Reference<frame::XStorable> xStorable2(
-                                                GetModel(), uno::UNO_QUERY_THROW);
-                                            xStorable2->store();
+                                            GetModel()->store();
 
                                             ScTabView* pTabView = pViewData->GetView();
                                             if ( pTabView )

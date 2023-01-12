@@ -111,8 +111,7 @@ ScVbaChartObjects::getChartObjectNames() const
         if ( !pDocShell )
             throw uno::RuntimeException("Failed to obtain the docshell implclass" );
 
-        uno::Reference< sheet::XSpreadsheetDocument > xSpreadsheetDocument( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
-        uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSpreadsheetDocument->getSheets();
+        uno::Reference< sheet::XSpreadsheets > xSpreadsheets = pDocShell->GetModel()->getSheets();
         std::vector< OUString > aChartNamesVector;
 
         const uno::Sequence< OUString > sSheetNames = xSpreadsheets->getElementNames();

@@ -332,7 +332,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         return;
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel()) : nullptr;
+    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
 
     if (!pModelObj)
         return;

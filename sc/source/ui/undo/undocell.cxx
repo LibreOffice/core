@@ -50,7 +50,7 @@ namespace HelperNotifyChanges
     static void NotifyIfChangesListeners(const ScDocShell& rDocShell, const ScAddress &rPos,
         const ScUndoEnterData::ValuesType &rOldValues, const OUString& rType = OUString("cell-change"))
     {
-        ScModelObj* pModelObj = getModel(rDocShell);
+        ScModelObj* pModelObj = rDocShell.GetModel();
         if (pModelObj)
         {
             ScRangeList aChangeRanges;

@@ -2631,8 +2631,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
         return;
 
     ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScModelObj* pModelObj = pDocSh ?
-        comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() ) : nullptr;
+    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();

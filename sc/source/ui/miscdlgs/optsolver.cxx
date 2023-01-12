@@ -830,7 +830,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     ReadConditions();
 
-    uno::Reference<sheet::XSpreadsheetDocument> xDocument( mpDocShell->GetModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xDocument( mpDocShell->GetModel() );
 
     ScRange aObjRange;
     if ( !ParseRef( aObjRange, m_xEdObjectiveCell->GetText(), false ) )

@@ -339,8 +339,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
         if( xLib.is()  )
         {
             uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
-            uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( pShell->GetModel()->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
             // set up the module info for the workbook and sheets in the newly created
             // spreadsheet
             ScDocument& rDoc = pShell->GetDocument();

@@ -1487,7 +1487,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     if ( bDoAutoSpell )
         CopyAutoSpellData(eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount);
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+    ScModelObj* pModelObj = pDocSh->GetModel();
 
     ScRangeList aChangeRanges;
     ScRange aChangeRange( aRange );

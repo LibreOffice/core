@@ -1448,7 +1448,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if ( nFlags & InsertDeleteFlags::OBJECTS )
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() );
+        ScModelObj* pModelObj = pDocSh->GetModel();
         if ( pPage && pModelObj )
         {
             bool bSameDoc = ( rClipParam.getSourceDocID() == rDoc.GetDocumentID() );
@@ -1803,7 +1803,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     SelectionChanged(true);
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+    ScModelObj* pModelObj = pDocSh->GetModel();
 
     ScRangeList aChangeRanges;
     for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
