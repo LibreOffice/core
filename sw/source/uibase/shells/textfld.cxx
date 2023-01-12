@@ -962,17 +962,20 @@ FIELD_INSERT:
                 continue;
             }
 
-            auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
-            if (itParam == pFieldmark->GetParameters()->end())
+            if (!aFieldCommandPrefix.isEmpty())
             {
-                continue;
-            }
+                auto itParam = pFieldmark->GetParameters()->find(ODF_CODE_PARAM);
+                if (itParam == pFieldmark->GetParameters()->end())
+                {
+                    continue;
+                }
 
-            OUString aCommand;
-            itParam->second >>= aCommand;
-            if (!aCommand.startsWith(aFieldCommandPrefix))
-            {
-                continue;
+                OUString aCommand;
+                itParam->second >>= aCommand;
+                if (!aCommand.startsWith(aFieldCommandPrefix))
+                {
+                    continue;
+                }
             }
 
             aRemovals.push_back(pFieldmark);
