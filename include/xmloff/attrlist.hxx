@@ -24,7 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -32,8 +31,7 @@
 
 class XMLOFF_DLLPUBLIC SvXMLAttributeList final : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
-        css::util::XCloneable,
-        css::lang::XUnoTunnel>
+        css::util::XCloneable>
 {
     struct SvXMLTagAttribute_Impl
     {
@@ -47,9 +45,6 @@ public:
     SvXMLAttributeList( const css::uno::Reference<
         css::xml::sax::XAttributeList> & rAttrList );
     virtual ~SvXMLAttributeList() override;
-
-    // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(SvXMLAttributeList)
 
     // css::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength() override;

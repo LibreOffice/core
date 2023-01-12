@@ -38,15 +38,14 @@ sal_Int16 SAL_CALL SvXMLAttributeList::getLength()
 
 
 SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
-    cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable, css::lang::XUnoTunnel>(r),
+    cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>(r),
     vecAttribute( r.vecAttribute )
 {
 }
 
 SvXMLAttributeList::SvXMLAttributeList( const uno::Reference< xml::sax::XAttributeList> & rAttrList )
 {
-    SvXMLAttributeList* pImpl =
-        comphelper::getFromUnoTunnel<SvXMLAttributeList>( rAttrList );
+    SvXMLAttributeList* pImpl = dynamic_cast<SvXMLAttributeList*>( rAttrList.get() );
 
     if( pImpl )
         vecAttribute = pImpl->vecAttribute;
@@ -184,9 +183,5 @@ sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
 
     return -1;
 }
-
-// XUnoTunnel & co
-UNO3_GETIMPLEMENTATION_IMPL(SvXMLAttributeList)
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
