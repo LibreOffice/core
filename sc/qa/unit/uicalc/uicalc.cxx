@@ -28,9 +28,11 @@
 #include <docsh.hxx>
 #include <dpobject.hxx>
 #include <drwlayer.hxx>
+#include <formulaopt.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
 #include <rangeutl.hxx>
+#include <scdll.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
@@ -273,6 +275,51 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
         CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 0, 0)));
     }
 }
+
+#if !defined(MACOSX) && !defined(_WIN32) //FIXME
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151886)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Set the system locale to German
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("de-DE");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    insertStringToCell("A1", u"=1,1");
+
+    insertStringToCell("A2", u"=1.1");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1,1"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("#NAME?"), pDoc->GetString(0, 1, 0));
+
+    // change UseEnglishFuncName to true
+    ScDocShell* pDocSh = getScDocShell();
+    ScFormulaOptions aFormulaOptions = SC_MOD()->GetFormulaOptions();
+    bool bOldStatus = aFormulaOptions.GetUseEnglishFuncName();
+    aFormulaOptions.SetUseEnglishFuncName(true);
+    pDocSh->SetFormulaOptions(aFormulaOptions);
+
+    insertStringToCell("A1", u"=1,1");
+
+    insertStringToCell("A2", u"=1.1");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1,1
+    // - Actual  : #NAME?
+    CPPUNIT_ASSERT_EQUAL(OUString("1,1"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("#NAME?"), pDoc->GetString(0, 1, 0));
+
+    aFormulaOptions.SetUseEnglishFuncName(bOldStatus);
+    pDocSh->SetFormulaOptions(aFormulaOptions);
+}
+#endif
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 {
