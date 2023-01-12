@@ -1381,7 +1381,7 @@ CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
 template <class T>
 static void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> aDesktop,
                              const OUString& sFileName, sal_Int32 configValue, sal_Int32 zoneId,
-                             sal_Bool expectedResult)
+                             bool expectedResult)
 {
     // Set desired configuration params
     auto xChanges = comphelper::ConfigurationChanges::create();
@@ -1415,7 +1415,7 @@ static void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> a
 
     // Are macro enabled in doc?
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(aComponent.get());
-    CPPUNIT_ASSERT_EQUAL(expectedResult, pTextDoc->getAllowMacroExecution());
+    CPPUNIT_ASSERT_EQUAL(expectedResult, bool(pTextDoc->getAllowMacroExecution()));
 
     aComponent->dispose();
 }
