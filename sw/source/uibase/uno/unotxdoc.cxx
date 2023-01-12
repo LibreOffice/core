@@ -2281,7 +2281,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
     {
-        VCLXDevice*     pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
+        VCLXDevice* pDevice = dynamic_cast<VCLXDevice*>( xRenderDevice.get() );
         pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
     }
 

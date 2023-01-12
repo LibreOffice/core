@@ -1461,7 +1461,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
             uno::Reference<awt::XDevice> xRenderDevice(rProp.Value, uno::UNO_QUERY);
             if ( xRenderDevice.is() )
             {
-                VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
+                VCLXDevice* pDevice = dynamic_cast<VCLXDevice*>( xRenderDevice.get() );
                 if ( pDevice )
                 {
                     pRet = pDevice->GetOutputDevice().get();

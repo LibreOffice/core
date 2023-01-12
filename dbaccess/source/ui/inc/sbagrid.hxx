@@ -107,8 +107,6 @@ namespace dbaui
 
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-        UNO3_GETIMPLEMENTATION_DECL(SbaXGridPeer)
-
         // css::frame::XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;

@@ -433,7 +433,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     VclPtr< OutputDevice > pOut;
     if (xRenderDevice.is())
     {
-        VCLXDevice*     pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
+        VCLXDevice* pDevice = dynamic_cast<VCLXDevice*>( xRenderDevice.get() );
         if (pDevice)
             pOut = pDevice->GetOutputDevice();
     }

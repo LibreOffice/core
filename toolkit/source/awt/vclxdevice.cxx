@@ -45,9 +45,6 @@ VCLXDevice::~VCLXDevice()
     mpOutputDevice.reset();
 }
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXDevice );
-
 // css::awt::XDevice,
 css::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  )
 {

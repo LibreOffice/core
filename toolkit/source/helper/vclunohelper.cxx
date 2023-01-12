@@ -104,19 +104,19 @@ css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const Bitmap
 
 vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
 {
-    VCLXWindow* pVCLXWindow = comphelper::getFromUnoTunnel<VCLXWindow>( rxWindow );
+    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( rxWindow.get() );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
 vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow )
 {
-    VCLXWindow* pVCLXWindow = comphelper::getFromUnoTunnel<VCLXWindow>( rxWindow );
+    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( rxWindow.get() );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
 vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindow )
 {
-    VCLXWindow* pVCLXWindow = comphelper::getFromUnoTunnel<VCLXWindow>( rxWindow );
+    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( rxWindow.get() );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
@@ -149,7 +149,7 @@ css::uno::Reference< css::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window*
 OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice )
 {
     VclPtr<OutputDevice> pOutDev;
-    VCLXDevice* pDev = comphelper::getFromUnoTunnel<VCLXDevice>( rxDevice );
+    VCLXDevice* pDev = dynamic_cast<VCLXDevice*>( rxDevice.get() );
     if ( pDev )
         pOutDev = pDev->GetOutputDevice();
     return pOutDev;
@@ -158,7 +158,7 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt
 OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XGraphics>& rxGraphics )
 {
     OutputDevice* pOutDev = nullptr;
-    VCLXGraphics* pGrf = comphelper::getFromUnoTunnel<VCLXGraphics>( rxGraphics );
+    VCLXGraphics* pGrf = dynamic_cast<VCLXGraphics*>( rxGraphics.get() );
     if ( pGrf )
         pOutDev = pGrf->GetOutputDevice();
     return pOutDev;

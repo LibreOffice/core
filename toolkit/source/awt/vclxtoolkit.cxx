@@ -1848,7 +1848,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     VclPtr<vcl::Window> pParent;
     if ( rDescriptor.Parent.is() )
     {
-        VCLXWindow* pParentComponent = comphelper::getFromUnoTunnel<VCLXWindow>( rDescriptor.Parent );
+        VCLXWindow* pParentComponent = dynamic_cast<VCLXWindow*>( rDescriptor.Parent.get() );
 
         // #103939# Don't throw assertion, may be it's a system dependent window, used in ImplCreateWindow.
         // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );

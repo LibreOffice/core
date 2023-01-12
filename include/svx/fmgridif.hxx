@@ -378,9 +378,6 @@ public:
     // late constructor, to always be called after the real constructor!
     void Create(vcl::Window* pParent, WinBits nStyle);
 
-// css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(FmXGridPeer)
-
 // css::form::XGridPeer
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL getColumns(  ) override;
     virtual void SAL_CALL setColumns( const css::uno::Reference< css::container::XIndexContainer >& aColumns ) override final;

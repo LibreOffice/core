@@ -116,7 +116,7 @@ namespace frm
         vcl::Window* pParentWin = nullptr;
         if ( _rParentPeer.is() )
         {
-            VCLXWindow* pParentXWin = comphelper::getFromUnoTunnel<VCLXWindow>( _rParentPeer );
+            VCLXWindow* pParentXWin = dynamic_cast<VCLXWindow*>( _rParentPeer.get() );
             if ( pParentXWin )
                 pParentWin = pParentXWin->GetWindow();
             DBG_ASSERT( pParentWin, "ONavigationBarControl::createPeer: could not obtain the VCL-level parent window!" );

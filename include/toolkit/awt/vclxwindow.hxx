@@ -141,9 +141,6 @@ public:
 
     bool IsDisposed() const;
 
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXWindow)
-
     // css::lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 

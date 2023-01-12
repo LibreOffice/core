@@ -88,7 +88,7 @@ VclPtr< Printer > Renderable::getPrinter() const
 
     if( aValue >>= xRenderDevice )
     {
-        VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>(xRenderDevice);
+        VCLXDevice* pDevice = dynamic_cast<VCLXDevice*>(xRenderDevice.get());
         VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
         pPrinter = dynamic_cast<Printer*>(pOut.get());
     }

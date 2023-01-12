@@ -22,7 +22,6 @@
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/virdev.hxx>
@@ -34,7 +33,6 @@
 class TOOLKIT_DLLPUBLIC VCLXDevice :
                     public cppu::WeakImplHelper<
                         css::awt::XDevice,
-                        css::lang::XUnoTunnel,
                         css::awt::XUnitConversion>
 {
     friend class VCLXGraphics;
@@ -49,9 +47,6 @@ public:
 
     void                    SetOutputDevice( const VclPtr<OutputDevice> &pOutDev ) { mpOutputDevice = pOutDev; }
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXDevice)
 
     // css::awt::XDevice,
     css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) override;

@@ -258,7 +258,7 @@ void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int
 
     if ( mpOutputDevice )
     {
-        VCLXDevice* pFromDev = comphelper::getFromUnoTunnel<VCLXDevice>( rxSource );
+        VCLXDevice* pFromDev = dynamic_cast<VCLXDevice*>( rxSource.get() );
         DBG_ASSERT( pFromDev, "VCLXGraphics::copy - invalid device" );
         if ( pFromDev )
         {

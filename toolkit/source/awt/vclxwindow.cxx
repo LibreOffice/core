@@ -903,10 +903,6 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 }
 
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION2_IMPL(VCLXWindow, VCLXDevice);
-
-
 // css::lang::Component
 void VCLXWindow::dispose(  )
 {

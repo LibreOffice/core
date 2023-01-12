@@ -462,8 +462,6 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
         Sequence { cppu::UnoType<css::frame::XDispatch>::get() });
 }
 
-UNO3_GETIMPLEMENTATION2_IMPL(SbaXGridPeer, FmXGridPeer);
-
 VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
     return VclPtr<SbaGridControl>::Create( m_xContext, pParent, this, nStyle);

@@ -1855,7 +1855,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if( !(xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) )) )
         return;
 
-    VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
+    VCLXDevice* pDevice = dynamic_cast<VCLXDevice*>( xRenderDevice.get() );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
 
     if( !pOut )

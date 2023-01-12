@@ -142,7 +142,7 @@ void StdTabController::ImplActivateControl( bool bFirst ) const
             Reference< XWindowPeer >  xCP = pControls[nCtrl]->getPeer();
             if ( xCP.is() )
             {
-                VCLXWindow* pC = comphelper::getFromUnoTunnel<VCLXWindow>( xCP );
+                VCLXWindow* pC = dynamic_cast<VCLXWindow*>( xCP.get() );
                 if ( pC && pC->GetWindow() && ( pC->GetWindow()->GetStyle() & WB_TABSTOP ) )
                 {
                     pC->GetWindow()->GrabFocus();
