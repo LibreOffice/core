@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/weakagg.hxx>
 
@@ -33,7 +32,7 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
 
@@ -47,12 +46,11 @@ typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
 
 
 
-typedef ::cppu::WeakAggImplHelper7  <   css::awt::XControlModel
+typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     ,   css::beans::XPropertyState
                                     ,   css::io::XPersistObject
                                     ,   css::lang::XComponent
                                     ,   css::lang::XServiceInfo
-                                    ,   css::lang::XUnoTunnel
                                     ,   css::util::XCloneable
                                     >   UnoControlModel_Base;
 
@@ -129,10 +127,6 @@ public:
 
     // css::uno::XAggregation
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-
-    // css::lang::XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::util::XCloneable
     css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;

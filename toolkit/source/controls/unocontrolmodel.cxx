@@ -420,19 +420,6 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
     return aRet;
 }
 
-// css::lang::XUnoTunnel
-
-const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theUnoControlModelUnoTunnelId;
-    return theUnoControlModelUnoTunnelId.getSeq();
-}
-
-sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    return comphelper::getSomethingImpl(rIdentifier, this);
-}
-
 // XInterface
 IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
 
