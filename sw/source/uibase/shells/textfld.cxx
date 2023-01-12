@@ -1128,7 +1128,7 @@ FIELD_INSERT:
 
         IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
         SwPosition& rCursor = *rSh.GetCursor()->GetPoint();
-        sw::mark::IFieldmark* pFieldmark = rIDMA.getFieldmarkFor(rCursor);
+        sw::mark::IFieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
         if (!pFieldmark)
         {
             break;
@@ -1353,12 +1353,12 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 // Check whether we are in a text form field
                 SwPosition aCursorPos(*rSh.GetCursor()->GetPoint());
-                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aCursorPos);
+                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aCursorPos);
                 if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMTEXT)
                     && aCursorPos.GetContentIndex() > 0)
                 {
                     SwPosition aPos(*aCursorPos.GetContentNode(), aCursorPos.GetContentIndex() - 1);
-                    pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                    pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
                 }
                 if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMTEXT &&
                     (aCursorPos > pFieldBM->GetMarkStart() && aCursorPos < pFieldBM->GetMarkEnd() ))

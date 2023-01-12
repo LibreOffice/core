@@ -1235,7 +1235,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             auto const ch(rInf.GetText()[sal_Int32(rInf.GetIdx())]);
             SwTextFrame const*const pFrame(rInf.GetTextFrame());
             SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
-            sw::mark::IFieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+            sw::mark::IFieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);
             if(pBM != nullptr && pBM->GetFieldname( ) == ODF_FORMDATE)
             {
                 if (ch == CH_TXT_ATR_FIELDSTART)

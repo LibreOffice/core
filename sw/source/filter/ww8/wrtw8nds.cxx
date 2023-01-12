@@ -2207,7 +2207,7 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
         if (pos < it) // previous one might have skipped over it
         {
             pos = it;
-            while (auto const*const pMark = rIDMA.getFieldmarkFor(SwPosition(rNd, pos)))
+            while (auto const*const pMark = rIDMA.getInnerFieldmarkFor(SwPosition(rNd, pos)))
             {
                 if (pMark->GetMarkEnd().GetNode() != rNd)
                 {
@@ -2544,7 +2544,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     SwPosition aPosition(rNode, nCurrentPos);
                     // the innermost field is the correct one
-                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkFor(aPosition);
+                    sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getInnerFieldmarkFor(aPosition);
                     assert(pFieldmark);
                     // DateFieldmark / ODF_FORMDATE is not a field...
                     if (pFieldmark->GetFieldname() != ODF_FORMDATE)

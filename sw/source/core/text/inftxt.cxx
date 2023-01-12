@@ -1152,7 +1152,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         {
             SwPosition const aPosition(m_pFrame->MapViewToModelPos(GetIdx()));
             const ::sw::mark::IMark* pFieldmark =
-                m_pFrame->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+                m_pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);
             bool bIsStartMark = (TextFrameIndex(1) == GetLen()
                     && CH_TXT_ATR_FIELDSTART == GetText()[sal_Int32(GetIdx())]);
             if(pFieldmark) {

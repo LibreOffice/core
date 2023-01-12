@@ -153,7 +153,7 @@ public:
                 sw::mark::IFieldmark const*const pFieldmark(
                         m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
                             ? m_rIDMA.getFieldmarkAt(*m_oNextFieldmarkHide)
-                            : m_rIDMA.getFieldmarkFor(*m_oNextFieldmarkHide));
+                            : m_rIDMA.getInnerFieldmarkFor(*m_oNextFieldmarkHide));
                 assert(pFieldmark);
                 m_Fieldmark.first = pFieldmark;
                 // for cursor travelling, there should be 2 visible chars;

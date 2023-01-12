@@ -2271,7 +2271,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                             fieldmarks.insert(m_rDoc.getIDocumentMarkAccess()->getFieldmarkAt(SwPosition(*pTextNode, j)));
                         break;
                         case CH_TXT_ATR_FIELDSEP:
-                            fieldmarks.insert(m_rDoc.getIDocumentMarkAccess()->getFieldmarkFor(SwPosition(*pTextNode, j)));
+                            fieldmarks.insert(m_rDoc.getIDocumentMarkAccess()->getInnerFieldmarkFor(SwPosition(*pTextNode, j)));
                         break;
                     }
                 }

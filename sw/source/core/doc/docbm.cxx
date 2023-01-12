@@ -1448,7 +1448,7 @@ namespace sw::mark
             : dynamic_cast<IFieldmark*>(*pFieldmark);
     }
 
-    IFieldmark* MarkManager::getFieldmarkFor(const SwPosition& rPos) const
+    IFieldmark* MarkManager::getInnerFieldmarkFor(const SwPosition& rPos) const
     {
         auto itFieldmark = find_if(
             m_vFieldmarks.begin(),
@@ -1457,6 +1457,9 @@ namespace sw::mark
         if (itFieldmark == m_vFieldmarks.end())
             return nullptr;
         auto pFieldmark(*itFieldmark);
+
+        // See if any fieldmarks after the first hit are closer to rPos.
+        ++itFieldmark;
         for ( ; itFieldmark != m_vFieldmarks.end()
                 && (**itFieldmark).GetMarkStart() <= rPos; ++itFieldmark)
         {   // find the innermost fieldmark
@@ -1565,13 +1568,13 @@ namespace sw::mark
 
         SwEditWin& rEditWin = pSwView->GetEditWin();
         SwPosition aPos(*rCursorShell.GetCursor()->GetPoint());
-        IFieldmark* pFieldBM = getFieldmarkFor(aPos);
+        IFieldmark* pFieldBM = getInnerFieldmarkFor(aPos);
         FieldmarkWithDropDownButton* pNewActiveFieldmark = nullptr;
         if ((!pFieldBM || (pFieldBM->GetFieldname() != ODF_FORMDROPDOWN && pFieldBM->GetFieldname() != ODF_FORMDATE))
             && aPos.GetContentIndex() > 0 )
         {
             aPos.AdjustContent(-1);
-            pFieldBM = getFieldmarkFor(aPos);
+            pFieldBM = getInnerFieldmarkFor(aPos);
         }
 
         if ( pFieldBM && (pFieldBM->GetFieldname() == ODF_FORMDROPDOWN ||
@@ -2080,7 +2083,7 @@ InsertText MakeInsertText(SwTextNode& rNode, const sal_Int32 nPos, const sal_Int
     SwCursor cursor(SwPosition(rNode, nPos), nullptr);
     bool isInsideFieldmarkCommand(false);
     bool isInsideFieldmarkResult(false);
-    while (auto const*const pMark = rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(*cursor.GetPoint()))
+    while (auto const*const pMark = rNode.GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(*cursor.GetPoint()))
     {
         if (sw::mark::FindFieldSep(*pMark) < *cursor.GetPoint())
         {

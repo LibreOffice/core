@@ -1423,7 +1423,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc().getIDocumentMarkAccess( );
-        sw::mark::IFieldmark const*const pMark(pMarksAccess->getFieldmarkFor(*GetPoint()));
+        sw::mark::IFieldmark const*const pMark(pMarksAccess->getInnerFieldmarkFor(*GetPoint()));
         if (pMark && (IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
                       || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
         {

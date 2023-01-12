@@ -880,8 +880,8 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
     const SwDoc& rDoc = GetDoc();
     // Legacy text/combo/checkbox: never return read-only when inside these form fields.
     const IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-    sw::mark::IFieldmark* pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
-    sw::mark::IFieldmark* pB = GetMark()  ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+    sw::mark::IFieldmark* pA = GetPoint() ? pMarksAccess->getInnerFieldmarkFor(*GetPoint()) : nullptr;
+    sw::mark::IFieldmark* pB = GetMark()  ? pMarksAccess->getInnerFieldmarkFor(*GetMark()) : pA;
     // prevent the user from accidentally deleting the field itself when modifying the text.
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());

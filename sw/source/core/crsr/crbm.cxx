@@ -287,7 +287,7 @@ bool SwCursorShell::IsFormProtected()
 {
     // TODO: Refactor
     SwPosition pos(*GetCursor()->Start());
-    return getIDocumentMarkAccess()->getFieldmarkFor(pos);
+    return getIDocumentMarkAccess()->getInnerFieldmarkFor(pos);
 }
 
 sw::mark::IFieldmark* SwCursorShell::GetFieldmarkAfter(bool bLoop)

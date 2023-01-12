@@ -3352,11 +3352,11 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 
     sal_Int32 nSelection = aIter->second.toInt32();
     SwPosition aPos(*m_pDocShell->GetWrtShell()->GetCursor()->GetPoint());
-    sw::mark::IFieldmark* pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+    sw::mark::IFieldmark* pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
     if ( !pFieldBM )
     {
         aPos.AdjustContent(-1);
-        pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+        pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
     }
     if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
     {

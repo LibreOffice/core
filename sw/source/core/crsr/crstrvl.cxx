@@ -1612,7 +1612,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             if( !bRet && IsAttrAtPos::FormControl & rContentAtPos.eContentAtPos )
             {
                 IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
-                sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getFieldmarkFor( aPos );
+                sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getInnerFieldmarkFor(aPos);
                 if (bCursorFoundExact && pFieldBookmark)
                 {
                     rContentAtPos.eContentAtPos = IsAttrAtPos::FormControl;

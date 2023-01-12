@@ -125,7 +125,7 @@ void GetTextFormField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
-    sw::mark::IFieldmark* pFieldmark = rIDMA.getFieldmarkFor(rCursor);
+    sw::mark::IFieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
     auto typeNode = rJsonWriter.startNode("field");
     if (!pFieldmark)
     {
