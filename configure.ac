@@ -1410,10 +1410,14 @@ EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRI
 
 if test "$_os" = "Emscripten"; then
     AC_MSG_CHECKING([if Emscripten is at least $EMSCRIPTEN_MIN_VERSION])
-    EMSCRIPTEN_DEFINES=$(echo | emcc -dM -E - | $GREP __EMSCRIPTEN_)
-    EMSCRIPTEN_MAJOR=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
-    EMSCRIPTEN_MINOR=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
-    EMSCRIPTEN_TINY=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_tiny__ //p')
+    AS_IF([test -z "$EMSDK"],
+          [AC_MSG_ERROR([No \$EMSDK environment variable.])])
+    EMSCRIPTEN_VERSION_H=$EMSDK/upstream/emscripten/cache/sysroot/include/emscripten/version.h
+    AS_IF([test ! -f "$EMSCRIPTEN_VERSION_H"],
+          [AC_MSG_ERROR([Could not find the <emscripten/version.h> in the Emscripten SDK.])])
+    EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_major__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
+    EMSCRIPTEN_MINOR=$($GREP __EMSCRIPTEN_minor__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
+    EMSCRIPTEN_TINY=$($GREP __EMSCRIPTEN_tiny__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_tiny__ //p')
     EMSCRIPTEN_VERSION="${EMSCRIPTEN_MAJOR}.${EMSCRIPTEN_MINOR}.${EMSCRIPTEN_TINY}"
 
     check_semantic_version_three_prefixed EMSCRIPTEN MIN
