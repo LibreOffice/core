@@ -85,7 +85,8 @@ Submission::~Submission() noexcept
 
 void Submission::setModel( const Reference<XModel>& xModel )
 {
-    mxModel = xModel;
+    mxModel = dynamic_cast<Model*>(xModel.get());
+    assert((!mxModel || !xModel) && "we only support an instance of Model here");
 }
 
 
@@ -202,12 +203,12 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     else if( !maRef.getExpression().isEmpty() )
     {
         aExpression.setExpression( maRef.getExpression() );
-        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = mxModel->getEvaluationContext();
     }
     else
     {
         aExpression.setExpression( "/" );
-        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = mxModel->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
     Reference<XXPathObject> xResult = aExpression.getXPath();
@@ -268,12 +269,9 @@ void Submission::liveCheck()
         throw RuntimeException();
 }
 
-Model* Submission::getModelImpl() const
+css::uno::Reference<XModel> Submission::getModel() const
 {
-    Model* pModel = nullptr;
-    if( mxModel.is() )
-        pModel = comphelper::getFromUnoTunnel<Model>( mxModel );
-    return pModel;
+    return mxModel;
 }
 
 
@@ -404,7 +402,7 @@ void SAL_CALL Submission::submitWithInteraction(
 {
     // as long as this class is not really threadsafe, we need to copy
     // the members we're interested in
-    Reference< XModel > xModel( mxModel );
+    rtl::Reference< Model > xModel( mxModel );
     OUString sID( msID );
 
     if ( !xModel.is() || msID.isEmpty() )
@@ -413,12 +411,9 @@ void SAL_CALL Submission::submitWithInteraction(
                 *this
               );
 
-    Model* pModel = comphelper::getFromUnoTunnel<Model>( xModel );
-    OSL_ENSURE( pModel != nullptr, "illegal model?" );
-
     // #i36765# #i47248# warning on submission of illegal data
     // check for validity (and query user if invalid)
-    bool bValid = pModel->isValid();
+    bool bValid = xModel->isValid();
     if( ! bValid )
     {
         InvalidDataOnSubmitException aInvalidDataException(

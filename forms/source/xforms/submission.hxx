@@ -78,7 +78,7 @@ class Submission : public Submission_t
 private:
 
     /// the Model to which this Submission belongs; may be NULL
-    css::uno::Reference<css::xforms::XModel> mxModel;
+    rtl::Reference<Model> mxModel;
 
     // this will extract the document from the model that will be submitted
     css::uno::Reference< css::xml::dom::XDocumentFragment >
@@ -96,8 +96,10 @@ public:
 
 
     /// get XForms model
-    css::uno::Reference<css::xforms::XModel>
-        getModel() const { return mxModel;}
+    css::uno::Reference<css::xforms::XModel> getModel() const;
+
+    /// get the model implementation
+    xforms::Model* getModelImpl() const { return mxModel.get(); }
 
     /// set XForms model
     void setModel(
@@ -162,9 +164,6 @@ private:
     ///
     /// @throws css::uno::RuntimeException
     void liveCheck();
-
-    /// get the model implementation
-    xforms::Model* getModelImpl() const;
 
 protected:
 

@@ -436,7 +436,7 @@ void SAL_CALL Model::submitWithInteraction(
         Submission* pSubmission =
             comphelper::getFromUnoTunnel<Submission>( mxSubmissions->getItem( sID ) );
         OSL_ENSURE( pSubmission != nullptr, "no submission?" );
-        OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
+        OSL_ENSURE( pSubmission->getModelImpl() == this,
                     "wrong model" );
 
         // submit. All exceptions are allowed to leave.

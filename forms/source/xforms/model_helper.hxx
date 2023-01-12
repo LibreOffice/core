@@ -92,14 +92,14 @@ protected:
     {
         auto pSubmission = comphelper::getFromUnoTunnel<Submission>( t );
         OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
-        pSubmission->setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
+        pSubmission->setModel( mpModel );
     }
 
     virtual void _remove( const T& t ) override
     {
         auto pSubmission = comphelper::getFromUnoTunnel<Submission>( t );
         OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
-        pSubmission->setModel( css::uno::Reference<css::xforms::XModel>( ) );
+        pSubmission->setModel( nullptr );
     }
 };
 
