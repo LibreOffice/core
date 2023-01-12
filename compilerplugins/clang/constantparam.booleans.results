@@ -1191,7 +1191,7 @@ include/svx/nbdtmg.hxx:130
     unsigned short nFromIndex
     0
 include/svx/nbdtmg.hxx:131
-    void svx::sidebar::NBOTypeMgrBase::RelplaceNumRule(class SvxNumRule &,unsigned short,unsigned short)
+    void svx::sidebar::NBOTypeMgrBase::ReplaceNumRule(class SvxNumRule &,unsigned short,unsigned short)
     unsigned short mLevel
     1
 include/svx/nbdtmg.hxx:133
