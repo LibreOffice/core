@@ -1486,9 +1486,20 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
 
 void BitmapEx::DumpAsPng(const char* pFileName) const
 {
-    SvFileStream aStream(pFileName ? OUString::fromUtf8(pFileName)
-                                   : OUString("file:///tmp/bitmap.png"),
-                         StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    OUString sPath;
+    if (pFileName)
+    {
+        sPath = OUString::fromUtf8(pFileName);
+    }
+    else if (const char* pEnv = std::getenv("VCL_DUMP_BMP_PATH"))
+    {
+        sPath = OUString::fromUtf8(pEnv);
+    }
+    else
+    {
+        sPath = "file:///tmp/bitmap.png";
+    }
+    SvFileStream aStream(sPath, StreamMode::STD_READWRITE | StreamMode::TRUNC);
     assert(aStream.good());
     vcl::PngImageWriter aWriter(aStream);
     aWriter.write(*this);
