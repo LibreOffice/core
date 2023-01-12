@@ -880,33 +880,19 @@ rtl::Reference<SfxStyleSheetBase> SfxStyleSheetPool::Create( const OUString& rNa
 }
 
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, SfxStyleSearchBits _nMask )
-: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel>(_rName, _rPool, _eFamily, _nMask)
+: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle>(_rName, _rPool, _eFamily, _nMask)
 {
 }
 
 SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle )
 {
-    return comphelper::getFromUnoTunnel<SfxUnoStyleSheet>(xStyle);
-}
-
-/**
- * XUnoTunnel
- */
-::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const css::uno::Sequence< ::sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
+    return dynamic_cast<SfxUnoStyleSheet*>(xStyle.get());
 }
 
 void
 SfxStyleSheetBasePool::StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >& xStyle)
 {
     pImpl->mxIndexedStyleSheets->AddStyleSheet(xStyle);
-}
-
-const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSfxUnoStyleSheetIdentifier;
-    return theSfxUnoStyleSheetIdentifier.getSeq();
 }
 
 void
