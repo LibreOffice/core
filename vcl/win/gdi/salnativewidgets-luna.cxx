@@ -398,6 +398,10 @@ static bool implDrawNativeMenuMark(HDC hDC, HTHEME hTheme, RECT rc, ControlPart 
 
 bool UseDarkMode()
 {
+    static bool bOSSupportsDarkMode = OSSupportsDarkMode();
+    if (!bOSSupportsDarkMode)
+        false;
+
     HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!hUxthemeLib)
         return false;
