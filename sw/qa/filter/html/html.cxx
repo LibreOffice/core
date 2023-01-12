@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <test/htmltesttools.hxx>
 
 #include <vcl/gdimtf.hxx>
 
@@ -30,7 +31,7 @@ namespace
  * Keep using the various sw_<format>import/export suites for multiple filter calls inside a single
  * test.
  */
-class Test : public SwModelTestBase
+class Test : public SwModelTestBase, public HtmlTestTools
 {
 public:
     Test()
@@ -161,6 +162,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
     // i.e. sdval was written in XHTML mode.
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdval");
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdnum");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
+{
+    // Given a document with a 2x2 table, A1:A2 and B1:B2 is merged:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SwTableNode* pTableNode = pWrtShell->GetCursor()->GetPointNode().FindTableNode();
+    SwTable& rTable = pTableNode->GetTable();
+    auto pBox = const_cast<SwTableBox*>(rTable.GetTableBox("A1"));
+    pBox->setRowSpan(2);
+    pBox = const_cast<SwTableBox*>(rTable.GetTableBox("B1"));
+    pBox->setRowSpan(2);
+    pBox = const_cast<SwTableBox*>(rTable.GetTableBox("A2"));
+    pBox->setRowSpan(-1);
+    pBox = const_cast<SwTableBox*>(rTable.GetTableBox("B2"));
+    pBox->setRowSpan(-1);
+
+    // When exporting to HTML:
+    save("HTML (StarWriter)");
+
+    // Then make sure that the output is simplified to valid HTML, by omitting the rowspan attribute
+    // & the empty <tr> element:
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//tr[1]/td[1]' unexpected 'rowspan' attribute
+    // i.e. a combination of rowspan + empty <tr> was emitted.
+    assertXPathNoAttribute(pHtmlDoc, "//tr[1]/td[1]", "rowspan");
+    assertXPath(pHtmlDoc, "//tr", 1);
 }
 }
 
