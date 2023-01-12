@@ -475,6 +475,41 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
     CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_BREF_1"), aBookmark.get<std::string>("name"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue("Name",
+                                      uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When in the refmark with the cursor and getting the command value for .uno:Field:
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Field?typeName=SetRef&namePrefix=ZOTERO_ITEM%20CSL_CITATION");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we find the inserted refmark:
+    std::unique_ptr<char[], o3tl::free_delete> pJSON(aJsonWriter.extractData());
+    std::stringstream aStream(pJSON.get());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree aBookmark = aTree.get_child("setRef");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - No such node (setRef)
+    // i.e. the returned JSON was an empty object.
+    CPPUNIT_ASSERT_EQUAL(std::string("ZOTERO_ITEM CSL_CITATION {} refmark"),
+                         aBookmark.get<std::string>("name"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
