@@ -1003,13 +1003,20 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
             m_pSortedObjs.reset();
         }
 
-        // Removing a fly from the page affects the margin of e.g. tables, so update the frame print
-        // area of the lowers of my body frame.
+        // Removing a fly from the page affects the margin of tables, so update the frame print area
+        // of the lowers of my body frame.
         SwFrame* pBodyFrame = FindBodyCont();
         if (pBodyFrame)
         {
             for (SwFrame* pFrame = pBodyFrame->GetLower(); pFrame; pFrame = pFrame->GetNext())
             {
+                if (!pFrame->IsTabFrame())
+                {
+                    // This is meant to match SwTabFrame::CalcFlyOffsets(), so not relevant for
+                    // other frame types.
+                    continue;
+                }
+
                 pFrame->InvalidatePrt();
             }
         }

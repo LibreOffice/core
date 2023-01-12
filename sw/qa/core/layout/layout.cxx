@@ -917,6 +917,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(0), nActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyNoTable)
+{
+    createSwDoc("page-remove-fly-no-table.fodt");
+    // This never returned.
+    calcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
