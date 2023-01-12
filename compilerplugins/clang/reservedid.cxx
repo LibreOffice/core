@@ -169,6 +169,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // vcl/source/window/cairo_cairo.cxx -> include/vcl/sysdata.hxx
             && s != "__CxxDetectRethrow"
                 // bridges/source/cpp_uno/msvc_win32_x86-64/mscx.hxx
+            && s != "__ImageBase"
+                // bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx, MS linker magic
             && s != "__PK11_GetKeyData"
                 // xmlsecurity/source/xmlsec/nss/nssrenam.h
             && s != "__current_exception" // bridges/inc/except.hxx, Windows
