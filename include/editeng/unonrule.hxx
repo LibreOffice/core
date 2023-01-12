@@ -23,12 +23,10 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <editeng/editengdllapi.h>
-#include <cppuhelper/implbase5.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <editeng/numitem.hxx>
-#include <comphelper/servicehelper.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
@@ -38,16 +36,14 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() noexcept;
 
-class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper5< css::container::XIndexReplace, css::ucb::XAnyCompare,
-    css::lang::XUnoTunnel, css::util::XCloneable, css::lang::XServiceInfo >
+class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper4< css::container::XIndexReplace, css::ucb::XAnyCompare,
+    css::util::XCloneable, css::lang::XServiceInfo >
 {
 private:
     SvxNumRule maRule;
 public:
     SvxUnoNumberingRules(SvxNumRule aRule);
     virtual ~SvxUnoNumberingRules() noexcept override;
-
-    UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
 
     //XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
