@@ -328,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     pDoc = getScDoc();
 
     // Change grammar to Excel A1
-    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    FormulaGrammarSwitch aFGSwitch(pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
     // Insert the reference to the external document
     OUString aFormula = "=['" + maTempFile.GetURL() + "']Sheet1!A1";
@@ -338,9 +338,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     // - Expected: 50
     // - Actual  : Err:507
     CPPUNIT_ASSERT_EQUAL(OUString("50"), pDoc->GetString(ScAddress(0, 0, 0)));
-
-    // Change grammar to default
-    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
@@ -1375,6 +1372,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf102525)
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 3, 0));
 
     CPPUNIT_ASSERT_EQUAL(OUString("{=IF(A1:A4>2,1,2)}"), pDoc->GetFormula(1, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf39650)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    FormulaGrammarSwitch aFGSwitch(pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    insertStringToCell("R3C3", u"xxx");
+    insertStringToCell("R2C2", u"=R[1]C[1]");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=R[1]C[1]"), pDoc->GetFormula(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("xxx"), pDoc->GetString(1, 1, 0));
+
+    goToCell("B2");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F4);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=R3C3"), pDoc->GetFormula(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("xxx"), pDoc->GetString(1, 1, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)

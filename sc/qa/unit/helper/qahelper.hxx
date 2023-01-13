@@ -92,7 +92,7 @@ inline std::string print(const ScAddress& rAddr)
 /**
  * Temporarily set formula grammar.
  */
-class FormulaGrammarSwitch
+class SCQAHELPER_DLLPUBLIC FormulaGrammarSwitch
 {
     ScDocument* mpDoc;
     formula::FormulaGrammar::Grammar meOldGrammar;
