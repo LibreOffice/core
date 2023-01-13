@@ -6576,6 +6576,20 @@ SfxVoidItem UpdateFields FN_UPDATE_FIELDS
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem UpdateField FN_UPDATE_FIELD
+(SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2, SfxUnoAnyItem Field FN_PARAM_3)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem UpdateInputFields FN_UPDATE_INPUTFIELDS
 ()
 [
