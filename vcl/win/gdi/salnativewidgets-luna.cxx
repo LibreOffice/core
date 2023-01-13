@@ -400,7 +400,7 @@ bool UseDarkMode()
 {
     static bool bOSSupportsDarkMode = OSSupportsDarkMode();
     if (!bOSSupportsDarkMode)
-        false;
+        return false;
 
     HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!hUxthemeLib)
