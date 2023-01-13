@@ -57,19 +57,6 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
     m_xAttrList = nullptr;
 }
 
-const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theXMLMutableAttributeListUnoTunnelId;
-    return theXMLMutableAttributeListUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
-        const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 sal_Int16 SAL_CALL XMLMutableAttributeList::getLength()
 {
     return m_xAttrList->getLength();

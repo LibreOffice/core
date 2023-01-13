@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -30,8 +29,7 @@ class SvXMLAttributeList;
 
 class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
-        css::util::XCloneable,
-        css::lang::XUnoTunnel>
+        css::util::XCloneable>
 {
     css::uno::Reference< css::xml::sax::XAttributeList> m_xAttrList;
 
@@ -45,10 +43,6 @@ public:
         css::xml::sax::XAttributeList> & rAttrList,
            bool bClone=false );
     virtual ~XMLMutableAttributeList() override;
-
-    // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength() override;
