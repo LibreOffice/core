@@ -99,10 +99,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (m_aStates.top().getDestination() == Destination::FOOTNOTESEPARATOR)
                 break; // just ignore it - only thing we read in here is CHFTNSEP
             checkFirstRun();
-            bool bNeedPap = m_bNeedPap;
             checkNeedPap();
-            if (bNeedPap)
-                runProps();
+            runProps(); // tdf#152872 paragraph marker formatting
             if (!m_aStates.top().getCurrentBuffer())
             {
                 parBreak();

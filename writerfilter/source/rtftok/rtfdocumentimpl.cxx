@@ -625,7 +625,8 @@ void RTFDocumentImpl::runProps()
     {
         auto pValue = new RTFValue(m_aStates.top().getCharacterAttributes(),
                                    m_aStates.top().getCharacterSprms());
-        bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
+        bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr,
+                         NS_ooxml::LN_Value_ST_StyleType_character);
     }
 
     // Delete the sprm, so the trackchange range will be started only once.
@@ -1717,11 +1718,13 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
     {
         Buf_t aTuple(rBuffer.front());
         rBuffer.pop_front();
-        if (std::get<0>(aTuple) == BUFFER_PROPS)
+        if (std::get<0>(aTuple) == BUFFER_PROPS || std::get<0>(aTuple) == BUFFER_PROPS_CHAR)
         {
             // Construct properties via getProperties() and not directly, to take care of deduplication.
             writerfilter::Reference<Properties>::Pointer_t const pProp(getProperties(
-                std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(), 0));
+                std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
+                std::get<0>(aTuple) == BUFFER_PROPS_CHAR ? NS_ooxml::LN_Value_ST_StyleType_character
+                                                         : 0));
             Mapper().props(pProp);
         }
         else if (std::get<0>(aTuple) == BUFFER_NESTROW)
@@ -3814,11 +3817,15 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 void RTFDocumentImpl::resetFrame() { m_aStates.top().getFrame() = RTFFrame(&m_aStates.top()); }
 
 void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
-                                       const tools::SvRef<TableRowBuffer>& pTableProperties)
+                                       const tools::SvRef<TableRowBuffer>& pTableProperties,
+                                       Id const nStyleType)
 {
     rBuffer.emplace_back(BUFFER_SETSTYLE, new RTFValue(m_aStates.top().getCurrentStyleIndex()),
                          nullptr);
-    rBuffer.emplace_back(BUFFER_PROPS, pValue, pTableProperties);
+    assert(nStyleType == 0 || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character);
+    rBuffer.emplace_back(nStyleType == NS_ooxml::LN_Value_ST_StyleType_character ? BUFFER_PROPS_CHAR
+                                                                                 : BUFFER_PROPS,
+                         pValue, pTableProperties);
 }
 
 RTFShape::RTFShape() = default;
