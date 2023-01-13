@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weak.hxx>
@@ -54,7 +53,6 @@ class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,
                                     public css::awt::XPopupMenu,
                                     public css::lang::XServiceInfo,
                                     public css::lang::XTypeProvider,
-                                    public css::lang::XUnoTunnel,
                                     public ::cppu::OWeakObject
 {
 private:
@@ -86,9 +84,6 @@ public:
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXMenu)
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;

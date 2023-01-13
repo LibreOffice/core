@@ -214,21 +214,17 @@ css::uno::Any VCLXMenu::queryInterface(
                                         static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)),
                                         static_cast< css::awt::XPopupMenu* >(this),
                                         static_cast< css::lang::XTypeProvider* >(this),
-                                        static_cast< css::lang::XServiceInfo* >(this),
-                                        static_cast< css::lang::XUnoTunnel* >(this) );
+                                        static_cast< css::lang::XServiceInfo* >(this) );
     else
         aRet = ::cppu::queryInterface(  rType,
                                         static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)),
                                         static_cast< css::awt::XMenuBar* >(this),
                                         static_cast< css::lang::XTypeProvider* >(this),
-                                        static_cast< css::lang::XServiceInfo* >(this),
-                                        static_cast< css::lang::XUnoTunnel* >(this) );
+                                        static_cast< css::lang::XServiceInfo* >(this) );
 
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-
-UNO3_GETIMPLEMENTATION_IMPL( VCLXMenu );
 
 css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 {
@@ -385,7 +381,7 @@ void VCLXMenu::setPopupMenu(
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
 
-    VCLXMenu* pVCLMenu = comphelper::getFromUnoTunnel<VCLXMenu>( rxPopupMenu );
+    VCLXMenu* pVCLMenu = dynamic_cast<VCLXMenu*>( rxPopupMenu.get() );
     DBG_ASSERT( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu(), "setPopupMenu: Invalid Menu!" );
 
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )

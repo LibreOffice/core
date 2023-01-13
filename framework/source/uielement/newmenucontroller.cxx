@@ -283,7 +283,7 @@ NewMenuController::~NewMenuController()
 // private function
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
+    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(dynamic_cast<VCLXMenu*>( rPopupMenu.get() ));
     PopupMenu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
@@ -367,7 +367,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     if ( !xPopupMenu.is() )
         return;
 
-    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu ));
+    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(dynamic_cast<VCLXMenu*>( xPopupMenu.get() ));
     if ( !pPopupMenu )
         return;
 
