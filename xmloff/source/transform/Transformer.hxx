@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -28,8 +27,7 @@
 class XMLTransformer : public ::cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
              css::lang::XServiceInfo,
-             css::lang::XInitialization,
-             css::lang::XUnoTunnel>
+             css::lang::XInitialization>
 {
 };
 

@@ -1943,18 +1943,6 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() noexcept
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
 
-const css::uno::Sequence<sal_Int8>& Oasis2OOoTransformer::getUnoTunnelId() noexcept
-{
-    static const class comphelper::UnoIdInit theOasis2OOoTransformerUnoTunnelId;
-    return theOasis2OOoTransformerUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 // XServiceInfo
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
 {

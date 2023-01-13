@@ -1950,18 +1950,6 @@ void OOo2OasisTransformer::Initialize(
     }
 }
 
-const css::uno::Sequence<sal_Int8>& OOo2OasisTransformer::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theOOo2OasisTransformerUnoTunnelId;
-    return theOOo2OasisTransformerUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 // XServiceInfo
 OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
 {

@@ -77,10 +77,6 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-    // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 

@@ -48,10 +48,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
     virtual OUString GetEventName( const OUString& rName,
                                              bool bForm = false ) override;
 };
