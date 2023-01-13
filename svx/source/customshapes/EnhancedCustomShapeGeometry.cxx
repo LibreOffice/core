@@ -8506,19 +8506,14 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptCurvedConnector5 :          pCustomShape = &msoCurvedConnector5; break;
 
         // Don't know, simply mapping to TextSimple
-        case mso_sptTextOnRing :
-        case mso_sptTextOnCurve :
-        case mso_sptTextRing :
-        case mso_sptTextWave :
-        case mso_sptTextCurve :
-        case mso_sptTextHexagon :
-        case mso_sptTextOctagon :
         case mso_sptTextBox :                   pCustomShape = &msoTextSimple; break;
 
         // FontWork
         case mso_sptTextSimple :
         case mso_sptTextPlainText :             pCustomShape = &msoTextPlainText; break;
+        case mso_sptTextOctagon :
         case mso_sptTextStop :                  pCustomShape = &msoTextStop; break;
+        case mso_sptTextHexagon :
         case mso_sptTextTriangle :              pCustomShape = &msoTextTriangle; break;
         case mso_sptTextTriangleInverted :      pCustomShape = &msoTextTriangleInverted; break;
         case mso_sptTextChevron :               pCustomShape = &msoTextChevron; break;
@@ -8533,10 +8528,12 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextSlantDown :             pCustomShape = &msoTextSlantDown; break;
         case mso_sptTextCascadeUp :             pCustomShape = &msoTextCascadeUp; break;
         case mso_sptTextCascadeDown :           pCustomShape = &msoTextCascadeDown; break;
+        case mso_sptTextOnRing :
         case mso_sptTextArchUpCurve :           pCustomShape = &msoTextArchUpCurve; break;
         case mso_sptTextArchDownCurve :         pCustomShape = &msoTextArchDownCurve; break;
         case mso_sptTextCircleCurve :           pCustomShape = &msoTextCircleCurve; break;
         case mso_sptTextButtonCurve :           pCustomShape = &msoTextButtonCurve; break;
+        case mso_sptTextRing :
         case mso_sptTextArchUpPour :            pCustomShape = &msoTextArchUpPour; break;
         case mso_sptTextArchDownPour :          pCustomShape = &msoTextArchDownPour; break;
         case mso_sptTextCirclePour :            pCustomShape = &msoTextCirclePour; break;
@@ -8544,6 +8541,8 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextCurveUp :               pCustomShape = &msoTextCurveUp; break;
         case mso_sptTextCurveDown :             pCustomShape = &msoTextCurveDown; break;
         case mso_sptTextCanUp :                 pCustomShape = &msoTextCanUp; break;
+        case mso_sptTextCurve :
+        case mso_sptTextOnCurve :
         case mso_sptTextCanDown :               pCustomShape = &msoTextCanDown; break;
         case mso_sptTextInflate :               pCustomShape = &msoTextInflate; break;
         case mso_sptTextDeflate :               pCustomShape = &msoTextDeflate; break;
@@ -8553,6 +8552,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextDeflateTop :            pCustomShape = &msoTextDeflateTop; break;
         case mso_sptTextDeflateInflate :        pCustomShape = &msoTextDeflateInflate; break;
         case mso_sptTextDeflateInflateDeflate : pCustomShape = &msoTextDeflateInflateDeflate; break;
+        case mso_sptTextWave :
         case mso_sptTextWave1 :                 pCustomShape = &msoTextWave1; break;
         case mso_sptTextWave2 :                 pCustomShape = &msoTextWave2; break;
         case mso_sptTextWave3 :                 pCustomShape = &msoTextWave3; break;
