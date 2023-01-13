@@ -457,9 +457,6 @@ void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCe
     }
 }
 
-/* XUnoTunnel */
-UNO3_GETIMPLEMENTATION_IMPL(X509Certificate_MSCryptImpl);
-
 static OUString findOIDDescription(char const *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );

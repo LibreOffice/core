@@ -30,7 +30,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
@@ -39,7 +38,6 @@
 
 class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::security::XCertificate ,
-    css::lang::XUnoTunnel,
     css::lang::XServiceInfo > , public xmlsecurity::Certificate
 {
     private:
@@ -71,9 +69,6 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
 
 
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override;
-
-        //Methods from XUnoTunnel
-        UNO3_GETIMPLEMENTATION_DECL(X509Certificate_MSCryptImpl)
 
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
         virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
