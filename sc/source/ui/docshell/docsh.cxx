@@ -589,6 +589,8 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     {
         if (m_pDocument->GetDrawLayer())
             m_pDocument->GetDrawLayer()->SetAnchoredTextOverflowLegacy(true);
+        if (m_pDocument->GetDrawLayer())
+            m_pDocument->GetDrawLayer()->SetLegacySingleLineFontwork(true); //for tdf#148000
     }
 
     GetUndoManager()->Clear();

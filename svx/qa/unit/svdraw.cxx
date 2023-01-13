@@ -382,6 +382,48 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
                 "32");
 }
 
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
+{
+    std::vector<OUString> aFilenames
+        = { u"tdf148000_EOLinCurvedText.pptx", u"tdf148000_EOLinCurvedText_New.odp",
+            u"tdf148000_EOLinCurvedText_Legacy.odp" };
+
+    for (int i = 0; i < 3; i++)
+    {
+        loadFromURL(aFilenames[i]);
+
+        SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+        xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+        OString aBasePath
+            = "/primitive2D/objectinfo[4]/unhandled/unhandled/polypolygoncolor/polypolygon/";
+
+        // The text is: "O" + eop + "O" + eol + "O"
+        // It should be displayed as 3 line of text. (1 "O" letter in every line)
+        sal_Int32 nY1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "y").toInt32();
+        sal_Int32 nY2 = getXPath(pXmlDoc, aBasePath + "polygon[3]/point[1]", "y").toInt32();
+        sal_Int32 nY3 = getXPath(pXmlDoc, aBasePath + "polygon[5]/point[1]", "y").toInt32();
+
+        sal_Int32 nDiff21 = nY2 - nY1;
+        sal_Int32 nDiff32 = nY3 - nY2;
+
+        // the 2. "O" must be positioned much lower as the 1. "O". (the eop break the line)
+        CPPUNIT_ASSERT_GREATER(sal_Int32(300), nDiff21);
+        if (i < 2)
+        {
+            // the 3. "O" must be positioned even lower with 1 line. (the eol must break the line as well)
+            CPPUNIT_ASSERT_LESS(sal_Int32(50), abs(nDiff32 - nDiff21));
+        }
+        else
+        {
+            // In legacy mode, the 3. "O" must be positioned about the same high as the 2. "O"
+            // the eol not break the line.
+            CPPUNIT_ASSERT_LESS(sal_Int32(50), nDiff32);
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 {
     loadFromURL(u"tdf140321_metal.odp");
