@@ -1342,6 +1342,41 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95306)
     CPPUNIT_ASSERT(!pDoc->ColHidden(4, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf102525)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell("A1", u"1");
+    insertStringToCell("A2", u"2");
+    insertStringToCell("A3", u"3");
+    insertStringToCell("A4", u"4");
+
+    insertArrayToCell("B1", u"=IF(A1:A4>2,1,2)");
+    goToCell("B1:B4");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F4);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 3, 0));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("{=IF($A$1:$A$4>2,1,2)}"), pDoc->GetFormula(1, 0, 0));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 3, 0));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("{=IF(A1:A4>2,1,2)}"), pDoc->GetFormula(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
 {
     createScDoc();
