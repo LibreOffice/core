@@ -110,9 +110,8 @@ SAL_CALL XMLSignature_NssImpl::generate(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pElement
-        = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xNodTunnel);
+        = dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -192,9 +191,8 @@ SAL_CALL XMLSignature_NssImpl::validate(
     if( !xElement.is() )
         throw RuntimeException() ;
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pElement
-        = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xNodTunnel);
+        = dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
     if( pElement == nullptr )
         throw RuntimeException() ;
 

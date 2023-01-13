@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
@@ -30,7 +29,6 @@
 class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLElementWrapper,
-    css::lang::XUnoTunnel,
     css::lang::XServiceInfo
 >
 /****** XMLElementWrapper_XmlSecImpl.hxx/CLASS XMLElementWrapper_XmlSecImpl ***
@@ -51,11 +49,6 @@ public:
     explicit XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNode);
 
     /* XXMLElementWrapper */
-
-    /* css::lang::XUnoTunnel */
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-    /// @throws css::uno::RuntimeException
-    static const css::uno::Sequence < sal_Int8 > & getUnoTunnelId();
 
     /* css::lang::XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;

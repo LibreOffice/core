@@ -78,7 +78,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     }
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
+        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -282,7 +282,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         throw RuntimeException() ;
 
     XMLElementWrapper_XmlSecImpl* pElement =
-        comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
+        dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
     if( pElement == nullptr )
         throw RuntimeException() ;
 
