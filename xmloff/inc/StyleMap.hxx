@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/hash_combine.hxx>
@@ -64,7 +63,7 @@ inline bool StyleNameHash_Impl::operator()(
 }
 
 class StyleMap final :
-    public ::cppu::WeakImplHelper< css::lang::XUnoTunnel>,
+    public ::cppu::WeakImplHelper<>,
     public std::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {
@@ -73,9 +72,6 @@ public:
 
     StyleMap();
     virtual ~StyleMap() override;
-
-    // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(StyleMap)
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

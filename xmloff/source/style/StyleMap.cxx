@@ -26,7 +26,4 @@ StyleMap::StyleMap() {}
 
 StyleMap::~StyleMap() {}
 
-// XUnoTunnel & co
-UNO3_GETIMPLEMENTATION_IMPL(StyleMap);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

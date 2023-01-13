@@ -982,7 +982,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= xIfc;
 
-                    StyleMap *pSMap = comphelper::getFromUnoTunnel<StyleMap>( xIfc );
+                    StyleMap *pSMap = dynamic_cast<StyleMap*>( xIfc.get() );
                     if( pSMap )
                     {
                         mpStyleMap = pSMap;
@@ -1393,7 +1393,7 @@ void SvXMLImport::AddStyleDisplayName( XmlStyleFamily nFamily,
                 xPropertySetInfo->hasPropertyByName(sPrivateData) )
             {
                 Reference < XInterface > xIfc(
-                        static_cast< css::lang::XUnoTunnel *>( mpStyleMap.get() ) );
+                        static_cast< css::lang::XTypeProvider *>( mpStyleMap.get() ) );
                 mxImportInfo->setPropertyValue( sPrivateData, Any(xIfc) );
             }
         }
