@@ -95,7 +95,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     //Get Keys Manager
     SecurityEnvironmentGpg* pSecEnv =
-        comphelper::getFromUnoTunnel<SecurityEnvironmentGpg>(aEnvironment);
+        dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -306,7 +306,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
         SecurityEnvironmentGpg* pSecEnv =
-            comphelper::getFromUnoTunnel<SecurityEnvironmentGpg>(aEnvironment);
+            dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
 

@@ -18,13 +18,11 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 namespace com::sun::star::security { class XCertificate; }
 namespace GpgME { class Context; }
 
-class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment,
-                                                            css::lang::XUnoTunnel >
+class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment >
 {
     std::unique_ptr<GpgME::Context> m_ctx;
 
@@ -43,11 +41,6 @@ public:
     virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const css::uno::Reference< css::security::XCertificate >& xCert ) override;
 
     virtual OUString SAL_CALL getSecurityEnvironmentInformation() override;
-
-    //Methods from XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
     virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
 

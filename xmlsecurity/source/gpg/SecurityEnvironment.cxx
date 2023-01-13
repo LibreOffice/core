@@ -90,23 +90,6 @@ SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
 {
 }
 
-/* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-/* XUnoTunnel extension */
-
-namespace
-{
-}
-
-const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
-    static const comphelper::UnoIdInit theSecurityEnvironmentUnoTunnelId;
-    return theSecurityEnvironmentUnoTunnelId.getSeq();
-}
-
 OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 {
     return OUString();
