@@ -151,19 +151,6 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl::getSupportedServiceNa
     return seqServiceNames;
 }
 
-/* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-/* XUnoTunnel extension */
-
-const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
-    static const comphelper::UnoIdInit theSecurityEnvironment_NssImplUnoTunnelId;
-    return theSecurityEnvironment_NssImplUnoTunnelId.getSeq();
-}
-
 OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()
 {
     OUStringBuffer buff;

@@ -128,11 +128,10 @@ SAL_CALL XMLSignature_NssImpl::generate(
     }
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
 
     // the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
     SecurityEnvironment_NssImpl* pSecEnv
-        = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecTunnel);
+        = dynamic_cast<SecurityEnvironment_NssImpl*>(aEnvironment.get());
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -219,9 +218,8 @@ SAL_CALL XMLSignature_NssImpl::validate(
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
         //Get Keys Manager
-        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
         SecurityEnvironment_NssImpl* pSecEnv
-            = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecTunnel);
+            = dynamic_cast<SecurityEnvironment_NssImpl*>(aEnvironment.get());
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
 

@@ -58,8 +58,7 @@ uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
         uno::Reference< css::xml::crypto::XXMLSecurityContext > xSecCtx = css::xml::crypto::XMLSecurityContext::create( m_xContext );
 
         uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = css::xml::crypto::SecurityEnvironment::create( m_xContext );
-        uno::Reference< lang::XUnoTunnel > xSecEnvTunnel(xSecEnv, uno::UNO_QUERY_THROW);
-        SecurityEnvironment_NssImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecEnvTunnel);
+        SecurityEnvironment_NssImpl* pSecEnv = dynamic_cast<SecurityEnvironment_NssImpl*>(xSecEnv.get());
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
