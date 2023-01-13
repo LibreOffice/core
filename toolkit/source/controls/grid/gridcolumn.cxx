@@ -274,19 +274,6 @@ namespace toolkit
     {
         return new GridColumn( *this );
     }
-
-
-    sal_Int64 SAL_CALL GridColumn::getSomething( const Sequence< sal_Int8 >& i_identifier )
-    {
-        return comphelper::getSomethingImpl(i_identifier, this);
-    }
-
-
-    const Sequence< sal_Int8 > & GridColumn::getUnoTunnelId() noexcept
-    {
-        static const comphelper::UnoIdInit aId;
-        return aId.getSeq();
-    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

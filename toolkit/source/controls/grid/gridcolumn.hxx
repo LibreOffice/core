@@ -22,7 +22,6 @@
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
 #include <comphelper/compbase.hxx>
@@ -33,7 +32,6 @@ namespace toolkit
 
 typedef comphelper::WeakComponentImplHelper    <   css::awt::grid::XGridColumn
                                             ,   css::lang::XServiceInfo
-                                            ,   css::lang::XUnoTunnel
                                             >   GridColumn_Base;
 class GridColumn final : public GridColumn_Base
 {
@@ -77,10 +75,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XUnoTunnel and friends
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& i_identifier ) override;
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
 
     // attribute access
     void setIndex( sal_Int32 const i_index );

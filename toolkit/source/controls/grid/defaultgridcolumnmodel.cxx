@@ -85,7 +85,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 private:
-    typedef ::std::vector< css::uno::Reference< css::awt::grid::XGridColumn > >   Columns;
+    typedef ::std::vector< rtl::Reference< GridColumn > >   Columns;
 
     ::comphelper::OInterfaceContainerHelper3<XContainerListener> m_aContainerListeners;
     Columns                             m_aColumns;
@@ -111,16 +111,9 @@ private:
                     ++col
                 )
             {
-                Reference< css::util::XCloneable > const xCloneable( *col, UNO_QUERY_THROW );
-                Reference< XGridColumn > const xClone( xCloneable->createClone(), UNO_QUERY_THROW );
+                rtl::Reference< GridColumn > const xClone( new GridColumn(**col) );
 
-                GridColumn* const pGridColumn = comphelper::getFromUnoTunnel<GridColumn>( xClone );
-                if ( pGridColumn == nullptr )
-                    throw RuntimeException( "invalid clone source implementation", *this );
-                    // that's indeed a RuntimeException, not an IllegalArgumentException or some such:
-                    // a DefaultGridColumnModel implementation whose columns are not GridColumn implementations
-                    // is borked.
-                pGridColumn->setIndex( col - i_copySource.m_aColumns.begin() );
+                xClone->setIndex( col - i_copySource.m_aColumns.begin() );
 
                 aColumns.push_back( xClone );
             }
@@ -150,11 +143,11 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        GridColumn* const pGridColumn = comphelper::getFromUnoTunnel<GridColumn>( i_column );
+        GridColumn* const pGridColumn = dynamic_cast<GridColumn*>( i_column.get() );
         if ( pGridColumn == nullptr )
             throw css::lang::IllegalArgumentException( "invalid column implementation", *this, 1 );
 
-        m_aColumns.push_back( i_column );
+        m_aColumns.push_back( pGridColumn );
         sal_Int32 index = m_aColumns.size() - 1;
         pGridColumn->setIndex( index );
 
@@ -189,13 +182,7 @@ private:
                 ++updatePos, ++columnIndex
             )
         {
-            GridColumn* pColumnImpl = comphelper::getFromUnoTunnel<GridColumn>( *updatePos );
-            if ( !pColumnImpl )
-            {
-                SAL_WARN( "toolkit.controls", "DefaultGridColumnModel::removeColumn: invalid column implementation!" );
-                continue;
-            }
-
+            GridColumn* pColumnImpl = updatePos->get();
             pColumnImpl->setIndex( columnIndex );
         }
 
@@ -223,7 +210,7 @@ private:
     Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns()
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return ::comphelper::containerToSequence( m_aColumns );
+        return ::comphelper::containerToSequence<Reference<XGridColumn>>( m_aColumns );
     }
 
 
@@ -254,7 +241,7 @@ private:
                 ContainerEvent aEvent;
                 aEvent.Source = *this;
                 aEvent.Accessor <<= sal_Int32( lastColIndex );
-                aEvent.Element <<= m_aColumns[ lastColIndex ];
+                aEvent.Element <<= Reference<XGridColumn>(m_aColumns[ lastColIndex ]);
                 aRemovedColumns.push_back( aEvent );
 
                 m_aColumns.erase( m_aColumns.begin() + lastColIndex );
@@ -264,7 +251,6 @@ private:
             for ( sal_Int32 i=0; i<rowElements; ++i )
             {
                 ::rtl::Reference< GridColumn > const pGridColumn = new GridColumn();
-                Reference< XGridColumn > const xColumn( pGridColumn );
                 OUString colTitle = "Column " + OUString::number( i + 1 );
                 pGridColumn->setTitle( colTitle );
                 pGridColumn->setColumnWidth( 80 /* APPFONT */ );
@@ -275,10 +261,10 @@ private:
                 ContainerEvent aEvent;
                 aEvent.Source = *this;
                 aEvent.Accessor <<= i;
-                aEvent.Element <<= xColumn;
+                aEvent.Element <<= Reference<XGridColumn>(pGridColumn);
                 aInsertedColumns.push_back( aEvent );
 
-                m_aColumns.push_back( xColumn );
+                m_aColumns.push_back( pGridColumn );
                 pGridColumn->setIndex( i );
             }
         }
@@ -355,8 +341,7 @@ private:
         {
             try
             {
-                const Reference< XComponent > xColComponent( m_aColumns[ 0 ], UNO_QUERY_THROW );
-                xColComponent->dispose();
+                m_aColumns[ 0 ]->dispose();
             }
             catch( const Exception& )
             {
