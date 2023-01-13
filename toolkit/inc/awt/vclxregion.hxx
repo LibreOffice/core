@@ -21,7 +21,6 @@
 
 
 #include <com/sun/star/awt/XRegion.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
@@ -32,8 +31,7 @@
 
 
 class VCLXRegion final : public cppu::WeakImplHelper<
-                            css::awt::XRegion,
-                            css::lang::XUnoTunnel>
+                            css::awt::XRegion>
 {
     std::mutex    maMutex;
     vcl::Region          maRegion;
@@ -43,9 +41,6 @@ public:
                     virtual ~VCLXRegion() override;
 
     const vcl::Region&   GetRegion() const                   { return maRegion; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXRegion)
 
     // css::awt::XRegion
      css::awt::Rectangle       SAL_CALL getBounds() override;

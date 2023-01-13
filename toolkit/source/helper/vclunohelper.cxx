@@ -123,7 +123,7 @@ vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWind
 vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     vcl::Region aRegion;
-    VCLXRegion* pVCLRegion = comphelper::getFromUnoTunnel<VCLXRegion>( rxRegion );
+    VCLXRegion* pVCLRegion = dynamic_cast<VCLXRegion*>( rxRegion.get() );
     if ( pVCLRegion )
         aRegion = pVCLRegion->GetRegion();
     else

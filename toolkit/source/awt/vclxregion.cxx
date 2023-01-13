@@ -31,9 +31,6 @@ VCLXRegion::~VCLXRegion()
 {
 }
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXRegion );
-
 css::awt::Rectangle VCLXRegion::getBounds()
 {
     std::scoped_lock aGuard( maMutex );
