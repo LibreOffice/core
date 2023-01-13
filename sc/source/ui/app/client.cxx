@@ -202,6 +202,12 @@ void ScClient::ViewChanged()
     if (!pDrawObj)
         return;
 
+    if (!IsObjectInPlaceActive())
+    {
+        pDrawObj->ActionChanged();
+        return;
+    }
+
     tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
     Fraction aFractX = GetScaleWidth() * aVisSize.Width();
     Fraction aFractY = GetScaleHeight() * aVisSize.Height();
