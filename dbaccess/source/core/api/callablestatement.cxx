@@ -84,7 +84,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 {
     MutexGuard aGuard(m_aMutex);
 
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY_THROW)->registerOutParameter( parameterIndex, sqlType, typeName );
 }
@@ -92,7 +92,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY_THROW)->registerNumericOutParameter( parameterIndex, sqlType, scale );
 }
@@ -101,7 +101,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 sal_Bool SAL_CALL OCallableStatement::wasNull(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->wasNull();
 }
@@ -109,7 +109,7 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  )
 OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getString( columnIndex );
 }
@@ -117,7 +117,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
 sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getBoolean( columnIndex );
 }
@@ -125,7 +125,7 @@ sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getByte( columnIndex );
 }
@@ -133,63 +133,63 @@ sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
 sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getShort( columnIndex );
 }
 
 sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getInt( columnIndex );
 }
 
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getLong( columnIndex );
 }
 
 float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getFloat( columnIndex );
 }
 
 double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getDouble( columnIndex );
 }
 
 Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getBytes( columnIndex );
 }
 
 css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getDate( columnIndex );
 }
 
 css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getTime( columnIndex );
 }
 
 css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getTimestamp( columnIndex );
 }
@@ -197,7 +197,7 @@ css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnI
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getBinaryStream( columnIndex );
 }
@@ -205,7 +205,7 @@ Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream(
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getCharacterStream( columnIndex );
 }
@@ -213,7 +213,7 @@ Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStre
 Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getObject( columnIndex, typeMap );
 }
@@ -221,28 +221,28 @@ Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Referen
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getRef( columnIndex );
 }
 
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getBlob( columnIndex );
 }
 
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getClob( columnIndex );
 }
 
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getArray( columnIndex );
 }
 

@@ -2737,7 +2737,7 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 
 ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
              :OSubComponent(m_aMutex, rParent)
-             ,ORowSetBase( _rContext, OComponentHelper::rBHelper, _pMutex )
+             ,ORowSetBase( _rContext, WeakComponentImplHelper::rBHelper, _pMutex )
              ,m_pParent(&rParent)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
@@ -2883,7 +2883,7 @@ void ORowSetClone::close()
 {
     {
         MutexGuard aGuard( m_aMutex );
-        if (OComponentHelper::rBHelper.bDisposed)
+        if (WeakComponentImplHelper::rBHelper.bDisposed)
             throw DisposedException();
     }
     dispose();

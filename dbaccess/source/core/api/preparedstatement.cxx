@@ -135,7 +135,7 @@ void OPreparedStatement::disposing()
 Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // do we have to populate the columns
     if (!m_pColumns->isInitialized())
@@ -175,7 +175,7 @@ Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
 Reference< XResultSetMetaData > OPreparedStatement::getMetaData()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     return Reference< XResultSetMetaDataSupplier >( m_xAggregateAsSet, UNO_QUERY_THROW )->getMetaData();
 }
 
@@ -183,7 +183,7 @@ Reference< XResultSetMetaData > OPreparedStatement::getMetaData()
 Reference< XResultSet >  OPreparedStatement::executeQuery()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -202,7 +202,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery()
 sal_Int32 OPreparedStatement::executeUpdate()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -212,7 +212,7 @@ sal_Int32 OPreparedStatement::executeUpdate()
 sal_Bool OPreparedStatement::execute()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -228,7 +228,7 @@ Reference< XConnection > OPreparedStatement::getConnection()
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setNull(parameterIndex, sqlType);
 }
@@ -236,7 +236,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObjectNull(parameterIndex, sqlType, typeName);
 }
@@ -244,7 +244,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBoolean(parameterIndex, x);
 }
@@ -252,7 +252,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setByte(parameterIndex, x);
 }
@@ -260,7 +260,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setShort(parameterIndex, x);
 }
@@ -268,7 +268,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setInt(parameterIndex, x);
 }
@@ -276,7 +276,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setLong(parameterIndex, x);
 }
@@ -284,7 +284,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setFloat(parameterIndex, x);
 }
@@ -292,7 +292,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setDouble(parameterIndex, x);
 }
@@ -300,7 +300,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setString(parameterIndex, x);
 }
@@ -308,7 +308,7 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUS
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBytes(parameterIndex, x);
 }
@@ -316,7 +316,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setDate(parameterIndex, x);
 }
@@ -324,7 +324,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setTime(parameterIndex, x);
 }
@@ -332,7 +332,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setTimestamp(parameterIndex, x);
 }
@@ -340,7 +340,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBinaryStream(parameterIndex, x, length);
 }
@@ -348,7 +348,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setCharacterStream(parameterIndex, x, length);
 }
@@ -356,7 +356,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObject(parameterIndex, x);
 }
@@ -364,7 +364,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
@@ -372,7 +372,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setRef(parameterIndex, x);
 }
@@ -380,7 +380,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBlob(parameterIndex, x);
 }
@@ -388,7 +388,7 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setClob(parameterIndex, x);
 }
@@ -396,7 +396,7 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setArray(parameterIndex, x);
 }
@@ -404,7 +404,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
 void SAL_CALL OPreparedStatement::clearParameters(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->clearParameters();
 }

@@ -46,7 +46,7 @@ using namespace dbtools;
 OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
     :OSubComponent(m_aMutex, _xConn)
-    ,OPropertySetHelper(OComponentHelper::rBHelper)
+    ,OPropertySetHelper(WeakComponentImplHelper::rBHelper)
     ,m_bUseBookmarks( false )
     ,m_bEscapeProcessing( true )
 
@@ -164,7 +164,7 @@ void OStatementBase::close()
 {
     {
         MutexGuard aGuard( m_aMutex );
-        ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+        ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     }
     dispose();
 }
@@ -293,7 +293,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 Any OStatementBase::getWarnings()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY_THROW)->getWarnings();
 }
@@ -301,7 +301,7 @@ Any OStatementBase::getWarnings()
 void OStatementBase::clearWarnings()
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY_THROW)->clearWarnings();
 }
@@ -320,7 +320,7 @@ void OStatementBase::cancel()
 Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -333,7 +333,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
 sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -346,7 +346,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
 sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -363,7 +363,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
 void SAL_CALL OStatementBase::addBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -376,7 +376,7 @@ void SAL_CALL OStatementBase::addBatch(  )
 void SAL_CALL OStatementBase::clearBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -389,7 +389,7 @@ void SAL_CALL OStatementBase::clearBatch(  )
 Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -405,7 +405,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
 Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
 
     if ( xGRes.is() )
@@ -446,7 +446,7 @@ Sequence< OUString > OStatement::getSupportedServiceNames(  )
 Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
     Reference< XResultSet > xResultSet;
@@ -472,7 +472,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL )
 sal_Int32 OStatement::executeUpdate( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -483,7 +483,7 @@ sal_Int32 OStatement::executeUpdate( const OUString& _rSQL )
 sal_Bool OStatement::execute( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -494,7 +494,7 @@ sal_Bool OStatement::execute( const OUString& _rSQL )
 void OStatement::addBatch( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
@@ -508,7 +508,7 @@ void OStatement::addBatch( const OUString& _rSQL )
 void OStatement::clearBatch( )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
@@ -520,7 +520,7 @@ void OStatement::clearBatch( )
 Sequence< sal_Int32 > OStatement::executeBatch( )
 {
     MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())

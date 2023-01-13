@@ -21,12 +21,12 @@
 
 #include <sal/config.h>
 
-#include <cppuhelper/component.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
 // OSubComponent - a component which holds a hard ref to its parent
 //                 and is been hold itself (by the parent) with a weak ref
-class OSubComponent : public ::cppu::OComponentHelper
+class OSubComponent : public ::cppu::WeakComponentImplHelper<>
 {
 protected:
     // the parent must support the tunnel implementation
@@ -37,11 +37,7 @@ public:
     OSubComponent(::osl::Mutex& _rMutex,
                   const css::uno::Reference< css::uno::XInterface >& _xParent);
 
-// css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
 // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL release() noexcept override;
 
     operator css::uno::Reference< css::uno::XInterface > () const

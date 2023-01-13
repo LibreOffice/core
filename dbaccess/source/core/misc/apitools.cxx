@@ -29,7 +29,7 @@ using namespace osl;
 // various helper functions
 // OSubComponent
 OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xParent)
-              :OComponentHelper(_rMutex)
+              :WeakComponentImplHelper(_rMutex)
               ,m_xParent(xParent)
 {
 
@@ -41,74 +41,51 @@ OSubComponent::~OSubComponent()
 
 }
 
-// css::lang::XTypeProvider
-Sequence< Type > OSubComponent::getTypes()
-{
-    OTypeCollection aTypes(cppu::UnoType<XComponent>::get(),
-                           cppu::UnoType<XTypeProvider>::get(),
-                           cppu::UnoType<XWeak>::get());
-
-    return aTypes.getTypes();
-}
-
 // XInterface
 
 void OSubComponent::release() noexcept
 {
-    Reference< XInterface > x( xDelegator );
-    if (! x.is())
+    if (osl_atomic_decrement( &m_refCount ) == 0 )
     {
-        if (osl_atomic_decrement( &m_refCount ) == 0 )
+        if (! rBHelper.bDisposed)
         {
-            if (! rBHelper.bDisposed)
+            // *before* again incrementing our ref count, ensure that our weak connection point
+            // will not create references to us anymore (via XAdapter::queryAdapted)
+            disposeWeakConnectionPoint();
+
+            Reference< XInterface > xHoldAlive( *this );
+            // remember the parent
+            Reference< XInterface > xParent;
             {
-                // *before* again incrementing our ref count, ensure that our weak connection point
-                // will not create references to us anymore (via XAdapter::queryAdapted)
-                disposeWeakConnectionPoint();
-
-                Reference< XInterface > xHoldAlive( *this );
-                // remember the parent
-                Reference< XInterface > xParent;
-                {
-                    MutexGuard aGuard( rBHelper.rMutex );
-                    xParent = m_xParent;
-                    m_xParent = nullptr;
-                }
-
-                SAL_WARN_IF( m_refCount != 1, "dbaccess.core", "OSubComponent::release: invalid ref count (before dispose)!" );
-
-                // First dispose
-                dispose();
-
-                // only the alive ref holds the object
-                SAL_WARN_IF( m_refCount != 1, "dbaccess.core", "OSubComponent::release: invalid ref count (after dispose)!" );
-
-                // release the parent in the ~
-                if (xParent.is())
-                {
-                    MutexGuard aGuard( rBHelper.rMutex );
-                    m_xParent = xParent;
-                }
-
-                // destroy the object if xHoldAlive decrement the refcount to 0
-                return;
+                MutexGuard aGuard( rBHelper.rMutex );
+                xParent = m_xParent;
+                m_xParent = nullptr;
             }
+
+            SAL_WARN_IF( m_refCount != 1, "dbaccess.core", "OSubComponent::release: invalid ref count (before dispose)!" );
+
+            // First dispose
+            dispose();
+
+            // only the alive ref holds the object
+            SAL_WARN_IF( m_refCount != 1, "dbaccess.core", "OSubComponent::release: invalid ref count (after dispose)!" );
+
+            // release the parent in the ~
+            if (xParent.is())
+            {
+                MutexGuard aGuard( rBHelper.rMutex );
+                m_xParent = xParent;
+            }
+
+            // destroy the object if xHoldAlive decrement the refcount to 0
+            return;
         }
-        // restore the reference count
-        osl_atomic_increment( &m_refCount );
     }
+    // restore the reference count
+    osl_atomic_increment( &m_refCount );
 
-    // as we cover the job of the componenthelper we use the ...
-    OWeakAggObject::release();
-}
-
-Any OSubComponent::queryInterface( const Type & rType )
-{
-    Any aReturn;
-    if (!rType.equals(cppu::UnoType<XAggregation>::get()))
-        aReturn = OComponentHelper::queryInterface(rType);
-
-    return aReturn;
+    // as we cover the job of the WeakComponentImplHelper we use the ...
+    OWeakObject::release();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
