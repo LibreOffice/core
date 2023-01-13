@@ -11187,7 +11187,7 @@ else
                 continue
             fi
             dnl TODO: White space in $i would cause problems:
-            CXXFLAGS="$save_CXXFLAGS -I$i/ZXing"
+            CXXFLAGS="$save_CXXFLAGS ${CXXFLAGS_CXX11} -I$i/ZXing"
             AC_CHECK_HEADER(MultiFormatWriter.h, [ZXING_CFLAGS=-I$i/ZXing; break],
                 [unset ac_cv_header_MultiFormatWriter_h], [#include <stdexcept>])
         done
