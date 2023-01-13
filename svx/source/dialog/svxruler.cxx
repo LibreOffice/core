@@ -969,6 +969,9 @@ void SvxRuler::SetDefTabDist(tools::Long inDefTabDist)  // New distance for Defa
         UpdateFrame(); // hack: try to get lAppNullOffset initialized
     /* New distance is set for DefaultTabs */
     lDefTabDist = inDefTabDist;
+    if( !lDefTabDist )
+        lDefTabDist = 1;
+
     UpdateTabs();
 }
 
@@ -1025,9 +1028,6 @@ void SvxRuler::UpdateTabs()
         const tools::Long lRightIndent = ConvertHPosPixel(nRightFrameMargin - mxParaItem->GetRight());
 
         tools::Long nDefTabDist = ConvertHPosPixel(lDefTabDist);
-
-        if( !nDefTabDist )
-            nDefTabDist = 1;
 
         const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent
                     ? 0
