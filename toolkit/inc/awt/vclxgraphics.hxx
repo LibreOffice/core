@@ -28,7 +28,6 @@
 #include <vcl/vclptr.hxx>
 
 #include <com/sun/star/awt/XGraphics2.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <memory>
 
@@ -52,8 +51,7 @@ namespace o3tl
 
 
 class VCLXGraphics final : public cppu::WeakImplHelper<
-                        css::awt::XGraphics2,
-                        css::lang::XUnoTunnel>
+                        css::awt::XGraphics2>
 {
 private:
     // used to return same reference on each call to getDevice()
@@ -79,9 +77,6 @@ public:
 
     void            SetOutputDevice( OutputDevice* pOutDev );
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXGraphics)
 
     // css::awt::XGraphics Attributes
     virtual css::uno::Reference< css::awt::XDevice > SAL_CALL getDevice() override;

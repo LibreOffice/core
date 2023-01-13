@@ -35,9 +35,6 @@ using namespace com::sun::star;
 
 
 
-// lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXGraphics );
-
 VCLXGraphics::VCLXGraphics()
     : mpOutputDevice(nullptr)
     , meRasterOp(RasterOp::OverPaint)
