@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <o3tl/safeint.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclevent.hxx>
@@ -78,14 +77,9 @@ namespace
 
     // = OToolBoxWindowItem
 
-    typedef ::cppu::ImplHelper1 <   XUnoTunnel
-                                >   OToolBoxWindowItem_Base;
-
     /** XAccessible implementation for a toolbox item which is represented by a VCL Window
     */
-    class OToolBoxWindowItem
-            :public OAccessibleWrapper
-            ,public OToolBoxWindowItem_Base
+    class OToolBoxWindowItem : public OAccessibleWrapper
     {
     private:
         sal_Int32 m_nIndexInParent;
@@ -93,8 +87,6 @@ namespace
     public:
         sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
         void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
-
-        static const Sequence< sal_Int8 > & getUnoTunnelId();
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -110,37 +102,16 @@ namespace
         }
 
     protected:
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
-
         // OAccessibleWrapper
         virtual rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
                 const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
             ) override;
-
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) override;
     };
-
-    IMPLEMENT_FORWARD_XINTERFACE2( OToolBoxWindowItem, OAccessibleWrapper, OToolBoxWindowItem_Base )
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OToolBoxWindowItem, OAccessibleWrapper, OToolBoxWindowItem_Base )
 
     rtl::Reference<OAccessibleContextWrapper> OToolBoxWindowItem::createAccessibleContext(
             const Reference< XAccessibleContext >& _rxInnerContext )
     {
         return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
-    }
-
-    const Sequence< sal_Int8 > & OToolBoxWindowItem::getUnoTunnelId()
-    {
-        static const comphelper::UnoIdInit implId;
-        return implId.getSeq();
-    }
-
-    sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )
-    {
-        return comphelper::getSomethingImpl(_rId, this);
     }
 }
 
@@ -296,7 +267,7 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator co
         NotifyAccessibleEvent( AccessibleEventId::CHILD, Any( xItemAcc ), Any() );
     }
 
-    auto pWindowItem = comphelper::getFromUnoTunnel<OToolBoxWindowItem>(xItemAcc);
+    auto pWindowItem = dynamic_cast<OToolBoxWindowItem*>(xItemAcc.get());
     if ( !pWindowItem )
     {
         static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
@@ -328,7 +299,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
     {
         Reference< XAccessible > xItemAcc( aIndexAdjust->second );
 
-        auto pWindowItem = comphelper::getFromUnoTunnel<OToolBoxWindowItem>(xItemAcc);
+        auto pWindowItem = dynamic_cast<OToolBoxWindowItem*>(xItemAcc.get());
         if ( !pWindowItem )
         {
             VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
