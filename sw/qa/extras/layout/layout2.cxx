@@ -1341,19 +1341,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the first level of vertical category axis labels orientation. The first level orientation should be horizontal.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[1]", "orientation",
-                "0");
+    assertXPath(pXmlDoc, "(//font)[1]", "orientation", "0");
     // Test the second level of vertical category axis labels orientation. The second level orientation should be vertical.
-    sal_Int32 nRotation
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[5]",
-                   "orientation")
-              .toInt32();
+    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[5]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
     // Test the third level of vertical category axis labels orientation. The third level orientation should be vertical.
-    nRotation = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[7]",
-                         "orientation")
-                    .toInt32();
+    nRotation = getXPath(pXmlDoc, "(//font)[7]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
 }
@@ -1370,18 +1364,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the first level of horizontal category axis labels orientation. The first level orientation should be vertical.
-    sal_Int32 nRotation
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/font[1]",
-                   "orientation")
-              .toInt32();
+    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[1]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
     // Test the second level of horizontal category axis labels orientation. The second level orientation should be horizontal.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/font[5]", "orientation",
-                "0");
+    assertXPath(pXmlDoc, "(//font)[5]", "orientation", "0");
     // Test the third level of horizontal category axis labels orientation. The third level orientation should be horizontal.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/font[7]", "orientation",
-                "0");
+    assertXPath(pXmlDoc, "(//font)[7]", "orientation", "0");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
