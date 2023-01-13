@@ -269,6 +269,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     if (IsOwnStorageFormat(rMedium))
     {
         mpDoc->SetAnchoredTextOverflowLegacy(true);
+        mpDoc->SetLegacySingleLineFontwork(true); //for tdf#148000
     }
 
     bool       bRet = false;

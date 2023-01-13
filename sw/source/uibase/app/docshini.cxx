@@ -476,10 +476,12 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         // (if required, they will be overridden later when settings will be read)
         if (IsOwnStorageFormat(rMedium))
         {
-            // legacy processing for tdf#99729
-            if (m_xDoc->getIDocumentDrawModelAccess().GetDrawModel())
-                m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(
-                    true);
+            SwDrawModel* pDrawModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
+            if (pDrawModel)
+            {
+                pDrawModel->SetAnchoredTextOverflowLegacy(true); // legacy processing for tdf#99729
+                pDrawModel->SetLegacySingleLineFontwork(true); // legacy processing for tdf#148000
+            }
         }
 
         // Loading

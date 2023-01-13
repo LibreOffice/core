@@ -575,6 +575,10 @@ public:
     void SetAnchoredTextOverflowLegacy(bool bEnabled);
     bool IsAnchoredTextOverflowLegacy() const;
 
+    // tdf#148000 compatibility flag
+    void SetLegacySingleLineFontwork(bool bEnabled);
+    bool IsLegacySingleLineFontwork() const;
+
     void ReformatAllTextObjects();
 
     std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
