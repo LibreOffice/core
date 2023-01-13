@@ -361,8 +361,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     // Remember the signing certificate.
     m_xSigningCertificate = begin;
 
-    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
-    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
+    const X509Certificate_NssImpl* xcert = dynamic_cast<X509Certificate_NssImpl*>(begin.get());
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
@@ -495,11 +494,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 {
     sal_Int32 validity = csss::CertificateValidity::INVALID;
     const CERTCertificate* cert ;
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
-    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
+    const X509Certificate_NssImpl* xcert = dynamic_cast<X509Certificate_NssImpl*>(aCert.get());
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
@@ -711,8 +709,7 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     sal_Int32 characters ;
     const CERTCertificate* cert ;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
-    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
+    const X509Certificate_NssImpl* xcert = dynamic_cast<X509Certificate_NssImpl*>(aCert.get());
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
@@ -814,7 +811,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
 
     // Adopt the private key of the signing certificate, if it has any.
     if (auto pCertificate
-            = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(m_xSigningCertificate))
+            = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
     {
         SECKEYPrivateKey* pPrivateKey = SECKEY_CopyPrivateKey(pCertificate->getPrivateKey());
         if (pPrivateKey)

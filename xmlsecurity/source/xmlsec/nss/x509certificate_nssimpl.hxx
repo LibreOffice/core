@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -33,7 +32,6 @@
 
 class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
     css::security::XCertificate ,
-    css::lang::XUnoTunnel,
     css::lang::XServiceInfo > , public xmlsecurity::Certificate
 {
     private:
@@ -76,16 +74,11 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
 
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override ;
 
-        //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
         virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
         /// @see xmlsecurity::Certificate::getSignatureMethodAlgorithm().
         virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() override;
-
-        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
         //Helper methods
         void setCert( CERTCertificate* cert ) ;
