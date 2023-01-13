@@ -2600,6 +2600,20 @@ SfxVoidItem UpdateBookmarks FN_UPDATE_BOOKMARKS
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem DeleteBookmarks FN_DELETE_BOOKMARKS
+(SfxStringItem BookmarkNamePrefix FN_PARAM_1)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxVoidItem UpdateBookmark FN_UPDATE_BOOKMARK
 (SfxStringItem BookmarkNamePrefix FN_PARAM_1, SfxUnoAnyItem Bookmark FN_PARAM_2)
 [
