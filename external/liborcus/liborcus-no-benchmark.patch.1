@@ -1,0 +1,19 @@
+-*- Mode: Diff -*-
+
+Don't build the benchmark directory.
+
+We won't run those anyway, and on some platforms building executables
+here and there for random externals can be problematic. While at it,
+skip the doc_example subdirectory too.
+
+--- liborcus/Makefile.in
++++ liborcus/Makefile.in
+@@ -408,7 +408,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = src include benchmark	doc_example
++SUBDIRS = src include
+ ACLOCAL_AMFLAGS = -I m4
+ pcfiles = liborcus-@ORCUS_API_VERSION@.pc $(am__append_1)
+ pkgconfig_DATA = $(pcfiles)
