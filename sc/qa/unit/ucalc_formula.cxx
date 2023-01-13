@@ -9085,7 +9085,7 @@ void TestFormula::testIntersectionOpExcel()
     // Data in C2.
     m_pDoc->SetValue(2,1,0, 1.0);
 
-    m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
     // Choose formula positions that don't intersect with those data ranges.
     ScAddress aPos(0,3,0);
@@ -9100,8 +9100,6 @@ void TestFormula::testIntersectionOpExcel()
     aPos.IncRow();
     m_pDoc->SetString(aPos,"=2*(horz vert)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A7 calculating with intersecting named expressions failed", 2.0, m_pDoc->GetValue(aPos));
-
-    m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH);
 
     m_pDoc->DeleteTab(0);
 }

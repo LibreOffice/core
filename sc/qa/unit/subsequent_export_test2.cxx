@@ -423,7 +423,7 @@ void ScExportTest2::testRefStringUnspecified()
                                  aConfig.meStringRefAddressSyntax);
 
     // change formula syntax (i.e. not string ref syntax) to ExcelA1
-    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
+    FormulaGrammarSwitch aFGSwitch(pDoc, formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
 
     saveAndReload("calc8");
 
@@ -502,7 +502,7 @@ void ScExportTest2::testTdf121260()
 
     ScDocument* pDoc = getScDoc();
     // change formula syntax (i.e. not string ref syntax) to ExcelA1
-    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
+    FormulaGrammarSwitch aFGSwitch(pDoc, formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pChart1 = parseExport("xl/charts/chart1.xml");

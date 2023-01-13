@@ -3053,7 +3053,7 @@ void ScExportTest::testSharedFormulaExportXLS()
         bool checkContent(ScDocument& rDoc)
         {
             formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
-            rDoc.SetGrammar(eGram);
+            FormulaGrammarSwitch aFGSwitch(&rDoc, eGram);
             sc::TokenStringContext aCxt(rDoc, eGram);
 
             // Check the title row.
