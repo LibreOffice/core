@@ -49,6 +49,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
+#include <comphelper/lok.hxx>
 #include <objshimp.hxx>
 #include "shutdownicon.hxx"
 
@@ -130,7 +131,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = true;
                         if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
                             if (!rSet.Put( SfxBoolItem( SID_ATTR_BACKUP,
-                                    officecfg::Office::Common::Save::Document::CreateBackup::get() )))
+                                    (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive()) )))
                                 bRet = false;
                     }
                     break;
