@@ -154,6 +154,11 @@ interface BaseTextSelection
         StateMethod = NoState ;
     ]
 
+    FN_UPDATE_FIELD // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+
     FN_UPDATE_CHARTS // status(final|play)
     [
         ExecMethod = Execute ;
