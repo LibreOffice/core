@@ -756,12 +756,12 @@ void DocxExport::WritePostitFields()
 
     pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces());
     m_pAttrOutput->SetSerializer( pPostitFS );
-    const auto eHasResolved = m_pAttrOutput->WritePostitFields();
+    const auto eHasProperties = m_pAttrOutput->WritePostitFields();
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     pPostitFS->endElementNS( XML_w, XML_comments );
     pPostitFS->endDocument();
 
-    if (eHasResolved != DocxAttributeOutput::hasResolved::yes)
+    if (eHasProperties != DocxAttributeOutput::hasProperties::yes)
         return;
 
     m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),

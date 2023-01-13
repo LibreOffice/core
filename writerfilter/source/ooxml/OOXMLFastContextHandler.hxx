@@ -621,10 +621,12 @@ public:
 
     void att_paraId(const OOXMLValue::Pointer_t& pValue);
     void att_done(const OOXMLValue::Pointer_t& pValue);
+    void att_paraIdParent(const OOXMLValue::Pointer_t& pValue);
 
 private:
     OUString m_sParaId;
     bool m_bDone = false;
+    OUString m_sParentId {};
 };
 
 }

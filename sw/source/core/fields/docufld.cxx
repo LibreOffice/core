@@ -1741,7 +1741,9 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         OUString aName,
         const DateTime& rDateTime,
         const bool bResolved,
-        const sal_uInt32 nPostItId
+        const sal_uInt32 nPostItId,
+        const sal_uInt32 nParentId,
+        const sal_uInt32 nParaId
 )
     : SwField( pT )
     , m_sText( std::move(aText) )
@@ -1750,6 +1752,8 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_sName( std::move(aName) )
     , m_aDateTime( rDateTime )
     , m_bResolved( bResolved )
+    , m_nParentId( nParentId )
+    , m_nParaId( nParaId )
 {
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
 }
@@ -1792,7 +1796,7 @@ bool SwPostItField::GetResolved() const
 std::unique_ptr<SwField> SwPostItField::Copy() const
 {
     std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
-                                                           m_aDateTime, m_bResolved, m_nPostItId));
+                                                           m_aDateTime, m_bResolved, m_nPostItId, m_nParentId, m_nParaId));
     if (mpText)
         pRet->SetTextObject( *mpText );
 
@@ -1847,6 +1851,16 @@ void SwPostItField::SetPostItId(const sal_uInt32 nPostItId)
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
 }
 
+void SwPostItField::SetParentId(const sal_uInt32 nParentId)
+{
+    m_nParentId = nParentId;
+}
+
+void SwPostItField::SetParaId(const sal_uInt32 nParaId)
+{
+    m_nParaId = nParaId;
+}
+
 bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -1897,6 +1911,24 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= m_aDateTime.GetUNODateTime();
         }
         break;
+    case FIELD_PROP_PAR5:
+        {
+            OUString sTemp;
+            std::stringstream ss;
+            ss << std::uppercase << std::hex << m_nParentId;
+            sTemp = OUString::createFromAscii(ss.str().c_str());
+            rAny <<= sTemp;
+        }
+        break;
+    case FIELD_PROP_PAR6:
+        {
+            OUString sTemp;
+            std::stringstream ss;
+            ss << std::uppercase << std::hex << m_nPostItId;
+            sTemp = OUString::createFromAscii(ss.str().c_str());
+            rAny <<= sTemp;
+        }
+        break;
     default:
         assert(false);
     }
@@ -1939,6 +1971,20 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         if(!(rAny >>= aDateTimeValue))
             return false;
         m_aDateTime = DateTime(aDateTimeValue);
+    }
+    break;
+    case FIELD_PROP_PAR5:
+    {
+        OUString sTemp;
+        rAny >>= sTemp;
+        m_nParentId = sTemp.toInt32(16);
+    }
+    break;
+    case FIELD_PROP_PAR6:
+    {
+        OUString sTemp;
+        rAny >>= sTemp;
+        m_nPostItId = sTemp.toInt32(16);
     }
     break;
     default:

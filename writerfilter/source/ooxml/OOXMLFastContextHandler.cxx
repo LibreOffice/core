@@ -2323,7 +2323,7 @@ OOXMLFastContextHandlerCommentEx::OOXMLFastContextHandlerCommentEx(
 
 void OOXMLFastContextHandlerCommentEx::lcl_endFastElement(Token_t /*Element*/)
 {
-    mpStream->commentProps(m_sParaId, { m_bDone });
+    mpStream->commentProps(m_sParaId, { m_bDone, m_sParentId });
 }
 
 void OOXMLFastContextHandlerCommentEx::att_paraId(const OOXMLValue::Pointer_t& pValue)
@@ -2335,6 +2335,11 @@ void OOXMLFastContextHandlerCommentEx::att_done(const OOXMLValue::Pointer_t& pVa
 {
     if (pValue->getInt())
         m_bDone = true;
+}
+
+void OOXMLFastContextHandlerCommentEx::att_paraIdParent(const OOXMLValue::Pointer_t& pValue)
+{
+    m_sParentId = pValue->getString();
 }
 
 }

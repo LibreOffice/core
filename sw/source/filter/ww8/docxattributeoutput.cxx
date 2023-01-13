@@ -8794,12 +8794,29 @@ void DocxAttributeOutput::WritePostitFieldReference()
     }
 }
 
-DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
+DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
 {
     bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
-    hasResolved eResult = hasResolved::no;
+    hasProperties eResult = hasProperties::no;
+    for (auto& [f1, data1] : m_postitFields)
+    {
+        if (f1->GetParentId() != 0)
+        {
+            for (size_t i = 0; i < m_postitFields.size(); i++)
+            {
+                auto& [f2, data2] = m_postitFields[i];
+                if (f2->GetParaId() == f1->GetParentId())
+                {
+                    data2.parentStatus = ParentStatus::IsParent;
+                    data1.parentStatus = ParentStatus::HasParent;
+                    data1.parentIndex = i;
+                    break;
+                }
+            }
+        }
+    }
     for (auto& [f, data] : m_postitFields)
     {
         OString idstr = OString::number(data.id);
@@ -8821,9 +8838,10 @@ DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
                  : f->GetInitials().toUtf8());
         m_pSerializer->startElementNS( XML_w, XML_comment, pAttributeList );
 
-        const bool bNeedParaId = f->GetResolved();
+        // Make sure to give parent/child fields a paraId
+        const bool bNeedParaId = f->GetResolved() || data.parentStatus != ParentStatus::None;
         if (bNeedParaId)
-            eResult = hasResolved::yes;
+            eResult = hasProperties::yes;
 
         if (f->GetTextObject() != nullptr)
         {
@@ -8856,11 +8874,30 @@ void DocxAttributeOutput::WritePostItFieldsResolved()
 {
     for (auto& [f, data] : m_postitFields)
     {
-        if (!f->GetResolved())
+        // Parent fields don't need to be exported here if they don't have a resolved attribute
+        if (!f->GetResolved() && data.parentStatus != ParentStatus::HasParent)
             continue;
         OUString idstr = NumberToHexBinary(data.lastParaId);
-        m_pSerializer->singleElementNS(XML_w15, XML_commentEx, FSNS(XML_w15, XML_paraId), idstr,
-                                       FSNS(XML_w15, XML_done), "1");
+        std::optional<OUString> sDone, sParentId;
+        if (f->GetParentId() != 0)
+        {
+            if (data.parentStatus == ParentStatus::HasParent)
+            {
+                // Since parent fields have been resolved first, they should already have an id
+                auto& aParentFieldData = m_postitFields[data.parentIndex].second;
+                sParentId = NumberToHexBinary(aParentFieldData.lastParaId);
+            }
+            else
+            {
+                SAL_WARN("sw.ww8", "SwPostItField has a parent id, but a matching parent was not found");
+            }
+        }
+        if (f->GetResolved())
+            sDone = "1";
+        m_pSerializer->singleElementNS(XML_w15, XML_commentEx,
+            FSNS(XML_w15, XML_paraId), idstr,
+            FSNS(XML_w15, XML_done), sDone,
+            FSNS(XML_w15, XML_paraIdParent), sParentId);
     }
 }
 

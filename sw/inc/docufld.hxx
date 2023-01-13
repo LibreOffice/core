@@ -456,6 +456,8 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     std::optional<OutlinerParaObject> mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
     sal_uInt32 m_nPostItId;
+    sal_uInt32 m_nParentId;
+    sal_uInt32 m_nParaId;
 
 public:
     static sal_uInt32 s_nLastPostItId;
@@ -467,7 +469,9 @@ public:
                    OUString aName,
                    const DateTime& rDate,
                    const bool bResolved = false,
-                   const sal_uInt32 nPostItId = 0);
+                   const sal_uInt32 nPostItId = 0,
+                   const sal_uInt32 nParentId = 0,
+                   const sal_uInt32 nParaId = 0);
 
     SwPostItField(const SwPostItField&) = delete;
     SwPostItField* operator=(const SwPostItField&) = delete;
@@ -482,6 +486,10 @@ public:
     tools::Time GetTime() const                 { return tools::Time(m_aDateTime.GetTime()); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
     void SetPostItId(const sal_uInt32 nPostItId = 0);
+    sal_uInt32 GetParentId() const             { return m_nParentId; }
+    void SetParentId(const sal_uInt32 nParentId);
+    sal_uInt32 GetParaId() const               { return m_nParaId; }
+    void SetParaId(const sal_uInt32 nParaId);
 
     /// Author
     virtual OUString        GetPar1() const override;

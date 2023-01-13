@@ -880,6 +880,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
+{
+    loadAndSave("CommentReply.docx");
+    xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    OUString sParentId = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[1]", "paraId");
+    OUString sChildId = getXPath(pXmlComm, "/w:comments/w:comment[2]/w:p[1]", "paraId");
+    OUString sChildIdEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
+    OUString sChildParentId = getXPath(pXmlCommExt,
+        "/w15:commentsEx/w15:commentEx", "paraIdParent");
+    // Make sure exported extended paraId matches the one in comments.xml
+    CPPUNIT_ASSERT_EQUAL(sChildId, sChildIdEx);
+    // Make sure the paraIdParent matches the id of its parent
+    CPPUNIT_ASSERT_EQUAL(sParentId, sChildParentId);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
     loadAndSave("CommentDone.docx");
