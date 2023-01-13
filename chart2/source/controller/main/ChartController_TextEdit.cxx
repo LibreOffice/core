@@ -26,6 +26,7 @@
 #include <DrawViewWrapper.hxx>
 #include <ChartWindow.hxx>
 #include <ChartModel.hxx>
+#include <ChartView.hxx>
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ControllerLockGuard.hxx>
@@ -72,9 +73,8 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
 
     //#i77362 change notification for changes on additional shapes are missing
-    uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
-    if( xChartViewProps.is() )
-        xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::Any(true) );
+    if( m_xChartView.is() )
+        m_xChartView->setPropertyValue( "SdrViewIsInEditMode", uno::Any(true) );
 
     auto pChartWindow(GetChartWindow());
 
@@ -117,9 +117,8 @@ bool ChartController::EndTextEdit()
     m_pDrawViewWrapper->SdrEndTextEdit();
 
     //#i77362 change notification for changes on additional shapes are missing
-    uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
-    if( xChartViewProps.is() )
-        xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::Any(false) );
+    if( m_xChartView.is() )
+        m_xChartView->setPropertyValue( "SdrViewIsInEditMode", uno::Any(false) );
 
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)

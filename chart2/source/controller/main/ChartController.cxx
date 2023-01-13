@@ -22,6 +22,7 @@
 
 #include <config_wasm_strip.h>
 #include <ChartController.hxx>
+#include <ChartView.hxx>
 #include <servicenames.hxx>
 #include <ResId.hxx>
 #include <dlg_DataSource.hxx>
@@ -543,9 +544,8 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     //--handle relations to the old model if any
     if( aOldModelRef.is() )
     {
-        uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
-        if( xViewBroadcaster.is() )
-            xViewBroadcaster->removeModeChangeListener(this);
+        if( m_xChartView.is() )
+            m_xChartView->removeModeChangeListener(this);
         m_pDrawModelWrapper.reset();
 
         aOldModelRef->removeListener( this );
@@ -590,11 +590,9 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     rtl::Reference< ChartModel > xFact = getChartModel();
     if( xFact.is())
     {
-        m_xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
+        m_xChartView = dynamic_cast<::chart::ChartView*>(xFact->createInstance( CHART_VIEW_SERVICE_NAME ).get());
         GetDrawModelWrapper();
-        uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
-        if( xViewBroadcaster.is() )
-            xViewBroadcaster->addModeChangeListener(this);
+        m_xChartView->addModeChangeListener(this);
     }
 
     //the frameloader is responsible to call xModel->connectController
@@ -799,9 +797,8 @@ void SAL_CALL ChartController::dispose()
 
         //--release all resources and references
         {
-            uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
-            if( xViewBroadcaster.is() )
-                xViewBroadcaster->removeModeChangeListener(this);
+            if( m_xChartView.is() )
+                m_xChartView->removeModeChangeListener(this);
 
             impl_invalidateAccessible();
             SolarMutexGuard aSolarGuard;
@@ -1513,9 +1510,8 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
 {
     if( !m_pDrawModelWrapper )
     {
-        ExplicitValueProvider* pProvider = comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView );
-        if( pProvider )
-            m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
+        if( m_xChartView )
+            m_pDrawModelWrapper = m_xChartView->getDrawModelWrapper();
         if ( m_pDrawModelWrapper )
         {
             m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl(
@@ -1621,7 +1617,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     }
     uno::Sequence< uno::Any > aArguments{ uno::Any(uno::Reference<view::XSelectionSupplier>(this)),
                                           uno::Any(getModel()),
-                                          uno::Any(m_xChartView),
+                                          uno::Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(m_xChartView.get()))),
                                           uno::Any(xParent),
                                           uno::Any(m_xViewWindow) };
 

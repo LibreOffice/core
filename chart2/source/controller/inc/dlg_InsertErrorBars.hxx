@@ -31,6 +31,8 @@ class XModel;
 
 namespace chart
 {
+class ChartView;
+
 class InsertErrorBarsDialog final : public weld::GenericDialogController
 {
 public:
@@ -40,10 +42,10 @@ public:
 
     void SetAxisMinorStepWidthForErrorBarDecimals(double fMinorStepWidth);
 
-    static double getAxisMinorStepWidthForErrorBarDecimals(
-        const rtl::Reference<::chart::ChartModel>& xChartModel,
-        const css::uno::Reference<css::uno::XInterface>& xChartView,
-        std::u16string_view rSelectedObjectCID);
+    static double
+    getAxisMinorStepWidthForErrorBarDecimals(const rtl::Reference<::chart::ChartModel>& xChartModel,
+                                             const rtl::Reference<::chart::ChartView>& xChartView,
+                                             std::u16string_view rSelectedObjectCID);
 
     void FillItemSet(SfxItemSet& rOutAttrs);
 

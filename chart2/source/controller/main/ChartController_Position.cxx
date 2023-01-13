@@ -23,6 +23,7 @@
 #include <PositionAndSizeHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartView.hxx>
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
@@ -170,9 +171,8 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
         if(pOutItemSet || pArgs)
         {
             awt::Rectangle aOldObjectRect;
-            ExplicitValueProvider* pProvider(comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
-            if( pProvider )
-                aOldObjectRect = pProvider->getRectangleOfObject(aCID);
+            if( m_xChartView )
+                aOldObjectRect = m_xChartView->getRectangleOfObject(aCID);
 
             awt::Rectangle aNewObjectRect;
             lcl_getPositionAndSizeFromItemSet( aItemSet, aNewObjectRect, ToSize(aOldObjectRect) );

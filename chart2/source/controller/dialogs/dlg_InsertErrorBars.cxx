@@ -23,6 +23,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
+#include <ChartView.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -68,12 +69,12 @@ void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMi
 
 double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     const rtl::Reference<::chart::ChartModel>& xChartModel,
-    const Reference< uno::XInterface >& xChartView,
+    const rtl::Reference<::chart::ChartView>& xChartView,
     std::u16string_view rSelectedObjectCID )
 {
     double fStepWidth = 0.001;
 
-    ExplicitValueProvider* pExplicitValueProvider( comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView) );
+    ExplicitValueProvider* pExplicitValueProvider( xChartView.get() );
     if( pExplicitValueProvider )
     {
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );

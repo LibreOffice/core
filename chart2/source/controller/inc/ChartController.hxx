@@ -83,6 +83,7 @@ namespace chart
 {
 
 class UndoGuard;
+class ChartView;
 class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
@@ -341,7 +342,7 @@ public:
 
     void NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
 
-    css::uno::Reference<css::uno::XInterface> const & getChartView() const;
+    rtl::Reference<::chart::ChartView> const & getChartView() const { return m_xChartView; }
 
     rtl::Reference<::chart::ChartModel> getChartModel();
     rtl::Reference<::chart::Diagram> getFirstDiagram();
@@ -395,7 +396,7 @@ private:
 
     //view
     css::uno::Reference<css::awt::XWindow> m_xViewWindow;
-    css::uno::Reference<css::uno::XInterface> m_xChartView;
+    rtl::Reference<::chart::ChartView> m_xChartView;
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
     std::unique_ptr<DrawViewWrapper> m_pDrawViewWrapper;
 

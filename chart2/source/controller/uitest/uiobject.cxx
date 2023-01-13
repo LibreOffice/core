@@ -11,6 +11,7 @@
 #include <uiobject.hxx>
 
 #include <ChartWindow.hxx>
+#include <ChartView.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <ObjectHierarchy.hxx>
@@ -173,10 +174,9 @@ std::set<OUString> ChartWindowUIObject::get_children() const
     if (!pController)
         return aChildren;
 
-    rtl::Reference<::chart::ChartModel> xChartDoc( pController->getChartModel() );
-
-    css::uno::Reference<css::uno::XInterface> xChartView = pController->getChartView();
-    chart::ExplicitValueProvider* pValueProvider = comphelper::getFromUnoTunnel<chart::ExplicitValueProvider>( xChartView );
+    rtl::Reference<::chart::ChartModel> xChartDoc = pController->getChartModel();
+    rtl::Reference<::chart::ChartView> xChartView = pController->getChartView();
+    chart::ExplicitValueProvider* pValueProvider = xChartView.get();
     chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider);
     chart::ObjectIdentifier aIdentifier = chart::ObjectHierarchy::getRootNodeOID();
     aChildren.insert(aIdentifier.getObjectCID());

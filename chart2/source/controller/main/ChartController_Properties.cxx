@@ -18,6 +18,7 @@
  */
 
 #include <ChartController.hxx>
+#include <ChartView.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectIdentifier.hxx>
@@ -739,7 +740,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         std::unique_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getChartModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
-                                 comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView),
+                                 m_xChartView.get(),
                                  pRefSizeProv.get()));
 
         if (!pItemConverter)

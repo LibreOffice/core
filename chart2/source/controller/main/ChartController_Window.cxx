@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <ChartController.hxx>
+#include <ChartView.hxx>
 #include <PositionAndSizeHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ChartWindow.hxx>
@@ -266,8 +267,7 @@ void SAL_CALL ChartController::setPosSize(
     pChartWindow->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-    uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
-    if( xProp.is() )
+    if( m_xChartView.is() )
     {
         auto aZoomFactors(::comphelper::InitPropertySequence({
             { "ScaleXNumerator", uno::Any( nScaleXNumerator ) },
@@ -275,7 +275,7 @@ void SAL_CALL ChartController::setPosSize(
             { "ScaleYNumerator", uno::Any( nScaleYNumerator ) },
             { "ScaleYDenominator", uno::Any( nScaleYDenominator ) }
         }));
-        xProp->setPropertyValue( "ZoomFactors", uno::Any( aZoomFactors ));
+        m_xChartView->setPropertyValue( "ZoomFactors", uno::Any( aZoomFactors ));
     }
 
     //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
@@ -468,8 +468,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
             return;
 
         //better performance for big data
-        uno::Reference<beans::XPropertySet> xProp(m_xChartView, uno::UNO_QUERY);
-        if (xProp.is())
+        if (m_xChartView.is())
         {
             awt::Size aResolution(1000, 1000);
             {
@@ -481,12 +480,11 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
                     aResolution.Height = pChartWindow->GetSizePixel().Height();
                 }
             }
-            xProp->setPropertyValue( "Resolution", uno::Any( aResolution ));
+            m_xChartView->setPropertyValue( "Resolution", uno::Any( aResolution ));
         }
 
-        uno::Reference< util::XUpdatable > xUpdatable( m_xChartView, uno::UNO_QUERY );
-        if (xUpdatable.is())
-            xUpdatable->update();
+        if (m_xChartView.is())
+            m_xChartView->update();
 
         {
             SolarMutexGuard aGuard;
@@ -1372,7 +1370,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     {
         // Navigation (Tab/F3/Home/End)
         rtl::Reference<::chart::ChartModel> xChartDoc( getChartModel() );
-        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
+        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, m_xChartView.get() );
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
         if( bReturn )
@@ -1638,10 +1636,8 @@ bool ChartController::requestQuickHelp(
         rOutQuickHelpText = ObjectNameProvider::getHelpText( aCID, xChartModel, bIsBalloonHelp /* bVerbose */ );
 
         // set rectangle
-        ExplicitValueProvider * pValueProvider(
-            comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
-        if( pValueProvider )
-            rOutEqualRect = pValueProvider->getRectangleOfObject( aCID, true );
+        if( m_xChartView )
+            rOutEqualRect = m_xChartView->getRectangleOfObject( aCID, true );
     }
 
     return bResult;
@@ -1793,8 +1789,7 @@ bool ChartController::impl_moveOrResizeObject(
         if( ( bDeterminePos || bDetermineSize ) &&
             ( aRefSize.Width > 0 && aRefSize.Height > 0 ) )
         {
-            ExplicitValueProvider * pValueProvider(
-                comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
+            ExplicitValueProvider * pValueProvider( m_xChartView.get() );
             if( pValueProvider )
             {
                 awt::Rectangle aRect( pValueProvider->getRectangleOfObject( rCID ));
@@ -2059,11 +2054,6 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     }
     else
         pChartWindow->SetPointer( PointerStyle::Arrow );
-}
-
-css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView() const
-{
-    return m_xChartView;
 }
 
 void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle)
