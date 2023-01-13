@@ -36,6 +36,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdshitm.hxx>
+#include <svx/svdmodel.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <o3tl/numeric.hxx>
@@ -50,6 +51,7 @@
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <unotools/configmgr.hxx>
+#include <comphelper/string.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -116,27 +118,58 @@ static bool InitializeFontWorkData(
         if ( pParaObj )
         {
             const EditTextObject& rTextObj = pParaObj->GetTextObject();
-            sal_Int32 nParagraphsLeft = rTextObj.GetParagraphCount();
+            sal_Int32 nParagraphsCount = rTextObj.GetParagraphCount();
 
-            rFWData.nMaxParagraphsPerTextArea = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
-            sal_Int32 j = 0;
-            while( nParagraphsLeft && nTextAreaCount )
+            // Collect all the lines from all paragraphs
+            std::vector<int> aLineParaID;      // which para this line is in
+            std::vector<int> aLineStart;       // where this line start in that para
+            std::vector<int> aLineLength;
+            std::vector<OUString> aParaText;
+            for (sal_Int32 nPara = 0; nPara < nParagraphsCount; ++nPara)
+            {
+                aParaText.push_back(rTextObj.GetText(nPara));
+                sal_Int32 nPos = 0;
+                sal_Int32 nPrevPos = 0;
+                do
+                {
+                    // search line break.
+                    if (!rSdrObjCustomShape.getSdrModelFromSdrObject().IsLegacySingleLineFontwork())
+                        nPos = aParaText[nPara].indexOf(sal_Unicode(u'\1'), nPrevPos);
+                    else
+                        nPos = -1; // tdf#148000: ignore line breaks in legacy fontworks
+
+                    aLineParaID.push_back(nPara);
+                    aLineStart.push_back(nPrevPos);
+                    aLineLength.push_back((nPos >= 0 ? nPos : aParaText[nPara].getLength())
+                                          - nPrevPos);
+                    nPrevPos = nPos + 1;
+                } while (nPos >= 0);
+            }
+
+            sal_Int32 nLinesLeft = aLineParaID.size();
+
+            rFWData.nMaxParagraphsPerTextArea = ((nLinesLeft - 1) / nTextAreaCount) + 1;
+            sal_Int32 nLine = 0;
+            while (nLinesLeft && nTextAreaCount)
             {
                 FWTextArea aTextArea;
-                sal_Int32 i, nParagraphs = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
-                for ( i = 0; i < nParagraphs; ++i, ++j )
+                sal_Int32 nLinesInPara = ((nLinesLeft - 1) / nTextAreaCount) + 1;
+                for (sal_Int32 i = 0; i < nLinesInPara; ++i, ++nLine)
                 {
                     FWParagraphData aParagraphData;
-                    aParagraphData.aString = rTextObj.GetText( j );
+                    aParagraphData.aString = aParaText[aLineParaID[nLine]].subView(
+                        aLineStart[nLine], aLineLength[nLine]);
 
-                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
-                    aParagraphData.nFrameDirection = rParaSet.Get( EE_PARA_WRITINGDIR ).GetValue();
-                    aTextArea.vParagraphs.push_back( aParagraphData );
+                    // retrieving some paragraph attributes
+                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs(aLineParaID[nLine]);
+                    aParagraphData.nFrameDirection = rParaSet.Get(EE_PARA_WRITINGDIR).GetValue();
+                    aTextArea.vParagraphs.push_back(aParagraphData);
                 }
-                rFWData.vTextAreas.push_back( aTextArea );
-                nParagraphsLeft -= nParagraphs;
+                rFWData.vTextAreas.push_back(aTextArea);
+                nLinesLeft -= nLinesInPara;
                 nTextAreaCount--;
             }
+
             bNoErr = true;
         }
     }

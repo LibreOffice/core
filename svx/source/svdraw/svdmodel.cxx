@@ -72,6 +72,9 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdoashp.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -80,12 +83,14 @@ struct SdrModelImpl
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
+    bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
     std::unique_ptr<svx::Theme> mpTheme;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)
         , mpUndoFactory(nullptr)
         , mbAnchoredTextOverflowLegacy(false)
+        , mbLegacySingleLineFontwork(false)
     {}
 };
 
@@ -1718,6 +1723,16 @@ bool SdrModel::IsAnchoredTextOverflowLegacy() const
     return mpImpl->mbAnchoredTextOverflowLegacy;
 }
 
+void SdrModel::SetLegacySingleLineFontwork(bool bEnabled)
+{
+    mpImpl->mbLegacySingleLineFontwork = bEnabled;
+}
+
+bool SdrModel::IsLegacySingleLineFontwork() const
+{
+    return mpImpl->mbLegacySingleLineFontwork;
+}
+
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
@@ -1761,6 +1776,32 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
             mpImpl->mbAnchoredTextOverflowLegacy = bBool;
         }
     }
+    else if (pValue->Name == "LegacySingleLineFontwork")
+    {
+        bool bBool = false;
+        if (pValue->Value >>= bBool)
+        {
+            mpImpl->mbLegacySingleLineFontwork = bBool;
+            // tdf#148000 hack: reset all CustomShape geometry as they may depend on this property
+            // Ideally this ReadUserDataSequenceValue should be called before geometry creation
+            // Once the calling order will be fixed, this hack will not be needed.
+            for (size_t i = 0; i < maPages.size(); ++i)
+            {
+                if (const SdrPage* pPage = maPages[i].get())
+                {
+                    SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                    while (aIter.IsMore())
+                    {
+                        SdrObject* pTempObj = aIter.Next();
+                        if (SdrObjCustomShape* pShape = dynamic_cast<SdrObjCustomShape*>(pTempObj))
+                        {
+                            pShape->InvalidateRenderGeometry();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 template <typename T>
@@ -1773,6 +1814,7 @@ void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValu
 {
     std::vector< std::pair< OUString, uno::Any > > aUserData;
     addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
+    addPair(aUserData, "LegacySingleLineFontwork", IsLegacySingleLineFontwork());
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());
