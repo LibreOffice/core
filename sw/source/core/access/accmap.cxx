@@ -1060,8 +1060,15 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 bAppendEvent = false;
                 break;
             case SwAccessibleEvent_Impl::INVALID_ATTR:
-                OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
-                        "invalid event combination" );
+                // tdf#150708 if the old is CARET_OR_STATES then try updating it
+                // with the additional states
+                if (aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES)
+                    aEvent.SetStates(rEvent.GetAllStates());
+                else
+                {
+                    OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
+                            "invalid event combination" );
+                }
                 break;
             }
             if( bAppendEvent )
