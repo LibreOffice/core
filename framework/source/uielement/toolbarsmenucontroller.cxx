@@ -47,6 +47,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -714,7 +715,8 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
         // Create popup menu on demand
         SolarMutexGuard aSolarMutexGuard;
 
-        m_xPopupMenu = xPopupMenu;
+        m_xPopupMenu = dynamic_cast<VCLXPopupMenu*>(xPopupMenu.get());
+        assert(bool(xPopupMenu) == bool(m_xPopupMenu) && "we only support VCLXPopupMenu");
         m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >(this) );
         fillPopupMenu( m_xPopupMenu );
     }

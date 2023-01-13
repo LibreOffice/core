@@ -32,11 +32,13 @@
 #include <tools/link.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 namespace com :: sun :: star :: util { class XURLTransformer; }
+class VCLXPopupMenu;
 
 namespace svt
 {
@@ -117,7 +119,7 @@ namespace svt
             css::uno::Reference< css::frame::XDispatch >           m_xDispatch;
             css::uno::Reference< css::frame::XFrame >              m_xFrame;
             css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
-            css::uno::Reference< css::awt::XPopupMenu >            m_xPopupMenu;
+            rtl::Reference< VCLXPopupMenu >                        m_xPopupMenu;
     };
 }
 

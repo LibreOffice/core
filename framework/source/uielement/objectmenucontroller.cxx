@@ -27,6 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

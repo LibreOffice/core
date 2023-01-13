@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
 #include <unordered_map>
 

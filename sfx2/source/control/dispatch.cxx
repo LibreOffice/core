@@ -1801,10 +1801,9 @@ boost::property_tree::ptree fillPopupMenu(Menu* pMenu)
 
 }
 
-boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu)
+boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const rtl::Reference<VCLXPopupMenu>& rPopupMenu)
 {
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(rPopupMenu);
-    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
+    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(rPopupMenu->GetMenu());
     return ::fillPopupMenu(pVCLMenu);
 }
 
@@ -1821,8 +1820,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
 
-    css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
+    rtl::Reference< VCLXPopupMenu > xPopupMenu = new VCLXPopupMenu();
 
     if ( !xPopupController.is() || !xPopupMenu.is() )
         return;

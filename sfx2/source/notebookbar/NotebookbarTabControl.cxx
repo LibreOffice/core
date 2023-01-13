@@ -34,6 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sidebar/SidebarToolBox.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #define ICON_SIZE 25
@@ -341,8 +342,7 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), UNO_QUERY);
 
-    Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.PopupMenu", xContext), UNO_QUERY);
+    rtl::Reference<VCLXPopupMenu> xPopupMenu = new VCLXPopupMenu();
 
     if (!xPopupController.is() || !xPopupMenu.is())
         return;

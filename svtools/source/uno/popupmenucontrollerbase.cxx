@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 using namespace com::sun::star;
 using namespace css::uno;
@@ -341,7 +342,8 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
     // Create popup menu on demand
     SolarMutexGuard aSolarMutexGuard;
 
-    m_xPopupMenu = xPopupMenu;
+    m_xPopupMenu = dynamic_cast<VCLXPopupMenu*>(xPopupMenu.get());
+    assert(bool(xPopupMenu) == bool(m_xPopupMenu) && "we only support VCLXPopupMenu");
     m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >(this) );
 
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );

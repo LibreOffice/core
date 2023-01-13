@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <rtl/ustring.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 
@@ -129,7 +130,7 @@ public:
         return *m_xPopupMenu;
     }
 
-    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface() { return m_xPopupMenu->CreateMenuInterface(); }
+    rtl::Reference<VCLXPopupMenu> CreateMenuInterface() { return new VCLXPopupMenu(m_xPopupMenu); }
 
     void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );

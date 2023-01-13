@@ -79,7 +79,7 @@ protected:
     bool                                                    m_bHasController;
     bool                                                    m_bResourceURL;
     OUString                                                m_aPopupCommand;
-    css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
+    rtl::Reference< VCLXPopupMenu >                         m_xPopupMenu;
 
 private:
     css::uno::Reference< css::frame::XUIControllerFactory > m_xPopupMenuFactory;
@@ -247,10 +247,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 
         try
         {
-            m_xPopupMenu.set(
-                m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.awt.PopupMenu", m_xContext ),
-                        css::uno::UNO_QUERY_THROW );
+            m_xPopupMenu = new VCLXPopupMenu();
 
             if (m_bResourceURL)
             {
@@ -357,7 +354,7 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
         ToolBoxItemId nId;
         if ( getToolboxId( nId, &pToolBox ) && pToolBox->IsItemEnabled( nId ) )
         {
-            Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
+            Menu* pVclMenu = m_xPopupMenu->GetMenu();
             pVclMenu->Activate();
             pVclMenu->Deactivate();
         }
@@ -697,8 +694,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
         aURL = m_xPopupMenu->getCommand(m_nMenuId);
 
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
-        VCLXMenu* pMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
-        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(pMenu->getUserValue(m_nMenuId)));
+        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(m_xPopupMenu->getUserValue(m_nMenuId)));
         if ( pMenuAttributes )
             aTarget = pMenuAttributes->aTargetFrame;
         else
@@ -750,8 +746,7 @@ void SAL_CALL NewToolbarController::updateImage()
     if ( m_xPopupMenu.is() && m_nMenuId )
     {
         aURL = m_xPopupMenu->getCommand(m_nMenuId);
-        VCLXMenu* pMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
-        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(pMenu->getUserValue(m_nMenuId)));
+        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(m_xPopupMenu->getUserValue(m_nMenuId)));
         if ( pMenuAttributes )
             aImageId = pMenuAttributes->aImageId;
     }

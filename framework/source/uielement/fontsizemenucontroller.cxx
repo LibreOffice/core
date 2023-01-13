@@ -34,6 +34,7 @@
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 #include <cppuhelper/supportsservice.hxx>

@@ -29,6 +29,7 @@
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <classes/fwkresid.hxx>
 
 #include <strings.hrc>

@@ -33,6 +33,7 @@
 #include <vcl/mnemonic.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 //  Defines
 

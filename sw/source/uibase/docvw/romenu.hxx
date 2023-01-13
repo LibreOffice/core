@@ -20,6 +20,7 @@
 #pragma once
 
 #include <editeng/brushitem.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
@@ -70,7 +71,7 @@ class SwReadOnlyPopup
 
 public:
     SwReadOnlyPopup(const Point &rDPos, SwView &rV);
-    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface() { return m_xMenu->CreateMenuInterface(); }
+    rtl::Reference<VCLXPopupMenu> CreateMenuInterface() { return new VCLXPopupMenu(m_xMenu); }
     ~SwReadOnlyPopup();
 
     void Execute( vcl::Window* pWin, const Point &rPPos );

@@ -395,15 +395,11 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
     if ( !(m_xFrame.is() && m_xPopupMenu.is()) )
         return;
 
-    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu ));
-    if ( !pPopupMenu )
-        return;
-
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool bShowImages( rSettings.GetUseImagesInMenus() );
     OUString aIconTheme( rSettings.DetermineIconTheme() );
 
-    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
+    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(m_xPopupMenu->GetMenu());
 
     if ( m_bShowImages != bShowImages || m_aIconTheme != aIconTheme )
     {

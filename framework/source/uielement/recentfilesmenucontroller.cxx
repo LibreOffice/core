@@ -26,6 +26,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graph.hxx>

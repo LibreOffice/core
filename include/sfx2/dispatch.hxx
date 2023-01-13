@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/toolbarids.hxx>
 #include <sal/types.h>
@@ -39,6 +40,7 @@ class SfxItemSet;
 class SfxModule;
 class Point;
 struct SfxDispatcher_Impl;
+class VCLXPopupMenu;
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace vcl { class Window; }
@@ -176,7 +178,7 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame const * pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
 
-    static boost::property_tree::ptree fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rMenu);
+    static boost::property_tree::ptree fillPopupMenu(const rtl::Reference<VCLXPopupMenu>& rMenu);
 };
 
 #endif

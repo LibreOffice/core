@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <osl/mutex.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;

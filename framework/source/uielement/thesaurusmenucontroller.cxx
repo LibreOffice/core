@@ -24,6 +24,7 @@
 #include <svl/lngmisc.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/commandinfoprovider.hxx>
 

@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <RptDef.hxx>
@@ -434,9 +435,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     if (!xMenuController.is())
         return;
 
-    css::uno::Reference<css::awt::XPopupMenu> xPopupMenu(
-        xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY);
+    rtl::Reference<VCLXPopupMenu> xPopupMenu = new VCLXPopupMenu();
 
     if (!xPopupMenu.is())
         return;

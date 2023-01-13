@@ -57,6 +57,7 @@ class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
 class SfxStoringHelper;
+class VCLXPopupMenu;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
@@ -304,11 +305,11 @@ public:
     void                        SetController( SfxBaseController* pController );
     css::uno::Reference<css::frame::XController> GetController() const;
 
-    bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rIn,
+    bool                        TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu>& rIn,
                                                            const OUString& rMenuIdentifier,
-                                                           css::uno::Reference<css::awt::XPopupMenu>& rOut,
+                                                           rtl::Reference<VCLXPopupMenu>& rOut,
                                                            css::ui::ContextMenuExecuteEvent aEvent);
-    bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>&,
+    bool                        TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu>&,
                                                            const OUString& rMenuIdentifier,
                                                            css::ui::ContextMenuExecuteEvent aEvent);
 

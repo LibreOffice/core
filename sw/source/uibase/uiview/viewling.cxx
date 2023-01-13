@@ -723,11 +723,11 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( m_pEditWin );
                 aEvent.ExecutePosition.X = aPixPos.X();
                 aEvent.ExecutePosition.Y = aPixPos.Y();
-                css::uno::Reference<css::awt::XPopupMenu> xMenu;
+                rtl::Reference<VCLXPopupMenu> xMenu;
 
                 OUString sMenuName = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                auto xMenuInterface = xPopup->CreateMenuInterface();
+                rtl::Reference<VCLXPopupMenu> xMenuInterface = xPopup->CreateMenuInterface();
                 if (TryContextMenuInterception(xMenuInterface, sMenuName, xMenu, aEvent))
                 {
                     //! happy hacking for context menu modifying extensions of this

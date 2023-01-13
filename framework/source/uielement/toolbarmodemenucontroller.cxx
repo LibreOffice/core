@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 
 
+#include <toolkit/awt/vclxmenu.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
@@ -276,7 +277,8 @@ void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt
         // Create popup menu on demand
         SolarMutexGuard aSolarMutexGuard;
 
-        m_xPopupMenu = xPopupMenu;
+        m_xPopupMenu = dynamic_cast<VCLXPopupMenu*>(xPopupMenu.get());
+        assert(bool(xPopupMenu) == bool(m_xPopupMenu) && "we only support VCLXPopupMenu");
         m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >(this) );
         fillPopupMenu( m_xPopupMenu );
     }

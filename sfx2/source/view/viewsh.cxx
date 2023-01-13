@@ -89,6 +89,7 @@
 #include <iostream>
 #include <vector>
 #include <libxml/xmlwriter.h>
+#include <toolkit/awt/vclxmenu.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1877,9 +1878,9 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::
     pImpl->aInterceptorContainer.removeInterface( g, xInterceptor );
 }
 
-bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rIn,
+bool SfxViewShell::TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu>& rIn,
                                               const OUString& rMenuIdentifier,
-                                              css::uno::Reference<css::awt::XPopupMenu>& rOut,
+                                              rtl::Reference<VCLXPopupMenu>& rOut,
                                               ui::ContextMenuExecuteEvent aEvent)
 {
     rOut.clear();
@@ -1940,15 +1941,14 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
     if (bModified)
     {
         // container was modified, create a new menu out of it
-        css::uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
-        rOut.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY_THROW);
+        rOut = new VCLXPopupMenu();
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(rOut, aEvent.ActionTriggerContainer);
     }
 
     return true;
 }
 
-bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+bool SfxViewShell::TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu>& rPopupMenu,
                                               const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent)
 {
     bool bModified = false;
