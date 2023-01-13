@@ -1141,7 +1141,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             // notify listeners
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 
-            sal_Int32 nSourceColumn( 0 );
+            sal_Int32 nSourceColumn( 1 );
             ValueTransfer aTransfer( aSourceColTypes, xRow, xStatementParams );
 
             for ( auto const& rColumnPos : aColumnPositions )
