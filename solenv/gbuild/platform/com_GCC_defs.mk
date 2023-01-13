@@ -205,7 +205,6 @@ endif
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
 	-fexceptions
 
 ifeq ($(gb_ENABLE_DBGUTIL),$(false))

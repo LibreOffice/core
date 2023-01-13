@@ -206,7 +206,6 @@ gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-WX)
 gb_CXX03FLAGS :=
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
 	-EHs \
 
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
