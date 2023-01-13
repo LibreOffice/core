@@ -1429,7 +1429,7 @@ SCROW ScViewData::GetPosY( ScVSplitPos eWhich, SCTAB nForTab ) const
 
 SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) || !maTabData[nTabIndex])
         return -1;
 
     return maTabData[nTabIndex]->nCurX;
