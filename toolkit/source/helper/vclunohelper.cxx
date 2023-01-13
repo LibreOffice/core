@@ -73,7 +73,7 @@ BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>&
     }
     else if ( rxBitmap.is() )
     {
-        VCLXBitmap* pVCLBitmap = comphelper::getFromUnoTunnel<VCLXBitmap>( rxBitmap );
+        VCLXBitmap* pVCLBitmap = dynamic_cast<VCLXBitmap*>( rxBitmap.get() );
         if ( pVCLBitmap )
             aBmp = pVCLBitmap->GetBitmap();
         else

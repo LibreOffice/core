@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDisplayBitmap.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -34,7 +33,6 @@
 class VCLXBitmap final : public cppu::WeakImplHelper<
                             css::awt::XBitmap,
                             css::awt::XDisplayBitmap,
-                            css::lang::XUnoTunnel,
                             css::util::XAccounting>
 {
     std::mutex    maMutex;
@@ -50,9 +48,6 @@ public:
 
     void            SetBitmap( const BitmapEx& rBmp )   { maBitmap = rBmp; }
     const BitmapEx& GetBitmap() const                   { return maBitmap; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXBitmap)
 
     // css::awt::XBitmap
     css::awt::Size                 SAL_CALL getSize() override;

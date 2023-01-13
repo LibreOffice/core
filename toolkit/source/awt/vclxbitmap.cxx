@@ -25,9 +25,6 @@
 
 
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXBitmap );
-
 // css::awt::XBitmap
 css::awt::Size VCLXBitmap::getSize()
 {
