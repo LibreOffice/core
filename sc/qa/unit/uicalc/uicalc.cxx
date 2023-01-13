@@ -1304,6 +1304,44 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.D3:Sheet1.D4"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95306)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Use Adding Selection
+    dispatchCommand(mxComponent, ".uno:StatusSelectionModeExp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("B1");
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:HideColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
+    CPPUNIT_ASSERT(pDoc->ColHidden(1, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(2, 0));
+    CPPUNIT_ASSERT(pDoc->ColHidden(3, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(4, 0));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(1, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(2, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(3, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(4, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
 {
     createScDoc();
