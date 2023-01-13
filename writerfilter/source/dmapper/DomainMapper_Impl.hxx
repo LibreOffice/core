@@ -619,6 +619,8 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
     bool m_bAnnotationResolved = false;
+    OUString m_sAnnotationParent;
+    OUString m_sAnnotationImportedParaId;
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);

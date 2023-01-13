@@ -1042,6 +1042,8 @@ struct SwFieldProperties_Impl
     OUString    sPar2;
     OUString    sPar3;
     OUString    sPar4;
+    OUString    sPar5;
+    OUString    sPar6;
     Date            aDate;
     double          fDouble;
     uno::Sequence<beans::PropertyValue> aPropSeq;
@@ -1373,6 +1375,14 @@ void SAL_CALL SwXTextField::attach(
                     {
                         aDateTime = *(m_pImpl->m_pProps->pDateTime);
                     }
+
+                    sal_uInt32 nImportedId = 0;
+                    if (!m_pImpl->m_pProps->sPar6.isEmpty())
+                        nImportedId = m_pImpl->m_pProps->sPar6.toInt32(16);
+                    sal_uInt32 nParentId = 0;
+                    if (!m_pImpl->m_pProps->sPar5.isEmpty())
+                        nParentId = m_pImpl->m_pProps->sPar5.toInt32(16);
+
                     SwPostItField* pPostItField = new SwPostItField(
                         static_cast<SwPostItFieldType*>(pFieldType),
                         m_pImpl->m_pProps->sPar1, // author
@@ -1380,7 +1390,10 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->sPar3, // author's initials
                         m_pImpl->m_pProps->sPar4, // name
                         aDateTime,
-                        m_pImpl->m_pProps->bBool1 // resolvedflag
+                        m_pImpl->m_pProps->bBool1, // resolvedflag
+                        0, // id
+                        nParentId, // parent id
+                        nImportedId // imported para id
                     );
                     if ( m_pImpl->m_xTextObject.is() )
                     {
@@ -2220,6 +2233,12 @@ SwXTextField::setPropertyValue(
         case FIELD_PROP_PAR4:
             rValue >>= m_pImpl->m_pProps->sPar4;
             break;
+        case FIELD_PROP_PAR5:
+            rValue >>= m_pImpl->m_pProps->sPar5;
+            break;
+        case FIELD_PROP_PAR6:
+            rValue >>= m_pImpl->m_pProps->sPar6;
+            break;
         case FIELD_PROP_FORMAT:
             rValue >>= m_pImpl->m_pProps->nFormat;
             m_pImpl->m_pProps->bFormatIsDefault = false;
@@ -2419,6 +2438,12 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_PAR4:
                 aRet <<= m_pImpl->m_pProps->sPar4;
+                break;
+            case FIELD_PROP_PAR5:
+                aRet <<= m_pImpl->m_pProps->sPar5;
+                break;
+            case FIELD_PROP_PAR6:
+                aRet <<= m_pImpl->m_pProps->sPar6;
                 break;
             case FIELD_PROP_FORMAT:
                 aRet <<= m_pImpl->m_pProps->nFormat;

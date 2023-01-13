@@ -5404,11 +5404,9 @@
         <attribute name="paraId">
           <ref name="ST_LongHexNumber"/>
         </attribute>
-        <!-- Not yet used
         <attribute name="paraIdParent">
           <ref name="ST_LongHexNumber"/>
         </attribute>
-        -->
         <attribute name="done">
           <ref name="ST_OnOff"/>
         </attribute>
@@ -5430,6 +5428,7 @@
     </resource>
     <resource name="CT_CommentEx" resource="CommentEx">
       <attribute name="paraId" tokenid="ooxml:CT_CommentEx_paraId" action="att_paraId"/>
+      <attribute name="paraIdParent" tokenid="ooxml:CT_CommentEx_paraIdParent" action="att_paraIdParent"/>
       <attribute name="done" tokenid="ooxml:CT_CommentEx_done" action="att_done"/>
     </resource>
     <resource name="ST_LongHexNumber" resource="String"/>

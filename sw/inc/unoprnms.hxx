@@ -923,6 +923,8 @@ inline constexpr OUStringLiteral UNO_NAME_ID = u"Id";
 inline constexpr OUStringLiteral UNO_NAME_TAB_INDEX = u"TabIndex";
 inline constexpr OUStringLiteral UNO_NAME_LOCK = u"Lock";
 inline constexpr OUStringLiteral UNO_NAME_DATE_STRING = u"DateString";
+inline constexpr OUStringLiteral UNO_NAME_PARA_ID = u"ParaId";
+inline constexpr OUStringLiteral UNO_NAME_PARA_ID_PARENT = u"ParaIdParent";
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

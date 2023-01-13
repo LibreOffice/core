@@ -982,9 +982,17 @@ private:
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* m_PendingPlaceholder;
 
+    enum class ParentStatus
+    {
+        None,
+        IsParent,
+        HasParent
+    };
     struct PostItDOCXData{
         sal_Int32 id;
         sal_Int32 lastParaId = 0; // [MS-DOCX] 2.5.3.1 CT_CommentEx needs paraId attribute
+        ParentStatus parentStatus = ParentStatus::None;
+        size_t parentIndex = 0;
     };
     /// Maps postit fields to ID's, used in commentRangeStart/End, commentReference and comment.xml.
     std::vector<std::pair<const SwPostItField*, PostItDOCXData>> m_postitFields;
@@ -1061,8 +1069,8 @@ public:
     static void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr const & fs, int tag, const SwEndNoteInfo& info, int listtag );
 
     bool HasPostitFields() const;
-    enum class hasResolved { no, yes };
-    hasResolved WritePostitFields();
+    enum class hasProperties { no, yes };
+    hasProperties WritePostitFields();
     void WritePostItFieldsResolved();
 
     /// VMLTextExport
