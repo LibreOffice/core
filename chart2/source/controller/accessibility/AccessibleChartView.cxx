@@ -25,6 +25,7 @@
 #include <strings.hrc>
 #include "AccessibleViewForwarder.hxx"
 #include <ChartModel.hxx>
+#include <ChartView.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -172,14 +173,14 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
     Reference< view::XSelectionSupplier > xSelectionSupplier;
     rtl::Reference<::chart::ChartModel> xChartModel;
-    Reference< uno::XInterface > xChartView;
+    rtl::Reference<::chart::ChartView> xChartView;
     Reference< XAccessible > xParent;
     Reference< awt::XWindow > xWindow;
     {
         MutexGuard aGuard( m_aMutex);
         xSelectionSupplier.set( m_xSelectionSupplier );
         xChartModel = m_xChartModel;
-        xChartView.set( m_xChartView );
+        xChartView = m_xChartView;
         xParent.set( m_xParent );
         xWindow.set( m_xWindow );
     }
@@ -209,8 +210,10 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
     if( rArguments.getLength() > 2 )
     {
-        Reference< uno::XInterface > xNewChartView;
-        rArguments[2] >>= xNewChartView;
+        Reference< uno::XInterface > xTmp;
+        rArguments[2] >>= xTmp;
+        rtl::Reference<::chart::ChartView> xNewChartView = dynamic_cast<::chart::ChartView*>(xTmp.get());
+        assert(bool(xTmp)==bool(xNewChartView) && "we only support ChartView");
         if( xNewChartView != xChartView )
         {
             xChartView = xNewChartView;
@@ -283,7 +286,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         MutexGuard aGuard( m_aMutex);
         m_xSelectionSupplier = WeakReference< view::XSelectionSupplier >(xSelectionSupplier);
         m_xChartModel = xChartModel.get();
-        m_xChartView = WeakReference< uno::XInterface >(xChartView);
+        m_xChartView = xChartView.get();
         m_xParent = WeakReference< XAccessible >(xParent);
         m_xWindow = WeakReference< awt::XWindow >(xWindow);
     }

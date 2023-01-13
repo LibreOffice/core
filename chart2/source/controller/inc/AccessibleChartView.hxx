@@ -38,6 +38,7 @@ class IAccessibleViewForwarder;
 
 namespace chart
 {
+class ChartView;
 
 namespace impl
 {
@@ -103,7 +104,7 @@ private: // methods
 private: // members
     css::uno::WeakReference< css::view::XSelectionSupplier >        m_xSelectionSupplier;
     unotools::WeakReference<::chart::ChartModel>                    m_xChartModel;
-    css::uno::WeakReference< css::uno::XInterface >                 m_xChartView;
+    unotools::WeakReference< ChartView >                            m_xChartView;
     css::uno::WeakReference< css::awt::XWindow >                    m_xWindow;
     css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
 
