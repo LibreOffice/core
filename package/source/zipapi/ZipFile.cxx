@@ -548,9 +548,9 @@ public:
     XBufferedStream( const uno::Reference<XInputStream>& xSrcStream ) : mnPos(0)
     {
         sal_Int32 nRemaining = xSrcStream->available();
-        comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xSrcStream.get() );
+        maBytes.reserve(nRemaining);
 
-        if (pByteReader)
+        if (auto pByteReader = dynamic_cast< comphelper::ByteReader* >( xSrcStream.get() ))
         {
             maBytes.resize(nRemaining);
 
@@ -561,36 +561,18 @@ public:
                 nRemaining -= nRead;
                 pData += nRead;
             }
+            return;
         }
-        else
+
+        const sal_Int32 nBufSize = 8192;
+        uno::Sequence<sal_Int8> aBuf(nBufSize);
+        while (nRemaining > 0)
         {
-            const sal_Int32 nBufSize = 8192;
-
-            sal_Int32 nRead = 0;
-            maBytes.reserve(nRemaining);
-            uno::Sequence<sal_Int8> aBuf(nBufSize);
-
-            auto readAndCopy = [&]( sal_Int32 nReadSize ) -> sal_Int32
-            {
-                sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
-                const sal_Int8* p = aBuf.getConstArray();
-                const sal_Int8* pEnd = p + nBytes;
-                maBytes.insert( maBytes.end(), p, pEnd );
-                return nBytes;
-            };
-
-            while (nRemaining > nBufSize)
-            {
-                const auto nBytes = readAndCopy(nBufSize);
-                if (!nBytes)
-                    break;
-                nRead += nBytes;
-                nRemaining -= nBytes;
-            }
-
-            if (nRemaining)
-                nRead += readAndCopy(nRemaining);
-            maBytes.resize(nRead);
+            const sal_Int32 nBytes = xSrcStream->readBytes(aBuf, std::min(nBufSize, nRemaining));
+            if (!nBytes)
+                break;
+            maBytes.insert(maBytes.end(), aBuf.begin(), aBuf.begin() + nBytes);
+            nRemaining -= nBytes;
         }
     }
 

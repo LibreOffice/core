@@ -90,9 +90,7 @@ static void CopyInputToOutput(
 {
     static const sal_Int32 nConstBufferSize = 32000;
 
-    comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() );
-
-    if (pByteReader)
+    if (auto pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() ))
     {
         sal_Int32 nRead;
         sal_Int8 aTempBuf[ nConstBufferSize ];
@@ -2155,9 +2153,7 @@ void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();
 
-    uno::Reference< css::lang::XUnoTunnel > xOutputTunnel( m_xOutStream, uno::UNO_QUERY );
-    comphelper::ByteWriter* pByteWriter = dynamic_cast< comphelper::ByteWriter* >( m_xOutStream.get() );
-    if (pByteWriter)
+    if (auto pByteWriter = dynamic_cast< comphelper::ByteWriter* >( m_xOutStream.get() ))
         pByteWriter->writeBytes(pData, nBytesToWrite);
     else
     {

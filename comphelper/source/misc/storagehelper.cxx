@@ -175,40 +175,32 @@ void OStorageHelper::CopyInputToOutput(
 {
     static const sal_Int32 nConstBufferSize = 32000;
 
-    comphelper::ByteReader* pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() );
-    comphelper::ByteWriter* pByteWriter = nullptr;
-    if (pByteReader)
-       pByteWriter = dynamic_cast< comphelper::ByteWriter* >( xOutput.get() );
-
-    if (pByteWriter)
+    if (auto pByteReader = dynamic_cast< comphelper::ByteReader* >( xInput.get() ))
     {
-        sal_Int32 nRead;
-        sal_Int8 aTempBuf[ nConstBufferSize ];
-        do
+        if (auto pByteWriter = dynamic_cast< comphelper::ByteWriter* >( xOutput.get() ))
         {
-            nRead = pByteReader->readSomeBytes ( aTempBuf, nConstBufferSize );
-            pByteWriter->writeBytes ( aTempBuf, nRead );
-        }
-        while ( nRead == nConstBufferSize );
-    }
-    else
-    {
-        sal_Int32 nRead;
-        uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
-
-        do
-        {
-            nRead = xInput->readBytes ( aSequence, nConstBufferSize );
-            if ( nRead < nConstBufferSize )
+            sal_Int32 nRead;
+            sal_Int8 aTempBuf[ nConstBufferSize ];
+            do
             {
-                uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-                xOutput->writeBytes ( aTempBuf );
+                nRead = pByteReader->readSomeBytes ( aTempBuf, nConstBufferSize );
+                pByteWriter->writeBytes ( aTempBuf, nRead );
             }
-            else
-                xOutput->writeBytes ( aSequence );
+            while ( nRead == nConstBufferSize );
+            return;
         }
-        while ( nRead == nConstBufferSize );
     }
+
+    sal_Int32 nRead;
+    uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+    do
+    {
+        nRead = xInput->readBytes ( aSequence, nConstBufferSize );
+        if ( nRead < nConstBufferSize )
+            aSequence.realloc( nRead );
+        xOutput->writeBytes ( aSequence );
+    }
+    while ( nRead == nConstBufferSize );
 }
 
 
