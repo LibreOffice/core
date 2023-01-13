@@ -861,6 +861,43 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
     CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
+{
+    // Given a document with 2 bookmarks, first covering "B" and second covering "D":
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("ABCDE");
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_GiQ7DAWQYWLy");
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->SetBookmark(vcl::KeyCode(), "other");
+
+    // When deleting 1 matching bookmark:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "BookmarkNamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_BREF_"
+    }
+}
+)json");
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:DeleteBookmarks", aArgs);
+
+    // Then make sure that only the other bookmark is kept:
+    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_GiQ7DAWQYWLy");
+    // Without the accompanying fix in place, this test would have failed, the matching bookmark was
+    // not removed.
+    CPPUNIT_ASSERT(bool(it == pDoc->getIDocumentMarkAccess()->getAllMarksEnd()));
+    it = pDoc->getIDocumentMarkAccess()->findMark("other");
+    CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

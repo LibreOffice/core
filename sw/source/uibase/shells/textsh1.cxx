@@ -613,6 +613,53 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rIDCO.DeleteAndJoin(aEndMarker);
     rIDMA.assureSortedMarkContainers();
 }
+
+void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
+    {
+        return;
+    }
+
+    OUString aBookmarkNamePrefix;
+    const SfxStringItem* pBookmarkNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (pBookmarkNamePrefix)
+    {
+        aBookmarkNamePrefix = pBookmarkNamePrefix->GetValue();
+    }
+
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+    comphelper::ScopeGuard g(
+        [&rWrtSh]
+        {
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELBOOKMARK, nullptr);
+        });
+
+    IDocumentMarkAccess* pMarkAccess = rWrtSh.GetDoc()->getIDocumentMarkAccess();
+    std::vector<sw::mark::IMark*> aRemovals;
+    for (auto it = pMarkAccess->getBookmarksBegin(); it != pMarkAccess->getBookmarksEnd(); ++it)
+    {
+        auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(*it);
+        assert(pBookmark);
+
+        if (!aBookmarkNamePrefix.isEmpty())
+        {
+            if (!pBookmark->GetName().startsWith(aBookmarkNamePrefix))
+            {
+                continue;
+            }
+        }
+
+        aRemovals.push_back(pBookmark);
+    }
+
+    for (const auto& pMark : aRemovals)
+    {
+        pMarkAccess->deleteMark(pMark);
+    }
+}
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -1007,11 +1054,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_DELETE_BOOKMARK:
         {
+            // This deletes a bookmark with the specified name.
             if (pItem && !rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
             {
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
                 pMarkAccess->deleteMark(pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()), false);
             }
+            break;
+        }
+        case FN_DELETE_BOOKMARKS:
+        {
+            // This deletes all bookmarks in the document matching a specified prefix.
+            DeleteBookmarks(rReq, rWrtSh);
             break;
         }
         case FN_UPDATE_SECTIONS:
