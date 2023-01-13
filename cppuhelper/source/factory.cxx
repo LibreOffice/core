@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/component.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -65,11 +65,11 @@ struct OFactoryComponentHelper_Mutex
 
 class OFactoryComponentHelper
     : public OFactoryComponentHelper_Mutex
-    , public OComponentHelper
-    , public XServiceInfo
-    , public XSingleServiceFactory
-    , public lang::XSingleComponentFactory
-    , public XUnloadingPreference
+    , public WeakComponentImplHelper<
+          XServiceInfo,
+          XSingleServiceFactory,
+          lang::XSingleComponentFactory,
+          XUnloadingPreference>
 {
 public:
     OFactoryComponentHelper(
@@ -79,7 +79,7 @@ public:
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_,
         bool bOneInstance_ )
-        : OComponentHelper( aMutex )
+        : WeakComponentImplHelper( aMutex )
         , bOneInstance( bOneInstance_ )
         , xSMgr( rServiceManager )
         , pCreateFunction( pCreateFunction_ )
@@ -89,13 +89,6 @@ public:
             if( pServiceNames_ )
                 aServiceNames = *pServiceNames_;
         }
-
-    // XInterface
-    Any SAL_CALL queryInterface( const Type & rType ) override;
-    void SAL_CALL acquire() noexcept override
-        { OComponentHelper::acquire(); }
-    void SAL_CALL release() noexcept override
-        { OComponentHelper::release(); }
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance() override;
@@ -114,16 +107,12 @@ public:
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-    // XAggregation
-    Any SAL_CALL queryAggregation( const Type & rType ) override;
 
     // XUnloadingPreference
     virtual sal_Bool SAL_CALL releaseOnNotification() override;
 
-    // OComponentHelper
-    void SAL_CALL dispose() override;
+    // WeakComponentImplHelper
+    void SAL_CALL disposing() override;
 
 private:
     css::uno::Reference<css::uno::XInterface> createInstanceWithArgumentsEveryTime(
@@ -156,25 +145,6 @@ protected:
 
 }
 
-Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
-{
-    return OComponentHelper::queryInterface( rType );
-}
-
-// XAggregation
-Any OFactoryComponentHelper::queryAggregation( const Type & rType )
-{
-    Any aRet( OComponentHelper::queryAggregation( rType ) );
-    return (aRet.hasValue()
-            ? aRet
-            : ::cppu::queryInterface(
-                rType,
-                static_cast< XSingleComponentFactory * >( this ),
-                static_cast< XSingleServiceFactory * >( this ),
-                static_cast< XServiceInfo * >( this ) ,
-                static_cast< XUnloadingPreference * >( this )));
-}
-
 // XTypeProvider
 Sequence< Type > OFactoryComponentHelper::getTypes()
 {
@@ -187,11 +157,6 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
         ar[ 3 ] = cppu::UnoType<XSingleComponentFactory>::get();
 
     return Sequence< Type >( ar, m_fptr ? 4 : 3 );
-}
-
-Sequence< sal_Int8 > OFactoryComponentHelper::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // OFactoryComponentHelper
@@ -320,11 +285,9 @@ OFactoryComponentHelper::createInstanceWithArgumentsEveryTime(
 }
 
 
-// OComponentHelper
-void OFactoryComponentHelper::dispose()
+// WeakComponentImplHelper
+void OFactoryComponentHelper::disposing()
 {
-    OComponentHelper::dispose();
-
     Reference<XInterface > x;
     {
         // do not delete in the guard section
@@ -385,7 +348,7 @@ public:
         bool bOneInstance_ )
             : OFactoryComponentHelper(
                 rServiceManager, rImplementationName_, nullptr, nullptr, nullptr, bOneInstance_ ),
-              OPropertySetHelper( OComponentHelper::rBHelper ),
+              OPropertySetHelper( WeakComponentImplHelper::rBHelper ),
               xImplementationKey( xImplementationKey_ )
         {}
 
