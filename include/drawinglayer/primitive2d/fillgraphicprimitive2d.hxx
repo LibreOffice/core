@@ -24,10 +24,24 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <vcl/bitmapex.hxx>
 
+namespace drawinglayer::primitive2d
+{
+class FillGraphicPrimitive2D;
+}
+
+namespace drawinglayer::processor2d
+{
+// define a simple accessor which can be used as friend. That method exists
+// only locally at SDPRProcessor2dTools.cxx and is thus only usable/callable
+// from there
+void setOffsetXYCreatedBitmap(
+    drawinglayer::primitive2d::FillGraphicPrimitive2D&,
+    const BitmapEx&);
+}
 
 // FillbitmapPrimitive2D class
-
 namespace drawinglayer::primitive2d
 {
         /** FillGraphicPrimitive2D class
@@ -52,8 +66,22 @@ namespace drawinglayer::primitive2d
             /// the fill attributes
             attribute::FillGraphicAttribute             maFillGraphic;
 
+            /// the evtl. buffered OffsetXYCreatedBitmap
+            BitmapEx                                    maOffsetXYCreatedBitmap;
+
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+
+            // allow this single acessor to change it to set buggered data
+            friend void drawinglayer::processor2d::setOffsetXYCreatedBitmap(
+                drawinglayer::primitive2d::FillGraphicPrimitive2D&,
+                const BitmapEx&);
+
+            // private tooling method to be called by setOffsetXYCreatedBitmap
+            void impSetOffsetXYCreatedBitmap(const BitmapEx& rBitmap)
+            {
+                maOffsetXYCreatedBitmap = rBitmap;
+            }
 
         public:
             /// constructor
@@ -64,6 +92,7 @@ namespace drawinglayer::primitive2d
             /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
+            const BitmapEx& getOffsetXYCreatedBitmap() const { return maOffsetXYCreatedBitmap; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;

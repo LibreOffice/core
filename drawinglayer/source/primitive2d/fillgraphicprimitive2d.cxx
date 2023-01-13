@@ -95,7 +95,8 @@ namespace drawinglayer::primitive2d
             basegfx::B2DHomMatrix aTransformation,
             const attribute::FillGraphicAttribute& rFillGraphic)
         :   maTransformation(std::move(aTransformation)),
-            maFillGraphic(rFillGraphic)
+            maFillGraphic(rFillGraphic),
+            maOffsetXYCreatedBitmap()
         {
         }
 

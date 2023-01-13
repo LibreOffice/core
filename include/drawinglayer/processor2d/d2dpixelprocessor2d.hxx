@@ -44,6 +44,7 @@ class PolygonStrokePrimitive2D;
 class LineRectanglePrimitive2D;
 class FilledRectanglePrimitive2D;
 class SingleLinePrimitive2D;
+class FillGraphicPrimitive2D;
 }
 
 struct ID2D1RenderTarget;
@@ -89,6 +90,8 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
         const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D);
     void
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
+    void processFillGraphicPrimitive2D(
+        const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
 
     // common helpers
     sal::systools::COMReference<ID2D1Bitmap>

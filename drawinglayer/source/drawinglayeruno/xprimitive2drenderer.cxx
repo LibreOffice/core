@@ -116,7 +116,15 @@ namespace drawinglayer::unorenderer
                         MaximumQuadraticPixels = 500000;
                     }
 
-                    const auto aViewInformation2D = geometry::createViewInformation2D(aViewInformationSequence);
+                    auto aViewInformation2D = geometry::createViewInformation2D(aViewInformationSequence);
+
+                    if(aViewInformation2D.getViewport().isEmpty())
+                    {
+                        // we have a Viewport since we create a discrete pixel device, use it
+                        // if none is given
+                        aViewInformation2D.setViewport(aRange);
+                    }
+
                     const sal_uInt32 nDiscreteWidth(basegfx::fround(o3tl::convert(fWidth, eRangeUnit, o3tl::Length::in) * DPI_X));
                     const sal_uInt32 nDiscreteHeight(basegfx::fround(o3tl::convert(fHeight, eRangeUnit, o3tl::Length::in) * DPI_Y));
 

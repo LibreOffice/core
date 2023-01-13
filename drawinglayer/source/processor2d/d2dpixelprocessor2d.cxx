@@ -26,6 +26,7 @@
 #include <postwin.h>
 
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
+#include <drawinglayer/processor2d/SDPRProcessor2dTools.hxx>
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -1109,15 +1110,18 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     basegfx::B2DRange aDiscreteRange(
         rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
-    const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
+    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
     basegfx::B2DRange aVisibleRange(aDiscreteRange);
-    aVisibleRange.intersect(aViewRange);
 
-    if (aVisibleRange.isEmpty())
+    if (!rDiscreteViewPort.isEmpty())
     {
-        // not visible, done
-        return;
+        aVisibleRange.intersect(rDiscreteViewPort);
+
+        if (aVisibleRange.isEmpty())
+        {
+            // not visible, done
+            return;
+        }
     }
 
     // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
@@ -1204,12 +1208,11 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     basegfx::B2DRange aTransparencyRange(
         rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aTransparencyRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
-    const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
+    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
 
-    // not visible, done
-    if (!aViewRange.overlaps(aTransparencyRange))
+    if (!rDiscreteViewPort.isEmpty() && !rDiscreteViewPort.overlaps(aTransparencyRange))
     {
+        // we have a Viewport and visible range of geometry is outside -> not visible, done
         return;
     }
 
@@ -1255,12 +1258,11 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
 
     basegfx::B2DRange aMaskRange(aMask.getB2DRange());
     aMaskRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const D2D1_SIZE_U aB2DSizePixel(getRenderTarget()->GetPixelSize());
-    const basegfx::B2DRange aViewRange(0.0, 0.0, aB2DSizePixel.width, aB2DSizePixel.height);
+    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
 
-    if (!aViewRange.overlaps(aMaskRange))
+    if (!rDiscreteViewPort.isEmpty() && !rDiscreteViewPort.overlaps(aMaskRange))
     {
-        // not in visible range, done
+        // we have a Viewport and visible range of geometry is outside -> not visible, done
         return;
     }
 
@@ -1768,6 +1770,129 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
         increaseError();
 }
 
+void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
+    const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D)
+{
+    BitmapEx aPreparedBitmap;
+    basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
+    static double fBigDiscreteArea(300.0 * 300.0);
+
+    // use tooling to do various checks and prepare tiled rendering, see
+    // description of method, parameters and return value there
+    if (!prepareBitmapForDirectRender(rFillGraphicPrimitive2D, getViewInformation2D(),
+                                      aPreparedBitmap, aFillUnitRange, fBigDiscreteArea))
+    {
+        // no output needed, done
+        return;
+    }
+
+    if (aPreparedBitmap.IsEmpty())
+    {
+        // output needed and Bitmap data empty, so no bitmap data based
+        // tiled rendering is suggested. Use fallback for paint (decompositon)
+        process(rFillGraphicPrimitive2D);
+        return;
+    }
+
+    // render tiled using the prepared Bitmap data
+    if (maBColorModifierStack.count())
+    {
+        // need to apply ColorModifier to Bitmap data
+        aPreparedBitmap = aPreparedBitmap.ModifyBitmapEx(maBColorModifierStack);
+
+        if (aPreparedBitmap.IsEmpty())
+        {
+            // color gets completely replaced, get it (any input works)
+            const basegfx::BColor aModifiedColor(
+                maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+
+            // use unit geometry as fallback object geometry. Do *not*
+            // transform, the below used method will use the already
+            // correctly initialized local ViewInformation
+            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+
+            // what we still need to apply is the object transform from the
+            // local primitive, that is not part of DisplayInfo yet
+            aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
+
+            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
+                new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
+                                                             aModifiedColor));
+
+            // draw as colored Polygon, done
+            processPolyPolygonColorPrimitive2D(*aTemp);
+            return;
+        }
+    }
+
+    bool bDone(false);
+    sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
+        getOrCreateB2DBitmap(getRenderTarget(), aPreparedBitmap));
+
+    if (pD2DBitmap)
+    {
+        sal::systools::COMReference<ID2D1BitmapBrush> pBitmapBrush;
+        const HRESULT hr(getRenderTarget()->CreateBitmapBrush(pD2DBitmap, &pBitmapBrush));
+
+        if (SUCCEEDED(hr) && pBitmapBrush)
+        {
+            // set extended to repeat/wrap AKA tiling
+            pBitmapBrush->SetExtendModeX(D2D1_EXTEND_MODE_WRAP);
+            pBitmapBrush->SetExtendModeY(D2D1_EXTEND_MODE_WRAP);
+
+            // set interpolation mode
+            // NOTE: This uses D2D1_BITMAP_INTERPOLATION_MODE, but there seem to be
+            //       advanced modes when using D2D1_INTERPOLATION_MODE, but that needs
+            //       D2D1_BITMAP_BRUSH_PROPERTIES1 and ID2D1BitmapBrush1
+            sal::systools::COMReference<ID2D1BitmapBrush1> pBrush1;
+            pBitmapBrush->QueryInterface(__uuidof(ID2D1BitmapBrush1),
+                                         reinterpret_cast<void**>(&pBrush1));
+
+            if (pBrush1)
+            {
+                pBrush1->SetInterpolationMode1(D2D1_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
+            }
+            else
+            {
+                pBitmapBrush->SetInterpolationMode(D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+            }
+
+            // set BitmapBrush transformation relative to it's PixelSize and
+            // the used FillUnitRange. Since we use unit coordinates here this
+            // is pretty simple
+            const D2D1_SIZE_U aBMSPixel(pD2DBitmap->GetPixelSize());
+            const double fScaleX((aFillUnitRange.getMaxX() - aFillUnitRange.getMinX())
+                                 / aBMSPixel.width);
+            const double fScaleY((aFillUnitRange.getMaxY() - aFillUnitRange.getMinY())
+                                 / aBMSPixel.height);
+            const D2D1_MATRIX_3X2_F aBTrans(D2D1::Matrix3x2F(
+                fScaleX, 0.0, 0.0, fScaleY, aFillUnitRange.getMinX(), aFillUnitRange.getMinY()));
+            pBitmapBrush->SetTransform(&aBTrans);
+
+            // set transform to ObjectToWorld to be able to paint in unit coordinates, so
+            // evtl. shear/rotate in that transform is used and does not influence the
+            // orthogonal and unit-oriented brush handling
+            const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+            const basegfx::B2DHomMatrix aLocalTransform(
+                getViewInformation2D().getObjectToViewTransformation()
+                * rFillGraphicPrimitive2D.getTransformation());
+            getRenderTarget()->SetTransform(D2D1::Matrix3x2F(
+                aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
+                aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
+
+            // use unit rectangle, transformation is already set to include ObjectToWorld
+            const D2D1_RECT_F rect = { FLOAT(0.0), FLOAT(0.0), FLOAT(1.0), FLOAT(1.0) };
+
+            // draw as unit rectangle as brush filled rectangle
+            getRenderTarget()->FillRectangle(&rect, pBitmapBrush);
+            bDone = true;
+        }
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
 void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     if (0 == mnRecursionCounter)
@@ -1913,6 +2038,12 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
             // (see 'Example POC' in Gerrit), decomposes to polygon primitive
             processSingleLinePrimitive2D(
                 static_cast<const primitive2d::SingleLinePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
+        {
+            processFillGraphicPrimitive2D(
+                static_cast<const primitive2d::FillGraphicPrimitive2D&>(rCandidate));
             break;
         }
 
