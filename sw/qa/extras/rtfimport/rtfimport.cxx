@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 
@@ -54,6 +55,12 @@
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configuration.hxx>
+
+#include <editeng/charhiddenitem.hxx>
+
+#include <ndindex.hxx>
+#include <ndtxt.hxx>
+#include <fmtautofmt.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -993,6 +1000,36 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44984)
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStartEnd"),
                          getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 1),
                                                "TextPortionType"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf131386)
+{
+    createSwDoc("hidden-para-separator.rtf");
+    SwDoc const* const pDoc = getSwDoc();
+    SwNodeIndex ix(pDoc->GetNodes().GetEndOfContent(), -1);
+    CPPUNIT_ASSERT(!ix.GetNode().GetTextNode()->GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle());
+    --ix;
+    --ix;
+    CPPUNIT_ASSERT(ix.GetNode()
+                       .GetTextNode()
+                       ->GetAttr(RES_PARATR_LIST_AUTOFMT)
+                       .GetStyleHandle()
+                       ->Get(RES_CHRATR_HIDDEN)
+                       .GetValue());
+    --ix;
+    CPPUNIT_ASSERT(ix.GetNode()
+                       .GetTextNode()
+                       ->GetAttr(RES_PARATR_LIST_AUTOFMT)
+                       .GetStyleHandle()
+                       ->Get(RES_CHRATR_HIDDEN)
+                       .GetValue());
+    --ix;
+    CPPUNIT_ASSERT(ix.GetNode()
+                       .GetTextNode()
+                       ->GetAttr(RES_PARATR_LIST_AUTOFMT)
+                       .GetStyleHandle()
+                       ->Get(RES_CHRATR_HIDDEN)
+                       .GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82071)

@@ -73,6 +73,7 @@ enum RTFBufferTypes
     BUFFER_SETSTYLE,
     /// Stores properties, should be created only in bufferProperties().
     BUFFER_PROPS,
+    BUFFER_PROPS_CHAR,
     BUFFER_NESTROW,
     BUFFER_CELLEND,
     BUFFER_STARTRUN,
@@ -762,7 +763,7 @@ public:
     void resetFrame();
     /// Buffers properties to be sent later.
     void bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
-                          const tools::SvRef<TableRowBuffer>& pTableProperties);
+                          const tools::SvRef<TableRowBuffer>& pTableProperties, Id nStyleType = 0);
     /// implement non-obvious RTF specific style inheritance
     RTFReferenceTable::Entries_t deduplicateStyleTable();
 
