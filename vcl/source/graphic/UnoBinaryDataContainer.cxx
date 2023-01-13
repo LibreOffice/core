@@ -14,9 +14,6 @@
 
 using namespace css;
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL(UnoBinaryDataContainer);
-
 css::uno::Sequence<sal_Int8> SAL_CALL UnoBinaryDataContainer::getCopyAsByteSequence()
 {
     if (maBinaryDataContainer.isEmpty())

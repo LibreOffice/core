@@ -17,14 +17,12 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/util/XBinaryDataContainer.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <utility>
 #include <vcl/BinaryDataContainer.hxx>
 
-class UnoBinaryDataContainer final
-    : public cppu::WeakImplHelper<css::util::XBinaryDataContainer, css::lang::XUnoTunnel>
+class UnoBinaryDataContainer final : public cppu::WeakImplHelper<css::util::XBinaryDataContainer>
 {
 private:
     BinaryDataContainer maBinaryDataContainer;
@@ -39,8 +37,6 @@ public:
 
     // XBinaryDataContainer
     css::uno::Sequence<sal_Int8> SAL_CALL getCopyAsByteSequence() override;
-
-    UNO3_GETIMPLEMENTATION_DECL(UnoBinaryDataContainer)
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

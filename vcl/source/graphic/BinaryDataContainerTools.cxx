@@ -18,7 +18,7 @@ BinaryDataContainer convertUnoBinaryDataContainer(
 {
     BinaryDataContainer aBinaryDataContainer;
     UnoBinaryDataContainer* pUnoBinaryDataContainer
-        = comphelper::getFromUnoTunnel<UnoBinaryDataContainer>(rxBinaryDataContainer);
+        = dynamic_cast<UnoBinaryDataContainer*>(rxBinaryDataContainer.get());
     if (pUnoBinaryDataContainer)
         aBinaryDataContainer = pUnoBinaryDataContainer->getBinaryDataContainer();
     return aBinaryDataContainer;
