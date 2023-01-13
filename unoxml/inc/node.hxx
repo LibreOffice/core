@@ -32,7 +32,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
@@ -89,7 +88,8 @@ namespace DOM
 
     class CDocument;
 
-    class CNode : public cppu::WeakImplHelper< css::xml::dom::XNode, css::lang::XUnoTunnel, css::xml::dom::events::XEventTarget >
+    class SAL_LOPLUGIN_ANNOTATE("crosscast") CNode
+        : public cppu::WeakImplHelper< css::xml::dom::XNode, css::xml::dom::events::XEventTarget >
     {
         friend class CDocument;
         friend class CElement;
@@ -122,8 +122,6 @@ namespace DOM
     public:
 
         virtual ~CNode() override;
-
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
 
         xmlNodePtr GetNodePtr() { return m_aNodePtr; }
 
@@ -290,10 +288,6 @@ namespace DOM
             sal_Bool useCapture) override;
 
         virtual sal_Bool SAL_CALL dispatchEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
-
-        // --- XUnoTunnel
-        virtual ::sal_Int64 SAL_CALL
-            getSomething(css::uno::Sequence< ::sal_Int8 > const& rId) override;
     };
 
     /// eliminate redundant namespace declarations

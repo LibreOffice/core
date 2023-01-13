@@ -161,12 +161,6 @@ namespace DOM
         }
     }
 
-    const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() noexcept
-    {
-        static const comphelper::UnoIdInit theCNodeUnoTunnelId;
-        return theCNodeUnoTunnelId.getSeq();
-    }
-
     CDocument & CNode::GetOwnerDocument()
     {
         OSL_ASSERT(m_xDocument.is());
@@ -300,7 +294,7 @@ namespace DOM
 
         if (nullptr == m_aNodePtr) { return nullptr; }
 
-        CNode *const pNewChild(comphelper::getFromUnoTunnel<CNode>(xNewChild));
+        CNode *const pNewChild(dynamic_cast<CNode*>(xNewChild.get()));
         if (!pNewChild) { throw RuntimeException(); }
         xmlNodePtr const cur = pNewChild->GetNodePtr();
         if (!cur) { throw RuntimeException(); }
@@ -639,8 +633,8 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        CNode *const pNewNode(comphelper::getFromUnoTunnel<CNode>(newChild));
-        CNode *const pRefNode(comphelper::getFromUnoTunnel<CNode>(refChild));
+        CNode *const pNewNode(dynamic_cast<CNode*>(newChild.get()));
+        CNode *const pRefNode(dynamic_cast<CNode*>(refChild.get()));
         if (!pNewNode || !pRefNode) { throw RuntimeException(); }
         xmlNodePtr const pNewChild(pNewNode->GetNodePtr());
         xmlNodePtr const pRefChild(pRefNode->GetNodePtr());
@@ -740,7 +734,7 @@ namespace DOM
 
         Reference<XNode> xReturn( xOldChild );
 
-        ::rtl::Reference<CNode> const pOld(comphelper::getFromUnoTunnel<CNode>(xOldChild));
+        ::rtl::Reference<CNode> const pOld(dynamic_cast<CNode*>(xOldChild.get()));
         if (!pOld.is()) { throw RuntimeException(); }
         xmlNodePtr const old = pOld->GetNodePtr();
         if (!old) { throw RuntimeException(); }
@@ -808,10 +802,8 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        ::rtl::Reference<CNode> const pOldNode(
-                comphelper::getFromUnoTunnel<CNode>(xOldChild));
-        ::rtl::Reference<CNode> const pNewNode(
-                comphelper::getFromUnoTunnel<CNode>(xNewChild));
+        ::rtl::Reference<CNode> const pOldNode(dynamic_cast<CNode*>(xOldChild.get()));
+        ::rtl::Reference<CNode> const pNewNode(dynamic_cast<CNode*>(xNewChild.get()));
         if (!pOldNode.is() || !pNewNode.is()) { throw RuntimeException(); }
         xmlNodePtr const pOld = pOldNode->GetNodePtr();
         xmlNodePtr const pNew = pNewNode->GetNodePtr();
@@ -975,12 +967,6 @@ namespace DOM
         // this calls event listeners, do not call with locked mutex
         pDispatcher->dispatchEvent(*pDocument, m_rMutex, pNode, this, evt);
         return true;
-    }
-
-    ::sal_Int64 SAL_CALL
-    CNode::getSomething(Sequence< ::sal_Int8 > const& rId)
-    {
-        return comphelper::getSomethingImpl(rId, this);
     }
 }
 
