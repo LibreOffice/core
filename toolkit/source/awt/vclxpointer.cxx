@@ -29,9 +29,6 @@ VCLXPointer::~VCLXPointer()
 {
 }
 
-// css::lang::XUnoTunnel
-UNO3_GETIMPLEMENTATION_IMPL( VCLXPointer );
-
 void VCLXPointer::setType( sal_Int32 nType )
 {
     std::scoped_lock aGuard( maMutex );

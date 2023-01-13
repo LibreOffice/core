@@ -1146,7 +1146,7 @@ void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rx
 {
     SolarMutexGuard aGuard;
 
-    VCLXPointer* pPointer = comphelper::getFromUnoTunnel<VCLXPointer>( rxPointer );
+    VCLXPointer* pPointer = dynamic_cast<VCLXPointer*>( rxPointer.get() );
     if ( pPointer && GetWindow() )
         GetWindow()->SetPointer( pPointer->GetPointer() );
 }

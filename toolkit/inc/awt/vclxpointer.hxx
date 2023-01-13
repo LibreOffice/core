@@ -22,7 +22,6 @@
 
 #include <com/sun/star/awt/XPointer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
@@ -33,7 +32,7 @@
 
 
 class VCLXPointer final : public cppu::WeakImplHelper<
-    css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
+    css::awt::XPointer, css::lang::XServiceInfo>
 {
     std::mutex    maMutex;
     PointerStyle    maPointer;
@@ -43,9 +42,6 @@ public:
     virtual ~VCLXPointer() override;
 
     PointerStyle GetPointer() const { return maPointer; }
-
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXPointer)
 
     // css::awt::XPointer
     void SAL_CALL setType( sal_Int32 nType ) override;
