@@ -441,7 +441,7 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
     if( !GetFrame() )
     {
-        SAL_WARN("sw.a11y", "SwAccessibleContext::FireAccessibleEvent called for already disposed frame?");
+        SAL_INFO("sw.a11y", "SwAccessibleContext::FireAccessibleEvent called for already disposed frame?");
         return;
     }
 
