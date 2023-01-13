@@ -17,7 +17,7 @@
 
 namespace model
 {
-/** Color transfomation type */
+/** Color transformation type */
 enum class TransformationType
 {
     Undefined,
@@ -104,7 +104,7 @@ public:
 
     std::vector<Transformation> const& getTransformations() const { return maTransformations; }
 
-    /** Applies the defined trasformations to the input color */
+    /** Applies the defined transformations to the input color */
     Color applyTransformations(Color const& rColor) const
     {
         Color aColor(rColor);
