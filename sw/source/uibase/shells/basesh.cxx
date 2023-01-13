@@ -882,6 +882,105 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
     return true;
 }
+
+/// Searches for the specified field type and field name prefix under cursor and update the matching
+/// field to have the provided new name and content.
+void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (!pTypeName || pTypeName->GetValue() != "SetRef")
+    {
+        // This is implemented so far only for reference marks.
+        return;
+    }
+
+    const SfxStringItem* pNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    if (!pNamePrefix)
+    {
+        return;
+    }
+    const OUString& rNamePrefix = pNamePrefix->GetValue();
+
+    const SfxUnoAnyItem* pField = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+    if (!pField)
+    {
+        return;
+    }
+    uno::Sequence<beans::PropertyValue> aField;
+    pField->GetValue() >>= aField;
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+    comphelper::ScopeGuard g(
+        [&rWrtSh]
+        {
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+        });
+
+    SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();
+    SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
+    std::vector<SwTextAttr*> aAttrs
+        = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
+    if (aAttrs.empty())
+    {
+        return;
+    }
+
+    auto& rRefmark = const_cast<SwFormatRefMark&>(aAttrs[0]->GetRefMark());
+    if (!rRefmark.GetRefName().startsWith(rNamePrefix))
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aMap(aField);
+    auto aName = aMap["Name"].get<OUString>();
+    rRefmark.GetRefName() = aName;
+
+    OUString aContent = aMap["Content"].get<OUString>();
+    auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());
+    if (!pTextRefMark->End())
+    {
+        return;
+    }
+
+    // Insert markers to remember where the paste positions are.
+    const SwTextNode& rTextNode = pTextRefMark->GetTextNode();
+    SwPaM aMarkers(SwPosition(rTextNode, *pTextRefMark->End()));
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    pTextRefMark->SetDontExpand(false);
+    if (!rIDCO.InsertString(aMarkers, "XY"))
+    {
+        return;
+    }
+
+    SwPaM aPasteEnd(SwPosition(rTextNode, *pTextRefMark->End()));
+    aPasteEnd.Move(fnMoveBackward, GoInContent);
+
+    // Paste HTML content.
+    SwPaM* pCursorPos = rWrtSh.GetCursor();
+    *pCursorPos = aPasteEnd;
+    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
+
+    // Update the refmark to point to the new content.
+    sal_Int32 nOldStart = pTextRefMark->GetStart();
+    sal_Int32 nNewStart = *pTextRefMark->End();
+    // First grow it to include text till the end of the paste position.
+    pTextRefMark->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
+    // Then shrink it to only start at the paste start: we know that the refmark was
+    // truncated to the paste start, as the refmark has to stay inside a single text node
+    pTextRefMark->SetStart(nNewStart);
+    rTextNode.GetSwpHints().SortIfNeedBe();
+    SwPaM aEndMarker(*aPasteEnd.GetPoint());
+    aEndMarker.SetMark();
+    aEndMarker.GetMark()->AdjustContent(1);
+    SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
+
+    // Remove markers. The start marker includes the old content as well.
+    rIDCO.DeleteAndJoin(aStartMarker);
+    rIDCO.DeleteAndJoin(aEndMarker);
+}
 }
 
 // Evaluate respectively dispatching the slot Id
@@ -924,6 +1023,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.ClearTableBoxContent();
                     rSh.SaveTableBoxContent();
                 }
+            }
+            break;
+        case FN_UPDATE_FIELD:
+            {
+                UpdateFieldContent(rReq, rSh);
             }
             break;
         case FN_UPDATE_CHARTS:

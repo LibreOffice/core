@@ -809,6 +809,58 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When updating that refmark:
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "TypeName": {
+        "type": "string",
+        "value": "SetRef"
+    },
+    "NamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_ITEM CSL_CITATION"
+    },
+    "Field": {
+        "type": "[]com.sun.star.beans.PropertyValue",
+        "value": {
+            "Name": {
+                "type": "string",
+                "value": "ZOTERO_ITEM CSL_CITATION {} new refmark"
+            },
+            "Content": {
+                "type": "string",
+                "value": "new content"
+            }
+        }
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:UpdateField", aArgs);
+
+    // Then make sure that the document text features the new content:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new content
+    // - Actual  : old content
+    // i.e. the content was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
