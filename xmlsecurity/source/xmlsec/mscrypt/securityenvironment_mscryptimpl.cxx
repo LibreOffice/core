@@ -174,9 +174,6 @@ uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupported
     return { "com.sun.star.xml.crypto.SecurityEnvironment" };
 }
 
-/* XUnoTunnel */
-UNO3_GETIMPLEMENTATION_IMPL(SecurityEnvironment_MSCryptImpl);
-
 HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() {
     return m_hProv ;
 }

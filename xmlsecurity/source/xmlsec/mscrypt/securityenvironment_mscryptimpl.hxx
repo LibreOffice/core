@@ -39,7 +39,6 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <vector>
 #include <xmlsec-wrapper.h>
@@ -49,8 +48,7 @@
 
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XSecurityEnvironment ,
-    css::lang::XServiceInfo,
-    css::lang::XUnoTunnel >
+    css::lang::XServiceInfo >
 {
     private:
         //crypto provider and key container
@@ -122,9 +120,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        //Methods from XUnoTunnel
-        UNO3_GETIMPLEMENTATION_DECL(SecurityEnvironment_MSCryptImpl)
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException

@@ -78,8 +78,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         uno::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( mxContext );
 
         /* Setup key slot and certDb */
-        uno::Reference< cssl::XUnoTunnel > xSecEnvTunnel( xSecEnv, uno::UNO_QUERY_THROW );
-        SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xSecEnvTunnel);
+        SecurityEnvironment_MSCryptImpl* pSecEnv = dynamic_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnv.get());
         if( pSecEnv == nullptr )
         {
             if( n_hStoreHandle != nullptr )

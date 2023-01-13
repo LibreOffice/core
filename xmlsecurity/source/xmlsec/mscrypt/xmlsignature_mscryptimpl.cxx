@@ -102,8 +102,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
-    SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xSecTunnel);
+    SecurityEnvironment_MSCryptImpl* pSecEnv = dynamic_cast<SecurityEnvironment_MSCryptImpl*>(aEnvironment.get());
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -191,8 +190,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     Reference< XSecurityEnvironment > xSecEnv
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
-    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY_THROW ) ;
-    SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xSecTunnel);
+    SecurityEnvironment_MSCryptImpl* pSecEnv = dynamic_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnv.get());
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
