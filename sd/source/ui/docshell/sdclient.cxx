@@ -143,6 +143,13 @@ void Client::ViewChanged()
     if (!pView)
         return;
 
+    // Do not recalculate the visareasize if the embedded object is opening in a new window.
+    if (!IsObjectInPlaceActive())
+    {
+        pSdrOle2Obj->BroadcastObjectChange();
+        return;
+    }
+
     ::tools::Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
     Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
 
