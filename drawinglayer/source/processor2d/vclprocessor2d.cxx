@@ -306,7 +306,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
             }
 
-            mpOutputDevice->SetFont(aFont);
             mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
             OUString aText(rTextCandidate.getText());
@@ -363,6 +362,10 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
                 mpOutputDevice->SetMapMode(aMapMode);
             }
+
+            // tdf#152990 set the font after the MapMode is (potentially) set so canvas uses the desired
+            // font size
+            mpOutputDevice->SetFont(aFont);
 
             if (!aDXArray.empty())
             {
