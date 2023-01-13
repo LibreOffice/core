@@ -18,7 +18,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
@@ -32,7 +31,6 @@
 #endif
 
 class CertificateImpl : public cppu::WeakImplHelper< css::security::XCertificate,
-                                                     css::lang::XUnoTunnel,
                                                      css::lang::XServiceInfo >,
                         public xmlsecurity::Certificate
 {
@@ -75,11 +73,6 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override;
 
     virtual sal_Int32 SAL_CALL getCertificateUsage() override;
-
-    //Methods from XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& aIdentifier) override;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;

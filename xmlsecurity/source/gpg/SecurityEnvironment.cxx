@@ -203,7 +203,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::createCertificateFromAscii( co
 sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertificate >& aCert,
                                                   const Sequence< Reference< XCertificate > >&  /*intermediateCerts*/ )
 {
-    const CertificateImpl* xCert = comphelper::getFromUnoTunnel<CertificateImpl>(aCert);
+    const CertificateImpl* xCert = dynamic_cast<CertificateImpl*>(aCert.get());
     if (xCert == nullptr) {
          // Can't find the key locally -> unknown owner
         return security::CertificateValidity::ISSUER_UNKNOWN;
@@ -223,7 +223,7 @@ sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertifica
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
     const Reference< XCertificate >& aCert)
 {
-    if (comphelper::getFromUnoTunnel<CertificateImpl>(aCert) == nullptr)
+    if (dynamic_cast<CertificateImpl*>(aCert.get()) == nullptr)
         throw RuntimeException();
 
     // we only listed private keys anyway, up in

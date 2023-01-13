@@ -193,19 +193,6 @@ sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
     return KeyUsage::DIGITAL_SIGNATURE | KeyUsage::NON_REPUDIATION  | KeyUsage::KEY_ENCIPHERMENT | KeyUsage::DATA_ENCIPHERMENT;
 }
 
-/* XUnoTunnel */
-sal_Int64 SAL_CALL CertificateImpl::getSomething(const Sequence< sal_Int8 >& aIdentifier)
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
-/* XUnoTunnel extension */
-
-const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
-    static const comphelper::UnoIdInit theCertificateImplUnoTunnelId;
-    return theCertificateImplUnoTunnelId.getSeq();
-}
-
 void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
 {
     m_pKey = key;
