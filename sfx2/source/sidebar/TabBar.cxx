@@ -35,6 +35,8 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <osl/diagnose.h>
 
+#include "uiobject.hxx"
+
 using namespace css;
 using namespace css::uno;
 
@@ -58,6 +60,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , maPopupMenuProvider(std::move(aPopupMenuProvider))
     , pParentSidebarController(rParentSidebarController)
 {
+    set_id("TabBar"); // for uitest
+
     InitControlBase(mxMenuButton.get());
 
     mxTempToplevel->move(mxContents.get(), m_xContainer.get());
@@ -376,6 +380,11 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 void TabBar::EnableMenuButton(const bool bEnable)
 {
     mxMenuButton->set_sensitive(bEnable);
+}
+
+FactoryFunction TabBar::GetUITestFactory() const
+{
+    return TabBarUIObject::create;
 }
 
 } // end of namespace sfx2::sidebar

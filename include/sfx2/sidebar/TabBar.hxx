@@ -39,6 +39,7 @@ class SidebarController;
 */
 class TabBar final : public InterimItemWindow
 {
+    friend class TabBarUIObject;
 public:
     /** DeckMenuData has entries for display name, and a flag:
          - isCurrentDeck for the deck selection data
@@ -85,6 +86,7 @@ public:
     /// Enables/Disables the menu button. Used by LoKit.
     void EnableMenuButton(const bool bEnable);
 
+    virtual FactoryFunction GetUITestFactory() const override;
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 

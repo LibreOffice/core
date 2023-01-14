@@ -287,6 +287,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/TitleBar \
     sfx2/source/sidebar/Theme \
     sfx2/source/sidebar/Tools \
+    sfx2/source/sidebar/uiobject\
     sfx2/source/sidebar/UnoPanel \
     sfx2/source/sidebar/UnoPanels \
     sfx2/source/sidebar/UnoDeck \
