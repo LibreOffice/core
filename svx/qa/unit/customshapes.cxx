@@ -1321,7 +1321,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf153000_MS0_SPT_25_31)
     // rendered same way as in Word. More info in bug 153000.
     loadFromURL(u"tdf153000_WordArt_type_25_to_31.docx");
     // The wrong rendering becomes visible in properties "Coordinates" and "Segments". To simplify
-    // the test we do not compare the values themselve but only the amount of values.
+    // the test we do not compare the values themselves but only the amount of values.
     // Without fix there were always 5 pairs in "Coordinates" and "Segments" did not exist.
     sal_Int32 aExpected[] = { 8, 5, 14, 8, 8, 14, 4 };
     for (sal_uInt8 i = 0; i < 7; i++)
