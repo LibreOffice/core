@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/graph.hxx>
 #include <basegfx/range/b2drange.hxx>
 
 #ifdef DBG_UTIL

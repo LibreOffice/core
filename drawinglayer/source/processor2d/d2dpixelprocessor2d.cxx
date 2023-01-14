@@ -35,6 +35,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
