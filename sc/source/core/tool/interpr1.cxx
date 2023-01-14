@@ -5064,6 +5064,7 @@ void ScInterpreter::ScMatch()
             return;
         }
 
+        // The source data is cell range.
         SCCOLROW nDelta = 0;
         if (nCol1 == nCol2)
         {                                           // search row in column
@@ -7508,16 +7509,26 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         {
             SCSIZE nX = static_cast<SCSIZE>(nSpIndex);
             SCSIZE nY = nDelta;
+            SCSIZE nXs = 0;
+            SCSIZE nYs = nY;
             if ( bHLookup )
             {
                 nX = nDelta;
                 nY = static_cast<SCSIZE>(nZIndex);
+                nXs = nX;
+                nYs = 0;
             }
             assert( nX < nC && nY < nR );
-            if ( pMat->IsStringOrEmpty( nX, nY) )
-                PushString(pMat->GetString( nX,nY).getString());
+            if (!(rItem.meType == ScQueryEntry::ByString && pMat->IsValue( nXs, nYs)))
+            {
+                if (pMat->IsStringOrEmpty( nX, nY))
+                    PushString(pMat->GetString( nX, nY).getString());
+                else
+                    PushDouble(pMat->GetDouble( nX, nY));
+            }
             else
-                PushDouble(pMat->GetDouble( nX,nY));
+                PushNA();
+            return;
         }
         else
             PushNA();
