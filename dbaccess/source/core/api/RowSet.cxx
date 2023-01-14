@@ -419,18 +419,6 @@ void SAL_CALL ORowSet::release() noexcept
     ORowSet_BASE1::release();
 }
 
-// css::XUnoTunnel
-sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const Sequence< sal_Int8 > & ORowSet::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit s_Id;
-    return s_Id.getSeq();
-}
-
 // css::XAggregation
 Any SAL_CALL ORowSet::queryAggregation( const Type& rType )
 {
@@ -2145,7 +2133,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify the clones
     for (auto const& elem : m_aClones)
     {
-        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(elem.get());
+        rtl::Reference<ORowSetClone> pClone = dynamic_cast<ORowSetClone*>(elem.get().get());
         if(pClone)
             pClone->onDeleteRow( _rBookmark );
     }
@@ -2158,7 +2146,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify the clones
     for (auto const& clone : m_aClones)
     {
-        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(clone.get());
+        rtl::Reference<ORowSetClone> pClone = dynamic_cast<ORowSetClone*>(clone.get().get());
         if(pClone)
             pClone->onDeletedRow( _rBookmark, _nPos );
     }
@@ -2901,18 +2889,6 @@ void ORowSetClone::close()
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetClone::getInfoHelper()
 {
     return *::comphelper::OPropertyArrayUsageHelper<ORowSetClone>::getArrayHelper();
-}
-
-const Sequence< sal_Int8 > & ORowSetClone::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::XUnoTunnel
-sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

@@ -255,10 +255,6 @@ namespace dbaccess
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
-    // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
     // css::uno::XAggregation
         virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
 
@@ -486,10 +482,6 @@ namespace dbaccess
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     // OComponentHelper
         virtual void SAL_CALL disposing() override;

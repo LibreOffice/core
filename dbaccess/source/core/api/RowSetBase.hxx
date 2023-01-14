@@ -19,7 +19,7 @@
 #pragma once
 
 #include <memory>
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -51,7 +50,7 @@ namespace dbaccess
 {
     class OEmptyCollection;
 
-    typedef ::cppu::ImplHelper10<               css::sdbcx::XRowLocate,
+    typedef ::cppu::ImplHelper9<                css::sdbcx::XRowLocate,
                                                 css::sdbc::XRow,
                                                 css::sdbc::XResultSetMetaDataSupplier,
                                                 css::sdbc::XWarningsSupplier,
@@ -59,8 +58,7 @@ namespace dbaccess
                                                 css::sdbcx::XColumnsSupplier,
                                                 css::lang::XServiceInfo,
                                                 css::sdbc::XRowSet,
-                                                css::sdbc::XCloseable,
-                                                css::lang::XUnoTunnel> ORowSetBase_BASE;
+                                                css::sdbc::XCloseable> ORowSetBase_BASE;
 
     class ORowSetCache;
     class ORowSetDataColumns;
