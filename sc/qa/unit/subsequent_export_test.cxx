@@ -30,6 +30,8 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
+#include <svl/zformat.hxx>
+#include <svl/numformat.hxx>
 #include <tabprotection.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -183,6 +185,7 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTdf113646();
     void testDateStandardfilterXLSX();
+    void testNumberFormatODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -290,6 +293,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testTdf113646);
     CPPUNIT_TEST(testDateStandardfilterXLSX);
+    CPPUNIT_TEST(testNumberFormatODS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4303,6 +4307,33 @@ void ScExportTest::testDateStandardfilterXLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
                 "dateTimeGrouping", "day");
+}
+
+void ScExportTest::testNumberFormatODS()
+{
+    createScDoc("ods/testNumberFormats.ods");
+    saveAndReload("calc8");
+    ScDocument* pDoc = getScDoc();
+    sal_uInt32 nNumberFormat;
+    const sal_Int32 nCountFormats = 18;
+    const OUString aExpectedFormatStr[nCountFormats]
+        = { "\"format=\"000000",        "\"format=\"??????",        "\"format=\"??0000",
+            "\"format=\"000,000",       "\"format=\"???,???",       "\"format=\"??0,000",
+            "\"format=\"000\" \"?/?",   "\"format=\"???\" \"?/?",   "\"format=\"?00\" \"?/?",
+            "\"format=\"0,000\" \"?/?", "\"format=\"?,???\" \"?/?", "\"format=\"?,?00\" \"?/?",
+            "\"format=\"0.000E+00",     "\"format=\"?.###E+00",     "\"format=\"?.0##E+00",
+            "\"format=\"000E+00",       "\"format=\"???E+00",       "\"format=\"?00E+00" };
+    for (sal_Int32 i = 0; i < nCountFormats; i++)
+    {
+        nNumberFormat = pDoc->GetNumberFormat(i + 1, 2, 0);
+        const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+        const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format modified during export/import",
+                                     aExpectedFormatStr[i], rFormatStr);
+    }
+    OUString aCSVPath = createFilePath(u"contentCSV/testNumberFormats.csv");
+    testCondFile(aCSVPath, &*pDoc, 0,
+                 false); // comma is thousand separator and cannot be used as delimiter
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

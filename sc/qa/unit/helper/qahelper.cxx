@@ -133,11 +133,12 @@ void ScModelTestBase::testFile(const OUString& aFileName, ScDocument& rDoc, SCTA
     }
 }
 
-void ScModelTestBase::testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+void ScModelTestBase::testCondFile( const OUString& aFileName, ScDocument* pDoc, SCTAB nTab, bool bCommaAsDelimiter )
 {
     conditional_format_handler aHandler(pDoc, nTab);
     orcus::csv::parser_config aConfig;
-    aConfig.delimiters.push_back(',');
+    if ( bCommaAsDelimiter )
+        aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
     aConfig.text_qualifier = '"';
     std::string aContent;

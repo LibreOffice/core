@@ -88,7 +88,8 @@ public:
 struct SvXMLNumberInfo
 {
     sal_Int32   nDecimals           = -1;
-    sal_Int32   nInteger            = -1;
+    sal_Int32   nInteger            = -1;       /// Total min number of digits in integer part ('0' + '?')
+    sal_Int32   nBlankInteger       = -1;       /// Number of '?' in integer part
     sal_Int32   nExpDigits          = -1;
     sal_Int32   nExpInterval        = -1;
     sal_Int32   nMinNumerDigits     = -1;
@@ -675,6 +676,11 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nInteger = nAttrVal;
                 break;
+            case XML_ELEMENT(LO_EXT, XML_MAX_BLANK_INTEGER_DIGITS):
+            case XML_ELEMENT(NUMBER, XML_MAX_BLANK_INTEGER_DIGITS):
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
+                    aNumInfo.nBlankInteger = nAttrVal;
+                break;
             case XML_ELEMENT(NUMBER, XML_GROUPING):
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     aNumInfo.bGrouping = bAttrBool;
@@ -776,6 +782,8 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
+    if ( aNumInfo.nBlankInteger > aNumInfo.nInteger )
+        aNumInfo.nInteger = aNumInfo.nBlankInteger;
     if ( aNumInfo.nMinDecimalDigits == -1)
     {
         if ( bVarDecimals || aNumInfo.bDecReplace )
@@ -1720,6 +1728,25 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
         aNumStr.stripStart('#');
+    }
+
+    if ( rInfo.nBlankInteger > 0 )
+    {
+        // Replace nBlankInteger '0' by '?'
+        sal_Int32 nIndex = 0;
+        sal_Int32 nBlanks = rInfo.nBlankInteger;
+        sal_Int32 nIntegerEnd = aNumStr.indexOf( pFormatter->GetNumDecimalSep() );
+        if ( nIntegerEnd < 0 )
+            nIntegerEnd = aNumStr.getLength();
+        while ( nIndex < nIntegerEnd && nBlanks > 0 )
+        {
+            if ( aNumStr[nIndex] == '0' )
+            {
+                aNumStr[nIndex] = '?';
+                nBlanks--;
+            }
+            nIndex++;
+        }
     }
 
     if ( bGrouping && rInfo.nExpInterval > rInfo.nInteger )

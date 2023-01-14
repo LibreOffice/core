@@ -163,7 +163,7 @@ public:
     void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
 
     //need own handler because conditional formatting strings must be generated
-    void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
+    void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab, bool bCommaAsDelimiter = true);
 
     const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage);
 

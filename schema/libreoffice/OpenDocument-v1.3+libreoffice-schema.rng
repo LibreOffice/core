@@ -2633,6 +2633,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <rng:define name="common-number-attlist" combine="interleave">
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:max-blank-integer-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="table-data-pilot-level-attlist" combine="interleave">
     <rng:optional>
