@@ -2196,11 +2196,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    Reference<XUnoTunnel> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);
-    dbaccess::ODatabaseContext* pContext
-        = comphelper::getFromUnoTunnel<dbaccess::ODatabaseContext>(xDBContextTunnel);
+    Reference<XInterface> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);
+    rtl::Reference<dbaccess::ODatabaseContext> pContext
+        = dynamic_cast<dbaccess::ODatabaseContext*>(xDBContextTunnel.get());
     assert(pContext);
-
+    
     rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));
     css::uno::Reference<XInterface> inst(pImpl->createNewModel_deliverOwnership());

@@ -707,17 +707,6 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
     m_aDatabaseObjects.erase( oldPos );
 }
 
-sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const Sequence< sal_Int8 > & ODatabaseContext::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
 {
 #if !HAVE_FEATURE_SCRIPTING

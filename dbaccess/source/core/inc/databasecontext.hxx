@@ -28,7 +28,6 @@
 #include "ModelImpl.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
@@ -55,7 +54,6 @@ class DatabaseDocumentLoader;
 
 typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
                                        ,   css::sdb::XDatabaseContext
-                                       ,   css::lang::XUnoTunnel
                                        >   DatabaseAccessContext_Base;
 
 class ODatabaseContext  :public DatabaseAccessContext_Base
@@ -154,10 +152,6 @@ public:
     // XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
     virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-
-    // css::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl);
     void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl);
