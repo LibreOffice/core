@@ -384,13 +384,6 @@ void SAL_CALL Submission::setName( const OUString& sID )
 }
 
 
-sal_Int64 SAL_CALL Submission::getSomething(
-    const Sequence<sal_Int8>& aId )
-{
-    return comphelper::getSomethingImpl(aId, this);
-}
-
-
 static OUString lcl_message( std::u16string_view rID, std::u16string_view rText )
 {
     OUString aMessage = OUString::Concat("XForms submission '") + rID + "' failed" + rText + ".";

@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include "propertysetbase.hxx"
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
@@ -52,7 +51,6 @@ namespace xforms
  */
 typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
-    css::lang::XUnoTunnel,
     css::xforms::XSubmission
 > Submission_t;
 
@@ -192,13 +190,6 @@ public:
     virtual OUString SAL_CALL getName() override;
 
     virtual void SAL_CALL setName( const OUString& ) override;
-
-
-    // XUnoTunnel
-
-
-    virtual sal_Int64 SAL_CALL getSomething(
-        const css::uno::Sequence<sal_Int8>& ) override;
 
 
     // XSubmission
