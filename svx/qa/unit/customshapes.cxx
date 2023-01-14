@@ -1217,7 +1217,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
             break;
         }
     }
-    if (rSegments.getLength() > 2)
+    if (rSegments.getLength() > 1)
         return true;
     else
         return false;
@@ -1280,6 +1280,58 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148707_two_commands_B_V)
         CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
         const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", sal_uInt32(2), aPolyPolygon.count());
+    }
+}
+
+bool lcl_getShapeCoordinates(uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rCoordinates,
+                             const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
+    uno::Any anotherAny = xShapeProps->getPropertyValue("CustomShapeGeometry");
+    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    if (!(anotherAny >>= aCustomShapeGeometry))
+        return false;
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aCustomShapeGeometry))
+    {
+        if (rProp.Name == "Path")
+        {
+            rProp.Value >>= aPathProps;
+            break;
+        }
+    }
+
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    {
+        if (rProp.Name == "Coordinates")
+        {
+            rProp.Value >>= rCoordinates;
+            break;
+        }
+    }
+    if (rCoordinates.getLength() > 0)
+        return true;
+    else
+        return false;
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf153000_MS0_SPT_25_31)
+{
+    // The shapes MSO_SPT=25 to MSO_SPT=31 are currently rendered as rectangle. They should be
+    // rendered same way as in Word. More info in bug 153000.
+    loadFromURL(u"tdf153000_WordArt_type_25_to_31.docx");
+    // The wrong rendering becomes visible in properties "Coordinates" and "Segments". To simplify
+    // the test we do not compare the values themselve but only the amount of values.
+    // Without fix there were always 5 pairs in "Coordinates" and "Segments" did not exist.
+    sal_Int32 aExpected[] = { 8, 5, 14, 8, 8, 14, 4 };
+    for (sal_uInt8 i = 0; i < 7; i++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+        CPPUNIT_ASSERT(lcl_getShapeSegments(aSegments, xShape));
+        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+        CPPUNIT_ASSERT(lcl_getShapeCoordinates(aCoordinates, xShape));
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], aCoordinates.getLength());
     }
 }
 }
