@@ -2519,6 +2519,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         const OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
                         const OUString sPrecision = OUString::number(nPrecision);
                         const OUString sLeadZeroes = OUString::number(nLeadZeroes);
+                        const OUString sNatNum12 = OUString::number( static_cast< sal_Int32 >( pFormatter->IsNatNum12( nNumberFormat ) ) );
 
                         aFormat += sThousand +
                             sBreak +
@@ -2527,6 +2528,8 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                             sPrecision +
                             sBreak +
                             sLeadZeroes +
+                            sBreak +
+                            sNatNum12 +
                             sBreak;
 
                         rSet.Put(SfxStringItem(nWhich, aFormat));

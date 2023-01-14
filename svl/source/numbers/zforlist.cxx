@@ -2257,6 +2257,13 @@ OUString SvNumberFormatter::GetLangDecimalSep( LanguageType nLang ) const
     return aRet;
 }
 
+bool SvNumberFormatter::IsNatNum12( sal_uInt32 nFIndex ) const
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    const SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+
+    return pFormat && pFormat->GetNatNumModifierString().startsWith( "[NatNum12" );
+}
 
 sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatString,
                                                     bool& bThousand, bool& IsRed, sal_uInt16& nPrecision,

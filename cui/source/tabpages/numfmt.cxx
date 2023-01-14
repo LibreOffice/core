@@ -942,7 +942,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_xBtnNegRed->set_active( bNegRed );
             if ( nCategory != CAT_SCIENTIFIC )
             {
-                m_xBtnThousand->set_sensitive( nCategory != CAT_TIME );
+                m_xBtnThousand->set_sensitive( nCategory != CAT_TIME
+                                            && !pNumFmtShell->IsNatNum12( theFormat ) );
                 m_xBtnThousand->set_active( bThousand && nCategory != CAT_TIME );
             }
             break;

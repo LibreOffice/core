@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <svx/numfmtsh.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -185,12 +186,17 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 sal_uInt16 nVal = pItem->GetValue();
                 mnCategorySelected = nVal;
                 mxLbCategory->set_active(nVal);
-                if (nVal < 8 &&  // General, Number, Percent, Currency, Time, Scientific, Fraction
-                    nVal != 4 )  // not Date
+                // There is an offset between category list enum and listbox in side panel
+                SvxNumberFormatCategory nCategory = static_cast< SvxNumberFormatCategory >( nVal + 1 );
+                if (nCategory <= CAT_FRACTION &&  // General, Number, Percent, Currency, Time, Scientific, Fraction
+                    nCategory != CAT_DATE )       // not Date
                 {
-                    bool bIsScientific ( nVal == 6 );// For scientific, Thousand separator is replaced by Engineering notation
-                    bool bIsFraction ( nVal == 7 );  // For fraction, Decimal places is replaced by Denominator places
-                    bool bIsTime ( nVal == 5 );  // For Time, Decimal places and NegRed available
+                    // For scientific, Thousand separator is replaced by Engineering notation
+                    bool bIsScientific ( nCategory == CAT_SCIENTIFIC );
+                    // For fraction, Decimal places is replaced by Denominator places
+                    bool bIsFraction ( nCategory == CAT_FRACTION );
+                    // For Time, Decimal places and NegRed available
+                    bool bIsTime ( nCategory == CAT_TIME );
                     mxBtnThousand->set_visible( !bIsScientific );
                     mxBtnThousand->set_sensitive( !bIsScientific && !bIsTime );
                     mxBtnThousand->set_active(false);
@@ -226,12 +232,14 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             bool          bNegRed       =    false;
             sal_uInt16        nPrecision    =    0;
             sal_uInt16        nLeadZeroes   =    0;
+            bool          bNatNum12     =    false;
+            SvxNumberFormatCategory nCategory = static_cast< SvxNumberFormatCategory >( mnCategorySelected + 1 );
             if( eState >= SfxItemState::DEFAULT)
             {
                 const SfxStringItem* pItem = static_cast<const SfxStringItem*>(pState);
                 const OUString& aCode = pItem->GetValue();
                 sal_Int32 nIndex = 0;
-                sal_Int32 aFormat[4] = {0};
+                sal_Int32 aFormat[5] = {0};
                 for (sal_Int32 & rn : aFormat)
                 {
                     rn = o3tl::toInt32(o3tl::getToken(aCode, 0, ',', nIndex));
@@ -242,6 +250,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 bNegRed     = static_cast<bool>(aFormat[1]);
                 nPrecision  = static_cast<sal_uInt16>(aFormat[2]);
                 nLeadZeroes = static_cast<sal_uInt16>(aFormat[3]);
+                bNatNum12   = static_cast< bool >( aFormat[4] );
             }
             else
             {
@@ -250,6 +259,11 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 nPrecision  =    0;
                 nLeadZeroes =    1;
             }
+            if ( nCategory == CAT_NUMBER ||
+                 nCategory == CAT_PERCENT ||
+                 nCategory == CAT_CURRENCY ||
+                 nCategory == CAT_FRACTION )
+                mxBtnThousand->set_sensitive( !bNatNum12 );
             if ( mxBtnThousand->get_visible() )
                 mxBtnThousand->set_active(bThousand);
             else if ( mxBtnEngineering->get_visible() )

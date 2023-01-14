@@ -238,6 +238,9 @@ public:
     /// Whether format index nFIndex is of type text or not
     bool IsTextFormat(sal_uInt32 nFIndex) const;
 
+    /// Whether format index nFIndex has NatNum12 modifier
+    bool IsNatNum12(sal_uInt32 nFIndex) const;
+
     /// Get additional info of a format index, e.g. for dialog box
     void GetFormatSpecialInfo(sal_uInt32 nFormat, bool& bThousand, bool& IsRed,
                               sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt);

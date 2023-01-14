@@ -346,6 +346,13 @@ sal_uInt16 SvxNumberFormatShell::GetFormatIntegerDigits(std::u16string_view rFor
     return pFormatter->GetFormatIntegerDigits(nFmtKey);
 }
 
+bool SvxNumberFormatShell::IsNatNum12(std::u16string_view rFormat) const
+{
+    sal_uInt32 nFmtKey = pFormatter->GetEntryKey(rFormat, eCurLanguage);
+
+    return pFormatter->IsNatNum12(nFmtKey);
+}
+
 void SvxNumberFormatShell::GetOptions(const OUString& rFormat, bool& rThousand, bool& rNegRed,
                                       sal_uInt16& rPrecision, sal_uInt16& rLeadingZeroes,
                                       sal_uInt16& rCatLbPos)

@@ -38,17 +38,20 @@ enum class SvxNumberValueType
 };
 
 // sort order of the category ListBox entries in the TabPage
-#define CAT_ALL             0
-#define CAT_USERDEFINED     1
-#define CAT_NUMBER          2
-#define CAT_PERCENT         3
-#define CAT_CURRENCY        4
-#define CAT_DATE            5
-#define CAT_TIME            6
-#define CAT_SCIENTIFIC      7
-#define CAT_FRACTION        8
-#define CAT_BOOLEAN         9
-#define CAT_TEXT            10
+enum SvxNumberFormatCategory
+{
+    CAT_ALL = 0,
+    CAT_USERDEFINED,
+    CAT_NUMBER,
+    CAT_PERCENT,
+    CAT_CURRENCY,
+    CAT_DATE,
+    CAT_TIME,
+    CAT_SCIENTIFIC,
+    CAT_FRACTION,
+    CAT_BOOLEAN,
+    CAT_TEXT
+};
 
 #define SELPOS_NONE         -1
 
@@ -129,6 +132,8 @@ public:
                                     sal_uInt16&     rCatLbPos );
 
     sal_uInt16          GetFormatIntegerDigits( std::u16string_view  rFormat ) const;
+
+    bool                IsNatNum12( std::u16string_view rFormat ) const;
 
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
