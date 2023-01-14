@@ -64,6 +64,7 @@ public:
     void testTdf121260();
     void testTextDirectionXLSX();
     void testTdf120168();
+    void testTdf117266();
     void testTdf66668();
     void testTdf130108();
     void testTdf76949();
@@ -195,6 +196,7 @@ public:
     CPPUNIT_TEST(testTdf121260);
     CPPUNIT_TEST(testTextDirectionXLSX);
     CPPUNIT_TEST(testTdf120168);
+    CPPUNIT_TEST(testTdf117266);
     CPPUNIT_TEST(testTdf66668);
     CPPUNIT_TEST(testTdf130108);
     CPPUNIT_TEST(testTdf76949);
@@ -530,6 +532,21 @@ void ScExportTest2::testTdf120168()
     // - Actual  : general
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "horizontal", "left");
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "horizontal", "right");
+}
+
+void ScExportTest2::testTdf117266()
+{
+    createScDoc("xlsm/tdf117266_macroButton.xlsm");
+
+    save("Calc MS Excel 2007 VBA XML");
+    xmlDocUniquePtr pVmlDrawing = parseExport("xl/drawings/vmlDrawing1.vml");
+
+    OUString sName = getXPath(pVmlDrawing, "/xml/v:shape", "id");
+    CPPUNIT_ASSERT(sName.startsWith("_x0000_s"));
+
+    assertXPathContent(pVmlDrawing, "/xml/v:shape/v:textbox/div/font", "Button 1 \"y\" z");
+    // Why the xx:, I have no idea..., but it certainly doesn't work with just x:.
+    assertXPathContent(pVmlDrawing, "/xml/v:shape//xx:FmlaMacro", "Module1.Button1_Click");
 }
 
 void ScExportTest2::testTdf66668()
