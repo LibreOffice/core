@@ -47,7 +47,7 @@ namespace drawinglayer::processor2d
         settings and the type of Graphic. Unify this by this helper in one place
         since this may get complicated (many cases to cover).
         It will create and return a BitmapEx when direct tiled rendering is
-        preferrable and suggested.
+        preferable and suggested.
         Of course every impl may still do what it wants, this is just to make
         implementations easier.
 
@@ -63,8 +63,8 @@ namespace drawinglayer::processor2d
         Please hand in an empty one to make this work.
 
         @param rFillUnitRange
-        This is a modifyable copy of FillGraphicAttribute.getGraphicRange(). We
-        need a modifyable one since params since OffsetX/OffsetY in
+        This is a modifiable copy of FillGraphicAttribute.getGraphicRange(). We
+        need a modifiable one since params since OffsetX/OffsetY in
         FillGraphicAttribute may require to change/adapt this if used
 
         @param fBigDiscreteArea
