@@ -126,7 +126,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
     Reference< XIndexAccess > xReturn;
     if ( rSubContainer.is() )
     {
-        ConstItemContainer* pSource = comphelper::getFromUnoTunnel<ConstItemContainer>( rSubContainer );
+        ConstItemContainer* pSource = dynamic_cast<ConstItemContainer*>( rSubContainer.get() );
         rtl::Reference<ItemContainer> pSubContainer;
         if ( pSource )
             pSubContainer = new ItemContainer( *pSource, m_aShareMutex );

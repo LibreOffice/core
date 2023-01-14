@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -38,7 +37,6 @@ class RootItemContainer;
 class ItemContainer;
 class ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
-                                                    css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,
                                                     css::beans::XPropertySet >
 {
@@ -50,10 +48,6 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         ConstItemContainer( const ItemContainer& rtemContainer );
         ConstItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rSourceContainer, bool bFastCopy = false );
         virtual ~ConstItemContainer() override;
-
-        // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
-        sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;

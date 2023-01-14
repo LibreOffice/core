@@ -147,7 +147,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     Reference< XIndexAccess > xReturn;
     if ( rSubContainer.is() )
     {
-        ItemContainer*      pSource = comphelper::getFromUnoTunnel<ItemContainer>( rSubContainer );
+        ItemContainer* pSource = dynamic_cast<ItemContainer*>( rSubContainer.get() );
         rtl::Reference<ConstItemContainer> pSubContainer;
         if ( pSource )
             pSubContainer = new ConstItemContainer( *pSource );
@@ -157,18 +157,6 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     }
 
     return xReturn;
-}
-
-// XUnoTunnel
-sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    return comphelper::getSomethingImpl(rIdentifier, this);
-}
-
-const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theConstItemContainerUnoTunnelId;
-    return theConstItemContainerUnoTunnelId.getSeq();
 }
 
 // XElementAccess
