@@ -668,7 +668,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
     ::rtl::Reference<OContentHelper> pContent;
     try
     {
-        pContent = comphelper::getFromUnoTunnel<OContentHelper>(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ));
+        pContent = dynamic_cast<OContentHelper*>(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ).get());
     }
     catch(const Exception&)
     {

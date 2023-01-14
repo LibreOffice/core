@@ -533,7 +533,7 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
             // #i44786#
             lcl_ensureName( _rxNewObject, _rName );
 
-            ::rtl::Reference< OContentHelper > pContent = comphelper::getFromUnoTunnel<OContentHelper>( _rxNewObject );
+            ::rtl::Reference< OContentHelper > pContent = dynamic_cast<OContentHelper*>( _rxNewObject.get() );
             if ( pContent.is() )
             {
                 TContentPtr pImpl = pContent->getImpl();
@@ -592,7 +592,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
             DBA_RES( RID_STR_NAME_ALREADY_USED ),
             *this );
 
-    ::rtl::Reference< OContentHelper > pContent( comphelper::getFromUnoTunnel<OContentHelper>( _rxObject ) );
+    ::rtl::Reference< OContentHelper > pContent( dynamic_cast<OContentHelper*>( _rxObject.get() ) );
     if ( !pContent.is() )
         throw IllegalArgumentException(
             DBA_RES( RID_STR_OBJECT_CONTAINER_MISMATCH ),

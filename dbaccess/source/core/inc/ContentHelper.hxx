@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -80,7 +79,6 @@ namespace dbaccess
                                            ,   css::beans::XPropertiesChangeNotifier
                                            ,   css::beans::XPropertyContainer
                                            ,   css::lang::XInitialization
-                                           ,   css::lang::XUnoTunnel
                                            ,   css::container::XChild
                                            ,   css::sdbcx::XRename
                                            >   OContentHelper_COMPBASE;
@@ -154,10 +152,6 @@ namespace dbaccess
 
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
-        // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

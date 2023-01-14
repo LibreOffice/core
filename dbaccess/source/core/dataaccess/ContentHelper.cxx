@@ -105,12 +105,6 @@ css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames
 }
 
 
-const css::uno::Sequence<sal_Int8> & OContentHelper::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit aId;
-    return aId.getSeq();
-}
-
 css::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
@@ -550,12 +544,6 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         // Propagate event.
         pListener->propertiesChange( rSeq );
     }
-}
-
-// css::lang::XUnoTunnel
-sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 Reference< XInterface > SAL_CALL OContentHelper::getParent(  )
