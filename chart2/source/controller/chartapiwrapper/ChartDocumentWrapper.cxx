@@ -1045,11 +1045,10 @@ rtl::Reference<SvxDrawPage> ChartDocumentWrapper::impl_getDrawPage() const
 
 namespace {
 
-uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const uno::Reference<uno::XInterface>& xChartView)
+uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const rtl::Reference<ChartView>& xChartView)
 {
-    auto pProvider = comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView);
-    if( pProvider )
-        return pProvider->getDrawModelWrapper()->getShapeFactory();
+    if( xChartView )
+        return xChartView->getDrawModelWrapper()->getShapeFactory();
 
     return uno::Reference< lang::XMultiServiceFactory >();
 }
@@ -1257,7 +1256,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             if( !m_xShapeFactory.is() && m_xChartView.is() )
             {
-                m_xShapeFactory = getShapeFactory( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
+                m_xShapeFactory = getShapeFactory( m_xChartView );
             }
             else
             {
@@ -1265,7 +1264,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if(pModel)
                 {
                     m_xChartView = pModel->getChartView();
-                    m_xShapeFactory = getShapeFactory( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
+                    m_xShapeFactory = getShapeFactory( m_xChartView );
                 }
             }
 

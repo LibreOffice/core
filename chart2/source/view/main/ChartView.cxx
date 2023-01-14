@@ -308,12 +308,6 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
              aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast );
 }
 
-// ____ XUnoTunnel ___
-::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl<ExplicitValueProvider>(aIdentifier, this);
-}
-
 // lang::XServiceInfo
 
 OUString SAL_CALL ChartView::getImplementationName()

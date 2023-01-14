@@ -21,6 +21,7 @@
 #include "AccessibleChartShape.hxx"
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
+#include <ChartView.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -612,12 +613,11 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
 
 awt::Rectangle SAL_CALL AccessibleBase::getBounds()
 {
-    ExplicitValueProvider *pExplicitValueProvider(
-        comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_aAccInfo.m_xView ));
-    if( pExplicitValueProvider )
+    rtl::Reference<ChartView> pChartView = m_aAccInfo.m_xView.get();
+    if( pChartView )
     {
         VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));
-        awt::Rectangle aLogicRect( pExplicitValueProvider->getRectangleOfObject( m_aAccInfo.m_aOID.getObjectCID() ));
+        awt::Rectangle aLogicRect( pChartView->getRectangleOfObject( m_aAccInfo.m_aOID.getObjectCID() ));
         if( pWindow )
         {
             tools::Rectangle aRect( aLogicRect.X, aLogicRect.Y,

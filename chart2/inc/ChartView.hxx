@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -86,7 +85,6 @@ class OOO_DLLPUBLIC_CHARTVIEW ChartView final : public ::cppu::WeakImplHelper<
     css::lang::XInitialization
         ,css::lang::XServiceInfo
         ,css::datatransfer::XTransferable
-        ,css::lang::XUnoTunnel
         ,css::util::XModifyListener
         ,css::util::XModeChangeBroadcaster
         ,css::util::XUpdatable2
@@ -172,10 +170,6 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
         const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
-
-    // for ExplicitValueProvider
-    // ____ XUnoTunnel ___
-    virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier ) override;
 
     // XDumper
     virtual OUString SAL_CALL dump(OUString const & kind) override;

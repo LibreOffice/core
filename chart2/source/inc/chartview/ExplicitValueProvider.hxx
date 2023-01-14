@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <sal/types.h>
 #include <chartview/chartviewdllapi.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -47,7 +48,7 @@ class ChartModel;
 struct ExplicitIncrementData;
 struct ExplicitScaleData;
 
-class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
+class OOO_DLLPUBLIC_CHARTVIEW SAL_LOPLUGIN_ANNOTATE("crosscast") ExplicitValueProvider
 {
 public:
     /** Gives calculated scale and increment values for a given xAxis in the current view.
@@ -71,8 +72,6 @@ public:
         getShapeForCID( const OUString& rObjectCID )=0;
 
     virtual std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     static css::awt::Rectangle
         AddSubtractAxisTitleSizes(

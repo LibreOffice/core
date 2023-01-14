@@ -77,12 +77,6 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
         true /*bSearchForParallelAxisIfNothingIsFound*/);
 }
 
-const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theExplicitValueProviderUnoTunnelId;
-    return theExplicitValueProviderUnoTunnelId.getSeq();
-}
-
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp)
 {

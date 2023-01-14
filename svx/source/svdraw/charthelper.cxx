@@ -40,14 +40,13 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel 
     try
     {
         const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
-        const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
-        const uno::Reference<util::XUpdatable2> xUpdatable(xChartView, uno::UNO_QUERY_THROW);
+        const uno::Reference< util::XUpdatable2 > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
 
-        xUpdatable->updateHard();
+        xChartView->updateHard();
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(false, "Unexpected exception!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 

@@ -303,7 +303,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         MutexGuard aGuard( m_aMutex);
         if( xChartModel.is())
             m_spObjectHierarchy =
-                std::make_shared<ObjectHierarchy>( xChartModel, comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView) );
+                std::make_shared<ObjectHierarchy>( xChartModel, m_xChartView.get().get() );
         else
             m_spObjectHierarchy.reset();
     }
