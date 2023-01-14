@@ -252,7 +252,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Forrest");
+        ColorSet aColorSet("Forest");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
