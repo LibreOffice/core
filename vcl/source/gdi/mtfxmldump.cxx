@@ -13,8 +13,13 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/BitmapReadAccess.hxx>
+
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <comphelper/hash.hxx>
 
 #include <sstream>
 
@@ -562,6 +567,53 @@ void writeGradient(tools::XmlWriter& rWriter, Gradient const& rGradient)
     rWriter.attribute("steps", rGradient.GetSteps());
 }
 
+OString toHexString(const std::vector<unsigned char>& a)
+{
+    std::stringstream aStrm;
+    for (auto& i : a)
+    {
+        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
+    }
+
+    return OString(aStrm.str().c_str());
+}
+
+void writeBitmapContentChecksum(tools::XmlWriter& rWriter, Bitmap const& rBitmap)
+{
+    Bitmap aBitmap(rBitmap);
+
+    comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    assert(pReadAccess);
+
+    for (tools::Long y = 0 ; y < pReadAccess->Height() ; ++y)
+    {
+        for (tools::Long x = 0 ; x < pReadAccess->Width() ; ++x)
+        {
+            BitmapColor aColor = pReadAccess->GetColor(y, x);
+            sal_uInt8 r = aColor.GetRed();
+            sal_uInt8 g = aColor.GetGreen();
+            sal_uInt8 b = aColor.GetBlue();
+            sal_uInt8 a = aColor.GetAlpha();
+            aHashEngine.update(&r, 1);
+            aHashEngine.update(&g, 1);
+            aHashEngine.update(&b, 1);
+            aHashEngine.update(&a, 1);
+        }
+    }
+    std::vector<unsigned char> aVector = aHashEngine.finalize();
+    rWriter.attribute("contentchecksum", toHexString(aVector));
+}
+
+void writeBitmap(tools::XmlWriter& rWriter, Bitmap const& rBitmap)
+{
+    writeBitmapContentChecksum(rWriter, rBitmap);
+    rWriter.attribute("bitmapwidth", rBitmap.GetSizePixel().Width());
+    rWriter.attribute("bitmapheight", rBitmap.GetSizePixel().Height());
+    rWriter.attribute("pixelformat", convertPixelFormatToString(rBitmap.getPixelFormat()));
+    rWriter.attribute("crc", hex32(rBitmap.GetChecksum()));
+}
+
 } // anonymous namespace
 
 MetafileXmlDump::MetafileXmlDump()
@@ -880,9 +932,10 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             case MetaActionType::BMP:
             {
                 auto pMeta = static_cast<MetaBmpAction*>(pAction);
+                Bitmap aBitmap = pMeta->GetBitmap();
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;
@@ -890,10 +943,11 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             case MetaActionType::BMPSCALE:
             {
                 auto pMeta = static_cast<MetaBmpScaleAction*>(pAction);
+                Bitmap aBitmap = pMeta->GetBitmap();
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
                 writeSize(rWriter, pMeta->GetSize());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;
@@ -901,6 +955,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             case MetaActionType::BMPSCALEPART:
             {
                 auto pMeta = static_cast<MetaBmpScalePartAction*>(pAction);
+                Bitmap aBitmap = pMeta->GetBitmap();
                 rWriter.startElement(sCurrentElementTag);
                 rWriter.attribute("destx", pMeta->GetDestPoint().X());
                 rWriter.attribute("desty", pMeta->GetDestPoint().Y());
@@ -910,7 +965,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("srcy", pMeta->GetSrcPoint().Y());
                 rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
                 rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;
@@ -920,8 +975,9 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 auto pMeta = static_cast<MetaBmpExAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
+                Bitmap aBitmap = pMeta->GetBitmapEx().GetBitmap();
                 rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;
@@ -932,8 +988,9 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
                 writeSize(rWriter, pMeta->GetSize());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
+                Bitmap aBitmap = pMeta->GetBitmapEx().GetBitmap();
                 rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;
@@ -941,6 +998,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             case MetaActionType::BMPEXSCALEPART:
             {
                 auto pMeta = static_cast<MetaBmpExScalePartAction*>(pAction);
+                Bitmap aBitmap = pMeta->GetBitmapEx().GetBitmap();
                 rWriter.startElement(sCurrentElementTag);
                 rWriter.attribute("destx", pMeta->GetDestPoint().X());
                 rWriter.attribute("desty", pMeta->GetDestPoint().Y());
@@ -950,8 +1008,8 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("srcy", pMeta->GetSrcPoint().Y());
                 rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
                 rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
-                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
                 rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
+                writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }
             break;

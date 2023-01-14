@@ -1005,8 +1005,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    std::vector<OUString> aExpectedCRC;
-    aExpectedCRC.insert(aExpectedCRC.end(),
+    std::array<OUString, 8> aExpectedCRC
     {
 #if defined OSL_BIGENDIAN
         "08feb5d3",
@@ -1027,39 +1026,54 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         "3c80d829",
         "71efc447",
 #endif
-    });
+    };
+
+    std::array<OUString, 8> aExpectedContentChecksum
+    {
+        "26bdebd04e5b18d685cea04982179e273ee3b659",
+        "f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5",
+        "7c953a06d34bbd38897f950d595df2880dbb0f75",
+        "ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249",
+        "8a1ebc46f890eb0879464c6e293bffd4ce7fadc0", // 1-bit
+        "23611fc9f484c23e45bbd457730adb8ab5355509", // 4-bit color bitmap - same as 8-bit color bitmap
+        "23611fc9f484c23e45bbd457730adb8ab5355509",
+        "97e499b74104debf12f99a774a2c4edc914d8900",
+    };
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
-        {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}
+        {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[0]}, {"pixelformat", "24BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]", {
         {"x", "5"}, {"y", "0"}, {"width", "2"}, {"height", "3"},
-        {"crc", aExpectedCRC[1]}, {"transparenttype", "bitmap"}
+        {"crc", aExpectedCRC[1]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[1]}, {"pixelformat", "24BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]", {
         {"destx", "7"}, {"desty", "1"}, {"destwidth", "2"}, {"destheight", "2"},
         {"srcx", "0"},  {"srcy", "0"},  {"srcwidth", "3"},  {"srcheight", "4"},
-        {"crc", aExpectedCRC[2]}, {"transparenttype", "bitmap"}
+        {"crc", aExpectedCRC[2]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[2]}, {"pixelformat", "24BPP"}
     });
 
 #ifndef MACOSX
     assertXPathAttrs(pDoc, "/metafile/bmpex[2]", {
-        {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}
+        {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[3]}
+    });
+    assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
+            {"x", "0"}, {"y", "6"}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[4]}, {"pixelformat", "8BPP"}
     });
     if (!bIsSvmFile)
     {
         assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
-            {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
+            {"crc", aExpectedCRC[4]}
         });
     }
     assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
-        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[5]}, {"pixelformat", "8BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
-        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
+        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[6]}, {"pixelformat", "8BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
-        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
+        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[7]}, {"pixelformat", "8BPP"}
     });
 #else
     (void)bIsSvmFile;
