@@ -25,7 +25,6 @@
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include "mip.hxx"
@@ -70,7 +69,6 @@ typedef cppu::ImplInheritanceHelper<
     css::xforms::XModel2,
     css::xforms::XFormsUIHelper1,
     css::util::XUpdatable,
-    css::lang::XUnoTunnel,
     css::lang::XServiceInfo
 > Model_t;
 class Model : public Model_t
@@ -113,10 +111,6 @@ public:
     virtual ~Model() noexcept override;
 
     xforms::EvaluationContext getEvaluationContext();
-
-
-    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
-
 
     // get/set that part of the schema, that we can't interpret as data types
     css::uno::Reference<css::xml::dom::XDocument> getForeignSchema() const { return mxForeignSchema;}
@@ -345,13 +339,6 @@ public:
 
 public:
     virtual void SAL_CALL update() override;
-
-
-    // XUnoTunnel
-
-
-public:
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& ) override;
 
 
     // XTypeProvider::getImplementationId

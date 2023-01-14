@@ -129,13 +129,6 @@ EvaluationContext Model::getEvaluationContext()
 }
 
 
-css::uno::Sequence<sal_Int8> Model::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit aImplementationId;
-    return aImplementationId.getSeq();
-}
-
-
 void Model::setForeignSchema( const css::uno::Reference<css::xml::dom::XDocument>& rDocument )
 {
     mxForeignSchema = rDocument;
@@ -582,11 +575,6 @@ void Model::update()
     rebuild();
 }
 
-
-sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
-{
-    return comphelper::getSomethingImpl(xId, this);
-}
 
 Sequence<sal_Int8> Model::getImplementationId()
 {

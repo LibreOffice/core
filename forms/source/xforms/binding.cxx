@@ -445,7 +445,7 @@ bool Binding::isLive() const
 
 Model* Binding::getModelImpl() const
 {
-    return comphelper::getFromUnoTunnel<Model>( mxModel );
+    return dynamic_cast<Model*>( mxModel.get() );
 }
 
 static void lcl_addListenerToNode( const Reference<XNode>& xNode,
