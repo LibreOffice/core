@@ -66,7 +66,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation",
     "com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation",
     "com_sun_star_comp_chart2_ChartController_get_implementation",
-    "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartModel_get_implementation",
     "com_sun_star_comp_chart2_ChartView_get_implementation",
     "com_sun_star_comp_chart2_ConfigDefaultColorScheme_get_implementation",
