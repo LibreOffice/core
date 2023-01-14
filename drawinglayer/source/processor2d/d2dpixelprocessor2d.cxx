@@ -1790,7 +1790,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
     if (aPreparedBitmap.IsEmpty())
     {
         // output needed and Bitmap data empty, so no bitmap data based
-        // tiled rendering is suggested. Use fallback for paint (decompositon)
+        // tiled rendering is suggested. Use fallback for paint (decomposition)
         process(rFillGraphicPrimitive2D);
         return;
     }
