@@ -1821,8 +1821,11 @@ OUString FormulaParser::importMacroName( std::u16string_view aFormulaString )
         document, ignoring the valid syntax 'Macro1!MyMacro' for sheet-local
         sheet macros.
      */
+    OUString aRemainder(aFormulaString);
+    if (aRemainder.indexOf('!') == -1)
+        return aRemainder;
+
     sal_Int32 nRefId = -1;
-    OUString aRemainder;
     if( lclExtractRefId( nRefId, aRemainder, aFormulaString ) && (aRemainder.getLength() > 1) && (aRemainder[ 0 ] == '!') )
     {
         /*  In BIFF12 documents, the reference identifier is always the
