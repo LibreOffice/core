@@ -144,22 +144,6 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
     m_pColumns->disposing();
 }
 
-sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
-{
-    return comphelper::getSomethingImpl(_rIdentifier, this);
-}
-
-const css::uno::Sequence<sal_Int8> & OQueryDescriptor_Base::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit aId;
-    return aId.getSeq();
-}
-
-css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 void OQueryDescriptor_Base::setColumnsOutOfDate( bool _bOutOfDate )
 {
     m_bColumnsOutOfDate = _bOutOfDate;

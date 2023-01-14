@@ -19,13 +19,12 @@
 
 #pragma once
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <apitools.hxx>
 #include <column.hxx>
@@ -38,9 +37,8 @@ namespace dbaccess
 {
 
 // OQueryDescriptor_Base - a query descriptor (as the name suggests :)
-typedef ::cppu::ImplHelper3<
+typedef ::cppu::ImplHelper2<
         css::sdbcx::XColumnsSupplier,
-        css::lang::XUnoTunnel,
         css::lang::XServiceInfo >  OQueryDescriptor_BASE;
 
 class OQueryDescriptor_Base
@@ -74,12 +72,6 @@ public:
 
 // css::sdbcx::XColumnsSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
-
-// css::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
