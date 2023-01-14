@@ -38,13 +38,6 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-const css::uno::Sequence<sal_Int8>& RootActionTriggerContainer::getUnoTunnelId() noexcept
-{
-    static const sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
-    static css::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
-    return seqID;
-}
-
 RootActionTriggerContainer::RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu,
                                                        const OUString* pMenuIdentifier)
     : m_bContainerCreated(false)
@@ -64,7 +57,6 @@ Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
                 aType ,
                 static_cast< XMultiServiceFactory*   >(this),
                 static_cast< XServiceInfo*           >(this),
-                static_cast< XUnoTunnel*             >(this),
                 static_cast< XTypeProvider*          >(this),
                 static_cast< XNamed*                 >(this));
 
@@ -199,12 +191,6 @@ sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& S
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
 {
     return { SERVICENAME_ACTIONTRIGGERCONTAINER };
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 // XTypeProvider

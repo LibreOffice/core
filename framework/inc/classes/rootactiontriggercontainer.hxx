@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
 inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.RootActionTriggerContainer";
@@ -35,7 +34,6 @@ namespace framework
 class RootActionTriggerContainer final : public PropertySetContainer,
                                     public css::lang::XMultiServiceFactory,
                                     public css::lang::XServiceInfo,
-                                    public css::lang::XUnoTunnel,
                                     public css::lang::XTypeProvider,
                                     public css::container::XNamed
 {
@@ -75,10 +73,6 @@ class RootActionTriggerContainer final : public PropertySetContainer,
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
