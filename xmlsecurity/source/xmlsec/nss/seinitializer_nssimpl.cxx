@@ -59,6 +59,7 @@ uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
 
         uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = css::xml::crypto::SecurityEnvironment::create( m_xContext );
         SecurityEnvironment_NssImpl* pSecEnv = dynamic_cast<SecurityEnvironment_NssImpl*>(xSecEnv.get());
+        assert(pSecEnv && "can only succeed");
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);

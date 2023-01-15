@@ -59,6 +59,7 @@ OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,cons
 static void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
     comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
+    assert(pList && "can only succeed");
     OUString sCellAddress = pList->getValueByName(_sName);
     const sal_Int32 nPos = sCellAddress.lastIndexOf('$');
     if ( nPos != -1 )
@@ -202,6 +203,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName == "table:table-cell" )
     {
         comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
+        assert(pList && "can only succeed");
         static OUString s_sValue(lcl_createAttribute(XML_NP_OFFICE,XML_VALUE));
         pList->RemoveAttribute(s_sValue);
     }
