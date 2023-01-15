@@ -300,6 +300,9 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
 
 void BulletsTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
+    if ( nIndex >= DEFAULT_BULLET_TYPES )
+        return;
+
     if ( mLevel == sal_uInt16(0xFFFF) || mLevel == 0)
         return;
 
@@ -314,8 +317,6 @@ void BulletsTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_UCS4 cChar = aFmt.GetBulletChar();
     std::optional<vcl::Font> pFont = aFmt.GetBulletFont();
-    if ( nIndex >= DEFAULT_BULLET_TYPES )
-        return;
 
     pActualBullets[nIndex]->cBulletChar = cChar;
     if ( pFont )
