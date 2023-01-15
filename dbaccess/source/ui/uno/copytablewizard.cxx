@@ -1361,7 +1361,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 OUString sDatabaseDest = xDestMetaData->getDatabaseProductName().toAsciiLowerCase();
                 // If we created a new primary key, then it won't necessarily be an IDENTITY column
                 const bool bShouldCreatePrimaryKey = rWizard.shouldCreatePrimaryKey();
-                if ( !bShouldCreatePrimaryKey && ((sDatabaseDest.indexOf("hsql") != -1) || (sDatabaseDest.indexOf("firebird") != -1)) )
+                if ( !bShouldCreatePrimaryKey && (sDatabaseDest.indexOf("firebird") != -1) )
                 {
                     const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
 
