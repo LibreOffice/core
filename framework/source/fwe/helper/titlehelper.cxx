@@ -536,7 +536,10 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
     if (!name.isEmpty())
     {
         if (!sTitle.isEmpty())
-            sTitle.append(" - ");
+        {
+            OUString separator (FwkResId (STR_EMDASH_SEPARATOR));
+            sTitle.append(separator);
+        }
         sTitle.append(name);
     }
 }

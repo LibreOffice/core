@@ -36,6 +36,7 @@
 #define STR_CLEAR_RECENT_FILES                      NC_("STR_CLEAR_RECENT_FILES", "Clear List")
 #define STR_CLEAR_RECENT_FILES_HELP                 NC_("STR_CLEAR_RECENT_FILES_HELP", "Clears the list with the most recently opened files. This action can not be undone.")
 #define STR_REMOTE_TITLE                            NC_("STR_REMOTE_TITLE", " (Remote)")
+#define STR_EMDASH_SEPARATOR                        NC_("STR_EMDASH_SEPARATOR", " — ")
 #define STR_SAFEMODE_TITLE                          NC_("STR_SAFEMODE_TITLE", " (Safe Mode)")
 #define STR_TOOLBAR_TITLE_ADDON                     NC_("STR_TOOLBAR_TITLE_ADDON", "Add-On %num%")
 #define STR_FULL_DISC_RETRY_BUTTON                  NC_("STR_FULL_DISC_RETRY_BUTTON", "Retry" )
