@@ -324,7 +324,7 @@ void MSWordStyles::BuildStylesTable()
 static OUString StripWWSuffix(const OUString& s)
 {
     OUString ret = s;
-    ret.endsWith(" (WW)", &ret);
+    (void)ret.endsWith(" (WW)", &ret);
     return ret;
 }
 
