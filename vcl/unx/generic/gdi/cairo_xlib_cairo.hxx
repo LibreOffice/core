@@ -88,7 +88,6 @@ namespace cairo {
         virtual void flush() const override;
 
         int getDepth() const;
-        DeviceFormat getFormat() const;
         const X11PixmapSharedPtr& getPixmap() const { return mpPixmap; }
     };
 }

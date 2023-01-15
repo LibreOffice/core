@@ -255,7 +255,7 @@ namespace cairo
 
         return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
                               Size(width, height),
-                              getFormat());
+                              DeviceFormat::DEFAULT);
     }
 
     /**
@@ -288,19 +288,6 @@ namespace cairo
         if (maSysData.pRenderFormat)
             return static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth;
         return -1;
-    }
-
-    /**
-     * Surface::getFormat:  Get the device format of the Canvas surface.
-     *
-     * @return color format
-     **/
-    DeviceFormat X11Surface::getFormat() const
-    {
-        if (!maSysData.pRenderFormat)
-            return DeviceFormat::DEFAULT;
-        assert (static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth != 1 && "unsupported");
-        return DeviceFormat::DEFAULT;
     }
 }
 
