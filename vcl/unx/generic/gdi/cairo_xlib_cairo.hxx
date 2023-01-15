@@ -41,7 +41,6 @@ namespace cairo {
         Drawable hDrawable;     // a drawable
         void*   pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
-        void*   pRenderFormat;  // render format for drawable
     };
 
     /// RAII wrapper for a pixmap
@@ -87,7 +86,6 @@ namespace cairo {
 
         virtual void flush() const override;
 
-        int getDepth() const;
         const X11PixmapSharedPtr& getPixmap() const { return mpPixmap; }
     };
 }

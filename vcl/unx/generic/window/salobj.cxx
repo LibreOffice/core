@@ -476,7 +476,7 @@ void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::A
 
     bool bFreePixmap = false;
     Pixmap aPixmap = None;
-    if (rEnterArgs.getLength() == 3)
+    if (rEnterArgs.getLength() == 2)
     {
         rEnterArgs[0] >>= bFreePixmap;
         sal_Int64 pixmapHandle = None;
@@ -490,7 +490,7 @@ void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::A
 
     bFreePixmap = false;
     aPixmap = None;
-    if (rLeaveArgs.getLength() == 3)
+    if (rLeaveArgs.getLength() == 2)
     {
         rLeaveArgs[0] >>= bFreePixmap;
         sal_Int64 pixmapHandle = None;

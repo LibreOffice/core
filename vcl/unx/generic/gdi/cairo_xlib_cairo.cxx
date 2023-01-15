@@ -57,24 +57,21 @@ namespace cairo
         pDisplay(nullptr),
         hDrawable(0),
         pVisual(nullptr),
-        nScreen(0),
-        pRenderFormat(nullptr)
+        nScreen(0)
     {}
 
     X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
         pDisplay(pSysDat.pDisplay),
         hDrawable(pSysDat.hDrawable),
         pVisual(pSysDat.pVisual),
-        nScreen(pSysDat.nScreen),
-        pRenderFormat(nullptr)
+        nScreen(pSysDat.nScreen)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat, const SalFrame* pReference ) :
         pDisplay(pSysDat.pDisplay),
         hDrawable(pSysDat.GetWindowHandle(pReference)),
         pVisual(pSysDat.pVisual),
-        nScreen(pSysDat.nScreen),
-        pRenderFormat(nullptr)
+        nScreen(pSysDat.nScreen)
     {}
 
     X11Pixmap::~X11Pixmap()
@@ -217,10 +214,8 @@ namespace cairo
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 
-            X11SysData aSysData(maSysData);
-            aSysData.pRenderFormat = pFormat;
             return SurfaceSharedPtr(
-                new X11Surface( aSysData,
+                new X11Surface( maSysData,
                                 std::make_shared<X11Pixmap>(hPixmap, maSysData.pDisplay),
                                 CairoSurfaceSharedPtr(
                                     cairo_xlib_surface_create_with_xrender_format(
@@ -276,18 +271,6 @@ namespace cairo
     void X11Surface::flush() const
     {
         XSync( static_cast<Display*>(maSysData.pDisplay), false );
-    }
-
-    /**
-     * Surface::getDepth:  Get the color depth of the Canvas surface.
-     *
-     * @return color depth
-     **/
-    int X11Surface::getDepth() const
-    {
-        if (maSysData.pRenderFormat)
-            return static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth;
-        return -1;
     }
 }
 

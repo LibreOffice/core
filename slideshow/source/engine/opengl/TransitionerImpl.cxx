@@ -385,7 +385,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
         xEnteringFastPropertySet->getFastPropertyValue(1) >>= aEnteringBitmap;
         xLeavingFastPropertySet->getFastPropertyValue(1) >>= aLeavingBitmap;
     }
-    if (aEnteringBitmap.getLength() == 3 && aLeavingBitmap.getLength() == 3)
+    if (aEnteringBitmap.getLength() == 2 && aLeavingBitmap.getLength() == 2)
         pChildWindow->SetLeaveEnterBackgrounds(aLeavingBitmap, aEnteringBitmap);
 }
 

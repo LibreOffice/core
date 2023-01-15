@@ -106,10 +106,9 @@ namespace cairocanvas
         // 0 ... get pointer to BitmapEx
         // 1 ... get X pixmap handle to rgb content
         // 2 ... FIXME: leftover? ever called with this? always returns nothing (empty Any)
-        // returned any contains either BitmapEx pointer or array of three Any value
+        // returned any contains either BitmapEx pointer or array of two Any value
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle (sal_Int64)
-        //     3rd the pixmap depth
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
 
