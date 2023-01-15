@@ -64,8 +64,6 @@ constexpr OUStringLiteral ELEMENT_NS_STATUSBARITEM = u"statusbar:statusbaritem";
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_STATUSBAR = u"xmlns:statusbar";
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
-
 constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_TRUE = u"true";
 constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE = u"false";
 
@@ -461,7 +459,6 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     m_xEmptyList = new ::comphelper::AttributeList;
-    m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
 }
@@ -485,11 +482,9 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_STATUSBAR,
-                         m_aAttributeType,
                          XMLNS_STATUSBAR );
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
-                         m_aAttributeType,
                          XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );
@@ -545,25 +540,22 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     }
 
     // save required attribute (URL)
-    pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
+    pList->AddAttribute( m_aAttributeURL, rCommandURL );
 
     // alignment
     if ( nStyle & ItemStyle::ALIGN_RIGHT )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
-                             m_aAttributeType,
                              ATTRIBUTE_ALIGN_RIGHT );
     }
     else if ( nStyle & ItemStyle::ALIGN_CENTER )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
-                             m_aAttributeType,
                              ATTRIBUTE_ALIGN_CENTER );
     }
     else
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
-                             m_aAttributeType,
                              ATTRIBUTE_ALIGN_LEFT );
     }
 
@@ -571,13 +563,11 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( nStyle & ItemStyle::DRAW_FLAT )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
-                             m_aAttributeType,
                              ATTRIBUTE_STYLE_FLAT );
     }
     else if ( nStyle & ItemStyle::DRAW_OUT3D )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
-                             m_aAttributeType,
                              ATTRIBUTE_STYLE_OUT );
     }
 
@@ -585,7 +575,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_AUTOSIZE,
-                             m_aAttributeType,
                              ATTRIBUTE_BOOLEAN_TRUE );
     }
 
@@ -593,7 +582,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OWNERDRAW,
-                             m_aAttributeType,
                              ATTRIBUTE_BOOLEAN_TRUE );
     }
 
@@ -601,7 +589,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( nWidth > 0 )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_WIDTH,
-                             m_aAttributeType,
                              OUString::number( nWidth ) );
     }
 
@@ -609,7 +596,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( nOffset != STATUSBAR_OFFSET )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OFFSET,
-                             m_aAttributeType,
                              OUString::number( nOffset ) );
     }
 
@@ -617,7 +603,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     if ( !( nStyle & ItemStyle::MANDATORY ) )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_MANDATORY,
-                             m_aAttributeType,
                              ATTRIBUTE_BOOLEAN_FALSE );
     }
 

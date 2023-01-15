@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmloff/attrlist.hxx>
+#include <sal/config.h>
+
+#include <comphelper/attributelist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"
 
@@ -26,11 +28,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SvXMLAttributeList *XMLMutableAttributeList::GetMutableAttrList()
+comphelper::AttributeList* XMLMutableAttributeList::GetMutableAttrList()
 {
     if( !m_pMutableAttrList )
     {
-        m_pMutableAttrList = new SvXMLAttributeList( m_xAttrList );
+        m_pMutableAttrList = new comphelper::AttributeList( m_xAttrList );
         m_xAttrList = m_pMutableAttrList;
     }
 
@@ -38,14 +40,14 @@ SvXMLAttributeList *XMLMutableAttributeList::GetMutableAttrList()
 }
 
 XMLMutableAttributeList::XMLMutableAttributeList() :
-    m_pMutableAttrList( new SvXMLAttributeList )
+    m_pMutableAttrList( new comphelper::AttributeList )
 {
     m_xAttrList = m_pMutableAttrList;
 }
 
 XMLMutableAttributeList::XMLMutableAttributeList( const Reference<
         XAttributeList> & rAttrList, bool bClone ) :
-    m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList )
+    m_xAttrList( rAttrList.is() ? rAttrList : new comphelper::AttributeList )
 {
     if( bClone )
         GetMutableAttrList();
@@ -95,7 +97,7 @@ OUString SAL_CALL XMLMutableAttributeList::getValueByName(
 Reference< XCloneable > XMLMutableAttributeList::createClone()
 {
     // A cloned list will be a read only list!
-    Reference< XCloneable >  r = new SvXMLAttributeList( m_xAttrList );
+    Reference< XCloneable >  r = new comphelper::AttributeList( m_xAttrList );
     return r;
 }
 

@@ -97,7 +97,7 @@ public:
     void SetAutoStyles( bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
 
     virtual void handleSpecialItem(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,

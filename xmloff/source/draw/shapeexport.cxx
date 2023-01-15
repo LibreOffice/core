@@ -559,7 +559,7 @@ namespace
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */,
                                  css::awt::Point* pRefPoint /* = NULL */,
-                                 SvXMLAttributeList* pAttrList /* = NULL */ )
+                                 comphelper::AttributeList* pAttrList /* = NULL */ )
 {
     SAL_INFO("xmloff", xShape->getShapeType());
     if( maCurrentShapesIter == maShapesInfos.end() )
@@ -583,7 +583,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // Need to stash the attributes that are pre-loaded for the shape export
     // (otherwise they will become attributes of the draw:a element)
     uno::Reference<xml::sax::XAttributeList> xSaveAttribs(
-        new SvXMLAttributeList(GetExport().GetAttrList()));
+        new comphelper::AttributeList(GetExport().GetAttrList()));
     GetExport().ClearAttrList();
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) )
     {
@@ -2576,7 +2576,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 void XMLShapeExport::ImpExportChartShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint,
-    SvXMLAttributeList* pAttrList )
+    comphelper::AttributeList* pAttrList )
 {
     ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint, pAttrList );
 }
@@ -2920,7 +2920,7 @@ void XMLShapeExport::ImpExportMeasureShape(
 void XMLShapeExport::ImpExportOLE2Shape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */,
-    SvXMLAttributeList* pAttrList /* = NULL */ )
+    comphelper::AttributeList* pAttrList /* = NULL */ )
 {
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);

@@ -27,8 +27,6 @@
 
 #include <tools/datetime.hxx>
 
-#include <xmloff/attrlist.hxx>
-
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
@@ -41,6 +39,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <comphelper/attributelist.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -188,7 +187,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     /*
      * write the xml context for signatures
      */
-    rtl::Reference<SvXMLAttributeList> pAttributeList = new SvXMLAttributeList();
+    rtl::Reference<comphelper::AttributeList> pAttributeList = new comphelper::AttributeList();
     OUString sNamespace;
     if (mbODFPre1_2)
         sNamespace = NS_DOCUMENTSIGNATURES;

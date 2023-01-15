@@ -48,7 +48,6 @@ constexpr OUStringLiteral ELEMENT_NS_ENTRY = u"image:entry";
 #define ATTRIBUTE_MASKMODE              "maskmode"
 #define ATTRIBUTE_HIGHCONTRASTURL       "highcontrasturl"
 #define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
-constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
 
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image";
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
@@ -288,7 +287,6 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     m_xEmptyList = new ::comphelper::AttributeList;
-    m_aAttributeType        = ATTRIBUTE_TYPE_CDATA;
     m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
     m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
     m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;
@@ -313,11 +311,9 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_IMAGE,
-                         m_aAttributeType,
                          XMLNS_IMAGE );
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
-                         m_aAttributeType,
                          XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );
@@ -339,7 +335,6 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageItemDescriptorList*
 
     // save required attributes
     pList->AddAttribute( m_aAttributeXlinkType,
-                         m_aAttributeType,
                          m_aAttributeValueSimple );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, pList );
@@ -357,7 +352,6 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_COMMAND,
-                         m_aAttributeType,
                          pImage->aCommandURL );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_ENTRY, pList );

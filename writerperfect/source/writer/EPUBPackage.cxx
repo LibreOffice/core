@@ -18,9 +18,9 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 
 #include <sal/log.hxx>
+#include <comphelper/attributelist.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <xmloff/attrlist.hxx>
 
 using namespace com::sun::star;
 
@@ -80,7 +80,7 @@ void EPUBPackage::openElement(const char* pName, const librevenge::RVNGPropertyL
 {
     assert(mxOutputWriter.is());
 
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
 
     librevenge::RVNGPropertyList::Iter it(rAttributes);
     for (it.rewind(); it.next();)

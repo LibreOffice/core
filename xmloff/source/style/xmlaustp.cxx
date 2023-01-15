@@ -58,7 +58,7 @@ namespace
 }
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
-        SvXMLAttributeList&,
+        comphelper::AttributeList&,
         XmlStyleFamily nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,

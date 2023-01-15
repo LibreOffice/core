@@ -142,14 +142,12 @@ void WriteRelationsInfoSequence(
 
     OUString aRelListElement( "Relationships" );
     OUString aRelElement( "Relationship" );
-    OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
     // write the namespace
     rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns",
-        aCDATAString,
         "http://schemas.openxmlformats.org/package/2006/relationships" );
 
     xWriter->startDocument();
@@ -168,7 +166,7 @@ void WriteRelationsInfoSequence(
                 // TODO/LATER: should the extensions be allowed?
                 throw lang::IllegalArgumentException();
             }
-            pAttrList->AddAttribute( pair.First, aCDATAString, pair.Second );
+            pAttrList->AddAttribute( pair.First, pair.Second );
         }
 
         xWriter->startElement( aRelElement, pAttrList );
@@ -199,14 +197,12 @@ void WriteContentSequence(
     static constexpr OUStringLiteral aDefaultElement(u"Default");
     static constexpr OUStringLiteral aOverrideElement(u"Override");
     static constexpr OUStringLiteral aContentTypeAttr(u"ContentType");
-    static constexpr OUStringLiteral aCDATAString(u"CDATA");
     static constexpr OUStringLiteral aWhiteSpace(u" ");
 
     // write the namespace
     rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns",
-        aCDATAString,
         "http://schemas.openxmlformats.org/package/2006/content-types" );
 
     xWriter->startDocument();
@@ -215,8 +211,8 @@ void WriteContentSequence(
     for ( const beans::StringPair & pair : aDefaultsSequence )
     {
         rtl::Reference<AttributeList> pAttrList = new AttributeList;
-        pAttrList->AddAttribute( "Extension", aCDATAString, pair.First );
-        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
+        pAttrList->AddAttribute( "Extension", pair.First );
+        pAttrList->AddAttribute( aContentTypeAttr, pair.Second );
 
         xWriter->startElement( aDefaultElement, pAttrList  );
         xWriter->ignorableWhitespace( aWhiteSpace );
@@ -226,8 +222,8 @@ void WriteContentSequence(
     for ( const beans::StringPair & pair : aOverridesSequence )
     {
         rtl::Reference<AttributeList> pAttrList = new AttributeList;
-        pAttrList->AddAttribute( "PartName", aCDATAString, pair.First );
-        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
+        pAttrList->AddAttribute( "PartName", pair.First );
+        pAttrList->AddAttribute( aContentTypeAttr, pair.Second );
 
         xWriter->startElement( aOverrideElement, pAttrList );
         xWriter->ignorableWhitespace( aWhiteSpace );

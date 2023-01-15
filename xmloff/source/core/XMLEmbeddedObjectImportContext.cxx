@@ -32,7 +32,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/XMLFilterServiceNames.h>
 #include <XMLEmbeddedObjectImportContext.hxx>
 

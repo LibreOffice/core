@@ -35,7 +35,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
-#include <xmloff/attrlist.hxx>
 #include "eventimp.hxx"
 #include "ximpshap.hxx"
 #include "sdpropls.hxx"

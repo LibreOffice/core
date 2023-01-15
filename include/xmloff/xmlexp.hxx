@@ -25,7 +25,6 @@
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/formlayerexport.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -45,6 +44,7 @@
 #include <unotools/securityoptions.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
+#include <comphelper/attributelist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
@@ -129,7 +129,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     css::uno::Reference< css::beans::XPropertySet > mxExportInfo;
     css::uno::Reference< css::lang::XEventListener > mxEventListener;
 
-    rtl::Reference<SvXMLAttributeList>          mxAttrList;        // a common attribute list
+    rtl::Reference<comphelper::AttributeList> mxAttrList;        // a common attribute list
 
     OUString     msOrigFileName; // the original URL
     OUString     msFilterName;
@@ -371,7 +371,7 @@ public:
                                   css::xml::sax::XAttributeList >& xAttrList );
 
     // Get common attribute list as implementation or interface.
-    SvXMLAttributeList &GetAttrList() { return *mxAttrList; }
+    comphelper::AttributeList &GetAttrList() { return *mxAttrList; }
     css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() const { return mxAttrList; }
 
     // Get document handler. This methods are not const, because the

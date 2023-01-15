@@ -58,10 +58,10 @@
  * Document object of the xml filter framework.
  ************************************************************************/
 #include "xfsaxattrlist.hxx"
-#include <xmloff/attrlist.hxx>
+#include <comphelper/attributelist.hxx>
 
 XFSaxAttrList::XFSaxAttrList()
-    : m_xSvAttrList(new SvXMLAttributeList())
+    : m_xSvAttrList(new comphelper::AttributeList())
 {
 }
 

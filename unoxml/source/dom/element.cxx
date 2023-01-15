@@ -58,7 +58,6 @@ namespace DOM
         if (!i_xHandler.is()) throw RuntimeException();
         rtl::Reference<comphelper::AttributeList> pAttrs =
             new comphelper::AttributeList();
-        OUString type = "";
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != nullptr; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : reinterpret_cast<const xmlChar*>("");
@@ -71,7 +70,7 @@ namespace DOM
             OUString val(reinterpret_cast<const char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
                 RTL_TEXTENCODING_UTF8);
-            pAttrs->AddAttribute(name, type, val);
+            pAttrs->AddAttribute(name, val);
         }
         // add attributes
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
@@ -84,7 +83,7 @@ namespace DOM
                 ? pNode->getLocalName()
                 : prefix + ":" + pNode->getLocalName();
             OUString val  = pNode->getNodeValue();
-            pAttrs->AddAttribute(name, type, val);
+            pAttrs->AddAttribute(name, val);
         }
         OUString prefix = getPrefix();
         OUString name = (prefix.isEmpty())

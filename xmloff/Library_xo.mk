@@ -120,7 +120,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/XMLBasicExportFilter \
     xmloff/source/core/XMLEmbeddedObjectExportFilter \
     xmloff/source/core/XMLEmbeddedObjectImportContext \
-    xmloff/source/core/attrlist \
     xmloff/source/core/i18nmap \
     xmloff/source/core/namespacemap \
     xmloff/source/core/unoatrcn \

@@ -23,8 +23,6 @@
 
 namespace framework{
 
-inline constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
-
 // same items with a name space alias
 inline constexpr OUStringLiteral AL_ELEMENT_ACCELERATORLIST = u"accel:acceleratorlist";
 inline constexpr OUStringLiteral AL_ELEMENT_ITEM = u"accel:item";

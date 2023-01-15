@@ -52,7 +52,7 @@ protected:
     static void AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eLName,
                        const OUString& rValue,
                        const SvXMLNamespaceMap& rNamespaceMap,
-                       SvXMLAttributeList& rAttrList );
+                       comphelper::AttributeList& rAttrList );
 
 public:
 
@@ -60,7 +60,7 @@ public:
             SvXMLItemMapEntriesRef rMapEntries,
             SwXMLExport& rExp );
 
-    virtual void handleSpecialItem( SvXMLAttributeList& rAttrList,
+    virtual void handleSpecialItem( comphelper::AttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
@@ -89,7 +89,7 @@ void SwXMLTableItemMapper_Impl::AddAttribute( sal_uInt16 nPrefix,
         enum XMLTokenEnum eLName,
         const OUString& rValue,
         const SvXMLNamespaceMap& rNamespaceMap,
-        SvXMLAttributeList& rAttrList )
+        comphelper::AttributeList& rAttrList )
 {
     OUString sName( rNamespaceMap.GetQNameByKey( nPrefix,
                                                  GetXMLToken(eLName) ) );
@@ -97,7 +97,7 @@ void SwXMLTableItemMapper_Impl::AddAttribute( sal_uInt16 nPrefix,
 }
 
 void SwXMLTableItemMapper_Impl::handleSpecialItem(
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         const SvXMLItemMapEntry& rEntry,
         const SfxPoolItem& rItem,
         const SvXMLUnitConverter& rUnitConverter,

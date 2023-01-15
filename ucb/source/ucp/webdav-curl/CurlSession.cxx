@@ -1598,7 +1598,7 @@ auto CurlProcessor::PropFind(
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
+    pAttrList->AddAttribute("xmlns", "DAV:");
     xWriter->startElement("propfind", pAttrList);
     if (o_pResourceInfos)
     {
@@ -1620,7 +1620,7 @@ auto CurlProcessor::PropFind(
                 SerfPropName name;
                 DAVProperties::createSerfPropName(rName, name);
                 pAttrList->Clear();
-                pAttrList->AddAttribute("xmlns", "CDATA", OUString::createFromAscii(name.nspace));
+                pAttrList->AddAttribute("xmlns", OUString::createFromAscii(name.nspace));
                 xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
                 xWriter->endElement(OUString::createFromAscii(name.name));
             }
@@ -1738,7 +1738,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
+    pAttrList->AddAttribute("xmlns", "DAV:");
     xWriter->startElement("propertyupdate", pAttrList);
     for (ProppatchValue const& rPropValue : rValues)
     {
@@ -1750,7 +1750,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         SerfPropName name;
         DAVProperties::createSerfPropName(rPropValue.name, name);
         pAttrList->Clear();
-        pAttrList->AddAttribute("xmlns", "CDATA", OUString::createFromAscii(name.nspace));
+        pAttrList->AddAttribute("xmlns", OUString::createFromAscii(name.nspace));
         xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
         if (rPropValue.operation == PROPSET)
         {
@@ -2205,7 +2205,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
+    pAttrList->AddAttribute("xmlns", "DAV:");
     xWriter->startElement("lockinfo", pAttrList);
     xWriter->startElement("lockscope", nullptr);
     switch (rLock.Scope)

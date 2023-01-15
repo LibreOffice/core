@@ -27,7 +27,7 @@ class SchXMLAutoStylePoolP final : public SvXMLAutoStylePoolP
     SchXMLExport& mrSchXMLExport;
 
     virtual void exportStyleAttributes(
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         XmlStyleFamily nFamily,
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp

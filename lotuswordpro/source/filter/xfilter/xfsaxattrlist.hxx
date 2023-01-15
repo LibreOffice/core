@@ -60,9 +60,17 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
+
 #include <xfilter/ixfattrlist.hxx>
 #include <rtl/ref.hxx>
-#include <xmloff/attrlist.hxx>
+
+namespace comphelper
+{
+class AttributeList;
+}
 
 class XFSaxAttrList : public IXFAttrList
 {
@@ -82,7 +90,7 @@ public:
     friend class XFSaxStream;
 
 private:
-    rtl::Reference<SvXMLAttributeList> m_xSvAttrList;
+    rtl::Reference<comphelper::AttributeList> m_xSvAttrList;
 };
 
 #endif //XFSAXATTRLIST_INC

@@ -29,8 +29,8 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <xmloff/attrlist.hxx>
 #include <rtl/ref.hxx>
 
 namespace T602ImportFilter {
@@ -118,7 +118,7 @@ private:
     css::uno::Reference< css::lang::XComponent >         mxDoc;
     css::uno::Reference < css::io::XInputStream >        mxInputStream;
 
-    rtl::Reference<SvXMLAttributeList> mpAttrList;
+    rtl::Reference<comphelper::AttributeList> mpAttrList;
 
     tnode node;         // START
 

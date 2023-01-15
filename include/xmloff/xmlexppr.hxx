@@ -48,7 +48,7 @@ namespace o3tl
 }
 
 class SvXMLUnitConverter;
-class SvXMLAttributeList;
+namespace comphelper { class AttributeList; }
 class SvXMLNamespaceMap;
 class SvXMLExport;
 
@@ -79,14 +79,14 @@ protected:
 
     /** fills the given attribute list with the items in the given set */
     void _exportXML( sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
-                     SvXMLAttributeList& rAttrList,
+                     comphelper::AttributeList& rAttrList,
                      const ::std::vector< XMLPropertyState >& rProperties,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
                      std::vector<sal_uInt16>* pIndexArray,
                        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const;
 
-    void _exportXML( SvXMLAttributeList& rAttrList,
+    void _exportXML( comphelper::AttributeList& rAttrList,
                      const XMLPropertyState& rProperty,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
@@ -169,7 +169,7 @@ public:
     /** this method is called for every item that has the
         MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,

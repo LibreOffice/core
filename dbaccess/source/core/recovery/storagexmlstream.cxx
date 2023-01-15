@@ -25,8 +25,8 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/ref.hxx>
+#include <comphelper/attributelist.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <xmloff/attrlist.hxx>
 
 #include <stack>
 
@@ -48,7 +48,7 @@ namespace dbaccess
     {
         Reference< XDocumentHandler >           xHandler;
         std::stack< OUString >         aElements;
-        ::rtl::Reference< SvXMLAttributeList >  xAttributes;
+        ::rtl::Reference<comphelper::AttributeList>  xAttributes;
     };
 
     // StorageXMLOutputStream
@@ -64,7 +64,7 @@ namespace dbaccess
         m_pData->xHandler.set( xSaxWriter, UNO_QUERY_THROW );
         m_pData->xHandler->startDocument();
 
-        m_pData->xAttributes = new SvXMLAttributeList;
+        m_pData->xAttributes = new comphelper::AttributeList;
     }
 
     StorageXMLOutputStream::~StorageXMLOutputStream()
@@ -89,7 +89,7 @@ namespace dbaccess
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
         m_pData->xHandler->startElement( i_rElementName, m_pData->xAttributes );
-        m_pData->xAttributes = new SvXMLAttributeList;
+        m_pData->xAttributes = new comphelper::AttributeList;
         m_pData->aElements.push( i_rElementName );
     }
 

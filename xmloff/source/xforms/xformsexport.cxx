@@ -347,7 +347,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
                 rMap.GetNameByKey( nKey ) != sURI )
             {
                 // add declaration if it doesn't already exist
-                SvXMLAttributeList& rAttrList = rExport.GetAttrList();
+                comphelper::AttributeList& rAttrList = rExport.GetAttrList();
                 OUString sName = "xmlns:" + rPrefix;
                 sal_Int16 nFound = rAttrList.GetIndexByName(sName);
                 // duplicate xmlns:script, http://openoffice.org/2000/script seen

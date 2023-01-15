@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_libraries,t602filter,\
 	xo \
 	tl \
 	utl \
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

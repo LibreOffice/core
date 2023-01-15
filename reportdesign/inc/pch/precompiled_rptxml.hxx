@@ -93,7 +93,6 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
 #include <xmloff/maptype.hxx>

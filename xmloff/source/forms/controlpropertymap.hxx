@@ -37,7 +37,7 @@ namespace xmloff
         explicit OFormComponentStyleExportMapper( const rtl::Reference< XMLPropertySetMapper >& _rMapper );
 
         void handleSpecialItem(
-            SvXMLAttributeList&                         _rAttrList,
+            comphelper::AttributeList&                         _rAttrList,
             const XMLPropertyState&                     _rProperty,
             const SvXMLUnitConverter&                   _rUnitConverter,
             const SvXMLNamespaceMap&                    _rNamespaceMap,

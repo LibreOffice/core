@@ -213,7 +213,6 @@ class OWriteMenuDocumentHandler final
         css::uno::Reference< css::container::XIndexAccess > m_xMenuBarContainer;
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         css::uno::Reference< css::xml::sax::XAttributeList > m_xEmptyList;
-        OUString m_aAttributeType;
         bool m_bIsMenuBar;
 };
 

@@ -27,7 +27,7 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 void OXMLAutoStylePoolP::exportStyleAttributes(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             XmlStyleFamily nFamily,
             const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp

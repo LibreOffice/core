@@ -27,7 +27,7 @@
 class SvXMLUnitConverter;
 class SfxPoolItem;
 class SfxItemSet;
-class SvXMLAttributeList;
+namespace comphelper { class AttributeList; }
 class SvXMLNamespaceMap;
 class SvXMLExport;
 
@@ -38,14 +38,14 @@ class SvXMLExportItemMapper
 protected:
     /** fills the given attribute list with the items in the given set */
     void exportXML( const SvXMLExport& rExport,
-                    SvXMLAttributeList& rAttrList,
+                    comphelper::AttributeList& rAttrList,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
                     std::vector<sal_uInt16> *pIndexArray ) const;
 
     void exportXML( const SvXMLExport& rExport,
-                    SvXMLAttributeList& rAttrList,
+                    comphelper::AttributeList& rAttrList,
                     const SfxPoolItem& rItem,
                     const SvXMLItemMapEntry &rEntry,
                     const SvXMLUnitConverter& rUnitConverter,
@@ -70,7 +70,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
-    virtual void handleSpecialItem( SvXMLAttributeList& rAttrList,
+    virtual void handleSpecialItem( comphelper::AttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,

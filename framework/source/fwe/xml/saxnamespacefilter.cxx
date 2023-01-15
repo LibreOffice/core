@@ -84,7 +84,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
             OUString aAttributeName           = xAttribs->getNameByIndex(attributeIndex);
             OUString aValue                   = xAttribs->getValueByIndex(attributeIndex);
             OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
-            pNewList->AddAttribute( aNamespaceAttributeName, "CDATA", aValue );
+            pNewList->AddAttribute(aNamespaceAttributeName, aValue);
         }
     }
     catch ( SAXException& e )

@@ -33,7 +33,7 @@ SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
 {}
 
 void SchXMLAutoStylePoolP::exportStyleAttributes(
-    SvXMLAttributeList& rAttrList,
+    comphelper::AttributeList& rAttrList,
     XmlStyleFamily nFamily,
     const ::std::vector< XMLPropertyState >& rProperties,
     const SvXMLExportPropertyMapper& rPropExp

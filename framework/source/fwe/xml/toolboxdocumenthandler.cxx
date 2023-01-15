@@ -563,7 +563,6 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_rItemAccess( rItemAccess )
 {
     m_xEmptyList = new ::comphelper::AttributeList;
-    m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLToolbarNS     = XMLNS_TOOLBAR_PREFIX;
 }
@@ -600,16 +599,13 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_TOOLBAR,
-                         m_aAttributeType,
                          XMLNS_TOOLBAR );
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
-                         m_aAttributeType,
                          XMLNS_XLINK );
 
     if ( !aUIName.isEmpty() )
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_UINAME,
-                             m_aAttributeType,
                              aUIName );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList );
@@ -664,19 +660,17 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     }
 
     // save required attribute (URL)
-    pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
+    pList->AddAttribute( m_aAttributeURL, rCommandURL );
 
     if ( !rLabel.isEmpty() )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_TEXT,
-                             m_aAttributeType,
                              rLabel );
     }
 
     if ( !bVisible )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_VISIBLE,
-                             m_aAttributeType,
                              ATTRIBUTE_BOOLEAN_FALSE );
     }
 
@@ -695,7 +689,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
             }
         }
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,
-                             m_aAttributeType,
                              aValue.makeStringAndClear() );
     }
 

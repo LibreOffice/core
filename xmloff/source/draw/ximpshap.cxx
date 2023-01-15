@@ -78,7 +78,6 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/attrlist.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/container/XChild.hpp>

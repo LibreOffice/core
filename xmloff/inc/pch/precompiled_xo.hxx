@@ -219,7 +219,6 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
 #include <xmloff/maptype.hxx>

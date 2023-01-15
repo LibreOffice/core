@@ -49,8 +49,6 @@ inline constexpr OUStringLiteral ELEMENT_NS_TOOLBARSEPARATOR = u"toolbar:toolbar
 inline constexpr OUStringLiteral ATTRIBUTE_XMLNS_TOOLBAR = u"xmlns:toolbar";
 inline constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-inline constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
-
 #define ATTRIBUTE_BOOLEAN_TRUE      "true"
 inline constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE  = u"false";
 

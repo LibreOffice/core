@@ -345,7 +345,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
 }
 
 void XMLPageMasterExportPropMapper::handleSpecialItem(
-        SvXMLAttributeList&,
+        comphelper::AttributeList&,
         const XMLPropertyState&,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&,

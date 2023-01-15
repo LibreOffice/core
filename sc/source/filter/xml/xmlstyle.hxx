@@ -120,7 +120,7 @@ public:
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
@@ -151,7 +151,7 @@ public:
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
@@ -169,7 +169,7 @@ public:
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
@@ -182,7 +182,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     ScXMLExport& rScXMLExport;
 
     virtual void exportStyleAttributes(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,

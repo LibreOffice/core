@@ -56,7 +56,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <xmloff/attrlist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>

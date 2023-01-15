@@ -47,7 +47,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/attrlist.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -394,7 +393,7 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         addChaffWhenEncryptedStorage();
 
         /*Add xmlns line*/
-        SvXMLAttributeList& rList = GetAttrList();
+        comphelper::AttributeList& rList = GetAttrList();
 
         // make use of a default namespace
         ResetNamespaceMap(); // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)

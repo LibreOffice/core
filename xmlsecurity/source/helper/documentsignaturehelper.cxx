@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+#include <comphelper/attributelist.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -41,7 +42,6 @@
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <xmloff/attrlist.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <xsecctl.hxx>
@@ -521,7 +521,7 @@ OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
 void DocumentSignatureHelper::writeDigestMethod(
     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler)
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("Algorithm", ALGO_XMLDSIGSHA256);
     xDocumentHandler->startElement("DigestMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     xDocumentHandler->endElement("DigestMethod");
@@ -531,19 +531,19 @@ static void WriteXadesCert(
     uno::Reference<xml::sax::XDocumentHandler> const& xDocumentHandler,
     SignatureInformation::X509CertInfo const& rCertInfo)
 {
-    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     DocumentSignatureHelper::writeDigestMethod(xDocumentHandler);
-    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     assert(!rCertInfo.CertDigest.isEmpty());
     xDocumentHandler->characters(rCertInfo.CertDigest);
     xDocumentHandler->endElement("DigestValue");
     xDocumentHandler->endElement("xd:CertDigest");
-    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(rCertInfo.X509IssuerName);
     xDocumentHandler->endElement("X509IssuerName");
-    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(rCertInfo.X509SerialNumber);
     xDocumentHandler->endElement("X509SerialNumber");
     xDocumentHandler->endElement("xd:IssuerSerial");
@@ -556,16 +556,16 @@ void DocumentSignatureHelper::writeSignedProperties(
     const OUString& sDate, const bool bWriteSignatureLineData)
 {
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Id", "idSignedProperties_" + signatureInfo.ouSignatureId);
         xDocumentHandler->startElement("xd:SignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
-    xDocumentHandler->startElement("xd:SignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("xd:SigningTime", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:SignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement("xd:SigningTime", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(sDate);
     xDocumentHandler->endElement("xd:SigningTime");
-    xDocumentHandler->startElement("xd:SigningCertificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:SigningCertificate", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     assert(signatureInfo.GetSigningCertificate() || !signatureInfo.ouGpgKeyID.isEmpty());
     if (signatureInfo.GetSigningCertificate())
     {
@@ -587,15 +587,15 @@ void DocumentSignatureHelper::writeSignedProperties(
         WriteXadesCert(xDocumentHandler, temp);
     }
     xDocumentHandler->endElement("xd:SigningCertificate");
-    xDocumentHandler->startElement("xd:SignaturePolicyIdentifier", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:SignaturePolicyIdentifier", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->endElement("xd:SignaturePolicyImplied");
     xDocumentHandler->endElement("xd:SignaturePolicyIdentifier");
 
     if (bWriteSignatureLineData && !signatureInfo.ouSignatureLineId.isEmpty()
         && signatureInfo.aValidSignatureImage.is() && signatureInfo.aInvalidSignatureImage.is())
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute(
             "xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
         xDocumentHandler->startElement(
@@ -606,7 +606,7 @@ void DocumentSignatureHelper::writeSignedProperties(
             // Write SignatureLineId element
             xDocumentHandler->startElement(
                 "loext:SignatureLineId",
-                Reference<XAttributeList>(new SvXMLAttributeList()));
+                Reference<XAttributeList>(new comphelper::AttributeList()));
             xDocumentHandler->characters(signatureInfo.ouSignatureLineId);
             xDocumentHandler->endElement("loext:SignatureLineId");
         }
@@ -615,7 +615,7 @@ void DocumentSignatureHelper::writeSignedProperties(
             // Write SignatureLineValidImage element
             xDocumentHandler->startElement(
                 "loext:SignatureLineValidImage",
-                Reference<XAttributeList>(new SvXMLAttributeList()));
+                Reference<XAttributeList>(new comphelper::AttributeList()));
 
             OUString aGraphicInBase64;
             Graphic aGraphic(signatureInfo.aValidSignatureImage);
@@ -630,7 +630,7 @@ void DocumentSignatureHelper::writeSignedProperties(
             // Write SignatureLineInvalidImage element
             xDocumentHandler->startElement(
                 "loext:SignatureLineInvalidImage",
-                Reference<XAttributeList>(new SvXMLAttributeList()));
+                Reference<XAttributeList>(new comphelper::AttributeList()));
             OUString aGraphicInBase64;
             Graphic aGraphic(signatureInfo.aInvalidSignatureImage);
             if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false))

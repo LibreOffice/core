@@ -26,7 +26,6 @@
 #include <svl/itemset.hxx>
 #include <utility>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -62,7 +61,7 @@ using uno::Any;
 
 // fills the given attribute list with the items in the given set
 void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
-                                SvXMLAttributeList& rAttrList,
+                                comphelper::AttributeList& rAttrList,
                                 const SfxItemSet& rSet,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap,
@@ -106,7 +105,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 }
 
 void SvXMLExportItemMapper::exportXML(const SvXMLExport&,
-                                 SvXMLAttributeList& rAttrList,
+                                 comphelper::AttributeList& rAttrList,
                                  const SfxPoolItem& rItem,
                                  const SvXMLItemMapEntry& rEntry,
                                  const SvXMLUnitConverter& rUnitConverter,
@@ -319,7 +318,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 
 /** this method is called for every item that has the
     MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
-void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/,
+void SvXMLExportItemMapper::handleSpecialItem( comphelper::AttributeList& /*rAttrList*/,
                                     const SvXMLItemMapEntry& /*rEntry*/,
                                     const SfxPoolItem& /*rItem*/,
                                     const SvXMLUnitConverter& /*rUnitConverter*/,

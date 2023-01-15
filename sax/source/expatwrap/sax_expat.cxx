@@ -142,8 +142,6 @@ struct Entity
 };
 
 
-constexpr OUStringLiteral gsCDATA = u"CDATA";
-
 class SaxExpatParser_Impl
 {
 public: // module scope
@@ -711,7 +709,6 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
         assert(awAttributes[i+1]);
         pImpl->rAttrList->AddAttribute(
             XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
-            gsCDATA,  // expat doesn't know types
             XML_CHAR_TO_OUSTRING( awAttributes[i+1] ) );
         i +=2;
     }

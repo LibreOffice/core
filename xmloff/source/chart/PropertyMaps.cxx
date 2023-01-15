@@ -31,7 +31,7 @@
 #include <propimp0.hxx>
 
 #include <xmloff/EnumPropertyHdl.hxx>
-#include <xmloff/attrlist.hxx>
+#include <comphelper/attributelist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/shapeimport.hxx>
@@ -683,7 +683,7 @@ OUString convertRange( const OUString & rRange, const uno::Reference< chart2::XC
 }
 
 void XMLChartExportPropertyMapper::handleSpecialItem(
-    SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
+    comphelper::AttributeList& rAttrList, const XMLPropertyState& rProperty,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap,
     const ::std::vector< XMLPropertyState > *pProperties,

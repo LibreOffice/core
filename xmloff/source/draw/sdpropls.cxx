@@ -1688,7 +1688,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 }
 
 void XMLShapeExportPropertyMapper::handleSpecialItem(
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,

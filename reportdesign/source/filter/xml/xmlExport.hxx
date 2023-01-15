@@ -109,7 +109,7 @@ private:
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponent);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
     void                    exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
-    void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName);
+    void                    exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt,const OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
     void                    exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph = true);

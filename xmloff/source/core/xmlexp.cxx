@@ -46,7 +46,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -441,7 +440,7 @@ SvXMLExport::SvXMLExport(
     const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(std::move(implementationName)),
-    mxAttrList( new SvXMLAttributeList ),
+    mxAttrList( new comphelper::AttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),
     maUnitConv(xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit, getSaneDefaultVersion()),
@@ -466,7 +465,7 @@ SvXMLExport::SvXMLExport(
     m_xContext(xContext), m_implementationName(std::move(implementationName)),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
-    mxAttrList( new SvXMLAttributeList ),
+    mxAttrList( new comphelper::AttributeList ),
     msOrigFileName(std::move( fileName )),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),
@@ -500,7 +499,7 @@ SvXMLExport::SvXMLExport(
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    mxAttrList( new SvXMLAttributeList ),
+    mxAttrList( new comphelper::AttributeList ),
     msOrigFileName(std::move( fileName )),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),

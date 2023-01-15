@@ -23,11 +23,11 @@
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <comphelper/attributelist.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -58,7 +58,7 @@ OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,cons
 
 static void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
-    SvXMLAttributeList* pList = dynamic_cast<SvXMLAttributeList*>(xAttribs.get());
+    comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
     OUString sCellAddress = pList->getValueByName(_sName);
     const sal_Int32 nPos = sCellAddress.lastIndexOf('$');
     if ( nPos != -1 )
@@ -122,7 +122,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     bool bExport = true;
     if ( _sName == "office:chart" )
     {
-        rtl::Reference<SvXMLAttributeList> pList = new SvXMLAttributeList();
+        rtl::Reference<comphelper::AttributeList> pList = new comphelper::AttributeList();
         OUStringBuffer sValue;
         static const SvXMLEnumMapEntry<sal_uInt16> aXML_CommandTypeEnumMap[] =
         {
@@ -152,7 +152,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
 
         const OUString sTableCalc = lcl_createAttribute(XML_NP_TABLE,XML_CALCULATION_SETTINGS);
         m_xDelegatee->startElement(sTableCalc,nullptr);
-        pList = new SvXMLAttributeList();
+        pList = new comphelper::AttributeList();
         pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),"1899-12-30");
 
         const OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
@@ -186,7 +186,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         bExport = false;
     else if ( _sName == "chart:plot-area" )
     {
-        SvXMLAttributeList* pList = dynamic_cast<SvXMLAttributeList*>(xAttribs.get());
+        comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
         pList->RemoveAttribute("table:cell-range-address");
     }
     else if ( _sName == "chart:categories" )
@@ -201,7 +201,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     }
     else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName == "table:table-cell" )
     {
-        SvXMLAttributeList* pList = dynamic_cast<SvXMLAttributeList*>(xAttribs.get());
+        comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
         static OUString s_sValue(lcl_createAttribute(XML_NP_OFFICE,XML_VALUE));
         pList->RemoveAttribute(s_sValue);
     }
@@ -345,7 +345,7 @@ void ExportDocumentHandler::exportTableRows()
     const OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
     static constexpr OUStringLiteral s_sFloat = u"float";
 
-    rtl::Reference<SvXMLAttributeList> pCellAtt = new SvXMLAttributeList();
+    rtl::Reference<comphelper::AttributeList> pCellAtt = new comphelper::AttributeList();
     pCellAtt->AddAttribute(sValueType, "string");
 
     bool bRemoveString = true;
@@ -370,7 +370,7 @@ void ExportDocumentHandler::exportTableRows()
     for(const auto& rColumn : std::as_const(m_aColumns))
     {
         OUString sFormula = "field:[" + rColumn + "]";
-        rtl::Reference<SvXMLAttributeList> pList = new SvXMLAttributeList();
+        rtl::Reference<comphelper::AttributeList> pList = new comphelper::AttributeList();
         pList->AddAttribute(sFormulaAttrib,sFormula);
 
         m_xDelegatee->startElement(sCell,pCellAtt);

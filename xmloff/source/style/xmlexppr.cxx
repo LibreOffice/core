@@ -38,7 +38,6 @@
 #include <utility>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -856,7 +855,7 @@ void SvXMLExportPropertyMapper::exportXML(
 /** this method is called for every item that has the
     MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
 void SvXMLExportPropertyMapper::handleSpecialItem(
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
@@ -888,7 +887,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::_exportXML(
         sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
@@ -958,7 +957,7 @@ sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16s
 }
 
 void SvXMLExportPropertyMapper::_exportXML(
-        SvXMLAttributeList& rAttrList,
+        comphelper::AttributeList& rAttrList,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,

@@ -149,7 +149,6 @@ class OWriteToolBoxDocumentHandler final
         css::uno::Reference< css::container::XIndexAccess >    m_rItemAccess;
         OUString                                               m_aXMLToolbarNS;
         OUString                                               m_aXMLXlinkNS;
-        OUString                                               m_aAttributeType;
         OUString                                               m_aAttributeURL;
 };
 

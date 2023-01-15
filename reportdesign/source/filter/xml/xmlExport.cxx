@@ -136,7 +136,7 @@ namespace rptxml
         /** this method is called for every item that has the
         MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
         virtual void handleSpecialItem(
-                SvXMLAttributeList& /*rAttrList*/,
+                comphelper::AttributeList& /*rAttrList*/,
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
@@ -992,7 +992,7 @@ bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OU
     return bRet;
 }
 
-void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName)
+void ORptExport::exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt,const OUString& _sName)
 {
     Reference<XPropertySet> xFind(_xProp);
     TPropertyStyleMap::const_iterator aFind = m_aAutoStyleNames.find(xFind);

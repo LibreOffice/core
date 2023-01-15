@@ -28,7 +28,6 @@ inline constexpr OUStringLiteral MANIFEST_NAMESPACE = u"http://openoffice.org/20
 inline constexpr OUStringLiteral MANIFEST_OASIS_NAMESPACE = u"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
 inline constexpr OUStringLiteral MANIFEST_LOEXT_NAMESPACE = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0";
 inline constexpr OUStringLiteral MANIFEST_DOCTYPE = u"<!DOCTYPE manifest:manifest PUBLIC \"-//OpenOffice.org//DTD Manifest 1.0//EN\" \"Manifest.dtd\">";
-inline constexpr OUStringLiteral ATTRIBUTE_CDATA = u"CDATA";
 
 inline constexpr OUStringLiteral ELEMENT_FILE_ENTRY = u"manifest:file-entry";
 inline constexpr OUStringLiteral ATTRIBUTE_FULL_PATH  = u"manifest:full-path";

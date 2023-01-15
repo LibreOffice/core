@@ -64,8 +64,6 @@ constexpr OUStringLiteral ATTRIBUTE_NS_STYLE = u"menu:style";
 
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_MENU = u"xmlns:menu";
 
-constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
-
 constexpr OUStringLiteral MENUBAR_DOCTYPE = u"<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">";
 
 #define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
@@ -720,7 +718,6 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_bIsMenuBar( bIsMenuBar )
 {
     m_xEmptyList = new ::comphelper::AttributeList;
-    m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 
 OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()
@@ -742,12 +739,10 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
     }
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_MENU,
-                         m_aAttributeType,
                          XMLNS_MENU );
 
     if ( m_bIsMenuBar ) //FIXME
         pList->AddAttribute( ATTRIBUTE_NS_ID,
-                             m_aAttributeType,
                              "menubar" );
 
     OUString aRootElement;
@@ -793,12 +788,10 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
                     rtl::Reference<::comphelper::AttributeList> pListMenu = new ::comphelper::AttributeList;
 
                     pListMenu->AddAttribute( ATTRIBUTE_NS_ID,
-                                            m_aAttributeType,
                                             aCommandURL );
 
                     if ( !aLabel.isEmpty() )
                         pListMenu->AddAttribute( ATTRIBUTE_NS_LABEL,
-                                                 m_aAttributeType,
                                                  aLabel );
 
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -843,20 +836,17 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_NS_ID,
-                                m_aAttributeType,
                                 aCommandURL );
 
     if ( !aHelpURL.isEmpty() )
     {
         pList->AddAttribute( ATTRIBUTE_NS_HELPID,
-                             m_aAttributeType,
                              aHelpURL );
     }
 
     if ( !aLabel.isEmpty() )
     {
         pList->AddAttribute( ATTRIBUTE_NS_LABEL,
-                                m_aAttributeType,
                                 aLabel );
     }
     if ( nStyle > 0 )
@@ -874,7 +864,6 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
             }
         }
         pList->AddAttribute( ATTRIBUTE_NS_STYLE,
-                                m_aAttributeType,
                                 aValue.makeStringAndClear() );
     }
 

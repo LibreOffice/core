@@ -3407,7 +3407,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                     if ( !sRanges.isEmpty() )
                                     {
                                         bIsChart = true;
-                                        rtl::Reference<SvXMLAttributeList> pAttrList = new SvXMLAttributeList();
+                                        rtl::Reference<comphelper::AttributeList> pAttrList = new comphelper::AttributeList();
                                         pAttrList->AddAttribute(
                                             GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
                                         GetShapeExport()->exportShape( xShape, SEF_DEFAULT, pPoint, pAttrList.get() );
@@ -3432,7 +3432,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 bIsChart = true;
                                 uno::Sequence< OUString > aRepresentations(
                                     xReceiver->getUsedRangeRepresentations());
-                                rtl::Reference<SvXMLAttributeList> pAttrList;
+                                rtl::Reference<comphelper::AttributeList> pAttrList;
                                 try
                                 {
                                     if (aRepresentations.hasElements())
@@ -3442,7 +3442,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                         // load (when the chart is not yet loaded)
                                         uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
                                         sRanges = lcl_RangeSequenceToString( aRepresentations, xRangeConverter );
-                                        pAttrList = new SvXMLAttributeList();
+                                        pAttrList = new comphelper::AttributeList();
                                         pAttrList->AddAttribute(
                                             GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
                                     }

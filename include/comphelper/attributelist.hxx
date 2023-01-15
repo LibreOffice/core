@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <vector>
 
 #include <com/sun/star/util/XCloneable.hpp>
@@ -33,32 +32,35 @@
 namespace comphelper
 {
 
-struct TagAttribute
-{
-    OUString sName;
-    OUString sType;
-    OUString sValue;
-};
-
 class COMPHELPER_DLLPUBLIC AttributeList final :
     public ::cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>
 {
+    struct TagAttribute
+    {
+        OUString sName;
+        OUString sValue;
+    };
     std::vector<TagAttribute> mAttributes;
 public:
     AttributeList();
-    AttributeList(const AttributeList &r);
+    AttributeList(const AttributeList &r) = default;
+    AttributeList(const css::uno::Reference<css::xml::sax::XAttributeList>& rAttrList);
+    AttributeList(AttributeList&&) = delete;
 
     virtual ~AttributeList() override;
 
     // methods that are not contained in any interface
-    void AddAttribute(const OUString &sName , const OUString &sType , const OUString &sValue)
-    {
-        mAttributes.push_back({sName, sType, sValue});
-    }
+    void AddAttribute(const OUString &sName, const OUString &sValue);
     void Clear()
     {
         mAttributes.clear();
     }
+    void RemoveAttribute(const OUString& sName);
+    void AppendAttributeList(const css::uno::Reference< css::xml::sax::XAttributeList >&);
+    void SetValueByIndex(sal_Int16 i, const OUString& rValue);
+    void RemoveAttributeByIndex(sal_Int16 i);
+    void RenameAttributeByIndex(sal_Int16 i, const OUString& rNewName);
+    sal_Int16 GetIndexByName(const OUString& rName) const;
 
     // css::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength() override
@@ -69,11 +71,8 @@ public:
     {
         return mAttributes[i].sName;
     }
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override
-    {
-        return mAttributes[i].sType;
-    }
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16) override { return "CDATA"; }
+    virtual OUString SAL_CALL getTypeByName(const OUString&) override { return "CDATA"; }
     virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override
     {
         return mAttributes[i].sValue;

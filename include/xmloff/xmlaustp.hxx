@@ -30,7 +30,7 @@
 class SvXMLExportPropertyMapper;
 class SvXMLNamespaceMap;
 class SvXMLAutoStylePoolP_Impl;
-class SvXMLAttributeList;
+namespace comphelper { class AttributeList; }
 class SvXMLExport;
 class SvXMLUnitConverter;
 struct XMLPropertyState;
@@ -56,7 +56,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public salhelper::SimpleReferenceOb
 protected:
 
     virtual void exportStyleAttributes(
-            SvXMLAttributeList& rAttrList,
+            comphelper::AttributeList& rAttrList,
             XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,

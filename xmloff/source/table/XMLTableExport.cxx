@@ -163,7 +163,7 @@ public:
     using SvXMLExportPropertyMapper::SvXMLExportPropertyMapper;
     /** this method is called for every item that has the
     MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
-    virtual void handleSpecialItem(SvXMLAttributeList&, const XMLPropertyState&, const SvXMLUnitConverter&,
+    virtual void handleSpecialItem(comphelper::AttributeList&, const XMLPropertyState&, const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&, const std::vector<XMLPropertyState>*, sal_uInt32) const override
     {
         // the SpecialItem NumberFormat must not be handled by this method

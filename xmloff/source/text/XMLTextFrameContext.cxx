@@ -55,7 +55,6 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <XMLImageMapContext.hxx>
 #include "XMLTextFrameContext.hxx"
-#include <xmloff/attrlist.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

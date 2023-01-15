@@ -19,22 +19,14 @@
 
 #include <comphelper/attributelist.hxx>
 
+#include <algorithm>
+#include <cassert>
+
 using namespace osl;
 using namespace com::sun::star;
 
 
 namespace comphelper {
-
-OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName )
-{
-    for (auto const& attribute : mAttributes)
-    {
-        if( attribute.sName == sName ) {
-            return attribute.sType;
-        }
-    }
-    return OUString();
-}
 
 OUString SAL_CALL AttributeList::getValueByName(const OUString& sName)
 {
@@ -53,10 +45,12 @@ AttributeList::AttributeList()
     mAttributes.reserve(20);
 }
 
-AttributeList::AttributeList(const AttributeList &r)
-    : cppu::WeakImplHelper<XAttributeList, XCloneable>(r)
+AttributeList::AttributeList(const uno::Reference< xml::sax::XAttributeList>& rAttrList)
 {
-    mAttributes = r.mAttributes;
+    if (AttributeList* pImpl = dynamic_cast<AttributeList*>(rAttrList.get()))
+        mAttributes = pImpl->mAttributes;
+    else
+        AppendAttributeList(rAttrList);
 }
 
 AttributeList::~AttributeList()
@@ -66,6 +60,66 @@ AttributeList::~AttributeList()
 css::uno::Reference< css::util::XCloneable > AttributeList::createClone()
 {
     return new AttributeList( *this );
+}
+
+void AttributeList::AddAttribute(const OUString& sName, const OUString& sValue)
+{
+    assert(!sName.isEmpty() && "empty attribute name is invalid");
+    assert(std::count(sName.getStr(), sName.getStr() + sName.getLength(), u':') <= 1
+           && "too many colons");
+    // TODO: this assertion fails in tests!
+//    assert(std::none_of(mAttributes.begin(), mAttributes.end(),
+//                        [&sName](const TagAttribute& a) { return a.sName == sName; }));
+    mAttributes.push_back({ sName, sValue });
+}
+
+void AttributeList::RemoveAttribute(const OUString& sName)
+{
+    auto ii = std::find_if(mAttributes.begin(), mAttributes.end(),
+                           [&sName](const TagAttribute& rAttr) { return rAttr.sName == sName; });
+
+    if (ii != mAttributes.end())
+        mAttributes.erase(ii);
+}
+
+void AttributeList::AppendAttributeList(const uno::Reference<css::xml::sax::XAttributeList>& r)
+{
+    assert(r.is());
+
+    sal_Int16 nMax = r->getLength();
+    sal_Int16 nTotalSize = mAttributes.size() + nMax;
+    mAttributes.reserve(nTotalSize);
+
+    for (sal_Int16 i = 0; i < nMax; ++i)
+        AddAttribute(r->getNameByIndex(i), r->getValueByIndex(i));
+
+    assert(nTotalSize == getLength());
+}
+
+void AttributeList::SetValueByIndex(sal_Int16 i, const OUString& rValue)
+{
+    mAttributes[i].sValue = rValue;
+}
+
+void AttributeList::RemoveAttributeByIndex(sal_Int16 i)
+{
+    mAttributes.erase(mAttributes.begin() + i);
+}
+
+void AttributeList::RenameAttributeByIndex(sal_Int16 i, const OUString& rNewName)
+{
+    mAttributes[i].sName = rNewName;
+}
+
+sal_Int16 AttributeList::GetIndexByName(const OUString& rName) const
+{
+    auto ii = std::find_if(mAttributes.begin(), mAttributes.end(),
+                           [&rName](const TagAttribute& rAttr) { return rAttr.sName == rName; });
+
+    if (ii != mAttributes.end())
+        return static_cast<sal_Int16>(std::distance(mAttributes.begin(), ii));
+
+    return -1;
 }
 
 } // namespace comphelper

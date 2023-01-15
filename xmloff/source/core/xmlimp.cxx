@@ -2124,7 +2124,7 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
             sDecl = "xmlns";
         else
             sDecl = "xmlns:" + rPrefix;
-        rAttrList->AddAttribute( sDecl, "CDATA", rNamespaceURI );
+        rAttrList->AddAttribute( sDecl, rNamespaceURI );
     }
     m_aNamespaceDefines.clear();
 }

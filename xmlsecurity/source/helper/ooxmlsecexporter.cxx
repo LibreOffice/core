@@ -19,6 +19,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+#include <comphelper/attributelist.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/ref.hxx>
@@ -26,7 +27,6 @@
 #include <svx/xoutbmp.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/salctype.hxx>
-#include <xmloff/attrlist.hxx>
 
 #include <documentsignaturehelper.hxx>
 #include <xsecctl.hxx>
@@ -113,7 +113,7 @@ bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationNa
 void OOXMLSecExporter::Impl::writeSignedInfo()
 {
     m_xDocumentHandler->startElement(
-        "SignedInfo", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignedInfo", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
 
     writeCanonicalizationMethod();
     writeSignatureMethod();
@@ -124,7 +124,7 @@ void OOXMLSecExporter::Impl::writeSignedInfo()
 
 void OOXMLSecExporter::Impl::writeCanonicalizationMethod()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("Algorithm", ALGO_C14N);
     m_xDocumentHandler->startElement("CanonicalizationMethod",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -133,7 +133,7 @@ void OOXMLSecExporter::Impl::writeCanonicalizationMethod()
 
 void OOXMLSecExporter::Impl::writeCanonicalizationTransform()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("Algorithm", ALGO_C14N);
     m_xDocumentHandler->startElement("Transform",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -142,7 +142,7 @@ void OOXMLSecExporter::Impl::writeCanonicalizationTransform()
 
 void OOXMLSecExporter::Impl::writeSignatureMethod()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
 
     if (m_rInformation.eAlgorithmID == svl::crypto::SignatureMethodAlgorithm::ECDSA)
         pAttributeList->AddAttribute("Algorithm", ALGO_ECDSASHA256);
@@ -162,7 +162,8 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
         if (rReference.nType == SignatureReferenceType::SAMEDOCUMENT)
         {
             {
-                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                rtl::Reference<comphelper::AttributeList> pAttributeList(
+                    new comphelper::AttributeList());
                 if (!rReference.ouURI.startsWith("idSignedProperties"))
                     pAttributeList->AddAttribute("Type",
                                                  "http://www.w3.org/2000/09/xmldsig#Object");
@@ -177,14 +178,15 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
             {
                 m_xDocumentHandler->startElement(
                     "Transforms",
-                    uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                    uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
                 writeCanonicalizationTransform();
                 m_xDocumentHandler->endElement("Transforms");
             }
 
             DocumentSignatureHelper::writeDigestMethod(m_xDocumentHandler);
             m_xDocumentHandler->startElement(
-                "DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                "DigestValue",
+                uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
             m_xDocumentHandler->characters(rReference.ouDigestValue);
             m_xDocumentHandler->endElement("DigestValue");
             m_xDocumentHandler->endElement("Reference");
@@ -194,8 +196,8 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
 
 void OOXMLSecExporter::Impl::writeSignatureValue()
 {
-    m_xDocumentHandler->startElement(
-        "SignatureValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("SignatureValue", uno::Reference<xml::sax::XAttributeList>(
+                                                           new comphelper::AttributeList()));
     m_xDocumentHandler->characters(m_rInformation.ouSignatureValue);
     m_xDocumentHandler->endElement("SignatureValue");
 }
@@ -203,17 +205,17 @@ void OOXMLSecExporter::Impl::writeSignatureValue()
 void OOXMLSecExporter::Impl::writeKeyInfo()
 {
     m_xDocumentHandler->startElement(
-        "KeyInfo", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "KeyInfo", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     assert(m_rInformation.GetSigningCertificate());
     for (auto const& rData : m_rInformation.X509Datas)
     {
         m_xDocumentHandler->startElement(
-            "X509Data", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+            "X509Data", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
         for (auto const& it : rData)
         {
             m_xDocumentHandler->startElement(
                 "X509Certificate",
-                uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
             m_xDocumentHandler->characters(it.X509Certificate);
             m_xDocumentHandler->endElement("X509Certificate");
         }
@@ -224,7 +226,7 @@ void OOXMLSecExporter::Impl::writeKeyInfo()
 
 void OOXMLSecExporter::Impl::writePackageObject()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("Id", "idPackageObject_" + m_rInformation.ouSignatureId);
     m_xDocumentHandler->startElement("Object",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -238,7 +240,7 @@ void OOXMLSecExporter::Impl::writePackageObject()
 void OOXMLSecExporter::Impl::writeManifest()
 {
     m_xDocumentHandler->startElement(
-        "Manifest", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "Manifest", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     const SignatureReferenceInformations& rReferences = m_rInformation.vSignatureReferenceInfors;
     for (const SignatureReferenceInformation& rReference : rReferences)
     {
@@ -262,7 +264,7 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
                                                                         embed::ElementModes::READ),
         uno::UNO_QUERY);
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Algorithm", ALGO_RELATIONSHIP);
         m_xDocumentHandler->startElement("Transform",
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -286,7 +288,7 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
         if (OOXMLSecExporter::Impl::isOOXMLRelationDenylist(aType))
             continue;
 
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("xmlns:mdssi", NS_MDSSI);
         pAttributeList->AddAttribute("SourceId", aId);
         m_xDocumentHandler->startElement("mdssi:RelationshipReference",
@@ -300,27 +302,28 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
 void OOXMLSecExporter::Impl::writePackageObjectSignatureProperties()
 {
     m_xDocumentHandler->startElement(
-        "SignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureProperties",
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Id", "idSignatureTime_" + m_rInformation.ouSignatureId);
         pAttributeList->AddAttribute("Target", "#" + m_rInformation.ouSignatureId);
         m_xDocumentHandler->startElement("SignatureProperty",
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("xmlns:mdssi", NS_MDSSI);
         m_xDocumentHandler->startElement("mdssi:SignatureTime",
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
     m_xDocumentHandler->startElement(
-        "mdssi:Format", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "mdssi:Format", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("YYYY-MM-DDThh:mm:ssTZD");
     m_xDocumentHandler->endElement("mdssi:Format");
 
     m_xDocumentHandler->startElement(
-        "mdssi:Value", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "mdssi:Value", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     if (!m_rInformation.ouDateTime.isEmpty())
         m_aSignatureTimeValue = m_rInformation.ouDateTime;
     else
@@ -344,7 +347,7 @@ void OOXMLSecExporter::Impl::writePackageObjectSignatureProperties()
 
 void OOXMLSecExporter::Impl::writeManifestReference(const SignatureReferenceInformation& rReference)
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("URI", rReference.ouURI);
     m_xDocumentHandler->startElement("Reference",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -362,8 +365,8 @@ void OOXMLSecExporter::Impl::writeManifestReference(const SignatureReferenceInfo
         if (nQueryPos != -1)
             aURI = aURI.copy(0, nQueryPos);
 
-        m_xDocumentHandler->startElement(
-            "Transforms", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        m_xDocumentHandler->startElement("Transforms", uno::Reference<xml::sax::XAttributeList>(
+                                                           new comphelper::AttributeList()));
 
         writeRelationshipTransform(aURI);
         writeCanonicalizationTransform();
@@ -373,7 +376,7 @@ void OOXMLSecExporter::Impl::writeManifestReference(const SignatureReferenceInfo
 
     DocumentSignatureHelper::writeDigestMethod(m_xDocumentHandler);
     m_xDocumentHandler->startElement(
-        "DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "DigestValue", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters(rReference.ouDigestValue);
     m_xDocumentHandler->endElement("DigestValue");
     m_xDocumentHandler->endElement("Reference");
@@ -382,15 +385,16 @@ void OOXMLSecExporter::Impl::writeManifestReference(const SignatureReferenceInfo
 void OOXMLSecExporter::Impl::writeOfficeObject()
 {
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Id", "idOfficeObject_" + m_rInformation.ouSignatureId);
         m_xDocumentHandler->startElement("Object",
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
     m_xDocumentHandler->startElement(
-        "SignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureProperties",
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Id", "idOfficeV1Details_" + m_rInformation.ouSignatureId);
         pAttributeList->AddAttribute("Target", "#" + m_rInformation.ouSignatureId);
         m_xDocumentHandler->startElement("SignatureProperty",
@@ -404,69 +408,72 @@ void OOXMLSecExporter::Impl::writeOfficeObject()
 
 void OOXMLSecExporter::Impl::writeSignatureInfo()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("xmlns", "http://schemas.microsoft.com/office/2006/digsig");
     m_xDocumentHandler->startElement("SignatureInfoV1",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
 
     m_xDocumentHandler->startElement(
-        "SetupID", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SetupID", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters(m_rInformation.ouSignatureLineId);
     m_xDocumentHandler->endElement("SetupID");
     m_xDocumentHandler->startElement(
-        "SignatureText", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureText", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->endElement("SignatureText");
-    m_xDocumentHandler->startElement(
-        "SignatureImage", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("SignatureImage", uno::Reference<xml::sax::XAttributeList>(
+                                                           new comphelper::AttributeList()));
     m_xDocumentHandler->endElement("SignatureImage");
-    m_xDocumentHandler->startElement(
-        "SignatureComments", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("SignatureComments", uno::Reference<xml::sax::XAttributeList>(
+                                                              new comphelper::AttributeList()));
     m_xDocumentHandler->characters(m_rInformation.ouDescription);
     m_xDocumentHandler->endElement("SignatureComments");
     // Just hardcode something valid according to [MS-OFFCRYPTO].
-    m_xDocumentHandler->startElement(
-        "WindowsVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("WindowsVersion", uno::Reference<xml::sax::XAttributeList>(
+                                                           new comphelper::AttributeList()));
     m_xDocumentHandler->characters("6.1");
     m_xDocumentHandler->endElement("WindowsVersion");
     m_xDocumentHandler->startElement(
-        "OfficeVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "OfficeVersion", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("16.0");
     m_xDocumentHandler->endElement("OfficeVersion");
-    m_xDocumentHandler->startElement(
-        "ApplicationVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("ApplicationVersion", uno::Reference<xml::sax::XAttributeList>(
+                                                               new comphelper::AttributeList()));
     m_xDocumentHandler->characters("16.0");
     m_xDocumentHandler->endElement("ApplicationVersion");
     m_xDocumentHandler->startElement(
-        "Monitors", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "Monitors", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("1");
     m_xDocumentHandler->endElement("Monitors");
     m_xDocumentHandler->startElement(
-        "HorizontalResolution", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "HorizontalResolution",
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("1280");
     m_xDocumentHandler->endElement("HorizontalResolution");
-    m_xDocumentHandler->startElement(
-        "VerticalResolution", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("VerticalResolution", uno::Reference<xml::sax::XAttributeList>(
+                                                               new comphelper::AttributeList()));
     m_xDocumentHandler->characters("800");
     m_xDocumentHandler->endElement("VerticalResolution");
     m_xDocumentHandler->startElement(
-        "ColorDepth", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "ColorDepth", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("32");
     m_xDocumentHandler->endElement("ColorDepth");
     m_xDocumentHandler->startElement(
-        "SignatureProviderId", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureProviderId",
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("{00000000-0000-0000-0000-000000000000}");
     m_xDocumentHandler->endElement("SignatureProviderId");
     m_xDocumentHandler->startElement(
-        "SignatureProviderUrl", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureProviderUrl",
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->endElement("SignatureProviderUrl");
     m_xDocumentHandler->startElement(
         "SignatureProviderDetails",
-        uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters(
         "9"); // This is what MSO 2016 writes, though [MS-OFFCRYPTO] doesn't document what the value means.
     m_xDocumentHandler->endElement("SignatureProviderDetails");
     m_xDocumentHandler->startElement(
-        "SignatureType", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "SignatureType", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     m_xDocumentHandler->characters("2");
     m_xDocumentHandler->endElement("SignatureType");
 
@@ -476,9 +483,9 @@ void OOXMLSecExporter::Impl::writeSignatureInfo()
 void OOXMLSecExporter::Impl::writePackageSignature()
 {
     m_xDocumentHandler->startElement(
-        "Object", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+        "Object", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("xmlns:xd", NS_XD);
         pAttributeList->AddAttribute("Target", "#" + m_rInformation.ouSignatureId);
         m_xDocumentHandler->startElement("xd:QualifyingProperties",
@@ -496,7 +503,7 @@ void OOXMLSecExporter::Impl::writeSignatureLineImages()
 {
     if (m_rInformation.aValidSignatureImage.is())
     {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute("Id", "idValidSigLnImg");
         m_xDocumentHandler->startElement("Object",
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -510,7 +517,7 @@ void OOXMLSecExporter::Impl::writeSignatureLineImages()
     if (!m_rInformation.aInvalidSignatureImage.is())
         return;
 
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("Id", "idInvalidSigLnImg");
     m_xDocumentHandler->startElement("Object",
                                      uno::Reference<xml::sax::XAttributeList>(pAttributeList));
@@ -524,7 +531,7 @@ void OOXMLSecExporter::Impl::writeSignatureLineImages()
 
 void OOXMLSecExporter::Impl::writeSignature()
 {
-    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
     pAttributeList->AddAttribute("xmlns", NS_XMLDSIG);
     pAttributeList->AddAttribute("Id", m_rInformation.ouSignatureId);
     getDocumentHandler()->startElement("Signature",

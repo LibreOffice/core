@@ -64,7 +64,7 @@ private:
 
     /// this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set
     virtual void handleSpecialItem(
-        SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
+        comphelper::AttributeList& rAttrList, const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx  ) const override;

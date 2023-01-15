@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-class SvXMLAttributeList;
+namespace comphelper { class AttributeList; }
 
 class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
@@ -33,9 +33,9 @@ class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
 {
     css::uno::Reference< css::xml::sax::XAttributeList> m_xAttrList;
 
-    rtl::Reference<SvXMLAttributeList> m_pMutableAttrList;
+    rtl::Reference<comphelper::AttributeList> m_pMutableAttrList;
 
-    SvXMLAttributeList *GetMutableAttrList();
+    comphelper::AttributeList *GetMutableAttrList();
 
 public:
     XMLMutableAttributeList();

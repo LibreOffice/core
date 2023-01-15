@@ -127,7 +127,7 @@ namespace dbaxml
         /** this method is called for every item that has the
         MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
         virtual void handleSpecialItem(
-                SvXMLAttributeList& /*rAttrList*/,
+                comphelper::AttributeList& /*rAttrList*/,
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
@@ -840,7 +840,7 @@ void ODBExport::exportTable(XPropertySet* _xProp)
     exportFilter(_xProp,PROPERTY_ORDER,XML_ORDER_STATEMENT);
 }
 
-void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
+void ODBExport::exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt)
 {
     Reference<XPropertySet> xFind(_xProp);
     exportStyleName(XML_STYLE_NAME,xFind,_rAtt,m_aAutoStyleNames);
@@ -848,7 +848,7 @@ void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
     exportStyleName(XML_DEFAULT_ROW_STYLE_NAME,xFind,_rAtt,m_aRowAutoStyleNames);
 }
 
-void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const uno::Reference<beans::XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap)
+void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const uno::Reference<beans::XPropertySet>& _xProp,comphelper::AttributeList& _rAtt,TPropertyStyleMap& _rMap)
 {
     TPropertyStyleMap::const_iterator aFind = _rMap.find(_xProp);
     if ( aFind != _rMap.end() )
@@ -911,7 +911,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
             if ( aFind != m_aTableDummyColumns.end() )
             {
                 SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
-                rtl::Reference<SvXMLAttributeList> pAtt = new SvXMLAttributeList;
+                rtl::Reference<comphelper::AttributeList> pAtt = new comphelper::AttributeList;
                 exportStyleName(aFind->second.get(),*pAtt);
                 AddAttributeList(pAtt);
                 SvXMLElementExport aColumn(*this,XML_NAMESPACE_DB, XML_COLUMN, true, true);
@@ -929,7 +929,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
             Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
             if ( xProp.is() )
             {
-                rtl::Reference<SvXMLAttributeList> pAtt = new SvXMLAttributeList;
+                rtl::Reference<comphelper::AttributeList> pAtt = new comphelper::AttributeList;
                 exportStyleName(xProp.get(),*pAtt);
 
                 bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));

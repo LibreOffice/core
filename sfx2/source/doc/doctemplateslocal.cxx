@@ -58,14 +58,12 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    static const OUStringLiteral aCDATAString( u"CDATA" );
     static const OUStringLiteral aWhiteSpace( u" " );
 
     // write the namespace
     rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns:groupuinames",
-        aCDATAString,
         "http://openoffice.org/2006/groupuinames" );
 
     xWriterHandler->startDocument();
@@ -74,8 +72,8 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
     for (const auto & i : aSequence)
     {
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute( g_sNameAttr, aCDATAString, i.First );
-        pAttrList->AddAttribute( g_sUINameAttr, aCDATAString, i.Second );
+        pAttrList->AddAttribute( g_sNameAttr, i.First );
+        pAttrList->AddAttribute( g_sUINameAttr, i.Second );
 
         xWriterHandler->startElement( g_sGroupElement, pAttrList );
         xWriterHandler->ignorableWhitespace( aWhiteSpace );

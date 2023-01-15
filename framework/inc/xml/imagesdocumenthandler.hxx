@@ -123,7 +123,6 @@ class OWriteImagesDocumentHandler final
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
         OUString                                                  m_aXMLImageNS;
-        OUString                                                  m_aAttributeType;
         OUString                                                  m_aAttributeXlinkType;
         OUString                                                  m_aAttributeValueSimple;
 };

@@ -248,7 +248,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     auto const fs = OUString(OUString::number(inistruct::fontsize) + "pt");
     auto const fs2 = OUString(OUString::number(2*inistruct::fontsize) + "pt");
 
-    mpAttrList = new SvXMLAttributeList;
+    mpAttrList = new comphelper::AttributeList;
 
     Reference < XAttributeList > xAttrList ( mpAttrList );
 
