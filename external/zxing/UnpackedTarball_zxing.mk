@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxing,$(ZXING_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 
+# * external/zxing/android_include.patch.0 was upstreamed at
+# <https://github.com/zxing-cpp/zxing-cpp/pull/458> "add missing #include <cmath> for std::abs"
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/assume.__cpp_lib_string_view.patch.0 \
 	external/zxing/android_include.patch.0 \
