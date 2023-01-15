@@ -81,6 +81,7 @@ inline constexpr OUStringLiteral RID_BMP_NAVI_OUTLINE = u"sw/res/nc20000.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_TABLE = u"sw/res/nc20001.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_FRAME = u"sw/res/nc20002.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_GRAPHIC = u"sw/res/nc20003.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_GRAPHIC_LINK = u"sw/res/nc20007.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_OLE = u"sw/res/nc20004.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_BOOKMARK = u"sw/res/nc20005.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_REGION = u"sw/res/nc20006.png";

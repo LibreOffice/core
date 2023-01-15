@@ -155,6 +155,8 @@ class SwContentTree final : public SfxListener
      */
     void                FindActiveTypeAndRemoveUserData();
 
+    void InsertContent(const weld::TreeIter& rParent);
+
     void insert(const weld::TreeIter* pParent, const OUString& rStr, const OUString& rId,
                 bool bChildrenOnDemand, weld::TreeIter* pRet);
 

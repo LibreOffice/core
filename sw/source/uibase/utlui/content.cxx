@@ -2063,6 +2063,34 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     return true;
 }
 
+void SwContentTree::InsertContent(const weld::TreeIter& rParent)
+{
+    assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+    SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
+    bool bGraphic = pCntType->GetType() == ContentTypeId::GRAPHIC;
+    bool bRegion = pCntType->GetType() == ContentTypeId::REGION;
+    std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator();
+    const size_t nCount = pCntType->GetMemberCount();
+    for(size_t i = 0; i < nCount; ++i)
+    {
+        const SwContent* pCnt = pCntType->GetMember(i);
+        if (pCnt)
+        {
+            OUString sEntry = pCnt->GetName();
+            if (sEntry.isEmpty())
+                sEntry = m_sSpace;
+            OUString sId(weld::toId(pCnt));
+            insert(&rParent, sEntry, sId, false, xChild.get());
+            m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+            if (bGraphic && !static_cast<const SwGraphicContent*>(pCnt)->GetLink().isEmpty())
+                m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_LINK);
+            else if (bRegion)
+                m_xTreeView->set_extra_row_indent(*xChild,
+                                    static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
+        }
+    }
+}
+
 void SwContentTree::insert(const weld::TreeIter* pParent, const OUString& rStr, const OUString& rId,
                            bool bChildrenOnDemand, weld::TreeIter* pRet)
 {
@@ -2085,9 +2113,9 @@ void SwContentTree::remove(const weld::TreeIter& rIter)
 // Content will be integrated into the Box only on demand.
 bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
 {
-    bool bChild = m_xTreeView->iter_has_child(rParent);
-    if (bChild || !m_xTreeView->get_children_on_demand(rParent))
-        return bChild;
+    // Does the parent already have children or is it not a 'children on demand' node?
+    if (m_xTreeView->iter_has_child(rParent) || !m_xTreeView->get_children_on_demand(rParent))
+        return false;
 
     // Is this a content type?
     if (lcl_IsContentType(rParent, *m_xTreeView))
@@ -2134,34 +2162,16 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
 
                     // add this node as a parent candidate for any following nodes at a higher outline level
                     aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
-
-                    bChild = true;
                 }
             }
         }
         else
-        {
-            bool bRegion = pCntType->GetType() == ContentTypeId::REGION;
-            for(size_t i = 0; i < nCount; ++i)
-            {
-                const SwContent* pCnt = pCntType->GetMember(i);
-                if (pCnt)
-                {
-                    OUString sEntry = pCnt->GetName();
-                    if (sEntry.isEmpty())
-                        sEntry = m_sSpace;
-                    OUString sId(weld::toId(pCnt));
-                    insert(&rParent, sEntry, sId, false, xChild.get());
-                    m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                    if (bRegion)
-                        m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
-                    bChild = true;
-                }
-            }
-        }
+            InsertContent(rParent);
+
+        return nCount != 0;
     }
 
-    return bChild;
+    return false;
 }
 
 SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
@@ -2586,26 +2596,7 @@ void SwContentTree::Display( bool bActive )
             xCntTypeEntry = m_xTreeView->make_iterator(xEntry.get());
 
             if (!bChOnDemand)
-            {
-                bool bRegion = rpRootContentT->GetType() == ContentTypeId::REGION;
-
-                std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator();
-                for (size_t i = 0; i < rpRootContentT->GetMemberCount(); ++i)
-                {
-                    const SwContent* pCnt = rpRootContentT->GetMember(i);
-                    if (pCnt)
-                    {
-                        OUString sEntry = pCnt->GetName();
-                        if(sEntry.isEmpty())
-                            sEntry = m_sSpace;
-                        OUString sSubId(weld::toId(pCnt));
-                        insert(xEntry.get(), sEntry, sSubId, false, xChild.get());
-                        m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                        if (bRegion)
-                            m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
-                    }
-                }
-            }
+                InsertContent(*xEntry);
             else
             {
                 // fill contents of to-be expanded entries while frozen
