@@ -675,6 +675,18 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
+        case FN_UNO_SORTED_TEXT_ID:
+        {
+            if( pAny )
+            {
+                sal_Int32 nIndex = -1;
+                SwTextNode* pTextNode = rPam.GetPoint()->GetNode().GetTextNode();
+                if ( pTextNode )
+                    nIndex = pTextNode->GetIndex().get();
+                *pAny <<= nIndex;
+            }
+        }
+        break;
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {

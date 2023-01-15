@@ -577,7 +577,8 @@ class SwUINumRuleItem;
 #define FN_UNO_FOOTER_LEFT                  (FN_EXTRA2 + 39)
 #define FN_UNO_FOOTER_RIGHT                 (FN_EXTRA2 + 40)
 #define FN_UNO_TEXT_PARAGRAPH               (FN_EXTRA2 + 41)
-#define FN_UNO_PARENT_TEXT (FN_EXTRA2 + 42)
+#define FN_UNO_PARENT_TEXT                  (FN_EXTRA2 + 42)
+#define FN_UNO_SORTED_TEXT_ID               (FN_EXTRA2 + 43)
 #define FN_UNO_FOLLOW_STYLE                 (FN_EXTRA2 + 59)
 
 #define FN_API_CALL                         TypedWhichId<SfxBoolItem>(FN_EXTRA2 + 60)

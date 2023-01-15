@@ -557,6 +557,8 @@ lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_In
     return comphelper::InitPropertySequence({
         { "FieldPositions", xProps->getPropertyValue("FieldPositions") },
         { "FootnotePositions", xProps->getPropertyValue("FootnotePositions") },
+        { "SortedTextId", xProps->getPropertyValue("SortedTextId") },
+        { "DocumentElementsCount", xProps->getPropertyValue("DocumentElementsCount") },
         { "ProofInfo", a }
     });
 }

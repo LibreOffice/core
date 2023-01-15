@@ -412,6 +412,7 @@ inline constexpr OUStringLiteral UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT = u"FooterIsD
 inline constexpr OUStringLiteral UNO_NAME_FOOTER_IS_SHARED = u"FooterIsShared";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_PARAGRAPH = u"TextParagraph";
 inline constexpr OUStringLiteral UNO_NAME_PARENT_TEXT = u"ParentText";
+inline constexpr OUStringLiteral UNO_NAME_SORTED_TEXT_ID = u"SortedTextId";
 
 inline constexpr OUStringLiteral UNO_NAME_FOOTER_HEIGHT = u"FooterHeight";
 inline constexpr OUStringLiteral UNO_NAME_FOOTER_IS_ON = u"FooterIsOn";

@@ -419,6 +419,15 @@ published service ParagraphProperties
             @since LibreOffice 7.4
          */
         [optional, property] long ParaHyphenationZone;
+
+        /** contains a paragraph identifier within the actual text,
+            which also shows the position of the paragraph relative to the
+            other paragraphs of the same text, i.e. a paragraph with lower
+            identifier is there before the other ones with greater values.
+            This property depends on implementation details and is considered experimental.
+            @since LibreOffice 7.5
+         */
+        [optional, property, readonly] long SortedTextId;
 };
 
 

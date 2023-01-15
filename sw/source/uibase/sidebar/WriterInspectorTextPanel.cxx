@@ -562,6 +562,7 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
                                                    UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
                                                    UNO_NAME_CHAR_STYLE_NAME,
                                                    UNO_NAME_NUMBERING_LEVEL,
+                                                   UNO_NAME_SORTED_TEXT_ID,
                                                    UNO_NAME_PARRSID,
                                                    UNO_NAME_CHAR_COLOR_THEME,
                                                    UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };

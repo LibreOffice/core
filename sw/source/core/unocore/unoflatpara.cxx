@@ -83,6 +83,8 @@ SwXFlatParagraph::getPropertySetInfo()
     static const comphelper::PropertyMapEntry s_Entries[] = {
         { OUString("FieldPositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString("FootnotePositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("SortedTextId"), -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("DocumentElementsCount"), -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
     return new comphelper::PropertySetInfo(s_Entries);
 }
@@ -106,6 +108,22 @@ SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
     else if (rPropertyName == "FootnotePositions")
     {
         return uno::Any( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
+    }
+    else if (rPropertyName == "SortedTextId")
+    {
+        SwTextNode const*const pCurrentNode = GetTextNode();
+        sal_Int32 nIndex = -1;
+        if ( pCurrentNode )
+            nIndex = pCurrentNode->GetIndex().get();
+        return uno::Any( nIndex );
+    }
+    else if (rPropertyName == "DocumentElementsCount")
+    {
+        SwTextNode const*const pCurrentNode = GetTextNode();
+        sal_Int32 nCount = -1;
+        if ( pCurrentNode )
+            nCount = pCurrentNode->GetDoc().GetNodes().Count().get();
+        return uno::Any( nCount );
     }
     return uno::Any();
 }
