@@ -23,6 +23,7 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 
+#include <rtl/ref.hxx>
 #include <vcl/idle.hxx>
 #include <comphelper/compbase.hxx>
 #include <memory>
@@ -38,6 +39,7 @@ class XController;
 
 namespace sd
 {
+class DrawController;
 class ViewShellBase;
 }
 
@@ -59,7 +61,7 @@ typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurat
 class ShellStackGuard : public ShellStackGuardInterfaceBase
 {
 public:
-    explicit ShellStackGuard(css::uno::Reference<css::frame::XController> const& rxController);
+    explicit ShellStackGuard(rtl::Reference<sd::DrawController> const& rxController);
     virtual ~ShellStackGuard() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;

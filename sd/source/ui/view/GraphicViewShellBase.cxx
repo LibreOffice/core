@@ -20,6 +20,7 @@
 #include <GraphicViewShellBase.hxx>
 
 #include <GraphicDocShell.hxx>
+#include <DrawController.hxx>
 #include <app.hrc>
 #include <framework/DrawModule.hxx>
 #include <framework/FrameworkHelper.hxx>
@@ -84,7 +85,7 @@ void GraphicViewShellBase::Execute(SfxRequest& rRequest)
 
 void GraphicViewShellBase::InitializeFramework()
 {
-    css::uno::Reference<css::frame::XController> xController(GetController());
+    rtl::Reference<sd::DrawController> xController(&GetDrawController());
     sd::framework::DrawModule::Initialize(xController);
 }
 

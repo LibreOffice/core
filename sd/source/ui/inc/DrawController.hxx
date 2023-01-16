@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/weakref.hxx>
@@ -51,8 +50,7 @@ typedef ::cppu::ImplInheritanceHelper <
     css::drawing::XDrawView,
     css::view::XSelectionChangeListener,
     css::view::XFormLayerAccess,
-    css::drawing::framework::XControllerManager,
-    css::lang::XUnoTunnel
+    css::drawing::framework::XControllerManager
     > DrawControllerInterfaceBase;
 
 class BroadcastHelperOwner
@@ -159,8 +157,6 @@ public:
     */
     void ReleaseViewShellBase();
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
 
@@ -219,10 +215,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController() override;
-
-    // XUnoTunnel
-
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
 private:
     /** This method must return the name to index table. This table

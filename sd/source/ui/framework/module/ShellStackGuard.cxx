@@ -38,19 +38,16 @@ namespace sd::framework {
 
 //===== CenterViewFocusModule ====================================================
 
-ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxController)
+ShellStackGuard::ShellStackGuard (rtl::Reference<sd::DrawController> const & rxController)
     : mpBase(nullptr),
       maPrinterPollingIdle("sd ShellStackGuard PrinterPollingIdle")
 {
-    Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    if (xControllerManager.is())
+    if (rxController.is())
     {
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        mxConfigurationController = rxController->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(rxController);
-        if (pController != nullptr)
-            mpBase = pController->GetViewShellBase();
+        mpBase = rxController->GetViewShellBase();
     }
 
     if (mxConfigurationController.is())

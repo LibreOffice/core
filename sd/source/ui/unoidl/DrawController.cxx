@@ -551,19 +551,6 @@ Reference<XModuleController> SAL_CALL
     return mxModuleController;
 }
 
-//===== XUnoTunnel ============================================================
-
-const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theDrawControllerUnoTunnelId;
-    return theDrawControllerUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 //===== Properties ============================================================
 
 void DrawController::FillPropertyTable (

@@ -237,8 +237,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-        ::sd::DrawController* pController = comphelper::getFromUnoTunnel<sd::DrawController>(xTunnel);
+        ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xController.get());
         if (pController != nullptr)
             mpBase = pController->GetViewShellBase();
 

@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd::framework
 {
-void PresentationModule::Initialize(Reference<frame::XController> const& rxController)
+void PresentationModule::Initialize(rtl::Reference<sd::DrawController> const& rxController)
 {
     new sd::framework::CenterViewFocusModule(rxController);
 }

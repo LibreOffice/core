@@ -25,13 +25,14 @@
 #include "SlideSorterModule.hxx"
 #include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sd::framework {
 
-void ImpressModule::Initialize (Reference<frame::XController> const & rxController)
+void ImpressModule::Initialize (rtl::Reference<sd::DrawController> const & rxController)
 {
     new CenterViewFocusModule(rxController);
     new ViewTabBarModule(

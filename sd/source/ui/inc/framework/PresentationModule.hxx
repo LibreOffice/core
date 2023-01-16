@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame
 {
@@ -28,6 +29,10 @@ class XController;
 namespace com::sun::star::uno
 {
 template <class interface_type> class Reference;
+}
+namespace sd
+{
+class DrawController;
 }
 
 namespace sd::framework
@@ -38,7 +43,7 @@ namespace sd::framework
 class PresentationModule
 {
 public:
-    static void Initialize(css::uno::Reference<css::frame::XController> const& rxController);
+    static void Initialize(rtl::Reference<sd::DrawController> const& rxController);
 };
 
 } // end of namespace sd::framework

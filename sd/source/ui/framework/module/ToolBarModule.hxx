@@ -23,12 +23,14 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <o3tl/deleter.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::frame { class XController; }
 
 namespace sd {
+class DrawController;
 class ViewShellBase;
 }
 
@@ -50,7 +52,7 @@ public:
             This is the access point to the drawing framework.
     */
     explicit ToolBarModule (
-        const css::uno::Reference<css::frame::XController>& rxController);
+        const rtl::Reference<sd::DrawController>& rxController);
     virtual ~ToolBarModule() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;

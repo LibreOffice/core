@@ -19,6 +19,7 @@
 
 #include <PresentationViewShellBase.hxx>
 #include <DrawDocShell.hxx>
+#include <DrawController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/PresentationModule.hxx>
 
@@ -84,8 +85,7 @@ PresentationViewShellBase::~PresentationViewShellBase()
 
 void PresentationViewShellBase::InitializeFramework()
 {
-    css::uno::Reference<css::frame::XController>
-        xController (GetController());
+    rtl::Reference<sd::DrawController> xController (&GetDrawController());
     sd::framework::PresentationModule::Initialize(xController);
 }
 

@@ -20,6 +20,7 @@
 #include <ImpressViewShellBase.hxx>
 
 #include <DrawDocShell.hxx>
+#include <DrawController.hxx>
 #include <app.hrc>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ImpressModule.hxx>
@@ -87,8 +88,8 @@ void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 
 void ImpressViewShellBase::InitializeFramework()
 {
-    css::uno::Reference<css::frame::XController>
-        xController (GetController());
+    rtl::Reference<sd::DrawController>
+        xController (&GetDrawController());
     sd::framework::ImpressModule::Initialize(xController);
 }
 

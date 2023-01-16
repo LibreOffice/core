@@ -70,8 +70,7 @@ ViewTabBar::ViewTabBar (
     // view frame.
     try
     {
-        Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
-        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xTunnel))
+        if (auto pController = dynamic_cast<DrawController*>(mxController.get()))
             mpViewShellBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)
@@ -149,8 +148,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     // view frame.
     try
     {
-        Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
-        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xTunnel))
+        if (auto pController = dynamic_cast<DrawController*>(rxController.get()))
             pBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)

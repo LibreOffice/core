@@ -41,20 +41,18 @@ namespace sd::framework {
 //===== ToolBarModule =========================================================
 
 ToolBarModule::ToolBarModule (
-    const Reference<frame::XController>& rxController)
+    const rtl::Reference<sd::DrawController>& rxController)
     : mpBase(nullptr),
       mbMainViewSwitchUpdatePending(false)
 {
     // Tunnel through the controller to obtain a ViewShellBase.
-    auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(rxController);
-    if (pController != nullptr)
-        mpBase = pController->GetViewShellBase();
+    if (rxController != nullptr)
+        mpBase = rxController->GetViewShellBase();
 
-    Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    if (!xControllerManager.is())
+    if (!rxController.is())
         return;
 
-    mxConfigurationController = xControllerManager->getConfigurationController();
+    mxConfigurationController = rxController->getConfigurationController();
     if (!mxConfigurationController.is())
         return;
 

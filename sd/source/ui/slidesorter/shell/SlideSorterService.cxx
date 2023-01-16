@@ -78,8 +78,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
 
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = nullptr;
-    Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-    ::sd::DrawController* pController = comphelper::getFromUnoTunnel<sd::DrawController>(xTunnel);
+    ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xController.get());
     if (pController != nullptr)
         pBase = pController->GetViewShellBase();
 

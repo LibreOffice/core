@@ -23,13 +23,14 @@
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
 #include "ToolBarModule.hxx"
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sd::framework
 {
-void DrawModule::Initialize(Reference<frame::XController> const& rxController)
+void DrawModule::Initialize(rtl::Reference<sd::DrawController> const& rxController)
 {
     new sd::framework::CenterViewFocusModule(rxController);
     new sd::framework::SlideSorterModule(rxController, FrameworkHelper::msLeftDrawPaneURL);

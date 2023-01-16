@@ -39,20 +39,18 @@ namespace sd::framework {
 
 //===== CenterViewFocusModule ====================================================
 
-CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> const & rxController)
+CenterViewFocusModule::CenterViewFocusModule (rtl::Reference<sd::DrawController> const & rxController)
     : mbValid(false),
       mpBase(nullptr),
       mbNewViewCreated(false)
 {
-    Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    if (xControllerManager.is())
+    if (rxController.is())
     {
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        mxConfigurationController = rxController->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(rxController);
-        if (pController != nullptr)
-            mpBase = pController->GetViewShellBase();
+        if (rxController != nullptr)
+            mpBase = rxController->GetViewShellBase();
 
         // Check, if all required objects do exist.
         if (mxConfigurationController.is() && mpBase!=nullptr)

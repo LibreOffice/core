@@ -21,6 +21,7 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::drawing::framework
 {
@@ -33,6 +34,7 @@ class XController;
 
 namespace sd
 {
+class DrawController;
 class ViewShellBase;
 }
 
@@ -49,8 +51,7 @@ typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurat
 class CenterViewFocusModule final : public CenterViewFocusModuleInterfaceBase
 {
 public:
-    explicit CenterViewFocusModule(
-        css::uno::Reference<css::frame::XController> const& rxController);
+    explicit CenterViewFocusModule(rtl::Reference<sd::DrawController> const& rxController);
     virtual ~CenterViewFocusModule() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;

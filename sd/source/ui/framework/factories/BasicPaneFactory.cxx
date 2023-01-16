@@ -132,8 +132,7 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
         // Tunnel through the controller to obtain access to the ViewShellBase.
         try
         {
-            Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-            if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xTunnel))
+            if (auto pController = dynamic_cast<DrawController*>(xController.get()))
                 mpViewShellBase = pController->GetViewShellBase();
         }
         catch(RuntimeException&)
