@@ -73,12 +73,6 @@ using namespace cppu;
 #define THROW_WHERE ""
 #endif
 
-const css::uno::Sequence < sal_Int8 > & ZipPackageStream::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit lcl_CachedImplId;
-    return lcl_CachedImplId.getSeq();
-}
-
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
                                     const uno::Reference< XComponentContext >& xContext,
                                     sal_Int32 nFormat,
@@ -300,13 +294,13 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         }
 
         // insert a new stream in the package
-        uno::Reference< XUnoTunnel > xTunnel;
+        uno::Reference< XInterface > xTmp;
         Any aRoot = pPackage->getByHierarchicalName("/");
-        aRoot >>= xTunnel;
-        uno::Reference< container::XNameContainer > xRootNameContainer( xTunnel, UNO_QUERY_THROW );
+        aRoot >>= xTmp;
+        uno::Reference< container::XNameContainer > xRootNameContainer( xTmp, UNO_QUERY_THROW );
 
-        uno::Reference< XUnoTunnel > xNPSTunnel( xNewPackStream, UNO_QUERY );
-        xRootNameContainer->insertByName("dummy", Any( xNPSTunnel ) );
+        uno::Reference< XInterface > xNPSDummy( xNewPackStream, UNO_QUERY );
+        xRootNameContainer->insertByName("dummy", Any( xNPSDummy ) );
 
         // commit the temporary package
         pPackage->commitChanges();
@@ -330,9 +324,9 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         // close raw stream, package stream and folder
         xInRaw.clear();
         xNewPSProps.clear();
-        xNPSTunnel.clear();
+        xNPSDummy.clear();
         xNewPackStream.clear();
-        xTunnel.clear();
+        xTmp.clear();
         xRootNameContainer.clear();
 
         // return the stream representing the first temporary file
@@ -1093,13 +1087,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
     }
 
     return uno::Reference< io::XInputStream >();
-}
-
-// XUnoTunnel
-
-sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 // XPropertySet

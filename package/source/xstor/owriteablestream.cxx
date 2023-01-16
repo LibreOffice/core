@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -324,8 +323,8 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     if ( m_bFlushed )
     {
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!" );
-        uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY_THROW );
-        xParentPackageFolder->insertByName( aName, uno::Any( xTunnel ) );
+        uno::Reference< uno::XInterface > xTmp( m_xPackageStream, uno::UNO_QUERY_THROW );
+        xParentPackageFolder->insertByName( aName, uno::Any( xTmp ) );
 
         m_bFlushed = false;
         m_bHasInsertedStreamOptimization = false;

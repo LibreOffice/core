@@ -28,7 +28,6 @@
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>

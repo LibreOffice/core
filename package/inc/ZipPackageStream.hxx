@@ -137,8 +137,6 @@ public:
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     void successfullyWritten( ZipEntry const *pEntry );
 
-    static const css::uno::Sequence < sal_Int8 > & getUnoTunnelId();
-
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream ) override;
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
@@ -151,9 +149,6 @@ public:
     virtual void SAL_CALL setRawStream(
                     const css::uno::Reference< css::io::XInputStream >& aStream ) override;
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getPlainRawStream() override;
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XPropertySet
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;

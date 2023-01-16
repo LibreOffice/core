@@ -171,15 +171,14 @@ void ZipPackage::parseManifest()
     {
         try {
             static const OUStringLiteral sManifest (u"manifest.xml");
-            uno::Reference< XUnoTunnel > xTunnel;
             Any aAny = m_xRootFolder->getByName( sMeta );
-            aAny >>= xTunnel;
-            uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
+            uno::Reference< XNameContainer > xMetaInfFolder;
+            aAny >>= xMetaInfFolder;
             if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
             {
+                uno::Reference < XActiveDataSink > xSink;
                 aAny = xMetaInfFolder->getByName( sManifest );
-                aAny >>= xTunnel;
-                uno::Reference < XActiveDataSink > xSink ( xTunnel, UNO_QUERY );
+                aAny >>= xSink;
                 if ( xSink.is() )
                 {
                     uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
@@ -238,14 +237,14 @@ void ZipPackage::parseManifest()
                         if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
                         {
                             aAny = getByHierarchicalName( sPath );
-                            uno::Reference < XUnoTunnel > xUnoTunnel;
-                            aAny >>= xUnoTunnel;
-                            if (auto pFolder = comphelper::getFromUnoTunnel<ZipPackageFolder>(xUnoTunnel))
+                            uno::Reference < XInterface > xTmp;
+                            aAny >>= xTmp;
+                            if (auto pFolder = dynamic_cast<ZipPackageFolder*>(xTmp.get()))
                             {
                                 pFolder->SetMediaType ( sMediaType );
                                 pFolder->SetVersion ( sVersion );
                             }
-                            else if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(xUnoTunnel))
+                            else if (auto pStream = dynamic_cast<ZipPackageStream*>(xTmp.get()))
                             {
                                 pStream->SetMediaType ( sMediaType );
                                 pStream->SetFromManifest( true );
@@ -374,9 +373,8 @@ void ZipPackage::parseManifest()
     {
         // get mediatype from the "mimetype" stream
         OUString aPackageMediatype;
-        uno::Reference< lang::XUnoTunnel > xMimeTypeTunnel;
-        m_xRootFolder->getByName( sMimetype ) >>= xMimeTypeTunnel;
-        uno::Reference < io::XActiveDataSink > xMimeSink( xMimeTypeTunnel, UNO_QUERY );
+        uno::Reference < io::XActiveDataSink > xMimeSink;
+        m_xRootFolder->getByName( sMimetype ) >>= xMimeSink;
         if ( xMimeSink.is() )
         {
             uno::Reference< io::XInputStream > xMimeInStream = xMimeSink->getInputStream();
@@ -452,10 +450,9 @@ void ZipPackage::parseContentType()
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
             throw io::IOException(THROW_WHERE "Wrong format!" );
 
-        uno::Reference< lang::XUnoTunnel > xTunnel;
+        uno::Reference < io::XActiveDataSink > xSink;
         uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
-        aAny >>= xTunnel;
-        uno::Reference < io::XActiveDataSink > xSink( xTunnel, UNO_QUERY );
+        aAny >>= xSink;
         if ( xSink.is() )
         {
             uno::Reference< io::XInputStream > xInStream = xSink->getInputStream();
@@ -484,9 +481,9 @@ void ZipPackage::parseContentType()
                     if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
                     {
                         uno::Any aIterAny = getByHierarchicalName( aPath );
-                        uno::Reference < lang::XUnoTunnel > xIterTunnel;
-                        aIterAny >>= xIterTunnel;
-                        if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(xIterTunnel))
+                        uno::Reference < XInterface > xIterTmp;
+                        aIterAny >>= xIterTmp;
+                        if (auto pStream = dynamic_cast<ZipPackageStream*>(xIterTmp.get()))
                         {
                             // this is a package stream, in OFOPXML format only streams can have mediatype
                             pStream->SetMediaType( rPair.Second );
@@ -800,7 +797,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if (aName == "/")
         // root directory.
-        return Any ( uno::Reference < XUnoTunnel > ( m_xRootFolder ) );
+        return Any ( uno::Reference < XInterface > ( static_cast<cppu::OWeakObject*>(m_xRootFolder.get()) ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
@@ -823,7 +820,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
 
                 if (pFolder && sTemp == pFolder->getName())
-                    return Any(uno::Reference<XUnoTunnel>(pFolder));
+                    return Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(pFolder)));
             }
             else
             {
@@ -869,7 +866,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     {
         if ( nStreamIndex != -1 )
             m_aRecent[sDirName] = pPrevious; // cache it.
-        return Any ( uno::Reference < XUnoTunnel > ( pCurrent ) );
+        return Any ( uno::Reference < XInterface > ( static_cast<cppu::OWeakObject*>(pCurrent) ) );
     }
 
     sTemp = aName.copy( nOldIndex );
@@ -1217,10 +1214,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             {
                 static const OUStringLiteral sManifest (u"manifest.xml");
 
-                uno::Reference< XUnoTunnel > xTunnel;
+                uno::Reference< XNameContainer > xMetaInfFolder;
                 Any aAny = m_xRootFolder->getByName( sMeta );
-                aAny >>= xTunnel;
-                uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
+                aAny >>= xMetaInfFolder;
                 if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
                     xMetaInfFolder->removeByName( sManifest );
             }

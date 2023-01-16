@@ -143,26 +143,20 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     }
 }
 
-const css::uno::Sequence < sal_Int8 > & ZipPackageFolder::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit lcl_CachedImplId;
-    return lcl_CachedImplId.getSeq();
-}
-
     // XNameContainer
 void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::Any& aElement )
 {
     if (hasByName(aName))
         throw ElementExistException(THROW_WHERE );
 
-    uno::Reference < XUnoTunnel > xRef;
+    uno::Reference < XInterface > xRef;
     aElement >>= xRef;
     if ( !(aElement >>= xRef) )
         throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
-    ZipPackageEntry* pEntry = comphelper::getFromUnoTunnel<ZipPackageFolder>(xRef);
+    ZipPackageEntry* pEntry = dynamic_cast<ZipPackageFolder*>(xRef.get());
     if (!pEntry)
-        pEntry = comphelper::getFromUnoTunnel<ZipPackageStream>(xRef);
+        pEntry = dynamic_cast<ZipPackageStream*>(xRef.get());
     if (!pEntry)
        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
@@ -186,7 +180,7 @@ uno::Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  )
     // XElementAccess
 uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
 {
-    return cppu::UnoType<XUnoTunnel>::get();
+    return cppu::UnoType<XInterface>::get();
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
 {
@@ -203,7 +197,7 @@ ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 {
-    return uno::Any ( doGetByName ( aName ).xTunnel );
+    return uno::Any ( uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(doGetByName ( aName ).xPackageEntry.get())) );
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
@@ -329,10 +323,6 @@ void ZipPackageFolder::saveContents(
     }
 }
 
-sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
 void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     if ( aPropertyName == "MediaType" )
@@ -395,14 +385,14 @@ sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceNa
 
 
 ZipContentInfo::ZipContentInfo ( ZipPackageStream * pNewStream )
-: xTunnel ( pNewStream )
+: xPackageEntry ( pNewStream )
 , bFolder ( false )
 , pStream ( pNewStream )
 {
 }
 
 ZipContentInfo::ZipContentInfo ( ZipPackageFolder * pNewFolder )
-: xTunnel ( pNewFolder )
+: xPackageEntry ( pNewFolder )
 , bFolder ( true )
 , pFolder ( pNewFolder )
 {

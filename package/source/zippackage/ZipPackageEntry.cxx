@@ -93,7 +93,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
 {
     if ( !xNewParent.is() )
         throw NoSupportException(THROW_WHERE );
-    ZipPackageFolder* pNewParent = comphelper::getFromUnoTunnel<ZipPackageFolder>(xNewParent);
+    ZipPackageFolder* pNewParent = dynamic_cast<ZipPackageFolder*>(xNewParent.get());
     if (!pNewParent)
         throw NoSupportException(THROW_WHERE );
 

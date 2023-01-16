@@ -40,7 +40,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -932,8 +931,8 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "An inserted storage is incomplete!" );
-    uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY_THROW );
-    xParentPackageFolder->insertByName( aName, uno::Any( xTunnel ) );
+    uno::Reference< uno::XInterface > xTmp( m_xPackageFolder, uno::UNO_QUERY_THROW );
+    xParentPackageFolder->insertByName( aName, uno::Any( xTmp ) );
 
     m_bCommited = false;
 }
@@ -1281,8 +1280,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
         throw embed::InvalidStorageException( THROW_WHERE);
 
     uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
-    uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
-                                                    uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
     if ( !xNewElement.is() )
@@ -1320,8 +1318,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
                                                                      GetSeekableTempCopy( xInStream );
 
     uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
-    uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
-                                                    uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
     if ( !xNewElement.is() )
@@ -1348,8 +1345,7 @@ std::unique_ptr<OStorage_Impl> OStorage_Impl::CreateNewStorageImpl( sal_Int32 nS
         throw embed::InvalidStorageException( THROW_WHERE );
 
     uno::Sequence< uno::Any > aSeq{ uno::Any(true) };
-    uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
-                                                    uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new storage!" );
     if ( !xNewElement.is() )
@@ -1423,12 +1419,12 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
     {
         SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
-        uno::Reference< lang::XUnoTunnel > xTunnel;
-        m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
-        if ( !xTunnel.is() )
+        uno::Reference< uno::XInterface > xTmp;
+        m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTmp;
+        if ( !xTmp.is() )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        uno::Reference< container::XNameContainer > xPackageSubFolder( xTunnel, uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameContainer > xPackageSubFolder( xTmp, uno::UNO_QUERY_THROW );
         pElement->m_xStorage.reset(new OStorage_Impl(this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType));
     }
 }
@@ -1445,12 +1441,12 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 
     SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
-    uno::Reference< lang::XUnoTunnel > xTunnel;
-    m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
-    if ( !xTunnel.is() )
+    uno::Reference< uno::XInterface > xTmp;
+    m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTmp;
+    if ( !xTmp.is() )
         throw container::NoSuchElementException( THROW_WHERE );
 
-    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY_THROW );
+    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTmp, uno::UNO_QUERY_THROW );
 
     // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
     pElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName(pElement->m_aOriginalName)));
