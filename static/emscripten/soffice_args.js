@@ -1,6 +1,6 @@
 Module['arguments'] = [
     '--norestore',
     '--nologo',
-    '--writer',
-    '/android/default-document/example_larger.odt'
+    '--convert-to',
+    'pdf:writer_pdf_Export'
 ];

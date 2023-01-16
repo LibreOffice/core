@@ -16,6 +16,9 @@ gb_EMSCRIPTEN_PRE_JS_FILES = \
     $(SRCDIR)/static/emscripten/environment.js \
     $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link \
 
+gb_EMSCRIPTEN_SHELL_HTML_FILE = \
+    $(SRCDIR)/static/emscripten/soffice.html \
+
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
@@ -88,6 +91,7 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 )
 
 $(foreach pre_js,$(gb_EMSCRIPTEN_PRE_JS_FILES),$(call gb_Executable_add_prejs,$(1),$(pre_js)))
+$(foreach shell_html,$(gb_EMSCRIPTEN_SHELL_HTML_FILE),$(call gb_Executable_add_shellhtml,$(1),$(shell_html)))
 
 endef
 
@@ -100,6 +104,7 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 )
 
 $(foreach pre_js,$(gb_EMSCRIPTEN_PRE_JS_FILES),$(call gb_CppunitTest_add_prejs,$(1),$(pre_js)))
+$(foreach shell_html,$(gb_EMSCRIPTEN_SHELL_HTML_FILE),$(call gb_CppunitTest_add_shellhtml,$(1),$(shell_html)))
 
 endef
 
