@@ -39,7 +39,15 @@ gb_EMSCRIPTEN_EXCEPT = -s DISABLE_EXCEPTION_CATCHING=0
 endif
 
 gb_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
+
+ifeq ($(ENABLE_WASM_EXCEPTIONS),TRUE)
+# Here we don't use += because gb_LinkTarget_EXCEPTIONFLAGS from com_GCC_defs.mk contains -fexceptions and
+# gb_EMSCRIPTEN_EXCEPT already has -fwasm-exceptions
+gb_LinkTarget_EXCEPTIONFLAGS = $(gb_EMSCRIPTEN_EXCEPT)
+else
 gb_LinkTarget_EXCEPTIONFLAGS += $(gb_EMSCRIPTEN_EXCEPT)
+endif
+
 gb_LinkTarget_CFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
 gb_LinkTarget_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_EXCEPT)
 ifeq ($(ENABLE_QT5),TRUE)
