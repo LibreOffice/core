@@ -34,7 +34,7 @@
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
 					<li>
-						<p id="macxiOSX" xml:lang="en-US">macOS 10.10 (Yosemite) or higher</p>
+						<p id="macxiOSX" xml:lang="en-US">macOS 10.15 (Catalina) or higher</p>
 					</li>
 				</ul>
 			</div>
