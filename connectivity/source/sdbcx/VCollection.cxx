@@ -374,7 +374,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
     if ( !xNewlyCreated.is() )
         throw RuntimeException();
 
-    ODescriptor* pDescriptor = comphelper::getFromUnoTunnel<ODescriptor>( xNewlyCreated );
+    ODescriptor* pDescriptor = dynamic_cast<ODescriptor*>( xNewlyCreated.get() );
     if ( pDescriptor )
         pDescriptor->setNew( false );
 

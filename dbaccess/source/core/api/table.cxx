@@ -309,18 +309,6 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
     m_xColumns->refresh();
 }
 
-sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OTable_Base>{});
-}
-
-const Sequence< sal_Int8 > & ODBTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit s_Id;
-    return s_Id.getSeq();
-}
-
 Reference< XPropertySet > ODBTable::createColumnDescriptor()
 {
     return new OTableColumnDescriptor( true );

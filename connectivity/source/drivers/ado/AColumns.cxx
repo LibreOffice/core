@@ -62,7 +62,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    rtl::Reference<OAdoColumn> pColumn = getFromUnoTunnel<OAdoColumn>( descriptor );
+    rtl::Reference<OAdoColumn> pColumn = dynamic_cast<OAdoColumn*>( descriptor.get() );
     Reference< XPropertySet > xColumn;
     if ( !pColumn.is() )
     {

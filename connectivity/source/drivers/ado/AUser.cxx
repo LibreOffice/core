@@ -65,21 +65,6 @@ void OAdoUser::refreshGroups()
         m_pGroups.reset(new OGroups(m_pCatalog, m_aMutex, aVector, aGroups, isCaseSensitive()));
 }
 
-Sequence< sal_Int8 > OAdoUser::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OUser_TYPEDEF>{});
-}
-
-
 void OAdoUser::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     if(m_aUser.IsValid())

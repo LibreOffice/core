@@ -65,7 +65,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 // XAppend
 sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoTable* pTable = getFromUnoTunnel<OAdoTable>( descriptor );
+    OAdoTable* pTable = dynamic_cast<OAdoTable*>( descriptor.get() );
     if ( pTable == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_TABLE_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

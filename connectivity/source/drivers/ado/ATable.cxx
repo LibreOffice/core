@@ -127,20 +127,6 @@ void OAdoTable::refreshIndexes()
         m_xIndexes.reset(new OIndexes(*this,m_aMutex,aVector,aIndexes,isCaseSensitive(),m_pCatalog->getConnection()));
 }
 
-Sequence< sal_Int8 > OAdoTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
-}
-
 // XRename
 void SAL_CALL OAdoTable::rename( const OUString& newName )
 {
@@ -165,7 +151,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     bool bError = true;
-    OAdoColumn* pColumn = comphelper::getFromUnoTunnel<OAdoColumn>(descriptor);
+    OAdoColumn* pColumn = dynamic_cast<OAdoColumn*>(descriptor.get());
     if(pColumn != nullptr)
     {
         WpADOColumns aColumns = m_aTable.get_Columns();

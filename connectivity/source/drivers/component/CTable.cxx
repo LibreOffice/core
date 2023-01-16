@@ -104,8 +104,7 @@ Any SAL_CALL OComponentTable::queryInterface( const Type & rType )
         rType == cppu::UnoType<XDataDescriptorFactory>::get())
         return Any();
 
-    const Any aRet = ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
-    return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
+    return OTable_TYPEDEF::queryInterface(rType);
 }
 
 

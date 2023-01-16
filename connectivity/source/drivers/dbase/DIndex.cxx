@@ -99,20 +99,6 @@ void ODbaseIndex::refreshColumns()
         m_pColumns.reset(new ODbaseIndexColumns(this,m_aMutex,aVector));
 }
 
-const Sequence< sal_Int8 > & ODbaseIndex::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// XUnoTunnel
-
-sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<ODbaseIndex_BASE>{});
-}
-
 ONDXPagePtr const & ODbaseIndex::getRoot()
 {
     openIndexFile();

@@ -45,10 +45,6 @@ namespace connectivity::ado
             OAdoGroup(OCatalog* _pParent,bool _bCase, ADOGroup* _pGroup=nullptr);
             OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
-
             // XAuthorizable
             virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
             virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;

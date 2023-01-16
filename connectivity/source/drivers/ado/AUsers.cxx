@@ -57,7 +57,7 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OUserExtend* pUser = getFromUnoTunnel<OUserExtend>( descriptor );
+    OUserExtend* pUser = dynamic_cast<OUserExtend*>( descriptor.get() );
     if ( pUser == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_USER_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

@@ -128,9 +128,6 @@ namespace dbaccess
     // css::sdbcx::XAlterTable,
         virtual void SAL_CALL alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
-        // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
     private:
         using OTable_Base::createArrayHelper;
         using OTable_Base::getFastPropertyValue;

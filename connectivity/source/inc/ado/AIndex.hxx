@@ -38,9 +38,6 @@ namespace connectivity::ado
         public:
             OAdoIndex(bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
             OAdoIndex(bool _bCase,  OConnection* _pConnection);
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
             WpADOIndex      getImpl() const { return m_aIndex;}
         };

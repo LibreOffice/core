@@ -41,10 +41,6 @@ namespace connectivity::ado
             OAdoKey(bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
             OAdoKey(bool _bCase,OConnection* _pConnection);
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
-
             WpADOKey        getImpl() const { return m_aKey;}
             // map the update/delete rules
             static RuleEnum Map2Rule(sal_Int32 _eNum);

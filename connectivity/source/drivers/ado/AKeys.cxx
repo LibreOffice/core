@@ -58,7 +58,7 @@ Reference< XPropertySet > OKeys::createDescriptor()
 // XAppend
 sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoKey* pKey = getFromUnoTunnel<OAdoKey>( descriptor );
+    OAdoKey* pKey = dynamic_cast<OAdoKey*>( descriptor.get() );
     if ( pKey == nullptr)
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

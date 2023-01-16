@@ -40,10 +40,6 @@ namespace connectivity::ado
         public:
             OAdoView(bool _bCase, ADOView* _pView=nullptr);
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
-
             WpADOView getImpl() const { return m_aView;}
         };
 }

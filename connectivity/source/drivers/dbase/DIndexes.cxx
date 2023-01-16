@@ -92,14 +92,9 @@ Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 // XAppend
 sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        ODbaseIndex* pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(xTunnel);
-        if(!pIndex)
-            throw SQLException();
+    ODbaseIndex* pIndex = dynamic_cast<ODbaseIndex*>(descriptor.get());
+    if(pIndex)
         pIndex->CreateImpl();
-    }
 
     return createObject( _rForName );
 }
@@ -107,7 +102,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 // XDrop
 void ODbaseIndexes::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
-    auto pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(getObject(_nPos));
+    rtl::Reference<ODbaseIndex> pIndex = dynamic_cast<ODbaseIndex*>(getObject(_nPos).get());
     if ( pIndex )
         pIndex->DropImpl();
 }

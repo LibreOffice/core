@@ -91,10 +91,6 @@ namespace connectivity::dbase
             void openIndexFile();
             virtual void refreshColumns() override;
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
             const ODbaseTable* getTable() const { return m_pTable; }
             const NDXHeader& getHeader() const { return m_aHeader; }
             std::unique_ptr<OIndexIterator> createIterator();

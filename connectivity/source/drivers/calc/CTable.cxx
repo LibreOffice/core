@@ -608,20 +608,6 @@ void SAL_CALL OCalcTable::disposing()
 
 }
 
-const Sequence< sal_Int8 > & OCalcTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OCalcTable_BASE>{});
-}
-
 bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                            bool bRetrieveData )
 {

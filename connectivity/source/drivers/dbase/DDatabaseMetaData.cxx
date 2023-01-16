@@ -294,7 +294,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         aRow[4] = new ORowSetValueDecorator(ORowSetValue(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE)))));
         aRow[6] = new ORowSetValueDecorator(*pBegin);
 
-        auto pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(xIndex);
+        auto pIndex = dynamic_cast<ODbaseIndex*>(xIndex.get());
         if(pIndex)
         {
             aRow[11] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_maxkeys));

@@ -66,20 +66,6 @@ OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection)
 }
 
 
-Sequence< sal_Int8 > OAdoColumn::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OColumn_ADO>{});
-}
-
 void OAdoColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;

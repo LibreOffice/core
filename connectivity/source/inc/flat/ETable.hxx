@@ -92,10 +92,6 @@ namespace connectivity::flat
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             virtual void SAL_CALL disposing() override;
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
             OUString getEntry() const;
         };
 

@@ -1528,8 +1528,7 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInf
 
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 {
-    Reference<css::lang::XUnoTunnel> xTunnel(_xTable, UNO_QUERY_THROW);
-    m_pTable = comphelper::getFromUnoTunnel<OFileTable>(xTunnel);
+    m_pTable = dynamic_cast<OFileTable*>(_xTable.get());
     assert(m_pTable.is());
 }
 

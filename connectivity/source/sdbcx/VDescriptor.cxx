@@ -44,12 +44,6 @@ namespace connectivity::sdbcx
 
 
         // css::lang::XUnoTunnel
-        sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId )
-        {
-            return comphelper::getSomethingImpl(rId, this);
-        }
-
-
         namespace
         {
             struct ResetROAttribute
@@ -86,22 +80,8 @@ namespace connectivity::sdbcx
 
         bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
         {
-            ODescriptor* pImplementation = comphelper::getFromUnoTunnel<ODescriptor>( _rxDescriptor );
+            ODescriptor* pImplementation = dynamic_cast<ODescriptor*>( _rxDescriptor.get() );
             return pImplementation && pImplementation->isNew();
-        }
-
-
-        const Sequence< sal_Int8 > & ODescriptor::getUnoTunnelId()
-        {
-            static const comphelper::UnoIdInit implId;
-            return implId.getSeq();
-        }
-
-
-        Any SAL_CALL ODescriptor::queryInterface( const Type & rType )
-        {
-            Any aRet = ::cppu::queryInterface(rType,static_cast< XUnoTunnel*> (this));
-            return aRet.hasValue() ? aRet : ODescriptor_PBASE::queryInterface(rType);
         }
 
 
@@ -115,8 +95,7 @@ namespace connectivity::sdbcx
         {
             ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                             cppu::UnoType<XFastPropertySet>::get(),
-                                            cppu::UnoType<XPropertySet>::get(),
-                                            cppu::UnoType<XUnoTunnel>::get());
+                                            cppu::UnoType<XPropertySet>::get());
             return aTypes.getTypes();
         }
 

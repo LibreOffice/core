@@ -54,10 +54,6 @@ public:
 
     void SAL_CALL disposing() override;
 
-    // css::lang::XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
     void construct() override;
 };
 

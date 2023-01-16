@@ -116,20 +116,6 @@ sdbcx::OCollection* OMySQLTable::createIndexes(const ::std::vector<OUString>& _r
     return new OIndexesHelper(this, m_aMutex, _rNames);
 }
 
-const Sequence<sal_Int8>& OMySQLTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OMySQLTable::getSomething(const Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
-}
-
 // XAlterTable
 void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                                              const Reference<XPropertySet>& descriptor)

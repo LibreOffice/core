@@ -118,20 +118,6 @@ void SAL_CALL OFileTable::disposing()
     FileClose();
 }
 
-const Sequence< sal_Int8 > & OFileTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit s_Id;
-    return s_Id.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
-}
-
 void OFileTable::FileClose()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

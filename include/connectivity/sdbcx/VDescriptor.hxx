@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
 
 #include <comphelper/propertycontainer.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
@@ -33,7 +32,6 @@ namespace connectivity::sdbcx
         typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
         class OOO_DLLPUBLIC_DBTOOLS ODescriptor
                     :public ODescriptor_PBASE
-                    ,public css::lang::XUnoTunnel
         {
         protected:
             OUString         m_Name;
@@ -63,14 +61,8 @@ namespace connectivity::sdbcx
 
             virtual void construct();
 
-            // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             /// @throws css::uno::RuntimeException
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
-
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
             static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );

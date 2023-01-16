@@ -161,9 +161,6 @@ namespace connectivity::dbase
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             virtual void SAL_CALL disposing() override;
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
             // XAlterTable
             virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;

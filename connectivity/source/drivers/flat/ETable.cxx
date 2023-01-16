@@ -545,23 +545,9 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType )
         return Any();
 
     Any aRet = OTable_TYPEDEF::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
+    return aRet;
 }
 
-
-const Sequence< sal_Int8 > & OFlatTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OFlatTable_BASE>{});
-}
 
 bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bRetrieveData)
 {

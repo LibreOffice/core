@@ -408,7 +408,7 @@ void OStatement_Base::construct(const OUString& sql)
     }
 
     // at this moment we support only one table per select statement
-    m_pTable = comphelper::getFromUnoTunnel<OFileTable>(rTabs.begin()->second);
+    m_pTable = dynamic_cast<OFileTable*>(rTabs.begin()->second.get());
     OSL_ENSURE(m_pTable.is(),"No table!");
     if ( m_pTable.is() )
         m_xColNames     = m_pTable->getColumns();

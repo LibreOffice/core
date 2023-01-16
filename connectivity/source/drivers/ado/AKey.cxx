@@ -66,20 +66,6 @@ void OAdoKey::refreshColumns()
         m_pColumns.reset(new OColumns(*this, m_aMutex, aVector, aColumns, isCaseSensitive(), m_pConnection));
 }
 
-Sequence< sal_Int8 > OAdoKey::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OAdoKey::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OKey_ADO>{});
-}
-
 void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     if(m_aKey.IsValid())

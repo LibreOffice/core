@@ -42,21 +42,6 @@ OAdoView::OAdoView(bool _bCase,ADOView* _pView) : OView_ADO(_bCase,nullptr)
 {
 }
 
-Sequence< sal_Int8 > OAdoView::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OView_ADO>{});
-}
-
-
 void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_aView.IsValid())
