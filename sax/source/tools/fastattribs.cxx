@@ -210,23 +210,10 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            sal_Int64 nVal = rtl_str_toInt64_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
-            if (nVal < SAL_MIN_INT32 || nVal > SAL_MAX_INT32) {
-                nVal = 0;
-            }
-            rInt = nVal;
+            rInt = getAsIntegerByIndex(i);
             return true;
         }
     return false;
-}
-
-sal_Int32 FastAttributeList::getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
-{
-    sal_Int64 n = rtl_str_toInt64_WithLength( getFastAttributeValue(nTokenIndex), 10, AttributeValueLength(nTokenIndex) );
-    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32) {
-        n = 0;
-    }
-    return n;
 }
 
 bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
@@ -235,8 +222,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            auto const p = getFastAttributeValue(i);
-            rDouble = rtl_math_stringToDouble( p,  p + AttributeValueLength(i), '.', 0, nullptr, nullptr );
+            rDouble = o3tl::toDouble(getAsViewByIndex(i));
             return true;
         }
     return false;
@@ -249,41 +235,27 @@ bool FastAttributeList::getAsView( sal_Int32 nToken, std::string_view& rPos ) co
         if (maAttributeTokens[i] != nToken)
             continue;
 
-        sal_Int32 nOffset = maAttributeValues[i];
-        size_t nValueLen = maAttributeValues[i + 1] - maAttributeValues[i] - 1;
-        rPos = { mpChunk + nOffset, nValueLen };
+        rPos = getAsViewByIndex(i);
         return true;
     }
 
     return false;
 }
 
-std::string_view FastAttributeList::getAsViewByIndex( sal_Int32 nTokenIndex ) const
-{
-    sal_Int32 nOffset = maAttributeValues[nTokenIndex];
-    size_t nValueLen = maAttributeValues[nTokenIndex + 1] - maAttributeValues[nTokenIndex] - 1;
-    return { mpChunk + nOffset, nValueLen };
-}
-
 OUString FastAttributeList::getValue( ::sal_Int32 Token )
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
-            return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+            return getValueByIndex(i);
 
     throw SAXException("FastAttributeList::getValue: unknown token " + OUString::number(Token), nullptr, Any());
-}
-
-OUString FastAttributeList::getValueByIndex( ::sal_Int32 nTokenIndex ) const
-{
-    return OUString( getFastAttributeValue(nTokenIndex), AttributeValueLength(nTokenIndex), RTL_TEXTENCODING_UTF8 );
 }
 
 OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
-            return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+            return getValueByIndex(i);
 
     return OUString();
 }
@@ -305,7 +277,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
     {
         pAttr->Token = maAttributeTokens[i];
-        pAttr->Value = OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+        pAttr->Value = getValueByIndex(i);
         pAttr++;
     }
     return aSeq;

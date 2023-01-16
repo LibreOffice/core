@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/math.h>
 #include <sax/saxdllapi.h>
 
@@ -105,9 +106,18 @@ public:
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const;
     bool getAsDouble( sal_Int32 nToken, double &rDouble) const;
     bool getAsView( sal_Int32 nToken, std::string_view& rPos ) const;
-    sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const;
-    std::string_view getAsViewByIndex( sal_Int32 nTokenIndex ) const;
-    OUString getValueByIndex( sal_Int32 nTokenIndex ) const;
+    sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
+    {
+        return o3tl::toInt32(getAsViewByIndex(nTokenIndex));
+    }
+    std::string_view getAsViewByIndex( sal_Int32 nTokenIndex ) const
+    {
+        return std::string_view(getFastAttributeValue(nTokenIndex), AttributeValueLength(nTokenIndex));
+    }
+    OUString getValueByIndex( sal_Int32 nTokenIndex ) const
+    {
+        return OStringToOUString(getAsViewByIndex(nTokenIndex), RTL_TEXTENCODING_UTF8);
+    }
 
     // XFastAttributeList
     virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
@@ -168,14 +178,12 @@ public:
         sal_Int32 toInt32() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
-            return rtl_str_toInt32(mrList.getFastAttributeValue(mnIdx), 10);
+            return mrList.getAsIntegerByIndex(mnIdx);
         }
         double toDouble() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
-            const char* pStr = mrList.getFastAttributeValue(mnIdx);
-            sal_Int32 nLen = mrList.AttributeValueLength(mnIdx);
-            return rtl_math_stringToDouble(pStr, pStr + nLen, '.', 0, nullptr, nullptr);
+            return o3tl::toDouble(mrList.getAsViewByIndex(mnIdx));
         }
         bool toBoolean() const
         {
@@ -185,9 +193,7 @@ public:
         OUString toString() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
-            return OUString(mrList.getFastAttributeValue(mnIdx),
-                            mrList.AttributeValueLength(mnIdx),
-                            RTL_TEXTENCODING_UTF8);
+            return mrList.getValueByIndex(mnIdx);
         }
         const char* toCString() const
         {
@@ -202,7 +208,7 @@ public:
         std::string_view toView() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
-            return std::string_view(mrList.getFastAttributeValue(mnIdx), mrList.AttributeValueLength(mnIdx));
+            return mrList.getAsViewByIndex(mnIdx);
         }
         bool isString(const char *str) const
         {
