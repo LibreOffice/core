@@ -898,6 +898,43 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFields)
+{
+    // Given a document with a refmark:
+    createSwDoc();
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue(
+            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("aaa<b>bbb</b>ccc"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // When deleting the refmarks:
+    std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
+{
+    "TypeName": {
+        "type": "string",
+        "value": "SetRef"
+    },
+    "NamePrefix": {
+        "type": "string",
+        "value": "ZOTERO_ITEM CSL_CITATION"
+    }
+}
+)json");
+    aArgs = comphelper::containerToSequence(aArgsVec);
+    dispatchCommand(mxComponent, ".uno:DeleteFields", aArgs);
+
+    // Then make sure that no refmark is kept:
+    SwDoc* pDoc = getSwDoc();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the refmark was not deleted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), pDoc->GetRefMarks());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
