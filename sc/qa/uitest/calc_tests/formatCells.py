@@ -403,6 +403,4 @@ class formatCell(UITestCase):
                 xspinDegrees.executeAction("UP", tuple())
                 self.assertEqual(get_state_as_dict(xspinDegrees)["Text"].replace('°', ''), "0")
 
-
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
