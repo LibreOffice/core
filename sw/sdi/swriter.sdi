@@ -2603,7 +2603,7 @@ SfxVoidItem UpdateBookmarks FN_UPDATE_BOOKMARKS
 SfxVoidItem DeleteBookmarks FN_DELETE_BOOKMARKS
 (SfxStringItem BookmarkNamePrefix FN_PARAM_1)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -2617,7 +2617,7 @@ SfxVoidItem DeleteBookmarks FN_DELETE_BOOKMARKS
 SfxVoidItem DeleteFields FN_DELETE_FIELDS
 (SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -8356,7 +8356,7 @@ SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
 SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
 (SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommand FN_PARAM_2, SfxStringItem FieldResult FN_PARAM_3)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -8374,7 +8374,7 @@ SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
 SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
 (SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -8389,7 +8389,7 @@ SfxVoidItem TextFormFields FN_UPDATE_TEXT_FORMFIELDS
 SfxVoidItem DeleteTextFormFields FN_DELETE_TEXT_FORMFIELDS
 (SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -8403,7 +8403,7 @@ SfxVoidItem DeleteTextFormFields FN_DELETE_TEXT_FORMFIELDS
 SfxVoidItem UpdateTextFormField FN_UPDATE_TEXT_FORMFIELD
 (SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommandPrefix FN_PARAM_2, SfxUnoAnyItem Field FN_PARAM_3)
 [
-    AutoUpdate = TRUE,
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
