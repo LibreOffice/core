@@ -420,22 +420,22 @@ class formatCell(UITestCase):
 
                 # NatNum12 number formats
 
-                entry = formatlb.getChild("6")
+                entry = formatlb.getChild("11")
                 self.assertEqual(get_state_as_dict(entry)["Text"], "ONE HUNDRED")
                 entry.executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 upper cardinal]0")
 
-                entry = formatlb.getChild("7")
+                entry = formatlb.getChild("10")
                 self.assertEqual(get_state_as_dict(entry)["Text"], "One Hundred")
                 entry.executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 title cardinal]0")
 
-                entry = formatlb.getChild("8")
+                entry = formatlb.getChild("9")
                 self.assertEqual(get_state_as_dict(entry)["Text"], "One hundred")
                 entry.executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 capitalize cardinal]0")
 
-                entry = formatlb.getChild("9")
+                entry = formatlb.getChild("8")
                 self.assertEqual(get_state_as_dict(entry)["Text"], "one hundred")
                 entry.executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 cardinal]0")

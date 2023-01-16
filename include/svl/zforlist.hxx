@@ -28,6 +28,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <unotools/localedatawrapper.hxx>
 
+#include <map>
 #include <unordered_map>
 
 namespace com::sun::star::i18n { struct Currency; }
@@ -279,7 +280,10 @@ enum NfEvalDateFormat
 };
 
 
-typedef std::unordered_map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
+/// This table is std::map because it needs to preserve insertion order,
+/// because the formats are roughly ordered from most to least common, and some
+/// parts of the UI want to show them in that order.
+typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
 typedef std::unordered_map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
 typedef std::unordered_map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
 
