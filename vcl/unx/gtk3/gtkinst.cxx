@@ -8655,7 +8655,8 @@ public:
 
     virtual ScrollType get_scroll_type() const override
     {
-        return ScrollType::Drag;
+        // tdf#153049 want a mousewheel spin to be treated as DontKnow
+        return has_grab() ? ScrollType::Drag : ScrollType::DontKnow;
     }
 
     virtual int get_scroll_thickness() const override
