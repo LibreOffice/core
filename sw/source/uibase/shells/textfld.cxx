@@ -748,6 +748,18 @@ FIELD_INSERT:
                     aFieldResult = pFieldResult->GetValue();
                 }
 
+                const SfxStringItem* pWrapper = rReq.GetArg<SfxStringItem>(FN_PARAM_4);
+                if (pWrapper)
+                {
+                    // Wrap the fieldmark in the requested container instead of inserting it
+                    // directly at the cursor position.
+                    OUString aWrapper = pWrapper->GetValue();
+                    if (aWrapper == "Footnote")
+                    {
+                        rSh.InsertFootnote(OUString());
+                    }
+                }
+
                 // Split node to remember where the start position is.
                 bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().SplitNode(
                     *pCursorPos->GetPoint(), false);

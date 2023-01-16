@@ -39,6 +39,7 @@
 #include <drawdoc.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
+#include <ftnidx.hxx>
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
@@ -933,6 +934,31 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFields)
     // - Actual  : 1
     // i.e. the refmark was not deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), pDoc->GetRefMarks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldFootnote)
+{
+    // Given an empty document:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // When inserting an ODF_UNHANDLED fieldmark inside a footnote:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Footnote"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // Then make sure that the footnote is created:
+    SwFootnoteIdxs& rFootnotes = pDoc->GetFootnoteIdxs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no footnote was created.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFootnotes.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

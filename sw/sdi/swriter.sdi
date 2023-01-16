@@ -8354,7 +8354,7 @@ SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
 ]
 
 SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
-(SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommand FN_PARAM_2, SfxStringItem FieldResult FN_PARAM_3)
+(SfxStringItem FieldType FN_PARAM_1, SfxStringItem FieldCommand FN_PARAM_2, SfxStringItem FieldResult FN_PARAM_3, SfxStringItem Wrapper FN_PARAM_4)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
