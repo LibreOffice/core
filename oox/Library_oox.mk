@@ -43,14 +43,13 @@ $(eval $(call gb_Library_use_libraries,oox,\
     comphelper \
     cppu \
     cppuhelper \
-    editeng \
     docmodel \
-    expwrap \
     drawinglayer \
-    docmodel \
+    editeng \
+    expwrap \
+    i18nlangtag \
     msfilter \
     sal \
-    i18nlangtag \
     sax \
     sfx \
     svl \
@@ -61,8 +60,8 @@ $(eval $(call gb_Library_use_libraries,oox,\
     tl \
     utl \
     vcl \
-    xo \
     xmlscript \
+    xo \
 ))
 
 $(eval $(call gb_Library_use_externals,oox,\
