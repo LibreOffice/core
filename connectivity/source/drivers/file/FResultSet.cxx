@@ -1381,19 +1381,6 @@ void OResultSet::OpenImpl()
     m_nFilePos  = 0;
 }
 
-const Sequence< sal_Int8 > & OResultSet::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-// css::lang::XUnoTunnel
-
-sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                                    const OValueRefRow& _rSelectRow,
                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,

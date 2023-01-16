@@ -54,8 +54,7 @@ namespace connectivity::file
                                                   css::sdbc::XCloseable,
                                                   css::sdbc::XColumnLocate,
                                                   css::lang::XServiceInfo,
-                                                  css::lang::XEventListener,
-                                                  css::lang::XUnoTunnel> OResultSet_BASE;
+                                                  css::lang::XEventListener> OResultSet_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSet :
                             public  cppu::BaseMutex,
@@ -246,9 +245,6 @@ namespace connectivity::file
             virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) override;
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
             //XEventlistener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
