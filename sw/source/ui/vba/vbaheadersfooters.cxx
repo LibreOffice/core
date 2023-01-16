@@ -63,19 +63,19 @@ public:
 
 class HeadersFootersEnumWrapper : public EnumerationHelper_BASE
 {
-    SwVbaHeadersFooters* pHeadersFooters;
-    sal_Int32 nIndex;
+    SwVbaHeadersFooters* m_pHeadersFooters;
+    sal_Int32 m_nIndex;
 public:
-    explicit HeadersFootersEnumWrapper( SwVbaHeadersFooters* _pHeadersFooters ) : pHeadersFooters( _pHeadersFooters ), nIndex( 0 ) {}
+    explicit HeadersFootersEnumWrapper( SwVbaHeadersFooters* _pHeadersFooters ) : m_pHeadersFooters( _pHeadersFooters ), m_nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex < pHeadersFooters->getCount() );
+        return ( m_nIndex < m_pHeadersFooters->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if ( nIndex < pHeadersFooters->getCount() )
-            return pHeadersFooters->Item( uno::Any( ++nIndex ), uno::Any() );
+        if ( m_nIndex < m_pHeadersFooters->getCount() )
+            return m_pHeadersFooters->Item( uno::Any( ++m_nIndex ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };

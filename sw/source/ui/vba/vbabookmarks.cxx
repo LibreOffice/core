@@ -56,7 +56,7 @@ class BookmarkCollectionHelper : public ::cppu::WeakImplHelper< container::XName
 private:
     uno::Reference< container::XNameAccess > mxNameAccess;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
-    uno::Any cachePos;
+    uno::Any m_cachePos;
 public:
     /// @throws uno::RuntimeException
     explicit BookmarkCollectionHelper( uno::Reference< container::XIndexAccess >  xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess ))
@@ -71,7 +71,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        return cachePos;
+        return m_cachePos;
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -81,7 +81,7 @@ public:
     {
         if( mxNameAccess->hasByName( aName ) )
         {
-            cachePos = mxNameAccess->getByName( aName );
+            m_cachePos = mxNameAccess->getByName( aName );
             return true;
         }
         else
@@ -92,7 +92,7 @@ public:
                 OUString aBookmarkName = xNamed->getName();
                 if( aName.equalsIgnoreAsciiCase( aBookmarkName ) )
                 {
-                    cachePos <<= xNamed;
+                    m_cachePos <<= xNamed;
                     return true;
                 }
             }

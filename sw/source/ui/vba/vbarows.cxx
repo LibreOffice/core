@@ -40,23 +40,23 @@ class RowsEnumWrapper : public EnumerationHelper_BASE
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< text::XTextTable > mxTextTable;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 m_nIndex;
 
 public:
-    RowsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), nIndex( 0 )
+    RowsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), m_nIndex( 0 )
     {
         mxIndexAccess = mxTextTable->getRows();
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex < mxIndexAccess->getCount() );
+        return ( m_nIndex < mxIndexAccess->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if( nIndex < mxIndexAccess->getCount() )
+        if( m_nIndex < mxIndexAccess->getCount() )
         {
-            return uno::Any( uno::Reference< word::XRow > ( new SwVbaRow( mxParent, mxContext, mxTextTable, nIndex++ ) ) );
+            return uno::Any( uno::Reference< word::XRow > ( new SwVbaRow( mxParent, mxContext, mxTextTable, m_nIndex++ ) ) );
         }
         throw container::NoSuchElementException();
     }
