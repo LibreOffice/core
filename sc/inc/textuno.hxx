@@ -25,7 +25,6 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -54,7 +53,6 @@ enum class ScHeaderFooterPart{ LEFT, CENTER, RIGHT };
 
 class ScHeaderFooterContentObj final : public cppu::WeakImplHelper<
                             css::sheet::XHeaderFooterContent,
-                            css::lang::XUnoTunnel,
                             css::lang::XServiceInfo >
 {
 private:
@@ -83,11 +81,6 @@ public:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
                             getRightText() override;
 
-                            // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<
-                                    sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static rtl::Reference<ScHeaderFooterContentObj> getImplementation(const css::uno::Reference<css::sheet::XHeaderFooterContent>& rObj);
 
                             // XServiceInfo

@@ -127,24 +127,10 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
     return xInt;
 }
 
-// XUnoTunnel
-
-sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theScHeaderFooterContentObjUnoTunnelId;
-    return theScHeaderFooterContentObjUnoTunnelId.getSeq();
-}
-
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(
                                 const uno::Reference<sheet::XHeaderFooterContent>& rObj)
 {
-    return comphelper::getFromUnoTunnel<ScHeaderFooterContentObj>(rObj);
+    return dynamic_cast<ScHeaderFooterContentObj*>(rObj.get());
 }
 
 void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
