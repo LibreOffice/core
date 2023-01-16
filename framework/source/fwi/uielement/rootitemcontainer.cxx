@@ -138,18 +138,6 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
     return xReturn;
 }
 
-// XUnoTunnel
-sal_Int64 RootItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    return comphelper::getSomethingImpl(rIdentifier, this);
-}
-
-const Sequence< sal_Int8 >& RootItemContainer::getUnoTunnelId() noexcept
-{
-    static const comphelper::UnoIdInit theRootItemContainerUnoTunnelId;
-    return theRootItemContainerUnoTunnelId.getSeq();
-}
-
 // XElementAccess
 sal_Bool SAL_CALL RootItemContainer::hasElements()
 {

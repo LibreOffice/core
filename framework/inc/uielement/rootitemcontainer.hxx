@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -40,8 +39,7 @@ class ConstItemContainer;
 
 typedef ::cppu::WeakImplHelper<
             css::container::XIndexContainer,
-            css::lang::XSingleComponentFactory,
-            css::lang::XUnoTunnel > RootItemContainer_BASE;
+            css::lang::XSingleComponentFactory > RootItemContainer_BASE;
 
 class RootItemContainer final : private cppu::BaseMutex,
                             public ::cppu::OBroadcastHelper                         ,
@@ -64,10 +62,6 @@ class RootItemContainer final : private cppu::BaseMutex,
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-
-        // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
-        sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;

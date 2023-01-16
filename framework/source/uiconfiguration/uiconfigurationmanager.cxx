@@ -350,7 +350,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         {
                             MenuConfiguration aMenuCfg( m_xContext );
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
-                            auto pRootItemContainer = comphelper::getFromUnoTunnel<RootItemContainer>( xContainer );
+                            auto pRootItemContainer = dynamic_cast<RootItemContainer*>( xContainer.get() );
                             if ( pRootItemContainer )
                                 aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             else
@@ -369,7 +369,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         {
                             Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
-                            auto pRootItemContainer = comphelper::getFromUnoTunnel<RootItemContainer>( xIndexContainer );
+                            auto pRootItemContainer = dynamic_cast<RootItemContainer*>( xIndexContainer.get() );
                             aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
@@ -386,7 +386,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         {
                             Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
-                            auto pRootItemContainer = comphelper::getFromUnoTunnel<RootItemContainer>( xIndexContainer );
+                            auto pRootItemContainer = dynamic_cast<RootItemContainer*>( xIndexContainer.get() );
                             aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
