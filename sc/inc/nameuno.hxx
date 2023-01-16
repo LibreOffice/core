@@ -31,7 +31,6 @@
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -47,7 +46,6 @@ class SC_DLLPUBLIC ScNamedRangeObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XFormulaTokens,
                             css::sheet::XCellRangeReferrer,
                             css::beans::XPropertySet,
-                            css::lang::XUnoTunnel,
                             css::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -108,11 +106,6 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                            /// XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

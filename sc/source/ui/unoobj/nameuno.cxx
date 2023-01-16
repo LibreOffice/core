@@ -419,20 +419,6 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
     return {SCNAMEDRANGEOBJ_SERVICE, SCLINKTARGET_SERVICE};
 }
 
-// XUnoTunnel
-
-sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theScNamedRangeObjUnoTunnelId;
-    return theScNamedRangeObjUnoTunnelId.getSeq();
-}
-
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
     mbModifyAndBroadcast(true),
     pDocShell( pDocSh )

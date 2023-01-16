@@ -87,7 +87,7 @@ ScVbaName::setVisible( sal_Bool /*bVisible*/ )
 
 OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar )
 {
-    ScNamedRangeObj* pNamedRange = comphelper::getFromUnoTunnel< ScNamedRangeObj >( mxNamedRange );
+    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
     OUString aContent;
     if ( pNamedRange )
     {
@@ -105,7 +105,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     OUString sContent( rContent );
     if (sContent.startsWith("="))
         sContent = sContent.copy(1);
-    ScNamedRangeObj* pNamedRange = comphelper::getFromUnoTunnel< ScNamedRangeObj >( mxNamedRange );
+    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
 
     // We should be able to do the below by just setting calling SetCode on pNamedRange
     // right?
