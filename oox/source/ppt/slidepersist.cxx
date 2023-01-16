@@ -341,6 +341,36 @@ void SlidePersist::hideShapesAsMasterShapes()
     }
 }
 
+// This angle determines in the direction of the line
+static sal_Int32 lcl_GetAngle(uno::Reference<drawing::XShape>& rXShape, awt::Point& rPt)
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
+    tools::Rectangle aR(pObj->GetSnapRect());
+    sal_Int32 nLeftX = rPt.X - aR.Left();
+    sal_Int32 nTopY = rPt.Y - aR.Top();
+    sal_Int32 nRightX = aR.Right() - rPt.X;
+    sal_Int32 nBottomY = aR.Bottom() - rPt.Y;
+    sal_Int32 nX = std::min(nLeftX, nRightX);
+    sal_Int32 nY = std::min(nTopY, nBottomY);
+
+    sal_Int32 nAngle;
+    if (nX < nY)
+    {
+        if (nLeftX < nRightX)
+            nAngle = 180; // Left
+        else
+            nAngle = 0; // Right
+    }
+    else
+    {
+        if (nTopY < nBottomY)
+            nAngle = 270; // Top
+        else
+            nAngle = 90; // Bottom
+    }
+    return nAngle;
+}
+
 Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) const
 {
     const auto& pIter = maAnimNodesMap.find(sId);
@@ -372,6 +402,8 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
     SdrObject* pEndObj = xEndSp.is() ? SdrObject::getSdrObjectFromXShape(xEndSp) : nullptr;
 
     sal_Int32 nStartSpLineW = 0;
+    sal_Int32 nStartA = -1;
+    sal_Int32 nEndA = -1;
     if (pStartObj)
     {
         aStartRect = pStartObj->GetSnapRect();
@@ -379,6 +411,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
         xPropxStartSp->getPropertyValue("LineWidth") >>= nStartSpLineW;
         if (nStartSpLineW)
             nStartSpLineW = nStartSpLineW / 2;
+        nStartA = lcl_GetAngle(xStartSp, aStartPt);
     }
     sal_Int32 nEndSpLineW = 0;
     if (pEndObj)
@@ -388,6 +421,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
         xPropxEndSp->getPropertyValue("LineWidth") >>= nEndSpLineW;
         if (nEndSpLineW)
             nEndSpLineW = nEndSpLineW / 2;
+        nEndA = lcl_GetAngle(xEndSp, aEndPt);
     }
 
     const OUString sConnectorName = rShapePtr->getConnectorName();
@@ -396,27 +430,25 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
         awt::Size aConnSize = rXConnector->getSize();
         if (xStartSp.is() || xEndSp.is())
         {
-            if (aConnSize.Height < aConnSize.Width)
+            if (nStartA >= 0)
             {
-                if (xStartSp.is())
-                    nEdge = (aStartPt.Y > aEndPt.Y)
-                                ? (nStartSpLineW - (aStartRect.Top() - aEndPt.Y))
-                                : ((aEndPt.Y - aStartRect.Bottom()) - nStartSpLineW);
-                else
-                    nEdge = (aStartPt.Y > aEndPt.Y)
-                                ? ((aStartPt.Y - aEndRect.Bottom()) - nEndSpLineW)
-                                : (nEndSpLineW - (aEndRect.Top() - aStartPt.Y));
-            }
-            else
-            {
-                if (xStartSp.is())
-                    nEdge = (aStartPt.X > aEndPt.X)
-                                ? (nStartSpLineW - (aStartRect.Left() - aEndPt.X))
-                                : ((aEndPt.X - aStartRect.Right()) - nStartSpLineW);
-                else
-                    nEdge = (aStartPt.X > aEndPt.X)
-                                ? ((aStartPt.X - aEndRect.Right()) - nEndSpLineW)
-                                : (nEndSpLineW - (aEndRect.Left() - aStartPt.X));
+                switch (nStartA)
+                {
+                    case 0:     nEdge = aEndPt.X - aStartRect.Right();  break;
+                    case 180:   nEdge = aEndPt.X - aStartRect.Left();   break;
+                    case 90:    nEdge = aEndPt.Y - aStartRect.Bottom(); break;
+                    case 270:   nEdge = aEndPt.Y - aStartRect.Top();    break;
+                }
+                nEdge += nStartSpLineW * (nStartA >= 180 ? +1 : -1);
+            } else {
+                switch (nEndA)
+                {
+                    case 0:     nEdge = aStartPt.X - aEndRect.Right();  break;
+                    case 180:   nEdge = aStartPt.X - aEndRect.Left();   break;
+                    case 90:    nEdge = aStartPt.Y - aEndRect.Bottom(); break;
+                    case 270:   nEdge = aStartPt.Y - aEndRect.Top();    break;
+                }
+                nEdge += nEndSpLineW * (nEndA >= 180 ? +1 : -1);
             }
         }
         else
