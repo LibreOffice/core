@@ -133,11 +133,11 @@
    <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
     <style:tab-stops/>
    </style:paragraph-properties>
-   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" loext:color-lum-mod="100%" loext:color-lum-off="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Source Han Serif CN" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" loext:color-lum-mod="100%" loext:color-lum-off="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Source Han Serif CN" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
   <style:default-style style:family="paragraph">
    <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.249cm" style:writing-mode="page"/>
-   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Source Han Serif CN" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Source Han Serif CN" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
   </style:default-style>
   <style:default-style style:family="table">
    <style:table-properties table:border-model="collapsing"/>
@@ -147,7 +147,7 @@
   </style:default-style>
   <style:style style:name="Standard" style:family="paragraph" style:class="text">
    <style:paragraph-properties fo:text-align="start" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:vertical-align="auto"/>
-   <style:text-properties style:font-name="Times New Roman" fo:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Calibri" style:font-family-asian="Calibri" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="12pt" style:language-asian="de" style:country-asian="AT" style:font-name-complex="Times New Roman1" style:font-family-complex="'Times New Roman'" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Calibri" style:font-family-asian="Calibri" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="12pt" style:language-asian="de" style:country-asian="AT" style:font-name-complex="Times New Roman1" style:font-family-complex="'Times New Roman'" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
   </style:style>
   <text:outline-style style:name="Outline">
    <text:outline-level-style text:level="1" style:num-format="">
@@ -209,9 +209,6 @@
   </style:default-page-layout>
  </office:styles>
  <office:automatic-styles>
-  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false" style:writing-mode="lr-tb"/>
-  </style:style>
   <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="First_20_Page">
    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" style:writing-mode="lr-tb"/>
   </style:style>
@@ -251,8 +248,7 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
    </text:sequence-decls>
-   <text:p text:style-name="P2"><text:s/><text:span text:style-name="T2">NNNNNNNNNN NNNNNNNNNNNNNNN </text:span><text:a xlink:type="simple" xlink:href="https://example.com/" text:style-name="Default_20_Style" text:visited-style-name="Default_20_Style"><text:span text:style-name="T4">https://example.com/xxxxxxx/eeeeeeeeeeeeeeeeeee/sssssssssssssssss</text:span></text:a><text:span text:style-name="T1"> </text:span></text:p>
-   <text:p text:style-name="P1"><text:span text:style-name="T3">Napoleon III. (französisch Napoléon III; * 20. April 1808 in Paris; † 9. Januar 1873 in Chislehurst bei London) war unter seinem Geburtsnamen Charles-Louis-Napoléon Bonaparte (auch Louis-Napoléon Bonaparte) während der Zweiten Republik von 1848 bis 1852 französischer Staatspräsident und von 1852 bis 1870 als Napoleon III. Kaiser der Franzosen. Mit dem Staatsstreich vom 2. Dezember 1851 hatte der aus einer Volkswahl hervorgegangene Präsident eine Diktatur errichtet. Ein Jahr darauf (1852) proklamierte er sich zum Kaiser und sein Land zum Zweiten Kaiserreich. Das Parlament wurde weitgehend entmachtet und erhielt erst ganz am Ende seiner Herrschaft wieder etwas mehr Kompetenzen.</text:span><text:span text:style-name="T1"> </text:span></text:p>
+   <text:p text:style-name="P2"><text:s/><text:span text:style-name="T2">NNNNNNNNNN NNNNNNNNNNNNNNN </text:span><text:a xlink:type="simple" xlink:href="https://example.com/" text:style-name="Default_20_Style" text:visited-style-name="Default_20_Style"><text:span text:style-name="T4">https://example.com/xxxxxxx/testtesttesttest/hyphenate/testtesttest</text:span></text:a><text:span text:style-name="T1"> </text:span></text:p>
   </office:text>
  </office:body>
 </office:document>

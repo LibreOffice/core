@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
                 " NNNNNNNNNN NNNNNNNNNNNNNNN ");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
-                "https://example.com/xxxxxxx/eeeeeeeeeeeeeeeeeee/sssssssssssssssss ");
+                "https://example.com/xxxxxxx/testtesttesttest/hyphenate/testtesttest ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
@@ -712,9 +712,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // URL hyphenated for backward compatibility
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
-                " NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/eeeeeeeeeeeeeeeeeee/ss");
+                " NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/testtesttesttest/hyphen");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
-                "sssssssssssssss ");
+                "ate/testtesttest ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
