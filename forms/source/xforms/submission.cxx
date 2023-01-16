@@ -86,7 +86,7 @@ Submission::~Submission() noexcept
 void Submission::setModel( const Reference<XModel>& xModel )
 {
     mxModel = dynamic_cast<Model*>(xModel.get());
-    assert((!mxModel || !xModel) && "we only support an instance of Model here");
+    assert(bool(mxModel)==bool(xModel) && "we only support an instance of Model here");
 }
 
 
