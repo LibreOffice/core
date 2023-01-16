@@ -110,6 +110,7 @@
 #define SID_MODIFYLAYER                     (SID_SD_START+45)
 #define SID_PAGEMODE                        (SID_SD_START+46)
 #define SID_LAYERMODE                       (SID_SD_START+47)
+#define SID_TOGGLELAYERVISIBILITY           (SID_SD_START+48)
     // FREE
 #define SID_MASTERPAGE                      (SID_SD_START+50)
 // Navigation between slides

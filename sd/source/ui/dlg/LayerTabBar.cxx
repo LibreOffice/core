@@ -188,6 +188,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
             else if (rMEvt.IsShift())
             {
                 // Shift: Toggle between layer visible / hidden
+                // see also SID_TOGGLELAYERVISIBILITY / tdf#113439
                 bNewVisible = !bOldVisible;
                 pPV->SetLayerVisible(aName, bNewVisible);
             }

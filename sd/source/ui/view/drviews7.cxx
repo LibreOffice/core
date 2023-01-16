@@ -799,6 +799,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_RENAMEPAGE_QUICK);
         rSet.DisableItem(SID_INSERTLAYER);
         rSet.DisableItem(SID_MODIFYLAYER);
+        rSet.DisableItem(SID_TOGGLELAYERVISIBILITY);
         rSet.DisableItem(SID_RENAMELAYER);
         rSet.DisableItem(SID_LAYERMODE);
         rSet.DisableItem(SID_INSERTFILE);
@@ -824,6 +825,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_INSERTLAYER );
         rSet.DisableItem( SID_MODIFYLAYER );
+        rSet.DisableItem( SID_TOGGLELAYERVISIBILITY );
         rSet.DisableItem( SID_DELETE_LAYER );
         rSet.DisableItem( SID_RENAMELAYER );
     }
@@ -1273,6 +1275,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.ClearItem(SID_3D_PYRAMID);
         rSet.DisableItem(SID_3D_PYRAMID);
     }
+
+    if ( !aActiveLayer.isEmpty() && pPV )
+        rSet.Put( SfxBoolItem(SID_TOGGLELAYERVISIBILITY, pPageView->IsLayerVisible(aActiveLayer)) );
 
     // are the modules available?
 

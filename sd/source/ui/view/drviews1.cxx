@@ -1316,6 +1316,7 @@ void DrawViewShell::ResetActualLayer()
     }
 
     pLayerBar->SetCurPageId(nActiveLayerPos + 1);
+    GetViewFrame()->GetBindings().Invalidate( SID_TOGGLELAYERVISIBILITY );
     GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
     GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
 }

@@ -2207,6 +2207,25 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_TOGGLELAYERVISIBILITY:
+        {
+            // tdf#113439; duplicates LayerTabBar::MouseButtonDown()
+            sal_uInt16 aTabId = GetLayerTabControl()->GetCurPageId();
+            OUString aName( GetLayerTabControl()->GetLayerName(aTabId) );
+
+            SdrPageView* pPV = mpDrawView->GetSdrPageView();
+            bool bVisible = !pPV->IsLayerVisible(aName);
+
+            pPV->SetLayerVisible(aName, bVisible);
+
+            ResetActualLayer();
+            GetDoc()->SetChanged();
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
         case SID_RENAMELAYER:
         {
             if ( mpDrawView->IsTextEdit() )

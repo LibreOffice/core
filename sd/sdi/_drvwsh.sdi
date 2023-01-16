@@ -188,6 +188,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_TOGGLELAYERVISIBILITY // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_RENAMELAYER // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

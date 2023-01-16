@@ -991,6 +991,20 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ToggleLayerVisibility" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Layer Visibility</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Show Layer</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Show Layer (Shift+Click)</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PageMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Normal</value>

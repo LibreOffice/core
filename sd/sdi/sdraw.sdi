@@ -2607,6 +2607,22 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxBoolItem ToggleLayerVisibility SID_TOGGLELAYERVISIBILITY
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
 [

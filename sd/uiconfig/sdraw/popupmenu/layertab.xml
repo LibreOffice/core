@@ -12,4 +12,5 @@
   <menu:menuitem menu:id=".uno:ModifyLayer"/>
   <menu:menuitem menu:id=".uno:DeleteLayer"/>
   <menu:menuitem menu:id=".uno:RenameLayer"/>
+  <menu:menuitem menu:id=".uno:ToggleLayerVisibility"/>
 </menu:menupopup>
