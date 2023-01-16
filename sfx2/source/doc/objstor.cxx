@@ -3006,6 +3006,37 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
         if( bOk )
         {
+#ifdef EMSCRIPTEN
+            if (aFilterName.endsWith("pdf_Export"))
+            {
+                try
+                {
+                    sal_Int32 nRead;
+                    Reference<io::XInputStream> aTempInput = pNewFile->GetInputStream();
+                    sal_Int32 nBufferSize = 32767;
+                    Sequence<sal_Int8> aSequence(nBufferSize);
+                    emscripten::val contentArray = emscripten::val::array();
+                    do
+                    {
+                        nRead = aTempInput->readBytes(aSequence, nBufferSize);
+                        if (nRead < nBufferSize)
+                        {
+                            Sequence<sal_Int8> aTempBuf(aSequence.getConstArray(), nRead);
+                            ReadWASMFile(contentArray, nRead, aTempBuf);
+                        }
+                        else
+                        {
+                            ReadWASMFile(contentArray, nRead, aSequence);
+                        }
+                    } while (nRead == nBufferSize);
+                    WriteWASMFile(contentArray, pNewFile->GetName());
+                }
+                catch (const Exception&)
+                {
+                }
+            }
+#endif
+
             if( !bCopyTo )
                 SetModified( false );
         }
@@ -3049,6 +3080,40 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
     return bOk;
 }
+
+
+#ifdef EMSCRIPTEN
+void SfxObjectShell::ReadWASMFile(emscripten::val& contentArray, sal_Int32 nRead, css::uno::Sequence<sal_Int8>& aContent)
+{
+    emscripten::val fileContentView = emscripten::val(emscripten::typed_memory_view(
+        nRead,
+        reinterpret_cast<const char*>(aContent.getConstArray())));
+    emscripten::val fileContentCopy = emscripten::val::global("ArrayBuffer").new_(nRead);
+    emscripten::val fileContentCopyView = emscripten::val::global("Uint8Array").new_(fileContentCopy);
+    fileContentCopyView.call<void>("set", fileContentView);
+    contentArray.call<void>("push", fileContentCopyView);
+}
+void SfxObjectShell::WriteWASMFile(emscripten::val& contentArray, const OUString& rFileName)
+{
+    INetURLObject aURL(rFileName);
+    OUString aNewname = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+    emscripten::val document = emscripten::val::global("document");
+    emscripten::val window = emscripten::val::global("window");
+    emscripten::val type = emscripten::val::object();
+    type.set("type","application/octet-stream");
+    emscripten::val contentBlob = emscripten::val::global("Blob").new_(contentArray, type);
+    emscripten::val contentUrl = window["URL"].call<emscripten::val>("createObjectURL", contentBlob);
+    emscripten::val contentLink = document.call<emscripten::val>("createElement", std::string("a"));
+    contentLink.set("href", contentUrl);
+    contentLink.set("download", aNewname.toUtf8().getStr());
+    contentLink.set("style", "display:none");
+    emscripten::val body = document["body"];
+    body.call<void>("appendChild", contentLink);
+    contentLink.call<void>("click");
+    body.call<void>("removeChild", contentLink);
+    window["URL"].call<emscripten::val>("revokeObjectURL", contentUrl);
+}
+#endif
 
 
 bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
