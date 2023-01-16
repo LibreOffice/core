@@ -149,7 +149,7 @@ task copyAssets(type: Copy) {
         into ('config') {
             from ("${liboInstdir}/share/config")
             includes = ['images_**.zip',
-                        '**/simpress/styles.xml',
+                        '**/simpress/**.xml',
                         '**/annotation.ui',
                         '**/hfmenubutton.ui',
                         '**/inforeadonlydialog.ui',
