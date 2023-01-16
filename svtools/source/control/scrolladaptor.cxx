@@ -106,6 +106,11 @@ void ScrollAdaptor::SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink)
     m_xScrollBar->connect_adjustment_changed(rLink);
 }
 
+void ScrollAdaptor::SetMouseReleaseHdl(const Link<const MouseEvent&, bool>& rLink)
+{
+    m_xScrollBar->connect_mouse_release(rLink);
+}
+
 tools::Long ScrollAdaptor::DoScroll(tools::Long nNewPos)
 {
     const auto nOrig = m_xScrollBar->adjustment_get_value();
