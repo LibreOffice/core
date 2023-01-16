@@ -136,19 +136,6 @@ sal_Bool SAL_CALL Pane::isAnchorOnly()
     return true;
 }
 
-//----- XUnoTunnel ------------------------------------------------------------
-
-const Sequence<sal_Int8>& Pane::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit thePaneUnoTunnelId;
-    return thePaneUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 Reference<rendering::XCanvas> Pane::CreateCanvas()
 {
     Reference<rendering::XCanvas> xCanvas;

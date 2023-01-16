@@ -185,8 +185,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         // Tunnel through the XWindow to the VCL side.
         try
         {
-            Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
-            if (auto pPane = comphelper::getFromUnoTunnel<framework::Pane>(xTunnel))
+            if (auto pPane = dynamic_cast<framework::Pane*>(xPane.get()))
                 pWindow = pPane->GetWindow()->GetParent();
         }
         catch (const RuntimeException&)

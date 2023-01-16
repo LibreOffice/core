@@ -21,7 +21,6 @@
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPane2.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
@@ -31,8 +30,7 @@ namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XPane,
-      css::drawing::framework::XPane2,
-      css::lang::XUnoTunnel
+      css::drawing::framework::XPane2
     > PaneInterfaceBase;
 
 /** A pane is a wrapper for a window and possibly for a tab bar (for view
@@ -42,8 +40,8 @@ typedef ::cppu::WeakComponentImplHelper <
     1. It implements the XPane interface.  This is the most important
     interface of this class for API based views (of which there not that
     many yet) because it gives access to the XWindow.
-    2. It gives access to the underlying VCL Window by implementing the
-    XUnoTunnel interface.  This is necessary at the moment and in the
+    2. It gives access to the underlying VCL Window.
+    This is necessary at the moment and in the
     foreseeable future because many parts of the Draw and Impress views rely
     on direct access on the Window class.
 */
@@ -69,9 +67,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
-    /** This method is typically used together with the XUnoTunnel to obtain
+    /** This method is typically used to obtain
         a Window pointer from an XPane object.
     */
     virtual vcl::Window* GetWindow();
@@ -108,10 +104,6 @@ public:
         view.  Therefore this default implementation returns always <TRUE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly() override;
-
-    //----- XUnoTunnel --------------------------------------------------------
-
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
 protected:
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
