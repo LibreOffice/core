@@ -65,6 +65,7 @@ fuzzer_core_libraries = \
     dbtools \
     deployment \
     deploymentmisc \
+    docmodel \
     drawinglayer \
     drawinglayercore \
     editeng \
