@@ -143,7 +143,6 @@ $(call gb_Helper_abbreviate_dirs,\
 			-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
-		$(T_USE_LD) $(T_LDFLAGS) $(foreach shell_html,$(T_SHELLHTML), --shell-file $(shell_html)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
