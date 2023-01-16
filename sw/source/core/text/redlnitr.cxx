@@ -234,6 +234,7 @@ public:
                 return false;
             };
             if (m_isHideParagraphBreaks
+                && m_pEndPos->GetNode().IsTextNode() // ooo27109-1.sxw
                 // only merge if next node is also text node
                 && m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->IsTextNode()
                 && hasHiddenItem(*m_pEndPos->GetNode().GetTextNode())
