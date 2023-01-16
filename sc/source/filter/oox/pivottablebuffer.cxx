@@ -1241,7 +1241,7 @@ void PivotTable::finalizeImport()
         mxDPDescriptor->setTag( maDefModel.maTag );
 
         // TODO: This is a hack. Eventually we need to convert the whole thing to the internal API.
-        auto pImpl = comphelper::getFromUnoTunnel<ScDataPilotDescriptorBase>(mxDPDescriptor);
+        auto pImpl = dynamic_cast<ScDataPilotDescriptorBase*>(mxDPDescriptor.get());
         if (!pImpl)
             return;
 

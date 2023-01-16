@@ -414,7 +414,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     if (!pDocShell)
         throw RuntimeException("DocShell is null", static_cast<cppu::OWeakObject*>(this));
 
-    auto pImp = comphelper::getFromUnoTunnel<ScDataPilotDescriptorBase>( xDescriptor );
+    auto pImp = dynamic_cast<ScDataPilotDescriptorBase*>( xDescriptor.get() );
     if (!pImp)
         throw RuntimeException("Failed to get ScDataPilotDescriptor", static_cast<cppu::OWeakObject*>(this));
 
@@ -971,20 +971,6 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
         }
     }
     return nullptr;
-}
-
-// XUnoTunnel
-
-sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
-                const Sequence<sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theScDataPilotDescriptorBaseUnoTunnelId;
-    return theScDataPilotDescriptorBaseUnoTunnelId.getSeq();
 }
 
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, OUString aN) :

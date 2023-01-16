@@ -26,7 +26,6 @@
 #include <svl/itemprop.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -128,13 +127,11 @@ public:
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
-class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase :
-                                  public cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScDataPilotDescriptorBase : public cppu::WeakImplHelper<
                                     css::sheet::XDataPilotDescriptor,
                                     css::beans::XPropertySet,
                                     css::sheet::XDataPilotDataLayoutFieldSupplier,
-                                    css::lang::XServiceInfo,
-                                    css::lang::XUnoTunnel>,
+                                    css::lang::XServiceInfo>,
                                   public SfxListener
 {
 private:
@@ -192,12 +189,6 @@ public:
                             // XDataPilotDataLayoutFieldSupplier
     virtual css::uno::Reference< css::sheet::XDataPilotField >
                             SAL_CALL getDataLayoutField() override;
-
-                            // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<
-                                    sal_Int8 >& aIdentifier ) override;
-
-    SC_DLLPUBLIC static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
                             // XServiceInfo is in derived classes
 };
