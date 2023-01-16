@@ -1628,12 +1628,7 @@ void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
     _rFilter = getCurrentFilterUIName();
 
     if ( _rFilter.isEmpty() )
-    {
-        if (isShowFilterExtensionEnabled())
-            _rFilter = getFilterName(maCurFilter);
-        else
-            _rFilter = maCurFilter;
-    }
+        _rFilter = maCurFilter;
 
     if ( !_rFilter.isEmpty() && mpMatcher )
     {

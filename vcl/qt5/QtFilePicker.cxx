@@ -67,10 +67,6 @@
 #include <fpicker/strings.hrc>
 #include <utility>
 
-#ifdef EMSCRIPTEN
-#include <emscripten.h>
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
@@ -191,128 +187,6 @@ void QtFilePicker::prepareExecute()
     xDesktop->addTerminateListener(this);
 }
 
-#ifdef EMSCRIPTEN
-void QtFilePicker::headlessPdfConversionWASM()
-{
-    QLabel* fileInfo = new QLabel("Opened file:");
-    fileInfo->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    QLabel* fileHash = new QLabel("Sha256:");
-    fileHash->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    auto onFileReady = [=](const QString& fileName, const QByteArray& fileContents) {
-        if (fileName.isEmpty())
-        {
-            // No file selected
-        }
-        else
-        {
-            fileInfo->setText(
-                QString("Opened file: %1 sizei: %2").arg(fileName).arg(fileContents.size()));
-            auto computeDisplayFileHash = [=]() {
-                QByteArray hash
-                    = QCryptographicHash::hash(fileContents, QCryptographicHash::Sha256);
-                fileHash->setText(QString("Sha256: %1").arg(QString(hash.toHex())));
-            };
-            QTimer::singleShot(100, computeDisplayFileHash); // update UI before computing hash
-            std::string aFileName = "/android/default-document/" + fileName.toStdString();
-            EM_ASM(
-                { FS.writeFile(UTF8ToString($0), new Uint8Array(Module.HEAPU8.buffer, $1, $2)); },
-                aFileName.c_str(), fileContents.data(), fileContents.size());
-
-            exportFileToPDFWASM(toOUString(fileName));
-        }
-    };
-
-    QFileDialog::getOpenFileContent("*.*", onFileReady);
-}
-
-void QtFilePicker::exportFileToPDFWASM(const OUString& rfileName)
-{
-    utl::MediaDescriptor aMediaDescriptor;
-    // Explicitly enable the usage of the reference XObject markup.
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseReferenceXObject", uno::Any(true) } }));
-    aMediaDescriptor["FilterData"] <<= aFilterData;
-
-    INetURLObject aURL(OUString("file:///android/default-document/" + rfileName));
-    uno::Reference<lang::XComponent> xComponent
-        = loadFromDesktop(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-    if (xComponent.is())
-    {
-        uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
-
-        if (xStorable.is())
-        {
-            OUString realfiltername = "writer_pdf_Export";
-            OUString aExt = aURL.getExtension();
-            if (aExt != "pdf")
-            {
-                if (aExt == "odt" || aExt == "ott")
-                {
-                    realfiltername = "writer_pdf_Export";
-                }
-                else if (aExt == "ods" || aExt == "ots")
-                {
-                    realfiltername = "calc_pdf_Export";
-                }
-                else if (aExt == "odp" || aExt == "otp")
-                {
-                    realfiltername = "impress_pdf_Export";
-                }
-                else if (aExt == "odg" || aExt == "otg")
-                {
-                    realfiltername = "draw_pdf_Export";
-                }
-                else
-                {
-                    // other types are not supported;
-                    return;
-                }
-                aURL.setExtension(std::u16string_view(u"pdf"));
-            }
-            aMediaDescriptor["FilterName"] <<= realfiltername;
-            aMediaDescriptor["FileName"]
-                <<= aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-            xStorable->storeToURL(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                                  aMediaDescriptor.getAsConstPropertyValueList());
-        }
-    }
-}
-
-uno::Reference<css::lang::XComponent>
-QtFilePicker::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
-                              const uno::Sequence<beans::PropertyValue>& rExtraArgs)
-{
-    std::vector<beans::PropertyValue> args;
-
-    if (!rDocService.isEmpty())
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "DocumentService";
-        aValue.Handle = -1;
-        aValue.Value <<= rDocService;
-        aValue.State = beans::PropertyState_DIRECT_VALUE;
-        args.push_back(aValue);
-    }
-
-    args.insert(args.end(), rExtraArgs.begin(), rExtraArgs.end());
-
-    css::uno::Reference<css::uno::XComponentContext> xComponentContext;
-    xComponentContext.set(comphelper::getComponentContext(comphelper::getProcessServiceFactory()));
-
-    css::uno::Reference<css::frame::XDesktop2> xDesktop;
-    xDesktop.set(frame::Desktop::create(xComponentContext));
-
-    if (xDesktop.is())
-    {
-        uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL(
-            rURL, "_default", 0, comphelper::containerToSequence(args));
-        return xComponent;
-    }
-
-    return uno::Reference<css::lang::XComponent>();
-}
-#endif
-
 void QtFilePicker::finished(int nResult)
 {
     SolarMutexGuard g;
@@ -343,13 +217,8 @@ sal_Int16 SAL_CALL QtFilePicker::execute()
         return ret;
     }
 
-#ifdef EMSCRIPTEN
-    headlessPdfConversionWASM();
-    int result = QFileDialog::Rejected;
-#else
     prepareExecute();
     int result = m_pFileDialog->exec();
-#endif
 
     if (QFileDialog::Rejected == result)
         return ExecutableDialogResults::CANCEL;
