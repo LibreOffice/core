@@ -16,6 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+// See svx/sdi/svx.sdi for hints on how to define these
+
 SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
 ()
 [
