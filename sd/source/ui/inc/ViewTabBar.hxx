@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
 
@@ -62,8 +61,7 @@ private:
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XToolBar,
     css::drawing::framework::XTabBar,
-    css::drawing::framework::XConfigurationChangeListener,
-    css::lang::XUnoTunnel
+    css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarInterfaceBase;
 
 /** Tab control for switching between views in the center pane.
@@ -122,12 +120,6 @@ public:
         css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
 
     virtual sal_Bool SAL_CALL isAnchorOnly() override;
-
-    //----- XUnoTunnel --------------------------------------------------------
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
     /** The returned value is calculated as the difference between the
         total height of the control and the height of its first tab page.

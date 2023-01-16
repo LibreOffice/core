@@ -265,19 +265,6 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
     return false;
 }
 
-//----- XUnoTunnel ------------------------------------------------------------
-
-const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theViewTabBarUnoTunnelId;
-    return theViewTabBarUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 bool ViewTabBar::ActivatePage(size_t nIndex)
 {
     try
