@@ -206,19 +206,6 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     return bResult;
 }
 
-//----- XUnoTunnel ------------------------------------------------------------
-
-const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theViewShellWrapperUnoTunnelId;
-    return theViewShellWrapperUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 //===== awt::XWindowListener ==================================================
 
 void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent&)

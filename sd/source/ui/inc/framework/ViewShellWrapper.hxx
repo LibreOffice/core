@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/compbase.hxx>
 
 #include <memory>
@@ -34,15 +33,14 @@ namespace com::sun::star::awt { class XWindow; }
 
 namespace sd::framework {
 
-typedef comphelper::WeakComponentImplHelper    <   css::lang::XUnoTunnel
-                                            ,   css::awt::XWindowListener
+typedef comphelper::WeakComponentImplHelper    <   css::awt::XWindowListener
                                             ,   css::view::XSelectionSupplier
                                             ,   css::drawing::framework::XRelocatableResource
                                             ,   css::drawing::framework::XView
                                             >   ViewShellWrapperInterfaceBase;
 
 /** This class wraps ViewShell objects and makes them look like an XView.
-    Most importantly it provides a tunnel to the ViewShell implementation.
+    Most importantly it provides access to the ViewShell implementation.
     Then it forwards size changes of the pane window to the view shell.
 */
 class ViewShellWrapper final : public ViewShellWrapperInterfaceBase
@@ -68,17 +66,11 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
-    /** This method is typically used together with the XUnoTunnel interface
+    /** This method is typically used
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
     const ::std::shared_ptr<ViewShell>& GetViewShell() const { return mpViewShell;}
-
-    // XUnoTunnel
-
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
     // XResource
 

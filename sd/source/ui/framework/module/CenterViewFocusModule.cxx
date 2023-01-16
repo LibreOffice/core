@@ -124,7 +124,7 @@ void CenterViewFocusModule::HandleNewView (
         xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
     if (mpBase!=nullptr)
     {
-        auto pViewShellWrapper = comphelper::getFromUnoTunnel<ViewShellWrapper>(xView);
+        auto pViewShellWrapper = dynamic_cast<ViewShellWrapper*>(xView.get());
         if (pViewShellWrapper != nullptr)
         {
             std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();

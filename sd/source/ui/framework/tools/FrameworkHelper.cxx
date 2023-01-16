@@ -199,8 +199,7 @@ namespace
         ::std::shared_ptr< ViewShell > pViewShell;
         try
         {
-            Reference<lang::XUnoTunnel> xViewTunnel( i_rViewShellWrapper, UNO_QUERY_THROW );
-            if (auto pWrapper = comphelper::getFromUnoTunnel<ViewShellWrapper>(xViewTunnel))
+            if (auto pWrapper = dynamic_cast<ViewShellWrapper*>(i_rViewShellWrapper.get()))
                 pViewShell = pWrapper->GetViewShell();
         }
         catch( const Exception& )
