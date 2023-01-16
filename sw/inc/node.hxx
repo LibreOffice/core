@@ -568,6 +568,8 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode ) = delete;
 };
 
+/// A section node represents the start of a section on the UI, i.e. the container created using
+/// Insert -> Section menu item.
 class SAL_DLLPUBLIC_RTTI SwSectionNode final
     : public SwStartNode
 {
