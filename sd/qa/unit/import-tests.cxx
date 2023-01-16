@@ -85,6 +85,7 @@ public:
     void testDocumentLayout();
     void testTdf152434();
     void testConnectors();
+    void testTdf153036_resizedConnectorL();
     void testTdf150719();
     void testTdf149314();
     void testTdf149124();
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testConnectors);
+    CPPUNIT_TEST(testTdf153036_resizedConnectorL);
     CPPUNIT_TEST(testTdf150719);
     CPPUNIT_TEST(testTdf149314);
     CPPUNIT_TEST(testTdf149124);
@@ -372,6 +374,20 @@ void SdImportTest::testConnectors()
             nCount++;
         }
     }
+}
+
+void SdImportTest::testTdf153036_resizedConnectorL()
+{
+    createSdImpressDoc("pptx/tdf153036_resizedConnectorL.pptx");
+
+    // TODO: If you are working on improvement related to connectors import, then
+    // expect this unit test to fail.
+    // This is a "L" shape, imported as a special "Z" shape that looks like a "L" shape.
+    uno::Reference<beans::XPropertySet> xConnector(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT(xConnector->getPropertySetInfo()->hasPropertyByName("EdgeLine1Delta"));
+
+    sal_Int32 nEdgeLine = xConnector->getPropertyValue("EdgeLine1Delta").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-3243), nEdgeLine);
 }
 
 void SdImportTest::testTdf150719()
