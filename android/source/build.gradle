@@ -144,12 +144,20 @@ task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'assets'
 
-    // include icons and Impress styles
+    // include icons, Impress styles and required .ui files
     into ('share') {
         into ('config') {
             from ("${liboInstdir}/share/config")
             includes = ['images_**.zip',
-                        '**/simpress/styles.xml']
+                        '**/simpress/styles.xml',
+                        '**/annotation.ui',
+                        '**/hfmenubutton.ui',
+                        '**/inforeadonlydialog.ui',
+                        '**/pbmenubutton.ui',
+                        '**/scrollbars.ui',
+                        '**/tabbuttons.ui',
+                        '**/tabviewbar.ui'
+                        ]
         }
     }
 
@@ -173,16 +181,6 @@ task copyAssets(type: Copy) {
         from("${liboWorkdir}/CustomTarget/i18npool/breakiterator/") {
             include '*.data'
         }
-    }
-    // include required .ui files
-    into('config') {
-        from "${liboInstdir}/share/config"
-        include '**/annotation.ui',
-                '**/hfmenubutton.ui',
-                '**/inforeadonlydialog.ui',
-                '**/pbmenubutton.ui',
-                '**/scrollbars.ui',
-                '**/tabbuttons.ui', '**/tabviewbar.ui'
     }
 }
 
@@ -265,6 +263,7 @@ task createRCfiles {
             [Bootstrap]
             LO_LIB_DIR=file://$APP_DATA_DIR/lib/
             BRAND_BASE_DIR=file:///assets
+            BRAND_SHARE_SUBDIR=share
             CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry
             URE_BIN_DIR=file:///assets/ure/bin/dir/nothing-here/we-can/exec-anyway
             '''.stripIndent()
