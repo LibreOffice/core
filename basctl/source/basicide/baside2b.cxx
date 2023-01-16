@@ -630,7 +630,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
             if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ||
                  rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM )
             {
-                // If the module is read-only, warn that it cannont be edited
+                // If the module is read-only, warn that it can't be edited
                 if ( rModulWindow.IsReadOnly() )
                     rModulWindow.ShowReadOnlyInfoBar();
             }
