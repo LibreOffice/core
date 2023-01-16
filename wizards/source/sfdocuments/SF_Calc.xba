@@ -673,16 +673,17 @@ Try:
 		Next i
 	
 		&apos;	Compute the final range position
-		If lCountDeleted &lt; .Width Then sCompact = Offset(Range, 0, 0, 0, .Width - lCountDeleted)
-
-		&apos;	Push to the right the cells that migrated leftwards irrelevantly
-		If Not WholeColumn Then
-			If Len(sCompact) &gt; 0 Then
+		If lCountDeleted &gt; 0 Then
+			sCompact = Offset(Range, 0, 0, 0, .Width - lCountDeleted)
+			&apos;	Push to the right the cells that migrated leftwards irrelevantly
+			If Not WholeColumn Then
 				sShiftRange = Offset(sCompact, 0, .Width - lCountDeleted, , lCountDeleted)
-			Else
-				sShiftRange = .RangeName
+				ShiftRight(sShiftRange, WholeColumn := False)
 			End If
-			ShiftRight(sShiftRange, WholeColumn := False)
+			&apos;	Conventionally, if all columns are deleted, the returned range is the zero-length string
+			If .Width = lCountDeleted Then sCompact = &quot;&quot;
+		Else		&apos;	Initial range is left unchanged
+			sCompact = .RangeName
 		End If
 
 	End With
@@ -724,7 +725,6 @@ Public Function CompactUp(Optional ByVal Range As Variant _
 &apos;&apos;&apos;			&apos;	The rows having a &quot;X&quot; in column G are completely suppressed
 
 Dim sCompact As String			&apos;	Return value
-Dim oCompact As Object			&apos;	Return value as an _Address type
 Dim lCountDeleted As Long		&apos;	Count the deleted rows
 Dim vCompactRanges As Variant	&apos;	Array of ranges to be compacted based on the formula
 Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
@@ -768,16 +768,17 @@ Try:
 		Next i
 	
 		&apos;	Compute the final range position
-		If lCountDeleted &lt; .Height Then sCompact = Offset(Range, 0, 0, .Height - lCountDeleted, 0)
-
-		&apos;	Push downwards the cells that migrated upwards irrelevantly
-		If Not WholeRow Then
-			If Len(sCompact) &gt; 0 Then
+		If lCountDeleted &gt; 0 Then
+			sCompact = Offset(Range, 0, 0, .Height - lCountDeleted, 0)
+			&apos;	Push downwards the cells that migrated upwards irrelevantly
+			If Not WholeRow Then
 				sShiftRange = Offset(sCompact, .Height - lCountDeleted, 0, lCountDeleted)
-			Else
-				sShiftRange = .RangeName
+				ShiftDown(sShiftRange, WholeRow := False)
 			End If
-			ShiftDown(sShiftRange, WholeRow := False)
+			&apos;	Conventionally, if all rows are deleted, the returned range is the zero-length string
+			If .Height = lCountDeleted Then sCompact = &quot;&quot;
+		Else		&apos;	Initial range is left unchanged
+			sCompact = .RangeName
 		End If
 
 	End With
