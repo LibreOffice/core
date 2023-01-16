@@ -116,6 +116,7 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
+#include <fmtrfmrk.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -660,6 +661,53 @@ void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         pMarkAccess->deleteMark(pMark);
     }
 }
+
+void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (!pTypeName || pTypeName->GetValue() != "SetRef")
+    {
+        // This is implemented so far only for reference marks.
+        return;
+    }
+
+    OUString aNamePrefix;
+    const SfxStringItem* pNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    if (pNamePrefix)
+    {
+        aNamePrefix = pNamePrefix->GetValue();
+    }
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+    comphelper::ScopeGuard g(
+        [&rWrtSh]
+        {
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELBOOKMARK, nullptr);
+        });
+
+    std::vector<const SwFormatRefMark*> aRemovals;
+    for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
+    {
+        const SwFormatRefMark* pRefMark = pDoc->GetRefMark(i);
+        if (!aNamePrefix.isEmpty())
+        {
+            if (!pRefMark->GetRefName().startsWith(aNamePrefix))
+            {
+                continue;
+            }
+        }
+
+        aRemovals.push_back(pRefMark);
+    }
+
+    for (const auto& pMark : aRemovals)
+    {
+        pDoc->DeleteFormatRefMark(pMark);
+    }
+}
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -1066,6 +1114,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // This deletes all bookmarks in the document matching a specified prefix.
             DeleteBookmarks(rReq, rWrtSh);
+            break;
+        }
+        case FN_DELETE_FIELDS:
+        {
+            // This deletes all fields in the document matching a specified type & prefix.
+            DeleteFields(rReq, rWrtSh);
             break;
         }
         case FN_UPDATE_SECTIONS:
