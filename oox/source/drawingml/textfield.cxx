@@ -121,7 +121,7 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
     }
     else if ( o3tl::starts_with(sType, u"file") )
     {
-        int idx = rtl_ustr_toInt32(sType.data() + 4, 10);
+        int idx = o3tl::toInt32(sType.substr(4));
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.FileName" );
         aFields.emplace_back( xIface, UNO_QUERY );
         Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
@@ -215,7 +215,7 @@ SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
     if( aDateTimeNum.empty() ) // "datetime"
         return SvxDateFormat::StdSmall;
 
-    int nDateTimeNum = rtl_ustr_toInt32(aDateTimeNum.data(), 10);
+    int nDateTimeNum = o3tl::toInt32(aDateTimeNum);
 
     switch( nDateTimeNum )
     {
@@ -244,7 +244,7 @@ SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
 SvxTimeFormat TextField::getLOTimeFormat(std::u16string_view rDateTimeType)
 {
     auto aDateTimeNum = rDateTimeType.substr(8);
-    int nDateTimeNum = rtl_ustr_toInt32(aDateTimeNum.data(), 10);
+    int nDateTimeNum = o3tl::toInt32(aDateTimeNum);
 
     switch( nDateTimeNum )
     {
