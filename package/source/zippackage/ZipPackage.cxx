@@ -1664,17 +1664,6 @@ sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-const Sequence< sal_Int8 > & ZipPackage::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit implId;
-    return implId.getSeq();
-}
-
-sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
 uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo()
 {
     return uno::Reference < XPropertySetInfo > ();

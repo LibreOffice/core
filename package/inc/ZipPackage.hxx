@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -61,7 +60,6 @@ class ZipPackage final : public cppu::WeakImplHelper
                     <
                        css::lang::XInitialization,
                        css::lang::XSingleServiceFactory,
-                       css::lang::XUnoTunnel,
                        css::lang::XServiceInfo,
                        css::container::XHierarchicalNameAccess,
                        css::util::XChangesBatch,
@@ -144,10 +142,6 @@ public:
     virtual void SAL_CALL commitChanges(  ) override;
     virtual sal_Bool SAL_CALL hasPendingChanges(  ) override;
     virtual css::uno::Sequence< css::util::ElementChange > SAL_CALL getPendingChanges(  ) override;
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-    /// @throws css::uno::RuntimeException
-    static const css::uno::Sequence < sal_Int8 > & getUnoTunnelId();
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
