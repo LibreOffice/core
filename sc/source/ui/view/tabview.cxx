@@ -228,6 +228,7 @@ void ScTabView::InitScrollBar(ScrollAdaptor& rScrollBar, tools::Long nMaxVal, co
     rScrollBar.SetVisibleSize( 10 );            // is reset by Resize
 
     rScrollBar.SetScrollHdl(rLink);
+    rScrollBar.SetMouseReleaseHdl(LINK(this, ScTabView, EndScrollHdl));
 
     rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() ) );
 }
@@ -1052,6 +1053,16 @@ IMPL_LINK_NOARG(ScTabView, VScrollTopHdl, weld::Scrollbar&, void)
 IMPL_LINK_NOARG(ScTabView, VScrollBottomHdl, weld::Scrollbar&, void)
 {
     ScrollHdl(aVScrollBottom.get());
+}
+
+IMPL_LINK_NOARG(ScTabView, EndScrollHdl, const MouseEvent&, bool)
+{
+    if (bDragging)
+    {
+        UpdateScrollBars();
+        bDragging = false;
+    }
+    return false;
 }
 
 void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
