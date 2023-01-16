@@ -3596,8 +3596,11 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         SwView* pFirstView = static_cast<SwView*>(SfxViewShell::GetFirst());
         if (pFirstView && SfxViewShell::GetNext(*pFirstView) == nullptr)
         {
-            if (SwViewShell* pShell = &pFirstView->GetWrtShell())
-                pShell->UpdateFields(true);
+            if (SwEditShell* pShell = &pFirstView->GetWrtShell())
+            {
+                pShell->SwViewShell::UpdateFields(true);
+                pShell->ResetModified();
+            }
         }
     }
 
