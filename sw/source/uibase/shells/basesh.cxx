@@ -913,16 +913,6 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
     uno::Sequence<beans::PropertyValue> aField;
     pField->GetValue() >>= aField;
 
-    SwDoc* pDoc = rWrtSh.GetDoc();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
-    rWrtSh.StartAction();
-    comphelper::ScopeGuard g(
-        [&rWrtSh]
-        {
-            rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
-        });
-
     SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();
     SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
     std::vector<SwTextAttr*> aAttrs
@@ -937,6 +927,16 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         return;
     }
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.StartAction();
+    comphelper::ScopeGuard g(
+        [&rWrtSh]
+        {
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+        });
 
     comphelper::SequenceAsHashMap aMap(aField);
     auto aName = aMap["Name"].get<OUString>();
