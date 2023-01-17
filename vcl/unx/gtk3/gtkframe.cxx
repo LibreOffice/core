@@ -832,6 +832,48 @@ void GtkSalFrame::resizeWindow( tools::Long nWidth, tools::Long nHeight )
         window_resize(nWidth, nHeight);
 }
 
+#if GTK_CHECK_VERSION(4,9,0)
+
+#define LO_TYPE_DRAWING_AREA     (lo_drawing_area_get_type())
+#define LO_DRAWING_AREA(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_DRAWING_AREA, LODrawingArea))
+#define LO_IS_DRAWING_AREA(obj)  (G_TYPE_CHECK_INSTANCE_TYPE((obj), LO_TYPE_DRAWING_AREA))
+
+struct LODrawingArea
+{
+    GtkDrawingArea parent_instance;
+};
+
+struct LODrawingAreaClass
+{
+    GtkDrawingAreaClass parent_class;
+};
+
+static void lo_drawing_area_accessible_init(GtkAccessibleInterface *iface)
+{
+    // doesn't actually do anything useful yet, just forward back to base impl for now
+    GtkAccessibleInterface *parent_iface = static_cast<GtkAccessibleInterface*>(g_type_interface_peek_parent(iface));
+    iface->get_at_context = parent_iface->get_at_context;
+    iface->get_platform_state = parent_iface->get_platform_state;
+}
+
+G_DEFINE_TYPE_WITH_CODE(LODrawingArea, lo_drawing_area, GTK_TYPE_DRAWING_AREA,
+                        G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_drawing_area_accessible_init))
+
+static void lo_drawing_area_class_init(LODrawingAreaClass* /*klass*/)
+{
+}
+
+static void lo_drawing_area_init(LODrawingArea* /*area*/)
+{
+}
+
+GtkWidget* lo_drawing_area_new()
+{
+    return GTK_WIDGET(g_object_new(LO_TYPE_DRAWING_AREA, nullptr));
+}
+
+#endif
+
 #if !GTK_CHECK_VERSION(4,0,0)
 // tdf#124694 GtkFixed takes the max size of all its children as its
 // preferred size, causing it to not clip its child, but grow instead.
@@ -960,7 +1002,11 @@ void GtkSalFrame::InitCommon()
 #else
     m_pOverlay = GTK_OVERLAY(gtk_overlay_new());
     m_pFixedContainer = GTK_FIXED(gtk_fixed_new());
+#if GTK_CHECK_VERSION(4,9,0)
+    m_pDrawingArea = GTK_DRAWING_AREA(lo_drawing_area_new());
+#else
     m_pDrawingArea = GTK_DRAWING_AREA(gtk_drawing_area_new());
+#endif
 #endif
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), 1, 1);
