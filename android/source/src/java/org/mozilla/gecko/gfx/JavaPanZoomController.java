@@ -983,7 +983,7 @@ class JavaPanZoomController
         PointF pointOfTap = getMotionInDocumentCoordinates(motionEvent);
         ImmutableViewportMetrics metrics = getMetrics();
         float newZoom = metrics.getZoomFactor() >=
-                DOUBLE_TAP_THRESHOLD ? mTarget.getZoomConstraints().getMinZoom() : DOUBLE_TAP_THRESHOLD;
+                DOUBLE_TAP_THRESHOLD ? mTarget.getZoomConstraints().getDefaultZoom() : DOUBLE_TAP_THRESHOLD;
         // calculate new top_left point from the point of tap
         float ratio = newZoom/metrics.getZoomFactor();
         float newLeft = pointOfTap.x - 1/ratio * (pointOfTap.x - metrics.getOrigin().x / metrics.getZoomFactor());

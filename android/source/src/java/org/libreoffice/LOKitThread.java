@@ -184,9 +184,11 @@ class LOKitThread extends Thread {
     private void updateZoomConstraints() {
         if (mTileProvider == null) return;
         mLayerClient = mContext.getLayerClient();
-        // Set min zoom to the page width so that you cannot zoom below page width
-        final float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
-        mLayerClient.setZoomConstraints(new ZoomConstraints(1f, minZoom, 0f));
+        // Set default zoom to the page width and min zoom so that the whole page is visible
+        final float pageHeightZoom = mLayerClient.getViewportMetrics().getHeight() / mTileProvider.getPageHeight();
+        final float pageWidthZoom = mLayerClient.getViewportMetrics().getWidth() / mTileProvider.getPageWidth();
+        final float minZoom = Math.min(pageWidthZoom, pageHeightZoom);
+        mLayerClient.setZoomConstraints(new ZoomConstraints(pageWidthZoom, minZoom, 0f));
     }
 
     /**
