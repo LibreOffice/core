@@ -492,6 +492,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="BASICEditor">
+        <info>
+          <desc>Specifies the settings of the BASIC code editor.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used as background in the Basic code editor.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="BASICIdentifier">
         <info>
           <desc>Specifies the settings for identifiers in BASIC source code.</desc>

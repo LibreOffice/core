@@ -146,6 +146,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/CalcText") ,false },
         { std::u16string_view(u"/CalcProtectedBackground") ,false },
         { std::u16string_view(u"/DrawGrid")        ,true },
+        { std::u16string_view(u"/BASICEditor"),  false },
         { std::u16string_view(u"/BASICIdentifier"),  false },
         { std::u16string_view(u"/BASICComment")   ,  false },
         { std::u16string_view(u"/BASICNumber")    ,  false },
@@ -402,6 +403,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLACK, // CALCTEXT
         COL_LIGHTGRAY, // CALCPROTECTEDBACKGROUND
         COL_GRAY7, // DRAWGRID
+        COL_WHITE, // BASICIEDITOR,
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY, // BASICCOMMENT,
         COL_LIGHTRED, // BASICNUMBER,

@@ -140,6 +140,7 @@ const vEntryInfo[] =
 
     { Group_Draw,    IDS(drawgrid) },
 
+    { Group_Basic,   IDS(basiceditor) },
     { Group_Basic,   IDS(basicid) },
     { Group_Basic,   IDS(basiccomment) },
     { Group_Basic,   IDS(basicnumber) },

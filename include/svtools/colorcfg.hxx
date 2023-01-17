@@ -67,6 +67,7 @@ enum ColorConfigEntry
     CALCTEXT,
     CALCPROTECTEDBACKGROUND,
     DRAWGRID            ,
+    BASICEDITOR,
     BASICIDENTIFIER,
     BASICCOMMENT   ,
     BASICNUMBER    ,

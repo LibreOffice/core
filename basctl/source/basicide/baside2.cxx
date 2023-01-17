@@ -1564,7 +1564,7 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
         { TokenType::Keywords,    svtools::BASICKEYWORD },
     };
 
-    Color aDocColor = aConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    Color aDocColor = aConfig.GetColorValue(svtools::BASICEDITOR).nColor;
     if (bFirst || aDocColor != m_aBackgroundColor)
     {
         m_aBackgroundColor = aDocColor;
