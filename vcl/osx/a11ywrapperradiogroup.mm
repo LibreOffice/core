@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/svapp.hxx>
 #include <osx/salinst.h>
 #include "a11ywrapperradiogroup.h"
 #include "a11ytextwrapper.h"
@@ -27,6 +28,9 @@
 @implementation AquaA11yWrapperRadioGroup : AquaA11yWrapper
 
 -(NSArray *)accessibilityAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
     // Special Attributes and removing unwanted attributes depending on role
