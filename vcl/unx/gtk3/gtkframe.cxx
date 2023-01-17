@@ -891,19 +891,14 @@ ooo_fixed_get_preferred_width(GtkWidget*, gint *minimum, gint *natural)
     *minimum = 0;
     *natural = 0;
 }
-#endif
 
 static void
 ooo_fixed_class_init(GtkFixedClass *klass)
 {
-#if !GTK_CHECK_VERSION(4,0,0)
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
     widget_class->get_accessible = ooo_fixed_get_accessible;
     widget_class->get_preferred_height = ooo_fixed_get_preferred_height;
     widget_class->get_preferred_width = ooo_fixed_get_preferred_width;
-#else
-    (void)klass;
-#endif
 }
 
 /*
@@ -938,6 +933,8 @@ ooo_fixed_get_type()
 
     return type;
 }
+
+#endif
 
 void GtkSalFrame::updateScreenNumber()
 {

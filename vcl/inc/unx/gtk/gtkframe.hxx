@@ -657,8 +657,6 @@ public:
     void AllowCycleFocusOut();
 };
 
-#define OOO_TYPE_FIXED ooo_fixed_get_type()
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
 extern "C" {
 
