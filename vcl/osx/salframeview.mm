@@ -1115,7 +1115,11 @@ static AquaSalFrame* getMouseContainerFrame()
             // Handle repeat key events by explicitly inserting the text if
             // -[NSResponder interpretKeyEvents:] does not insert or mark any
             // text. Note: do not do this step if there is uncommitted text.
-            if ( !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
+            // Related: tdf#42437 Skip special press-and-hold handling for action keys
+            // Pressing and holding action keys such as arrow keys must not be
+            // handled like pressing and holding a character key as it will
+            // insert unexpected text.
+            if ( !mbKeyHandled && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
             {
                 NSString *pChars = [mpLastEvent characters];
                 [self insertText:pChars replacementRange:NSMakeRange( 0, [pChars length] )];
@@ -1264,9 +1268,13 @@ static AquaSalFrame* getMouseContainerFrame()
                 mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 
         }
-        mbKeyHandled = true;
         [self unmarkText];
     }
+
+    // Mark event as handled even if the frame isn't valid like is done in
+    // [self setMarkedText:selectedRange:replacementRange:] and
+    // [self doCommandBySelector:]
+    mbKeyHandled = true;
 }
 
 -(void)insertTab: (id)aSender
