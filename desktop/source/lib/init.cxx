@@ -5399,22 +5399,34 @@ static void getDocLanguages(LibreOfficeKitDocument* pThis, uno::Sequence<lang::L
     css::uno::Any aLangStatus;
     pDispatcher->QueryState(SID_LANGUAGE_STATUS, aLangStatus);
 
-    Sequence<OUString> aSeqLang;
-    if (!(aLangStatus >>= aSeqLang))
-        return;
+    OUString sCurrent;
+    OUString sKeyboard;
+    OUString sGuessText;
+    SvtScriptType eScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN
+        | SvtScriptType::COMPLEX;
 
-    // (aSeqLang[0] == "Current Language",  aSeqLang[1] == "Script Type",
-    //  aSeqLang[2] == "Keyboard Language", aSeqLang[3] == "Guess Text Lang")
-    if (aSeqLang.getLength() != 4)
-        return;
+    Sequence<OUString> aSeqLang;
+    if (aLangStatus >>= aSeqLang)
+    {
+        if (aSeqLang.getLength() == 4)
+        {
+            sCurrent = aSeqLang[0];
+            eScriptType = static_cast<SvtScriptType>(aSeqLang[1].toInt32());
+            sKeyboard = aSeqLang[1];
+            sGuessText = aSeqLang[2];
+        }
+    }
+    else
+    {
+        aLangStatus >>= sCurrent;
+    }
 
     LanguageType nLangType;
     std::set<LanguageType> aLangItems;
-    SvtScriptType eScriptType = static_cast<SvtScriptType>(aSeqLang[1].toInt32());
 
-    if (!aSeqLang[0].isEmpty())
+    if (!sCurrent.isEmpty())
     {
-        nLangType = SvtLanguageTable::GetLanguageType(aSeqLang[0]);
+        nLangType = SvtLanguageTable::GetLanguageType(sCurrent);
         if (nLangType != LANGUAGE_DONTKNOW)
         {
             aLangItems.insert(nLangType);
@@ -5436,9 +5448,9 @@ static void getDocLanguages(LibreOfficeKitDocument* pThis, uno::Sequence<lang::L
         aLangItems.insert(nLangType);
     }
 
-    if (!aSeqLang[2].isEmpty())
+    if (!sKeyboard.isEmpty())
     {
-        nLangType = SvtLanguageTable::GetLanguageType(aSeqLang[2]);
+        nLangType = SvtLanguageTable::GetLanguageType(sKeyboard);
         if (nLangType != LANGUAGE_DONTKNOW &&
             (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
         {
@@ -5446,7 +5458,7 @@ static void getDocLanguages(LibreOfficeKitDocument* pThis, uno::Sequence<lang::L
         }
     }
 
-    if (!aSeqLang[3].isEmpty())
+    if (!sGuessText.isEmpty())
     {
         Reference<linguistic2::XLanguageGuessing> xLangGuesser;
         try
@@ -5459,9 +5471,10 @@ static void getDocLanguages(LibreOfficeKitDocument* pThis, uno::Sequence<lang::L
 
         if (xLangGuesser.is())
         {
-            lang::Locale aLocale = xLangGuesser->guessPrimaryLanguage(aSeqLang[3], 0,
-                                                                      aSeqLang[3].getLength());
-            nLangType = LanguageTag(aLocale).makeFallback().getLanguageType();
+            lang::Locale aLocale = xLangGuesser->guessPrimaryLanguage(sGuessText, 0,
+                                                                      sGuessText.getLength());
+            LanguageTag aLanguageTag(aLocale);
+            nLangType = aLanguageTag.getLanguageType(false);
             if (nLangType != LANGUAGE_DONTKNOW &&
                 (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
             {
