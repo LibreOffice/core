@@ -111,9 +111,19 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
             mnPos = -1;
         }
     }
-    svtools::ColorConfig aColorConfig;
-    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    aPrevCol = pColor ? *pColor : aWindowTextColor;
+    if (pColor)
+        aPrevCol = *pColor;
+    else
+    {
+        svtools::ColorConfig aColorConfig;
+        Color aFgColor = aColorConfig.GetColorValue(svtools::FONTCOLOR, false).nColor;
+        if (aFgColor == COL_AUTO)
+        {
+            Color aBgColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+            aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
+        }
+        aPrevCol = aFgColor;
+    }
     Invalidate();
 }
 
@@ -133,8 +143,12 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     rRenderContext.Push(vcl::PushFlags::ALL);
 
     svtools::ColorConfig aColorConfig;
-    rRenderContext.SetTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-    rRenderContext.SetBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    Color aBgColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    Color aFgColor = aColorConfig.GetColorValue(svtools::FONTCOLOR, false).nColor;
+    if (aFgColor == COL_AUTO)
+        aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
+    rRenderContext.SetBackground(aBgColor);
+    rRenderContext.SetTextColor(aFgColor);
     rRenderContext.Erase();
 
     vcl::Font aDrawFont = rRenderContext.GetFont();
