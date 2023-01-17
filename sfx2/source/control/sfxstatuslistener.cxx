@@ -142,8 +142,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
     SfxViewFrame* pViewFrame = nullptr;
     if ( m_xDispatch.is() )
     {
-        Reference< XUnoTunnel > xTunnel( m_xDispatch, UNO_QUERY );
-        if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
+        if (auto pDisp = dynamic_cast<SfxOfficeDispatch*>(m_xDispatch.get()))
             pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
     }
 

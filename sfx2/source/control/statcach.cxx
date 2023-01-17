@@ -263,8 +263,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             if ( xDisp.is() )
             {
                 // test the dispatch object if it is just a wrapper for a SfxDispatcher
-                css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
-                if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
+                if (auto pDisp = dynamic_cast<SfxOfficeDispatch*>(xDisp.get()))
                 {
                     // The intercepting object is an SFX component
                     // If this dispatch object does not use the wanted dispatcher or the AppDispatcher, it's treated like any other UNO component

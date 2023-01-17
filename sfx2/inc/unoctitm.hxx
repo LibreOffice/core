@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/multiinterfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -67,7 +66,7 @@ public:
 
 class SfxSlotServer;
 class SfxDispatchController_Impl;
-class SfxOfficeDispatch final : public cppu::ImplInheritanceHelper<SfxStatusDispatcher, css::lang::XUnoTunnel>
+class SfxOfficeDispatch final : public cppu::ImplInheritanceHelper<SfxStatusDispatcher>
 {
 friend class SfxDispatchController_Impl;
     std::unique_ptr<SfxDispatchController_Impl>  pImpl;
@@ -88,10 +87,6 @@ public:
                                           const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void   SAL_CALL     addStatusListener( const css::uno::Reference< css::frame::XStatusListener > & xControl,
                                                    const css::util::URL& aURL) override;
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override ;
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     static bool             IsMasterUnoCommand( const css::util::URL& aURL );
     static OUString         GetMasterUnoCommand( const css::util::URL& aURL );

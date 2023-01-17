@@ -184,8 +184,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
         uno::Reference < frame::XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
-            uno::Reference< lang::XUnoTunnel > xTunnel( xDisp, uno::UNO_QUERY );
-            if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
+            if (auto pDisp = dynamic_cast<SfxOfficeDispatch*>(xDisp.get()))
                 pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
         }
     }

@@ -1529,7 +1529,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
 
         if ( xDisp.is() )
         {
-            if (!comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xDisp))
+            if (!dynamic_cast<SfxOfficeDispatch*>(xDisp.get()))
             {
                 bool bDeleteCache = false;
                 if ( !pCache )
@@ -1648,15 +1648,10 @@ sal_uInt16 SfxBindings::QuerySlotId( const util::URL& aURL )
     if (!xDispatch.is())
         return 0;
 
-    css::uno::Reference<css::lang::XUnoTunnel> xTunnel(xDispatch, css::uno::UNO_QUERY);
-    if (!xTunnel.is())
+    SfxOfficeDispatch* pDispatch = dynamic_cast<SfxOfficeDispatch*>(xDispatch.get());
+    if (!pDispatch)
         return 0;
 
-    sal_Int64 nHandle = xTunnel->getSomething(SfxOfficeDispatch::getUnoTunnelId());
-    if (!nHandle)
-        return 0;
-
-    SfxOfficeDispatch* pDispatch = reinterpret_cast<SfxOfficeDispatch*>(sal::static_int_cast<sal_IntPtr>(nHandle));
     return pDispatch->GetId();
 }
 

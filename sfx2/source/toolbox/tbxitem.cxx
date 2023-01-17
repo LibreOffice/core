@@ -293,8 +293,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
         Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
-            Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-            if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
+            if (auto pDisp = dynamic_cast<SfxOfficeDispatch*>(xDisp.get()))
                 pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
         }
     }

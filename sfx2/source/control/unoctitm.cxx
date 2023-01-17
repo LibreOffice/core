@@ -173,12 +173,6 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Referen
 }
 
 
-// XUnoTunnel
-sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const css::util::URL& rURL )
     : pImpl( new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL ))
 {
@@ -204,14 +198,6 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
         SolarMutexGuard aGuard;
         pImpl.reset();
     }
-}
-
-const css::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::getUnoTunnelId()
-{
-    // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
-    static const sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
-    static css::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16) ;
-    return seqID ;
 }
 
 #if HAVE_FEATURE_JAVA
