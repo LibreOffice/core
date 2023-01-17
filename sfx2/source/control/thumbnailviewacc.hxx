@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -40,8 +39,7 @@ typedef comphelper::WeakComponentImplHelper<
     css::accessibility::XAccessibleEventBroadcaster,
     css::accessibility::XAccessibleContext,
     css::accessibility::XAccessibleComponent,
-    css::accessibility::XAccessibleSelection,
-    css::lang::XUnoTunnel >
+    css::accessibility::XAccessibleSelection >
     ValueSetAccComponentBase;
 
 class ThumbnailViewAcc :
@@ -109,10 +107,6 @@ public:
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    // XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 
 private:
     ::std::vector< css::uno::Reference<

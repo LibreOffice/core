@@ -44,23 +44,10 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 {
 }
 
-const uno::Sequence< sal_Int8 >& ThumbnailViewAcc::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSfxValueSetAccUnoTunnelId;
-    return theSfxValueSetAccUnoTunnelId.getSeq();
-}
-
 ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
     noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<ThumbnailViewAcc>(rxData);
-    }
-    catch(const css::uno::Exception&)
-    {
-        return nullptr;
-    }
+    return dynamic_cast<ThumbnailViewAcc*>(rxData.get());
 }
 
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewAcc::getAccessibleContext()
@@ -448,11 +435,6 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int64 nChildIndex)
     // the specified child is currently selected.
 //FIXME TODO    if (isAccessibleChildSelected(nChildIndex))
 //FIXME TODO        ;
-}
-
-sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 void ThumbnailViewAcc::disposing(std::unique_lock<std::mutex>& rGuard)
