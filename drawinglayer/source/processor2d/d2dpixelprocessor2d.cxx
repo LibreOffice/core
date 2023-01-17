@@ -575,6 +575,20 @@ public:
 
         if (hasRenderTarget())
         {
+            // set Viewort if none was given. We have a fixed pixel target, s we know the
+            // exact Viewport to work on
+            if (getViewInformation2D().getViewport().isEmpty())
+            {
+                drawinglayer::geometry::ViewInformation2D aViewInformation(getViewInformation2D());
+                basegfx::B2DRange aViewport(0.0, 0.0, nWidth, nHeight);
+                basegfx::B2DHomMatrix aInvViewTransform(aViewInformation.getViewTransformation());
+
+                aInvViewTransform.invert();
+                aViewport.transform(aInvViewTransform);
+                aViewInformation.setViewport(aViewport);
+                updateViewInformation(aViewInformation);
+            }
+
             // clear as render preparation
             getRenderTarget()->BeginDraw();
             getRenderTarget()->Clear(D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.0f));
@@ -936,14 +950,25 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
     // locally and Clear() it (see class def above).
     // That way it is not necessary to patch/relocate all the local variables (safer)
     // and the renderer has no real overhead itself
-    const basegfx::B2DHomMatrix aEmbedTransform(basegfx::utils::createTranslateB2DHomMatrix(
-        -rVisibleRange.getMinX(), -rVisibleRange.getMinY()));
-    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
-    aViewInformation2D.setViewTransformation(aEmbedTransform
-                                             * getViewInformation2D().getViewTransformation());
-    D2DBitmapPixelProcessor2D aSubContentRenderer(
-        aViewInformation2D, ceil(rVisibleRange.getWidth()), ceil(rVisibleRange.getHeight()),
-        getRenderTarget());
+    geometry::ViewInformation2D aAdaptedViewInformation2D(getViewInformation2D());
+    const double fTargetWidth(ceil(rVisibleRange.getWidth()));
+    const double fTargetHeight(ceil(rVisibleRange.getHeight()));
+
+    {
+        // create adapted ViewTransform, needs to be offset in discrete coordinates,
+        // so multiply from left
+        basegfx::B2DHomMatrix aAdapted(basegfx::utils::createTranslateB2DHomMatrix(
+                                           -rVisibleRange.getMinX(), -rVisibleRange.getMinY())
+                                       * getViewInformation2D().getViewTransformation());
+        aAdaptedViewInformation2D.setViewTransformation(aAdapted);
+
+        // reset Viewport (world coordinates), so the helper renderer will create it's
+        // own based on it's given internal discrete size
+        aAdaptedViewInformation2D.setViewport(basegfx::B2DRange());
+    }
+
+    D2DBitmapPixelProcessor2D aSubContentRenderer(aAdaptedViewInformation2D, fTargetWidth,
+                                                  fTargetHeight, getRenderTarget());
 
     if (!aSubContentRenderer.valid())
     {
