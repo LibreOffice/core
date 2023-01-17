@@ -434,24 +434,10 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     }
 }
 
-const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theValueSetAccUnoTunnelId;
-    return theValueSetAccUnoTunnelId.getSeq();
-}
-
-
 ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
     noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<ValueSetAcc>(rxData);
-    }
-    catch(const css::uno::Exception&)
-    {
-        return nullptr;
-    }
+    return dynamic_cast<ValueSetAcc*>(rxData.get());
 }
 
 
@@ -897,12 +883,6 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int64 nChildIndex )
     // the specified child is currently selected.
     if (isAccessibleChildSelected(nChildIndex))
         mpParent->SetNoSelection();
-}
-
-
-sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 
