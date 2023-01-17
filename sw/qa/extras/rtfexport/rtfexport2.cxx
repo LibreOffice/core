@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <bordertest.hxx>
 
@@ -44,16 +45,7 @@ public:
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
-        if (filename == std::string_view("fdo48023.rtf"))
-        {
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
-            AllSettings aSettings(m_aSavedSettings);
-            aSettings.SetLanguageTag(LanguageTag("ru"));
-            Application::SetSettings(aSettings);
-            return pResetter;
-        }
-        else if (filename == std::string_view("fdo44211.rtf"))
+        if (filename == std::string_view("fdo44211.rtf"))
         {
             std::unique_ptr<Resetter> pResetter(
                 new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
@@ -314,14 +306,27 @@ DECLARE_RTFEXPORT_TEST(testFdo48356, "fdo48356.rtf")
     CPPUNIT_ASSERT_EQUAL(1, i);
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo48023, "fdo48023.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
 {
-    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    // Implicit encoding detection based on locale was missing
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442"),
-        xTextRange->getString());
+        // Implicit encoding detection based on locale was missing
+        CPPUNIT_ASSERT_EQUAL(
+            OUString(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442"),
+            xTextRange->getString());
+    };
+
+    AllSettings aSavedSettings = Application::GetSettings();
+    AllSettings aSettings(aSavedSettings);
+    aSettings.SetLanguageTag(LanguageTag("ru"));
+    Application::SetSettings(aSettings);
+    comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
+
+    createSwDoc("fdo48023.rtf");
+    verify();
+    reload(mpFilter, "fdo48023.rtf");
+    verify();
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo48876, "fdo48876.rtf")
