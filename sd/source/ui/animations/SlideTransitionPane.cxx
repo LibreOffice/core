@@ -683,7 +683,8 @@ void SlideTransitionPane::openSoundFileDialog()
     if( ! mxLB_SOUND->get_sensitive())
         return;
 
-    SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
+    weld::Window* pDialogParent(GetFrameWeld());
+    SdOpenSoundFileDialog aFileDialog(pDialogParent);
 
     DBG_ASSERT( mxLB_SOUND->get_active() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
@@ -717,7 +718,7 @@ void SlideTransitionPane::openSoundFileDialog()
             {
                 OUString aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDialogParent,
                                                            VclMessageType::Warning, VclButtonsType::NONE,
                                                            aStrWarning));
                 xWarn->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
