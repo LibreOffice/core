@@ -152,9 +152,6 @@ public:
      * @returns if submission was successful */
     bool doSubmit( const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
-    // helpers for UNO tunnel
-    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
-
 private:
 
     /// check whether object is live, and throw suitable exception if not

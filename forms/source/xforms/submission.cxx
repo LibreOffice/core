@@ -254,13 +254,6 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     return ( aResult == CSubmission::SUCCESS );
 }
 
-Sequence<sal_Int8> Submission::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit aImplementationId;
-    return aImplementationId.getSeq();
-}
-
-
 void Submission::liveCheck()
 {
     bool bValid = mxModel.is();

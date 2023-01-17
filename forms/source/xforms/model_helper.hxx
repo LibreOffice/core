@@ -84,20 +84,20 @@ public:
 
     virtual bool isValid( const T& t ) const override
     {
-        return comphelper::getFromUnoTunnel<Submission>( t ) != nullptr;
+        return dynamic_cast<Submission*>( t.get() ) != nullptr;
     }
 
 protected:
     virtual void _insert( const T& t ) override
     {
-        auto pSubmission = comphelper::getFromUnoTunnel<Submission>( t );
+        auto pSubmission = dynamic_cast<Submission*>( t.get() );
         OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
         pSubmission->setModel( mpModel );
     }
 
     virtual void _remove( const T& t ) override
     {
-        auto pSubmission = comphelper::getFromUnoTunnel<Submission>( t );
+        auto pSubmission = dynamic_cast<Submission*>( t.get() );
         OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
         pSubmission->setModel( nullptr );
     }
