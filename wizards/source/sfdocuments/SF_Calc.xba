@@ -1084,7 +1084,7 @@ Const cstSubArgs = &quot;SourceRange, DestinationRange&quot;
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sCopy = &quot;&quot;
 
-Check:
+Check:string
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SourceRange, &quot;SourceRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT), , , CALCREFERENCE) Then GoTo Finally
@@ -3305,7 +3305,11 @@ Public Function SortRange(Optional ByVal Range As Variant _
 								, Optional ByVal CaseSensitive As Variant _
 								, Optional ByVal SortColumns As Variant _
 								) As Variant
-&apos;&apos;&apos;	Sort the given range on maximum 3 columns/rows. The sorting order may vary by column/row
+&apos;&apos;&apos;	Sort the given range on any number of columns/rows. The sorting order may vary by column/row
+&apos;&apos;&apos;	If the number of sort keys is &gt; 3 then the range is sorted several times, by groups of 3 keys,
+&apos;&apos;&apos;	starting from the last key. In this context the algorithm used by Calc to sort ranges
+&apos;&apos;&apos;	is presumed STABLE, i.e. it maintains the relative order of records with equal keys.
+&apos;&apos;&apos;	
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Range: the range to sort as a string
 &apos;&apos;&apos;		SortKeys: a scalar (if 1 column/row) or an array of column/row numbers starting from 1
@@ -3329,13 +3333,19 @@ Public Function SortRange(Optional ByVal Range As Variant _
 Dim sSort As String					&apos;	Return value
 Dim oRangeAddress As _Address		&apos;	Parsed range
 Dim oRange As Object				&apos;	com.sun.star.table.XCellRange
+Dim oSortRange As Object			&apos;	The area to sort as an _Address object
 Dim oDestRange As Object			&apos;	Destination as a range
 Dim oDestAddress As Object			&apos;	com.sun.star.table.CellRangeAddress
 Dim oDestCell As Object				&apos;	com.sun.star.table.CellAddress
 Dim vSortDescriptor As Variant		&apos;	Array of com.sun.star.beans.PropertyValue
 Dim vSortFields As Variant			&apos;	Array of com.sun.star.table.TableSortField
 Dim sOrder As String				&apos;	Item in SortOrder
-Dim i As Long
+Dim lSort As Long					&apos;	Counter for sub-sorts
+Dim lKeys As Long					&apos;	UBound of SortKeys
+Dim lKey As Long					&apos;	Actual index in SortKeys
+Dim i As Long, j As Long
+Const cstMaxKeys = 3				&apos;	Maximum number of keys allowed in a single sorting step
+
 Const cstThisSub = &quot;SFDocuments.Calc.SortRange&quot;
 Const cstSubArgs = &quot;Range, SortKeys, [TargetRange=&quot;&quot;&quot;&quot;], [SortOrder=&quot;&quot;ASC&quot;&quot;], [DestinationCell=&quot;&quot;&quot;&quot;], [ContainsHeader=False], [CaseSensitive=False], [SortColumns=False]&quot;
 
@@ -3368,47 +3378,64 @@ Check:
 		If Not ScriptForge.SF_Utils._Validate(SortColumns, &quot;SortColumns&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 	Set oRangeAddress = _ParseAddress(Range)
-	If Len(DestinationCell) &gt; 0 Then Set oDestRange = _ParseAddress(DestinationCell)
+	If Len(DestinationCell) &gt; 0 Then Set oDestRange = _ParseAddress(DestinationCell) Else Set oDestRange = Nothing
 
 Try:
-	&apos;	Initialize the sort descriptor
+	&apos;	Initialize a generic sort descriptor
 	Set oRange = oRangeAddress.XCellRange
-	vSortDescriptor = oRange.createSortDescriptor
+	vSortDescriptor = oRange.createSortDescriptor	&apos;	Makes a generic sort descriptor for ranges
 	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsSortColumns&quot;, SortColumns)
 	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;ContainsHeader&quot;, ContainsHeader)
 	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;BindFormatsToContent&quot;, True)
-	If Len(DestinationCell) = 0 Then
-		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, False)
-	Else
-		Set oDestAddress = oDestRange.XCellRange.RangeAddress
-		Set oDestCell = New com.sun.star.table.CellAddress
-		With oDestAddress
-			oDestCell.Sheet = .Sheet
-			oDestCell.Column = .StartColumn
-			oDestCell.Row = .StartRow
-		End With
-		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, True)
-		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;OutputPosition&quot;, oDestCell)
-	End If
 	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsUserListEnabled&quot;, False)
 
-	&apos;	Define the sorting keys
-	vSortFields = Array()
-	ReDim vSortFields(0 To UBound(SortKeys))
-	For i = 0 To UBound(SortKeys)
-		vSortFields(i) = New com.sun.star.table.TableSortField
-		If i &gt; UBound(SortOrder) Then sOrder = &quot;&quot; Else sOrder = SortOrder(i)
-		If Len(sOrder) = 0 Then sOrder = &quot;ASC&quot;
-		With vSortFields(i)
-			.Field = SortKeys(i) - 1
-			.IsAscending = ( UCase(sOrder) = &quot;ASC&quot; )
-			.IsCaseSensitive = CaseSensitive
-		End With
-	Next i
+	&apos;	Sort by keys group
+	&apos;	If keys = (1, 2, 3, 4, 5) then groups = (4, 5), (1, 2, 3)
+	lKeys = UBound(SortKeys)
+	lSort = Int(lKeys / cstMaxKeys)
+	Set oSortRange = oRangeAddress
 
-	&apos;	Associate the keys and the descriptor, and sort
-	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;SortFields&quot;, vSortFields)
-	oRange.sort(vSortDescriptor)
+	For j = lSort To 0 Step -1		&apos;	Sort first on last sort keys
+
+		&apos;	The 1st sort must consider the destination area. Next sorts are done on the destination area
+		If Len(DestinationCell) = 0 Or j &lt; lSort Then
+			vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, False)
+			vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;OutputPosition&quot;, Nothing)
+		Else
+			Set oDestAddress = oDestRange.XCellRange.RangeAddress
+			Set oDestCell = New com.sun.star.table.CellAddress
+			With oDestAddress
+				oDestCell.Sheet = .Sheet
+				oDestCell.Column = .StartColumn
+				oDestCell.Row = .StartRow
+			End With
+			vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, True)
+			vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;OutputPosition&quot;, oDestCell)
+		End If
+
+		&apos;	Define the sorting keys
+		vSortFields = DimArray(lKeys Mod cstMaxKeys)
+		For i = 0 To UBound(vSortFields)
+			vSortFields(i) = New com.sun.star.table.TableSortField
+			lKey = j * cstMaxKeys + i
+			If lKey &gt; UBound(SortOrder) Then sOrder = &quot;&quot; Else sOrder = SortOrder(lKey)
+			If Len(sOrder) = 0 Then sOrder = &quot;ASC&quot;
+			With vSortFields(i)
+				.Field = SortKeys(lKey) - 1
+				.IsAscending = ( UCase(sOrder) = &quot;ASC&quot; )
+				.IsCaseSensitive = CaseSensitive
+			End With
+		Next i
+		lKeys = lKeys - UBound(vSortFields) - 1
+
+		&apos;	Associate the keys and the descriptor, and sort
+		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;SortFields&quot;, vSortFields)
+		oSortRange.XCellRange.sort(vSortDescriptor)
+
+		&apos;	Next loop, if any, is done on the destination area
+		If Len(DestinationCell) &gt; 0 And j = lSort And lSort &gt; 0 Then Set oSortRange = _Offset(oDestRange, 0, 0, oRangeAddress.Height, oRangeAddress.Width)
+
+	Next j
 
 	&apos;	Compute the changed area
 	If Len(DestinationCell) = 0 Then
