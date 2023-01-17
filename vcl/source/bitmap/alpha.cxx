@@ -91,8 +91,12 @@ void AlphaMask::BlendWith(const Bitmap& rOther)
     AlphaMask aOther(rOther); // to 8 bits
     Bitmap::ScopedReadAccess pOtherAcc(aOther);
     AlphaScopedWriteAccess pAcc(*this);
+    assert (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8 && "cannot BlendWith this combination");
     if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))
+    {
+        SAL_WARN("vcl", "cannot BlendWith this combination");
         return;
+    }
 
     const tools::Long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
     const tools::Long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
