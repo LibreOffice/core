@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/svapp.hxx>
 #include <osx/salinst.h>
 #include "a11ywrapperlist.h"
 
@@ -28,6 +29,9 @@ using namespace ::com::sun::star::accessibility;
 @implementation AquaA11yWrapperList : AquaA11yWrapper
 
 -(NSArray *)accessibilityAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
     // Special Attributes and removing unwanted attributes depending on role

@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/svapp.hxx>
 #include <osx/salinst.h>
 
 #include "a11ywrappercombobox.h"
@@ -110,6 +111,9 @@ using namespace ::com::sun::star::uno;
 #pragma mark Accessibility Protocol
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     if ( [ self textArea ] != nil && (
          [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextRangeAttribute ]
@@ -120,6 +124,9 @@ using namespace ::com::sun::star::uno;
 }
 
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     if ( [ self textArea ] != nil && (
          [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextRangeAttribute ]
@@ -130,6 +137,9 @@ using namespace ::com::sun::star::uno;
 }
 
 -(NSArray *)accessibilityAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
     // Special Attributes and removing unwanted attributes depending on role
