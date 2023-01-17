@@ -2738,7 +2738,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if(!pDoc)

@@ -199,7 +199,7 @@ class SW_DLLPUBLIC SwXTextTableCursor final
 public:
     SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const* pBox);
     SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTableCursor* pTableSelection);
-    DECLARE_XINTERFACE()
+    virtual void SAL_CALL release() noexcept override;
 
     //XTextTableCursor
     virtual OUString SAL_CALL getRangeName() override;

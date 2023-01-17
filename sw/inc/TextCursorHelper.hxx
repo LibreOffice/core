@@ -17,21 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 class SwDoc;
 class SwPaM;
 
-class OTextCursorHelper : public ::cppu::ImplHelper1< css::lang::XUnoTunnel>
+class SAL_LOPLUGIN_ANNOTATE("crosscast") OTextCursorHelper
 {
 public:
-
-    OTextCursorHelper(){}
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     virtual const SwPaM*        GetPaM() const  = 0;
     virtual SwPaM*              GetPaM()        = 0;
@@ -39,7 +32,7 @@ public:
     virtual SwDoc*              GetDoc()        = 0;
 
 protected:
-    ~OTextCursorHelper() {}
+    ~OTextCursorHelper();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

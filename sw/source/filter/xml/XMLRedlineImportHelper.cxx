@@ -60,10 +60,8 @@ using ::com::sun::star::beans::XPropertySetInfo;
 // a few helper functions
 static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> const & rCursor )
 {
-    Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
-    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
     OTextCursorHelper *const pXCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+        dynamic_cast<OTextCursorHelper*>(rCursor.get());
     OSL_ENSURE( pXCursor, "OTextCursorHelper missing" );
     return pXCursor ? pXCursor->GetDoc() : nullptr;
 }

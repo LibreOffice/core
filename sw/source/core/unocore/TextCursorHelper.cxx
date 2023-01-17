@@ -20,19 +20,6 @@
 #include <TextCursorHelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
-using namespace ::com::sun::star;
-
-const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theOTextCursorHelperUnoTunnelId;
-    return theOTextCursorHelperUnoTunnelId.getSeq();
-}
-
-//XUnoTunnel
-sal_Int64 SAL_CALL OTextCursorHelper::getSomething(
-    const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
+OTextCursorHelper::~OTextCursorHelper() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

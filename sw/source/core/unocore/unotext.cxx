@@ -301,8 +301,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
             uno::UNO_QUERY);
     SwXTextRange *const pRange =
         comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     if ((!pRange  || &pRange ->GetDoc() != GetDoc()) &&
         (!pCursor || pCursor->GetDoc() != GetDoc()))
     {
@@ -442,8 +441,7 @@ SwXText::insertControlCharacter(
             SwXTextRange *const pRange =
                 comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
             OTextCursorHelper *const pCursor =
-                comphelper::getFromUnoTunnel<OTextCursorHelper>(
-                            xRangeTunnel);
+                dynamic_cast<OTextCursorHelper*>(xTextRange.get());
             if (pRange)
             {
                 pRange->SetPositions(aPam);
@@ -475,7 +473,7 @@ SwXText::insertControlCharacter(
     SwXTextRange *const pRange =
         comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
     SwCursor aCursor(*aPam.GetPoint(), nullptr);
     SwUnoCursorHelper::SelectPam(aCursor, true);
@@ -614,7 +612,7 @@ SwXText::insertTextContent(
             pRange->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
-        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel)))
+        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(dynamic_cast<OTextCursorHelper*>(xRange.get())))
         {
             pCursor->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
@@ -996,7 +994,7 @@ bool SwXText::Impl::CheckForOwnMember(
     const uno::Reference<text::XTextCursor> xOwnCursor(m_rThis.CreateCursor());
 
     OTextCursorHelper *const pOwnCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xOwnCursor);
+            dynamic_cast<OTextCursorHelper*>(xOwnCursor.get());
     OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetPointNode().StartOfSectionNode();
@@ -1373,11 +1371,7 @@ SwXText::insertTextPortion(
     }
     uno::Reference< text::XTextRange > xRet;
     const uno::Reference<text::XTextCursor> xTextCursor = createTextCursorByRange(xInsertPosition);
-
-    const uno::Reference< lang::XUnoTunnel > xRangeTunnel(
-            xTextCursor, uno::UNO_QUERY_THROW );
-    SwXTextCursor *const pTextCursor =
-        comphelper::getFromUnoTunnel<SwXTextCursor>(xRangeTunnel);
+    SwXTextCursor *const pTextCursor = dynamic_cast<SwXTextCursor*>(xTextCursor.get());
 
     bool bIllegalException = false;
     bool bRuntimeException = false;
@@ -1827,7 +1821,7 @@ SwXText::convertToTextFrame(
         const uno::Reference<text::XTextCursor> xFrameTextCursor =
             rNewFrame.createTextCursor();
         SwXTextCursor *const pFrameCursor =
-            comphelper::getFromUnoTunnel<SwXTextCursor>(xFrameTextCursor);
+            dynamic_cast<SwXTextCursor*>(xFrameTextCursor.get());
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame
@@ -2372,11 +2366,7 @@ SwXText::copyText(
         xText->createTextCursor();
     xCursor->gotoEnd( true );
 
-    uno::Reference< lang::XUnoTunnel > const xCursorTunnel(xCursor,
-        uno::UNO_QUERY_THROW);
-
-    OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+    OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xCursor.get());
     if (!pCursor)
     {
         throw uno::RuntimeException();

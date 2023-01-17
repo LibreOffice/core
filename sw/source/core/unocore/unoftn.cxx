@@ -296,7 +296,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     SwXTextRange *const pRange =
         comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwDoc *const pNewDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)

@@ -991,7 +991,7 @@ void SwXTextViewCursor::gotoRange(
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
 
     const FrameTypeFlags nFrameType = rSh.GetFrameType(nullptr,true);
 
@@ -1599,21 +1599,6 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
              "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextViewCursorUnoTunnelId;
-    return theSwXTextViewCursorUnoTunnelId.getSeq();
-}
-
-//XUnoTunnel
-sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
-    const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this,
-                                        comphelper::FallbackToGetSomethingOf<OTextCursorHelper>{});
-}
-
-IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCursorHelper)
 const SwDoc*        SwXTextViewCursor::GetDoc() const
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();

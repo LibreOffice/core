@@ -172,10 +172,7 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
 
 bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
-    uno::Reference<XUnoTunnel> xCursorTunnel(
-            const_cast<SwXMLTextImportHelper *>(this)->GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(const_cast<SwXMLTextImportHelper *>(this)->GetCursor().get());
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = pTextCursor ? pTextCursor->GetDoc() : nullptr;
 
@@ -216,9 +213,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     if( aObjName.isEmpty() )
         return xPropSet;
 
-    uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = static_cast<SwXMLImport&>(rImport).getDoc();
 
@@ -518,10 +513,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     uno::Reference < XPropertySet > xPropSet;
 
-    uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
-    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
+    assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = static_cast<SwXMLImport&>(rImport).getDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
@@ -609,10 +602,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
-    uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
-    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
+    assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
@@ -653,10 +644,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     uno::Reference < XPropertySet > xPropSet;
-    uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
-    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
+    assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
@@ -732,10 +721,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
-    uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
-    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
+    assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );

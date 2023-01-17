@@ -1108,7 +1108,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
     SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel);
     SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
@@ -1126,8 +1126,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         // if it is started with a table then set into the table
         xTextCursor.set(pHeadText->CreateTextCursor(true));
         xTextCursor->gotoEnd(true);
-        pCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
+        pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
         pCursor->GetPaM()->Normalize();
     }
     else
@@ -1135,8 +1134,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     {
         xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(true);
-        pCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
+        pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
     }
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {

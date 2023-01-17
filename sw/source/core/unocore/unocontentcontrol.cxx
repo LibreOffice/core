@@ -438,15 +438,9 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     }
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
-    if (!xRangeTunnel.is())
-    {
-        throw lang::IllegalArgumentException(
-            "SwXContentControl::AttachImpl(): argument is no XUnoTunnel",
-            static_cast<::cppu::OWeakObject*>(this), 0);
-    }
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper* pCursor
-        = pRange ? nullptr : comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        = pRange ? nullptr : dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(

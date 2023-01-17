@@ -144,10 +144,6 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     uno::Reference<lang::XUnoTunnel> const xTunnel(xIfc, UNO_QUERY);
-    if (!xTunnel.is()) // everything below needs tunnel
-    {
-        return;
-    }
 
     SwXShape *const pShape(comphelper::getFromUnoTunnel<SwXShape>(xTunnel));
     if (pShape)
@@ -171,7 +167,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     OTextCursorHelper *const pCursor(
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel));
+        dynamic_cast<OTextCursorHelper*>(xIfc.get()));
     if (pCursor)
     {
         if (pCursor->GetDoc() == &rTargetDoc)

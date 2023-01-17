@@ -272,7 +272,7 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwDoc *const pDocument =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDocument)
@@ -937,16 +937,9 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     }
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel(i_xTextRange, uno::UNO_QUERY);
-    if (!xRangeTunnel.is())
-    {
-        throw lang::IllegalArgumentException(
-            "SwXMeta::attach(): argument is no XUnoTunnel",
-            static_cast< ::cppu::OWeakObject* >(this), 0);
-    }
     SwXTextRange *const pRange(
             comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
-    OTextCursorHelper *const pCursor( pRange ? nullptr :
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel));
+    OTextCursorHelper *const pCursor(dynamic_cast<OTextCursorHelper*>(i_xTextRange.get()));
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(

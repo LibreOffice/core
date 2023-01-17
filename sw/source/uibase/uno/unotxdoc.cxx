@@ -779,8 +779,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
     bool bParentInExtra = false;
     if(xLastResult.is())
     {
-        Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        OTextCursorHelper* pPosCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+        OTextCursorHelper* pPosCursor = dynamic_cast<OTextCursorHelper*>(xLastResult.get());
         SwPaM* pCursor = pPosCursor ? pPosCursor->GetPaM() : nullptr;
         if(pCursor)
         {
@@ -789,6 +788,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         }
         else
         {
+            Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
             SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xCursorTunnel);
             if(!pRange)
                 return nullptr;

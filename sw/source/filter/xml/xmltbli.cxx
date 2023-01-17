@@ -595,9 +595,7 @@ void SwXMLTableCellContext_Impl::endFastElement(sal_Int32 )
                 xSrcTextCursor->gotoEnd( true );
 
                 // Until we have an API for copying we have to use the core.
-                Reference<XUnoTunnel> xSrcCursorTunnel( xSrcTextCursor, UNO_QUERY);
-                assert(xSrcCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-                OTextCursorHelper *pSrcTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xSrcTextCursor);
+                OTextCursorHelper *pSrcTextCursor = dynamic_cast<OTextCursorHelper*>(xSrcTextCursor.get());
                 assert(pSrcTextCursor && "SwXTextCursor missing");
                 SwDoc *pDoc = pSrcTextCursor->GetDoc();
                 const SwPaM *pSrcPaM = pSrcTextCursor->GetPaM();
@@ -606,10 +604,7 @@ void SwXMLTableCellContext_Impl::endFastElement(sal_Int32 )
                 {
                     InsertContent_();
 
-                    Reference<XUnoTunnel> xDstCursorTunnel(
-                        GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
-                    assert(xDstCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-                    OTextCursorHelper *pDstTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(GetImport().GetTextImport()->GetCursor());
+                    OTextCursorHelper *pDstTextCursor = dynamic_cast<OTextCursorHelper*>(GetImport().GetTextImport()->GetCursor().get());
                     assert(pDstTextCursor && "SwXTextCursor missing");
                     SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
                     SwPosition aDstPos( *pDstTextCursor->GetPaM()->GetPoint() );
@@ -2672,10 +2667,10 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                     ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
 
     const SwStartNode *pStNd;
-    Reference<XUnoTunnel> xCursorTunnel( GetImport().GetTextImport()->GetCursor(),
+    Reference<XInterface> xCursorTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+    OTextCursorHelper *pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
 
     if( m_bFirstSection )

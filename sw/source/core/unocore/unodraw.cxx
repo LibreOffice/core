@@ -2003,21 +2003,17 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     // (see also SwXTextRange::XTextRangeToSwPaM)
     const SwDoc* pDoc = nullptr;
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    if(xRangeTunnel.is())
-    {
-        if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
-            pDoc = &pRange->GetDoc();
-        else if (auto pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel))
-            pDoc = pText->GetDoc();
-        else if (auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel))
-            pDoc = pCursor->GetDoc();
-        else if (auto pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel))
-            pDoc = &pPortion->GetCursor().GetDoc();
-        else if (auto pParagraph = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
-                 pParagraph && pParagraph->GetTextNode())
-            pDoc = &pParagraph->GetTextNode()->GetDoc();
-
-    }
+    if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
+        pDoc = &pRange->GetDoc();
+    else if (auto pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel))
+        pDoc = pText->GetDoc();
+    else if (auto pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get()))
+        pDoc = pCursor->GetDoc();
+    else if (auto pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel))
+        pDoc = &pPortion->GetCursor().GetDoc();
+    else if (auto pParagraph = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+             pParagraph && pParagraph->GetTextNode())
+        pDoc = &pParagraph->GetTextNode()->GetDoc();
 
     if(!pDoc)
         throw uno::RuntimeException();

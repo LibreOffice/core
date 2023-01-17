@@ -110,14 +110,6 @@ public:
     virtual const SwDoc*        GetDoc() const override;
     virtual SwDoc*              GetDoc() override;
 
-    DECLARE_XINTERFACE()
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(

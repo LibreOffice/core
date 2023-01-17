@@ -1004,19 +1004,6 @@ SwXTextCursor::getSupportedServiceNames()
     };
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextCursorUnoTunnelId;
-    return theSwXTextCursorUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXTextCursor::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    const sal_Int64 nRet( comphelper::getSomethingImpl<SwXTextCursor>(rId, this) );
-    return nRet ? nRet : OTextCursorHelper::getSomething(rId);
-}
-
 void SAL_CALL SwXTextCursor::collapseToStart()
 {
     SolarMutexGuard aGuard;
@@ -1207,7 +1194,7 @@ SwXTextCursor::gotoRange(
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
 
     if (!pRange && !pCursor)
     {
@@ -3129,16 +3116,6 @@ SwXTextCursor::getAvailableServiceNames()
 {
     uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
     return aRet;
-}
-
-IMPLEMENT_FORWARD_REFCOUNT( SwXTextCursor,SwXTextCursor_Base )
-
-uno::Any SAL_CALL
-SwXTextCursor::queryInterface(const uno::Type& rType)
-{
-    return (rType == cppu::UnoType<lang::XUnoTunnel>::get())
-        ? OTextCursorHelper::queryInterface(rType)
-        : SwXTextCursor_Base::queryInterface(rType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

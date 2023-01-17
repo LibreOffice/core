@@ -363,7 +363,7 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
 
 static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
-    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(rTextCursor);
+    OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(rTextCursor.get());
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     return pTextCursor;
 }
@@ -629,10 +629,10 @@ void SwXMLImport::endDocument()
     SwDoc *pDoc = nullptr;
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
-        Reference<XUnoTunnel> xCursorTunnel( GetTextImport()->GetCursor(),
+        Reference<XInterface> xCursorTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-        OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
+        OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
         assert(pTextCursor && "SwXTextCursor missing");
         SwPaM *pPaM = pTextCursor->GetPaM();
         if( IsInsertMode() && m_oSttNdIdx->GetIndex() )

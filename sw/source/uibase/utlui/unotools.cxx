@@ -151,7 +151,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
     Color aBgColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
     m_xVirDev->DrawWallpaper(tools::Rectangle(Point(), aSize), aBgColor);
 
-    auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(m_xCursor);
+    auto pCursor = dynamic_cast<OTextCursorHelper*>(m_xCursor.get());
     if (pCursor)
     {
         uno::Reference<view::XViewSettingsSupplier> xSettings(m_xController, uno::UNO_QUERY);
@@ -298,7 +298,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         //From here, a cursor is defined, which goes through the template,
         //and overwrites the template words where it is necessary.
 
-        auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(m_xCursor);
+        auto pCursor = dynamic_cast<OTextCursorHelper*>(m_xCursor.get());
 
         SwDoc *pDoc = pCursor ? pCursor->GetDoc() : nullptr;
         if (pDoc && (m_nStyleFlags & EX_LOCALIZE_TOC_STRINGS))
@@ -434,11 +434,9 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 
 void SwOneExampleFrame::ClearDocument()
 {
-    uno::Reference< lang::XUnoTunnel> xTunnel( m_xCursor, uno::UNO_QUERY);
-    if( !xTunnel.is() )
+    if( !m_xCursor )
         return;
-
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(m_xCursor.get());
     if( pCursor )
     {
         SwDoc* pDoc = pCursor->GetDoc();

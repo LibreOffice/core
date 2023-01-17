@@ -1352,7 +1352,7 @@ void SAL_CALL SwXTextField::attach(
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-        OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
         SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
         // if a FieldMaster was attached, then the document is already fixed!

@@ -331,7 +331,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pxRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-        OTextCursorHelper* pxCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        OTextCursorHelper* pxCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
         OUString sOnlyText;
         OUString* pOnlyText = nullptr;
@@ -848,11 +848,12 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         // This means that we would reflect any changes which were done to the AutoText by foreign instances
         // in the meantime
 
-    // The reference to the tunnel is needed during the whole call, likely because it could be a
+    // The reference to xTmp is needed during the whole call, likely because it could be a
     // different object, not xTextRange itself, and the reference guards it from preliminary death
+    uno::Reference<text::XTextRange> xKeepAlive( xTextRange );
     uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
-    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xKeepAlive.get());
     SwXText *pText = comphelper::getFromUnoTunnel<SwXText>(xTunnel);
 
     SwDoc* pDoc = nullptr;
@@ -862,8 +863,8 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         pDoc = pCursor->GetDoc();
     else if ( pText && pText->GetDoc() )
     {
-        xTunnel.set(pText->getStart(), uno::UNO_QUERY);
-        pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+        xKeepAlive = pText->getStart();
+        pCursor = dynamic_cast<OTextCursorHelper*>(xKeepAlive.get());
         if (pCursor)
             pDoc = pText->GetDoc();
     }

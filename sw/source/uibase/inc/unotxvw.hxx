@@ -163,8 +163,6 @@ class SwXTextViewCursor final: public SwXTextViewCursor_Base, public OTextCursor
 public:
     SwXTextViewCursor(SwView* pVw);
 
-    DECLARE_XINTERFACE()
-
     //XTextViewCursor
     virtual sal_Bool SAL_CALL isVisible() override;
     virtual void SAL_CALL setVisible(sal_Bool bVisible) override;
@@ -230,11 +228,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     void    Invalidate(){m_pView = nullptr;}
 

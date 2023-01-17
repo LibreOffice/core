@@ -101,8 +101,6 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
 
-    if(!xRangeTunnel.is()) return;
-
     if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
     {
         SwDoc& rDoc = pRange->GetDoc();
@@ -115,7 +113,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
         commitStringMarkup (nType, aIdentifier, startPos->GetContentIndex(), endPos->GetContentIndex() - startPos->GetContentIndex(), xMarkupInfoContainer);
     }
-    else if (auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel))
+    else if (auto pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get()))
     {
         SwPaM & rPam(*pCursor->GetPaM());
 

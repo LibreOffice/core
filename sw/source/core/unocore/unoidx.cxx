@@ -1291,8 +1291,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     const uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange *const pRange =
         comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
@@ -1761,7 +1760,7 @@ SwXDocumentIndexMark::attach(
     SwXTextRange *const pRange =
         comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+        dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)

@@ -1423,24 +1423,10 @@ OUString SwXTextTableCursor::getImplementationName()
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-void SwXTextTableCursor::acquire() noexcept
-{
-    SwXTextTableCursor_Base::acquire();
-}
-
 void SwXTextTableCursor::release() noexcept
 {
     SolarMutexGuard aGuard;
     SwXTextTableCursor_Base::release();
-}
-
-css::uno::Any SAL_CALL
-SwXTextTableCursor::queryInterface( const css::uno::Type& _rType )
-{
-    css::uno::Any aReturn = SwXTextTableCursor_Base::queryInterface( _rType );
-    if ( !aReturn.hasValue() )
-        aReturn = OTextCursorHelper::queryInterface( _rType );
-    return aReturn;
 }
 
 const SwPaM*        SwXTextTableCursor::GetPaM() const  { return &GetCursor(); }
@@ -2099,7 +2085,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 
     uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange(comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
-    OTextCursorHelper* pCursor(comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel));
+    OTextCursorHelper* pCursor(dynamic_cast<OTextCursorHelper*>(xTextRange.get()));
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if (!pDoc || !m_pImpl->m_nRows || !m_pImpl->m_nColumns)
         throw lang::IllegalArgumentException();
