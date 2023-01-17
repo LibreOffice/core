@@ -119,12 +119,12 @@ void ScModelTestBase::testFile(const OUString& aFileName, ScDocument& rDoc, SCTA
 
     std::string aContent;
     loadFile(aFileName, aContent);
-    orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
+    orcus::csv_parser<csv_handler> parser(aContent, aHandler, aConfig);
     try
     {
         parser.parse();
     }
-    catch (const orcus::csv::parse_error& e)
+    catch (const orcus::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
         OStringBuffer aErrorMsg("csv parser error: ");
@@ -142,12 +142,12 @@ void ScModelTestBase::testCondFile(const OUString& aFileName, ScDocument* pDoc, 
     aConfig.text_qualifier = '"';
     std::string aContent;
     loadFile(aFileName, aContent);
-    orcus::csv_parser<conditional_format_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
+    orcus::csv_parser<conditional_format_handler> parser(aContent, aHandler, aConfig);
     try
     {
         parser.parse();
     }
-    catch (const orcus::csv::parse_error& e)
+    catch (const orcus::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
         OStringBuffer aErrorMsg("csv parser error: ");

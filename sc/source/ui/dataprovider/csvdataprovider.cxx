@@ -41,19 +41,19 @@ public:
         mnCol = 0;
     }
 
-    void cell(const char* p, size_t n, bool /*transient*/)
+    void cell(std::string_view s, bool /*transient*/)
     {
         if (mnCol > mpDoc->MaxCol())
             return;
 
         double mfValue = 0.0;
-        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', mfValue))
+        if (ScStringUtil::parseSimpleNumber(s.data(), s.size(), '.', ',', mfValue))
         {
             mpDoc->SetValue(mnCol, mnRow, 0, mfValue);
         }
         else
         {
-            OString aStr(p, n);
+            OString aStr(s.data(), s.size());
             mpDoc->SetString(mnCol, mnRow, 0, OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
         }
 
@@ -107,7 +107,7 @@ void CSVFetchThread::execute()
         return;
 
     CSVHandler aHdl(&mrDocument);
-    orcus::csv_parser<CSVHandler> parser(aBuffer.getStr(), aBuffer.getLength(), aHdl, maConfig);
+    orcus::csv_parser<CSVHandler> parser(aBuffer, aHdl, maConfig);
     parser.parse();
 
     for (const auto& itr : maDataTransformations)

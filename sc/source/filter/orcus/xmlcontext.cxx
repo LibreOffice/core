@@ -187,7 +187,7 @@ void ScOrcusXMLContextImpl::loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusX
         orcus::xml_structure_tree::element aElem = aWalker.root();
         populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, nullptr, rParam);
     }
-    catch (const orcus::sax::malformed_xml_error& e)
+    catch (const orcus::malformed_xml_error& e)
     {
         SAL_WARN("sc.orcus", "Malformed XML error: " << e.what());
     }
@@ -200,29 +200,6 @@ void ScOrcusXMLContextImpl::loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusX
         rTreeCtrl.expand_row(rEntry);
         return false;
     });
-}
-
-namespace {
-
-class SetNamespaceAlias
-{
-    orcus::orcus_xml& mrFilter;
-    orcus::xmlns_repository& mrNsRepo;
-public:
-    SetNamespaceAlias(orcus::orcus_xml& filter, orcus::xmlns_repository& repo) :
-        mrFilter(filter), mrNsRepo(repo) {}
-
-    void operator() (size_t index)
-    {
-        orcus::xmlns_id_t nsid = mrNsRepo.get_identifier(index);
-        if (nsid == orcus::XMLNS_UNKNOWN_ID)
-            return;
-
-        std::string alias = mrNsRepo.get_short_name(index);
-        mrFilter.set_namespace_alias(alias.c_str(), nsid);
-    }
-};
-
 }
 
 void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
@@ -241,7 +218,17 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
         orcus::orcus_xml filter(maNsRepo, &aFactory, nullptr);
 
         // Define all used namespaces.
-        std::for_each(rParam.maNamespaces.begin(), rParam.maNamespaces.end(), SetNamespaceAlias(filter, maNsRepo));
+        for (std::size_t index : rParam.maNamespaces)
+        {
+            orcus::xmlns_id_t nsid = maNsRepo.get_identifier(index);
+            if (nsid == orcus::XMLNS_UNKNOWN_ID)
+                continue;
+
+            std::ostringstream os;
+            os << "ns" << index;
+            std::string alias = os.str();
+            filter.set_namespace_alias(alias.c_str(), nsid);
+        }
 
         // Set cell links.
         for (const ScOrcusImportXMLParam::CellLink& rLink : rParam.maCellLinks)

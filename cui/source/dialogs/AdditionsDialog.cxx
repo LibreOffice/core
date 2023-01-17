@@ -134,7 +134,7 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
     {
         aJsonDoc.load(rResponse, aConfig);
     }
-    catch (const orcus::json::parse_error&)
+    catch (const orcus::parse_error&)
     {
         TOOLS_WARN_EXCEPTION("cui.dialogs", "Invalid JSON file from the extensions API");
         return;

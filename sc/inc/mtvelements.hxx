@@ -27,8 +27,7 @@
 
 #include <mdds/multi_type_vector/macro.hpp>
 #include <mdds/multi_type_vector/soa/main.hpp>
-#include <mdds/multi_type_vector/custom_func1.hpp>
-#include <mdds/multi_type_vector/custom_func3.hpp>
+#include <mdds/multi_type_vector/block_funcs.hpp>
 
 #include <unordered_map>
 #include <memory>
@@ -110,31 +109,47 @@ public:
     const ScColumn* getColumn() const;
 };
 
-struct CellStoreTrait
+struct SparklineTraits : public mdds::mtv::default_traits
+{
+    using block_funcs = mdds::mtv::element_block_funcs<sc::sparkline_block>;
+};
+
+struct CellNodeTraits : public mdds::mtv::default_traits
+{
+    using block_funcs = mdds::mtv::element_block_funcs<sc::cellnote_block>;
+};
+
+struct BroadcasterTraits : public mdds::mtv::default_traits
+{
+    using block_funcs = mdds::mtv::element_block_funcs<sc::broadcaster_block>;
+};
+
+struct CellTextAttrTraits : public mdds::mtv::default_traits
+{
+    using block_funcs = mdds::mtv::element_block_funcs<sc::celltextattr_block>;
+};
+
+struct CellStoreTraits : public mdds::mtv::default_traits
 {
     using event_func = CellStoreEvent;
-    static constexpr mdds::mtv::lu_factor_t loop_unrolling = mdds::mtv::lu_factor_t::lu16;
+    using block_funcs = mdds::mtv::element_block_funcs<
+        numeric_block, sc::string_block, sc::edittext_block, sc::formula_block>;
 };
 
 /// Sparkline container
-typedef mdds::mtv::custom_block_func1<sc::sparkline_block> CSparklineFunction;
-typedef mdds::mtv::soa::multi_type_vector<CSparklineFunction> SparklineStoreType;
+typedef mdds::mtv::soa::multi_type_vector<SparklineTraits> SparklineStoreType;
 
 /// Cell note container
-typedef mdds::mtv::custom_block_func1<sc::cellnote_block> CNoteFunc;
-typedef mdds::mtv::soa::multi_type_vector<CNoteFunc> CellNoteStoreType;
+typedef mdds::mtv::soa::multi_type_vector<CellNodeTraits> CellNoteStoreType;
 
 /// Broadcaster storage container
-typedef mdds::mtv::custom_block_func1<sc::broadcaster_block> BCBlkFunc;
-typedef mdds::mtv::soa::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
+typedef mdds::mtv::soa::multi_type_vector<BroadcasterTraits> BroadcasterStoreType;
 
 /// Cell text attribute container.
-typedef mdds::mtv::custom_block_func1<sc::celltextattr_block> CTAttrFunc;
-typedef mdds::mtv::soa::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
+typedef mdds::mtv::soa::multi_type_vector<CellTextAttrTraits> CellTextAttrStoreType;
 
 /// Cell container
-typedef mdds::mtv::custom_block_func3<sc::string_block, sc::edittext_block, sc::formula_block> CellFunc;
-typedef mdds::mtv::soa::multi_type_vector<CellFunc, CellStoreTrait> CellStoreType;
+typedef mdds::mtv::soa::multi_type_vector<CellStoreTraits> CellStoreType;
 
 /**
  * Store position data for column array storage.

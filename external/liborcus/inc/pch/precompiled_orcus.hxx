@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:21:19 using:
+ Generated on 2023-01-24 17:20:59 using:
  ./bin/update_pch external/liborcus orcus --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./external/liborcus/inc/pch/precompiled_orcus.hxx "make external/liborcus.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
@@ -36,9 +37,12 @@
 #include <locale>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -46,7 +50,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/optional.hpp>
 #include <boost/pool/object_pool.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -62,7 +65,6 @@
 #include <orcus/dom_tree.hpp>
 #include <orcus/exception.hpp>
 #include <orcus/format_detection.hpp>
-#include <orcus/global.hpp>
 #include <orcus/info.hpp>
 #include <orcus/interface.hpp>
 #include <orcus/json_document_tree.hpp>
@@ -88,6 +90,7 @@
 #include <orcus/spreadsheet/export_interface.hpp>
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/spreadsheet/import_interface_pivot.hpp>
+#include <orcus/spreadsheet/import_interface_styles.hpp>
 #include <orcus/spreadsheet/import_interface_view.hpp>
 #include <orcus/spreadsheet/styles.hpp>
 #include <orcus/spreadsheet/types.hpp>

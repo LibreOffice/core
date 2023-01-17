@@ -20,6 +20,8 @@
 #include <cellform.hxx>
 #include <cellvalue.hxx>
 
+#include <orcus/csv_parser.hpp>
+
 #define DEBUG_CSV_HANDLER 0
 
 inline OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
@@ -62,7 +64,7 @@ inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aEx
 
 }
 
-class csv_handler
+class csv_handler : public orcus::csv_handler
 {
 public:
     csv_handler(ScDocument* pDoc, SCTAB nTab, StringType eType):
@@ -72,20 +74,17 @@ public:
             mnTab(nTab),
             meStringType(eType)  {}
 
-    static void begin_parse() {}
-
-    static void end_parse() {}
-
-    static void begin_row() {}
-
     void end_row()
     {
         ++mnRow;
         mnCol = 0;
     }
 
-    void cell(const char* p, size_t n, bool /*transient*/)
+    void cell(std::string_view value, bool /*transient*/)
     {
+        const char* p = value.data();
+        std::size_t n = value.size();
+
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
@@ -158,7 +157,7 @@ private:
     StringType meStringType;
 };
 
-class conditional_format_handler
+class conditional_format_handler : public orcus::csv_handler
 {
 public:
     conditional_format_handler(ScDocument* pDoc, SCTAB nTab):
@@ -167,25 +166,19 @@ public:
         mnRow(0),
         mnTab(nTab) {}
 
-    static void begin_parse() {}
-
-    static void end_parse() {}
-
-    static void begin_row() {}
-
     void end_row()
     {
         ++mnRow;
         mnCol = 0;
     }
 
-    void cell(const char* p, size_t n, bool /*transient*/)
+    void cell(std::string_view value, bool /*transient*/)
     {
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
         OUString aString = getConditionalFormatString(mpDoc, mnCol, mnRow, mnTab);
-        OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+        OUString aCSVString(value.data(), value.size(), RTL_TEXTENCODING_UTF8);
 #if DEBUG_CSV_HANDLER
         std::cout << "String: " << OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         std::cout << "CSVString: " << OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;

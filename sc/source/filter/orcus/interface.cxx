@@ -726,16 +726,18 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
 
 }
 
-void ScOrcusSheetProperties::set_column_width(os::col_t col, double width, orcus::length_unit_t unit)
+void ScOrcusSheetProperties::set_column_width(os::col_t col, os::col_t col_span, double width, orcus::length_unit_t unit)
 {
     double nNewWidth = translateToInternal(width, unit);
-    mrDoc.getDoc().SetColWidthOnly(col, mnTab, nNewWidth);
+
+    for (os::col_t offset = 0; offset < col_span; ++offset)
+        mrDoc.getDoc().SetColWidthOnly(col + offset, mnTab, nNewWidth);
 }
 
-void ScOrcusSheetProperties::set_column_hidden(os::col_t col, bool hidden)
+void ScOrcusSheetProperties::set_column_hidden(os::col_t col, os::col_t col_span, bool hidden)
 {
     if (hidden)
-        mrDoc.getDoc().SetColHidden(col, col, mnTab, hidden);
+        mrDoc.getDoc().SetColHidden(col, col + col_span - 1, mnTab, hidden);
 }
 
 void ScOrcusSheetProperties::set_row_height(os::row_t row, double height, orcus::length_unit_t unit)
@@ -1223,6 +1225,25 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
     mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
 }
 
+void ScOrcusSheet::set_column_format(
+    os::col_t col, os::col_t col_span, std::size_t xf_index)
+{
+    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+
+    mrDoc.getDoc().ApplyPatternAreaTab(
+        col, 0, col + col_span - 1, mrDoc.getDoc().MaxRow(), mnTab, aPattern);
+}
+
+void ScOrcusSheet::set_row_format(os::row_t row, std::size_t xf_index)
+{
+    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+
+    mrDoc.getDoc().ApplyPatternAreaTab(
+        0, row, mrDoc.getDoc().MaxCol(), row, mnTab, aPattern);
+}
+
 orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
 {
     orcus::spreadsheet::range_size_t ret;
@@ -1307,42 +1328,42 @@ size_t ScOrcusSharedStrings::commit_segments()
         OStringToOUString(aStr, mrFactory.getGlobalSettings().getTextEncoding()));
 }
 
-ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles ) :
-    mrFactory(rFactory)
+void ScOrcusFont::applyToItemSet( SfxItemSet& rSet ) const
 {
-    ScDocument& rDoc = rFactory.getDoc().getDoc();
-    if (!bSkipDefaultStyles && !rDoc.GetStyleSheetPool()->HasStandardStyles())
-        rDoc.GetStyleSheetPool()->CreateStandardStyles();
-}
-
-/*
-namespace {
-
-std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Red: " << (int)rColor.GetRed() << ", Green: " << (int)rColor.GetGreen() << ", Blue: " << (int)rColor.GetBlue();
-    return rStrm;
-}
-
-}
-*/
-
-void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
-{
-    if (mbItalic)
-    {
-        FontItalic eItalic = *mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
-        rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
-        rSet.Put(SvxPostureItem(eItalic, ATTR_CJK_FONT_POSTURE));
-        rSet.Put(SvxPostureItem(eItalic, ATTR_CTL_FONT_POSTURE));
-    }
-
     if (mbBold)
     {
         FontWeight eWeight = *mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
+    }
+
+    if (mbBoldAsian)
+    {
+        FontWeight eWeight = *mbBoldAsian ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_CJK_FONT_WEIGHT));
+    }
+
+    if (mbBoldComplex)
+    {
+        FontWeight eWeight = *mbBoldComplex ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_CTL_FONT_WEIGHT));
+    }
+
+    if (mbItalic)
+    {
+        FontItalic eItalic = *mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
+        rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
+    }
+
+    if (mbItalicAsian)
+    {
+        FontItalic eItalic = *mbItalicAsian ? ITALIC_NORMAL : ITALIC_NONE;
+        rSet.Put(SvxPostureItem(eItalic, ATTR_CJK_FONT_POSTURE));
+    }
+
+    if (mbItalicComplex)
+    {
+        FontItalic eItalic = *mbItalicComplex ? ITALIC_NORMAL : ITALIC_NONE;
+        rSet.Put(SvxPostureItem(eItalic, ATTR_CTL_FONT_POSTURE));
     }
 
     if (maColor)
@@ -1351,11 +1372,27 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     if (maName && !maName->isEmpty())
         rSet.Put( SvxFontItem( FAMILY_DONTKNOW, *maName, *maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
 
+    if (maNameAsian && !maNameAsian->isEmpty())
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, *maNameAsian, *maNameAsian, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_CJK_FONT ));
+
+    if (maNameComplex && !maNameComplex->isEmpty())
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, *maNameComplex, *maNameComplex, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_CTL_FONT ));
+
     if (mnSize)
     {
         double fSize = translateToInternal(*mnSize, orcus::length_unit_t::point);
         rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_FONT_HEIGHT));
+    }
+
+    if (mnSizeAsian)
+    {
+        double fSize = translateToInternal(*mnSizeAsian, orcus::length_unit_t::point);
         rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_CJK_FONT_HEIGHT));
+    }
+
+    if (mnSizeComplex)
+    {
+        double fSize = translateToInternal(*mnSizeComplex, orcus::length_unit_t::point);
         rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_CTL_FONT_HEIGHT));
     }
 
@@ -1363,7 +1400,11 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     {
         SvxUnderlineItem aUnderline(*meUnderline, ATTR_FONT_UNDERLINE);
         if (maUnderlineColor)
+            // Separate color specified for the underline
             aUnderline.SetColor(*maUnderlineColor);
+        else if (maColor)
+            // Use font color
+            aUnderline.SetColor(*maColor);
         rSet.Put(aUnderline);
     }
 
@@ -1371,7 +1412,7 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
         rSet.Put(SvxCrossedOutItem(*meStrikeout, ATTR_FONT_CROSSEDOUT));
 }
 
-void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
+void ScOrcusFill::applyToItemSet( SfxItemSet& rSet ) const
 {
     if (!mePattern || !maFgColor)
         return;
@@ -1380,42 +1421,26 @@ void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
         rSet.Put(SvxBrushItem(*maFgColor, ATTR_BACKGROUND));
 }
 
-void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& rSet) const
+void ScOrcusBorder::applyToItemSet( SfxItemSet& rSet ) const
 {
-    if (!mbLocked && !mbHidden && !mbPrintContent && !mbFormulaHidden)
-        return;
-
-    bool bLocked = mbLocked.value_or(true); // defaults to true.
-    bool bHidden = mbHidden.value_or(false);
-    bool bFormulaHidden = mbFormulaHidden.value_or(false);
-    bool bPrintContent = mbPrintContent.value_or(false);
-    rSet.Put(ScProtectionAttr(bLocked, bFormulaHidden, bHidden, bPrintContent));
-}
-
-namespace {
-
-SvxBoxItemLine getDirection(os::border_direction_t dir)
-{
-    switch (dir)
+    auto getDirection = [](os::border_direction_t dir) -> SvxBoxItemLine
     {
-        case os::border_direction_t::right:
-            return SvxBoxItemLine::RIGHT;
-        case os::border_direction_t::left:
-            return SvxBoxItemLine::LEFT;
-        case os::border_direction_t::top:
-            return SvxBoxItemLine::TOP;
-        case os::border_direction_t::bottom:
-            return SvxBoxItemLine::BOTTOM;
-        default:
-        break;
-    }
-    return SvxBoxItemLine::RIGHT;
-}
+        switch (dir)
+        {
+            case os::border_direction_t::right:
+                return SvxBoxItemLine::RIGHT;
+            case os::border_direction_t::left:
+                return SvxBoxItemLine::LEFT;
+            case os::border_direction_t::top:
+                return SvxBoxItemLine::TOP;
+            case os::border_direction_t::bottom:
+                return SvxBoxItemLine::BOTTOM;
+            default:
+                ;
+        }
+        return SvxBoxItemLine::RIGHT;
+    };
 
-}
-
-void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
-{
     if (maBorders.empty())
         return;
 
@@ -1458,7 +1483,19 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
     rSet.Put(aBoxItem);
 }
 
-void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, const ScDocument& rDoc) const
+void ScOrcusProtection::applyToItemSet( SfxItemSet& rSet ) const
+{
+    if (!mbLocked && !mbHidden && !mbPrintContent && !mbFormulaHidden)
+        return;
+
+    bool bLocked = mbLocked.value_or(true); // defaults to true.
+    bool bHidden = mbHidden.value_or(false);
+    bool bFormulaHidden = mbFormulaHidden.value_or(false);
+    bool bPrintContent = mbPrintContent.value_or(false);
+    rSet.Put(ScProtectionAttr(bLocked, bFormulaHidden, bHidden, bPrintContent));
+}
+
+void ScOrcusNumberFormat::applyToItemSet( SfxItemSet& rSet, const ScDocument& rDoc ) const
 {
     if (!maCode)
         return;
@@ -1474,14 +1511,16 @@ void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, const ScDocu
         rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nKey));
 }
 
-ScOrcusStyles::xf::xf():
+ScOrcusXf::ScOrcusXf() :
     mnFontId(0),
     mnFillId(0),
     mnBorderId(0),
     mnProtectionId(0),
     mnNumberFormatId(0),
     mnStyleXf(0),
-    mbAlignment(false),
+    mbApplyAlignment(false),
+    mbWrapText(false),
+    mbShrinkToFit(false),
     meHorAlignment(SvxCellHorJustify::Standard),
     meVerAlignment(SvxCellVerJustify::Standard),
     meHorAlignMethod(SvxCellJustifyMethod::Auto),
@@ -1489,139 +1528,118 @@ ScOrcusStyles::xf::xf():
 {
 }
 
-ScOrcusStyles::cell_style::cell_style():
-    maParentName(OUString(SC_STYLE_PROG_STANDARD)),
+ScOrcusCellStyle::ScOrcusCellStyle() :
+    maParentName(SC_STYLE_PROG_STANDARD),
     mnXFId(0),
     mnBuiltInId(0)
 {
 }
 
-void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
+ScOrcusImportFontStyle::ScOrcusImportFontStyle( ScOrcusFactory& rFactory, std::vector<ScOrcusFont>& rFonts ) :
+    mrFactory(rFactory),
+    mrFonts(rFonts)
 {
-    size_t nFontId = rXf.mnFontId;
-    if (nFontId >= maFonts.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid font id");
-        return;
-    }
-
-    maFonts[nFontId].applyToItemSet(rSet);
-
-    size_t nFillId = rXf.mnFillId;
-    if (nFillId >= maFills.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid fill id");
-        return;
-    }
-
-    const fill& rFill = maFills[nFillId];
-    rFill.applyToItemSet(rSet);
-
-    size_t nBorderId = rXf.mnBorderId;
-    if (nBorderId >= maBorders.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid border id");
-        return;
-    }
-    maBorders[nBorderId].applyToItemSet(rSet);
-
-    size_t nProtectionId = rXf.mnProtectionId;
-    if (nProtectionId >= maProtections.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid protection id");
-        return;
-    }
-
-    maProtections[nProtectionId].applyToItemSet(rSet);
-
-    size_t nNumberFormatId = rXf.mnNumberFormatId;
-    if (nNumberFormatId >= maNumberFormats.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid number format id");
-        return;
-    }
-    const number_format& rFormat = maNumberFormats[nNumberFormatId];
-    rFormat.applyToItemSet(rSet, mrFactory.getDoc().getDoc());
-
-    if(rXf.mbAlignment)
-    {
-        rSet.Put(SvxHorJustifyItem(rXf.meHorAlignment, ATTR_HOR_JUSTIFY));
-        rSet.Put(SvxVerJustifyItem(rXf.meVerAlignment, ATTR_VER_JUSTIFY));
-        rSet.Put(SvxJustifyMethodItem(rXf.meHorAlignMethod, ATTR_HOR_JUSTIFY_METHOD));
-        rSet.Put(SvxJustifyMethodItem(rXf.meVerAlignMethod, ATTR_VER_JUSTIFY_METHOD));
-    }
 }
 
-void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
+void ScOrcusImportFontStyle::reset()
 {
-    SAL_INFO("sc.orcus.style", "applyXfToitemSet: " << xfId);
-    if (maCellXfs.size() <= xfId)
-    {
-        SAL_WARN("sc.orcus.style", "invalid xf id");
-        return;
-    }
-
-    const xf& rXf = maCellXfs[xfId];
-    applyXfToItemSet(rSet, rXf);
+    maCurrentFont = ScOrcusFont();
 }
 
-void ScOrcusStyles::set_font_count(size_t /*n*/)
-{
-    // needed at all?
-}
-
-void ScOrcusStyles::set_font_bold(bool b)
+void ScOrcusImportFontStyle::set_bold(bool b)
 {
     maCurrentFont.mbBold = b;
 }
 
-void ScOrcusStyles::set_font_italic(bool b)
+void ScOrcusImportFontStyle::set_bold_asian(bool b)
+{
+    maCurrentFont.mbBoldAsian = b;
+}
+
+void ScOrcusImportFontStyle::set_bold_complex(bool b)
+{
+    maCurrentFont.mbBoldComplex = b;
+}
+
+void ScOrcusImportFontStyle::set_italic(bool b)
 {
     maCurrentFont.mbItalic = b;
 }
 
-void ScOrcusStyles::set_font_name(std::string_view name)
+void ScOrcusImportFontStyle::set_italic_asian(bool b)
+{
+    maCurrentFont.mbItalicAsian = b;
+}
+
+void ScOrcusImportFontStyle::set_italic_complex(bool b)
+{
+    maCurrentFont.mbItalicComplex = b;
+}
+
+void ScOrcusImportFontStyle::set_name(std::string_view name)
 {
     OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentFont.maName = aName;
 }
 
-void ScOrcusStyles::set_font_size(double point)
+void ScOrcusImportFontStyle::set_name_asian(std::string_view name)
+{
+    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentFont.maNameAsian = aName;
+}
+
+void ScOrcusImportFontStyle::set_name_complex(std::string_view name)
+{
+    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentFont.maNameComplex = aName;
+}
+
+void ScOrcusImportFontStyle::set_size(double point)
 {
     maCurrentFont.mnSize = point;
 }
 
-void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
+void ScOrcusImportFontStyle::set_size_asian(double point)
+{
+    maCurrentFont.mnSizeAsian = point;
+}
+
+void ScOrcusImportFontStyle::set_size_complex(double point)
+{
+    maCurrentFont.mnSizeComplex = point;
+}
+
+void ScOrcusImportFontStyle::set_underline(os::underline_t e)
 {
     switch(e)
     {
-        case orcus::spreadsheet::underline_t::single_line:
-        case orcus::spreadsheet::underline_t::single_accounting:
+        case os::underline_t::single_line:
+        case os::underline_t::single_accounting:
             maCurrentFont.meUnderline = LINESTYLE_SINGLE;
             break;
-        case orcus::spreadsheet::underline_t::double_line:
-        case orcus::spreadsheet::underline_t::double_accounting:
+        case os::underline_t::double_line:
+        case os::underline_t::double_accounting:
             maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
             break;
-        case orcus::spreadsheet::underline_t::none:
+        case os::underline_t::none:
             maCurrentFont.meUnderline = LINESTYLE_NONE;
             break;
-        case orcus::spreadsheet::underline_t::dotted:
+        case os::underline_t::dotted:
             maCurrentFont.meUnderline = LINESTYLE_DOTTED;
             break;
-        case orcus::spreadsheet::underline_t::dash:
+        case os::underline_t::dash:
             maCurrentFont.meUnderline = LINESTYLE_DASH;
             break;
-        case orcus::spreadsheet::underline_t::long_dash:
+        case os::underline_t::long_dash:
             maCurrentFont.meUnderline = LINESTYLE_LONGDASH;
             break;
-        case orcus::spreadsheet::underline_t::dot_dash:
+        case os::underline_t::dot_dash:
             maCurrentFont.meUnderline = LINESTYLE_DASHDOT;
             break;
-        case orcus::spreadsheet::underline_t::dot_dot_dot_dash:
-            maCurrentFont.meUnderline = LINESTYLE_DASHDOTDOT; // dot-dot-dot-dash is absent from underline types in libo
+        case os::underline_t::dot_dot_dash:
+            maCurrentFont.meUnderline = LINESTYLE_DASHDOTDOT;
             break;
-        case orcus::spreadsheet::underline_t::wave:
+        case os::underline_t::wave:
             maCurrentFont.meUnderline = LINESTYLE_WAVE;
             break;
         default:
@@ -1629,9 +1647,9 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
     }
 }
 
-void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width_t e )
+void ScOrcusImportFontStyle::set_underline_width(os::underline_width_t e)
 {
-    if (e == orcus::spreadsheet::underline_width_t::bold || e == orcus::spreadsheet::underline_width_t::thick)
+    if (e == os::underline_width_t::bold || e == os::underline_width_t::thick)
     {
         if (maCurrentFont.meUnderline)
         {
@@ -1668,13 +1686,13 @@ void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width
     }
 }
 
-void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t /*e*/)
+void ScOrcusImportFontStyle::set_underline_mode(os::underline_mode_t /*e*/)
 {
 }
 
-void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t  e )
+void ScOrcusImportFontStyle::set_underline_type(os::underline_type_t  e )
 {
-    if (e == orcus::spreadsheet::underline_type_t::double_type)
+    if (e == os::underline_type_t::double_type)
     {
         if (maCurrentFont.meUnderline)
         {
@@ -1696,27 +1714,23 @@ void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t
     }
 }
 
-void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+void ScOrcusImportFontStyle::set_underline_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
     maCurrentFont.maUnderlineColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+void ScOrcusImportFontStyle::set_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
     maCurrentFont.maColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t /*s*/)
+void ScOrcusImportFontStyle::set_strikethrough_style(os::strikethrough_style_t /*s*/)
 {
 }
 
-void ScOrcusStyles::set_strikethrough_type(orcus::spreadsheet::strikethrough_type_t s)
+void ScOrcusImportFontStyle::set_strikethrough_type(os::strikethrough_type_t s)
 {
     if (maCurrentFont.meStrikeout)
     {
@@ -1734,7 +1748,7 @@ void ScOrcusStyles::set_strikethrough_type(orcus::spreadsheet::strikethrough_typ
         case os::strikethrough_type_t::none:
             maCurrentFont.meStrikeout = STRIKEOUT_NONE;
             break;
-        case os::strikethrough_type_t::single:
+        case os::strikethrough_type_t::single_type:
             maCurrentFont.meStrikeout = STRIKEOUT_SINGLE;
             break;
         case os::strikethrough_type_t::double_type:
@@ -1745,7 +1759,7 @@ void ScOrcusStyles::set_strikethrough_type(orcus::spreadsheet::strikethrough_typ
     }
 }
 
-void ScOrcusStyles::set_strikethrough_width(orcus::spreadsheet::strikethrough_width_t s)
+void ScOrcusImportFontStyle::set_strikethrough_width(os::strikethrough_width_t s)
 {
     switch (s)
     {
@@ -1757,7 +1771,7 @@ void ScOrcusStyles::set_strikethrough_width(orcus::spreadsheet::strikethrough_wi
     }
 }
 
-void ScOrcusStyles::set_strikethrough_text(orcus::spreadsheet::strikethrough_text_t s)
+void ScOrcusImportFontStyle::set_strikethrough_text(os::strikethrough_text_t s)
 {
     switch (s)
     {
@@ -1772,388 +1786,571 @@ void ScOrcusStyles::set_strikethrough_text(orcus::spreadsheet::strikethrough_tex
     }
 }
 
-size_t ScOrcusStyles::commit_font()
+std::size_t ScOrcusImportFontStyle::commit()
 {
     SAL_INFO("sc.orcus.style", "commit font");
-    maFonts.push_back(maCurrentFont);
-    maCurrentFont = ScOrcusStyles::font();
-    return maFonts.size() - 1;
+    mrFonts.push_back(maCurrentFont);
+    maCurrentFont = ScOrcusFont();
+    return mrFonts.size() - 1;
 }
 
-// fill
-
-void ScOrcusStyles::set_fill_count(size_t /*n*/)
+ScOrcusImportFillStyle::ScOrcusImportFillStyle( std::vector<ScOrcusFill>& rFills ) :
+    mrFills(rFills)
 {
-    // needed at all?
 }
 
-void ScOrcusStyles::set_fill_pattern_type(orcus::spreadsheet::fill_pattern_t fp)
+void ScOrcusImportFillStyle::reset()
+{
+    maCurrentFill = ScOrcusFill();
+}
+
+void ScOrcusImportFillStyle::set_pattern_type(os::fill_pattern_t fp)
 {
     maCurrentFill.mePattern = fp;
 }
 
-void ScOrcusStyles::set_fill_fg_color(
-    orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
+void ScOrcusImportFillStyle::set_fg_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
     maCurrentFill.maFgColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_fill_bg_color(
-    orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
+void ScOrcusImportFillStyle::set_bg_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
     maCurrentFill.maBgColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-size_t ScOrcusStyles::commit_fill()
+std::size_t ScOrcusImportFillStyle::commit()
 {
     SAL_INFO("sc.orcus.style", "commit fill");
-    maFills.push_back(maCurrentFill);
-    maCurrentFill = ScOrcusStyles::fill();
-    return maFills.size() - 1;
+    mrFills.push_back(maCurrentFill);
+    maCurrentFill = ScOrcusFill();
+    return mrFills.size() - 1;
 }
 
-// border
-
-void ScOrcusStyles::set_border_count(size_t /*n*/)
+ScOrcusImportBorderStyle::ScOrcusImportBorderStyle( std::vector<ScOrcusBorder>& rBorders ) :
+    mrBorders(rBorders)
 {
-    // needed at all?
 }
 
-void ScOrcusStyles::set_border_style(
-    orcus::spreadsheet::border_direction_t dir, orcus::spreadsheet::border_style_t style)
+void ScOrcusImportBorderStyle::set_style(
+    os::border_direction_t dir, os::border_style_t style)
 {
-    border::border_line& rBorder = maCurrentBorder.maBorders[dir];
+    ScOrcusBorder::BorderLine& rBorderLine = maCurrentBorder.maBorders[dir];
 
     switch (style)
     {
-        case orcus::spreadsheet::border_style_t::solid:
-            rBorder.meStyle = SvxBorderLineStyle::SOLID;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::solid:
+            rBorderLine.meStyle = SvxBorderLineStyle::SOLID;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::hair:
-            rBorder.meStyle = SvxBorderLineStyle::SOLID;
-            rBorder.mnWidth = oox::xls::API_LINE_HAIR;
+        case os::border_style_t::hair:
+            rBorderLine.meStyle = SvxBorderLineStyle::SOLID;
+            rBorderLine.mnWidth = oox::xls::API_LINE_HAIR;
             break;
-        case orcus::spreadsheet::border_style_t::medium:
-            rBorder.meStyle = SvxBorderLineStyle::SOLID;
-            rBorder.mnWidth = oox::xls::API_LINE_MEDIUM;
+        case os::border_style_t::medium:
+            rBorderLine.meStyle = SvxBorderLineStyle::SOLID;
+            rBorderLine.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
-        case orcus::spreadsheet::border_style_t::thick:
-            rBorder.meStyle = SvxBorderLineStyle::SOLID;
-            rBorder.mnWidth = oox::xls::API_LINE_THICK;
+        case os::border_style_t::thick:
+            rBorderLine.meStyle = SvxBorderLineStyle::SOLID;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THICK;
             break;
-        case orcus::spreadsheet::border_style_t::thin:
-            rBorder.meStyle = SvxBorderLineStyle::SOLID;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::thin:
+            rBorderLine.meStyle = SvxBorderLineStyle::SOLID;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::dash_dot:
-            rBorder.meStyle = SvxBorderLineStyle::DASH_DOT;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::dash_dot:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASH_DOT;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::dash_dot_dot:
-            rBorder.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::dash_dot_dot:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::dashed:
-            rBorder.meStyle = SvxBorderLineStyle::DASHED;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::dashed:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASHED;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::dotted:
-            rBorder.meStyle = SvxBorderLineStyle::DOTTED;
-            rBorder.mnWidth = oox::xls::API_LINE_THIN;
+        case os::border_style_t::dotted:
+            rBorderLine.meStyle = SvxBorderLineStyle::DOTTED;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THIN;
             break;
-        case orcus::spreadsheet::border_style_t::double_border:
-            rBorder.meStyle = SvxBorderLineStyle::DOUBLE;
-            rBorder.mnWidth = oox::xls::API_LINE_THICK;
+        case os::border_style_t::double_border:
+            rBorderLine.meStyle = SvxBorderLineStyle::DOUBLE;
+            rBorderLine.mnWidth = oox::xls::API_LINE_THICK;
             break;
-        case orcus::spreadsheet::border_style_t::medium_dash_dot:
-        case orcus::spreadsheet::border_style_t::slant_dash_dot:
-            rBorder.meStyle = SvxBorderLineStyle::DASH_DOT;
-            rBorder.mnWidth = oox::xls::API_LINE_MEDIUM;
+        case os::border_style_t::medium_dash_dot:
+        case os::border_style_t::slant_dash_dot:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASH_DOT;
+            rBorderLine.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
-        case orcus::spreadsheet::border_style_t::medium_dash_dot_dot:
-            rBorder.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
-            rBorder.mnWidth = oox::xls::API_LINE_MEDIUM;
+        case os::border_style_t::medium_dash_dot_dot:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            rBorderLine.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
-        case orcus::spreadsheet::border_style_t::medium_dashed:
-            rBorder.meStyle = SvxBorderLineStyle::DASHED;
-            rBorder.mnWidth = oox::xls::API_LINE_MEDIUM;
+        case os::border_style_t::medium_dashed:
+            rBorderLine.meStyle = SvxBorderLineStyle::DASHED;
+            rBorderLine.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
-        case orcus::spreadsheet::border_style_t::unknown:
-        case orcus::spreadsheet::border_style_t::none:
-            rBorder.mnWidth = oox::xls::API_LINE_NONE;
+        case os::border_style_t::unknown:
+        case os::border_style_t::none:
+            rBorderLine.mnWidth = oox::xls::API_LINE_NONE;
             break;
         default:
             ;
     }
 }
 
-void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
-            orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+void ScOrcusImportBorderStyle::set_color(
+    os::border_direction_t dir, os::color_elem_t alpha, os::color_elem_t red,
+    os::color_elem_t green, os::color_elem_t blue)
 {
-    border::border_line& current_line = maCurrentBorder.maBorders[dir];
-    current_line.maColor = Color(ColorAlpha, alpha, red, green, blue);
+    ScOrcusBorder::BorderLine& rBorderLine = maCurrentBorder.maBorders[dir];
+    rBorderLine.maColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t  dir, double val, orcus::length_unit_t  unit )
+void ScOrcusImportBorderStyle::reset()
 {
-    border::border_line& current_line = maCurrentBorder.maBorders[dir];
-    current_line.mnWidth = translateToInternal(val, unit);
+    maCurrentBorder = ScOrcusBorder();
 }
 
-size_t ScOrcusStyles::commit_border()
+void ScOrcusImportBorderStyle::set_width(os::border_direction_t  dir, double val, orcus::length_unit_t unit)
+{
+    ScOrcusBorder::BorderLine& rBorderLine = maCurrentBorder.maBorders[dir];
+    rBorderLine.mnWidth = translateToInternal(val, unit);
+}
+
+std::size_t ScOrcusImportBorderStyle::commit()
 {
     SAL_INFO("sc.orcus.style", "commit border");
-    maBorders.push_back(maCurrentBorder);
-    maCurrentBorder = ScOrcusStyles::border();
-    return maBorders.size() - 1;
+    mrBorders.push_back(maCurrentBorder);
+    maCurrentBorder = ScOrcusBorder();
+    return mrBorders.size() - 1;
 }
 
-// cell protection
-void ScOrcusStyles::set_cell_hidden(bool b)
+ScOrcusImportCellProtection::ScOrcusImportCellProtection( std::vector<ScOrcusProtection>& rProtections ) :
+    mrProtections(rProtections)
+{
+}
+
+void ScOrcusImportCellProtection::reset()
+{
+    maCurrentProtection = ScOrcusProtection();
+}
+
+void ScOrcusImportCellProtection::set_hidden(bool b)
 {
     maCurrentProtection.mbHidden = b;
 }
 
-void ScOrcusStyles::set_cell_locked(bool b)
+void ScOrcusImportCellProtection::set_locked(bool b)
 {
     maCurrentProtection.mbLocked = b;
 }
 
-void ScOrcusStyles::set_cell_print_content(bool b )
+void ScOrcusImportCellProtection::set_print_content(bool b )
 {
     maCurrentProtection.mbPrintContent = b;
 }
 
-void ScOrcusStyles::set_cell_formula_hidden(bool b )
+void ScOrcusImportCellProtection::set_formula_hidden(bool b )
 {
     maCurrentProtection.mbFormulaHidden = b;
 }
 
-size_t ScOrcusStyles::commit_cell_protection()
+std::size_t ScOrcusImportCellProtection::commit()
 {
     SAL_INFO("sc.orcus.style", "commit cell protection");
-    maProtections.push_back(maCurrentProtection);
-    maCurrentProtection = ScOrcusStyles::protection();
-    return maProtections.size() - 1;
+    mrProtections.push_back(maCurrentProtection);
+    maCurrentProtection = ScOrcusProtection();
+    return mrProtections.size() - 1;
 }
 
-void ScOrcusStyles::set_number_format_count(size_t)
+ScOrcusImportNumberFormat::ScOrcusImportNumberFormat( ScOrcusFactory& rFactory, std::vector<ScOrcusNumberFormat>& rFormats ) :
+    mrFactory(rFactory), mrNumberFormats(rFormats)
 {
 }
 
-void ScOrcusStyles::set_number_format_identifier(size_t)
+void ScOrcusImportNumberFormat::reset()
+{
+    maCurrentFormat = ScOrcusNumberFormat();
+}
+
+void ScOrcusImportNumberFormat::set_identifier(std::size_t /*id*/)
 {
 }
 
-void ScOrcusStyles::set_number_format_code(std::string_view s)
+void ScOrcusImportNumberFormat::set_code(std::string_view s)
 {
     OUString aCode(s.data(), s.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentNumberFormat.maCode = aCode;
+    maCurrentFormat.maCode = aCode;
 }
 
-size_t ScOrcusStyles::commit_number_format()
+std::size_t ScOrcusImportNumberFormat::commit()
 {
     SAL_INFO("sc.orcus.style", "commit number format");
-    maNumberFormats.push_back(maCurrentNumberFormat);
-    maCurrentNumberFormat = ScOrcusStyles::number_format();
-    return maNumberFormats.size() - 1;
+    mrNumberFormats.push_back(maCurrentFormat);
+    maCurrentFormat = ScOrcusNumberFormat();
+    return mrNumberFormats.size() - 1;
 }
 
-// cell style xf
-
-void ScOrcusStyles::set_cell_style_xf_count(size_t /*n*/)
-{
-    // needed at all?
-}
-
-size_t ScOrcusStyles::commit_cell_style_xf()
-{
-    SAL_INFO("sc.orcus.style", "commit cell style xf");
-    maCellStyleXfs.push_back(maCurrentXF);
-    return maCellStyleXfs.size() - 1;
-}
-
-// cell xf
-
-void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
-{
-    // needed at all?
-}
-
-size_t ScOrcusStyles::commit_cell_xf()
-{
-    SAL_INFO("sc.orcus.style", "commit cell xf");
-    maCellXfs.push_back(maCurrentXF);
-    return maCellXfs.size() - 1;
-}
-
-// dxf
-
-void ScOrcusStyles::set_dxf_count(size_t /*n*/)
+ScOrucsImportCellStyle::ScOrucsImportCellStyle(
+    ScOrcusFactory& rFactory, ScOrcusStyles& rStyles, const std::vector<ScOrcusXf>& rXfs ) :
+    mrFactory(rFactory),
+    mrStyles(rStyles),
+    mrXfs(rXfs)
 {
 }
 
-size_t ScOrcusStyles::commit_dxf()
+void ScOrucsImportCellStyle::reset()
 {
-    return 0;
+    maCurrentStyle = ScOrcusCellStyle();
 }
 
-// xf (cell format) - used both by cell xf and cell style xf.
-
-void ScOrcusStyles::set_xf_number_format(size_t index)
+void ScOrucsImportCellStyle::set_name(std::string_view name)
 {
-    maCurrentXF.mnNumberFormatId = index;
+    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentStyle.maName = aName;
 }
 
-void ScOrcusStyles::set_xf_font(size_t index)
+void ScOrucsImportCellStyle::set_display_name(std::string_view name)
 {
-    maCurrentXF.mnFontId = index;
+    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentStyle.maDisplayName = aName;
 }
 
-void ScOrcusStyles::set_xf_fill(size_t index)
+void ScOrucsImportCellStyle::set_xf(size_t index)
 {
-    maCurrentXF.mnFillId = index;
+    maCurrentStyle.mnXFId = index;
 }
 
-void ScOrcusStyles::set_xf_border(size_t index)
+void ScOrucsImportCellStyle::set_builtin(size_t index)
 {
-    maCurrentXF.mnBorderId = index;
+    maCurrentStyle.mnBuiltInId = index;
 }
 
-void ScOrcusStyles::set_xf_protection(size_t index)
+void ScOrucsImportCellStyle::set_parent_name(std::string_view name)
 {
-    maCurrentXF.mnProtectionId = index;
+    const OUString aParentName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentStyle.maParentName = aParentName;
 }
 
-void ScOrcusStyles::set_xf_style_xf(size_t index)
+void ScOrucsImportCellStyle::commit()
 {
-    maCurrentXF.mnStyleXf = index;
+    SAL_INFO("sc.orcus.style", "commit cell style: " << maCurrentStyle.maName);
+    if (maCurrentStyle.mnXFId >= mrXfs.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid xf id for commit cell style");
+        return;
+    }
+
+    if (maCurrentStyle.mnXFId == 0)
+        return;
+
+    ScStyleSheetPool* pPool = mrFactory.getDoc().getDoc().GetStyleSheetPool();
+    SfxStyleSheetBase& rBase = pPool->Make(maCurrentStyle.maName, SfxStyleFamily::Para);
+    // Need to convert the parent name to localized UI name, see tdf#139205.
+    rBase.SetParent(
+        ScStyleNameConversion::ProgrammaticToDisplayName(
+            maCurrentStyle.maParentName, SfxStyleFamily::Para));
+
+    SfxItemSet& rSet = rBase.GetItemSet();
+    const ScOrcusXf& rXf = mrXfs[maCurrentStyle.mnXFId];
+    mrStyles.applyXfToItemSet(rSet, rXf);
+
+    maCurrentStyle = ScOrcusCellStyle();
 }
 
-void ScOrcusStyles::set_xf_apply_alignment(bool /*b*/)
+void ScOrcusImportXf::reset( std::vector<ScOrcusXf>& rXfs )
 {
+    mpXfs = &rXfs;
+    maCurrentXf = ScOrcusXf();
 }
 
-void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align)
+void ScOrcusImportXf::set_font(std::size_t index)
+{
+    maCurrentXf.mnFontId = index;
+}
+
+void ScOrcusImportXf::set_fill(std::size_t index)
+{
+    maCurrentXf.mnFillId = index;
+}
+
+void ScOrcusImportXf::set_border(std::size_t index)
+{
+    maCurrentXf.mnBorderId = index;
+}
+
+void ScOrcusImportXf::set_protection(std::size_t index)
+{
+    maCurrentXf.mnProtectionId = index;
+}
+
+void ScOrcusImportXf::set_number_format(std::size_t index)
+{
+    maCurrentXf.mnNumberFormatId = index;
+}
+
+void ScOrcusImportXf::set_style_xf(std::size_t index)
+{
+    maCurrentXf.mnStyleXf = index;
+}
+
+void ScOrcusImportXf::set_apply_alignment(bool b)
+{
+    maCurrentXf.mbApplyAlignment = b;
+}
+
+void ScOrcusImportXf::set_horizontal_alignment(os::hor_alignment_t align)
 {
     switch (align)
     {
         case os::hor_alignment_t::left:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Left;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Left;
             break;
         case os::hor_alignment_t::right:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Right;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Right;
             break;
         case os::hor_alignment_t::center:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Center;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Center;
             break;
         case os::hor_alignment_t::justified:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Block;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Block;
             break;
         case os::hor_alignment_t::distributed:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Block;
-            maCurrentXF.meHorAlignMethod = SvxCellJustifyMethod::Distribute;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Block;
+            maCurrentXf.meHorAlignMethod = SvxCellJustifyMethod::Distribute;
             break;
         case os::hor_alignment_t::unknown:
-            maCurrentXF.meHorAlignment = SvxCellHorJustify::Standard;
+            maCurrentXf.meHorAlignment = SvxCellHorJustify::Standard;
             break;
         default:
             ;
     }
-    maCurrentXF.mbAlignment = true;
+    maCurrentXf.mbApplyAlignment = true;
 }
 
-void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align)
+void ScOrcusImportXf::set_vertical_alignment(os::ver_alignment_t align)
 {
     switch (align)
     {
         case os::ver_alignment_t::top:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Top;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Top;
             break;
         case os::ver_alignment_t::bottom:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Bottom;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Bottom;
             break;
         case os::ver_alignment_t::middle:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Center;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Center;
             break;
         case os::ver_alignment_t::justified:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Block;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Block;
             break;
         case os::ver_alignment_t::distributed:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Block;
-            maCurrentXF.meVerAlignMethod = SvxCellJustifyMethod::Distribute;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Block;
+            maCurrentXf.meVerAlignMethod = SvxCellJustifyMethod::Distribute;
             break;
         case os::ver_alignment_t::unknown:
-            maCurrentXF.meVerAlignment = SvxCellVerJustify::Standard;
+            maCurrentXf.meVerAlignment = SvxCellVerJustify::Standard;
             break;
         default:
             ;
     }
-    maCurrentXF.mbAlignment = true;
+    maCurrentXf.mbApplyAlignment = true;
 }
 
-// cell style entry
-// not needed for now for gnumeric
+void ScOrcusImportXf::set_wrap_text(bool b)
+{
+    maCurrentXf.mbWrapText = b;
+}
+
+void ScOrcusImportXf::set_shrink_to_fit(bool b)
+{
+    maCurrentXf.mbShrinkToFit = b;
+}
+
+std::size_t ScOrcusImportXf::commit()
+{
+    mpXfs->push_back(maCurrentXf);
+    return mpXfs->size() - 1;
+}
+
+
+ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles ) :
+    mrFactory(rFactory),
+    maFontStyle(rFactory, maFonts),
+    maFillStyle(maFills),
+    maBorderStyle(maBorders),
+    maCellProtection(maProtections),
+    maNumberFormat(rFactory, maNumberFormats),
+    maCellStyle(rFactory, *this, maCellStyleXfs)
+{
+    ScDocument& rDoc = rFactory.getDoc().getDoc();
+    if (!bSkipDefaultStyles && !rDoc.GetStyleSheetPool()->HasStandardStyles())
+        rDoc.GetStyleSheetPool()->CreateStandardStyles();
+}
+
+/*
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Red: " << (int)rColor.GetRed() << ", Green: " << (int)rColor.GetGreen() << ", Blue: " << (int)rColor.GetBlue();
+    return rStrm;
+}
+
+}
+*/
+
+void ScOrcusStyles::applyXfToItemSet( SfxItemSet& rSet, const ScOrcusXf& rXf )
+{
+    size_t nFontId = rXf.mnFontId;
+    if (nFontId >= maFonts.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid font id");
+        return;
+    }
+
+    maFonts[nFontId].applyToItemSet(rSet);
+
+    size_t nFillId = rXf.mnFillId;
+    if (nFillId >= maFills.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid fill id");
+        return;
+    }
+
+    maFills[nFillId].applyToItemSet(rSet);
+
+    size_t nBorderId = rXf.mnBorderId;
+    if (nBorderId >= maBorders.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid border id");
+        return;
+    }
+    maBorders[nBorderId].applyToItemSet(rSet);
+
+    size_t nProtectionId = rXf.mnProtectionId;
+    if (nProtectionId >= maProtections.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid protection id");
+        return;
+    }
+
+    maProtections[nProtectionId].applyToItemSet(rSet);
+
+    size_t nNumberFormatId = rXf.mnNumberFormatId;
+    if (nNumberFormatId >= maNumberFormats.size())
+    {
+        SAL_WARN("sc.orcus.style", "invalid number format id");
+        return;
+    }
+    const ScOrcusNumberFormat& rFormat = maNumberFormats[nNumberFormatId];
+    rFormat.applyToItemSet(rSet, mrFactory.getDoc().getDoc());
+
+    if (rXf.mbApplyAlignment)
+    {
+        rSet.Put(SvxHorJustifyItem(rXf.meHorAlignment, ATTR_HOR_JUSTIFY));
+        rSet.Put(SvxVerJustifyItem(rXf.meVerAlignment, ATTR_VER_JUSTIFY));
+        rSet.Put(SvxJustifyMethodItem(rXf.meHorAlignMethod, ATTR_HOR_JUSTIFY_METHOD));
+        rSet.Put(SvxJustifyMethodItem(rXf.meVerAlignMethod, ATTR_VER_JUSTIFY_METHOD));
+    }
+}
+
+void ScOrcusStyles::applyXfToItemSet( SfxItemSet& rSet, std::size_t xfId )
+{
+    SAL_INFO("sc.orcus.style", "applyXfToitemSet: " << xfId);
+    if (maCellXfs.size() <= xfId)
+    {
+        SAL_WARN("sc.orcus.style", "invalid xf id");
+        return;
+    }
+
+    applyXfToItemSet(rSet, maCellXfs[xfId]);
+}
+
+os::iface::import_font_style* ScOrcusStyles::start_font_style()
+{
+    maFontStyle.reset();
+    return &maFontStyle;
+}
+
+os::iface::import_fill_style* ScOrcusStyles::start_fill_style()
+{
+    maFillStyle.reset();
+    return &maFillStyle;
+}
+
+os::iface::import_border_style* ScOrcusStyles::start_border_style()
+{
+    maBorderStyle.reset();
+    return &maBorderStyle;
+}
+
+os::iface::import_cell_protection* ScOrcusStyles::start_cell_protection()
+{
+    maCellProtection.reset();
+    return &maCellProtection;
+}
+
+os::iface::import_number_format* ScOrcusStyles::start_number_format()
+{
+    maNumberFormat.reset();
+    return &maNumberFormat;
+}
+
+os::iface::import_xf* ScOrcusStyles::start_xf(os::xf_category_t cat)
+{
+    switch (cat)
+    {
+        case os::xf_category_t::cell:
+            maXf.reset(maCellXfs);
+            break;
+        case os::xf_category_t::cell_style:
+            maXf.reset(maCellStyleXfs);
+            break;
+        case os::xf_category_t::differential:
+            maXf.reset(maCellDiffXfs);
+            break;
+        case os::xf_category_t::unknown:
+            SAL_WARN("sc.orcus.style", "unknown xf category");
+            return nullptr;
+    }
+
+    return &maXf;
+}
+
+os::iface::import_cell_style* ScOrcusStyles::start_cell_style()
+{
+    maCellStyle.reset();
+    return &maCellStyle;
+}
+
+void ScOrcusStyles::set_font_count(size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_fill_count(size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_border_count(size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_number_format_count(size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_xf_count(os::xf_category_t /*cat*/, size_t /*n*/)
+{
+}
 
 void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
 {
-    // needed at all?
-}
-
-void ScOrcusStyles::set_cell_style_name(std::string_view name)
-{
-    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentCellStyle.maName = aName;
-}
-
-void ScOrcusStyles::set_cell_style_xf(size_t index)
-{
-    maCurrentCellStyle.mnXFId = index;
-}
-
-void ScOrcusStyles::set_cell_style_builtin(size_t index)
-{
-    // not needed for gnumeric
-    maCurrentCellStyle.mnBuiltInId = index;
-}
-
-void ScOrcusStyles::set_cell_style_parent_name(std::string_view name)
-{
-    const OUString aParentName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentCellStyle.maParentName = aParentName;
-}
-
-size_t ScOrcusStyles::commit_cell_style()
-{
-    SAL_INFO("sc.orcus.style", "commit cell style: " << maCurrentCellStyle.maName);
-    if (maCurrentCellStyle.mnXFId >= maCellStyleXfs.size())
-    {
-        SAL_WARN("sc.orcus.style", "invalid xf id for commit cell style");
-        return 0;
-    }
-    if (maCurrentCellStyle.mnXFId == 0)
-    {
-        return 0;
-    }
-
-    ScStyleSheetPool* pPool = mrFactory.getDoc().getDoc().GetStyleSheetPool();
-    SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
-    // Need to convert the parent name to localized UI name, see tdf#139205.
-    rBase.SetParent(ScStyleNameConversion::ProgrammaticToDisplayName(maCurrentCellStyle.maParentName,
-                                                                     SfxStyleFamily::Para));
-    SfxItemSet& rSet = rBase.GetItemSet();
-
-    xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];
-    applyXfToItemSet(rSet, rXf);
-
-    maCurrentXF = ScOrcusStyles::xf();
-    maCurrentCellStyle = ScOrcusStyles::cell_style();
-
-    return 0;
 }
 
 // auto filter import
@@ -2167,7 +2364,7 @@ ScOrcusAutoFilter::~ScOrcusAutoFilter()
 {
 }
 
-void ScOrcusAutoFilter::set_range(const orcus::spreadsheet::range_t& range)
+void ScOrcusAutoFilter::set_range(const os::range_t& range)
 {
     maRange.aStart.SetRow(range.first.row);
     maRange.aStart.SetCol(range.first.column);
@@ -2175,7 +2372,7 @@ void ScOrcusAutoFilter::set_range(const orcus::spreadsheet::range_t& range)
     maRange.aEnd.SetCol(range.last.column);
 }
 
-void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t col)
+void ScOrcusAutoFilter::set_column(os::col_t col)
 {
     SAL_INFO("sc.orcus.autofilter", "set_column: " << col);
 }

@@ -80,7 +80,8 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
         aContent.WriteBytes(aSeq.getConstArray(), nReadBytes);
     }
 
-    orcus::format_t eFormat = orcus::detect(static_cast<const unsigned char*>(aContent.GetData()), aContent.GetSize());
+    std::string_view aStream(static_cast<const char*>(aContent.GetData()), aContent.GetSize());
+    orcus::format_t eFormat = orcus::detect(aStream);
 
     switch (eFormat)
     {

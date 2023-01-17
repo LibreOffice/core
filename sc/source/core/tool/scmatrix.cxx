@@ -57,25 +57,22 @@ namespace {
  * Custom string trait struct to tell mdds::multi_type_matrix about the
  * custom string type and how to handle blocks storing them.
  */
-struct matrix_trait
+struct matrix_traits
 {
     typedef sc::string_block string_element_block;
     typedef sc::uint16_block integer_element_block;
-
-    typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
-struct matrix_flag_trait
+
+struct matrix_flag_traits
 {
     typedef sc::string_block string_element_block;
     typedef mdds::mtv::uint8_element_block integer_element_block;
-
-    typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
 
 }
 
-typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
-typedef mdds::multi_type_matrix<matrix_flag_trait> MatrixFlagImplType;
+typedef mdds::multi_type_matrix<matrix_traits> MatrixImplType;
+typedef mdds::multi_type_matrix<matrix_flag_traits> MatrixFlagImplType;
 
 namespace {
 

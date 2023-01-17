@@ -10532,7 +10532,7 @@ dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
 MDDS_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/mdds/include"
-libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-2.0 >= 2.0.0])
+libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-2.1 >= 2.1.0])
 
 dnl ===================================================================
 dnl Check for system dragonbox
@@ -10839,7 +10839,7 @@ AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
 dnl ===================================================================
 dnl Orcus
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.17 >= 0.17.2])
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.18 >= 0.18.0])
 if test "$with_system_orcus" != "yes"; then
     if test "$SYSTEM_BOOST" = "TRUE"; then
         dnl Link with Boost.System

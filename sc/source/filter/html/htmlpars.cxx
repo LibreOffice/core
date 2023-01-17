@@ -75,11 +75,11 @@ ScHTMLStyles::ScHTMLStyles() : maEmpty() {}
 void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
                        const OUString& aProp, const OUString& aValue)
 {
-    if (pElemName)
+    if (nElemName)
     {
         OUString aElem(pElemName, nElemName, RTL_TEXTENCODING_UTF8);
         aElem = aElem.toAsciiLowerCase();
-        if (pClassName)
+        if (nClassName)
         {
             // Both element and class names given.
             ElemsType::iterator itrElem = m_ElemProps.find(aElem);
@@ -107,7 +107,7 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
     }
     else
     {
-        if (pClassName)
+        if (nClassName)
         {
             // Class name only. Add it to the global.
             OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
@@ -3030,53 +3030,32 @@ namespace {
  */
 class CSSHandler: public orcus::css_handler
 {
-    struct MemStr
-    {
-        const char* mp;
-        size_t      mn;
-
-        MemStr() : mp(nullptr), mn(0) {}
-        MemStr(const char* p, size_t n) : mp(p), mn(n) {}
-        MemStr(const MemStr& r) : mp(r.mp), mn(r.mn) {}
-        MemStr& operator=(const MemStr& r) = default;
-    };
-
-    typedef std::pair<MemStr, MemStr> SelectorName;     // element : class
+    typedef std::pair<std::string_view, std::string_view> SelectorName; // element : class
     typedef std::vector<SelectorName> SelectorNames;
 
     SelectorNames maSelectorNames;      // current selector names
-    MemStr maPropName;                  // current property name.
-    MemStr maPropValue;                 // current property value.
+    std::string_view maPropName;        // current property name.
+    std::string_view maPropValue;                 // current property value.
     ScHTMLStyles& mrStyles;
 
 public:
     explicit CSSHandler(ScHTMLStyles& rStyles):
-        maPropName(),
-        maPropValue(),
         mrStyles(rStyles)
      {}
 
-    // selector name starting with "@"
-    static void at_rule_name(const char* /*p*/, size_t /*n*/)
-    {
-        // TODO: For now, we ignore at-rule properties
-    }
-
     // selector name not starting with "." or "#" (i.e. element selectors)
-    void simple_selector_type(const char* pElem, size_t nElem)
+    void simple_selector_type(std::string_view aElem)
     {
-        MemStr aElem(pElem, nElem); // element given
-        MemStr aClass(nullptr, 0);  // class name not given - to be added in the "element global" storage
+        std::string_view aClass{};  // class name not given - to be added in the "element global" storage
         SelectorName aName(aElem, aClass);
 
         maSelectorNames.push_back(aName);
     }
 
     // selector names starting with a "." (i.e. class selector)
-    void simple_selector_class(const char* pClassName, size_t nClassName)
+    void simple_selector_class(std::string_view aClass)
     {
-        MemStr aElem(nullptr, 0);   // no element given - should be added in the "global" storage
-        MemStr aClass(pClassName, nClassName);
+        std::string_view aElem{};   // no element given - should be added in the "global" storage
         SelectorName aName(aElem, aClass);
 
         maSelectorNames.push_back(aName);
@@ -3084,35 +3063,34 @@ public:
 
     // TODO: Add other selectors
 
-    void property_name(const char* p, size_t n)
+    void property_name(std::string_view aPropName)
     {
-        maPropName = MemStr(p, n);
+        maPropName = aPropName;
     }
 
-    void value(const char* p, size_t n)
+    void value(std::string_view aValue)
     {
-        maPropValue = MemStr(p, n);
+        maPropValue = aValue;
     }
 
-    void end_block() {
+    void end_block()
+    {
         maSelectorNames.clear();
     }
 
     void end_property()
     {
-        SelectorNames::const_iterator itr = maSelectorNames.begin(), itrEnd = maSelectorNames.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rSelName : maSelectorNames)
         {
             // Add this property to the collection for each selector.
-            const SelectorName& rSelName = *itr;
-            const MemStr& rElem = rSelName.first;
-            const MemStr& rClass = rSelName.second;
-            OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
-            OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
-            mrStyles.add(rElem.mp, rElem.mn, rClass.mp, rClass.mn, aName, aValue);
+            std::string_view aElem = rSelName.first;
+            std::string_view aClass = rSelName.second;
+            OUString aName(maPropName.data(), maPropName.size(), RTL_TEXTENCODING_UTF8);
+            OUString aValue(maPropValue.data(), maPropValue.size(), RTL_TEXTENCODING_UTF8);
+            mrStyles.add(aElem.data(), aElem.size(), aClass.data(), aClass.size(), aName, aValue);
         }
-        maPropName = MemStr();
-        maPropValue = MemStr();
+        maPropName = std::string_view{};
+        maPropValue = std::string_view{};
     }
 
 };
@@ -3123,12 +3101,12 @@ void ScHTMLQueryParser::ParseStyle(std::u16string_view rStrm)
 {
     OString aStr = OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
     CSSHandler aHdl(GetStyles());
-    orcus::css_parser<CSSHandler> aParser(aStr.getStr(), aStr.getLength(), aHdl);
+    orcus::css_parser<CSSHandler> aParser(aStr, aHdl);
     try
     {
         aParser.parse();
     }
-    catch (const orcus::css::parse_error& rOrcusParseError)
+    catch (const orcus::parse_error& rOrcusParseError)
     {
         SAL_WARN("sc", "ScHTMLQueryParser::ParseStyle: " << rOrcusParseError.what());
         // TODO: Parsing of CSS failed.  Do nothing for now.

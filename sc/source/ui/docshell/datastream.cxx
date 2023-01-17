@@ -66,21 +66,21 @@ public:
     static void begin_row() {}
     static void end_row() {}
 
-    void cell(const char* p, size_t n, bool /*transient*/)
+    void cell(std::string_view s, bool /*transient*/)
     {
         if (mnCols >= mnColCount)
             return;
 
         DataStream::Cell aCell;
-        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', aCell.mfValue))
+        if (ScStringUtil::parseSimpleNumber(s.data(), s.size(), '.', ',', aCell.mfValue))
         {
             aCell.mbValue = true;
         }
         else
         {
             aCell.mbValue = false;
-            aCell.maStr.Pos = std::distance(mpLineHead, p);
-            aCell.maStr.Size = n;
+            aCell.maStr.Pos = std::distance(mpLineHead, s.data());
+            aCell.maStr.Size = s.size();
         }
         mrLine.maCells.push_back(aCell);
 
@@ -199,7 +199,7 @@ private:
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
                 CSVHandler aHdl(rLine, mnColCount);
-                orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
+                orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), aHdl, maConfig);
                 parser.parse();
             }
 
