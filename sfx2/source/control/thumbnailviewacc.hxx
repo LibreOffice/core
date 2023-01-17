@@ -147,8 +147,7 @@ private:
 class ThumbnailViewItemAcc : public ::cppu::WeakImplHelper< css::accessibility::XAccessible,
                                                      css::accessibility::XAccessibleEventBroadcaster,
                                                      css::accessibility::XAccessibleContext,
-                                                     css::accessibility::XAccessibleComponent,
-                                                     css::lang::XUnoTunnel >
+                                                     css::accessibility::XAccessibleComponent>
 {
 private:
 
@@ -198,10 +197,6 @@ public:
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-    // XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX

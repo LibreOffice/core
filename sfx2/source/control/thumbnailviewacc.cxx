@@ -539,23 +539,10 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
     }
 }
 
-const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theValueItemAccUnoTunnelId;
-    return theValueItemAccUnoTunnelId.getSeq();
-}
-
 ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
     noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<ThumbnailViewItemAcc>(rxData);
-    }
-    catch(const css::uno::Exception&)
-    {
-        return nullptr;
-    }
+    return dynamic_cast<ThumbnailViewItemAcc*>(rxData.get());
 }
 
 void ThumbnailViewAcc::GetFocus()
@@ -860,11 +847,6 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )
 sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
 {
     return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor());
-}
-
-sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
