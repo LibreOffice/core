@@ -333,7 +333,6 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidResize: (NSNotification*)pNotification
 {
-    (void)pNotification;
     SolarMutexGuard aGuard;
 
     if ( mbInWindowDidResize )
