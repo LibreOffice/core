@@ -226,6 +226,7 @@ private:
     DECL_LINK(HScrollRightHdl, weld::Scrollbar&, void );
     DECL_LINK(VScrollTopHdl, weld::Scrollbar&, void );
     DECL_LINK(VScrollBottomHdl, weld::Scrollbar&, void );
+    DECL_LINK(EndScrollHdl, const MouseEvent&, bool);
     void ScrollHdl(ScrollAdaptor* rScrollBar);
 
     DECL_LINK(SplitHdl, Splitter*, void);
