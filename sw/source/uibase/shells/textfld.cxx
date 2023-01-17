@@ -731,9 +731,6 @@ FIELD_INSERT:
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
-            // Don't update the layout after inserting content and before deleting temporary
-            // text nodes.
-            rSh.StartAction();
 
             SwPaM* pCursorPos = rSh.GetCursor();
             if(pCursorPos)
@@ -758,7 +755,18 @@ FIELD_INSERT:
                     {
                         rSh.InsertFootnote(OUString());
                     }
+                    else if (aWrapper == "Endnote")
+                    {
+                        // It's important that there is no Start/EndAction() around this, so the
+                        // inner EndAction() triggers a layout update and the cursor can jump to the
+                        // created SwFootnoteFrame.
+                        rSh.InsertFootnote(OUString(), /*bEndNote=*/true);
+                    }
                 }
+
+                // Don't update the layout after inserting content and before deleting temporary
+                // text nodes.
+                rSh.StartAction();
 
                 // Split node to remember where the start position is.
                 bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().SplitNode(
@@ -802,9 +810,9 @@ FIELD_INSERT:
                             std::pair<OUString, uno::Any>(ODF_CODE_PARAM, uno::Any(aFieldCode)));
                     }
                 }
+                rSh.EndAction();
             }
 
-            rSh.EndAction();
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
             rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
         }
