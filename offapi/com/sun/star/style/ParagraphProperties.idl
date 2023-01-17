@@ -425,7 +425,7 @@ published service ParagraphProperties
             other paragraphs of the same text, i.e. a paragraph with lower
             identifier is there before the other ones with greater values.
             This property depends on implementation details and is considered experimental.
-            @since LibreOffice 7.5
+            @since LibreOffice 7.6
          */
         [optional, property, readonly] long SortedTextId;
 };
