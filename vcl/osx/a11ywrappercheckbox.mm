@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/svapp.hxx>
 #include <osx/salinst.h>
 
 #include "a11ywrappercheckbox.h"
@@ -36,6 +37,9 @@
 }
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     if ( [ attribute isEqualToString: NSAccessibilityValueAttribute ] ) {
         return NO;
     }
@@ -43,6 +47,9 @@
 }
 
 -(NSArray *)accessibilityAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
     // Remove text-specific attributes

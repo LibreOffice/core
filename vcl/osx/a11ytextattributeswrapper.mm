@@ -300,7 +300,11 @@ using namespace ::com::sun::star::uno;
     [AquaA11yTextAttributesWrapper addMarkup:markup withType:css::text::TextMarkupType::SPELLCHECK toString:string inRange:range];
 }
 
-+(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {
+// tdf#148453 Fix crash by turning off optimization for Objective-C selector
+// The default attributes sequence sometimes crashes when it is released but
+// only when compiler optimization is enabled, so disable optimization for the
+// +[AquaA11yTextAttributesWrapper createAttributedStringForElement] selector.
++(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange __attribute__((optnone)) {
     static const Sequence < OUString > emptySequence;
     // vars
     NSMutableAttributedString * string = nil;
