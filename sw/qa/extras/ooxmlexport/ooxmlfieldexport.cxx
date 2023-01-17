@@ -809,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText)
     loadAndReload("conditional-text.fodt");
     // Load a document which has a conditional text field in it.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    std::u16string_view aExpected(u" IF 1 < 2 \"True\" \"False\"");
+    std::u16string_view aExpected(u" IF 1 < 2 \"True\" \"- 'False' -\"");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0

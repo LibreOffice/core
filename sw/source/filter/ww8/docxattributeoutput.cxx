@@ -8752,7 +8752,9 @@ void DocxAttributeOutput::HiddenField(const SwField& rField)
         if (aFalse.getLength() > 1 && aFalse.startsWith("\"") && aFalse.endsWith("\""))
             aFalse = aFalse.copy(1, aFalse.getLength() - 2);
 
-        OUString aCmd = FieldString(ww::eIF) + aCond + " \"" + aTrue + "\" \"" + aFalse + "\"";
+        // Substitute a single quote for an illegal double quote if one exists
+        OUString aCmd = FieldString(ww::eIF) + aCond + " \"" + aTrue.replaceAll("\"", "'")
+            + "\" \"" + aFalse.replaceAll("\"", "'") + "\"";
         m_rExport.OutputField(&rField, ww::eIF, aCmd);
         return;
     }
