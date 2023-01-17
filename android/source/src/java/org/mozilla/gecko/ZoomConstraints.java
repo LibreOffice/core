@@ -6,26 +6,14 @@
 package org.mozilla.gecko;
 
 public final class ZoomConstraints {
-    private final boolean mAllowZoom;
-    private final boolean mAllowDoubleTapZoom;
     private final float mDefaultZoom;
     private final float mMinZoom;
     private final float mMaxZoom;
 
-    public ZoomConstraints(boolean allowZoom, float defaultZoom, float minZoom, float maxZoom) {
-        mAllowZoom = allowZoom;
-        mAllowDoubleTapZoom = allowZoom;
+    public ZoomConstraints(float defaultZoom, float minZoom, float maxZoom) {
         mDefaultZoom = defaultZoom;
         mMinZoom = minZoom;
         mMaxZoom = maxZoom;
-    }
-
-    public final boolean getAllowZoom() {
-        return mAllowZoom;
-    }
-
-    public final boolean getAllowDoubleTapZoom() {
-        return mAllowDoubleTapZoom;
     }
 
     public final float getDefaultZoom() {
