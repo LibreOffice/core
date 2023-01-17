@@ -105,7 +105,7 @@ OUString SAL_CALL TitleHelper::getTitle()
     if (!m_sTitle.isEmpty())
         return m_sTitle;
 
-    // Title seems to be unused till now ... do bootstraping
+    // Title seems to be unused till now ... do bootstrapping
     impl_updateTitle (true);
 
     return m_sTitle;
