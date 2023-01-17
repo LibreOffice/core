@@ -76,24 +76,10 @@ void ValueItemAcc::ParentDestroyed()
     mpParent = nullptr;
 }
 
-const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theValueItemAccUnoTunnelId;
-    return theValueItemAccUnoTunnelId.getSeq();
-}
-
-
 ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
     noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<ValueItemAcc>(rxData);
-    }
-    catch(const css::uno::Exception&)
-    {
-        return nullptr;
-    }
+    return dynamic_cast<ValueItemAcc*>(rxData.get());
 }
 
 
@@ -390,11 +376,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
-}
-
-sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
 }
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
