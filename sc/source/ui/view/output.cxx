@@ -2422,7 +2422,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                         bFirst = false;
                     }
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 4 ) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
@@ -2433,8 +2433,18 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                             ++nNextX;
                         }
                     }
+                    // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
+                    // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
+                    const double nSize( rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
+                    Point aPoints[3];
+                    aPoints[0] = Point(nMarkX, nPosY);
+                    aPoints[0].setX( bLayoutRTL ? aPoints[0].X() + nSize : aPoints[0].X() - nSize );
+                    aPoints[1] = Point(nMarkX, nPosY);
+                    aPoints[2] = Point(nMarkX, nPosY + nSize);
+                    tools::Polygon aPoly(3, aPoints);
+
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
-                        rRenderContext.DrawRect( tools::Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
+                        rRenderContext.DrawPolygon(aPoly);
                 }
 
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
