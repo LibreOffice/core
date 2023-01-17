@@ -682,6 +682,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 #pragma mark Accessibility Protocol
 
 -(id)accessibilityAttributeValue:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << "]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
@@ -712,6 +715,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(BOOL)accessibilityIsIgnored {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityIsIgnored]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
@@ -736,6 +742,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(NSArray *)accessibilityAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeNames]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
@@ -817,6 +826,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeIsSettable:" << attribute << "]");
     bool isSettable = false;
     if ( [ self accessibleText ] ) {
@@ -835,6 +847,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(NSArray *)accessibilityParameterizedAttributeNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityParameterizedAttributeNames]");
     NSMutableArray * attributeNames = [ [ NSMutableArray alloc ] init ];
     // Special Attributes depending on interface
@@ -845,6 +860,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(id)accessibilityAttributeValue:(NSString *)attribute forParameter:(id)parameter {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << (static_cast<NSObject*>(parameter)) << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: YES ];
     if ( [ self respondsToSelector: methodSelector ] ) {
@@ -860,6 +878,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetValue:" << (static_cast<NSObject*>(value)) << " forAttribute:" << attribute << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: NO withGetterParameter: NO ];
     if ( [ AquaA11yComponentWrapper respondsToSelector: methodSelector ] ) {
@@ -877,6 +898,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(id)accessibilityFocusedUIElement {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityFocusedUIElement]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
@@ -937,6 +961,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(void)accessibilityPerformAction:(NSString *)action {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityPerformAction:" << action << "]");
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
     if ( actionResponder ) {
@@ -945,6 +972,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(NSArray *)accessibilityActionNames {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityActionNames]");
     NSArray * actionNames = nil;
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
@@ -1030,6 +1060,9 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 }
 
 -(id)accessibilityHitTest:(NSPoint)point {
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityHitTest:" << point << "]");
     static id wrapper = nil;
     if ( nil != wrapper ) {
