@@ -745,6 +745,7 @@ bool DoSearch(SwPaM & rSearchPam,
         if (   -1 != rSearchOpt.searchString.indexOf("\\xAD")
             || -1 != rSearchOpt.searchString.indexOf("\\x{00AD}")
             || -1 != rSearchOpt.searchString.indexOf("\\u00AD")
+            || -1 != rSearchOpt.searchString.indexOf("\\u00ad")
             || -1 != rSearchOpt.searchString.indexOf("\\U000000AD")
             || -1 != rSearchOpt.searchString.indexOf("\\N{SOFT HYPHEN}"))
         {
