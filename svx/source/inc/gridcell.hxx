@@ -35,7 +35,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XButton.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -1013,8 +1012,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 Lines ) override;
 };
 
-typedef ::cppu::ImplHelper2 <   css::awt::XTextComponent
-                            ,   css::lang::XUnoTunnel
+typedef ::cppu::ImplHelper1 <   css::awt::XTextComponent
                             >   FmXFilterCell_Base;
 class FmXFilterCell final : public FmXGridCell
                     ,public FmXFilterCell_Base
@@ -1027,12 +1025,6 @@ public:
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-// XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-// helpers for XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
 //  painting the filter text
     void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect);

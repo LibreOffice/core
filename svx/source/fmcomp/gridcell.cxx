@@ -4491,19 +4491,6 @@ FmXFilterCell::~FmXFilterCell()
 
 }
 
-// XUnoTunnel
-sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
-{
-    return comphelper::getSomethingImpl(_rIdentifier, this);
-}
-
-const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theFmXFilterCellUnoTunnelId;
-    return theFmXFilterCellUnoTunnelId.getSeq();
-}
-
-
 void FmXFilterCell::PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect )
 {
     static_cast< DbFilterField* >( m_pCellControl.get() )->PaintCell( rDev, rRect );
