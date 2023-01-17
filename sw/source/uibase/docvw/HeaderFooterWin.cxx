@@ -549,8 +549,13 @@ IMPL_LINK_NOARG(SwHeaderFooterWin, ClickHdl, weld::Button&, void)
 
     const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
     const OUString& rStyleName = pPageFrame->GetPageDesc()->GetName();
-    rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
-
+    {
+        VclPtr<SwHeaderFooterWin> xThis(this);
+        rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
+        //tdf#153059 after ChangeHeaderOrFooter is it possible that "this" is disposed
+        if (xThis->isDisposed())
+            return;
+    }
     m_xPushButton->hide();
     m_xMenuButton->show();
     PaintButton();
