@@ -212,6 +212,9 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
             }
         }
     }
+    // Avoid further bitmap use with unfinished write access
+    pWrite.reset();
+    xMaskAcc.reset();
     if (nBitCount == 32)
         return BitmapEx(aBmp, *pAlphaMask);
     else
