@@ -67,6 +67,7 @@ struct SvxOpenGrf_Impl
 
     sfx2::FileDialogHelper                  aFileDlg;
     OUString sDetectedFilter;
+    weld::Window* pDialogParent;
     uno::Reference < XFilePickerControlAccess > xCtrlAcc;
 };
 
@@ -74,6 +75,7 @@ struct SvxOpenGrf_Impl
 SvxOpenGrf_Impl::SvxOpenGrf_Impl(weld::Window* pPreferredParent,
                                  sal_Int16 nDialogType)
     : aFileDlg(nDialogType, FileDialogFlags::Graphic, pPreferredParent)
+    , pDialogParent(pPreferredParent)
 {
     uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
     xCtrlAcc.set(xFP, UNO_QUERY);
@@ -152,7 +154,7 @@ ErrCode SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpImpl->pDialogParent,
                                                            VclMessageType::Warning, VclButtonsType::NONE,
                                                            SfxResId(SvxOpenGrfErr2ResId(nImpRet))));
                 xWarn->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
