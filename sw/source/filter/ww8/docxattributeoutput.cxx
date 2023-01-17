@@ -8737,7 +8737,7 @@ void DocxAttributeOutput::HiddenField(const SwField& rField)
         OUString aTrueFalse = rField.GetPar2();
         sal_Int32 nPos = aTrueFalse.indexOf('|');
         OUString aTrue;
-        std::u16string_view aFalse;
+        OUString aFalse;
         if (nPos == -1)
         {
             aTrue = aTrueFalse;
@@ -8747,6 +8747,11 @@ void DocxAttributeOutput::HiddenField(const SwField& rField)
             aTrue = aTrueFalse.subView(0, nPos);
             aFalse = aTrueFalse.subView(nPos + 1);
         }
+        if (aTrue.getLength() > 1 && aTrue.startsWith("\"") && aTrue.endsWith("\""))
+            aTrue = aTrue.copy(1, aTrue.getLength() - 2);
+        if (aFalse.getLength() > 1 && aFalse.startsWith("\"") && aFalse.endsWith("\""))
+            aFalse = aFalse.copy(1, aFalse.getLength() - 2);
+
         OUString aCmd = FieldString(ww::eIF) + aCond + " \"" + aTrue + "\" \"" + aFalse + "\"";
         m_rExport.OutputField(&rField, ww::eIF, aCmd);
         return;
