@@ -40,6 +40,7 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <ftnidx.hxx>
+#include <txtftn.hxx>
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
@@ -959,6 +960,46 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldFootnote)
     // - Actual  : 0
     // i.e. no footnote was created.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFootnotes.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldEndnote)
+{
+    // Given an empty document:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // When inserting an ODF_UNHANDLED fieldmark inside an endnote:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldCommand",
+                                      uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
+        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Endnote"))),
+    };
+    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+
+    // Then make sure that the endnote is created:
+    SwFootnoteIdxs& rFootnotes = pDoc->GetFootnoteIdxs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no endnote was inserted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFootnotes.size());
+    SwTextFootnote* pEndnote = rFootnotes[0];
+    const SwFormatFootnote& rFormatEndnote = pEndnote->GetFootnote();
+    CPPUNIT_ASSERT(rFormatEndnote.IsEndNote());
+    // Also check that the endnote body contains the fieldmark:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->GotoFootnoteText();
+    pWrtShell->EndOfSection(/*bSelect=*/true);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    OUString aActual = pCursor->GetText();
+    static sal_Unicode const aForbidden[]
+        = { CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_FIELDEND, 0 };
+    aActual = comphelper::string::removeAny(aActual, aForbidden);
+    // Then this was empty: the fieldmark was inserted before the note anchor, not in the note body.
+    CPPUNIT_ASSERT_EQUAL(OUString("result"), aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
