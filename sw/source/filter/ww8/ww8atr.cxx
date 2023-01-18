@@ -3689,10 +3689,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
         return;
     }
 
-    if ( dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
+    if (pTextNd = dynamic_cast<const SwTextNode*>(GetExport().m_pOutFormatNode); pTextNd)
     {
-        pTextNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
-
         if( pTextNd->IsCountedInList())
         {
             int nLevel = pTextNd->GetActualListLevel();
@@ -3761,7 +3759,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     }
     else if ( auto pC = dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) )
     {
-        if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
+        if (pC->IsAssignedToListLevelOfOutlineStyle())
             nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
         else
         {
