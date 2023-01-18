@@ -42,6 +42,7 @@
 #include <map>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
@@ -1412,6 +1413,30 @@ const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
     return m_pImpl->m_pCurrentEntry;
 }
 
+/**
+ This is a heuristic to find Word's w:styleId value from localised style name.
+ It's not clear how exactly it works, but apparently Word stores into
+ w:styleId some filtered representation of the localised style name.
+ Tragically there are references to the localised style name itself in TOC
+ fields.
+ Hopefully this works and a complete map of >100 built-in style names
+ localised to all langauges isn't needed.
+*/
+static auto FilterChars(OUString const& rStyleName) -> OUString
+{
+    OUStringBuffer ret;
+    sal_Int32 index(0);
+    while (index < rStyleName.getLength())
+    {
+        auto const c(rStyleName.iterateCodePoints(&index));
+        if (rtl::isAsciiAlphanumeric(c))
+        {
+            ret.appendUtf32(c);
+        }
+    }
+    return ret.makeStringAndClear();
+}
+
 OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExtendedSearch)
 {
     OUString sRet( rWWName );
@@ -1419,6 +1444,10 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
         auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(rWWName);
+        if (findIt == m_pImpl->m_aStyleSheetEntriesMap.end())
+        {
+            findIt = m_pImpl->m_aStyleSheetEntriesMap.find(FilterChars(rWWName));
+        }
         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
         {
             if (!findIt->second->sConvertedStyleName.isEmpty())

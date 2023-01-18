@@ -6303,7 +6303,9 @@ void DomainMapper_Impl::handleToc
                     uno::Sequence< OUString> aStyles( nLevelCount );
                     for ( auto& rStyle : asNonConstRange(aStyles) )
                     {
-                        rStyle = (aTOCStyleIter++)->second;
+                        // tdf#153082 must map w:styleId to w:name
+                        rStyle = GetStyleSheetTable()->ConvertStyleName(aTOCStyleIter->second, true);
+                        ++aTOCStyleIter;
                     }
                     xParaStyles->replaceByIndex(nLevel - 1, uno::Any(aStyles));
                 }

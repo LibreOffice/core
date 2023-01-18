@@ -15,6 +15,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -708,6 +709,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
     OUString aActual = getParagraph(2)->getString();
     // This was "itadmin".
     CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), aActual);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
+{
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    // check styles
+    uno::Reference<container::XIndexAccess> xParaStyles =
+        getProperty<uno::Reference<container::XIndexAccess>>(xTOC, "LevelParagraphStyles");
+    uno::Sequence<OUString> styles;
+    xParaStyles->getByIndex(0) >>= styles;
+    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"_MyStyle0"}, styles);
+    xParaStyles->getByIndex(1) >>= styles;
+    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"Custom1"}, styles);
+    xParaStyles->getByIndex(2) >>= styles;
+    // the first one is built-in Word style that was localised DE "Intensives Zitat" in the file
+    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"Intense Quote"}, styles);
+    xTOC->update();
+    OUString const tocContent(xTOC->getAnchor()->getString());
+    CPPUNIT_ASSERT(tocContent.startsWith("Table of Contents"));
+    CPPUNIT_ASSERT(tocContent.indexOf("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.") != -1);
+    CPPUNIT_ASSERT(tocContent.indexOf("Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.") != -1);
+    CPPUNIT_ASSERT(tocContent.indexOf("Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.") != -1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
