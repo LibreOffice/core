@@ -4112,7 +4112,11 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                         bFollowTextFlow && bIsAnchoredToTmpFrm;
                     bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
                     bool bInBackground = !rFrameFormat.GetOpaque().GetValue();
-                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bInBackground)
+                    // Legacy render requires in-background setting, the new mode does not.
+                    bool bConsiderFollowTextFlow = bInBackground
+                                                   || !rFrameFormat.getIDocumentSettingAccess().get(
+                                                       DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
+                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bConsiderFollowTextFlow)
                     {
                         // Ignore wrap-through objects when determining the cell height.
                         // Normally FollowTextFlow requires a resize of the cell, but not in case of
