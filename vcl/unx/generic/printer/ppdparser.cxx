@@ -689,11 +689,6 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
-    auto pFontList = getKey( "Font" );
-    if (pFontList == nullptr) {
-        SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
-    }
-
     // fill in direct values
     if( (pKey = getKey( "print-color-mode" )) )
         m_bColorDevice = pKey->countValues() > 1;
@@ -851,11 +846,6 @@ PPDParser::PPDParser( OUString aFile ) :
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
-
-    auto pFontList = getKey( "Font" );
-    if (pFontList == nullptr) {
-        SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
-    }
 
     // fill in direct values
     if ((pKey = getKey("ColorDevice")))
