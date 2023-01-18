@@ -45,6 +45,7 @@ class LineRectanglePrimitive2D;
 class FilledRectanglePrimitive2D;
 class SingleLinePrimitive2D;
 class FillGraphicPrimitive2D;
+class InvertPrimitive2D;
 }
 
 struct ID2D1RenderTarget;
@@ -92,6 +93,7 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
     void processFillGraphicPrimitive2D(
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
+    void processInvertPrimitive2D(const primitive2d::InvertPrimitive2D& rInvertPrimitive2D);
 
     // common helpers
     sal::systools::COMReference<ID2D1Bitmap>

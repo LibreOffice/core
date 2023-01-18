@@ -47,6 +47,7 @@
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -903,8 +904,7 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
         return pRetval;
     }
 
-    // Release early, was only a test and I saw comments in docu thatQueryInterface
-    // does already increase that refcount
+    // Release early
     pID2D1DeviceContext.clear();
 
     // I had a former version (call it 'a') where I directly painted to a
@@ -1142,12 +1142,12 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     if (!rDiscreteViewPort.isEmpty())
     {
         aVisibleRange.intersect(rDiscreteViewPort);
+    }
 
-        if (aVisibleRange.isEmpty())
-        {
-            // not visible, done
-            return;
-        }
+    if (aVisibleRange.isEmpty())
+    {
+        // not visible, done
+        return;
     }
 
     // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
@@ -1919,6 +1919,104 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
         increaseError();
 }
 
+void D2DPixelProcessor2D::processInvertPrimitive2D(
+    const primitive2d::InvertPrimitive2D& rInvertPrimitive2D)
+{
+    if (rInvertPrimitive2D.getChildren().empty())
+    {
+        // no content, done
+        return;
+    }
+
+    // calculate visible range, create only for that range
+    basegfx::B2DRange aDiscreteRange(
+        rInvertPrimitive2D.getChildren().getB2DRange(getViewInformation2D()));
+    aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
+    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+    basegfx::B2DRange aVisibleRange(aDiscreteRange);
+
+    if (!rDiscreteViewPort.isEmpty())
+    {
+        aVisibleRange.intersect(rDiscreteViewPort);
+    }
+
+    if (aVisibleRange.isEmpty())
+    {
+        // not visible, done
+        return;
+    }
+
+    // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
+    // Only with ID2D1DeviceContext we can use ::DrawImage which supports
+    // D2D1_COMPOSITE_MODE_XOR
+    sal::systools::COMReference<ID2D1DeviceContext> pID2D1DeviceContext;
+    getRenderTarget()->QueryInterface(__uuidof(ID2D1DeviceContext),
+                                      reinterpret_cast<void**>(&pID2D1DeviceContext));
+
+    if (!pID2D1DeviceContext)
+    {
+        // TODO: We have *no* ID2D1DeviceContext and cannot use D2D1_COMPOSITE_MODE_XOR,
+        // so there is currently no (simple?) way to solve this, there is no 'Invert' method.
+        // It may be possible to convert to a WICBitmap (gets read access) and do the invert
+        // there, but that needs experimenting and is probably not performant - but doable.
+        increaseError();
+        return;
+    }
+
+    // Use a temporary second instance of a D2DBitmapPixelProcessor2D with adapted
+    // ViewInformation2D, it will create the needed ID2D1BitmapRenderTarget
+    // locally and Clear() it (see class def above).
+    // That way it is not necessary to patch/relocate all the local variables (safer)
+    // and the renderer has no real overhead itself
+    geometry::ViewInformation2D aAdaptedViewInformation2D(getViewInformation2D());
+    const double fTargetWidth(ceil(aVisibleRange.getWidth()));
+    const double fTargetHeight(ceil(aVisibleRange.getHeight()));
+
+    {
+        // create adapted ViewTransform, needs to be offset in discrete coordinates,
+        // so multiply from left
+        basegfx::B2DHomMatrix aAdapted(basegfx::utils::createTranslateB2DHomMatrix(
+                                           -aVisibleRange.getMinX(), -aVisibleRange.getMinY())
+                                       * getViewInformation2D().getViewTransformation());
+        aAdaptedViewInformation2D.setViewTransformation(aAdapted);
+
+        // reset Viewport (world coordinates), so the helper renderer will create it's
+        // own based on it's given internal discrete size
+        aAdaptedViewInformation2D.setViewport(basegfx::B2DRange());
+    }
+
+    D2DBitmapPixelProcessor2D aSubContentRenderer(aAdaptedViewInformation2D, fTargetWidth,
+                                                  fTargetHeight, getRenderTarget());
+
+    if (!aSubContentRenderer.valid())
+    {
+        // did not work, done
+        increaseError();
+        return;
+    }
+
+    // render sub-content recursively
+    aSubContentRenderer.process(rInvertPrimitive2D.getChildren());
+
+    // grab Bitmap & prepare results from RGBA content rendering
+    sal::systools::COMReference<ID2D1Bitmap> pInBetweenResult(aSubContentRenderer.getID2D1Bitmap());
+    bool bDone(false);
+
+    if (pID2D1DeviceContext && pInBetweenResult)
+    {
+        getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+        const D2D1_POINT_2F aTopLeft
+            = { FLOAT(floor(aVisibleRange.getMinX())), FLOAT(floor(aVisibleRange.getMinY())) };
+
+        pID2D1DeviceContext->DrawImage(pInBetweenResult, aTopLeft, D2D1_INTERPOLATION_MODE_LINEAR,
+                                       D2D1_COMPOSITE_MODE_XOR);
+        bDone = true;
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
 void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     if (0 == mnRecursionCounter)
@@ -1978,11 +2076,14 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         case PRIMITIVE2D_ID_INVERTPRIMITIVE2D:
         {
-            // TODO: fallback is at VclPixelProcessor2D::processInvertPrimitive2D, so
-            // not in reach. Ignore for now.
-            // NOTE: We *urgently* need to get rid of the last parts in LO that use
-            //       XOR paint. Modern graphic systems allow no read access to the
-            //       pixel targets, but that's naturally a precondition for XOR
+            // We urgently should get rid of XOR paint, modern graphic systems
+            // allow no read access to the pixel targets, but that's naturally
+            // a precondition for XOR. While we can do that for the office's
+            // visualization, we can in principle *not* fully avoid getting
+            // stuff that needs/defines XOR paint, e.g. EMF/WMF imports, so
+            // we *have* to support it (for now - sigh)...
+            processInvertPrimitive2D(
+                static_cast<const primitive2d::InvertPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
