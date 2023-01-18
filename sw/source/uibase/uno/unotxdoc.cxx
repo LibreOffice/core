@@ -787,8 +787,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         }
         else
         {
-            Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-            SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xCursorTunnel);
+            SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xLastResult.get());
             if(!pRange)
                 return nullptr;
             pRange->GetPositions(*pUnoCursor);

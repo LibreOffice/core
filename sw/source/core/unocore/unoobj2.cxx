@@ -901,19 +901,6 @@ void SwXTextRange::DeleteAndInsert(
     m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextRangeUnoTunnelId;
-    return theSwXTextRangeUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL
-SwXTextRange::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXTextRange>(rId, this);
-}
-
 OUString SAL_CALL
 SwXTextRange::getImplementationName()
 {
@@ -1107,7 +1094,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     bool bRet = false;
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
     SwXText* pText = dynamic_cast<SwXText*>(xTextRange.get());

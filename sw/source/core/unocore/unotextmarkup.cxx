@@ -99,9 +99,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-
-    if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
+    if (auto pRange = dynamic_cast<SwXTextRange*>(xRange.get()))
     {
         SwDoc& rDoc = pRange->GetDoc();
 

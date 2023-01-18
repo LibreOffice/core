@@ -293,10 +293,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     {
         throw uno::RuntimeException();
     }
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange,
-            uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     if ((!pRange  || &pRange ->GetDoc() != GetDoc()) &&
         (!pCursor || pCursor->GetDoc() != GetDoc()))
@@ -432,10 +429,8 @@ SwXText::insertControlCharacter(
             m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
             m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
 
-            const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-                    xTextRange, uno::UNO_QUERY);
             SwXTextRange *const pRange =
-                comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+                dynamic_cast<SwXTextRange*>(xTextRange.get());
             OTextCursorHelper *const pCursor =
                 dynamic_cast<OTextCursorHelper*>(xTextRange.get());
             if (pRange)
@@ -464,10 +459,8 @@ SwXText::insertControlCharacter(
     if (!bAbsorb)
         return;
 
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
     SwXTextRange *const pRange =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+        dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper *const pCursor =
         dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
@@ -596,8 +589,7 @@ SwXText::insertTextContent(
 
     if (bAbsorb && !bAttribute)
     {
-        uno::Reference<lang::XUnoTunnel> const xRangeTunnel(xRange, uno::UNO_QUERY);
-        if (SwXTextRange *const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
+        if (SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xRange.get()))
         {
             pRange->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
@@ -1550,10 +1542,8 @@ SwXText::convertToTextFrame(
     }
     pTempStartPam.reset();
 
-    SwXTextRange *const pStartRange =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xStart);
-    SwXTextRange *const pEndRange   =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xEnd);
+    SwXTextRange *const pStartRange = dynamic_cast<SwXTextRange*>(xStart.get());
+    SwXTextRange *const pEndRange   = dynamic_cast<SwXTextRange*>(xEnd.get());
     // bookmarks have to be removed before the referenced text node
     // is deleted in DelFullPara
     if (pStartRange)

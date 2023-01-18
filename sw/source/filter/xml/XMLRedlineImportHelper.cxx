@@ -68,10 +68,8 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> const & rCursor )
 
 static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
 {
-    Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
-    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");
-    SwXTextRange *const pXRange =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
+    SwXTextRange *const pXRange = dynamic_cast<SwXTextRange*>(rRange.get());
+    OSL_ENSURE(pXRange, "missing SwXTextRange for XTextRange");
     // #i115174#: this may be a SvxUnoTextRange
     // OSL_ENSURE( pXRange, "SwXTextRange missing" );
     return pXRange ? &pXRange->GetDoc() : nullptr;

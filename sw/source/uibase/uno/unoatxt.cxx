@@ -329,8 +329,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     const OUString& sLongName(aTitle);
     if (pGlosGroup && !pGlosGroup->GetError())
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pxRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+        SwXTextRange* pxRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
         OTextCursorHelper* pxCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
         OUString sOnlyText;
@@ -850,10 +849,9 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
     // The reference to xKeepAlive is needed during the whole call, likely because it could be a
     // different object, not xTextRange itself, and the reference guards it from preliminary death
-    uno::Reference<text::XTextRange> xKeepAlive( xTextRange );
-    uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
-    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xKeepAlive.get());
+    auto xKeepAlive( xTextRange );
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
+    OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwXText *pText = dynamic_cast<SwXText*>(xTextRange.get());
 
     SwDoc* pDoc = nullptr;

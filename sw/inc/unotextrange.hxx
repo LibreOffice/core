@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_UNOTEXTRANGE_HXX
 #define INCLUDED_SW_INC_UNOTEXTRANGE_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -76,8 +75,7 @@ namespace sw {
 } // namespace sw
 
 typedef ::cppu::WeakImplHelper
-<   css::lang::XUnoTunnel
-,   css::lang::XServiceInfo
+<   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
 ,   css::beans::XPropertyState
 ,   css::container::XEnumerationAccess
@@ -132,12 +130,6 @@ public:
     static rtl::Reference< SwXTextRange > CreateXTextRange(
             SwDoc & rDoc,
             const SwPosition& rPos, const SwPosition *const pMark);
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -214,9 +214,7 @@ void SwXBookmark::attachToRangeEx(
         throw uno::RuntimeException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
 
     SwDoc *const pDoc =

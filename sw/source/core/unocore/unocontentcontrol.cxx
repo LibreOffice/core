@@ -437,8 +437,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
                                     static_cast<::cppu::OWeakObject*>(this));
     }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper* pCursor
         = pRange ? nullptr : dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     if (!pRange && !pCursor)

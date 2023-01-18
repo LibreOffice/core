@@ -278,12 +278,8 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         throw uno::RuntimeException();
     }
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        dynamic_cast<OTextCursorHelper*>(xTextRange.get());
+    SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
+    OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwDoc *const pNewDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)

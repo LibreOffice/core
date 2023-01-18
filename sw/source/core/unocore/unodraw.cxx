@@ -1987,7 +1987,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     // (see also SwXTextRange::XTextRangeToSwPaM)
     const SwDoc* pDoc = nullptr;
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
+    if (auto pRange = dynamic_cast<SwXTextRange*>(xTextRange.get()))
         pDoc = &pRange->GetDoc();
     else if (auto pText = dynamic_cast<SwXText*>(xTextRange.get()))
         pDoc = pText->GetDoc();

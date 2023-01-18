@@ -988,8 +988,7 @@ void SwXTextViewCursor::gotoRange(
         *aOwnPaM.GetMark() = *pShellCursor->GetMark();
     }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xRange.get());
     SwXParagraph* pPara = dynamic_cast<SwXParagraph*>(xRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
 
