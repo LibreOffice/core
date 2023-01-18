@@ -623,11 +623,27 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             case ww::eIF: // IF-field
             {
                 // conditional field parameters
-                const OUString& fieldDefinition = m_aFieldStack.back().GetBookmarkCode();
+                OUString fieldDefinition = m_aFieldStack.back().GetBookmarkCode();
 
                 OUString paramCondition;
                 OUString paramTrue;
                 OUString paramFalse;
+
+                // ParseIfFieldDefinition expects: IF <some condition> "true result" "false result"
+                // while many fields include '\* MERGEFORMAT' after that.
+                // So first trim off the switches that are not supported anyway
+                sal_Int32 nLastIndex = fieldDefinition.lastIndexOf("\\*");
+                sal_Int32 nOtherIndex = fieldDefinition.lastIndexOf("\\#"); //number format
+                if (nOtherIndex > 0 && (nOtherIndex < nLastIndex || nLastIndex < 0))
+                    nLastIndex = nOtherIndex;
+                nOtherIndex = fieldDefinition.lastIndexOf("\\@"); //date format
+                if (nOtherIndex > 0 && (nOtherIndex < nLastIndex || nLastIndex < 0))
+                    nLastIndex = nOtherIndex;
+                nOtherIndex = fieldDefinition.lastIndexOf("\\!"); //locked result
+                if (nOtherIndex > 0 && (nOtherIndex < nLastIndex || nLastIndex < 0))
+                    nLastIndex = nOtherIndex;
+                if (nLastIndex > 0)
+                    fieldDefinition = fieldDefinition.copy(0, nLastIndex);
 
                 SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
 

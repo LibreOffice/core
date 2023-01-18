@@ -818,6 +818,15 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", OUString(aExpected));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testConditionalText2)
+{
+    loadAndReload("tdf114537_conditional-text2.doc");
+    // Load a document which has a conditional text field in it.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    std::u16string_view aExpected(u" IF 1 = 1 \"test1\" \"test2\"");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", OUString(aExpected));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
 {
     css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
