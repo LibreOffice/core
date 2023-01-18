@@ -67,6 +67,7 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
+#include <docufld.hxx>
 #include <swmodule.hxx>
 
 #include <SwRewriter.hxx>
@@ -1092,6 +1093,13 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
                 mrMgr.SetActiveSidebarWin(nullptr);
             SwitchToFieldPos();
             mrView.GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+
+            if (nSlot == FN_REPLY)
+            {
+                // Get newly created SwPostItField and set its paraIdParent
+                auto pPostItField = mrMgr.GetLatestPostItField();
+                pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
+            }
             break;
         }
         case FN_DELETE_COMMENT:

@@ -49,6 +49,7 @@
 #include <editeng/outlobj.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/random.hxx>
 #include <docufld.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
@@ -234,6 +235,26 @@ void SwAnnotationWin::ToggleResolvedForThread()
     GetTopReplyNote()->ToggleResolved();
     mrMgr.UpdateResolvedStatus(GetTopReplyNote());
     mrMgr.LayoutPostIts();
+}
+
+sal_uInt32 SwAnnotationWin::GetParaId()
+{
+    auto pField = static_cast<SwPostItField*>(mpFormatField->GetField());
+    auto nParaId = pField->GetParaId();
+    if (nParaId == 0)
+    {
+        // The parent annotation does not have a paraId. This happens when the annotation was just
+        // created, and not imported. paraIds are regenerated upon export, thus this new paraId
+        // is only generated so that children annotations can refer to it
+        nParaId = CreateUniqueParaId();
+        pField->SetParaId(nParaId);
+    }
+    return nParaId;
+}
+
+sal_uInt32 SwAnnotationWin::CreateUniqueParaId()
+{
+    return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max());
 }
 
 void SwAnnotationWin::DeleteThread()

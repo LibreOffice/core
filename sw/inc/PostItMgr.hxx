@@ -230,6 +230,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         sw::annotation::SwAnnotationWin* GetNextPostIt( sal_uInt16 aDirection,
                                                         sw::annotation::SwAnnotationWin* aPostIt);
+        SwPostItField* GetLatestPostItField();
+
         tools::Long GetNextBorder();
 
         sw::annotation::SwAnnotationWin* GetActiveSidebarWin() { return mpActivePostIt; }
