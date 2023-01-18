@@ -3669,10 +3669,9 @@ void AttributeOutputBase::ParaOutlineLevelBase( const SfxUInt16Item& rItem )
 
 void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 {
-    const SwTextNode* pTextNd = nullptr;
     if (rNumRule.GetValue().isEmpty())
     {
-        ParaNumRule_Impl(pTextNd, 0, 0);
+        ParaNumRule_Impl(nullptr, 0, 0);
         return;
     }
     const SwNumRule* pRule = GetExport().m_rDoc.FindNumRulePtr(
@@ -3683,17 +3682,13 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     sal_uInt16 nNumId = GetExport().GetNumberingId(*pRule) + 1;
     sal_uInt8 nLvl = 0;
 
-    if (!GetExport().m_pOutFormatNode)
-    {
-        ParaNumRule_Impl(pTextNd, nLvl, nNumId);
-        return;
-    }
-
-    if (pTextNd = dynamic_cast<const SwTextNode*>(GetExport().m_pOutFormatNode); pTextNd)
+    const SwTextNode* pTextNd = dynamic_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
+    if (pTextNd)
     {
         if( pTextNd->IsCountedInList())
         {
             nLvl = std::clamp(pTextNd->GetActualListLevel(), 0, MAXLEVEL - 1);
+            const bool bListRestart = pTextNd->IsListRestart();
 
             if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
             {
@@ -3701,7 +3696,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                 OUString const listId(pTextNd->GetListId());
                 if (!listId.isEmpty()
                     && (listId != pRule->GetDefaultListId() // default list id uses the 1:1 mapping
-                        || pTextNd->IsListRestart())    // or restarting previous list
+                        || bListRestart)    // or restarting previous list
                     )
                 {
                     SwList const*const pList(
@@ -3712,7 +3707,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                             GetExport().m_rDoc.FindNumRulePtr(
                                 pList->GetDefaultListStyleName()));
                         assert(pAbstractRule);
-                        if (pAbstractRule == pRule && !pTextNd->IsListRestart())
+                        if (pAbstractRule == pRule && !bListRestart)
                         {
                             // different list, but no override
                             nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule) + 1;
@@ -3722,7 +3717,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                             nNumId = GetExport().OverrideNumRule(
                                     *pRule, listId, *pAbstractRule) + 1;
 
-                            if (pTextNd->IsListRestart())
+                            if (bListRestart)
                             {
                                 // For restarted lists we should also keep value for
                                 // future w:lvlOverride / w:startOverride
@@ -3733,7 +3728,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                     }
                 }
             }
-            else if (pTextNd->IsListRestart())
+            else if (bListRestart)
             {
                 sal_uInt16 nStartWith = static_cast<sal_uInt16>(pTextNd->GetActualListStartValue());
                 nNumId = GetExport().DuplicateNumRule(pRule, nLvl, nStartWith);
