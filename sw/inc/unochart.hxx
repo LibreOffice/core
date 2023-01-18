@@ -22,7 +22,6 @@
 #include <map>
 #include <set>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -90,6 +89,8 @@ public:
     void Disconnect();
 };
 
+class SwChartDataSequence;
+
 typedef cppu::WeakImplHelper
 <
     css::chart2::data::XDataProvider,
@@ -107,14 +108,14 @@ class SwChartDataProvider final :
     // see set definition below...
     struct lt_DataSequenceRef
     {
-        bool operator()( css::uno::WeakReference< css::chart2::data::XDataSequence > xWRef1, css::uno::WeakReference< css::chart2::data::XDataSequence > xWRef2 ) const
+        bool operator()( const unotools::WeakReference< SwChartDataSequence > & xWRef1, const unotools::WeakReference< SwChartDataSequence >& xWRef2 ) const
         {
-            css::uno::Reference< css::chart2::data::XDataSequence > xRef1( xWRef1 );
-            css::uno::Reference< css::chart2::data::XDataSequence > xRef2( xWRef2 );
+            rtl::Reference< SwChartDataSequence > xRef1( xWRef1 );
+            rtl::Reference< SwChartDataSequence > xRef2( xWRef2 );
             return xRef1.get() < xRef2.get();
         }
     };
-    typedef std::set< css::uno::WeakReference < css::chart2::data::XDataSequence >, lt_DataSequenceRef > Set_DataSequenceRef_t;
+    typedef std::set< unotools::WeakReference < SwChartDataSequence >, lt_DataSequenceRef > Set_DataSequenceRef_t;
 
     // map of data-sequence sets for each table
     typedef std::map< const SwTable *, Set_DataSequenceRef_t > Map_Set_DataSequenceRef_t;
@@ -171,8 +172,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    void        AddDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > const &rxDataSequence );
-    void        RemoveDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > const &rxDataSequence );
+    void        AddDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence );
+    void        RemoveDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence );
 
     // will send modified events for all data-sequences of the table
     // tdf#122995 added Immediate-Mode to allow non-timer-delayed Chart invalidation
@@ -221,7 +222,6 @@ typedef cppu::WeakImplHelper
     css::util::XCloneable,
     css::beans::XPropertySet,
     css::lang::XServiceInfo,
-    css::lang::XUnoTunnel,
     css::util::XModifiable,
     css::lang::XEventListener,
     css::lang::XComponent
@@ -256,11 +256,6 @@ public:
                          SwFrameFormat   &rTableFormat,
                          const std::shared_ptr<SwUnoCursor>& pTableCursor );
     virtual ~SwChartDataSequence() override;
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XDataSequence
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData() override;
