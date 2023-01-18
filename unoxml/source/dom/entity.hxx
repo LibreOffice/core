@@ -45,7 +45,8 @@ namespace DOM
                 xmlEntityPtr const pEntity);
 
     public:
-        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) override;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType,
+                        css::xml::dom::NodeType const*) override;
 
         /**
         For unparsed entities, the name of the notation for the entity.

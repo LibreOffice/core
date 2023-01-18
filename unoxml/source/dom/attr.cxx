@@ -70,7 +70,7 @@ namespace DOM
         return pNs;
     }
 
-    bool CAttr::IsChildTypeAllowed(NodeType const nodeType)
+    bool CAttr::IsChildTypeAllowed(NodeType const nodeType, NodeType const*const)
     {
         switch (nodeType) {
             case NodeType_TEXT_NODE:

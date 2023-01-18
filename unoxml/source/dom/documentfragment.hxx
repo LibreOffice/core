@@ -40,7 +40,8 @@ namespace DOM
                 xmlNodePtr const pNode);
 
     public:
-        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) override;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType,
+                        css::xml::dom::NodeType const*) override;
 
         // ---- resolve uno inheritance problems...
         // overrides for XNode base

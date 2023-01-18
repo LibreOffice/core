@@ -52,7 +52,8 @@ namespace DOM
         /// return the libxml namespace corresponding to m_pNamespace on pNode
         xmlNsPtr GetNamespace(xmlNodePtr const pNode);
 
-        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) override;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType,
+                        css::xml::dom::NodeType const*) override;
 
         /**
         Returns the name of this attribute.
