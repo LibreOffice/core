@@ -188,6 +188,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     else if ( _sName == "chart:plot-area" )
     {
         comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
+        assert(pList && "can only succeed");
         pList->RemoveAttribute("table:cell-range-address");
     }
     else if ( _sName == "chart:categories" )
