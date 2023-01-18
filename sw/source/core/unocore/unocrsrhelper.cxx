@@ -177,8 +177,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXTextRanges* const pRanges(
-        comphelper::getFromUnoTunnel<SwXTextRanges>(xTunnel));
+    SwXTextRanges* const pRanges = dynamic_cast<SwXTextRanges*>(xIfc.get());
     if (pRanges)
     {
         SwUnoCursor const* pUnoCursor = pRanges->GetCursor();

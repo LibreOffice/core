@@ -210,8 +210,7 @@ public:
 };
 
 typedef ::cppu::WeakImplHelper
-<   css::lang::XUnoTunnel
-,   css::lang::XServiceInfo
+<   css::lang::XServiceInfo
 ,   css::container::XIndexAccess
 > SwXTextRanges_Base;
 
@@ -219,7 +218,6 @@ struct SwXTextRanges : public SwXTextRanges_Base
 {
     virtual SwUnoCursor* GetCursor() =0;
     static rtl::Reference<SwXTextRanges> Create(SwPaM* const pCursor);
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 
 #endif // INCLUDED_SW_INC_UNOTEXTRANGE_HXX

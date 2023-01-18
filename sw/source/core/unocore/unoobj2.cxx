@@ -1550,9 +1550,6 @@ namespace {
 struct SwXTextRangesImpl final : public SwXTextRanges
 {
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
         { return "SwXTextRanges"; };
@@ -1613,18 +1610,6 @@ void SwXTextRangesImpl::MakeRanges()
 
 rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
     { return new SwXTextRangesImpl(pPaM); }
-
-const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextRangesUnoTunnelId;
-    return theSwXTextRangesUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXTextRangesImpl::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXTextRanges>(rId, this);
-}
 
 /*
  *  Text positions
