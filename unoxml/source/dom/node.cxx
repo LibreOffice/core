@@ -262,7 +262,7 @@ namespace DOM
         // default: do nothing
     }
 
-    bool CNode::IsChildTypeAllowed(NodeType const /*nodeType*/)
+    bool CNode::IsChildTypeAllowed(NodeType const /*nodeType*/, NodeType const*const)
     {
         // default: no children allowed
         return false;
@@ -301,7 +301,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        if (!IsChildTypeAllowed(pNewChild->m_aNodeType)) {
+        if (!IsChildTypeAllowed(pNewChild->m_aNodeType, nullptr)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -642,7 +642,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        if (!IsChildTypeAllowed(pNewNode->m_aNodeType)) {
+        if (!IsChildTypeAllowed(pNewNode->m_aNodeType, nullptr)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -822,7 +822,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        if (!IsChildTypeAllowed(pNewNode->m_aNodeType)) {
+        if (!IsChildTypeAllowed(pNewNode->m_aNodeType, &pOldNode->m_aNodeType)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;

@@ -203,7 +203,7 @@ namespace DOM
         popContext(i_rContext);
     }
 
-    bool CElement::IsChildTypeAllowed(NodeType const nodeType)
+    bool CElement::IsChildTypeAllowed(NodeType const nodeType, NodeType const*const)
     {
         switch (nodeType) {
             case NodeType_ELEMENT_NODE:
