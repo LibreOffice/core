@@ -191,6 +191,11 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         bool IsResolved() const;
         bool IsThreadResolved();
 
+        // Get annotation paraId or generate one if it doesn't exist
+        sal_uInt32 GetParaId();
+        // Used to generate a unique paraId
+        static sal_uInt32 CreateUniqueParaId();
+
         // Set this SwAnnotationWin as the currently active one
         // return false if it was already active
         bool SetActiveSidebarWin();
