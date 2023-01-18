@@ -29,6 +29,7 @@
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <view.hxx>
@@ -858,6 +859,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     // through and follow-text-flow set to true:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
+    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, true);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
@@ -922,6 +924,41 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyNoTable)
     createSwDoc("page-remove-fly-no-table.fodt");
     // This never returned.
     calcLayout();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNewFollowTextFlowWrapInBackground)
+{
+    // Given a document with a table, and a graphic inside that table -- anchored, wrap set to
+    // through and follow-text-flow set to true, legacy USE_FORMER_TEXT_WRAPPING is not set:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 1, 1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
+    aFrameSet.Put(aAnchor);
+    SwFormatSurround aSurround(text::WrapTextMode_THROUGH);
+    aFrameSet.Put(aSurround);
+    SwFormatFrameSize aSize(SwFrameSize::Fixed, 1000, 1000);
+    aFrameSet.Put(aSize);
+    SwFormatFollowTextFlow aFlow(true);
+    aFrameSet.Put(aFlow);
+    Graphic aGrf;
+
+    // When inserting that image:
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
+
+    // Then make sure that the cell height grows to have space for the graphic, given that
+    // background=true is not specified.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nCellHeight = getXPath(pXmlDoc, "//cell[1]/infos/bounds", "height").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 1000
+    // - Actual  : 1120
+    // i.e. the cell height was too large, the image influenced it, which is not expected.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(1000), nCellHeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
