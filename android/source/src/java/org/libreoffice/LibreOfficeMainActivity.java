@@ -60,7 +60,7 @@ import java.util.UUID;
 public class LibreOfficeMainActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
-    private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
+    public static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
     private static final String ENABLE_DEVELOPER_PREFS_KEY = "ENABLE_DEVELOPER";
     private static final int REQUEST_CODE_SAVEAS = 12345;

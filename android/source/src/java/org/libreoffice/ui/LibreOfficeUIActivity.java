@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.libreoffice.AboutDialogFragment;
+import org.libreoffice.BuildConfig;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.LocaleHelper;
 import org.libreoffice.R;
@@ -179,6 +180,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         editFAB = findViewById(R.id.editFAB);
         editFAB.setOnClickListener(this);
+        // allow creating new docs only when experimental editing is enabled
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean bAllowCreatingDocs = BuildConfig.ALLOW_EDITING && preferences.getBoolean(LibreOfficeMainActivity.ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        editFAB.setVisibility(bAllowCreatingDocs ? View.VISIBLE : View.INVISIBLE);
+
         impressFAB = findViewById(R.id.newImpressFAB);
         impressFAB.setOnClickListener(this);
         writerFAB = findViewById(R.id.newWriterFAB);
