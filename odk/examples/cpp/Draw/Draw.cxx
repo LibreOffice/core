@@ -66,7 +66,7 @@ int main()
     }
     catch (Exception& e)
     {
-        std::cout << "Error: cannot do bootstraping." << std::endl << e.Message << std::endl;
+        std::cout << "Error: cannot do bootstrapping." << std::endl << e.Message << std::endl;
         exit(1);
     }
 

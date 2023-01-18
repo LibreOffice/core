@@ -156,7 +156,7 @@ public class RecoveryTools {
             if (userPath.equals(""))userPath = utils.expandMacro(xMSF, "${$ORIGIN/bootstrap.ini:UserInstallation}");
             System.out.println("userPath:'" + userPath + "'");
 
-            if (userPath.equals("")) throw new com.sun.star.io.IOException("could not get user path at bootstraping");
+            if (userPath.equals("")) throw new com.sun.star.io.IOException("could not get user path at bootstrapping");
 
             String recoveryFolder = utils.getSystemURL(userPath + "/user/backup");
 
