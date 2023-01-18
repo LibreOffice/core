@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -37,8 +36,7 @@ namespace i18nutil {
 class SwXTextSearch final : public cppu::WeakImplHelper
 <
     css::util::XPropertyReplace,
-    css::lang::XServiceInfo,
-    css::lang::XUnoTunnel
+    css::lang::XServiceInfo
 >
 {
     friend class SwXTextDocument;
@@ -67,11 +65,6 @@ class SwXTextSearch final : public cppu::WeakImplHelper
     virtual ~SwXTextSearch() override;
 public:
     SwXTextSearch();
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XSearchDescriptor
     virtual OUString SAL_CALL getSearchString(  ) override;

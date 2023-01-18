@@ -346,17 +346,6 @@ namespace
 {
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextSearch::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextSearchUnoTunnelId;
-    return theSwXTextSearchUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 OUString SwXTextSearch::getSearchString()
 {
     SolarMutexGuard aGuard;

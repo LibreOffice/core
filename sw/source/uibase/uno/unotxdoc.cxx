@@ -696,9 +696,8 @@ SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & x
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
 {
     SolarMutexGuard aGuard;
-    Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY_THROW);
     SwXTextSearch* pSearch;
-    if (!IsValid() || !(pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDescTunnel)))
+    if (!IsValid() || !(pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get())))
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
     Reference< XTextCursor >  xCursor;
@@ -770,7 +769,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      sal_Int32& nResult,
                                      Reference< XInterface > const & xLastResult)
 {
-    const auto pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDesc);
+    const auto pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get());
     if(!IsValid() || !pSearch)
         return nullptr;
 
