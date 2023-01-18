@@ -369,12 +369,13 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
-    OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    OUString aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
-    OUStringBuffer aBuf;
+    OUString aActionString;
+    OUString aRefStr;
+    OUString aUser;
+    OUString aDate;
     OUString aDesc;
 
     std::unique_ptr<ScRedlinData> pNewData(new ScRedlinData);
@@ -392,20 +393,20 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
     {
         if(pScChangeAction->IsDialogParent())
         {
-            aBuf.append(aStrContentWithChild);
+            aActionString = aStrContentWithChild;
             pNewData->nInfo=RD_SPECIAL_VISCONTENT;
             pNewData->bIsRejectable=false;
             pNewData->bIsAcceptable=false;
         }
         else
         {
-            aBuf.append(*MakeTypeString(eType));
+            aActionString = *MakeTypeString(eType);
             aDesc = pScChangeAction->GetDescription(*pDoc, true);
         }
     }
     else
     {
-        aBuf.append(aStrContentWithChild);
+        aActionString = *MakeTypeString(eType);
 
         if(bDelMaster)
         {
@@ -420,27 +421,16 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
 
     aRefStr = pScChangeAction->GetRefString(*pDoc, true);
 
-    aBuf.append('\t');
-    aBuf.append(aRefStr);
-    aBuf.append('\t');
-
     bool bIsGenerated = false;
 
     if(!pChanges->IsGenerated(pScChangeAction->GetActionNumber()))
     {
-        aBuf.append(aUser);
-        aBuf.append('\t');
-        aBuf.append(ScGlobal::getLocaleData().getDate(aDateTime));
-        aBuf.append(' ');
-        aBuf.append(ScGlobal::getLocaleData().getTime(aDateTime));
-        aBuf.append('\t');
-
+        aUser = pScChangeAction->GetUser();
+        aDate = ScGlobal::getLocaleData().getDate(aDateTime) + " " + ScGlobal::getLocaleData().getTime(aDateTime);
         bIsGenerated = false;
     }
     else
     {
-        aBuf.append('\t');
-        aBuf.append('\t');
         bIsGenerated = true;
     }
 
@@ -450,8 +440,6 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
     {
         aComment +=  " (" + aDesc + ")";
     }
-
-    aBuf.append(aComment);
 
     if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
     {
@@ -480,9 +468,15 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
 
     weld::TreeView& rTreeView = pTheView->GetWidget();
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    OUString sString(aBuf.makeStringAndClear());
     OUString sId(weld::toId(pNewData.release()));
-    rTreeView.insert(pParent, -1, &sString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
+    rTreeView.insert(pParent, -1, &aActionString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
+    rTreeView.set_text( *xEntry, aRefStr, 1);
+    if (!aUser.isEmpty())
+        rTreeView.set_text( *xEntry, aUser, 2);
+    if (!aDate.isEmpty())
+        rTreeView.set_text( *xEntry, aDate, 3);
+    if (!aComment.isEmpty())
+        rTreeView.set_text( *xEntry, aComment, 4);
     if (!bFlag && bUseColor && !pParent)
     {
         rTreeView.set_font_color(*xEntry, COL_LIGHTBLUE);
@@ -651,55 +645,38 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
             bFlag=true;
     }
 
+    OUString aContent;
     OUString aRefStr;
-    OUString aString;
-    OUString a2String;
+    OUString aDate;
     OUString aDesc;
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        OUString aTmp = pScChangeAction->GetOldString(pDoc);
-        a2String = aTmp;
-        if(a2String.isEmpty()) a2String=aStrEmpty;
-
-        //aString+="\'";
-        aString+=a2String;
-        //aString+="\'";
-
-        aDesc = aStrChildOrgContent + ": ";
+        aContent = pScChangeAction->GetOldString(pDoc);
+        if (aContent.isEmpty())
+            aContent = aStrEmpty;
+        aDesc = aStrChildOrgContent + ": " + aContent;
     }
     else
     {
-        OUString aTmp = pScChangeAction->GetNewString(pDoc);
-        a2String = aTmp;
-        if(a2String.isEmpty())
-        {
-            a2String = aStrEmpty;
-            aString += a2String;
-        }
+        const OUString aTmp( pScChangeAction->GetNewString(pDoc));
+        if (aTmp.isEmpty())
+            aContent = aStrEmpty;
         else
-        {
-            aString += "\'" + a2String + "\'";
-            a2String = aString;
-        }
-        aDesc = aStrChildContent;
-
+            aContent = "\'" + aTmp + "\'";
+        aDesc = aStrChildContent + aContent;
     }
 
-    aDesc += a2String;
-    aString += "\t";
     aRefStr = pScChangeAction->GetRefString(*pDoc, true);
-    aString += aRefStr + "\t";
 
     if(!bIsGenerated)
     {
-        aString += aUser + "\t"
-                +  ScGlobal::getLocaleData().getDate(aDateTime) + " "
-                +  ScGlobal::getLocaleData().getTime(aDateTime) + "\t";
+        // aUser is kept.
+        aDate = ScGlobal::getLocaleData().getDate(aDateTime) + " " + ScGlobal::getLocaleData().getTime(aDateTime);
     }
     else
     {
-        aString += "\t\t";
+        aUser.clear();
     }
 
     OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
@@ -708,8 +685,6 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
     {
         aComment += " (" + aDesc + ")";
     }
-
-    aString += aComment;
 
     std::unique_ptr<ScRedlinData> pNewData(new ScRedlinData);
     pNewData->nInfo=nSpecial;
@@ -726,7 +701,14 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
     weld::TreeView& rTreeView = pTheView->GetWidget();
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     OUString sId(weld::toId(pNewData.release()));
-    rTreeView.insert(&rParent, -1, &aString, &sId, nullptr, nullptr, false, xEntry.get());
+    rTreeView.insert(&rParent, -1, &aContent, &sId, nullptr, nullptr, false, xEntry.get());
+    rTreeView.set_text( *xEntry, aRefStr, 1);
+    if (!aUser.isEmpty())
+        rTreeView.set_text( *xEntry, aUser, 2);
+    if (!aDate.isEmpty())
+        rTreeView.set_text( *xEntry, aDate, 3);
+    if (!aComment.isEmpty())
+        rTreeView.set_text( *xEntry, aComment, 4);
     if (pTheView->IsValidComment(aComment) && bFlag)
         bHasFilterEntry=true;
     else
