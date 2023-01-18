@@ -475,8 +475,12 @@ static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEs
 
 void SvxFontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.SetTextColor( svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-    rRenderContext.SetBackground( svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+    Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    Color aFgColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
+    if (aFgColor == COL_AUTO)
+        aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
+    rRenderContext.SetBackground(aBgColor);
+    rRenderContext.SetTextColor(aFgColor);
 }
 
 void SvxFontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -583,6 +587,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     ApplySettings(rRenderContext);
+    rRenderContext.Erase();
 
     Printer* pPrinter = pImpl->mpPrinter;
     const SvxFont& rFont = pImpl->maFont;
@@ -985,8 +990,12 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
         if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
         {
             const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
-            if( GPOS_NONE == rBrush.GetGraphicPos() )
-                pImpl->mxBackColor = rBrush.GetColor();
+            if (GPOS_NONE == rBrush.GetGraphicPos())
+            {
+                const Color& rBrushColor = rBrush.GetColor();
+                if (rBrushColor != COL_TRANSPARENT)
+                    pImpl->mxBackColor = rBrush.GetColor();
+            }
         }
     }
 
