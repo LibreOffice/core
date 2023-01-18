@@ -423,7 +423,7 @@ void ScExportTest2::testRefStringUnspecified()
                                  aConfig.meStringRefAddressSyntax);
 
     // change formula syntax (i.e. not string ref syntax) to ExcelA1
-    FormulaGrammarSwitch aFGSwitch(pDoc, formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
+    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
 
     saveAndReload("calc8");
 
