@@ -353,7 +353,6 @@ class SwXCellRange final : public cppu::WeakImplHelper
 <
     css::table::XCellRange,
     css::lang::XServiceInfo,
-    css::lang::XUnoTunnel,
     css::beans::XPropertySet,
     css::chart::XChartDataArray,
     css::util::XSortable,
@@ -372,16 +371,11 @@ public:
             const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat,
             SwRangeDescriptor const & rDesc);
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel);
 
     std::vector<css::uno::Reference<css::table::XCell>> GetCells();
 
     const SwUnoCursor* GetTableCursor() const;
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XCellRange
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;

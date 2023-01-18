@@ -3144,22 +3144,6 @@ public:
 
 };
 
-namespace
-{
-}
-
-const uno::Sequence< sal_Int8 > & SwXCellRange::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXCellRangeUnoTunnelId;
-    return theSwXCellRangeUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-
 OUString SwXCellRange::getImplementationName()
     { return "SwXCellRange"; }
 

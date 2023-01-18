@@ -245,8 +245,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXCellRange *const pCellRange(
-        comphelper::getFromUnoTunnel<SwXCellRange>(xTunnel));
+    SwXCellRange *const pCellRange = dynamic_cast<SwXCellRange*>(xIfc.get());
     if (pCellRange)
     {
         SwUnoCursor const*const pUnoCursor(pCellRange->GetTableCursor());
