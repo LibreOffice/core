@@ -1166,18 +1166,6 @@ public:
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 };
 
-const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXFrameUnoTunnelId;
-    return theSwXFrameUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-
 OUString SwXFrame::getImplementationName()
 {
     return "SwXFrame";
@@ -1740,7 +1728,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             uno::Reference<text::XTextFrame> xFrame;
             if(aValue >>= xFrame)
             {
-                SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xFrame);
+                SwXFrame* pFrame = dynamic_cast<SwXFrame*>(xFrame.get());
                 if(pFrame && this != pFrame && pFrame->GetFrameFormat() && pFrame->GetFrameFormat()->GetDoc() == pDoc)
                 {
                     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet( pDoc->GetAttrPool() );
@@ -3422,15 +3410,6 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
 uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
 {
     return new SwFrameEventDescriptor( *this );
-}
-
-sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    sal_Int64 nRet = SwXFrame::getSomething( rId );
-    if( !nRet )
-        nRet = SwXText::getSomething( rId );
-
-    return nRet;
 }
 
 ::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)

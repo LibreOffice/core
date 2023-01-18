@@ -999,7 +999,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 uno::Reference<text::XTextFrame> xFrame;
                 if(aValue >>= xFrame)
                 {
-                    SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xFrame);
+                    SwXFrame* pFrame = dynamic_cast<SwXFrame*>(xFrame.get());
                     if(pFrame && pFrame->GetFrameFormat() &&
                         pFrame->GetFrameFormat()->GetDoc() == pDoc)
                     {
@@ -2005,7 +2005,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
         pDoc = &pRange->GetDoc();
-    else if (auto pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel))
+    else if (auto pText = dynamic_cast<SwXText*>(xTextRange.get()))
         pDoc = pText->GetDoc();
     else if (auto pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get()))
         pDoc = pCursor->GetDoc();

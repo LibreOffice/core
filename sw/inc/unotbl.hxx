@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_UNOTBL_HXX
 #define INCLUDED_SW_INC_UNOTBL_HXX
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XSortable.hpp>
@@ -88,12 +89,6 @@ class SwXCell final : public SwXCellBaseClass,
 public:
     SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, size_t nPos);
     SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode); // XML import interface
-
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;

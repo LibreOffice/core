@@ -198,10 +198,6 @@ SwXText::queryInterface(const uno::Type& rType)
     {
         aRet <<= uno::Reference< text::XText >(this);
     }
-    else if (rType == cppu::UnoType<lang::XUnoTunnel>::get())
-    {
-        aRet <<= uno::Reference< lang::XUnoTunnel >(this);
-    }
     else if (rType == cppu::UnoType<text::XSimpleText>::get())
     {
         aRet <<= uno::Reference< text::XSimpleText >(this);
@@ -579,12 +575,6 @@ SwXText::insertTextContent(
     // instead are "overlaid"
     const uno::Reference<lang::XUnoTunnel> xContentTunnel(xContent,
             uno::UNO_QUERY);
-    if (!xContentTunnel.is())
-    {
-        lang::IllegalArgumentException aArgException;
-        aArgException.Message = "text content does not support lang::XUnoTunnel";
-        throw aArgException;
-    }
     SwXDocumentIndexMark *const pDocumentIndexMark =
         comphelper::getFromUnoTunnel<SwXDocumentIndexMark>(xContentTunnel);
     SwXTextSection *const pSection =
@@ -1212,18 +1202,6 @@ SwXText::removeVetoableChangeListener(
 
 namespace
 {
-}
-
-const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextUnoTunnelId;
-    return theSwXTextUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXText::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXText>(rId, this);
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -2357,9 +2335,7 @@ SwXText::copyText(
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<lang::XUnoTunnel> const xSourceTunnel(xSource,
-        uno::UNO_QUERY);
-    SwXText const* const pSource(comphelper::getFromUnoTunnel<SwXText>(xSourceTunnel));
+    SwXText const* const pSource(dynamic_cast<SwXText*>(xSource.get()));
 
     uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
     uno::Reference< text::XTextCursor > const xCursor =

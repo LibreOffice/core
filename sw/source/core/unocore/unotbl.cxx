@@ -743,17 +743,6 @@ SwXCell::~SwXCell()
     EndListeningAll();
 }
 
-const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXCellUnoTunnelId;
-    return theSwXCellUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this, comphelper::FallbackToGetSomethingOf<SwXText>{});
-}
-
 uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
 {
     return comphelper::concatSequences(

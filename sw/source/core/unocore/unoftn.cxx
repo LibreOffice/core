@@ -163,19 +163,6 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
     return xNote;
 }
 
-const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXFootnoteUnoTunnelId;
-    return theSwXFootnoteUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    const sal_Int64 nRet( comphelper::getSomethingImpl<SwXFootnote>(rId, this) );
-    return nRet ? nRet : SwXText::getSomething(rId);
-}
-
 OUString SAL_CALL
 SwXFootnote::getImplementationName()
 {

@@ -45,10 +45,9 @@ class SfxItemPropertySet;
 namespace com::sun::star::frame { class XModel; }
 
 class BaseFrameProperties_Impl;
-class SAL_DLLPUBLIC_RTTI SwXFrame : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXFrame : public cppu::WeakImplHelper
 <
     css::lang::XServiceInfo,
-    css::lang::XUnoTunnel,
     css::beans::XPropertySet,
     css::beans::XPropertyState,
     css::drawing::XShape,
@@ -97,11 +96,6 @@ protected:
     CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat);
 
 public:
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
 
     //XNamed
     virtual OUString SAL_CALL getName() override;
@@ -233,9 +227,6 @@ public:
 
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XPropertySet
     virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;

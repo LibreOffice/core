@@ -1110,7 +1110,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
-    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel);
+    SwXText* pText = dynamic_cast<SwXText*>(xTextRange.get());
     SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
     SwXHeadFootText* pHeadText
         = eMode == TextRangeMode::AllowTableNode ? dynamic_cast<SwXHeadFootText*>(pText) : nullptr;

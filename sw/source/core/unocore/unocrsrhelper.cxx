@@ -191,8 +191,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
 
     // check these before Range to prevent misinterpretation of text frames
     // and cells also implement XTextRange
-    SwXFrame *const pFrame(
-        comphelper::getFromUnoTunnel<SwXFrame>(xTunnel));
+    SwXFrame *const pFrame = dynamic_cast<SwXFrame*>(xIfc.get());
     if (pFrame)
     {
         const SwFrameFormat *const pFrameFormat(pFrame->GetFrameFormat());
@@ -215,8 +214,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXCell *const pCell(
-        comphelper::getFromUnoTunnel<SwXCell>(xTunnel));
+    SwXCell *const pCell = dynamic_cast<SwXCell*>(xIfc.get());
     if (pCell)
     {
         SwFrameFormat *const pFrameFormat(pCell->GetFrameFormat());

@@ -872,9 +872,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    uno::Reference<XUnoTunnel> xCursorTunnel( rPropSet, UNO_QUERY );
-    assert(xCursorTunnel.is() && "missing XUnoTunnel for embedded");
-    SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xCursorTunnel);
+    SwXFrame* pFrame = dynamic_cast<SwXFrame*>(rPropSet.get());
     OSL_ENSURE( pFrame, "SwXFrame missing" );
     SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
     const SwFormatContent& rContent = pFrameFormat->GetContent();

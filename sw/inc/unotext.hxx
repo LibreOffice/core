@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_UNOTEXT_HXX
 #define INCLUDED_SW_INC_UNOTEXT_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
@@ -44,7 +43,6 @@ class SwPaM;
 
 class SAL_DLLPUBLIC_RTTI SwXText
     : public css::lang::XTypeProvider
-    , public css::lang::XUnoTunnel
     , public css::beans::XPropertySet
     , public css::text::XTextAppendAndConvert
     , public css::text::XTextCopy
@@ -95,12 +93,6 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type >
         SAL_CALL getTypes() override;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

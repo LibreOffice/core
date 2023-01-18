@@ -3082,7 +3082,7 @@ SwXTextCursor::createEnumeration()
 
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    SwXText* pParentText = comphelper::getFromUnoTunnel<SwXText>(m_xParentText);
+    SwXText* pParentText = dynamic_cast<SwXText*>(m_xParentText.get());
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {

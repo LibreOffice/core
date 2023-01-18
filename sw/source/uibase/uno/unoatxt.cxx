@@ -848,13 +848,13 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         // This means that we would reflect any changes which were done to the AutoText by foreign instances
         // in the meantime
 
-    // The reference to xTmp is needed during the whole call, likely because it could be a
+    // The reference to xKeepAlive is needed during the whole call, likely because it could be a
     // different object, not xTextRange itself, and the reference guards it from preliminary death
     uno::Reference<text::XTextRange> xKeepAlive( xTextRange );
     uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xKeepAlive.get());
-    SwXText *pText = comphelper::getFromUnoTunnel<SwXText>(xTunnel);
+    SwXText *pText = dynamic_cast<SwXText*>(xTextRange.get());
 
     SwDoc* pDoc = nullptr;
     if (pRange)

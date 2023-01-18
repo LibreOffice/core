@@ -520,9 +520,7 @@ SwDoc* SwXMLExport::getDoc()
     }
 
     Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    assert( xTextTunnel.is());
-    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xTextTunnel);
+    SwXText* pText = dynamic_cast<SwXText*>(xText.get());
     assert( pText != nullptr );
     m_pDoc = pText->GetDoc();
     assert( m_pDoc != nullptr );
