@@ -330,7 +330,6 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
             }
             while (nPos < m_pTextNode->Len());
         }
-        assert(m_nChgCnt == 0); // should have reset it all? there cannot be ExtOn() inside of a Delete redline, surely?
         // Unapply current para items:
         // the SwAttrHandler doesn't appear to be capable of *unapplying*
         // items at all; it can only apply a previously effective item.
