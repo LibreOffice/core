@@ -6279,13 +6279,14 @@ void DomainMapper_Impl::handleToc
             TOCStyleMap aMap;
             sal_Int32 nLevel;
             sal_Int32 nPosition = 0;
+            auto const tsep(sTemplate.indexOf(',') != -1 ? ',' : ';');
             while( nPosition >= 0)
             {
-                OUString sStyleName = sTemplate.getToken( 0, ',', nPosition );
+                OUString sStyleName = sTemplate.getToken(0, tsep, nPosition);
                                 //empty tokens should be skipped
                 while( sStyleName.isEmpty() && nPosition > 0 )
-                    sStyleName = sTemplate.getToken( 0, ',', nPosition );
-                nLevel = o3tl::toInt32(o3tl::getToken(sTemplate, 0, ',', nPosition ));
+                    sStyleName = sTemplate.getToken(0, tsep, nPosition);
+                nLevel = o3tl::toInt32(o3tl::getToken(sTemplate, 0, tsep, nPosition ));
                 if( !nLevel )
                     nLevel = 1;
                 if( !sStyleName.isEmpty() )

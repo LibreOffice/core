@@ -138,6 +138,7 @@
 #include "ww8par.hxx"
 #include "ww8attributeoutput.hxx"
 #include "fields.hxx"
+#include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/fltrcfg.hxx>
 
@@ -2252,6 +2253,21 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
     }
 }
 
+static auto GetSeparatorForLocale() -> OUString
+{
+    switch (sal_uInt16(MsLangId::getSystemLanguage()))
+    {
+        case sal_uInt16(LANGUAGE_GERMAN):
+        case sal_uInt16(LANGUAGE_GERMAN_AUSTRIAN):
+        case sal_uInt16(LANGUAGE_GERMAN_LIECHTENSTEIN):
+        case sal_uInt16(LANGUAGE_GERMAN_LUXEMBOURG):
+        case sal_uInt16(LANGUAGE_GERMAN_SWISS):
+            return ";";
+        default:
+            return ",";
+    }
+}
+
 void AttributeOutputBase::StartTOX( const SwSection& rSect )
 {
     if ( const SwTOXBase* pTOX = rSect.GetTOXBase() )
@@ -2361,6 +2377,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     sStr = FieldString(eCode);
 
                     OUString sTOption;
+                    // tdf#153082 Word's separator interpretation in DOCX
+                    // fields varies by system locale.
+                    auto const tsep(GetSeparatorForLocale());
                     sal_uInt16 n, nTOXLvl = pTOX->GetLevel();
                     if( !nTOXLvl )
                         ++nTOXLvl;
@@ -2462,8 +2481,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
                                 {
                                     if (!sTOption.isEmpty())
-                                        sTOption += ",";
-                                    sTOption += pColl->GetName() + "," + OUString::number( nTestLvl + 1 );
+                                        sTOption += tsep;
+                                    sTOption += pColl->GetName() + tsep + OUString::number(nTestLvl + 1);
                                 }
                             }
                         }
@@ -2483,7 +2502,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             if( !rStyles.isEmpty() )
                             {
                                 sal_Int32 nPos = 0;
-                                const OUString sLvl{ "," + OUString::number( n + 1 ) };
+                                const OUString sLvl{tsep + OUString::number(n + 1)};
                                 do {
                                     const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
                                     if( !sStyle.isEmpty() )
@@ -2494,7 +2513,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                             if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                             {
                                                 if( !sTOption.isEmpty() )
-                                                    sTOption += ",";
+                                                    sTOption += tsep;
                                                 sTOption += sStyle + sLvl;
                                             }
                                         }
