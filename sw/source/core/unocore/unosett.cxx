@@ -996,22 +996,6 @@ bool SwXNumberingRules::isInvalidStyle(std::u16string_view rName)
     return rName == aInvalidStyle;
 }
 
-namespace
-{
-}
-
-const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXNumberingRulesUnoTunnelId;
-    return theSwXNumberingRulesUnoTunnelId.getSeq();
-}
-
-// return implementation specific data
-sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 OUString SwXNumberingRules::getImplementationName()
 {
     return "SwXNumberingRules";

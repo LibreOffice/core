@@ -248,7 +248,7 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
     {
-        auto pSwXRules = comphelper::getFromUnoTunnel<SwXNumberingRules>(xRulesRef);
+        auto pSwXRules = dynamic_cast<SwXNumberingRules*>(xRulesRef.get());
         if(pSwXRules)
         {
             *m_pRule = *pSwXRules->GetNumRule();

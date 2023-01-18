@@ -1701,10 +1701,10 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
-    if(!rValue.has<uno::Reference<container::XIndexReplace>>() || !rValue.has<uno::Reference<lang::XUnoTunnel>>())
+    auto xNumberTunnel(rValue.get<uno::Reference<container::XIndexReplace>>());
+    if(!xNumberTunnel)
         throw lang::IllegalArgumentException();
-    auto xNumberTunnel(rValue.get<uno::Reference<lang::XUnoTunnel>>());
-    SwXNumberingRules* pSwXRules = comphelper::getFromUnoTunnel<SwXNumberingRules>(xNumberTunnel);
+    SwXNumberingRules* pSwXRules = dynamic_cast<SwXNumberingRules*>(xNumberTunnel.get());
     if(!pSwXRules)
         return;
     SwNumRule aSetRule(*pSwXRules->GetNumRule());

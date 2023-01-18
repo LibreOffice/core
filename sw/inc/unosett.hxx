@@ -26,12 +26,11 @@
 #include "swtypes.hxx"
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include "unobaseclass.hxx"
 
 class SwDoc;
@@ -132,10 +131,9 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXNumberingRules : public cppu::WeakAggImplHelper5
+class SwXNumberingRules : public cppu::WeakAggImplHelper4
 <
     css::container::XIndexReplace,
-    css::lang::XUnoTunnel,
     css::beans::XPropertySet,
     css::container::XNamed,
     css::lang::XServiceInfo
@@ -160,10 +158,6 @@ protected:
 public:
     SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = nullptr); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
