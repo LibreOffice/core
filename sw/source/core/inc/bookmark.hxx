@@ -239,6 +239,7 @@ namespace sw::mark {
         {
         public:
             TextFieldmark(const SwPaM& rPaM, const OUString& rName);
+            ~TextFieldmark();
             void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             void ReleaseDoc(SwDoc& rDoc) override;
 
