@@ -53,7 +53,8 @@ namespace DOM
 
         virtual void fastSaxify( Context& i_rContext ) override;
 
-        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) override;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType,
+                        css::xml::dom::NodeType const*) override;
 
         /**
         Retrieves an attribute value by name.

@@ -114,7 +114,8 @@ namespace DOM
 
         virtual void fastSaxify( Context& rContext ) override;
 
-        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) override;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType,
+                css::xml::dom::NodeType const* pReplacedNodeType) override;
 
         /**
         Creates an Attr of the given name.
