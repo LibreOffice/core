@@ -156,7 +156,6 @@
     <string name="unable_to_export_pdf">PDF-Export nicht möglich</string>
     <string name="unable_to_save">Speichern nicht möglich</string>
     <string name="printing_not_supported">Ihr Gerät unterstützt Drucken nicht</string>
-    <string name="creating_new_files_not_supported">Erstellen neuer Dokumente auf diesem Gerät nicht verfügbar, benötigt Android-SDK-Version >= 19.</string>
     <string name="error">Fehler</string>
     <string name="enter_part_name">Name für Abschnitt eingeben</string>
     <string name="bmp_null">Bmp ist null!</string>

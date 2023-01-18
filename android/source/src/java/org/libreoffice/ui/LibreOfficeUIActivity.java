@@ -180,9 +180,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         editFAB = findViewById(R.id.editFAB);
         editFAB.setOnClickListener(this);
-        // allow creating new docs only when experimental editing is enabled
+        // allow creating new docs only when experimental editing is enabled and
+        // Intent.ACTION_CREATE_DOCUMENT (used in 'createNewFileDialog') is available (SDK version >= 19)
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean bAllowCreatingDocs = BuildConfig.ALLOW_EDITING && preferences.getBoolean(LibreOfficeMainActivity.ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        final boolean bEditingEnabled = BuildConfig.ALLOW_EDITING && preferences.getBoolean(LibreOfficeMainActivity.ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        final boolean bAllowCreatingDocs = bEditingEnabled && Build.VERSION.SDK_INT >= 19;
         editFAB.setVisibility(bAllowCreatingDocs ? View.VISIBLE : View.INVISIBLE);
 
         impressFAB = findViewById(R.id.newImpressFAB);
@@ -451,12 +453,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.editFAB) {
-            // Intent.ACTION_CREATE_DOCUMENT, used in 'createNewFileDialog' requires SDK version 19
-            if (Build.VERSION.SDK_INT < 19) {
-                Toast.makeText(this,
-                    getString(R.string.creating_new_files_not_supported), Toast.LENGTH_SHORT).show();
-                return;
-            }
             if (isFabMenuOpen) {
                 collapseFabMenu();
             } else {
