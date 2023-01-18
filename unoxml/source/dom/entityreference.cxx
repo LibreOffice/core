@@ -34,7 +34,7 @@ namespace DOM
     {
     }
 
-    bool CEntityReference::IsChildTypeAllowed(NodeType const nodeType)
+    bool CEntityReference::IsChildTypeAllowed(NodeType const nodeType, NodeType const*const)
     {
         switch (nodeType) {
             case NodeType_ELEMENT_NODE:

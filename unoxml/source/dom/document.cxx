@@ -291,7 +291,7 @@ namespace DOM
         rContext.mxDocHandler->endDocument();
     }
 
-    bool CDocument::IsChildTypeAllowed(NodeType const nodeType)
+    bool CDocument::IsChildTypeAllowed(NodeType const nodeType, NodeType const*const pReplacedNodeType)
     {
         switch (nodeType) {
             case NodeType_PROCESSING_INSTRUCTION_NODE:
@@ -299,10 +299,12 @@ namespace DOM
                 return true;
             case NodeType_ELEMENT_NODE:
                  // there may be only one!
-                return nullptr == lcl_getDocumentRootPtr(m_aDocPtr);
+                return (pReplacedNodeType && *pReplacedNodeType == nodeType)
+                    || nullptr == lcl_getDocumentRootPtr(m_aDocPtr);
             case NodeType_DOCUMENT_TYPE_NODE:
                  // there may be only one!
-                return nullptr == lcl_getDocumentType(m_aDocPtr);
+                return (pReplacedNodeType && *pReplacedNodeType == nodeType)
+                    || nullptr == lcl_getDocumentType(m_aDocPtr);
             default:
                 return false;
         }
