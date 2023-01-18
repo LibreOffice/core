@@ -739,7 +739,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
                         impl_AddBool(pAttrList.get(), FSNS(XML_o, XML_detectmouseclick), nValue != 0);
 
-                    if (imageData)
+                    if (imageData && ((pSdrGrafObj && pSdrGrafObj->isSignatureLine())
+                        || m_nShapeType == ESCHER_ShpInst_PictureFrame))
                         m_pSerializer->singleElementNS( XML_v, XML_imagedata, pAttrList );
                     else
                     {
@@ -751,7 +752,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                 case ESCHER_FillSolid:       pFillType = "solid"; break;
                                 // TODO case ESCHER_FillPattern:     pFillType = ""; break;
                                 case ESCHER_FillTexture:     pFillType = "tile"; break;
-                                // TODO case ESCHER_FillPicture:     pFillType = ""; break;
+                                case ESCHER_FillPicture:     pFillType = "frame"; break;
                                 // TODO case ESCHER_FillShade:       pFillType = ""; break;
                                 // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
                                 // TODO case ESCHER_FillShadeShape:  pFillType = ""; break;
@@ -773,7 +774,6 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                         if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
                             impl_AddColor( pAttrList.get(), XML_color2, nValue );
-
 
                         if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
                             // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
@@ -1397,7 +1397,8 @@ sal_Int32 VMLExport::StartShape()
 
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
     const SdrTextObj* pTxtObj = DynCastSdrTextObj( m_pSdrObject );
-    if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
+    if (pTxtObj && m_pTextExport && !m_pSdrObject->IsTextPath()
+        && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
         std::optional<OutlinerParaObject> pParaObj;
 

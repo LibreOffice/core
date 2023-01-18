@@ -117,7 +117,7 @@ public:
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
     bool GetTextBounds( tools::Rectangle& rTextBound ) const;
-    bool IsTextPath() const;
+    virtual bool IsTextPath() const override;
     basegfx::B2DPolyPolygon GetLineGeometry( const bool bBezierAllowed ) const;
 
 protected:

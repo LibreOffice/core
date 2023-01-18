@@ -1176,11 +1176,13 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 CPPUNIT_TEST_FIXTURE(Test, NoFillAttrInImagedata)
 {
     loadAndSave("NoFillAttrInImagedata.docx");
-    //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'
+    //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'. The
+    //source file has v:fill and no v:imagedata. Same should be in the file written by LO.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "type");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill", "type", "tile");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")

@@ -768,6 +768,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
     assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchor", "b");
     assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchorCtr", "1");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
+{
+    // The document has a Fontwork shape with bitmap fill.
+    loadFromURL(u"tdf128568_FontworkBitmapFill.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    // Attribute ID is not allowed in element v:shape
+    skipValidation();
+
+    // Saving that to DOCX:
+    save("Office Open XML Text");
+
+    // Make sure it is exported to VML and has no txbxContent but a textpath element. Without fix it
+    // was exported as DML 'abc transform', but that is not able to use bitmap fill in Word.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//mc:alternateContent", 0);
+    assertXPath(pXmlDoc, "//v:shape/v:textbox/v:txbxContent", 0);
+    assertXPath(pXmlDoc, "//v:shape/v:textpath", 1);
+
+    // Without fix the bitmap was referenced by v:imagedata element. But that produces a picture
+    // in Word not a WordArt shape. Instead a v:fill has to be used.
+    assertXPath(pXmlDoc, "//v:shape/v:imagedata", 0);
+    assertXPath(pXmlDoc, "//v:shape/v:fill", 1);
+    assertXPath(pXmlDoc, "//v:shape/v:fill[@r:id]", 1);
+
+    // The fill is set to 'stretched' in LO, that is type="frame" in VML. That was not implemented
+    // in VML export.
+    assertXPath(pXmlDoc, "//v:shape/v:fill", "type", "frame");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

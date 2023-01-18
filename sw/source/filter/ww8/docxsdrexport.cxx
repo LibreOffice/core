@@ -490,7 +490,8 @@ public:
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
     void textFrameShadow(const SwFrameFormat& rFrameFormat);
-    static bool isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape);
+    static bool isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape,
+                                    const SdrObject* pSdrObject);
 
     void setSerializer(const sax_fastparser::FSHelperPtr& pSerializer)
     {
@@ -1379,7 +1380,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
                                     int nAnchorId)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape());
-    if (!Impl::isSupportedDMLShape(xShape))
+    if (!Impl::isSupportedDMLShape(xShape, pSdrObject))
         return;
 
     m_pImpl->getExport().DocxAttrOutput().GetSdtEndBefore(pSdrObject);
@@ -1539,23 +1540,33 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
                                    XML_offset, aOffset);
 }
 
-bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape)
+bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape,
+                                              const SdrObject* pSdrObject)
 {
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape")
         || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
         return false;
 
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     // For signature line shapes, we don't want DML, just the VML shape.
     if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
     {
-        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         bool bIsSignatureLineShape = false;
         xShapeProperties->getPropertyValue("IsSignatureLine") >>= bIsSignatureLineShape;
         if (bIsSignatureLineShape)
             return false;
     }
 
+    // A FontWork shape with bitmap fill cannot be expressed as a modern 'abc transform'
+    // in Word. Only the legacy VML WordArt allows bitmap fill.
+    if (pSdrObject->IsTextPath())
+    {
+        css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
+        xShapeProperties->getPropertyValue("FillStyle") >>= eFillStyle;
+        if (eFillStyle == css::drawing::FillStyle_BITMAP)
+            return false;
+    }
     return true;
 }
 
@@ -1575,7 +1586,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
 
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
-    if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape)
+    if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape, sdrObj)
         && (!bDMLAndVMLDrawingOpen || lcl_isLockedCanvas(xShape))) // Locked canvas is OK inside DML
     {
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_AlternateContent);
