@@ -48,6 +48,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <rtl/strbuf.hxx>
 #include <strings.hrc>
+#include <tools/json_writer.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -560,6 +561,25 @@ namespace sw::mark
     {
         if ( !rName.isEmpty() )
             m_aName = rName;
+    }
+
+    TextFieldmark::~TextFieldmark()
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (!pViewShell)
+            return;
+
+        OUString fieldCommand;
+        (*GetParameters())[OUString(ODF_CODE_PARAM)] >>= fieldCommand;
+        tools::JsonWriter aJson;
+        aJson.put("commandName", ".uno:DeleteTextFormField");
+        aJson.put("success", true);
+        {
+            auto result = aJson.startNode("result");
+            aJson.put("DeleteTextFormField", fieldCommand);
+        }
+
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
     }
 
     void TextFieldmark::InitDoc(SwDoc& io_rDoc,
