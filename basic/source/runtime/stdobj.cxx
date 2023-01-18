@@ -328,8 +328,8 @@ constexpr Method aMethods[] = {
 { u"Ddeterminateall",               SbxNULL,         FUNCTION_,        SbRtl_DDETerminateAll      },
 { u"DimArray",                      SbxOBJECT,       FUNCTION_,        SbRtl_DimArray             },
 { u"Dir",                           SbxSTRING,   2 | FUNCTION_,        SbRtl_Dir                  },
-    arg(u"FileSpec", SbxSTRING,  OPT_),
-    arg(u"attrmask", SbxINTEGER, OPT_),
+    arg(u"Pathname",   SbxSTRING,  OPT_),
+    arg(u"Attributes", SbxINTEGER, OPT_),
 
 { u"DoEvents",                      SbxINTEGER,      FUNCTION_,        SbRtl_DoEvents             },
 { u"DumpAllObjects",                SbxEMPTY,    2 | SUB_,             SbRtl_DumpAllObjects       },
@@ -487,10 +487,10 @@ constexpr Method aMethods[] = {
     arg(u"Compare", SbxINTEGER, OPT_),
 
 { u"InStrRev",                      SbxLONG,      4 | FUNCTION_ | COMPATONLY_, SbRtl_InStrRev     },
-    arg(u"String1", SbxSTRING),
-    arg(u"String2", SbxSTRING),
-    arg(u"Start",   SbxSTRING,  OPT_),
-    arg(u"Compare", SbxINTEGER, OPT_),
+    arg(u"StringCheck", SbxSTRING),
+    arg(u"StringMatch", SbxSTRING),
+    arg(u"Start",       SbxSTRING,  OPT_),
+    arg(u"Compare",     SbxINTEGER, OPT_),
 
 { u"Int",                           SbxDOUBLE,    1 | FUNCTION_,       SbRtl_Int                  },
     arg(u"number", SbxDOUBLE),
@@ -535,8 +535,8 @@ constexpr Method aMethods[] = {
     arg(u"Variant", SbxVARIANT),
 
 { u"Join",                          SbxSTRING,    2 | FUNCTION_,       SbRtl_Join                 },
-    arg(u"list",      SbxOBJECT),
-    arg(u"delimiter", SbxSTRING),
+    arg(u"SourceArray", SbxOBJECT),
+    arg(u"Delimiter",   SbxSTRING),
 
 { u"Kill",                          SbxNULL,      1 | FUNCTION_,       SbRtl_Kill                 },
     arg(u"filespec", SbxSTRING),
@@ -549,7 +549,7 @@ constexpr Method aMethods[] = {
 
 { u"Left",                          SbxSTRING,    2 | FUNCTION_,       SbRtl_Left                 },
     arg(u"String", SbxSTRING),
-    arg(u"Count",  SbxLONG),
+    arg(u"Length", SbxLONG),
 
 { u"Len",                           SbxLONG,      1 | FUNCTION_,       SbRtl_Len                  },
     arg(u"StringOrVariant", SbxVARIANT),
@@ -593,9 +593,9 @@ constexpr Method aMethods[] = {
 
 { u"Me",                            SbxOBJECT,    0 | FUNCTION_ | COMPATONLY_, SbRtl_Me           },
 { u"Mid",                           SbxSTRING,    3 | LFUNCTION_,      SbRtl_Mid                  },
-    arg(u"String",   SbxSTRING),
-    arg(u"StartPos", SbxLONG),
-    arg(u"Length",   SbxLONG, OPT_),
+    arg(u"String", SbxSTRING),
+    arg(u"Start",  SbxLONG),
+    arg(u"Length", SbxLONG, OPT_),
 
 { u"Minute",                        SbxINTEGER,   1 | FUNCTION_,       SbRtl_Minute               },
     arg(u"Date", SbxDATE),
@@ -711,7 +711,7 @@ constexpr Method aMethods[] = {
 
 { u"Right",                         SbxSTRING,    2 | FUNCTION_,       SbRtl_Right                },
     arg(u"String", SbxSTRING),
-    arg(u"Count",  SbxLONG),
+    arg(u"Length", SbxLONG),
 
 { u"RmDir",                         SbxNULL,      1 | FUNCTION_,       SbRtl_RmDir                },
     arg(u"pathname", SbxSTRING),
@@ -742,7 +742,7 @@ constexpr Method aMethods[] = {
     arg(u"Wait",   SbxBOOL, OPT_),
 
 { u"SetAttr",                       SbxNULL,      2 | FUNCTION_,       SbRtl_SetAttr              },
-    arg(u"File",       SbxSTRING),
+    arg(u"PathName",   SbxSTRING),
     arg(u"Attributes", SbxINTEGER),
 
 { u"SET_OFF",                       SbxINTEGER,       CPROP_,          SbRtl_SET_OFF              },
@@ -752,8 +752,8 @@ constexpr Method aMethods[] = {
     arg(u"number", SbxDOUBLE),
 
 { u"Shell",                         SbxLONG,      2 | FUNCTION_,       SbRtl_Shell                },
-    arg(u"Commandstring", SbxSTRING),
-    arg(u"WindowStyle",   SbxINTEGER, OPT_),
+    arg(u"PathName",    SbxSTRING),
+    arg(u"WindowStyle", SbxINTEGER, OPT_),
 
 { u"Sin",                           SbxDOUBLE,    1 | FUNCTION_,       SbRtl_Sin                  },
     arg(u"number", SbxDOUBLE),
@@ -778,7 +778,7 @@ constexpr Method aMethods[] = {
 { u"Split",                         SbxOBJECT,    3 | FUNCTION_,       SbRtl_Split                },
     arg(u"expression", SbxSTRING),
     arg(u"delimiter",  SbxSTRING),
-    arg(u"count",      SbxLONG),
+    arg(u"Limit",      SbxLONG),
 
 { u"Sqr",                           SbxDOUBLE,    1 | FUNCTION_,       SbRtl_Sqr                  },
     arg(u"number", SbxDOUBLE),
@@ -797,8 +797,8 @@ constexpr Method aMethods[] = {
     arg(u"LCID",       SbxINTEGER, OPT_),
 
 { u"String",                        SbxSTRING,    2 | FUNCTION_,       SbRtl_String               },
-    arg(u"Count",  SbxLONG),
-    arg(u"Filler", SbxVARIANT),
+    arg(u"Number",    SbxLONG),
+    arg(u"Character", SbxVARIANT),
 
 { u"StrReverse",                    SbxSTRING,    1 | FUNCTION_ | COMPATONLY_, SbRtl_StrReverse   },
     arg(u"String1", SbxSTRING),
@@ -875,7 +875,7 @@ constexpr Method aMethods[] = {
     arg(u"Var", SbxVARIANT),
 
 { u"TypeName",                      SbxSTRING,    1 | FUNCTION_,       SbRtl_TypeName             },
-    arg(u"Var", SbxVARIANT),
+    arg(u"Varname", SbxVARIANT),
 
 { u"UBound",                        SbxLONG,      1 | FUNCTION_,       SbRtl_UBound               },
     arg(u"Var", SbxVARIANT),
@@ -890,7 +890,7 @@ constexpr Method aMethods[] = {
     arg(u"String", SbxSTRING),
 
 { u"VarType",                       SbxINTEGER,   1 | FUNCTION_,       SbRtl_VarType              },
-    arg(u"Var", SbxVARIANT),
+    arg(u"Varname", SbxVARIANT),
 
 { u"V_EMPTY",                       SbxINTEGER,       CPROP_,          SbRtl_V_EMPTY              },
 { u"V_NULL",                        SbxINTEGER,       CPROP_,          SbRtl_V_NULL               },

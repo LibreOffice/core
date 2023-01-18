@@ -42,6 +42,8 @@ Sub verify_testVarType()
     TestUtil.AssertEqual(vbString,   8,  "vbString")
     TestUtil.AssertEqual(vbBoolean,  11, "vbBoolean")
 
+    TestUtil.AssertEqual(VarType(varname:=TestStr), vbString, "VarType(varname:=TestStr)")
+
     TestUtil.AssertEqual(VarType(TestStr),        vbString,   "VarType(TestStr)")
     TestUtil.AssertEqual(VarType(TestBoo),        vbBoolean,  "VarType(TestBoo)")
     TestUtil.AssertEqual(VarType(TestDouble),     vbDouble,   "VarType(TestDouble)")

@@ -27,6 +27,8 @@ Dim intArray()  As Integer,  lngArray(5) As Long, sngArray!() As Single, dblArra
 Function doUnitTest ' TypeName()
 
     myErr = CVErr(0.56E-41)
+    assert(TypeName(varName:=int16) = "Integer", "TypeName(varName:=int16) is not ""Integer""")
+
     assert( TypeName(int16) = "Integer" , "TypeName(int16) is not ""Integer""")
     assert( TypeName(int32) = "Long"    , "TypeName(int32) is not ""Long""")
     assert( TypeName(flt32) = "Single"  , "TypeName(flt32) is not ""Single""" )

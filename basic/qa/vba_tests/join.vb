@@ -27,6 +27,11 @@ Sub verify_testJoin()
     TestUtil.AssertEqual(Join(vaArray, "<>"), "string1<>string2<>string3", "Join(vaArray, ""<>"")")
     TestUtil.AssertEqual(Join(vaArray, ""),   "string1string2string3",     "Join(vaArray, """")")
 
+    ' tdf#141474 keyword names need to match that of VBA
+    Dim aList(0 to 7) As String : aList = Array("(", "Star", "|", "Open", "|", "Libre", ")", "Office")
+    TestUtil.AssertEqual(Join(sourceArray:=aList), "( Star | Open | Libre ) Office", "Join() with 1 keyword name")
+    TestUtil.AssertEqual(Join(delimiter:="", sourceArray:=aList), "(Star|Open|Libre)Office", "Join() with 2 keyword names")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testJoin", Err, Error$, Erl)

@@ -37,6 +37,13 @@ Sub verify_testInStrRev()
     ' This test should fail after tdf#110003 has been fixed.
     TestUtil.AssertEqual(InStrRev("Straße", "s", -1, 1), 5, "InStrRev(""Straße"", ""s"", -1, 1)")
 
+    ' tdf#141474 keyword names need to match that of VBA
+    Const vbBinaryCompare = 0, vbTextCompare = 1
+    TestUtil.AssertEqual(InStrRev(stringMatch:="Star", stringCheck:="LibreOffice"),                                            0, "InStrRev(stringMatch:=""Star"", stringCheck:=""LibreOffice"")")
+    TestUtil.AssertEqual(InStrRev(Start:=-1, stringMatch:="Libre", stringCheck:="LibreOfficeLibre"),                          12, "InStrRev(Start:=-1, stringMatch:=""Libre"", stringCheck:=""LibreOfficeLibre"")")
+    TestUtil.AssertEqual(InStrRev(Start:=12, stringMatch:="Libre", stringCheck:="LibreOfficeLibre"),                           1, "InStrRev(Start:=12, stringMatch:=""Libre"", stringCheck:=""LibreOfficeLibre"")")
+    TestUtil.AssertEqual(InStrRev(Compare:=vbBinaryCompare, Start:=12, stringMatch:="Libre", stringCheck:="LibreOfficeLibre"), 1, "InStrRev(Compare:=vbBinaryCompare, Start:=12, stringMatch:=""Libre"", stringCheck:=""LibreOfficeLibre"")")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testInStrRev", Err, Error$, Erl)

@@ -53,6 +53,8 @@ Sub verify_testvartype()
     TestUtil.AssertEqual( VarType(Nothing), V_OBJECT, "Vartype(Empty) is not V_OBJECT")
 
     myErr = CVErr("errMsg")
+    TestUtil.AssertEqual(VarType(varName:=int16), V_INTEGER, "VarType(varName:=int16) is not V_INTEGER")
+
     TestUtil.AssertEqual( VarType(int16), V_INTEGER , "VarType(int16) is not V_INTEGER")
     TestUtil.AssertEqual( VarType(int32), V_LONG    , "VarType(int32) is not V_LONG")
     TestUtil.AssertEqual( VarType(flt32), V_SINGLE  , "VarType(flt32) is not V_SINGLE" )

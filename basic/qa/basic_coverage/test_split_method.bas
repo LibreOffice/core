@@ -53,6 +53,12 @@ Sub verify_testSplit
         TestUtil.AssertEqual(VarType(splitArr(i)), 8200, "VarType(splitArr(i))")
     Next
 
+    ' tdf#141474 keyword names need to match that of VBA
+    TestUtil.AssertEqual(Split(expression:="LibreOffice StarOffice")(1), "StarOffice", "Split with 1 keyword name" )
+    Dim txt As String : txt = "Libre_Office_Star_Office"
+    TestUtil.AssertEqual(Split(delimiter:="_", expression:=txt)(2), "Star", "Split with 2 keyword names" )
+    TestUtil.AssertEqual(Split(limit:=3, delimiter:="_", expression:=txt)(2), "Star_Office", "Split with 3 keyword names" )
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testSplit", Err, Error$, Erl)

@@ -32,6 +32,8 @@ Sub verify_testTypeName()
     Dim TestCurrSign@
     Dim TestStrSign$
 
+    TestUtil.AssertEqual(TypeName(varname:=s1), "String", "TypeName(varname:=s1")
+
     TestUtil.AssertEqual(TypeName(s1), "String",  "TypeName(s1)")
     TestUtil.AssertEqual(TypeName(b1), "Boolean", "TypeName(b1)")
     TestUtil.AssertEqual(TypeName(c1), "Byte",    "TypeName(c1)")
