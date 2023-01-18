@@ -8728,37 +8728,8 @@ void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef
     // There is nothing to do here for the set fields
 }
 
-void DocxAttributeOutput::HiddenField(const SwField& rField)
+void DocxAttributeOutput::HiddenField(const SwField& /*rField*/)
 {
-    auto eSubType = static_cast<SwFieldTypesEnum>(rField.GetSubType());
-    if (eSubType == SwFieldTypesEnum::ConditionalText)
-    {
-        OUString aCond = rField.GetPar1();
-        OUString aTrueFalse = rField.GetPar2();
-        sal_Int32 nPos = aTrueFalse.indexOf('|');
-        OUString aTrue;
-        OUString aFalse;
-        if (nPos == -1)
-        {
-            aTrue = aTrueFalse;
-        }
-        else
-        {
-            aTrue = aTrueFalse.subView(0, nPos);
-            aFalse = aTrueFalse.subView(nPos + 1);
-        }
-        if (aTrue.getLength() > 1 && aTrue.startsWith("\"") && aTrue.endsWith("\""))
-            aTrue = aTrue.copy(1, aTrue.getLength() - 2);
-        if (aFalse.getLength() > 1 && aFalse.startsWith("\"") && aFalse.endsWith("\""))
-            aFalse = aFalse.copy(1, aFalse.getLength() - 2);
-
-        // Substitute a single quote for an illegal double quote if one exists
-        OUString aCmd = FieldString(ww::eIF) + aCond + " \"" + aTrue.replaceAll("\"", "'")
-            + "\" \"" + aFalse.replaceAll("\"", "'") + "\"";
-        m_rExport.OutputField(&rField, ww::eIF, aCmd);
-        return;
-    }
-
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::HiddenField()" );
 }
 

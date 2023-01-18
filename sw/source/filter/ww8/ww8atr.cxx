@@ -3338,7 +3338,36 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             OUString sExpand(pField->GetPar2());
             if (!sExpand.isEmpty())
             {
-                HiddenField( *pField );
+                auto eSubType = static_cast<SwFieldTypesEnum>(pField->GetSubType());
+                if (eSubType == SwFieldTypesEnum::ConditionalText)
+                {
+                    OUString aCond = pField->GetPar1();
+                    OUString aTrueFalse = pField->GetPar2();
+                    sal_Int32 nPos = aTrueFalse.indexOf('|');
+                    OUString aTrue;
+                    OUString aFalse;
+                    if (nPos == -1)
+                    {
+                        aTrue = aTrueFalse;
+                    }
+                    else
+                    {
+                        aTrue = aTrueFalse.subView(0, nPos);
+                        aFalse = aTrueFalse.subView(nPos + 1);
+                    }
+                    if (aTrue.getLength() > 1 && aTrue.startsWith("\"") && aTrue.endsWith("\""))
+                        aTrue = aTrue.copy(1, aTrue.getLength() - 2);
+                    if (aFalse.getLength() > 1 && aFalse.startsWith("\"") && aFalse.endsWith("\""))
+                        aFalse = aFalse.copy(1, aFalse.getLength() - 2);
+
+                    // Substitute a single quote for an illegal double quote if one exists
+                    OUString aCmd = FieldString(ww::eIF) + aCond + " \""
+                        + aTrue.replaceAll("\"", "'") + "\" \"" + aFalse.replaceAll("\"", "'")
+                            + "\"";
+                    GetExport().OutputField(pField, ww::eIF, aCmd);
+                }
+                else
+                    HiddenField(*pField);
             }
         }
         break;
