@@ -59,6 +59,8 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <linguistic/misc.hxx>
 
+#include <workctrl.hxx>
+
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -2398,6 +2400,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
 
     // Before the fix the pasted table name was 'Table1'.
     CPPUNIT_ASSERT_EQUAL(OUString("MyTableName"), pFormat->GetName());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
+{
+    createSwDoc();
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+
+    // insert two fields
+    dispatchCommand(mxComponent, ".uno:InsertTimeField", {});
+    dispatchCommand(mxComponent, ".uno:InsertDateField", {});
+
+    // navigate by field
+    SwView::SetMoveType(NID_FIELD);
+
+    // set cursor to the start of the document
+    pWrtShell->SttEndDoc(false);
+    // navigate to the previous field
+    dispatchCommand(mxComponent, ".uno:ScrollToPrevious", {});
+    // Before the fix the position would be 0, navigation did not wrap to end of document
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pCursor->GetPoint()->GetContentIndex());
+
+    // set cursor to the end of the document
+    pWrtShell->SttEndDoc(false);
+    // navigate to the next field
+    dispatchCommand(mxComponent, ".uno:ScrollToNext", {});
+    // Before the fix the position would be 1, navigation did not wrap to start of document
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pCursor->GetPoint()->GetContentIndex());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

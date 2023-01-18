@@ -428,8 +428,34 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                                             FN_PREV_BOOKMARK);
             break;
         case NID_FIELD:
+        {
             rSh.EnterStdMode();
-            rSh.MoveFieldType(nullptr, bNext, SwFieldIds::Unknown);
+            rSh.StartAction();
+            SearchLabel eSearchLabel = SearchLabel::Empty;
+            if (!rSh.MoveFieldType(nullptr, bNext, SwFieldIds::Unknown))
+            {
+                // no field found in the move direction
+                // wrap and try again
+                SwShellCursor* pCursor = rSh.GetCursor_();
+                SwCursorSaveState aSaveState(*pCursor);
+                rSh.SttEndDoc(bNext);
+                // document might have a field at the start of the document
+                SwField* pField = rSh.GetCurField();
+                if ((bNext && pField && pField->GetTypeId() != SwFieldTypesEnum::Postit) ||
+                    rSh.MoveFieldType(nullptr, bNext, SwFieldIds::Unknown))
+                {
+                    eSearchLabel = bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped;
+                }
+                else
+                {
+                    // no visible fields found
+                    pCursor->RestoreSavePos();
+                    eSearchLabel = SearchLabel::NavElementNotFound;
+                }
+            }
+            SvxSearchDialogWrapper::SetSearchLabel(eSearchLabel);
+            rSh.EndAction();
+        }
         break;
         case NID_FIELD_BYTYPE:
         {
