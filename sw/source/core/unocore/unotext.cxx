@@ -647,8 +647,7 @@ SwXText::insertTextContentBefore(
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             comphelper::getFromUnoTunnel<SwXTextSection>(xSuccTunnel);
-    SwXTextTable *const pXTable =
-            comphelper::getFromUnoTunnel<SwXTextTable>(xSuccTunnel);
+    SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
@@ -701,8 +700,7 @@ SwXText::insertTextContentAfter(
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             comphelper::getFromUnoTunnel<SwXTextSection>(xPredTunnel);
-    SwXTextTable *const pXTable =
-            comphelper::getFromUnoTunnel<SwXTextTable>(xPredTunnel);
+    SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xPredecessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
     SwTextNode * pTextNode = nullptr;
@@ -751,8 +749,7 @@ SwXText::removeTextContentBefore(
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             comphelper::getFromUnoTunnel<SwXTextSection>(xSuccTunnel);
-    SwXTextTable *const pXTable =
-            comphelper::getFromUnoTunnel<SwXTextTable>(xSuccTunnel);
+    SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
@@ -803,8 +800,7 @@ SwXText::removeTextContentAfter(
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             comphelper::getFromUnoTunnel<SwXTextSection>(xPredTunnel);
-    SwXTextTable *const pXTable =
-            comphelper::getFromUnoTunnel<SwXTextTable>(xPredTunnel);
+    SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xPredecessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {

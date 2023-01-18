@@ -1947,18 +1947,6 @@ public:
 
 };
 
-const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextTableUnoTunnelId;
-    return theSwXTextTableUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-
 SwXTextTable::SwXTextTable()
     : m_pImpl(new Impl(nullptr))
 {
@@ -2072,7 +2060,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
     if (!m_pImpl->IsDescriptor())  /* already attached ? */
         throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
-    uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
+    uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange(comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
     OTextCursorHelper* pCursor(dynamic_cast<OTextCursorHelper*>(xTextRange.get()));
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;

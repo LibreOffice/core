@@ -202,8 +202,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXTextTable *const pTextTable(
-        comphelper::getFromUnoTunnel<SwXTextTable>(xTunnel));
+    SwXTextTable *const pTextTable = dynamic_cast<SwXTextTable*>(xIfc.get());
     if (pTextTable)
     {
         SwFrameFormat *const pFrameFormat(pTextTable->GetFrameFormat());

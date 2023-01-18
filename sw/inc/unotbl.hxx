@@ -246,7 +246,7 @@ struct SwRangeDescriptor
     void Normalize();
 };
 
-class SAL_DLLPUBLIC_RTTI SwXTextTable final : public cppu::WeakImplHelper
+class SW_DLLPUBLIC SwXTextTable final : public cppu::WeakImplHelper
 <
     css::text::XTextTable,
     css::lang::XServiceInfo,
@@ -256,7 +256,6 @@ class SAL_DLLPUBLIC_RTTI SwXTextTable final : public cppu::WeakImplHelper
     css::container::XNamed,
     css::table::XAutoFormattable,
     css::util::XSortable,
-    css::lang::XUnoTunnel,
     css::sheet::XCellRangeData
 >
 {
@@ -272,15 +271,9 @@ public:
     static rtl::Reference<SwXTextTable>
             CreateXTextTable(SwFrameFormat * pFrameFormat);
 
-    SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static void GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
-    SW_DLLPUBLIC static void GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
-
-    SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
+    SwFrameFormat* GetFrameFormat();
 
     //XTextTable
     virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) override;

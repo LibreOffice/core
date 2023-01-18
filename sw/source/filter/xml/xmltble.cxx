@@ -1208,8 +1208,7 @@ void SwXMLTextParagraphExport::exportTable(
     OSL_ENSURE( xTextTable.is(), "text table missing" );
     if( xTextTable.is() )
     {
-        Reference<XUnoTunnel> xTableTunnel( rTextContent, UNO_QUERY);
-        SwXTextTable* pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xTableTunnel);
+        SwXTextTable* pXTable = dynamic_cast<SwXTextTable*>(rTextContent.get());
         if( pXTable )
         {
             SwFrameFormat *const pFormat = pXTable->GetFrameFormat();

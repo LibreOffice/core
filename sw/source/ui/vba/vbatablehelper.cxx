@@ -36,8 +36,7 @@ SwVbaTableHelper::SwVbaTableHelper( uno::Reference< text::XTextTable > xTextTabl
 
 SwTable* SwVbaTableHelper::GetSwTable( const uno::Reference< text::XTextTable >& xTextTable )
 {
-    uno::Reference< lang::XUnoTunnel > xTunnel( xTextTable, uno::UNO_QUERY_THROW );
-    SwXTextTable* pXTextTable = comphelper::getFromUnoTunnel<SwXTextTable>(xTunnel);
+    SwXTextTable* pXTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
     if( !pXTextTable )
         throw uno::RuntimeException();
 

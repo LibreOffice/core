@@ -1213,7 +1213,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         // xml:id for RDF metadata
         GetImport().SetXmlId(xTable, sXmlId);
 
-        pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xTable);
+        pXTable = dynamic_cast<SwXTextTable*>(xTable.get());
 
         Reference < XCellRange > xCellRange( xTable, UNO_QUERY );
         Reference < XCell > xCell = xCellRange->getCellByPosition( 0, 0 );
