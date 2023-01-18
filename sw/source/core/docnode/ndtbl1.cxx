@@ -640,6 +640,7 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor,
         // new redline can cause a problem)
         if ( bInsertDummy && (pLn->IsEmpty() || bDeletionOfOwnRowInsertion ) )
         {
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             SwNodeIndex aInsPos( *(pLn->GetTabBoxes()[0]->GetSttNd()), 1 );
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
             getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
