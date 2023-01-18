@@ -561,7 +561,7 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
     IDocumentMarkAccess& rIDMA = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
     SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();
-    auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(rIDMA.getInnerBookmarkFor(rCursor));
+    auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(rIDMA.getOneInnermostBookmarkFor(rCursor));
     if (!pBookmark || !pBookmark->GetName().startsWith(aBookmarkNamePrefix))
     {
         return;

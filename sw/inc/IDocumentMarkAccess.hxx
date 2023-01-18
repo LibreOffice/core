@@ -314,7 +314,7 @@ class IDocumentMarkAccess
         virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
 
         /// Get the innermost bookmark that contains rPos.
-        virtual sw::mark::IMark* getInnerBookmarkFor(const SwPosition& rPos) const = 0;
+        virtual sw::mark::IMark* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
 
         // Fieldmarks
         /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.

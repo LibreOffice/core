@@ -1437,7 +1437,7 @@ namespace sw::mark
         return dynamic_cast<IFieldmark*>(pFieldmark);
     }
 
-    IMark* MarkManager::getInnerBookmarkFor(const SwPosition& rPos) const
+    IMark* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
     {
         auto it = std::find_if(m_vBookmarks.begin(), m_vBookmarks.end(),
                                [&rPos](const sw::mark::MarkBase* pMark)
