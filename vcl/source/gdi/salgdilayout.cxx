@@ -381,7 +381,10 @@ void SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice&
         mirror( aMirror, rOutDev );
         setClipRegion( aMirror );
     }
-    setClipRegion( i_rClip );
+    else
+    {
+        setClipRegion( i_rClip );
+    }
 }
 
 void SalGraphics::DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice& rOutDev )
