@@ -1154,9 +1154,9 @@ void FontSizeBox::Fill( const FontList* pList )
         ++pTempAry;
     }
 
+    m_xComboBox->thaw();
     set_active_or_entry_text(aStr);
     m_xComboBox->select_entry_region(nSelectionStart, nSelectionEnd);
-    m_xComboBox->thaw();
 }
 
 void FontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax, sal_uInt16 nStep )
