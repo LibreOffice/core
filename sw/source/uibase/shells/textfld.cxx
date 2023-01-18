@@ -299,6 +299,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if(!sTmp.isEmpty())
                         cSeparator = sTmp[0];
                 }
+                if (pArgs->GetItemState(FN_PARAM_5, false, &pItem) == SfxItemState::SET)
+                {
+                    const OUString& rWrapper = static_cast<const SfxStringItem *>(pItem)->GetValue();
+                    if (rWrapper == "Footnote")
+                    {
+                        // Wrap the field in the requested container instead of inserting it
+                        // directly at the cursor position.
+                        GetShellPtr()->InsertFootnote(OUString());
+                    }
+                }
                 SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                 bRes = aFieldMgr.InsertField( aData );
             }
