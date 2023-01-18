@@ -525,6 +525,12 @@ CPPUNIT_TEST_FIXTURE(Test, testOOoxmlEmbedded)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage4));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf152710, "tdf152710.odt")
+{
+    // Without this fix in place, this test would have crash at import time
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
