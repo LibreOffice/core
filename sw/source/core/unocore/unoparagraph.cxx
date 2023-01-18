@@ -295,18 +295,6 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
     return true;
 }
 
-const uno::Sequence< sal_Int8 > & SwXParagraph::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXParagraphUnoTunnelId;
-    return theSwXParagraphUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXParagraph::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXParagraph>(rId, this);
-}
-
 OUString SAL_CALL
 SwXParagraph::getImplementationName()
 {

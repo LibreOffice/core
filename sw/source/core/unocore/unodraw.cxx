@@ -1995,7 +1995,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         pDoc = pCursor->GetDoc();
     else if (auto pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel))
         pDoc = &pPortion->GetCursor().GetDoc();
-    else if (auto pParagraph = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+    else if (auto pParagraph = dynamic_cast<SwXParagraph*>(xTextRange.get());
              pParagraph && pParagraph->GetTextNode())
         pDoc = &pParagraph->GetTextNode()->GetDoc();
 

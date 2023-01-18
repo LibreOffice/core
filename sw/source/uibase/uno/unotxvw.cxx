@@ -990,7 +990,7 @@ void SwXTextViewCursor::gotoRange(
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
     SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-    SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+    SwXParagraph* pPara = dynamic_cast<SwXParagraph*>(xRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
 
     const FrameTypeFlags nFrameType = rSh.GetFrameType(nullptr,true);

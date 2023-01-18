@@ -636,8 +636,7 @@ SwXText::insertTextContentBefore(
         throw aRuntime;
     }
 
-    SwXParagraph *const pPara =
-            comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
+    SwXParagraph *const pPara = dynamic_cast<SwXParagraph*>(xNewContent.get());
     if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
     {
         throw lang::IllegalArgumentException();
@@ -692,8 +691,7 @@ SwXText::insertTextContentAfter(
         throw uno::RuntimeException();
     }
 
-    SwXParagraph *const pPara =
-            comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
+    SwXParagraph *const pPara = dynamic_cast<SwXParagraph*>(xNewContent.get());
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
     {
         throw lang::IllegalArgumentException();
