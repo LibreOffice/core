@@ -7121,7 +7121,7 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
         "List Paragraph",
         "Quote",
         "Intense Quote",
-        "Subtle Emphasis,",
+        "Subtle Emphasis",
         "Intense Emphasis",
         "Subtle Reference",
         "Intense Reference",
