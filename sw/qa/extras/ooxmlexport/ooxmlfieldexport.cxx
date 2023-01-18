@@ -824,7 +824,9 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText2)
     // Load a document which has a conditional text field in it.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     std::u16string_view aExpected(u" IF 1 = 1 \"test1\" \"test2\"");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", OUString(aExpected));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", OUString(aExpected));
+
+    getParagraph(1, "test1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")

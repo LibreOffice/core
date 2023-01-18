@@ -78,6 +78,15 @@ DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf141649_conditionalText, "tdf141649_conditionalText.doc")
+{
+    // In MS Word, the IF field is editable and requires manual update, so the most correct
+    // result is "manual refresh with F9" inside a text field,
+    // but for our purposes, a single instance of "trueResult" is appropriate.
+    getParagraph(1, "trueResult");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

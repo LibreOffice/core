@@ -1026,6 +1026,16 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
                 m_bEmbeddObj = true;
             // Field not supported: store the field code for later use
             m_aFieldStack.back().SetBookmarkCode( aStr );
+
+            if (aF.nId == ww::eIF)
+            {
+                // In MS Word, the IF field is editable and requires a manual refresh
+                // so the last, saved result might not match either of the true or false options.
+                // But in LO the field is automatically updated and not editable,
+                // so the previous result is of no value to import since it could never be seen.
+                return aF.nLen;
+            }
+
             return aF.nLen - aF.nLRes - 1;  // skipped too many, the resulted field will be read like main text
         }
     }
