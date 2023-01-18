@@ -3693,15 +3693,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     {
         if( pTextNd->IsCountedInList())
         {
-            int nLevel = pTextNd->GetActualListLevel();
-
-            if (nLevel < 0)
-                nLevel = 0;
-
-            if (nLevel >= MAXLEVEL)
-                nLevel = MAXLEVEL - 1;
-
-            nLvl = static_cast< sal_uInt8 >(nLevel);
+            nLvl = std::clamp(pTextNd->GetActualListLevel(), 0, MAXLEVEL - 1);
 
             if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
             {
