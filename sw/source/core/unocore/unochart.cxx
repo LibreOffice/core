@@ -1405,12 +1405,23 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
 
 void SwChartDataProvider::AddDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence )
 {
-    m_aDataSequences[ &rTable ].insert( rxDataSequence );
+    Vec_DataSequenceRef_t& rVec = m_aDataSequences[ &rTable ];
+    assert(std::find_if(rVec.begin(), rVec.end(),
+        [&rxDataSequence](const unotools::WeakReference < SwChartDataSequence >& i)
+        {
+            return i.get() == rxDataSequence;
+        }) == rVec.end() && "duplicate insert");
+    rVec.push_back( rxDataSequence );
 }
 
 void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence )
 {
-    m_aDataSequences[ &rTable ].erase( rxDataSequence );
+    Vec_DataSequenceRef_t& rVec = m_aDataSequences[ &rTable ];
+    rVec.erase( std::remove_if(rVec.begin(), rVec.end(),
+        [&rxDataSequence](const unotools::WeakReference < SwChartDataSequence >& i)
+        {
+            return i.get() == rxDataSequence;
+        }), rVec.end());
 }
 
 void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediate )
@@ -1422,8 +1433,8 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediat
     if (!m_bDisposed)
        pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
-    const Set_DataSequenceRef_t &rSet = m_aDataSequences[ pTable ];
-    for (const unotools::WeakReference<SwChartDataSequence>& rItem : rSet)
+    const Vec_DataSequenceRef_t &rVec = m_aDataSequences[ pTable ];
+    for (const unotools::WeakReference<SwChartDataSequence>& rItem : rVec)
     {
         rtl::Reference< SwChartDataSequence > xRef(rItem);
         if (xRef.is())
@@ -1447,13 +1458,11 @@ void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
     if (!m_bDisposed)
         pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
-    Set_DataSequenceRef_t &rSet = m_aDataSequences[ pTable ];
+    Vec_DataSequenceRef_t &rVec = m_aDataSequences[ pTable ];
 
     // iterate over all data-sequences for that table...
-    Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
-    Set_DataSequenceRef_t::iterator aEndIt( rSet.end() );
-    Set_DataSequenceRef_t::iterator aDelIt;     // iterator used for deletion when appropriate
-    while (aIt != aEndIt)
+    auto aIt( rVec.begin() );
+    while (aIt != rVec.end())
     {
         bool bNowEmpty = false;
         bool bSeqDisposed = false;
@@ -1472,18 +1481,16 @@ void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
                 bNowEmpty = true;
                 bSeqDisposed = true;
             }
-
-            if (bNowEmpty)
-                aDelIt = aIt;
         }
-        ++aIt;
 
         if (bNowEmpty)
         {
-            rSet.erase( aDelIt );
+            aIt = rVec.erase( aIt );
             if (pDataSeq && !bSeqDisposed)
                 pDataSeq->dispose();    // the current way to tell chart that sth. got removed
         }
+        else
+            ++aIt;
     }
 }
 
@@ -1500,9 +1507,9 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     //! This is necessary since calling 'dispose' will implicitly remove an element
     //! of the original container, and thus any iterator in the original container
     //! would become invalid.
-    const Set_DataSequenceRef_t aSet( m_aDataSequences[ pTable ] );
+    const Vec_DataSequenceRef_t aVec( m_aDataSequences[ pTable ] );
 
-    for (const unotools::WeakReference<SwChartDataSequence>& rItem : aSet)
+    for (const unotools::WeakReference<SwChartDataSequence>& rItem : aVec)
     {
         rtl::Reference< SwChartDataSequence > xRef(rItem);
         if (xRef.is())
@@ -1572,8 +1579,8 @@ void SwChartDataProvider::AddRowCols(
     }
 
     // iterate over all data-sequences for the table
-    const Set_DataSequenceRef_t &rSet = m_aDataSequences[ &rTable ];
-    for (const unotools::WeakReference<SwChartDataSequence>& rItem : rSet)
+    const Vec_DataSequenceRef_t &rVec = m_aDataSequences[ &rTable ];
+    for (const unotools::WeakReference<SwChartDataSequence>& rItem : rVec)
     {
         rtl::Reference< SwChartDataSequence > pDataSeq(rItem);
         if (pDataSeq.is())

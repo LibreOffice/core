@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_UNOCHART_HXX
 
 #include <map>
-#include <set>
+#include <vector>
 
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -105,20 +105,11 @@ class SwChartDataProvider final :
 {
 
     // used to keep weak-references to all data-sequences of a single table
-    // see set definition below...
-    struct lt_DataSequenceRef
-    {
-        bool operator()( const unotools::WeakReference< SwChartDataSequence > & xWRef1, const unotools::WeakReference< SwChartDataSequence >& xWRef2 ) const
-        {
-            rtl::Reference< SwChartDataSequence > xRef1( xWRef1 );
-            rtl::Reference< SwChartDataSequence > xRef2( xWRef2 );
-            return xRef1.get() < xRef2.get();
-        }
-    };
-    typedef std::set< unotools::WeakReference < SwChartDataSequence >, lt_DataSequenceRef > Set_DataSequenceRef_t;
+    // see definition below...
+    typedef std::vector< unotools::WeakReference < SwChartDataSequence > > Vec_DataSequenceRef_t;
 
     // map of data-sequence sets for each table
-    typedef std::map< const SwTable *, Set_DataSequenceRef_t > Map_Set_DataSequenceRef_t;
+    typedef std::map< const SwTable *, Vec_DataSequenceRef_t > Map_Set_DataSequenceRef_t;
 
     // map of all data-sequences provided directly or indirectly (e.g. via
     // data-source) by this object. Since there is only one object of this type
