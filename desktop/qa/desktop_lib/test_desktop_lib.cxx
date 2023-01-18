@@ -687,6 +687,10 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
 
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Then make sure the resulting PDF has 2 pages:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport();
