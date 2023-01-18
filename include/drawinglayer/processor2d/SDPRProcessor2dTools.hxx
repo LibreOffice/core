@@ -26,7 +26,7 @@ namespace drawinglayer::primitive2d
 class FillGraphicPrimitive2D;
 }
 
-namespace geometry
+namespace drawinglayer::geometry
 {
 class ViewInformation2D;
 }
@@ -82,7 +82,7 @@ namespace drawinglayer::processor2d
     */
 bool prepareBitmapForDirectRender(
     const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D,
-    const geometry::ViewInformation2D& rViewInformation2D, BitmapEx& rTarget,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, BitmapEx& rTarget,
     basegfx::B2DRange& rFillUnitRange, double fBigDiscreteArea = 300.0 * 300.0);
 
 /** helper to react/process if OffsetX/OffsetY of the FillGraphicAttribute is used.

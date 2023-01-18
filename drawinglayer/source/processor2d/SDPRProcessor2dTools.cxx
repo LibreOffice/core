@@ -139,7 +139,7 @@ void takeCareOfOffsetXY(
 
 bool prepareBitmapForDirectRender(
     const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D,
-    const geometry::ViewInformation2D& rViewInformation2D, BitmapEx& rTarget,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, BitmapEx& rTarget,
     basegfx::B2DRange& rFillUnitRange, double fBigDiscreteArea)
 {
     const attribute::FillGraphicAttribute& rFillGraphicAttribute(
