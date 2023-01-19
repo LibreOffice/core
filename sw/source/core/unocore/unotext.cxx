@@ -579,8 +579,7 @@ SwXText::insertTextContent(
     SwXMeta *const pMeta =
         comphelper::getFromUnoTunnel<SwXMeta>(xContentTunnel);
     auto* pContentControl = dynamic_cast<SwXContentControl*>(xContent.get());
-    SwXTextField* pTextField =
-        comphelper::getFromUnoTunnel<SwXTextField>(xContentTunnel);
+    SwXTextField* pTextField = dynamic_cast<SwXTextField*>(xContent.get());
     if (pTextField && pTextField->GetServiceId() != SwServiceType::FieldTypeAnnotation)
         pTextField = nullptr;
 

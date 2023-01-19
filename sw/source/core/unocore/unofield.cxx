@@ -1158,18 +1158,6 @@ public:
     virtual void Notify(const SfxHint&) override;
 };
 
-const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextFieldUnoTunnelId;
-    return theSwXTextFieldUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXTextField::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXTextField>(rId, this);
-}
-
 SwXTextField::SwXTextField(
     SwServiceType nServiceId,
     SwDoc* pDoc)
@@ -1250,11 +1238,8 @@ SwServiceType SwXTextField::GetServiceId() const
 void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
 {
     assert(rField.GetFormatField()->Which() == (rField.GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
-    rtl::Reference<SwXTextField> const xField(
+    rtl::Reference<SwXTextField> const pXField(
         rField.GetFormatField()->GetXTextField());
-    SwXTextField *const pXField = xField.is()
-        ? comphelper::getFromUnoTunnel<SwXTextField>(uno::Reference<lang::XUnoTunnel>(xField))
-        : nullptr;
     if (pXField)
         pXField->m_pImpl->SetFormatField(nullptr, nullptr);
     SwTextField *const pOldAttr(rField.GetFormatField()->GetTextField());
@@ -1283,7 +1268,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     if (pXField)
     {
         pXField->m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rNewFormat), &rNode.GetDoc());
-        const_cast<SwFormatField&>(rNewFormat).SetXTextField(xField);
+        const_cast<SwFormatField&>(rNewFormat).SetXTextField(pXField);
     }
 }
 

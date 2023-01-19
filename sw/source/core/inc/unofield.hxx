@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFIELD_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOFIELD_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -109,7 +108,6 @@ typedef ::cppu::WeakImplHelper
 <   css::text::XDependentTextField
 ,   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
-,   css::lang::XUnoTunnel
 ,   css::util::XUpdatable
 > SwXTextField_Base;
 
@@ -141,12 +139,6 @@ public:
     static rtl::Reference<SwXTextField>
         CreateXTextField(SwDoc * pDoc, SwFormatField const* pFormat,
                 SwServiceType nServiceId = SwServiceType::Invalid);
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
