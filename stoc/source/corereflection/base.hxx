@@ -28,7 +28,7 @@
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/component.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -74,10 +74,10 @@ typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::
 
 
 class IdlReflectionServiceImpl
-    : public ::cppu::OComponentHelper
-    , public css::reflection::XIdlReflection
-    , public css::container::XHierarchicalNameAccess
-    , public css::lang::XServiceInfo
+    : public ::cppu::WeakComponentImplHelper<
+          css::reflection::XIdlReflection,
+          css::container::XHierarchicalNameAccess,
+          css::lang::XServiceInfo>
 {
     ::osl::Mutex                            _aComponentMutex;
     css::uno::Reference< css::container::XHierarchicalNameAccess >    _xTDMgr;
@@ -102,22 +102,13 @@ public:
     explicit IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~IdlReflectionServiceImpl() override;
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-
-    // some XComponent part from OComponentHelper
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelper
+    virtual void SAL_CALL disposing() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XIdlReflection
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL forName( const OUString & rTypeName ) override;

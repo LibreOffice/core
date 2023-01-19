@@ -45,7 +45,7 @@ namespace stoc_corefl
 
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
-    : OComponentHelper( _aComponentMutex )
+    : WeakComponentImplHelper( _aComponentMutex )
 {
     xContext->getValueByName(
         "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) >>= _xTDMgr;
@@ -54,53 +54,10 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
 
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl() {}
 
-// XInterface
-
-Any IdlReflectionServiceImpl::queryInterface( const Type & rType )
-{
-    Any aRet( ::cppu::queryInterface(
-        rType,
-        static_cast< XIdlReflection * >( this ),
-        static_cast< XHierarchicalNameAccess * >( this ),
-        static_cast< XServiceInfo * >( this ) ) );
-
-    return (aRet.hasValue() ? aRet : OComponentHelper::queryInterface( rType ));
-}
-
-void IdlReflectionServiceImpl::acquire() noexcept
-{
-    OComponentHelper::acquire();
-}
-
-void IdlReflectionServiceImpl::release() noexcept
-{
-    OComponentHelper::release();
-}
-
-// XTypeProvider
-
-Sequence< Type > IdlReflectionServiceImpl::getTypes()
-{
-    static OTypeCollection s_aTypes(
-        cppu::UnoType<XIdlReflection>::get(),
-        cppu::UnoType<XHierarchicalNameAccess>::get(),
-        cppu::UnoType<XServiceInfo>::get(),
-        OComponentHelper::getTypes() );
-
-    return s_aTypes.getTypes();
-}
-
-Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XComponent
 
-void IdlReflectionServiceImpl::dispose()
+void IdlReflectionServiceImpl::disposing()
 {
-    OComponentHelper::dispose();
-
     MutexGuard aGuard( _aComponentMutex );
     _aElements.clear();
 #ifdef TEST_LIST_CLASSES
