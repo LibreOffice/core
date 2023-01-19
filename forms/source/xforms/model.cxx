@@ -428,7 +428,7 @@ void SAL_CALL Model::submitWithInteraction(
     {
         Submission* pSubmission =
             dynamic_cast<Submission*>( mxSubmissions->getItem( sID ).get() );
-        OSL_ENSURE( pSubmission != nullptr, "no submission?" );
+        assert(pSubmission && "no submission?");
         OSL_ENSURE( pSubmission->getModelImpl() == this,
                     "wrong model" );
 

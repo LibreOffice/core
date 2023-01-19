@@ -91,14 +91,14 @@ protected:
     virtual void _insert( const T& t ) override
     {
         auto pSubmission = dynamic_cast<Submission*>( t.get() );
-        OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
+        assert(pSubmission && "invalid item?");
         pSubmission->setModel( mpModel );
     }
 
     virtual void _remove( const T& t ) override
     {
         auto pSubmission = dynamic_cast<Submission*>( t.get() );
-        OSL_ENSURE( pSubmission != nullptr, "invalid item?" );
+        assert(pSubmission && "invalid item?");
         pSubmission->setModel( nullptr );
     }
 };
