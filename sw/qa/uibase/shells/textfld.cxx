@@ -58,4 +58,33 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
     CPPUNIT_ASSERT_EQUAL(OUString("content"), rFormatNote.GetFootnoteText(*pWrtShell->GetLayout()));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When inserting a refmark inside an endnote:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+        comphelper::makePropertyValue("Name", uno::Any(OUString("myref"))),
+        comphelper::makePropertyValue("Content", uno::Any(OUString("content"))),
+        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Endnote"))),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+
+    // Then make sure that the note body contains the refmark:
+    SwDoc* pDoc = getSwDoc();
+    SwFootnoteIdxs& rNotes = pDoc->GetFootnoteIdxs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no endnote was inserted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rNotes.size());
+    SwTextFootnote* pNote = rNotes[0];
+    const SwFormatFootnote& rNote = pNote->GetFootnote();
+    CPPUNIT_ASSERT(rNote.IsEndNote());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL(OUString("content"), rNote.GetFootnoteText(*pWrtShell->GetLayout()));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
