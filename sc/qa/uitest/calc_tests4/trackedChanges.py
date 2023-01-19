@@ -54,6 +54,82 @@ class CalcTrackedChanges(UITestCase):
                 xpass = xDialog.getChild("pass1ed")
                 xpass.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
 
+    def test_ContentChange(self):
+
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            self.ui_test.wait_until_child_is_available("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #track changes;  enter text to cell
+            self.xUITest.executeCommand(".uno:TraceChangeMode")
+            enter_text_to_cell(gridwin, "A1", "Hello")
+            enter_text_to_cell(gridwin, "A1", "There")
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(1, len(xChangesList.getChildren()))
+
+                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+
+                xChild = xChangesList.getChild('0')
+                self.assertTrue(get_state_as_dict(xChild)["Text"].startswith(textStart))
+
+                xChild.executeAction("EXPAND", tuple())
+
+                self.assertEqual(3, len(xChild.getChildren()))
+                textStartChild1 = "<empty>\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEndChild1 = "(Original: <empty>)"
+                textStartChild2 = "'Hello'\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEndChild2 = "(Changed to 'Hello')"
+                textStartChild3 = "'There'\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEndChild3 = "(Changed to 'There')"
+
+                self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].startswith(textStartChild1))
+                self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].endswith(textEndChild1))
+                self.assertTrue(get_state_as_dict(xChild.getChild('1'))["Text"].startswith(textStartChild2))
+                self.assertTrue(get_state_as_dict(xChild.getChild('1'))["Text"].endswith(textEndChild2))
+                self.assertTrue(get_state_as_dict(xChild.getChild('2'))["Text"].startswith(textStartChild3))
+                self.assertTrue(get_state_as_dict(xChild.getChild('2'))["Text"].endswith(textEndChild3))
+
+            self.assertEqual("There", get_cell_by_position(document, 0, 0, 0).getString())
+
+    def test_Tdf153096(self):
+
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            self.ui_test.wait_until_child_is_available("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #track changes;  enter text to cell
+            self.xUITest.executeCommand(".uno:TraceChangeMode")
+            enter_text_to_cell(gridwin, "A1", "Hello")
+
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+
+            self.xUITest.executeCommand(".uno:DeleteRows")
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(1, len(xChangesList.getChildren()))
+
+                textStart = "Row deleted\t(Sheet1.1:1)\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd = "(Row 1:1 deleted)"
+
+                xChild = xChangesList.getChild('0')
+
+                # Without the fix in place, this test would have failed here
+                self.assertTrue(get_state_as_dict(xChild)["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChild)["Text"].endswith(textEnd))
+
+                xChild.executeAction("EXPAND", tuple())
+
+                self.assertEqual(1, len(xChild.getChildren()))
+                textStartChild1 = "Changed contents\t(Sheet1.A1)\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEndChild1 = "(Cell (A1) changed from '<empty>' to 'Hello')"
+
+                self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].startswith(textStartChild1))
+                self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].endswith(textEndChild1))
 
     def test_tracked_changes_accept(self):
 
