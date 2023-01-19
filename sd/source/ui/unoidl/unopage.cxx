@@ -509,6 +509,10 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 // XInterface
 Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
 {
+    return SvxFmDrawPage::queryInterface(rType);
+}
+
+css::uno::Any SdGenericDrawPage::queryAggregation(css::uno::Type const & rType) {
     Any aAny;
 
     if (rType == cppu::UnoType<beans::XPropertySet>::get())
@@ -555,7 +559,7 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
             return Any( Reference< XAnimationNodeSupplier >( this ) );
     }
     else
-        return SvxDrawPage::queryInterface( rType );
+        return SvxFmDrawPage::queryAggregation( rType );
 
     return aAny;
 }
@@ -2041,6 +2045,10 @@ SdDrawPage::~SdDrawPage() noexcept
 // XInterface
 Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
 {
+    return SdGenericDrawPage::queryInterface(rType);
+}
+
+css::uno::Any SdDrawPage::queryAggregation(css::uno::Type const & rType) {
     if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
         return Any( Reference< drawing::XMasterPageTarget >( this ) );
@@ -2055,7 +2063,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
         }
     }
 
-    return SdGenericDrawPage::queryInterface( rType );
+    return SdGenericDrawPage::queryAggregation( rType );
 }
 
 void SAL_CALL SdDrawPage::acquire() noexcept
@@ -2638,6 +2646,10 @@ SdMasterPage::~SdMasterPage() noexcept
 // XInterface
 Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
 {
+    return SdGenericDrawPage::queryInterface(rType);
+}
+
+css::uno::Any SdMasterPage::queryAggregation(css::uno::Type const & rType) {
     ::SolarMutexGuard aGuard;
 
     throwIfDisposed();
@@ -2655,7 +2667,7 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
                GetPage()  && GetPage()->GetPageKind() != PageKind::Handout) )
         aAny <<= Reference< presentation::XPresentationPage >( this );
     else
-        return SdGenericDrawPage::queryInterface( rType );
+        return SdGenericDrawPage::queryAggregation( rType );
 
     return aAny;
 }

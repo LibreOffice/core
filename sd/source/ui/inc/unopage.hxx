@@ -112,6 +112,8 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL release() noexcept override;
 
+    css::uno::Any SAL_CALL queryAggregation(css::uno::Type const & rType) override;
+
     // XShapeCombiner
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL combine( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
     virtual void SAL_CALL split( const css::uno::Reference< css::drawing::XShape >& xGroup ) override;
@@ -179,6 +181,8 @@ public:
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
+    css::uno::Any SAL_CALL queryAggregation(css::uno::Type const & rType) override;
+
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
@@ -235,6 +239,8 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
+
+    css::uno::Any SAL_CALL queryAggregation(css::uno::Type const & rType) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
