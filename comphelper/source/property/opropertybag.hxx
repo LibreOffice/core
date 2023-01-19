@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XPropertyBag.hpp>
 #include <com/sun/star/container/XSet.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -55,12 +55,12 @@ namespace comphelper
     typedef std::map< sal_Int32, css::uno::Any >     MapInt2Any;
     typedef std::set< css::uno::Type, UnoTypeLess >  TypeBag;
 
-    typedef ::cppu::WeakAggImplHelper5  <   css::beans::XPropertyBag
-                                        ,   css::util::XModifiable
-                                        ,   css::lang::XServiceInfo
-                                        ,   css::lang::XInitialization
-                                        ,   css::container::XSet
-                                        >   OPropertyBag_Base;
+    typedef ::cppu::WeakImplHelper  <   css::beans::XPropertyBag
+                                    ,   css::util::XModifiable
+                                    ,   css::lang::XServiceInfo
+                                    ,   css::lang::XInitialization
+                                    ,   css::container::XSet
+                                    >   OPropertyBag_Base;
     typedef ::comphelper::OPropertyStateHelper  OPropertyBag_PBase;
 
     class OPropertyBag final : public ::comphelper::OMutexAndBroadcastHelper  // must be before OPropertyBag_PBase
