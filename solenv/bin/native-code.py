@@ -706,7 +706,6 @@ draw_constructor_list = [
     "com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation",
-    "com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation",
     "com_sun_star_comp_Draw_framework_ResourceID_get_implementation",
     "com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation",
     "com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation",

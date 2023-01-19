@@ -48,9 +48,8 @@ typedef comphelper::WeakComponentImplHelper <
     resource and instantiates this service.  The service is expected to
     register on its creation a factory for the resource in question.
 
-    2. The ModuleController reads on its creation
-    org.openoffice.Office.Impress/MultiPaneGUI/Framework/StartupServices
-    configuration data and instantiates all listed services.  These services
+    2. The ModuleController instantiates PresentationFactoryProvider.
+    This service
     can then register as listeners at the ConfigurationController or do
     whatever they like.
 */
@@ -92,21 +91,10 @@ private:
     */
     void ProcessFactory (const ::std::vector<css::uno::Any>& rValues);
 
-    /** Instantiate all startup services that are found in the
-        /org.openoffice.Office.Impress/MultiPaneGUI/Framework/StartupServices
-        configuration entry.  This method is called once when a new
+    /** Instantiate startup services.  This method is called once when a new
         ModuleController object is created.
     */
     void InstantiateStartupServices();
-
-    /** Called for one entry in the StartupServices configuration list this
-        method instantiates the service described by the entry.  It does not
-        hold references to the new object so that the object will be
-        destroyed on function exit when it does not register itself
-        somewhere.  It typically will register as
-        XConfigurationChangeListener at the configuration controller.
-    */
-    void ProcessStartupService (const ::std::vector<css::uno::Any>& rValues);
 };
 
 } // end of namespace sd::framework

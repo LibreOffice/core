@@ -181,13 +181,6 @@
           </node>
         </node>
       </node>
-      <node oor:name="StartupServices">
-    <node oor:name="S0" oor:op="replace">
-      <prop oor:name="ServiceName">
-        <value>com.sun.star.drawing.framework.PresentationFactoryProvider</value>
-      </prop>
-    </node>
-      </node>
     </node>
   </node>
   <node oor:name="Misc">

@@ -72,6 +72,15 @@ private:
     void ThrowIfDisposed() const;
 };
 
+typedef comphelper::WeakComponentImplHelper<> PresentationFactoryProviderInterfaceBase;
+
+class PresentationFactoryProvider
+    : public PresentationFactoryProviderInterfaceBase
+{
+public:
+    PresentationFactoryProvider(const css::uno::Reference<css::frame::XController>& rxController);
+};
+
 } // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

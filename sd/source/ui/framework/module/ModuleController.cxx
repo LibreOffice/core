@@ -18,6 +18,7 @@
  */
 
 #include <framework/ModuleController.hxx>
+#include <framework/PresentationFactory.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -26,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -36,7 +38,6 @@ using ::sd::tools::ConfigurationAccess;
 namespace sd::framework {
 
 const sal_uInt32 snFactoryPropertyCount (2);
-const sal_uInt32 snStartupPropertyCount (1);
 
 //===== ModuleController ======================================================
 Reference<XModuleController> ModuleController::CreateInstance (
@@ -119,54 +120,18 @@ void ModuleController::InstantiateStartupServices()
 {
     try
     {
-        tools::ConfigurationAccess aConfiguration (
-            "/org.openoffice.Office.Impress/",
-            tools::ConfigurationAccess::READ_ONLY);
-        Reference<container::XNameAccess> xFactories (
-            aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/StartupServices"),
-            UNO_QUERY);
-        ::std::vector<OUString> aProperties (snStartupPropertyCount);
-        aProperties[0] = "ServiceName";
-        tools::ConfigurationAccess::ForAll(
-            xFactories,
-            aProperties,
-            [this] (OUString const&, ::std::vector<Any> const& xs) {
-                return this->ProcessStartupService(xs);
-            } );
-    }
-    catch (Exception&)
-    {
-        SAL_WARN("sd.fwk", "ERROR in ModuleController::InstantiateStartupServices");
-    }
-}
-
-void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
-{
-    OSL_ASSERT(rValues.size() == snStartupPropertyCount);
-
-    try
-    {
-        // Get the service name of the startup service.
-        OUString sServiceName;
-        rValues[0] >>= sServiceName;
-
         // Instantiate service.
-        Reference<uno::XComponentContext> xContext =
-            ::comphelper::getProcessComponentContext();
-
-        // Create the startup service.
-        Sequence<Any> aArguments{ Any(mxController) };
         // Note that when the new object will be destroyed at the end of
         // this scope when it does not register itself anywhere.
         // Typically it will add itself as ConfigurationChangeListener
         // at the configuration controller.
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArguments, xContext);
-
-        SAL_INFO("sd.fwk", __func__ << ": ModuleController::created startup service " << sServiceName);
+        Reference<uno::XComponentContext> xContext =
+            ::comphelper::getProcessComponentContext();
+        rtl::Reference<::sd::framework::PresentationFactoryProvider> x = new sd::framework::PresentationFactoryProvider(mxController);
     }
     catch (Exception&)
     {
-        SAL_WARN("sd.fwk", "ERROR in ModuleController::ProcessStartupServices");
+        SAL_WARN("sd.fwk", "ERROR in ModuleController::InstantiateStartupServices");
     }
 }
 

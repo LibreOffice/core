@@ -39,20 +39,6 @@ namespace sd::framework {
 
 namespace {
 
-typedef comphelper::WeakComponentImplHelper<lang::XInitialization> PresentationFactoryProviderInterfaceBase;
-
-class PresentationFactoryProvider
-    : public PresentationFactoryProviderInterfaceBase
-{
-public:
-    PresentationFactoryProvider ();
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
-};
-
 typedef comphelper::WeakComponentImplHelper<XView> PresentationViewInterfaceBase;
 
 /** The PresentationView is not an actual view, it is a marker whose
@@ -143,32 +129,19 @@ void PresentationFactory::ThrowIfDisposed() const
     }
 }
 
-namespace {
-
 //===== PresentationFactoryProvider ===========================================
 
-PresentationFactoryProvider::PresentationFactoryProvider ()
+PresentationFactoryProvider::PresentationFactoryProvider (const Reference<frame::XController>& rxController)
 {
-}
-
-// XInitialization
-
-void SAL_CALL PresentationFactoryProvider::initialize(
-    const Sequence<Any>& aArguments)
-{
-    if (!aArguments.hasElements())
-        return;
-
     try
     {
         // Get the XController from the first argument.
-        Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
-        Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
+        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC (xCM->getConfigurationController());
         if (xCC.is())
             xCC->addResourceFactory(
                 gsPresentationViewURL,
-                new PresentationFactory(xController));
+                new PresentationFactory(rxController));
     }
     catch (RuntimeException&)
     {
@@ -176,17 +149,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
     }
 }
 
-} // end of anonymous namespace.
-
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation(css::uno::XComponentContext*,
-                                                                    css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::PresentationFactoryProvider);
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

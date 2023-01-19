@@ -1319,15 +1319,6 @@
             <label>Multi Pane Framework Resource Factories</label>
           </info>
         </set>
-        <set oor:name="StartupServices" oor:node-type="StartupService">
-          <info>
-            <desc>
-              Set of services that are instantiated every time the
-              framework of a Draw or Impress document is initialized.
-            </desc>
-            <label>Multi Pane Framework Startup Services</label>
-          </info>
-        </set>
       </group>
       <group oor:name="SlideSorterBar">
         <info>
