@@ -457,18 +457,6 @@ protected:
     virtual void Notify(const SfxHint& rHint) override;
 };
 
-const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXFieldMasterUnoTunnelId;
-    return theSwXFieldMasterUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXFieldMaster>(rId, this);
-}
-
 OUString SAL_CALL
 SwXFieldMaster::getImplementationName()
 {
@@ -1306,10 +1294,7 @@ void SAL_CALL SwXTextField::attachTextFieldMaster(
 
     if (!m_pImpl->IsDescriptor())
         throw uno::RuntimeException();
-    uno::Reference< lang::XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
-    if (!xMasterTunnel.is())
-        throw lang::IllegalArgumentException();
-    SwXFieldMaster* pMaster = comphelper::getFromUnoTunnel<SwXFieldMaster>(xMasterTunnel);
+    SwXFieldMaster* pMaster = dynamic_cast<SwXFieldMaster*>(xFieldMaster.get());
 
     SwFieldType* pFieldType = pMaster ? pMaster->GetFieldType() : nullptr;
     if (!pFieldType ||

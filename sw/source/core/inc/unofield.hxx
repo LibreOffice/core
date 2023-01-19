@@ -39,7 +39,6 @@ class SwSetExpField;
 typedef ::cppu::WeakImplHelper
 <   css::beans::XPropertySet
 ,   css::lang::XServiceInfo
-,   css::lang::XUnoTunnel
 ,   css::lang::XComponent
 > SwXFieldMaster_Base;
 
@@ -68,12 +67,6 @@ public:
     static OUString LocalizeFormula(const SwSetExpField& rField, const OUString& rFormula, bool bQuery);
 
     SwFieldType* GetFieldType(bool bDontCreate = false) const;
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
