@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,7 +41,7 @@ namespace vcl { class Window; }
 
 namespace accessibility {
 
-typedef ::cppu::WeakAggComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper<
             css::accessibility::XAccessibleContext,
             css::accessibility::XAccessibleComponent,
             css::accessibility::XAccessibleEventBroadcaster,
