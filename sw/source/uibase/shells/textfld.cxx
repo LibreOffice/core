@@ -301,12 +301,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
                 if (pArgs->GetItemState(FN_PARAM_5, false, &pItem) == SfxItemState::SET)
                 {
+                    // Wrap the field in the requested container instead of inserting it
+                    // directly at the cursor position.
                     const OUString& rWrapper = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     if (rWrapper == "Footnote")
                     {
-                        // Wrap the field in the requested container instead of inserting it
-                        // directly at the cursor position.
                         GetShellPtr()->InsertFootnote(OUString());
+                    }
+                    else if (rWrapper == "Endnote")
+                    {
+                        GetShellPtr()->InsertFootnote(OUString(), /*bEndNote=*/true);
                     }
                 }
                 SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
