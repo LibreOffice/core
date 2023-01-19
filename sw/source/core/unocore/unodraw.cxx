@@ -478,14 +478,6 @@ uno::Any SwFmDrawPage::queryInterface( const uno::Type& aType )
     return aRet;
 }
 
-uno::Sequence< uno::Type > SwFmDrawPage::getTypes()
-{
-    return comphelper::concatSequences(
-                SvxFmDrawPage::getTypes(),
-                SwFmDrawPage_Base::getTypes(),
-                uno::Sequence { cppu::UnoType<form::XFormsSupplier2>::get() });
-}
-
 sal_Int32 SwFmDrawPage::getCount()
 {
     SolarMutexGuard aGuard;

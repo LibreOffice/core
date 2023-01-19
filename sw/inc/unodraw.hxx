@@ -77,7 +77,6 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
