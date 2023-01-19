@@ -110,6 +110,7 @@ public:
     virtual OUString getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
                                                        PDFAnnotAActionType eEvent)
         = 0;
+    virtual OUString getFormFieldValue(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;

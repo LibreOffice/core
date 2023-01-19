@@ -27,6 +27,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -438,7 +440,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testGotoMark)
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
 {
     // Given a document with a fieldmark, the cursor inside the fieldmark:
-    SwDoc* pDoc = createSwDoc();
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
         comphelper::makePropertyValue("FieldCommand", uno::Any(OUString("my command"))),
@@ -448,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
     pCursor->SttEndDoc(/*bSttDoc=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     // When trying to insert an inner fieldmark:
     // Without the accompanying fix in place, this test would have crashed.
