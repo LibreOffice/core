@@ -31,16 +31,21 @@ class tdf135938(UITestCase):
                 xName.executeAction("TYPE", mkPropertyValues({"TEXT": "DEF"}))
                 xInsert.executeAction("CLICK", tuple())
 
-                # Select insert reference type
-                xTreeEntry = xTreelistType.getChild('1')
-                self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "Insert Reference")
-                xTreeEntry.executeAction("SELECT", tuple())
+                # Search for insert reference type
+                xFilter = None
+                for childIx in range(len(xTreelistType.getChildren())):
+                    xTreeEntry = xTreelistType.getChild(childIx)
+                    if get_state_as_dict(xTreeEntry)["Text"] == "Insert Reference":
+                        xTreeEntry.executeAction("SELECT", tuple())
+                        # Filter the cross references
+                        xFilter = xDialog.getChild("filter")
+                        xFilter.executeAction("TYPE", mkPropertyValues({"TEXT": "A"}))
+                        # Without the fix in place, this test would have failed with
+                        # AssertionError: 'ABC' != 'DEF', i.e., the text of the name field did not change
+                        self.assertEqual(get_state_as_dict(xName)["Text"], "ABC")
+                        break
 
-                # Filter the cross references
-                xFilter = xDialog.getChild("filter")
-                xFilter.executeAction("TYPE", mkPropertyValues({"TEXT": "A"}))
-                # Without the fix in place, this test would have failed with
-                # AssertionError: 'ABC' != 'DEF', i.e., the text of the name field did not change
-                self.assertEqual(get_state_as_dict(xName)["Text"], "ABC")
+                # Check if insert reference entry was found
+                self.assertFalse(xFilter is None)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
