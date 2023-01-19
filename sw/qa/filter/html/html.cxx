@@ -20,6 +20,7 @@
 #include <itabenum.hxx>
 #include <wrtsh.hxx>
 #include <cellatr.hxx>
+#include <fmtornt.hxx>
 
 namespace
 {
@@ -215,6 +216,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
     // i.e. a combination of rowspan + empty <tr> was emitted.
     assertXPathNoAttribute(pHtmlDoc, "//tr[1]/td[1]", "rowspan");
     assertXPath(pHtmlDoc, "//tr", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
+{
+    // Given a document with a centered table:
+    loadURL("private:factory/swriter", nullptr);
+    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDocument->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::NONE, 0);
+    pWrtShell->InsertTable(aTableOptions, 1, 1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+    SwFormatHoriOrient aHoriOrientItem(/*nX=*/0, text::HoriOrientation::CENTER);
+    aSet.Put(aHoriOrientItem);
+    pWrtShell->SetTableAttr(aSet);
+
+    // When exporting to XHTML:
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save("HTML (StarWriter)", maTempFile);
+
+    // Then make sure that CSS is used to horizontally position the table:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e <center> was used to position the table, not CSS.
+    assertXPath(pXmlDoc, "//reqif-xhtml:center", 0);
+    assertXPath(pXmlDoc, "//reqif-xhtml:table", "style", "margin-left: auto; margin-right: auto");
 }
 }
 
