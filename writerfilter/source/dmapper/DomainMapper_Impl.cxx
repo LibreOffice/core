@@ -264,10 +264,8 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
         OUString aCommand = pOuter->GetCommand();
 
         // Ignore leading space before the field name, but don't accept IFF when we check for IF.
-        if (!aCommand.isEmpty() && aCommand[0] == ' ')
-        {
+        while (aCommand.getLength() > 3 && aCommand[0] == ' ')
             aCommand = aCommand.subView(1);
-        }
 
         if (aCommand.startsWith("IF "))
         {
@@ -288,10 +286,13 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
             switch (*pInner->GetFieldId())
             {
                 case FIELD_DOCVARIABLE:
+                case FIELD_FORMTEXT:
                 case FIELD_FORMULA:
                 case FIELD_IF:
                 case FIELD_MERGEFIELD:
+                case FIELD_REF:
                 {
+                    // LO does not currently know how to evaluate these as conditions or results
                     return false;
                 }
                 default:
