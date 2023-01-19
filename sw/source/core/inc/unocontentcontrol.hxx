@@ -23,7 +23,6 @@
 #include <deque>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -48,9 +47,9 @@ class SwContentControl;
  * service.
  */
 class SwXContentControl
-    : public cppu::WeakImplHelper<css::lang::XUnoTunnel, css::lang::XServiceInfo,
-                                  css::container::XEnumerationAccess, css::text::XTextContent,
-                                  css::text::XText, css::beans::XPropertySet>
+    : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::container::XEnumerationAccess,
+                                  css::text::XTextContent, css::text::XText,
+                                  css::beans::XPropertySet>
 {
     class Impl;
     sw::UnoImplPtr<Impl> m_pImpl;
@@ -82,11 +81,6 @@ public:
     /// Initializes params with position of the attribute content (without CH_TXTATR).
     bool SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart, sal_Int32& rEnd) const;
     const css::uno::Reference<css::text::XText>& GetParentText() const;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
-    // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& Identifier) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

@@ -346,18 +346,6 @@ bool SwXContentControl::SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart,
     return false;
 }
 
-const uno::Sequence<sal_Int8>& SwXContentControl::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXContentControlUnoTunnelId;
-    return theSwXContentControlUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL SwXContentControl::getSomething(const uno::Sequence<sal_Int8>& rId)
-{
-    return comphelper::getSomethingImpl<SwXContentControl>(rId, this);
-}
-
 // XServiceInfo
 OUString SAL_CALL SwXContentControl::getImplementationName() { return "SwXContentControl"; }
 
