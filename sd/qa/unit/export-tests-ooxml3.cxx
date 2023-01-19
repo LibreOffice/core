@@ -748,14 +748,15 @@ void SdOOXMLExportTest3::testTdf125573_FontWorkScaleX()
     awt::Rectangle aBoundRectArch;
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
     // BoundRect is DPI dependent, thus allow some range.
-    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectArch.Width - 13038));
+    // (Without fix Expected less than: 85 Actual  : 10432)
+    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectArch.Width - 13038));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1));
     awt::Rectangle aBoundRectWave;
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
     // BoundRect is DPI dependent, thus allow some range.
-    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectWave.Width - 11576));
+    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectWave.Width - 11576));
 }
 
 void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
