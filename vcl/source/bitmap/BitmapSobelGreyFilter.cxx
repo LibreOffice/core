@@ -113,8 +113,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
             nSum1 += nMask331 * nGrey33;
             nSum2 += nMask332 * nGrey33;
 
-            nSum1
-                = static_cast<sal_Int32>(sqrt(static_cast<double>(nSum1 * nSum1 + nSum2 * nSum2)));
+            nSum1 = static_cast<sal_Int32>(std::hypot(nSum1, nSum2));
 
             aGrey.SetIndex(
                 ~static_cast<sal_uInt8>(std::clamp(nSum1, sal_Int32(0), sal_Int32(255))));
