@@ -2829,8 +2829,10 @@ private:
 #endif
     int m_nPressedButton;
 #if !GTK_CHECK_VERSION(4, 0, 0)
+protected:
     int m_nPressStartX;
     int m_nPressStartY;
+private:
 #endif
     ImplSVEvent* m_pDragCancelEvent;
     GtkCssProvider* m_pBgCssProvider;
@@ -3268,6 +3270,14 @@ private:
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
+    virtual void drag_set_icon(GtkDragSource*)
+#else
+    virtual void drag_set_icon(GdkDragContext*)
+#endif
+    {
+    }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
     void signal_drag_begin(GtkDragSource* context)
 #else
     void signal_drag_begin(GdkDragContext* context)
@@ -3278,19 +3288,22 @@ private:
         {
 #if !GTK_CHECK_VERSION(4, 0, 0)
             launch_drag_cancel(context);
-#else
-            (void)context;
 #endif
             return;
         }
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (bUnsetDragIcon)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
             gtk_drag_set_icon_surface(context, surface);
             cairo_surface_destroy(surface);
-        }
 #endif
+        }
+        else
+        {
+            drag_set_icon(context);
+        }
+
         if (!m_xDragSource)
             return;
         m_xDragSource->setActiveDragSource();
@@ -4902,11 +4915,11 @@ namespace
     {
         Size aSize(rDevice.GetOutputSizePixel());
         cairo_surface_t* orig_surface = get_underlying_cairo_surface(rDevice);
-        double m_fXScale, m_fYScale;
-        dl_cairo_surface_get_device_scale(orig_surface, &m_fXScale, &m_fYScale);
+        double fXScale, fYScale;
+        dl_cairo_surface_get_device_scale(orig_surface, &fXScale, &fYScale);
 
         cairo_surface_t* surface;
-        if (m_fXScale != 1.0 || m_fYScale != -1)
+        if (fXScale != 1.0 || fYScale != -1)
         {
             surface = cairo_surface_create_similar_image(orig_surface,
                                                          CAIRO_FORMAT_ARGB32,
@@ -16440,6 +16453,77 @@ public:
         g_DragSource = this;
         return false;
     }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    virtual void drag_set_icon(GtkDragSource*) override
+    {
+    }
+#else
+    virtual void drag_set_icon(GdkDragContext* context) override
+    {
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(m_pTreeView);
+        if (gtk_tree_selection_get_mode(selection) == GTK_SELECTION_MULTIPLE)
+        {
+            int nWidth = 0;
+            int nHeight = 0;
+
+            GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), nullptr);
+            std::vector<cairo_surface_t*> surfaces;
+            std::vector<int> heights;
+            for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+            {
+                GtkTreePath* pPath = static_cast<GtkTreePath*>(pItem->data);
+
+                surfaces.push_back(gtk_tree_view_create_row_drag_icon(m_pTreeView, pPath));
+
+                double x1, x2, y1, y2;
+                cairo_t* cr = cairo_create(surfaces.back());
+                cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+                cairo_destroy(cr);
+
+                heights.push_back(y2 - y1);
+
+                nWidth = std::max(nWidth, static_cast<int>(x2 - x1));
+                nHeight += heights.back();
+            }
+            g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+
+            // if its just one, then don't do anything and leave the default dnd icon as-is
+            if (surfaces.size() > 1)
+            {
+                cairo_surface_t* target = cairo_surface_create_similar(surfaces[0],
+                                                                       cairo_surface_get_content(surfaces[0]),
+                                                                       nWidth,
+                                                                       nHeight);
+
+                cairo_t* cr = cairo_create(target);
+
+                double y_pos = 0;
+                for (size_t i = 0; i < surfaces.size(); ++i)
+                {
+                    cairo_set_source_surface(cr, surfaces[i], 2, y_pos + 2);
+                    cairo_rectangle(cr, 0, y_pos, nWidth, heights[i]);
+                    cairo_fill(cr);
+                    y_pos += heights[i];
+                }
+
+                cairo_destroy(cr);
+
+                double fXScale, fYScale;
+                dl_cairo_surface_get_device_scale(target, &fXScale, &fYScale);
+                cairo_surface_set_device_offset(target,
+                                                - m_nPressStartX * fXScale,
+                                                0);
+
+                gtk_drag_set_icon_surface(context, target);
+                cairo_surface_destroy(target);
+            }
+
+            for (auto surface : surfaces)
+                cairo_surface_destroy(surface);
+        }
+    }
+#endif
 
     virtual void do_signal_drag_end() override
     {
