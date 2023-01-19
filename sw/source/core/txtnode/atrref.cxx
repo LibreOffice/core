@@ -22,6 +22,11 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
+#include <sfx2/viewsh.hxx>
+#include <tools/json_writer.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <doc.hxx>
+#include <ndtxt.hxx>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {
@@ -92,6 +97,27 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
     }
     SetDontMoveAttr( true );
     SetOverlapAllowedAttr( true );
+}
+
+SwTextRefMark::~SwTextRefMark()
+{
+    if (GetTextNode().GetDoc().IsClipBoard())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return;
+
+    OUString fieldCommand = GetRefMark().GetRefName();
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:DeleteField");
+    aJson.put("success", true);
+    {
+        auto result = aJson.startNode("result");
+        aJson.put("DeleteField", fieldCommand);
+    }
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
 }
 
 const sal_Int32* SwTextRefMark::GetEnd() const

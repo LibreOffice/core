@@ -33,6 +33,8 @@ public:
     SwTextRefMark( SwFormatRefMark& rAttr,
             sal_Int32 const nStart, sal_Int32 const*const pEnd = nullptr);
 
+    ~SwTextRefMark();
+
     virtual const sal_Int32* GetEnd() const override;       // SwTextAttr
     virtual void SetEnd(sal_Int32) override;       // SwTextAttr
 
