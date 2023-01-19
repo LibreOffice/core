@@ -420,6 +420,27 @@ namespace sw::mark
         m_aName = rName;
     }
 
+    void Bookmark::sendLOKDeleteCallback()
+    {
+        if (GetMarkPos().GetDoc().IsClipBoard())
+            return;
+
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (!pViewShell)
+            return;
+
+        OUString fieldCommand = GetName();
+        tools::JsonWriter aJson;
+        aJson.put("commandName", ".uno:DeleteBookmark");
+        aJson.put("success", true);
+        {
+            auto result = aJson.startNode("result");
+            aJson.put("DeleteBookmark", fieldCommand);
+        }
+
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+    }
+
     void Bookmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const, SwPosition const*const)
     {

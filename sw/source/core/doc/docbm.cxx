@@ -1262,6 +1262,24 @@ namespace sw::mark
         switch(IDocumentMarkAccess::GetType(*pMark))
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
+                {
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark.get());
+                    if ( ppBookmark != m_vBookmarks.end() )
+                    {
+                        Bookmark* pBookmark = dynamic_cast<Bookmark*>(*ppBookmark);
+
+                        if(pBookmark)
+                            pBookmark->sendLOKDeleteCallback();
+
+                        m_vBookmarks.erase(ppBookmark);
+                    }
+                    else
+                    {
+                        assert(false &&
+                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
+                    }
+                }
+                break;
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 {
