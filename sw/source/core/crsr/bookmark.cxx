@@ -113,7 +113,8 @@ namespace sw::mark
             }
             else
             {
-                assert(pNode->IsNoTextNode() || pNode->IsSectionNode());
+                assert(pNode->IsNoTextNode() || pNode->IsSectionNode()
+                    || (pNode->IsEndNode() && pNode->StartOfSectionNode()->IsSectionNode()));
             }
         }
         assert(ret); // must have found it
