@@ -161,6 +161,9 @@ namespace sw::mark {
             Bookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
+
+            ~Bookmark();
+
             void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
             void DeregisterFromDoc(SwDoc& io_rDoc) override;
