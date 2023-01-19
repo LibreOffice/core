@@ -121,6 +121,10 @@ FONTCONFIG_TARBALL := fontconfig-2.13.94.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+# There are sadly now two Caladea fonts with different metrics, see:
+#  https://bugzilla.redhat.com/show_bug.cgi?id=2162532
+#  https://github.com/huertatipografica/Caladea/issues/4
+# be careful on potential upgrades
 FONT_CALADEA_SHA256SUM := c48d1c2fd613c9c06c959c34da7b8388059e2408d2bb19845dc3ed35f76e4d09
 FONT_CALADEA_TARBALL := 368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214.tar.gz
 # three static lines
