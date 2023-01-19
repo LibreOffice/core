@@ -8892,7 +8892,7 @@ void DocxAttributeOutput::WritePostItFieldsResolved()
             if (data.parentStatus == ParentStatus::HasParent)
             {
                 // Since parent fields have been resolved first, they should already have an id
-                auto& aParentFieldData = m_postitFields[data.parentIndex].second;
+                const PostItDOCXData& aParentFieldData = m_postitFields[data.parentIndex].second;
                 sParentId = NumberToHexBinary(aParentFieldData.lastParaId);
             }
             else

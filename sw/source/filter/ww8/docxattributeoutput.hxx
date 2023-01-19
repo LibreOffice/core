@@ -982,6 +982,7 @@ private:
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* m_PendingPlaceholder;
 
+    /// Used to store the parent status of a PostIt (parent/child/neither)
     enum class ParentStatus
     {
         None,

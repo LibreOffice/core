@@ -1913,20 +1913,12 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR5:
         {
-            OUString sTemp;
-            std::stringstream ss;
-            ss << std::uppercase << std::hex << m_nParentId;
-            sTemp = OUString::createFromAscii(ss.str().c_str());
-            rAny <<= sTemp;
+            rAny <<= OUString(OUString::number(m_nParentId, 16).toAsciiUpperCase());
         }
         break;
     case FIELD_PROP_PAR6:
         {
-            OUString sTemp;
-            std::stringstream ss;
-            ss << std::uppercase << std::hex << m_nPostItId;
-            sTemp = OUString::createFromAscii(ss.str().c_str());
-            rAny <<= sTemp;
+            rAny <<= OUString(OUString::number(m_nPostItId, 16).toAsciiUpperCase());
         }
         break;
     default:

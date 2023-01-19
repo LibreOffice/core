@@ -3838,10 +3838,10 @@ void DomainMapper_Impl::PopAnnotation()
     try
     {
         if (m_bAnnotationResolved)
-            m_xAnnotationField->setPropertyValue("Resolved", css::uno::Any(true));
+            m_xAnnotationField->setPropertyValue("Resolved", uno::Any(true));
 
-        m_xAnnotationField->setPropertyValue("ParaIdParent", css::uno::Any(m_sAnnotationParent));
-        m_xAnnotationField->setPropertyValue("ParaId", css::uno::Any(m_sAnnotationImportedParaId));
+        m_xAnnotationField->setPropertyValue("ParaIdParent", uno::Any(m_sAnnotationParent));
+        m_xAnnotationField->setPropertyValue("ParaId", uno::Any(m_sAnnotationImportedParaId));
 
         // See if the annotation will be a single position or a range.
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
