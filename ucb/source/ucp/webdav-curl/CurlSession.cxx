@@ -883,9 +883,6 @@ auto CurlProcessor::ProcessRequestImpl(
         oUploadSource.emplace(*pInData, rHeaders);
         rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, &*oUploadSource);
         assert(rc == CURLE_OK);
-        // libcurl won't upload without setting this
-        rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_UPLOAD, 1L);
-        assert(rc == CURLE_OK);
     }
     rSession.m_ErrorBuffer[0] = '\0';
 
@@ -1646,6 +1643,7 @@ auto CurlProcessor::PropFind(
     curl_off_t const len(xSeqOutStream->getWrittenBytes().getLength());
 
     ::std::vector<CurlOption> const options{
+        { CURLOPT_UPLOAD, 1L, nullptr },
         { CURLOPT_CUSTOMREQUEST, "PROPFIND", "CURLOPT_CUSTOMREQUEST" },
         // note: Sharepoint cannot handle "Transfer-Encoding: chunked"
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
@@ -1800,6 +1798,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     curl_off_t const len(xSeqOutStream->getWrittenBytes().getLength());
 
     ::std::vector<CurlOption> const options{
+        { CURLOPT_UPLOAD, 1L, nullptr },
         { CURLOPT_CUSTOMREQUEST, "PROPPATCH", "CURLOPT_CUSTOMREQUEST" },
         // note: Sharepoint cannot handle "Transfer-Encoding: chunked"
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
@@ -1953,8 +1952,10 @@ auto CurlSession::PUT(OUString const& rURIReference,
     // lock m_Mutex after accessing global LockStore to avoid deadlock
 
     // note: Nextcloud 20 cannot handle "Transfer-Encoding: chunked"
-    ::std::vector<CurlOption> const options{ { CURLOPT_INFILESIZE_LARGE, len, nullptr,
-                                               CurlOption::Type::CurlOffT } };
+    ::std::vector<CurlOption> const options{
+        { CURLOPT_UPLOAD, 1L, nullptr }, // libcurl won't upload without setting this
+        { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
+    };
 
     CurlProcessor::ProcessRequest(*this, uri, "PUT", options, &rEnv, ::std::move(pList), nullptr,
                                   &rxInStream, nullptr);
@@ -2135,6 +2136,7 @@ auto CurlProcessor::Lock(
     }
 
     ::std::vector<CurlOption> const options{
+        { CURLOPT_UPLOAD, 1L, nullptr },
         { CURLOPT_CUSTOMREQUEST, "LOCK", "CURLOPT_CUSTOMREQUEST" },
         // note: Sharepoint cannot handle "Transfer-Encoding: chunked"
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
