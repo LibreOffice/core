@@ -328,20 +328,6 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions
     return css::uno::Sequence< ::sal_Int32>();
 }
 
-const uno::Sequence< sal_Int8 >&
-SwXFlatParagraph::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXFlatParagraphUnoTunnelId;
-    return theSwXFlatParagraphUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXFlatParagraph::getSomething(
-        const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic )
     : mpDoc( &rDoc ),
       mnType( nType ),
@@ -519,10 +505,8 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if (!mpDoc)
         return xRet;
 
-    const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
-    SAL_WARN_IF(!xFPTunnel.is(), "sw.core", "invalid argument");
-    SwXFlatParagraph* const pFlatParagraph(comphelper::getFromUnoTunnel<SwXFlatParagraph>(xFPTunnel));
-
+    SwXFlatParagraph* const pFlatParagraph(dynamic_cast<SwXFlatParagraph*>(xPara.get()));
+    SAL_WARN_IF(!pFlatParagraph, "sw.core", "invalid argument");
     if ( !pFlatParagraph )
         return xRet;
 
@@ -564,11 +548,8 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if (!mpDoc)
         return xRet;
 
-    const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
-
-    SAL_WARN_IF(!xFPTunnel.is(), "sw.core", "invalid argument");
-    SwXFlatParagraph* const pFlatParagraph(comphelper::getFromUnoTunnel<SwXFlatParagraph>(xFPTunnel));
-
+    SwXFlatParagraph* const pFlatParagraph(dynamic_cast<SwXFlatParagraph*>(xPara.get()));
+    SAL_WARN_IF(!pFlatParagraph, "sw.core", "invalid argument");
     if ( !pFlatParagraph )
         return xRet;
 

@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <svl/listener.hxx>
@@ -42,7 +41,6 @@ typedef ::cppu::ImplInheritanceHelper
 <   SwXTextMarkup
 ,   css::beans::XPropertySet
 ,   css::text::XFlatParagraph
-,   css::lang::XUnoTunnel
 > SwXFlatParagraph_Base;
 
 class SwXFlatParagraph final
@@ -94,11 +92,6 @@ public:
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() override;
 
     using SwXTextMarkup::GetTextNode;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& rId) override;
 
 private:
     SwXFlatParagraph( const SwXFlatParagraph & ) = delete;
