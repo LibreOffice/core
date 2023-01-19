@@ -1113,7 +1113,13 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine();  // <CENTER> in new line
         if( text::HoriOrientation::CENTER==eDivHoriOri )
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
+        {
+            if (!rHTMLWrt.mbXHTML)
+            {
+                // Not XHTML's css center: start <center>.
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
+            }
+        }
         else
         {
             OStringLiteral sOut = OOO_STRING_SVTOOLS_HTML_division
@@ -1166,7 +1172,11 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         OString aTag = text::HoriOrientation::CENTER == eDivHoriOri
                            ? OOO_STRING_SVTOOLS_HTML_center
                            : OOO_STRING_SVTOOLS_HTML_division;
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aTag), false);
+        if (!rHTMLWrt.mbXHTML || eDivHoriOri != text::HoriOrientation::CENTER)
+        {
+            // Not XHTML's css center: end <center>.
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aTag), false);
+        }
         rHTMLWrt.m_bLFPossible = true;
     }
 
