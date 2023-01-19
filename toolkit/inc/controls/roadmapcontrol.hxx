@@ -168,7 +168,9 @@ namespace toolkit
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
-    DECLARE_XINTERFACE()
+    DECLARE_UNO3_AGG_DEFAULTS(UnoRoadmapControl, UnoControlRoadmap_Base)
+
+    css::uno::Any SAL_CALL queryAggregation(css::uno::Type const & aType) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;

@@ -362,7 +362,14 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoControlRoadmap_IBase )
-IMPLEMENT_FORWARD_XINTERFACE2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoControlRoadmap_IBase )
+
+css::uno::Any UnoRoadmapControl::queryAggregation(css::uno::Type const & aType) {
+    auto ret = UnoControlRoadmap_Base::queryAggregation(aType);
+    if (!ret.hasValue()) {
+        ret = UnoControlRoadmap_IBase::queryInterface(aType);
+    }
+    return ret;
+}
 
 
 sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)

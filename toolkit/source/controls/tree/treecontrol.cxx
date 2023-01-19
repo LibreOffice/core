@@ -27,7 +27,7 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/property.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 
@@ -120,7 +120,7 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  )
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper< UnoControlBase, css::awt::tree::XTreeControl > UnoTreeControl_Base;
+typedef ::cppu::AggImplInheritanceHelper1< UnoControlBase, css::awt::tree::XTreeControl > UnoTreeControl_Base;
 class UnoTreeControl : public UnoTreeControl_Base
 {
 public:

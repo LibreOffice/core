@@ -25,7 +25,7 @@
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <memory>
@@ -78,7 +78,7 @@ public:
 
 // = UnoGridControl
 
-typedef ::cppu::ImplInheritanceHelper  <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper2  <   UnoControlBase
                                         ,   css::awt::grid::XGridControl
                                         ,   css::awt::grid::XGridRowSelection
                                         >   UnoGridControl_Base;
