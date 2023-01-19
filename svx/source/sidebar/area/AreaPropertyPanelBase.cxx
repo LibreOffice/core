@@ -876,8 +876,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
             default:
             case drawing::FillStyle_NONE:
             {
-                mxLbFillAttr->set_active(-1);
-                mxLbFillAttr->set_sensitive(false);
+                mxLbFillAttr->hide();
                 // "Use slide background" also uses FillStyle_NONE internally,
                 // don't switch listbox in that case (will be handled by updateFillUseBackground)
                 nPos = meLastXFS == USE_BACKGROUND ? USE_BACKGROUND : NONE;
