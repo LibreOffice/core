@@ -253,27 +253,30 @@ static FieldContextPtr GetParentFieldContext(const std::deque<FieldContextPtr>& 
 /// Decides if the pInner field inside pOuter is allowed in Writer core, depending on their type.
 static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldContextPtr& pInner)
 {
-    std::optional<FieldId> oOuterFieldId = pOuter->GetFieldId();
-    OUString aCommand = pOuter->GetCommand();
-
-    // Ignore leading space before the field name, but don't accept IFF when we check for IF.
-    if (!aCommand.isEmpty() && aCommand[0] == ' ')
-    {
-        aCommand = aCommand.subView(1);
-    }
-
-    if (!oOuterFieldId && aCommand.startsWith("IF "))
-    {
-        // This will be FIELD_IF once the command is closed.
-        oOuterFieldId = FIELD_IF;
-    }
-
-    if (!oOuterFieldId)
+    if (!pInner->GetFieldId())
     {
         return true;
     }
 
-    if (!pInner->GetFieldId())
+    std::optional<FieldId> oOuterFieldId = pOuter->GetFieldId();
+    if (!oOuterFieldId)
+    {
+        OUString aCommand = pOuter->GetCommand();
+
+        // Ignore leading space before the field name, but don't accept IFF when we check for IF.
+        if (!aCommand.isEmpty() && aCommand[0] == ' ')
+        {
+            aCommand = aCommand.subView(1);
+        }
+
+        if (aCommand.startsWith("IF "))
+        {
+            // This will be FIELD_IF once the command is closed.
+            oOuterFieldId = FIELD_IF;
+        }
+    }
+
+    if (!oOuterFieldId)
     {
         return true;
     }
