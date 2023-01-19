@@ -3010,6 +3010,14 @@ private:
                 return true;
         }
 
+        /* Save press to possibly begin a drag */
+        if (pEvent->type != GDK_BUTTON_RELEASE)
+        {
+            m_nPressedButton = pEvent->button;
+            m_nPressStartX = pEvent->x;
+            m_nPressStartY = pEvent->y;
+        }
+
         if (!m_aMousePressHdl.IsSet() && !m_aMouseReleaseHdl.IsSet())
             return false;
 
@@ -3058,14 +3066,6 @@ private:
                 break;
             default:
                 return false;
-        }
-
-        /* Save press to possibly begin a drag */
-        if (pEvent->type != GDK_BUTTON_RELEASE)
-        {
-            m_nPressedButton = pEvent->button;
-            m_nPressStartX = pEvent->x;
-            m_nPressStartY = pEvent->y;
         }
 
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
