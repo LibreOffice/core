@@ -470,14 +470,6 @@ uno::Sequence< OUString > SwFmDrawPage::getSupportedServiceNames()
     return { "com.sun.star.drawing.GenericDrawPage" };
 }
 
-uno::Any SwFmDrawPage::queryInterface( const uno::Type& aType )
-{
-    uno::Any aRet = SvxFmDrawPage::queryInterface(aType);
-    if(!aRet.hasValue())
-        aRet = SwFmDrawPage_Base::queryInterface(aType);
-    return aRet;
-}
-
 sal_Int32 SwFmDrawPage::getCount()
 {
     SolarMutexGuard aGuard;

@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -39,7 +40,7 @@ class SdrView;
 class SwDoc;
 class SwXShape;
 
-typedef cppu::ImplInheritanceHelper
+typedef cppu::AggImplInheritanceHelper1
 <
     SvxFmDrawPage,
     css::container::XEnumerationAccess
@@ -75,8 +76,6 @@ public:
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
