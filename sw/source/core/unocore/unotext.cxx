@@ -573,7 +573,7 @@ SwXText::insertTextContent(
     SwXTextSection *const pSection =
         comphelper::getFromUnoTunnel<SwXTextSection>(xContentTunnel);
     SwXBookmark *const pBookmark =
-        comphelper::getFromUnoTunnel<SwXBookmark>(xContentTunnel);
+        dynamic_cast<SwXBookmark*>(xContent.get());
     SwXReferenceMark *const pReferenceMark =
         comphelper::getFromUnoTunnel<SwXReferenceMark>(xContentTunnel);
     SwXMeta *const pMeta =

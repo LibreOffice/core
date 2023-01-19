@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -40,7 +39,6 @@ class SwXTextRange;
 
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
-,   css::lang::XUnoTunnel
 ,   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
 ,   css::container::XNamed
@@ -91,17 +89,11 @@ public:
 
     /// @return IMark for this, but only if it lives in pDoc
     static ::sw::mark::IMark const* GetBookmarkInDoc(SwDoc const*const pDoc,
-            const css::uno::Reference<css::lang::XUnoTunnel> & xUT);
+            const css::uno::Reference<css::uno::XInterface> & xUT);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject() override;
     virtual css::uno::Reference< css::frame::XModel > GetModel() override;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -182,26 +182,14 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
 }
 
 ::sw::mark::IMark const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
-        const uno::Reference< lang::XUnoTunnel> & xUT)
+        const uno::Reference<uno::XInterface> & xUT)
 {
-    SwXBookmark *const pXBkm(
-            comphelper::getFromUnoTunnel<SwXBookmark>(xUT));
+    SwXBookmark *const pXBkm = dynamic_cast<SwXBookmark*>(xUT.get());
     if (pXBkm && (pDoc == pXBkm->m_pImpl->m_pDoc))
     {
         return pXBkm->m_pImpl->m_pRegisteredBookmark;
     }
     return nullptr;
-}
-
-const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXBookmarkUnoTunnelId;
-    return theSwXBookmarkUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl<SwXBookmark>(rId, this);
 }
 
 void SwXBookmark::attachToRangeEx(

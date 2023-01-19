@@ -256,8 +256,8 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    ::sw::mark::IMark const*const pMark(
-            SwXBookmark::GetBookmarkInDoc(& rTargetDoc, xTunnel));
+    ::sw::mark::IMark const*const pMark =
+            SwXBookmark::GetBookmarkInDoc(& rTargetDoc, xIfc);
     if (pMark)
     {
         o_rpMark = pMark;
