@@ -1420,7 +1420,7 @@ const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
  Tragically there are references to the localised style name itself in TOC
  fields.
  Hopefully this works and a complete map of >100 built-in style names
- localised to all langauges isn't needed.
+ localised to all languages isn't needed.
 */
 static auto FilterChars(OUString const& rStyleName) -> OUString
 {
