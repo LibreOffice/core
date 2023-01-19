@@ -825,15 +825,11 @@ public:
 
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
+        css::uno::Any aRet;
+
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
             aFlavor.MimeType = "text/plain;charset=utf-8";
-
-        auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
-        if (it == m_aMimeTypeToGtkType.end())
-            return css::uno::Any();
-
-        css::uno::Any aRet;
 
         GdkClipboard* clipboard = clipboard_get(m_eSelection);
 
@@ -846,21 +842,25 @@ public:
             aRet <<= aStr.replaceAll("\r\n", "\n");
             return aRet;
         }
-        else
+#endif
+
+        auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
+        if (it == m_aMimeTypeToGtkType.end())
+            return css::uno::Any();
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
+                                                                 it->second);
+        if (!data)
         {
-            GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
-                                                                     it->second);
-            if (!data)
-            {
-                return css::uno::Any();
-            }
-            gint length;
-            const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
-                                                                            &length);
-            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
-            gtk_selection_data_free(data);
-            aRet <<= aSeq;
+            return css::uno::Any();
         }
+        gint length;
+        const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
+                                                                        &length);
+        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+        gtk_selection_data_free(data);
+        aRet <<= aSeq;
 #else
         SalInstance* pInstance = GetSalInstance();
         read_transfer_result aRes;
