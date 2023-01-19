@@ -134,10 +134,10 @@
   </node>
   <node oor:name="ColorScheme">
     <prop oor:name="CurrentColorScheme">
-      <value>${PRODUCTNAME}</value>
+      <value>COLOR_SCHEME_LIBREOFFICE_AUTOMATIC</value>
     </prop>
     <node oor:name="ColorSchemes">
-      <node oor:name="${PRODUCTNAME}" oor:op="replace">
+      <node oor:name="COLOR_SCHEME_LIBREOFFICE_AUTOMATIC" oor:op="replace">
         <node oor:name="DocColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -440,7 +440,7 @@
           </prop>
         </node>
       </node>
-      <node oor:name="${PRODUCTNAME} Dark" oor:op="replace">
+      <node oor:name="COLOR_SCHEME_LIBREOFFICE_DARK" oor:op="replace">
         <node oor:name="DocColor">
           <prop oor:name="Color">
             <value>1842204</value>

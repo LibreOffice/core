@@ -160,6 +160,33 @@ const vEntryInfo[] =
     #undef IDS
 };
 
+// Maps the names of default color schemes to the corresponding TranslateId
+std::map<OUString, OUString> const vColorSchemes = {
+    {"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC)},
+    {"COLOR_SCHEME_LIBREOFFICE_DARK",      CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_DARK)}
+};
+
+// If the color scheme name has a translated string, then return the translation
+// Or else simply return the input string
+// For non-translatable color schemes, the ID and the name are the same
+OUString lcl_SchemeIdToTranslatedName(const OUString& sSchemeId)
+{
+    auto it = vColorSchemes.find(sSchemeId);
+    if (it != vColorSchemes.end())
+        return it->second;
+    return sSchemeId;
+}
+
+// Given a translated color scheme name, return the scheme ID used in the UI.xcu file
+// For non-translatable color schemes, the ID and the name are the same
+OUString lcl_TranslatedNameToSchemeId(const OUString& sName)
+{
+    for (auto it = vColorSchemes.begin(); it != vColorSchemes.end(); ++it)
+        if (it->second == sName)
+            return it->first;
+    return sName;
+}
+
 // ColorConfigWindow_Impl
 
 class ColorConfigWindow_Impl
@@ -787,8 +814,8 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     m_xColorSchemeLB->clear();
     const uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
     for(const OUString& s : aSchemes)
-        m_xColorSchemeLB->append_text(s);
-    m_xColorSchemeLB->set_active_text(pColorConfig->GetCurrentSchemeName());
+        m_xColorSchemeLB->append_text(lcl_SchemeIdToTranslatedName(s));
+    m_xColorSchemeLB->set_active_text(lcl_SchemeIdToTranslatedName(pColorConfig->GetCurrentSchemeName()));
     m_xColorSchemeLB->save_value();
     m_xDeleteSchemePB->set_sensitive( aSchemes.getLength() > 1 );
     UpdateColorConfig();
@@ -809,8 +836,8 @@ void SvxColorOptionsTabPage::UpdateColorConfig()
 
 IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    pColorConfig->LoadScheme(rBox.get_active_text());
-    pExtColorConfig->LoadScheme(rBox.get_active_text());
+    pColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(rBox.get_active_text()));
+    pExtColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(rBox.get_active_text()));
     UpdateColorConfig();
 }
 
