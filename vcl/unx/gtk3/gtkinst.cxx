@@ -3135,6 +3135,7 @@ private:
             {
                 cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
                 gtk_drag_set_icon_surface(pContext, surface);
+                cairo_surface_destroy(surface);
             }
 
             m_nPressedButton = -1;
@@ -3287,6 +3288,7 @@ private:
         {
             cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
             gtk_drag_set_icon_surface(context, surface);
+            cairo_surface_destroy(surface);
         }
 #endif
         if (!m_xDragSource)
