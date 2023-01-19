@@ -2064,6 +2064,17 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
     if( SfxItemState::SET==rItemSet.GetItemState( RES_LAYOUT_SPLIT, false, &pItem ) )
         OutCSS1_SwFormatLayoutSplit( *this, *pItem );
 
+    if (mbXHTML)
+    {
+        sal_Int16 eTabHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
+        if (eTabHoriOri == text::HoriOrientation::CENTER)
+        {
+            // Emit XHTML's center using inline CSS.
+            OutCSS1_Property(sCSS1_P_margin_left, "auto", nullptr, sw::Css1Background::Table);
+            OutCSS1_Property(sCSS1_P_margin_right, "auto", nullptr, sw::Css1Background::Table);
+        }
+    }
+
     if( !m_bFirstCSS1Property )
         Strm().WriteChar( '\"' );
 }
