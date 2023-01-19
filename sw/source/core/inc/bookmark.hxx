@@ -188,6 +188,7 @@ namespace sw::mark {
             bool IsInClipboard() const override;
             bool IsInUndo() const override;
             bool IsInContent() const override;
+            void sendLOKDeleteCallback();
             css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
         private:
