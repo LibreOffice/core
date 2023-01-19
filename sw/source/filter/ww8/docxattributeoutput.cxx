@@ -8004,10 +8004,14 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
         if (bListsAreDifferent || levelOverride != rLevelOverrides.end())
         {
             // If there are "gaps" in w:lvlOverride numbers, MS Word can have issues with numbering.
-            // So we need to emit empty override tokens up to current one.
+            // So we need to emit default override tokens up to current one.
             while (nPreviousOverrideLevel < nLevel)
             {
-                m_pSerializer->singleElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nPreviousOverrideLevel));
+                const SwNumFormat& rFormat = rRule.Get(nPreviousOverrideLevel);
+                m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nPreviousOverrideLevel));
+                // tdf#153104: absent startOverride is treated by Word as "startOverride value 0".
+                m_pSerializer->singleElementNS(XML_w, XML_startOverride, FSNS(XML_w, XML_val), OString::number(rFormat.GetStart()));
+                m_pSerializer->endElementNS(XML_w, XML_lvlOverride);
                 nPreviousOverrideLevel++;
             }
 

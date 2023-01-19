@@ -272,6 +272,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
     CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para5Style);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
+{
+    loadAndReload("tdf153104.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val");
+
+    xmlDocUniquePtr pXmlNum = parseExport("word/numbering.xml");
+    OString numPath = "/w:numbering/w:num[@w:numId='"
+                      + OUStringToOString(numId, RTL_TEXTENCODING_ASCII_US) + "']/";
+
+    // Check that first level's w:lvlOverride/w:startOverride is written correctly:
+    // the list defines starting value of 10, which must be kept upon second level
+    // numbering reset.
+    // Without the fix, this would fail with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/w:numbering/w:num[@w:numId='3']/w:lvlOverride[@w:ilvl='0']/w:startOverride' number of nodes is incorrect
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='0']/w:startOverride", "val", "10");
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val", "1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
