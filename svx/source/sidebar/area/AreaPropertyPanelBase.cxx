@@ -246,14 +246,13 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
         default:
         case NONE:
         {
-            mxLbFillAttr->show();
+            mxLbFillAttr->hide();
             mxLbFillGradFrom->hide();
             mxLbFillGradTo->hide();
             mxGradientStyle->hide();
             mxMTRAngle->hide();
             mxToolBoxColor->hide();
             mxBmpImport->hide();
-            mxLbFillAttr->set_sensitive(false);
 
             // #i122676# need to call a single SID_ATTR_FILL_STYLE change
             setFillStyle(XFillStyleItem(drawing::FillStyle_NONE));
@@ -800,8 +799,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
             default:
             case drawing::FillStyle_NONE:
             {
-                mxLbFillAttr->set_active(-1);
-                mxLbFillAttr->set_sensitive(false);
+                mxLbFillAttr->hide();
                 nPos = NONE;
                 break;
             }
@@ -1096,7 +1094,7 @@ void AreaPropertyPanelBase::Update()
         {
             case eFillStyle::NONE:
             {
-                mxLbFillAttr->show();
+                mxLbFillAttr->hide();
                 mxLbFillGradFrom->hide();
                 mxLbFillGradTo->hide();
                 mxMTRAngle->hide();
