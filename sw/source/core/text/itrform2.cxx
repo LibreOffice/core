@@ -1047,18 +1047,16 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         pDescriptor->Description = pContentControl->GetAlias();
     }
 
-    if (!pContentControl->GetShowingPlaceHolder())
-    {
-        SwPosition aPoint(*pTextNode, nStart);
-        SwPosition aMark(*pTextNode, nEnd);
-        SwPaM aPam(aMark, aPoint);
-        OUString aText = aPam.GetText();
-        static sal_Unicode const aForbidden[] = {
-            CH_TXTATR_BREAKWORD,
-            0
-        };
-        pDescriptor->Text = comphelper::string::removeAny(aText, aForbidden);
-    }
+    // Map the text of the content control to the descriptor's text.
+    SwPosition aPoint(*pTextNode, nStart);
+    SwPosition aMark(*pTextNode, nEnd);
+    SwPaM aPam(aMark, aPoint);
+    OUString aText = aPam.GetText();
+    static sal_Unicode const aForbidden[] = {
+        CH_TXTATR_BREAKWORD,
+        0
+    };
+    pDescriptor->Text = comphelper::string::removeAny(aText, aForbidden);
 
     // Calculate the bounding rectangle of this content control, which can be one or more layout
     // portions in one or more lines.

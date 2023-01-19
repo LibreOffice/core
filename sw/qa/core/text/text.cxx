@@ -675,6 +675,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
                          pAnnotation->getFormFieldAlternateName(pPdfDocument.get()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
+{
+    // Given a file with a content control, in placeholder mode:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure that a fillable form widget is emitted with the expected value:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Click here to enter text
+    // - Actual  :
+    // i.e. the value of the content control was empty, the placeholder value was lost.
+    CPPUNIT_ASSERT_EQUAL(SwResId(STR_CONTENT_CONTROL_PLACEHOLDER),
+                         pAnnotation->getFormFieldValue(pPdfDocument.get()));
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
 {
     // Given a file with a checkbox content control:
