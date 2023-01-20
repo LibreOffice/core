@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include <unobaseclass.hxx>
@@ -34,7 +33,7 @@ class SwFormatLineBreak;
 /// UNO API wrapper around an SwFormatLineBreak, exposed as the com.sun.star.text.LineBreak service.
 class SwXLineBreak final
     : public cppu::WeakImplHelper<css::beans::XPropertySet, css::lang::XServiceInfo,
-                                  css::text::XTextContent, css::lang::XUnoTunnel>
+                                  css::text::XTextContent>
 {
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
@@ -80,11 +79,6 @@ public:
     addEventListener(const css::uno::Reference<css::lang::XEventListener>& xListener) override;
     void SAL_CALL
     removeEventListener(const css::uno::Reference<css::lang::XEventListener>& xListener) override;
-
-    // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rIdentifier) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOLINEBREAK_HXX

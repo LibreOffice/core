@@ -283,15 +283,4 @@ void SAL_CALL SwXLineBreak::removeVetoableChangeListener(
     SAL_WARN("sw.uno", "SwXLineBreak::removeVetoableChangeListener: not implemented");
 }
 
-sal_Int64 SAL_CALL SwXLineBreak::getSomething(const css::uno::Sequence<sal_Int8>& rIdentifier)
-{
-    return comphelper::getSomethingImpl<SwXLineBreak>(rIdentifier, this);
-}
-
-const uno::Sequence<sal_Int8>& SwXLineBreak::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXLineBreakUnoTunnelId;
-    return theSwXLineBreakUnoTunnelId.getSeq();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
