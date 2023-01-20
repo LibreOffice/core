@@ -93,7 +93,7 @@ namespace calc
         EventObject aDisposeEvent( *this );
         m_aListEntryListeners.disposeAndClear( aDisposeEvent );
 
-        WeakAggComponentImplHelperBase::disposing();
+        WeakComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
     }

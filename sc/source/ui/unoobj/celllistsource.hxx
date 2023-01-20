@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -41,11 +41,11 @@ namespace calc
 
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper4 <   css::form::binding::XListEntryTypedSource
-                                                ,   css::util::XModifyListener
-                                                ,   css::lang::XServiceInfo
-                                                ,   css::lang::XInitialization
-                                                >   OCellListSource_Base;
+    typedef ::cppu::WeakComponentImplHelper <   css::form::binding::XListEntryTypedSource
+                                            ,   css::util::XModifyListener
+                                            ,   css::lang::XServiceInfo
+                                            ,   css::lang::XInitialization
+                                            >   OCellListSource_Base;
     // the base for the property handling
     typedef ::comphelper::OPropertyContainer        OCellListSource_PBase;
     // the second base for property handling
