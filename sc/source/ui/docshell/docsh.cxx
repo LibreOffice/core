@@ -1301,6 +1301,15 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     sc::SetFormulaDirtyContext aCxt;
                     m_pDocument->SetAllFormulasDirty(aCxt);
 
+                    // tdf#82254 - check whether to include a byte-order-mark in the output
+                    if (const bool bIncludeBOM = aImpEx.GetIncludeBOM())
+                    {
+                        aOptions.SetIncludeBOM(bIncludeBOM);
+                        if (rMedium.GetItemSet() != nullptr)
+                            rMedium.GetItemSet()->Put(
+                                SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions.WriteToString()));
+                    }
+
                     // for mobile case, we use a copy of the original document and give it a temporary name before editing
                     // Therefore, the sheet name becomes ugly, long and nonsensical.
 #if !(defined ANDROID)
@@ -1939,6 +1948,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     bool bSaveNumberAsSuch = rAsciiOpt.bSaveNumberAsSuch;
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
     bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
+    bool bIncludeBOM      = rAsciiOpt.bIncludeBOM;
 
     rtl_TextEncoding eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
@@ -1955,6 +1965,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     }
     else
     {
+        // tdf#82254 - check whether to include a byte-order-mark in the output
+        if (bIncludeBOM && eCharSet == RTL_TEXTENCODING_UTF8)
+            rStream.WriteUChar(0xEF).WriteUChar(0xBB).WriteUChar(0xBF);
         aStrDelimEncoded = OString(&cStrDelim, 1, eCharSet);
         aDelimEncoded = OString(&cDelim, 1, eCharSet);
         rtl_TextEncodingInfo aInfo;

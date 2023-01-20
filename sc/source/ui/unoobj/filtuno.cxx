@@ -231,6 +231,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
 
         OUString aTitle;
+        bool bIncludeBOM = false;
 
         if ( aFilterString == ScDocShell::GetAsciiFilterName() )
         {
@@ -245,6 +246,10 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
             aTitle = ScResId( STR_EXPORT_ASCII );
             bAscii = true;
+
+            ScAsciiOptions aOptions;
+            aOptions.ReadFromString(aFilterOptions);
+            bIncludeBOM = aOptions.GetIncludeBOM();
         }
         else if ( aFilterString == ScDocShell::GetLotusFilterName() )
         {
@@ -299,6 +304,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
+        aOptions.bIncludeBOM = bIncludeBOM;
         if(skipDialog)
         {
             // TODO: check we are not missing some of the stuff that ScImportOptionsDlg::GetImportOptions

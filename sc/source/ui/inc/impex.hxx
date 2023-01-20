@@ -71,6 +71,7 @@ class SC_DLLPUBLIC ScImportExport
     bool        mbOverwriting;  // Whether we could be overwriting existing values (paste).
                                 // In this case we cannot use the insert optimization, but we
                                 // do not need to broadcast after the import.
+    bool        mbIncludeBOM; // Whether to include a byte-order-mark in the output.
     ScExportTextOptions mExportTextOptions;
 
     std::unique_ptr<ScAsciiOptions> pExtOptions;        // extended options
@@ -158,6 +159,9 @@ public:
     void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
     void SetOverwriting( const bool bOverwriting ) { mbOverwriting = bOverwriting; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
+
+    bool GetIncludeBOM() const { return mbIncludeBOM; }
+    void SetIncludeBOM(bool bVal) { mbIncludeBOM = bVal; }
 };
 
 // Helper class for importing clipboard strings as streams.

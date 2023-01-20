@@ -54,6 +54,8 @@
 #include <undomanager.hxx>
 #include <tabprotection.hxx>
 
+#include <sfx2/docfile.hxx>
+
 #include <orcusfilters.hxx>
 #include <filter.hxx>
 
@@ -196,6 +198,7 @@ public:
     void testImportCrashes();
     void testTdf129681();
     void testTdf149484();
+    void testTdf82254_csv_bom();
     void testEscapedUnicodeXLSX();
     void testTdf144758_DBDataDefaultOrientation();
     void testSharedFormulaXLS();
@@ -321,6 +324,7 @@ public:
     CPPUNIT_TEST(testImportCrashes);
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf149484);
+    CPPUNIT_TEST(testTdf82254_csv_bom);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
     CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -3201,6 +3205,23 @@ void ScFiltersTest::testTdf149484()
     // - Expected: -TRUE-
     // - Actual  : TRUE
     CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), pDoc->GetString(0, 2, 0));
+}
+
+void ScFiltersTest::testTdf82254_csv_bom()
+{
+    setImportFilterName(SC_TEXT_CSV_FILTER_NAME);
+    createScDoc("csv/testTdf82254-csv-bom.csv");
+    saveAndReload(SC_TEXT_CSV_FILTER_NAME);
+    ScDocShell* pDocSh = getScDocShell();
+    SvStream* pStream = pDocSh->GetMedium()->GetInStream();
+
+    pStream->Seek(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), pStream->Tell());
+    pStream->StartReadingUnicodeText(RTL_TEXTENCODING_UTF8);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 0 (no byte order mark was read)
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(3), pStream->Tell());
 }
 
 void ScFiltersTest::testEscapedUnicodeXLSX()

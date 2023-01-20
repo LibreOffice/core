@@ -47,6 +47,7 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
     bRemoveSpace = false;
     nSheetToExport = 0;
     bEvaluateFormulas = true;   // true if not present at all, for compatibility
+    bIncludeBOM = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -94,6 +95,8 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
         if ( nTokenCount >= 13 )
             // If present, defaults to "false".
             bEvaluateFormulas = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
+        if (nTokenCount >= 14)
+            bIncludeBOM = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
     }
 }
 
@@ -120,7 +123,9 @@ OUString ScImportOptions::BuildString() const
             "," +
             OUString::number(nSheetToExport) +  // Only available for command line --convert-to
             "," +
-            OUString::boolean( bEvaluateFormulas ) ;  // same as "Evaluate formulas" in ScAsciiOptions
+            OUString::boolean( bEvaluateFormulas ) +  // same as "Evaluate formulas" in ScAsciiOptions
+            "," +
+            OUString::boolean(bIncludeBOM) ;  // same as "Include BOM" in ScAsciiOptions
 
     return aResult;
 }

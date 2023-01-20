@@ -37,6 +37,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bSkipEmptyCells(false),
     bSaveAsShown(true),
     bSaveFormulas(false),
+    bIncludeBOM(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
@@ -192,6 +193,9 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString )
     }
     else
         bEvaluateFormulas = true;   // default of versions that didn't add the parameter
+
+    // Token 13: include BOM.
+    bIncludeBOM = nPos >= 0 && o3tl::getToken(rString, 0, ',', nPos) == u"true";
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -261,7 +265,9 @@ OUString ScAsciiOptions::WriteToString() const
                // Token 11: sheet to export, always 0 for current sheet
                ",0," +
                // Token 12: evaluate formulas in import
-               OUString::boolean( bEvaluateFormulas )
+               OUString::boolean( bEvaluateFormulas ) + "," +
+               // Token 13: include BOM
+               OUString::boolean(bIncludeBOM)
             );
     return aOutStr.makeStringAndClear();
 }

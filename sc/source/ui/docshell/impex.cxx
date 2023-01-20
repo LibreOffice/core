@@ -114,7 +114,7 @@ ScImportExport::ScImportExport( ScDocument& r )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false )
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -129,7 +129,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false )
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -145,7 +145,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false )
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -162,7 +162,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false )
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -1577,6 +1577,9 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     std::unique_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScResId( STR_LOAD_DOC ), nRemaining, true ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
+    // tdf#82254 - check whether to include a byte-order-mark in the output
+    if (nOldPos != rStrm.Tell())
+        mbIncludeBOM = true;
 
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
