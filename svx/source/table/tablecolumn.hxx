@@ -22,7 +22,7 @@
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include "propertyset.hxx"
 #include <celltypes.hxx>
@@ -30,7 +30,7 @@
 
 namespace sdr::table {
 
-typedef ::cppu::ImplInheritanceHelper< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;
+typedef ::cppu::AggImplInheritanceHelper2< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;
 
 class TableColumn : public TableColumnBase
 {
