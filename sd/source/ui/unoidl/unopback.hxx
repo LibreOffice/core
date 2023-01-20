@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <svl/lstner.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -44,8 +43,7 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
                                     css::beans::XPropertySet,
                                     css::lang::XServiceInfo,
-                                    css::beans::XPropertyState,
-                                    css::lang::XUnoTunnel>,
+                                    css::beans::XPropertyState>,
                             public SfxListener
 {
     const SvxItemPropertySet*  mpPropSet;
@@ -61,9 +59,6 @@ public:
     // internal
     void fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    // uno helper
-    UNO3_GETIMPLEMENTATION_DECL( SdUnoPageBackground )
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

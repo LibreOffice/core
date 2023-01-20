@@ -2455,7 +2455,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     }
 
     // is it our own implementation?
-    SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xSet );
+    SdUnoPageBackground* pBack = dynamic_cast<SdUnoPageBackground*>( xSet.get() );
 
     SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
 
@@ -2827,7 +2827,7 @@ void SdMasterPage::setBackground( const Any& rValue )
         {
             // first fill an item set
             // is it our own implementation?
-            SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xInputSet );
+            SdUnoPageBackground* pBack = dynamic_cast<SdUnoPageBackground*>( xInputSet.get() );
 
             SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
 

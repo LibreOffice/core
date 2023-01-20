@@ -45,8 +45,6 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
     return &aPageBackgroundPropertySet_Impl;
 }
 
-UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
-
 SdUnoPageBackground::SdUnoPageBackground(
     SdDrawDocument* pDoc /* = NULL */,
     const SfxItemSet* pSet /* = NULL */)
