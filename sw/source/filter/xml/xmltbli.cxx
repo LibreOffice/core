@@ -2667,14 +2667,15 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                     ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
 
     const SwStartNode *pStNd;
-    Reference<XInterface> xCursorTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       UNO_QUERY);
-    OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
-    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
 
     if( m_bFirstSection )
     {
+        Reference<XInterface> xCursorTunnel( GetImport().GetTextImport()->GetCursor(),
+                                           UNO_QUERY);
+        OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OTextCursorHelper *pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
+        assert(pTextCursor && "SwXTextCursor missing");
+
         // The Cursor already is in the first section
         pStNd = pTextCursor->GetPaM()->GetPointNode().FindTableBoxStartNode();
         m_bFirstSection = false;

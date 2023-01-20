@@ -969,7 +969,7 @@ bool SwXText::Impl::CheckForOwnMember(
 
     OTextCursorHelper *const pOwnCursor =
             dynamic_cast<OTextCursorHelper*>(xOwnCursor.get());
-    OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
+    assert(pOwnCursor && "OTextCursorHelper::getUnoTunnelId() ???");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetPointNode().StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;

@@ -873,7 +873,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SolarMutexGuard aGuard;
 
     SwXFrame* pFrame = dynamic_cast<SwXFrame*>(rPropSet.get());
-    OSL_ENSURE( pFrame, "SwXFrame missing" );
+    assert(pFrame && "SwXFrame missing");
     SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
     const SwFormatContent& rContent = pFrameFormat->GetContent();
     const SwNodeIndex *pNdIdx = rContent.GetContentIdx();

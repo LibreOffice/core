@@ -1114,6 +1114,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         xTextCursor.set(pHeadText->CreateTextCursor(true));
         xTextCursor->gotoEnd(true);
         pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
+        assert(pCursor && "cant must succeed");
         pCursor->GetPaM()->Normalize();
     }
     else
@@ -1122,6 +1123,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(true);
         pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
+        assert(pCursor && "cant must succeed");
     }
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
