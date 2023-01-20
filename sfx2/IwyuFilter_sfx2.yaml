@@ -131,9 +131,6 @@ excludelist:
     sfx2/source/doc/signaturestate.cxx:
     # Actually used
     - com/sun/star/security/DocumentSignatureInformation.hpp
-    sfx2/source/inc/asyncfunc.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
     sfx2/source/sidebar/ControllerFactory.cxx:
     # Actually used
     - com/sun/star/frame/XFrame.hpp
