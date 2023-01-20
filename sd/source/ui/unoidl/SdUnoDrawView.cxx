@@ -115,7 +115,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() const
         // Get the corresponding XLayer object from the implementation
         // object of the layer manager.
         Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
-        SdLayerManager* pManager = comphelper::getFromUnoTunnel<SdLayerManager> (xManager);
+        SdLayerManager* pManager = dynamic_cast<SdLayerManager*> (xManager.get());
         if (pManager != nullptr)
             xCurrentLayer = pManager->GetLayer (pLayer);
     }

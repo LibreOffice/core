@@ -379,9 +379,6 @@ SdLayerManager::~SdLayerManager() noexcept
     dispose();
 }
 
-// uno helper
-UNO3_GETIMPLEMENTATION_IMPL( SdLayerManager );
-
 // XComponent
 void SAL_CALL SdLayerManager::dispose(  )
 {
