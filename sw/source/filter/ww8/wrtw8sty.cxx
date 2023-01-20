@@ -122,7 +122,7 @@ public:
 //  Styles
 
 // Immediately after reserved slots, character styles begin
-#define WW8_RESERVED_SLOTS 10
+#define WW8_RESERVED_SLOTS 15 // tdf#153094: the value is important
 
 // GetId( SwCharFormat ) for use in text -> zero is not allowed,
 // use "Default Char Style" instead
