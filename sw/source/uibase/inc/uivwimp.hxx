@@ -82,10 +82,11 @@ public:
 };
 
 class SwMailMergeConfigItem;
+class SwXDispatchProviderInterceptor;
 
 class SwView_Impl
 {
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor >   m_xDispatchProviderInterceptor;
+    rtl::Reference< SwXDispatchProviderInterceptor > m_xDispatchProviderInterceptor;
     css::uno::Reference< css::view::XSelectionSupplier >              mxXTextView;       // UNO object
     std::vector< unotools::WeakReference< SwTransferable > > mxTransferables;
 

@@ -61,9 +61,8 @@ SwView_Impl::SwView_Impl(SwView* pShell)
 
 SwView_Impl::~SwView_Impl()
 {
-    auto pInterceptor = comphelper::getFromUnoTunnel<SwXDispatchProviderInterceptor>(m_xDispatchProviderInterceptor);
-    if(pInterceptor)
-        pInterceptor->Invalidate();
+    if(m_xDispatchProviderInterceptor)
+        m_xDispatchProviderInterceptor->Invalidate();
     view::XSelectionSupplier* pTextView = mxXTextView.get();
     static_cast<SwXTextView*>(pTextView)->Invalidate();
     mxXTextView.clear();

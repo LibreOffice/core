@@ -151,18 +151,6 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     m_xIntercepted = nullptr;
 }
 
-const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXDispatchProviderInterceptorUnoTunnelId;
-    return theSwXDispatchProviderInterceptorUnoTunnelId.getSeq();
-}
-
-sal_Int64 SwXDispatchProviderInterceptor::getSomething(
-    const uno::Sequence< sal_Int8 >& aIdentifier )
-{
-    return comphelper::getSomethingImpl(aIdentifier, this);
-}
-
 void    SwXDispatchProviderInterceptor::Invalidate()
 {
     DispatchMutexLock_Impl aLock;

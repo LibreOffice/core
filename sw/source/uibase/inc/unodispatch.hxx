@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -35,7 +34,6 @@ class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
 <
     css::frame::XDispatchProviderInterceptor,
     css::lang::XEventListener,
-    css::lang::XUnoTunnel,
     css::frame::XInterceptorInfo
 >
 {
@@ -78,10 +76,6 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
-    //XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XInterceptorInfo
     virtual css::uno::Sequence<OUString> SAL_CALL getInterceptedURLs() override;
