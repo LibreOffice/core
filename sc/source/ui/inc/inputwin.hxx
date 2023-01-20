@@ -261,12 +261,11 @@ public:
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
     void                    NumLinesChanged();
-    virtual tools::Long            GetNumLines() const override { return mxTextWndGroup->GetNumLines(); }
-    tools::Long                    GetVertOffset() const { return  mnVertOffset; }
+    virtual tools::Long     GetNumLines() const override { return mxTextWndGroup->GetNumLines(); }
 
-    int GetPixelHeightForLines() const
+    int GetPixelHeightForLines(tools::Long nLines) const
     {
-        return mxTextWndGroup->GetPixelHeightForLines(GetNumLines());
+        return mxTextWndGroup->GetPixelHeightForLines(nLines);
     }
 
     weld::Builder&          GetBuilder() { return *m_xBuilder; }
@@ -278,7 +277,6 @@ private:
     std::unique_ptr<ScTextWndGroup> mxTextWndGroup;
     std::unique_ptr<weld::Button> mxButtonUp;
     std::unique_ptr<weld::Button> mxButtonDown;
-    tools::Long                   mnVertOffset;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
 };
@@ -348,7 +346,8 @@ private:
     VclPtr<ScInputBarGroup> mxTextWindow;
     ScInputHandler* pInputHdl;
     ScTabViewShell* mpViewShell;
-    tools::Long            mnMaxY;
+    tools::Long     mnMaxY;
+    tools::Long     mnStandardItemHeight;
     bool            bIsOkCancelMode;
     bool            bInResize;
 };
