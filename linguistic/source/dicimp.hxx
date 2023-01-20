@@ -30,7 +30,7 @@
 
 #include "defs.hxx"
 
-#define DIC_MAX_ENTRIES     30000
+#define DIC_MAX_ENTRIES SAL_MAX_INT32
 
 sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUString &aDicName );
 
