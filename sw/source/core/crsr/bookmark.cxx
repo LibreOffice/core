@@ -568,6 +568,9 @@ namespace sw::mark
 
     TextFieldmark::~TextFieldmark()
     {
+        if (GetMarkPos().GetDoc().IsClipBoard())
+            return;
+
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (!pViewShell)
             return;
