@@ -136,6 +136,8 @@ public:
 
     SvxCSS1LengthType m_eLeftType, m_eTopType;
     SvxCSS1LengthType m_eWidthType, m_eHeightType;
+    SvxCSS1LengthType m_eLeftMarginType;
+    SvxCSS1LengthType m_eRightMarginType;
 
     SvxCSS1SizeType m_eSizeType;
 
