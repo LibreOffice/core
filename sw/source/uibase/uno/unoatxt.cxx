@@ -655,17 +655,6 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
     return aRet;
 }
 
-const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXAutoTextEntryUnoTunnelId;
-    return theSwXAutoTextEntryUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, OUString aGroupName,
                                             OUString aEntryName) :
     m_pGlossaries(pGlss),

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSDOC_HXX
 
 #include <rtl/ustring.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 
 class SwTextBlocks;
@@ -35,8 +36,10 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #include <vector>
 #include <swdllapi.h>
 
+class SwXAutoTextEntry;
+
 typedef std::vector< css::uno::WeakReference< css::text::XAutoTextGroup > > UnoAutoTextGroups;
-typedef std::vector< css::uno::WeakReference< css::text::XAutoTextEntry > > UnoAutoTextEntries;
+typedef std::vector< unotools::WeakReference< SwXAutoTextEntry > > UnoAutoTextEntries;
 
 #define GLOS_DELIM u'*'
 

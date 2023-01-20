@@ -459,7 +459,7 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
                 aLoop != m_aGlossaryEntries.end();
             )
         {
-            auto pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(aLoop->get());
+            rtl::Reference<SwXAutoTextEntry> pEntry = aLoop->get();
             if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
             {
                 pEntry->Invalidate();
@@ -511,7 +511,7 @@ void SwGlossaries::InvalidateUNOOjects()
     // invalidate all the AutoTextEntry-objects
     for (const auto& rEntry : m_aGlossaryEntries)
     {
-        auto pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(rEntry.get());
+        rtl::Reference<SwXAutoTextEntry> pEntry = rEntry.get();
         if ( pEntry )
             pEntry->Invalidate();
     }
@@ -584,17 +584,14 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     if ( USHRT_MAX == nIdx )
         throw container::NoSuchElementException();
 
-    Reference< text::XAutoTextEntry > xReturn;
+    rtl::Reference< SwXAutoTextEntry > xReturn;
 
     UnoAutoTextEntries::iterator aSearch( m_aGlossaryEntries.begin() );
     for ( ; aSearch != m_aGlossaryEntries.end(); )
     {
-        Reference< lang::XUnoTunnel > xEntryTunnel( aSearch->get(), UNO_QUERY );
+        rtl::Reference< SwXAutoTextEntry > pEntry( aSearch->get() );
 
-        SwXAutoTextEntry* pEntry = nullptr;
-        if ( xEntryTunnel.is() )
-            pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(xEntryTunnel);
-        else
+        if ( !pEntry )
         {
             // the object is dead in the meantime -> remove from cache
             aSearch = m_aGlossaryEntries.erase( aSearch );

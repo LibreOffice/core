@@ -155,7 +155,6 @@ class SwXAutoTextEntry final
         <
             css::text::XAutoTextEntry,
             css::lang::XServiceInfo,
-            css::lang::XUnoTunnel,
             css::text::XText,
             css::document::XEventsSupplier
         >
@@ -196,11 +195,6 @@ class SwXAutoTextEntry final
 
 public:
     SwXAutoTextEntry(SwGlossaries* , OUString aGroupName, OUString aEntryName);
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XText
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
