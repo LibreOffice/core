@@ -424,18 +424,6 @@ SwXDocumentIndex::CreateXDocumentIndex(
     return xIndex;
 }
 
-const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXDocumentIndexUnoTunnelId;
-    return theSwXDocumentIndexUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXDocumentIndex>(rId, this);
-}
-
 OUString SAL_CALL
 SwXDocumentIndex::getImplementationName()
 {
