@@ -445,10 +445,6 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
     return false;
 }
 
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScTableConditionalFormat);
-
 ScTableConditionalEntry::ScTableConditionalEntry(ScCondFormatEntryItem  aItem) :
     aData(std::move( aItem ))
 {

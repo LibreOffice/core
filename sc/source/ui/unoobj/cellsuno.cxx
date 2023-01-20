@@ -2255,7 +2255,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                     if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                     {
                         ScTableConditionalFormat* pFormat =
-                                comphelper::getFromUnoTunnel<ScTableConditionalFormat>( xInterface );
+                                dynamic_cast<ScTableConditionalFormat*>( xInterface.get() );
                         if (pFormat)
                         {
                             ScDocument& rDoc = pDocShell->GetDocument();
