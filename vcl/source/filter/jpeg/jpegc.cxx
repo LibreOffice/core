@@ -81,6 +81,7 @@ static void outputMessage (j_common_ptr cinfo)
 
 extern "C" {
 
+// see also external/libtiff/0001-ofz-54685-Timeout.patch
 static void emitMessage (j_common_ptr cinfo, int msg_level)
 {
     if (msg_level < 0)
