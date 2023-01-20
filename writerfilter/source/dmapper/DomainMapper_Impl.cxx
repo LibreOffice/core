@@ -6342,6 +6342,12 @@ void DomainMapper_Impl::handleToc
             xTOC->setPropertyValue(getPropertyName(PROP_LABEL_CATEGORY),
                                    uno::Any(sFigureSequence));
 
+        if (!sTemplate.isEmpty())
+        {
+            OUString const sConvertedStyleName(GetStyleSheetTable()->ConvertStyleName(sTemplate, true));
+            xTOC->setPropertyValue("CreateFromParagraphStyle", uno::Any(sConvertedStyleName));
+        }
+
         if ( bHyperlinks )
         {
             uno::Reference< container::XIndexReplace> xLevelFormats;

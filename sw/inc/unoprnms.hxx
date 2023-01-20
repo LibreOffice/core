@@ -471,6 +471,7 @@ inline constexpr OUStringLiteral UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS
 inline constexpr OUStringLiteral UNO_NAME_INDEX_AUTO_MARK_FILE_U_R_L = u"IndexAutoMarkFileURL";
 inline constexpr OUStringLiteral UNO_NAME_IS_COMMA_SEPARATED = u"IsCommaSeparated";
 inline constexpr OUStringLiteral UNO_NAME_IS_RELATIVE_TABSTOPS = u"IsRelativeTabstops";
+inline constexpr OUStringLiteral UNO_NAME_CREATE_FROM_PARAGRAPH_STYLE = u"CreateFromParagraphStyle";
 inline constexpr OUStringLiteral UNO_NAME_CREATE_FROM_LEVEL_PARAGRAPH_STYLES
     = u"CreateFromLevelParagraphStyles";
 inline constexpr OUStringLiteral UNO_NAME_SHOW_CHANGES = u"ShowChanges";

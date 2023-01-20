@@ -780,6 +780,30 @@ SwXDocumentIndex::setPropertyValue(
         case WID_CREATE_FROM_PARAGRAPH_STYLES:
             lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Template);
         break;
+        case WID_CREATE_FROM_PARAGRAPH_STYLE:
+        {
+            OUString style;
+            if (rValue >>= style)
+            {
+                if (style.indexOf(TOX_STYLE_DELIMITER) != -1)
+                {
+                    throw lang::IllegalArgumentException();
+                }
+                lcl_AnyToBitMask(uno::Any(true), nCreate, SwTOXElement::Template);
+                OUString uiStyle;
+                SwStyleNameMapper::FillUIName(style, uiStyle, SwGetPoolIdFromName::TxtColl);
+                rTOXBase.SetStyleNames(uiStyle, 0);
+            }
+            else if (!rValue.hasValue())
+            {
+                lcl_AnyToBitMask(uno::Any(false), nCreate, SwTOXElement::Template);
+            }
+            else
+            {
+                throw lang::IllegalArgumentException();
+            }
+        }
+        break;
 
         case WID_PARA_LEV1:
         case WID_PARA_LEV2:
@@ -1089,6 +1113,23 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             case WID_CREATE_FROM_PARAGRAPH_STYLES:
                 lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Template);
             break;
+            case WID_CREATE_FROM_PARAGRAPH_STYLE:
+            {
+                if (nCreate & SwTOXElement::Template)
+                {   // there is only one style, at top level
+                    OUString const& rStyle(pTOXBase->GetStyleNames(0));
+                    if (!rStyle.isEmpty())
+                    {
+                        assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
+                        OUString ret;
+                        SwStyleNameMapper::FillProgName(rStyle, ret,
+                            SwGetPoolIdFromName::TxtColl);
+                        aRet <<= ret;
+                    }
+                }
+            }
+            break;
+
             case WID_PARA_HEAD:
             {
                 //Header is at position 0

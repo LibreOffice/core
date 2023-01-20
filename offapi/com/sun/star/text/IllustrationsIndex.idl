@@ -36,6 +36,12 @@ published service IllustrationsIndex
     /* determines the way the paragraph containing a label is included in the index.
         @see ChapterFormat*/
     [optional, property] short LabelDisplayType;//tables, illustrations
+
+    /** determines if paragraphs with one particular style applied are
+        included in the index.
+        @since LibreOffice 7.6
+     */
+    [optional, property, maybevoid] string CreateFromParagraphStyle;
 };
 
 
