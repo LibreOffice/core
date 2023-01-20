@@ -145,18 +145,6 @@ SwXReferenceMark::CreateXReferenceMark(
     return xMark;
 }
 
-const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXReferenceMarkUnoTunnelId;
-    return theSwXReferenceMarkUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXReferenceMark>(rId, this);
-}
-
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 {
     return "SwXReferenceMark";

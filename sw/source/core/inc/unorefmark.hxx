@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOREFMARK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOREFMARK_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -34,8 +33,7 @@ class SwDoc;
 class SwFormatRefMark;
 
 typedef ::cppu::WeakImplHelper
-<   css::lang::XUnoTunnel
-,   css::lang::XServiceInfo
+<   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
 ,   css::container::XNamed
 ,   css::text::XTextContent
@@ -58,12 +56,6 @@ public:
 
     static rtl::Reference<SwXReferenceMark>
         CreateXReferenceMark(SwDoc & rDoc, SwFormatRefMark * pMarkFormat);
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

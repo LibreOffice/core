@@ -575,7 +575,7 @@ SwXText::insertTextContent(
     SwXBookmark *const pBookmark =
         dynamic_cast<SwXBookmark*>(xContent.get());
     SwXReferenceMark *const pReferenceMark =
-        comphelper::getFromUnoTunnel<SwXReferenceMark>(xContentTunnel);
+        dynamic_cast<SwXReferenceMark*>(xContent.get());
     SwXMeta *const pMeta = dynamic_cast<SwXMeta*>(xContent.get());
     auto* pContentControl = dynamic_cast<SwXContentControl*>(xContent.get());
     SwXTextField* pTextField = dynamic_cast<SwXTextField*>(xContent.get());
