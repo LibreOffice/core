@@ -1166,7 +1166,7 @@ bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
 
 bool isValidVectorGraphicObject(const sd::outliner::IteratorPosition& rPosition)
 {
-    auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(rPosition.mxObject.get().get());
+    rtl::Reference<SdrGrafObj> pGraphicObject = dynamic_cast<SdrGrafObj*>(rPosition.mxObject.get().get());
     if (pGraphicObject)
     {
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();

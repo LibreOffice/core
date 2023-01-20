@@ -212,7 +212,7 @@ void SwView_Impl::Invalidate()
     GetUNOObject_Impl()->Invalidate();
     for (const auto& xTransferable: mxTransferables)
     {
-        auto pTransferable = xTransferable.get().get();
+        rtl::Reference<SwTransferable> pTransferable = xTransferable.get();
         if(pTransferable)
             pTransferable->Invalidate();
     }

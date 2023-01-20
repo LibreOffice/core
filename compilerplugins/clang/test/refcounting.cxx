@@ -107,11 +107,26 @@ void foo7()
     UnoSubObject* p3 = static_cast<UnoSubObject*>(getConstRef().get());
     (void)p3;
     p3 = static_cast<UnoSubObject*>(getConstRef().get());
-
-    // no warning expected, although, arguably, we should be assigning to a rtl::Reference temporary
-    unotools::WeakReference<UnoObject> weak1;
-    auto pTextObj = dynamic_cast<UnoSubObject*>(weak1.get().get());
-    (void)pTextObj;
 }
 
+const unotools::WeakReference<UnoObject>& getWeakRef();
+void foo8()
+{
+    // expected-error@+1 {{weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoSubObject* p1 = static_cast<UnoSubObject*>(getWeakRef().get().get());
+    (void)p1;
+
+    // expected-error@+1 {{weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoObject* p2 = getWeakRef().get().get();
+    (void)p2;
+
+    unotools::WeakReference<UnoObject> weak1;
+    // expected-error@+1 {{weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoSubObject* p3 = dynamic_cast<UnoSubObject*>(weak1.get().get());
+    (void)p3;
+
+    // expected-error@+1 {{weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoObject* p4 = weak1.get().get();
+    (void)p4;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -75,6 +75,7 @@ private:
 
     bool visitTemporaryObjectExpr(Expr const * expr);
     bool isCastingReference(const Expr* expr);
+    bool isCallingGetOnWeakRef(const Expr* expr);
 };
 
 bool containsXInterfaceSubclass(const clang::Type* pType0);
@@ -714,6 +715,17 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
                     << pointeeType
                     << varDecl->getSourceRange();
         }
+        if (isCallingGetOnWeakRef(varDecl->getInit()))
+        {
+            auto pointeeType = varDecl->getType()->getPointeeType();
+            if (containsOWeakObjectSubclass(pointeeType))
+                report(
+                    DiagnosticsEngine::Warning,
+                    "weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference",
+                    varDecl->getLocation())
+                    << pointeeType
+                    << varDecl->getSourceRange();
+        }
     }
     return true;
 }
@@ -762,6 +774,47 @@ bool RefCounting::isCastingReference(const Expr* expr)
     return true;
 }
 
+/**
+    Look for code like
+        makeFoo().get();
+    or
+        cast<T*>(makeFoo().get().get());
+    or
+        foo.get();
+    where makeFoo() returns a unotools::WeakReference<Foo>
+    and foo is a unotools::WeakReference<Foo> var.
+*/
+bool RefCounting::isCallingGetOnWeakRef(const Expr* expr)
+{
+    expr = expr->IgnoreImplicit();
+    // unwrap the cast (if any)
+    if (auto castExpr = dyn_cast<CastExpr>(expr))
+        expr = castExpr->getSubExpr()->IgnoreImplicit();
+    // unwrap outer get (if any)
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr))
+    {
+        auto methodDecl = memberCallExpr->getMethodDecl();
+        if (methodDecl && methodDecl->getIdentifier() && methodDecl->getName() == "get")
+        {
+            QualType objectType = memberCallExpr->getImplicitObjectArgument()->getType();
+            if (loplugin::TypeCheck(objectType).Class("Reference").Namespace("rtl"))
+                expr = memberCallExpr->getImplicitObjectArgument()->IgnoreImplicit();
+        }
+    }
+    // check for converting a WeakReference to a strong reference via get()
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr))
+    {
+        auto methodDecl = memberCallExpr->getMethodDecl();
+        if (methodDecl && methodDecl->getIdentifier() && methodDecl->getName() == "get")
+        {
+            QualType objectType = memberCallExpr->getImplicitObjectArgument()->getType();
+            if (loplugin::TypeCheck(objectType).Class("WeakReference").Namespace("unotools"))
+                return true;
+        }
+    }
+    return false;
+}
+
 bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
 {
     if (ignoreLocation(binaryOperator))
@@ -797,6 +850,21 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
             report(
                 DiagnosticsEngine::Warning,
                 "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
+                binaryOperator->getBeginLoc())
+                << pointeeType
+                << binaryOperator->getSourceRange();
+    }
+    if (isCallingGetOnWeakRef(binaryOperator->getRHS()))
+    {
+        // TODO Very dodgy code, but I see no simple way of fixing it
+        StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(binaryOperator->getBeginLoc()));
+        if (loplugin::isSamePathname(fileName, SRCDIR "/sd/source/ui/view/Outliner.cxx"))
+            return true;
+        auto pointeeType = binaryOperator->getLHS()->getType()->getPointeeType();
+        if (containsOWeakObjectSubclass(pointeeType))
+            report(
+                DiagnosticsEngine::Warning,
+                "weak object being converted to strong, and then the reference dropped, and managed via raw pointer, should be managed via rtl::Reference",
                 binaryOperator->getBeginLoc())
                 << pointeeType
                 << binaryOperator->getSourceRange();
