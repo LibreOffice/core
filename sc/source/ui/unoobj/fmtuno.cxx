@@ -914,8 +914,4 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableValidationObj )
 
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScTableValidationObj);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

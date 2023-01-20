@@ -157,7 +157,6 @@ class ScTableValidationObj final : public cppu::WeakImplHelper<
                             css::sheet::XSheetCondition2,
                             css::sheet::XMultiFormulaTokens,
                             css::beans::XPropertySet,
-                            css::lang::XUnoTunnel,
                             css::lang::XServiceInfo >
 {
 private:
@@ -230,9 +229,6 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScTableValidationObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

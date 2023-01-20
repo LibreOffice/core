@@ -2302,7 +2302,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                     if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                     {
                         ScTableValidationObj* pValidObj =
-                                comphelper::getFromUnoTunnel<ScTableValidationObj>( xInterface );
+                                dynamic_cast<ScTableValidationObj*>( xInterface.get() );
                         if (pValidObj)
                         {
                             ScDocument& rDoc = pDocShell->GetDocument();
