@@ -1252,10 +1252,6 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScEditFieldObj);
-
 // XServiceInfo
 
 OUString SAL_CALL ScEditFieldObj::getImplementationName()

@@ -358,7 +358,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() && xRange.is() )
     {
-        ScEditFieldObj* pHeaderField = comphelper::getFromUnoTunnel<ScEditFieldObj>( xContent );
+        ScEditFieldObj* pHeaderField = dynamic_cast<ScEditFieldObj*>( xContent.get() );
 
         SvxUnoTextRangeBase* pTextRange =
             comphelper::getFromUnoTunnel<ScHeaderFooterTextCursor>( xRange );
@@ -425,7 +425,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScEditFieldObj* pHeaderField = comphelper::getFromUnoTunnel<ScEditFieldObj>(xContent);
+        ScEditFieldObj* pHeaderField = dynamic_cast<ScEditFieldObj*>(xContent.get());
         if ( pHeaderField && pHeaderField->IsInserted() )
         {
             //! check if the field is in this cell

@@ -1086,7 +1086,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
 
     uno::Reference<text::XTextContent> xEffContent;
 
-    ScEditFieldObj* pCellField = comphelper::getFromUnoTunnel<ScEditFieldObj>( xContent );
+    ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>( xContent.get() );
     if ( pCellField )
     {
         //  createInstance("TextField.URL") from the document creates a ScCellFieldObj.

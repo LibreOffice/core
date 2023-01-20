@@ -26,7 +26,6 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -160,7 +159,6 @@ public:
 typedef comphelper::WeakComponentImplHelper<
                             css::text::XTextField,
                             css::beans::XPropertySet,
-                            css::lang::XUnoTunnel,
                             css::lang::XServiceInfo> ScEditFieldObj_Base;
 class ScEditFieldObj final : public ScEditFieldObj_Base
 {
@@ -231,9 +229,6 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScEditFieldObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

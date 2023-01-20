@@ -6016,7 +6016,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xContent.is() )
     {
-        ScEditFieldObj* pCellField = comphelper::getFromUnoTunnel<ScEditFieldObj>(xContent);
+        ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
         SvxUnoTextRangeBase* pTextRange = comphelper::getFromUnoTunnel<ScCellTextCursor>( xRange );
 
         if ( pCellField && !pCellField->IsInserted() && pTextRange )
@@ -6066,7 +6066,7 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScEditFieldObj* pCellField = comphelper::getFromUnoTunnel<ScEditFieldObj>(xContent);
+        ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
         if ( pCellField && pCellField->IsInserted() )
         {
             //! Check if field is in this cell
