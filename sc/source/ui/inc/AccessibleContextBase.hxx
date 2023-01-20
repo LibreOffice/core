@@ -29,7 +29,7 @@
 
 #include <svl/lstner.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 namespace tools { class Rectangle; }
@@ -39,7 +39,7 @@ namespace tools { class Rectangle; }
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::WeakAggComponentImplHelper5<
+typedef cppu::WeakComponentImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleContext,
