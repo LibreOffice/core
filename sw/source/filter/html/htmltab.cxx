@@ -4917,6 +4917,35 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     else
     {
         m_xTable.reset();
+
+        // Parse CSS on the table.
+        OUString aStyle;
+        const HTMLOptions& rHTMLOptions = GetOptions();
+        for (size_t i = rHTMLOptions.size(); i;)
+        {
+            const HTMLOption& rOption = rHTMLOptions[--i];
+            if (rOption.GetToken() == HtmlOptionId::STYLE)
+            {
+                aStyle = rOption.GetString();
+            }
+        }
+        if (!aStyle.isEmpty())
+        {
+            // Have inline CSS.
+            SfxItemSet aItemSet(m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap());
+            SvxCSS1PropertyInfo aPropInfo;
+            if (ParseStyleOptions(aStyle, /*aId=*/OUString(), /*aClass=*/OUString(), aItemSet,
+                                  aPropInfo))
+            {
+                if (aPropInfo.m_eLeftMarginType == SVX_CSS1_LTYPE_AUTO
+                    && aPropInfo.m_eRightMarginType == SVX_CSS1_LTYPE_AUTO)
+                {
+                    // Both left & right is set to auto: that's our center.
+                    eParentAdjust = SvxAdjust::Center;
+                }
+            }
+        }
+
         HTMLTableOptions aTableOptions(GetOptions(), eParentAdjust);
 
         if (!aTableOptions.aId.isEmpty())
