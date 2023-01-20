@@ -95,7 +95,7 @@ namespace calc
             xBroadcaster->removeModifyListener( this );
         }
 
-        WeakAggComponentImplHelperBase::disposing();
+        WeakComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener
         // for the cell)
