@@ -23,12 +23,7 @@ interface XView;
 
 /** The module controller is responsible for loading a module (ad-don,
     plugin, whatever the name) when it is first used.
-    <p>For this there is a
-    list in the office configuration which associates resource URLs with
-    service names which in turn are associated with modules (or dlls).  The
-    path to the office configuration list is
-    MultiPaneGUI/Framework/ResourceFactories in the
-    Impress.xcu file.</p>
+    <p>For this there is a list in the sd::framework::ModuleController class.</p>
 */
 interface XModuleController
 {

@@ -37,45 +37,44 @@ using ::sd::tools::ConfigurationAccess;
 
 namespace sd::framework {
 
-const sal_uInt32 snFactoryPropertyCount (2);
-
 //===== ModuleController ======================================================
-Reference<XModuleController> ModuleController::CreateInstance (
-    const Reference<XComponentContext>& rxContext)
+Reference<XModuleController> ModuleController::CreateInstance()
 {
-    return new ModuleController(rxContext);
+    return new ModuleController();
 }
 
-ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
+ModuleController::ModuleController()
 {
-    /** Load a list of URL to service mappings from the
-        /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
-        configuration entry.  The mappings are stored in the
+    /** Load a list of URL to service mappings.
+        The mappings are stored in the
         mpResourceToFactoryMap member.
     */
-    try
-    {
-        ConfigurationAccess aConfiguration (
-            rxContext,
-            "/org.openoffice.Office.Impress/",
-            ConfigurationAccess::READ_ONLY);
-        Reference<container::XNameAccess> xFactories (
-            aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/ResourceFactories"),
-            UNO_QUERY);
-        ::std::vector<OUString> aProperties (snFactoryPropertyCount);
-        aProperties[0] = "ServiceName";
-        aProperties[1] = "ResourceList";
-        ConfigurationAccess::ForAll(
-            xFactories,
-            aProperties,
-            [this] (OUString const&, ::std::vector<Any> const& xs) {
-                return this->ProcessFactory(xs);
-            } );
-    }
-    catch (Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("sd");
-    }
+    ProcessFactory(
+        "com.sun.star.drawing.framework.BasicPaneFactory",
+        { "private:resource/pane/CenterPane",
+          "private:resource/pane/LeftImpressPane",
+          "private:resource/pane/LeftDrawPane" });
+    ProcessFactory(
+        "com.sun.star.drawing.framework.BasicViewFactory",
+        { "private:resource/view/ImpressView",
+          "private:resource/view/GraphicView",
+          "private:resource/view/OutlineView",
+          "private:resource/view/NotesView",
+          "private:resource/view/HandoutView",
+          "private:resource/view/SlideSorter",
+        "private:resource/view/PresentationView" });
+    ProcessFactory(
+        "com.sun.star.drawing.framework.BasicToolBarFactory",
+        { "private:resource/toolbar/ViewTabBar" });
+    ProcessFactory(
+        "com.sun.star.comp.Draw.framework.TaskPanelFactory",
+        { "private:resource/toolpanel/AllMasterPages",
+          "private:resource/toolpanel/RecentMasterPages",
+          "private:resource/toolpanel/UsedMasterPages",
+          "private:resource/toolpanel/Layouts",
+          "private:resource/toolpanel/TableDesign",
+          "private:resource/toolpanel/CustomAnimations",
+          "private:resource/toolpanel/SlideTransitions" });
 }
 
 ModuleController::~ModuleController() noexcept
@@ -90,21 +89,9 @@ void ModuleController::disposing(std::unique_lock<std::mutex>&)
     mxController.clear();
 }
 
-void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
+void ModuleController::ProcessFactory (const OUString& sServiceName, ::std::vector<OUString> aURLs)
 {
-    OSL_ASSERT(rValues.size() == snFactoryPropertyCount);
-
-    // Get the service name of the factory.
-    OUString sServiceName;
-    rValues[0] >>= sServiceName;
-
     // Get all resource URLs that are created by the factory.
-    Reference<container::XNameAccess> xResources (rValues[1], UNO_QUERY);
-    ::std::vector<OUString> aURLs;
-    tools::ConfigurationAccess::FillList(
-        xResources,
-        "URL",
-        aURLs);
 
     SAL_INFO("sd.fwk", __func__ << ": ModuleController::adding factory " << sServiceName);
 
@@ -197,10 +184,10 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation(
-        css::uno::XComponentContext* context,
+        css::uno::XComponentContext* /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference< css::uno::XInterface > xModCont ( sd::framework::ModuleController::CreateInstance(context) );
+    css::uno::Reference< css::uno::XInterface > xModCont ( sd::framework::ModuleController::CreateInstance() );
     xModCont->acquire();
     return xModCont.get();
 }

@@ -59,9 +59,7 @@ class ModuleController final
 public:
     static css::uno::Reference<
         css::drawing::framework::XModuleController>
-        CreateInstance (
-            const css::uno::Reference<css::uno::XComponentContext>&
-            rxContext);
+        CreateInstance();
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
@@ -82,14 +80,13 @@ private:
     std::unordered_map<OUString, css::uno::WeakReference<css::uno::XInterface>> maLoadedFactories;
 
     /// @throws std::exception
-    ModuleController (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    ModuleController();
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() noexcept override;
 
     /** Called for every entry in the ResourceFactories configuration entry.
     */
-    void ProcessFactory (const ::std::vector<css::uno::Any>& rValues);
+    void ProcessFactory (const OUString& ServiceName, ::std::vector<OUString> aURLs);
 
     /** Instantiate startup services.  This method is called once when a new
         ModuleController object is created.

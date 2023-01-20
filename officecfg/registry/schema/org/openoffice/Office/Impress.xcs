@@ -1308,18 +1308,6 @@
           </info>
         </set>
       </group>
-      <group oor:name="Framework">
-        <info>
-          <desc>Options that control the multi pane framework.</desc>
-          <label>Multi Pane Framework Options</label>
-        </info>
-        <set oor:name="ResourceFactories" oor:node-type="ResourceFactory">
-          <info>
-            <desc>Set of factories and the resources created by them.</desc>
-            <label>Multi Pane Framework Resource Factories</label>
-          </info>
-        </set>
-      </group>
       <group oor:name="SlideSorterBar">
         <info>
           <desc>Values related to the slide sorter.</desc>
