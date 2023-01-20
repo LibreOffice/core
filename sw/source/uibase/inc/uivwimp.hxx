@@ -87,7 +87,7 @@ class SwXDispatchProviderInterceptor;
 class SwView_Impl
 {
     rtl::Reference< SwXDispatchProviderInterceptor > m_xDispatchProviderInterceptor;
-    css::uno::Reference< css::view::XSelectionSupplier >              mxXTextView;       // UNO object
+    rtl::Reference< SwXTextView > mxXTextView;       // UNO object
     std::vector< unotools::WeakReference< SwTransferable > > mxTransferables;
 
     // temporary document for printing text of selection / multi selection
