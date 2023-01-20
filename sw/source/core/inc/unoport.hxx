@@ -253,7 +253,6 @@ class SwXTextPortionEnumeration final
     : public ::cppu::WeakImplHelper
         < css::container::XEnumeration
         , css::lang::XServiceInfo
-        , css::lang::XUnoTunnel
         >
 {
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
@@ -269,12 +268,6 @@ public:
 
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
         TextRangeList_t && rPortions );
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() override;

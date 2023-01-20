@@ -279,18 +279,6 @@ namespace
     }
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextPortionEnumerationUnoTunnelId;
-    return theSwXTextPortionEnumerationUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(
-        const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 OUString SwXTextPortionEnumeration::getImplementationName()
 {
     return "SwXTextPortionEnumeration";
