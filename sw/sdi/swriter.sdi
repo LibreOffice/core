@@ -2616,6 +2616,20 @@ SfxVoidItem DeleteBookmarks FN_DELETE_BOOKMARKS
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxVoidItem DeleteSections FN_DELETE_SECTIONS
+(SfxStringItem SectionNamePrefix FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxVoidItem DeleteFields FN_DELETE_FIELDS
 (SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2)
 [

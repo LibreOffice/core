@@ -451,6 +451,49 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSSECTION, nullptr);
 }
 
+void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
+{
+    OUString aSectionNamePrefix;
+    const SfxStringItem* pSectionNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+    if (pSectionNamePrefix)
+    {
+        aSectionNamePrefix = pSectionNamePrefix->GetValue();
+    }
+
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELSECTION, nullptr);
+    rWrtSh.StartAction();
+    comphelper::ScopeGuard g(
+        [&rWrtSh]
+        {
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
+        });
+
+    SwDoc* pDoc = rWrtSh.GetDoc();
+    SwSectionFormats& rFormats = pDoc->GetSections();
+    std::vector<SwSectionFormat*> aRemovals;
+    for (size_t i = 0; i < rFormats.size(); ++i)
+    {
+        SwSectionFormat* pFormat = rFormats[i];
+
+        if (!aSectionNamePrefix.isEmpty())
+        {
+            if (!pFormat->GetName().startsWith(aSectionNamePrefix))
+            {
+                continue;
+            }
+        }
+
+        aRemovals.push_back(pFormat);
+    }
+
+    for (const auto& pFormat : aRemovals)
+    {
+        // Just delete the format, not the content of the section.
+        pDoc->DelSectionFormat(pFormat);
+    }
+}
+
 void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
@@ -1126,6 +1169,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_UPDATE_SECTIONS:
         {
             UpdateSections(rReq, rWrtSh);
+            break;
+        }
+        case FN_DELETE_SECTIONS:
+        {
+            // This deletes all sections in the document matching a specified prefix. Note that the
+            // section is deleted, but not its contents.
+            DeleteSections(rReq, rWrtSh);
             break;
         }
         case FN_SET_REMINDER:
