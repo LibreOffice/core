@@ -274,10 +274,6 @@ excludelist:
     - com/sun/star/rendering/XSpriteCanvas.hpp
     - com/sun/star/rendering/XBitmap.hpp
     - com/sun/star/awt/XWindowListener.hpp
-    sd/source/ui/presenter/PresenterTextView.hxx:
-    # base class has to be a complete type
-    - tools/PropertySet.hxx
-    - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/presenter/SlideRenderer.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/XSlideRenderer.hpp

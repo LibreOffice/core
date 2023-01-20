@@ -346,7 +346,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/presenter/PresenterCanvas \
 	sd/source/ui/presenter/PresenterHelper \
 	sd/source/ui/presenter/PresenterPreviewCache \
-	sd/source/ui/presenter/PresenterTextView \
 	sd/source/ui/presenter/SlideRenderer \
 	sd/source/ui/sidebar/AllMasterPagesSelector \
 	sd/source/ui/sidebar/CurrentMasterPagesSelector \

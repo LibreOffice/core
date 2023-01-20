@@ -694,7 +694,6 @@ draw_constructor_list = [
     "sd_PresentationDocument_get_implementation",
     "com_sun_star_comp_Draw_PresenterHelper_get_implementation",
     "com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation",
-    "com_sun_star_comp_Draw_PresenterTextView_get_implementation",
     "com_sun_star_comp_Draw_SlideRenderer_get_implementation",
     "com_sun_star_comp_Draw_SlideSorter_get_implementation",
     "com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation",
