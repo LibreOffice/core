@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -165,7 +166,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
     loadAndReload("FDO77715.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c \\h ");
+    // tdf#153090 check that para style is preserved
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c \\h \\t \"Block Header\" ");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Block Header"), getProperty<OUString>(xTOC, "CreateFromParagraphStyle"));
+    // tdf#153090 check that update uses the style
+    xTOC->update();
+    OUString const tocContent(xTOC->getAnchor()->getString());
+    CPPUNIT_ASSERT(tocContent.startsWith("National Infrastructure Bank Aff/Neg Index"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_u)

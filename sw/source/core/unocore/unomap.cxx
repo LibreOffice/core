@@ -443,6 +443,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     BASE_INDEX_PROPERTIES_
                     { UNO_NAME_CREATE_FROM_CHAPTER, WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_CREATE_FROM_LABELS, WID_CREATE_FROM_LABELS                  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { UNO_NAME_CREATE_FROM_PARAGRAPH_STYLE, WID_CREATE_FROM_PARAGRAPH_STYLE, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
                     { UNO_NAME_IS_PROTECTED, WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_LABEL_CATEGORY, WID_LABEL_CATEGORY                      ,  cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_LABEL_DISPLAY_TYPE, WID_LABEL_DISPLAY_TYPE                  ,  cppu::UnoType<sal_Int16>::get()  , PROPERTY_NONE,     0},
@@ -475,6 +476,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     { UNO_NAME_CREATE_FROM_STAR_CALC, WID_CREATE_FROM_STAR_CALC               ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_CREATE_FROM_STAR_DRAW, WID_CREATE_FROM_STAR_DRAW               ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, WID_CREATE_FROM_OTHER_EMBEDDED_OBJECTS  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { UNO_NAME_CREATE_FROM_PARAGRAPH_STYLE, WID_CREATE_FROM_PARAGRAPH_STYLE, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
                     { UNO_NAME_TEXT_COLUMNS, RES_COL,                cppu::UnoType<css::text::XTextColumns>::get(),    PROPERTY_NONE, MID_COLUMNS},
                     { UNO_NAME_BACK_GRAPHIC_URL, RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
                     { UNO_NAME_BACK_GRAPHIC, RES_BACKGROUND,      cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC    },
@@ -496,6 +498,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     BASE_INDEX_PROPERTIES_
                     { UNO_NAME_CREATE_FROM_CHAPTER, WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_CREATE_FROM_LABELS, WID_CREATE_FROM_LABELS                  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { UNO_NAME_CREATE_FROM_PARAGRAPH_STYLE, WID_CREATE_FROM_PARAGRAPH_STYLE, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
                     { UNO_NAME_IS_PROTECTED, WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_USE_ALPHABETICAL_SEPARATORS, WID_USE_ALPHABETICAL_SEPARATORS         ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { UNO_NAME_LABEL_CATEGORY, WID_LABEL_CATEGORY                      ,  cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},
