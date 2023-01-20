@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -155,12 +154,12 @@ void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface > cons
     SvFileStream* pStream = new SvFileStream(rSourceFileURL, StreamMode::READ );
     Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
     Reference< XActiveDataSink > xSink( mxFactory->createInstance(), UNO_QUERY );
-    Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
-    if( !xSink.is() || !xTunnel.is())
+    assert(xSink); // this should never fail
+    if( !xSink.is() )
         return;
 
     Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
-    xNameContainer->insertByName(encodeZipUri( aName ), Any(xTunnel));
+    xNameContainer->insertByName(encodeZipUri( aName ), Any(xSink));
     xSink->setInputStream( xInput );
 }
 
