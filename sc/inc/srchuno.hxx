@@ -22,7 +22,6 @@
 #include <memory>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svl/itemprop.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -31,7 +30,6 @@ class SvxSearchItem;
 
 class ScCellSearchObj final : public cppu::WeakImplHelper<
                                 css::util::XReplaceDescriptor,
-                                css::lang::XUnoTunnel,
                                 css::lang::XServiceInfo >
 {
 private:
@@ -69,9 +67,6 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                                // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScCellSearchObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

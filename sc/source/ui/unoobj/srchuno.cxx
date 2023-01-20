@@ -189,8 +189,4 @@ uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
     return {SCSEARCHDESCRIPTOR_SERVICE, SCREPLACEDESCRIPTOR_SERVICE};
 }
 
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScCellSearchObj);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

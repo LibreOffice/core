@@ -3758,7 +3758,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
     uno::Reference<container::XIndexAccess> xRet;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = comphelper::getFromUnoTunnel<ScCellSearchObj>( xDesc );
+        ScCellSearchObj* pSearch = dynamic_cast<ScCellSearchObj*>( xDesc.get() );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
@@ -3797,7 +3797,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
     uno::Reference<uno::XInterface> xRet;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = comphelper::getFromUnoTunnel<ScCellSearchObj>( xDesc );
+        ScCellSearchObj* pSearch = dynamic_cast<ScCellSearchObj*>( xDesc.get() );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
@@ -3878,7 +3878,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
     sal_uInt64 nReplaced = 0;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = comphelper::getFromUnoTunnel<ScCellSearchObj>( xDesc );
+        ScCellSearchObj* pSearch = dynamic_cast<ScCellSearchObj*>( xDesc.get() );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
