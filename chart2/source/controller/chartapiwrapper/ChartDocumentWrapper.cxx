@@ -653,6 +653,7 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
 }
 
 // ____ XInterface (for new interfaces) ____
+// [-loplugin:unoaggregation]
 uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
 {
     if( m_xDelegator.is())

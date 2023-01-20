@@ -374,10 +374,10 @@ static bool BaseCheckNotSubclass(const clang::CXXRecordDecl *BaseDefinition, voi
     return true;
 }
 
-bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base) {
+bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base, bool checkSelf) {
     if (!decl)
         return false;
-    if (base(decl))
+    if (checkSelf && base(decl))
         return true;
     if (!decl->hasDefinition()) {
         return false;

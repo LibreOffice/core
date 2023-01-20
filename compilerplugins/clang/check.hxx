@@ -160,8 +160,9 @@ private:
 
 
 typedef std::function<bool(clang::Decl const *)> DeclChecker;
-// Returns true if the class has a base matching the checker, or if the class itself matches.
-bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base);
+// Returns true if the class has a base matching the checker, or, when checkSelf is true, if the
+// class itself matches.
+bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base, bool checkSelf = true);
 
 
 namespace detail {
