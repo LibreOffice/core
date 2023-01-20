@@ -478,7 +478,6 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
-    SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
     SC_QUERYINTERFACE( sheet::XSelectedSheetsSupplier )
 
@@ -2071,8 +2070,6 @@ uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 }
 
 // XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScTabViewObj);
 
 css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
 {

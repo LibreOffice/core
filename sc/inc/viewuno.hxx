@@ -38,7 +38,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <comphelper/servicehelper.hxx>
 
@@ -137,7 +136,6 @@ class ScTabViewObj final : public ScViewPaneBase,
                      public css::sheet::XViewSplitable,
                      public css::sheet::XViewFreezable,
                      public css::sheet::XRangeSelection,
-                     public css::lang::XUnoTunnel,
                      public css::datatransfer::XTransferableSupplier,
                      public css::sheet::XSelectedSheetsSupplier
 {
@@ -268,9 +266,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScTabViewObj)
 
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;

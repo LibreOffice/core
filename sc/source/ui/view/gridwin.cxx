@@ -2803,7 +2803,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
                 css::uno::Reference<css::frame::XController> xController = pViewFrame->GetFrame().GetController();
                 if (xController.is())
                 {
-                    ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
+                    ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
                     if (pImp && pImp->IsMouseListening())
                     {
                         css::awt::MouseEvent aEvent;

@@ -2247,7 +2247,7 @@ void ScTabView::SetNewVisArea()
         css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
             if (pImp)
                 pImp->VisAreaChanged();
         }

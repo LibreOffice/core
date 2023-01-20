@@ -312,7 +312,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
             if (pImp)
                 pImp->SheetChanged( bSameTabButMoved );
         }
