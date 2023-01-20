@@ -143,8 +143,7 @@ public:
 };
 
 typedef ::cppu::WeakImplHelper
-<   css::lang::XUnoTunnel
-,   css::lang::XServiceInfo
+<   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
 ,   css::text::XDocumentIndexMark
 > SwXDocumentIndexMark_Base;
@@ -171,12 +170,6 @@ public:
     static rtl::Reference<SwXDocumentIndexMark>
         CreateXDocumentIndexMark(SwDoc & rDoc,
             SwTOXMark * pMark, TOXTypes eType = TOX_INDEX);
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

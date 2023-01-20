@@ -569,7 +569,7 @@ SwXText::insertTextContent(
     const uno::Reference<lang::XUnoTunnel> xContentTunnel(xContent,
             uno::UNO_QUERY);
     SwXDocumentIndexMark *const pDocumentIndexMark =
-        comphelper::getFromUnoTunnel<SwXDocumentIndexMark>(xContentTunnel);
+        dynamic_cast<SwXDocumentIndexMark*>(xContent.get());
     SwXTextSection *const pSection =
         comphelper::getFromUnoTunnel<SwXTextSection>(xContentTunnel);
     SwXBookmark *const pBookmark =

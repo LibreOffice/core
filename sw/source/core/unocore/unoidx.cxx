@@ -1639,18 +1639,6 @@ namespace
 {
 }
 
-const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXDocumentIndexMarkUnoTunnelId;
-    return theSwXDocumentIndexMarkUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXDocumentIndexMark>(rId, this);
-}
-
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName()
 {
