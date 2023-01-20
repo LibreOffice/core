@@ -78,6 +78,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/splittable.ui"
         || rUIFile == u"modules/swriter/ui/translationdialog.ui"
         || rUIFile == u"modules/swriter/ui/pagenumberdlg.ui"
+        || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"
         // sfx
         || rUIFile == u"sfx/ui/cmisinfopage.ui"
         || rUIFile == u"sfx/ui/custominfopage.ui"
