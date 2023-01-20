@@ -329,6 +329,7 @@ class SwUINumRuleItem;
 #define FN_UPDATE_FIELD (FN_INSERT2 + 38)
 #define FN_DELETE_BOOKMARKS (FN_INSERT2 + 39)
 #define FN_DELETE_FIELDS (FN_INSERT2 + 40)
+#define FN_DELETE_SECTIONS (FN_INSERT2 + 41)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

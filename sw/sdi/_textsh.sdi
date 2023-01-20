@@ -1843,6 +1843,12 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_DELETE_SECTIONS
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_DELETE_FIELDS
     [
         ExecMethod = Execute ;
