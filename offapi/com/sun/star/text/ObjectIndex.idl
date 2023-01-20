@@ -21,28 +21,26 @@
 
  module com {  module sun {  module star {  module text {
 
-/** specifies service of object indexes within a document.@see com::sun::star::text::BaseIndex
+/** specifies service of object indexes within a document.
+    @see com::sun::star::text::BaseIndex
  */
 published service ObjectIndex
 {
     service  com::sun::star::text::BaseIndex;
 
-    /** Determines if star office math objects are included in the office.
+    /** Determines if LibreOffice Math objects are included in the index.
      */
     [optional, property] boolean CreateFromStarMath;//objects
-    /** Determines if star office image objects are included in the office.
-     */
-    [optional, property] boolean CreateFromStarImage;//objects
-    /** Determines if star office chart objects are included in the office.
+    /** Determines if LibreOffice Chart objects are included in the index.
      */
     [optional, property] boolean CreateFromStarChart;//objects
-    /** Determines if star office calc objects are included in the office.
+    /** Determines if LibreOffice Calc objects are included in the index.
      */
     [optional, property] boolean CreateFromStarCalc;//objects
-    /** Determines if star office draw objects are included in the office.
+    /** Determines if LibreOffice Draw objects are included in the index.
      */
     [optional, property] boolean CreateFromStarDraw;//objects
-    /** Determines if external embedded objects are included in the office.
+    /** Determines if external embedded objects are included in the index.
      */
     [optional, property] boolean CreateFromOtherEmbeddedObjects;//objects
 
@@ -53,10 +51,6 @@ published service ObjectIndex
     [optional, property, maybevoid] string CreateFromParagraphStyle;
 };
 
-
 }; }; }; };
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14519,7 +14519,6 @@ module com {
     published service ObjectIndex {
      service ::com::sun::star::text::BaseIndex;
      [property, optional] boolean CreateFromStarMath;
-     [property, optional] boolean CreateFromStarImage;
      [property, optional] boolean CreateFromStarChart;
      [property, optional] boolean CreateFromStarCalc;
      [property, optional] boolean CreateFromStarDraw;

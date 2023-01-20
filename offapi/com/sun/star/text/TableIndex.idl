@@ -50,8 +50,6 @@ published service TableIndex
     [optional, property, maybevoid] string CreateFromParagraphStyle;
 };
 
-
 }; }; }; };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
