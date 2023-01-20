@@ -1,5 +1,5 @@
---- libtiff/Makefile.in	2022-05-21 15:32:48.069999327 +0100
-+++ libtiff/Makefile.in	2022-05-21 15:32:59.051499293 +0100
+--- a/libtiff/Makefile.in	2022-05-21 15:32:48.069999327 +0100
++++ b/libtiff/Makefile.in	2022-05-21 15:32:59.051499293 +0100
 @@ -372,7 +372,7 @@
  LDFLAGS = @LDFLAGS@
  LIBDIR = @LIBDIR@
