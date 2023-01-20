@@ -368,7 +368,6 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 AquaSalInstance::AquaSalInstance()
     : SalInstance(std::make_unique<SalYieldMutex>())
     , mnActivePrintJobs( 0 )
-    , mbIsLiveResize( false )
     , mbNoYieldLock( false )
     , mbTimerProcessed( false )
 {
@@ -556,6 +555,13 @@ static bool isWakeupEvent( NSEvent *pEvent )
 
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
+    // Related: tdf#152703 Eliminate potential blocking during live resize
+    // Some events and timers call Application::Reschedule() or
+    // Application::Yield() so don't block and wait for events when a
+    // window is in live resize
+    if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
+        bWait = false;
+
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
@@ -565,7 +571,11 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     ReleasePoolHolder aReleasePool;
 
     // first, process current user events
-    bool bHadEvent = DispatchUserEvents( bHandleAllCurrentEvents );
+    // Related: tdf#152703 Eliminate potential blocking during live resize
+    // Only native events and timers need to be dispatched to redraw
+    // the window so skip dispatching user events when a window is in
+    // live resize
+    bool bHadEvent = ( !ImplGetSVData()->mpWinData->mbIsLiveResize && DispatchUserEvents( bHandleAllCurrentEvents ) );
     if ( !bHandleAllCurrentEvents && bHadEvent )
         return true;
 

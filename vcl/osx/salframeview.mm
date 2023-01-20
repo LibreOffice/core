@@ -169,6 +169,9 @@ static AquaSalFrame* getMouseContainerFrame()
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
     mDraggingDestinationHandler = nil;
+    mbInLiveResize = NO;
+    mbInWindowDidResize = NO;
+    mpLiveResizeTimer = nil;
     mpFrame = pFrame;
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
                      { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
@@ -209,6 +212,22 @@ static AquaSalFrame* getMouseContainerFrame()
     return static_cast<SalFrameWindow *>(pNSWindow);
 }
 
+-(void)clearLiveResizeTimer
+{
+    if ( mpLiveResizeTimer )
+    {
+        [mpLiveResizeTimer invalidate];
+        [mpLiveResizeTimer release];
+        mpLiveResizeTimer = nil;
+    }
+}
+
+-(void)dealloc
+{
+    [self clearLiveResizeTimer];
+    [super dealloc];
+}
+
 -(AquaSalFrame*)getSalFrame
 {
     return mpFrame;
@@ -219,21 +238,6 @@ static AquaSalFrame* getMouseContainerFrame()
     if( GetSalData() && GetSalData()->mpInstance )
     {
         SolarMutexGuard aGuard;
-
-#if HAVE_FEATURE_SKIA
-        // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
-        // The window will clear its background so when Skia/Metal is enabled,
-        // explicitly flush the Skia graphics to the window during live
-        // resizing or else nothing will be drawn until after live resizing
-        // has ended.
-        if ( [self inLiveResize] && SkiaHelper::isVCLSkiaEnabled() && mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        {
-            AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
-            if ( pGraphics )
-                pGraphics->Flush();
-        }
-#endif
-
         [super displayIfNeeded];
     }
 }
@@ -332,22 +336,100 @@ static AquaSalFrame* getMouseContainerFrame()
     (void)pNotification;
     SolarMutexGuard aGuard;
 
+    if ( mbInWindowDidResize )
+        return;
+
+    mbInWindowDidResize = YES;
+
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        // Related: tdf#152703 Stop flicker with Skia/Metal while resizing
-        // When Skia/Metal is enabled, rapidly resizing a window has a
-        // noticeable amount of flicker so don't send any paint events during
-        // live resizing.
-        // Also, it appears that most of the LibreOffice layouts do not change
-        // their layout much during live resizing so apply this change when
-        // Skia is not enabled to ensure consistent behavior whether Skia is
-        // enabled or not.
-        if ( ![self inLiveResize] )
+        bool bInLiveResize = [self inLiveResize];
+        ImplSVData* pSVData = ImplGetSVData();
+        assert( pSVData );
+        if ( pSVData )
+        {
+            const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
+            if ( bWasLiveResize != bInLiveResize )
+            {
+                pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
+                Scheduler::Wakeup();
+            }
+        }
+
+        if ( bInLiveResize || mbInLiveResize )
+        {
+            mbInLiveResize = bInLiveResize;
+
+#if HAVE_FEATURE_SKIA
+            // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
+            // The window will clear its background so when Skia/Metal is
+            // enabled, explicitly flush the Skia graphics to the window
+            // during live resizing or else nothing will be drawn until after
+            // live resizing has ended.
+            // Also, flushing during [self windowDidResize:] eliminates flicker
+            // by forcing this window's SkSurface to recreate its underlying
+            // CAMetalLayer with the new size. Flushing in
+            // [self displayIfNeeded] does not eliminate flicker so apparently
+            // [self windowDidResize:] is called earlier.
+            if ( SkiaHelper::isVCLSkiaEnabled() )
+            {
+                AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+                if ( pGraphics )
+                    pGraphics->Flush();
+            }
+#endif
+
+            // tdf#152703 Force relayout during live resizing of window
+            // During a live resize, macOS floods the application with
+            // windowDidResize: notifications so sending a paint event does
+            // not trigger redrawing with the new size.
+            // Instead, force relayout by dispatching all pending internal
+            // events and firing any pending timers.
+            // Also, Application::Reschedule() can potentially display a
+            // modal dialog which will cause a hang so temporarily disable
+            // live resize by clamping the window's minimum and maximum sizes
+            // to the current frame size which in Application::Reschedule().
+            NSRect aFrame = [self frame];
+            NSSize aMinSize = [self minSize];
+            NSSize aMaxSize = [self maxSize];
+            [self setMinSize:aFrame.size];
+            [self setMaxSize:aFrame.size];
+            Application::Reschedule( true );
+            [self setMinSize:aMinSize];
+            [self setMaxSize:aMaxSize];
+
+            if ( mbInLiveResize )
+            {
+                // tdf#152703 Force repaint after live resizing ends
+                // Repost this notification so that this selector will be called
+                // at least once after live resizing ends
+                if ( !mpLiveResizeTimer )
+                {
+                    mpLiveResizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(windowDidResizeWithTimer:) userInfo:pNotification repeats:YES];
+                    if ( mpLiveResizeTimer )
+                    {
+                        [mpLiveResizeTimer retain];
+
+                        // The timer won't fire without a call to
+                        // Application::Reschedule() unless we copy the fix for
+                        // #i84055# from vcl/osx/saltimer.cxx and add the timer
+                        // to the NSEventTrackingRunLoopMode run loop mode
+                        [[NSRunLoop currentRunLoop] addTimer:mpLiveResizeTimer forMode:NSEventTrackingRunLoopMode];
+                    }
+                }
+            }
+        }
+        else
+        {
+            [self clearLiveResizeTimer];
             mpFrame->SendPaintEvent();
+        }
     }
+
+    mbInWindowDidResize = NO;
 }
 
 -(void)windowDidMiniaturize: (NSNotification*)pNotification
@@ -486,6 +568,12 @@ static AquaSalFrame* getMouseContainerFrame()
         [pView endExtTextInput:nFlags];
 }
 
+-(void)windowDidResizeWithTimer:(NSTimer *)pTimer
+{
+    if ( pTimer )
+        [self windowDidResize:[pTimer userInfo]];
+}
+
 @end
 
 @implementation SalFrameView
@@ -565,9 +653,9 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)drawRect: (NSRect)aRect
 {
-    AquaSalInstance *pInstance = GetSalData()->mpInstance;
-    assert(pInstance);
-    if (!pInstance)
+    ImplSVData* pSVData = ImplGetSVData();
+    assert( pSVData );
+    if ( !pSVData )
         return;
 
     SolarMutexGuard aGuard;
@@ -575,10 +663,10 @@ static AquaSalFrame* getMouseContainerFrame()
         return;
 
     const bool bIsLiveResize = [self inLiveResize];
-    const bool bWasLiveResize = pInstance->mbIsLiveResize;
+    const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
     if (bWasLiveResize != bIsLiveResize)
     {
-        pInstance->mbIsLiveResize = bIsLiveResize;
+        pSVData->mpWinData->mbIsLiveResize = bIsLiveResize;
         Scheduler::Wakeup();
     }
 
@@ -1705,7 +1793,7 @@ static AquaSalFrame* getMouseContainerFrame()
         else
              mSelectedRange = NSMakeRange( selRange.location, selRange.location + selRange.length > mMarkedRange.length ? mMarkedRange.length - selRange.location : selRange.length );
 
-        // If we are going to post uncommitted text, cache the string paramater
+        // If we are going to post uncommitted text, cache the string parameter
         // as is needed in both [self endExtTextInput] and
         // [self attributedSubstringForProposedRange:actualRange:]
         mpLastMarkedText = [aString retain];
@@ -1851,7 +1939,7 @@ static AquaSalFrame* getMouseContainerFrame()
     // the returned position won't be anywhere near the text cursor. So,
     // dispatch an empty SalEvent::ExtTextInput event, fetch the position,
     // and then dispatch a SalEvent::EndExtTextInput event.
-    BOOL bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+    bool bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
     if ( bNeedsExtTextInput )
     {
         SalExtTextInputEvent aInputEvent;
@@ -2018,7 +2106,7 @@ static AquaSalFrame* getMouseContainerFrame()
             mbInCommitMarkedText = YES;
             if (nFlags & EndExtTextInputFlags::Complete)
             {
-                // Retain the last marked text as it will be releasd in
+                // Retain the last marked text as it will be released in
                 // [self insertText:replacementText:]
                 NSAttributedString *pText = [mpLastMarkedText retain];
                 [self insertText:pText replacementRange:NSMakeRange(0, [mpLastMarkedText length])];
