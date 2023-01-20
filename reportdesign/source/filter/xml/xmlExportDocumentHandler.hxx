@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,9 +36,9 @@ namespace rptxml
 
 OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
-typedef ::cppu::WeakAggImplHelper3< css::xml::sax::XDocumentHandler
-                                ,   css::lang::XInitialization
-                                ,   css::lang::XServiceInfo>   ExportDocumentHandler_BASE;
+typedef ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler
+                            ,   css::lang::XInitialization
+                            ,   css::lang::XServiceInfo>   ExportDocumentHandler_BASE;
 
 class ExportDocumentHandler : public ExportDocumentHandler_BASE
 {
