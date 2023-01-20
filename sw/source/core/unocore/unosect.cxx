@@ -225,18 +225,6 @@ SwXTextSection::~SwXTextSection()
 {
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextSectionUnoTunnelId;
-    return theSwXTextSectionUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL
-SwXTextSection::getSomething(const uno::Sequence< sal_Int8 >& rId)
-{
-    return comphelper::getSomethingImpl<SwXTextSection>(rId, this);
-}
-
 uno::Reference< text::XTextSection > SAL_CALL
 SwXTextSection::getParentSection()
 {

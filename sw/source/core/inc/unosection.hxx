@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOSECTION_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOSECTION_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -38,7 +37,6 @@ class SwSectionFormat;
 
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
-,   css::lang::XUnoTunnel
 ,   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
 ,   css::beans::XPropertyState
@@ -72,12 +70,6 @@ public:
     virtual ::sfx2::Metadatable* GetCoreObject() override;
     virtual css::uno::Reference< css::frame::XModel >
         GetModel() override;
-
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

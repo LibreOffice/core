@@ -566,12 +566,10 @@ SwXText::insertTextContent(
 
     // special treatment for Contents that do not replace the range, but
     // instead are "overlaid"
-    const uno::Reference<lang::XUnoTunnel> xContentTunnel(xContent,
-            uno::UNO_QUERY);
     SwXDocumentIndexMark *const pDocumentIndexMark =
         dynamic_cast<SwXDocumentIndexMark*>(xContent.get());
     SwXTextSection *const pSection =
-        comphelper::getFromUnoTunnel<SwXTextSection>(xContentTunnel);
+        dynamic_cast<SwXTextSection*>(xContent.get());
     SwXBookmark *const pBookmark =
         dynamic_cast<SwXBookmark*>(xContent.get());
     SwXReferenceMark *const pReferenceMark =
@@ -633,10 +631,7 @@ SwXText::insertTextContentBefore(
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            comphelper::getFromUnoTunnel<SwXTextSection>(xSuccTunnel);
+    SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xSuccessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     SwTextNode * pTextNode = nullptr;
@@ -686,10 +681,7 @@ SwXText::insertTextContentAfter(
         throw lang::IllegalArgumentException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            comphelper::getFromUnoTunnel<SwXTextSection>(xPredTunnel);
+    SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xPredecessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xPredecessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
@@ -735,10 +727,7 @@ SwXText::removeTextContentBefore(
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            comphelper::getFromUnoTunnel<SwXTextSection>(xSuccTunnel);
+    SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xSuccessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
@@ -786,10 +775,7 @@ SwXText::removeTextContentAfter(
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            comphelper::getFromUnoTunnel<SwXTextSection>(xPredTunnel);
+    SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xPredecessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xPredecessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
