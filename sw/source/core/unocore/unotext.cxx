@@ -2393,33 +2393,6 @@ SwXBodyText::getSupportedServiceNames()
     return { "com.sun.star.text.Text" };
 }
 
-uno::Any SAL_CALL
-SwXBodyText::queryAggregation(const uno::Type& rType)
-{
-    uno::Any aRet;
-    if (rType == cppu::UnoType<container::XEnumerationAccess>::get())
-    {
-        aRet <<= uno::Reference< container::XEnumerationAccess >(this);
-    }
-    else if (rType == cppu::UnoType<container::XElementAccess>::get())
-    {
-        aRet <<= uno::Reference< container::XElementAccess >(this);
-    }
-    else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
-    {
-        aRet <<= uno::Reference< lang::XServiceInfo >(this);
-    }
-    else
-    {
-        aRet = SwXText::queryInterface( rType );
-    }
-    if(aRet.getValueType() == cppu::UnoType<void>::get())
-    {
-        aRet = OWeakAggObject::queryAggregation( rType );
-    }
-    return aRet;
-}
-
 uno::Sequence< uno::Type > SAL_CALL
 SwXBodyText::getTypes()
 {

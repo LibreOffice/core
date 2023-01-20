@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 #include "unotext.hxx"
 
@@ -33,7 +32,7 @@ class SwFrameFormat;
 class SwXTextCursor;
 struct SwXParagraphEnumeration;
 
-typedef ::cppu::WeakAggImplHelper2
+typedef ::cppu::WeakImplHelper
 <   css::lang::XServiceInfo
 ,   css::container::XEnumerationAccess
 > SwXBodyText_Base;
@@ -56,10 +55,6 @@ public:
             const css::uno::Type& rType) override;
     virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
-
-    // XAggregation
-    virtual css::uno::Any SAL_CALL queryAggregation(
-            const css::uno::Type& rType) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type >
