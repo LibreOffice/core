@@ -129,9 +129,7 @@ void PresentationFactory::ThrowIfDisposed() const
     }
 }
 
-//===== PresentationFactoryProvider ===========================================
-
-PresentationFactoryProvider::PresentationFactoryProvider (const Reference<frame::XController>& rxController)
+void PresentationFactory::install(const Reference<frame::XController>& rxController)
 {
     try
     {

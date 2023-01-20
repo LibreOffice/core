@@ -44,6 +44,8 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController);
     virtual ~PresentationFactory() override;
 
+    static void install(const css::uno::Reference<css::frame::XController>& rxController);
+
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
@@ -70,15 +72,6 @@ private:
 
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const;
-};
-
-typedef comphelper::WeakComponentImplHelper<> PresentationFactoryProviderInterfaceBase;
-
-class PresentationFactoryProvider
-    : public PresentationFactoryProviderInterfaceBase
-{
-public:
-    PresentationFactoryProvider(const css::uno::Reference<css::frame::XController>& rxController);
 };
 
 } // end of namespace sd::framework

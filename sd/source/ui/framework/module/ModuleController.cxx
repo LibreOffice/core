@@ -127,7 +127,7 @@ void ModuleController::InstantiateStartupServices()
         // at the configuration controller.
         Reference<uno::XComponentContext> xContext =
             ::comphelper::getProcessComponentContext();
-        rtl::Reference<::sd::framework::PresentationFactoryProvider> x = new sd::framework::PresentationFactoryProvider(mxController);
+        sd::framework::PresentationFactory::install(mxController);
     }
     catch (Exception&)
     {
