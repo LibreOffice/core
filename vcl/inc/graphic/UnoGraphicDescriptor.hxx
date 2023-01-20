@@ -61,7 +61,7 @@ class Graphic;
 
 namespace unographic {
 
-class GraphicDescriptor : public ::cppu::OWeakAggObject,
+class GraphicDescriptor : public ::cppu::OWeakObject,
                           public css::lang::XServiceInfo,
                           public css::lang::XTypeProvider,
                           public ::comphelper::PropertySetHelper
@@ -78,7 +78,6 @@ public:
     static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;

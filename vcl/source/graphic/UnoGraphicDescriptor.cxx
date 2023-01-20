@@ -157,7 +157,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 }
 
 
-uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
+uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
 {
     uno::Any aAny;
 
@@ -172,29 +172,23 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
     else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else
-        aAny = OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakObject::queryInterface( rType );
 
     return aAny;
-}
-
-
-uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
-{
-    return OWeakAggObject::queryInterface( rType );
 }
 
 
 void SAL_CALL GraphicDescriptor::acquire()
     noexcept
 {
-    OWeakAggObject::acquire();
+    OWeakObject::acquire();
 }
 
 
 void SAL_CALL GraphicDescriptor::release()
     noexcept
 {
-    OWeakAggObject::release();
+    OWeakObject::release();
 }
 
 

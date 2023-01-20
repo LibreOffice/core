@@ -50,7 +50,7 @@ void Graphic::init(const ::Graphic& rGraphic)
     unographic::GraphicDescriptor::init(maGraphic);
 }
 
-uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
+uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 {
     uno::Any aAny;
     if( rType == cppu::UnoType<graphic::XGraphic>::get())
@@ -59,18 +59,12 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
         aAny <<= uno::Reference< awt::XBitmap >( this );
     else if( rType == cppu::UnoType<lang::XUnoTunnel>::get())
         aAny <<= uno::Reference< lang::XUnoTunnel >(this);
+    else if( rType == cppu::UnoType<graphic::XGraphicTransformer>::get())
+        aAny <<= uno::Reference< graphic::XGraphicTransformer >(this);
     else
-        aAny = ::unographic::GraphicDescriptor::queryAggregation( rType );
+        aAny = ::unographic::GraphicDescriptor::queryInterface( rType );
 
     return aAny;
-}
-
-uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
-{
-    css::uno::Any aReturn = ::unographic::GraphicDescriptor::queryInterface( rType );
-    if ( !aReturn.hasValue() )
-        aReturn = ::cppu::queryInterface ( rType, static_cast< graphic::XGraphicTransformer*>( this ) );
-    return aReturn;
 }
 
 void SAL_CALL Graphic::acquire()
