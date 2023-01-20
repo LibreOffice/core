@@ -504,9 +504,11 @@ void FontNameBox::Fill( const FontList* pList )
         set_active_or_entry_text(aOldText);
 }
 
+static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
+
 void FontNameBox::EnableWYSIWYG(bool bEnable)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() || IsRunningUnitTest())
         return;
     if (mbWYSIWYG == bEnable)
         return;
