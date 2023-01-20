@@ -2368,6 +2368,16 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 {
                     sStr += "\\h ";
                 }
+                if (pTOX->GetCreateType() & SwTOXElement::Template)
+                {
+                    OUString const& rStyle(pTOX->GetStyleNames(0));
+                    assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
+                    SwTextFormatColl const*const pColl = GetExport().m_rDoc.FindTextFormatCollByName(rStyle);
+                    if (pColl)
+                    {
+                        sStr += "\\t \"" + rStyle + sEntryEnd;
+                    }
+                }
                 break;
 
             case TOX_AUTHORITIES:
