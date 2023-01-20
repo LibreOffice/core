@@ -16488,7 +16488,7 @@ public:
             }
             g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
 
-            // if its just one, then don't do anything and leave the default dnd icon as-is
+            // if it's just one, then don't do anything and leave the default dnd icon as-is
             if (surfaces.size() > 1)
             {
                 cairo_surface_t* target = cairo_surface_create_similar(surfaces[0],
