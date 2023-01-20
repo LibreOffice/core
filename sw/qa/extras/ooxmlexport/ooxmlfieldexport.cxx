@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
     loadAndReload("FDO77715.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c \\h ");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_u)
