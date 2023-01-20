@@ -2053,7 +2053,7 @@ static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, OUString& rText )
 static bool lcl_IsHyperlinked(const SwForm& rForm, sal_uInt16 nTOXLvl)
 {
     bool bRes = false;
-    for (sal_uInt16 nI = 1; nI < nTOXLvl; ++nI)
+    for (sal_uInt16 nI = 1; nI <= nTOXLvl; ++nI)
     {
         // #i21237#
         SwFormTokens aPattern = rForm.GetPattern(nI);
@@ -2363,6 +2363,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     {
                         sStr += "\\p \"" + aText + sEntryEnd;
                     }
+                }
+                if (lcl_IsHyperlinked(pTOX->GetTOXForm(), 1))
+                {
+                    sStr += "\\h ";
                 }
                 break;
 
