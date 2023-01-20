@@ -830,19 +830,6 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return bForceExpandHints;
 }
 
-const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXMetaUnoTunnelId;
-    return theSwXMetaUnoTunnelId.getSeq();
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL
-SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
-{
-    return comphelper::getSomethingImpl<SwXMeta>(i_rId, this);
-}
-
 // XServiceInfo
 OUString SAL_CALL
 SwXMeta::getImplementationName()
