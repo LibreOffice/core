@@ -1078,6 +1078,7 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                 aObjectToDeviceInv.invert();
                 fLineWidth
                     = (aObjectToDeviceInv * basegfx::B2DVector(MaxNormalLineWidth, 0)).getLength();
+                fLineWidth = std::min(fLineWidth, 2048.0);
             }
         }
     }
