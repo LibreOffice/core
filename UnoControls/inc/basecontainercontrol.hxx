@@ -74,12 +74,6 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    //  XAggregation
-
-    virtual css::uno::Any SAL_CALL queryAggregation(
-        const css::uno::Type& aType
-    ) override;
-
     //  XControl
 
     virtual void SAL_CALL createPeer(
@@ -127,7 +121,7 @@ public:
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
 
 protected:
-    using OComponentHelper::disposing;
+    using WeakComponentImplHelper::disposing;
 
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer

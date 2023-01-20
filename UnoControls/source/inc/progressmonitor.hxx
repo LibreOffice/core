@@ -107,10 +107,6 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    //  XAggregation
-
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
-
     //  XProgressMonitor
 
     /**

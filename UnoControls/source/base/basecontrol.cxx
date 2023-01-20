@@ -49,7 +49,7 @@ constexpr bool DEFAULT_ENABLE = true;
 //  construct/destruct
 
 BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
-    : OComponentHelper          ( m_aMutex              )
+    : WeakComponentImplHelper   ( m_aMutex              )
     , m_xComponentContext       ( rxContext              )
     , m_nX                      ( DEFAULT_X             )
     , m_nY                      ( DEFAULT_Y             )
@@ -69,83 +69,9 @@ BaseControl::~BaseControl()
 
 Any SAL_CALL BaseControl::queryInterface( const Type& rType )
 {
-    Any aReturn;
-    if ( m_xDelegator.is() )
-    {
-        // If a delegator exists, forward question to its queryInterface.
-        // Delegator will ask its own queryAggregation!
-        aReturn = m_xDelegator->queryInterface( rType );
-    }
-    else
-    {
-        // If a delegator is unknown, forward question to own queryAggregation.
-        aReturn = queryAggregation( rType );
-    }
-
-    return aReturn;
-}
-
-//  XInterface
-
-void SAL_CALL BaseControl::acquire() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OComponentHelper::acquire();
-}
-
-//  XInterface
-
-void SAL_CALL BaseControl::release() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OComponentHelper::release();
-}
-
-//  XTypeProvider
-
-Sequence< Type > SAL_CALL BaseControl::getTypes()
-{
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XPaintListener>::get(),
-                cppu::UnoType<XWindowListener>::get(),
-                cppu::UnoType<XView>::get(),
-                cppu::UnoType<XWindow>::get(),
-                cppu::UnoType<XServiceInfo>::get(),
-                cppu::UnoType<XControl>::get(),
-                OComponentHelper::getTypes() );
-
-    return ourTypeCollection.getTypes();
-}
-
-//  XTypeProvider
-
-Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-//  XAggregation
-
-void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel )
-{
-    // Ready for multithreading
-    MutexGuard aGuard( m_aMutex );
-    m_xDelegator = xDel;
-}
-
-//  XAggregation
-
-Any SAL_CALL BaseControl::queryAggregation( const Type& aType )
-{
     // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   aType                                   ,
+    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
+    Any aReturn ( ::cppu::queryInterface(   rType                                   ,
                                                static_cast< XPaintListener*> ( this )   ,
                                                static_cast< XWindowListener*> ( this )  ,
                                                static_cast< XView*          > ( this )  ,
@@ -164,8 +90,53 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType )
     else
     {
         // Else; ... ask baseclass for interfaces!
-        return OComponentHelper::queryAggregation( aType );
+        return WeakComponentImplHelper::queryInterface( rType );
     }
+}
+
+//  XInterface
+
+void SAL_CALL BaseControl::acquire() noexcept
+{
+    // Attention:
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+
+    // Forward to baseclass
+    WeakComponentImplHelper::acquire();
+}
+
+//  XInterface
+
+void SAL_CALL BaseControl::release() noexcept
+{
+    // Attention:
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+
+    // Forward to baseclass
+    WeakComponentImplHelper::release();
+}
+
+//  XTypeProvider
+
+Sequence< Type > SAL_CALL BaseControl::getTypes()
+{
+    static OTypeCollection ourTypeCollection(
+                cppu::UnoType<XPaintListener>::get(),
+                cppu::UnoType<XWindowListener>::get(),
+                cppu::UnoType<XView>::get(),
+                cppu::UnoType<XWindow>::get(),
+                cppu::UnoType<XServiceInfo>::get(),
+                cppu::UnoType<XControl>::get(),
+                WeakComponentImplHelper::getTypes() );
+
+    return ourTypeCollection.getTypes();
+}
+
+//  XTypeProvider
+
+Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId()
+{
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  XServiceInfo
@@ -203,7 +174,7 @@ void SAL_CALL BaseControl::dispose()
     }
 
     // set the service manager to disposed
-    OComponentHelper::dispose();
+    WeakComponentImplHelper::dispose();
 
     // release context and peer
     m_xContext.clear();
@@ -240,7 +211,7 @@ void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& 
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    OComponentHelper::addEventListener( xListener );
+    WeakComponentImplHelper::addEventListener( xListener );
 }
 
 //  XComponent
@@ -249,7 +220,7 @@ void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener 
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    OComponentHelper::removeEventListener( xListener );
+    WeakComponentImplHelper::removeEventListener( xListener );
 }
 
 //  XControl

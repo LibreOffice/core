@@ -76,20 +76,19 @@ StatusIndicator::~StatusIndicator() {}
 
 Any SAL_CALL StatusIndicator::queryInterface( const Type& rType )
 {
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn;
-    css::uno::Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
-    if ( xDel.is() )
+    // Ask for my own supported interfaces ...
+    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
+    Any aReturn ( ::cppu::queryInterface( rType                                     ,
+                                          static_cast< XLayoutConstrains*   > ( this )  ,
+                                          static_cast< XStatusIndicator*    > ( this )
+                                        )
+                );
+
+    // If searched interface not supported by this class ...
+    if ( !aReturn.hasValue() )
     {
-        // If a delegator exists, forward question to its queryInterface.
-        // Delegator will ask its own queryAggregation!
-        aReturn = xDel->queryInterface( rType );
-    }
-    else
-    {
-        // If a delegator is unknown, forward question to own queryAggregation.
-        aReturn = queryAggregation( rType );
+        // ... ask baseclasses.
+        aReturn = BaseControl::queryInterface( rType );
     }
 
     return aReturn;
@@ -127,28 +126,6 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes()
                 BaseContainerControl::getTypes() );
 
     return ourTypeCollection.getTypes();
-}
-
-//  XAggregation
-
-Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface( aType                                     ,
-                                          static_cast< XLayoutConstrains*   > ( this )  ,
-                                          static_cast< XStatusIndicator*    > ( this )
-                                        )
-                );
-
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = BaseControl::queryAggregation( aType );
-    }
-
-    return aReturn;
 }
 
 //  XStatusIndicator

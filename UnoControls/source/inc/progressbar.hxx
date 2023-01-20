@@ -77,10 +77,6 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    //  XAggregation
-
-    css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
-
     //  XProgressBar
 
     virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;

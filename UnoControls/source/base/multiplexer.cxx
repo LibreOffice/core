@@ -97,7 +97,7 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType )
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
+    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
     Any aReturn ( ::cppu::queryInterface(   rType                                           ,
                                             static_cast< XWindowListener*       > ( this )  ,
                                             static_cast< XKeyListener*          > ( this )  ,

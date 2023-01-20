@@ -73,20 +73,23 @@ FrameControl::~FrameControl()
 
 Any SAL_CALL FrameControl::queryInterface( const Type& rType )
 {
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn;
-    Reference< XInterface > xDel = BaseControl::impl_getDelegator();
-    if ( xDel.is() )
+    // Ask for my own supported interfaces ...
+    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
+    Any aReturn ( ::cppu::queryInterface(   rType                                               ,
+                                               static_cast< XControlModel*              > ( this )  ,
+                                               static_cast< XConnectionPointContainer*  > ( this )
+                                        )
+                );
+
+    // If searched interface not supported by this class ...
+    if ( !aReturn.hasValue() )
     {
-        // If a delegator exists, forward question to its queryInterface.
-        // Delegator will ask its own queryAggregation!
-        aReturn = xDel->queryInterface( rType );
-    }
-    else
-    {
-        // If a delegator is unknown, forward question to own queryAggregation.
-        aReturn = queryAggregation( rType );
+        // ... ask baseclasses.
+        aReturn = OPropertySetHelper::queryInterface( rType );
+        if ( !aReturn.hasValue() )
+        {
+            aReturn = BaseControl::queryInterface( rType );
+        }
     }
 
     return aReturn;
@@ -125,32 +128,6 @@ Sequence< Type > SAL_CALL FrameControl::getTypes()
                 BaseControl::getTypes() );
 
     return ourTypeCollection.getTypes();
-}
-
-//  XAggregation
-
-Any SAL_CALL FrameControl::queryAggregation( const Type& aType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   aType                                               ,
-                                               static_cast< XControlModel*              > ( this )  ,
-                                               static_cast< XConnectionPointContainer*  > ( this )
-                                        )
-                );
-
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = OPropertySetHelper::queryInterface( aType );
-        if ( !aReturn.hasValue() )
-        {
-            aReturn = BaseControl::queryAggregation( aType );
-        }
-    }
-
-    return aReturn;
 }
 
 OUString FrameControl::getImplementationName()

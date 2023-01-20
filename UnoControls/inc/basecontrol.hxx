@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/component.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 
@@ -46,7 +46,7 @@ class BaseControl   : public css::lang::XServiceInfo
                     , public css::awt::XWindow
                     , public css::awt::XControl
                     , public cppu::BaseMutex
-                    , public ::cppu::OComponentHelper
+                    , public ::cppu::WeakComponentImplHelper<>
 {
 public:
     BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -114,16 +114,6 @@ public:
     */
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-    //  XAggregation
-
-    virtual void SAL_CALL setDelegator(
-        const css::uno::Reference< css::uno::XInterface >& xDelegator
-    ) override;
-
-    virtual css::uno::Any SAL_CALL queryAggregation(
-        const css::uno::Type& aType
-    ) override;
 
     //  XServiceInfo
 
@@ -275,7 +265,7 @@ public:
     virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
 
 protected:
-    using OComponentHelper::disposing;
+    using WeakComponentImplHelper::disposing;
 
     const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 
@@ -297,13 +287,10 @@ protected:
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent );
 
-    const css::uno::Reference< css::uno::XInterface >& impl_getDelegator() const { return m_xDelegator;}
-
 private:
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
     css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
-    css::uno::Reference< css::uno::XInterface >               m_xDelegator;
     rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
     css::uno::Reference< css::uno::XInterface >               m_xContext;
     css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
