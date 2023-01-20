@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -88,7 +87,6 @@ class SwXTextPortion : public cppu::WeakImplHelper
     css::text::XTextRange,
     css::beans::XPropertyState,
     css::container::XContentEnumerationAccess,
-    css::lang::XUnoTunnel,
     css::lang::XServiceInfo
 >,
     public SvtListener
@@ -199,10 +197,6 @@ public:
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
-
-    //XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -1986,14 +1986,13 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     // get access to SwDoc
     // (see also SwXTextRange::XTextRangeToSwPaM)
     const SwDoc* pDoc = nullptr;
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     if (auto pRange = dynamic_cast<SwXTextRange*>(xTextRange.get()))
         pDoc = &pRange->GetDoc();
     else if (auto pText = dynamic_cast<SwXText*>(xTextRange.get()))
         pDoc = pText->GetDoc();
     else if (auto pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get()))
         pDoc = pCursor->GetDoc();
-    else if (auto pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel))
+    else if (auto pPortion = dynamic_cast<SwXTextPortion*>(xTextRange.get()))
         pDoc = &pPortion->GetCursor().GetDoc();
     else if (auto pParagraph = dynamic_cast<SwXParagraph*>(xTextRange.get());
              pParagraph && pParagraph->GetTextNode())

@@ -836,17 +836,6 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
     return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_CHAR, m_pFrameFormat);
 }
 
-const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXTextPortionUnoTunnelId;
-    return theSwXTextPortionUnoTunnelId.getSeq();
-}
-
-sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
 {
     return { "com.sun.star.text.TextContent" };

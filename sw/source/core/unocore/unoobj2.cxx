@@ -1093,10 +1093,9 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
 {
     bool bRet = false;
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
-    SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
+    SwXTextPortion* pPortion = dynamic_cast<SwXTextPortion*>(xTextRange.get());
     SwXText* pText = dynamic_cast<SwXText*>(xTextRange.get());
     SwXParagraph* pPara = dynamic_cast<SwXParagraph*>(xTextRange.get());
     SwXHeadFootText* pHeadText
