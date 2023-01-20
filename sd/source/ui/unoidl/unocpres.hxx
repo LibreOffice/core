@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/interfacecontainer3.hxx>
 #include <osl/mutex.hxx>
 
@@ -39,7 +38,6 @@ class SdCustomShow;
 
 class SdXCustomPresentation :   public ::cppu::WeakImplHelper< css::container::XIndexContainer,
                                                                 css::container::XNamed,
-                                                                css::lang::XUnoTunnel,
                                                                 css::lang::XComponent,
                                                                 css::lang::XServiceInfo >
 {
@@ -61,9 +59,6 @@ public:
     SdCustomShow* GetSdCustomShow() const noexcept { return mpSdCustomShow; }
     void SetSdCustomShow( SdCustomShow* pShow ) noexcept { mpSdCustomShow = pShow; }
     SdXImpressDocument* GetModel() const noexcept { return mpModel; }
-
-    // uno helper
-    UNO3_GETIMPLEMENTATION_DECL(SdXCustomPresentation)
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

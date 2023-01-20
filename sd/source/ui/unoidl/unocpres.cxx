@@ -59,8 +59,6 @@ SdXCustomPresentation::~SdXCustomPresentation() noexcept
 {
 }
 
-UNO3_GETIMPLEMENTATION_IMPL( SdXCustomPresentation );
-
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentation::getImplementationName()
 {
@@ -317,7 +315,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
 
     uno::Reference< container::XIndexContainer > xContainer;
     if( (aElement >>= xContainer) && xContainer.is() )
-        pXShow = comphelper::getFromUnoTunnel<SdXCustomPresentation>(xContainer);
+        pXShow = dynamic_cast<SdXCustomPresentation*>(xContainer.get());
 
     if( nullptr == pXShow )
         throw lang::IllegalArgumentException();
