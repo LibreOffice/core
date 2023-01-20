@@ -21,7 +21,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -69,14 +68,11 @@ class SvUnoImageMapObject : public OWeakAggObject,
                             public XEventsSupplier,
                             public XServiceInfo,
                             public PropertySetHelper,
-                            public XTypeProvider,
-                            public XUnoTunnel
+                            public XTypeProvider
 {
 public:
     SvUnoImageMapObject( IMapObjectType nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
-
-    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
 
     std::unique_ptr<IMapObject> createIMapObject() const;
 
@@ -123,8 +119,6 @@ private:
 };
 
 }
-
-UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
 rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMapObjectType nType )
 {
@@ -317,8 +311,6 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
         aAny <<= Reference< XEventsSupplier >(this);
     else if( rType == cppu::UnoType<XMultiPropertySet>::get())
         aAny <<= Reference< XMultiPropertySet >(this);
-    else if( rType == cppu::UnoType<XUnoTunnel>::get())
-        aAny <<= Reference< XUnoTunnel >(this);
     else
         aAny = OWeakAggObject::queryAggregation( rType );
 
@@ -343,8 +335,7 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
         cppu::UnoType<XServiceInfo>::get(),
         cppu::UnoType<XPropertySet>::get(),
         cppu::UnoType<XMultiPropertySet>::get(),
-        cppu::UnoType<XTypeProvider>::get(),
-        cppu::UnoType<XUnoTunnel>::get() };
+        cppu::UnoType<XTypeProvider>::get() };
     return aTypes;
 }
 
@@ -499,7 +490,7 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 
 namespace {
 
-class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUnoTunnel >
+class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo >
 {
 public:
     explicit SvUnoImageMap();
@@ -508,8 +499,6 @@ public:
     void fillImageMap( ImageMap& rMap ) const;
     /// @throws IllegalArgumentException
     static SvUnoImageMapObject* getObject( const Any& aElement );
-
-    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) override;
@@ -539,8 +528,6 @@ private:
 
 }
 
-UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
-
 SvUnoImageMap::SvUnoImageMap()
 {
 }
@@ -563,7 +550,7 @@ SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
     Reference< XInterface > xObject;
     aElement >>= xObject;
 
-    SvUnoImageMapObject* pObject = comphelper::getFromUnoTunnel<SvUnoImageMapObject>( xObject );
+    SvUnoImageMapObject* pObject = dynamic_cast<SvUnoImageMapObject*>( xObject.get() );
     if( nullptr == pObject )
         throw IllegalArgumentException();
 
@@ -709,7 +696,7 @@ Reference< XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, cons
 
 bool SvUnoImageMap_fillImageMap( const Reference< XInterface >& xImageMap, ImageMap& rMap )
 {
-    SvUnoImageMap* pUnoImageMap = comphelper::getFromUnoTunnel<SvUnoImageMap>( xImageMap );
+    SvUnoImageMap* pUnoImageMap = dynamic_cast<SvUnoImageMap*>( xImageMap.get() );
     if( nullptr == pUnoImageMap )
         return false;
 
