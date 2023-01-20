@@ -400,6 +400,8 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     m_eTopType( rProp.m_eTopType ),
     m_eWidthType( rProp.m_eWidthType ),
     m_eHeightType( rProp.m_eHeightType ),
+    m_eLeftMarginType( rProp.m_eLeftMarginType ),
+    m_eRightMarginType( rProp.m_eRightMarginType ),
     m_eSizeType( rProp.m_eSizeType ),
     m_ePageBreakBefore( rProp.m_ePageBreakBefore ),
     m_ePageBreakAfter( rProp.m_ePageBreakAfter )
@@ -439,6 +441,8 @@ void SvxCSS1PropertyInfo::Clear()
 
     m_nLeft = m_nTop = m_nWidth = m_nHeight = 0;
     m_eLeftType = m_eTopType = m_eWidthType = m_eHeightType = SVX_CSS1_LTYPE_NONE;
+    m_eLeftMarginType = SVX_CSS1_LTYPE_NONE;
+    m_eRightMarginType = SVX_CSS1_LTYPE_NONE;
 
 // Feature: PrintExt
     m_eSizeType = SVX_CSS1_STYPE_NONE;
@@ -2034,6 +2038,12 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         ;
     }
 
+    if (pExpr->GetString() == "auto")
+    {
+        rPropInfo.m_bLeftMargin = true;
+        rPropInfo.m_eLeftMarginType = SVX_CSS1_LTYPE_AUTO;
+    }
+
     if( bSet )
     {
         rPropInfo.m_nLeftMargin = nLeft;
@@ -2091,6 +2101,12 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
         break;
     default:
         ;
+    }
+
+    if (pExpr->GetString() == "auto")
+    {
+        rPropInfo.m_bRightMargin = true;
+        rPropInfo.m_eRightMarginType = SVX_CSS1_LTYPE_AUTO;
     }
 
     if( bSet )

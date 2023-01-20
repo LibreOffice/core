@@ -248,6 +248,31 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
     assertXPath(pXmlDoc, "//reqif-xhtml:center", 0);
     assertXPath(pXmlDoc, "//reqif-xhtml:table", "style", "margin-left: auto; margin-right: auto");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
+{
+    // Given an XHTML file with a centered (with inline CSS) table, when importing that document:
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "centered-table.xhtml";
+    uno::Sequence<beans::PropertyValue> aLoadArgs = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    mxComponent = loadFromDesktop(aURL, OUString(), aLoadArgs);
+
+    // Then make sure that the table is centered:
+    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDocument->GetDocShell()->GetDoc();
+    const SwFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+    const SwFrameFormat* pTableFormat = rTableFormats[0];
+    sal_Int16 eHoriOrient = pTableFormat->GetHoriOrient().GetHoriOrient();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (CENTER)
+    // - Actual  : 3 (LEFT)
+    // i.e. the table alignment was lost on import.
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, eHoriOrient);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
