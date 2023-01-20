@@ -99,6 +99,31 @@ bool prepareBitmapForDirectRender(
 void takeCareOfOffsetXY(
     const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D,
     BitmapEx& rTarget, basegfx::B2DRange& rFillUnitRange);
+
+/** helper to calculate a discrete visible range based on a given logic range
+    and a current ViewInformation2D. This is used for pixel renderers.
+    It is handy to check for visibility of a primitive, but also to continue
+    working with just the visible discrete part.
+
+    The result rDiscreteVisibleRange will be reset if rContentRange is empty.
+    Else it will be calculated. If ViewInformation2D does have a valid
+    Viewport (getDiscreteViewport is not empty), it will also be clipped
+    against that to calculate the visible part.
+
+        @param rDiscreteVisibleRange
+        The logic range in view-coordinates (will be tranmsformed by
+        getObjectToViewTransformation)
+
+        @param rContentRange
+        The logic input range in view-coordinates (will be tranmsformed by
+        getObjectToViewTransformation)
+
+        @param rViewInformation2D
+        The ViewInformation to work with (from the processor)
+    */
+void calculateDiscreteVisibleRange(
+    basegfx::B2DRange& rDiscreteVisibleRange, const basegfx::B2DRange& rContentRange,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

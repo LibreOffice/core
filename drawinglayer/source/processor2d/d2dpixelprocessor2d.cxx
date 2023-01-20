@@ -542,7 +542,7 @@ public:
     // creating helper-ID2D1Bitmap's for a given ID2D1RenderTarget
     D2DBitmapPixelProcessor2D(const drawinglayer::geometry::ViewInformation2D& rViewInformation,
                               sal_uInt32 nWidth, sal_uInt32 nHeight,
-                              sal::systools::COMReference<ID2D1RenderTarget>& rParent)
+                              const sal::systools::COMReference<ID2D1RenderTarget>& rParent)
         : drawinglayer::processor2d::D2DPixelProcessor2D(rViewInformation)
         , mpBitmapRenderTarget()
     {
@@ -610,6 +610,65 @@ public:
         return pResult;
     }
 };
+
+bool createBitmapSubContent(sal::systools::COMReference<ID2D1Bitmap>& rResult,
+                            basegfx::B2DRange& rDiscreteVisibleRange,
+                            const drawinglayer::primitive2d::Primitive2DContainer& rContent,
+                            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
+                            const sal::systools::COMReference<ID2D1RenderTarget>& rRenderTarget)
+{
+    if (rContent.empty() || !rRenderTarget)
+    {
+        // no content or no render target, done
+        return false;
+    }
+
+    drawinglayer::processor2d::calculateDiscreteVisibleRange(
+        rDiscreteVisibleRange, rContent.getB2DRange(rViewInformation2D), rViewInformation2D);
+
+    if (rDiscreteVisibleRange.isEmpty())
+    {
+        // not visible, done
+        return false;
+    }
+
+    // Use a temporary second instance of a D2DBitmapPixelProcessor2D with adapted
+    // ViewInformation2D, it will create the needed ID2D1BitmapRenderTarget
+    // locally and Clear() it.
+    drawinglayer::geometry::ViewInformation2D aAdaptedViewInformation2D(rViewInformation2D);
+    const double fTargetWidth(ceil(rDiscreteVisibleRange.getWidth()));
+    const double fTargetHeight(ceil(rDiscreteVisibleRange.getHeight()));
+
+    {
+        // create adapted ViewTransform, needs to be offset in discrete coordinates,
+        // so multiply from left
+        basegfx::B2DHomMatrix aAdapted(
+            basegfx::utils::createTranslateB2DHomMatrix(-rDiscreteVisibleRange.getMinX(),
+                                                        -rDiscreteVisibleRange.getMinY())
+            * rViewInformation2D.getViewTransformation());
+        aAdaptedViewInformation2D.setViewTransformation(aAdapted);
+
+        // reset Viewport (world coordinates), so the helper renderer will create it's
+        // own based on it's given internal discrete size
+        aAdaptedViewInformation2D.setViewport(basegfx::B2DRange());
+    }
+
+    D2DBitmapPixelProcessor2D aSubContentRenderer(aAdaptedViewInformation2D, fTargetWidth,
+                                                  fTargetHeight, rRenderTarget);
+
+    if (!aSubContentRenderer.valid())
+    {
+        // did not work, done
+        return false;
+    }
+
+    // render sub-content recursively
+    aSubContentRenderer.process(rContent);
+
+    // grab Bitmap & prepare results from RGBA content rendering
+    rResult = aSubContentRenderer.getID2D1Bitmap();
+    return true;
+}
 }
 
 namespace drawinglayer::processor2d
@@ -814,19 +873,21 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
     const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
     // check if graphic content is inside discrete local ViewPort
-    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
-    const basegfx::B2DHomMatrix aLocalTransform(
-        getViewInformation2D().getObjectToViewTransformation() * rBitmapCandidate.getTransform());
-
-    if (!rDiscreteViewPort.isEmpty())
+    if (!getViewInformation2D().getDiscreteViewport().isEmpty())
     {
-        basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+        // calculate logic object range, remember: the helper below will
+        // transform using getObjectToViewTransformation, so the bitmap-local
+        // transform would be missing
+        basegfx::B2DRange aDiscreteVisibleRange(basegfx::B2DRange::getUnitB2DRange());
+        aDiscreteVisibleRange.transform(rBitmapCandidate.getTransform());
 
-        aUnitRange.transform(aLocalTransform);
+        // calculate visible range
+        calculateDiscreteVisibleRange(aDiscreteVisibleRange, aDiscreteVisibleRange,
+                                      getViewInformation2D());
 
-        if (!aUnitRange.overlaps(rDiscreteViewPort))
+        if (aDiscreteVisibleRange.isEmpty())
         {
-            // content is outside discrete local ViewPort, done
+            // not visible, done
             return;
         }
     }
@@ -872,6 +933,9 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
     if (pD2DBitmap)
     {
         const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        const basegfx::B2DHomMatrix aLocalTransform(
+            getViewInformation2D().getObjectToViewTransformation()
+            * rBitmapCandidate.getTransform());
         getRenderTarget()->SetTransform(D2D1::Matrix3x2F(
             aLocalTransform.a(), aLocalTransform.b(), aLocalTransform.c(), aLocalTransform.d(),
             aLocalTransform.e() + fAAOffset, aLocalTransform.f() + fAAOffset));
@@ -886,8 +950,7 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
 }
 
 sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Direct(
-    const primitive2d::TransparencePrimitive2D& rTransCandidate,
-    const basegfx::B2DRange& rVisibleRange)
+    const primitive2d::TransparencePrimitive2D& rTransCandidate)
 {
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
     // Only then can we use ID2D1Effect/CLSID_D2D1LuminanceToAlpha and it makes
@@ -906,81 +969,15 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
 
     // Release early
     pID2D1DeviceContext.clear();
+    basegfx::B2DRange aDiscreteVisibleRange;
 
-    // I had a former version (call it 'a') where I directly painted to a
-    // alpha-only bitmap target, see aAlphaFormat below and refer to
-    // refs/changes/87/141087/21 for details.
-    // To do that this class had a member mbTargetAlpha and all other
-    // impls of ::process*Primitive2D of this renderer had to take care
-    // of it when true by setting used colors to their LuminanceToAlpha values,
-    // so another necessity similar and besides a possible ColorModifierStack.
-    // That worked okay, since for now this is not complex to do since only
-    // gradients (decomposed to Polygons) get rendered for now when a
-    // TransparencePrimitive2D is processed, so it would work as long as only
-    // polygons are treated correctly.
-    // But the definition of TransparencePrimitive2D is (see include\
-    // drawinglayer\primitive2d\transparenceprimitive2d.hxx) is more dynamic:
-    //
-    //    The basic definition is to use the transparence content as transparence-Mask by
-    //    interpreting the transparence-content not as RGB, but as Luminance transparence mask
-    //    using the common RGB_to_luminance definition as e.g. used by VCL.
-    //
-    // And it is good and necessary to be defined that way to be able to
-    // define *any* content as alpha channel for this primitive, now and in the
-    // future. Thus, more complex stuff like Bitmaps(RBGA) and sub-contents
-    // themselves, containing transparence, may be used in the future, and the
-    // former solution (a) would create errors.
-    // To solve this, it is necessary to unchanged draw that sub-content as
-    // RGB and convert the complete result to luminance, so being independent
-    // of painting already as luminance-based alpha channel, so I created this
-    // method 'b'.
-    // This is possible using ID2D1Effect and CLSID_D2D1LuminanceToAlpha when
-    // a Direct2D is in place that supports this (else fallback to
-    // implCreateAlpha_B2DBitmap, see there). I thoroughly compared a and b
-    // in a windows pro build, there are only minimal differences, so equal
-    // in performance. Thus I choose (b) over (a) for less complexity & more
-    // security, esp. for the future to avoid errors.
-    //
-    // NOTE: This is also a good example for future impls how to use the
-    // ID2D1Effect mechanism of Direct2D, e.g. for our glow/softEdge/shadow
-    // stuff...
-
-    // Use a temporary second instance of a D2DBitmapPixelProcessor2D with adapted
-    // ViewInformation2D, it will create the needed ID2D1BitmapRenderTarget
-    // locally and Clear() it (see class def above).
-    // That way it is not necessary to patch/relocate all the local variables (safer)
-    // and the renderer has no real overhead itself
-    geometry::ViewInformation2D aAdaptedViewInformation2D(getViewInformation2D());
-    const double fTargetWidth(ceil(rVisibleRange.getWidth()));
-    const double fTargetHeight(ceil(rVisibleRange.getHeight()));
-
+    if (!createBitmapSubContent(pRetval, aDiscreteVisibleRange, rTransCandidate.getTransparence(),
+                                getViewInformation2D(), getRenderTarget())
+        || !pRetval)
     {
-        // create adapted ViewTransform, needs to be offset in discrete coordinates,
-        // so multiply from left
-        basegfx::B2DHomMatrix aAdapted(basegfx::utils::createTranslateB2DHomMatrix(
-                                           -rVisibleRange.getMinX(), -rVisibleRange.getMinY())
-                                       * getViewInformation2D().getViewTransformation());
-        aAdaptedViewInformation2D.setViewTransformation(aAdapted);
-
-        // reset Viewport (world coordinates), so the helper renderer will create it's
-        // own based on it's given internal discrete size
-        aAdaptedViewInformation2D.setViewport(basegfx::B2DRange());
-    }
-
-    D2DBitmapPixelProcessor2D aSubContentRenderer(aAdaptedViewInformation2D, fTargetWidth,
-                                                  fTargetHeight, getRenderTarget());
-
-    if (!aSubContentRenderer.valid())
-    {
-        // did not work, done
+        // return of false means no display needed, return
         return pRetval;
     }
-
-    // render sub-content recursively
-    aSubContentRenderer.process(rTransCandidate.getTransparence());
-
-    // grab Bitmap & prepare results from RGBA content rendering
-    sal::systools::COMReference<ID2D1Bitmap> pInBetweenResult(aSubContentRenderer.getID2D1Bitmap());
 
     // Now we need a target to render this to, using the ID2D1Effect tooling.
     // We can directly apply the effect to an alpha-only 8bit target here,
@@ -992,8 +989,8 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
     sal::systools::COMReference<ID2D1BitmapRenderTarget> pContent;
     const D2D1_PIXEL_FORMAT aAlphaFormat(
         D2D1::PixelFormat(DXGI_FORMAT_A8_UNORM, D2D1_ALPHA_MODE_STRAIGHT));
-    const D2D1_SIZE_U aRenderTargetSizePixel(
-        D2D1::SizeU(ceil(rVisibleRange.getWidth()), ceil(rVisibleRange.getHeight())));
+    const D2D1_SIZE_U aRenderTargetSizePixel(D2D1::SizeU(ceil(aDiscreteVisibleRange.getWidth()),
+                                                         ceil(aDiscreteVisibleRange.getHeight())));
     const HRESULT hr(getRenderTarget()->CreateCompatibleRenderTarget(
         nullptr, &aRenderTargetSizePixel, &aAlphaFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
         &pContent));
@@ -1013,7 +1010,7 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
             if (pLuminanceToAlpha)
             {
                 // chain effect stuff together & paint it
-                pLuminanceToAlpha->SetInput(0, pInBetweenResult);
+                pLuminanceToAlpha->SetInput(0, pRetval);
 
                 pID2D1DeviceContext->BeginDraw();
                 pID2D1DeviceContext->Clear(D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.0f));
@@ -1133,18 +1130,12 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
     }
 
     // calculate visible range, create only for that range
-    basegfx::B2DRange aDiscreteRange(
-        rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
-    aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
-    basegfx::B2DRange aVisibleRange(aDiscreteRange);
+    basegfx::B2DRange aDiscreteVisibleRange;
+    calculateDiscreteVisibleRange(aDiscreteVisibleRange,
+                                  rTransCandidate.getChildren().getB2DRange(getViewInformation2D()),
+                                  getViewInformation2D());
 
-    if (!rDiscreteViewPort.isEmpty())
-    {
-        aVisibleRange.intersect(rDiscreteViewPort);
-    }
-
-    if (aVisibleRange.isEmpty())
+    if (aDiscreteVisibleRange.isEmpty())
     {
         // not visible, done
         return;
@@ -1152,14 +1143,14 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
 
     // try to create directly, this needs the current mpRT to be a ID2D1DeviceContext/d2d1_1
     // what is not guaranteed but usually works for more modern windows (after 7)
-    sal::systools::COMReference<ID2D1Bitmap> pAlphaBitmap(
-        implCreateAlpha_Direct(rTransCandidate, aVisibleRange));
+    sal::systools::COMReference<ID2D1Bitmap> pAlphaBitmap(implCreateAlpha_Direct(rTransCandidate));
     D2D1_MATRIX_3X2_F aMaskScale(D2D1::Matrix3x2F::Identity());
 
     if (!pAlphaBitmap)
     {
         // did not work, use more expensive fallback to existing tooling
-        pAlphaBitmap = implCreateAlpha_B2DBitmap(rTransCandidate, aVisibleRange, aMaskScale);
+        pAlphaBitmap
+            = implCreateAlpha_B2DBitmap(rTransCandidate, aDiscreteVisibleRange, aMaskScale);
     }
 
     if (!pAlphaBitmap)
@@ -1186,7 +1177,7 @@ void D2DPixelProcessor2D::processTransparencePrimitive2D(
             // need to set transform offset for Layer initialization, we work
             // in discrete device coordinates
             getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Translation(
-                floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
+                floor(aDiscreteVisibleRange.getMinX()), floor(aDiscreteVisibleRange.getMinY())));
 
             getRenderTarget()->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr,
                                                                D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
@@ -1231,14 +1222,15 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
         return;
     }
 
-    basegfx::B2DRange aTransparencyRange(
-        rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
-    aTransparencyRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+    // calculate visible range
+    basegfx::B2DRange aDiscreteVisibleRange;
+    calculateDiscreteVisibleRange(aDiscreteVisibleRange,
+                                  rTransCandidate.getChildren().getB2DRange(getViewInformation2D()),
+                                  getViewInformation2D());
 
-    if (!rDiscreteViewPort.isEmpty() && !rDiscreteViewPort.overlaps(aTransparencyRange))
+    if (aDiscreteVisibleRange.isEmpty())
     {
-        // we have a Viewport and visible range of geometry is outside -> not visible, done
+        // not visible, done
         return;
     }
 
@@ -1282,13 +1274,14 @@ void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
         return;
     }
 
-    basegfx::B2DRange aMaskRange(aMask.getB2DRange());
-    aMaskRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+    // calculate visible range
+    basegfx::B2DRange aDiscreteVisibleRange;
+    calculateDiscreteVisibleRange(aDiscreteVisibleRange, aMask.getB2DRange(),
+                                  getViewInformation2D());
 
-    if (!rDiscreteViewPort.isEmpty() && !rDiscreteViewPort.overlaps(aMaskRange))
+    if (aDiscreteVisibleRange.isEmpty())
     {
-        // we have a Viewport and visible range of geometry is outside -> not visible, done
+        // not visible, done
         return;
     }
 
@@ -1928,24 +1921,6 @@ void D2DPixelProcessor2D::processInvertPrimitive2D(
         return;
     }
 
-    // calculate visible range, create only for that range
-    basegfx::B2DRange aDiscreteRange(
-        rInvertPrimitive2D.getChildren().getB2DRange(getViewInformation2D()));
-    aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
-    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
-    basegfx::B2DRange aVisibleRange(aDiscreteRange);
-
-    if (!rDiscreteViewPort.isEmpty())
-    {
-        aVisibleRange.intersect(rDiscreteViewPort);
-    }
-
-    if (aVisibleRange.isEmpty())
-    {
-        // not visible, done
-        return;
-    }
-
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
     // Only with ID2D1DeviceContext we can use ::DrawImage which supports
     // D2D1_COMPOSITE_MODE_XOR
@@ -1963,50 +1938,26 @@ void D2DPixelProcessor2D::processInvertPrimitive2D(
         return;
     }
 
-    // Use a temporary second instance of a D2DBitmapPixelProcessor2D with adapted
-    // ViewInformation2D, it will create the needed ID2D1BitmapRenderTarget
-    // locally and Clear() it (see class def above).
-    // That way it is not necessary to patch/relocate all the local variables (safer)
-    // and the renderer has no real overhead itself
-    geometry::ViewInformation2D aAdaptedViewInformation2D(getViewInformation2D());
-    const double fTargetWidth(ceil(aVisibleRange.getWidth()));
-    const double fTargetHeight(ceil(aVisibleRange.getHeight()));
+    sal::systools::COMReference<ID2D1Bitmap> pInBetweenResult;
+    basegfx::B2DRange aDiscreteVisibleRange;
 
+    // create in-between result in discrete coordinates, clipped against visible
+    // part of ViewInformation (if available)
+    if (!createBitmapSubContent(pInBetweenResult, aDiscreteVisibleRange,
+                                rInvertPrimitive2D.getChildren(), getViewInformation2D(),
+                                getRenderTarget()))
     {
-        // create adapted ViewTransform, needs to be offset in discrete coordinates,
-        // so multiply from left
-        basegfx::B2DHomMatrix aAdapted(basegfx::utils::createTranslateB2DHomMatrix(
-                                           -aVisibleRange.getMinX(), -aVisibleRange.getMinY())
-                                       * getViewInformation2D().getViewTransformation());
-        aAdaptedViewInformation2D.setViewTransformation(aAdapted);
-
-        // reset Viewport (world coordinates), so the helper renderer will create it's
-        // own based on it's given internal discrete size
-        aAdaptedViewInformation2D.setViewport(basegfx::B2DRange());
-    }
-
-    D2DBitmapPixelProcessor2D aSubContentRenderer(aAdaptedViewInformation2D, fTargetWidth,
-                                                  fTargetHeight, getRenderTarget());
-
-    if (!aSubContentRenderer.valid())
-    {
-        // did not work, done
-        increaseError();
+        // return of false means no display needed, return
         return;
     }
 
-    // render sub-content recursively
-    aSubContentRenderer.process(rInvertPrimitive2D.getChildren());
-
-    // grab Bitmap & prepare results from RGBA content rendering
-    sal::systools::COMReference<ID2D1Bitmap> pInBetweenResult(aSubContentRenderer.getID2D1Bitmap());
     bool bDone(false);
 
-    if (pID2D1DeviceContext && pInBetweenResult)
+    if (pInBetweenResult)
     {
         getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
-        const D2D1_POINT_2F aTopLeft
-            = { FLOAT(floor(aVisibleRange.getMinX())), FLOAT(floor(aVisibleRange.getMinY())) };
+        const D2D1_POINT_2F aTopLeft = { FLOAT(floor(aDiscreteVisibleRange.getMinX())),
+                                         FLOAT(floor(aDiscreteVisibleRange.getMinY())) };
 
         pID2D1DeviceContext->DrawImage(pInBetweenResult, aTopLeft, D2D1_INTERPOLATION_MODE_LINEAR,
                                        D2D1_COMPOSITE_MODE_XOR);

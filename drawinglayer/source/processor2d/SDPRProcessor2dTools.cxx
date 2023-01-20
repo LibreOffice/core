@@ -179,7 +179,7 @@ bool prepareBitmapForDirectRender(
     if (!rDiscreteViewPort.isEmpty())
     {
         // calculate discrete covered pixel area
-        basegfx::B2DRange aDiscreteRange(0.0, 0.0, 1.0, 1.0);
+        basegfx::B2DRange aDiscreteRange(basegfx::B2DRange::getUnitB2DRange());
         aDiscreteRange.transform(aLocalTransform);
 
         if (!rDiscreteViewPort.overlaps(rDiscreteViewPort))
@@ -272,6 +272,28 @@ bool prepareBitmapForDirectRender(
 
     // signal to render it
     return true;
+}
+
+void calculateDiscreteVisibleRange(
+    basegfx::B2DRange& rDiscreteVisibleRange, const basegfx::B2DRange& rContentRange,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+{
+    if (rContentRange.isEmpty())
+    {
+        // no content, done
+        rDiscreteVisibleRange.reset();
+        return;
+    }
+
+    basegfx::B2DRange aDiscreteRange(rContentRange);
+    aDiscreteRange.transform(rViewInformation2D.getObjectToViewTransformation());
+    const basegfx::B2DRange& rDiscreteViewPort(rViewInformation2D.getDiscreteViewport());
+    rDiscreteVisibleRange = aDiscreteRange;
+
+    if (!rDiscreteViewPort.isEmpty())
+    {
+        rDiscreteVisibleRange.intersect(rDiscreteViewPort);
+    }
 }
 } // end of namespace
 

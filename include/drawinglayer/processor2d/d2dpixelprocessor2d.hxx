@@ -97,8 +97,7 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
 
     // common helpers
     sal::systools::COMReference<ID2D1Bitmap>
-    implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate,
-                           const basegfx::B2DRange& rVisibleRange);
+    implCreateAlpha_Direct(const primitive2d::TransparencePrimitive2D& rTransCandidate);
     sal::systools::COMReference<ID2D1Bitmap>
     implCreateAlpha_B2DBitmap(const primitive2d::TransparencePrimitive2D& rTransCandidate,
                               const basegfx::B2DRange& rVisibleRange,
