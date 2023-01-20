@@ -2562,7 +2562,7 @@ OUString SwCursorShell::GetSelText() const
     if (GetLayout()->HasMergedParas())
     {
         SwContentFrame const*const pFrame(GetCurrFrame(false));
-        if (FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->GetNodeIndex()))
+        if (pFrame && FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->GetNodeIndex()))
         {
             OUStringBuffer buf;
             SwPosition const*const pStart(m_pCurrentCursor->Start());
