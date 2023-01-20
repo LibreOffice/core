@@ -474,7 +474,8 @@ void ScInputWindow::Resize()
 {
     ToolBox::Resize();
 
-    Size aSize = GetSizePixel();
+    Size aStartSize = GetSizePixel();
+    Size aSize = aStartSize;
 
     //(-10) to allow margin between sidebar and formulabar
     tools::Long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
@@ -498,7 +499,9 @@ void ScInputWindow::Resize()
             aSize.setHeight(aGroupBarSize.Height() + 2 * (pGroupBar->GetVertOffset() + 1));
         }
     }
-    SetSizePixel(aSize);
+
+    if (aStartSize != aSize)
+        SetSizePixel(aSize);
 
     Invalidate();
 }
