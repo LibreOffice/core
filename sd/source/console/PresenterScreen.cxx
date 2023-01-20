@@ -106,7 +106,7 @@ sal_Bool SAL_CALL PresenterScreenJob::supportsService(const OUString& aServiceNa
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-sdext_PresenterScreenJob_get_implementation(
+sd_PresenterScreenJob_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new PresenterScreenJob(context));

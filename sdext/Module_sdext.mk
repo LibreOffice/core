@@ -10,10 +10,6 @@
 $(eval $(call gb_Module_Module,sdext))
 
 $(eval $(call gb_Module_add_targets,sdext,\
-    Library_PresenterScreen \
-))
-
-$(eval $(call gb_Module_add_targets,sdext,\
     Library_PresentationMinimizer \
 ))
 

@@ -11,6 +11,8 @@ $(eval $(call gb_Library_Library,sdui))
 
 $(eval $(call gb_Library_set_plugin_for,sdui,sd))
 
+$(eval $(call gb_Library_set_componentfile,sdui,sd/source/console/presenter,services))
+
 $(eval $(call gb_Library_set_include,sdui,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \
@@ -93,6 +95,39 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/vectdlg \
     sd/source/ui/dlg/PhotoAlbumDialog \
     sd/source/ui/dlg/BulletAndPositionDlg \
+    sd/source/console/PresenterAccessibility \
+    sd/source/console/PresenterBitmapContainer \
+    sd/source/console/PresenterButton \
+    sd/source/console/PresenterCanvasHelper \
+    sd/source/console/PresenterConfigurationAccess \
+    sd/source/console/PresenterController \
+    sd/source/console/PresenterCurrentSlideObserver \
+    sd/source/console/PresenterFrameworkObserver \
+    sd/source/console/PresenterGeometryHelper \
+    sd/source/console/PresenterHelpView \
+    sd/source/console/PresenterHelper \
+    sd/source/console/PresenterNotesView \
+    sd/source/console/PresenterPaintManager \
+    sd/source/console/PresenterPane \
+    sd/source/console/PresenterPaneBase \
+    sd/source/console/PresenterPaneBorderPainter \
+    sd/source/console/PresenterPaneContainer \
+    sd/source/console/PresenterPaneFactory \
+    sd/source/console/PresenterProtocolHandler \
+    sd/source/console/PresenterScreen \
+    sd/source/console/PresenterScrollBar \
+    sd/source/console/PresenterSlidePreview \
+    sd/source/console/PresenterSlideShowView \
+    sd/source/console/PresenterSlideSorter \
+    sd/source/console/PresenterSprite \
+    sd/source/console/PresenterSpritePane \
+    sd/source/console/PresenterTextView \
+    sd/source/console/PresenterTheme \
+    sd/source/console/PresenterTimer \
+    sd/source/console/PresenterToolBar \
+    sd/source/console/PresenterUIPainter \
+    sd/source/console/PresenterViewFactory \
+    sd/source/console/PresenterWindowManager \
 ))
 
 # $(WORKDIR)/inc/sd/sddll0.hxx :
