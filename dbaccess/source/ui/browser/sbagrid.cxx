@@ -127,9 +127,9 @@ rtl::Reference<FmXGridPeer> SbaXGridControl::imp_CreatePeer(vcl::Window* pParent
     return pReturn;
 }
 
-Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType)
+Any SAL_CALL SbaXGridControl::queryAggregation(const Type& _rType)
 {
-    Any aRet = FmXGridControl::queryInterface(_rType);
+    Any aRet = FmXGridControl::queryAggregation(_rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
 }
 

@@ -62,8 +62,8 @@ namespace dbaui
         virtual ~SbaXGridControl() override;
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        DECLARE_UNO3_AGG_DEFAULTS(SbaXGridControl, FmXGridControl)
+        virtual css::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
