@@ -205,17 +205,6 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
     return { "com.sun.star.text.AutoTextContainer" };
 }
 
-const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSwXAutoTextGroupUnoTunnelId;
-    return theSwXAutoTextGroupUnoTunnelId.getSeq();
-}
-
-sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
             SwGlossaries*   pGlos) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_AUTO_TEXT_GROUP)),

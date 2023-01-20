@@ -436,14 +436,14 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
                 aLoop != m_aGlossaryGroups.end();
             )
         {
-            Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
+            rtl::Reference< SwXAutoTextGroup > xNamed( aLoop->get() );
             if ( !xNamed.is() )
             {
                 aLoop = m_aGlossaryGroups.erase(aLoop);
             }
             else if ( xNamed->getName() == rGroup )
             {
-                static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
+                xNamed->Invalidate();
                     // note that this static_cast works because we know that the array only
                     // contains SwXAutoTextGroup implementation
                 m_aGlossaryGroups.erase( aLoop );
@@ -502,9 +502,9 @@ void SwGlossaries::InvalidateUNOOjects()
     // invalidate all the AutoTextGroup-objects
     for (const auto& rGroup : m_aGlossaryGroups)
     {
-        Reference< text::XAutoTextGroup > xGroup( rGroup.get(), UNO_QUERY );
+        rtl::Reference< SwXAutoTextGroup > xGroup( rGroup.get() );
         if ( xGroup.is() )
-            static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
+            xGroup->Invalidate();
     }
     UnoAutoTextGroups().swap(m_aGlossaryGroups);
 
@@ -524,13 +524,13 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( std::u16string
     // first, find the name with path-extension
     const OUString sCompleteGroupName = GetCompleteGroupName( _rGroupName );
 
-    Reference< text::XAutoTextGroup >  xGroup;
+    rtl::Reference< SwXAutoTextGroup >  xGroup;
 
     // look up the group in the cache
     UnoAutoTextGroups::iterator aSearch = m_aGlossaryGroups.begin();
     for ( ; aSearch != m_aGlossaryGroups.end(); )
     {
-        auto pSwGroup = comphelper::getFromUnoTunnel<SwXAutoTextGroup>(aSearch->get());
+        rtl::Reference<SwXAutoTextGroup> pSwGroup = aSearch->get();
         if ( !pSwGroup )
         {
             // the object is dead in the meantime -> remove from cache

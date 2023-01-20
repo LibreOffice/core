@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/text/XAutoTextEntry.hpp>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
@@ -90,8 +89,7 @@ class SwXAutoTextGroup final : public cppu::WeakImplHelper
     css::beans::XPropertySet,
     css::lang::XServiceInfo,
     css::container::XIndexAccess,
-    css::container::XNamed,
-    css::lang::XUnoTunnel
+    css::container::XNamed
 >
 {
     const SfxItemPropertySet* m_pPropSet;
@@ -103,11 +101,6 @@ class SwXAutoTextGroup final : public cppu::WeakImplHelper
 
 public:
         SwXAutoTextGroup(const OUString& rName, SwGlossaries* pGloss);
-
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XAutoTextGroup
     virtual css::uno::Sequence< OUString > SAL_CALL getTitles() override;
