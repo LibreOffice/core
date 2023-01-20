@@ -30,8 +30,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
@@ -104,7 +104,7 @@ public:
 
 class SwShapeDescriptor_Impl;
 typedef
-cppu::WeakAggImplHelper6
+cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::beans::XPropertyState,
