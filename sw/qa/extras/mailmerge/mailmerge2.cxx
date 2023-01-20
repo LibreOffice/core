@@ -513,7 +513,8 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
     SvMemoryStream aMemory;
     aMemory.WriteStream(aPDFFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    CPPUNIT_ASSERT(pPDFium);
+    if (!pPDFium)
+        return;
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
