@@ -130,7 +130,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
     if ( ! rxLayer.is())
         return;
 
-    SdLayer* pLayer = comphelper::getFromUnoTunnel<SdLayer> (rxLayer);
+    SdLayer* pLayer = dynamic_cast<SdLayer*> (rxLayer.get());
     if (pLayer == nullptr)
         return;
 

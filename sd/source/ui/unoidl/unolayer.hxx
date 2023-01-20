@@ -42,7 +42,6 @@ enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 class SdLayer : public ::cppu::WeakImplHelper< css::drawing::XLayer,
                                                 css::lang::XServiceInfo,
                                                 css::container::XChild,
-                                                css::lang::XUnoTunnel,
                                                 css::lang::XComponent >
 {
 public:
@@ -51,9 +50,6 @@ public:
 
     // intern
     SdrLayer* GetSdrLayer() const noexcept { return pLayer; }
-
-    // uno helper
-    UNO3_GETIMPLEMENTATION_DECL( SdLayer )
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
