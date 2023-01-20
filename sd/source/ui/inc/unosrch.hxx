@@ -22,7 +22,6 @@
 #include <memory>
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -71,7 +70,7 @@ public:
 /** this class holds the parameters and status of a search or replace operation performed
     by class SdUnoSearchReplaceShape */
 
-class SdUnoSearchReplaceDescriptor final : public ::cppu::WeakImplHelper< css::lang::XUnoTunnel, css::util::XReplaceDescriptor > // public css::util::XSearchDescriptor, css::beans::XPropertySet
+class SdUnoSearchReplaceDescriptor final : public ::cppu::WeakImplHelper< css::util::XReplaceDescriptor > // public css::util::XSearchDescriptor, css::beans::XPropertySet
 {
     std::unique_ptr<SvxItemPropertySet> mpPropSet;
 
@@ -89,8 +88,6 @@ public:
 
     bool IsCaseSensitive() const { return mbCaseSensitive; }
     bool IsWords() const { return mbWords; }
-
-    UNO3_GETIMPLEMENTATION_DECL( SdUnoSearchReplaceDescriptor )
 
     // XSearchDescriptor
     virtual OUString SAL_CALL getSearchString(  ) override;
