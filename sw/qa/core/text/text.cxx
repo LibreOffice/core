@@ -634,6 +634,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -677,6 +681,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a content control, in placeholder mode:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
