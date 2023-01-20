@@ -292,11 +292,16 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
                 case FIELD_IF:
                 case FIELD_MERGEFIELD:
                 case FIELD_REF:
+                case FIELD_PAGE:
+                case FIELD_NUMPAGES:
                 {
                     // LO does not currently know how to evaluate these as conditions or results
                     return false;
                 }
                 default:
+                    SAL_WARN("writerfilter","found field["<<*pInner->GetFieldId()<<"] defined in FieldTypes.hxx");
+                    assert(false && "looking for example documents using { IF } with fields for condition or result");
+                    return false;
                     break;
             }
             break;
