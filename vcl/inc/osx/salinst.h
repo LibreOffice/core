@@ -89,7 +89,6 @@ public:
     int                                     mnActivePrintJobs;
     osl::Mutex                              maUserEventListMutex;
     osl::Condition                          maWaitingYieldCond;
-    bool                                    mbIsLiveResize;
     bool                                    mbNoYieldLock;
     bool                                    mbTimerProcessed;
 

@@ -28,8 +28,13 @@ enum class SalEvent;
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
+    BOOL                mbInLiveResize;
+    BOOL                mbInWindowDidResize;
+    NSTimer*            mpLiveResizeTimer;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(void)clearLiveResizeTimer;
+-(void)dealloc;
 -(BOOL)canBecomeKeyWindow;
 -(void)displayIfNeeded;
 -(void)windowDidBecomeKey: (NSNotification*)pNotification;
@@ -62,6 +67,8 @@ enum class SalEvent;
 
 -(void)endExtTextInput;
 -(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
+
+-(void)windowDidResizeWithTimer:(NSTimer *)pTimer;
 @end
 
 @interface SalFrameView : AquaA11yWrapper <NSTextInputClient>
