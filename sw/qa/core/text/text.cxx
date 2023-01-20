@@ -701,6 +701,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a checkbox content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -727,6 +731,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a dropdown content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -753,6 +761,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a date content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -782,6 +794,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a document with a custom 24pt font size and a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -810,6 +826,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a combo box content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -837,6 +857,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
