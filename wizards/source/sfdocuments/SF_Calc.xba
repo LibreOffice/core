@@ -2111,6 +2111,7 @@ Public Function Methods() As Variant
 					, &quot;OpenRangeSelector&quot; _
 					, &quot;Printf&quot; _
 					, &quot;PrintOut&quot; _
+					, &quot;RemoveDuplicates&quot; _
 					, &quot;RemoveSheet&quot; _
 					, &quot;RenameSheet&quot; _
 					, &quot;SetArray&quot; _
@@ -2581,6 +2582,131 @@ Public Function Properties() As Variant
 					)
 
 End Function	&apos;	SFDocuments.SF_Calc.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveDuplicates(Optional ByVal Range As Variant _
+									, Optional ByVal Columns As Variant _
+									, Optional ByVal Header As Variant _
+									, Optional ByVal CaseSensitive As Variant _
+									, Optional ByVal Mode As Variant _
+									) As String
+&apos;&apos;&apos;	Remove duplicate values from a range of values.
+&apos;&apos;&apos;	The comparison between rows is done on a subset of the columns in the range.
+&apos;&apos;&apos;	The resulting range replaces the input range, in which, either:
+&apos;&apos;&apos;		all duplicate rows are cleared from their content
+&apos;&apos;&apos;		all duplicate rows are suppressed and rows below are pushed upwards.
+&apos;&apos;&apos;	Anyway, the first copy of each set of duplicates is kept and the initial sequence is preserved.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range, as a string, from which the duplicate rows should be removed
+&apos;&apos;&apos;		Columns: an array of column numbers to compare; items are in the interval [1 .. range width]
+&apos;&apos;&apos;			Default = the first column in the range
+&apos;&apos;&apos;		Header: when True, the first row is a header row. Default = False.
+&apos;&apos;&apos;		CaseSensitive: for string comparisons. Default = False.
+&apos;&apos;&apos;		Mode: either &quot;CLEAR&quot; or &quot;COMPACT&quot; (Default)
+&apos;&apos;&apos;			For large ranges, the &quot;COMPACT&quot; mode is probably significantly slower.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The resulting range as a string
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oCalc.RemoveDuplicates(&quot;Sheet1.B2:K11&quot;, Array(1, 2), Header := True, CaseSensitive := True)
+
+Dim sRemove As String				&apos;	Return value
+Dim oRangeAddress As Object			&apos;	Parsed range as an _Address object
+Dim sMirrorRange As String			&apos;	Mirror of initial range
+Dim lRandom As Long					&apos;	Random number to build the worksheet name
+Dim sWorkSheet As String			&apos;	Name of worksheet
+Dim vRows() As Variant				&apos;	Array of row numbers
+Dim sRowsRange As String			&apos;	Range of the last column of the worksheet
+Dim sFullMirrorRange As String		&apos;	Mirrored data + rows column
+Dim sLastRowsRange As String		&apos;	Same as sRowsRange without the first cell
+Dim sDuplicates As String			&apos;	Formula identifying a duplicate row
+Dim lColumn As Long					&apos;	Single column number
+Dim sColumn As String				&apos;	Single column name
+Dim sFilter As String				&apos;	Filter formula for final compaction or clearing
+
+Const cstThisSub = &quot;SFDocuments.Calc.RemoveDuplicates&quot;
+Const cstSubArgs = &quot;Range, [Columns], [Header=False], [CaseSensitive=False], [Mode=&quot;&quot;COMPACT&quot;&quot;|&quot;&quot;CLEAR&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sRemove = &quot;&quot;
+
+Check:
+	If IsMissing(Columns) Or IsEmpty(Columns) Then Columns = Array(1)
+	If Not IsArray(Columns) Then Columns = Array(Columns)
+	If IsMissing(Header) Or IsEmpty(Header) Then Header = False
+	If IsMissing(CaseSensitive) Or IsEmpty(CaseSensitive) Then CaseSensitive = False
+	If IsMissing(Mode) Or IsEmpty(Mode) Then Mode = &quot;COMPACT&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateArray(Columns, &quot;Columns&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Header, &quot;Header&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(CaseSensitive, &quot;CaseSensitive&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Mode, &quot;Mode&quot;, V_STRING, Array(&quot;COMPACT&quot;, &quot;CLEAR&quot;)) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Let&apos;s assume the initial range is &quot;$Sheet1.$B$11:$K$110&quot; (100 rows, 10 clumns, no header)
+	&apos;	Ignore header, consider only the effective data
+	If Header Then Set oRangeAddress = _Offset(Range, 1, 0, Height(Range) - 1, 0) Else Set oRangeAddress = _ParseAddress(Range)
+
+	&apos;**	Step 1: create a worksheet and copy the range in A1
+		lRandom = ScriptForge.SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN.NV&quot;, 1, 999999)
+		sWorkSheet = &quot;SF_WORK_&quot; &amp; Right(&quot;000000&quot; &amp; lRandom, 6)
+		InsertSheet(sWorkSheet)
+		&apos;	sMurrorRange = &quot;$SF_WORK.$A$1:$J$100&quot;
+		sMirrorRange = CopyToCell(oRangeAddress, &quot;$&quot; &amp; sWorkSheet &amp; &quot;.$A$1&quot;)
+
+	&apos;**	Step 2: add a column in the mirror with the row numbers in the initial range
+		&apos;	vRows = [11..110]
+		With oRangeAddress.XCellRange
+			vRows = ScriptForge.RangeInit(CLng(.RangeAddress.StartRow + 1), CLng(.RangeAddress.EndRow + 1))
+		End With
+		&apos;	sRowsRange = &quot;$SF_WORK.$K$1:$K$100&quot;
+		sRowsRange = SetArray(Offset(sMirrorRange, , Width(sMirrorRange), 1, 1), vRows())
+
+	&apos;**	Step 3: sort the mirrored data, including the row numbers column
+		&apos;	sMirrorRange = &quot;$SF_WORK.$A$1:$K$100&quot;
+		sFullMirrorRange = Offset(sMirrorRange, , , , Width(sMirrorRange) + 1)
+		SortRange(sFullMirrorRange, SortKeys := Columns, CaseSensitive := CaseSensitive)
+
+	&apos;**	Step 4: Filter out the row numbers containing duplicates
+		&apos;	sLastRowRange = &quot;$SF_WORK.$K$2:$K$100&quot;
+		sLastRowsRange = Offset(sRowsRange, 1, , Height(sRowsRange) - 1)
+		&apos;	If Columns = (1, 3) =&gt; sDuplicates = &quot;=AND(TRUE;$A2=$A1;$C2=$C1)
+		sDuplicates = &quot;=AND(TRUE&quot;
+		For Each lColumn In Columns
+			sColumn = _GetColumnName(lColumn)
+			If CaseSensitive Then
+				sDuplicates = sDuplicates &amp; &quot;;$&quot; &amp; sColumn &amp; &quot;2=$&quot; &amp; sColumn &amp; &quot;1&quot;
+			Else
+				sDuplicates = sDuplicates &amp; &quot;;UPPER($&quot; &amp; sColumn &amp; &quot;2)=UPPER($&quot; &amp; sColumn &amp; &quot;1)&quot;
+			End If
+		Next lColumn
+		sDuplicates = sDuplicates &amp; &quot;)&quot;
+		ClearValues(sLastRowsRange, sDuplicates, &quot;ROW&quot;)
+
+	&apos;**	Step 5: Compact or clear the rows in the initial range that are not retained in the final row numbers list
+		&apos;	sFilter = &quot;=ISNA(MATCH(ROW();$SF_WORK.$K$1:$K$100;0))&quot;
+		sFilter = &quot;=ISNA(MATCH(ROW();&quot; &amp; sRowsRange &amp; &quot;;0))&quot;
+		Select Case UCase(Mode)
+			Case &quot;COMPACT&quot;
+				sRemove = CompactUp(oRangeAddress.RangeName, WholeRow := False, FilterFormula := sFilter)
+				If Header Then sRemove = Offset(sRemove, -1, 0, Height(sRemove) + 1)
+			Case &quot;CLEAR&quot;
+				ClearValues(oRangeAddress.RangeName, FilterFormula := sFilter, FilterScope := &quot;ROW&quot;)
+				If Header Then sRemove = _ParseAddress(Range).RangeName Else sRemove = oRangeAddress.RangeName
+		End Select	
+
+	&apos;**	Housekeeping
+		RemoveSheet(sWorkSheet)
+
+Finally:
+	RemoveDuplicates = sRemove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Calc.RemoveDuplicates
 
 REM -----------------------------------------------------------------------------
 Public Function RemoveSheet(Optional ByVal SheetName As Variant) As Boolean

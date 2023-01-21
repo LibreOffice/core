@@ -2263,6 +2263,9 @@ class SFDocuments:
         def PrintOut(self, sheetname = '~', pages = '', copies = 1):
             return self.ExecMethod(self.vbMethod, 'PrintOut', sheetname, pages, copies)
 
+        def RemoveDuplicates(self, range, columns = 1, header = False, casesensitive = False, mode = 'COMPACT'):
+            return self.ExecMethod(self.vbMethod, 'RemoveDuplicates', range, columns, header, casesensitive, mode)
+
         def RemoveSheet(self, sheetname):
             return self.ExecMethod(self.vbMethod, 'RemoveSheet', sheetname)
 
