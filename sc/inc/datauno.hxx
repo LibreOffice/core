@@ -38,7 +38,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -110,7 +109,6 @@ class ScSubTotalDescriptorBase : public cppu::WeakImplHelper<
                                         css::container::XEnumerationAccess,
                                         css::container::XIndexAccess,
                                         css::beans::XPropertySet,
-                                        css::lang::XUnoTunnel,
                                         css::lang::XServiceInfo >
 {
 private:
@@ -159,9 +157,6 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScSubTotalDescriptorBase)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

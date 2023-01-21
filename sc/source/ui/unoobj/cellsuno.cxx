@@ -5526,7 +5526,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
 
     ScDocShell* pDocSh = GetDocShell();
     ScSubTotalDescriptorBase* pImp =
-        comphelper::getFromUnoTunnel<ScSubTotalDescriptorBase>( xDescriptor );
+        dynamic_cast<ScSubTotalDescriptorBase*>( xDescriptor.get() );
 
     if (!(pDocSh && pImp))
         return;

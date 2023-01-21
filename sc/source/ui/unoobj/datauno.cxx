@@ -731,10 +731,6 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const OUString& aP
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSubTotalDescriptorBase )
 
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScSubTotalDescriptorBase);
-
 ScSubTotalDescriptor::ScSubTotalDescriptor()
 {
 }
