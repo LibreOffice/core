@@ -81,7 +81,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
@@ -155,7 +154,7 @@ namespace ooo::vba::excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
 }
 
-class SC_DLLPUBLIC ScCellRangesBase :
+class SC_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ScCellRangesBase :
                          public cppu::WeakImplHelper<
                             css::beans::XPropertySet,
                              css::beans::XMultiPropertySet,
@@ -168,7 +167,6 @@ class SC_DLLPUBLIC ScCellRangesBase :
                              css::util::XReplaceable,
                              css::util::XModifyBroadcaster,
                              css::lang::XServiceInfo,
-                             css::lang::XUnoTunnel,
                              css::beans::XTolerantMultiPropertySet>,
                          public SfxListener
 {
@@ -372,9 +370,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScCellRangesBase)
 };
 
 class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesBase,
@@ -958,9 +953,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScTableSheetObj);
 
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;

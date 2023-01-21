@@ -550,7 +550,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             // currently, only our own cell ranges are supported
 
             uno::Reference<table::XCellRange> xRange(rArg, uno::UNO_QUERY);
-            ScCellRangesBase* pImpl = comphelper::getFromUnoTunnel<ScCellRangesBase>( xRange );
+            ScCellRangesBase* pImpl = dynamic_cast<ScCellRangesBase*>( xRange.get() );
             if ( pImpl )
             {
                 ScDocument* pSrcDoc = pImpl->GetDocument();

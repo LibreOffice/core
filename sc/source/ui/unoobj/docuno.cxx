@@ -1620,11 +1620,11 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScCellRangesBase* pSelObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( xInterface );
+        ScCellRangesBase* pSelObj = dynamic_cast<ScCellRangesBase*>( xInterface.get() );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
-            bool bSheet = ( comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface ) != nullptr );
+            bool bSheet = ( dynamic_cast<ScTableSheetObj*>( pSelObj ) != nullptr );
             bool bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
@@ -3795,7 +3795,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface );
+            ScTableSheetObj* pSheetObj = dynamic_cast<ScTableSheetObj*>( xInterface.get() );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
@@ -3841,7 +3841,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface );
+            ScTableSheetObj* pSheetObj = dynamic_cast<ScTableSheetObj*>( xInterface.get() );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 SCTAB nPosition;

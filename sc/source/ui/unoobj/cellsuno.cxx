@@ -3851,7 +3851,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
     SolarMutexGuard aGuard;
     if ( xStartAt.is() )
     {
-        ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xStartAt );
+        ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xStartAt.get() );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocShell )
         {
             const ScRangeList& rStartRanges = pRangesImp->GetRangeList();
@@ -3954,10 +3954,6 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
     }
     return nReplaced;
 }
-
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScCellRangesBase);
 
 ScCellRangesObj::ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR)
     : ScCellRangesBase(pDocSh, rR)
@@ -4196,7 +4192,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
     uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
     if ( pDocSh && xInterface.is() )
     {
-        ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xInterface );
+        ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xInterface.get() );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocSh )
         {
             //  if explicit name is given and already existing, throw exception
@@ -4821,7 +4817,7 @@ void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
 
     if ( !rFormula.isEmpty() )
     {
-        if ( comphelper::getFromUnoTunnel<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
+        if ( dynamic_cast<ScTableSheetObj*>( this ) )
         {
             //  don't set array formula for sheet object
             throw uno::RuntimeException();
@@ -4890,7 +4886,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
 
     if ( rTokens.hasElements() )
     {
-        if ( comphelper::getFromUnoTunnel<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
+        if ( dynamic_cast<ScTableSheetObj*>( this ) )
         {
             throw uno::RuntimeException();
         }
@@ -4920,7 +4916,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 {
     SolarMutexGuard aGuard;
 
-    if ( comphelper::getFromUnoTunnel<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
+    if ( dynamic_cast<ScTableSheetObj*>( this ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();
@@ -4965,7 +4961,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
 {
     SolarMutexGuard aGuard;
 
-    if ( comphelper::getFromUnoTunnel<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
+    if ( dynamic_cast<ScTableSheetObj*>( this ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();
@@ -6707,7 +6703,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xCellRange.is() )
     {
-        ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xCellRange );
+        ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xCellRange.get() );
         if (pRangesImp)
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
@@ -8260,10 +8256,6 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
             SCPARAPROPERTIES_SERVICE,
             SCLINKTARGET_SERVICE};
 }
-
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION2_IMPL(ScTableSheetObj, ScCellRangeObj);
 
 ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab ) :
     ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol, pDocSh->GetDocument().MaxRow(),nTab) ),

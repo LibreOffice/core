@@ -679,7 +679,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     if (bRet)
         return bRet;
 
-    ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xInterface );
+    ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xInterface.get() );
     uno::Reference<drawing::XShapes> xShapeColl( xInterface, uno::UNO_QUERY );
     uno::Reference<drawing::XShape> xShapeSel( xInterface, uno::UNO_QUERY );
     SvxShape* pShapeImp = comphelper::getFromUnoTunnel<SvxShape>( xShapeSel );
@@ -1057,7 +1057,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
 
     //  XSpreadsheet and ScCellRangesBase -> has to be the same sheet
 
-    ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xActiveSheet );
+    ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xActiveSheet.get() );
     if ( pRangesImp && pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
     {
         const ScRangeList& rRanges = pRangesImp->GetRangeList();

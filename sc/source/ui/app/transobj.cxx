@@ -635,9 +635,8 @@ ScDocument* ScTransferObj::GetSourceDocument()
 
 ScDocShell* ScTransferObj::GetSourceDocShell()
 {
-    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
-    if (pRangesObj)
-        return pRangesObj->GetDocShell();
+    if (m_xDragSourceRanges)
+        return m_xDragSourceRanges->GetDocShell();
 
     return nullptr;    // none set
 }
@@ -645,10 +644,9 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
 ScMarkData ScTransferObj::GetSourceMarkData() const
 {
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
-    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
-    if (pRangesObj)
+    if (m_xDragSourceRanges)
     {
-        const ScRangeList& rRanges = pRangesObj->GetRangeList();
+        const ScRangeList& rRanges = m_xDragSourceRanges->GetRangeList();
         aMarkData.MarkFromRangeList( rRanges, false );
     }
     return aMarkData;

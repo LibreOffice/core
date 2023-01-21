@@ -230,9 +230,9 @@ static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const 
 ScCellRangesBase* ScVbaRange::getCellRangesBase()
 {
     if( mxRanges.is() )
-        return comphelper::getFromUnoTunnel<ScCellRangesBase>( mxRanges );
+        return dynamic_cast<ScCellRangesBase*>( mxRanges.get() );
     if( mxRange.is() )
-        return comphelper::getFromUnoTunnel<ScCellRangesBase>( mxRange );
+        return dynamic_cast<ScCellRangesBase*>( mxRange.get() );
     throw uno::RuntimeException("General Error creating range - Unknown" );
 }
 
@@ -366,7 +366,7 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
 static ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
 {
-    ScCellRangesBase* pUno = comphelper::getFromUnoTunnel<ScCellRangesBase>( xIf );
+    ScCellRangesBase* pUno = dynamic_cast<ScCellRangesBase*>( xIf.get() );
     if ( !pUno )
             throw uno::RuntimeException("Failed to access underlying uno range object"  );
     return pUno->GetDocShell();
@@ -513,7 +513,7 @@ public:
     OUString getNumberFormatString()
     {
         uno::Reference< uno::XInterface > xIf( mxRangeProps, uno::UNO_QUERY_THROW );
-        ScCellRangesBase* pUnoCellRange = comphelper::getFromUnoTunnel<ScCellRangesBase>( xIf );
+        ScCellRangesBase* pUnoCellRange = dynamic_cast<ScCellRangesBase*>( xIf.get() );
         if ( pUnoCellRange )
         {
 
@@ -874,7 +874,7 @@ protected:
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase
-                    = comphelper::getFromUnoTunnel< ScCellRangesBase >( xIf );
+                    = dynamic_cast< ScCellRangesBase* >( xIf.get() );
                 if ( pUnoRangesBase )
                 {
                     const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
@@ -923,7 +923,7 @@ public:
         {
             uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
             ScCellRangesBase* pUnoRangesBase
-                = comphelper::getFromUnoTunnel< ScCellRangesBase >( xIf );
+                = dynamic_cast< ScCellRangesBase* >( xIf.get() );
             if (pUnoRangesBase)
             {
                 OUString sVal;
@@ -1833,12 +1833,12 @@ ScVbaRange::HasFormula()
         return aResult;
     }
     uno::Reference< uno::XInterface > xIf( mxRange, uno::UNO_QUERY_THROW );
-    ScCellRangesBase* pThisRanges = comphelper::getFromUnoTunnel< ScCellRangesBase > ( xIf );
+    ScCellRangesBase* pThisRanges = dynamic_cast< ScCellRangesBase* > ( xIf.get() );
     if ( pThisRanges )
     {
         uno::Reference<uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE | sheet::FormulaResult::STRING ), uno::UNO_QUERY_THROW );
         ScCellRangesBase* pFormulaRanges
-            = comphelper::getFromUnoTunnel< ScCellRangesBase > ( xRanges );
+            = dynamic_cast< ScCellRangesBase* > ( xRanges.get() );
         assert(pFormulaRanges);
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )
