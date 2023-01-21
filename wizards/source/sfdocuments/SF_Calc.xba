@@ -2645,7 +2645,7 @@ Check:
 	End If
 
 Try:
-	&apos;	Let&apos;s assume the initial range is &quot;$Sheet1.$B$11:$K$110&quot; (100 rows, 10 clumns, no header)
+	&apos;	Let&apos;s assume the initial range is &quot;$Sheet1.$B$11:$K$110&quot; (100 rows, 10 columns, no header)
 	&apos;	Ignore header, consider only the effective data
 	If Header Then Set oRangeAddress = _Offset(Range, 1, 0, Height(Range) - 1, 0) Else Set oRangeAddress = _ParseAddress(Range)
 
@@ -2653,7 +2653,7 @@ Try:
 		lRandom = ScriptForge.SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN.NV&quot;, 1, 999999)
 		sWorkSheet = &quot;SF_WORK_&quot; &amp; Right(&quot;000000&quot; &amp; lRandom, 6)
 		InsertSheet(sWorkSheet)
-		&apos;	sMurrorRange = &quot;$SF_WORK.$A$1:$J$100&quot;
+		&apos;	sMirrorRange = &quot;$SF_WORK.$A$1:$J$100&quot;
 		sMirrorRange = CopyToCell(oRangeAddress, &quot;$&quot; &amp; sWorkSheet &amp; &quot;.$A$1&quot;)
 
 	&apos;**	Step 2: add a column in the mirror with the row numbers in the initial range
