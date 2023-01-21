@@ -431,15 +431,18 @@ bool SwAccessibleParagraph::HasCursor()
 void SwAccessibleParagraph::UpdatePortionData()
 {
     // obtain the text frame
-    OSL_ENSURE( GetFrame() != nullptr, "The text frame has vanished!" );
-    OSL_ENSURE( GetFrame()->IsTextFrame(), "The text frame has mutated!" );
     const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
-
-    // build new portion data
-    m_pPortionData.reset( new SwAccessiblePortionData(
-        pFrame, GetMap()->GetShell()->GetViewOptions()) );
-    pFrame->VisitPortions( *m_pPortionData );
-
+    OSL_ENSURE( pFrame != nullptr, "The text frame has vanished!" );
+    if (!pFrame)
+        ClearPortionData();
+    else
+    {
+        OSL_ENSURE( pFrame->IsTextFrame(), "The text frame has mutated!" );
+        // build new portion data
+        m_pPortionData.reset( new SwAccessiblePortionData(
+            pFrame, GetMap()->GetShell()->GetViewOptions()) );
+        pFrame->VisitPortions( *m_pPortionData );
+    }
     OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
 }
 
