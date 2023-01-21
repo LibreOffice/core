@@ -111,11 +111,11 @@ void takeCareOfOffsetXY(
     against that to calculate the visible part.
 
         @param rDiscreteVisibleRange
-        The logic range in view-coordinates (will be tranmsformed by
+        The logic range in view-coordinates (will be transformed by
         getObjectToViewTransformation)
 
         @param rContentRange
-        The logic input range in view-coordinates (will be tranmsformed by
+        The logic input range in view-coordinates (will be transformed by
         getObjectToViewTransformation)
 
         @param rViewInformation2D
