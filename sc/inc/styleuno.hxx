@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -161,7 +160,6 @@ class ScStyleObj final : public ::cppu::WeakImplHelper<
                     css::beans::XMultiPropertySet,
                     css::beans::XPropertyState,
                     css::beans::XMultiPropertyStates,
-                    css::lang::XUnoTunnel,
                     css::lang::XServiceInfo >,
                 public SfxListener
 {
@@ -262,9 +260,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScStyleObj)
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

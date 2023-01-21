@@ -677,7 +677,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScStyleObj* pStyleObj = comphelper::getFromUnoTunnel<ScStyleObj>( xInterface );
+        ScStyleObj* pStyleObj = dynamic_cast<ScStyleObj*>( xInterface.get() );
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
                 !pStyleObj->IsInserted() )  // not yet inserted?
         {
@@ -961,10 +961,6 @@ ScStyleObj::~ScStyleObj()
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
-
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScStyleObj);
 
 void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
