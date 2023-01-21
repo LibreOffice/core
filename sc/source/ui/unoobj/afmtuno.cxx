@@ -190,7 +190,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScAutoFormatObj* pFormatObj = comphelper::getFromUnoTunnel<ScAutoFormatObj>( xInterface );
+        ScAutoFormatObj* pFormatObj = dynamic_cast<ScAutoFormatObj*>( xInterface.get() );
         if ( pFormatObj && !pFormatObj->IsInserted() )
         {
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -352,10 +352,6 @@ void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
     OSL_ENSURE( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat is multiple" );
     nFormatIndex = nNewIndex;
 }
-
-// XUnoTunnel
-
-UNO3_GETIMPLEMENTATION_IMPL(ScAutoFormatObj);
 
 // XTableAutoFormat
 

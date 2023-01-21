@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -89,7 +88,6 @@ class ScAutoFormatObj final : public ::cppu::WeakImplHelper<
                             css::container::XEnumerationAccess,
                             css::container::XNamed,
                             css::beans::XPropertySet,
-                            css::lang::XUnoTunnel,
                             css::lang::XServiceInfo >
 {
 private:
@@ -146,9 +144,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(ScAutoFormatObj)
 };
 
 class ScAutoFormatFieldObj final : public ::cppu::WeakImplHelper<
