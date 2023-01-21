@@ -653,14 +653,16 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         }
     }
 
-    // #i3952#
+    // #i3952# Whitespace does not increase line height
     if ( bHasBlankPortion && bHasOnlyBlankPortions )
     {
         sal_uInt16 nTmpAscent = GetAscent();
         sal_uInt16 nTmpHeight = Height();
         rLine.GetAttrHandler().GetDefaultAscentAndHeight( rInf.GetVsh(), *rInf.GetOut(), nTmpAscent, nTmpHeight );
-        SetAscent( nTmpAscent );
-        Height( nTmpHeight, false );
+        if (nTmpAscent < GetAscent() || GetAscent() <= 0)
+            SetAscent(nTmpAscent);
+        if (nTmpHeight < Height() || Height() <= 0)
+            Height(nTmpHeight, false);
     }
 
     // Robust:
