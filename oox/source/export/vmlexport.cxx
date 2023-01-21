@@ -187,19 +187,23 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt
     m_nShapeFlags = nShapeFlags;
 
     m_sShapeId = ShapeIdString( nShapeId );
-    // If shape is a watermark object - should keep the original shape's name
-    // because Microsoft detects if it is a watermark by the actual name
-    if (!IsWaterMarkShape(m_pSdrObject->GetName()))
+    if (m_sShapeId.startsWith("_x0000_"))
     {
-        // Not a watermark object
-        m_pShapeAttrList->add( XML_id, m_sShapeId );
+        // xml_id must be set elsewhere. The id is critical for matching VBA macros etc,
+        // and the spid is critical to link to the shape number elsewhere.
+        m_pShapeAttrList->addNS( XML_o, XML_spid, m_sShapeId );
     }
-    else
+    else if (IsWaterMarkShape(m_pSdrObject->GetName()))
     {
-        // A watermark object - store the optional shape ID
+        // Shape is a watermark object - keep the original shape's name
+        // because Microsoft detects if it is a watermark by the actual name
         m_pShapeAttrList->add( XML_id, m_pSdrObject->GetName() );
         // also ('o:spid')
         m_pShapeAttrList->addNS( XML_o, XML_spid, m_sShapeId );
+    }
+    else
+    {
+        m_pShapeAttrList->add(XML_id, m_sShapeId);
     }
 }
 

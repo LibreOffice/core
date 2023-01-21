@@ -542,7 +542,10 @@ void ScExportTest2::testTdf117266()
     xmlDocUniquePtr pVmlDrawing = parseExport("xl/drawings/vmlDrawing1.vml");
 
     OUString sName = getXPath(pVmlDrawing, "/xml/v:shape", "id");
-    CPPUNIT_ASSERT(sName.startsWith("_x0000_s"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Button 1001"), sName);
+
+    OUString sSpid = getXPath(pVmlDrawing, "/xml/v:shape", "spid");
+    CPPUNIT_ASSERT(sSpid.startsWith("_x0000_s"));
 
     assertXPathContent(pVmlDrawing, "/xml/v:shape/v:textbox/div/font", "Button 1 \"y\" z");
     // Why the xx:, I have no idea..., but it certainly doesn't work with just x:.

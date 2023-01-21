@@ -1093,12 +1093,14 @@ class VmlFormControlExporter : public oox::vml::VMLExport
     sal_uInt16 m_nObjType;
     tools::Rectangle m_aAreaFrom;
     tools::Rectangle m_aAreaTo;
+    OUString m_sControlName;
     OUString m_aLabel;
     OUString m_aMacroName;
 
 public:
     VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
+                           const OUString& sControlName,
                            OUString aLabel, OUString aMacroName);
 
 protected:
@@ -1112,11 +1114,13 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
                                                sal_uInt16 nObjType,
                                                const tools::Rectangle& rAreaFrom,
                                                const tools::Rectangle& rAreaTo,
+                                               const OUString& sControlName,
                                                OUString aLabel, OUString aMacroName)
     : VMLExport(p)
     , m_nObjType(nObjType)
     , m_aAreaFrom(rAreaFrom)
     , m_aAreaTo(rAreaTo)
+    , m_sControlName(sControlName)
     , m_aLabel(std::move(aLabel))
     , m_aMacroName(std::move(aMacroName))
 {
@@ -1126,6 +1130,9 @@ sal_Int32 VmlFormControlExporter::StartShape()
 {
     // Host control.
     AddShapeAttribute(XML_type, "#_x0000_t201");
+    if (!m_sControlName.isEmpty())
+        AddShapeAttribute(XML_id, m_sControlName.toUtf8());
+
     return VMLExport::StartShape();
 }
 
@@ -1186,7 +1193,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     // Unlike XclExpTbxControlObj::SaveXml(), this is not calculated in EMUs.
     lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo);
     VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
-                                                aAreaTo, msLabel, GetMacroName());
+                                                aAreaTo, msCtrlName, msLabel, GetMacroName());
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s");
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
