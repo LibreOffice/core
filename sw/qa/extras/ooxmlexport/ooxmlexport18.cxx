@@ -294,6 +294,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
     assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val", "1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
+{
+    loadAndReload("tdf153128.docx");
+    calcLayout();
+    sal_Int32 nFirstLineHeight
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion", "height")
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nFirstLineHeight);
+
+    // The text height is 1 pt, i.e. 20 twip; without the fix, it would fail with
+    // - Expected less than: 30
+    // - Actual  : 414
+    CPPUNIT_ASSERT_LESS(sal_Int32(30), nFirstLineHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
