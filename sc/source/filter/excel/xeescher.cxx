@@ -1094,13 +1094,14 @@ class VmlFormControlExporter : public oox::vml::VMLExport
     tools::Rectangle m_aAreaFrom;
     tools::Rectangle m_aAreaTo;
     OUString m_sControlName;
+    OUString m_sFmlaLink;
     OUString m_aLabel;
     OUString m_aMacroName;
 
 public:
     VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
-                           const OUString& sControlName,
+                           const OUString& sControlName, const OUString& sFmlaLink,
                            OUString aLabel, OUString aMacroName);
 
 protected:
@@ -1115,12 +1116,14 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
                                                const tools::Rectangle& rAreaFrom,
                                                const tools::Rectangle& rAreaTo,
                                                const OUString& sControlName,
+                                               const OUString& sFmlaLink,
                                                OUString aLabel, OUString aMacroName)
     : VMLExport(p)
     , m_nObjType(nObjType)
     , m_aAreaFrom(rAreaFrom)
     , m_aAreaTo(rAreaTo)
     , m_sControlName(sControlName)
+    , m_sFmlaLink(sFmlaLink)
     , m_aLabel(std::move(aLabel))
     , m_aMacroName(std::move(aMacroName))
 {
@@ -1178,6 +1181,9 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     }
     XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextVAlign), "Center");
 
+    if (!m_sFmlaLink.isEmpty())
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaLink), m_sFmlaLink);
+
     pVmlDrawing->endElement(FSNS(XML_x, XML_ClientData));
     VMLExport::EndShape(nShapeElement);
 }
@@ -1192,8 +1198,15 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     tools::Rectangle aAreaTo;
     // Unlike XclExpTbxControlObj::SaveXml(), this is not calculated in EMUs.
     lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo);
+
+    const OUString sCellLink
+        = mxCellLinkAddress.IsValid()
+              ? mxCellLinkAddress.Format(ScRefFlags::ADDR_ABS, &GetDoc(),
+                                         ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1))
+              : OUString();
+
     VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
-                                                aAreaTo, msCtrlName, msLabel, GetMacroName());
+                                                aAreaTo, msCtrlName, sCellLink, msLabel, GetMacroName());
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s");
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,

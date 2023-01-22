@@ -1075,6 +1075,10 @@ void ScExportTest2::testTdf106181()
         pDrawing,
         "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
         "hidden", "0");
+
+    xmlDocUniquePtr pVmlDrawing = parseExport("xl/drawings/vmlDrawing1.vml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+    assertXPathContent(pVmlDrawing, "//xx:ClientData/xx:FmlaLink", "$D$9");
 }
 
 void ScExportTest2::testTdf145057()
