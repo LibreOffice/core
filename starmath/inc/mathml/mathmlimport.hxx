@@ -34,20 +34,21 @@ namespace beans
 class XPropertySet;
 }
 }
+class SmModel;
 
 typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 
 class SmXMLImportWrapper
 {
-    css::uno::Reference<css::frame::XModel> xModel;
+    rtl::Reference<SmModel> m_xModel;
 
 private:
     // Use customized entities
     bool m_bUseHTMLMLEntities;
 
 public:
-    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> xRef)
-        : xModel(std::move(xRef))
+    explicit SmXMLImportWrapper(rtl::Reference<SmModel> xRef)
+        : m_xModel(std::move(xRef))
         , m_bUseHTMLMLEntities(false)
     {
     }

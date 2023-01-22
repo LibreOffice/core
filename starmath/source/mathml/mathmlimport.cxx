@@ -99,15 +99,13 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
-    //Make a model component from our SmModel
-    uno::Reference<lang::XComponent> xModelComp = xModel;
-    OSL_ENSURE(xModelComp.is(), "XMLReader::Read: got no model");
+    OSL_ENSURE(m_xModel.is(), "XMLReader::Read: got no model");
 
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     bool bEmbedded = false;
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
+    SmModel* pModel = m_xModel.get();
 
     SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     if (pDocShell)
@@ -184,7 +182,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         auto nWarn
-            = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "meta.xml", xContext, xInfoSet,
+            = ReadThroughComponent(rMedium.GetStorage(), m_xModel, "meta.xml", xContext, xInfoSet,
                                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
                                            : "com.sun.star.comp.Math.XMLMetaImporter"),
                                    m_bUseHTMLMLEntities);
@@ -194,7 +192,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
 
-            nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "settings.xml", xContext,
+            nWarn = ReadThroughComponent(rMedium.GetStorage(), m_xModel, "settings.xml", xContext,
                                          xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
                                                  : "com.sun.star.comp.Math.XMLSettingsImporter"),
@@ -206,7 +204,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
                     xStatusIndicator->setValue(nSteps++);
 
                 nError = ReadThroughComponent(
-                    rMedium.GetStorage(), xModelComp, "content.xml", xContext, xInfoSet,
+                    rMedium.GetStorage(), m_xModel, "content.xml", xContext, xInfoSet,
                     "com.sun.star.comp.Math.XMLImporter", m_bUseHTMLMLEntities);
             }
             else
@@ -223,7 +221,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        nError = ReadThroughComponent(xInputStream, xModelComp, xContext, xInfoSet,
+        nError = ReadThroughComponent(xInputStream, m_xModel, xContext, xInfoSet,
                                       "com.sun.star.comp.Math.XMLImporter", false,
                                       m_bUseHTMLMLEntities);
     }
@@ -435,7 +433,7 @@ void SmXMLImport::endDocument()
     if (pTree && pTree->GetType() == SmNodeType::Table)
     {
         uno::Reference<frame::XModel> xModel = GetModel();
-        SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
+        SmModel* pModel = dynamic_cast<SmModel*>(xModel.get());
 
         if (pModel)
         {
@@ -2565,7 +2563,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     if (!xModel.is())
         return;
 
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
+    SmModel* pModel = dynamic_cast<SmModel*>(xModel.get());
 
     if (!pModel)
         return;

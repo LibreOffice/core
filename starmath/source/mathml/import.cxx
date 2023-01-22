@@ -90,19 +90,11 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         return ERRCODE_SFX_DOLOADFAILED;
     }
 
-    // Make a model component from our SmModel
-    uno::Reference<lang::XComponent> xModelComp = m_xModel;
-    if (!xModelComp.is())
-    {
-        SAL_WARN("starmath", "Failed to make model while file input");
-        return ERRCODE_SFX_DOLOADFAILED;
-    }
-
     // Try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     // Get model via uno
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
+    SmModel* pModel = m_xModel.get();
     if (pModel == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm model while file input");
@@ -197,12 +189,12 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         if (!bEmbedded)
         {
             if (bOASIS)
-                nWarn = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"meta.xml",
-                                              xContext, xInfoSet,
+                nWarn = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"meta.xml", xContext,
+                                              xInfoSet,
                                               u"com.sun.star.comp.Math.MLOasisMetaImporter", 6);
             else
                 nWarn
-                    = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"meta.xml", xContext,
+                    = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"meta.xml", xContext,
                                             xInfoSet, u"com.sun.star.comp.Math.XMLMetaImporter", 5);
         }
 
@@ -222,12 +214,12 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         // Read settings
         // read a component from storage
         if (bOASIS)
-            nWarn = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"settings.xml",
-                                          xContext, xInfoSet,
+            nWarn = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"settings.xml", xContext,
+                                          xInfoSet,
                                           u"com.sun.star.comp.Math.MLOasisSettingsImporter", 6);
         else
             nWarn
-                = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"settings.xml", xContext,
+                = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"settings.xml", xContext,
                                         xInfoSet, u"com.sun.star.comp.Math.XMLSettingsImporter", 5);
 
         // Check if successful
@@ -246,13 +238,11 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         // Read document
         // read a component from storage
         if (m_pDocShell->GetSmSyntaxVersion() == 5)
-            nWarn
-                = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"content.xml", xContext,
-                                        xInfoSet, u"com.sun.star.comp.Math.XMLImporter", 5);
+            nWarn = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"content.xml", xContext,
+                                          xInfoSet, u"com.sun.star.comp.Math.XMLImporter", 5);
         else
-            nWarn
-                = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"content.xml", xContext,
-                                        xInfoSet, u"com.sun.star.comp.Math.MLImporter", 6);
+            nWarn = ReadThroughComponentS(rMedium.GetStorage(), m_xModel, u"content.xml", xContext,
+                                          xInfoSet, u"com.sun.star.comp.Math.MLImporter", 6);
         // Check if successful
         if (nWarn != ERRCODE_NONE)
         {
@@ -281,10 +271,10 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         // read a component from input stream
         ErrCode nError = ERRCODE_NONE;
         if (m_pDocShell->GetSmSyntaxVersion() == 5)
-            nError = ReadThroughComponentIS(xInputStream, xModelComp, xContext, xInfoSet,
+            nError = ReadThroughComponentIS(xInputStream, m_xModel, xContext, xInfoSet,
                                             u"com.sun.star.comp.Math.XMLImporter", false, 5);
         else
-            nError = ReadThroughComponentIS(xInputStream, xModelComp, xContext, xInfoSet,
+            nError = ReadThroughComponentIS(xInputStream, m_xModel, xContext, xInfoSet,
                                             u"com.sun.star.comp.Math.MLImporter", false, 6);
 
         // Finish
@@ -325,7 +315,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
     }
 
     // Get model via uno
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
+    SmModel* pModel = m_xModel.get();
     if (pModel == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm model while file input");

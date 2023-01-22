@@ -33,12 +33,13 @@
 
 class SfxMedium;
 class SmDocShell;
+class SmModel;
 
 class SmMLExportWrapper
 {
 private:
     // Model
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    rtl::Reference<SmModel> m_xModel;
     // Save as a flat document ( mml, fodf ... )
     bool m_bFlat;
     // Use html / mathml entities
@@ -77,7 +78,7 @@ public:
     void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
 public:
-    explicit SmMLExportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+    explicit SmMLExportWrapper(rtl::Reference<SmModel> xRef)
         : m_xModel(std::move(xRef))
         , m_bFlat(true)
         , m_bUseHTMLMLEntities(false)

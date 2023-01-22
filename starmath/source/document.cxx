@@ -595,7 +595,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             mpTree.reset();
             InvalidateCursor();
         }
-        Reference<css::frame::XModel> xModel(GetModel());
+        rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(GetModel().get()));
         SmXMLImportWrapper aEquation(xModel);
         aEquation.useHTMLMLEntities(true);
         bSuccess = ( ERRCODE_NONE == aEquation.Import(rMedium) );
@@ -656,7 +656,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         if (xStorage->hasByName("content.xml") && xStorage->isStreamElement("content.xml"))
         {
             // is this a fabulous math package ?
-            Reference<css::frame::XModel> xModel(GetModel());
+            rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(GetModel().get()));
             SmXMLImportWrapper aEquation(xModel);
             auto nError = aEquation.Import(rMedium);
             bRet = ERRCODE_NONE == nError;

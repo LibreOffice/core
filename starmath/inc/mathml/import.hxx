@@ -22,10 +22,11 @@
 class SfxMedium;
 class SmDocShell;
 class SmMLImport;
+class SmModel;
 
 class SmMLImportWrapper
 {
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    rtl::Reference<SmModel> m_xModel;
     SmDocShell* m_pDocShell;
     SmMLImport* m_pMlImport;
 
@@ -40,7 +41,7 @@ public:
 public:
     /** Constructor
      */
-    explicit SmMLImportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+    explicit SmMLImportWrapper(rtl::Reference<SmModel> xRef)
         : m_xModel(std::move(xRef))
         , m_pDocShell(nullptr)
         , m_pMlImport(nullptr)

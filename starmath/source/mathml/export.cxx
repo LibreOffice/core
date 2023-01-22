@@ -76,16 +76,8 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     if (m_xModel == nullptr || xContext == nullptr)
         return false;
 
-    //Get model
-    uno::Reference<lang::XComponent> xModelComp = m_xModel;
-    SAL_WARN_IF(xModelComp == nullptr, "starmath", "Missing model component");
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
-    SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
-    if (xModelComp == nullptr || pModel == nullptr)
-        return false;
-
     // Get doc shell
-    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(m_xModel->GetObjectShell());
     if (pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm document");
@@ -175,7 +167,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(1);
 
-            bRet = WriteThroughComponentS(xStg, xModelComp, u"meta.xml", xContext, xInfoSet,
+            bRet = WriteThroughComponentS(xStg, m_xModel, u"meta.xml", xContext, xInfoSet,
                                           u"com.sun.star.comp.Math.MLOasisMetaExporter", 6);
         }
 
@@ -187,10 +179,10 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
                 xStatusIndicator->setValue(2);
 
             if (pDocShell->GetSmSyntaxVersion() == 5)
-                bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
+                bRet = WriteThroughComponentS(xStg, m_xModel, u"content.xml", xContext, xInfoSet,
                                               u"com.sun.star.comp.Math.XMLContentExporter", 5);
             else
-                bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
+                bRet = WriteThroughComponentS(xStg, m_xModel, u"content.xml", xContext, xInfoSet,
                                               u"com.sun.star.comp.Math.MLContentExporter", 6);
         }
 
@@ -201,7 +193,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(3);
 
-            bRet = WriteThroughComponentS(xStg, xModelComp, u"settings.xml", xContext, xInfoSet,
+            bRet = WriteThroughComponentS(xStg, m_xModel, u"settings.xml", xContext, xInfoSet,
                                           u"com.sun.star.comp.Math.MLOasisSettingsExporter", 6);
         }
     }
@@ -222,10 +214,10 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         // Write everything in the same place
         // Note: export through an XML exporter component (output stream version)
         if (pDocShell->GetSmSyntaxVersion() == 5)
-            bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
+            bRet = WriteThroughComponentOS(xOut, m_xModel, xContext, xInfoSet,
                                            u"com.sun.star.comp.Math.XMLContentExporter", 5);
         else
-            bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
+            bRet = WriteThroughComponentOS(xOut, m_xModel, xContext, xInfoSet,
                                            u"com.sun.star.comp.Math.MLContentExporter", 6);
     }
 
@@ -248,7 +240,7 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
     //Get model
     uno::Reference<lang::XComponent> xModelComp = m_xModel;
     SAL_WARN_IF(xModelComp == nullptr, "starmath", "Missing model component");
-    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
+    SmModel* pModel = m_xModel.get();
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
     if (xModelComp == nullptr || pModel == nullptr)
         return u"";

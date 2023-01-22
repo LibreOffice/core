@@ -1602,7 +1602,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         if (xStorage->hasByName("content.xml"))
         {
             // is this a fabulous math package ?
-            Reference<css::frame::XModel> xModel(pDoc->GetModel());
+            rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(pDoc->GetModel().get()));
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bRet = ERRCODE_NONE == aEquation.Import(rMedium);
         }
@@ -1639,7 +1639,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
         const OUString& rFltName = rMedium.GetFilter()->GetFilterName();
         if ( rFltName == MATHML_XML )
         {
-            Reference<css::frame::XModel> xModel(pDoc->GetModel());
+            rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(pDoc->GetModel().get()));
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bSuccess = ERRCODE_NONE == aEquation.Import(rMedium);
         }
