@@ -2665,7 +2665,7 @@ Try:
 		sRowsRange = SetArray(Offset(sMirrorRange, , Width(sMirrorRange), 1, 1), vRows())
 
 	&apos;**	Step 3: sort the mirrored data, including the row numbers column
-		&apos;	sMirrorRange = &quot;$SF_WORK.$A$1:$K$100&quot;
+		&apos;	sFullMirrorRange = &quot;$SF_WORK.$A$1:$K$100&quot;
 		sFullMirrorRange = Offset(sMirrorRange, , , , Width(sMirrorRange) + 1)
 		SortRange(sFullMirrorRange, SortKeys := Columns, CaseSensitive := CaseSensitive)
 
