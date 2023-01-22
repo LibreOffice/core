@@ -10544,7 +10544,7 @@ if test "$with_system_dragonbox" = "yes"; then
     AC_LANG_PUSH([C++])
     save_CPPFLAGS=$CPPFLAGS
     # This is where upstream installs to, unfortunately no .pc or so...
-    DRAGONBOX_CFLAGS=-I/usr/include/dragonbox-1.0.0
+    DRAGONBOX_CFLAGS=-I/usr/include/dragonbox-1.1.3
     CPPFLAGS="$CPPFLAGS $DRAGONBOX_CFLAGS"
     AC_CHECK_HEADER([dragonbox/dragonbox.h], [],
        [AC_MSG_ERROR([dragonbox/dragonbox.h not found. install dragonbox])], [])
