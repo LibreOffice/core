@@ -121,15 +121,55 @@ public:
 
 //  Styles
 
-// Immediately after reserved slots, character styles begin
-#define WW8_RESERVED_SLOTS 15 // tdf#153094: the value is important
+// According to [MS-DOC] v20221115 2.9.271 STSH,
+// "The beginning of the rglpstd array is reserved for specific "fixed-index" application-defined
+//  styles. A particular fixed-index, application-defined style has the same istd value in every
+//  stylesheet. The rglpstd MUST contain an LPStd for each of these fixed-index styles and the order
+//  MUST match the order in the following table.
+//
+//  istd   sti of application-defined style (see sti in StdfBase)
+//  0      0
+//  1      1
+//  2      2
+//  3      3
+//  4      4
+//  5      5
+//  6      6
+//  7      7
+//  8      8
+//  9      9
+//  10     65
+//  11     105
+//  12     107
+//  13     Reserved for future use
+//  14     Reserved for future use"
+//
+// And [MS-OE376] v20220816 2.1.236 Part 4 Section 2.7.3.9, name (Primary Style Name)
+// specifies the following mapping:
+//
+//  sti    Style name                Style type
+//  0      Normal                    paragraph
+//  1      heading 1                 paragraph
+//  2      heading 2                 paragraph
+//  3      heading 3                 paragraph
+//  4      heading 4                 paragraph
+//  5      heading 5                 paragraph
+//  6      heading 6                 paragraph
+//  7      heading 7                 paragraph
+//  8      heading 8                 paragraph
+//  9      heading 9                 paragraph
+//  65     Default Paragraph Font    character
+//  105    Normal Table              table
+//  107    No List                   numbering
+
+#define WW8_RESERVED_SLOTS 15
 
 // GetId( SwCharFormat ) for use in text -> zero is not allowed,
 // use "Default Char Style" instead
 sal_uInt16 MSWordExportBase::GetId( const SwCharFormat* pFormat ) const
 {
     sal_uInt16 nRet = m_pStyles->GetSlot( pFormat );
-    return ( nRet != 0x0fff ) ? nRet : WW8_RESERVED_SLOTS;      // Default Char Style
+    return ( nRet != 0x0fff ) ? nRet : 10;      // Default Char Style
 }
 
 // GetId( SwTextFormatColl ) for use in TextNodes -> zero is not allowed,
