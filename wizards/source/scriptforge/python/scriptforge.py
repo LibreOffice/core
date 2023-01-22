@@ -103,7 +103,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Class constants
     # #########################################################################
     library = 'ScriptForge'
-    Version = '7.4'  # Actual version number
+    Version = '7.6'  # Actual version number
     #
     # Basic dispatcher for Python scripts
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
