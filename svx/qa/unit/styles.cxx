@@ -30,22 +30,22 @@ public:
 };
 
 /// Get the character color of the first text portion in xShape.
-sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
+Color GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
 {
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    sal_Int32 nColor{};
+    Color nColor{};
     xPortion->getPropertyValue("CharColor") >>= nColor;
     return nColor;
 }
 
 /// Get the solid fill color of xShape.
-sal_Int32 GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
+Color GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
 {
-    sal_Int32 nColor{};
+    Color nColor{};
     xShape->getPropertyValue("FillColor") >>= nColor;
     return nColor;
 }
@@ -61,17 +61,17 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
     // Blue.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeTextColor(xShape));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeTextColor(xShape));
     uno::Reference<text::XTextRange> xShape2(xDrawPageShapes->getByIndex(1), uno::UNO_QUERY);
     // Blue, lighter.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeTextColor(xShape2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeTextColor(xShape2));
     uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getByIndex(2), uno::UNO_QUERY);
     // Blue, darker.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x2f5597), GetShapeTextColor(xShape3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2f5597), GetShapeTextColor(xShape3));
     // Shape fill:
     uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
     // Blue.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeFillColor(xShape4));
 
     // The theme color of this filled shape is set by the PPTX import:
     {
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     }
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
+    CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeFillColor(xShape5));
     // The theme index, and effects (lum mod, lum off) are set by the PPTX import:
     {
         uno::Reference<util::XThemeColor> xThemeColor;
@@ -113,26 +113,26 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     // - Expected: 9486886 (#90c226, green)
     // - Actual  : 4485828 (#4472c4, blue)
     // i.e. shape text was not updated on theme change.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeTextColor(xShape));
+    CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeTextColor(xShape));
     // Green, lighter:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14020002 (#d5eda2, light green)
     // - Actual  : 9486886 (#90c226, stock green)
     // i.e. the "light" effect on green was not applied.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeTextColor(xShape2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeTextColor(xShape2));
     // Green, darker.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x6c911d), GetShapeTextColor(xShape3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x6c911d), GetShapeTextColor(xShape3));
     // Shape fill:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 9486886 (#90c226, green)
     // - Actual  : 4485828 (#4472c4, blue)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeFillColor(xShape4));
+    CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeFillColor(xShape4));
     // Green, lighter:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14020002 (#d5eda2, light green)
     // - Actual  : 9486886 (#90c226, green)
     // i.e. the "light" effect on green was not applied.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeFillColor(xShape5));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeFillColor(xShape5));
 }
 }
 
