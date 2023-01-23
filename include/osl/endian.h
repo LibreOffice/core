@@ -60,13 +60,6 @@ extern "C" {
 #   elif defined _BIG_ENDIAN
 #       define OSL_BIGENDIAN
 #   endif
-#elif defined AIX
-#   include <sys/machine.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define OSL_LITENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define OSL_BIGENDIAN
-#   endif
 #elif defined __sun
 #   include <sys/isa_defs.h>
 #   if defined _LITTLE_ENDIAN

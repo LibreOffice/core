@@ -92,8 +92,6 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
 		--prefix=/python-inst \
 		--with-system-expat \
-		$(if $(filter AIX,$(OS)), \
-			--disable-ipv6 --with-threads OPT="-g0 -fwrapv -O3 -Wall") \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
                                 --with-universal-archs=intel \

@@ -1015,13 +1015,13 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	) \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
-	$(if $(DISABLE_PYTHON),,$(if $(filter-out AIX,$(OS)), \
+	$(if $(DISABLE_PYTHON),, \
 		Pyuno/commonwizards \
 		Pyuno/fax \
 		Pyuno/letter \
 		Pyuno/agenda \
 		Pyuno/mailmerge \
-	)) \
+	) \
 	sfx2_classification \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
 	$(if $(ENABLE_HTMLHELP),\

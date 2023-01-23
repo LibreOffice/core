@@ -21,8 +21,6 @@ $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/jav
 endif
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
-else ifeq ($(OS),AIX)
-$(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
 else
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_unx.xml))
 endif

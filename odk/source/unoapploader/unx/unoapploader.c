@@ -75,8 +75,6 @@ int main( int argc, char *argv[] )
     {
 #if defined(MACOSX)
         static const char* ENVVARNAME = "DYLD_LIBRARY_PATH";
-#elif defined(AIX)
-        static const char* ENVVARNAME = "LIBPATH";
 #else
         static const char* ENVVARNAME = "LD_LIBRARY_PATH";
 #endif
@@ -263,14 +261,11 @@ char* createCommandName( char* argv0 )
 
     char* cmdname = NULL;
     char* sep = NULL;
-#ifndef AIX
     Dl_info dl_info;
-#endif
 
     /* get the executable file name from argv0 */
     prgname = argv0;
 
-#ifndef AIX
     /*
      * if argv0 doesn't contain an absolute path name, try to get the absolute
      * path name from dladdr; note that this only works for Solaris, not for
@@ -282,7 +277,6 @@ char* createCommandName( char* argv0 )
     {
         prgname = dl_info.dli_fname;
     }
-#endif
 
     /* prefix the executable file name by '_' */
     if ( prgname != NULL )

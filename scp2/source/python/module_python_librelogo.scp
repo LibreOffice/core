@@ -10,7 +10,6 @@
 
 #include "AutoInstall/python_librelogo"
 
-#ifndef AIX
 #ifndef DISABLE_PYUNO
 Module gid_Module_Optional_Pyuno_LibreLogo
     PackageInfo = "packinfo_office.txt";
@@ -22,5 +21,4 @@ Module gid_Module_Optional_Pyuno_LibreLogo
     Default = YES;
     Styles = ( );
 End
-#endif
 #endif

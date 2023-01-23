@@ -111,7 +111,7 @@ static ErrCode GetSvError( int nErrno )
         { EBADF,        SVSTREAM_INVALID_HANDLE },
 #if defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
-    defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY) || \
+    defined(__FreeBSD_kernel__) || defined(DRAGONFLY) || \
     defined(IOS) || defined(HAIKU)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else

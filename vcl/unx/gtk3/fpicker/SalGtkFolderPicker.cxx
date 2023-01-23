@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef AIX
-#define _LINUX_SOURCE_COMPAT
-#include <sys/timer.h>
-#undef _LINUX_SOURCE_COMPAT
-#endif
-
 #include <config_gio.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>

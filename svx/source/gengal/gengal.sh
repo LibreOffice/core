@@ -47,10 +47,6 @@ NetBSD|FreeBSD|DragonFly)
     LD_LIBRARY_PATH=$sd_prog${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
     ;;
-AIX)
-    LIBPATH=$sd_prog${LIBPATH:+:${LIBPATH}}
-    export LIBPATH
-    ;;
 esac
 
 #collect all bootstrap variables specified on the command line
@@ -67,17 +63,8 @@ if [ -x "$sd_prog/javaldx" ] ; then
     my_path=$("$sd_prog/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc")
     if [ -n "$my_path" ] ; then
-        sd_platform=$(uname -s)
-        case $sd_platform in
-          AIX)
-            LIBPATH=$my_path${LIBPATH:+:$LIBPATH}
-            export LIBPATH
-            ;;
-          *)
-            LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-            export LD_LIBRARY_PATH
-            ;;
-        esac
+        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH
     fi
 fi
 

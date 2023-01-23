@@ -59,14 +59,7 @@ namespace {
 struct AlignSize_Impl
 {
     sal_Int16 nInt16;
-#ifdef AIX
-    //double: doubleword aligned if -qalign=natural/-malign=natural
-    //which isn't the default ABI. Otherwise word aligned, While a long long int
-    //is always doubleword aligned, so use that instead.
-    sal_Int64   dDouble;
-#else
     double dDouble;
-#endif
 };
 
 }

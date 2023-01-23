@@ -21,8 +21,7 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),windows,\
 			$(if $(filter NETBSD,$(OS)),netbsd,\
 				$(if $(filter FREEBSD,$(OS)),freebsd,\
 					$(if $(filter DRAGONFLY,$(OS)),dragonfly,\
-						$(if $(filter MACOSX,$(OS)),macosx,\
-							$(if $(filter AIX,$(OS)),aix))))))))
+						$(if $(filter MACOSX,$(OS)),macosx)))))))
 
 .PHONY: $(call gb_CustomTarget_get_workdir,odk/check)/checkbin
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \

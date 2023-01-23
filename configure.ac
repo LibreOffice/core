@@ -1092,15 +1092,6 @@ freebsd*)
     _os=NetBSD
     ;;
 
-aix*)
-    using_freetype_fontconfig=yes
-    using_x11=yes
-    test_randr=no
-    test_gstreamer_1_0=no
-    PTHREAD_LIBS=-pthread
-    _os=AIX
-    ;;
-
 openbsd*)
     using_freetype_fontconfig=yes
     using_x11=yes
@@ -1268,13 +1259,6 @@ if test "$_os" = "Android" ; then
         AC_MSG_ERROR([the --with-android-sdk option is mandatory, unless it is available at external/android-sdk-linux/.])
     elif test ! -d "$ANDROID_SDK_DIR/platforms"; then
         AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
-    fi
-fi
-
-if test "$_os" = "AIX"; then
-    AC_PATH_PROG(GAWK, gawk)
-    if test -z "$GAWK"; then
-        AC_MSG_ERROR([gawk not found in \$PATH])
     fi
 fi
 
@@ -2168,7 +2152,7 @@ AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
         [Specify package format(s) for LibreOffice installation sets. The
          implicit --without-package-format leads to no installation sets being
-         generated. Possible values: aix, archive, bsd, deb, dmg,
+         generated. Possible values: archive, bsd, deb, dmg,
          installed, msi, pkg, and rpm.
          Example: --with-package-format='deb rpm']),
 ,)
@@ -4961,16 +4945,6 @@ AC_SUBST(ENABLE_OPTIMIZED_DEBUG)
 #
 case "$host_os" in
 
-aix*)
-    COM=GCC
-    CPUNAME=POWERPC
-    OS=AIX
-    RTL_OS=AIX
-    RTL_ARCH=PowerPC
-    PLATFORMID=aix_powerpc
-    P_SEP=:
-    ;;
-
 cygwin*|wsl*)
     # Already handled
     ;;
@@ -5489,11 +5463,10 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        aix | bsd | deb | pkg | rpm | archive | dmg | installed | msi)
+        bsd | deb | pkg | rpm | archive | dmg | installed | msi)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
-aix - AIX software distribution
 bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
 pkg - Solaris software distribution
@@ -8881,12 +8854,6 @@ AC_SUBST(JAWTLIB)
 if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
     case "$host_os" in
 
-    aix*)
-        JAVAINC="-I$JAVA_HOME/include"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/aix"
-        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
-        ;;
-
     cygwin*|wsl*)
         JAVAINC="-I$JAVA_HOME/include/win32"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
@@ -9196,7 +9163,7 @@ if test "$enable_epm" = "yes"; then
 else
     for i in $PKGFORMAT; do
         case "$i" in
-        aix | bsd | deb | pkg | rpm | native | portable)
+        bsd | deb | pkg | rpm | native | portable)
             AC_MSG_ERROR(
                 [--with-package-format='$PKGFORMAT' requires --enable-epm])
             ;;
@@ -11561,7 +11528,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
+    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*)
         x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
@@ -14654,7 +14621,7 @@ else
 
     case "$host_os" in
 
-    aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
+    dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
         if test "$ENABLE_JAVA" != ""; then
             pathmunge "$JAVA_HOME/bin" "after"
         fi

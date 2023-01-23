@@ -23,7 +23,7 @@
 #include <math.h>
 #include <unistd.h>
 
-#if defined(__sun) || defined(AIX)
+#if defined(__sun)
 #include <osl/module.h>
 #endif
 

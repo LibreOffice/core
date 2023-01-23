@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
 			$(if $(filter EMSCRIPTEN ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
-			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
+			$(if $(filter SOLARIS,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \

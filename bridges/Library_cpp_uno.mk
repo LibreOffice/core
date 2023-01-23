@@ -138,10 +138,6 @@ ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
-else ifeq ($(OS),AIX)
-bridges_SELECTED_BRIDGE := gcc3_aix_powerpc
-bridge_exception_objects := except
-bridge_cxx_objects := cpp2uno uno2cpp
 endif
 
 else ifeq ($(CPUNAME),POWERPC64)

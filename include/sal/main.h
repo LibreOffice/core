@@ -29,10 +29,6 @@
 #include "sal/saldllapi.h"
 #include "sal/types.h"
 
-#if defined AIX
-#include <unistd.h>
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

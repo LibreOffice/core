@@ -584,14 +584,8 @@ static void exec_pagein (Args *args)
 static void extend_library_path(const char *new_element)
 {
     rtl_uString *pEnvName=NULL, *pOrigEnvVar=NULL, *pNewEnvVar=NULL;
-    const char *pathname;
-#ifdef AIX
-    pathname = "LIBPATH";
-#else
-    pathname = "LD_LIBRARY_PATH";
-#endif
 
-    rtl_uString_newFromAscii(&pEnvName, pathname);
+    rtl_uString_newFromAscii(&pEnvName, "LD_LIBRARY_PATH");
     rtl_uString_newFromAscii(&pNewEnvVar, new_element);
 
     osl_getEnvironment(pEnvName, &pOrigEnvVar);

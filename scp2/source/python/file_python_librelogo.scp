@@ -8,7 +8,6 @@
 
 #include "macros.inc"
 
-#ifndef AIX
 #ifndef DISABLE_PYUNO
 File gid_File_Share_Registry_LibreLogo_Xcd
     TXT_FILE_BODY;
@@ -16,5 +15,4 @@ File gid_File_Share_Registry_LibreLogo_Xcd
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "librelogo.xcd";
 End
-#endif
 #endif

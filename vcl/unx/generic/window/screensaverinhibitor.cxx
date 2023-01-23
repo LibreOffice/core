@@ -17,7 +17,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
-#if !defined(__sun) && !defined(AIX)
+#if !defined(__sun)
 #include <X11/extensions/dpms.h>
 #endif
 
@@ -329,7 +329,7 @@ void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
 
 void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
 {
-#if !defined(__sun) && !defined(AIX)
+#if !defined(__sun)
     int dummy;
     // This won't change while X11 is running, hence
     // we can evaluate only once and store as static
@@ -364,7 +364,7 @@ void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
                          mnDPMSSuspendTimeout,
                          mnDPMSOffTimeout );
     }
-#endif // !defined(__sun) && !defined(AIX)
+#endif // !defined(__sun)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

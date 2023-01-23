@@ -31,57 +31,9 @@
 #include "system.hxx"
 #include "file_url.hxx"
 
-#ifdef AIX
-#include <sys/ldr.h>
-#endif
-
 static bool getModulePathFromAddress(void * address, rtl_String ** path)
 {
     bool result = false;
-#if defined(AIX)
-    int size = 4 * 1024;
-    char *buf, *filename=NULL;
-    struct ld_info *lp;
-
-    if ((buf = (char*)malloc(size)) == NULL)
-        return false;
-
-    //figure out how big a buffer we need
-    while (loadquery(L_GETINFO, buf, size) == -1 && errno == ENOMEM)
-    {
-        size += 4 * 1024;
-        free(buf);
-        if ((buf = (char*)malloc(size)) == NULL)
-            return false;
-    }
-
-    lp = (struct ld_info*) buf;
-    while (lp)
-    {
-        unsigned long start = (unsigned long)lp->ldinfo_dataorg;
-        unsigned long end = start + lp->ldinfo_datasize;
-        if (start <= (unsigned long)address && end > (unsigned long)address)
-        {
-            filename = lp->ldinfo_filename;
-            break;
-        }
-        if (!lp->ldinfo_next)
-            break;
-        lp = (struct ld_info*) ((char *) lp + lp->ldinfo_next);
-    }
-
-    if (filename)
-    {
-        rtl_string_newFromStr(path, filename);
-        result = sal_True;
-    }
-    else
-    {
-        result = sal_False;
-    }
-
-    free(buf);
-#else
 #if HAVE_UNIX_DLAPI
     Dl_info dl_info;
 
@@ -94,7 +46,6 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path)
 #else
     (void) address;
     (void) path;
-#endif
 #endif
     return result;
 }

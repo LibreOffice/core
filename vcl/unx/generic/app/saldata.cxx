@@ -26,9 +26,6 @@
 #ifdef SUN
 #include <sys/systeminfo.h>
 #endif
-#ifdef AIX
-#include <strings.h>
-#endif
 #ifdef FREEBSD
 #include <sys/types.h>
 #include <sys/time.h>

@@ -23,10 +23,6 @@
 #if defined LINUX || defined FREEBSD || \
     defined NETBSD || defined OPENBSD || defined DRAGONFLY
 #include <sys/time.h>
-#elif defined AIX
-#include <time.h>
-#include <sys/time.h>
-#include <strings.h>
 #endif
 #include <sal/types.h>
 

@@ -22,10 +22,6 @@
 #endif
 
 #endif
-#ifdef _AIX
-#define CORE_BIG_ENDIAN
-#undef CORE_LITTLE_ENDIAN
-#endif /* Def _AIX */
 
 #ifdef _MSC_VER
 #undef CORE_BIG_ENDIAN

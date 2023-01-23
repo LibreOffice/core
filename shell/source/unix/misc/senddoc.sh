@@ -27,14 +27,7 @@ if [ "$sd_platform" = "Linux" ] ; then
 fi
 
 # do not confuse the system mail clients with OOo and Java libraries
-case $sd_platform in
-  AIX)
-    unset LIBPATH
-    ;;
-  *)
-    unset LD_LIBRARY_PATH
-    ;;
-esac
+unset LD_LIBRARY_PATH
 
 # tries to locate the executable specified
 # as first parameter in the user's path.

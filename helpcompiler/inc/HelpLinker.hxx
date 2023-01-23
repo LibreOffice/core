@@ -26,10 +26,6 @@
 #include "HelpCompiler.hxx"
 #include <libxslt/xsltInternals.h>
 
-#ifdef AIX
-#    undef _THREAD_SAFE
-#endif
-
 class L10N_DLLPUBLIC IndexerPreProcessor
 {
 private:

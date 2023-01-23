@@ -57,7 +57,6 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin-
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
 
-ifneq ($(OS),AIX)
 python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
 python3_EXTENSION_MODULES= \
 	LO_lib/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -128,7 +127,6 @@ python3_EXTENSION_MODULES= \
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
 	$(python3_EXTENSION_MODULES) \
 ))
-endif
 endif
 
 # headers are not delivered, but used from unpacked dir Include/

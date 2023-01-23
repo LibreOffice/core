@@ -18,7 +18,7 @@
 #  define LOK_TOLERATE_UNUSED
 #endif
 
-#if defined(__linux__) || defined (__FreeBSD__) || defined(_AIX) ||\
+#if defined(__linux__) || defined (__FreeBSD__) ||\
     defined(_WIN32) || defined(__APPLE__) || defined (__NetBSD__) ||\
     defined (__sun) || defined(__OpenBSD__) || defined(__EMSCRIPTEN__)
 
@@ -31,9 +31,6 @@
 
     #include <dlfcn.h>
 
-    #ifdef  _AIX
-    #  include <sys/ldr.h>
-    #endif
     #ifdef __APPLE__
         #define TARGET_LIB        "lib" "sofficeapp" ".dylib"
         #define TARGET_MERGED_LIB "lib" "mergedlo" ".dylib"
@@ -359,7 +356,7 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
 }
 #endif
 
-#endif // defined(__linux__) || defined (__FreeBSD__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
+#endif // defined(__linux__) || defined (__FreeBSD__) || defined(_WIN32) || defined(__APPLE__)
 
 #endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 

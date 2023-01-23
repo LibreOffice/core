@@ -29,8 +29,7 @@ $(call gb_ExternalProject_get_state_target,lpsolve,build):
 		$(if $(filter MACOSX,$(OS)),EXTRA_LINKFLAGS='-install_name @__________________________________________________OOO/liblpsolve55.dylib') \
 		sh -e $(if $(filter MACOSX,$(OS)),ccc.osx, \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),ccc.static, \
-		$(if $(filter AIXGCC,$(OS)$(COM)),ccc.aix.gcc, \
-		ccc))) \
+		ccc)) \
 	,lpsolve55)
 	$(call gb_Trace_EndRange,lpsolve,EXTERNAL)
 endif # $(OS)

@@ -40,29 +40,6 @@
  
      if ( $CC ) {
          # Find the compiler vendor and version number for certain compilers
-@@ -364,14 +365,14 @@
-             }
-         }
- 
--        if ( ${SYSTEM} eq 'AIX' ) {
--            # favor vendor cc over gcc
--            if (IPC::Cmd::can_run('cc')) {
--                $CC = 'cc';
--                $CCVENDOR = ''; # Determine later
--                $CCVER = 0;
--            }
--        }
-+#        if ( ${SYSTEM} eq 'AIX' ) {
-+#            # favor vendor cc over gcc
-+#            if (IPC::Cmd::can_run('cc')) {
-+#                $CC = 'cc';
-+#                $CCVENDOR = ''; # Determine later
-+#                $CCVER = 0;
-+#            }
-+#        }
- 
-         if ( $SYSTEM eq "SunOS" ) {
-             # check for Oracle Developer Studio, expected output is "cc: blah-blah C x.x blah-blah"
 --- util/perl/OpenSSL/config.pm.orig	2022-11-08 12:54:59.751298823 +0100
 +++ util/perl/OpenSSL/config.pm	2022-11-08 12:55:16.436287053 +0100
 @@ -52,13 +52,13 @@

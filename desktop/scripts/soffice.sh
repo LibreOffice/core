@@ -163,10 +163,6 @@ NetBSD|DragonFly)
     LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     export LD_LIBRARY_PATH
     ;;
-AIX)
-    LIBPATH="$sd_prog${LIBPATH:+:$LIBPATH}"
-    export LIBPATH
-    ;;
 esac
 
 # restore locale setting, avoiding to export empty LC_ALL, s. tdf#130080

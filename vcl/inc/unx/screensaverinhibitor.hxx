@@ -36,7 +36,7 @@ private:
 
     std::optional<int> mnXScreenSaverTimeout;
 
-#if !defined(__sun) && !defined(AIX)
+#if !defined(__sun)
     BOOL mbDPMSWasEnabled;
     CARD16 mnDPMSStandbyTimeout;
     CARD16 mnDPMSSuspendTimeout;

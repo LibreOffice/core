@@ -291,16 +291,6 @@ sub setglobalvariables
         }
     }
 
-    if ($installer::globals::os eq 'AIX')
-    {
-        if ( $installer::globals::packageformat eq "rpm" )
-        {
-            $installer::globals::isrpmbuild = 1;
-            $installer::globals::epmoutpath = "RPMS";
-        }
-        if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
-    }
-
     if ($installer::globals::os eq 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;

@@ -23,7 +23,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,icu,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-build.patch.1 \
-	external/icu/icu4c-aix.patch.1 \
 	external/icu/icu4c-warnings.patch.1 \
 	external/icu/icu4c-macosx.patch.1 \
 	external/icu/icu4c-solarisgcc.patch.1 \

@@ -26,8 +26,7 @@ endif
 
 openldap_LDFLAGS = $(call gb_ExternalProject_get_link_flags,openldap)
 ifeq ($(SYSTEM_NSS),)
-openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
-    $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)
+openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib
 endif
 # Help openldap's configure determine that it needs -lpthread even if libasan.so
 # contains a pthread_create override:

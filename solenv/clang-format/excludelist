@@ -431,10 +431,6 @@ bridges/inc/bridge.hxx
 bridges/inc/cppinterfaceproxy.hxx
 bridges/inc/unointerfaceproxy.hxx
 bridges/inc/vtablefactory.hxx
-bridges/source/cpp_uno/gcc3_aix_powerpc/cpp2uno.cxx
-bridges/source/cpp_uno/gcc3_aix_powerpc/except.cxx
-bridges/source/cpp_uno/gcc3_aix_powerpc/share.hxx
-bridges/source/cpp_uno/gcc3_aix_powerpc/uno2cpp.cxx
 bridges/source/cpp_uno/gcc3_ios/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_ios/except.cxx
 bridges/source/cpp_uno/gcc3_ios/rtti.h

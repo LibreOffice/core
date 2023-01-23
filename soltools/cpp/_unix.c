@@ -31,7 +31,7 @@
 
 #include "cpp.h"
 
-#if defined(MACOSX) || defined(AIX) || defined(_WIN32)
+#if defined(MACOSX) || defined(_WIN32)
 #include "_getopt.h"
 #else
 #include <getopt.h>
@@ -54,7 +54,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-#if defined(MACOSX) || defined(AIX) || defined(_WIN32)
+#if defined(MACOSX) || defined(_WIN32)
     while ((c = stgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
 #else
     while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)

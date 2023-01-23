@@ -140,10 +140,8 @@ oslFileError oslTranslateFileError(int Errno)
 #endif
             return osl_File_E_NOSYS;
 
-#if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))
         case ENOTEMPTY:
             return osl_File_E_NOTEMPTY;
-#endif
 
         case ELOOP:
             return osl_File_E_LOOP;

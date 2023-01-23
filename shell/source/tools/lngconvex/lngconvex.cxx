@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef AIX
-#    undef _THREAD_SAFE
-#endif
-
-
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>

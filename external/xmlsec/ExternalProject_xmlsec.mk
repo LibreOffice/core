@@ -46,7 +46,6 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter iOS MACOSX,$(OS_FOR_BUILD)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
-		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \

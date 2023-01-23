@@ -32,12 +32,6 @@ Module gid_Module_Root
              gid_Starregistry_Services_Rdb,
              auto_ooo_ALL,
              auto_ooobinarytable_ALL,
-             gid_Unixlink_File_Lib_Curl,
-             gid_Unixlink_File_Lib_Raptor,
-             gid_Unixlink_File_Lib_Rasqal,
-             gid_Unixlink_File_Lib_Rdf,
-             gid_Unixlink_File_Lib_Xslt,
-             gid_Unixlink_File_Lib_eXslt,
              GID_FILE_LIB_WPD,
              gid_File_Lib_Cli_Oootypes_Assembly,
              gid_File_Lib_Policy_Cli_Oootypes_Assembly,
@@ -98,12 +92,6 @@ Module gid_Module_Root
              gid_File_Share_Registry_Forcedefault_Xcd,
              gid_File_Extra_Fontunxpsprint,
              gid_File_Extra_Fontunxafm);
-    Unixlinks = (gid_Unixlink_File_Lib_Curl,
-                 gid_Unixlink_File_Lib_Raptor,
-                 gid_Unixlink_File_Lib_Rasqal,
-                 gid_Unixlink_File_Lib_Rdf,
-                 gid_Unixlink_File_Lib_Xslt,
-                 gid_Unixlink_File_Lib_eXslt);
 End
 
 Module gid_Module_Prg

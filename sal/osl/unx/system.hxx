@@ -201,19 +201,6 @@
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #endif
 
-#ifdef AIX
-#   define AF_IPX -1
-#   include <strings.h>
-#   include <pthread.h>
-#   include <dlfcn.h>
-#   include <sys/time.h>
-#   include <sys/un.h>
-#   include <netinet/tcp.h>
-#   include <sys/machine.h>
-#   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
-#   define  LIBPATH "LIBPATH"
-#endif
-
 #ifdef __sun
 #   include <shadow.h>
 #   include <sys/un.h>
@@ -291,7 +278,6 @@ int macxp_resolveAlias(char *path, int buflen);
 
 #if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
-    !defined(AIX)     && \
     !defined(__sun) && !defined(MACOSX) && \
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
     !defined(IOS) && !defined(ANDROID) && \
