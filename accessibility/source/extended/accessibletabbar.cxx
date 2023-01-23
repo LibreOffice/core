@@ -51,7 +51,7 @@ namespace accessibility
 
 
     AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
-        :AccessibleTabBarBase( pTabBar )
+        :ImplInheritanceHelper( pTabBar )
     {
         if ( m_pTabBar )
             m_aAccessibleChildren.assign( m_pTabBar->GetAccessibleChildWindowCount() + 1, Reference< XAccessible >() );
@@ -150,18 +150,6 @@ namespace accessibility
 
         return aBounds;
     }
-
-
-    // XInterface
-
-
-    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBar, OAccessibleExtendedComponentHelper, AccessibleTabBar_BASE )
-
-
-    // XTypeProvider
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBar, OAccessibleExtendedComponentHelper, AccessibleTabBar_BASE )
 
 
     // XComponent
