@@ -886,6 +886,27 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProps);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
+{
+    // Given a document with change tracking enabled, one image is part of a delete redline:
+    loadFromURL(u"scale-width-redline.fodt");
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:GoToEndOfLine", {});
+    dispatchCommand(mxComponent, ".uno:EndOfParaSel", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // When saving to ODT:
+    save("writer8");
+
+    // Then make sure that a non-zero size is written to the output:
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6.1728in
+    // - Actual  : 0in
+    // i.e. the deleted image had zero size, which is incorrect.
+    assertXPath(pXmlDoc, "//draw:frame[@draw:name='Image45']", "width", "6.1728in");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
