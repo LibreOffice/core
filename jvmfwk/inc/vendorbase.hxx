@@ -63,8 +63,6 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #define JFW_PLUGIN_ARCH "riscv64"
 #elif defined S390X
 #define JFW_PLUGIN_ARCH "s390x"
-#elif defined S390
-#define JFW_PLUGIN_ARCH "s390"
 #elif defined ARM
 #define JFW_PLUGIN_ARCH "arm"
 #elif defined IA64

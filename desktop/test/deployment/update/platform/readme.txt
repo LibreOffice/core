@@ -12,7 +12,6 @@ linux_mips_el.oxt: linux_mips_el
 linux_mips64_el.oxt: linux_mips64_el
 linux_powerpc64.oxt: linux_powerpc64
 linux_powerpc.oxt: linux_powerpc
-linux_s390.oxt: linux_s390
 linux_s390x.oxt: linux_s390x
 linux_sparc.oxt: linux_sparc
 linux_x86.oxt: linux_x86

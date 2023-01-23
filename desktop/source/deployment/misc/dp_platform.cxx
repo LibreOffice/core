@@ -115,8 +115,6 @@ namespace
             ret = checkOSandCPU(u"Linux", u"IA64");
         else if (token == u"linux_m68k")
             ret = checkOSandCPU(u"Linux", u"M68K");
-        else if (token == u"linux_s390")
-            ret = checkOSandCPU(u"Linux", u"S390");
         else if (token == u"linux_s390x")
             ret = checkOSandCPU(u"Linux", u"S390x");
         else if (token == u"linux_hppa")

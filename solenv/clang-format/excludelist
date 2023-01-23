@@ -488,10 +488,6 @@ bridges/source/cpp_uno/gcc3_linux_powerpc64/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_linux_powerpc64/except.cxx
 bridges/source/cpp_uno/gcc3_linux_powerpc64/share.hxx
 bridges/source/cpp_uno/gcc3_linux_powerpc64/uno2cpp.cxx
-bridges/source/cpp_uno/gcc3_linux_s390/cpp2uno.cxx
-bridges/source/cpp_uno/gcc3_linux_s390/except.cxx
-bridges/source/cpp_uno/gcc3_linux_s390/share.hxx
-bridges/source/cpp_uno/gcc3_linux_s390/uno2cpp.cxx
 bridges/source/cpp_uno/gcc3_linux_s390x/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_linux_s390x/except.cxx
 bridges/source/cpp_uno/gcc3_linux_s390x/share.hxx

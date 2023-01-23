@@ -148,13 +148,6 @@ bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
 endif
 
-else ifeq ($(CPUNAME),S390)
-
-ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
-bridges_SELECTED_BRIDGE := gcc3_linux_s390
-bridge_exception_objects := cpp2uno except uno2cpp
-endif
-
 else ifeq ($(CPUNAME),S390X)
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)

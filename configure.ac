@@ -5216,11 +5216,6 @@ linux-gnu*|linux-musl*)
         RTL_ARCH=SPARC64
         PLATFORMID=linux_sparc64
         ;;
-    s390)
-        CPUNAME=S390
-        RTL_ARCH=S390
-        PLATFORMID=linux_s390
-        ;;
     s390x)
         CPUNAME=S390X
         RTL_ARCH=S390x

@@ -155,7 +155,7 @@ int macxp_resolveAlias(char *path, int buflen)
 //libuno_sal so that dlopening of the libgcj provided libjvm.so on some
 //platforms where it needs that symbol will succeed. e.g. Debian mips/lenny
 //with gcc 4.3. With this in place the smoketest succeeds with libgcj provided
-//java. Quite possibly also required/helpful for s390x/s390 and maybe some
+//java. Quite possibly also required/helpful for s390x and maybe some
 //others. Without it the dlopen of libjvm.so will fail with __data_start
 //not found
 extern int __data_start[] __attribute__((weak));
