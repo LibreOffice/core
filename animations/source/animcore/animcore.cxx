@@ -45,7 +45,6 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -58,6 +57,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <unotools/weakref.hxx>
 #include <array>
 #include <vector>
 #include <algorithm>
@@ -90,7 +90,6 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::util::XCloneable;
-using ::com::sun::star::lang::XUnoTunnel;
 using ::com::sun::star::util::XChangesNotifier;
 using ::com::sun::star::util::XChangesListener;
 using ::com::sun::star::util::ElementChange;
@@ -120,7 +119,6 @@ class AnimationNodeBase :   public cppu::BaseMutex,
                             public XCommand,
                             public XCloneable,
                             public XChangesNotifier,
-                            public XUnoTunnel,
                             public OWeakObject
 {
 
@@ -293,10 +291,6 @@ public:
     virtual void SAL_CALL addChangesListener( const Reference< XChangesListener >& aListener ) override;
     virtual void SAL_CALL removeChangesListener( const Reference< XChangesListener >& aListener ) override;
 
-    // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething( const Sequence< ::sal_Int8 >& aIdentifier ) override;
-
-    static const Sequence< sal_Int8 > & getUnoTunnelId();
     void fireChangeListener();
 
 private:
@@ -317,8 +311,7 @@ private:
     Sequence< NamedValue > maUserData;
 
     // parent interface for XChild interface implementation
-    WeakReference<XInterface>   mxParent;
-    AnimationNode*          mpParent;
+    unotools::WeakReference<AnimationNode> mxParent;
 
     // attributes for XAnimate
     Any maTarget;
@@ -427,7 +420,6 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mfAcceleration( 0.0 ),
     mfDecelerate( 0.0 ),
     mbAutoReverse( false ),
-    mpParent(nullptr),
     mnValueType( 0 ),
     mnSubItem( 0 ),
     mnCalcMode( (nNodeType == AnimationNodeType::ANIMATEMOTION) ? AnimationCalcMode::PACED : AnimationCalcMode::LINEAR),
@@ -470,7 +462,6 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     mfDecelerate( rNode.mfDecelerate ),
     mbAutoReverse( rNode.mbAutoReverse ),
     maUserData( rNode.maUserData ),
-    mpParent(nullptr),
 
     // attributes for XAnimate
     maTarget( rNode.maTarget ),
@@ -658,8 +649,7 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
         static_cast< XAnimationNode* >( static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ) ),
         static_cast< XInterface* >(static_cast< OWeakObject * >(this)),
         static_cast< XWeak* >(static_cast< OWeakObject * >(this)),
-        static_cast< XChangesNotifier* >( this ),
-        static_cast< XUnoTunnel* >( this ) ) );
+        static_cast< XChangesNotifier* >( this ) ) );
 
     if(!aRet.hasValue())
     {
@@ -754,19 +744,19 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) noexcept
 
     static constexpr std::array<sal_Int32, mpTypes.size()> type_numbers =
     {
-        7, // CUSTOM
-        9, // PAR
-        9, // SEQ
-        9, // ITERATE
-        8, // ANIMATE
-        8, // SET
-        8, // ANIMATEMOTION
-        8, // ANIMATECOLOR
-        8, // ANIMATETRANSFORM
-        8, // TRANSITIONFILTER
-        8, // AUDIO
-        8, // COMMAND
-        8, // ANIMATEPHYSICS
+        6, // CUSTOM
+        8, // PAR
+        8, // SEQ
+        8, // ITERATE
+        7, // ANIMATE
+        7, // SET
+        7, // ANIMATEMOTION
+        7, // ANIMATECOLOR
+        7, // ANIMATETRANSFORM
+        7, // TRANSITIONFILTER
+        7, // AUDIO
+        7, // COMMAND
+        7, // ANIMATEPHYSICS
     };
 
     // collect types
@@ -779,7 +769,6 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) noexcept
     pTypeAr[nPos++] = cppu::UnoType<XCloneable>::get();
     pTypeAr[nPos++] = cppu::UnoType<XTypeProvider>::get();
     pTypeAr[nPos++] = cppu::UnoType<XServiceInfo>::get();
-    pTypeAr[nPos++] = cppu::UnoType<XUnoTunnel>::get();
     pTypeAr[nPos++] = cppu::UnoType<XChangesNotifier>::get();
 
     switch( nNodeType )
@@ -1213,7 +1202,7 @@ void SAL_CALL AnimationNode::setUserData( const Sequence< NamedValue >& _userdat
 Reference< XInterface > SAL_CALL AnimationNode::getParent()
 {
     Guard< Mutex > aGuard( m_aMutex );
-    return mxParent.get();
+    return static_cast<cppu::OWeakObject*>(mxParent.get().get());
 }
 
 
@@ -1221,10 +1210,11 @@ Reference< XInterface > SAL_CALL AnimationNode::getParent()
 void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    if( Parent != mxParent.get() )
+    if( Parent.get() != static_cast<cppu::OWeakObject*>(mxParent.get().get()) )
     {
-        mxParent = Parent;
-        mpParent = comphelper::getFromUnoTunnel<AnimationNode>(mxParent.get());
+        rtl::Reference<AnimationNode> xParent = dynamic_cast<AnimationNode*>(Parent.get());
+        mxParent = xParent.get();
+        assert(bool(xParent) == bool(Parent) && "only support AnimationNode subtypes");
 
         fireChangeListener();
     }
@@ -2085,19 +2075,6 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 }
 
 
-// XUnoTunnel
-::sal_Int64 SAL_CALL AnimationNode::getSomething( const Sequence< ::sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, this);
-}
-
-const css::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theAnimationNodeUnoTunnelId;
-    return theAnimationNodeUnoTunnelId.getSeq();
-}
-
-
 void AnimationNode::fireChangeListener()
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -2107,18 +2084,15 @@ void AnimationNode::fireChangeListener()
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
-        const ChangesEvent aEvent( xSource, Any( mxParent.get() ), aChanges );
+        const ChangesEvent aEvent( xSource, Any( css::uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(mxParent.get().get())) ), aChanges );
         while( aIterator.hasMoreElements() )
             aIterator.next()->changesOccurred( aEvent );
     }
 
     //fdo#69645 use WeakReference of mxParent to test if mpParent is still valid
-    if (mpParent)
-    {
-        Reference<XInterface> xGuard(mxParent);
-        if (xGuard.is())
-            mpParent->fireChangeListener();
-    }
+    rtl::Reference<AnimationNode> xGuard(mxParent);
+    if (xGuard.is())
+        xGuard->fireChangeListener();
 }
 
 
