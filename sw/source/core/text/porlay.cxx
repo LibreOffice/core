@@ -355,20 +355,25 @@ void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
     SetLLSpaceAdd( nInit, 0 );
 }
 
-// Returns true if there are only blanks in [nStt, nEnd[
+// #i3952# Returns true if there are only blanks in [nStt, nEnd[
+// Used to implement IgnoreTabsAndBlanksForLineCalculation compat flag
 static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, TextFrameIndex nEnd)
 {
-    bool bBlankOnly = true;
     while ( nStt < nEnd )
     {
-        const sal_Unicode cChar = rText[ sal_Int32(nStt++) ];
-        if ( ' ' != cChar && CH_FULL_BLANK != cChar && CH_SIX_PER_EM != cChar )
+        switch (rText[sal_Int32(nStt++)])
         {
-            bBlankOnly = false;
-            break;
+        case 0x0020: // SPACE
+        case 0x2002: // EN SPACE
+        case 0x2003: // EM SPACE
+        case 0x2005: // FOUR-PER-EM SPACE
+        case 0x3000: // IDEOGRAPHIC SPACE
+            continue;
+        default:
+            return false;
         }
     }
-    return bBlankOnly;
+    return true;
 }
 
 // Swapped out from FormatLine()
