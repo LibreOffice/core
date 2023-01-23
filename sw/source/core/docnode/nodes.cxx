@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
+#include <tools/json_writer.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/viewsh.hxx>
+
 #include <node.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -2437,6 +2441,22 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
             // related to this table are removed from the
             // 'Extra Redlines' array
             pTableNode->RemoveRedlines();
+        }
+
+        SwSectionNode* pSectionNode = pNode->GetSectionNode();
+        if (pSectionNode && !GetDoc().IsClipBoard() && SfxViewShell::Current())
+        {
+            OUString fieldCommand = pSectionNode->GetSection().GetSectionName();
+            tools::JsonWriter aJson;
+            aJson.put("commandName", ".uno:DeleteSection");
+            aJson.put("success", true);
+            {
+                auto result = aJson.startNode("result");
+                aJson.put("DeleteSection", fieldCommand);
+            }
+
+            SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+
         }
     }
 
