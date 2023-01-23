@@ -312,7 +312,8 @@ namespace
     };
 
 
-    IMark* lcl_getMarkAfter(const MarkManager::container_t& rMarks, const SwPosition& rPos)
+    IMark* lcl_getMarkAfter(const MarkManager::container_t& rMarks, const SwPosition& rPos,
+                            bool bLoop)
     {
         auto const pMarkAfter = upper_bound(
             rMarks.begin(),
@@ -320,11 +321,17 @@ namespace
             rPos,
             CompareIMarkStartsAfter());
         if(pMarkAfter == rMarks.end())
+        {
+            if (bLoop && rMarks.begin() != rMarks.end())
+                return *rMarks.begin();
+
             return nullptr;
+        }
         return *pMarkAfter;
     };
 
-    IMark* lcl_getMarkBefore(const MarkManager::container_t& rMarks, const SwPosition& rPos)
+    IMark* lcl_getMarkBefore(const MarkManager::container_t& rMarks, const SwPosition& rPos,
+                             bool bLoop)
     {
         // candidates from which to choose the mark before
         MarkManager::container_t vCandidates;
@@ -342,7 +349,13 @@ namespace
             back_inserter(vCandidates),
             [&rPos] (const ::sw::mark::MarkBase *const pMark) { return !(pMark->GetMarkEnd() < rPos); } );
         // no candidate left => we are in front of the first mark or there are none
-        if(vCandidates.empty()) return nullptr;
+        if(vCandidates.empty())
+        {
+            if (bLoop && rMarks.begin() != rMarks.end())
+                return *(rMarks.end() - 1);
+
+            return nullptr;
+        }
         // return the highest (last) candidate using mark end ordering
         return *max_element(vCandidates.begin(), vCandidates.end(), &lcl_MarkOrderingByEnd);
     }
@@ -1640,11 +1653,11 @@ namespace sw::mark
         return aRet;
     }
 
-    IFieldmark* MarkManager::getFieldmarkAfter(const SwPosition& rPos) const
-        { return dynamic_cast<IFieldmark*>(lcl_getMarkAfter(m_vFieldmarks, rPos)); }
+    IFieldmark* MarkManager::getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const
+        { return dynamic_cast<IFieldmark*>(lcl_getMarkAfter(m_vFieldmarks, rPos, bLoop)); }
 
-    IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos) const
-        { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
+    IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const
+        { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos, bLoop)); }
 
     IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksBegin() const
     {

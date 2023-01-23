@@ -2630,14 +2630,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case SwKeyState::GotoNextFieldMark:
                 {
-                    ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkAfter();
+                    const sw::mark::IFieldmark* pFieldmark
+                        = rSh.GetFieldmarkAfter(/*bLoop=*/true);
                     if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
                 }
                 break;
 
             case SwKeyState::GotoPrevFieldMark:
                 {
-                    ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkBefore();
+                    const sw::mark::IFieldmark* pFieldmark
+                        = rSh.GetFieldmarkBefore(/*bLoop=*/true);
                     if( pFieldmark )
                         rSh.GotoFieldmark(pFieldmark);
                 }
