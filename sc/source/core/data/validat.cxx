@@ -51,6 +51,7 @@
 #include <scmatrix.hxx>
 #include <cellvalue.hxx>
 #include <comphelper/lok.hxx>
+#include <simpleformulacalc.hxx>
 
 #include <math.h>
 #include <memory>
@@ -438,15 +439,85 @@ bool ScValidationData::IsDataValidCustom(
     if (rTest.isEmpty())              // check whether empty cells are allowed
         return IsIgnoreBlank();
 
-    if (rTest[0] == '=')   // formulas do not pass the validity test
-        return false;
+    SvNumberFormatter* pFormatter = nullptr;
+    sal_uInt32 nFormat = 0;
+    double nVal = 0.0;
+    OUString rStrResult = "";
+    bool bIsVal = false;
 
-    SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+    if (rTest[0] == '=')
+    {
+        std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, *mpDoc, rPos, rTest, true);
+        pFCell->SetLimitString(true);
 
-    // get the value if any
-    sal_uInt32 nFormat = rPattern.GetNumberFormat( pFormatter );
-    double nVal;
-    bool bIsVal = pFormatter->IsNumberFormat( rTest, nFormat, nVal );
+        bool bColRowName = pFCell->HasColRowName();
+        if (bColRowName)
+        {
+            // ColRowName from RPN-Code?
+            if (pFCell->GetCode()->GetCodeLen() <= 1)
+            {   // ==1: area
+                // ==0: would be an area if...
+                OUString aBraced = "(" + rTest + ")";
+                pFCell.emplace(*mpDoc, rPos, aBraced, true);
+                pFCell->SetLimitString(true);
+            }
+            else
+                bColRowName = false;
+        }
+
+        FormulaError nErrCode = pFCell->GetErrCode();
+        if (nErrCode == FormulaError::NONE || pFCell->IsMatrix())
+        {
+            pFormatter = mpDoc->GetFormatTable();
+            const Color* pColor;
+            if (pFCell->IsMatrix())
+            {
+                rStrResult = pFCell->GetString().getString();
+            }
+            else if (pFCell->IsValue())
+            {
+                nVal = pFCell->GetValue();
+                nFormat = pFormatter->GetStandardFormat(nVal, 0,
+                    pFCell->GetFormatType(), ScGlobal::eLnge);
+                pFormatter->GetOutputString(nVal, nFormat, rStrResult, &pColor);
+                bIsVal = true;
+            }
+            else
+            {
+                nFormat = pFormatter->GetStandardFormat(
+                    pFCell->GetFormatType(), ScGlobal::eLnge);
+                pFormatter->GetOutputString(pFCell->GetString().getString(), nFormat,
+                    rStrResult, &pColor);
+                // Indicate it's a string, so a number string doesn't look numeric.
+                // Escape embedded quotation marks first by doubling them, as
+                // usual. Actually the result can be copy-pasted from the result
+                // box as literal into a formula expression.
+                rStrResult = "\"" + rStrResult.replaceAll("\"", "\"\"") + "\"";
+            }
+
+            ScRange aTestRange;
+            if (bColRowName || (aTestRange.Parse(rTest, *mpDoc) & ScRefFlags::VALID))
+                rStrResult += " ...";
+            // area
+
+            // check whether empty cells are allowed
+            if (rStrResult.isEmpty())
+                return IsIgnoreBlank();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        pFormatter = GetDocument()->GetFormatTable();
+
+        // get the value if any
+        nFormat = rPattern.GetNumberFormat(pFormatter);
+        bIsVal = pFormatter->IsNumberFormat(rTest, nFormat, nVal);
+        rStrResult = rTest;
+    }
 
     ScRefCellValue aTmpCell;
     svl::SharedString aSS;
@@ -456,7 +527,7 @@ bool ScValidationData::IsDataValidCustom(
     }
     else
     {
-        aSS = mpDoc->GetSharedStringPool().intern(rTest);
+        aSS = mpDoc->GetSharedStringPool().intern(rStrResult);
         aTmpCell = ScRefCellValue(&aSS);
     }
 
@@ -525,25 +596,95 @@ bool ScValidationData::IsDataValid(
     if (rTest.isEmpty())              // check whether empty cells are allowed
         return IsIgnoreBlank();
 
+    SvNumberFormatter* pFormatter = nullptr;
+    sal_uInt32 nFormat = 0;
+    double nVal = 0.0;
+    OUString rStrResult = "";
+    bool bIsVal = false;
+
     if (rTest[0] == '=')   // formulas do not pass the validity test
-        return false;
+    {
+        std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, *mpDoc, rPos, rTest, true);
+        pFCell->SetLimitString(true);
 
-    SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+        bool bColRowName = pFCell->HasColRowName();
+        if (bColRowName)
+        {
+            // ColRowName from RPN-Code?
+            if (pFCell->GetCode()->GetCodeLen() <= 1)
+            {   // ==1: area
+                // ==0: would be an area if...
+                OUString aBraced = "(" + rTest + ")";
+                pFCell.emplace(*mpDoc, rPos, aBraced, true);
+                pFCell->SetLimitString(true);
+            }
+            else
+                bColRowName = false;
+        }
 
-    // get the value if any
-    sal_uInt32 nFormat = rPattern.GetNumberFormat( pFormatter );
-    double nVal;
-    bool bIsVal = pFormatter->IsNumberFormat( rTest, nFormat, nVal );
+        FormulaError nErrCode = pFCell->GetErrCode();
+        if (nErrCode == FormulaError::NONE || pFCell->IsMatrix())
+        {
+            pFormatter = mpDoc->GetFormatTable();
+            const Color* pColor;
+            if (pFCell->IsMatrix())
+            {
+                rStrResult = pFCell->GetString().getString();
+            }
+            else if (pFCell->IsValue())
+            {
+                nVal = pFCell->GetValue();
+                nFormat = pFormatter->GetStandardFormat(nVal, 0,
+                    pFCell->GetFormatType(), ScGlobal::eLnge);
+                pFormatter->GetOutputString(nVal, nFormat, rStrResult, &pColor);
+                bIsVal = true;
+            }
+            else
+            {
+                nFormat = pFormatter->GetStandardFormat(
+                    pFCell->GetFormatType(), ScGlobal::eLnge);
+                pFormatter->GetOutputString(pFCell->GetString().getString(), nFormat,
+                    rStrResult, &pColor);
+                // Indicate it's a string, so a number string doesn't look numeric.
+                // Escape embedded quotation marks first by doubling them, as
+                // usual. Actually the result can be copy-pasted from the result
+                // box as literal into a formula expression.
+                rStrResult = "\"" + rStrResult.replaceAll("\"", "\"\"") + "\"";
+            }
+
+            ScRange aTestRange;
+            if (bColRowName || (aTestRange.Parse(rTest, *mpDoc) & ScRefFlags::VALID))
+                rStrResult += " ...";
+            // area
+
+            // check whether empty cells are allowed
+            if (rStrResult.isEmpty())
+                return IsIgnoreBlank();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        pFormatter = GetDocument()->GetFormatTable();
+
+        // get the value if any
+        nFormat = rPattern.GetNumberFormat(pFormatter);
+        bIsVal = pFormatter->IsNumberFormat(rTest, nFormat, nVal);
+        rStrResult = rTest;
+    }
 
     bool bRet;
     if (SC_VALID_TEXTLEN == eDataMode)
     {
         if (!bIsVal)
-            bRet = IsDataValidTextLen( rTest, rPos, nullptr);
+            bRet = IsDataValidTextLen( rStrResult, rPos, nullptr);
         else
         {
             ScValidationDataIsNumeric aDataNumeric( nVal, pFormatter, nFormat);
-            bRet = IsDataValidTextLen( rTest, rPos, &aDataNumeric);
+            bRet = IsDataValidTextLen( rStrResult, rPos, &aDataNumeric);
         }
     }
     else
@@ -555,7 +696,7 @@ bool ScValidationData::IsDataValid(
         }
         else
         {
-            svl::SharedString aSS = mpDoc->GetSharedStringPool().intern(rTest);
+            svl::SharedString aSS = mpDoc->GetSharedStringPool().intern( rStrResult );
             ScRefCellValue aTmpCell(&aSS);
             bRet = IsDataValid(aTmpCell, rPos);
         }
