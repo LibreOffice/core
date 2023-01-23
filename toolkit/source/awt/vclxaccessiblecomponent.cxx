@@ -79,16 +79,6 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     DisconnectEvents();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, VCLXAccessibleComponent_BASE )
-css::uno::Sequence< css::uno::Type > SAL_CALL VCLXAccessibleComponent::getTypes()
-{
-    return ::comphelper::concatSequences(
-        OAccessibleExtendedComponentHelper::getTypes(),
-        VCLXAccessibleComponent_BASE::getTypes()
-    );
-}
-IMPLEMENT_GET_IMPLEMENTATION_ID( VCLXAccessibleComponent )
-
 OUString VCLXAccessibleComponent::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleWindow";

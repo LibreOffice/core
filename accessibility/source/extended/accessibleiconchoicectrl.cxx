@@ -168,7 +168,7 @@ namespace accessibility
             throw RuntimeException("getAccessibleChild: Entry "
                                    + OUString::number(i) + " not found",
                 static_cast<css::lang::XTypeProvider*>(
-                    static_cast<VCLXAccessibleComponent_BASE*>(this)));
+                    static_cast<VCLXAccessibleComponent*>(this)));
 
         return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
     }

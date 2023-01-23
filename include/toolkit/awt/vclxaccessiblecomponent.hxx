@@ -22,7 +22,7 @@
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
 
@@ -41,12 +41,9 @@ class AccessibleRelationSetHelper;
 
 
 
-typedef ::cppu::ImplHelper1<
-    css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
-
 class TOOLKIT_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") VCLXAccessibleComponent
-        :public comphelper::OAccessibleExtendedComponentHelper
-        ,public VCLXAccessibleComponent_BASE
+        :public cppu::ImplInheritanceHelper<
+             comphelper::OAccessibleExtendedComponentHelper, css::lang::XServiceInfo>
 {
 private:
     rtl::Reference<VCLXWindow>      m_xVCLXWindow;
@@ -76,11 +73,6 @@ public:
         return dynamic_cast< derived_type * >( GetWindow() ); }
 
     virtual void SAL_CALL disposing() override;
-
-    // css::uno::XInterface
-    DECLARE_XINTERFACE()
-    // css::lang::XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

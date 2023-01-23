@@ -22,6 +22,7 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 
 
