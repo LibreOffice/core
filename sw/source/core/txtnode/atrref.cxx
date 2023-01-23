@@ -29,6 +29,7 @@
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 
@@ -121,7 +122,7 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
 
 SwTextRefMark::~SwTextRefMark()
 {
-    if (GetTextNode().GetDoc().IsClipBoard())
+    if (!comphelper::LibreOfficeKit::isActive() || GetTextNode().GetDoc().IsClipBoard())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();

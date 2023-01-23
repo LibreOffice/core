@@ -23,6 +23,7 @@
 #include <tools/json_writer.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewsh.hxx>
+#include <comphelper/lok.hxx>
 
 #include <node.hxx>
 #include <doc.hxx>
@@ -2444,7 +2445,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
         }
 
         SwSectionNode* pSectionNode = pNode->GetSectionNode();
-        if (pSectionNode && !GetDoc().IsClipBoard() && SfxViewShell::Current())
+        if (comphelper::LibreOfficeKit::isActive() && pSectionNode && !GetDoc().IsClipBoard() && SfxViewShell::Current())
         {
             OUString fieldCommand = pSectionNode->GetSection().GetSectionName();
             tools::JsonWriter aJson;
