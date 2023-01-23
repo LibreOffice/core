@@ -20,9 +20,8 @@
 #pragma once
 
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace vcl { class Window; }
@@ -38,8 +37,6 @@ namespace toolkit
 
 
     typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
-    typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
-                                >   OAccessibleControlContext_IBase;
 
     /** class implementing the AccessibleContext for a UNO control - to be used in design mode of the control.
         <p><b>life time control<b/><br/>
@@ -48,8 +45,8 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext final
-            :public OAccessibleControlContext_Base
-            ,public OAccessibleControlContext_IBase
+            :public cppu::ImplInheritanceHelper<
+                OAccessibleControlContext_Base, css::lang::XEventListener>
     {
     public:
         /** creates an accessible context for a uno control
@@ -61,9 +58,6 @@ namespace toolkit
             const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
         );
 
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
     private:
 
         // XAccessibleContext

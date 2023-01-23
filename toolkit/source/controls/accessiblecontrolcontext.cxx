@@ -58,18 +58,6 @@ namespace toolkit
     }
 
 
-    // (order matters: the first is the class name, the second is the class doing the ref counting)
-    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleControlContext, OAccessibleControlContext_Base, OAccessibleControlContext_IBase )
-    css::uno::Sequence< css::uno::Type > SAL_CALL OAccessibleControlContext::getTypes()
-    {
-        return ::comphelper::concatSequences(
-            OAccessibleControlContext_Base::getTypes(),
-            OAccessibleControlContext_IBase::getTypes()
-        );
-    }
-    IMPLEMENT_GET_IMPLEMENTATION_ID( OAccessibleControlContext )
-
-
     void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator )
     {
         OContextEntryGuard aGuard( this );
