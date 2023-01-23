@@ -441,7 +441,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )
-            WriteFill( xProps );
+            WriteFill(xProps, aSize);
         WriteOutline( xProps );
     }
 
@@ -1111,7 +1111,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     }
     if( rXPropSet.is() )
     {
-        WriteFill( rXPropSet );
+        WriteFill(rXPropSet, xShape->getSize());
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
 
@@ -2482,7 +2482,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
     if (!IsFontworkShape(xShapeProps)) // Fontwork needs fill and outline in run properties instead.
     {
-        WriteBlipOrNormalFill(xPropertySet, "Graphic");
+        WriteBlipOrNormalFill(xPropertySet, "Graphic", xShape->getSize());
         WriteOutline(xPropertySet);
         WriteShapeEffects(xPropertySet);
     }

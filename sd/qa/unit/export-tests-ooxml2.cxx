@@ -77,6 +77,7 @@ public:
     }
 
     void testRepeatBitmapMode();
+    void testTdf153107();
     void testTdf142291();
     void testTdf151492();
     void testTdf149697();
@@ -149,6 +150,7 @@ public:
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
     CPPUNIT_TEST(testRepeatBitmapMode);
+    CPPUNIT_TEST(testTdf153107);
     CPPUNIT_TEST(testTdf142291);
     CPPUNIT_TEST(testTdf151492);
     CPPUNIT_TEST(testTdf149697);
@@ -245,6 +247,64 @@ void SdOOXMLExportTest2::testRepeatBitmapMode()
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sx", "682760");
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "sy", "639983");
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "ctr");
+}
+
+void SdOOXMLExportTest2::testTdf153107()
+{
+    createSdImpressDoc("odp/tdf153107.odp");
+    save("Impress Office Open XML");
+
+    // placeholder
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:blipFill/a:tile", "tx",
+                "1879200");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:blipFill/a:tile", "ty",
+                "83628");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:blipFill/a:tile", "sx",
+                "264773");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:blipFill/a:tile", "sy",
+                "91428");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:blipFill/a:tile", "algn",
+                "ctr");
+
+    // custom shape
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:blipFill/a:tile", "tx",
+                "198000");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:blipFill/a:tile", "ty",
+                "324000");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:blipFill/a:tile", "sx",
+                "69743");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:blipFill/a:tile", "sy",
+                "78709");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:blipFill/a:tile", "algn",
+                "tl");
+
+    // polygon
+    xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:blipFill/a:tile", "tx",
+                "2073600");
+    assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:blipFill/a:tile", "ty",
+                "221760");
+    assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:blipFill/a:tile", "sx",
+                "182602");
+    assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:blipFill/a:tile", "sy",
+                "86580");
+    assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:blipFill/a:tile", "algn",
+                "ctr");
+
+    // textbox
+    xmlDocUniquePtr pXmlDocContent4 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent4, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:blipFill/a:tile", "tx",
+                "662400");
+    assertXPath(pXmlDocContent4, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:blipFill/a:tile", "ty",
+                "760320");
+    assertXPath(pXmlDocContent4, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:blipFill/a:tile", "sx",
+                "202891");
+    assertXPath(pXmlDocContent4, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:blipFill/a:tile", "sy",
+                "129870");
+    assertXPath(pXmlDocContent4, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:blipFill/a:tile", "algn",
+                "tl");
 }
 
 void SdOOXMLExportTest2::testTdf142291()
