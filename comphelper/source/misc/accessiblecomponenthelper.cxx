@@ -303,11 +303,6 @@ namespace comphelper
     }
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
-        // (order matters: the first is the class name, the second is the class doing the ref counting)
-
-
     sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const awt::Point& _rPoint )
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );

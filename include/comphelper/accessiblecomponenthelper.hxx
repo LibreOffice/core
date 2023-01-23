@@ -27,6 +27,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -179,28 +180,23 @@ namespace comphelper
     //= OAccessibleComponentHelper
 
 
-    struct OAccessibleComponentHelper_Base :
-        public ::cppu::ImplHelper1< css::accessibility::XAccessibleComponent >
-    {
-    protected:
-        ~OAccessibleComponentHelper_Base() {}
-    };
-
     /** a helper class for implementing an AccessibleContext which at the same time
         supports an XAccessibleComponent interface.
     */
     class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
-            :public OCommonAccessibleComponent
-            ,public OAccessibleComponentHelper_Base
+            :public cppu::ImplInheritanceHelper<
+                 OCommonAccessibleComponent, css::accessibility::XAccessibleComponent>
     {
+    private:
+        OAccessibleComponentHelper(OAccessibleComponentHelper const &) = delete;
+        OAccessibleComponentHelper(OAccessibleComponentHelper &&) = delete;
+        void operator =(OAccessibleComponentHelper const &) = delete;
+        void operator =(OAccessibleComponentHelper &&) = delete;
+
     protected:
         OAccessibleComponentHelper();
 
     public:
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
-
         // XAccessibleComponent - default implementations
         virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
         virtual css::awt::Point SAL_CALL getLocation(  ) override;
