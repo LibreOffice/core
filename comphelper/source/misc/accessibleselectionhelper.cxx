@@ -107,11 +107,6 @@ namespace comphelper
     }
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
-    // (order matters: the first is the class name, the second is the class doing the ref counting)
-
-
     Reference< XAccessibleContext > OAccessibleSelectionHelper::implGetAccessibleContext()
     {
         return this;

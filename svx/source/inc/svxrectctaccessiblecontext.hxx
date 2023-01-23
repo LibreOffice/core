@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <rtl/ref.hxx>

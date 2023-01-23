@@ -24,6 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>

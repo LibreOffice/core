@@ -23,7 +23,7 @@
 #include <config_options.h>
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <comphelper/comphelperdllapi.h>
 
@@ -94,15 +94,18 @@ namespace comphelper
     //= OAccessibleSelectionHelper
 
 
-    typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
-
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.
     */
-    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAccessibleSelectionHelper : public OAccessibleComponentHelper,
-                                       public OCommonAccessibleSelection,
-                                       public OAccessibleSelectionHelper_Base
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAccessibleSelectionHelper : public cppu::ImplInheritanceHelper<OAccessibleComponentHelper, css::accessibility::XAccessibleSelection>,
+                                       public OCommonAccessibleSelection
     {
+    private:
+        OAccessibleSelectionHelper(OAccessibleSelectionHelper const &) = delete;
+        OAccessibleSelectionHelper(OAccessibleSelectionHelper &&) = delete;
+        void operator =(OAccessibleSelectionHelper const &) = delete;
+        void operator =(OAccessibleSelectionHelper &&) = delete;
+
     protected:
 
         OAccessibleSelectionHelper();
@@ -111,10 +114,6 @@ namespace comphelper
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > implGetAccessibleContext() override;
 
     public:
-
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleSelection - default implementations
         virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
