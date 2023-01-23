@@ -706,11 +706,11 @@ if test -n "$with_android_ndk"; then
     11.1.*|12.1.*|13.1.*|14.1.*)
         AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x.*])
         ;;
-    16.*|17.*|18.*|19.*|20.*)
+    16.*|17.*|18.*|19.*|20.*|21.*|22.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* til 20.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* til 20.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* to 22.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* to 22.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
