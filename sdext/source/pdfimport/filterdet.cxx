@@ -188,6 +188,102 @@ PDFDetector::PDFDetector( uno::Reference< uno::XComponentContext > xContext) :
     m_xContext(std::move( xContext ))
 {}
 
+namespace
+{
+
+sal_Int32 fillAttributes(uno::Sequence<beans::PropertyValue> const& rFilterData, uno::Reference<io::XInputStream>& xInput, OUString& aURL, sal_Int32& nFilterNamePos, sal_Int32& nPasswordPos, OUString& aPassword)
+{
+    const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
+    sal_Int32 nAttribs = rFilterData.getLength();
+    for (sal_Int32 i = 0; i < nAttribs; i++)
+    {
+        OUString aVal( "<no string>" );
+        pAttribs[i].Value >>= aVal;
+        SAL_INFO("sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal);
+
+        if (pAttribs[i].Name == "InputStream")
+            pAttribs[i].Value >>= xInput;
+        else if (pAttribs[i].Name == "URL")
+            pAttribs[i].Value >>= aURL;
+        else if (pAttribs[i].Name == "FilterName")
+            nFilterNamePos = i;
+        else if (pAttribs[i].Name == "Password")
+        {
+            nPasswordPos = i;
+            pAttribs[i].Value >>= aPassword;
+        }
+    }
+    return nAttribs;
+}
+
+// read the first 1024 byte (see PDF reference implementation note 12)
+constexpr const sal_Int32 constHeaderSize = 1024;
+
+bool detectPDF(uno::Reference<io::XInputStream> const& xInput, uno::Sequence<sal_Int8>& aHeader, sal_uInt64& nHeaderReadSize)
+{
+    try
+    {
+        uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
+        if (xSeek.is())
+            xSeek->seek(0);
+
+        nHeaderReadSize = xInput->readBytes(aHeader, constHeaderSize);
+        if (nHeaderReadSize <= 5)
+            return false;
+
+        const sal_Int8* pBytes = aHeader.getConstArray();
+        for (sal_uInt64 i = 0; i < nHeaderReadSize - 5; i++)
+        {
+            if (pBytes[i+0] == '%' &&
+                pBytes[i+1] == 'P' &&
+                pBytes[i+2] == 'D' &&
+                pBytes[i+3] == 'F' &&
+                pBytes[i+4] == '-')
+            {
+                return true;
+            }
+        }
+    }
+    catch (const css::io::IOException &)
+    {
+        TOOLS_WARN_EXCEPTION("sdext.pdfimport", "caught");
+    }
+    return false;
+}
+
+bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& rFileHandle, uno::Sequence<sal_Int8> const& aHeader, sal_uInt64 nHeaderReadSize)
+{
+    try
+    {
+        sal_uInt64 nWritten = 0;
+        osl_writeFile(rFileHandle, aHeader.getConstArray(), nHeaderReadSize, &nWritten);
+
+        const sal_uInt64 nBufferSize = 4096;
+        uno::Sequence<sal_Int8> aBuffer(nBufferSize);
+
+        // copy the bytes
+        sal_uInt64 nRead = 0;
+        do
+        {
+            nRead = xInput->readBytes(aBuffer, nBufferSize);
+            if (nRead > 0)
+            {
+                osl_writeFile(rFileHandle, aBuffer.getConstArray(), nRead, &nWritten);
+                if (nWritten != nRead)
+                    return false;
+            }
+        }
+        while (nRead == nBufferSize);
+    }
+    catch (const css::io::IOException &)
+    {
+        TOOLS_WARN_EXCEPTION("sdext.pdfimport", "caught");
+    }
+    return false;
+}
+
+} // end anonymous namespace
+
 // XExtendedFilterDetection
 OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData )
 {
@@ -195,176 +291,127 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     bool bSuccess = false;
 
     // get the InputStream carrying the PDF content
-    uno::Reference< io::XInputStream > xInput;
-    uno::Reference< io::XStream > xEmbedStream;
-    OUString aOutFilterName, aOutTypeName;
+    uno::Reference<io::XInputStream> xInput;
+    uno::Reference<io::XStream> xEmbedStream;
+    OUString aOutFilterName;
+    OUString aOutTypeName;
     OUString aURL;
-    OUString aPwd;
-    const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
-    sal_Int32 nAttribs = rFilterData.getLength();
+    OUString aPassword;
+
     sal_Int32 nFilterNamePos = -1;
-    sal_Int32 nPwdPos = -1;
-    for( sal_Int32 i = 0; i < nAttribs; i++ )
+    sal_Int32 nPasswordPos = -1;
+    sal_Int32 nAttribs = fillAttributes(rFilterData, xInput, aURL, nFilterNamePos, nPasswordPos, aPassword);
+
+    if (!xInput.is())
+        return OUString();
+
+
+    uno::Sequence<sal_Int8> aHeader(constHeaderSize);
+    sal_uInt64 nHeaderReadSize = 0;
+    bSuccess = detectPDF(xInput, aHeader, nHeaderReadSize);
+
+    if (!bSuccess)
+        return OUString();
+
+    oslFileHandle aFileHandle = nullptr;
+
+    // check for hybrid PDF
+    if (bSuccess && (aURL.isEmpty() || !comphelper::isFileUrl(aURL)))
     {
-        OUString aVal( "<no string>" );
-        pAttribs[i].Value >>= aVal;
-        SAL_INFO( "sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal);
-
-        if ( pAttribs[i].Name == "InputStream" )
-            pAttribs[i].Value >>= xInput;
-        else if ( pAttribs[i].Name == "URL" )
-            pAttribs[i].Value >>= aURL;
-        else if ( pAttribs[i].Name == "FilterName" )
-            nFilterNamePos = i;
-        else if ( pAttribs[i].Name == "Password" )
+        if (osl_createTempFile(nullptr, &aFileHandle, &aURL.pData) != osl_File_E_None)
         {
-            nPwdPos = i;
-            pAttribs[i].Value >>= aPwd;
-        }
-    }
-    if( xInput.is() )
-    {
-        oslFileHandle aFile = nullptr;
-        try {
-            uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
-            if( xSeek.is() )
-                xSeek->seek( 0 );
-            // read the first 1024 byte (see PDF reference implementation note 12)
-            const sal_Int32 nHeaderSize = 1024;
-            uno::Sequence< sal_Int8 > aBuf( nHeaderSize );
-            sal_uInt64 nBytes = xInput->readBytes( aBuf, nHeaderSize );
-            if( nBytes > 5 )
-            {
-                const sal_Int8* pBytes = aBuf.getConstArray();
-                for( sal_uInt64 i = 0; i < nBytes-5; i++ )
-                {
-                    if( pBytes[i]   == '%' &&
-                        pBytes[i+1] == 'P' &&
-                        pBytes[i+2] == 'D' &&
-                        pBytes[i+3] == 'F' &&
-                        pBytes[i+4] == '-' )
-                    {
-                        bSuccess = true;
-                        break;
-                    }
-                }
-            }
-
-            // check for hybrid PDF
-            if( bSuccess &&
-                ( aURL.isEmpty() || !comphelper::isFileUrl(aURL) )
-            )
-            {
-                sal_uInt64 nWritten = 0;
-                if( osl_createTempFile( nullptr, &aFile, &aURL.pData ) != osl_File_E_None )
-                {
-                    bSuccess = false;
-                }
-                else
-                {
-                    SAL_INFO( "sdext.pdfimport", "created temp file " + aURL );
-
-                    osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
-
-                    SAL_WARN_IF( nWritten != nBytes, "sdext.pdfimport", "writing of header bytes failed" );
-
-                    if( nWritten == nBytes )
-                    {
-                        const sal_uInt32 nBufSize = 4096;
-                        aBuf = uno::Sequence<sal_Int8>(nBufSize);
-                        // copy the bytes
-                        do
-                        {
-                            nBytes = xInput->readBytes( aBuf, nBufSize );
-                            if( nBytes > 0 )
-                            {
-                                osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
-                                if( nWritten != nBytes )
-                                {
-                                    bSuccess = false;
-                                    break;
-                                }
-                            }
-                        } while( nBytes == nBufSize );
-                    }
-                }
-                osl_closeFile( aFile );
-            }
-        } catch (const css::io::IOException &) {
-            TOOLS_WARN_EXCEPTION("sdext.pdfimport", "caught");
-            return OUString();
-        }
-        OUString aEmbedMimetype;
-        xEmbedStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, false );
-        if( aFile )
-            osl_removeFile( aURL.pData );
-        if( !aEmbedMimetype.isEmpty() )
-        {
-            if( aEmbedMimetype == "application/vnd.oasis.opendocument.text"
-                || aEmbedMimetype == "application/vnd.oasis.opendocument.text-master" )
-                aOutFilterName = "writer_pdf_addstream_import";
-            else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
-                aOutFilterName = "impress_pdf_addstream_import";
-            else if( aEmbedMimetype == "application/vnd.oasis.opendocument.graphics"
-                     || aEmbedMimetype == "application/vnd.oasis.opendocument.drawing" )
-                aOutFilterName = "draw_pdf_addstream_import";
-            else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
-                aOutFilterName = "calc_pdf_addstream_import";
-        }
-    }
-
-    if( bSuccess )
-    {
-        if( !aOutFilterName.isEmpty() )
-        {
-            if( nFilterNamePos == -1 )
-            {
-                nFilterNamePos = nAttribs;
-                rFilterData.realloc( ++nAttribs );
-                rFilterData.getArray()[ nFilterNamePos ].Name = "FilterName";
-            }
-            auto pFilterData = rFilterData.getArray();
-            aOutTypeName = "pdf_Portable_Document_Format";
-
-            pFilterData[nFilterNamePos].Value <<= aOutFilterName;
-            if( xEmbedStream.is() )
-            {
-                rFilterData.realloc( ++nAttribs );
-                pFilterData = rFilterData.getArray();
-                pFilterData[nAttribs-1].Name = "EmbeddedSubstream";
-                pFilterData[nAttribs-1].Value <<= xEmbedStream;
-            }
-            if( !aPwd.isEmpty() )
-            {
-                if( nPwdPos == -1 )
-                {
-                    nPwdPos = nAttribs;
-                    rFilterData.realloc( ++nAttribs );
-                    pFilterData = rFilterData.getArray();
-                    pFilterData[ nPwdPos ].Name = "Password";
-                }
-                pFilterData[ nPwdPos ].Value <<= aPwd;
-            }
+            bSuccess = false;
         }
         else
         {
-            css::beans::PropertyValue* pFilterData;
-            if( nFilterNamePos == -1 )
-            {
-                nFilterNamePos = nAttribs;
-                rFilterData.realloc( ++nAttribs );
-                pFilterData = rFilterData.getArray();
-                pFilterData[ nFilterNamePos ].Name = "FilterName";
-            }
-            else
-                pFilterData = rFilterData.getArray();
+            SAL_INFO( "sdext.pdfimport", "created temp file " + aURL);
+            bSuccess = copyToTemp(xInput, aFileHandle, aHeader, nHeaderReadSize);
+        }
+        osl_closeFile(aFileHandle);
+    }
 
-            const sal_Int32 nDocumentType = 0; //const sal_Int32 nDocumentType = queryDocumentTypeDialog(m_xContext,aURL);
-            if( nDocumentType < 0 )
+    if (!bSuccess)
+    {
+        if (aFileHandle)
+            osl_removeFile(aURL.pData);
+        return OUString();
+    }
+
+    OUString aEmbedMimetype;
+    xEmbedStream = getAdditionalStream(aURL, aEmbedMimetype, aPassword, m_xContext, rFilterData, false);
+
+    if (aFileHandle)
+        osl_removeFile(aURL.pData);
+
+    if (!aEmbedMimetype.isEmpty())
+    {
+        if( aEmbedMimetype == "application/vnd.oasis.opendocument.text"
+            || aEmbedMimetype == "application/vnd.oasis.opendocument.text-master" )
+            aOutFilterName = "writer_pdf_addstream_import";
+        else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
+            aOutFilterName = "impress_pdf_addstream_import";
+        else if( aEmbedMimetype == "application/vnd.oasis.opendocument.graphics"
+                 || aEmbedMimetype == "application/vnd.oasis.opendocument.drawing" )
+            aOutFilterName = "draw_pdf_addstream_import";
+        else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
+            aOutFilterName = "calc_pdf_addstream_import";
+    }
+
+    if (!bSuccess)
+        return OUString();
+
+    if (!aOutFilterName.isEmpty())
+    {
+        if( nFilterNamePos == -1 )
+        {
+            nFilterNamePos = nAttribs;
+            rFilterData.realloc( ++nAttribs );
+            rFilterData.getArray()[ nFilterNamePos ].Name = "FilterName";
+        }
+        auto pFilterData = rFilterData.getArray();
+        aOutTypeName = "pdf_Portable_Document_Format";
+
+        pFilterData[nFilterNamePos].Value <<= aOutFilterName;
+        if( xEmbedStream.is() )
+        {
+            rFilterData.realloc( ++nAttribs );
+            pFilterData = rFilterData.getArray();
+            pFilterData[nAttribs-1].Name = "EmbeddedSubstream";
+            pFilterData[nAttribs-1].Value <<= xEmbedStream;
+        }
+        if (!aPassword.isEmpty())
+        {
+            if (nPasswordPos == -1)
             {
-                return OUString();
+                nPasswordPos = nAttribs;
+                rFilterData.realloc(++nAttribs);
+                pFilterData = rFilterData.getArray();
+                pFilterData[nPasswordPos].Name = "Password";
             }
-            else switch( nDocumentType )
+            pFilterData[nPasswordPos].Value <<= aPassword;
+        }
+    }
+    else
+    {
+        css::beans::PropertyValue* pFilterData;
+        if( nFilterNamePos == -1 )
+        {
+            nFilterNamePos = nAttribs;
+            rFilterData.realloc( ++nAttribs );
+            pFilterData = rFilterData.getArray();
+            pFilterData[ nFilterNamePos ].Name = "FilterName";
+        }
+        else
+            pFilterData = rFilterData.getArray();
+
+        const sal_Int32 nDocumentType = 0; //const sal_Int32 nDocumentType = queryDocumentTypeDialog(m_xContext,aURL);
+        if( nDocumentType < 0 )
+        {
+            return OUString();
+        }
+        else
+        {
+            switch (nDocumentType)
             {
                 case 0:
                     pFilterData[nFilterNamePos].Value <<= OUString( "draw_pdf_import" );
@@ -381,9 +428,9 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 default:
                     assert(!"Unexpected case");
             }
-
-            aOutTypeName = "pdf_Portable_Document_Format";
         }
+
+        aOutTypeName = "pdf_Portable_Document_Format";
     }
 
     return aOutTypeName;
