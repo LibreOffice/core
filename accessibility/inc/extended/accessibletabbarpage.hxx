@@ -21,7 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <extended/accessibletabbarbase.hxx>
 
 
@@ -31,12 +31,10 @@ namespace accessibility
 
 
 
-    typedef ::cppu::ImplHelper2<
-        css::accessibility::XAccessible,
-        css::lang::XServiceInfo > AccessibleTabBarPage_BASE;
-
-    class AccessibleTabBarPage final : public AccessibleTabBarBase,
-                                       public AccessibleTabBarPage_BASE
+    class AccessibleTabBarPage final : public cppu::ImplInheritanceHelper<
+                                           AccessibleTabBarBase,
+                                           css::accessibility::XAccessible,
+                                           css::lang::XServiceInfo>
     {
         friend class AccessibleTabBarPageList;
 
@@ -69,12 +67,6 @@ namespace accessibility
     public:
         AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
                               const css::uno::Reference< css::accessibility::XAccessible >& rxParent );
-
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
