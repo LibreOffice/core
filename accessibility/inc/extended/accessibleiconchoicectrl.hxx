@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
@@ -30,13 +30,13 @@ class SvtIconChoiceCtrl;
 
 namespace accessibility
 {
-    typedef ::cppu::ImplHelper2<  css::accessibility::XAccessible
-                                , css::accessibility::XAccessibleSelection> AccessibleIconChoiceCtrl_BASE;
-
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleIconChoiceCtrl final : public AccessibleIconChoiceCtrl_BASE
-                                          ,public VCLXAccessibleComponent
+    class AccessibleIconChoiceCtrl final :
+        public cppu::ImplInheritanceHelper<
+            VCLXAccessibleComponent,
+            css::accessibility::XAccessible,
+            css::accessibility::XAccessibleSelection>
     {
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
@@ -59,12 +59,6 @@ namespace accessibility
         */
         AccessibleIconChoiceCtrl( SvtIconChoiceCtrl const & _rIconCtrl,
                                   const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
-
-        // XInterface
-        DECLARE_XINTERFACE()
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
