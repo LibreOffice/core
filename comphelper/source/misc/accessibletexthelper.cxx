@@ -732,18 +732,6 @@ namespace comphelper
     }
 
 
-    // XInterface
-
-
-    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleTextHelper, OAccessibleExtendedComponentHelper, OAccessibleTextHelper_Base )
-
-
-    // XTypeProvider
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleTextHelper, OAccessibleExtendedComponentHelper, OAccessibleTextHelper_Base )
-
-
     // XAccessibleText
 
 

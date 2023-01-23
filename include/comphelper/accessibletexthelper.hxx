@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::i18n { class XBreakIterator; }
@@ -111,26 +111,24 @@ namespace comphelper
     // OAccessibleTextHelper
 
 
-    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessibleText
-                                >   OAccessibleTextHelper_Base;
-
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
         supports an XAccessibleText interface
     */
-    class COMPHELPER_DLLPUBLIC OAccessibleTextHelper : public OAccessibleExtendedComponentHelper,
-                                  public OCommonAccessibleText,
-                                  public OAccessibleTextHelper_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleTextHelper : public cppu::ImplInheritanceHelper<
+                                                           OAccessibleExtendedComponentHelper,
+                                                           css::accessibility::XAccessibleText>,
+                                  public OCommonAccessibleText
     {
+    private:
+        OAccessibleTextHelper(OAccessibleTextHelper const &) = delete;
+        OAccessibleTextHelper(OAccessibleTextHelper &&) = delete;
+        void operator =(OAccessibleTextHelper const &) = delete;
+        void operator =(OAccessibleTextHelper &&) = delete;
+
     protected:
         OAccessibleTextHelper();
 
     public:
-        // XInterface
-        DECLARE_XINTERFACE( )
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER( )
-
         // XAccessibleText
         virtual OUString SAL_CALL getSelectedText() override;
         virtual sal_Int32 SAL_CALL getSelectionStart() override;

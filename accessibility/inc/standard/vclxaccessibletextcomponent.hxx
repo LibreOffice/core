@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 
 
