@@ -1241,6 +1241,15 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         for (auto const& it : bookmarks)
         {
+            // don't show __RefHeading__ bookmarks, which are hidden in Navigator, too
+            // (They are inserted automatically e.g. with the ToC at the beginning of
+            // the headings)
+            if (it.first->GetName().startsWith(
+                                    IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()))
+            {
+                continue;
+            }
+
             // search for custom bookmark boundary mark color
             Color c = getBookmarkColor(rNode, it.first);
 
