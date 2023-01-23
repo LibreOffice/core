@@ -248,16 +248,18 @@ public:
 
     void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, css::awt::Gradient rGradient);
 
-    void WriteBlipOrNormalFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-            const OUString& rURLPropName );
-    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-            const OUString& sURLPropName );
-    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-                         const OUString& sURLPropName, sal_Int32 nXmlNamespace );
+    void WriteBlipOrNormalFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                               const OUString& rURLPropName, const css::awt::Size& rSize = {});
+    void WriteBlipFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                       const OUString& sURLPropName, const css::awt::Size& rSize = {});
+    void WriteBlipFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                       const css::awt::Size& rSize, const OUString& sURLPropName,
+                       sal_Int32 nXmlNamespace);
 
     void WriteXGraphicBlipFill(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
-                               sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia = false);
+                               sal_Int32 nXmlNamespace, bool bWriteMode,
+                               bool bRelPathToMedia = false, css::awt::Size const& rSize = {});
 
     void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WritePattFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
@@ -276,7 +278,8 @@ public:
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     void WriteXGraphicTile(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
-                           css::uno::Reference<css::graphic::XGraphic> const& rxGraphic);
+                           css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+                           css::awt::Size const& rSize);
 
     void WriteLinespacing(const css::style::LineSpacing& rLineSpacing, float fFirstCharHeight);
 
@@ -286,8 +289,9 @@ public:
 
     void WriteImageBrightnessContrastTransparence(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet);
 
-    void WriteXGraphicBlipMode(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
-                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    void WriteXGraphicBlipMode(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
+                               css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+                               css::awt::Size const& rSize);
 
     void WriteShapeTransformation(const css::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false, bool bFlippedBeforeRotation = false);
@@ -327,7 +331,8 @@ public:
     void WriteEmptyCustomGeometry();
     void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                           const bool bClosed);
-    void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
+    void WriteFill(const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+                   const css::awt::Size& rSize = {});
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( std::u16string_view sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );

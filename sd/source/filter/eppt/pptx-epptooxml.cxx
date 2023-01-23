@@ -598,7 +598,7 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
 
     PowerPointShapeExport aDML(pFS, &maShapeMap, this);
     aDML.SetBackgroundDark(mbIsBackgroundDark);
-    aDML.WriteFill(rXPropSet);
+    aDML.WriteFill(rXPropSet, maPageSize);
 
     pFS->endElementNS(XML_p, XML_bgPr);
     pFS->endElementNS(XML_p, XML_bg);
@@ -1765,7 +1765,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     {
         WriteBlipFill(xProps, "Graphic");
         // Do not forget to export the visible properties.
-        WriteFill( xProps );
+        WriteFill( xProps, xShape->getSize());
         WriteOutline( xProps );
         WriteShapeEffects( xProps );
 

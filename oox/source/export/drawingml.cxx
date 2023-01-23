@@ -1566,7 +1566,8 @@ OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const 
 }
 
 void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const & rXPropSet,
-                                      uno::Reference<graphic::XGraphic> const & rxGraphic)
+                                      uno::Reference<graphic::XGraphic> const & rxGraphic,
+                                      css::awt::Size const& rSize)
 {
     BitmapMode eBitmapMode(BitmapMode_NO_REPEAT);
     if (GetProperty(rXPropSet, "FillBitmapMode"))
@@ -1577,7 +1578,7 @@ void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const 
     switch (eBitmapMode)
     {
     case BitmapMode_REPEAT:
-        WriteXGraphicTile(rXPropSet, rxGraphic);
+        WriteXGraphicTile(rXPropSet, rxGraphic, rSize);
         break;
     case BitmapMode_STRETCH:
         WriteXGraphicStretch(rXPropSet, rxGraphic);
@@ -1587,7 +1588,8 @@ void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const 
     }
 }
 
-void DrawingML::WriteBlipOrNormalFill( const Reference< XPropertySet >& xPropSet, const OUString& rURLPropName )
+void DrawingML::WriteBlipOrNormalFill(const Reference<XPropertySet>& xPropSet,
+                                      const OUString& rURLPropName, const awt::Size& rSize)
 {
     // check for blip and otherwise fall back to normal fill
     // we always store normal fill properties but OOXML
@@ -1595,15 +1597,17 @@ void DrawingML::WriteBlipOrNormalFill( const Reference< XPropertySet >& xPropSet
     if (GetProperty ( xPropSet, rURLPropName ))
         WriteBlipFill( xPropSet, rURLPropName );
     else
-        WriteFill(xPropSet);
+        WriteFill(xPropSet, rSize);
 }
 
-void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const OUString& sURLPropName )
+void DrawingML::WriteBlipFill(const Reference<XPropertySet>& rXPropSet,
+                              const OUString& sURLPropName, const awt::Size& rSize)
 {
-    WriteBlipFill( rXPropSet, sURLPropName, XML_a );
+    WriteBlipFill( rXPropSet, rSize, sURLPropName, XML_a );
 }
 
-void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const OUString& sURLPropName, sal_Int32 nXmlNamespace )
+void DrawingML::WriteBlipFill(const Reference<XPropertySet>& rXPropSet, const awt::Size& rSize,
+                              const OUString& sURLPropName, sal_Int32 nXmlNamespace)
 {
     if ( !GetProperty( rXPropSet, sURLPropName ) )
         return;
@@ -1625,13 +1629,14 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
         bool bWriteMode = false;
         if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
             bWriteMode = true;
-        WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
+        WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode, false, rSize);
     }
 }
 
 void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const & rXPropSet,
                                       uno::Reference<graphic::XGraphic> const & rxGraphic,
-                                      sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia)
+                                      sal_Int32 nXmlNamespace, bool bWriteMode,
+                                      bool bRelPathToMedia, css::awt::Size const& rSize)
 {
     if (!rxGraphic.is() )
         return;
@@ -1648,7 +1653,7 @@ void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const 
 
     if (bWriteMode)
     {
-        WriteXGraphicBlipMode(rXPropSet, rxGraphic);
+        WriteXGraphicBlipMode(rXPropSet, rxGraphic, rSize);
     }
     else if(GetProperty(rXPropSet, "FillBitmapStretch"))
     {
@@ -1839,7 +1844,8 @@ static OUString lclConvertRectanglePointToToken(RectanglePoint eRectanglePoint)
 }
 
 void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXPropSet,
-                                  uno::Reference<graphic::XGraphic> const& rxGraphic)
+                                  uno::Reference<graphic::XGraphic> const& rxGraphic,
+                                  css::awt::Size const& rSize)
 {
     Graphic aGraphic(rxGraphic);
     Size aOriginalSize(aGraphic.GetPrefSize());
@@ -1856,6 +1862,8 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
         if (GetProperty(rXPropSet, "FillBitmapPositionOffsetX"))
         {
             sal_Int32 nX = (nSizeX != 0) ? nSizeX : aOriginalSize.Width();
+            if (nX < 0 && rSize.Width > 0)
+                nX = rSize.Width * std::abs(nX) / 100;
             nOffsetX = (*o3tl::doAccess<sal_Int32>(mAny)) * nX * 3.6;
         }
 
@@ -1876,6 +1884,8 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
         if (GetProperty(rXPropSet, "FillBitmapPositionOffsetY"))
         {
             sal_Int32 nY = (nSizeY != 0) ? nSizeY : aOriginalSize.Height();
+            if (nY < 0 && rSize.Height > 0)
+                nY = rSize.Height * std::abs(nY) / 100;
             nOffsetY = (*o3tl::doAccess<sal_Int32>(mAny)) * nY * 3.6;
         }
 
@@ -1891,18 +1901,15 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
     // if the "Scale" setting is checked in the images settings dialog.
     if (nSizeX < 0 && nSizeY < 0)
     {
-        Reference<drawing::XDrawPagesSupplier> xDPS(GetFB()->getModel(), UNO_QUERY_THROW);
-        Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), UNO_SET_THROW);
-        // in this case, the size of the first slide is enough, because all slides are the same size
-        Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(0), UNO_QUERY);
-        css::uno::Reference<css::beans::XPropertySet> xPagePropSet(xDrawPage, UNO_QUERY);
-        if (xPagePropSet)
+        if (rSize.Width != 0 && rSize.Height != 0)
         {
-            double nPageWidth, nPageHeight;
-            xPagePropSet->getPropertyValue("Width") >>= nPageWidth;
-            xPagePropSet->getPropertyValue("Height") >>= nPageHeight;
-            nSizeX = nPageWidth / aOriginalSize.Width() * std::abs(nSizeX);
-            nSizeY = nPageHeight / aOriginalSize.Height() * std::abs(nSizeY);
+            nSizeX = rSize.Width / double(aOriginalSize.Width()) * std::abs(nSizeX);
+            nSizeY = rSize.Height / double(aOriginalSize.Height()) * std::abs(nSizeY);
+        }
+        else
+        {
+            nSizeX = std::abs(nSizeX);
+            nSizeY = std::abs(nSizeY);
         }
     }
 
@@ -5003,7 +5010,7 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
     return p;
 }
 
-void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
+void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Size& rSize)
 {
     if ( !GetProperty( xPropSet, "FillStyle" ) )
         return;
@@ -5039,7 +5046,7 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
         WriteGradientFill( xPropSet );
         break;
     case FillStyle_BITMAP :
-        WriteBlipFill( xPropSet, "FillBitmap" );
+        WriteBlipFill( xPropSet, "FillBitmap", rSize );
         break;
     case FillStyle_HATCH :
         WritePattFill( xPropSet );
