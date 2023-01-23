@@ -37,9 +37,8 @@ using namespace ::xmloff::token;
 
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     SvXMLImport& rImport,
-    Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport,
-                                  rPropSet, true),
+    Reference<XPropertySet> & rPropSet)
+    :   XMLIndexSourceBaseContext(rImport, rPropSet, UseStyles::Level),
         bUseObjects(false),
         bUseGraphic(false),
         bUseMarks(false),

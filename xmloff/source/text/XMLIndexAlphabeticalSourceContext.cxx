@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet)
-:   XMLIndexSourceBaseContext(rImport, rPropSet, false)
+:   XMLIndexSourceBaseContext(rImport, rPropSet, UseStyles::None)
 ,   bMainEntryStyleNameOK(false)
 ,   bSeparators(false)
 ,   bCombineEntries(true)

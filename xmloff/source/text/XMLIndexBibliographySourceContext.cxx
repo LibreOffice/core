@@ -38,9 +38,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     SvXMLImport& rImport,
-    Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport,
-                                  rPropSet, false)
+    Reference<XPropertySet> & rPropSet)
+    : XMLIndexSourceBaseContext(rImport, rPropSet, UseStyles::None)
 {
 }
 

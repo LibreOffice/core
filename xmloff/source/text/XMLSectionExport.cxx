@@ -830,6 +830,22 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny >>= xLevelParagraphStyles;
         ExportLevelParagraphStyles(xLevelParagraphStyles);
     }
+    else if (TEXT_SECTION_TYPE_ILLUSTRATION == eType
+            || TEXT_SECTION_TYPE_OBJECT == eType
+            || TEXT_SECTION_TYPE_TABLE == eType)
+    {
+        Any const any(rPropertySet->getPropertyValue("CreateFromParagraphStyle"));
+        if (any.hasValue() &&
+            (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        {
+            OUString const styleName(any.get<OUString>());
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                         GetExport().EncodeStyleName(styleName));
+
+            SvXMLElementExport const e(GetExport(),
+                XML_NAMESPACE_LO_EXT, XML_INDEX_SOURCE_STYLE, true, false);
+        }
+    }
 }
 
 

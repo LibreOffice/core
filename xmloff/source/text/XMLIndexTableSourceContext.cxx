@@ -45,8 +45,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     SvXMLImport& rImport, Reference<XPropertySet> & rPropSet)
-    : XMLIndexSourceBaseContext(rImport,
-                                  rPropSet, false)
+    : XMLIndexSourceBaseContext(rImport, rPropSet, UseStyles::Single)
     , nDisplayFormat(0)
     , bSequenceOK(false)
     , bDisplayFormatOK(false)

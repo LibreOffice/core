@@ -42,9 +42,9 @@ using ::com::sun::star::xml::sax::XAttributeList;
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
-    bool bLevelFormats)
+    UseStyles const eUseStyles)
 :   SvXMLImportContext(rImport)
-,   bUseLevelFormats(bLevelFormats)
+,   m_UseStyles(eUseStyles)
 ,   bChapterIndex(false)
 ,   bRelativeTabs(true)
 ,   rIndexPropertySet(rPropSet)
@@ -100,7 +100,7 @@ void XMLIndexSourceBaseContext::endFastElement(sal_Int32 )
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     SvXMLImportContextRef xContext;
 
@@ -109,12 +109,25 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseCont
         xContext = new XMLIndexTitleTemplateContext(GetImport(),
                                                     rIndexPropertySet);
     }
-    else if ( bUseLevelFormats &&
-              nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLES) )
+    else if (m_UseStyles == UseStyles::Level
+            && nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLES))
     {
         xContext = new XMLIndexTOCStylesContext(GetImport(),
                                                 rIndexPropertySet);
     }
+    else if (m_UseStyles == UseStyles::Single
+            && (nElement == XML_ELEMENT(LO_EXT, XML_INDEX_SOURCE_STYLE)
+                || nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLE)))
+    {
+        OUString const styleName(xmloff::GetIndexSourceStyleName(xAttrList));
+        if (!styleName.isEmpty())
+        {
+            OUString const convertedStyleName(GetImport().GetStyleDisplayName(
+                        XmlStyleFamily::TEXT_PARAGRAPH, styleName));
+            rIndexPropertySet->setPropertyValue("CreateFromParagraphStyle", css::uno::Any(convertedStyleName));
+        }
+    }
+
     // else: unknown namespace -> ignore
 
     return xContext;

@@ -1912,6 +1912,68 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:interleave>
     </rng:define>
 
+    <!-- TODO no proposal -->
+    <rng:define name="text-illustration-index-source">
+      <rng:element name="text:illustration-index-source">
+        <rng:ref name="text-illustration-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-illustration-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+    <rng:define name="text-object-index-source">
+      <rng:element name="text:object-index-source">
+        <rng:ref name="text-object-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-object-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+    <rng:define name="text-table-index-source">
+      <rng:element name="text:table-index-source">
+        <rng:ref name="text-illustration-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-table-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+
   </rng:include>
 
     <!-- TODO no proposal -->

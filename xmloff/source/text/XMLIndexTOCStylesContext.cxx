@@ -18,6 +18,8 @@
  */
 
 #include "XMLIndexTOCStylesContext.hxx"
+
+#include "XMLIndexSourceBaseContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlictxt.hxx>
@@ -103,6 +105,23 @@ void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
     xIndexReplace->replaceByIndex(nOutlineLevel, Any(aStyleNamesSequence));
 }
 
+namespace xmloff {
+
+OUString GetIndexSourceStyleName(
+        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList)
+{
+    for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
+    {
+        if (rIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME))
+        {
+            return rIter.toString();
+        }
+    }
+    return OUString();
+}
+
+} // namespace xmloff
+
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCStylesContext::createFastChildContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
@@ -111,13 +130,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCStylesConte
     if ( nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLE) )
     {
         // find text:style-name attribute and record in aStyleNames
-        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        OUString const styleName(xmloff::GetIndexSourceStyleName(xAttrList));
+        if (!styleName.isEmpty())
         {
-            if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME) )
-            {
-                aStyleNames.push_back(aIter.toString());
-                break;
-            }
+            aStyleNames.emplace_back(styleName);
         }
     }
 

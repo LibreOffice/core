@@ -35,7 +35,11 @@ namespace com::sun::star {
  */
 class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
-    bool bUseLevelFormats;
+protected:
+    enum class UseStyles { None, Level, Single };
+
+private:
+    UseStyles m_UseStyles;
     bool bChapterIndex;     /// chapter-wise or document index?
     bool bRelativeTabs;     /// tab stops relative to margin or indent?
 
@@ -50,7 +54,7 @@ public:
     XMLIndexSourceBaseContext(
         SvXMLImport& rImport,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        bool bLevelFormats);
+        UseStyles eUseStyles);
 
     virtual ~XMLIndexSourceBaseContext() override;
 
@@ -68,5 +72,13 @@ protected:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
+
+
+namespace xmloff {
+
+OUString GetIndexSourceStyleName(
+    css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
+
+} // namespace xmloff
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
