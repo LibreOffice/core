@@ -99,8 +99,8 @@ Private _ControlCache		As Variant		&apos; Array of control objects sorted like E
 REM ============================================================ MODULE CONSTANTS
 
 &apos;	Dialog usual buttons
-Private Const OKBUTTON			= 1
-Private Const CANCELBUTTON		= 0
+Private Const cstOKBUTTON		= 1
+Private Const cstCANCELBUTTON	= 0
 
 &apos;	Page management
 Private Const PILOTCONTROL		= 1
@@ -153,6 +153,11 @@ End Function	&apos;	SFDialogs.SF_Dialog Explicit Destructor
 REM ================================================================== PROPERTIES
 
 REM -----------------------------------------------------------------------------
+Property Get CANCELBUTTON() As Variant
+	CANCELBUTTON = cstCANCELBUTTON
+End Property	&apos;	SFDialogs.SF_Dialog.CANCELBUTTON (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Caption() As Variant
 &apos;&apos;&apos;	The Caption property refers to the title of the dialog
 	Caption = _PropertyGet(&quot;Caption&quot;)
@@ -187,6 +192,11 @@ Property Get Name() As String
 &apos;&apos;&apos;	Return the name of the actual dialog
 	Name = _PropertyGet(&quot;Name&quot;)
 End Property	&apos;	SFDialogs.SF_Dialog.Name
+
+REM -----------------------------------------------------------------------------
+Property Get OKBUTTON() As Variant
+	OKBUTTON = cstOKBUTTON
+End Property	&apos;	SFDialogs.SF_Dialog.OKBUTTON (get)
 
 REM -----------------------------------------------------------------------------
 Property Get OnFocusGained() As Variant
