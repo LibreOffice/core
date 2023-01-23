@@ -45,7 +45,7 @@ namespace accessibility
 
     AccessibleListBox::AccessibleListBox( SvTreeListBox const & _rListBox, const Reference< XAccessible >& _xParent ) :
 
-        VCLXAccessibleComponent( _rListBox.GetWindowPeer() ),
+        ImplInheritanceHelper( _rListBox.GetWindowPeer() ),
         m_xParent( _xParent )
     {
     }
@@ -59,8 +59,6 @@ namespace accessibility
             dispose();
         }
     }
-    IMPLEMENT_FORWARD_XINTERFACE2(AccessibleListBox, VCLXAccessibleComponent, ImplHelper2)
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleListBox, VCLXAccessibleComponent, ImplHelper2)
 
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
