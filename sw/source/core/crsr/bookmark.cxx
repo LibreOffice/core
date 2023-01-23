@@ -417,7 +417,7 @@ namespace sw::mark
 
     Bookmark::~Bookmark()
     {
-        if (GetMarkPos().GetDoc().IsClipBoard())
+        if (!comphelper::LibreOfficeKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
             return;
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -589,7 +589,7 @@ namespace sw::mark
 
     TextFieldmark::~TextFieldmark()
     {
-        if (GetMarkPos().GetDoc().IsClipBoard())
+        if (!comphelper::LibreOfficeKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
             return;
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
