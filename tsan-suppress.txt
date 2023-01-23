@@ -12,6 +12,7 @@
 # actually be hit in practice.
 deadlock:cppuhelper::ServiceManager::disposing()
 deadlock:cppuhelper::ServiceManager::loadImplementation
+deadlock:AffineBridge::v_callInto_v
 
 # Ignore stuff in external DBUS library.
 # Some kind of dbus lock issue when we call it from psp::CUPSManager.
@@ -62,3 +63,6 @@ race:g_task_finalize
 race:g_socket_send_message_with_timeout
 race:g_idle_source_new
 race:g_slice_alloc0
+
+# Python build, lock order inversion
+deadlock:take_gil
