@@ -215,23 +215,6 @@ void SAL_CALL Configuration::setName (const OUString&)
     // ignored.
 }
 
-OUString Configuration::getImplementationName()
-{
-    return
-        "com.sun.star.comp.Draw.framework.configuration.Configuration";
-}
-
-sal_Bool Configuration::supportsService(OUString const & ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
-css::uno::Sequence<OUString> Configuration::getSupportedServiceNames()
-{
-    return css::uno::Sequence<OUString>{
-        "com.sun.star.drawing.framework.Configuration"};
-}
-
 void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,
     const bool bActivation)
@@ -297,15 +280,6 @@ bool AreConfigurationsEquivalent (
 }
 
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation(
-        css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::Configuration(nullptr, false));
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

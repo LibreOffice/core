@@ -33,8 +33,7 @@ namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfiguration,
-    css::container::XNamed,
-    css::lang::XServiceInfo
+    css::container::XNamed
     > ConfigurationInterfaceBase;
 
 /** A configuration describes the resources of an application like panes,
@@ -114,12 +113,6 @@ public:
         give access to a human readable name for debugging purposes.
     */
     virtual void SAL_CALL setName (const OUString& rName) override;
-
-    OUString SAL_CALL getImplementationName() override;
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     class ResourceContainer;
