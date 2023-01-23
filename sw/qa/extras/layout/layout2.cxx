@@ -2573,6 +2573,177 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152031)
                                  nLeft_Row2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf153136)
+{
+    createSwDoc("tdf153136.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    const sal_Int32 small = 300; // Small-height lines are around 276 twip
+    const sal_Int32 large = 1000; // Large-height lines are 1104 twip or more
+
+    // Page 1: standalone paragraphs
+
+    // U+0009 CHARACTER TABULATION: height is ignored
+    sal_Int32 height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[1]", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+0020 SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[2]", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+00A0 NO-BREAK SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[3]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+1680 OGHAM SPACE MARK: height is considered; not tested, because Liberation Serif lacks it
+
+    // U+2000 EN QUAD: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[4]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2001 EM QUAD: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[5]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2002 EN SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[6]", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2003 EM SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[7]", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2004 THREE-PER-EM SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[8]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2005 FOUR-PER-EM SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[9]", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2006 SIX-PER-EM SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[10]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2007 FIGURE SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[11]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2008 PUNCTUATION SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[12]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2009 THIN SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[13]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+200A HAIR SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[14]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+202F NARROW NO-BREAK SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[15]", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+205F MEDIUM MATHEMATICAL SPACE: height is considered; not tested, because Liberation Serif lacks it
+    // U+3000 IDEOGRAPHIC SPACE: height is ignored; not tested, because Liberation Serif lacks it
+
+    // Page 2: table rows (no paragraph-level size DF)
+
+    // U+0020 SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+00A0 NO-BREAK SPACE: height is considered (1104 or so)
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+1680 OGHAM SPACE MARK: height is considered; not tested, because Liberation Serif lacks it
+
+    // U+2000 EN QUAD: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[3]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2001 EM QUAD: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[4]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2002 EN SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[5]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2003 EM SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[6]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2004 THREE-PER-EM SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[7]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2005 FOUR-PER-EM SPACE: height is ignored
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[8]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_LESS(small, height);
+
+    // U+2006 SIX-PER-EM SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[9]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2007 FIGURE SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[10]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2008 PUNCTUATION SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[11]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+2009 THIN SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[12]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+200A HAIR SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[13]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+202F NARROW NO-BREAK SPACE: height is considered
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[14]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(large, height);
+
+    // U+205F MEDIUM MATHEMATICAL SPACE: height is considered; not tested, because Liberation Serif lacks it
+    // U+3000 IDEOGRAPHIC SPACE: height is ignored; not tested, because Liberation Serif lacks it
+
+    // TODO: page 3, with table having paragraphs with paragraph-level size DF;
+    // all rows should have large height
+
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[1]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[2]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[3]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[4]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[5]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[6]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[7]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[8]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[9]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[10]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[11]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[12]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[13]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+    // height = getXPath(pXmlDoc, "(/root/page[3]//row)[14]/infos/bounds", "height").toInt32();
+    // CPPUNIT_ASSERT_GREATER(large, height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
