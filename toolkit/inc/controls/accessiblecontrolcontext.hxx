@@ -22,6 +22,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 
 namespace vcl { class Window; }
