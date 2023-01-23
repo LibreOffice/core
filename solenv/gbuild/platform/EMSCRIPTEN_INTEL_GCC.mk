@@ -62,7 +62,6 @@ gb_LINKERSTRIPDEBUGFLAGS :=
 # This maps to g3, no source maps, but DWARF with current emscripten!
 # https://developer.chrome.com/blog/wasm-debugging-2020/
 gb_DEBUGINFO_FLAGS = -g
-#gb_DEBUGINFO_FLAGS = -gsource-map --source-map-base=file://$(WORKDIR)/LinkTarget/Executable
 
 ifeq ($(HAVE_EXTERNAL_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS += -gseparate-dwarf
