@@ -391,7 +391,12 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 bool bFirstRun = m_bFirstRun;
                 checkFirstRun();
-                checkNeedPap();
+                if (bFirstRun || m_bNeedCr)
+                {
+                    // Only send the paragraph properties early if we'll create a new paragraph in a
+                    // bit anyway.
+                    checkNeedPap();
+                }
                 sal_uInt8 const sBreak[] = { 0xc };
                 Mapper().text(sBreak, 1);
                 if (bFirstRun || m_bNeedCr)
