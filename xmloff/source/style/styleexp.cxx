@@ -244,7 +244,8 @@ bool XMLStyleExport::exportStyle(
         aAny = xPropSet->getPropertyValue("LinkStyle");
         OUString sLinkName;
         aAny >>= sLinkName;
-        if (!sLinkName.isEmpty())
+        if (!sLinkName.isEmpty()
+            && (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_LINKED_STYLE_NAME,
                                      GetExport().EncodeStyleName(sLinkName));
