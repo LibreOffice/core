@@ -420,7 +420,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         auto nFound = m_xFaxLB->find_text(pAddPrinterAttr->m_sFaxName);
         if (nFound != -1)
             m_xFaxLB->set_active(nFound);
-        else
+        else if (m_xFaxLB->get_count())
             m_xFaxLB->set_active(0);
     }
     if (m_xProspectCB->get_active())
