@@ -443,9 +443,9 @@ PDFOutputStream::~PDFOutputStream()
 {
 }
 
-void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream )
+void PDFWriter::AddAttachedFile(OUString const& rFileName, OUString const& rMimeType, std::unique_ptr<PDFOutputStream> pStream)
 {
-    xImplementation->addStream( rMimeType, pStream );
+    xImplementation->addDocumentAttachedFile(rFileName, rMimeType, std::move(pStream));
 }
 
 std::set< PDFWriter::ErrorCode > const & PDFWriter::GetErrors() const

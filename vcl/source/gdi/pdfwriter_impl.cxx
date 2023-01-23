@@ -3423,6 +3423,35 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
     return true;
 }
 
+void PDFWriterImpl::addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, std::unique_ptr<PDFOutputStream> rStream)
+{
+    sal_Int32 nObjectID = addEmbeddedFile(std::move(rStream), rMimeType);
+    auto& rAttachedFile = m_aDocumentAttachedFiles.emplace_back();
+    rAttachedFile.maFilename = rFileName;
+    rAttachedFile.maMimeType = rMimeType;
+    rAttachedFile.mnEmbeddedFileObjectId = nObjectID;
+    rAttachedFile.mnObjectId = createObject();
+}
+
+sal_Int32 PDFWriterImpl::addEmbeddedFile(std::unique_ptr<PDFOutputStream> rStream, OUString const& rMimeType)
+{
+    sal_Int32 aObjectID = createObject();
+    auto& rEmbedded = m_aEmbeddedFiles.emplace_back();
+    rEmbedded.m_nObject = aObjectID;
+    rEmbedded.m_aSubType = rMimeType;
+    rEmbedded.m_pStream = std::move(rStream);
+    return aObjectID;
+}
+
+sal_Int32 PDFWriterImpl::addEmbeddedFile(BinaryDataContainer const & rDataContainer)
+{
+    sal_Int32 aObjectID = createObject();
+    m_aEmbeddedFiles.emplace_back();
+    m_aEmbeddedFiles.back().m_nObject = aObjectID;
+    m_aEmbeddedFiles.back().m_aDataContainer = rDataContainer;
+    return aObjectID;
+}
+
 bool PDFWriterImpl::emitScreenAnnotations()
 {
     int nAnnots = m_aScreens.size();
@@ -4871,26 +4900,81 @@ bool PDFWriterImpl::emitAnnotations()
     return true;
 }
 
+class PDFStreamIf : public cppu::WeakImplHelper< css::io::XOutputStream >
+{
+    VclPtr<PDFWriterImpl>  m_pWriter;
+    bool            m_bWrite;
+    public:
+    explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
+
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override
+    {
+        if( m_bWrite && aData.hasElements() )
+        {
+            sal_Int32 nBytes = aData.getLength();
+            m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
+        }
+    }
+    virtual void SAL_CALL flush() override {}
+    virtual void SAL_CALL closeOutput() override
+    {
+        m_bWrite = false;
+    }
+};
+
 bool PDFWriterImpl::emitEmbeddedFiles()
 {
-    for (const auto& rEmbeddedFile : m_aEmbeddedFiles)
+    for (auto& rEmbeddedFile : m_aEmbeddedFiles)
     {
         if (!updateObject(rEmbeddedFile.m_nObject))
             continue;
 
+        sal_Int32 nSizeObject = createObject();
+
         OStringBuffer aLine;
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
-        aLine.append("<< /Type /EmbeddedFile /Length ");
-        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aDataContainer.getSize()));
-        aLine.append(" >>\nstream\n");
+        aLine.append("<< /Type /EmbeddedFile");
+        if (!rEmbeddedFile.m_aSubType.isEmpty())
+        {
+            aLine.append("/Subtype /");
+            appendName(rEmbeddedFile.m_aSubType, aLine);
+        }
+        aLine.append(" /Length ");
+        appendObjectReference(nSizeObject, aLine);
+        aLine.append(">>\nstream\n");
+        checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
+        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+        disableStreamEncryption();
+        aLine.setLength(0);
+
+        sal_Int64 nSize{};
+        if (!rEmbeddedFile.m_aDataContainer.isEmpty())
+        {
+            nSize = rEmbeddedFile.m_aDataContainer.getSize();
+            CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()));
+        }
+        else if (rEmbeddedFile.m_pStream)
+        {
+            sal_uInt64 nBegin = getCurrentFilePosition();
+            css::uno::Reference<css::io::XOutputStream> xStream(new PDFStreamIf(this));
+            rEmbeddedFile.m_pStream->write(xStream);
+            rEmbeddedFile.m_pStream.reset();
+            xStream.clear();
+            nSize = sal_Int64(getCurrentFilePosition() - nBegin);
+        }
+        aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()));
-
-        aLine.append("\nendstream\nendobj\n\n");
-        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+        if (!updateObject(nSizeObject))
+            return false;
+        aLine.append(nSizeObject);
+        aLine.append(" 0 obj\n");
+        aLine.append(nSize);
+        aLine.append("\nendobj\n\n");
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return false;
     }
     return true;
 }
@@ -5001,6 +5085,25 @@ bool PDFWriterImpl::emitCatalog()
     CHECK_RETURN( emitAnnotations() );
     CHECK_RETURN( emitEmbeddedFiles() );
 
+    // emit attached files
+    for (auto & rAttachedFile : m_aDocumentAttachedFiles)
+    {
+        if (!updateObject(rAttachedFile.mnObjectId))
+            return false;
+        aLine.setLength( 0 );
+
+        appendObjectID(rAttachedFile.mnObjectId, aLine);
+        aLine.append("<</Type/Filespec /F");
+        aLine.append('<');
+        PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+        aLine.append('>');
+        aLine.append(" /EF <</F ");
+        appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
+        aLine.append(">>");
+        aLine.append(">>\nendobj\n\n");
+        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    }
+
     // emit Catalog
     m_nCatalogObject = createObject();
     if( ! updateObject( m_nCatalogObject ) )
@@ -5018,6 +5121,22 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append("/Dests ");
         aLine.append( nNamedDestinationsDictionary );
         aLine.append( " 0 R\n" );
+    }
+
+    if (!m_aDocumentAttachedFiles.empty())
+    {
+        aLine.append("/Names ");
+        aLine.append("<</EmbeddedFiles <</Names [");
+        for (auto & rAttachedFile : m_aDocumentAttachedFiles)
+        {
+            aLine.append('<');
+            PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+            aLine.append('>');
+            aLine.append(' ');
+            appendObjectReference(rAttachedFile.mnObjectId, aLine);
+        }
+        aLine.append("]>>>>");
+        aLine.append("\n" );
     }
 
     if( m_aContext.PageLayout != PDFWriter::DefaultLayout )
@@ -5797,19 +5916,21 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( aDocChecksum );
         aLine.append( "\n" );
     }
-    if( !m_aAdditionalStreams.empty() )
+
+    if (!m_aDocumentAttachedFiles.empty())
     {
         aLine.append( "/AdditionalStreams [" );
-        for(const PDFAddStream & rAdditionalStream : m_aAdditionalStreams)
+        for (auto const& rAttachedFile : m_aDocumentAttachedFiles)
         {
             aLine.append( "/" );
-            appendName( rAdditionalStream.m_aMimeType, aLine );
-            aLine.append( " " );
-            aLine.append( rAdditionalStream.m_nStreamObject );
-            aLine.append( " 0 R\n" );
+            appendName(rAttachedFile.maMimeType, aLine);
+            aLine.append(" ");
+            appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
+            aLine.append("\n");
         }
         aLine.append( "]\n" );
     }
+
     aLine.append( ">>\n"
                   "startxref\n" );
     aLine.append( static_cast<sal_Int64>(nXRefOffset) );
@@ -5927,104 +6048,6 @@ void PDFWriterImpl::sortWidgets()
     // FIXME: implement tab order in structure tree for PDF 1.5
 }
 
-class PDFStreamIf :
-        public cppu::WeakImplHelper< css::io::XOutputStream >
-{
-    VclPtr<PDFWriterImpl>  m_pWriter;
-    bool            m_bWrite;
-    public:
-    explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
-
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
-};
-
-void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
-{
-    if( m_bWrite && aData.hasElements() )
-    {
-        sal_Int32 nBytes = aData.getLength();
-        m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
-    }
-}
-
-void SAL_CALL PDFStreamIf::flush()
-{
-}
-
-void SAL_CALL PDFStreamIf::closeOutput()
-{
-    m_bWrite = false;
-}
-
-bool PDFWriterImpl::emitAdditionalStreams()
-{
-    unsigned int nStreams = m_aAdditionalStreams.size();
-    for( unsigned int i = 0; i < nStreams; i++ )
-    {
-        PDFAddStream& rStream = m_aAdditionalStreams[i];
-        rStream.m_nStreamObject = createObject();
-        sal_Int32 nSizeObject = createObject();
-
-        if( ! updateObject( rStream.m_nStreamObject ) )
-            return false;
-
-        OStringBuffer aLine;
-        aLine.append( rStream.m_nStreamObject );
-        aLine.append( " 0 obj\n<</Length " );
-        aLine.append( nSizeObject );
-        aLine.append( " 0 R" );
-        if( rStream.m_bCompress )
-            aLine.append( "/Filter/FlateDecode" );
-        aLine.append( ">>\nstream\n" );
-        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            return false;
-        sal_uInt64 nBeginStreamPos = 0, nEndStreamPos = 0;
-        if( osl::File::E_None != m_aFile.getPos(nBeginStreamPos) )
-        {
-            m_aFile.close();
-            m_bOpen = false;
-        }
-        if( rStream.m_bCompress )
-            beginCompression();
-
-        checkAndEnableStreamEncryption( rStream.m_nStreamObject );
-        css::uno::Reference< css::io::XOutputStream > xStream( new PDFStreamIf( this ) );
-        assert(rStream.m_pStream);
-        if (!rStream.m_pStream)
-            return false;
-        rStream.m_pStream->write( xStream );
-        xStream.clear();
-        delete rStream.m_pStream;
-        rStream.m_pStream = nullptr;
-        disableStreamEncryption();
-
-        if( rStream.m_bCompress )
-            endCompression();
-
-        if (osl::File::E_None != m_aFile.getPos(nEndStreamPos))
-        {
-            m_aFile.close();
-            m_bOpen = false;
-            return false;
-        }
-        if( ! writeBuffer( "\nendstream\nendobj\n\n", 19 ) )
-            return false ;
-        // emit stream length object
-        if( ! updateObject( nSizeObject ) )
-            return false;
-        aLine.setLength( 0 );
-        aLine.append( nSizeObject );
-        aLine.append( " 0 obj\n" );
-        aLine.append( static_cast<sal_Int64>(nEndStreamPos-nBeginStreamPos) );
-        aLine.append( "\nendobj\n\n" );
-        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            return false;
-    }
-    return true;
-}
-
 bool PDFWriterImpl::emit()
 {
     endPage();
@@ -6042,9 +6065,6 @@ bool PDFWriterImpl::emit()
         createControl( aSignature, 0 );
     }
 #endif
-
-    // emit additional streams
-    CHECK_RETURN( emitAdditionalStreams() );
 
     // emit catalog
     CHECK_RETURN( emitCatalog() );
@@ -9461,10 +9481,8 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     if (m_aContext.UseReferenceXObject)
     {
         // Store the original PDF data as an embedded file.
-        m_aEmbeddedFiles.emplace_back();
-        m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_aDataContainer = rDataContainer;
-        rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
+        auto nObjectID = addEmbeddedFile(rDataContainer);
+        rEmit.m_nEmbeddedObject = nObjectID;
     }
     else
     {
@@ -11491,20 +11509,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     m_aPages[ nPageNr ].m_aAnnotations.push_back( rNewWidget.m_nObject );
 
     return nNewWidget;
-}
-
-void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStream )
-{
-    if( pStream )
-    {
-        m_aAdditionalStreams.emplace_back( );
-        PDFAddStream& rStream = m_aAdditionalStreams.back();
-        rStream.m_aMimeType = !rMimeType.isEmpty()
-                              ? rMimeType
-                              : OUString( "application/octet-stream"  );
-        rStream.m_pStream = pStream;
-        rStream.m_bCompress = false;
-    }
 }
 
 void PDFWriterImpl::MARK( const char* pString )

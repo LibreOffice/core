@@ -27,6 +27,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
+#include <rtl/ustring.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
@@ -312,19 +313,16 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     if( !xStore.is() )
         return;
 
-    Sequence< beans::PropertyValue > aArgs( 2 + (m_aPreparedPassword.hasElements() ? 1 : 0) );
-    aArgs.getArray()[0].Name = "FilterName";
-    aArgs.getArray()[1].Name = "OutputStream";
-    aArgs.getArray()[1].Value <<= xStream;
-    if( m_aPreparedPassword.hasElements() )
-    {
-        aArgs.getArray()[2].Name = "EncryptionData";
-        aArgs.getArray()[2].Value <<= m_aPreparedPassword;
-    }
+    std::vector<beans::PropertyValue> aArgs {
+        comphelper::makePropertyValue("FilterName", OUString()),
+        comphelper::makePropertyValue("OutputStream", xStream),
+    };
+    if (m_aPreparedPassword.hasElements())
+        aArgs.push_back(comphelper::makePropertyValue("EncryptionData", m_aPreparedPassword));
 
     try
     {
-        xStore->storeToURL( "private:stream", aArgs );
+        xStore->storeToURL("private:stream", comphelper::containerToSequence(aArgs));
     }
     catch( const IOException& )
     {
@@ -927,9 +925,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // export stream
                 // get mimetype
                 OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
-                aPDFWriter.AddStream( aSrcMimetype,
-                                       new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword )
-                                       );
+                OUString aExt;
+                if (aSrcMimetype == "application/vnd.oasis.opendocument.text")
+                    aExt = ".odt";
+                else if (aSrcMimetype == "application/vnd.oasis.opendocument.presentation")
+                    aExt = ".odp";
+                else if (aSrcMimetype == "application/vnd.oasis.opendocument.spreadsheet")
+                    aExt = ".ods";
+                else if (aSrcMimetype == "application/vnd.oasis.opendocument.graphics")
+                    aExt = ".odg";
+                std::unique_ptr<vcl::PDFOutputStream> pStream(new PDFExportStreamDoc(mxSrcDoc, aPreparedPermissionPassword));
+                aPDFWriter.AddAttachedFile("Original" + aExt, aSrcMimetype, std::move(pStream));
             }
 
             if ( pOut )

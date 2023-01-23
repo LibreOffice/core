@@ -1193,24 +1193,24 @@ The following structure describes the permissions used in PDF security
      */
     sal_Int32 CreateControl( const AnyWidget& rControlType );
 
-    /** Inserts an additional stream to the PDF file
+    /** Attaches an additional file to the PDF file
 
-    This function adds an arbitrary stream to the produced PDF file. May be called
-    any time before Emit(). The stream will be written during
-    Emit by calling the PDFOutputStream Object's write
-    method. After the call the PDFOutputStream will be deleted.
+    This function adds an arbitrary stream that represents an attached file
+    in the PDF file.
 
-    All additional streams and their mimetypes will be entered into an array
-    in the trailer dictionary.
+    This also adds an additional stream array entry (with the mimetype) in
+    the trailer dictionary for backwards compatibility.
+
+    @param rFileName
+    the filename of the additional file as presented in the stream
 
     @param rMimeType
     the mimetype of the stream
 
     @param pStream
     the interface to the additional stream
-
     */
-    void AddStream( const OUString& rMimeType, PDFOutputStream* pStream );
+    void AddAttachedFile(OUString const& rFileName, const OUString& rMimeType, std::unique_ptr<PDFOutputStream> pStream);
 
     /// Write rString as a PDF hex string into rBuffer.
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);

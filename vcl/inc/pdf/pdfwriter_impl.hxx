@@ -440,8 +440,10 @@ struct PDFEmbeddedFile
 {
     /// ID of the file.
     sal_Int32 m_nObject;
+    OUString m_aSubType;
     /// Contents of the file.
     BinaryDataContainer m_aDataContainer;
+    std::unique_ptr<PDFOutputStream> m_pStream;
 
     PDFEmbeddedFile()
         : m_nObject(0)
@@ -673,7 +675,15 @@ struct GraphicsState
 
 enum class Mode { DEFAULT, NOWRITE };
 
-}
+struct PDFDocumentAttachedFile
+{
+    OUString maFilename;
+    OUString maMimeType;
+    sal_Int32 mnEmbeddedFileObjectId;
+    sal_Int32 mnObjectId;
+};
+
+} // end pdf namespace
 
 class PDFWriterImpl final : public VirtualDevice, public PDFObjectContainer
 {
@@ -728,6 +738,9 @@ private:
     std::vector<PDFScreen> m_aScreens;
     /// Contains embedded files.
     std::vector<PDFEmbeddedFile> m_aEmbeddedFiles;
+
+    std::vector<PDFDocumentAttachedFile> m_aDocumentAttachedFiles;
+
     /* makes correctly encoded for export to PDF URLS
     */
     css::uno::Reference< css::util::XURLTransformer > m_xTrans;
@@ -810,11 +823,20 @@ private:
     std::unique_ptr<ZCodec>                 m_pCodec;
     std::unique_ptr<SvMemoryStream>         m_pMemStream;
 
-    std::vector< PDFAddStream >             m_aAdditionalStreams;
     std::set< PDFWriter::ErrorCode >        m_aErrors;
 
     ::comphelper::Hash                      m_DocDigest;
 
+    sal_uInt64 getCurrentFilePosition()
+    {
+        sal_uInt64 nPosition{};
+        if (osl::File::E_None != m_aFile.getPos(nPosition))
+        {
+            m_aFile.close();
+            m_bOpen = false;
+        }
+        return nPosition;
+    }
 /*
 variables for PDF security
 i12626
@@ -1317,8 +1339,11 @@ public:
     // controls
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
 
-    // additional streams
-    void addStream( const OUString& rMimeType, PDFOutputStream* pStream );
+    // attached file
+    void addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, std::unique_ptr<PDFOutputStream> rStream);
+
+    sal_Int32 addEmbeddedFile(BinaryDataContainer const & rDataContainer);
+    sal_Int32 addEmbeddedFile(std::unique_ptr<PDFOutputStream> rStream, OUString const& rMimeType);
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case
