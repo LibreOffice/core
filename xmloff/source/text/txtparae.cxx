@@ -2873,6 +2873,11 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         // invalid layout size we got.
         bUseLayoutSize = false;
     }
+    if (aLayoutSize.Width <= 0 || aLayoutSize.Height <= 0)
+    {
+        // This is broken, Writer frames have a minimal size, see MINFLY.
+        bUseLayoutSize = false;
+    }
 
     // svg:width
     sal_Int16 nWidthType = SizeType::FIX;
