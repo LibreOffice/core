@@ -29,6 +29,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/weakref.hxx>
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <memory>
 #include <vector>
@@ -38,7 +39,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XModuleController; }
 namespace com::sun::star::drawing { class XLayer; }
 namespace osl { class Mutex; }
-
+namespace sd::framework { class ConfigurationController; }
 class SdPage;
 
 namespace sd {
@@ -295,8 +296,7 @@ private:
     */
     css::uno::Reference<css::drawing::XDrawSubController> mxSubController;
 
-    css::uno::Reference<
-        css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
     css::uno::Reference<
         css::drawing::framework::XModuleController> mxModuleController;
 

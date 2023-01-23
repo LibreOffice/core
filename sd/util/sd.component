@@ -65,10 +65,6 @@
       constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.configuration.ConfigurationController"
-      constructor="com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation">
-    <service name="com.sun.star.drawing.framework.ConfigurationController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.Draw.framework.module.ModuleController"
       constructor="com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation">
     <service name="com.sun.star.drawing.framework.ModuleController"/>

@@ -32,12 +32,12 @@ namespace com::sun::star::drawing::framework { class XConfiguration; }
 namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
+namespace com::sun::star::frame { class XController; }
 
 namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationController,
-    css::lang::XInitialization
+    css::drawing::framework::XConfigurationController
     > ConfigurationControllerInterfaceBase;
 
 /** The configuration controller is responsible for maintaining the current
@@ -51,7 +51,7 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    ConfigurationController() noexcept;
+    ConfigurationController(const css::uno::Reference<css::frame::XController>& rxController) noexcept;
     virtual ~ConfigurationController() noexcept override;
     ConfigurationController(const ConfigurationController&) = delete;
     ConfigurationController& operator=(const ConfigurationController&) = delete;
@@ -141,11 +141,6 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XResourceFactory>
         SAL_CALL getResourceFactory (
         const OUString& sResourceURL) override;
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     /** Use this class instead of calling lock() and unlock() directly in
         order to be exception safe.

@@ -148,7 +148,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing/framework
 	BasicPaneFactory \
 	BasicToolBarFactory \
 	BasicViewFactory \
-	ConfigurationController \
 	ModuleController \
 	ResourceId \
 ))

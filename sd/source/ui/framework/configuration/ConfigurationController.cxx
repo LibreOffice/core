@@ -101,10 +101,15 @@ ConfigurationController::Lock::~Lock()
 
 //===== ConfigurationController ===============================================
 
-ConfigurationController::ConfigurationController() noexcept
+ConfigurationController::ConfigurationController(const css::uno::Reference<css::frame::XController>& rxController) noexcept
     : ConfigurationControllerInterfaceBase(m_aMutex)
     , mbIsDisposed(false)
 {
+    const SolarMutexGuard aSolarGuard;
+
+    mpImplementation.reset(new Implementation(
+        *this,
+        rxController));
 }
 
 ConfigurationController::~ConfigurationController() noexcept
@@ -475,22 +480,6 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
     return mpImplementation->mpResourceFactoryContainer->GetFactory(sResourceURL);
 }
 
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
-{
-    ::osl::MutexGuard aGuard (m_aMutex);
-
-    if (aArguments.getLength() == 1)
-    {
-        const SolarMutexGuard aSolarGuard;
-
-        mpImplementation.reset(new Implementation(
-            *this,
-            Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW)));
-    }
-}
-
 void ConfigurationController::ThrowIfDisposed () const
 {
     if (mbIsDisposed)
@@ -527,15 +516,6 @@ ConfigurationController::Implementation::Implementation (
 }
 
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation(
-        css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::ConfigurationController());
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

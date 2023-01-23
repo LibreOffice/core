@@ -25,6 +25,7 @@
 #include <ViewShellManager.hxx>
 #include <FormShellManager.hxx>
 #include <Window.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -33,7 +34,6 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/drawing/framework/ConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ModuleController.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
@@ -761,8 +761,7 @@ void DrawController::ProvideFrameworkControllers()
         Reference<XController> xController (this);
         const Reference<XComponentContext> xContext (
             ::comphelper::getProcessComponentContext() );
-        mxConfigurationController = ConfigurationController::create(
-            xContext,
+        mxConfigurationController = new sd::framework::ConfigurationController(
             xController);
         mxModuleController = ModuleController::create(
             xContext,
@@ -781,9 +780,8 @@ void DrawController::DisposeFrameworkControllers()
     if (xComponent.is())
         xComponent->dispose();
 
-    xComponent.set(mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    if (mxConfigurationController.is())
+        mxConfigurationController->dispose();
 }
 
 void DrawController::ThrowIfDisposed() const
