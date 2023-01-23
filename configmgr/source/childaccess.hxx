@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
@@ -48,11 +47,9 @@ class Node;
 class RootAccess;
 
 class ChildAccess:
-    public Access, public css::container::XChild,
-    public css::lang::XUnoTunnel
+    public Access, public css::container::XChild
 {
 public:
-    static css::uno::Sequence< sal_Int8 > const & getUnoTunnelId();
 
     ChildAccess(
         Components & components, rtl::Reference< RootAccess > const & root,
@@ -84,9 +81,6 @@ public:
 
     virtual void SAL_CALL setParent(
         css::uno::Reference< css::uno::XInterface > const &) override;
-
-    virtual sal_Int64 SAL_CALL getSomething(
-        css::uno::Sequence< sal_Int8 > const & aIdentifier) override;
 
     void bind(
         rtl::Reference< RootAccess > const & root,

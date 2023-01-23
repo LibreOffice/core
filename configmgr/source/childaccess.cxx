@@ -56,12 +56,6 @@
 
 namespace configmgr {
 
-css::uno::Sequence< sal_Int8 > const & ChildAccess::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theChildAccessUnoTunnelId;
-    return theChildAccessUnoTunnelId.getSeq();
-}
-
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, OUString name,
@@ -157,15 +151,6 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         "setParent", static_cast< cppu::OWeakObject * >(this));
-}
-
-sal_Int64 ChildAccess::getSomething(
-    css::uno::Sequence< sal_Int8 > const & aIdentifier)
-{
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
-    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 void ChildAccess::bind(
@@ -341,8 +326,7 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     return res.hasValue()
         ? res
         : cppu::queryInterface(
-            aType, static_cast< css::container::XChild * >(this),
-            static_cast< css::lang::XUnoTunnel * >(this));
+            aType, static_cast< css::container::XChild * >(this));
 }
 
 }

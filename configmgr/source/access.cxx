@@ -2159,7 +2159,9 @@ void Access::checkKnownProperty(OUString const & descriptor) {
 rtl::Reference< ChildAccess > Access::getFreeSetMember(
     css::uno::Any const & value)
 {
-    rtl::Reference< ChildAccess > freeAcc = comphelper::getFromUnoTunnel<ChildAccess>(value);
+    css::uno::Reference<XInterface> xTmp;
+    value >>= xTmp;
+    rtl::Reference< ChildAccess > freeAcc = dynamic_cast<ChildAccess*>(xTmp.get());
     if (!freeAcc.is() || freeAcc->getParentAccess().is() ||
         (freeAcc->isInTransaction() &&
          freeAcc->getRootAccess() != getRootAccess()))
