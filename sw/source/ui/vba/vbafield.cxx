@@ -74,9 +74,9 @@ namespace {
 class SwVbaReadFieldParams
 {
 private:
-    OUString aData;
-    sal_Int32 nLen, nFnd, nNext, nSavPtr;
-    OUString aFieldName;
+    OUString m_aData;
+    sal_Int32 m_nLen, m_nFnd, m_nNext, m_nSavPtr;
+    OUString m_aFieldName;
 public:
     explicit SwVbaReadFieldParams( const OUString& rData );
 
@@ -85,39 +85,39 @@ public:
     sal_Int32 FindNextStringPiece( sal_Int32 _nStart );
 
     OUString GetResult() const;
-    const OUString& GetFieldName()const { return aFieldName; }
+    const OUString& GetFieldName()const { return m_aFieldName; }
 };
 
 }
 
 SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )
-    : aData( _rData ), nLen( _rData.getLength() ), nNext( 0 )
+    : m_aData( _rData ), m_nLen( _rData.getLength() ), m_nNext( 0 )
 {
     // First search for an opening parenthesis or a space or a quotation mark
     // or a backslash, so that the field command
     // (thus INCLUDEPICTURE or ...) is ignored.
-    while( (nLen > nNext) && (aData[ nNext ] == ' ') )
-        ++nNext;
+    while( (m_nLen > m_nNext) && (m_aData[ m_nNext ] == ' ') )
+        ++m_nNext;
 
     sal_Unicode c;
-    while(     nLen > nNext
-            && (c = aData[ nNext ]) != ' '
+    while(     m_nLen > m_nNext
+            && (c = m_aData[ m_nNext ]) != ' '
             && c != '"'
             && c != '\\'
             && c != 132
             && c != 0x201c )
-        ++nNext;
+        ++m_nNext;
 
-    nFnd      = nNext;
-    nSavPtr   = nNext;
-    aFieldName = aData.copy( 0, nFnd );
+    m_nFnd      = m_nNext;
+    m_nSavPtr   = m_nNext;
+    m_aFieldName = m_aData.copy( 0, m_nFnd );
 }
 
 OUString SwVbaReadFieldParams::GetResult() const
 {
-    return    (-1 == nFnd)
+    return    (-1 == m_nFnd)
             ? OUString()
-            : aData.copy( nFnd, (nSavPtr - nFnd) );
+            : m_aData.copy( m_nFnd, (m_nSavPtr - m_nFnd) );
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
@@ -125,29 +125,29 @@ tools::Long SwVbaReadFieldParams::SkipToNextToken()
 {
     tools::Long nRet = -1;     // end
     if (
-         (-1 != nNext) && (nLen > nNext) &&
-         -1 != (nFnd = FindNextStringPiece(nNext))
+         (-1 != m_nNext) && (m_nLen > m_nNext) &&
+         -1 != (m_nFnd = FindNextStringPiece(m_nNext))
        )
     {
-        nSavPtr = nNext;
+        m_nSavPtr = m_nNext;
 
-        if ('\\' == aData[nFnd] && '\\' != aData[nFnd + 1])
+        if ('\\' == m_aData[m_nFnd] && '\\' != m_aData[m_nFnd + 1])
         {
-            nRet = aData[++nFnd];
-            nNext = ++nFnd;             // and set behind
+            nRet = m_aData[++m_nFnd];
+            m_nNext = ++m_nFnd;             // and set behind
         }
         else
         {
             nRet = -2;
             if (
-                 (-1 != nSavPtr ) &&
+                 (-1 != m_nSavPtr ) &&
                  (
-                   ('"' == aData[nSavPtr - 1]) ||
-                   (0x201d == aData[nSavPtr - 1])
+                   ('"' == m_aData[m_nSavPtr - 1]) ||
+                   (0x201d == m_aData[m_nSavPtr - 1])
                  )
                )
             {
-                --nSavPtr;
+                --m_nSavPtr;
             }
         }
     }
@@ -164,37 +164,37 @@ tools::Long SwVbaReadFieldParams::SkipToNextToken()
 
 sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
-    sal_Int32  n = ( -1 == nStart ) ? nFnd : nStart;  // Start
+    sal_Int32  n = ( -1 == nStart ) ? m_nFnd : nStart;  // Start
     sal_Int32 n2;          // End
 
-    nNext = -1;        // Default for not found
+    m_nNext = -1;        // Default for not found
 
-    while( (nLen > n) && (aData[ n ] == ' ') )
+    while( (m_nLen > n) && (m_aData[ n ] == ' ') )
         ++n;
 
-    if( nLen == n )
+    if( m_nLen == n )
         return -1;     // String End reached!
 
-    if(     (aData[ n ] == '"')     // quotation marks are in front of parenthesis?
-        ||  (aData[ n ] == 0x201c)
-        ||  (aData[ n ] == 132) )
+    if(     (m_aData[ n ] == '"')     // quotation marks are in front of parenthesis?
+        ||  (m_aData[ n ] == 0x201c)
+        ||  (m_aData[ n ] == 132) )
     {
         n++;                        // ignore quotation marks
         n2 = n;                     // From here search for the end
-        while(     (nLen > n2)
-                && (aData[ n2 ] != '"')
-                && (aData[ n2 ] != 0x201d)
-                && (aData[ n2 ] != 147) )
+        while(     (m_nLen > n2)
+                && (m_aData[ n2 ] != '"')
+                && (m_aData[ n2 ] != 0x201d)
+                && (m_aData[ n2 ] != 147) )
             n2++;                   // Search for the end of the parenthesis
     }
     else                        // no quotation marks
     {
         n2 = n;                     // from here search for the end
-        while( (nLen > n2) && (aData[ n2 ] != ' ') ) // Search for the end of the parenthesis
+        while( (m_nLen > n2) && (m_aData[ n2 ] != ' ') ) // Search for the end of the parenthesis
         {
-            if( aData[ n2 ] == '\\' )
+            if( m_aData[ n2 ] == '\\' )
             {
-                if( aData[ n2+1 ] == '\\' )
+                if( m_aData[ n2+1 ] == '\\' )
                     n2 += 2;        // double-backslash -> OK
                 else
                 {
@@ -207,10 +207,10 @@ sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
                 n2++;               // no backslash -> OK
         }
     }
-    if( nLen > n2 )
+    if( m_nLen > n2 )
     {
-        if(aData[ n2 ] != ' ') n2++;
-        nNext = n2;
+        if(m_aData[ n2 ] != ' ') n2++;
+        m_nNext = n2;
     }
     return n;
 }

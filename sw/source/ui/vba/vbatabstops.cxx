@@ -49,22 +49,22 @@ namespace {
 class TabStopsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
-    sal_Int32 nIndex;
+    sal_Int32 m_nIndex;
 
 public:
-    explicit TabStopsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), nIndex( 0 )
+    explicit TabStopsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), m_nIndex( 0 )
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex < mxIndexAccess->getCount() );
+        return ( m_nIndex < mxIndexAccess->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if( nIndex < mxIndexAccess->getCount() )
+        if( m_nIndex < mxIndexAccess->getCount() )
         {
-            return mxIndexAccess->getByIndex( nIndex++ );
+            return mxIndexAccess->getByIndex( m_nIndex++ );
         }
         throw container::NoSuchElementException();
     }

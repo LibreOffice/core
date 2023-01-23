@@ -70,7 +70,7 @@ class TableCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAc
                                                              container::XNameAccess >
 {
     XTextTableVec mxTables;
-    XTextTableVec::iterator cachePos;
+    XTextTableVec::iterator m_cachePos;
 
 public:
     explicit TableCollectionHelper( const uno::Reference< frame::XModel >& xDocument )
@@ -84,7 +84,7 @@ public:
             if( !lcl_isInHeaderFooter( xTable ) )
                 mxTables.push_back( xTable );
         }
-        cachePos = mxTables.begin();
+        m_cachePos = mxTables.begin();
     }
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override
@@ -106,7 +106,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        uno::Reference< text::XTextTable > xTable( *cachePos, uno::UNO_SET_THROW );
+        uno::Reference< text::XTextTable > xTable( *m_cachePos, uno::UNO_SET_THROW );
         return uno::Any( xTable );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
@@ -123,15 +123,15 @@ public:
     }
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
-        cachePos = mxTables.begin();
+        m_cachePos = mxTables.begin();
         XTextTableVec::iterator it_end = mxTables.end();
-        for ( ; cachePos != it_end; ++cachePos )
+        for ( ; m_cachePos != it_end; ++m_cachePos )
         {
-            uno::Reference< container::XNamed > xName( *cachePos, uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xName( *m_cachePos, uno::UNO_QUERY_THROW );
             if ( aName.equalsIgnoreAsciiCase( xName->getName() ) )
                 break;
         }
-        return ( cachePos != it_end );
+        return ( m_cachePos != it_end );
     }
 };
 
