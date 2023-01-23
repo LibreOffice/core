@@ -286,7 +286,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 	animcore \
-	PresenterScreen \
 	PresentationMinimizer \
 	wpftimpress \
 ))
