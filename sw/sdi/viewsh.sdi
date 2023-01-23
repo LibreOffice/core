@@ -390,6 +390,10 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_ATTR_VIEWLAYOUT
+    [
+        StateMethod = GetState ;
+    ]
     FN_CLOSE_PAGEPREVIEW
     [
         ExecMethod = Execute ;

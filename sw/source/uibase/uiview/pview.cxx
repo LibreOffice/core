@@ -36,6 +36,7 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/paperinf.hxx>
 #include <svx/svdview.hxx>
+#include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>
@@ -1013,6 +1014,11 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
             {
                 rSet.DisableItem(nWhich);
             }
+        }
+        break;
+        case SID_ATTR_VIEWLAYOUT:
+        {
+            rSet.DisableItem( SID_ATTR_VIEWLAYOUT );
         }
         break;
         case FN_SHOW_MULTIPLE_PAGES:

@@ -34,7 +34,7 @@ SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
-    sal_uInt16      mnState; // 0 = auto, 1= single, 2 = book, 3 = none
+    sal_uInt16      mnState; // 0 = auto, 1= single, 2 = book, 3 = none, 4 = off
     Image       maImageSingleColumn;
     Image       maImageSingleColumn_Active;
     Image       maImageAutomatic;
@@ -64,7 +64,10 @@ SwViewLayoutControl::~SwViewLayoutControl()
 void SwViewLayoutControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SfxItemState::DEFAULT != eState || pState->IsVoidItem() )
+    {
         GetStatusBar().SetItemText( GetId(), OUString() );
+        mpImpl->mnState = 4; //tdf#148441 switch off is disabled
+    }
     else
     {
         assert( dynamic_cast< const SvxViewLayoutItem *>( pState )  && "invalid item type" );
@@ -94,102 +97,114 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 
     const tools::Rectangle aControlRect = getControlRect();
 
-    const bool bSingleColumn    = 0 == mpImpl->mnState;
-    const bool bAutomatic       = 1 == mpImpl->mnState;
-    const bool bBookMode        = 2 == mpImpl->mnState;
+    if (mpImpl->mnState < 4)
+    {
+        const bool bSingleColumn    = 0 == mpImpl->mnState;
+        const bool bAutomatic       = 1 == mpImpl->mnState;
+        const bool bBookMode        = 2 == mpImpl->mnState;
 
-    const tools::Long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
-                                mpImpl->maImageAutomatic.GetSizePixel().Width() +
-                                mpImpl->maImageBookMode.GetSizePixel().Width();
+        const tools::Long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
+                                    mpImpl->maImageAutomatic.GetSizePixel().Width() +
+                                    mpImpl->maImageBookMode.GetSizePixel().Width();
 
-    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
-    const tools::Long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
+        const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
+        const tools::Long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
-    aRect.AdjustLeft( nXOffset );
-    aRect.AdjustTop( nYOffset );
+        aRect.AdjustLeft( nXOffset );
+        aRect.AdjustTop( nYOffset );
 
-    // draw single column image:
-    pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
+        // draw single column image:
+        pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
 
-    // draw automatic image:
-    aRect.AdjustLeft(mpImpl->maImageSingleColumn.GetSizePixel().Width() );
-    pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
+        // draw automatic image:
+        aRect.AdjustLeft(mpImpl->maImageSingleColumn.GetSizePixel().Width() );
+        pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
 
-    // draw bookmode image:
-    aRect.AdjustLeft(mpImpl->maImageAutomatic.GetSizePixel().Width() );
-    pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
+        // draw bookmode image:
+        aRect.AdjustLeft(mpImpl->maImageAutomatic.GetSizePixel().Width() );
+        pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
+    }
+    else
+    {
+        pDev->DrawRect( aControlRect );
+    }
 }
 
 bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 {
-    const tools::Rectangle aRect = getControlRect();
-    const Point aPoint = rEvt.GetPosPixel();
-    const tools::Long nXDiff = aPoint.X() - aRect.Left();
-
-    sal_uInt16 nColumns = 1;
-    bool bBookMode = false;
-
-    const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
-    const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
-    const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
-    const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
-
-    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
-
-    if ( nXDiff < nXOffset + nImageWidthSingle )
+    if (mpImpl->mnState < 4)
     {
-        mpImpl->mnState = 0; // single
-        nColumns = 1;
+        const tools::Rectangle aRect = getControlRect();
+        const Point aPoint = rEvt.GetPosPixel();
+        const tools::Long nXDiff = aPoint.X() - aRect.Left();
+
+        sal_uInt16 nColumns = 1;
+        bool bBookMode = false;
+
+        const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+        const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+        const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+        const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+
+        const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
+
+        if ( nXDiff < nXOffset + nImageWidthSingle )
+        {
+            mpImpl->mnState = 0; // single
+            nColumns = 1;
+        }
+        else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
+        {
+            mpImpl->mnState = 1; // auto
+            nColumns = 0;
+        }
+        else
+        {
+            mpImpl->mnState = 2; // book
+            nColumns = 2;
+            bBookMode = true;
+        }
+
+        // commit state change
+        SvxViewLayoutItem aViewLayout( nColumns, bBookMode );
+
+        css::uno::Any a;
+        aViewLayout.QueryValue( a );
+
+        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue("ViewLayout",
+                                                                                            a) };
+        execute( aArgs );
     }
-    else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
-    {
-        mpImpl->mnState = 1; // auto
-        nColumns = 0;
-    }
-    else
-    {
-        mpImpl->mnState = 2; // book
-        nColumns = 2;
-        bBookMode = true;
-    }
-
-    // commit state change
-    SvxViewLayoutItem aViewLayout( nColumns, bBookMode );
-
-    css::uno::Any a;
-    aViewLayout.QueryValue( a );
-
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue("ViewLayout",
-                                                                                         a) };
-    execute( aArgs );
-
     return true;
 }
 
 bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
 {
-    const tools::Rectangle aRect = getControlRect();
-    const Point aPoint = rEvt.GetPosPixel();
-    const tools::Long nXDiff = aPoint.X() - aRect.Left();
-
-    const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
-    const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
-    const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
-    const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
-
-    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
-
-    if ( nXDiff < nXOffset + nImageWidthSingle )
+    if (mpImpl->mnState < 4)
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_ONE));
-    }
-    else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
-    {
-        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_MULTI));
-    }
-    else
-    {
-        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_BOOK));
+        const tools::Rectangle aRect = getControlRect();
+        const Point aPoint = rEvt.GetPosPixel();
+        const tools::Long nXDiff = aPoint.X() - aRect.Left();
+
+        const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+        const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+        const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+        const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+
+        const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
+
+        if ( nXDiff < nXOffset + nImageWidthSingle )
+        {
+            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_ONE));
+        }
+        else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
+        {
+            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_MULTI));
+        }
+        else
+        {
+            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_BOOK));
+        }
     }
     return true;
 }
