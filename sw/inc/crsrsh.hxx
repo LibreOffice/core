@@ -579,8 +579,8 @@ public:
 
     bool IsFormProtected();
     ::sw::mark::IFieldmark* GetCurrentFieldmark();
-    ::sw::mark::IFieldmark* GetFieldmarkAfter();
-    ::sw::mark::IFieldmark* GetFieldmarkBefore();
+    sw::mark::IFieldmark* GetFieldmarkAfter(bool bLoop);
+    sw::mark::IFieldmark* GetFieldmarkBefore(bool bLoop);
     bool GotoFieldmark( const ::sw::mark::IFieldmark* const pMark );
 
     // update Cursr, i.e. reset it into content should only be called when the

@@ -95,8 +95,8 @@ namespace sw::mark {
             virtual const_iterator_t getFieldmarksEnd() const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const override;
-            virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const override;
-            virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const override;
+            virtual sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const override;
+            virtual sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const override;
 
             virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
             virtual std::vector<::sw::mark::IFieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const override;
