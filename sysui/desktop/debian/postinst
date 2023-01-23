@@ -166,7 +166,7 @@ application/vnd.sun.xml.draw; %PREFIX -view %s
 application/vnd.sun.xml.draw.template; %PREFIX -view %s
 application/vnd.stardivision.draw; %PREFIX -view %s
 application/x-stardraw; %PREFIX -view %s
-application/vnd.oasis.opendocument.database; %PREFIX -view %s
+application/vnd.oasis.opendocument.base; %PREFIX -view %s
 application/vnd.sun.xml.base; %PREFIX -view %s
 application/vnd.writerperfect; %PREFIX -view %s
 application/wordperfect5.1; %PREFIX -view %s

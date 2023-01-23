@@ -138,7 +138,7 @@ do
   icon=${link_dir}/%iconprefix-formula.png;                     test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
   icon=${link_dir}/%iconprefix-master-document.png;             test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
   icon=${link_dir}/%iconprefix-oasis-database.png;              test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
-  icon=${link_dir}/%iconprefix-oasis-database.png;              test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
+  icon=${link_dir}/%iconprefix-oasis-database.png;              test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.base.png
   icon=${link_dir}/%iconprefix-oasis-drawing.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
   icon=${link_dir}/%iconprefix-oasis-drawing-template.png;      test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
   icon=${link_dir}/%iconprefix-oasis-formula.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
@@ -307,7 +307,7 @@ application/vnd.sun.xml.draw; %unixfilename -view %s
 application/vnd.sun.xml.draw.template; %unixfilename -view %s
 application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
-application/vnd.oasis.opendocument.database; %unixfilename -view %s
+application/vnd.oasis.opendocument.base; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
 application/vnd.openofficeorg.extension; %unixfilename %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; %unixfilename -view %s
