@@ -37,14 +37,10 @@ using ::sd::tools::ConfigurationAccess;
 
 namespace sd::framework {
 
-//===== ModuleController ======================================================
-Reference<XModuleController> ModuleController::CreateInstance()
+ModuleController::ModuleController(const css::uno::Reference<css::frame::XController>& rxController)
 {
-    return new ModuleController();
-}
+    assert(rxController);
 
-ModuleController::ModuleController()
-{
     /** Load a list of URL to service mappings.
         The mappings are stored in the
         mpResourceToFactoryMap member.
@@ -75,6 +71,15 @@ ModuleController::ModuleController()
           "private:resource/toolpanel/TableDesign",
           "private:resource/toolpanel/CustomAnimations",
           "private:resource/toolpanel/SlideTransitions" });
+
+    try
+    {
+        mxController = rxController;
+
+        InstantiateStartupServices();
+    }
+    catch (RuntimeException&)
+    {}
 }
 
 ModuleController::~ModuleController() noexcept
@@ -161,36 +166,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     maLoadedFactories[iFactory->second] = xFactory;
 }
 
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
-{
-    if (aArguments.hasElements())
-    {
-        try
-        {
-            // Get the XController from the first argument.
-            mxController.set(aArguments[0], UNO_QUERY_THROW);
-
-            InstantiateStartupServices();
-        }
-        catch (RuntimeException&)
-        {}
-    }
-}
-
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation(
-        css::uno::XComponentContext* /*context*/,
-        css::uno::Sequence<css::uno::Any> const &)
-{
-    css::uno::Reference< css::uno::XInterface > xModCont ( sd::framework::ModuleController::CreateInstance() );
-    xModCont->acquire();
-    return xModCont.get();
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

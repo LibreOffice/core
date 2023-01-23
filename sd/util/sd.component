@@ -65,10 +65,6 @@
       constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.module.ModuleController"
-      constructor="com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation">
-    <service name="com.sun.star.drawing.framework.ModuleController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog"
       constructor="com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>

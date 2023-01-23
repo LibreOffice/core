@@ -40,6 +40,7 @@ namespace com::sun::star::drawing::framework { class XModuleController; }
 namespace com::sun::star::drawing { class XLayer; }
 namespace osl { class Mutex; }
 namespace sd::framework { class ConfigurationController; }
+namespace sd::framework { class ModuleController; }
 class SdPage;
 
 namespace sd {
@@ -297,8 +298,7 @@ private:
     css::uno::Reference<css::drawing::XDrawSubController> mxSubController;
 
     rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
-    css::uno::Reference<
-        css::drawing::framework::XModuleController> mxModuleController;
+    rtl::Reference<sd::framework::ModuleController> mxModuleController;
 
     /** Send an event to all relevant property listeners that a
         property has changed its value.  The fire() method of the

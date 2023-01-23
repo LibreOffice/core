@@ -32,8 +32,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XModuleController,
-    css::lang::XInitialization
+    css::drawing::framework::XModuleController
     > ModuleControllerInterfaceBase;
 
 /** The ModuleController has two tasks:
@@ -57,20 +56,14 @@ class ModuleController final
     : public ModuleControllerInterfaceBase
 {
 public:
-    static css::uno::Reference<
-        css::drawing::framework::XModuleController>
-        CreateInstance();
+    /// @throws std::exception
+    ModuleController(const css::uno::Reference<css::frame::XController>& rxController);
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XModuleController
 
     virtual void SAL_CALL requestResource(const OUString& rsResourceURL) override;
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
 private:
     css::uno::Reference<
@@ -79,8 +72,6 @@ private:
     std::unordered_map<OUString, OUString> maResourceToFactoryMap;
     std::unordered_map<OUString, css::uno::WeakReference<css::uno::XInterface>> maLoadedFactories;
 
-    /// @throws std::exception
-    ModuleController();
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() noexcept override;
 
