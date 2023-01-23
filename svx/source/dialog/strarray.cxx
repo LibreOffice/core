@@ -24,7 +24,7 @@
 #include <fieldunit.hrc>
 #include <numberingtype.hrc>
 
-sal_uInt32 SvxFieldUnitTable::Count() { return SAL_N_ELEMENTS(RID_SVXSTR_FIELDUNIT_TABLE); }
+sal_uInt32 SvxFieldUnitTable::Count() { return std::size(RID_SVXSTR_FIELDUNIT_TABLE); }
 
 OUString SvxFieldUnitTable::GetString(sal_uInt32 nPos)
 {
@@ -47,11 +47,11 @@ OUString SvxAttrNameTable::GetString(sal_uInt32 nPos)
     return OUString();
 }
 
-sal_uInt32 SvxAttrNameTable::Count() { return SAL_N_ELEMENTS(RID_ATTR_NAMES); }
+sal_uInt32 SvxAttrNameTable::Count() { return std::size(RID_ATTR_NAMES); }
 
 sal_uInt32 SvxAttrNameTable::FindIndex(int nValue)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_ATTR_NAMES); ++i)
+    for (size_t i = 0; i < std::size(RID_ATTR_NAMES); ++i)
     {
         if (nValue == RID_ATTR_NAMES[i].second)
             return i;
@@ -66,7 +66,7 @@ OUString SvxNumberingTypeTable::GetString(sal_uInt32 nPos)
     return OUString();
 }
 
-sal_uInt32 SvxNumberingTypeTable::Count() { return SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); }
+sal_uInt32 SvxNumberingTypeTable::Count() { return std::size(RID_SVXSTRARY_NUMBERINGTYPE); }
 
 int SvxNumberingTypeTable::GetValue(sal_uInt32 nPos)
 {
@@ -77,7 +77,7 @@ int SvxNumberingTypeTable::GetValue(sal_uInt32 nPos)
 
 sal_uInt32 SvxNumberingTypeTable::FindIndex(int nValue)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
+    for (size_t i = 0; i < std::size(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
     {
         if (nValue == RID_SVXSTRARY_NUMBERINGTYPE[i].second)
             return i;
