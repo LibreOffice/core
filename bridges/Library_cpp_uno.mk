@@ -77,10 +77,6 @@ bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
 bridge_exception_objects := cpp2uno except uno2cpp
 bridge_noncallexception_objects := callvirtualmethod
-else ifeq ($(OS),SOLARIS)
-bridges_SELECTED_BRIDGE := gcc3_solaris_intel
-bridge_exception_objects := cpp2uno except uno2cpp
-bridge_noncallexception_objects := callvirtualmethod
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno uno2cpp
@@ -162,10 +158,6 @@ bridges_SELECTED_BRIDGE := gcc3_linux_sparc
 bridge_asm_objects := call
 bridge_noopt_objects := except
 bridge_exception_objects := cpp2uno uno2cpp
-else ifeq ($(OS),SOLARIS)
-bridges_SELECTED_BRIDGE := gcc3_solaris_sparc
-bridge_noopt_objects := cpp2uno uno2cpp
-bridge_exception_objects := except
 endif
 
 else ifeq ($(OS)-$(CPUNAME),LINUX-SPARC64)

@@ -520,16 +520,6 @@ bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx
-bridges/source/cpp_uno/gcc3_solaris_intel/callvirtualmethod.cxx
-bridges/source/cpp_uno/gcc3_solaris_intel/callvirtualmethod.hxx
-bridges/source/cpp_uno/gcc3_solaris_intel/cpp2uno.cxx
-bridges/source/cpp_uno/gcc3_solaris_intel/except.cxx
-bridges/source/cpp_uno/gcc3_solaris_intel/share.hxx
-bridges/source/cpp_uno/gcc3_solaris_intel/uno2cpp.cxx
-bridges/source/cpp_uno/gcc3_solaris_sparc/cpp2uno.cxx
-bridges/source/cpp_uno/gcc3_solaris_sparc/except.cxx
-bridges/source/cpp_uno/gcc3_solaris_sparc/share.hxx
-bridges/source/cpp_uno/gcc3_solaris_sparc/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx
 bridges/source/cpp_uno/msvc_win32_intel/except.cxx
 bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx
