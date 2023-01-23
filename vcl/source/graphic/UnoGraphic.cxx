@@ -57,8 +57,6 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
         aAny <<= uno::Reference< graphic::XGraphic >( this );
     else if( rType == cppu::UnoType<awt::XBitmap>::get())
         aAny <<= uno::Reference< awt::XBitmap >( this );
-    else if( rType == cppu::UnoType<lang::XUnoTunnel>::get())
-        aAny <<= uno::Reference< lang::XUnoTunnel >(this);
     else if( rType == cppu::UnoType<graphic::XGraphicTransformer>::get())
         aAny <<= uno::Reference< graphic::XGraphicTransformer >(this);
     else
@@ -175,12 +173,6 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
         return uno::Sequence<sal_Int8>();
     }
 }
-
-sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    return comphelper::getSomethingImpl(rId, &maGraphic);
-}
-
 
 // XGraphicTransformer
 uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(

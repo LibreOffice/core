@@ -219,7 +219,8 @@ Graphic::Graphic(const GDIMetaFile& rMtf)
 
 Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
-    const ::Graphic* pGraphic = comphelper::getFromUnoTunnel<::Graphic>(rxGraphic);
+    const ::unographic::Graphic* pUnoGraphic = dynamic_cast<::unographic::Graphic*>(rxGraphic.get());
+    const ::Graphic* pGraphic = pUnoGraphic ? &pUnoGraphic->GetGraphic() : nullptr;
 
     if( pGraphic )
     {
@@ -554,11 +555,6 @@ OString Graphic::getUniqueID() const
     if (mxImpGraphic)
         aUniqueString = mxImpGraphic->getUniqueID();
     return aUniqueString;
-}
-
-const css::uno::Sequence<sal_Int8> & Graphic::getUnoTunnelId() {
-    static const comphelper::UnoIdInit gId;
-    return gId.getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

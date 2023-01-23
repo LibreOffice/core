@@ -796,7 +796,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
     {
         const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
-        const ::Graphic*                    pGraphic = comphelper::getFromUnoTunnel<::Graphic>( xIFace );
+        const ::unographic::Graphic* pUnoGraphic = dynamic_cast<::unographic::Graphic*>(xIFace.get());
+        const ::Graphic* pGraphic = pUnoGraphic ? &pUnoGraphic->GetGraphic() : nullptr;
 
         if( pGraphic && ( pGraphic->GetType() != GraphicType::NONE ) )
         {

@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_SOURCE_GRAPHIC_GRAPHIC_HXX
 
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
@@ -33,7 +32,6 @@ namespace unographic {
 
 class Graphic final : public css::graphic::XGraphic,
                 public css::awt::XBitmap,
-                public css::lang::XUnoTunnel,
                 public css::graphic::XGraphicTransformer,
                 public ::unographic::GraphicDescriptor
 {
@@ -43,6 +41,8 @@ public:
 
     using ::unographic::GraphicDescriptor::init;
     void init(const ::Graphic& rGraphic);
+
+    const ::Graphic& GetGraphic() const { return maGraphic; }
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -65,9 +65,6 @@ private:
     virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) override;
     virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) override;
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 
     // XGraphicTransformer
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(
