@@ -48,7 +48,7 @@ namespace accessibility
 
 
     AccessibleTabBarPageList::AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent )
-        :AccessibleTabBarBase( pTabBar )
+        :ImplInheritanceHelper( pTabBar )
         ,m_nIndexInParent( nIndexInParent )
     {
         if ( m_pTabBar )
@@ -324,18 +324,6 @@ namespace accessibility
 
         return aBounds;
     }
-
-
-    // XInterface
-
-
-    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPageList, OAccessibleExtendedComponentHelper, AccessibleTabBarPageList_BASE )
-
-
-    // XTypeProvider
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPageList, OAccessibleExtendedComponentHelper, AccessibleTabBarPageList_BASE )
 
 
     // XComponent

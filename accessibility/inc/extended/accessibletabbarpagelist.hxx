@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <extended/accessibletabbarbase.hxx>
 
 #include <vector>
@@ -34,13 +34,11 @@ namespace accessibility
 
 
 
-    typedef ::cppu::ImplHelper3<
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleSelection,
-        css::lang::XServiceInfo > AccessibleTabBarPageList_BASE;
-
-    class AccessibleTabBarPageList final : public AccessibleTabBarBase,
-                                           public AccessibleTabBarPageList_BASE
+    class AccessibleTabBarPageList final : public cppu::ImplInheritanceHelper<
+                                               AccessibleTabBarBase,
+                                               css::accessibility::XAccessible,
+                                               css::accessibility::XAccessibleSelection,
+                                               css::lang::XServiceInfo>
     {
     private:
         typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
@@ -67,12 +65,6 @@ namespace accessibility
 
     public:
         AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent );
-
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
