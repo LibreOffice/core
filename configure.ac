@@ -5734,6 +5734,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-nss \
         --disable-online-update \
         --disable-opencl \
+        --disable-openssl \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
         --disable-skia \
@@ -5741,9 +5742,9 @@ if test "$cross_compiling" = "yes"; then
         --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
+        --without-tls \
         --without-webdav \
         --without-x \
-        --with-tls=openssl \
 "
     # single quotes added for better readability in case of spaces
     echo "    Running CONF-FOR-BUILD/configure" \
@@ -5798,7 +5799,6 @@ if test "$cross_compiling" = "yes"; then
         LIBXSLT
         MDDS
         NATIVE
-        OPENSSL
         ORCUS
         PYTHON
         SCRIPTING
@@ -10632,7 +10632,7 @@ if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8],,system-if-linux)
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS=TRUE
-elif test $_os != iOS ; then
+elif test $_os != iOS -a "$enable_openssl" != "no"; then
     with_tls=openssl
 fi
 AC_SUBST(ENABLE_NSS)
