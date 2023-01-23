@@ -2066,6 +2066,7 @@ namespace svxform
         , m_xDefaultED(m_xBuilder->weld_entry("value"))
         , m_xDefaultBtn(m_xBuilder->weld_button("browse"))
         , m_xSettingsFrame(m_xBuilder->weld_widget("settingsframe"))
+        , m_xDataTypeLB(m_xBuilder->weld_combo_box("datatype"))
         , m_xRequiredCB(m_xBuilder->weld_check_button("required"))
         , m_xRequiredBtn(m_xBuilder->weld_button("requiredcond"))
         , m_xRelevantCB(m_xBuilder->weld_check_button("relevant"))
