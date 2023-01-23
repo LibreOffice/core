@@ -2209,6 +2209,21 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_THEME_DIALOG:
             {
+                bool bDisable = true;
+                auto* pDocument = rSh.GetDoc();
+                auto* pDocumentShell = pDocument->GetDocShell();
+                if (pDocumentShell)
+                {
+                    SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+                    if (pPage)
+                    {
+                        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+                        if (pTheme)
+                            bDisable = false;
+                    }
+                }
+                if (bDisable)
+                    rSet.DisableItem(nWhich);
             }
             break;
         }
