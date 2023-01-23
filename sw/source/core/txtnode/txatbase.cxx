@@ -154,6 +154,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             GetFormatField().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_FTN:
+            GetFootnote().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_LINEBREAK:
             GetLineBreak().dumpAsXml(pWriter);

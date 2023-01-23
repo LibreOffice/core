@@ -96,6 +96,8 @@ public:
     unotools::WeakReference<SwXFootnote> const& GetXFootnote() const
         { return m_wXFootnote; }
     void SetXFootnote(rtl::Reference<SwXFootnote> const& xNote);
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

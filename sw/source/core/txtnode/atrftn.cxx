@@ -280,6 +280,19 @@ uno::Reference<text::XTextRange> SwFormatFootnote::getAnchor(SwDoc& rDoc) const
     return xRet;
 }
 
+void SwFormatFootnote::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFootnote"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("text-attr"), "%p", m_pTextAttr);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endnote"),
+                                      BAD_CAST(OString::boolean(m_bEndNote).getStr()));
+
+    SfxPoolItem::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
     , m_pTextNode( nullptr )
