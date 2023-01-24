@@ -310,6 +310,18 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
         if (xText.is())
         {
+            try
+            {
+                // tdf#153161: it seems that the call to XTextRange::getString flushes the changes
+                // for some objects, that otherwise fail to get exported correctly. Maybe at some
+                // point it would make sense to find a better place for more targeted flush.
+                xText->getString();
+            }
+            catch (uno::RuntimeException const&)
+            {
+                // E.g., SwXTextFrame that contains only a table will throw; this is not an error
+            }
+
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsEmptyPresentationObject") )
