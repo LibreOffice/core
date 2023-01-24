@@ -748,7 +748,7 @@ void setBlenderXor(SkPaint* paint)
         // Skia does not allow binary operators in the default ES2Strict mode, but that's only
         // because of OpenGL support. We don't use OpenGL, and it's safe for all modes that we do use.
         // https://groups.google.com/g/skia-discuss/c/EPLuQbg64Kc/m/2uDXFIGhAwAJ
-        opts.enforceES2Restrictions = false;
+        opts.maxVersionAllowed = SkSL::Version::k300;
         auto effect = SkRuntimeEffect::MakeForBlender(SkString(diff), opts);
         if (!effect.effect)
         {

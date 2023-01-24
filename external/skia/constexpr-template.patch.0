@@ -23,23 +23,12 @@
          collectArgs(args, std::forward<RemainingArgs>(remaining)...);
      }
  
---- include/sksl/DSLVar.h
-+++ include/sksl/DSLVar.h
-@@ -35,7 +35,7 @@
-     /**
-      * Creates an empty, unpopulated var. Can be replaced with a real var later via `swap`.
-      */
--    DSLVarBase() : fType(kVoid_Type), fDeclared(true) {}
-+    DSLVarBase();
- 
-     /**
-      * Constructs a new variable with the specified type and name. The name is used (in mangled
 --- src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
 +++ src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
 @@ -10,8 +10,7 @@
- 
- #include "include/core/SkBlendMode.h"
  #include "include/core/SkRefCnt.h"
+ 
+ #include <memory>
 -
 -class GrFragmentProcessor;
 +#include "src/gpu/ganesh/GrFragmentProcessor.h"
@@ -48,25 +37,14 @@
  
 --- src/sksl/dsl/DSLFunction.cpp
 +++ src/sksl/dsl/DSLFunction.cpp
-@@ -34,6 +34,10 @@
- 
- namespace dsl {
+@@ -41,6 +41,10 @@
+     return context.fConfig->fIsBuiltinCode && SkSL::FindIntrinsicKind(name) != kNotIntrinsic;
+ }
  
 +void DSLFunction::push_back(ExpressionArray& args, DSLExpression& expr) {
 +    args.push_back(expr.release());
 +}
 +
  void DSLFunction::init(DSLModifiers modifiers, const DSLType& returnType, std::string_view name,
-                        SkTArray<DSLParameter*> params, Position pos) {
+                        SkSpan<DSLParameter*> params, Position pos) {
      fPosition = pos;
---- src/sksl/dsl/DSLVar.cpp
-+++ src/sksl/dsl/DSLVar.cpp
-@@ -46,6 +46,8 @@
- 
- namespace dsl {
- 
-+DSLVarBase::DSLVarBase() : fType(kVoid_Type), fDeclared(true) {}
-+
- DSLVarBase::DSLVarBase(DSLType type, std::string_view name, DSLExpression initialValue,
-                        Position pos, Position namePos)
-     : DSLVarBase(DSLModifiers(), std::move(type), name, std::move(initialValue), pos, namePos) {}
