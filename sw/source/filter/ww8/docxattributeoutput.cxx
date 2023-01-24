@@ -3880,9 +3880,11 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                         if (auto format = m_rExport.m_rDoc.FindTextFormatCollByName(sParaStyleName))
                             if (auto slot = m_rExport.m_pStyles->GetSlot(format); slot != 0xfff)
                                 sStyleName = m_rExport.m_pStyles->GetStyleId(slot);
-                        // If the style name is empty at this point, this is a bug, meaning that we
-                        // failed to output the style to styles.xml properly
-                        assert(!sStyleName.isEmpty());
+                        // The resolved style name can be empty at this point, sParaStyleName can be
+                        // an arbitrary string from the original document.
+                        // Note that Word does *not* roundtrip unknown style names in redlines!
+                        if (sStyleName.isEmpty())
+                            sStyleName = MSWordStyles::CreateStyleId(sParaStyleName);
                         if (!sStyleName.isEmpty())
                             m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
                     }

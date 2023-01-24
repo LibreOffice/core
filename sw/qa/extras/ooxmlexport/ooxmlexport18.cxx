@@ -309,6 +309,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
     CPPUNIT_ASSERT_LESS(sal_Int32(30), nFirstLineHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
+{
+    // This must not fail assertions
+    loadAndReload("UnknownStyleInRedline.docx");
+    // Check that the original unknown style name "UnknownStyle" is roundtripped
+    // (maybe this is wrong, because Word does not do this).
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:pPr/w:pPrChange/w:pPr/w:pStyle[@w:val='UnknownStyle']");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

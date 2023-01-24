@@ -1633,6 +1633,9 @@ public:
     /// Get slot of the style (rFormat).
     sal_uInt16 GetSlot( const SwFormat* pFormat ) const;
 
+    /// create style id using only ASCII characters of the style name
+    static OString CreateStyleId(std::u16string_view aName);
+
     /// Get styleId of the nSlot-th style (nSlot is its position in m_aStyles).
     OString const & GetStyleId(sal_uInt16 nSlot) const;
 
