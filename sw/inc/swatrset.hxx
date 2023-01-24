@@ -81,6 +81,7 @@ class SwFormatLineNumber;
 class SwFormatEditInReadonly;
 class SwFormatLayoutSplit;
 class SwFormatRowSplit;
+class SwFormatFlySplit;
 class SwFormatChain;
 class SwFormatFootnoteAtTextEnd;
 class SwFormatEndAtTextEnd;
@@ -262,6 +263,7 @@ public:
     inline const SwFormatEditInReadonly  &GetEditInReadonly( bool = true ) const;
     inline const SwFormatLayoutSplit     &GetLayoutSplit( bool = true ) const;
     inline const SwFormatRowSplit          &GetRowSplit( bool = true ) const;
+    inline const SwFormatFlySplit          &GetFlySplit( bool = true ) const;
     inline const SwFormatChain             &GetChain( bool = true ) const;
     inline const SwFormatLineNumber      &GetLineNumber( bool = true ) const;
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;

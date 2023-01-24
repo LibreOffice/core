@@ -233,6 +233,7 @@ public:
     inline const SwFormatEditInReadonly  &GetEditInReadonly( bool = true ) const;
     inline const SwFormatLayoutSplit     &GetLayoutSplit( bool = true ) const;
     inline const SwFormatRowSplit          &GetRowSplit( bool = true ) const;
+    inline const SwFormatFlySplit          &GetFlySplit( bool = true ) const;
     inline const SwFormatChain               &GetChain( bool = true ) const;
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;
     inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
