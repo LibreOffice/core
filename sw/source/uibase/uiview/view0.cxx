@@ -192,6 +192,7 @@ void SwView::RecheckBrowseMode()
             FN_VLINEAL,             /*20216*/
             FN_VSCROLLBAR,      /*20217*/
             FN_HSCROLLBAR,      /*20218*/
+            FN_VIEW_SECTION_BOUNDARIES, /*20219*/
             FN_VIEW_META_CHARS, /**/
             FN_VIEW_MARKS,      /**/
             //FN_VIEW_FIELDNAME,    /**/
@@ -253,6 +254,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case FN_VIEW_BOUNDS:
                 aBool.SetValue( SwViewOption::IsDocBoundaries()); break;
+            case FN_VIEW_SECTION_BOUNDARIES:
+                aBool.SetValue(SwViewOption::IsSectionBoundaries()); break;
             case FN_VIEW_GRAPHIC:
                 aBool.SetValue( pOpt->IsGraphic() ); break;
             case FN_VIEW_FIELDS:
@@ -409,6 +412,12 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         if( STATE_TOGGLE == eState )
             bFlag = !SwViewOption::IsDocBoundaries();
         SwViewOption::SetAppearanceFlag(ViewOptFlags::DocBoundaries, bFlag, true );
+        break;
+
+    case FN_VIEW_SECTION_BOUNDARIES:
+        if( STATE_TOGGLE == eState )
+            bFlag = !SwViewOption::IsSectionBoundaries();
+        SwViewOption::SetAppearanceFlag(ViewOptFlags::SectionBoundaries, bFlag, true );
         break;
 
     case SID_GRID_VISIBLE:

@@ -6681,7 +6681,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                         const SwRect &rRect ) const
 {
-    const bool bSubsOpt   = isSubsidiaryLinesEnabled();
+    const bool bSubsOpt = isSubsidiaryLinesEnabled() || isSubsidiaryLinesForSectionsEnabled();
     if ( bSubsOpt )
         PaintSubsidiaryLines( pPage, rRect );
 
@@ -6918,6 +6918,9 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
 void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
                                         const SwRect & ) const
 {
+    if (!SwViewOption::IsDocBoundaries())
+        return;
+
     if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
         return;
 
@@ -6989,6 +6992,9 @@ void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
 void SwSectionFrame::PaintSubsidiaryLines( const SwPageFrame * pPage,
                                         const SwRect & rRect ) const
 {
+    if (!SwViewOption::IsSectionBoundaries())
+        return;
+
     const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrame();
     if ( bNoLowerColumn )
     {
@@ -7007,6 +7013,9 @@ void SwBodyFrame::PaintSubsidiaryLines( const SwPageFrame *,
 
 void SwHeadFootFrame::PaintSubsidiaryLines( const SwPageFrame *, const SwRect & ) const
 {
+    if (!SwViewOption::IsDocBoundaries())
+        return;
+
     if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
     {
         SwRect aArea( getFramePrintArea() );

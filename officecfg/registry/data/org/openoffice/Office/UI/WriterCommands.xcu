@@ -2825,6 +2825,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SectionBoundaries" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sec~tion Boundaries</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ThesaurusDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Thesaurus...</value>

@@ -163,6 +163,7 @@ class SwUINumRuleItem;
 #define FN_VLINEAL              (FN_VIEW + 16)  /* Vertical Liner */
 #define FN_VSCROLLBAR           (FN_VIEW + 17)  /* Vertical Scrollbar */
 #define FN_HSCROLLBAR           (FN_VIEW + 18)  /* Horizontal Scrollbar */
+#define FN_VIEW_SECTION_BOUNDARIES (FN_VIEW + 19)  /* View section boundaries */
 
 #define FN_VIEW_META_CHARS      (FN_VIEW + 24)  /* View meta chars */
 #define FN_VIEW_MARKS           (FN_VIEW + 25)  /* View marks */

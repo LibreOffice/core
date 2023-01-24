@@ -6669,6 +6669,24 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem SectionBoundaries FN_VIEW_SECTION_BOUNDARIES
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxBoolItem VRuler FN_VLINEAL
 
 [
