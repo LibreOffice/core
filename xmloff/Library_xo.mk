@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     i18nlangtag \
     sal \
     salhelper \
-	sax \
+    sax \
     svl \
     tl \
     utl \
@@ -251,6 +251,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/XMLPageExport \
     xmloff/source/style/XMLPercentOrMeasurePropertyHandler \
     xmloff/source/style/XMLRectangleMembersHandler \
+    xmloff/source/style/XMLThemeContext \
     xmloff/source/style/adjushdl \
     xmloff/source/style/backhdl \
     xmloff/source/style/bordrhdl \

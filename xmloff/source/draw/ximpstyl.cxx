@@ -52,6 +52,7 @@
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>
+#include <XMLThemeContext.hxx>
 #include <unotools/configmgr.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
@@ -82,48 +83,7 @@ public:
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
-
-/// Imports <loext:theme>.
-class XMLThemeContext : public SvXMLImportContext
-{
-    uno::Reference<beans::XPropertySet> m_xMasterPage;
-    comphelper::SequenceAsHashMap m_aTheme;
-
-public:
-    XMLThemeContext(SvXMLImport& rImport,
-                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                    uno::Reference<beans::XPropertySet> xMasterPage);
-    ~XMLThemeContext();
-
-    uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) override;
-};
-
-/// Imports <loext:color-table> inside <loext:theme>.
-class XMLColorTableContext : public SvXMLImportContext
-{
-    comphelper::SequenceAsHashMap& m_rTheme;
-    std::vector<util::Color> m_aColorScheme;
-
-public:
-    XMLColorTableContext(SvXMLImport& rImport,
-                         const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                         comphelper::SequenceAsHashMap& rTheme);
-    ~XMLColorTableContext();
-
-    uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) override;
-};
-
-/// Imports <loext:color> inside <loext:color-table>.
-class XMLColorContext : public SvXMLImportContext
-{
-public:
-    XMLColorContext(SvXMLImport& rImport,
-                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                    std::vector<util::Color>& rColorScheme);
-};
-}
+} // end anonymous namespace
 
 SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_Int32 nElement,
@@ -878,8 +838,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext
         {
             if (GetSdImport().IsImpress())
             {
-                uno::Reference<beans::XPropertySet> xMasterPage(GetLocalShapesContext(),
-                                                                uno::UNO_QUERY);
+                uno::Reference<drawing::XDrawPage> xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 return new XMLThemeContext(GetSdImport(), xAttrList, xMasterPage);
             }
             break;
@@ -1485,97 +1444,6 @@ void SdXMLHeaderFooterDeclContext::endFastElement(sal_Int32 nToken)
 void SdXMLHeaderFooterDeclContext::characters( const OUString& rChars )
 {
     maStrText += rChars;
-}
-
-XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
-                                 const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 uno::Reference<beans::XPropertySet> xMasterPage)
-    : SvXMLImportContext(rImport)
-    , m_xMasterPage(std::move(xMasterPage))
-{
-    for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
-    {
-        switch (rAttribute.getToken())
-        {
-            case XML_ELEMENT(LO_EXT, XML_NAME):
-            {
-                m_aTheme["Name"] <<= rAttribute.toString();
-                break;
-            }
-        }
-    }
-}
-
-XMLThemeContext::~XMLThemeContext()
-{
-    uno::Any aTheme(m_aTheme.getAsConstPropertyValueList());
-    m_xMasterPage->setPropertyValue("Theme", aTheme);
-}
-
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLThemeContext::createFastChildContext(
-    sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs)
-{
-    if (nElement == XML_ELEMENT(LO_EXT, XML_COLOR_TABLE))
-    {
-        return new XMLColorTableContext(GetImport(), xAttribs, m_aTheme);
-    }
-
-    return nullptr;
-}
-
-XMLColorTableContext::XMLColorTableContext(
-    SvXMLImport& rImport, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-    comphelper::SequenceAsHashMap& rTheme)
-    : SvXMLImportContext(rImport)
-    , m_rTheme(rTheme)
-{
-    for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
-    {
-        switch (rAttribute.getToken())
-        {
-            case XML_ELEMENT(LO_EXT, XML_NAME):
-            {
-                m_rTheme["ColorSchemeName"] <<= rAttribute.toString();
-                break;
-            }
-        }
-    }
-}
-
-XMLColorTableContext::~XMLColorTableContext()
-{
-    m_rTheme["ColorScheme"] <<= comphelper::containerToSequence(m_aColorScheme);
-}
-
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLColorTableContext::createFastChildContext(
-    sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs)
-{
-    if (nElement == XML_ELEMENT(LO_EXT, XML_COLOR))
-    {
-        return new XMLColorContext(GetImport(), xAttribs, m_aColorScheme);
-    }
-
-    return nullptr;
-}
-
-XMLColorContext::XMLColorContext(SvXMLImport& rImport,
-                                 const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 std::vector<util::Color>& rColorScheme)
-    : SvXMLImportContext(rImport)
-{
-    for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
-    {
-        switch (rAttribute.getToken())
-        {
-            case XML_ELEMENT(LO_EXT, XML_COLOR):
-            {
-                util::Color nColor;
-                sax::Converter::convertColor(nColor, rAttribute.toView());
-                rColorScheme.push_back(nColor);
-                break;
-            }
-        }
-    }
 }
 
 namespace xmloff {
