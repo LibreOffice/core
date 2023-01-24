@@ -3417,8 +3417,8 @@ static void UnsetAltIfAltGr(SalKeyEvent& rKeyEvt, sal_uInt16 nModCode)
 }
 
 // tdf#152404 Commit uncommitted text before dispatching key shortcuts. In
-// certain cases such as pressing Command-Option-C in a Writer document while
-// there is uncommitted text will call AquaSalFrame::EndExtTextInput() which
+// certain cases such as pressing Control-Alt-C in a Writer document while
+// there is uncommitted text will call WinSalFrame::EndExtTextInput() which
 // will dispatch a SalEvent::EndExtTextInput event. Writer's handler for that
 // event will delete the uncommitted text and then insert the committed text
 // but LibreOffice will crash when deleting the uncommitted text because
