@@ -3404,6 +3404,7 @@ static void doc_iniUnoCommands ()
         return;
     }
 
+#if !defined IOS && !defined ANDROID && !defined __EMSCRIPTEN__
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     if (!xSEInitializer.is())
     {
@@ -3417,6 +3418,7 @@ static void doc_iniUnoCommands ()
     {
         SAL_WARN("lok", "iniUnoCommands: failed to create security context");
     }
+#endif
 
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
