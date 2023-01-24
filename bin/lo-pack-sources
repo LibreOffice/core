@@ -283,10 +283,22 @@ sub pack_module_sources($$$$)
 sub generate_module_tarball($$$$$$$$)
 {
     my ($source_dir, $release_version, $module, $md5, $bzip2, $xz, $lo_topdir_name, $module_tarball_name) = @_;
+	 my $PARALLELISM =  $ENV{'PARALLELISM'};
+	 my $CPUS_XZ = 0;
+
+	 # Set CPUS_ to the number of CPUs that should be used. If PARALLELISM
+    # is set then this is used otherwise autodetect is used.
+    if (defined $PARALLELISM) {
+        if ($PARALLELISM > 0) {
+            $CPUS_XZ = $PARALLELISM;
+        } else {
+            $CPUS_XZ = 1;
+		  }
+    }
 
     my $temp_dir = prepare_module_sources($source_dir, $release_version, $module, $lo_topdir_name);
     pack_module_sources($temp_dir, $md5, "$module_tarball_name.tar.bz2", "bzip2 -z --best > ") if (defined $bzip2);
-    pack_module_sources($temp_dir, $md5, "$module_tarball_name.tar.xz", "xz -z > ") if (defined $xz);
+    pack_module_sources($temp_dir, $md5, "$module_tarball_name.tar.xz", "xz -z -T$CPUS_XZ -e > ") if (defined $xz);
     remove_tempdir($temp_dir);
 }
 
