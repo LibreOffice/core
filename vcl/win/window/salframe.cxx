@@ -3416,6 +3416,22 @@ static void UnsetAltIfAltGr(SalKeyEvent& rKeyEvt, sal_uInt16 nModCode)
     }
 }
 
+// tdf#152404 Commit uncommitted text before dispatching key shortcuts. In
+// certain cases such as pressing Command-Option-C in a Writer document while
+// there is uncommitted text will call AquaSalFrame::EndExtTextInput() which
+// will dispatch a SalEvent::EndExtTextInput event. Writer's handler for that
+// event will delete the uncommitted text and then insert the committed text
+// but LibreOffice will crash when deleting the uncommitted text because
+// deletion of the text also removes and deletes the newly inserted comment.
+static void FlushIMBeforeShortCut(WinSalFrame* pFrame, SalEvent nEvent, sal_uInt16 nModCode)
+{
+    if (pFrame->mbCandidateMode && nEvent == SalEvent::KeyInput
+        && (nModCode & (KEY_MOD1 | KEY_MOD2)))
+    {
+        pFrame->EndExtTextInput(EndExtTextInputFlags::Complete);
+    }
+}
+
 static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
@@ -3506,6 +3522,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         aKeyEvt.mnRepeat    = nRepeat;
 
         UnsetAltIfAltGr(aKeyEvt, nModCode);
+        FlushIMBeforeShortCut(pFrame, SalEvent::KeyInput, nModCode);
 
         nLastChar = 0;
         nLastVKChar = 0;
@@ -3661,6 +3678,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnRepeat    = nRepeat;
 
                 UnsetAltIfAltGr(aKeyEvt, nModCode);
+                FlushIMBeforeShortCut(pFrame, nEvent, nModCode);
 
                 bIgnoreCharMsg = bCharPeek;
                 bool nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
