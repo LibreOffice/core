@@ -131,6 +131,7 @@ public:
     void testAutofittedTextboxIndent();
     void testTdf151622_oleIcon();
     void testTdf152436();
+    void testLinkedOLE();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -223,6 +224,7 @@ public:
     CPPUNIT_TEST(testAutofittedTextboxIndent);
     CPPUNIT_TEST(testTdf151622_oleIcon);
     CPPUNIT_TEST(testTdf152436);
+    CPPUNIT_TEST(testLinkedOLE);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2119,6 +2121,22 @@ void SdOOXMLExportTest3::testTdf152436()
 
     // Check number of shapes after export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
+}
+
+void SdOOXMLExportTest3::testLinkedOLE()
+{
+    createSdImpressDoc("odp/linked_ole.odp");
+
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In<>, XPath '//p:oleObj' number of nodes is incorrect
+    // i.e. the linked ole object wasn't exported.
+    assertXPath(pXml, "//p:oleObj", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);

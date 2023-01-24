@@ -2602,48 +2602,59 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     OUString sRelationType;
     OUString sSuffix;
     const char * pProgID(nullptr);
+    OString anotherProgID;
 
     uno::Reference<io::XInputStream> const xInStream =
         oox::GetOLEObjectStream(
             mpFB->getComponentContext(), xObj, progID,
             sMediaType, sRelationType, sSuffix, pProgID);
 
+    OUString sURL;
+    OUString sRelId;
     if (!xInStream.is())
     {
-        return *this;
-    }
+        xPropSet->getPropertyValue("LinkURL") >>= sURL;
+        if (sURL.isEmpty())
+            return *this;
 
-    OString anotherProgID;
-    if (!pProgID && !progID.isEmpty())
+        sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                   oox::getRelationship(Relationship::OLEOBJECT), sURL, true);
+    }
+    else
     {
-        anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
-        pProgID = anotherProgID.getStr();
-    }
+        if (!pProgID && !progID.isEmpty())
+        {
+            anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
+            pProgID = anotherProgID.getStr();
+        }
 
-    assert(!sMediaType.isEmpty());
-    assert(!sRelationType.isEmpty());
-    assert(!sSuffix.isEmpty());
+        assert(!sMediaType.isEmpty());
+        assert(!sRelationType.isEmpty());
+        assert(!sSuffix.isEmpty());
 
-    OUString sFileName = "embeddings/oleObject" + OUString::number(++m_nEmbeddedObjects) + "." + sSuffix;
-    uno::Reference<io::XOutputStream> const xOutStream(
-        mpFB->openFragmentStream(
-            OUString::createFromAscii(GetComponentDir()) + "/" + sFileName,
-            sMediaType));
-    assert(xOutStream.is()); // no reason why that could fail
+        OUString sFileName
+            = "embeddings/oleObject" + OUString::number(++m_nEmbeddedObjects) + "." + sSuffix;
+        uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(
+            OUString::createFromAscii(GetComponentDir()) + "/" + sFileName, sMediaType));
+        assert(xOutStream.is()); // no reason why that could fail
 
-    try {
-        ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
-    } catch (uno::Exception const&) {
-        TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLEObject");
+        try
+        {
+            ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
+        }
+        catch (uno::Exception const&)
+        {
+            TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLEObject");
+        }
+
+        sRelId = mpFB->addRelation(
+            mpFS->getOutputStream(), sRelationType,
+            Concat2View(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
     }
 
     sal_Int64 nAspect;
     bool bShowAsIcon = (xPropSet->getPropertyValue("Aspect") >>= nAspect)
                        && nAspect == embed::Aspects::MSOLE_ICON;
-
-    OUString const sRelId = mpFB->addRelation(
-        mpFS->getOutputStream(), sRelationType,
-        Concat2View(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
 
     mpFS->startElementNS(mnXmlNamespace, XML_graphicFrame);
 
@@ -2682,7 +2693,10 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
                           XML_spid, "" );
     }
 
-    mpFS->singleElementNS( mnXmlNamespace, XML_embed );
+    if (sURL.isEmpty())
+        mpFS->singleElementNS(mnXmlNamespace, XML_embed);
+    else
+        mpFS->singleElementNS(mnXmlNamespace, XML_link, XML_updateAutomatic, "1");
 
     // pic element
     SdrObject* pSdrOLE2(SdrObject::getSdrObjectFromXShape(xShape));
