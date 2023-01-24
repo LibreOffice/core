@@ -280,7 +280,7 @@ endif
 
 # For Emscripten, the emcc command is a Python script that outputs annoying warnings like
 # .../emscripten/tools/building.py:638: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/emscripten_temp_0fvvg__1/conftest.js.jso.js' mode='w' encoding='utf-8'>
-# into stderr, which makes the configure script think that there is a problem in
+# into stderr, which makes a configure script think that there is a problem in
 # compiling even a microscopic test program with an option like -Werror which
 # surely *is* supported. Avoid this by setting PYTHONWARNINGS=ignore.
 
