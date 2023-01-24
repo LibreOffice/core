@@ -265,8 +265,8 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
 static void lcl_ModifyLines( SwTableLines &rLines, const tools::Long nOld,
                          const tools::Long nNew, std::vector<SwFormat*>& rFormatArr, const bool bCheckSum )
 {
-    for ( size_t i = 0; i < rLines.size(); ++i )
-        ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFormatArr );
+    for ( auto &rLine : rLines)
+        ::lcl_ModifyBoxes( rLine->GetTabBoxes(), nOld, nNew, rFormatArr );
     if( bCheckSum )
     {
         for(SwFormat* pFormat : rFormatArr)
