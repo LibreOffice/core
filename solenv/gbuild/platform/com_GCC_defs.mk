@@ -275,9 +275,16 @@ endif
 ifeq ($(COMPILER_PLUGINS_DEBUG),TRUE)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --debug
 endif
-# set CCACHE_CPP2=1 to prevent clang generating spurious warnings
-# clear PYTHONWARNINGS to prevent noise from emscripten implementation
-gb_COMPILER_SETUP += CCACHE_CPP2=1 $(if $(filter EMSCRIPTEN,$(OS)),PYTHONWARNINGS=default)
+
+# Set CCACHE_CPP2=1 to prevent Clang generating spurious warnings.
+
+# For Emscripten, the emcc command is a Python script that outputs annoying warnings like
+# .../emscripten/tools/building.py:638: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/emscripten_temp_0fvvg__1/conftest.js.jso.js' mode='w' encoding='utf-8'>
+# into stderr, which makes the configure script think that there is a problem in
+# compiling even a microscopic test program with an option like -Werror which
+# surely *is* supported. Avoid this by setting PYTHONWARNINGS=ignore.
+
+gb_COMPILER_SETUP += CCACHE_CPP2=1 $(if $(filter EMSCRIPTEN,$(OS)),PYTHONWARNINGS=ignore)
 gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox CCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox SCCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
