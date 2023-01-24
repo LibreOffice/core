@@ -283,12 +283,14 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
         std::u16string_view msName;
         std::function<void(Dialog&)> mCallback;
         bool mbAutoClose;
+        Timer maTimeoutTimer;
 
     public:
         virtual ~ListenerHelper()
         {
             Application::SetDialogCancelMode(miPreviousDialogCancelMode);
             Application::RemoveEventListener(mLink);
+            maTimeoutTimer.Stop();
         }
 
         ListenerHelper(const std::u16string_view& name, std::function<void(Dialog&)> callback,
@@ -297,15 +299,38 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             , msName(name)
             , mCallback(callback)
             , mbAutoClose(bAutoClose)
+            , maTimeoutTimer("workaround timer if we don't catch WindowActivate")
         {
             mLink = LINK(this, ListenerHelper, eventListener);
             Application::AddEventListener(mLink);
+
+            maTimeoutTimer.SetInvokeHandler(LINK(this, ListenerHelper, timeoutTimerHandler));
+            maTimeoutTimer.SetTimeout(60000);
+            maTimeoutTimer.Start();
 
             miPreviousDialogCancelMode = Application::GetDialogCancelMode();
             Application::SetDialogCancelMode(DialogCancelMode::Off);
         }
 
     private:
+        // mimic IMPL_LINK inline
+        static void LinkStubtimeoutTimerHandler(void* instance, Timer* timer)
+        {
+            static_cast<ListenerHelper*>(instance)->timeoutTimerHandler(timer);
+        }
+
+        void timeoutTimerHandler(Timer*)
+        {
+            std::cerr << "timeout waiting for dialog '" << OUString(msName) << "' to show up"
+                      << std::endl;
+
+            assert(mbWaitingForDialog);
+
+            // This is not very nice, but it should help fail earlier if we never catch the dialog
+            // yet we're in a sub-loop and waitEndDialog() didn't have a chance to run yet.
+            throw new css::uno::RuntimeException("Timeout waiting for dialog");
+        }
+
         // mimic IMPL_LINK inline
         static void LinkStubeventListener(void* instance, VclSimpleEvent& event)
         {
@@ -328,6 +353,8 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
 
             // remove ourselves, we don't want to run again
             Application::RemoveEventListener(mLink);
+            maTimeoutTimer.ClearInvokeHandler();
+            maTimeoutTimer.Stop();
 
             /* bind the dialog before checking its name so auto-close can kick in if anything
              * fails/throws */
