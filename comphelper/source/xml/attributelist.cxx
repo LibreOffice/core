@@ -65,7 +65,10 @@ css::uno::Reference< css::util::XCloneable > AttributeList::createClone()
 void AttributeList::AddAttribute(const OUString& sName, const OUString& sValue)
 {
     assert(!sName.isEmpty() && "empty attribute name is invalid");
-    assert(std::count(sName.getStr(), sName.getStr() + sName.getLength(), u':') <= 1
+    // Either it's 'namespace_prefix:attribute_name',
+    // or as in XMLNamespaces::applyNSToAttributeName, it's 'namespace:full:uri^attribute_name'.
+    assert((std::count(sName.getStr(), sName.getStr() + sName.getLength(), u':') <= 1
+            || std::count(sName.getStr(), sName.getStr() + sName.getLength(), u'^') == 1)
            && "too many colons");
     // TODO: this assertion fails in tests!
 //    assert(std::none_of(mAttributes.begin(), mAttributes.end(),
