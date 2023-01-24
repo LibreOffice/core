@@ -41,24 +41,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format")
     {
     }
-
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        m_aSavedSettings = Application::GetSettings();
-        if (filename == std::string_view("fdo44211.rtf"))
-        {
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
-            AllSettings aSettings(m_aSavedSettings);
-            aSettings.SetLanguageTag(LanguageTag("lt"));
-            Application::SetSettings(aSettings);
-            return pResetter;
-        }
-        return nullptr;
-    }
-
-protected:
-    AllSettings m_aSavedSettings;
 };
 
 DECLARE_RTFEXPORT_TEST(testFdo45553, "fdo45553.rtf")
@@ -343,11 +325,24 @@ DECLARE_RTFEXPORT_TEST(testFdo48876, "fdo48876.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo48193, "fdo48193.rtf") { CPPUNIT_ASSERT_EQUAL(7, getLength()); }
 
-DECLARE_RTFEXPORT_TEST(testFdo44211, "fdo44211.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
 {
-    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0105\u010D\u0119"), xTextRange->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString(u"\u0105\u010D\u0119"), xTextRange->getString());
+    };
+
+    AllSettings aSavedSettings = Application::GetSettings();
+    AllSettings aSettings(aSavedSettings);
+    aSettings.SetLanguageTag(LanguageTag("lt"));
+    Application::SetSettings(aSettings);
+    comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
+
+    createSwDoc("fdo44211.rtf");
+    verify();
+    reload(mpFilter, "fdo44211.rtf");
+    verify();
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo48037, "fdo48037.rtf")
