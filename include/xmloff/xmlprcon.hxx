@@ -21,10 +21,10 @@
 #define INCLUDED_XMLOFF_XMLPRCON_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlimppr.hxx>
 
 #include <vector>
 
-class SvXMLImportPropertyMapper;
 struct XMLPropertyState;
 
 class XMLOFF_DLLPUBLIC SvXMLPropertySetContext : public SvXMLImportContext
