@@ -451,6 +451,16 @@ bool GtkSalFrame::doKeyCallback( guint state,
     bool bStopProcessingKey;
     if (bDown)
     {
+        // tdf#152404 Commit uncommitted text before dispatching key shortcuts. In
+        // certain cases such as pressing Control-Alt-C in a Writer document while
+        // there is uncommitted text will call GtkSalFrame::EndExtTextInput() which
+        // will dispatch a SalEvent::EndExtTextInput event. Writer's handler for that
+        // event will delete the uncommitted text and then insert the committed text
+        // but LibreOffice will crash when deleting the uncommitted text because
+        // deletion of the text also removes and deletes the newly inserted comment.
+        if (m_pIMHandler && !m_pIMHandler->m_aInputEvent.maText.isEmpty() && (aEvent.mnCode & (KEY_MOD1 | KEY_MOD2)))
+            m_pIMHandler->doCallEndExtTextInput();
+
         bStopProcessingKey = CallCallbackExc(SalEvent::KeyInput, &aEvent);
         // #i46889# copy AlternateKeyCode handling from generic plugin
         if (!bStopProcessingKey)
