@@ -45,6 +45,7 @@ public:
             ::std::vector< XMLPropertyState > &rProps,
             rtl::Reference < SvXMLImportPropertyMapper > xMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
+    SvXMLPropertySetContext(SvXMLPropertySetContext&&) = delete;
 
     virtual ~SvXMLPropertySetContext() override;
 
