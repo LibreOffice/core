@@ -12,6 +12,9 @@
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
+#include <frmmgr.hxx>
+#include <frameformats.hxx>
+#include <formatflysplit.hxx>
 
 namespace
 {
@@ -49,6 +52,26 @@ CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
     // Then make sure we get data without crashing:
     CPPUNIT_ASSERT(aData.hasValue());
     pMod->m_pXSelection = pOldTransferable;
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatFlySplit)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetFlySplit().GetValue());
+
+    SfxItemSet aSet(pFly->GetAttrSet());
+    SwFormatFlySplit aItem(true);
+    aSet.Put(aItem);
+    pDoc->SetFlyFrameAttr(*pFly, aSet);
+
+    CPPUNIT_ASSERT(pFly->GetAttrSet().GetFlySplit().GetValue());
 }
 }
 
