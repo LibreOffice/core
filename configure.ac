@@ -686,34 +686,6 @@ fi
 if test -n "$with_android_ndk"; then
     eval ANDROID_NDK_DIR=$with_android_ndk
 
-    # Set up a lot of pre-canned defaults
-
-    if test ! -f $ANDROID_NDK_DIR/RELEASE.TXT; then
-        if test ! -f $ANDROID_NDK_DIR/source.properties; then
-            AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT or source.properties file in $ANDROID_NDK_DIR.])
-        fi
-        ANDROID_NDK_VERSION=`sed -n -e 's/Pkg.Revision = //p' $ANDROID_NDK_DIR/source.properties`
-    else
-        ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_DIR/RELEASE.TXT`
-    fi
-    if test -z "$ANDROID_NDK_VERSION";  then
-        AC_MSG_ERROR([Failed to determine Android NDK version. Please check your installation.])
-    fi
-    case $ANDROID_NDK_VERSION in
-    r9*|r10*)
-        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
-        ;;
-    11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*|21.*|22.*)
-        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
-        ;;
-    23.*)
-        ;;
-    *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk."
-        ;;
-    esac
-
     ANDROID_API_LEVEL=16
     if test -n "$with_android_api_level" ; then
         ANDROID_API_LEVEL="$with_android_api_level"
@@ -745,6 +717,34 @@ if test -n "$with_android_ndk"; then
         ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
         ANDROID_APP_ABI=x86
     fi
+
+    # Set up a lot of pre-canned defaults
+
+    if test ! -f $ANDROID_NDK_DIR/RELEASE.TXT; then
+        if test ! -f $ANDROID_NDK_DIR/source.properties; then
+            AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT or source.properties file in $ANDROID_NDK_DIR.])
+        fi
+        ANDROID_NDK_VERSION=`sed -n -e 's/Pkg.Revision = //p' $ANDROID_NDK_DIR/source.properties`
+    else
+        ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_DIR/RELEASE.TXT`
+    fi
+    if test -z "$ANDROID_NDK_VERSION";  then
+        AC_MSG_ERROR([Failed to determine Android NDK version. Please check your installation.])
+    fi
+    case $ANDROID_NDK_VERSION in
+    r9*|r10*)
+        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
+        ;;
+    11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*|21.*|22.*)
+        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
+        ;;
+    23.*)
+        ;;
+    *)
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk."
+        ;;
+    esac
 
     case "$with_android_ndk_toolchain_version" in
     clang5.0)
