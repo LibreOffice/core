@@ -23,6 +23,7 @@
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterHelper.hxx"
 #include "PresenterPaneContainer.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Pointer.hpp>
@@ -31,7 +32,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -50,7 +50,7 @@ namespace sdext::presenter {
 PresenterSlideShowView::PresenterSlideShowView (
     css::uno::Reference<css::uno::XComponentContext> xContext,
     css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
-    const css::uno::Reference<css::frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterSlideShowViewInterfaceBase(m_aMutex),
       mxComponentContext(std::move(xContext)),
@@ -87,8 +87,7 @@ void PresenterSlideShowView::LateInit()
 
     // Use view id and controller to retrieve window and canvas from
     // configuration controller.
-    Reference<XControllerManager> xCM (mxController, UNO_QUERY_THROW);
-    Reference<XConfigurationController> xCC (xCM->getConfigurationController());
+    Reference<XConfigurationController> xCC (mxController->getConfigurationController());
 
     if (xCC.is())
     {

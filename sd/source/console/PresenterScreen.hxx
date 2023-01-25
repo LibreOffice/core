@@ -35,6 +35,8 @@
 #include <map>
 #include <string_view>
 
+namespace sd { class DrawController; }
+
 namespace sdext::presenter {
 
 class PresenterController;
@@ -127,7 +129,7 @@ public:
 
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
     css::uno::WeakReference<css::uno::XComponentContext> mxContextWeak;

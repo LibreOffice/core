@@ -50,7 +50,7 @@ public:
     explicit PresenterHelpView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterHelpView() override;
 

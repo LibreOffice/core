@@ -42,6 +42,8 @@
 #include <map>
 #include <memory>
 
+namespace sd { class DrawController; }
+
 namespace sdext::presenter {
 
 class PresenterCanvasHelper;
@@ -85,7 +87,7 @@ public:
     PresenterController (
         unotools::WeakReference<PresenterScreen> xScreen,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
         rtl::Reference<PresenterPaneContainer> xPaneContainer,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
@@ -176,7 +178,7 @@ private:
     unotools::WeakReference<PresenterScreen> mxScreen;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;

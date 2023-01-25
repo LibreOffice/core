@@ -23,10 +23,10 @@
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/Color.hpp>
@@ -121,7 +121,7 @@ class PresenterHelpView::TextContainer : public vector<std::shared_ptr<Block> >
 PresenterHelpView::PresenterHelpView (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterHelpViewInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
@@ -133,9 +133,8 @@ PresenterHelpView::PresenterHelpView (
     try
     {
         // Get the content window via the pane anchor.
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC (
-            xCM->getConfigurationController(), UNO_SET_THROW);
+            rxController->getConfigurationController(), UNO_SET_THROW);
         mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();

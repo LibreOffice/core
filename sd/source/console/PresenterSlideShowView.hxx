@@ -61,7 +61,7 @@ public:
     PresenterSlideShowView (
         css::uno::Reference<css::uno::XComponentContext> xContext,
         css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterSlideShowView() override;
     PresenterSlideShowView(const PresenterSlideShowView&) = delete;
@@ -176,7 +176,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

@@ -27,10 +27,10 @@
 #include "PresenterPaintManager.hxx"
 #include "PresenterTimer.hxx"
 #include "PresenterWindowManager.hxx"
+#include <DrawController.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
@@ -1007,7 +1007,7 @@ void PresenterToolBar::ThrowIfDisposed() const
 PresenterToolBarView::PresenterToolBarView (
     const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterToolBarViewInterfaceBase(m_aMutex),
       mxViewId(rxViewId),
@@ -1015,8 +1015,7 @@ PresenterToolBarView::PresenterToolBarView (
 {
     try
     {
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        Reference<XConfigurationController> xCC(xCM->getConfigurationController(),UNO_SET_THROW);
+        Reference<XConfigurationController> xCC(rxController->getConfigurationController(),UNO_SET_THROW);
         mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();

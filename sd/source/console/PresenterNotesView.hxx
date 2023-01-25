@@ -34,6 +34,8 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
+namespace sd { class DrawController; }
+
 namespace sdext::presenter {
 
 class PresenterButton;
@@ -61,7 +63,7 @@ public:
     explicit PresenterNotesView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterNotesView() override;
 

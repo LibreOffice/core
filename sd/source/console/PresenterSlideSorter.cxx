@@ -29,8 +29,8 @@
 #include "PresenterScrollBar.hxx"
 #include "PresenterUIPainter.hxx"
 #include "PresenterWindowManager.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -228,7 +228,7 @@ private:
 PresenterSlideSorter::PresenterSlideSorter (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterSlideSorterInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
@@ -255,9 +255,8 @@ PresenterSlideSorter::PresenterSlideSorter (
     try
     {
         // Get pane and window.
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC (
-            xCM->getConfigurationController(), UNO_SET_THROW);
+            rxController->getConfigurationController(), UNO_SET_THROW);
         Reference<lang::XMultiComponentFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_SET_THROW);
 
@@ -323,8 +322,7 @@ PresenterSlideSorter::PresenterSlideSorter (
             mpPresenterController->GetPaintManager()));
 
         // Listen for changes of the current slide.
-        Reference<beans::XPropertySet> xControllerProperties (rxController, UNO_QUERY_THROW);
-        xControllerProperties->addPropertyChangeListener(
+        rxController->addPropertyChangeListener(
             "CurrentPage",
             this);
 

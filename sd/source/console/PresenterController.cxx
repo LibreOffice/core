@@ -32,6 +32,7 @@
 #include "PresenterTheme.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+#include <DrawController.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -41,7 +42,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -85,7 +85,7 @@ PresenterController::InstanceContainer PresenterController::maInstances;
 PresenterController::PresenterController (
     unotools::WeakReference<PresenterScreen> xScreen,
     const Reference<XComponentContext>& rxContext,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
     rtl::Reference<PresenterPaneContainer> xPaneContainer,
     const Reference<XResourceId>& rxMainPaneId)
@@ -113,8 +113,7 @@ PresenterController::PresenterController (
     new PresenterCurrentSlideObserver(this,rxSlideShowController);
 
     // Listen for configuration changes.
-    Reference<XControllerManager> xCM (mxController, UNO_QUERY_THROW);
-    mxConfigurationController = xCM->getConfigurationController();
+    mxConfigurationController = mxController->getConfigurationController();
     if (mxConfigurationController.is())
     {
         mxConfigurationController->addConfigurationChangeListener(
@@ -772,7 +771,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
 void SAL_CALL PresenterController::disposing (
     const lang::EventObject& rEvent)
 {
-    if (rEvent.Source == mxController)
+    if (rEvent.Source.get() == static_cast<cppu::OWeakObject*>(mxController.get()))
         mxController = nullptr;
     else if (rEvent.Source == mxConfigurationController)
         mxConfigurationController = nullptr;

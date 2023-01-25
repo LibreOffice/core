@@ -31,6 +31,8 @@
 #include <map>
 #include <memory>
 
+namespace sd { class DrawController; }
+
 namespace sdext::presenter {
 
 class PresenterController;
@@ -66,7 +68,7 @@ public:
     */
     static css::uno::Reference<css::drawing::framework::XResourceFactory> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneFactory() override;
 
@@ -97,7 +99,7 @@ private:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         ::rtl::Reference<PresenterController> xPresenterController);
 
-    void Register (const css::uno::Reference<css::frame::XController>& rxController);
+    void Register (const rtl::Reference<::sd::DrawController>& rxController);
 
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);

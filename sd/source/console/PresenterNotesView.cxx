@@ -25,11 +25,11 @@
 #include "PresenterPaintManager.hxx"
 #include "PresenterScrollBar.hxx"
 #include "PresenterTextView.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -53,7 +53,7 @@ namespace sdext::presenter {
 PresenterNotesView::PresenterNotesView (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<XResourceId>& rxViewId,
-    const Reference<frame::XController>& rxController,
+    const ::rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterNotesViewInterfaceBase(m_aMutex),
       mxViewId(rxViewId),
@@ -64,8 +64,7 @@ PresenterNotesView::PresenterNotesView (
 {
     try
     {
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        Reference<XConfigurationController> xCC (xCM->getConfigurationController(), UNO_SET_THROW);
+        Reference<XConfigurationController> xCC (rxController->getConfigurationController(), UNO_SET_THROW);
         Reference<XPane> xPane (xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxParentWindow = xPane->getWindow();

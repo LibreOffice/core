@@ -200,7 +200,7 @@ public:
     explicit PresenterToolBarView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterToolBarView() override;
     PresenterToolBarView(const PresenterToolBarView&) = delete;

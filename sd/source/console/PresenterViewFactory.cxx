@@ -25,7 +25,7 @@
 #include "PresenterSlidePreview.hxx"
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <DrawController.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -94,7 +94,7 @@ public:
 
 PresenterViewFactory::PresenterViewFactory (
     const Reference<uno::XComponentContext>& rxContext,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> pPresenterController)
     : PresenterViewFactoryInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
@@ -105,7 +105,7 @@ PresenterViewFactory::PresenterViewFactory (
 
 Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
     rtl::Reference<PresenterViewFactory> pFactory (
@@ -114,13 +114,12 @@ Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     return Reference<drawing::framework::XResourceFactory>(pFactory);
 }
 
-void PresenterViewFactory::Register (const Reference<frame::XController>& rxController)
+void PresenterViewFactory::Register (const rtl::Reference<::sd::DrawController>& rxController)
 {
     try
     {
         // Get the configuration controller.
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        mxConfigurationController = xCM->getConfigurationController();
+        mxConfigurationController = rxController->getConfigurationController();
         if ( ! mxConfigurationController.is())
         {
             throw RuntimeException();
@@ -350,7 +349,7 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
             new PresenterSlideShowView(
                 mxComponentContext,
                 rxViewId,
-                Reference<frame::XController>(mxControllerWeak),
+                mxControllerWeak.get(),
                 mpPresenterController));
         pShowView->LateInit();
         xView = pShowView;
@@ -398,7 +397,7 @@ Reference<XView> PresenterViewFactory::CreateToolBarView(
     return new PresenterToolBarView(
         mxComponentContext,
         rxViewId,
-        Reference<frame::XController>(mxControllerWeak),
+        mxControllerWeak.get(),
         mpPresenterController);
 }
 
@@ -418,7 +417,7 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
             new PresenterNotesView(
                 mxComponentContext,
                 rxViewId,
-                Reference<frame::XController>(mxControllerWeak),
+                mxControllerWeak.get(),
                 mpPresenterController)),
             UNO_QUERY_THROW);
     }
@@ -446,7 +445,7 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
             new PresenterSlideSorter(
                 mxComponentContext,
                 rxViewId,
-                Reference<frame::XController>(mxControllerWeak),
+                mxControllerWeak.get(),
                 mpPresenterController));
         xView = pView.get();
     }
@@ -464,7 +463,7 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
     return Reference<XView>(new PresenterHelpView(
         mxComponentContext,
         rxViewId,
-        Reference<frame::XController>(mxControllerWeak),
+        mxControllerWeak.get(),
         mpPresenterController));
 }
 

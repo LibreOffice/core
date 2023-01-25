@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sddllapi.h>
 #include <cppuhelper/propshlp.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -73,7 +74,7 @@ class ViewShellBase;
     The implementation of the XControllerManager interface is not yet in its
     final form.
 */
-class DrawController final
+class SD_DLLPUBLIC DrawController final
     : public DrawControllerInterfaceBase,
       private BroadcastHelperOwner,
       public ::cppu::OPropertySetHelper

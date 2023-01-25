@@ -27,8 +27,11 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
+
+namespace sd { class DrawController; }
 
 namespace sdext::presenter {
 
@@ -93,7 +96,7 @@ public:
     */
     static css::uno::Reference<css::drawing::framework::XResourceFactory> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory() override;
 
@@ -113,7 +116,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
-    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
+    unotools::WeakReference<::sd::DrawController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
         css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
@@ -122,10 +125,10 @@ private:
 
     PresenterViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         ::rtl::Reference<PresenterController> pPresenterController);
 
-    void Register (const css::uno::Reference<css::frame::XController>& rxController);
+    void Register (const ::rtl::Reference<::sd::DrawController>& rxController);
 
     css::uno::Reference<css::drawing::framework::XView> CreateSlideShowView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;

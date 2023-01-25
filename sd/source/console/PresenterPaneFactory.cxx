@@ -23,7 +23,7 @@
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterSpritePane.hxx"
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <DrawController.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <utility>
 
@@ -38,7 +38,7 @@ namespace sdext::presenter {
 
 Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
     rtl::Reference<PresenterPaneFactory> pFactory (
@@ -56,14 +56,13 @@ PresenterPaneFactory::PresenterPaneFactory (
 {
 }
 
-void PresenterPaneFactory::Register (const Reference<frame::XController>& rxController)
+void PresenterPaneFactory::Register (const rtl::Reference<::sd::DrawController>& rxController)
 {
     Reference<XConfigurationController> xCC;
     try
     {
         // Get the configuration controller.
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        xCC.set(xCM->getConfigurationController());
+        xCC.set(rxController->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
         if ( ! xCC.is())
         {

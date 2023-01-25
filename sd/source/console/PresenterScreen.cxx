@@ -26,9 +26,9 @@
 #include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
@@ -316,24 +316,24 @@ void PresenterScreen::InitializePresenterScreen()
             return;
 
         // find first controller that is not the current controller (the one with the slideshow
-        mxController = mxModel->getCurrentController();
+        auto tmpController = mxModel->getCurrentController();
         Reference< container::XEnumeration > xEnum( mxModel->getControllers() );
         if( xEnum.is() )
         {
             while( xEnum->hasMoreElements() )
             {
                 Reference< frame::XController > xC( xEnum->nextElement(), UNO_QUERY );
-                if( xC.is() && (xC != mxController) )
+                if( xC.is() && (xC.get() != tmpController.get()) )
                 {
-                    mxController = xC;
+                    mxController = dynamic_cast<::sd::DrawController*>(xC.get());
+                    assert(bool(mxController) == bool(xC) && "only support instances of type DrawController");
                     break;
                 }
             }
         }
         // Get the XController from the first argument.
-        Reference<XControllerManager> xCM(mxController, UNO_QUERY_THROW);
 
-        Reference<XConfigurationController> xCC( xCM->getConfigurationController());
+        Reference<XConfigurationController> xCC( mxController->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
 
         Reference<drawing::framework::XResourceId> xMainPaneId(
