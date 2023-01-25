@@ -1777,6 +1777,8 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
     if (!AllowScale(maBmpEx.GetSizePixel(), pOut->LogicToPixel(maSz)))
         return;
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, maSz))))
+        return;
 
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
