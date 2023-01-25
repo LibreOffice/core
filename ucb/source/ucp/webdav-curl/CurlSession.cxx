@@ -955,6 +955,8 @@ auto CurlProcessor::ProcessRequestImpl(
                  "curl_easy_perform failed: " << GetErrorString(rc, rSession.m_ErrorBuffer));
         switch (rc)
         {
+            case CURLE_UNSUPPORTED_PROTOCOL:
+                throw DAVException(DAVException::DAV_UNSUPPORTED);
             case CURLE_COULDNT_RESOLVE_PROXY:
                 throw DAVException(
                     DAVException::DAV_HTTP_LOOKUP,
@@ -1241,6 +1243,7 @@ auto CurlProcessor::ProcessRequest(
         }
     }
     bool isRetry(false);
+    bool isFallbackHTTP10(false);
     int nAuthRequests(0);
     int nAuthRequestsProxy(0);
 
@@ -1463,6 +1466,27 @@ auto CurlProcessor::ProcessRequest(
                         break;
                     }
                 }
+            }
+            else if (rException.getError() == DAVException::DAV_UNSUPPORTED)
+            {
+                // tdf#152493 libcurl can't handle "Transfer-Encoding: chunked"
+                // in HTTP/1.1 100 Continue response.
+                // workaround: if HTTP/1.1 didn't work, try HTTP/1.0
+                // (but fallback only once - to prevent infinite loop)
+                if (isFallbackHTTP10)
+                {
+                    throw DAVException(DAVException::DAV_HTTP_ERROR);
+                }
+                isFallbackHTTP10 = true;
+                // note: this is not reset - future requests to this URI use it!
+                auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTP_VERSION,
+                                           CURL_HTTP_VERSION_1_0);
+                if (rc != CURLE_OK)
+                {
+                    throw DAVException(DAVException::DAV_HTTP_ERROR);
+                }
+                SAL_INFO("ucb.ucp.webdav.curl", "attempting fallback to HTTP/1.0");
+                isRetry = true;
             }
             if (!isRetry)
             {
