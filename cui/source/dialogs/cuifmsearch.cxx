@@ -312,15 +312,20 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, weld::Button&, rButton, void
     if (m_ppbApproxSettings.get() == &rButton)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(m_xDialog.get(), m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
+
+        VclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(m_xDialog.get(), m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
                     m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() ));
-        if (pDlg->Execute() == RET_OK)
+        pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
+
+        if (nResult == RET_OK)
         {
             m_pSearchEngine->SetLevRelaxed( pDlg->IsRelaxed() );
             m_pSearchEngine->SetLevOther( pDlg->GetOther() );
             m_pSearchEngine->SetLevShorter(pDlg->GetShorter() );
             m_pSearchEngine->SetLevLonger( pDlg->GetLonger() );
         }
+        pDlg->disposeOnce();
+        });
     }
     else if (m_pSoundsLikeCJKSettings.get() == &rButton)
     {
