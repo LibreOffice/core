@@ -373,6 +373,12 @@ published service BaseFrameProperties
     */
     [optional, property] boolean Decorative;
 
+    /** If `TRUE`, the frame is allowed to be split at page breaks.
+
+        @since LibreOffice 7.6
+     */
+    [optional, property] boolean IsSplitAllowed;
+
 };
 
 
