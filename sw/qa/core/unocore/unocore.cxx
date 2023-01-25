@@ -28,6 +28,7 @@
 #include <ndtxt.hxx>
 #include <textlinebreak.hxx>
 #include <textcontentcontrol.hxx>
+#include <frmmgr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -900,6 +901,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
     CPPUNIT_ASSERT_EQUAL(
         OUString("normal"),
         getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-weight"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testFlySplit)
+{
+    // Given a document with a fly frame:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDocument->getTextFrames()->getByName("Frame1"),
+                                               uno::UNO_QUERY);
+    bool bIsSplitAllowed{};
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // - Unknown property: IsSplitAllowed
+    // i.e. the property was missing.
+    xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    CPPUNIT_ASSERT(!bIsSplitAllowed);
+
+    // When marking it as IsSplitAllowed=true:
+    xFrame->setPropertyValue("IsSplitAllowed", uno::Any(true));
+
+    // Then make sure that IsSplitAllowed is true when asking back:
+    xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    CPPUNIT_ASSERT(bIsSplitAllowed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

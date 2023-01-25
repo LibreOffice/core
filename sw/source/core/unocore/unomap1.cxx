@@ -772,6 +772,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFrameProp
         { UNO_NAME_SIZE_TYPE, RES_FRM_SIZE,           cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
         { UNO_NAME_WIDTH_TYPE, RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
         { UNO_NAME_WRITING_MODE, RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_IS_SPLIT_ALLOWED, RES_FLY_SPLIT, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0 },
 
         // added FillProperties for SW, same as FILL_PROPERTIES in svx
         // but need own defines in Writer due to later association of strings
