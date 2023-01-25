@@ -110,7 +110,7 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
           [this] () { return this->GetSidebarContextName(); },
-          uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
+          uno::Reference<frame::XController>(rViewShellBase.GetDrawController()),
           vcl::EnumContext::Context::Default))
     , mbMouseButtonDown(false)
     , mbMouseSelecting(false)

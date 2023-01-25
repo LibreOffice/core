@@ -573,7 +573,7 @@ void DrawViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    DrawController& rController = GetViewShellBase().GetDrawController();
+    DrawController& rController = *GetViewShellBase().GetDrawController();
     rController.FireVisAreaChanged (rRect);
 }
 
@@ -626,7 +626,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             *this,
             *GetView()));
         css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
-        GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
+        GetViewShellBase().GetDrawController()->fireChangeLayer( &rLayer );
     }
 }
 

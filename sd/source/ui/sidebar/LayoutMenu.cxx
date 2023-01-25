@@ -507,14 +507,15 @@ void LayoutMenu::Fill()
     OUString sCenterPaneViewName;
     try
     {
-        Reference<XControllerManager> xControllerManager (
-            Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY_THROW);
-        Reference<XResourceId> xPaneId (ResourceId::create(
-            ::comphelper::getProcessComponentContext(),
-            FrameworkHelper::msCenterPaneURL));
-        Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
-        if (xView.is())
-            sCenterPaneViewName = xView->getResourceId()->getResourceURL();
+        if (mrBase.GetDrawController())
+        {
+            Reference<XResourceId> xPaneId (ResourceId::create(
+                ::comphelper::getProcessComponentContext(),
+                FrameworkHelper::msCenterPaneURL));
+            Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
+            if (xView.is())
+                sCenterPaneViewName = xView->getResourceId()->getResourceURL();
+        }
     }
     catch (RuntimeException&)
     {}

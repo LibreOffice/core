@@ -237,7 +237,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 
         // With the view in the center pane the sub controller is
         // released, too.
-        mpBase->GetDrawController().SetSubController(
+        mpBase->GetDrawController()->SetSubController(
             Reference<drawing::XDrawSubController>());
 
         SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
@@ -485,7 +485,7 @@ void BasicViewFactory::ActivateCenterView (
     if (mpBase->GetDocShell()->IsInPlaceActive())
         mpBase->GetViewFrame()->Resize(true);
 
-    mpBase->GetDrawController().SetSubController(
+    mpBase->GetDrawController()->SetSubController(
         rpDescriptor->mpViewShell->CreateSubController());
 }
 

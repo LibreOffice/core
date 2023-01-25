@@ -132,7 +132,7 @@ void SlideShowRestarter::StartPresentation()
     //being called during the configuration update event on exit. At this point
     //newly created objects won't get disposed called on them, because the
     //disposer is doing its last execution of that now.
-    if (mpViewShellBase && mpViewShellBase->GetDrawController().IsDisposing())
+    if (mpViewShellBase && mpViewShellBase->GetDrawController()->IsDisposing())
         return;
 
     if (mpDispatcher == nullptr && mpViewShellBase!=nullptr)

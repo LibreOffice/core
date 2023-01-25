@@ -306,9 +306,10 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
     try
     {
-        Reference<XControllerManager> xControllerManager (GetDrawController(), UNO_QUERY_THROW);
-        Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
+        rtl::Reference<::sd::DrawController> xControllerManager (GetDrawController());
+        Reference<XConfigurationController> xConfigurationController;
+        if (xControllerManager)
+            xConfigurationController = xControllerManager->getConfigurationController();
         if (xConfigurationController.is())
         {
             OUString sView (rsDefaultView);
@@ -937,11 +938,11 @@ std::shared_ptr<FormShellManager> const & ViewShellBase::GetFormShellManager() c
     return mpImpl->mpFormShellManager;
 }
 
-DrawController& ViewShellBase::GetDrawController() const
+DrawController* ViewShellBase::GetDrawController() const
 {
     OSL_ASSERT(mpImpl != nullptr);
 
-    return *mpImpl->mpController;
+    return mpImpl->mpController.get();
 }
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)

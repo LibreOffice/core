@@ -211,7 +211,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
         StartListening (*mpDocument);
 
     // Listen for configuration changes.
-    DrawController& rDrawController = mrBase.GetDrawController();
+    DrawController& rDrawController = *mrBase.GetDrawController();
 
     Reference<XConfigurationController> xConfigurationController (
         rDrawController.getConfigurationController());

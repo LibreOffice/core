@@ -88,8 +88,7 @@ void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 
 void ImpressViewShellBase::InitializeFramework()
 {
-    rtl::Reference<sd::DrawController>
-        xController (&GetDrawController());
+    rtl::Reference<sd::DrawController> xController(GetDrawController());
     sd::framework::ImpressModule::Initialize(xController);
 }
 

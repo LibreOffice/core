@@ -293,7 +293,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             {
                 if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
                 {
-                    mxView.set(mrBase.GetDrawController(), UNO_QUERY);
+                    mxView = mrBase.GetDrawController();
                     onSelectionChanged();
                     onChangeCurrentPage();
                     break;

@@ -1572,11 +1572,11 @@ void ViewShell::SwitchActiveViewFireFocus()
 // move these two methods from DrawViewShell.
 void ViewShell::fireSwitchCurrentPage(sal_Int32 pageIndex)
 {
-    GetViewShellBase().GetDrawController().fireSwitchCurrentPage(pageIndex);
+    GetViewShellBase().GetDrawController()->fireSwitchCurrentPage(pageIndex);
 }
 void ViewShell::NotifyAccUpdate( )
 {
-    GetViewShellBase().GetDrawController().NotifyAccUpdate();
+    GetViewShellBase().GetDrawController()->NotifyAccUpdate();
 }
 
 weld::Window* ViewShell::GetFrameWeld() const

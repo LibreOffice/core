@@ -256,7 +256,7 @@ void DrawViewShell::SelectionHasChanged()
 
     mpDrawView->UpdateSelectionClipboard();
 
-    GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+    GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
 }
 
 namespace {
@@ -344,8 +344,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         eEMode = EditMode::MasterPage;
     }
 
-    GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EditMode::MasterPage);
-    GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
+    GetViewShellBase().GetDrawController()->FireChangeEditMode (eEMode == EditMode::MasterPage);
+    GetViewShellBase().GetDrawController()->FireChangeLayerMode (bIsLayerModeActive);
 
     if ( mpDrawView->IsTextEdit() )
     {
@@ -359,7 +359,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         pLayerBar->EndEditMode();
     maTabControl->EndEditMode();
 
-    GetViewShellBase().GetDrawController().BroadcastContextChange();
+    GetViewShellBase().GetDrawController()->BroadcastContextChange();
 
     meEditMode = eEMode;
 
@@ -1051,7 +1051,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
             mpDrawView->HideSdrPage();
             maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
             mpDrawView->ShowSdrPage(mpActualPage);
-            GetViewShellBase().GetDrawController().FireSwitchCurrentPage(mpActualPage);
+            GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
 
             SdrPageView* pNewPageView = mpDrawView->GetSdrPageView();
 
@@ -1120,7 +1120,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
             sal_uInt16 nNum = pMaster->GetPageNum();
             mpDrawView->ShowSdrPage(mpDrawView->GetModel()->GetMasterPage(nNum));
 
-            GetViewShellBase().GetDrawController().FireSwitchCurrentPage(pMaster);
+            GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(pMaster);
 
             SdrPageView* pNewPageView = mpDrawView->GetSdrPageView();
 

@@ -705,7 +705,7 @@ bool View::SdrBeginTextEdit(
 
     if ( mpViewSh )
     {
-        mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+        mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
 
         if (pObj && pObj->GetObjIdentifier() == SdrObjKind::Table)
             mpViewSh->UpdateScrollBars();
@@ -808,7 +808,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     {
         if ( mpViewSh )
         {
-            mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+            mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
 
             if (comphelper::LibreOfficeKit::isActive())
                 SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");

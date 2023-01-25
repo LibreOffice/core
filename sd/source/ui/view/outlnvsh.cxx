@@ -1332,7 +1332,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         //Now, CurrentPage property change is already sent for DrawView and OutlineView, so it is not necessary to send again here
         if(m_StrOldPageName!=aPageStr)
         {
-            GetViewShellBase().GetDrawController().fireSwitchCurrentPage(nPos);
+            GetViewShellBase().GetDrawController()->fireSwitchCurrentPage(nPos);
             m_StrOldPageName = aPageStr;
         }
     }
@@ -1812,7 +1812,7 @@ void OutlineViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    GetViewShellBase().GetDrawController().FireVisAreaChanged(rRect);
+    GetViewShellBase().GetDrawController()->FireVisAreaChanged(rRect);
 }
 
 /** If there is a valid controller then create a new instance of
@@ -1870,7 +1870,7 @@ void OutlineViewShell::SetCurrentPage (SdPage* pPage)
             false);
     GetDoc()->SetSelected (pPage, true);
 
-    DrawController& rController(GetViewShellBase().GetDrawController());
+    DrawController& rController(*GetViewShellBase().GetDrawController());
     rController.FireSelectionChangeListener();
     rController.FireSwitchCurrentPage (pPage);
 

@@ -85,7 +85,7 @@ void GraphicViewShellBase::Execute(SfxRequest& rRequest)
 
 void GraphicViewShellBase::InitializeFramework()
 {
-    rtl::Reference<sd::DrawController> xController(&GetDrawController());
+    rtl::Reference<sd::DrawController> xController(GetDrawController());
     sd::framework::DrawModule::Initialize(xController);
 }
 

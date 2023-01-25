@@ -736,7 +736,7 @@ void SAL_CALL SlideShow::end()
                 else
                 {
                     DrawController& rDrawController =
-                        mpCurrentViewShellBase->GetDrawController();
+                        *mpCurrentViewShellBase->GetDrawController();
                     rDrawController.setCurrentPage(
                         Reference<XDrawPage>(
                             mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)->getUnoPage(),

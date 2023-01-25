@@ -259,7 +259,7 @@ void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
                 sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();
                 pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
                 mxPreviewValueSet->SelectItem (nIndex);
-                mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
+                mrBase.GetDrawController()->setCurrentPage(xSelectedMaster);
             }
         }
     }

@@ -85,7 +85,7 @@ PresentationViewShellBase::~PresentationViewShellBase()
 
 void PresentationViewShellBase::InitializeFramework()
 {
-    rtl::Reference<sd::DrawController> xController (&GetDrawController());
+    rtl::Reference<sd::DrawController> xController (GetDrawController());
     sd::framework::PresentationModule::Initialize(xController);
 }
 
