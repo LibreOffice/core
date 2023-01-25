@@ -22,8 +22,10 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XController; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -41,10 +43,10 @@ class PresentationFactory final
 {
 public:
     PresentationFactory (
-        const css::uno::Reference<css::frame::XController>& rxController);
+        const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~PresentationFactory() override;
 
-    static void install(const css::uno::Reference<css::frame::XController>& rxController);
+    static void install(const rtl::Reference<::sd::DrawController>& rxController);
 
     // XResourceFactory
 
@@ -68,7 +70,7 @@ public:
         const css::lang::EventObject& rEventObject) override;
 
 private:
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
 
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const;

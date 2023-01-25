@@ -71,7 +71,7 @@ private:
 constexpr OUStringLiteral gsPresentationViewURL = u"private:resource/view/Presentation";
 
 PresentationFactory::PresentationFactory (
-    const Reference<frame::XController>& rxController)
+    const rtl::Reference<::sd::DrawController>& rxController)
     : mxController(rxController)
 {
 }
@@ -99,10 +99,9 @@ void SAL_CALL PresentationFactory::releaseResource (
 {
     ThrowIfDisposed();
 
-    auto pController = dynamic_cast<sd::DrawController*>(mxController.get());
-    if (pController != nullptr)
+    if (mxController)
     {
-        ViewShellBase* pBase = pController->GetViewShellBase();
+        ViewShellBase* pBase = mxController->GetViewShellBase();
         if (pBase != nullptr)
             SlideShow::Stop( *pBase );
     }
@@ -129,13 +128,11 @@ void PresentationFactory::ThrowIfDisposed() const
     }
 }
 
-void PresentationFactory::install(const Reference<frame::XController>& rxController)
+void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rxController)
 {
     try
     {
-        // Get the XController from the first argument.
-        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        Reference<XConfigurationController> xCC (xCM->getConfigurationController());
+        Reference<XConfigurationController> xCC (rxController->getConfigurationController());
         if (xCC.is())
             xCC->addResourceFactory(
                 gsPresentationViewURL,

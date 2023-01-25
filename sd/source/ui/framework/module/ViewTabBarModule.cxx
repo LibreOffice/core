@@ -20,6 +20,7 @@
 #include "ViewTabBarModule.hxx"
 
 #include <framework/FrameworkHelper.hxx>
+#include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -46,16 +47,14 @@ namespace sd::framework {
 //===== ViewTabBarModule ==================================================
 
 ViewTabBarModule::ViewTabBarModule (
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const Reference<XResourceId>& rxViewTabBarId)
     : mxViewTabBarId(rxViewTabBarId)
 {
-    Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-
-    if (!xControllerManager.is())
+    if (!rxController.is())
         return;
 
-    mxConfigurationController = xControllerManager->getConfigurationController();
+    mxConfigurationController = rxController->getConfigurationController();
     if (!mxConfigurationController.is())
         return;
 

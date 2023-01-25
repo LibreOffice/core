@@ -21,10 +21,12 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace com::sun::star::frame { class XController; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -48,7 +50,7 @@ public:
             new module.
     */
     ViewTabBarModule (
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         const css::uno::Reference<
             css::drawing::framework::XResourceId>& rxViewTabBarId);
     virtual ~ViewTabBarModule() override;
