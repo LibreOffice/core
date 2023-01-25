@@ -721,10 +721,12 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         LLVM_TRIPLE=armv7a-linux-androideabi
+        ANDROID_SYSROOT_PLATFORM=arm-linux-androideabi
         ANDROID_APP_ABI=armeabi-v7a
         ANDROIDCFLAGS="-mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8"
     elif test $host_cpu = aarch64; then
         LLVM_TRIPLE=aarch64-linux-android
+        ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
         # minimum android version that supports aarch64
         if test "$ANDROID_API_LEVEL" -lt "21" ; then
             ANDROID_API_LEVEL=21
@@ -732,6 +734,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_APP_ABI=arm64-v8a
     elif test $host_cpu = x86_64; then
         LLVM_TRIPLE=x86_64-linux-android
+        ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
         # minimum android version that supports x86_64
         ANDROID_API_LEVEL=21
         ANDROID_APP_ABI=x86_64
@@ -739,6 +742,7 @@ if test -n "$with_android_ndk"; then
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         LLVM_TRIPLE=i686-linux-android
+        ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
         ANDROID_APP_ABI=x86
     fi
 
@@ -770,8 +774,8 @@ if test -n "$with_android_ndk"; then
         # ndk would also support windows and windows-x86_64
         ;;
     esac
-    android_TOOLCHAIN=$ANDROID_NDK_DIR/toolchains/llvm/prebuilt/$android_HOST_TAG
-    ANDROID_COMPILER_BIN=$android_TOOLCHAIN/bin
+    ANDROID_TOOLCHAIN=$ANDROID_NDK_DIR/toolchains/llvm/prebuilt/$android_HOST_TAG
+    ANDROID_COMPILER_BIN=$ANDROID_TOOLCHAIN/bin
 
     test -z "$AR" && AR=$ANDROID_COMPILER_BIN/llvm-ar
     test -z "$NM" && NM=$ANDROID_COMPILER_BIN/llvm-nm
@@ -802,6 +806,8 @@ AC_SUBST(ANDROID_NDK_DIR)
 AC_SUBST(ANDROID_API_LEVEL)
 AC_SUBST(ANDROID_APP_ABI)
 AC_SUBST(ANDROID_GCC_TOOLCHAIN_VERSION)
+AC_SUBST(ANDROID_SYSROOT_PLATFORM)
+AC_SUBST(ANDROID_TOOLCHAIN)
 
 dnl ===================================================================
 dnl --with-android-sdk
