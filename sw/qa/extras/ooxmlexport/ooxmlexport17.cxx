@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("mytag")));
     xContentControlProps->setPropertyValue("Id", uno::Any(static_cast<sal_Int32>(123)));
-    xContentControlProps->setPropertyValue("TabIndex", uno::Any(sal_uInt32(2)));
+    xContentControlProps->setPropertyValue("TabIndex", uno::Any(sal_uInt32(4294967295))); // -1
     xContentControlProps->setPropertyValue("Lock", uno::Any(OUString("sdtLocked")));
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
@@ -453,7 +453,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", "myalias");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", "val", "mytag");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:id", "val", "123");
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tabIndex", "val", "2");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tabIndex", "val", "-1");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", "sdtLocked");
 }
 
