@@ -32,6 +32,7 @@
 
 #include <tools/stream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <svx/msdffdef.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdmetitm.hxx>
@@ -401,6 +402,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
     }
 
     // properties
+    // The numbers of defines ESCHER_Prop_foo and DFF_Prop_foo correspond to the PIDs in
+    // 'Microsoft Office Drawing 97-2007 Binary Format Specification'.
+    // The property values are set by EscherPropertyContainer::CreateCustomShapeProperties() method.
     bool bAlreadyWritten[ 0xFFF ] = {};
     const EscherProperties &rOpts = rProps.GetOpts();
     for (auto const& opt : rOpts)
@@ -964,11 +968,38 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             OUString aSize = OUString::number(nSizeF);
                             aStyle += ";font-size:" + aSize + "pt";
                         }
-                        if (IsWaterMarkShape(m_pSdrObject->GetName()))
-                            pAttrList->add(XML_trim, "t");
+
+                        sal_uInt32 nGtextFlags;
+                        if (rProps.GetOpt(DFF_Prop_gtextFStrikethrough /*255*/, nGtextFlags))
+                        {
+                            // The property is in fact a collection of flags. Two bytes contain the
+                            // fUsegtextF* flags and the other two bytes at same place the associated
+                            // On/Off flags. See '2.3.22.10 Geometry Text Boolean Properties' section
+                            // in [MS-ODRAW].
+                            if ((nGtextFlags & 0x00200020) == 0x00200020) // DFF_Prop_gtextFBold = 250
+                                aStyle += ";font-weight:bold";
+                            if ((nGtextFlags & 0x00100010) == 0x00100010) // DFF_Prop_gtextFItalic = 251
+                                aStyle += ";font-style:italic";
+                            if ((nGtextFlags & 0x00800080) == 0x00800080) // no DFF, PID gtextFNormalize = 248
+                                aStyle += ";v-same-letter-heights:t";
+
+                            // The value 'Fontwork character spacing' in LO is bound to field 'Scaling'
+                            // not to 'Spacing' in character properties. In fact the characters are
+                            // rendered with changed distance and width. The method in escherex.cxx has
+                            // put a rounded value of 'CharScaleWidth' API property to
+                            // DFF_Prop_gtextSpacing (=196) as integer part of 16.16 fixed point format.
+                            // fUsegtextFTight and gtextFTight (244) of MS binary format are not used.
+                            sal_uInt32 nGtextSpacing;
+                            if (rProps.GetOpt(DFF_Prop_gtextSpacing, nGtextSpacing))
+                                aStyle += ";v-text-spacing:" + OUString::number(nGtextSpacing) + "f";
+                        }
 
                         if (!aStyle.isEmpty())
                             pAttrList->add(XML_style, aStyle);
+
+                        if (IsWaterMarkShape(m_pSdrObject->GetName()))
+                            pAttrList->add(XML_trim, "t");
+
                         m_pSerializer->singleElementNS(XML_v, XML_textpath, pAttrList);
                     }
 
@@ -1007,6 +1038,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     // note that XML_ID is different from XML_id (although it looks like a LO
                     // implementation distinction without valid justification to me).
+                    // FIXME: XML_ID produces invalid file, see tdf#153183
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
                 break;

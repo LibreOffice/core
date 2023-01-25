@@ -798,6 +798,40 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
     // in VML export.
     assertXPath(pXmlDoc, "//v:shape/v:fill", "type", "frame");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
+{
+    // The document has five Fontwork shapes. They have bitmap fill and thus are exported to VML.
+    // They differ in font properties e.g. font weight and character spacing.
+    loadFromURL(u"tdf128568_FontworkFontProperties.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Make sure the style attribute of the textpath element has the needed items. Without fix only
+    // font-family and font-size were written.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    OUString sStyle;
+    // bold
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[1]/v:textpath", "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("font-weight:bold") > -1);
+    // italic
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[2]/v:textpath", "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("font-style:italic") > -1);
+    // character spacing 'very loose', 150 * 655, see escherex.cxx
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[3]/v:textpath", "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("v-text-spacing:98250f") > -1);
+    // character spacing 'tight', 90 * 655, see escherex.cxx
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[4]/v:textpath", "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("v-text-spacing:58950f") > -1);
+    // same letter heights
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[5]/v:textpath", "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("v-same-letter-heights:t") > -1);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
