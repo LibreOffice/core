@@ -48,7 +48,7 @@ android {
         strippedUIEditing.assets.srcDirs 'assets_strippedUI'
     }
     defaultConfig {
-        minSdkVersion 16
+        // minSdkVersion is set in liboSettings.gradle
         targetSdkVersion 33
         // multidex needed when > 65,536 methods referenced with minSdKVersion < 21
         // s. https://developer.android.com/studio/build/multidex
