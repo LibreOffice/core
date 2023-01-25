@@ -261,13 +261,13 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     }
 
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
-    if (nHeight > 8120)
+    if (nHeight > 8000)
     {
         SAL_WARN("vcl", "rendering text would use > 2G Memory: " << nHeight);
         return;
     }
 
-    if (nWidth > 4024)
+    if (nWidth > 2000)
     {
         SAL_WARN("vcl", "rendering text would use > 2G Memory: " << nWidth);
         return;
