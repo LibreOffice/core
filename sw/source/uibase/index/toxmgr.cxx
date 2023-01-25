@@ -384,6 +384,12 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             }
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
+            if (eCurTOXType == TOX_ILLUSTRATIONS
+                || eCurTOXType == TOX_TABLES
+                || eCurTOXType == TOX_OBJECTS)
+            {
+                pNewTOX->SetCreate(rDesc.GetContentOptions());
+            }
         }
         break;
     }

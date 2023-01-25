@@ -781,6 +781,10 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     , m_xCaptionSequenceLB(m_xBuilder->weld_combo_box("category"))
     , m_xDisplayTypeFT(m_xBuilder->weld_label("displayft"))
     , m_xDisplayTypeLB(m_xBuilder->weld_combo_box("display"))
+    , m_xParaStyleCB(m_xBuilder->weld_check_button("useparastyle"))
+    , m_xParaStyleFT(m_xBuilder->weld_label("parastyleft"))
+    , m_xParaStyleLB(m_xBuilder->weld_combo_box("parastyle"))
+    , m_xParaStyleFrame(m_xBuilder->weld_widget("parastyleframe"))
     , m_xTOXMarksCB(m_xBuilder->weld_check_button("indexmarks"))
     , m_xIdxOptionsFrame(m_xBuilder->weld_widget("optionsframe"))
     , m_xCollectSameCB(m_xBuilder->weld_check_button("combinesame"))
@@ -845,10 +849,12 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     m_xUseDashCB->connect_toggled(aLk);
     m_xInitialCapsCB->connect_toggled(aLk);
     m_xKeyAsEntryCB->connect_toggled(aLk);
+    m_xParaStyleCB->connect_toggled(aLk);
 
     m_xTitleED->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyEntryHdl));
     m_xLevelNF->connect_value_changed(LINK(this, SwTOXSelectTabPage, ModifySpinHdl));
     m_xSortAlgorithmLB->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyListBoxHdl));
+    m_xParaStyleLB->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyListBoxHdl));
 
     aLk = LINK(this, SwTOXSelectTabPage, RadioButtonHdl);
     m_xFromCaptionsRB->connect_toggled(aLk);
@@ -953,6 +959,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
+
     m_xReadOnlyCB->set_active(rDesc.IsReadonly());
     if (!m_xTitleED->get_value_changed_from_saved())
     {
@@ -991,6 +998,42 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     //all but illustration and table
     m_xTOXMarksCB->set_active( bool(nCreateType & SwTOXElement::Mark) );
 
+    if (TOX_ILLUSTRATIONS == aCurType.eType || TOX_TABLES == aCurType.eType
+        || TOX_OBJECTS== aCurType.eType)
+    {
+        // load all para styles...
+        m_xParaStyleLB->clear();
+        SwWrtShell const& rWrtSh(static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell());
+        const sal_uInt16 nSz = rWrtSh.GetTextFormatCollCount();
+        for (sal_uInt16 j = 0; j < nSz; ++j)
+        {
+            SwTextFormatColl const& rColl = rWrtSh.GetTextFormatColl(j);
+            if (rColl.IsDefault())
+                continue;
+
+            OUString const name(rColl.GetName());
+            if (!name.isEmpty())
+            {
+                m_xParaStyleLB->append_text(name);
+            }
+        }
+        // first, init ParaStyle - because any later init (e.g. m_xFromCaptionsRB)
+        // ends up calling FillTOXDescription() resetting rDesc!
+        OUString const& rStyle(rDesc.GetStyleNames(0));
+        assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
+        if (rStyle.isEmpty())
+        {
+            m_xParaStyleCB->set_active(false);
+            m_xParaStyleLB->set_sensitive(false);
+        }
+        else
+        {
+            m_xParaStyleCB->set_active(true);
+            m_xParaStyleLB->set_sensitive(true);
+            m_xParaStyleLB->set_active_text(rStyle);
+        }
+    }
+
     //content
     if(TOX_CONTENT == aCurType.eType)
     {
@@ -1026,7 +1069,6 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         if (m_xDisplayTypeLB->get_active() == -1)
             m_xDisplayTypeLB->set_active(0);
         RadioButtonHdl(*m_xFromCaptionsRB);
-
     }
     else if(TOX_OBJECTS == aCurType.eType)
     {
@@ -1123,6 +1165,14 @@ void SwTOXSelectTabPage::FillTOXDescription()
             rDesc.SetCreateFromObjectNames(m_xFromObjectNamesRB->get_active());
             rDesc.SetSequenceName(m_xCaptionSequenceLB->get_active_text());
             rDesc.SetCaptionDisplay(static_cast<SwCaptionDisplay>(m_xDisplayTypeLB->get_active()));
+            if (m_xParaStyleCB->get_active())
+            {
+                m_aStyleArr[0] = m_xParaStyleLB->get_active_text();
+            }
+            else
+            {
+                m_aStyleArr[0] = OUString();
+            }
         break;
         case TOX_OBJECTS:
         {
@@ -1136,6 +1186,14 @@ void SwTOXSelectTabPage::FillTOXDescription()
                 }
             }
             rDesc.SetOLEOptions(nOLEData);
+            if (m_xParaStyleCB->get_active())
+            {
+                m_aStyleArr[0] = m_xParaStyleLB->get_active_text();
+            }
+            else
+            {
+                m_aStyleArr[0] = OUString();
+            }
         }
         break;
         case TOX_AUTHORITIES:
@@ -1158,8 +1216,11 @@ void SwTOXSelectTabPage::FillTOXDescription()
         nContentOptions |= SwTOXElement::Mark;
     if (m_xFromHeadingsCB->get_active() && m_xFromHeadingsCB->get_visible())
         nContentOptions |= SwTOXElement::OutlineLevel;
-    if (m_xAddStylesCB->get_active() && m_xAddStylesCB->get_visible())
+    if ((m_xAddStylesCB->get_active() && m_xAddStylesCB->get_visible())
+        || (m_xParaStyleCB->get_active() && m_xParaStyleCB->get_visible()))
+    {
         nContentOptions |= SwTOXElement::Template;
+    }
 
     rDesc.SetContentOptions(nContentOptions);
     rDesc.SetIndexOptions(nIndexOptions);
@@ -1264,6 +1325,10 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
     m_xCaptionSequenceLB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
     m_xDisplayTypeFT->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
     m_xDisplayTypeLB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xParaStyleCB->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
+    m_xParaStyleFT->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
+    m_xParaStyleLB->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
+    m_xParaStyleFrame->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
 
     m_xAuthorityFrame->set_visible( 0 != (nType & TO_AUTHORITIES) );
 
@@ -1346,6 +1411,13 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::Toggleable&, rButton, void)
         m_xUseFFCB->set_sensitive(m_xCollectSameCB->get_active() && !m_xUseDashCB->get_active());
         m_xUseDashCB->set_sensitive(m_xCollectSameCB->get_active() && !m_xUseFFCB->get_active());
         m_xCaseSensitiveCB->set_sensitive(m_xCollectSameCB->get_active());
+    }
+    else if (TOX_ILLUSTRATIONS == aCurType.eType
+            || TOX_TABLES == aCurType.eType
+            || TOX_OBJECTS == aCurType.eType)
+    {
+        bool const bEnable(m_xParaStyleCB->get_active());
+        m_xParaStyleLB->set_sensitive(bEnable);
     }
     ModifyHdl();
 };

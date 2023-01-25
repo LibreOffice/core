@@ -812,6 +812,81 @@
           </packing>
         </child>
         <child>
+          <object class="GtkFrame" id="parastyleframe">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=2 n-rows=2 -->
+              <object class="GtkGrid" id="grid14">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="margin-start">12</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkCheckButton" id="useparastyle">
+                    <property name="label" translatable="yes" context="tocindexpage|useparastyle">Create from additional paragraph style</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="useparastyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|useparastyle">Include paragraphs that have the selected style applied in the index.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="parastyleft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="tocindexpage|parastyleft">Paragraph style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">display</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="parastyle">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="parastyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|parastyle">Select the paragraph style for which you want to create index entries.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkFrame" id="authframe">
             <property name="can-focus">False</property>
             <property name="no-show-all">True</property>
