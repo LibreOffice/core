@@ -1,8 +1,8 @@
 --- src/opts/SkRasterPipeline_opts.h
 +++ src/opts/SkRasterPipeline_opts.h
-@@ -43,7 +43,7 @@
+@@ -68,7 +68,7 @@
+ };
  
- using NoCtx = const void*;
  
 -#if !defined(__clang__)
 +#if !defined(__clang__) || __clang_major__ >= 11

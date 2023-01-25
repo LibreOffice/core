@@ -1,0 +1,60 @@
+commit b2cecde549c76cbd1c8b7d0cee2c6799936c1e7a
+Author: Greg Daniel <egdaniel@google.com>
+Date:   Thu Jun 16 11:29:08 2022 -0400
+
+    Fix not using texture barrier on StrokeTessOp.
+    
+    Previously we were overwriting the renderpassXferBarriers flag on
+    ProgramInfo to set it to kNone. This flag is meant to say whether or not
+    the entire render pass uses barriers or not. This is needed in Vulkan
+    because all pipelines in a render pass that has an input attachment
+    must bind the input attachment regardless if it is used or not. So the
+    pipeline must be created with a layout for an input attachment
+    descriptor set.
+    
+    This change just removes to performance optimization to only use the
+    barrier on the stencil and not fill draw. This use case shouldn't
+    come up too often and also shouldn't be a big perf hit regardless.
+    The way GrAppliedClip is created/used it is hard for us to create
+    multiple different Pipeline objects: one for stencil and one for the
+    fill.
+    
+    Bug: skia:13402
+    Change-Id: I15ce74b4d41b90d3dd4169a1f4fb77ed87c8b26d
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/549898
+    Reviewed-by: Michael Ludwig <michaelludwig@google.com>
+    Commit-Queue: Greg Daniel <egdaniel@google.com>
+
+diff --git a/src/gpu/ganesh/ops/StrokeTessellateOp.cpp b/src/gpu/ganesh/ops/StrokeTessellateOp.cpp
+index 8f47441eb9..de8153cd0f 100644
+--- a/src/gpu/ganesh/ops/StrokeTessellateOp.cpp
++++ b/src/gpu/ganesh/ops/StrokeTessellateOp.cpp
+@@ -179,7 +179,12 @@ void StrokeTessellateOp::prePrepareTessellator(GrTessellationShader::ProgramArgs
+         fStencilProgram = GrTessellationShader::MakeProgram(args, fTessellationShader, pipeline,
+                                                             &kMarkStencil);
+         fillStencil = &kTestAndResetStencil;
+-        args.fXferBarrierFlags = GrXferBarrierFlags::kNone;
++        // TODO: Currently if we have a texture barrier for a dst read it will get put in before
++        // both the stencil draw and the fill draw. In reality we only really need the barrier
++        // once to guard the reads of the color buffer in the fill from the previous writes. Maybe
++        // we can investigate how to remove one of these barriers but it is probably not something
++        // that is required a lot and thus the extra barrier shouldn't be too much of a perf hit to
++        // general Skia use.
+     }
+ 
+     fFillProgram = GrTessellationShader::MakeProgram(args, fTessellationShader, pipeline,
+diff --git a/src/gpu/ganesh/vk/GrVkPipelineStateBuilder.cpp b/src/gpu/ganesh/vk/GrVkPipelineStateBuilder.cpp
+index 54bc7f857a..0d61b8c4cb 100644
+--- a/src/gpu/ganesh/vk/GrVkPipelineStateBuilder.cpp
++++ b/src/gpu/ganesh/vk/GrVkPipelineStateBuilder.cpp
+@@ -279,6 +279,10 @@ GrVkPipelineState* GrVkPipelineStateBuilder::finalize(const GrProgramDesc& desc,
+         }
+     }
+ 
++    // The vulkan spec says that if a subpass has an input attachment, then the input attachment
++    // descriptor set must be bound to all pipelines in that subpass. This includes pipelines that
++    // don't actually use the input attachment. Thus we look at the renderPassBarriers and not just
++    // the DstProxyView barrier flags to determine if we use the input attachment.
+     bool usesInput = SkToBool(fProgramInfo.renderPassBarriers() & GrXferBarrierFlags::kTexture);
+     uint32_t layoutCount =
+         usesInput ? GrVkUniformHandler::kDescSetCount : (GrVkUniformHandler::kDescSetCount - 1);

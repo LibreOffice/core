@@ -32,8 +32,8 @@ index f143dab013..be3cde0f4f 100644
      bool isAniso() const { return maxAniso != 0; }
  
  private:
--    constexpr SkSamplingOptions(int maxAniso) : maxAniso(maxAniso) {}
-+    constexpr SkSamplingOptions(int maxAniso_) : maxAniso(maxAniso_) {}
+-    SkSamplingOptions(int maxAniso) : maxAniso(maxAniso) {}
++    SkSamplingOptions(int maxAniso_) : maxAniso(maxAniso_) {}
  };
  
  #endif

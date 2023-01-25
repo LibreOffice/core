@@ -278,7 +278,7 @@ index c9db528ca4..634034da5a 100644
      PFN_vkGetInstanceProcAddr getInstanceProc = fGetInstanceProcAddr;
 -    GrVkBackendContext backendContext;
 +    GrVkBackendContext& backendContext = fGlobalShared->backendContext;
-     skgpu::VulkanExtensions extensions;
+     GrVkExtensions extensions;
 -    VkPhysicalDeviceFeatures2 features;
 -    if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions,
 -                                             &features, &fDebugCallback, &fPresentQueueIndex,
@@ -327,10 +327,10 @@ index c9db528ca4..634034da5a 100644
 +    localGetPhysicalDeviceProperties(backendContext.fPhysicalDevice, &d->physDeviceProperties);
 +    uint32_t physDevVersion = d->physDeviceProperties.apiVersion;
  
--    fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc, fInstance, fDevice,
-+    d->fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc, d->fInstance, d->fDevice,
-                                                 backendContext.fInstanceVersion, physDevVersion,
-                                                 &extensions));
+-    fInterface.reset(new GrVkInterface(backendContext.fGetProc, fInstance, fDevice,
++    d->fInterface.reset(new GrVkInterface(backendContext.fGetProc, d->fInstance, d->fDevice,
+                                        backendContext.fInstanceVersion, physDevVersion,
+                                        &extensions));
  
 -    GET_PROC(DestroyInstance);
 -    if (fDebugCallback != VK_NULL_HANDLE) {
@@ -650,8 +650,8 @@ index c9db528ca4..634034da5a 100644
      GrFlushInfo info;
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &beSemaphore;
--    skgpu::MutableTextureState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fPresentQueueIndex);
-+    skgpu::MutableTextureState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fShared->fPresentQueueIndex);
+-    GrBackendSurfaceMutableState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fPresentQueueIndex);
++    GrBackendSurfaceMutableState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fShared->fPresentQueueIndex);
      surface->flush(info, &presentState);
      surface->recordingContext()->asDirectContext()->submit();
  
@@ -666,15 +666,13 @@ diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowConte
 index 7e1fdd9af5..946bca7522 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
-@@ -19,20 +19,24 @@
+@@ -19,18 +19,22 @@
  #include "tools/gpu/vk/VkTestUtils.h"
  #include "tools/sk_app/WindowContext.h"
  
 +#include <cassert>
 +
  class GrRenderTarget;
- 
- namespace skgpu { struct VulkanInterface; }
  
  namespace sk_app {
  
@@ -744,7 +742,7 @@ index 7e1fdd9af5..946bca7522 100644
 +    VkDevice fDevice = VK_NULL_HANDLE;
 +    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
 +
-     sk_sp<const skgpu::VulkanInterface> fInterface;
+     sk_sp<const GrVkInterface> fInterface;
  
 -    VkSurfaceKHR      fSurface;
 -    VkSwapchainKHR    fSwapchain;

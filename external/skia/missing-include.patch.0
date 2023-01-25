@@ -1,0 +1,20 @@
+--- src/core/SkShaderCodeDictionary.h
++++ src/core/SkShaderCodeDictionary.h
+@@ -9,6 +9,7 @@
+ #define SkShaderCodeDictionary_DEFINED
+ 
+ #include <array>
++#include <string>
+ #include <unordered_map>
+ #include <vector>
+ #include "include/core/SkSpan.h"
+--- third_party/vulkanmemoryallocator/include/vk_mem_alloc.h
++++ third_party/vulkanmemoryallocator/include/vk_mem_alloc.h
+@@ -2570,6 +2570,7 @@
+ #include <cstring>
+ #include <utility>
+ #include <type_traits>
++#include <stdio.h>
+ 
+ #ifdef _MSC_VER
+     #include <intrin.h> // For functions like __popcnt, _BitScanForward etc.

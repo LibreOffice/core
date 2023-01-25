@@ -28,7 +28,7 @@ diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/W
 index 11bd2d2ac2..09c92dc417 100644
 --- a/tools/sk_app/unix/WindowContextFactory_unix.h
 +++ b/tools/sk_app/unix/WindowContextFactory_unix.h
-@@ -36,20 +36,20 @@ struct XlibWindowInfo {
+@@ -36,15 +36,15 @@ struct XlibWindowInfo {
      int          fHeight;
  };
  
@@ -43,11 +43,6 @@ index 11bd2d2ac2..09c92dc417 100644
 +SK_API std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
  #endif
  
- #if defined(SK_DAWN) && defined(SK_GRAPHITE_ENABLED)
- std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
-                                                              const DisplayParams&);
- #endif
- 
 -std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
  
@@ -57,16 +52,7 @@ diff --git a/tools/sk_app/win/WindowContextFactory_win.h b/tools/sk_app/win/Wind
 index c05a4f0acf..fc27cd2afb 100644
 --- a/tools/sk_app/win/WindowContextFactory_win.h
 +++ b/tools/sk_app/win/WindowContextFactory_win.h
-@@ -13,31 +13,33 @@ struct DisplayParams;
- 
- #include <memory>
- 
-+#include "include/core/SkTypes.h"
-+
- namespace sk_app {
- 
- class WindowContext;
- struct DisplayParams;
+@@ -20,21 +20,21 @@ struct DisplayParams;
  
  namespace window_context_factory {
  
@@ -87,9 +73,6 @@ index c05a4f0acf..fc27cd2afb 100644
  #ifdef SK_DAWN
 -std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
- #ifdef SK_GRAPHITE_ENABLED
- std::unique_ptr<WindowContext> MakeGraphiteDawnD3D12ForWin(HWND, const DisplayParams&);
- #endif
  #endif
  
 -std::unique_ptr<WindowContext> MakeRasterForWin(HWND, const DisplayParams&);
