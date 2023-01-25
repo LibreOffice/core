@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <memory>
 #include <vector>
@@ -35,6 +36,10 @@ class XControllerManager;
 namespace com::sun::star::drawing::framework
 {
 class XResourceId;
+}
+namespace sd
+{
+class DrawController;
 }
 
 namespace sd::framework
@@ -59,10 +64,9 @@ public:
     /** Create a new ConfigurationUpdater object that notifies configuration
         changes and the start and end of updates via the given broadcaster.
     */
-    ConfigurationUpdater(
-        std::shared_ptr<ConfigurationControllerBroadcaster> pBroadcaster,
-        std::shared_ptr<ConfigurationControllerResourceManager> pResourceManager,
-        const css::uno::Reference<css::drawing::framework::XControllerManager>& xControllerManager);
+    ConfigurationUpdater(std::shared_ptr<ConfigurationControllerBroadcaster> pBroadcaster,
+                         std::shared_ptr<ConfigurationControllerResourceManager> pResourceManager,
+                         const rtl::Reference<::sd::DrawController>& xControllerManager);
     ~ConfigurationUpdater();
 
     /** Request an update of the current configuration so that it looks like
@@ -91,7 +95,7 @@ private:
     /** A reference to the XControllerManager is kept so that
         UpdateConfiguration() has access to the other sub controllers.
     */
-    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
+    rtl::Reference<::sd::DrawController> mxControllerManager;
 
     std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 

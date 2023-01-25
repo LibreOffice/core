@@ -19,6 +19,7 @@
 
 #include <framework/ModuleController.hxx>
 #include <framework/PresentationFactory.hxx>
+#include <DrawController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -37,7 +38,7 @@ using ::sd::tools::ConfigurationAccess;
 
 namespace sd::framework {
 
-ModuleController::ModuleController(const css::uno::Reference<css::frame::XController>& rxController)
+ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& rxController)
 {
     assert(rxController);
 
@@ -117,8 +118,6 @@ void ModuleController::InstantiateStartupServices()
         // this scope when it does not register itself anywhere.
         // Typically it will add itself as ConfigurationChangeListener
         // at the configuration controller.
-        Reference<uno::XComponentContext> xContext =
-            ::comphelper::getProcessComponentContext();
         sd::framework::PresentationFactory::install(mxController);
     }
     catch (Exception&)
@@ -149,7 +148,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         ::comphelper::getProcessComponentContext();
 
     // Create the factory service.
-    Sequence<Any> aArguments{ Any(mxController) };
+    Sequence<Any> aArguments{ Any(uno::Reference<XControllerManager>(mxController)) };
     try
     {
         xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(

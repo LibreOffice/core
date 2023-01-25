@@ -24,6 +24,7 @@
 #include "ConfigurationControllerResourceManager.hxx"
 #include <framework/Configuration.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <DrawController.hxx>
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -65,7 +66,7 @@ private:
 ConfigurationUpdater::ConfigurationUpdater (
     std::shared_ptr<ConfigurationControllerBroadcaster> pBroadcaster,
     std::shared_ptr<ConfigurationControllerResourceManager> pResourceManager,
-    const Reference<XControllerManager>& rxControllerManager)
+    const rtl::Reference<::sd::DrawController>& rxControllerManager)
     : mpBroadcaster(std::move(pBroadcaster)),
       mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(nullptr, false))),
       mbUpdatePending(false),

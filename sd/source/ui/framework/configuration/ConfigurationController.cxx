@@ -20,6 +20,7 @@
 #include <framework/ConfigurationController.hxx>
 #include <framework/Configuration.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <DrawController.hxx>
 #include "ConfigurationUpdater.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ConfigurationTracer.hxx"
@@ -51,9 +52,9 @@ class ConfigurationController::Implementation
 public:
     Implementation (
         ConfigurationController& rController,
-        const Reference<frame::XController>& rxController);
+        const rtl::Reference<::sd::DrawController>& rxController);
 
-    Reference<XControllerManager> mxControllerManager;
+    rtl::Reference<::sd::DrawController> mxControllerManager;
 
     /** The Broadcaster class implements storing and calling of listeners.
     */
@@ -101,7 +102,7 @@ ConfigurationController::Lock::~Lock()
 
 //===== ConfigurationController ===============================================
 
-ConfigurationController::ConfigurationController(const css::uno::Reference<css::frame::XController>& rxController) noexcept
+ConfigurationController::ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController) noexcept
     : ConfigurationControllerInterfaceBase(m_aMutex)
     , mbIsDisposed(false)
 {
@@ -500,7 +501,7 @@ void ConfigurationController::ThrowIfDisposed () const
 
 ConfigurationController::Implementation::Implementation (
     ConfigurationController& rController,
-    const Reference<frame::XController>& rxController)
+    const rtl::Reference<::sd::DrawController>& rxController)
     : mxControllerManager(rxController, UNO_QUERY_THROW),
       mpBroadcaster(std::make_shared<ConfigurationControllerBroadcaster>(&rController)),
       mxRequestedConfiguration(new Configuration(&rController, true)),

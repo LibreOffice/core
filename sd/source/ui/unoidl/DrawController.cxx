@@ -758,12 +758,8 @@ void DrawController::ProvideFrameworkControllers()
     SolarMutexGuard aGuard;
     try
     {
-        Reference<XController> xController (this);
-        const Reference<XComponentContext> xContext (
-            ::comphelper::getProcessComponentContext() );
-        mxConfigurationController = new sd::framework::ConfigurationController(
-            xController);
-        mxModuleController = new sd::framework::ModuleController(xController);
+        mxConfigurationController = new sd::framework::ConfigurationController(this);
+        mxModuleController = new sd::framework::ModuleController(this);
     }
     catch (const RuntimeException&)
     {

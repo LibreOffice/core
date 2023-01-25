@@ -23,11 +23,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 
 #include <unordered_map>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -57,7 +59,7 @@ class ModuleController final
 {
 public:
     /// @throws std::exception
-    ModuleController(const css::uno::Reference<css::frame::XController>& rxController);
+    ModuleController(const rtl::Reference<::sd::DrawController>& rxController);
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
@@ -66,8 +68,7 @@ public:
     virtual void SAL_CALL requestResource(const OUString& rsResourceURL) override;
 
 private:
-    css::uno::Reference<
-        css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
 
     std::unordered_map<OUString, OUString> maResourceToFactoryMap;
     std::unordered_map<OUString, css::uno::WeakReference<css::uno::XInterface>> maLoadedFactories;

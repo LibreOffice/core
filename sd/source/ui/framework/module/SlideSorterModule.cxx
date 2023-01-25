@@ -21,6 +21,7 @@
 
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
@@ -46,19 +47,18 @@ namespace sd::framework {
 //===== SlideSorterModule ==================================================
 
 SlideSorterModule::SlideSorterModule (
-    const Reference<frame::XController>& rxController,
+    const rtl::Reference<::sd::DrawController>& rxController,
     const OUString& rsLeftPaneURL)
     : mxResourceId(FrameworkHelper::CreateResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
       mxMainViewAnchorId(FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL)),
       mxViewTabBarId(FrameworkHelper::CreateResourceId(
           FrameworkHelper::msViewTabBarURL,
           FrameworkHelper::msCenterPaneURL)),
-      mxControllerManager(rxController,UNO_QUERY)
+      mxControllerManager(rxController)
 {
-    Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    if (xControllerManager.is())
+    if (mxControllerManager.is())
     {
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        mxConfigurationController = mxControllerManager->getConfigurationController();
 
         if (mxConfigurationController.is())
         {

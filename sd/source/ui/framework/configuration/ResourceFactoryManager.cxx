@@ -18,6 +18,7 @@
  */
 
 #include "ResourceFactoryManager.hxx"
+#include <DrawController.hxx>
 #include <tools/wldcrd.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -37,7 +38,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
-ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManager>& rxManager)
+ResourceFactoryManager::ResourceFactoryManager (const rtl::Reference<::sd::DrawController>& rxManager)
     : mxControllerManager(rxManager)
 {
     // Create the URL transformer.

@@ -24,6 +24,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -33,6 +34,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
 namespace com::sun::star::frame { class XController; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -51,7 +53,7 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    ConfigurationController(const css::uno::Reference<css::frame::XController>& rxController) noexcept;
+    ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController) noexcept;
     virtual ~ConfigurationController() noexcept override;
     ConfigurationController(const ConfigurationController&) = delete;
     ConfigurationController& operator=(const ConfigurationController&) = delete;

@@ -27,11 +27,13 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::drawing::framework { class XControllerManager; }
 namespace com::sun::star::drawing::framework { class XResourceFactory; }
 namespace com::sun::star::util { class XURLTransformer; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -40,8 +42,7 @@ namespace sd::framework {
 class ResourceFactoryManager
 {
 public:
-    explicit ResourceFactoryManager (
-        const css::uno::Reference<css::drawing::framework::XControllerManager>& rxManager);
+    explicit ResourceFactoryManager(const rtl::Reference<::sd::DrawController>& rxManager);
 
     ~ResourceFactoryManager();
 
@@ -100,7 +101,7 @@ private:
         FactoryPatternList;
     FactoryPatternList maFactoryPatternList;
 
-    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
+    rtl::Reference<::sd::DrawController> mxControllerManager;
     css::uno::Reference<css::util::XURLTransformer> mxURLTransformer;
 
     /** Look up the factory for the given URL.

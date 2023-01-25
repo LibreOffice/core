@@ -21,6 +21,7 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
 #include <set>
 
@@ -28,6 +29,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XControllerManager; }
 namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace com::sun::star::frame { class XController; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
@@ -49,7 +51,7 @@ class SlideSorterModule final
 {
 public:
     SlideSorterModule (
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const rtl::Reference<::sd::DrawController>& rxController,
         const OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule() override;
 
@@ -80,7 +82,7 @@ private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
     OUString msCurrentMainViewURL;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
-    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
+    rtl::Reference<::sd::DrawController> mxControllerManager;
 
     void HandleMainViewSwitch (
         const OUString& rsViewURL,
