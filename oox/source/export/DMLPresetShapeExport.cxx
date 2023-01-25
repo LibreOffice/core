@@ -43,47 +43,45 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
         = xShapeProps->getPropertyValue("CustomShapeGeometry")
               .get<uno::Sequence<beans::PropertyValue>>();
 
-    for (sal_uInt32 i = 0; i < aCustomShapeGeometry.size(); i++)
+    for (auto const& rCustomShapeGeometryItem : aCustomShapeGeometry)
     {
-        if (aCustomShapeGeometry[i].Name == "Type")
+        if (rCustomShapeGeometryItem.Name == "Type")
         {
-            m_sPresetShapeType = aCustomShapeGeometry[i].Value.get<OUString>();
+            m_sPresetShapeType = rCustomShapeGeometryItem.Value.get<OUString>();
         }
-        if (aCustomShapeGeometry[i].Name == "Handles")
+        if (rCustomShapeGeometryItem.Name == "Handles")
         {
             m_bHasHandleValues = true;
             m_HandleValues
-                = aCustomShapeGeometry[i]
-                      .Value
+                = rCustomShapeGeometryItem.Value
                       .get<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>();
         }
-        if (aCustomShapeGeometry[i].Name == "AdjustmentValues")
+        if (rCustomShapeGeometryItem.Name == "AdjustmentValues")
         {
             m_AdjustmentValues
-                = aCustomShapeGeometry[i]
-                      .Value
+                = rCustomShapeGeometryItem.Value
                       .get<css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>>();
         }
-        if (aCustomShapeGeometry[i].Name == "MirroredX")
+        if (rCustomShapeGeometryItem.Name == "MirroredX")
         {
-            m_bIsFlipped.first = aCustomShapeGeometry[i].Value.get<bool>();
+            m_bIsFlipped.first = rCustomShapeGeometryItem.Value.get<bool>();
         }
-        if (aCustomShapeGeometry[i].Name == "MirroredY")
+        if (rCustomShapeGeometryItem.Name == "MirroredY")
         {
-            m_bIsFlipped.second = aCustomShapeGeometry[i].Value.get<bool>();
+            m_bIsFlipped.second = rCustomShapeGeometryItem.Value.get<bool>();
         }
-        //if (aCustomShapeGeometry[i].Name == "Equations")
+        //if (rCustomShapeGeometryItem.Name == "Equations")
         //{
-        //    m_Equations = aCustomShapeGeometry[i].Value.get<css::uno::Sequence<OUString>>();
+        //    m_Equations = rCustomShapeGeometryItem.Value.get<css::uno::Sequence<OUString>>();
         //}
-        //if (aCustomShapeGeometry[i].Name == "Path")
+        //if (rCustomShapeGeometryItem.Name == "Path")
         //{
-        //    m_Path = aCustomShapeGeometry[i]
+        //    m_Path = rCustomShapeGeometryItem
         //                 .Value.get<css::uno::Sequence<css::beans::PropertyValue>>();
         //}
-        //if (aCustomShapeGeometry[i].Name == "ViewBox")
+        //if (rCustomShapeGeometryItem.Name == "ViewBox")
         //{
-        //    m_ViewBox = aCustomShapeGeometry[i].Value.get<css::awt::Rectangle>();
+        //    m_ViewBox = rCustomShapeGeometryItem.Value.get<css::awt::Rectangle>();
         //}
     }
 };
