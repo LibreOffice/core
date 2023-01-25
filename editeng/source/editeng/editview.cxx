@@ -1394,6 +1394,53 @@ const SvxFieldData* EditView::GetFieldAtCursor() const
     return pFieldItem ? pFieldItem->GetField() : nullptr;
 }
 
+sal_Int32 EditView::countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPos, bool bCanOverflow) const
+{
+    if (!pImpEditView || !pImpEditView->pEditEngine)
+        return 0;
+
+    int nOffset = 0;
+
+    for (int nCurrentPara = 0; nCurrentPara <= nPara; nCurrentPara++)
+    {
+        int nFields = pImpEditView->pEditEngine->GetFieldCount( nCurrentPara );
+        for (int nField = 0; nField < nFields; nField++)
+        {
+            EFieldInfo aFieldInfo
+                = pImpEditView->pEditEngine->GetFieldInfo( nCurrentPara, nField );
+
+            bool bLastPara = nCurrentPara == nPara;
+            sal_Int32 nFieldPos = aFieldInfo.aPosition.nIndex;
+
+            if (bLastPara && nFieldPos >= nPos)
+                break;
+
+            sal_Int32 nFieldLen = aFieldInfo.aCurrentText.getLength();
+
+            // position in the middle of a field
+            if (!bCanOverflow && bLastPara && nFieldPos + nFieldLen > nPos)
+                nFieldLen = nPos - nFieldPos;
+
+            nOffset += nFieldLen - 1;
+        }
+    }
+
+    return nOffset;
+}
+
+sal_Int32 EditView::GetPosNoField(sal_Int32 nPara, sal_Int32 nPos) const
+{
+    sal_Int32 nOffset = countFieldsOffsetSum(nPara, nPos, false);
+    assert(nPos >= nOffset);
+    return nPos - nOffset;
+}
+
+sal_Int32 EditView::GetPosWithField(sal_Int32 nPara, sal_Int32 nPos) const
+{
+    sal_Int32 nOffset = countFieldsOffsetSum(nPara, nPos, true);
+    return nPos + nOffset;
+}
+
 void EditView::SetInvalidateMore( sal_uInt16 nPixel )
 {
     pImpEditView->SetInvalidateMore( nPixel );

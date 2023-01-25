@@ -1133,7 +1133,7 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
     if (comphelper::LibreOfficeKit::isActive())
-        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), "", ESelection());
+        ScInputHandler::LOKSendFormulabarUpdate(nullptr, SfxViewShell::Current(), "", ESelection());
 }
 
 Point ScTextWndGroup::GetCursorScreenPixelPos(bool bBelow)
@@ -1800,8 +1800,10 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             nParaStart = pParaPoint ? pParaPoint->X() : 0;
             nParaEnd = pParaPoint ? pParaPoint->Y() : 0;
-            nPosStart = aSelectionStartEnd.X();
-            nPosEnd = aSelectionStartEnd.Y();
+            nPosStart = m_xEditView->GetPosNoField(nParaStart, aSelectionStartEnd.X());
+            nPosEnd = m_xEditView->GetPosNoField(nParaEnd, aSelectionStartEnd.Y());
+
+
         }
 
         m_xEditView->SetSelection(ESelection(nParaStart, nPosStart, nParaEnd, nPosEnd));
@@ -2043,7 +2045,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
     if (comphelper::LibreOfficeKit::isActive())
     {
         ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
-        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), rNewString, aSel);
+        ScInputHandler::LOKSendFormulabarUpdate(m_xEditView.get(), SfxViewShell::Current(), rNewString, aSel);
     }
 
     SetScrollBarRange();
