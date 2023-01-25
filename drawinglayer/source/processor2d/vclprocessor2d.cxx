@@ -160,10 +160,24 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             rTextCandidate.getTextTransform().decompose(aFontSize, aTextTranslate, fIgnoreRotate,
                                                         fIgnoreShearX);
 
+            // tdf#153092 Ideally we don't have to scale the font and dxarray, but we might have
+            // to nevertheless if dealing with non integer sizes
+            const bool bScaleFont(aFontSize.getY() != std::round(aFontSize.getY()));
+            vcl::Font aFont;
+
             // Get the VCL font
-            vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
-                rTextCandidate.getFontAttribute(), aFontSize.getX(), aFontSize.getY(), fRotate,
-                rTextCandidate.getLocale()));
+            if (!bScaleFont)
+            {
+                aFont = primitive2d::getVclFontFromFontAttribute(
+                    rTextCandidate.getFontAttribute(), aFontSize.getX(), aFontSize.getY(), fRotate,
+                    rTextCandidate.getLocale());
+            }
+            else
+            {
+                aFont = primitive2d::getVclFontFromFontAttribute(
+                    rTextCandidate.getFontAttribute(), aFontScaling.getX(), aFontScaling.getY(),
+                    fRotate, rTextCandidate.getLocale());
+            }
 
             // Don't draw fonts without height
             if (aFont.GetFontHeight() <= 0)
@@ -287,9 +301,17 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!rTextCandidate.getDXArray().empty())
             {
+                double fPixelVectorFactor(1.0);
+                if (bScaleFont)
+                {
+                    const basegfx::B2DVector aPixelVector(maCurrentTransformation
+                                                          * basegfx::B2DVector(1.0, 0.0));
+                    fPixelVectorFactor = aPixelVector.getLength();
+                }
+
                 aDXArray.reserve(rTextCandidate.getDXArray().size());
                 for (auto const& elem : rTextCandidate.getDXArray())
-                    aDXArray.push_back(basegfx::fround(elem));
+                    aDXArray.push_back(basegfx::fround(elem * fPixelVectorFactor));
             }
 
             // set parameters and paint text snippet
@@ -339,28 +361,41 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 }
             }
 
-            basegfx::B2DHomMatrix aCombinedTransform(
-                getTransformFromMapMode(mpOutputDevice->GetMapMode()) * maCurrentTransformation);
-
-            basegfx::B2DVector aCurrentScaling, aCurrentTranslate;
-            double fCurrentRotate;
-            aCombinedTransform.decompose(aCurrentScaling, aCurrentTranslate, fCurrentRotate,
-                                         fIgnoreShearX);
-
-            const Point aOrigin(basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
-                                basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
-            MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin,
-                             Fraction(aCurrentScaling.getX()), Fraction(aCurrentScaling.getY()));
-
-            if (fCurrentRotate)
-                aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
-            const Point aStartPoint(aTextTranslate.getX(), aTextTranslate.getY());
-
-            const bool bChangeMapMode(aMapMode != mpOutputDevice->GetMapMode());
-            if (bChangeMapMode)
+            Point aStartPoint;
+            bool bChangeMapMode(false);
+            if (!bScaleFont)
             {
-                mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
-                mpOutputDevice->SetMapMode(aMapMode);
+                basegfx::B2DHomMatrix aCombinedTransform(
+                    getTransformFromMapMode(mpOutputDevice->GetMapMode())
+                    * maCurrentTransformation);
+
+                basegfx::B2DVector aCurrentScaling, aCurrentTranslate;
+                double fCurrentRotate;
+                aCombinedTransform.decompose(aCurrentScaling, aCurrentTranslate, fCurrentRotate,
+                                             fIgnoreShearX);
+
+                const Point aOrigin(
+                    basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
+                    basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
+                MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin,
+                                 Fraction(aCurrentScaling.getX()),
+                                 Fraction(aCurrentScaling.getY()));
+
+                if (fCurrentRotate)
+                    aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
+                aStartPoint = Point(aTextTranslate.getX(), aTextTranslate.getY());
+
+                bChangeMapMode = aMapMode != mpOutputDevice->GetMapMode();
+                if (bChangeMapMode)
+                {
+                    mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+                    mpOutputDevice->SetMapMode(aMapMode);
+                }
+            }
+            else
+            {
+                const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
+                aStartPoint = Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
             }
 
             // tdf#152990 set the font after the MapMode is (potentially) set so canvas uses the desired
