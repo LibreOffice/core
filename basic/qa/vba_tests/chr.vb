@@ -21,7 +21,7 @@ Sub verify_testCHR()
     TestUtil.AssertEqual(Chr(87),  "W", "Chr(87)")
     TestUtil.AssertEqual(Chr(105), "i", "Chr(105)")
     TestUtil.AssertEqual(Chr(35),  "#", "Chr(35)")
-    
+
     ' tdf#145693 - argument name should be 'charcode' instead of 'string'
     TestUtil.AssertEqual(Chr(charcode:=35),  "#", "Chr(charcode:=35)")
 
