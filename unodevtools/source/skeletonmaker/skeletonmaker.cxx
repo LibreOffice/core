@@ -248,7 +248,7 @@ SAL_IMPLEMENT_MAIN()
 
     if ( types.empty() && options.componenttype != 3) {
         std::cerr
-            << "\nError: no type is specified, use the -T option at least once\n";
+            << "\nError: no type is specified, use the -t option at least once\n";
         printUsageAndExit(programname, version);
         exit(EXIT_FAILURE);
     }
