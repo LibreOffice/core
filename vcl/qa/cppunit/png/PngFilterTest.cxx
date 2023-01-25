@@ -26,6 +26,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -176,6 +177,7 @@ public:
     void testPngRoundtrip24_8();
     void testPngRoundtrip32();
     void testPngWrite8BitRGBPalette();
+    void testTdf153180MonochromeFilterPngExport();
     void testDump();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
@@ -188,6 +190,7 @@ public:
     CPPUNIT_TEST(testPngRoundtrip32);
     CPPUNIT_TEST(testPngWrite8BitRGBPalette);
     CPPUNIT_TEST(testDump);
+    CPPUNIT_TEST(testTdf153180MonochromeFilterPngExport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1955,6 +1958,56 @@ void PngFilterTest::testPngWrite8BitRGBPalette()
                                      aBitmapEx.GetPixelColor(j, i));
             }
         }
+    }
+}
+
+void PngFilterTest::testTdf153180MonochromeFilterPngExport()
+{
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    Graphic aGraphicOriginal;
+    {
+        // 3 * 16 bits rgb color alpha, no background chunk
+        const OUString aURL(getFullUrl(u"bgan6a16.png"));
+        SvFileStream aFileStream(aURL, StreamMode::READ);
+        ErrCode aResult = rFilter.ImportGraphic(aGraphicOriginal, aURL, aFileStream);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+        CPPUNIT_ASSERT(aGraphicOriginal.IsAlpha());
+    }
+
+    // Apply the monochrome filter to the graphic but keep the alpha.
+    BitmapEx aBitmapEx(aGraphicOriginal.GetBitmapEx());
+    AlphaMask aAlphaMask(aBitmapEx.GetAlphaMask());
+
+    BitmapEx aTmpBmpEx(aBitmapEx.GetBitmap());
+    BitmapFilter::Filter(aTmpBmpEx, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
+
+    Graphic aGraphicAfterFilter{ BitmapEx(aTmpBmpEx.GetBitmap(), aAlphaMask) };
+    CPPUNIT_ASSERT(aGraphicAfterFilter.IsAlpha());
+
+    // export the resulting graphic
+    utl::TempFileNamed aTempFile(u"testPngExportTdf153180", true, u".png");
+    if (!bKeepTemp)
+        aTempFile.EnableKillingFile();
+    {
+        SvStream& rStream = *aTempFile.GetStream(StreamMode::WRITE);
+        vcl::PngImageWriter aPngWriter(rStream);
+        bool bWriteSuccess = aPngWriter.write(aGraphicAfterFilter.GetBitmapEx());
+        CPPUNIT_ASSERT_EQUAL(true, bWriteSuccess);
+        aTempFile.CloseStream();
+    }
+    {
+        SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
+        rStream.Seek(0);
+        // Import the png and check that it still has alpha
+        Graphic aGraphic;
+        ErrCode aResult = rFilter.ImportGraphic(aGraphic, aTempFile.GetURL(), rStream);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+
+        // Without the accompanying patch would fail with:
+        // assertion failed
+        // -Expression : aGraphic.IsAlpha()
+        CPPUNIT_ASSERT(aGraphic.IsAlpha());
     }
 }
 

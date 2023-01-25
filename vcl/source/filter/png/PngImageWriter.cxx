@@ -15,15 +15,25 @@
 
 namespace
 {
-void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline,
+void combineScanlineChannels(Scanline pColorScanline, Scanline pAlphaScanline,
                              std::vector<std::remove_pointer_t<Scanline>>& pResult,
-                             sal_uInt32 nBitmapWidth)
+                             sal_uInt32 nBitmapWidth, int colorType)
 {
+    if (colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
+    {
+        for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
+        {
+            pResult[i * 2] = *pColorScanline++; // Gray
+            pResult[i * 2 + 1] = *pAlphaScanline++; // A
+        }
+        return;
+    }
+
     for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
     {
-        pResult[i * 4] = *pRGBScanline++; // R
-        pResult[i * 4 + 1] = *pRGBScanline++; // G
-        pResult[i * 4 + 2] = *pRGBScanline++; // B
+        pResult[i * 4] = *pColorScanline++; // R
+        pResult[i * 4 + 1] = *pColorScanline++; // G
+        pResult[i * 4 + 2] = *pColorScanline++; // B
         pResult[i * 4 + 3] = *pAlphaScanline++; // A
     }
 }
@@ -130,7 +140,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 if (!aBitmap.HasGreyPalette8Bit())
                     colorType = PNG_COLOR_TYPE_PALETTE;
                 else
+                {
                     colorType = PNG_COLOR_TYPE_GRAY;
+                    if (pAlphaAccess)
+                    {
+                        colorType = PNG_COLOR_TYPE_GRAY_ALPHA;
+                        bCombineChannels = true;
+                    }
+                }
                 bitDepth = 8;
                 break;
             }
@@ -222,14 +239,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 if (bCombineChannels)
                 {
                     auto nBitmapWidth = pAccess->Width();
-                    // Allocate enough size to fit all 4 channels
-                    aCombinedChannels.resize(nBitmapWidth * 4);
+                    // Allocate enough size to fit all channels
+                    aCombinedChannels.resize(nBitmapWidth * png_get_channels(pPng, pInfo));
                     Scanline pAlphaPointer = pAlphaAccess->GetScanline(y);
                     if (!pSourcePointer || !pAlphaPointer)
                         return false;
-                    // Combine RGB and alpha channels
+                    // Combine color and alpha channels
                     combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels,
-                                            nBitmapWidth);
+                                            nBitmapWidth, colorType);
                     pFinalPointer = aCombinedChannels.data();
                     // Invert alpha channel (255 - a)
                     png_set_invert_alpha(pPng);
