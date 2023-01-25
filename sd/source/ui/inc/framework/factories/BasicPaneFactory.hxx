@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -31,14 +32,13 @@ namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd {
-
+class DrawController;
 class ViewShellBase;
 }
 
 namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper <
-    css::lang::XInitialization,
     css::drawing::framework::XResourceFactory,
     css::drawing::framework::XConfigurationChangeListener
     > BasicPaneFactoryInterfaceBase;
@@ -56,15 +56,11 @@ class BasicPaneFactory
 {
 public:
     explicit BasicPaneFactory (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~BasicPaneFactory() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     // XResourceFactory
 

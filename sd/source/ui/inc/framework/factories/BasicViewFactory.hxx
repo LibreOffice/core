@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <vcl/vclptr.hxx>
 #include <memory>
@@ -31,6 +32,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XPane; }
 
 namespace sd {
+class DrawController;
 class ViewShell;
 class ViewShellBase;
 class FrameView;
@@ -41,8 +43,7 @@ namespace vcl { class Window; }
 namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory,
-    css::lang::XInitialization
+    css::drawing::framework::XResourceFactory
     > BasicViewFactoryInterfaceBase;
 
 /** Factory for the frequently used standard views of the drawing framework:
@@ -61,7 +62,7 @@ class BasicViewFactory
     : public BasicViewFactoryInterfaceBase
 {
 public:
-    BasicViewFactory ();
+    BasicViewFactory(const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~BasicViewFactory() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -74,11 +75,6 @@ public:
 
     virtual void SAL_CALL releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
-
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController>

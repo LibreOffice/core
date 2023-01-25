@@ -20,7 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
-#include "BasicPaneFactory.hxx"
+#include <framework/factories/BasicPaneFactory.hxx>
 
 #include "ChildWindowPane.hxx"
 #include "FrameWindowPane.hxx"
@@ -84,67 +84,23 @@ public:
 //===== PaneFactory ===========================================================
 
 BasicPaneFactory::BasicPaneFactory (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext,
+    const rtl::Reference<::sd::DrawController>& rxController)
     : mxComponentContext(rxContext),
       mpViewShellBase(nullptr),
       mpPaneContainer(new PaneContainer)
 {
-}
-
-BasicPaneFactory::~BasicPaneFactory()
-{
-}
-
-void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
-{
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
-    if (xCC.is())
-    {
-        xCC->removeResourceFactoryForReference(this);
-        xCC->removeConfigurationChangeListener(this);
-        mxConfigurationControllerWeak.clear();
-    }
-
-    for (const auto& rDescriptor : *mpPaneContainer)
-    {
-        if (rDescriptor.mbIsReleased)
-        {
-            Reference<XComponent> xComponent (rDescriptor.mxPane, UNO_QUERY);
-            if (xComponent.is())
-            {
-                xComponent->removeEventListener(this);
-                xComponent->dispose();
-            }
-        }
-    }
-}
-
-void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
-{
-    if (!aArguments.hasElements())
-        return;
-
     try
     {
-        // Get the XController from the first argument.
-        Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
-
         // Tunnel through the controller to obtain access to the ViewShellBase.
-        try
-        {
-            if (auto pController = dynamic_cast<DrawController*>(xController.get()))
-                mpViewShellBase = pController->GetViewShellBase();
-        }
-        catch(RuntimeException&)
-        {}
+        mpViewShellBase = rxController->GetViewShellBase();
 
-        Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
-        Reference<XConfigurationController> xCC (xCM->getConfigurationController());
+        Reference<XConfigurationController> xCC (rxController->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
 
         // Add pane factories for the two left panes (one for Impress and one for
         // Draw) and the center pane.
-        if (xController.is() && xCC.is())
+        if (rxController.is() && xCC.is())
         {
             PaneDescriptor aDescriptor;
             aDescriptor.msPaneURL = FrameworkHelper::msCenterPaneURL;
@@ -187,6 +143,34 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
         Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
         if (xCC.is())
             xCC->removeResourceFactoryForReference(this);
+    }
+}
+
+BasicPaneFactory::~BasicPaneFactory()
+{
+}
+
+void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
+{
+    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    if (xCC.is())
+    {
+        xCC->removeResourceFactoryForReference(this);
+        xCC->removeConfigurationChangeListener(this);
+        mxConfigurationControllerWeak.clear();
+    }
+
+    for (const auto& rDescriptor : *mpPaneContainer)
+    {
+        if (rDescriptor.mbIsReleased)
+        {
+            Reference<XComponent> xComponent (rDescriptor.mxPane, UNO_QUERY);
+            if (xComponent.is())
+            {
+                xComponent->removeEventListener(this);
+                xComponent->dispose();
+            }
+        }
     }
 }
 
@@ -418,14 +402,6 @@ void BasicPaneFactory::ThrowIfDisposed() const
 }
 
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation(css::uno::XComponentContext* context,
-                                                                     css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::BasicPaneFactory(context));
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

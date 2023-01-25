@@ -19,6 +19,9 @@
 
 #include <framework/ModuleController.hxx>
 #include <framework/PresentationFactory.hxx>
+#include <framework/factories/BasicPaneFactory.hxx>
+#include <framework/factories/BasicViewFactory.hxx>
+#include <framework/factories/BasicToolBarFactory.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -63,15 +66,6 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
     ProcessFactory(
         "com.sun.star.drawing.framework.BasicToolBarFactory",
         { "private:resource/toolbar/ViewTabBar" });
-    ProcessFactory(
-        "com.sun.star.comp.Draw.framework.TaskPanelFactory",
-        { "private:resource/toolpanel/AllMasterPages",
-          "private:resource/toolpanel/RecentMasterPages",
-          "private:resource/toolpanel/UsedMasterPages",
-          "private:resource/toolpanel/Layouts",
-          "private:resource/toolpanel/TableDesign",
-          "private:resource/toolpanel/CustomAnimations",
-          "private:resource/toolpanel/SlideTransitions" });
 
     try
     {
@@ -148,18 +142,14 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         ::comphelper::getProcessComponentContext();
 
     // Create the factory service.
-    Sequence<Any> aArguments{ Any(uno::Reference<XControllerManager>(mxController)) };
-    try
-    {
-        xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            iFactory->second,
-            aArguments,
-            xContext);
-    }
-    catch (const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("sd.fwk", "caught exception while creating factory");
-    }
+    if (iFactory->second == "com.sun.star.drawing.framework.BasicPaneFactory")
+        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicPaneFactory(xContext, mxController));
+    else if (iFactory->second == "com.sun.star.drawing.framework.BasicViewFactory")
+        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicViewFactory(mxController));
+    else if (iFactory->second == "com.sun.star.drawing.framework.BasicToolBarFactory")
+        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicToolBarFactory(mxController));
+    else
+        throw RuntimeException("unknown factory");
 
     // Remember that this factory has been instanced.
     maLoadedFactories[iFactory->second] = xFactory;

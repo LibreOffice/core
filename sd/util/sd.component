@@ -45,18 +45,6 @@
       constructor="com_sun_star_comp_Draw_SlideRenderer_get_implementation">
     <service name="com.sun.star.drawing.SlideRenderer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicPaneFactory"
-      constructor="com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation">
-    <service name="com.sun.star.drawing.framework.BasicPaneFactory"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicToolBarFactory"
-      constructor="com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation">
-    <service name="com.sun.star.drawing.framework.BasicToolBarFactory"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicViewFactory"
-      constructor="com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation">
-    <service name="com.sun.star.drawing.framework.BasicViewFactory"/>
-  </implementation>
   <implementation name="com.sun.star.comp.Draw.framework.ResourceId"
       constructor="com_sun_star_comp_Draw_framework_ResourceID_get_implementation">
     <service name="com.sun.star.drawing.framework.ResourceId"/>

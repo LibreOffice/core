@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "BasicViewFactory.hxx"
+#include <framework/factories/BasicViewFactory.hxx>
 
 #include <framework/ViewShellWrapper.hxx>
 #include <framework/FrameworkHelper.hxx>
@@ -82,7 +82,7 @@ public:
 
 //===== ViewFactory ===========================================================
 
-BasicViewFactory::BasicViewFactory ()
+BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& rxController)
     : mpViewShellContainer(new ViewShellContainer()),
       mpBase(nullptr),
       mpFrameView(nullptr),
@@ -90,6 +90,30 @@ BasicViewFactory::BasicViewFactory ()
       mpViewCache(std::make_shared<ViewCache>()),
       mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
 {
+    try
+    {
+        // Tunnel through the controller to obtain a ViewShellBase.
+        mpBase = rxController->GetViewShellBase();
+
+        // Register the factory for its supported views.
+        mxConfigurationController = rxController->getConfigurationController();
+        if ( ! mxConfigurationController.is())
+            throw RuntimeException();
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msImpressViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msDrawViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msOutlineViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
+    }
+    catch (RuntimeException&)
+    {
+        mpBase = nullptr;
+        if (mxConfigurationController.is())
+            mxConfigurationController->removeResourceFactoryForReference(this);
+        throw;
+    }
 }
 
 BasicViewFactory::~BasicViewFactory()
@@ -224,43 +248,6 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
     ReleaseView(*iViewShell, false);
 
     mpViewShellContainer->erase(iViewShell);
-}
-
-void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
-{
-    if (!aArguments.hasElements())
-        return;
-
-    try
-    {
-        // Get the XController from the first argument.
-        Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
-
-        // Tunnel through the controller to obtain a ViewShellBase.
-        ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xController.get());
-        if (pController != nullptr)
-            mpBase = pController->GetViewShellBase();
-
-        // Register the factory for its supported views.
-        Reference<XControllerManager> xCM (xController,UNO_QUERY_THROW);
-        mxConfigurationController = xCM->getConfigurationController();
-        if ( ! mxConfigurationController.is())
-            throw RuntimeException();
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msImpressViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msDrawViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msOutlineViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
-    }
-    catch (RuntimeException&)
-    {
-        mpBase = nullptr;
-        if (mxConfigurationController.is())
-            mxConfigurationController->removeResourceFactoryForReference(this);
-        throw;
-    }
 }
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
@@ -503,14 +490,6 @@ void BasicViewFactory::ActivateCenterView (
 }
 
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::XComponentContext*,
-                                                                     css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::BasicViewFactory);
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

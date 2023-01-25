@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "BasicToolBarFactory.hxx"
+#include <framework/factories/BasicToolBarFactory.hxx>
 
 #include <ViewTabBar.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <DrawController.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -37,42 +38,11 @@ namespace sd::framework {
 
 //===== BasicToolBarFactory ===================================================
 
-BasicToolBarFactory::BasicToolBarFactory ()
+BasicToolBarFactory::BasicToolBarFactory(const rtl::Reference<::sd::DrawController>& rxController)
 {
-}
-
-BasicToolBarFactory::~BasicToolBarFactory()
-{
-}
-
-void BasicToolBarFactory::disposing(std::unique_lock<std::mutex>&)
-{
-    Shutdown();
-}
-
-void BasicToolBarFactory::Shutdown()
-{
-    Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
-    if (mxConfigurationController.is())
-    {
-        mxConfigurationController->removeResourceFactoryForReference(this);
-        mxConfigurationController = nullptr;
-    }
-}
-
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
-{
-    if (!aArguments.hasElements())
-        return;
-
     try
     {
-        // Get the XController from the first argument.
-        mxController.set(aArguments[0], UNO_QUERY_THROW);
+        mxController = rxController;
 
         utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
         if ( ! aDescriptor.getUnpackedValueOrDefault(
@@ -80,8 +50,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             false))
         {
             // Register the factory for its supported tool bars.
-            Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
-            mxConfigurationController = xControllerManager->getConfigurationController();
+            mxConfigurationController = mxController->getConfigurationController();
             if (mxConfigurationController.is())
             {
                 mxConfigurationController->addResourceFactory(
@@ -103,6 +72,28 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
     {
         Shutdown();
         throw;
+    }
+}
+
+
+BasicToolBarFactory::~BasicToolBarFactory()
+{
+}
+
+void BasicToolBarFactory::disposing(std::unique_lock<std::mutex>&)
+{
+    Shutdown();
+}
+
+void BasicToolBarFactory::Shutdown()
+{
+    Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
+    if (mxConfigurationController.is())
+    {
+        mxConfigurationController->removeResourceFactoryForReference(this);
+        mxConfigurationController = nullptr;
     }
 }
 
@@ -149,13 +140,5 @@ void BasicToolBarFactory::ThrowIfDisposed() const
 }
 
 } // end of namespace sd::framework
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation(css::uno::XComponentContext*,
-                                                                        css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::BasicToolBarFactory);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,16 +22,17 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace sd { class DrawController; }
 
 namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
-    css::lang::XInitialization,
     css::lang::XEventListener
     > BasicToolBarFactoryInterfaceBase;
 
@@ -42,7 +43,7 @@ class BasicToolBarFactory
     : public BasicToolBarFactoryInterfaceBase
 {
 public:
-    BasicToolBarFactory ();
+    BasicToolBarFactory (const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~BasicToolBarFactory() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -59,11 +60,6 @@ public:
             const css::uno::Reference<css::drawing::framework::XResource>&
                 rxToolBar) override;
 
-    // XInitialization
-
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
-
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (
@@ -71,7 +67,7 @@ public:
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
 
     void Shutdown();
 
