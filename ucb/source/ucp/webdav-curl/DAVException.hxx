@@ -130,6 +130,7 @@ class DAVException : public std::exception
             DAV_SESSION_CREATE, // session creation error,
                                 // mData = server[:port]
             DAV_INVALID_ARG,    // invalid argument
+            DAV_UNSUPPORTED,    // internal to CurlSession
 
             DAV_LOCK_EXPIRED,   // DAV lock expired
 
