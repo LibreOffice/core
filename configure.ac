@@ -741,8 +741,18 @@ if test -n "$with_android_ndk"; then
     23.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk."
+        # NDK 24 dropped support for API levels < 19
+        if test "$ANDROID_API_LEVEL" -lt "19"; then
+            ANDROID_API_LEVEL=19
+        fi
+        case $ANDROID_NDK_VERSION in
+        24.*|25.*)
+            ;;
+        *)
+            AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk.])
+            add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk."
+            ;;
+        esac
         ;;
     esac
 
