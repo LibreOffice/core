@@ -29,6 +29,7 @@ Option Explicit
 &apos;&apos;&apos;		The SF_Calc module is focused on :
 &apos;&apos;&apos;			- management (copy, insert, move, ...) of sheets within a Calc document
 &apos;&apos;&apos;			- exchange of data between Basic data structures and Calc ranges of values
+&apos;&apos;&apos;			- copying and importing massive amounts of data
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The current module is closely related to the &quot;UI&quot; service of the ScriptForge library
 &apos;&apos;&apos;
@@ -63,9 +64,9 @@ Option Explicit
 &apos;&apos;&apos;					or an object produced by .Range()
 &apos;&apos;&apos;				The sheet name is optional (default = active sheet). Surrounding quotes and $ signs are optional
 &apos;&apos;&apos;					~.~, ~							The current selection in the active sheet
-&apos;&apos;&apos;					&apos;$SheetX&apos;.D2 or $D$2			A single cell
-&apos;&apos;&apos;					&apos;$SheetX&apos;.D2:F6, D2:D10			Multiple cells
-&apos;&apos;&apos;					&apos;$SheetX&apos;.A:A or 3:5			All cells in the same column or row up to the last active cell
+&apos;&apos;&apos;					$&apos;SheetX&apos;.D2 or $D$2			A single cell
+&apos;&apos;&apos;					$SheetX.D2:F6, D2:D10			Multiple cells
+&apos;&apos;&apos;					$&apos;SheetX&apos;.A:A or 3:5			All cells in the same column or row up to the last active cell
 &apos;&apos;&apos;					SheetX.*						All cells up to the last active cell
 &apos;&apos;&apos;					myRange							A range name at spreadsheet level
 &apos;&apos;&apos;					~.yourRange, SheetX.someRange	A range name at sheet level
@@ -74,10 +75,10 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;			Several methods may receive a &quot;FilterFormula&quot; as argument.
 &apos;&apos;&apos;			A FilterFormula may be associated with a FilterScope: &quot;row&quot;, &quot;column&quot; or &quot;cell&quot;.
-&apos;&apos;&apos;			These arguments determines on which rows/columns/cells of a range the method should be applied
+&apos;&apos;&apos;			These arguments determine on which rows/columns/cells of a range the method should be applied
 &apos;&apos;&apos;			Examples:
-&apos;&apos;&apos;				oDoc.ClearAll(&quot;A1:J10&quot;, FilterFormula := &quot;=(A1&lt;=0)&quot;, FilterScope := &quot;CELL&quot;)		&apos;	Clear all negative values
-&apos;&apos;&apos;				oDoc.ClearAll(&quot;A2:J10&quot;, FilterFormula := &quot;=(A2&lt;&gt;A1)&quot;, FilterScope := &quot;COLUMN&quot;)	&apos;	Clear when identical to above cell
+&apos;&apos;&apos;				oDoc.ClearAll(&quot;A1:J10&quot;, FilterFormula := &quot;=(A1&lt;=0)&quot;, FilterScope := &quot;CELL&quot;)	&apos;	Clear all negative values
+&apos;&apos;&apos;				oDoc.ClearAll(&quot;SheetX.A1:J10&quot;, &quot;=SUM(SheetX.A1:A10)&gt;100&quot;, &quot;COLUMN&quot;)			&apos;	Clear all columns whose sum is greater than 500
 &apos;&apos;&apos;
 &apos;&apos;&apos;				FilterFormula:	a Calc formula that returns TRUE or FALSE
 &apos;&apos;&apos;								the formula is expressed in terms of
@@ -4372,8 +4373,8 @@ Private Function _ParseAddress(ByVal psAddress As String) As Object
 &apos;&apos;&apos;	Parse and validate a sheet or range reference
 &apos;&apos;&apos;	Syntax to parse:
 &apos;&apos;&apos;		[Sheet].[Range]
-&apos;&apos;&apos;			Sheet 	=&gt; [&apos;][$]sheet[&apos;] or document named range or ~
-&apos;&apos;&apos;			Range	=&gt; A1:D10, A1, A:D, 10:10 ($ ignored), or sheet named range or ~
+&apos;&apos;&apos;			Sheet 	=&gt; [$][&apos;]sheet[&apos;] or document named range or ~
+&apos;&apos;&apos;			Range	=&gt; A1:D10, A1, A:D, 10:10 ($ ignored), or sheet named range or ~ or *
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		An object of type _Address
 &apos;&apos;&apos;	Exceptions:
