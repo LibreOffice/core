@@ -701,16 +701,16 @@ if test -n "$with_android_ndk"; then
     fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
-        AC_MSG_ERROR([Building for Android requires NDK version >= 21.*])
+        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
         ;;
-    11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*)
-        AC_MSG_ERROR([Building for Android requires NDK version >= 21.*])
+    11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*|21.*|22.*)
+        AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
         ;;
-    21.*|22.*|23.*)
+    23.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 21.* to 23.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 21.* to 23.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
