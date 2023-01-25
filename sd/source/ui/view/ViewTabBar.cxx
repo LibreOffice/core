@@ -59,7 +59,7 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
 
 ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
-    const Reference<frame::XController>& rxController)
+    const rtl::Reference<::sd::DrawController>& rxController)
     : mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       mxViewTabBarId(rxViewTabBarId),
@@ -68,20 +68,13 @@ ViewTabBar::ViewTabBar (
 {
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
-    try
-    {
-        if (auto pController = dynamic_cast<DrawController*>(mxController.get()))
-            mpViewShellBase = pController->GetViewShellBase();
-    }
-    catch (const RuntimeException&)
-    {
-    }
+    if (mxController)
+        mpViewShellBase = mxController->GetViewShellBase();
 
     // Register as listener at XConfigurationController.
-    Reference<XControllerManager> xControllerManager (mxController, UNO_QUERY);
-    if (xControllerManager.is())
+    if (mxController.is())
     {
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        mxConfigurationController = mxController->getConfigurationController();
         if (mxConfigurationController.is())
         {
             mxConfigurationController->addConfigurationChangeListener(
@@ -139,21 +132,15 @@ void ViewTabBar::disposing(std::unique_lock<std::mutex>&)
 
 vcl::Window* ViewTabBar::GetAnchorWindow(
     const Reference<XResourceId>& rxViewTabBarId,
-    const Reference<frame::XController>& rxController)
+    const rtl::Reference<::sd::DrawController>& rxController)
 {
     vcl::Window* pWindow = nullptr;
     ViewShellBase* pBase = nullptr;
 
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
-    try
-    {
-        if (auto pController = dynamic_cast<DrawController*>(rxController.get()))
-            pBase = pController->GetViewShellBase();
-    }
-    catch (const RuntimeException&)
-    {
-    }
+    if (rxController)
+        pBase = rxController->GetViewShellBase();
 
     // The ViewTabBar supports at the moment only the center pane.
     if (rxViewTabBarId.is()
@@ -170,9 +157,8 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         Reference<XPane> xPane;
         try
         {
-            Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY_THROW);
             Reference<XConfigurationController> xCC (
-                xControllerManager->getConfigurationController());
+                rxController->getConfigurationController());
             if (xCC.is())
                 xPane.set(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
         }
@@ -269,9 +255,8 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
 {
     try
     {
-        Reference<XControllerManager> xControllerManager (mxController,UNO_QUERY_THROW);
         Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
+            mxController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();
         Reference<XView> xView;

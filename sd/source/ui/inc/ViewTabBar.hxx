@@ -35,6 +35,7 @@ namespace com::sun::star::frame { class XController; }
 namespace vcl { class Window; }
 
 namespace sd {
+    class DrawController;
     class ViewShellBase;
     class ViewTabBar;
 }
@@ -72,7 +73,7 @@ class ViewTabBar final
 public:
     ViewTabBar (
         const css::uno::Reference< css::drawing::framework::XResourceId>& rxViewTabBarId,
-        const css::uno::Reference< css::frame::XController>& rxController);
+        const rtl::Reference< ::sd::DrawController>& rxController);
     virtual ~ViewTabBar() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -148,7 +149,7 @@ public:
 
 private:
     VclPtr<TabBarControl> mpTabControl;
-    css::uno::Reference<css::frame::XController> mxController;
+    rtl::Reference<::sd::DrawController> mxController;
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
@@ -168,7 +169,7 @@ private:
     */
     static vcl::Window* GetAnchorWindow(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewTabBarId,
-        const css::uno::Reference<css::frame::XController>& rxController);
+        const rtl::Reference<::sd::DrawController>& rxController);
 };
 
 } // end of namespace sd
