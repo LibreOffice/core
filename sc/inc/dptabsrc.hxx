@@ -528,8 +528,10 @@ public:
     bool IsSubtotalsAtTop() const
     {
         return bEnableLayout &&
+            (aLayoutInfo.LayoutMode ==
+            css::sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP ||
             aLayoutInfo.LayoutMode ==
-            css::sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
+            css::sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT);
     }
 
     bool IsAddEmpty() const

@@ -735,6 +735,25 @@
                         <property name="top_attach">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-show-expand-collapse">
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-show-expand-collapse">Show expand/collapse buttons</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-show-expand-collapse-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-show-expand-collapse">Select this check box to show expand/collapse buttons for field members</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child type="label">

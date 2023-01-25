@@ -696,6 +696,7 @@ ScDPSaveData::ScDPSaveData() :
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( true ),
     bDrillDown( true ),
+    bExpandCollapse( false ),
     mbDimensionMembersBuilt(false)
 {
 }
@@ -707,6 +708,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
+    bExpandCollapse( r.bExpandCollapse ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
     mpGrandTotalName(r.mpGrandTotalName)
 {
@@ -1010,6 +1012,11 @@ void ScDPSaveData::SetFilterButton(bool bSet)
 void ScDPSaveData::SetDrillDown(bool bSet)
 {
     bDrillDown = bSet;
+}
+
+void ScDPSaveData::SetExpandCollapse(bool bSet)
+{
+    bExpandCollapse = bSet;
 }
 
 static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )

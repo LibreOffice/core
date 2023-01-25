@@ -373,6 +373,27 @@ void ScCheckListMenuControl::endSubMenu(ScListSubMenuControl& rSubMenu)
     }
 }
 
+void ScCheckListMenuControl::addFields(const std::vector<OUString>& aFields)
+{
+    if (!mbIsMultiField)
+        return;
+
+    mxFieldsCombo->clear();
+
+    for (auto& aField: aFields)
+        mxFieldsCombo->append_text(aField);
+
+    mxFieldsCombo->set_active(0);
+}
+
+tools::Long ScCheckListMenuControl::getField()
+{
+    if (!mbIsMultiField)
+        return -1;
+
+    return mxFieldsCombo->get_active();
+}
+
 void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)
 {
     mxMenu->select(nPos == MENU_NOT_SELECTED ? -1 : nPos);
@@ -476,13 +497,15 @@ constexpr int nCheckListVisibleRows = 9;
 constexpr int nColorListVisibleRows = 9;
 
 ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
-                                               bool bHasDates, int nWidth)
+                                               bool bHasDates, int nWidth, bool bIsMultiField)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filterdropdown.ui"))
     , mxPopover(mxBuilder->weld_popover("FilterDropDown"))
     , mxContainer(mxBuilder->weld_container("container"))
     , mxMenu(mxBuilder->weld_tree_view("menu"))
     , mxScratchIter(mxMenu->make_iterator())
     , mxNonMenu(mxBuilder->weld_widget("nonmenu"))
+    , mxFieldsComboLabel(mxBuilder->weld_label("select_field_label"))
+    , mxFieldsCombo(mxBuilder->weld_combo_box("multi_field_combo"))
     , mxEdSearch(mxBuilder->weld_entry("search_edit"))
     , mxBox(mxBuilder->weld_widget("box"))
     , mxListChecks(mxBuilder->weld_tree_view("check_list_box"))
@@ -508,6 +531,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , maOpenTimer(this)
     , maCloseTimer(this)
     , maSearchEditTimer("ScCheckListMenuControl maSearchEditTimer")
+    , mbIsMultiField(bIsMultiField)
 {
     mxTreeChecks->set_clicks_to_toggle(1);
     mxListChecks->set_clicks_to_toggle(1);
@@ -556,6 +580,16 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxListChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     mxBox->show();
+    if (mbIsMultiField)
+    {
+        mxFieldsComboLabel->show();
+        mxFieldsCombo->show();
+    }
+    else
+    {
+        mxFieldsComboLabel->hide();
+        mxFieldsCombo->hide();
+    }
     mxEdSearch->show();
     mxButtonBox->show();
 
@@ -565,6 +599,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
 
     mxBtnOk->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
     mxBtnCancel->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+    if (mbIsMultiField)
+        mxFieldsCombo->connect_changed(LINK(this, ScCheckListMenuControl, ComboChangedHdl));
     mxEdSearch->connect_changed(LINK(this, ScCheckListMenuControl, EdModifyHdl));
     mxEdSearch->connect_activate(LINK(this, ScCheckListMenuControl, EdActivateHdl));
     mxTreeChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
@@ -742,6 +778,12 @@ namespace
         rView.set_text(rIter, aLabel, 0);
         rView.set_sensitive(rIter, !rMember.mbHiddenByOtherFilter);
     }
+}
+
+IMPL_LINK_NOARG(ScCheckListMenuControl, ComboChangedHdl, weld::ComboBox&, void)
+{
+    if (mbIsMultiField && mxFieldChangedAction)
+        mxFieldChangedAction->execute();
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, SearchEditTimeoutHdl, Timer*, void)
@@ -1076,6 +1118,15 @@ void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal,
     aMember.mbHiddenByOtherFilter = bHiddenByOtherFilter;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));
+}
+
+void ScCheckListMenuControl::clearMembers()
+{
+    maMembers.clear();
+
+    mpChecks->freeze();
+    mpChecks->clear();
+    mpChecks->thaw();
 }
 
 std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::TreeIter* pParent, std::u16string_view sNode)
@@ -1499,6 +1550,11 @@ void ScCheckListMenuControl::setOKAction(Action* p)
 void ScCheckListMenuControl::setPopupEndAction(Action* p)
 {
     mxPopupEndAction.reset(p);
+}
+
+void ScCheckListMenuControl::setFieldChangedAction(Action* p)
+{
+    mxFieldChangedAction.reset(p);
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, weld::Popover&, void)

@@ -72,6 +72,7 @@ struct PTFieldModel
     bool                mbShowAll;          /// True = show items without data.
     bool                mbOutline;          /// True = show in outline view, false = show in tabular view.
     bool                mbSubtotalTop;      /// True = show subtotals on top of items in outline or compact mode.
+    bool                mbCompact;          /// True = show in compact view, false = show in either outline or tabular view.
     bool                mbInsertBlankRow;   /// True = insert blank rows after items.
     bool                mbInsertPageBreak;  /// True = insert page breaks after items.
     bool                mbAutoShow;         /// True = auto show (top 10) filter enabled.

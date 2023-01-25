@@ -1963,11 +1963,18 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             }
         }
 
-        if (pAttr->HasPivotButton() || pAttr->HasPivotPopupButton())
+        if (pAttr->HasPivotButton() || pAttr->HasPivotPopupButton() || pAttr->HasPivotMultiFieldPopupButton())
         {
-            DoPushPivotButton(nPosX, nPosY, rMEvt, pAttr->HasPivotButton(), pAttr->HasPivotPopupButton());
+            DoPushPivotButton(nPosX, nPosY, rMEvt, pAttr->HasPivotButton(),
+                pAttr->HasPivotPopupButton(), pAttr->HasPivotMultiFieldPopupButton());
             rState.mbActivatePart = false;
             return;
+        }
+
+        if (pAttr->HasPivotToggle())
+        {
+            DoPushPivotToggle(nPosX, nPosY, rMEvt);
+            rState.mbActivatePart = false;
         }
 
         //  List Validity drop-down button

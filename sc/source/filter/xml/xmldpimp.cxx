@@ -100,7 +100,9 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bSourceCellRange(false),
     bShowFilter(true),
     bDrillDown(true),
-    bHeaderGridLayout(false)
+    bShowExpandCollapse(false),
+    bHeaderGridLayout(false),
+    bHasCompactField(false)
 {
     if ( !rAttrList.is() )
         return;
@@ -173,6 +175,11 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_ELEMENT( TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK ):
             {
                 bDrillDown = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( LO_EXT, XML_SHOW_DRILL_DOWN_BUTTONS ):
+            {
+                bShowExpandCollapse = IsXMLToken(aIter, XML_TRUE);
             }
             break;
             case XML_ELEMENT( TABLE, XML_HEADER_GRID_LAYOUT ):
@@ -363,7 +370,7 @@ void ScXMLDataPilotTableContext::SetButtons(ScDPObject* pDPObject)
                         if (bHasHidden)
                             nMFlag |= ScMF::HiddenMember;
 
-                        nMFlag |= ScMF::ButtonPopup;
+                        nMFlag |= (bHasCompactField ? ScMF::ButtonPopup2 : ScMF::ButtonPopup);
                     }
 
                     pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
@@ -512,6 +519,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
     pDPSave->SetFilterButton(bShowFilter);
     pDPSave->SetDrillDown(bDrillDown);
+    pDPSave->SetExpandCollapse(bShowExpandCollapse);
     if (pDPDimSaveData)
         pDPSave->SetDimensionData(pDPDimSaveData.get());
     pDPObject->SetSaveData(*pDPSave);
@@ -896,6 +904,15 @@ void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
         xDim->SetSubtotalName(rName);
 }
 
+void ScXMLDataPilotFieldContext::SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo& aInfo)
+{
+    if (xDim)
+        xDim->SetLayoutInfo(&aInfo);
+
+    if (pDataPilotTable && aInfo.LayoutMode == sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT)
+        pDataPilotTable->SetHasCompactField();
+}
+
 void ScXMLDataPilotFieldContext::AddGroup(::std::vector<OUString>&& rMembers, const OUString& rName)
 {
     ScXMLDataPilotGroup aGroup;
@@ -1166,6 +1183,7 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
     ScXMLImportContext( rImport )
 {
     sheet::DataPilotFieldLayoutInfo aInfo;
+    aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT;
 
     if ( rAttrList.is() )
     {
@@ -1180,12 +1198,20 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
                         aInfo.AddEmptyLines = false;
                 break;
                 case XML_ELEMENT( TABLE, XML_LAYOUT_MODE ):
-                    if (IsXMLToken(aIter, XML_TABULAR_LAYOUT))
-                        aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT;
-                    else if (IsXMLToken(aIter, XML_OUTLINE_SUBTOTALS_TOP))
-                        aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
-                    else if (IsXMLToken(aIter, XML_OUTLINE_SUBTOTALS_BOTTOM))
-                        aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
+                case XML_ELEMENT( LO_EXT, XML_LAYOUT_MODE ):
+                    // Ensure that loext:layout-mode="compact" is not overwritten by any
+                    // value of table:layout-mode.
+                    if (aInfo.LayoutMode != sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT)
+                    {
+                        if (IsXMLToken(aIter, XML_TABULAR_LAYOUT))
+                            aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+                        else if (IsXMLToken(aIter, XML_OUTLINE_SUBTOTALS_TOP))
+                            aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
+                        else if (IsXMLToken(aIter, XML_OUTLINE_SUBTOTALS_BOTTOM))
+                            aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
+                        else if (IsXMLToken(aIter, XML_COMPACT_LAYOUT))
+                            aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT;
+                    }
                 break;
             }
         }

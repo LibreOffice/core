@@ -155,6 +155,17 @@ bool ScMergeFlagAttr::HasPivotPopupButton() const
     return bool(GetValue() & ScMF::ButtonPopup);
 }
 
+bool ScMergeFlagAttr::HasPivotToggle() const
+{
+    auto nFlags = GetValue();
+    return (nFlags & ScMF::DpCollapse) || (nFlags & ScMF::DpExpand);
+}
+
+bool ScMergeFlagAttr::HasPivotMultiFieldPopupButton() const
+{
+    return bool(GetValue() & ScMF::ButtonPopup2);
+}
+
 void ScMergeFlagAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScMergeFlagAttr"));

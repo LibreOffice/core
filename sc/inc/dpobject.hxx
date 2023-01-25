@@ -206,6 +206,9 @@ public:
     void                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
     void                FillLabelData(ScPivotParam& rParam);
 
+    void                GetFieldIdsNames(css::sheet::DataPilotFieldOrientation nOrient, std::vector<tools::Long>& rIndices,
+                                         std::vector<OUString>& rNames);
+
     bool                GetHierarchiesNA( sal_Int32 nDim, css::uno::Reference< css::container::XNameAccess >& xHiers );
     void                GetHierarchies( sal_Int32 nDim, css::uno::Sequence< OUString >& rHiers );
 

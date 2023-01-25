@@ -60,6 +60,18 @@ constants DataPilotFieldLayoutMode
 
     const long OUTLINE_SUBTOTALS_BOTTOM = 2;
 
+    /** In compact layout mode, the items from the following field start in the row
+        below an item's name with an indentation but in the same column as this field's
+        items are.
+
+        <P>Subtotals are shown at the top (on the same row as the item's name). When
+        the subtotals take up more than one row (manually selected, or because there
+        are several data fields), they are always shown below the item's data,
+        regardless of the setting.</p>
+     */
+
+    const long COMPACT_LAYOUT = 3;
+
 };
 
 

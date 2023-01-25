@@ -418,9 +418,17 @@ void ScXMLExportDataPilot::WriteLayoutInfo(const ScDPSaveDimension* pDim)
         case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM:
         sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_BOTTOM);
         break;
+        case sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT:
+        sValueStr = GetXMLToken(XML_TABULAR_LAYOUT);
+        break;
     }
+
     if (!sValueStr.isEmpty())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LAYOUT_MODE, sValueStr);
+
+    if (pLayoutInfo->LayoutMode == sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT)
+        rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_LAYOUT_MODE, GetXMLToken(XML_COMPACT_LAYOUT));
+
     SvXMLElementExport aElemDPLLI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO, true, true);
 }
 
@@ -793,6 +801,8 @@ void ScXMLExportDataPilot::WriteDataPilots()
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_FILTER_BUTTON, XML_FALSE);
         if (!pDPSave->GetDrillDown())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK, XML_FALSE);
+        if (pDPSave->GetExpandCollapse())
+            rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SHOW_DRILL_DOWN_BUTTONS, XML_TRUE);
         if ((*pDPs)[i].GetHeaderLayout())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HEADER_GRID_LAYOUT, XML_TRUE);
 

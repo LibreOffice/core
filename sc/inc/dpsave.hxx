@@ -247,6 +247,7 @@ private:
     sal_uInt16 nRepeatEmptyMode;
     bool bFilterButton; // not passed to DataPilotSource
     bool bDrillDown; // not passed to DataPilotSource
+    bool bExpandCollapse; // not passed to DataPilotSource
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -341,6 +342,10 @@ public:
     SC_DLLPUBLIC void SetDrillDown( bool bSet );
     bool GetDrillDown() const
         { return bDrillDown; }
+
+    SC_DLLPUBLIC void SetExpandCollapse( bool bSet );
+    bool GetExpandCollapse() const
+        { return bExpandCollapse; }
 
     void WriteToSource( const css::uno::Reference<css::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;

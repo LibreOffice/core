@@ -2435,6 +2435,7 @@ add-empty-lines
 tabular-layout
 outline-subtotals-top
 outline-subtotals-bottom
+compact-layout
 layout-mode
 data-pilot-layout-info
 symbol-color
@@ -2596,6 +2597,7 @@ GNM_STEP_CENTER_Y_DUMMY
 N_DB_OASIS_DUMMY
 show-filter-button
 drill-down-on-double-click
+show-drill-down-buttons
 header-grid-layout
 grouped-by
 days
