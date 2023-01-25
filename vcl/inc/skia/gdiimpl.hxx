@@ -339,6 +339,8 @@ protected:
         return stream;
     }
 
+    void windowBackingPropertiesChanged();
+
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
@@ -370,6 +372,7 @@ protected:
     LastPolyPolygonInfo mLastPolyPolygonInfo;
     inline static int pendingOperationsToFlush = 0;
     int mScaling; // The scale factor for HiDPI screens.
+    bool mInWindowBackingPropertiesChanged;
 };
 
 inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const

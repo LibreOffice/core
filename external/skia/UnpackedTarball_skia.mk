@@ -40,6 +40,7 @@ skia_patches := \
     tdf148624.patch.1 \
     constexpr-template.patch.0 \
     missing-include.patch.0 \
+    tdf147342.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

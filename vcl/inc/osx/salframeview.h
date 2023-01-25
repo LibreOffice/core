@@ -45,6 +45,7 @@ enum class SalEvent;
 -(void)windowDidMiniaturize: (NSNotification*)pNotification;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
 -(BOOL)windowShouldClose: (NSNotification*)pNotification;
+-(void)windowDidChangeBackingProperties:(NSNotification *)pNotification;
 //-(void)willEncodeRestorableState:(NSCoder*)pCoderState;
 //-(void)didDecodeRestorableState:(NSCoder*)pCoderState;
 //-(void)windowWillEnterVersionBrowser:(NSNotification*)pNotification;

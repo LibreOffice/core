@@ -1,0 +1,95 @@
+--- tools/sk_app/mac/WindowContextFactory_mac.h	2022-02-16 06:03:39.000000000 -0500
++++ tools/sk_app/mac/WindowContextFactory_mac.h	2023-01-25 08:09:00.000000000 -0500
+@@ -19,15 +19,8 @@
+ 
+ struct DisplayParams;
+ 
+-static inline CGFloat GetBackingScaleFactor(NSView* view) {
+-    #ifdef SK_BUILD_FOR_IOS
+-    UIScreen* screen = view.window.screen ?: [UIScreen mainScreen];
+-    return screen.nativeScale;
+-    #else
+-    NSScreen* screen = view.window.screen ?: [NSScreen mainScreen];
+-    return screen.backingScaleFactor;
+-    #endif
+-}
++SK_API CGFloat GetBackingScaleFactor(NSView* view);
++SK_API void ResetBackingScaleFactor();
+ 
+ namespace window_context_factory {
+ 
+--- tools/sk_app/mac/MetalWindowContext_mac.mm	2021-11-25 10:39:27.000000000 -0500
++++ tools/sk_app/mac/MetalWindowContext_mac.mm	2023-01-25 08:20:32.000000000 -0500
+@@ -87,6 +91,12 @@
+     fMetalLayer.drawableSize = backingSize;
+     fMetalLayer.contentsScale = backingScaleFactor;
+ 
++    // Related tdf#147342 Copy layer's colorspace to window's colorspace
++    // This method is now called when the window's backing properties have
++    // changed so copy any colorspace changes.
++    NSColorSpace* cs = fMainView.window.colorSpace;
++    fMetalLayer.colorspace = cs.CGColorSpace;
++
+     fWidth = backingSize.width;
+     fHeight = backingSize.height;
+ }
+--- /dev/null	2023-01-25 09:20:55.000000000 -0500
++++ tools/sk_app/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
+@@ -0,0 +1,57 @@
++/*
++ * Use of this source code is governed by a BSD-style license that can be
++ * found in the LICENSE file.
++ */
++
++#include "tools/sk_app/mac/WindowContextFactory_mac.h"
++
++namespace sk_app {
++
++static bool  bWindowScaling = false;
++static float fWindowScale = 1.0f;
++
++CGFloat GetBackingScaleFactor(NSView* view) {
++    #ifdef SK_BUILD_FOR_IOS
++    UIScreen* screen = view.window.screen ?: [UIScreen mainScreen];
++    return screen.nativeScale;
++    #else
++    // Related: tdf#147342 This should always be an exact copy of the
++    // sal::aqua::getWindowScaling() function in the following file:
++    // vcl/osx/salgdiutils.cxx
++    (void)view;
++
++    if (!bWindowScaling)
++    {
++        NSArray *aScreens = [NSScreen screens];
++        if (aScreens)
++        {
++            for (NSScreen *aScreen : aScreens)
++            {
++                float fScale = [aScreen backingScaleFactor];
++                if (fScale > fWindowScale)
++                  fWindowScale = fScale;
++            }
++            bWindowScaling = true;
++        }
++        if( const char* env = getenv("SAL_FORCE_HIDPI_SCALING"))
++        {
++            fWindowScale = atof(env);
++            bWindowScaling = true;
++        }
++    }
++    return fWindowScale;
++    #endif
++}
++
++void ResetBackingScaleFactor() {
++    #ifndef SK_BUILD_FOR_IOS
++    // Related: tdf#147342 Force recalculation of the window scaling but keep
++    // the previous window scaling as the minimum so that we don't lose the
++    // resolution in cached images if a HiDPI monitor is disconnected and
++    // then reconnected.
++    bWindowScaling = false;
++    GetBackingScaleFactor(nil);
++    #endif
++}
++
++}  // namespace sk_app

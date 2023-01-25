@@ -950,6 +950,7 @@ ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/tools/sk_app/MetalWindowContext \
     UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
+    UnpackedTarball/skia/tools/sk_app/mac/WindowContextFactory_mac \
 ))
 
 # Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac

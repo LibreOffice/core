@@ -287,6 +287,8 @@ void AquaSalFrame::screenParametersChanged()
 {
     OSX_SALDATA_RUNINMAIN( screenParametersChanged() )
 
+    sal::aqua::resetWindowScaling();
+
     UpdateFrameGeometry();
 
     if( mpGraphics )
