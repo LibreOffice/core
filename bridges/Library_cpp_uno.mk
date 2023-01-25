@@ -217,7 +217,6 @@ endif
 # it off.
 ifeq ($(COM),GCC)
 $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
-	$(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-I$(ANDROID_BINUTILS_PREBUILT_ROOT)/lib/gcc/arm-linux-androideabi/4.9.x/include) \
 	-fno-omit-frame-pointer \
 	-fno-strict-aliasing \
 	-fno-lto \

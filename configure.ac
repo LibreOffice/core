@@ -701,16 +701,16 @@ if test -n "$with_android_ndk"; then
     fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
-        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x*])
+        AC_MSG_ERROR([Building for Android requires NDK version >= 21.*])
         ;;
-    11.1.*|12.1.*|13.1.*|14.1.*)
-        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x.*])
+    11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*)
+        AC_MSG_ERROR([Building for Android requires NDK version >= 21.*])
         ;;
-    16.*|17.*|18.*|19.*|20.*|21.*|22.*)
+    21.*|22.*|23.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* to 22.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* to 22.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 21.* to 23.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 21.* to 23.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
@@ -719,36 +719,26 @@ if test -n "$with_android_ndk"; then
         ANDROID_API_LEVEL="$with_android_api_level"
     fi
 
-    android_cpu=$host_cpu
     if test $host_cpu = arm; then
-        android_platform_prefix=arm-linux-androideabi
-        android_gnu_prefix=$android_platform_prefix
         LLVM_TRIPLE=armv7a-linux-androideabi
         ANDROID_APP_ABI=armeabi-v7a
         ANDROIDCFLAGS="-mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8"
     elif test $host_cpu = aarch64; then
-        android_platform_prefix=aarch64-linux-android
-        android_gnu_prefix=$android_platform_prefix
-        LLVM_TRIPLE=$android_platform_prefix
+        LLVM_TRIPLE=aarch64-linux-android
         # minimum android version that supports aarch64
         if test "$ANDROID_API_LEVEL" -lt "21" ; then
             ANDROID_API_LEVEL=21
         fi
         ANDROID_APP_ABI=arm64-v8a
     elif test $host_cpu = x86_64; then
-        android_platform_prefix=x86_64-linux-android
-        android_gnu_prefix=$android_platform_prefix
-        LLVM_TRIPLE=$android_platform_prefix
+        LLVM_TRIPLE=x86_64-linux-android
         # minimum android version that supports x86_64
         ANDROID_API_LEVEL=21
         ANDROID_APP_ABI=x86_64
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
-        android_cpu=x86
-        android_platform_prefix=$android_cpu
-        android_gnu_prefix=i686-linux-android
-        LLVM_TRIPLE=$android_gnu_prefix
+        LLVM_TRIPLE=i686-linux-android
         ANDROID_APP_ABI=x86
     fi
 
@@ -782,15 +772,12 @@ if test -n "$with_android_ndk"; then
     esac
     android_TOOLCHAIN=$ANDROID_NDK_DIR/toolchains/llvm/prebuilt/$android_HOST_TAG
     ANDROID_COMPILER_BIN=$android_TOOLCHAIN/bin
-    dnl TODO: NSS build uses it...
-    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_NDK_DIR/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION/prebuilt/$android_HOST_TAG
-    AC_SUBST(ANDROID_BINUTILS_PREBUILT_ROOT)
 
-    test -z "$AR" && AR=$ANDROID_COMPILER_BIN/$android_gnu_prefix-ar
-    test -z "$NM" && NM=$ANDROID_COMPILER_BIN/$android_gnu_prefix-nm
-    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_COMPILER_BIN/$android_gnu_prefix-objdump
-    test -z "$RANLIB" && RANLIB=$ANDROID_COMPILER_BIN/$android_gnu_prefix-ranlib
-    test -z "$STRIP" && STRIP=$ANDROID_COMPILER_BIN/$android_gnu_prefix-strip
+    test -z "$AR" && AR=$ANDROID_COMPILER_BIN/llvm-ar
+    test -z "$NM" && NM=$ANDROID_COMPILER_BIN/llvm-nm
+    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_COMPILER_BIN/llvm-objdump
+    test -z "$RANLIB" && RANLIB=$ANDROID_COMPILER_BIN/llvm-ranlib
+    test -z "$STRIP" && STRIP=$ANDROID_COMPILER_BIN/llvm-strip
 
     ANDROIDCFLAGS="$ANDROIDCFLAGS -target ${LLVM_TRIPLE}${ANDROID_API_LEVEL}"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -no-canonical-prefixes -ffunction-sections -fdata-sections -Qunused-arguments"
