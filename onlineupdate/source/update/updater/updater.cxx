@@ -2925,7 +2925,7 @@ int NS_main(int argc, NS_tchar **argv)
         {
             PRErrorCode error = PR_GetError();
             fprintf(stderr, "Could not initialize NSS: %s (%d)",
-                    PR_ErrorToName(error), (int) error);
+                    PR_ErrorToName(error), static_cast<int>(error));
             _exit(1);
         }
     }

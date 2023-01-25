@@ -175,7 +175,7 @@ struct CryptoImpl
             {
                 PRErrorCode error = PR_GetError();
                 const char* errorText = PR_ErrorToName(error);
-                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number((int) error) + ")");
+                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number(static_cast<int>(error)) + ")");
             }
         }
     }
