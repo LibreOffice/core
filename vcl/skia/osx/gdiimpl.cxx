@@ -95,6 +95,8 @@ void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
 
 void AquaSkiaSalGraphicsImpl::Flush(const tools::Rectangle&) { performFlush(); }
 
+void AquaSkiaSalGraphicsImpl::WindowBackingPropertiesChanged() { windowBackingPropertiesChanged(); }
+
 void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
 {
     if (!isGPU())

@@ -35,6 +35,11 @@
 #include <osx/salframe.h>
 #include <osx/saldata.hxx>
 
+#if HAVE_FEATURE_SKIA
+#include <tools/sk_app/mac/WindowContextFactory_mac.h>
+#include <vcl/skia/SkiaHelper.hxx>
+#endif
+
 // TODO: Scale will be set to 2.0f as default after implementation of full scaled display support . This will allow moving of
 // windows between non retina and retina displays without blurry text and graphics. Static variables have to be removed thereafter.
 
@@ -50,15 +55,17 @@ namespace sal::aqua
 {
 float getWindowScaling()
 {
+    // Related: tdf#147342 Any changes to this function must be copied to the
+    // sk_app::GetBackingScaleFactor() function in the following file:
+    // workdir/UnpackedTarball/skia/tools/sk_app/mac/WindowContextFactory_mac.h
     if (!bWindowScaling)
     {
         NSArray *aScreens = [NSScreen screens];
         if (aScreens != nullptr)
         {
-            int nScreens = [aScreens count];
-            for (int i = 0; i < nScreens; i++)
+            for (NSScreen *aScreen : aScreens)
             {
-                float fScale = [[aScreens objectAtIndex:i] backingScaleFactor];
+                float fScale = [aScreen backingScaleFactor];
                 if (fScale > fWindowScale)
                   fWindowScale = fScale;
             }
@@ -71,6 +78,20 @@ float getWindowScaling()
         }
     }
     return fWindowScale;
+}
+
+void resetWindowScaling()
+{
+    // Related: tdf#147342 Force recalculation of the window scaling but keep
+    // the previous window scaling as the minimum so that we don't lose the
+    // resolution in cached images if a HiDPI monitor is disconnected and
+    // then reconnected.
+#if HAVE_FEATURE_SKIA
+    if ( SkiaHelper::isVCLSkiaEnabled() )
+        sk_app::ResetBackingScaleFactor();
+#endif
+    bWindowScaling = false;
+    getWindowScaling();
 }
 } // end aqua
 

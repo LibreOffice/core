@@ -43,6 +43,7 @@ public:
 
     virtual void Flush() override;
     virtual void Flush(const tools::Rectangle&) override;
+    virtual void WindowBackingPropertiesChanged() override;
 
 private:
     virtual int getWindowScaling() const override;

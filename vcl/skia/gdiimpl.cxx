@@ -267,6 +267,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mXorMode(XorMode::None)
     , mFlush(new SkiaFlushIdle(this))
     , mScaling(1)
+    , mInWindowBackingPropertiesChanged(false)
 {
 }
 
@@ -485,7 +486,7 @@ void SkiaSalGraphicsImpl::checkSurface()
         SAL_INFO("vcl.skia.trace",
                  "create(" << this << "): " << Size(mSurface->width(), mSurface->height()));
     }
-    else if (GetWidth() * mScaling != mSurface->width()
+    else if (mInWindowBackingPropertiesChanged || GetWidth() * mScaling != mSurface->width()
              || GetHeight() * mScaling != mSurface->height())
     {
         if (!avoidRecreateByResize())
@@ -2180,6 +2181,16 @@ void SkiaSalGraphicsImpl::dump(const char* file) const
 {
     assert(mSurface.get());
     SkiaHelper::dump(mSurface, file);
+}
+
+void SkiaSalGraphicsImpl::windowBackingPropertiesChanged()
+{
+    if (mInWindowBackingPropertiesChanged || !isGPU())
+        return;
+
+    mInWindowBackingPropertiesChanged = true;
+    performFlush();
+    mInWindowBackingPropertiesChanged = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

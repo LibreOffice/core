@@ -129,6 +129,7 @@ private:
 namespace sal::aqua
 {
 float getWindowScaling();
+void resetWindowScaling();
 }
 
 struct AquaSharedAttributes
@@ -287,6 +288,7 @@ public:
     virtual void drawTextLayout(const GenericSalLayout& layout, bool bTextRenderModeForResolutionIndependentLayout) = 0;
     virtual void Flush() {}
     virtual void Flush( const tools::Rectangle& ) {}
+    virtual void WindowBackingPropertiesChanged() {};
 protected:
     AquaGraphicsBackendBase(AquaSharedAttributes& rShared, SalGraphicsImpl * impl)
         : mrShared( rShared ), mpImpl(impl)
@@ -482,6 +484,7 @@ public:
 
     void                    Flush();
     void                    Flush( const tools::Rectangle& );
+    void                    WindowBackingPropertiesChanged();
 
     void                    UnsetState();
     // InvalidateContext does an UnsetState and sets mrContext to 0

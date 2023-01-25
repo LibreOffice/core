@@ -500,6 +500,27 @@ static AquaSalFrame* getMouseContainerFrame()
     (void)pNotification;
 }
 
+-(void)windowDidChangeBackingProperties:(NSNotification *)pNotification
+{
+    (void)pNotification;
+#if HAVE_FEATURE_SKIA
+    SolarMutexGuard aGuard;
+
+    sal::aqua::resetWindowScaling();
+
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    {
+        // tdf#147342 Notify Skia that the window's backing properties changed
+        if ( SkiaHelper::isVCLSkiaEnabled() )
+        {
+            AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+            if ( pGraphics )
+                pGraphics->WindowBackingPropertiesChanged();
+        }
+    }
+#endif
+}
+
 -(void)dockMenuItemTriggered: (id)sender
 {
     (void)sender;
