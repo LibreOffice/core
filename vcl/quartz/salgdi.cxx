@@ -488,6 +488,11 @@ void AquaSalGraphics::Flush( const tools::Rectangle& rRect )
     mpBackend->Flush( rRect );
 }
 
+void AquaSalGraphics::WindowBackingPropertiesChanged()
+{
+    mpBackend->WindowBackingPropertiesChanged();
+}
+
 #ifdef IOS
 
 bool AquaSharedAttributes::checkContext()
