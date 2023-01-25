@@ -39,6 +39,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/numberingformatpage.ui"
         || rUIFile == u"cui/ui/password.ui"
         || rUIFile == u"cui/ui/splitcellsdialog.ui"
+        || rUIFile == u"cui/ui/similaritysearchdialog.ui"
         || rUIFile == u"cui/ui/widgettestdialog.ui"
         // scalc
         || rUIFile == u"modules/scalc/ui/analysisofvariancedialog.ui"
