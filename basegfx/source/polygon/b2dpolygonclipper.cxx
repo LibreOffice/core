@@ -489,7 +489,7 @@ namespace basegfx::utils
                     // be solved again, they were solved in the preparation.
                     aRetval.append(aMergePolyPolygonA);
                     aRetval.append(aMergePolyPolygonB);
-                    aRetval = solveCrossovers(aRetval);
+                    aRetval = solveCrossovers(aRetval, pPointLimit);
 
                     // now remove neutral polygons (closed, but no area). In a last
                     // step throw away all polygons which have a depth of less than 1
