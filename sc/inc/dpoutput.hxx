@@ -60,9 +60,11 @@ private:
                             pColNumFmt;
     std::unique_ptr<sal_uInt32[]>
                             pRowNumFmt;
+    std::vector<bool>       aRowCompactFlags;
     sal_Int32               nColFmtCount;
     sal_Int32               nRowFmtCount;
     sal_uInt32              nSingleNumFmt;
+    size_t                  nRowDims; // Including empty ones.
 
     // Output geometry related parameters
     sal_Int32               nColCount;
@@ -81,6 +83,8 @@ private:
     bool                    bSizesValid:1;
     bool                    bSizeOverflow:1;
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
+    bool                    mbHasCompactRowField:1; // true: at least one of the row fields has compact layout.
+    bool                    mbExpandCollapse:1; // true: show expand/collapse buttons
 
     void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const css::sheet::DataResult& rData );
@@ -89,18 +93,25 @@ private:
                                 bool bColHeader, tools::Long nLevel );
 
     void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
+    void MultiFieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bRowField);
 
+    /// Computes number of columns needed to write row fields.
+    SCCOL           GetColumnsForRowFields() const;
     void            CalcSizes();
 
     /** Query which sub-area of the table the cell is in. See
         css.sheet.DataPilotTablePositionType for the interpretation of the
         return value. */
     sal_Int32       GetPositionType(const ScAddress& rPos);
+    /// Returns the range of row fields that are contained by table's row fields column nCol.
+    void            GetRowFieldRange(SCCOL nCol, sal_Int32& nRowFieldStart, sal_Int32& nRowFieldEnd) const;
+    /// Find row field index from row position in case of compact layout.
+    sal_Int32       GetRowFieldCompact(SCCOL nColQuery, SCROW nRowQuery) const;
 
 public:
                     ScDPOutput( ScDocument* pD,
                                 css::uno::Reference< css::sheet::XDimensionsSupplier> xSrc,
-                                const ScAddress& rPos, bool bFilter );
+                                const ScAddress& rPos, bool bFilter, bool bExpandCollapse );
                     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );

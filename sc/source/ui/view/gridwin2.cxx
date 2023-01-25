@@ -21,6 +21,7 @@
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
 
+#include <attrib.hxx>
 #include <gridwin.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -41,6 +42,7 @@
 #include <scabstdlg.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
 
 #include <unordered_map>
 #include <memory>
@@ -146,7 +148,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     return false;
 }
 
-void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup )
+void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField )
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
@@ -162,12 +164,20 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             // For page field selection cell, the real field position is to the left.
             aDimPos.IncCol(-1);
 
+        if (bMultiField && DPTestMultiFieldPopupArrow(rMEvt, aPos, pDPObj))
+        {
+            // Multi-field pop up menu has been launched.  Don't activate
+            // field move or regular popup.
+            return;
+        }
+
         tools::Long nField = pDPObj->GetHeaderDim(aDimPos, nOrient);
         if ( nField >= 0 )
         {
             bDPMouse   = false;
             nDPField   = nField;
             pDragDPObj = pDPObj;
+
             if (bPopup && DPTestFieldPopupArrow(rMEvt, aPos, aDimPos, pDPObj))
             {
                 // field name pop up menu has been launched.  Don't activate
@@ -224,6 +234,51 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
     else
     {
         OSL_FAIL("Nothing here");
+    }
+}
+
+void ScGridWindow::DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
+{
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
+
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
+
+    ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
+    if (!pDPObj)
+        return;
+
+    if (!pDPObj->GetSaveData()->GetDrillDown())
+        return;
+
+    // Get the geometry of the cell.
+    Point aScrPos = mrViewData.GetScrPos(nCol, nRow, eWhich);
+    tools::Long nSizeX, nSizeY;
+    mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    Size aScrSize(nSizeX - 1, nSizeY - 1);
+
+    sal_uInt16 nIndent = 0;
+    if (const ScIndentItem* pIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT))
+        nIndent = pIndentItem->GetValue();
+
+    // Check if the mouse cursor is clicking on the toggle +/- box.
+    ScDPFieldButton aBtn(GetOutDev(), &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
+    aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    aBtn.setDrawToggleButton(true, true, nIndent);
+    Point aPopupPos;
+    Size aPopupSize;
+    aBtn.getToggleBoundingBox(aPopupPos, aPopupSize);
+    tools::Rectangle aRect(aPopupPos, aPopupSize);
+    if (aRect.Contains(rMEvt.GetPosPixel()))
+    {
+        // Mouse cursor inside the toggle +/- box.
+        sheet::DataPilotTableHeaderData aData;
+        ScAddress aCellPos(nCol, nRow, nTab);
+        pDPObj->GetHeaderPositionData(aCellPos, aData);
+        ScDPObject aNewObj(*pDPObj);
+        pDPObj->ToggleDetails(aData, &aNewObj);
+        ScDBDocFunc aFunc(*mrViewData.GetDocShell());
+        aFunc.DataPilotUpdate(pDPObj, &aNewObj, true, false);
     }
 }
 
@@ -369,6 +424,39 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     return false;
 }
 
+bool ScGridWindow::DPTestMultiFieldPopupArrow(
+    const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
+{
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
+
+    // Get the geometry of the cell.
+    Point aScrPos = mrViewData.GetScrPos(rPos.Col(), rPos.Row(), eWhich);
+    tools::Long nSizeX, nSizeY;
+    mrViewData.GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
+    Size aScrSize(nSizeX - 1, nSizeY - 1);
+
+    // Check if the mouse cursor is clicking on the popup arrow box.
+    ScDPFieldButton aBtn(GetOutDev(), &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
+    aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
+    aBtn.setDrawPopupButtonMulti(true);
+    Point aPopupPos;
+    Size aPopupSize;
+    aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
+    tools::Rectangle aRect(aPopupPos, aPopupSize);
+    if (aRect.Contains(rMEvt.GetPosPixel()))
+    {
+        DataPilotFieldOrientation nOrient;
+        pDPObj->GetHeaderDim(rPos, nOrient);
+        // Mouse cursor inside the popup arrow box.  Launch the multi-field menu.
+        DPLaunchMultiFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, pDPObj, nOrient);
+        return true;
+    }
+
+    return false;
+}
+
 namespace {
 
 struct DPFieldPopupData : public ScCheckListMenuControl::ExtendedData
@@ -376,6 +464,12 @@ struct DPFieldPopupData : public ScCheckListMenuControl::ExtendedData
     ScDPLabelData   maLabels;
     ScDPObject*     mpDPObj;
     tools::Long            mnDim;
+};
+
+struct DPMultiFieldPopupData : public DPFieldPopupData
+{
+    std::vector<tools::Long> maFieldIndices;
+    std::vector<OUString>    maFieldNames;
 };
 
 class DPFieldPopupOKAction : public ScCheckListMenuControl::Action
@@ -387,6 +481,21 @@ public:
     virtual bool execute() override
     {
         mpGridWindow->UpdateDPFromFieldPopupMenu();
+        return true;
+    }
+private:
+    VclPtr<ScGridWindow> mpGridWindow;
+};
+
+class DPFieldChangedAction : public ScCheckListMenuControl::Action
+{
+public:
+    explicit DPFieldChangedAction(ScGridWindow* p) :
+        mpGridWindow(p) {}
+
+    virtual bool execute() override
+    {
+        mpGridWindow->UpdateDPPopupMenuForFieldChange();
         return true;
     }
 private:
@@ -445,53 +554,104 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
     DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);
 }
 
-void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
-                                          tools::Long nDimIndex, ScDPObject* pDPObj)
+bool lcl_FillDPFieldPopupData(tools::Long nDimIndex, ScDPObject* pDPObj,
+                              DPFieldPopupData& rDPData, bool& bDimOrientNotPage)
 {
-    std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
-    pDPData->mnDim = nDimIndex;
+    if (!pDPObj)
+        return false;
+
+    rDPData.mnDim = nDimIndex;
     pDPObj->GetSource();
 
     bool bIsDataLayout;
-    OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    OUString aDimName = pDPObj->GetDimName(rDPData.mnDim, bIsDataLayout);
     pDPObj->BuildAllDimensionMembers();
     const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     const ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(aDimName);
     if (!pDim)
         // This should never happen.
-        return;
+        return false;
 
-    bool bDimOrientNotPage = pDim->GetOrientation() != DataPilotFieldOrientation_PAGE;
+    bDimOrientNotPage = pDim->GetOrientation() != DataPilotFieldOrientation_PAGE;
 
     // We need to get the list of field members.
-    pDPObj->FillLabelData(pDPData->mnDim, pDPData->maLabels);
-    pDPData->mpDPObj = pDPObj;
+    pDPObj->FillLabelData(rDPData.mnDim, rDPData.maLabels);
+    rDPData.mpDPObj = pDPObj;
 
-    const ScDPLabelData& rLabelData = pDPData->maLabels;
+    return true;
+}
+
+void ScGridWindow::DPLaunchMultiFieldPopupMenu(const Point& rScreenPosition, const Size& rScreenSize,
+                                               ScDPObject* pDPObj, DataPilotFieldOrientation nOrient)
+{
+    if (!pDPObj)
+        return;
+
+    pDPObj->GetSource();
+
+    std::unique_ptr<DPMultiFieldPopupData> pDPData(new DPMultiFieldPopupData);
+    pDPObj->GetFieldIdsNames(nOrient, pDPData->maFieldIndices, pDPData->maFieldNames);
+
+    if (pDPData->maFieldIndices.empty())
+        return;
+
+    tools::Long nDimIndex = pDPData->maFieldIndices[0];
+
+    bool bDimOrientNotPage = true;
+    if (!lcl_FillDPFieldPopupData(nDimIndex, pDPObj, *pDPData, bDimOrientNotPage))
+        return;
 
     mpDPFieldPopup.reset();
 
     weld::Window* pPopupParent = GetFrameWeld();
     mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
-                                                    false, -1));
+                                                    false, -1, true));
 
-    mpDPFieldPopup->setExtendedData(std::move(pDPData));
-    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
+    mpDPFieldPopup->addFields(pDPData->maFieldNames);
+    DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj, true);
+
+    DPConfigFieldPopup();
+
+    if (IsMouseCaptured())
+        ReleaseMouse();
+
+    tools::Rectangle aCellRect(rScreenPosition, rScreenSize);
+    mpDPFieldPopup->launch(pPopupParent, aCellRect);
+}
+
+void ScGridWindow::DPPopulateFieldMembers(const ScDPLabelData& rLabelData)
+{
+    // Populate field members.
+    size_t n = rLabelData.maMembers.size();
+    mpDPFieldPopup->setMemberSize(n);
+    for (size_t i = 0; i < n; ++i)
     {
-        // Populate field members.
-        size_t n = rLabelData.maMembers.size();
-        mpDPFieldPopup->setMemberSize(n);
-        for (size_t i = 0; i < n; ++i)
-        {
-            const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
-            OUString aName = rMem.getDisplayName();
-            if (aName.isEmpty())
-                // Use special string for an empty name.
-                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible, false);
-            else
-                mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible, false);
-        }
+        const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
+        OUString aName = rMem.getDisplayName();
+        if (aName.isEmpty())
+            // Use special string for an empty name.
+            mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible, false);
+        else
+            mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible, false);
     }
+}
+
+void ScGridWindow::DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::ExtendedData> pDPData,
+                                     bool bDimOrientNotPage, ScDPObject* pDPObj,
+                                     bool bMultiField)
+{
+    if (!mpDPFieldPopup || !pDPObj)
+        return;
+
+    const ScDPLabelData& rLabelData = static_cast<DPFieldPopupData*>(pDPData.get())->maLabels;
+    const tools::Long nDimIndex = static_cast<DPFieldPopupData*>(pDPData.get())->mnDim;
+    mpDPFieldPopup->setExtendedData(std::move(pDPData));
+
+    if (bMultiField)
+        mpDPFieldPopup->setFieldChangedAction(new DPFieldChangedAction(this));
+
+    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
+    DPPopulateFieldMembers(rLabelData);
 
     if (bDimOrientNotPage)
     {
@@ -531,15 +691,74 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     }
 
     mpDPFieldPopup->initMembers();
+}
 
-    tools::Rectangle aCellRect(rScrPos, rScrSize);
+void ScGridWindow::DPConfigFieldPopup()
+{
+    if (!mpDPFieldPopup)
+        return;
+
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
     mpDPFieldPopup->setConfig(aConfig);
+}
+
+void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
+                                          tools::Long nDimIndex, ScDPObject* pDPObj)
+{
+    std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
+    bool bDimOrientNotPage = true;
+    if (!lcl_FillDPFieldPopupData(nDimIndex, pDPObj, *pDPData, bDimOrientNotPage))
+        return;
+
+    mpDPFieldPopup.reset();
+
+    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
+    if (comphelper::LibreOfficeKit::isActive())
+        pNotifier = SfxViewShell::Current();
+
+    weld::Window* pPopupParent = GetFrameWeld();
+    mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
+                                                    false, -1, pNotifier));
+
+    DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj);
+
+    DPConfigFieldPopup();
+
     if (IsMouseCaptured())
         ReleaseMouse();
+
+    tools::Rectangle aCellRect(rScrPos, rScrSize);
     mpDPFieldPopup->launch(pPopupParent, aCellRect);
+}
+
+void ScGridWindow::UpdateDPPopupMenuForFieldChange()
+{
+    if (!mpDPFieldPopup)
+        return;
+
+    DPMultiFieldPopupData* pDPData = static_cast<DPMultiFieldPopupData*>(mpDPFieldPopup->getExtendedData());
+    if (!pDPData)
+        return;
+
+    if (pDPData->maFieldIndices.empty())
+        return;
+
+    tools::Long nIndex = mpDPFieldPopup->getField();
+    tools::Long nDimIndex = pDPData->maFieldIndices[nIndex];
+    if (nDimIndex == pDPData->mnDim)
+        return;
+
+    bool bDimOrientNotPage = true;
+    if (!lcl_FillDPFieldPopupData(nDimIndex, pDPData->mpDPObj, *pDPData, bDimOrientNotPage))
+        return;
+
+    mpDPFieldPopup->clearMembers();
+
+    DPPopulateFieldMembers(pDPData->maLabels);
+
+    mpDPFieldPopup->initMembers();
 }
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()

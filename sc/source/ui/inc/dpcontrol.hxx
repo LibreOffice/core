@@ -43,15 +43,19 @@ public:
     void setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL);
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
+    void setDrawPopupButtonMulti(bool b);
+    void setDrawToggleButton(bool b, bool bCollapse, sal_Int32 nIndent);
     void setHasHiddenMember(bool b);
     void setPopupPressed(bool b);
     void setPopupLeft(bool b);
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
+    void getToggleBoundingBox(Point& rPos, Size& rSize) const;
 
 private:
     void drawPopupButton();
+    void drawToggleButton();
 
 private:
     Point                   maPos;
@@ -61,8 +65,12 @@ private:
     ScDocument*             mpDoc;
     VclPtr<OutputDevice>    mpOutDev;
     const StyleSettings*    mpStyle;
+    sal_Int32               mnToggleIndent;
     bool                    mbBaseButton;
     bool                    mbPopupButton;
+    bool                    mbPopupButtonMulti;
+    bool                    mbToggleButton;
+    bool                    mbToggleCollapse;
     bool                    mbHasHiddenMember;
     bool                    mbPopupPressed;
     bool                    mbPopupLeft;

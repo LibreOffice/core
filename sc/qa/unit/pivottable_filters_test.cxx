@@ -84,6 +84,7 @@ public:
     void testPivotTableDuplicatedMemberFilterXLSX();
     void testPivotTableTabularModeXLSX();
     void testPivotTableDuplicateFields();
+    void testPivotTableCompactLayoutXLSX();
     void testTdf112106();
     void testTdf123923();
     void testTdf123939();
@@ -138,6 +139,7 @@ public:
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
     CPPUNIT_TEST(testPivotTableTabularModeXLSX);
     CPPUNIT_TEST(testPivotTableDuplicateFields);
+    CPPUNIT_TEST(testPivotTableCompactLayoutXLSX);
     CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST(testTdf123923);
     CPPUNIT_TEST(testTdf123939);
@@ -520,26 +522,22 @@ void ScPivotTableFiltersTest::testPivotTableSharedNestedDateGroupXLSX()
     auto testThis = [](ScDocument& rDoc) {
         // Check whether right date groups are imported for both tables
         // First table
-        CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(0, 3, 1)));
+        // Years, Quarters, 'a' have compact layout so the only header contains a multi-field filter.
         CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0, 4, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0, 11, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0, 18, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0, 21, 1)));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(1, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(2, 3, 1)));
 
         // Second table
-        CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(6, 3, 1)));
+        // Years, Quarters, 'a' have compact layout so the only row header contains a multi-field filter.
         CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(6, 4, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(6, 11, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(6, 18, 1)));
         CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(6, 21, 1)));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(7, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(8, 3, 1)));
 
         // There should be exactly 2 pivot tables and 1 cache.
         ScDPCollection* pDPs = rDoc.GetDPCollection();
@@ -2633,6 +2631,71 @@ void ScPivotTableFiltersTest::testTdf73845()
             }
         }
     }
+}
+
+void ScPivotTableFiltersTest::testPivotTableCompactLayoutXLSX()
+{
+    auto testThis = [](ScDocument& rDoc) {
+        ScDPCollection* pDPs = rDoc.GetDPCollection();
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one pivot table instance.", size_t(1),
+                                     pDPs->GetCount());
+
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
+        const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        CPPUNIT_ASSERT_MESSAGE("The show expand/collapse buttons option must be true",
+                               pSaveData->GetExpandCollapse());
+
+        CPPUNIT_ASSERT_EQUAL(OUString("Row Labels"), rDoc.GetString(ScAddress(10, 1, 0)));
+
+        // Check some row fields
+        struct RowFieldLabel
+        {
+            OUString aContent;
+            ScAddress aAddr;
+            bool bIndented;
+        };
+
+        constexpr int nCases = 6;
+        const RowFieldLabel aCases[nCases] = {
+            { "aaa", ScAddress(10, 2, 0), true },
+
+            { "bbb", ScAddress(10, 3, 0), true },
+
+            { "ccc", ScAddress(10, 4, 0), true },
+
+            { "aax", ScAddress(10, 10, 0), true },
+
+            { "bbx", ScAddress(10, 14, 0), true },
+
+            { "ccc", ScAddress(10, 15, 0), true },
+        };
+
+        for (int nCaseNum = 0; nCaseNum < nCases; ++nCaseNum)
+        {
+            auto& rCase = aCases[nCaseNum];
+            CPPUNIT_ASSERT_EQUAL(rCase.aContent, rDoc.GetString(rCase.aAddr));
+            const ScIndentItem* pIndent = rDoc.GetAttr(rCase.aAddr, ATTR_INDENT);
+            if (rCase.bIndented)
+                CPPUNIT_ASSERT(pIndent && pIndent->GetValue() > 0);
+            else
+                CPPUNIT_ASSERT(!pIndent || pIndent->GetValue() == 0);
+        }
+
+        // check col fields
+        CPPUNIT_ASSERT_EQUAL(OUString("ddd"), rDoc.GetString(ScAddress(11, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("ddx"), rDoc.GetString(ScAddress(12, 1, 0)));
+    };
+
+    createScDoc("xlsx/pivot-table/pivotcompact.xlsx");
+    testThis(*getScDoc());
+
+    saveAndReload("calc8");
+    testThis(*getScDoc());
+
+    saveAndReload("Calc Office Open XML");
+    testThis(*getScDoc());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);

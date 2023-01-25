@@ -291,6 +291,7 @@
                           <item translatable="yes" context="datafieldoptionsdialog|layout">Tabular layout</item>
                           <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the top</item>
                           <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the bottom</item>
+                          <item translatable="yes" context="datafieldoptionsdialog|layout">Compact layout</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="layout-atkobject">

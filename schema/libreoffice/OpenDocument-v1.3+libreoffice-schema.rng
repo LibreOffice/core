@@ -2463,6 +2463,29 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+    <!-- TODO no proposal -->
+  <rng:define name="table-data-pilot-table-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:show-drill-down-buttons">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal for pivot table compact layout-->
+  <rng:define name="table-data-pilot-layout-info-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:layout-mode">
+        <rng:choice>
+          <rng:value>tabular-layout</rng:value>
+          <rng:value>outline-subtotals-top</rng:value>
+          <rng:value>outline-subtotals-bottom</rng:value>
+          <rng:value>compact-layout</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
     <!-- TODO no proposal, 9009663d -->
   <rng:define name="chart-chart-attlist" combine="interleave">
     <rng:optional>

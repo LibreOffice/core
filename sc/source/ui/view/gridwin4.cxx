@@ -2173,7 +2173,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             }
         }
 
-        if ( pRowInfo[nArrY].bPivotButton && pRowInfo[nArrY].bChanged )
+        if ( (pRowInfo[nArrY].bPivotToggle || pRowInfo[nArrY].bPivotButton) && pRowInfo[nArrY].bChanged )
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
             nRow = pThisRowInfo->nRowNo;
@@ -2191,12 +2191,22 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                 tools::Long nPosY = aScrPos.Y();
                 // bLayoutRTL is handled in setBoundingBox
 
-                OUString aStr = rDoc.GetString(nCol, nRow, nTab);
-                aCellBtn.setText(aStr);
+                bool bDrawToggle = pInfo->bPivotCollapseButton || pInfo->bPivotExpandButton;
+                if (!bDrawToggle)
+                {
+                    OUString aStr = rDoc.GetString(nCol, nRow, nTab);
+                    aCellBtn.setText(aStr);
+                }
+
+                sal_uInt16 nIndent = 0;
+                if (const ScIndentItem* pIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT))
+                    nIndent = pIndentItem->GetValue();
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                 aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
                 aCellBtn.setDrawPopupButton(pInfo->bPivotPopupButton);
+                aCellBtn.setDrawPopupButtonMulti(pInfo->bPivotPopupButtonMulti);
+                aCellBtn.setDrawToggleButton(bDrawToggle, pInfo->bPivotCollapseButton, nIndent);
                 aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
                 aCellBtn.draw();
             }

@@ -101,7 +101,9 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     bool            bSourceCellRange:1;
     bool            bShowFilter:1;
     bool            bDrillDown:1;
+    bool            bShowExpandCollapse:1;
     bool            bHeaderGridLayout:1;
+    bool            bHasCompactField:1; // True = One or more fields have compact layout.
 
     SelectedPagesType maSelectedPages;
 
@@ -134,6 +136,7 @@ public:
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
     void SetButtons(ScDPObject* pDPObject);
     void SetSelectedPage( const OUString& rDimName, const OUString& rSelected );
+    void SetHasCompactField() { bHasCompactField = true; }
 };
 
 class ScXMLDPSourceSQLContext : public ScXMLImportContext
@@ -267,7 +270,7 @@ public:
     void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
     void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (xDim) xDim->SetAutoShowInfo(&aInfo); }
     void SetSortInfo(const css::sheet::DataPilotFieldSortInfo& aInfo) { if (xDim) xDim->SetSortInfo(&aInfo); }
-    void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo& aInfo) { if (xDim) xDim->SetLayoutInfo(&aInfo); }
+    void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo& aInfo);
     void SetGrouping(const OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
         sal_Int32 nPart, bool bDate, bool bAutoSt, bool bAutoE)
     {

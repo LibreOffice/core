@@ -92,6 +92,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxCheckIdentifyCategories(m_xBuilder->weld_check_button("check-identify-categories"))
     , mxCheckTotalRows(m_xBuilder->weld_check_button("check-total-rows"))
     , mxCheckDrillToDetail(m_xBuilder->weld_check_button("check-drill-to-details"))
+    , mxCheckExpandCollapse(m_xBuilder->weld_check_button("check-show-expand-collapse"))
     , mxSourceRadioNamedRange(m_xBuilder->weld_radio_button("source-radio-named-range"))
     , mxSourceRadioSelection(m_xBuilder->weld_radio_button("source-radio-selection"))
     , mxSourceListBox(m_xBuilder->weld_combo_box("source-list"))
@@ -168,11 +169,13 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     {
         mxCheckAddFilter->set_active(false);
         mxCheckDrillToDetail->set_active(false);
+        mxCheckExpandCollapse->set_active(false);
     }
     else
     {
         mxCheckAddFilter->set_active(pSaveData->GetFilterButton());
         mxCheckDrillToDetail->set_active(pSaveData->GetDrillDown());
+        mxCheckExpandCollapse->set_active(pSaveData->GetExpandCollapse());
     }
 
     mxCheckIgnoreEmptyRows->set_active(maPivotParameters.bIgnoreEmptyRows);
@@ -520,6 +523,7 @@ void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
     rSaveData.SetRowGrand(mxCheckTotalRows->get_active());
     rSaveData.SetFilterButton(mxCheckAddFilter->get_active());
     rSaveData.SetDrillDown(mxCheckDrillToDetail->get_active());
+    rSaveData.SetExpandCollapse(mxCheckExpandCollapse->get_active());
 
     Reference<XDimensionsSupplier> xSource = maPivotTableObject.GetSource();
 

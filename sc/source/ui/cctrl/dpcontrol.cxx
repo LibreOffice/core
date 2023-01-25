@@ -32,8 +32,12 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
+    mnToggleIndent(0),
     mbBaseButton(true),
     mbPopupButton(false),
+    mbPopupButtonMulti(false),
+    mbToggleButton(false),
+    mbToggleCollapse(false),
     mbHasHiddenMember(false),
     mbPopupPressed(false),
     mbPopupLeft(false)
@@ -72,6 +76,18 @@ void ScDPFieldButton::setDrawBaseButton(bool b)
 void ScDPFieldButton::setDrawPopupButton(bool b)
 {
     mbPopupButton = b;
+}
+
+void ScDPFieldButton::setDrawPopupButtonMulti(bool b)
+{
+    mbPopupButtonMulti = b;
+}
+
+void ScDPFieldButton::setDrawToggleButton(bool b, bool bCollapse, sal_Int32 nIndent)
+{
+    mbToggleButton = b;
+    mbToggleCollapse = bCollapse;
+    mnToggleIndent = nIndent;
 }
 
 void ScDPFieldButton::setHasHiddenMember(bool b)
@@ -140,8 +156,11 @@ void ScDPFieldButton::draw()
         mpOutDev->Pop();
     }
 
-    if (mbPopupButton)
+    if (mbPopupButton || mbPopupButtonMulti)
         drawPopupButton();
+
+    if (mbToggleButton)
+        drawToggleButton();
 
     mpOutDev->EnableMapMode(bOldMapEnabled);
 }
@@ -172,6 +191,34 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     rPos.setY(maPos.getY() + maSize.getHeight() - nH);
     rSize.setWidth(nW);
     rSize.setHeight(nH);
+}
+
+void ScDPFieldButton::getToggleBoundingBox(Point& rPos, Size& rSize) const
+{
+    const float fScaleFactor = mpOutDev->GetDPIScaleFactor();
+
+    tools::Long nMaxSize = 13 * fScaleFactor; // Button max size in either dimension
+    tools::Long nMargin = 3 * fScaleFactor;
+
+    tools::Long nIndent = fScaleFactor * o3tl::convert(mnToggleIndent, o3tl::Length::twip, o3tl::Length::px);
+    tools::Long nW = std::min(maSize.getWidth() / 2, nMaxSize);
+    tools::Long nH = std::min(maSize.getHeight(),    nMaxSize);
+    nIndent = std::min(nIndent, maSize.getWidth());
+
+    double fZoom = static_cast<double>(maZoomY) > 1.0 ? static_cast<double>(maZoomY) : 1.0;
+    if (fZoom > 1.0)
+    {
+        nW = fZoom * (nW - 1);
+        nH = fZoom * (nH - 1);
+        nIndent = fZoom * (nIndent -1);
+        nMargin = fZoom * (nMargin - 1);
+    }
+
+    // FIXME: RTL case ?
+    rPos.setX(maPos.getX() + nIndent - nW + nMargin);
+    rPos.setY(maPos.getY() + maSize.getHeight() / 2 - nH / 2 + nMargin);
+    rSize.setWidth(nW - nMargin - 1);
+    rSize.setHeight(nH - nMargin - 1);
 }
 
 void ScDPFieldButton::drawPopupButton()
@@ -223,6 +270,31 @@ void ScDPFieldButton::drawPopupButton()
         Point aBoxPos(aPos.X() + aSize.Width() - 5 * fScaleFactor, aPos.Y() + aSize.Height() - 5 * fScaleFactor);
         Size aBoxSize(3 * fScaleFactor, 3 * fScaleFactor);
         mpOutDev->DrawRect(tools::Rectangle(aBoxPos, aBoxSize));
+    }
+}
+
+void ScDPFieldButton::drawToggleButton()
+{
+    Point aPos;
+    Size aSize;
+    getToggleBoundingBox(aPos, aSize);
+
+    // Background & outer black border
+    mpOutDev->SetLineColor(COL_BLACK);
+    mpOutDev->SetFillColor();
+    mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
+
+    Point aCenter(aPos.X() + aSize.getWidth() / 2, aPos.Y() + aSize.getHeight() / 2);
+
+    mpOutDev->DrawLine(
+        Point(aPos.X() + 2, aCenter.Y()),
+        Point(aPos.X() + aSize.getWidth() - 2, aCenter.Y()));
+
+    if (!mbToggleCollapse)
+    {
+        mpOutDev->DrawLine(
+            Point(aCenter.X(), aPos.Y() + 2),
+            Point(aCenter.X(), aPos.Y() + aSize.getHeight() - 2));
     }
 }
 

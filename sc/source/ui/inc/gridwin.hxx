@@ -85,6 +85,7 @@ class ScLokRTLContext;
 namespace sdr::overlay { class OverlayObjectList; }
 
 class ScFilterListBox;
+struct ScDPLabelData;
 
 class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTargetHelper, public DragSourceHelper
 {
@@ -226,7 +227,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     bool            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-    void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup );
+    void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField );
+    void DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
@@ -239,8 +241,15 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
      *         mouse event handling is necessary, false otherwise.
      */
     bool DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj);
+    bool DPTestMultiFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj);
 
+    void DPPopulateFieldMembers(const ScDPLabelData& rLabelData);
+    void DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::ExtendedData> pDPData, bool bDimOrientNotPage,
+                           ScDPObject* pDPObj, bool bMultiField = false);
+    void DPConfigFieldPopup();
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
+    void DPLaunchMultiFieldPopupMenu(const Point& rScrPos, const Size& rScrSize, ScDPObject* pDPObj,
+                                     css::sheet::DataPilotFieldOrientation nOrient);
 
     void            RFMouseMove( const MouseEvent& rMEvt, bool bUp );
 
@@ -444,6 +453,7 @@ public:
 
     void            CheckNeedsRepaint();
 
+    void            UpdateDPPopupMenuForFieldChange();
     void            UpdateDPFromFieldPopupMenu();
     bool            UpdateVisibleRange();
 

@@ -2570,6 +2570,7 @@ namespace xmloff::token {
         XML_TABULAR_LAYOUT,
         XML_OUTLINE_SUBTOTALS_TOP,
         XML_OUTLINE_SUBTOTALS_BOTTOM,
+        XML_COMPACT_LAYOUT,
         XML_LAYOUT_MODE,
         XML_DATA_PILOT_LAYOUT_INFO,
 
@@ -2755,6 +2756,7 @@ namespace xmloff::token {
 
         XML_SHOW_FILTER_BUTTON,
         XML_DRILL_DOWN_ON_DOUBLE_CLICK,
+        XML_SHOW_DRILL_DOWN_BUTTONS,
         XML_HEADER_GRID_LAYOUT,
         XML_GROUPED_BY,
         XML_DAYS,

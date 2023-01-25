@@ -41,10 +41,13 @@ enum class ScMF {
     ButtonPopup    = 0x0020,  /// dp button with popup arrow
     HiddenMember   = 0x0040,  /// dp field button with presence of hidden member
     DpTable        = 0x0080,  /// dp table output
-    All            = 0x00FF
+    DpCollapse     = 0x0100,  /// dp compact layout collapse button
+    DpExpand       = 0x0200,  /// dp compact layout expand button
+    ButtonPopup2   = 0x0400,  /// dp button with popup arrow for multiple fields
+    All            = 0x07FF
 };
 namespace o3tl {
-    template<> struct typed_flags<ScMF> : is_typed_flags<ScMF, 0xff> {};
+    template<> struct typed_flags<ScMF> : is_typed_flags<ScMF, 0x07ff> {};
 }
 
 class EditTextObject;
@@ -106,6 +109,8 @@ public:
 
     bool    HasPivotButton() const;
     bool    HasPivotPopupButton() const;
+    bool    HasPivotToggle() const;
+    bool    HasPivotMultiFieldPopupButton() const;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -139,6 +139,9 @@ struct ScCellInfo
         , bFilterActive(false)
         , bPrinted(false)       // view-internal
         , bHideGrid(false)      // view-internal
+        , bPivotCollapseButton(false)
+        , bPivotExpandButton(false)
+        , bPivotPopupButtonMulti(false)
     {
     }
 
@@ -178,6 +181,9 @@ struct ScCellInfo
     bool                        bFilterActive:1;
     bool                        bPrinted : 1;               // when required (pagebreak mode)
     bool                        bHideGrid : 1;              // output-internal
+    bool                        bPivotCollapseButton : 1;   // dp compact layout collapse button
+    bool                        bPivotExpandButton : 1;     // dp compact layout expand button
+    bool                        bPivotPopupButtonMulti : 1; // dp button with popup arrow for multiple fields
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
@@ -237,6 +243,7 @@ struct RowInfo
     bool                bAutoFilter:1;
     bool                bPivotButton:1;
     bool                bChanged:1;           // TRUE, if not tested
+    bool                bPivotToggle:1;
 
 private:
     // This class allocates ScCellInfo with also one item extra before and after.

@@ -124,7 +124,7 @@ public:
     };
 
     ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
-                           bool bTreeMode, int nWidth);
+                           bool bTreeMode, int nWidth, bool bIsMultiField = false);
     ~ScCheckListMenuControl();
 
     void addMenuItem(const OUString& rText, Action* pAction);
@@ -138,6 +138,7 @@ public:
     void addDateMember(const OUString& rName, double nVal, bool bVisible, bool bHiddenByOtherFilter);
     void addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter,
                    bool bValue = false);
+    void clearMembers();
     size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 
@@ -172,6 +173,7 @@ public:
 
     void setOKAction(Action* p);
     void setPopupEndAction(Action* p);
+    void setFieldChangedAction(Action* p);
 
     int GetTextWidth(const OUString& rsName) const;
     int IncreaseWindowWidthToFitText(int nMaxTextWidth);
@@ -183,6 +185,9 @@ public:
     void terminateAllPopupMenus();
 
     void endSubMenu(ScListSubMenuControl& rSubMenu);
+
+    void addFields(const std::vector<OUString>& aFields);
+    tools::Long getField();
 private:
 
     std::vector<MenuItemData>         maMenuItems;
@@ -233,6 +238,8 @@ private:
 
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
 
+    DECL_LINK(ComboChangedHdl, weld::ComboBox&, void);
+
     DECL_LINK(EdModifyHdl, weld::Entry&, void);
     DECL_LINK(EdActivateHdl, weld::Entry&, bool);
 
@@ -262,6 +269,8 @@ private:
     std::unique_ptr<weld::TreeView> mxMenu;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Widget> mxNonMenu;
+    std::unique_ptr<weld::Label> mxFieldsComboLabel;
+    std::unique_ptr<weld::ComboBox> mxFieldsCombo;
     std::unique_ptr<weld::Entry> mxEdSearch;
     std::unique_ptr<weld::Widget> mxBox;
     std::unique_ptr<weld::TreeView> mxListChecks;
@@ -286,6 +295,7 @@ private:
     std::unique_ptr<ExtendedData> mxExtendedData;
     std::unique_ptr<Action>       mxOKAction;
     std::unique_ptr<Action>       mxPopupEndAction;
+    std::unique_ptr<Action>       mxFieldChangedAction;
 
     Config maConfig;
     Size maAllocatedSize;
@@ -321,6 +331,8 @@ private:
 
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
+
+    bool mbIsMultiField;
 };
 
 class ScListSubMenuControl final

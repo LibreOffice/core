@@ -155,6 +155,8 @@
 #define STR_PIVOT_TOTAL                         NC_("STR_PIVOT_TOTAL", "Total")
 #define STR_PIVOT_DATA                          NC_("STR_PIVOT_DATA", "Data")
 #define STR_PIVOT_GROUP                         NC_("STR_PIVOT_GROUP", "Group")
+#define STR_PIVOT_ROW_LABELS                    NC_("STR_PIVOT_ROW_LABELS", "Row Labels")
+#define STR_PIVOT_COL_LABELS                    NC_("STR_PIVOT_COL_LABELS", "Column Labels")
 /* To translators: $1 == will be replaced by STR_SELCOUNT_ROWARG, and $2 by STR_SELCOUNT_COLARG
    e.g. Selected: 1 row, 2 columns */
 #define STR_SELCOUNT                            NC_("STR_SELCOUNT", "Selected: $1, $2")

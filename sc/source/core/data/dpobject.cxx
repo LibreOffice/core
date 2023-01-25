@@ -526,7 +526,7 @@ void ScDPObject::CreateOutput()
         return;
 
     bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-    pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
+    pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton, pSaveData ? pSaveData->GetExpandCollapse() : false ) );
     pOutput->SetHeaderLayout ( mbHeaderLayout );
 
     sal_Int32 nOldRows = nHeaderRows;
@@ -2479,6 +2479,34 @@ void ScDPObject::FillLabelData(ScPivotParam& rParam)
         ScDPLabelData* pNewLabel = new ScDPLabelData;
         FillLabelDataForDimension(xDims, nDim, *pNewLabel);
         rParam.maLabelArray.push_back(std::unique_ptr<ScDPLabelData>(pNewLabel));
+    }
+}
+
+void ScDPObject::GetFieldIdsNames(sheet::DataPilotFieldOrientation nOrient, std::vector<tools::Long>& rIndices,
+                                     std::vector<OUString>& rNames)
+{
+    CreateObjects();
+    if (!xSource.is())
+        return;
+
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
+    tools::Long nDimCount = xDims->getCount();
+    for (tools::Long nDim = 0; nDim < nDimCount; ++nDim)
+    {
+        uno::Reference<uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xDimName(xIntDim, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xDimProp(xIntDim, uno::UNO_QUERY);
+
+        sheet::DataPilotFieldOrientation nDimOrient = ScUnoHelpFunctions::GetEnumProperty(
+                            xDimProp, SC_UNO_DP_ORIENTATION,
+                            sheet::DataPilotFieldOrientation_HIDDEN );
+
+        if ( xDimProp.is() && nDimOrient == nOrient)
+        {
+            rIndices.push_back(nDim);
+            rNames.push_back(xDimName->getName());
+        }
     }
 }
 

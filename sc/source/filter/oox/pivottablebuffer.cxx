@@ -201,6 +201,7 @@ PTFieldModel::PTFieldModel() :
     mbShowAll( true ),
     mbOutline( true ),
     mbSubtotalTop( true ),
+    mbCompact( false ),
     mbInsertBlankRow( false ),
     mbInsertPageBreak( false ),
     mbAutoShow( false ),
@@ -286,6 +287,7 @@ void PivotTableField::importPivotField( const AttributeList& rAttribs )
     maModel.mbShowAll         = rAttribs.getBool( XML_showAll, true );
     maModel.mbOutline         = rAttribs.getBool( XML_outline, true );
     maModel.mbSubtotalTop     = rAttribs.getBool( XML_subtotalTop, true );
+    maModel.mbCompact         = maModel.mbSubtotalTop && maModel.mbOutline && rAttribs.getBool( XML_compact, true );
     maModel.mbInsertBlankRow  = rAttribs.getBool( XML_insertBlankRow, false );
     maModel.mbInsertPageBreak = rAttribs.getBool( XML_insertPageBreak, false );
     maModel.mbAutoShow        = rAttribs.getBool( XML_autoShow, false );
@@ -708,9 +710,22 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
 
             // layout settings
             DataPilotFieldLayoutInfo aLayoutInfo;
-            aLayoutInfo.LayoutMode = maModel.mbOutline ?
-                (maModel.mbSubtotalTop ? DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP : DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM) :
-                DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+            if (maModel.mbCompact)
+            {
+                aLayoutInfo.LayoutMode = DataPilotFieldLayoutMode::COMPACT_LAYOUT;
+            }
+            else if (maModel.mbOutline)
+            {
+                if (maModel.mbSubtotalTop)
+                    aLayoutInfo.LayoutMode = DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
+                else
+                    aLayoutInfo.LayoutMode = DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
+            }
+            else
+            {
+                aLayoutInfo.LayoutMode = DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+            }
+
             aLayoutInfo.AddEmptyLines = maModel.mbInsertBlankRow;
             aPropSet.setProperty( PROP_LayoutInfo, aLayoutInfo );
             aPropSet.setProperty( PROP_ShowEmpty, maModel.mbShowAll );
@@ -1255,6 +1270,9 @@ void PivotTable::finalizeImport()
         aDescProp.setProperty( PROP_RowGrand, maDefModel.mbRowGrandTotals );
         aDescProp.setProperty( PROP_ShowFilterButton, false );
         aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
+
+        if (auto* pSaveData = mpDPObject->GetSaveData())
+            pSaveData->SetExpandCollapse(maDefModel.mbShowDrill);
 
         // finalize all fields, this finds field names and creates grouping fields
         finalizeFieldsImport();

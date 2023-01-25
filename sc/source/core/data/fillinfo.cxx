@@ -225,6 +225,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
             pThisRowInfo->bChanged      = true;
             pThisRowInfo->bAutoFilter   = false;
             pThisRowInfo->bPivotButton  = false;
+            pThisRowInfo->bPivotToggle  = false;
             pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
 
             ++rArrRow;
@@ -507,6 +508,9 @@ void ScDocument::FillInfo(
                         bool bScenario(nOverlap & ScMF::Scenario);
                         bool bPivotPopupButton(nOverlap & ScMF::ButtonPopup);
                         bool bFilterActive(nOverlap & ScMF::HiddenMember);
+                        bool bPivotCollapseButton(nOverlap & ScMF::DpCollapse);
+                        bool bPivotExpandButton(nOverlap & ScMF::DpExpand);
+                        bool bPivotPopupButtonMulti(nOverlap & ScMF::ButtonPopup2);
                         if (bMerged||bHOverlapped||bVOverlapped)
                             bAnyMerged = true;                              // internal
 
@@ -538,8 +542,10 @@ void ScDocument::FillInfo(
                                     pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
                                     pThisRowInfo->bAutoFilter = true;
-                                if (bPivotButton || bPivotPopupButton)
+                                if (bPivotButton || bPivotPopupButton || bPivotPopupButtonMulti)
                                     pThisRowInfo->bPivotButton = true;
+                                if (bPivotCollapseButton || bPivotExpandButton)
+                                    pThisRowInfo->bPivotToggle = true;
 
                                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
                                 ScBasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
@@ -551,6 +557,9 @@ void ScDocument::FillInfo(
                                 pInfo->bAutoFilter  = bAutoFilter;
                                 pInfo->bPivotButton  = bPivotButton;
                                 pInfo->bPivotPopupButton = bPivotPopupButton;
+                                pInfo->bPivotCollapseButton = bPivotCollapseButton;
+                                pInfo->bPivotExpandButton = bPivotExpandButton;
+                                pInfo->bPivotPopupButtonMulti = bPivotPopupButtonMulti;
                                 pInfo->bFilterActive = bFilterActive;
                                 pInfo->pLinesAttr   = pLinesAttr;
                                 pInfo->mpTLBRLine   = pTLBRLine;

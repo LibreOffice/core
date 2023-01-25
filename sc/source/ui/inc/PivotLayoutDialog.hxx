@@ -60,6 +60,7 @@ private:
     std::unique_ptr<weld::CheckButton> mxCheckIdentifyCategories;
     std::unique_ptr<weld::CheckButton> mxCheckTotalRows;
     std::unique_ptr<weld::CheckButton> mxCheckDrillToDetail;
+    std::unique_ptr<weld::CheckButton> mxCheckExpandCollapse;
 
     std::unique_ptr<weld::RadioButton> mxSourceRadioNamedRange;
     std::unique_ptr<weld::RadioButton> mxSourceRadioSelection;
