@@ -19,6 +19,7 @@
 #include <format.hxx>
 #include <charatr.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 
 #include <sal/config.h>
@@ -234,7 +235,23 @@ ThemeColorChanger::~ThemeColorChanger() {}
 void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
 {
     SwDoc* pDocument = mpDocSh->GetDoc();
+    if (!pDocument)
+        return;
+
     pDocument->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+
+    SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    if (pTheme)
+    {
+        pTheme->SetColorSet(std::make_unique<svx::ColorSet>(rColorSet));
+    }
+    else
+    {
+        pPage->getSdrPageProperties().SetTheme(std::make_unique<svx::Theme>("Office"));
+        pTheme = pPage->getSdrPageProperties().GetTheme();
+        pTheme->SetColorSet(std::make_unique<svx::ColorSet>(rColorSet));
+    }
 
     SfxStyleSheetBasePool* pPool = mpDocSh->GetStyleSheetPool();
     SwDocStyleSheet* pStyle;
