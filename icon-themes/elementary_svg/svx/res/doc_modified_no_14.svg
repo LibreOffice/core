@@ -1,1 +1,130 @@
-<svg viewBox="0 0 14 10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(.24324 0 0 .35135 .157 -.427)" gradientUnits="userSpaceOnUse" x1="24" x2="24" y1="6.923" y2="41.077"><stop offset="0" stop-color="#fff"/><stop offset="0" stop-color="#fff" stop-opacity=".235"/><stop offset="1" stop-color="#fff" stop-opacity=".157"/><stop offset="1" stop-color="#fff" stop-opacity=".392"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="6.804" x2="7.026" y1="9.831" y2=".169"><stop offset="0" stop-opacity=".34"/><stop offset="1" stop-opacity=".247"/></linearGradient><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="6.306" x2="6.421" y1="2.619" y2="9.49"><stop offset="0" stop-color="#f4f4f4"/><stop offset="1" stop-color="#dbdbdb"/></linearGradient><path d="m4.006 8.996v-8l5.994.004v8z" fill="url(#c)"/><path d="m3.506 9.496v-9l7.007.004v9z" fill="none" stroke="url(#b)" stroke-linejoin="round" stroke-width="1.001"/><path d="m9.55 8.518-5.05-.038v-6.98l5.048.039z" fill="none" stroke="url(#a)" stroke-linecap="round"/><path d="m11 1.5-2.5 3-1.5-1.5-2 2 3.5 3.5 2.5-3z" fill="#fafafa"/><path d="m6.5 4.5 2 2 4-5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".34"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 14 14"
+   version="1.1"
+   id="svg31"
+   sodipodi:docname="doc_modified_no_14.svg"
+   width="14"
+   height="14"
+   inkscape:export-filename="doc_modified_no_14.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs35" />
+  <sodipodi:namedview
+     id="namedview33"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="23.6"
+     inkscape:cx="4.1313559"
+     inkscape:cy="5.1483051"
+     inkscape:window-width="1572"
+     inkscape:window-height="771"
+     inkscape:window-x="1862"
+     inkscape:window-y="107"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg31" />
+  <linearGradient
+     id="a"
+     gradientTransform="matrix(0.24324,0,0,0.35135,0.15700002,-0.427)"
+     gradientUnits="userSpaceOnUse"
+     x1="24"
+     x2="24"
+     y1="6.9229999"
+     y2="41.077">
+    <stop
+       offset="0"
+       stop-color="#fff"
+       id="stop2" />
+    <stop
+       offset="0"
+       stop-color="#fff"
+       stop-opacity=".235"
+       id="stop4" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".157"
+       id="stop6" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".392"
+       id="stop8" />
+  </linearGradient>
+  <linearGradient
+     id="b"
+     gradientUnits="userSpaceOnUse"
+     x1="6.8039999"
+     x2="7.026"
+     y1="9.8310003"
+     y2="0.169">
+    <stop
+       offset="0"
+       stop-opacity=".34"
+       id="stop11" />
+    <stop
+       offset="1"
+       stop-opacity=".247"
+       id="stop13" />
+  </linearGradient>
+  <linearGradient
+     id="c"
+     gradientUnits="userSpaceOnUse"
+     x1="6.3060002"
+     x2="6.421"
+     y1="2.619"
+     y2="9.4899998">
+    <stop
+       offset="0"
+       stop-color="#f4f4f4"
+       id="stop16" />
+    <stop
+       offset="1"
+       stop-color="#dbdbdb"
+       id="stop18" />
+  </linearGradient>
+  <path
+     d="m 3.0005,11.0005 v -8 l 5.994,0.004 v 8 z"
+     fill="url(#c)"
+     id="path21"
+     style="fill:url(#c)" />
+  <path
+     d="m 2.5005,11.5005 v -9 l 7.007,0.004 v 9 z"
+     fill="none"
+     stroke="url(#b)"
+     stroke-linejoin="round"
+     stroke-width="1.001"
+     id="path23"
+     style="stroke:url(#b)" />
+  <path
+     d="m 8.5445,10.5225 -5.05,-0.038 v -6.98 l 5.048,0.039 z"
+     fill="none"
+     stroke="url(#a)"
+     stroke-linecap="round"
+     id="path25"
+     style="stroke:url(#a)" />
+  <path
+     d="m 9.9945,3.5045 -2.5,3 -1.5,-1.5 -2,2 3.5,3.5 2.5,-3 z"
+     fill="#fafafa"
+     id="path27" />
+  <path
+     d="m 5.4945,6.5045 2,2 4,-5"
+     fill="none"
+     stroke="#000000"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-opacity="0.34"
+     id="path29" />
+</svg>
