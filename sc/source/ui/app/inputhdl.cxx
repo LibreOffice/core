@@ -1798,13 +1798,23 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     }
 }
 
-void ScInputHandler::LOKSendFormulabarUpdate(const SfxViewShell* pActiveViewSh,
+void ScInputHandler::LOKSendFormulabarUpdate(EditView* pActiveView,
+                                             const SfxViewShell* pActiveViewSh,
                                              const OUString& rText,
                                              const ESelection& rSelection)
 {
-    OUString aSelection =
-        OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos) + ";" +
-        OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
+    OUString aSelection;
+    if (pActiveView)
+    {
+        aSelection = OUString::number(pActiveView->GetPosWithField(0, rSelection.nStartPos)) + ";" +
+            OUString::number(pActiveView->GetPosWithField(0, rSelection.nEndPos)) + ";" +
+            OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
+    }
+    else
+    {
+        aSelection = OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos) + ";" +
+            OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
+    }
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)["action_type"] = "setText";
@@ -2793,7 +2803,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (pActiveView)
             aSel = pActiveView->GetSelection();
 
-        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh,
+        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh,
                                                 ScEditUtil::GetMultilineString(*mpEditEngine),
                                                 aSel);
     }
@@ -4269,7 +4279,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (aSel.nEndPara == EE_PARA_NOT_FOUND)
                             aSel.nEndPara = 0;
 
-                        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh, aString, aSel);
+                        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh, aString, aSel);
                         // TODO: deprecated?
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                     }
@@ -4433,7 +4443,7 @@ void ScInputHandler::InputSelection( const EditView* pView )
     {
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
-        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh, GetEditString(), aSel);
+        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh, GetEditString(), aSel);
     }
 }
 
