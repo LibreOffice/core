@@ -137,6 +137,7 @@ public:
     CustomShapePropertiesPtr&       getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
     OUString&                       getConnectorName() { return msConnectorName; }
+    std::vector<OUString>&          getConnectorAdjustments() { return maConnectorAdjustmentList; };
     ConnectorShapePropertiesList&   getConnectorShapeProperties() { return maConnectorShapePropertiesList; }
     void                            setConnectorShape(bool bConnector) { mbConnector = bConnector; }
     bool                            isConnectorShape() const { return mbConnector; }
@@ -329,6 +330,8 @@ protected:
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     css::awt::Size   maChSize;                 // only used for group shapes
     css::awt::Point  maChPosition;             // only used for group shapes
+
+    std::vector<OUString>       maConnectorAdjustmentList; // only used for connector shapes
 
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;

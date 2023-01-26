@@ -84,6 +84,7 @@ public:
 
     void testDocumentLayout();
     void testTdf152434();
+    void testStandardConnectors();
     void testConnectors();
     void testTdf153036_resizedConnectorL();
     void testTdf150719();
@@ -161,6 +162,7 @@ public:
 
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testTdf152434);
+    CPPUNIT_TEST(testStandardConnectors);
     CPPUNIT_TEST(testConnectors);
     CPPUNIT_TEST(testTdf153036_resizedConnectorL);
     CPPUNIT_TEST(testTdf150719);
@@ -355,12 +357,40 @@ void SdImportTest::testTdf152434()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
+void SdImportTest::testStandardConnectors()
+{
+    createSdImpressDoc("pptx/standardConnectors.pptx");
+
+    sal_Int32 aEdgeValue[] = { -1352, -2457, 3977, -2900, -1261, 4611, -1431, -2643, 3830, 3438 };
+
+    sal_Int32 nCount = 0;
+    sal_Int32 nEdgeLine = 0;
+    for (size_t i = 0; i < 10; i++)
+    {
+        uno::Reference<beans::XPropertySet> xConnector(getShapeFromPage(i, 0));
+        bool bConnector = xConnector->getPropertySetInfo()->hasPropertyByName("EdgeKind");
+        if (bConnector)
+        {
+            nEdgeLine = xConnector->getPropertyValue("EdgeLine1Delta").get<sal_Int32>();
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
+            nCount++;
+
+            nEdgeLine = xConnector->getPropertyValue("EdgeLine2Delta").get<sal_Int32>();
+            if (nEdgeLine != 0)
+            {
+                CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
+                nCount++;
+            }
+        }
+    }
+}
+
 void SdImportTest::testConnectors()
 {
     createSdImpressDoc("pptx/connectors.pptx");
 
-    sal_Int32 aEdgeValue[] = { -1123, -1123, -1547, 1432,  1356, -1357, 1604,  -1540,
-                               599,   1288,  -1629, -1052, -513, 1569,  -1283, 333 };
+    sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476,  1356, -1357, 1604,  -1540,
+                               607,   1296,  -1638, -1060, -522, 1578,  -1291, 333 };
 
     sal_Int32 nCount = 0;
     for (size_t i = 0; i < 18; i++)

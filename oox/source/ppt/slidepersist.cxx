@@ -386,7 +386,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
 {
     sal_Int32 nEdge = 0;
     awt::Point aStartPt, aEndPt;
-    tools::Rectangle aStartRect, aEndRect;
+    tools::Rectangle aS, aE; // Start, End rectangle
     uno::Reference<drawing::XShape> xStartSp, xEndSp;
     uno::Reference<beans::XPropertySet> xPropSet(rXConnector, uno::UNO_QUERY);
     xPropSet->getPropertyValue("EdgeStartPoint") >>= aStartPt;
@@ -401,80 +401,218 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
     SdrObject* pStartObj = xStartSp.is() ? SdrObject::getSdrObjectFromXShape(xStartSp) : nullptr;
     SdrObject* pEndObj = xEndSp.is() ? SdrObject::getSdrObjectFromXShape(xEndSp) : nullptr;
 
-    sal_Int32 nStartSpLineW = 0;
     sal_Int32 nStartA = -1;
     sal_Int32 nEndA = -1;
     if (pStartObj)
     {
-        aStartRect = pStartObj->GetSnapRect();
-        uno::Reference<beans::XPropertySet> xPropxStartSp(xStartSp, uno::UNO_QUERY);
-        xPropxStartSp->getPropertyValue("LineWidth") >>= nStartSpLineW;
-        if (nStartSpLineW)
-            nStartSpLineW = nStartSpLineW / 2;
+        aS = pStartObj->GetSnapRect();
         nStartA = lcl_GetAngle(xStartSp, aStartPt);
     }
-    sal_Int32 nEndSpLineW = 0;
     if (pEndObj)
     {
-        aEndRect = pEndObj->GetSnapRect();
-        uno::Reference<beans::XPropertySet> xPropxEndSp(xEndSp, uno::UNO_QUERY);
-        xPropxEndSp->getPropertyValue("LineWidth") >>= nEndSpLineW;
-        if (nEndSpLineW)
-            nEndSpLineW = nEndSpLineW / 2;
+        aE = pEndObj->GetSnapRect();
         nEndA = lcl_GetAngle(xEndSp, aEndPt);
     }
 
-    const OUString sConnectorName = rShapePtr->getConnectorName();
-    if (sConnectorName == "bentConnector2")
+    // bentConnector3, bentConnector4, bentConnector5
+    if (!rShapePtr->getConnectorAdjustments().empty())
     {
-        awt::Size aConnSize = rXConnector->getSize();
-        if (xStartSp.is() || xEndSp.is())
+        sal_Int32 nAdjustValue = 0;
+        for (size_t i = 0; i < rShapePtr->getConnectorAdjustments().size(); i++)
         {
-            if (nStartA >= 0)
+            bool bVertical = false;
+            if (xStartSp.is() || xEndSp.is())
+                bVertical = xStartSp.is() ? ((nStartA == 90 || nStartA == 270) ? true : false)
+                                          : ((nEndA == 90 || nEndA == 270) ? true : false);
+            else
             {
-                switch (nStartA)
-                {
-                    case 0:     nEdge = aEndPt.X - aStartRect.Right();  break;
-                    case 180:   nEdge = aEndPt.X - aStartRect.Left();   break;
-                    case 90:    nEdge = aEndPt.Y - aStartRect.Bottom(); break;
-                    case 270:   nEdge = aEndPt.Y - aStartRect.Top();    break;
-                }
-                nEdge += nStartSpLineW * (nStartA >= 180 ? +1 : -1);
-            } else {
-                switch (nEndA)
-                {
-                    case 0:     nEdge = aStartPt.X - aEndRect.Right();  break;
-                    case 180:   nEdge = aStartPt.X - aEndRect.Left();   break;
-                    case 90:    nEdge = aStartPt.Y - aEndRect.Bottom(); break;
-                    case 270:   nEdge = aStartPt.Y - aEndRect.Top();    break;
-                }
-                nEdge += nEndSpLineW * (nEndA >= 180 ? +1 : -1);
+                sal_Int32 nAng = rShapePtr->getRotation() / 60000;
+                bVertical = (nAng == 90 || nAng == 270) ? true : false;
             }
-        }
-        else
-        {
-            bool bFlipH = rShapePtr->getFlipH();
-            bool bFlipV = rShapePtr->getFlipV();
-            sal_Int32 nConnectorAngle = rShapePtr->getRotation() / 60000;
-            if (aConnSize.Height < aConnSize.Width)
+
+            if (i % 2 == 1)
+                bVertical = !bVertical;
+
+            nAdjustValue = rShapePtr->getConnectorAdjustments()[i].toInt32();
+            if (bVertical)
             {
-                if ((nConnectorAngle == 90 && bFlipH && bFlipV) || (nConnectorAngle == 180)
-                    || (nConnectorAngle == 270 && bFlipH))
-                    nEdge -= aConnSize.Width;
+                sal_Int32 nY = aStartPt.Y + ((nAdjustValue * (aEndPt.Y - aStartPt.Y)) / 100000);
+                if (xStartSp.is() && xEndSp.is())
+                {
+                    if (aS.Top() <= aE.Top())
+                    {
+                        if (nStartA == 270 && i != 2)
+                            nEdge = nY - aS.Top();
+                        else
+                        {
+                            if (aS.Bottom() < aE.Top() && nEndA != 90)
+                            {
+                                nEdge = nY - (aS.Bottom() + ((aE.Top() - aS.Bottom()) / 2));
+                            }
+                            else
+                                nEdge = nY - aE.Bottom();
+                        }
+                    }
+                    else
+                    {
+                        if (nStartA == 90 && i != 2)
+                            nEdge = nY - aS.Bottom();
+                        else
+                        {
+                            if (aE.Bottom() < aS.Top() && nEndA != 270)
+                                nEdge = nY - (aS.Top() + ((aE.Bottom() - aS.Top()) / 2));
+                            else
+                                nEdge = nY - aE.Top();
+                        }
+                    }
+                }
+                else if ((xStartSp.is() && !xEndSp.is()) || (!xStartSp.is() && xEndSp.is()))
+                {
+                    if (aStartPt.Y < aEndPt.Y)
+                    {
+                        if (xStartSp.is())
+                            nEdge = (nStartA == 90)
+                                        ? nY - (aEndPt.Y - ((aEndPt.Y - aS.Bottom()) / 2))
+                                        : nY - aS.Top();
+                        else
+                            nEdge = (nEndA == 90)
+                                        ? nY - aE.Bottom()
+                                        : nY - (aStartPt.Y + ((aE.Top() - aStartPt.Y) / 2));
+                    }
+                    else
+                    {
+                        if (xStartSp.is())
+                            nEdge = (nStartA == 90) ? nY - aS.Bottom()
+                                                    : nY - (aEndPt.Y + ((aS.Top() - aEndPt.Y) / 2));
+                        else
+                            nEdge = (nEndA == 90)
+                                        ? nY - (aStartPt.Y - ((aStartPt.Y - aE.Bottom()) / 2))
+                                        : nY - aE.Top();
+                    }
+                }
                 else
-                    nEdge += aConnSize.Width;
+                {
+                    nEdge = (aStartPt.Y < aEndPt.Y)
+                                ? nY - (aStartPt.Y + (rXConnector->getSize().Height / 2))
+                                : nY - (aStartPt.Y - (rXConnector->getSize().Height / 2));
+                }
+            }
+            else // Horizontal
+            {
+                sal_Int32 nX = aStartPt.X + ((nAdjustValue * (aEndPt.X - aStartPt.X)) / 100000);
+                if (xStartSp.is() && xEndSp.is())
+                {
+                    if (aS.Left() <= aE.Left())
+                    {
+                        if (nStartA == 180 && i != 2)
+                            nEdge = nX - aS.Left();
+                        else
+                        {
+                            if (aS.Right() < aE.Left() && nEndA != 0)
+                                nEdge = nX - (aS.Right() + ((aE.Left() - aS.Right()) / 2));
+                            else
+                                nEdge = nX - aE.Right();
+                        }
+                    }
+                    else
+                    {
+                        if (nStartA == 0 && i != 2)
+                            nEdge = nX - aS.Right();
+                        else
+                        {
+                            if (aE.Right() < aS.Left() && nEndA != 180)
+                                nEdge = nX - (aS.Left() + ((aE.Right() - aS.Left()) / 2));
+                            else
+                                nEdge = nX - aE.Left();
+                        }
+                    }
+                }
+                else if ((xStartSp.is() && !xEndSp.is()) || (!xStartSp.is() && xEndSp.is()))
+                {
+                    if (aStartPt.X < aEndPt.X)
+                    {
+                        if (xStartSp.is())
+                            nEdge = (nStartA == 0)
+                                        ? nX - (aS.Right() + ((aEndPt.X - aS.Right()) / 2))
+                                        : nX - aS.Left();
+                        else
+                            nEdge = (nEndA == 0)
+                                        ? nX - aE.Right()
+                                        : nX - (aStartPt.X + ((aE.Left() - aStartPt.X) / 2));
+                    }
+                    else
+                    {
+                        if (xStartSp.is())
+                            nEdge = (nStartA == 0) ? nX - aS.Right()
+                                                   : nX - (aEndPt.X + ((aS.Left() - aEndPt.X) / 2));
+                        else
+                            nEdge = (nEndA == 0)
+                                        ? nX - (aE.Right() + ((aStartPt.X - aE.Right()) / 2))
+                                        : nX - aE.Left();
+                    }
+                }
+                else
+                {
+                    nEdge = (aStartPt.X < aEndPt.X)
+                                ? nX - (aStartPt.X + (rXConnector->getSize().Width / 2))
+                                : nX - (aStartPt.X - (rXConnector->getSize().Width / 2));
+                }
+            }
+            xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta", Any(nEdge));
+        }
+    }
+    else
+    {
+        const OUString sConnectorName = rShapePtr->getConnectorName();
+        if (sConnectorName == "bentConnector2")
+        {
+            awt::Size aConnSize = rXConnector->getSize();
+            if (xStartSp.is() || xEndSp.is())
+            {
+                if (nStartA >= 0)
+                {
+                    switch (nStartA)
+                    {
+                    case 0:     nEdge = aEndPt.X - aS.Right();  break;
+                    case 180:   nEdge = aEndPt.X - aS.Left();   break;
+                    case 90:    nEdge = aEndPt.Y - aS.Bottom(); break;
+                    case 270:   nEdge = aEndPt.Y - aS.Top();    break;
+                    }
+                } else {
+                    switch (nEndA)
+                    {
+                    case 0:     nEdge = aStartPt.X - aE.Right();  break;
+                    case 180:   nEdge = aStartPt.X - aE.Left();   break;
+                    case 90:    nEdge = aStartPt.Y - aE.Bottom(); break;
+                    case 270:   nEdge = aStartPt.Y - aE.Top();    break;
+                    }
+                }
             }
             else
             {
-                if ((nConnectorAngle == 180 && bFlipV) || (nConnectorAngle == 270 && bFlipV)
-                    || (nConnectorAngle == 90 && bFlipH && bFlipV)
-                    || (nConnectorAngle == 0 && !bFlipV))
-                    nEdge -= aConnSize.Height;
+                bool bFlipH = rShapePtr->getFlipH();
+                bool bFlipV = rShapePtr->getFlipV();
+                sal_Int32 nConnectorAngle = rShapePtr->getRotation() / 60000;
+                if (aConnSize.Height < aConnSize.Width)
+                {
+                    if ((nConnectorAngle == 90 && bFlipH && bFlipV) || (nConnectorAngle == 180)
+                        || (nConnectorAngle == 270 && bFlipH))
+                        nEdge -= aConnSize.Width;
+                    else
+                        nEdge += aConnSize.Width;
+                }
                 else
-                    nEdge += aConnSize.Height;
+                {
+                    if ((nConnectorAngle == 180 && bFlipV) || (nConnectorAngle == 270 && bFlipV)
+                        || (nConnectorAngle == 90 && bFlipH && bFlipV)
+                        || (nConnectorAngle == 0 && !bFlipV))
+                        nEdge -= aConnSize.Height;
+                    else
+                        nEdge += aConnSize.Height;
+                }
             }
+            xPropSet->setPropertyValue("EdgeLine1Delta", Any(nEdge / 2));
         }
-        xPropSet->setPropertyValue("EdgeLine1Delta", Any(nEdge / 2));
     }
 }
 
