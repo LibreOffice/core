@@ -1835,6 +1835,10 @@ Reference< XShape > const & Shape::createAndInsert(
                 RTL_TEXTENCODING_UTF8);
             msConnectorName = sConnectorShapePresetTypeName;
 
+            auto aAdjustmentList = mpCustomShapePropertiesPtr->getAdjustmentGuideList();
+            for (size_t i = 0; i < aAdjustmentList.size(); i++)
+                maConnectorAdjustmentList.push_back(aAdjustmentList[i].maFormula);
+
             sal_Int32 nType = mpCustomShapePropertiesPtr->getShapePresetType();
             switch (nType)
             {
