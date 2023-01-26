@@ -24,20 +24,20 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclptr.hxx>
 
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
-typedef ::cppu::ImplHelper4 < css::accessibility::XAccessible,
-                              css::accessibility::XAccessibleAction,
-                              css::accessibility::XAccessibleValue,
-                              css::lang::XServiceInfo > VCLXAccessibleToolBoxItem_BASE;
 
-class VCLXAccessibleToolBoxItem final : public AccessibleTextHelper_BASE,
-                                        public VCLXAccessibleToolBoxItem_BASE
+class VCLXAccessibleToolBoxItem final : public cppu::ImplInheritanceHelper<
+                                            AccessibleTextHelper_BASE,
+                                            css::accessibility::XAccessible,
+                                            css::accessibility::XAccessibleAction,
+                                            css::accessibility::XAccessibleValue,
+                                            css::lang::XServiceInfo>
 {
 private:
     OUString                m_sOldName;
@@ -86,8 +86,7 @@ public:
     void                ToggleEnableState();
 
     // XInterface
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
+    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

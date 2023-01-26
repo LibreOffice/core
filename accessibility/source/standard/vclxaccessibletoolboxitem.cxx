@@ -258,7 +258,6 @@ void VCLXAccessibleToolBoxItem::implGetSelection( sal_Int32& nStartIndex, sal_In
 
 // XInterface
 
-IMPLEMENT_FORWARD_REFCOUNT( VCLXAccessibleToolBoxItem, AccessibleTextHelper_BASE )
 Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType )
 {
     // #i33611# - toolbox buttons without text don't support XAccessibleText
@@ -266,15 +265,8 @@ Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType )
         && ( !m_pToolBox || m_pToolBox->GetButtonType() == ButtonType::SYMBOLONLY ) )
         return Any();
 
-    css::uno::Any aReturn = AccessibleTextHelper_BASE::queryInterface( _rType );
-    if ( !aReturn.hasValue() )
-        aReturn = VCLXAccessibleToolBoxItem_BASE::queryInterface( _rType );
-    return aReturn;
+    return ImplInheritanceHelper::queryInterface( _rType );
 }
-
-// XTypeProvider
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleToolBoxItem, AccessibleTextHelper_BASE, VCLXAccessibleToolBoxItem_BASE )
 
 // XComponent
 
