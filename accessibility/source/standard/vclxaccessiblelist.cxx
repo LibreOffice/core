@@ -54,7 +54,7 @@ namespace
 
 VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType,
                                         const Reference< XAccessible >& _xParent)
-    : VCLXAccessibleComponent   (pVCLWindow),
+    : ImplInheritanceHelper     (pVCLWindow),
       m_aBoxType                (aBoxType),
       m_nVisibleLineCount       (0),
       m_nIndexInParent          (DEFAULT_INDEX_IN_PARENT),
@@ -504,10 +504,6 @@ void VCLXAccessibleList::HandleChangedItemList()
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
         Any(), Any());
 }
-
-
-IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleList, VCLXAccessibleComponent, VCLXAccessibleList_BASE)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleList, VCLXAccessibleComponent, VCLXAccessibleList_BASE)
 
 // XAccessible
 

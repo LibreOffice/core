@@ -22,13 +22,8 @@
 #include <memory>
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleSelection
-    > VCLXAccessibleList_BASE;
 
 typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
     ListItems;
@@ -45,8 +40,10 @@ namespace accessibility
     classes for selection.
 */
 class VCLXAccessibleList final
-    : public VCLXAccessibleComponent,
-      public VCLXAccessibleList_BASE
+    : public cppu::ImplInheritanceHelper<
+          VCLXAccessibleComponent,
+          css::accessibility::XAccessible,
+          css::accessibility::XAccessibleSelection>
 {
 public:
     enum BoxType {COMBOBOX, LISTBOX};
@@ -75,12 +72,6 @@ public:
             item.  It is used to retrieve the index of that item.
     */
     void UpdateSelection (std::u16string_view sTextOfSelectedItem);
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
