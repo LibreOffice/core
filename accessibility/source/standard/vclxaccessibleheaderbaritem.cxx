@@ -81,18 +81,6 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds()
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedComponentHelper, VCLXAccessibleHeaderBarItem_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedComponentHelper, VCLXAccessibleHeaderBarItem_BASE )
-
-
 // XServiceInfo
 OUString VCLXAccessibleHeaderBarItem::getImplementationName()
 {

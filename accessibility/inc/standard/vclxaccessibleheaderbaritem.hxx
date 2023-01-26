@@ -21,7 +21,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vcl/vclptr.hxx>
 
@@ -34,12 +34,10 @@ class VclWindowEvent;
 //    class VCLXAccessibleHeaderBarItem
 //    ----------------------------------------------------
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessible,
-    css::lang::XServiceInfo > VCLXAccessibleHeaderBarItem_BASE;
-
-class VCLXAccessibleHeaderBarItem final : public comphelper::OAccessibleExtendedComponentHelper,
-                                    public VCLXAccessibleHeaderBarItem_BASE
+class VCLXAccessibleHeaderBarItem final : public cppu::ImplInheritanceHelper<
+                                              comphelper::OAccessibleExtendedComponentHelper,
+                                              css::accessibility::XAccessible,
+                                              css::lang::XServiceInfo>
 {
 private:
     VclPtr<HeaderBar>        m_pHeadBar;
@@ -53,12 +51,6 @@ private:
 public:
     VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent );
     virtual ~VCLXAccessibleHeaderBarItem() override;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
