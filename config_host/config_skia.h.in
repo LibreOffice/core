@@ -62,8 +62,9 @@ are the same.
 // the default X11 visual is actually also BGRA.
 #define SK_R32_SHIFT 16
 
-// Enable Skia's internal checks depending on DBG_UTIL mode. ENABLE_SKIA_DEBUG
-// controls whether to build with or without optimizations (set in Makefile).
+// Enable Skia's internal checks depending on DBG_UTIL mode.
+// ENABLE_SKIA_DEBUG controls whether to build with or without optimizations, and
+// is set by using --enable-skia=debug.
 #ifdef DBG_UTIL
 
 #define SK_DEBUG
