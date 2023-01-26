@@ -119,7 +119,7 @@ namespace
 
 VCLXAccessibleToolBox::VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow ) :
 
-    VCLXAccessibleComponent( pVCLXWindow )
+    ImplInheritanceHelper( pVCLXWindow )
 
 {
 }
@@ -595,12 +595,6 @@ void VCLXAccessibleToolBox::ProcessWindowChildEvent( const VclWindowEvent& rVclW
 
     }
 }
-
-// XInterface
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleToolBox, VCLXAccessibleComponent, VCLXAccessibleToolBox_BASE )
-
-// XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleToolBox, VCLXAccessibleComponent, VCLXAccessibleToolBox_BASE )
 
 // XComponent
 void SAL_CALL VCLXAccessibleToolBox::disposing()
