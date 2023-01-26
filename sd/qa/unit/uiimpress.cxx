@@ -1091,6 +1091,29 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
     pDispatcher->ExecuteList(SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, { &aXFillStyleItem });
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
+{
+    createSdImpressDoc("odp/tdf153161_FlushToSave.odp");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    OUString sOldText(xShape->getString());
+    CPPUNIT_ASSERT(sOldText.startsWith(u"在没有版本控制系统的时期"));
+
+    // Type something, getting into text editing mode (appending) automatically
+    insertStringToObject(1, u"Foo Bar", /*bUseEscape*/ false);
+
+    saveAndReload("impress8");
+
+    xDrawPagesSupplier.set(mxComponent, uno::UNO_QUERY);
+    xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    xShape.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    OUString sExpectedText = sOldText + "Foo Bar";
+    CPPUNIT_ASSERT_EQUAL(sExpectedText, xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
 {
     createSdImpressDoc();
