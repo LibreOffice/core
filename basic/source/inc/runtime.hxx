@@ -250,7 +250,6 @@ class SbiRuntime
     BasicDebugFlags    nFlags;           // Debugging-Flags
     ErrCode            nError;
     sal_uInt16         nOps;             // opcode counter
-    sal_uInt32         m_nLastTime;
 
     std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
     std::vector<SbiGosub>   pGosubStk;      // GOSUB stack
