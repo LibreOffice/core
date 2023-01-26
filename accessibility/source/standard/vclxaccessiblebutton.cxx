@@ -96,18 +96,6 @@ void VCLXAccessibleButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
-
-
 // XServiceInfo
 
 
