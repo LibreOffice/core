@@ -22,17 +22,15 @@
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper1 <
-    css::accessibility::XAccessibleText >  VCLXAccessibleTextComponent_BASE;
-
-class VCLXAccessibleTextComponent : public VCLXAccessibleComponent,
-                                    public ::comphelper::OCommonAccessibleText,
-                                    public VCLXAccessibleTextComponent_BASE
+class VCLXAccessibleTextComponent : public cppu::ImplInheritanceHelper<
+                                        VCLXAccessibleComponent,
+                                        css::accessibility::XAccessibleText>,
+                                    public ::comphelper::OCommonAccessibleText
 {
     OUString                                m_sText;
 
@@ -51,12 +49,6 @@ protected:
 
 public:
     VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow );
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;

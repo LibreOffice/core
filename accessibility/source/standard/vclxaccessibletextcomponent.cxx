@@ -45,7 +45,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow )
-    :VCLXAccessibleComponent( pVCLXWindow )
+    :ImplInheritanceHelper( pVCLXWindow )
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
@@ -116,18 +116,6 @@ void VCLXAccessibleTextComponent::disposing()
 
     m_sText.clear();
 }
-
-
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTextComponent, VCLXAccessibleComponent, VCLXAccessibleTextComponent_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTextComponent, VCLXAccessibleComponent, VCLXAccessibleTextComponent_BASE )
 
 
 // XAccessibleText
