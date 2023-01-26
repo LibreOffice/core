@@ -676,6 +676,8 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
 
     const auto payload = rPayload.getStr();
     const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
+    if (!pCurrentViewShell)
+        return;
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
