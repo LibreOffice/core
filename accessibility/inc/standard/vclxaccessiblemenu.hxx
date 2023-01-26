@@ -22,29 +22,22 @@
 #include <standard/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper1 <
-    css::accessibility::XAccessibleSelection > VCLXAccessibleMenu_BASE;
-
-class VCLXAccessibleMenu final : public VCLXAccessibleMenuItem,
-                            public VCLXAccessibleMenu_BASE
+class VCLXAccessibleMenu final :
+    public cppu::ImplInheritanceHelper<
+        VCLXAccessibleMenuItem, css::accessibility::XAccessibleSelection>
 {
     virtual bool        IsFocused() override;
     virtual bool        IsPopupMenuOpen() override;
     sal_Int64           implGetSelectedAccessibleChildCount();
 
 public:
-    using VCLXAccessibleMenuItem::VCLXAccessibleMenuItem;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
+    VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr ):
+        ImplInheritanceHelper(pParent, nItemPos, pMenu) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
