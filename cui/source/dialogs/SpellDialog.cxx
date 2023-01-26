@@ -161,6 +161,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     : SfxModelessDialogController (_pBindings, pChildWindow,
         pParent, "cui/ui/spellingdialog.ui", "SpellingDialog")
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
+    , m_pInitHdlEvent(nullptr)
     , bFocusLocked(true)
     , rParent(*pChildWindow)
     , pImpl( new SpellDialog_Impl )
@@ -219,11 +220,13 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     //InitHdl wants to use virtual methods, so it
     //can't be called during the ctor, so init
     //it on next event cycle post-ctor
-    Application::PostUserEvent(LINK(this, SpellDialog, InitHdl));
+    m_pInitHdlEvent = Application::PostUserEvent(LINK(this, SpellDialog, InitHdl));
 }
 
 SpellDialog::~SpellDialog()
 {
+    if (m_pInitHdlEvent)
+        Application::RemoveUserEvent(m_pInitHdlEvent);
     if (pImpl)
     {
         // save possibly modified user-dictionaries
@@ -387,6 +390,7 @@ void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGua
  */
 IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
 {
+    m_pInitHdlEvent = nullptr;
     m_xDialog->freeze();
     //show or hide AutoCorrect depending on the modules abilities
     m_xAutoCorrPB->set_visible(rParent.HasAutoCorrection());
