@@ -62,17 +62,4 @@ class WriterInsertPageHeader(UITestCase):
 
             self.delete_header()
 
-    def test_tdf146248(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf146248.docx")):
-
-            self.delete_header()
-
-            # crashed before
-            self.xUITest.executeCommand(".uno:Undo")
-
-            document = self.ui_test.get_component()
-            self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
-
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

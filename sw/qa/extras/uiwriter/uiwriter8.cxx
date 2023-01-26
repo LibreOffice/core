@@ -819,6 +819,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
         getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
+{
+    createSwDoc("tdf146248.docx");
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Delete the header
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141613)
 {
     createSwDoc();
