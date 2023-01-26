@@ -50,7 +50,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleMenuItem::VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
-    :OAccessibleMenuItemComponent( pParent, nItemPos, pMenu )
+    :ImplInheritanceHelper( pParent, nItemPos, pMenu )
 {
 }
 
@@ -132,18 +132,6 @@ void VCLXAccessibleMenuItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nStartIndex = 0;
     nEndIndex = 0;
 }
-
-
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleMenuItem, OAccessibleMenuItemComponent, VCLXAccessibleMenuItem_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenuItem, OAccessibleMenuItemComponent, VCLXAccessibleMenuItem_BASE )
 
 
 // XServiceInfo

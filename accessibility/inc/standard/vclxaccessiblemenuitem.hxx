@@ -25,20 +25,18 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper3<
-    css::accessibility::XAccessibleText,
-    css::accessibility::XAccessibleAction,
-    css::accessibility::XAccessibleValue > VCLXAccessibleMenuItem_BASE;
-
-class VCLXAccessibleMenuItem :  public OAccessibleMenuItemComponent,
-                                public ::comphelper::OCommonAccessibleText,
-                                public VCLXAccessibleMenuItem_BASE
+class VCLXAccessibleMenuItem :  public cppu::ImplInheritanceHelper<
+                                    OAccessibleMenuItemComponent,
+                                    css::accessibility::XAccessibleText,
+                                    css::accessibility::XAccessibleAction,
+                                    css::accessibility::XAccessibleValue>,
+                                public ::comphelper::OCommonAccessibleText
 {
 protected:
     virtual bool            IsFocused() override;
@@ -56,12 +54,6 @@ protected:
 
 public:
     VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
