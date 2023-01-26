@@ -402,6 +402,14 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetSummationOfParagraphs();
     }
 
+    if (aFilterName == "Impress MS PowerPoint 2007 XML")
+    {
+        // This is a "MS Compact" mode for connectors.
+        // The Libreoffice uses bounding rectangle of connected shapes but
+        // MSO uses snap rectangle when calculate the edge track.
+        mpDoc->SetConnectorUseSnapRect(true);
+    }
+
     if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
         aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" ||
         aFilterName == "Impress MS PowerPoint 2007 XML VBA" ||

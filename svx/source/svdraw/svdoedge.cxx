@@ -753,7 +753,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         else
         {
-            aBoundRect1 = rCon1.pObj->GetCurrentBoundRect();
+            if (getSdrModelFromSdrObject().IsConnectorUseSnapRect())
+                aBoundRect1 = rCon1.pObj->GetSnapRect();
+            else
+                aBoundRect1 = rCon1.pObj->GetCurrentBoundRect();
         }
 
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
@@ -780,7 +783,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         else
         {
-            aBoundRect2 = rCon2.pObj->GetCurrentBoundRect();
+            if (getSdrModelFromSdrObject().IsConnectorUseSnapRect())
+                aBoundRect2 = rCon2.pObj->GetSnapRect();
+            else
+                aBoundRect2 = rCon2.pObj->GetCurrentBoundRect();
         }
 
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());

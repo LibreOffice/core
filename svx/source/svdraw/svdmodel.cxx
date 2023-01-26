@@ -84,6 +84,7 @@ struct SdrModelImpl
     SdrUndoFactory* mpUndoFactory;
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
     bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
+    bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
     std::unique_ptr<model::Theme> mpTheme;
 
     SdrModelImpl()
@@ -91,6 +92,7 @@ struct SdrModelImpl
         , mpUndoFactory(nullptr)
         , mbAnchoredTextOverflowLegacy(false)
         , mbLegacySingleLineFontwork(false)
+        , mbConnectorUseSnapRect(false)
     {}
 };
 
@@ -1708,6 +1710,16 @@ bool SdrModel::IsLegacySingleLineFontwork() const
     return mpImpl->mbLegacySingleLineFontwork;
 }
 
+void SdrModel::SetConnectorUseSnapRect(bool bEnabled)
+{
+    mpImpl->mbConnectorUseSnapRect = bEnabled;
+}
+
+bool SdrModel::IsConnectorUseSnapRect() const
+{
+    return mpImpl->mbConnectorUseSnapRect;
+}
+
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
@@ -1751,6 +1763,14 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
             mpImpl->mbAnchoredTextOverflowLegacy = bBool;
         }
     }
+    else if (pValue->Name == "ConnectorUseSnapRect")
+    {
+        bool bBool = false;
+        if (pValue->Value >>= bBool)
+        {
+            mpImpl->mbConnectorUseSnapRect = bBool;
+        }
+    }
     else if (pValue->Name == "LegacySingleLineFontwork")
     {
         bool bBool = false;
@@ -1790,6 +1810,7 @@ void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValu
     std::vector< std::pair< OUString, uno::Any > > aUserData;
     addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
     addPair(aUserData, "LegacySingleLineFontwork", IsLegacySingleLineFontwork());
+    addPair(aUserData, "ConnectorUseSnapRect", IsConnectorUseSnapRect());
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());

@@ -574,6 +574,10 @@ public:
     void SetLegacySingleLineFontwork(bool bEnabled);
     bool IsLegacySingleLineFontwork() const;
 
+    // tdf#149756 compatibility flag
+    void SetConnectorUseSnapRect(bool bEnabled);
+    bool IsConnectorUseSnapRect() const;
+
     void ReformatAllTextObjects();
 
     std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
