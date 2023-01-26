@@ -34,6 +34,8 @@ class SwUndoPageDesc final : public SwUndo
     // To avoid duplication of (header/footer)content nodes for simple page desc changes
     void ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest );
 
+    // tdf#153220 use to Exit HeaderFooter EditMode
+    void ExitHeaderFooterEdit();
 public:
     SwUndoPageDesc(const SwPageDesc & aOld, const SwPageDesc & aNew,
                    SwDoc * pDoc);
