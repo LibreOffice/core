@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -34,12 +34,10 @@ class VclSimpleEvent;
 class VclMenuEvent;
 
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessible,
-    css::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
-
-class OAccessibleMenuBaseComponent : public comphelper::OAccessibleExtendedComponentHelper,
-                                     public OAccessibleMenuBaseComponent_BASE
+class OAccessibleMenuBaseComponent : public cppu::ImplInheritanceHelper<
+                                         comphelper::OAccessibleExtendedComponentHelper,
+                                         css::accessibility::XAccessible,
+                                         css::lang::XServiceInfo>
 {
     friend class OAccessibleMenuItemComponent;
     friend class VCLXAccessibleMenuItem;
@@ -111,12 +109,6 @@ public:
     virtual ~OAccessibleMenuBaseComponent() override;
 
     void                    SetStates();
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;

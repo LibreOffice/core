@@ -629,18 +629,6 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleMenuBaseComponent, OAccessibleExtendedComponentHelper, OAccessibleMenuBaseComponent_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuBaseComponent, OAccessibleExtendedComponentHelper, OAccessibleMenuBaseComponent_BASE )
-
-
 // XComponent
 
 
