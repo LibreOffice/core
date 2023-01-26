@@ -1281,7 +1281,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_THEME:
             {
                 SdrModel& rModel = getSdrModelFromUnoModel();
-                std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(aValue);
+                std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
                 rModel.SetTheme(std::move(pTheme));
             }
             break;
@@ -1408,7 +1408,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_THEME:
             {
                 SdrModel& rModel = getSdrModelFromUnoModel();
-                svx::Theme* pTheme = rModel.GetTheme();
+                model::Theme* pTheme = rModel.GetTheme();
                 if (pTheme)
                 {
                     pTheme->ToAny(aAny);

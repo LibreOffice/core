@@ -24,7 +24,7 @@
 
 namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
-namespace svx { struct ThemeFont; }
+namespace model { struct ThemeFont; }
 
 namespace oox::drawingml {
 
@@ -52,7 +52,7 @@ public:
                             sal_Int16& rnFontFamily,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
-    void fillThemeFont(svx::ThemeFont& rThemeFont) const;
+    void fillThemeFont(model::ThemeFont& rThemeFont) const;
 
     static void resolvePitch(sal_Int32 nOoxPitch, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily);
 

@@ -12,7 +12,7 @@
 #include <sal/config.h>
 #include <oox/dllapi.h>
 #include <oox/core/xmlfilterbase.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 namespace oox
 {
@@ -24,12 +24,12 @@ private:
 public:
     ThemeExport(oox::core::XmlFilterBase* pFilterBase);
 
-    void write(OUString const& rPath, svx::Theme const& rTheme);
+    void write(OUString const& rPath, model::Theme const& rTheme);
 
 private:
-    static bool writeColorSet(sax_fastparser::FSHelperPtr pFS, svx::Theme const& rTheme);
+    static bool writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme const& rTheme);
     static bool writeFontScheme(sax_fastparser::FSHelperPtr pFS,
-                                svx::FontScheme const& rFontScheme);
+                                model::FontScheme const& rFontScheme);
     static bool writeFormatScheme(sax_fastparser::FSHelperPtr pFS);
 };
 

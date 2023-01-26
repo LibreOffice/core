@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
     CPPUNIT_ASSERT(pDoc);
 
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 
-    svx::FontScheme const& rFontScheme = pTheme->getFontScheme();
+    model::FontScheme const& rFontScheme = pTheme->getFontScheme();
     CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri Light"), rFontScheme.getMajorLatin().maTypeface);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri"), rFontScheme.getMinorLatin().maTypeface);
     CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorAsian().maTypeface.isEmpty());

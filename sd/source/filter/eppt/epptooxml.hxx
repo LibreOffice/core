@@ -26,7 +26,7 @@
 
 using ::sax_fastparser::FSHelperPtr;
 
-namespace svx
+namespace model
 {
 class Theme;
 }
@@ -92,13 +92,13 @@ private:
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
 
     /// Export the color set part of a theme.
-    static bool WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme);
+    static bool WriteColorSets(const FSHelperPtr& pFS, model::Theme* pTheme);
 
     /// Same as WriteColorSets(), but works from a grab-bag.
     bool WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath);
 
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
-    void WriteTheme( sal_Int32 nThemeNum, svx::Theme* pTheme );
+    void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 
     virtual bool ImplCreateDocument() override;
     virtual bool ImplCreateMainNotes() override;

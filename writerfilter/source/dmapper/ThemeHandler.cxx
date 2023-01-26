@@ -10,7 +10,7 @@
 #include "ThemeHandler.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <ooxml/resourceids.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace com::sun::star;
 
@@ -320,7 +320,7 @@ OUString fromLocaleToScriptTag(const OUString& sLocale)
     return fromLCIDToScriptTag(LanguageTag::convertToLanguageType(sLocale));
 }
 
-OUString resolveMajorMinorTypeFace(svx::FontScheme const& rFontSheme, const Id id)
+OUString resolveMajorMinorTypeFace(model::FontScheme const& rFontSheme, const Id id)
 {
     switch (id)
     {
@@ -346,7 +346,7 @@ OUString resolveMajorMinorTypeFace(svx::FontScheme const& rFontSheme, const Id i
     return OUString();
 }
 
-OUString resolveSupplementalFontList(svx::FontScheme const& rFontSheme, const Id id,
+OUString resolveSupplementalFontList(model::FontScheme const& rFontSheme, const Id id,
                                      std::u16string_view rLangAsia, std::u16string_view rLangBidi)
 {
     switch (id)
@@ -409,7 +409,7 @@ OUString ThemeHandler::getStringForTheme(const Id id)
 OUString ThemeHandler::getFontNameForTheme(const Id id) const
 {
     auto pSvxTheme = mpTheme->createSvxTheme();
-    svx::FontScheme const& rFontScheme = pSvxTheme->getFontScheme();
+    model::FontScheme const& rFontScheme = pSvxTheme->getFontScheme();
     OUString aSupplementalTypeFace = resolveSupplementalFontList(
         rFontScheme, id, maThemeFontLangEastAsia, maThemeFontLangBidi);
     if (!aSupplementalTypeFace.isEmpty())

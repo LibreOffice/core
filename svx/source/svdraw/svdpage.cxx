@@ -1288,7 +1288,7 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
-void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme)
+void SdrPageProperties::SetTheme(std::unique_ptr<model::Theme> pTheme)
 {
     mpTheme = std::move(pTheme);
 
@@ -1310,7 +1310,7 @@ void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme)
     }
 }
 
-svx::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
+model::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
 
 void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

@@ -90,7 +90,7 @@ namespace com::sun::star::beans {
     struct PropertyValue;
 }
 
-namespace svx
+namespace model
 {
 class Theme;
 }
@@ -542,8 +542,8 @@ public:
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
-    void SetTheme(std::unique_ptr<svx::Theme> pTheme);
-    svx::Theme* GetTheme();
+    void SetTheme(std::unique_ptr<model::Theme> pTheme);
+    model::Theme* GetTheme();
 
     void    SetStarDrawPreviewMode(bool bPreview);
     bool    IsStarDrawPreviewMode() const { return m_bStarDrawPreviewMode; }

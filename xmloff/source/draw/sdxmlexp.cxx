@@ -2428,7 +2428,7 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     };
     for (size_t nColor = 0; nColor < aColors.size(); ++nColor)
     {
-        // Import goes via svx::Theme::FromAny(), which sanitizes user input.
+        // Import goes via model::Theme::FromAny(), which sanitizes user input.
         assert(nColor < SAL_N_ELEMENTS(aColorTokens));
 
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, GetXMLToken(aColorTokens[nColor]));

@@ -976,7 +976,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_THEME:
         {
             SdrPage* pPage = GetPage();
-            std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(aValue);
+            std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
             pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
             break;
         }
@@ -1298,7 +1298,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_THEME:
     {
         SdrPage* pPage = GetPage();
-        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
         {
             pTheme->ToAny(aAny);

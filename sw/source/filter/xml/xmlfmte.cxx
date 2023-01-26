@@ -43,10 +43,10 @@
 #include <sax/tools/converter.hxx>
 
 #include <o3tl/enumrange.hxx>
-#include <svx/ColorSets.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 
 using namespace ::com::sun::star::beans;

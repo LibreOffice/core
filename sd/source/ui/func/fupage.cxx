@@ -265,7 +265,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     if (mpDoc->GetDocumentType() == DocumentType::Impress && mpPage->IsMasterPage())
     {
         // A master slide may have a theme.
-        svx::Theme* pTheme = mpPage->getSdrPageProperties().GetTheme();
+        model::Theme* pTheme = mpPage->getSdrPageProperties().GetTheme();
         if (pTheme)
         {
             uno::Any aTheme;
@@ -573,7 +573,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             auto it = pGrabBag->GetGrabBag().find("Theme");
             if (it != pGrabBag->GetGrabBag().end())
             {
-                std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(it->second);
+                std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(it->second);
                 pMasterPage->getSdrPageProperties().SetTheme(std::move(pTheme));
             }
             else

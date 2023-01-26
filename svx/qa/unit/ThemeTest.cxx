@@ -14,7 +14,7 @@
 
 #include <config_features.h>
 
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 namespace
 {
@@ -24,7 +24,7 @@ class ThemeTest : public CppUnit::TestFixture
 
 CPPUNIT_TEST_FIXTURE(ThemeTest, testPitchFamilyConversion)
 {
-    svx::ThemeFont aFont;
+    model::ThemeFont aFont;
     aFont.maPitch = 2;
     aFont.maFamily = 1;
 
