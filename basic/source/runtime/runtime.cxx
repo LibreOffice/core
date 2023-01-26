@@ -590,30 +590,12 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *static_cast<StarBASIC*>(pm->pParent) ), pInst( GetSbData()->pInst ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage.get() ), mpExtCaller(nullptr), m_nLastTime(0)
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage.get() )
 {
     nFlags    = pe ? pe->GetDebugFlags() : BasicDebugFlags::NONE;
     pIosys    = pInst->GetIoSystem();
-    pForStk   = nullptr;
-    pError    = nullptr;
-    pErrCode  =
-    pErrStmnt =
-    pRestart  = nullptr;
-    pNext     = nullptr;
     pCode     =
     pStmnt    = pImg->GetCode() + nStart;
-    bRun      =
-    bError    = true;
-    bInError  = false;
-    bBlocked  = false;
-    nLine     = 0;
-    nCol1     = 0;
-    nCol2     = 0;
-    nExprLvl  = 0;
-    nArgc     = 0;
-    nError    = ERRCODE_NONE;
-    nForLvl   = 0;
-    nOps      = 0;
     refExprStk = new SbxArray;
     SetVBAEnabled( pMod->IsVBACompat() );
     SetParameters( pe ? pe->GetParameters() : nullptr );

@@ -226,31 +226,31 @@ class SbiRuntime
     SbxArrayRef        refRedimpArray;   // Array saved to use for REDIM PRESERVE
     SbxVariableRef     refRedim;         // Array saved to use for REDIM
     SbxVariableRef     xDummyVar;        // substitute for variables that weren't found
-    SbxVariable*       mpExtCaller;      // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
-    SbiForStack*       pForStk;          // FOR/NEXT-Stack
-    sal_uInt16         nExprLvl;         // depth of the expr-stack
-    sal_uInt16         nForLvl;          // #118235: Maintain for level
+    SbxVariable*       mpExtCaller = nullptr; // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
+    SbiForStack*       pForStk = nullptr; // FOR/NEXT-Stack
+    sal_uInt16         nExprLvl = 0;     // depth of the expr-stack
+    sal_uInt16         nForLvl = 0;      // #118235: Maintain for level
     const sal_uInt8*   pCode;            // current Code-Pointer
     const sal_uInt8*   pStmnt;           // beginning of the last statement
-    const sal_uInt8*   pError;           // address of the current error handler
-    const sal_uInt8*   pRestart;         // restart-address
-    const sal_uInt8*   pErrCode;         // restart-address RESUME NEXT
-    const sal_uInt8*   pErrStmnt;        // restart-address RESUME 0
+    const sal_uInt8*   pError = nullptr; // address of the current error handler
+    const sal_uInt8*   pRestart = nullptr; // restart-address
+    const sal_uInt8*   pErrCode = nullptr; // restart-address RESUME NEXT
+    const sal_uInt8*   pErrStmnt = nullptr; // restart-address RESUME 0
     OUString           aLibName;         // Lib-name for declare-call
     SbxArrayRef        refParams;        // current procedure parameters
     SbxArrayRef        refLocals;        // local variable
     SbxArrayRef        refArgv;
     // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
-    short              nArgc;
-    bool               bRun;
-    bool               bError;           // true: handle errors
-    bool               bInError;         // true: in an error handler
-    bool               bBlocked;         // true: blocked by next call level, #i48868
+    short              nArgc = 0;
+    bool               bRun = true;
+    bool               bError = true;    // true: handle errors
+    bool               bInError = false; // true: in an error handler
+    bool               bBlocked = false; // true: blocked by next call level, #i48868
     bool               bVBAEnabled;
     BasicDebugFlags    nFlags;           // Debugging-Flags
-    ErrCode            nError;
-    sal_uInt16         nOps;             // opcode counter
-    sal_uInt32         m_nLastTime;
+    ErrCode            nError = ERRCODE_NONE;
+    sal_uInt16         nOps = 0;         // opcode counter
+    sal_uInt32         m_nLastTime = 0;
 
     std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
     std::vector<SbiGosub>   pGosubStk;      // GOSUB stack
@@ -349,8 +349,8 @@ public:
     void          SetVBAEnabled( bool bEnabled );
     bool          IsImageFlag( SbiImageFlags n ) const;
     sal_uInt16      GetBase() const;
-    sal_Int32  nLine,nCol1,nCol2;
-    SbiRuntime* pNext;               // Stack-Chain
+    sal_Int32  nLine = 0, nCol1 = 0, nCol2 = 0;
+    SbiRuntime* pNext = nullptr; // Stack-Chain
 
     // tdf#79426, tdf#125180 - adds the information about a missing parameter
     static void SetIsMissing( SbxVariable* );
