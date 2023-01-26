@@ -142,7 +142,7 @@ void SwMacrosTest::testVba()
 
         uno::Any aRet = executeMacro(testInfo[i].sMacroUrl);
         OUString aStringRes;
-        CPPUNIT_ASSERT(aRet >>= aStringRes);
+        CPPUNIT_ASSERT_MESSAGE(sFileName.toUtf8().getStr(), aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
     }
 }
