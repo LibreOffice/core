@@ -4295,17 +4295,13 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     OUString aFunctionName = m_aPrefix
                            + rFunction;
 
-    bool bSetRescheduleBack = false;
-    bool bOldReschedule = true;
+    bool bOldReschedule = false;
     SbiInstance* pInst = GetSbData()->pInst;
     if( pInst && pInst->IsCompatibility() )
     {
         bOldReschedule = pInst->IsReschedule();
         if ( bOldReschedule )
-        {
             pInst->EnableReschedule( false );
-            bSetRescheduleBack = true;
-        }
     }
 
     SbxVariable* p = xScopeObj->Find( aFunctionName, SbxClassType::Method );
@@ -4340,7 +4336,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     aRet = sbxToUnoValue( xValue.get() );
     pMeth->SetParameters( nullptr );
 
-    if( bSetRescheduleBack )
+    if (bOldReschedule)
         pInst->EnableReschedule( bOldReschedule );
 
     // TODO: OutParameter?
