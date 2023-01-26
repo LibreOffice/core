@@ -3409,8 +3409,13 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
         OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
         vector<double>::iterator iter = rArray.begin() + nIndex;
         ::std::nth_element( rArray.begin(), iter, rArray.end());
-        if (fDiff == 0.0)
+        if (fDiff <= 0.0)
+        {
+            // Note: neg fDiff seen with forum-mso-en4-719754.xlsx with
+            // fPercentile of near 1 where approxFloor gave nIndex of nSize-1
+            // resulting in a non-zero tiny negative fDiff.
             return *iter;
+        }
         else
         {
             OSL_ENSURE(nIndex < nSize-1, "GetPercentile: wrong index(2)");
