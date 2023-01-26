@@ -1491,6 +1491,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf95699)
                          pFieldMark->GetFieldname());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
+{
+    // given a form-protected doc with 4 unchecked legacy fieldmark checkboxes (and several modern
+    // content controls which all have a tabstop of -1 to disable tabstop navigation to them)
+    // we want to test that tab navigation completes and loops around to continue at the beginning.
+    createSwDoc("tdf151548_tabNavigation.docm");
+    SwDoc* pDoc = getSwDoc();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMarkAccess->getFieldmarksCount());
+
+    // Tab and toggle 4 times, verifying beforehand that the state was unchecked
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Tab 4 more times, verifying beforehand that the checkbox had been toggle on, then toggles off
+    // meaning that looping is working, and no other controls are reacting to the tab key.
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+
+        CPPUNIT_ASSERT(pCheckBox->IsChecked());
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104032)
 {
     // Open the document with FORMCHECKBOX field, select it and copy to clipboard

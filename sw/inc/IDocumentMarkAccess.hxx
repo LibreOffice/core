@@ -325,6 +325,9 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t getFieldmarksEnd() const =0;
 
+        /// returns the number of IFieldmarks.
+        virtual sal_Int32 getFieldmarksCount() const = 0;
+
         /// get Fieldmark for CH_TXT_ATR_FIELDSTART/CH_TXT_ATR_FIELDEND at rPos
         virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;

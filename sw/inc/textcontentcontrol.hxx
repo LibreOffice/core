@@ -64,6 +64,7 @@ public:
     size_t GetCount() const { return m_aContentControls.size(); }
     bool IsEmpty() const { return m_aContentControls.empty(); }
     SwTextContentControl* Get(size_t nIndex);
+    SwTextContentControl* UnsortedGet(size_t nIndex);
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 

@@ -864,6 +864,132 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
     return bRet;
 }
 
+/**
+ * Go to the next (or previous) form control, based first on tabIndex and then paragraph position,
+ * where a tabIndex of 1 is first, 0 is last, and -1 is excluded.
+ */
+void SwCursorShell::GotoFormControl(bool bNext)
+{
+    // (note: this only applies to modern content controls and legacy fieldmarks,
+    //  since activeX richText controls aren't exposed to SW keystrokes)
+
+    struct FormControlSort
+    {
+        bool operator()(std::pair<const SwPosition&, sal_uInt32> rLHS,
+                        std::pair<const SwPosition&, sal_uInt32> rRHS) const
+        {
+            assert(rLHS.second && rRHS.second && "tabIndex zero must be changed to SAL_MAX_UINT32");
+            //first compare tabIndexes where 1 has the priority.
+            if (rLHS.second < rRHS.second)
+                return true;
+            if (rLHS.second > rRHS.second)
+                return false;
+
+            // when tabIndexes are equal (and they usually are) then sort by paragraph position
+            return rLHS.first < rRHS.first;
+        }
+    };
+    std::map<std::pair<SwPosition, sal_uInt32>,
+             std::pair<SwTextContentControl*, sw::mark::IFieldmark*>, FormControlSort>  aFormMap;
+
+    // add all of the eligible modern Content Controls into a sorted map
+    SwContentControlManager& rManager = GetDoc()->GetContentControlManager();
+    for (size_t  i = 0; i < rManager.GetCount(); ++i)
+    {
+        SwTextContentControl* pTCC = rManager.UnsortedGet(i);
+        if (!pTCC || !pTCC->GetTextNode())
+            continue;
+        auto pCC = pTCC->GetContentControl().GetContentControl();
+
+        // -1 indicates the control should not participate in keyboard tab navigation
+        if (pCC && pCC->GetTabIndex() == SAL_MAX_UINT32)
+            continue;
+
+        const SwPosition nPos(*pTCC->GetTextNode(), pTCC->GetStart());
+
+        // since 0 is the lowest priority (1 is the highest), and -1 has already been excluded,
+        // use SAL_MAX_UINT32 as zero's tabIndex so that automatic sorting is correct.
+        sal_uInt32 nTabIndex = pCC && pCC->GetTabIndex() ? pCC->GetTabIndex() : SAL_MAX_UINT32;
+
+        const std::pair<SwTextContentControl*, sw::mark::IFieldmark*> pFormControl(pTCC, nullptr);
+        aFormMap[std::make_pair(nPos, nTabIndex)] = pFormControl;
+    }
+
+    if (aFormMap.begin() == aFormMap.end())
+    {
+        // only legacy fields exist. Avoid reprocessing everything and use legacy code path.
+        GotoFieldmark(bNext ? GetFieldmarkAfter(/*Loop=*/true) : GetFieldmarkBefore(/*Loop=*/true));
+        return;
+    }
+
+    // add all of the legacy form field controls into the sorted map
+    IDocumentMarkAccess* pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        auto pFieldMark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+        assert(pFieldMark);
+        std::pair<SwTextContentControl*, sw::mark::IFieldmark*> pFormControl(nullptr, pFieldMark);
+        // legacy form fields do not have (functional) tabIndexes - use lowest priority for them
+        aFormMap[std::make_pair((*it)->GetMarkStart(), SAL_MAX_UINT32)] = pFormControl;
+    }
+
+    if (aFormMap.begin() == aFormMap.end())
+        return;
+
+    // Identify the current location in the document, and the current tab index priority
+
+    // A content control could contain a Fieldmark, so check for legacy fieldmarks first
+    sw::mark::IFieldmark* pFieldMark = GetCurrentFieldmark();
+    SwTextContentControl* pTCC = !pFieldMark ? CursorInsideContentControl() : nullptr;
+
+    auto pCC = pTCC ? pTCC->GetContentControl().GetContentControl() : nullptr;
+    const sal_Int32 nCurTabIndex = pCC && pCC->GetTabIndex() ? pCC->GetTabIndex() : SAL_MAX_UINT32;
+
+    SwPosition nCurPos(*GetCursor()->GetPoint());
+    if (pFieldMark)
+        nCurPos = pFieldMark->GetMarkStart();
+    else if (pTCC && pTCC->GetTextNode())
+        nCurPos = SwPosition(*pTCC->GetTextNode(), pTCC->GetStart());
+
+    // Find the previous (or next) tab control and navigate to it
+    const std::pair<SwPosition, sal_uInt32> nOldPos(nCurPos, nCurTabIndex);
+
+    // lower_bound acts like find, and returns a pointer to nFindPos if it exists,
+    // otherwise it will point to the previous entry.
+    auto aNewPos = aFormMap.lower_bound(nOldPos);
+    if (bNext && aNewPos != aFormMap.end())
+        ++aNewPos;
+    else if (!bNext && aNewPos != aFormMap.end() && aNewPos->first == nOldPos)
+    {
+        // Found the current position - need to return previous
+        if (aNewPos == aFormMap.begin())
+            aNewPos = aFormMap.end(); // prepare to loop around
+        else
+            --aNewPos;
+    }
+
+    if (aNewPos == aFormMap.end())
+    {
+        // Loop around to the other side
+        if (bNext)
+            aNewPos = aFormMap.begin();
+        else
+            --aNewPos;
+    }
+
+    // the entry contains a pointer to either a Content Control (first) or Fieldmark (second)
+    if (aNewPos->second.first)
+    {
+        auto& rFCC = static_cast<SwFormatContentControl&>(aNewPos->second.first->GetAttr());
+        GotoFormatContentControl(rFCC);
+    }
+    else
+    {
+        assert(aNewPos->second.second);
+        GotoFieldmark(aNewPos->second.second);
+    }
+}
+
 bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 {
     SwTextField const*const pTextField(rField.GetTextField());
