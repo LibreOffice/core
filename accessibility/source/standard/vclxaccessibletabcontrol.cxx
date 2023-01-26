@@ -42,7 +42,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
-    :VCLXAccessibleComponent( pVCLXWindow )
+    :ImplInheritanceHelper( pVCLXWindow )
 {
     m_pTabControl = GetAs<TabControl>();
     if (!m_pTabControl)
@@ -289,18 +289,6 @@ void VCLXAccessibleTabControl::FillAccessibleStateSet( sal_Int64& rStateSet )
     if ( m_pTabControl )
         rStateSet |= AccessibleStateType::FOCUSABLE;
 }
-
-
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTabControl, VCLXAccessibleComponent, VCLXAccessibleTabControl_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTabControl, VCLXAccessibleComponent, VCLXAccessibleTabControl_BASE )
 
 
 // XComponent
