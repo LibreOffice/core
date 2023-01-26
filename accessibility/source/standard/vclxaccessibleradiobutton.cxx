@@ -105,18 +105,6 @@ void VCLXAccessibleRadioButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
-
-
 // XServiceInfo
 
 
