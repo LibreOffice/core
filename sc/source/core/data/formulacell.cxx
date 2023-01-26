@@ -4508,7 +4508,7 @@ struct ScDependantsCalculator
                     ScRange aAbs = aRef.toAbs(mrDoc, mrPos);
 
                     // Multiple sheet
-                    if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
+                    if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
                         return false;
 
                     bool bIsRef1RowRel = aRef.Ref1.IsRowRel();

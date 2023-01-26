@@ -195,7 +195,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 ScRange aAbs = aRef.toAbs(mrDoc, mrPos);
 
                 // Multiple sheets not handled by vector/matrix.
-                if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
+                if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
                     return false;
 
                 // Check for self reference.
