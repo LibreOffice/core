@@ -27,17 +27,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 SVTXAccessibleNumericField::SVTXAccessibleNumericField(VCLXWindow* pVCLWindow)
-    : VCLXAccessibleEdit(pVCLWindow)
+    : ImplInheritanceHelper(pVCLWindow)
 {
 }
-
-// XInterface
-IMPLEMENT_FORWARD_XINTERFACE2(SVTXAccessibleNumericField, VCLXAccessibleTextComponent,
-                              SVTXAccessibleNumericField_BASE)
-
-// XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(SVTXAccessibleNumericField, VCLXAccessibleTextComponent,
-                                 SVTXAccessibleNumericField_BASE)
 
 sal_Int16 SVTXAccessibleNumericField::getAccessibleRole() { return AccessibleRole::SPIN_BOX; }
 
