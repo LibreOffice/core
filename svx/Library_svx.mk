@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
 		crashreport) \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
+    docmodel \
     drawinglayercore \
     drawinglayer \
     editeng \

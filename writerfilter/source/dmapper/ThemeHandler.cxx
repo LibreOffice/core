@@ -10,6 +10,7 @@
 #include "ThemeHandler.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <ooxml/resourceids.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace com::sun::star;
 

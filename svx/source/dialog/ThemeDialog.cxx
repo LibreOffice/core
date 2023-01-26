@@ -9,6 +9,7 @@
 
 #include <svx/dialog/ThemeDialog.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svx
@@ -53,7 +54,7 @@ void ThemeDialog::DoubleClickHdl()
 
     sal_uInt32 nIndex = nItemId - 1;
 
-    svx::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
+    model::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
 
     mpChanger->apply(rColorSet);
 }

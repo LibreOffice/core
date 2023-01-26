@@ -46,10 +46,10 @@ namespace
 class ThemeColorHandler : public sw::ModelTraverseHandler
 {
     SwDoc& mrDocument;
-    svx::ColorSet const& mrColorSet;
+    model::ColorSet const& mrColorSet;
 
 public:
-    ThemeColorHandler(SwDoc& rDocument, svx::ColorSet const& rColorSet)
+    ThemeColorHandler(SwDoc& rDocument, model::ColorSet const& rColorSet)
         : mrDocument(rDocument)
         , mrColorSet(rColorSet)
     {
@@ -115,7 +115,7 @@ public:
     }
 };
 
-void changeColor(SwFormat* pFormat, svx::ColorSet const& rColorSet, SwDoc* pDocument)
+void changeColor(SwFormat* pFormat, model::ColorSet const& rColorSet, SwDoc* pDocument)
 {
     const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
     std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
@@ -142,7 +142,7 @@ ThemeColorChanger::ThemeColorChanger(SwDocShell* pDocSh)
 
 ThemeColorChanger::~ThemeColorChanger() = default;
 
-void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
+void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
 {
     SwDoc* pDocument = mpDocSh->GetDoc();
     if (!pDocument)
@@ -154,13 +154,13 @@ void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
     svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
     if (pTheme)
     {
-        pTheme->SetColorSet(std::make_unique<svx::ColorSet>(rColorSet));
+        pTheme->SetColorSet(std::make_unique<model::ColorSet>(rColorSet));
     }
     else
     {
         pPage->getSdrPageProperties().SetTheme(std::make_unique<svx::Theme>("Office"));
         pTheme = pPage->getSdrPageProperties().GetTheme();
-        pTheme->SetColorSet(std::make_unique<svx::ColorSet>(rColorSet));
+        pTheme->SetColorSet(std::make_unique<model::ColorSet>(rColorSet));
     }
 
     SfxStyleSheetBasePool* pPool = mpDocSh->GetStyleSheetPool();

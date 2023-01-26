@@ -10,7 +10,6 @@
 
 #include <svx/ColorSets.hxx>
 
-#include <sstream>
 #include <utility>
 
 #include <libxml/xmlwriter.h>
@@ -21,6 +20,7 @@
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <o3tl/enumrange.hxx>
 #include <com/sun/star/util/Color.hpp>
 
@@ -28,58 +28,6 @@ using namespace com::sun::star;
 
 namespace svx
 {
-
-ColorSet::ColorSet(OUString const& rName)
-    : maName(rName)
-{}
-
-void ColorSet::add(model::ThemeColorType eType, Color aColorData)
-{
-    if (eType == model::ThemeColorType::Unknown)
-        return;
-    maColors[sal_Int16(eType)] = aColorData;
-}
-
-Color ColorSet::getColor(model::ThemeColorType eType) const
-{
-    if (eType == model::ThemeColorType::Unknown)
-    {
-        SAL_WARN("svx", "ColorSet::getColor with ThemeColorType::Unknown");
-        return COL_AUTO;
-    }
-    return maColors[size_t(eType)];
-}
-
-Color ColorSet::resolveColor(model::ThemeColor const& rThemeColor) const
-{
-    auto eType = rThemeColor.getType();
-    if (eType == model::ThemeColorType::Unknown)
-    {
-        SAL_WARN("svx", "ColorSet::resolveColor with ThemeColorType::Unknown");
-        return COL_AUTO;
-    }
-    Color aColor = getColor(eType);
-    return rThemeColor.applyTransformations(aColor);
-}
-
-void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maName"),
-                                      BAD_CAST(maName.toUtf8().getStr()));
-
-    for (const auto& rColor : maColors)
-    {
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Color"));
-        std::stringstream ss;
-        ss << rColor;
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
-        (void)xmlTextWriterEndElement(pWriter);
-    }
-
-    (void)xmlTextWriterEndElement(pWriter);
-}
 
 ColorSets::ColorSets()
 {}
@@ -90,7 +38,7 @@ ColorSets::~ColorSets()
 void ColorSets::init()
 {
     {
-        ColorSet aColorSet("LibreOffice");
+        model::ColorSet aColorSet("LibreOffice");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
@@ -106,7 +54,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Rainbow");
+        model::ColorSet aColorSet("Rainbow");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x1C1C1C);
@@ -122,7 +70,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Beach");
+        model::ColorSet aColorSet("Beach");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0xFFBF00);
@@ -138,7 +86,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Sunset");
+        model::ColorSet aColorSet("Sunset");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x492300);
@@ -154,7 +102,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Ocean");
+        model::ColorSet aColorSet("Ocean");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x2A6099);
@@ -170,7 +118,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Forest");
+        model::ColorSet aColorSet("Forest");
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
@@ -186,7 +134,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        ColorSet aColorSet("Breeze");
+        model::ColorSet aColorSet("Breeze");
         aColorSet.add(model::ThemeColorType::Dark1, 0x232629);
         aColorSet.add(model::ThemeColorType::Light1, 0xFCFCFC);
         aColorSet.add(model::ThemeColorType::Dark2, 0x31363B);
@@ -203,9 +151,9 @@ void ColorSets::init()
     }
 }
 
-const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
+const model::ColorSet& ColorSets::getColorSet(std::u16string_view rName)
 {
-    for (const ColorSet & rColorSet : maColorSets)
+    for (const model::ColorSet & rColorSet : maColorSets)
     {
         if (rColorSet.getName() == rName)
             return rColorSet;
@@ -213,7 +161,7 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
     return maColorSets[0];
 }
 
-void ColorSets::insert(ColorSet const& rColorSet)
+void ColorSets::insert(model::ColorSet const& rColorSet)
 {
     maColorSets.push_back(rColorSet);
 }
@@ -223,11 +171,11 @@ Theme::Theme(OUString const& rName)
 {
 }
 
-void Theme::SetColorSet(std::unique_ptr<ColorSet> pColorSet) { mpColorSet = std::move(pColorSet); }
+void Theme::SetColorSet(std::unique_ptr<model::ColorSet> pColorSet) { mpColorSet = std::move(pColorSet); }
 
-const ColorSet* Theme::GetColorSet() const { return mpColorSet.get(); }
+const model::ColorSet* Theme::GetColorSet() const { return mpColorSet.get(); }
 
-ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
+model::ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
 
 void Theme::SetName(const OUString& rName) { maName = rName; }
 
@@ -276,7 +224,7 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
 {
     comphelper::SequenceAsHashMap aMap(rVal);
     std::unique_ptr<Theme> pTheme;
-    ColorSet* pColorSet = nullptr;
+    model::ColorSet* pColorSet = nullptr;
 
     auto it = aMap.find("Name");
     if (it != aMap.end())
@@ -291,7 +239,7 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     {
         OUString aName;
         it->second >>= aName;
-        auto pSet = std::make_unique<ColorSet>(aName);
+        auto pSet = std::make_unique<model::ColorSet>(aName);
         pTheme->SetColorSet(std::move(pSet));
         pColorSet = pTheme->GetColorSet();
     }

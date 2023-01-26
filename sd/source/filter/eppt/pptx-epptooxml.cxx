@@ -2176,7 +2176,7 @@ bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme
         return false;
     }
 
-    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    model::ColorSet* pColorSet = pTheme->GetColorSet();
     if (!pColorSet)
     {
         return false;
@@ -2271,7 +2271,7 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, svx::Theme* pTheme)
     OUString aColorSchemeName("Office");
     if (pTheme)
     {
-        svx::ColorSet* pColorSet = pTheme->GetColorSet();
+        model::ColorSet* pColorSet = pTheme->GetColorSet();
         if (pColorSet)
         {
             aColorSchemeName = pColorSet->getName();

@@ -30,7 +30,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 
 namespace oox::drawingml {
 
@@ -95,7 +95,7 @@ public:
     const OUString& GetName() const { return maName; }
 
     void ToAny(css::uno::Any& rVal) const;
-    void fill(svx::ColorSet& rColorSet) const;
+    void fill(model::ColorSet& rColorSet) const;
 
 };
 

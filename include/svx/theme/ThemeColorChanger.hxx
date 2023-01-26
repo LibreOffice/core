@@ -11,7 +11,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/theme/IThemeColorChanger.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 
@@ -19,7 +19,7 @@ namespace svx
 {
 namespace theme
 {
-SVXCORE_DLLPUBLIC void updateSdrObject(svx::ColorSet const& rColorSet, SdrObject* pObject);
+SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject);
 }
 
 class SVXCORE_DLLPUBLIC ThemeColorChanger : public IThemeColorChanger
@@ -31,7 +31,7 @@ public:
     ThemeColorChanger(SdrPage* pPage);
     virtual ~ThemeColorChanger() override;
 
-    void apply(svx::ColorSet const& rColorSet) override;
+    void apply(model::ColorSet const& rColorSet) override;
 };
 
 } // end svx namespace

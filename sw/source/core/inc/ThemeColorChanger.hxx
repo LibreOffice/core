@@ -10,7 +10,7 @@
 #pragma once
 
 #include <docsh.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <svx/theme/ThemeColorChanger.hxx>
 
 namespace sw
@@ -24,7 +24,7 @@ public:
     ThemeColorChanger(SwDocShell* pDocSh);
     virtual ~ThemeColorChanger() override;
 
-    void apply(svx::ColorSet const& rColorSet) override;
+    void apply(model::ColorSet const& rColorSet) override;
 };
 
 } // end sw namespace
