@@ -21,15 +21,13 @@
 
 #include <standard/accessiblemenubasecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
-typedef ::cppu::ImplHelper1<
-    css::accessibility::XAccessibleSelection > OAccessibleMenuComponent_BASE;
-
-class OAccessibleMenuComponent : public OAccessibleMenuBaseComponent,
-                                 public OAccessibleMenuComponent_BASE
+class OAccessibleMenuComponent : public cppu::ImplInheritanceHelper<
+                                     OAccessibleMenuBaseComponent,
+                                     css::accessibility::XAccessibleSelection>
 {
 protected:
     virtual bool            IsEnabled() override;
@@ -40,15 +38,9 @@ protected:
     // OCommonAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
-    using OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent;
-
 public:
 
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
+    OAccessibleMenuComponent( Menu* pMenu ): ImplInheritanceHelper(pMenu) {}
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

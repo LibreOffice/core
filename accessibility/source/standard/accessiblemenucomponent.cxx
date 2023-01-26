@@ -121,18 +121,6 @@ awt::Rectangle OAccessibleMenuComponent::implGetBounds()
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleMenuComponent, OAccessibleMenuBaseComponent, OAccessibleMenuComponent_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuComponent, OAccessibleMenuBaseComponent, OAccessibleMenuComponent_BASE )
-
-
 // XAccessibleContext
 
 
