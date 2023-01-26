@@ -14,6 +14,7 @@
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -30,7 +31,7 @@ namespace theme
 namespace
 {
 /// Updates text portion property colors
-void updateTextPortionColorSet(svx::ColorSet const& rColorSet,
+void updateTextPortionColorSet(model::ColorSet const& rColorSet,
                                const uno::Reference<beans::XPropertySet>& xPortion)
 {
     if (!xPortion->getPropertySetInfo()->hasPropertyByName(
@@ -53,7 +54,7 @@ void updateTextPortionColorSet(svx::ColorSet const& rColorSet,
 }
 
 /// Updates the fill property colors
-void updateFillColorSet(svx::ColorSet const& rColorSet,
+void updateFillColorSet(model::ColorSet const& rColorSet,
                         const uno::Reference<beans::XPropertySet>& xShape)
 {
     if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME_REFERENCE))
@@ -75,7 +76,7 @@ void updateFillColorSet(svx::ColorSet const& rColorSet,
 }
 
 /// Updates the line property colors
-void updateLineColorSet(svx::ColorSet const& rColorSet,
+void updateLineColorSet(model::ColorSet const& rColorSet,
                         const uno::Reference<beans::XPropertySet>& xShape)
 {
     if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_LINECOLOR_THEME_REFERENCE))
@@ -99,7 +100,7 @@ void updateLineColorSet(svx::ColorSet const& rColorSet,
 } // end anonymous namespace
 
 /// Updates properties of the SdrObject
-void updateSdrObject(svx::ColorSet const& rColorSet, SdrObject* pObject)
+void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject)
 {
     uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
     uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
@@ -136,7 +137,7 @@ ThemeColorChanger::ThemeColorChanger(SdrPage* pPage)
 
 ThemeColorChanger::~ThemeColorChanger() = default;
 
-void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
+void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
 {
     for (size_t nObject = 0; nObject < mpPage->GetObjCount(); ++nObject)
     {

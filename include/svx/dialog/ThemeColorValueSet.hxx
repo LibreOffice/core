@@ -12,13 +12,13 @@
 #include <svx/svxdllapi.h>
 #include <sal/config.h>
 #include <svtools/valueset.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 
 namespace svx
 {
 class SVX_DLLPUBLIC ThemeColorValueSet final : public ValueSet
 {
-    std::vector<std::reference_wrapper<const svx::ColorSet>> maColorSets;
+    std::vector<std::reference_wrapper<const model::ColorSet>> maColorSets;
 
 public:
     ThemeColorValueSet()
@@ -30,7 +30,7 @@ public:
     void UserDraw(const UserDrawEvent& rUserDrawEvent) override;
     void StyleUpdated() override;
 
-    void insert(svx::ColorSet const& rColorSet);
+    void insert(model::ColorSet const& rColorSet);
 };
 
 } // end svx namespace

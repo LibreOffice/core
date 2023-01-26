@@ -37,7 +37,7 @@ void ThemeExport::write(OUString const& rPath, svx::Theme const& rTheme)
 
     pFS->startElementNS(XML_a, XML_themeElements);
 
-    const svx::ColorSet* pColorSet = rTheme.GetColorSet();
+    const model::ColorSet* pColorSet = rTheme.GetColorSet();
 
     pFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
     writeColorSet(pFS, rTheme);
@@ -242,7 +242,7 @@ bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, svx::Theme cons
         = { XML_dk1,     XML_lt1,     XML_dk2,     XML_lt2,     XML_accent1, XML_accent2,
             XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
 
-    const svx::ColorSet* pColorSet = rTheme.GetColorSet();
+    const model::ColorSet* pColorSet = rTheme.GetColorSet();
     if (!pColorSet)
         return false;
 

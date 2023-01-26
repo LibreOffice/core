@@ -19,7 +19,7 @@ constexpr tools::Long LABEL_HEIGHT = 16;
 constexpr tools::Long LABEL_TEXT_HEIGHT = 14;
 constexpr tools::Long constElementNumber = 8;
 
-void ThemeColorValueSet::insert(svx::ColorSet const& rColorSet)
+void ThemeColorValueSet::insert(model::ColorSet const& rColorSet)
 {
     maColorSets.push_back(std::cref(rColorSet));
     InsertItem(maColorSets.size());
@@ -40,7 +40,7 @@ void ThemeColorValueSet::UserDraw(const UserDrawEvent& rUserDrawEvent)
     tools::Rectangle aRect = rUserDrawEvent.GetRect();
     const Point aPosition = aRect.GetPos();
     const sal_uInt16 nItemId = rUserDrawEvent.GetItemId();
-    svx::ColorSet const& rColorSet = maColorSets[nItemId - 1];
+    model::ColorSet const& rColorSet = maColorSets[nItemId - 1];
 
     Size aSize = aRect.GetSize();
     Size aMin(BORDER * 7 + SIZE * constElementNumber / 2 + BORDER * 2,

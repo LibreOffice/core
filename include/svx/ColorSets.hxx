@@ -19,6 +19,7 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <tools/color.hxx>
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -27,49 +28,27 @@ class SdrPage;
 namespace svx
 {
 
-
-class SVXCORE_DLLPUBLIC ColorSet
-{
-    OUString maName;
-    std::array<Color, 12> maColors;
-
-public:
-    ColorSet(OUString const& rName);
-
-    void add(model::ThemeColorType Type, Color aColorData);
-
-    const OUString& getName() const
-    {
-        return maName;
-    }
-
-    Color resolveColor(model::ThemeColor const& rThemeColor) const;
-    Color getColor(model::ThemeColorType eType) const;
-
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
-};
-
 class SVXCORE_DLLPUBLIC ColorSets
 {
-    std::vector<ColorSet> maColorSets;
+    std::vector<model::ColorSet> maColorSets;
 public:
     ColorSets();
     ~ColorSets();
 
     void init();
-    const std::vector<ColorSet>& getColorSets() const
+    const std::vector<model::ColorSet>& getColorSets() const
     {
         return maColorSets;
     }
 
-    const ColorSet& getColorSet(sal_uInt32 nIndex) const
+    const model::ColorSet& getColorSet(sal_uInt32 nIndex) const
     {
         return maColorSets[nIndex];
     }
 
-    const ColorSet& getColorSet(std::u16string_view rName);
+    const model::ColorSet& getColorSet(std::u16string_view rName);
 
-    void insert(ColorSet const& rColorSet);
+    void insert(model::ColorSet const& rColorSet);
 };
 
 struct SVXCORE_DLLPUBLIC ThemeSupplementalFont
@@ -217,7 +196,7 @@ class SVXCORE_DLLPUBLIC Theme
 {
 private:
     OUString maName;
-    std::unique_ptr<ColorSet> mpColorSet;
+    std::unique_ptr<model::ColorSet> mpColorSet;
 
     FontScheme maFontScheme;
 
@@ -231,9 +210,9 @@ public:
 
     FontScheme const& getFontScheme() const { return maFontScheme; }
 
-    void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
-    const ColorSet* GetColorSet() const;
-    ColorSet* GetColorSet();
+    void SetColorSet(std::unique_ptr<model::ColorSet> pColorSet);
+    const model::ColorSet* GetColorSet() const;
+    model::ColorSet* GetColorSet();
 
     void SetName(const OUString& rName);
     const OUString& GetName() const;

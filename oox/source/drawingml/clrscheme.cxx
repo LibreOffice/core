@@ -130,7 +130,7 @@ void ClrScheme::ToAny(css::uno::Any& rVal) const
     rVal <<= comphelper::containerToSequence(aRet);
 }
 
-void ClrScheme::fill(svx::ColorSet& rColorSet) const
+void ClrScheme::fill(model::ColorSet& rColorSet) const
 {
     for (const auto& [nToken, rColor] : maClrScheme)
     {

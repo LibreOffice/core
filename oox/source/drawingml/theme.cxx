@@ -28,6 +28,7 @@
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <svx/unoapi.hxx>
 
 using namespace com::sun::star;
@@ -111,7 +112,7 @@ const TextFont* Theme::resolveFont( std::u16string_view rName ) const
 std::unique_ptr<svx::Theme> Theme::createSvxTheme() const
 {
     auto pTheme = std::make_unique<svx::Theme>(maThemeName);
-    auto pColorSet = std::make_unique<svx::ColorSet>(maClrScheme.GetName());
+    auto pColorSet = std::make_unique<model::ColorSet>(maClrScheme.GetName());
     maClrScheme.fill(*pColorSet);
     pTheme->SetColorSet(std::move(pColorSet));
 

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 
 namespace svx
 {
@@ -18,7 +18,7 @@ class SVXCORE_DLLPUBLIC IThemeColorChanger
 {
 public:
     virtual ~IThemeColorChanger() = default;
-    virtual void apply(svx::ColorSet const& rColorSet) = 0;
+    virtual void apply(model::ColorSet const& rColorSet) = 0;
 };
 
 } // end svx namespace

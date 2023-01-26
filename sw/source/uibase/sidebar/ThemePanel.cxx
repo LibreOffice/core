@@ -59,10 +59,10 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
             maColorSets.insert(*pTheme->GetColorSet());
     }
 
-    const std::vector<svx::ColorSet>& aColorSets = maColorSets.getColorSets();
+    const std::vector<model::ColorSet>& aColorSets = maColorSets.getColorSets();
     for (size_t i = 0; i < aColorSets.size(); ++i)
     {
-        const svx::ColorSet& rColorSet = aColorSets[i];
+        const model::ColorSet& rColorSet = aColorSets[i];
         mxValueSetColors->insert(rColorSet);
     }
 
@@ -106,7 +106,7 @@ void ThemePanel::DoubleClickHdl()
         return;
     sal_uInt32 nIndex = nItemId - 1;
 
-    svx::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
+    model::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
 
     ThemeColorChanger aChanger(pDocSh);
     aChanger.apply(rColorSet);

@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
-    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    model::ColorSet* pColorSet = pTheme->GetColorSet();
     CPPUNIT_ASSERT(pColorSet);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
 
