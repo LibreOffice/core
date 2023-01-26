@@ -11,7 +11,7 @@
 
 #include <docsh.hxx>
 #include <svx/ColorSets.hxx>
-#include <svx/theme/IThemeColorChanger.hxx>
+#include <svx/theme/ThemeColorChanger.hxx>
 
 namespace sw
 {
@@ -21,11 +21,7 @@ private:
     SwDocShell* mpDocSh;
 
 public:
-    ThemeColorChanger(SwDocShell* pDocSh)
-        : mpDocSh(pDocSh)
-    {
-    }
-
+    ThemeColorChanger(SwDocShell* pDocSh);
     virtual ~ThemeColorChanger() override;
 
     void apply(svx::ColorSet const& rColorSet) override;

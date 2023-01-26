@@ -10,15 +10,28 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+#include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/ColorSets.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
 
 namespace svx
 {
-class SVXCORE_DLLPUBLIC IThemeColorChanger
+namespace theme
 {
+SVXCORE_DLLPUBLIC void updateSdrObject(svx::ColorSet const& rColorSet, SdrObject* pObject);
+}
+
+class SVXCORE_DLLPUBLIC ThemeColorChanger : public IThemeColorChanger
+{
+private:
+    SdrPage* mpPage;
+
 public:
-    virtual ~IThemeColorChanger() = default;
-    virtual void apply(svx::ColorSet const& rColorSet) = 0;
+    ThemeColorChanger(SdrPage* pPage);
+    virtual ~ThemeColorChanger() override;
+
+    void apply(svx::ColorSet const& rColorSet) override;
 };
 
 } // end svx namespace

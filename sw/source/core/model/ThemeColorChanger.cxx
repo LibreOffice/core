@@ -97,105 +97,10 @@ public:
         updateHints(pNode->GetTextNode());
     }
 
-    /// Updates text portion property colors
-    void updateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion)
-    {
-        if (!xPortion->getPropertySetInfo()->hasPropertyByName(
-                UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE))
-            return;
-
-        uno::Reference<util::XThemeColor> xThemeColor;
-        xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE) >>= xThemeColor;
-        if (!xThemeColor.is())
-            return;
-
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-        if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-            return;
-
-        Color aColor = mrColorSet.resolveColor(aThemeColor);
-        xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR,
-                                   uno::Any(static_cast<sal_Int32>(aColor)));
-    }
-
-    /// Updates the fill property colors
-    void updateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape)
-    {
-        if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME_REFERENCE))
-            return;
-
-        uno::Reference<util::XThemeColor> xThemeColor;
-        xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME_REFERENCE) >>= xThemeColor;
-        if (!xThemeColor.is())
-            return;
-
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-        if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-            return;
-
-        Color aColor = mrColorSet.resolveColor(aThemeColor);
-        xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
-    }
-
-    /// Updates the line property colors
-    void updateLineColorSet(const uno::Reference<beans::XPropertySet>& xShape)
-    {
-        if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_LINECOLOR_THEME_REFERENCE))
-            return;
-
-        uno::Reference<util::XThemeColor> xThemeColor;
-        xShape->getPropertyValue(UNO_NAME_LINECOLOR_THEME_REFERENCE) >>= xThemeColor;
-        if (!xThemeColor.is())
-            return;
-
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-        if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-            return;
-
-        Color aColor = mrColorSet.resolveColor(aThemeColor);
-        xShape->setPropertyValue(UNO_NAME_LINECOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
-    }
-
-    /// Updates properties of the SdrObject
-    void updateSdrObject(SdrObject* pObject)
-    {
-        uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
-        uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
-        if (xShapeText.is())
-        {
-            // E.g. group shapes have no text.
-            uno::Reference<container::XEnumerationAccess> xText(xShapeText->getText(),
-                                                                uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
-            while (xParagraphs->hasMoreElements())
-            {
-                uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
-                                                                         uno::UNO_QUERY);
-                uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-                while (xPortions->hasMoreElements())
-                {
-                    uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(),
-                                                                 uno::UNO_QUERY);
-                    updateTextPortionColorSet(xPortion);
-                }
-            }
-        }
-
-        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        updateFillColorSet(xShapeProps);
-        updateLineColorSet(xShapeProps);
-    }
-
     void handleSdrObject(SdrObject* pObject) override
     {
         // update current object
-        updateSdrObject(pObject);
+        svx::theme::updateSdrObject(mrColorSet, pObject);
 
         // update child objects
         SdrObjList* pList = pObject->GetSubList();
@@ -204,7 +109,7 @@ public:
             SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
             while (aIter.IsMore())
             {
-                updateSdrObject(aIter.Next());
+                svx::theme::updateSdrObject(mrColorSet, aIter.Next());
             }
         }
     }
@@ -230,7 +135,12 @@ void changeColor(SwFormat* pFormat, svx::ColorSet const& rColorSet, SwDoc* pDocu
 
 } // end anonymous namespace
 
-ThemeColorChanger::~ThemeColorChanger() {}
+ThemeColorChanger::ThemeColorChanger(SwDocShell* pDocSh)
+    : mpDocSh(pDocSh)
+{
+}
+
+ThemeColorChanger::~ThemeColorChanger() = default;
 
 void ThemeColorChanger::apply(svx::ColorSet const& rColorSet)
 {

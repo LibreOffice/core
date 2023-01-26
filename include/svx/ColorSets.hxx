@@ -244,8 +244,6 @@ public:
 
     static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
 
-    void UpdateSdrPage(const SdrPage* pPage);
-
     std::vector<Color> GetColors() const;
 
     Color GetColor(model::ThemeColorType eType) const;
