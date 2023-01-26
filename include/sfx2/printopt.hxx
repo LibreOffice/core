@@ -46,7 +46,6 @@ private:
     std::unique_ptr<weld::ComboBox> m_xReduceBitmapsResolutionLB;
     std::unique_ptr<weld::CheckButton> m_xReduceBitmapsTransparencyCB;
     std::unique_ptr<weld::CheckButton> m_xConvertToGreyscalesCB;
-    std::unique_ptr<weld::CheckButton> m_xPDFCB;
     std::unique_ptr<weld::CheckButton> m_xPaperSizeCB;
     std::unique_ptr<weld::CheckButton> m_xPaperOrientationCB;
     std::unique_ptr<weld::CheckButton> m_xTransparencyCB;

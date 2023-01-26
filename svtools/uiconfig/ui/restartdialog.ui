@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="RestartDialog">
@@ -91,21 +91,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_pdf">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_pdf">For the modified default print job format to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
               </packing>
             </child>
             <child>

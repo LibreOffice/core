@@ -32,9 +32,6 @@ public:
         case svtools::RESTART_REASON_JAVA:
             reason_ = m_xBuilder->weld_widget("reason_java");
             break;
-        case svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT:
-            reason_ = m_xBuilder->weld_widget("reason_pdf");
-            break;
         case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
             reason_ = m_xBuilder->weld_widget("reason_bibliography_install");
             break;

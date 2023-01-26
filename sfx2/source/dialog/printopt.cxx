@@ -50,24 +50,14 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPag
     , m_xReduceBitmapsResolutionLB(m_xBuilder->weld_combo_box("reducebitmapdpi"))
     , m_xReduceBitmapsTransparencyCB(m_xBuilder->weld_check_button("reducebitmaptrans"))
     , m_xConvertToGreyscalesCB(m_xBuilder->weld_check_button("converttogray"))
-    , m_xPDFCB(m_xBuilder->weld_check_button("pdf"))
     , m_xPaperSizeCB(m_xBuilder->weld_check_button("papersize"))
     , m_xPaperOrientationCB(m_xBuilder->weld_check_button("paperorient"))
     , m_xTransparencyCB(m_xBuilder->weld_check_button("trans"))
 {
-#ifndef ENABLE_CUPS
-    m_xPDFCB->hide();
-#endif
-
-    if( bOutputForPrinter )
-    {
+    if (bOutputForPrinter)
         m_xPrinterOutputRB->set_active(true);
-    }
     else
-    {
         m_xPrintFileOutputRB->set_active(true);
-        m_xPDFCB->set_sensitive(false);
-    }
 
     m_xPrinterOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
     m_xPrintFileOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl ) );
@@ -182,7 +172,6 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const vcl::printer::Optio
 
     m_xReduceBitmapsTransparencyCB->set_active( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
     m_xConvertToGreyscalesCB->set_active( pCurrentOptions->IsConvertToGreyscales() );
-    m_xPDFCB->set_active( pCurrentOptions->IsPDFAsStandardPrintJobFormat() );
 
     ClickReduceTransparencyCBHdl(*m_xReduceTransparencyCB);
     ClickReduceGradientsCBHdl(*m_xReduceGradientsCB);
@@ -203,14 +192,6 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( vcl::printer::Options* pCur
                                                                    SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_xReduceBitmapsTransparencyCB->get_active() );
     pCurrentOptions->SetConvertToGreyscales( m_xConvertToGreyscalesCB->get_active() );
-    bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();
-    if (bOrigBackEnd != m_xPDFCB->get_active())
-    {
-        pCurrentOptions->SetPDFAsStandardPrintJobFormat( m_xPDFCB->get_active() );
-        svtools::executeRestartDialog(
-                comphelper::getProcessComponentContext(), nullptr,
-                svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT);
-    }
 }
 
 IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, weld::Toggleable&, void )
@@ -278,12 +259,10 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, weld::Toggl
     {
         ImplUpdateControls( &maPrintFileOptions );
         bOutputForPrinter = false;
-        m_xPDFCB->set_sensitive(false);
     }
     else
     {
         ImplSaveControls( &maPrintFileOptions );
-        m_xPDFCB->set_sensitive(true);
     }
 }
 

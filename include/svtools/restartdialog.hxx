@@ -26,9 +26,6 @@ enum RestartReason {
     // "For the selected Java runtime environment to work properly,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_JAVA,
-    // For the modified default print job format to take effect,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT,
     // "For the bibliography to work properly,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_BIBLIOGRAPHY_INSTALL,
