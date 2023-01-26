@@ -1166,16 +1166,14 @@ void SbModule::Run( SbMethod* pMeth )
                 pSbData->pInst->CalcBreakCallLevel( pMeth->GetDebugFlags() );
             }
 
-            auto xRuntimeGuard(std::make_unique<RunGuard>(this, pMeth, pMeth->nStart, pSbData, bDelInst));
-
-            if ( mbVBACompat )
             {
-                pSbData->pInst->EnableCompatibility( true );
+                RunGuard xRuntimeGuard(this, pMeth, pMeth->nStart, pSbData, bDelInst);
+
+                if (mbVBACompat)
+                    pSbData->pInst->EnableCompatibility(true);
+
+                xRuntimeGuard.run();
             }
-
-            xRuntimeGuard->run();
-
-            xRuntimeGuard.reset();
 
             if( bDelInst )
             {
@@ -1254,9 +1252,7 @@ void SbModule::RunInit()
     pSbData->bRunInit = true;
 
     // The init code starts always here
-    auto xRuntimeGuard(std::make_unique<RunInitGuard>(this, nullptr, 0, pSbData));
-    xRuntimeGuard->run();
-    xRuntimeGuard.reset();
+    RunInitGuard(this, nullptr, 0, pSbData).run();
 
     pImage->bInit = true;
     pImage->bFirstInit = false;
