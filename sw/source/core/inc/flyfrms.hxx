@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include "flyfrm.hxx"
+#include "flowfrm.hxx"
 
 class SwNoTextFrame;
 
@@ -156,7 +157,7 @@ public:
 };
 
 // Flys that are bound to Content but not in Content
-class SwFlyAtContentFrame final: public SwFlyFreeFrame
+class SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
 {
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
@@ -171,6 +172,7 @@ class SwFlyAtContentFrame final: public SwFlyFreeFrame
     virtual void RegisterAtCorrectPage() override;
     virtual void RegisterAtPage(SwPageFrame &) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    bool ShouldBwdMoved(SwLayoutFrame* pNewUpper, bool& rReformat) override;
 
 public:
     // #i28701#

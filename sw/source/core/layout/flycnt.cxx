@@ -74,7 +74,8 @@ SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert, const 
 }
 
 SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
-    SwFlyFreeFrame( pFormat, pSib, pAnch )
+    SwFlyFreeFrame( pFormat, pSib, pAnch ),
+    SwFlowFrame(static_cast<SwFrame&>(*this))
 {
     m_bAtCnt = true;
     m_bAutoPosition = (RndStdIds::FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
@@ -1516,6 +1517,11 @@ bool SwFlyAtContentFrame::InvalidationAllowed( const InvalidationType _nInvalid 
     }
 
     return bAllowed;
+}
+
+bool SwFlyAtContentFrame::ShouldBwdMoved(SwLayoutFrame* /*pNewUpper*/, bool& /*rReformat*/)
+{
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
