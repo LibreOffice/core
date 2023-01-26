@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
     // i.e. the custom "red" color was lost as RES_PARATR_LIST_AUTOFMT was not serialized to ODT.
     CPPUNIT_ASSERT_EQUAL(
         OUString("00ff0000"),
-        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
@@ -900,7 +900,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
     // i.e. the numbering portion was bold, while its weight should be normal.
     CPPUNIT_ASSERT_EQUAL(
         OUString("normal"),
-        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-weight"));
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "weight"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testFlySplit)

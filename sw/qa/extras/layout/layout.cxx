@@ -4223,10 +4223,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
 {
     createSwDoc("tdf64222.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(
-        pXmlDoc,
-        "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
-        "font-height", "560");
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
+                "child::*[@type='PortionType::Number']/SwFont",
+                "height", "560");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)

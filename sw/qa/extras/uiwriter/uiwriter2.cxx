@@ -106,9 +106,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
                 "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
                 "expand", "2.");
     // The numbering height was 960 in DOC format.
-    assertXPath(pXmlDoc,
-                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
-                "font-height", "220");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", "220");
 
     // tdf#127606: now it's possible to change formatting of numbering
     // increase font size (220 -> 260)
@@ -117,9 +118,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     pViewShell->Reformat();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc,
-                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
-                "font-height", "260");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", "260");
 
     // save it to DOCX
     reload("Office Open XML Text", "tdf117923.docx");
@@ -130,9 +132,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // this was 220
-    assertXPath(pXmlDoc,
-                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
-                "font-height", "260");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", "260");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)

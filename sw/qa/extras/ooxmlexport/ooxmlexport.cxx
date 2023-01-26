@@ -860,7 +860,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 
     // The paragraph marker's red font color was inherited by the number portion, this was ff0000.
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), parseDump("//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "font-color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), parseDump("//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont", "color"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")

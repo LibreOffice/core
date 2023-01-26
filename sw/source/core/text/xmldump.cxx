@@ -509,6 +509,8 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
     // do not use Color::AsRGBHexString() as that omits the transparency
     (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08" SAL_PRIxUINT32, sal_uInt32(GetColor()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("height"), BAD_CAST(OString::number(GetSize(GetActual()).Height()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("width"), BAD_CAST(OString::number(GetSize(GetActual()).Width()).getStr()));
     {
         std::stringstream ss;
         ss << GetWeight();

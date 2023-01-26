@@ -914,8 +914,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
     // - Actual  : 240
     // i.e. the numbering portion font size was 12pt, not 24pt (but only when the doc had a
     // bookmark).
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
-                "font-height", "480");
+    assertXPath(pXmlDoc,
+                "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont",
+                "height", "480");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
@@ -933,7 +934,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
     // i.e. the run color affected the color of the number portion in Writer, but not in Word.
     CPPUNIT_ASSERT_EQUAL(
         OUString("ffffffff"),
-        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
+        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

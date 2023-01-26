@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      * to the numbering. This is easier to test using a layout dump.
      */
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "font-height", "220");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]/SwFont", "height", "220");
 
     // hidden _Toc and _Ref bookmarks are not visible in Visible bookmarks mode
     // This was PortionType::Bookmark
