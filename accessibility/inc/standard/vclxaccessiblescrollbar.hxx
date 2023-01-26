@@ -24,17 +24,15 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessibleAction,
-    css::accessibility::XAccessibleValue > VCLXAccessibleScrollBar_BASE;
-
-class VCLXAccessibleScrollBar final : public VCLXAccessibleComponent,
-                                public VCLXAccessibleScrollBar_BASE
+class VCLXAccessibleScrollBar final : public cppu::ImplInheritanceHelper<
+                                          VCLXAccessibleComponent,
+                                          css::accessibility::XAccessibleAction,
+                                          css::accessibility::XAccessibleValue>
 {
     virtual ~VCLXAccessibleScrollBar() override = default;
 
@@ -42,13 +40,7 @@ class VCLXAccessibleScrollBar final : public VCLXAccessibleComponent,
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
-    using VCLXAccessibleComponent::VCLXAccessibleComponent;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
+    VCLXAccessibleScrollBar( VCLXWindow* pVCLXWindow ): ImplInheritanceHelper(pVCLXWindow) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
