@@ -176,18 +176,6 @@ void VCLXAccessibleStatusBarItem::implGetSelection( sal_Int32& nStartIndex, sal_
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleStatusBarItem, AccessibleTextHelper_BASE, VCLXAccessibleStatusBarItem_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleStatusBarItem, AccessibleTextHelper_BASE, VCLXAccessibleStatusBarItem_BASE )
-
-
 // XComponent
 
 
