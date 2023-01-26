@@ -357,9 +357,6 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             aOutFilterName = "calc_pdf_addstream_import";
     }
 
-    if (!bSuccess)
-        return OUString();
-
     if (!aOutFilterName.isEmpty())
     {
         if( nFilterNamePos == -1 )
