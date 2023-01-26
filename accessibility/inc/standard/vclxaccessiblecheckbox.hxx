@@ -24,17 +24,15 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessibleAction,
-    css::accessibility::XAccessibleValue > VCLXAccessibleCheckBox_BASE;
-
-class VCLXAccessibleCheckBox final : public VCLXAccessibleTextComponent,
-                               public VCLXAccessibleCheckBox_BASE
+class VCLXAccessibleCheckBox final : public cppu::ImplInheritanceHelper<
+                                         VCLXAccessibleTextComponent,
+                                         css::accessibility::XAccessibleAction,
+                                         css::accessibility::XAccessibleValue>
 {
 private:
     bool    m_bChecked;
@@ -55,12 +53,6 @@ private:
 
 public:
     VCLXAccessibleCheckBox( VCLXWindow* pVCLXindow );
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
