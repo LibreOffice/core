@@ -214,7 +214,7 @@ namespace
     }
 }
 
-bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
+bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
 {
     SwDoc* pDoc = GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
@@ -336,7 +336,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             bool bGoNxt = m_vSavePos.back().nNode < rPtIdx.GetIndex();
-            while( nullptr != ( pFrame = ( bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame() ))
+            while( nullptr != ( pFrame = ( bGoNxt ? pFrame->FindNextCnt(true) : pFrame->FindPrevCnt() ))
                    && 0 == pFrame->getFrameArea().Height() )
                 ;
 
@@ -348,8 +348,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
                 while ( pFrame && 0 == pFrame->getFrameArea().Height() )
                 {
-                    pFrame = bGoNxt ? pFrame->GetNextContentFrame()
-                        :   pFrame->GetPrevContentFrame();
+                    pFrame = bGoNxt ? pFrame->FindNextCnt(true) : pFrame->FindPrevCnt();
                 }
             }
 
