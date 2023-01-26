@@ -1550,7 +1550,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
 {
     createSwDoc();
-    createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
