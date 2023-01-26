@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -250,8 +250,8 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="activates-default">True</property>
-                        <property name="adjustment">adjustment1</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustment1</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="reducegradstep-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegradstep">Specifies the maximum number of gradient stripes for printing.</property>
