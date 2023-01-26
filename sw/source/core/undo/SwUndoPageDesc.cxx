@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <editsh.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
 #include <pagedesc.hxx>
@@ -216,12 +217,22 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     pNewFormat->SetFormatAttr( SwFormatContent() );
 }
 
+void SwUndoPageDesc::ExitHeaderFooterEdit()
+{
+    SwEditShell* pESh = m_pDoc->GetEditShell();
+    if (!pESh)
+        return;
+    if (pESh->IsHeaderFooterEdit())
+        pESh->ToggleHeaderFooterEdit();
+}
+
 void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 {
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
     if( m_bExchange )
         ExchangeContentNodes( m_aNew.m_PageDesc, m_aOld.m_PageDesc );
     m_pDoc->ChgPageDesc(m_aOld.GetName(), m_aOld);
+    ExitHeaderFooterEdit();
 }
 
 void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
@@ -230,6 +241,7 @@ void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
     if( m_bExchange )
         ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
     m_pDoc->ChgPageDesc(m_aNew.GetName(), m_aNew);
+    ExitHeaderFooterEdit();
 }
 
 SwRewriter SwUndoPageDesc::GetRewriter() const
