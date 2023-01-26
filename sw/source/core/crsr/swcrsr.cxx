@@ -219,7 +219,7 @@ namespace
     }
 }
 
-bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
+bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
 {
     SwDoc& rDoc = GetDoc();
     SwNodes& rNds = rDoc.GetNodes();
@@ -341,7 +341,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             bool bGoNxt = m_vSavePos.back().nNode < rPtPos.GetNodeIndex();
             for (;;)
             {
-                pFrame = bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame();
+                pFrame = bGoNxt ? pFrame->FindNextCnt(true) : pFrame->FindPrevCnt();
                 if (!pFrame || 0 != pFrame->getFrameArea().Height() )
                     break;
             }
@@ -354,8 +354,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
                 while ( pFrame && 0 == pFrame->getFrameArea().Height() )
                 {
-                    pFrame = bGoNxt ? pFrame->GetNextContentFrame()
-                        :   pFrame->GetPrevContentFrame();
+                    pFrame = bGoNxt ? pFrame->FindNextCnt(true) : pFrame->FindPrevCnt();
                 }
             }
 
