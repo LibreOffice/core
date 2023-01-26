@@ -38,7 +38,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, bool bIsDropDownBox)
-    : VCLXAccessibleComponent (pVCLWindow),
+    : ImplInheritanceHelper (pVCLWindow),
       m_aBoxType (aType),
       m_bIsDropDownBox (bIsDropDownBox)
 {
@@ -245,9 +245,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
     }
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleBox, VCLXAccessibleComponent, VCLXAccessibleBox_BASE)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleBox, VCLXAccessibleComponent, VCLXAccessibleBox_BASE)
 
 //=====  XAccessible  =========================================================
 
