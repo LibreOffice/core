@@ -44,6 +44,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
+#include <svx/theme/ThemeColorChanger.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -1291,7 +1292,7 @@ void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme)
 {
     mpTheme = std::move(pTheme);
 
-    if (mpTheme && mpSdrPage->IsMasterPage())
+    if (mpTheme && mpTheme->GetColorSet() && mpSdrPage->IsMasterPage())
     {
         SdrModel& rModel = mpSdrPage->getSdrModelFromSdrPage();
         sal_uInt16 nPageCount = rModel.GetPageCount();
@@ -1303,7 +1304,8 @@ void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme)
                 continue;
             }
 
-            mpTheme->UpdateSdrPage(pPage);
+            svx::ThemeColorChanger aChanger(pPage);
+            aChanger.apply(*mpTheme->GetColorSet());
         }
     }
 }

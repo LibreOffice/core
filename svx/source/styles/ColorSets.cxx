@@ -11,15 +11,9 @@
 #include <svx/ColorSets.hxx>
 
 #include <sstream>
+#include <utility>
 
 #include <libxml/xmlwriter.h>
-
-#include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
@@ -28,85 +22,9 @@
 #include <editeng/unoprnms.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
 #include <o3tl/enumrange.hxx>
-#include <utility>
+#include <com/sun/star/util/Color.hpp>
 
 using namespace com::sun::star;
-
-namespace
-{
-/// Updates a text portion to match a new color set, in case it already uses theme colors.
-void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion,
-                               const svx::ColorSet& rColorSet)
-{
-    if (!xPortion->getPropertySetInfo()->hasPropertyByName(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE))
-        return;
-
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE) >>= xThemeColor;
-    if (!xThemeColor.is())
-        return;
-
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-        return;
-
-    Color aColor = rColorSet.resolveColor(aThemeColor);
-    xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::Any(static_cast<sal_Int32>(aColor)));
-}
-
-void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const svx::ColorSet& rColorSet)
-{
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME_REFERENCE))
-        return;
-
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME_REFERENCE) >>= xThemeColor;
-    if (!xThemeColor.is())
-        return;
-
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-        return;
-
-    Color aColor = rColorSet.resolveColor(aThemeColor);
-    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
-}
-
-void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
-{
-    const svx::ColorSet* pColorSet = pTheme->GetColorSet();
-    if (!pColorSet)
-    {
-        return;
-    }
-
-    uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
-    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
-    if (xShapeText.is())
-    {
-        // E.g. group shapes have no text.
-        uno::Reference<container::XEnumerationAccess> xText(xShapeText->getText(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
-        while (xParagraphs->hasMoreElements())
-        {
-            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-            while (xPortions->hasMoreElements())
-            {
-                uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
-                UpdateTextPortionColorSet(xPortion, *pColorSet);
-            }
-        }
-    }
-
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    UpdateFillColorSet(xShapeProps, *pColorSet);
-}
-}
 
 namespace svx
 {
@@ -401,24 +319,6 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     }
 
     return pTheme;
-}
-
-void Theme::UpdateSdrPage(const SdrPage* pPage)
-{
-    for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
-    {
-        SdrObject* pObject = pPage->GetObj(nObject);
-        UpdateSdrObject(this, pObject);
-        SdrObjList* pList = pObject->GetSubList();
-        if (pList)
-        {
-            SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
-            while (aIter.IsMore())
-            {
-                UpdateSdrObject(this, aIter.Next());
-            }
-        }
-    }
 }
 
 std::vector<Color> Theme::GetColors() const
