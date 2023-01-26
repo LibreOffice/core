@@ -93,6 +93,7 @@ namespace sw::mark {
             // Fieldmarks
             virtual const_iterator_t getFieldmarksBegin() const override;
             virtual const_iterator_t getFieldmarksEnd() const override;
+            virtual sal_Int32 getFieldmarksCount() const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const override;
             virtual sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const override;

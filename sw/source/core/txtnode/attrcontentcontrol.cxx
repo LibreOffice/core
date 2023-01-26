@@ -809,6 +809,12 @@ SwTextContentControl* SwContentControlManager::Get(size_t nIndex)
     return m_aContentControls[nIndex];
 }
 
+SwTextContentControl* SwContentControlManager::UnsortedGet(size_t nIndex)
+{
+    assert(nIndex < m_aContentControls.size());
+    return m_aContentControls[nIndex];
+}
+
 void SwContentControlManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControlManager"));
