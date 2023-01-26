@@ -24,17 +24,15 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessibleAction,
-    css::accessibility::XAccessibleEditableText > VCLXAccessibleEdit_BASE;
-
-class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
-                           public VCLXAccessibleEdit_BASE
+class VCLXAccessibleEdit : public cppu::ImplInheritanceHelper<
+                               VCLXAccessibleTextComponent,
+                               css::accessibility::XAccessibleAction,
+                               css::accessibility::XAccessibleEditableText>
 {
     friend class VCLXAccessibleBox;
 
@@ -54,12 +52,6 @@ protected:
 
 public:
     VCLXAccessibleEdit( VCLXWindow* pVCLXindow );
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -56,7 +56,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleTextComponent( pVCLWindow )
+    :ImplInheritanceHelper( pVCLWindow )
 {
     m_nCaretPosition = getCaretPosition();
 }
@@ -156,18 +156,6 @@ void VCLXAccessibleEdit::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nE
     nStartIndex = aSelection.Min;
     nEndIndex = aSelection.Max;
 }
-
-
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleEdit, VCLXAccessibleTextComponent, VCLXAccessibleEdit_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponent, VCLXAccessibleEdit_BASE )
 
 
 // XServiceInfo
