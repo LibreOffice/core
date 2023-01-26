@@ -36,6 +36,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/sdshitm.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;
 
@@ -412,7 +413,7 @@ rtl::Reference<SdrObject> SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAdd
 
 bool SdrTextObj::ImpCanConvTextToCurve() const
 {
-    return !IsOutlText();
+    return !IsOutlText() && !utl::ConfigManager::IsFuzzing();
 }
 
 rtl::Reference<SdrPathObj> SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const
