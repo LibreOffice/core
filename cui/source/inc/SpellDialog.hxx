@@ -130,7 +130,7 @@ private:
     OUString        m_sTitleSpellingGrammar;
 
     Link<SpellUndoAction_Impl&,void> aDialogUndoLink;
-
+    ImplSVEvent *   m_pInitHdlEvent;
     bool            bFocusLocked;
 
     svx::SpellDialogChildWindow& rParent;
