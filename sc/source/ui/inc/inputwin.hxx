@@ -262,7 +262,6 @@ public:
     void                    DecrementVerticalSize();
     void                    NumLinesChanged();
     virtual tools::Long            GetNumLines() const override { return mxTextWndGroup->GetNumLines(); }
-    tools::Long                    GetVertOffset() const { return  mnVertOffset; }
 
     int GetPixelHeightForLines() const
     {
@@ -278,7 +277,6 @@ private:
     std::unique_ptr<ScTextWndGroup> mxTextWndGroup;
     std::unique_ptr<weld::Button> mxButtonUp;
     std::unique_ptr<weld::Button> mxButtonDown;
-    tools::Long                   mnVertOffset;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
 };
