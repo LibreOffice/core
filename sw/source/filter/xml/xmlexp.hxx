@@ -90,6 +90,9 @@ class SwXMLExport : public SvXMLExport
                            SwXMLTableInfo_Impl& rTableInfo,
                            sal_uInt32 nHeaderRows = 0 );
 
+    void ExportThemeElement(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
+
+
     virtual void ExportMeta_() override;
     virtual void ExportFontDecls_() override;
     virtual void ExportStyles_( bool bUsed ) override;

@@ -3285,6 +3285,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:optional>
     </rng:element>
   </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-style" combine="interleave">
+      <rng:optional>
+        <rng:ref name="loext-theme"/>
+      </rng:optional>
+  </rng:define>
+
   <rng:define name="style-master-page" combine="choice">
     <rng:element name="style:master-page">
       <rng:ref name="style-master-page-attlist"/>
