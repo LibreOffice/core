@@ -765,23 +765,26 @@ bool SbiRuntime::Step()
 {
     if( bRun )
     {
+        static sal_uInt32 nLastTime = osl_getGlobalTimer();
+
         // in any case check casually!
         if( !( ++nOps & 0xF ) && pInst->IsReschedule() )
         {
             sal_uInt32 nTime = osl_getGlobalTimer();
-            if (nTime - m_nLastTime > 5 ) // 20 ms
+            if (nTime - nLastTime > 5) // 20 ms
             {
+                nLastTime = nTime;
                 Application::Reschedule();
-                m_nLastTime = nTime;
             }
         }
 
         // #i48868 blocked by next call level?
         while( bBlocked )
         {
-            if( pInst->IsReschedule() )
+            if( pInst->IsReschedule() ) // And what if not? Busy loop?
             {
                 Application::Reschedule();
+                nLastTime = osl_getGlobalTimer();
             }
         }
 
