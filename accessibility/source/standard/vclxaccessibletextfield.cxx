@@ -31,7 +31,7 @@ using namespace ::com::sun::star::accessibility;
 
 
 VCLXAccessibleTextField::VCLXAccessibleTextField (VCLXWindow* pVCLWindow, const Reference< XAccessible >& _xParent) :
-    VCLXAccessibleTextComponent (pVCLWindow),
+    ImplInheritanceHelper (pVCLWindow),
     m_xParent( _xParent )
 
 {
@@ -47,9 +47,6 @@ OUString VCLXAccessibleTextField::implGetText()
 
     return aText;
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)
 
 
 // XAccessible

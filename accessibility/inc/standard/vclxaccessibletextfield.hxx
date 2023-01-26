@@ -21,10 +21,7 @@
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BASE;
-
+#include <cppuhelper/implbase.hxx>
 
 /** This class represents non editable text fields.  The object passed to
     the constructor is expected to be a list (a ListBox to be
@@ -33,18 +30,11 @@ typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BA
     exported text changes.
 */
 class VCLXAccessibleTextField final :
-    public VCLXAccessibleTextComponent,
-    public VCLXAccessible_BASE
+    public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent, css::accessibility::XAccessible>
 {
 public:
     VCLXAccessibleTextField (VCLXWindow* pVCLXindow,
                              const css::uno::Reference< css::accessibility::XAccessible >& _xParent);
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XAccessible
     css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
