@@ -27,9 +27,18 @@ class tdf135938(UITestCase):
                 xName.executeAction("TYPE", mkPropertyValues({"TEXT": "ABC"}))
                 xInsert = xDialog.getChild("ok")
                 xInsert.executeAction("CLICK", tuple())
+
+                xSelect = xDialog.getChild("select-ref")
+                self.assertEqual("1", get_state_as_dict(xSelect)["Children"])
+                self.assertEqual("ABC", get_state_as_dict(xSelect.getChild(0))["Text"])
+
                 xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xName.executeAction("TYPE", mkPropertyValues({"TEXT": "DEF"}))
                 xInsert.executeAction("CLICK", tuple())
+
+                self.assertEqual("2", get_state_as_dict(xSelect)["Children"])
+                self.assertEqual("ABC", get_state_as_dict(xSelect.getChild(0))["Text"])
+                self.assertEqual("DEF", get_state_as_dict(xSelect.getChild(1))["Text"])
 
                 # Search for insert reference type
                 xFilter = None
@@ -43,6 +52,8 @@ class tdf135938(UITestCase):
                         # Without the fix in place, this test would have failed with
                         # AssertionError: 'ABC' != 'DEF', i.e., the text of the name field did not change
                         self.assertEqual(get_state_as_dict(xName)["Text"], "ABC")
+
+                        self.assertEqual("1", get_state_as_dict(xSelect)["Children"])
                         break
 
                 # Check if insert reference entry was found
