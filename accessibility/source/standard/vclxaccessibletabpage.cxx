@@ -219,18 +219,6 @@ void VCLXAccessibleTabPage::implGetSelection( sal_Int32& nStartIndex, sal_Int32&
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTabPage, AccessibleTextHelper_BASE, VCLXAccessibleTabPage_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTabPage, AccessibleTextHelper_BASE, VCLXAccessibleTabPage_BASE )
-
-
 // XComponent
 
 

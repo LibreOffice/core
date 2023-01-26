@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 
@@ -33,12 +33,10 @@ class TabControl;
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
 
-typedef ::cppu::ImplHelper2<
-    css::accessibility::XAccessible,
-    css::lang::XServiceInfo > VCLXAccessibleTabPage_BASE;
-
-class VCLXAccessibleTabPage final : public AccessibleTextHelper_BASE,
-                                public VCLXAccessibleTabPage_BASE
+class VCLXAccessibleTabPage final : public cppu::ImplInheritanceHelper<
+                                        AccessibleTextHelper_BASE,
+                                        css::accessibility::XAccessible,
+                                        css::lang::XServiceInfo>
 {
     friend class VCLXAccessibleTabControl;
 
@@ -79,12 +77,6 @@ private:
 public:
     VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId );
     virtual ~VCLXAccessibleTabPage() override;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
