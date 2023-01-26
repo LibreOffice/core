@@ -496,7 +496,7 @@ void ScInputWindow::Resize()
         if (pGroupBar->GetNumLines() > 1)
         {
             Size aGroupBarSize = pGroupBar->GetSizePixel();
-            aSize.setHeight(aGroupBarSize.Height() + 2 * (pGroupBar->GetVertOffset() + 1));
+            aSize.setHeight(aGroupBarSize.Height());
         }
     }
 
@@ -850,7 +850,6 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     , mxTextWndGroup(new ScTextWndGroup(*this, pViewSh))
     , mxButtonUp(m_xBuilder->weld_button("up"))
     , mxButtonDown(m_xBuilder->weld_button("down"))
-    , mnVertOffset(0)
 {
     InitControlBase(m_xContainer.get());
 
@@ -1085,12 +1084,6 @@ void ScInputBarGroup::TriggerToolboxLayout()
     vcl::Window *w=GetParent();
     ScInputWindow &rParent = dynamic_cast<ScInputWindow&>(*w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-
-    // Capture the vertical position of this window in the toolbar, when we increase
-    // the size of the toolbar to accommodate expanded line input we need to take this
-    // into account
-    if ( !mnVertOffset )
-        mnVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
 
     if ( !pViewFrm )
         return;
