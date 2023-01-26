@@ -195,6 +195,7 @@ public:
     void testCursorWindows();
     void testLandscape();
     void testTdf95699();
+    void testTdf151548_tabNavigation();
     void testTdf104032();
     void testTdf104440();
     void testTdf104425();
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testCursorWindows);
     CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST(testTdf95699);
+    CPPUNIT_TEST(testTdf151548_tabNavigation);
     CPPUNIT_TEST(testTdf104032);
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
@@ -1450,6 +1452,45 @@ void SwUiWriterTest4::testTdf95699()
         = pMarkAccess->getFieldmarkAfter(SwPosition(pDoc->GetNodes().GetEndOfExtras()), false);
     CPPUNIT_ASSERT_EQUAL(OUString("vnd.oasis.opendocument.field.FORMCHECKBOX"),
                          pFieldMark->GetFieldname());
+}
+
+void SwUiWriterTest4::testTdf151548_tabNavigation()
+{
+    // given a form-protected doc with 4 unchecked legacy fieldmark checkboxes (and several modern
+    // content controls which all have a tabstop of -1 to disable tabstop navigation to them)
+    // we want to test that tab navigation completes and loops around to continue at the beginning.
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf151548_tabNavigation.docm");
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMarkAccess->getFieldmarksCount());
+
+    // Tab and toggle 4 times, verifying beforehand that the state was unchecked
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Tab 4 more times, verifying beforehand that the checkbox had been toggle on, then toggles off
+    // meaning that looping is working, and no other controls are reacting to the tab key.
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+
+        CPPUNIT_ASSERT(pCheckBox->IsChecked());
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+    }
 }
 
 void SwUiWriterTest4::testTdf104032()

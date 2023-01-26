@@ -709,6 +709,8 @@ public:
 
     bool GotoFormatContentControl(const SwFormatContentControl& rContentControl);
 
+    void GotoFormControl(bool bNext);
+
     static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,
         const bool bIncludeInputFieldAtStart );

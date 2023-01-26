@@ -2071,8 +2071,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                 case KEY_TAB:
                 {
-
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark() || rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
+                    // Rich text contentControls accept tabs and fieldmarks and other rich text,
+                    // so first act on cases that are not a content control
+                    SwTextContentControl* pTextContentControl = rSh.CursorInsideContentControl();
+                    if ((rSh.IsFormProtected() && !pTextContentControl) ||
+                        rSh.GetCurrentFieldmark() || rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
                     {
                         eKeyState = SwKeyState::GotoNextFieldMark;
                     }
@@ -2120,6 +2123,21 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eNextKeyState = SwKeyState::NextCell;
                         }
                     }
+                    else if (pTextContentControl)
+                    {
+                        auto pCC = pTextContentControl->GetContentControl().GetContentControl();
+                        if (pCC)
+                        {
+                            switch (pCC->GetType())
+                            {
+                                case SwContentControlType::RICH_TEXT:
+                                    eKeyState = SwKeyState::InsTab;
+                                    break;
+                                default:
+                                    eKeyState = SwKeyState::GotoNextFieldMark;
+                            }
+                        }
+                    }
                     else
                     {
                         eKeyState = SwKeyState::InsTab;
@@ -2137,7 +2155,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
                 case KEY_TAB | KEY_SHIFT:
                 {
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
+                    SwTextContentControl* pTextContentControl = rSh.CursorInsideContentControl();
+                    if ((rSh.IsFormProtected() && !pTextContentControl) ||
+                        rSh.GetCurrentFieldmark()|| rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
                     {
                         eKeyState = SwKeyState::GotoPrevFieldMark;
                     }
@@ -2175,6 +2195,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = SwKeyState::CheckAutoCorrect;
                             eNextKeyState = SwKeyState::PrevCell;
                         }
+                    }
+                    else if (pTextContentControl)
+                    {
+                        eKeyState = SwKeyState::GotoPrevFieldMark;
                     }
                     else
                     {
@@ -2610,18 +2634,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case SwKeyState::GotoNextFieldMark:
                 {
-                    const sw::mark::IFieldmark* pFieldmark
-                        = rSh.GetFieldmarkAfter(/*bLoop=*/true);
-                    if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
+                    rSh.GotoFormControl(/*bNext=*/true);
                 }
                 break;
 
             case SwKeyState::GotoPrevFieldMark:
                 {
-                    const sw::mark::IFieldmark* pFieldmark
-                        = rSh.GetFieldmarkBefore(/*bLoop=*/true);
-                    if( pFieldmark )
-                        rSh.GotoFieldmark(pFieldmark);
+                    rSh.GotoFormControl(/*bNext=*/false);
                 }
                 break;
 
