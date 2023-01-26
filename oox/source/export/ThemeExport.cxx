@@ -25,7 +25,7 @@ ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase)
 {
 }
 
-void ThemeExport::write(OUString const& rPath, svx::Theme const& rTheme)
+void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 {
     sax_fastparser::FSHelperPtr pFS = mpFilterBase->openFragmentStreamWithSerializer(
         rPath, "application/vnd.openxmlformats-officedocument.theme+xml");
@@ -43,7 +43,7 @@ void ThemeExport::write(OUString const& rPath, svx::Theme const& rTheme)
     writeColorSet(pFS, rTheme);
     pFS->endElementNS(XML_a, XML_clrScheme);
 
-    svx::FontScheme const& rFontScheme = rTheme.getFontScheme();
+    model::FontScheme const& rFontScheme = rTheme.getFontScheme();
     pFS->startElementNS(XML_a, XML_fontScheme, XML_name, rFontScheme.getName());
     writeFontScheme(pFS, rFontScheme);
     pFS->endElementNS(XML_a, XML_fontScheme);
@@ -61,7 +61,7 @@ void ThemeExport::write(OUString const& rPath, svx::Theme const& rTheme)
 namespace
 {
 void fillAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const& pAttrList,
-                  svx::ThemeFont const& rThemeFont)
+                  model::ThemeFont const& rThemeFont)
 {
     pAttrList->add(XML_typeface, rThemeFont.maTypeface);
     pAttrList->add(XML_panose, rThemeFont.maPanose);
@@ -72,7 +72,7 @@ void fillAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const& pAttr
 } // end anonymous ns
 
 bool ThemeExport::writeFontScheme(sax_fastparser::FSHelperPtr pFS,
-                                  svx::FontScheme const& rFontScheme)
+                                  model::FontScheme const& rFontScheme)
 {
     pFS->startElementNS(XML_a, XML_majorFont);
 
@@ -222,7 +222,7 @@ bool ThemeExport::writeFormatScheme(sax_fastparser::FSHelperPtr pFS)
     return true;
 }
 
-bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, svx::Theme const& rTheme)
+bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme const& rTheme)
 {
     static std::unordered_map<sal_Int32, model::ThemeColorType> constTokenMap
         = { { XML_dk1, model::ThemeColorType::Dark1 },

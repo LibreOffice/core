@@ -81,7 +81,7 @@
 #include <SwUndoFmt.hxx>
 #include <strings.hrc>
 #include <AccessibilityCheck.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
@@ -1582,7 +1582,7 @@ std::vector<Color> SwDocShell::GetThemeColors()
     SdrPage* pPage = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     if (!pPage)
         return {};
-    svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pTheme)
         return {};
     return pTheme->GetColors();

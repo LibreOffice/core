@@ -71,7 +71,7 @@
 #include <o3tl/enumrange.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoashp.hxx>
 
@@ -84,7 +84,7 @@ struct SdrModelImpl
     SdrUndoFactory* mpUndoFactory;
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
     bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
-    std::unique_ptr<svx::Theme> mpTheme;
+    std::unique_ptr<model::Theme> mpTheme;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)
@@ -1570,9 +1570,9 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     }
 }
 
-void SdrModel::SetTheme(std::unique_ptr<svx::Theme> pTheme) { mpImpl->mpTheme = std::move(pTheme); }
+void SdrModel::SetTheme(std::unique_ptr<model::Theme> pTheme) { mpImpl->mpTheme = std::move(pTheme); }
 
-svx::Theme* SdrModel::GetTheme() { return mpImpl->mpTheme.get(); }
+model::Theme* SdrModel::GetTheme() { return mpImpl->mpTheme.get(); }
 
 uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
 {

@@ -35,7 +35,7 @@ namespace com::sun::star {
     namespace drawing { class XDrawPage; }
     namespace xml::dom { class XDocument; }
 }
-namespace svx {
+namespace model {
     class Theme;
 }
 
@@ -107,7 +107,7 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
-    std::unique_ptr<svx::Theme> createSvxTheme() const;
+    std::unique_ptr<model::Theme> createSvxTheme() const;
     void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
 private:

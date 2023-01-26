@@ -24,7 +24,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
-#include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using ::oox::core::XmlFilterBase;
 
@@ -91,7 +91,7 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     return !rFontName.isEmpty();
 }
 
-void TextFont::fillThemeFont(svx::ThemeFont& rThemeFont) const
+void TextFont::fillThemeFont(model::ThemeFont& rThemeFont) const
 {
     rThemeFont.maTypeface = maTypeface;
     rThemeFont.maPanose = maPanose;

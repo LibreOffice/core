@@ -1508,7 +1508,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                          "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
 
     SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
-    svx::Theme* pTheme = nullptr;
+    model::Theme* pTheme = nullptr;
     if (pMasterPage)
     {
         pTheme = pMasterPage->getSdrPageProperties().GetTheme();
@@ -2153,7 +2153,7 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
     }
 }
 
-bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme)
+bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, model::Theme* pTheme)
 {
     static std::map<PredefinedClrSchemeId, sal_Int32> aPredefinedClrTokens =
     {
@@ -2251,7 +2251,7 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
     return false;
 }
 
-void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, svx::Theme* pTheme)
+void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, model::Theme* pTheme)
 {
     OUString sThemePath = "ppt/theme/theme" + OUString::number(nThemeNum + 1) + ".xml";
 

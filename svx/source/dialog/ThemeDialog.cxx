@@ -10,11 +10,12 @@
 #include <svx/dialog/ThemeDialog.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svx
 {
-ThemeDialog::ThemeDialog(weld::Window* pParent, svx::Theme* pTheme,
+ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme,
                          std::shared_ptr<IThemeColorChanger> const& pChanger)
     : GenericDialogController(pParent, "svx/ui/themedialog.ui", "ThemeDialog")
     , mpTheme(pTheme)

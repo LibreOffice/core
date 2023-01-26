@@ -18,8 +18,8 @@
 #include <ThemeColorChanger.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/ColorSets.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -54,7 +54,7 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     if (pDocument)
     {
         SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
             maColorSets.insert(*pTheme->GetColorSet());
     }
