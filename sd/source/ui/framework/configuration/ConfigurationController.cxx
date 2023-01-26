@@ -102,7 +102,7 @@ ConfigurationController::Lock::~Lock()
 
 //===== ConfigurationController ===============================================
 
-ConfigurationController::ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController) noexcept
+ConfigurationController::ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController)
     : ConfigurationControllerInterfaceBase(m_aMutex)
     , mbIsDisposed(false)
 {

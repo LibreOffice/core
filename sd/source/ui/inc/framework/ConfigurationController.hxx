@@ -53,7 +53,7 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController) noexcept;
+    ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~ConfigurationController() noexcept override;
     ConfigurationController(const ConfigurationController&) = delete;
     ConfigurationController& operator=(const ConfigurationController&) = delete;
