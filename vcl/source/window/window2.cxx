@@ -339,6 +339,8 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
 bool Window::IsTracking() const
 {
+    if (!mpWindowImpl)
+        return false;
     return (mpWindowImpl->mbUseFrameData ?
             mpWindowImpl->mpFrameData->mpTrackWin == this :
             ImplGetSVData()->mpWinData->mpTrackWin == this);
