@@ -103,6 +103,7 @@ public:
     void testTdf112126();
     void testCellProperties();
     void testUserTableStyles();
+    void testTdf153179();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testTdf112126);
     CPPUNIT_TEST(testCellProperties);
     CPPUNIT_TEST(testUserTableStyles);
+    CPPUNIT_TEST(testTdf153179);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1859,6 +1861,15 @@ void SdExportTest::testUserTableStyles()
     CPPUNIT_ASSERT(xStyleFamily->hasByName("userdefined"));
     xTableStyle.set(xStyleFamily->getByName("userdefined"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTableStyle->isUserDefined());
+}
+
+void SdExportTest::testTdf153179()
+{
+    createSdImpressDoc("pptx/ole-emf_min.pptx");
+    saveAndReload("impress8");
+
+    // Check number of shapes after export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
