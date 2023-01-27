@@ -180,7 +180,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::GetCharRect with swapped frame" );
 
-    if( IsLocked() || IsHiddenNow() )
+    if (IsLocked())
         return false;
 
     // Find the right frame first. We need to keep in mind that:

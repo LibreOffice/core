@@ -90,7 +90,7 @@ void NotifyTableCollapsedParagraph(const SwContentNode *const pNode, SwCursorShe
 
     const SwTableLine* pLine = pRow->GetTabLine( );
 
-    if (pShell && (pShell->IsTableMode() || (pShell->StartsWithTable() && pShell->ExtendedSelectedAll())))
+    if (pShell && (pShell->IsTableMode() || (pShell->StartsWith_() != SwCursorShell::StartsWith::None && pShell->ExtendedSelectedAll())))
     {
         // If we have a table selection, then avoid the notification: it's not necessary (the text
         // cursor needs no updating) and the notification may kill the selection overlay, leading to

@@ -162,7 +162,7 @@ void SwWrtShell::SelAll()
         SttSelect();
         GoEnd(true, &bMoveTable);
 
-        bool bNeedsExtendedSelectAll = StartsWithTable();
+        bool bNeedsExtendedSelectAll = StartsWith_() != StartsWith::None;
 
         // If the cursor was in a table, then we only need the extended select
         // all if the whole table is already selected, to still allow selecting
