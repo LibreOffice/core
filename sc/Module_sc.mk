@@ -202,7 +202,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_modelobj \
 	CppunitTest_sc_namedrangeobj \
 	CppunitTest_sc_namedrangesobj \
-	CppunitTest_sc_opencl_test \
+	CppunitTest_sc_opencl-1 \
+	CppunitTest_sc_opencl-2 \
 	CppunitTest_sc_outlineobj \
 	CppunitTest_sc_recentfunctionsobj \
 	CppunitTest_sc_recordchanges \
