@@ -101,6 +101,21 @@ void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
 {
     switch (cs)
     {
+        case orcus::character_set_t::big5:
+            mnTextEncoding = RTL_TEXTENCODING_BIG5;
+            break;
+        case orcus::character_set_t::euc_jp:
+            mnTextEncoding = RTL_TEXTENCODING_EUC_JP;
+            break;
+        case orcus::character_set_t::euc_kr:
+            mnTextEncoding = RTL_TEXTENCODING_EUC_KR;
+            break;
+        case orcus::character_set_t::gb2312:
+            mnTextEncoding = RTL_TEXTENCODING_GB_2312;
+            break;
+        case orcus::character_set_t::gbk:
+            mnTextEncoding = RTL_TEXTENCODING_GBK;
+            break;
         case orcus::character_set_t::iso_2022_jp:
         case orcus::character_set_t::iso_2022_jp_2:
             mnTextEncoding = RTL_TEXTENCODING_ISO_2022_JP;
@@ -116,6 +131,9 @@ void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
             break;
         case orcus::character_set_t::utf_7:
             mnTextEncoding = RTL_TEXTENCODING_UTF7;
+            break;
+        case orcus::character_set_t::utf_8:
+            mnTextEncoding = RTL_TEXTENCODING_UTF8;
             break;
         case orcus::character_set_t::windows_1250:
             mnTextEncoding = RTL_TEXTENCODING_MS_1250;
