@@ -31,7 +31,6 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include <map>
@@ -214,14 +213,12 @@ private:
 class ScCsvGrid;
 class ScAccessibleCsvCell;
 
-typedef ::cppu::ImplHelper3<
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleTable,
-        css::accessibility::XAccessibleSelection >
-    ScAccessibleCsvGridImpl;
-
 /** Accessible class representing the CSV grid control. */
-class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCsvGridImpl
+class ScAccessibleCsvGrid : public cppu::ImplInheritanceHelper<
+                                ScAccessibleCsvControl,
+                                css::accessibility::XAccessible,
+                                css::accessibility::XAccessibleTable,
+                                css::accessibility::XAccessibleSelection>
 {
 protected:
     typedef std::map< sal_Int64, rtl::Reference<ScAccessibleCsvCell> > XAccessibleSet;
@@ -348,22 +345,6 @@ public:
 
     /** Deselects the child with the specified index in all selected children. */
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    // XInterface -------------------------------------------------------------
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    virtual void SAL_CALL release() noexcept override;
-
-    // XTypeProvider ----------------------------------------------------------
-
-    /** Returns a sequence with all supported interface types. */
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
-    /** Returns an implementation ID. */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // events -----------------------------------------------------------------
 public:

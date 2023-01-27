@@ -727,7 +727,7 @@ static sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 }
 
 ScAccessibleCsvGrid::ScAccessibleCsvGrid(ScCsvGrid& rGrid)
-    : ScAccessibleCsvControl(rGrid)
+    : ImplInheritanceHelper(rGrid)
 {
 }
 
@@ -1067,39 +1067,6 @@ void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int64 nSelectedC
     ensureValidPosition( nSelectedChildIndex / nColumns, nColumn );
     if( nColumn > 0 )
         implSelectColumn( nColumn, false );
-}
-
-// XInterface -----------------------------------------------------------------
-
-Any SAL_CALL ScAccessibleCsvGrid::queryInterface( const css::uno::Type& rType )
-{
-    Any aAny( ScAccessibleCsvGridImpl::queryInterface( rType ) );
-    return aAny.hasValue() ? aAny : ScAccessibleCsvControl::queryInterface( rType );
-}
-
-void SAL_CALL ScAccessibleCsvGrid::acquire() noexcept
-{
-    ScAccessibleCsvControl::acquire();
-}
-
-void SAL_CALL ScAccessibleCsvGrid::release() noexcept
-{
-    ScAccessibleCsvControl::release();
-}
-
-// XTypeProvider --------------------------------------------------------------
-
-Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
-{
-    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(),
-        Sequence {
-            cppu::UnoType<XAccessibleTable>::get(),
-            cppu::UnoType<XAccessibleSelection>::get() });
-}
-
-Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // events ---------------------------------------------------------------------
