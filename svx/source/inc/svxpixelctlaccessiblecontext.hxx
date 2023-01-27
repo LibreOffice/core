@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
@@ -40,10 +39,9 @@ namespace com::sun::star::awt {
 class SvxPixelCtl;
 class SvxPixelCtlAccessible;
 
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
-
-class SvxPixelCtlAccessibleChild final : public ::comphelper::OAccessibleComponentHelper,
-                                         public OAccessibleHelper_Base
+class SvxPixelCtlAccessibleChild final : public cppu::ImplInheritanceHelper<
+                                             ::comphelper::OAccessibleComponentHelper,
+                                             css::accessibility::XAccessible>
 {
 public:
     SvxPixelCtlAccessibleChild(
@@ -52,9 +50,6 @@ public:
                 const tools::Rectangle& rBounds,
                 rtl::Reference<SvxPixelCtlAccessible> xParent,
                 tools::Long nIndexInParent );
-
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
 
     //XAccessibleComponent
     virtual void SAL_CALL grabFocus(  ) override;
