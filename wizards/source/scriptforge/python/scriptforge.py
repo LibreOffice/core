@@ -1993,6 +1993,9 @@ class SFDocuments:
         def CreateMenu(self, menuheader, before = '', submenuchar = '>'):
             return self.ExecMethod(self.vbMethod, 'CreateMenu', menuheader, before, submenuchar)
 
+        def Echo(self, echoon = True, hourglass = False):
+            return self.ExecMethod(self.vbMethod, 'Echo', echoon, hourglass)
+
         def ExportAsPDF(self, filename, overwrite = False, pages = '', password = '', watermark = ''):
             return self.ExecMethod(self.vbMethod, 'ExportAsPDF', filename, overwrite, pages, password, watermark)
 

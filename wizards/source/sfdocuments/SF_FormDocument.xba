@@ -489,6 +489,13 @@ Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
 End Function	&apos;	SFDocuments.SF_FormDocument.CreateMenu
 
 REM -----------------------------------------------------------------------------
+Public Sub Echo(Optional ByVal EchoOn As Variant _
+						, Optional ByVal Hourglass As Variant _
+						)
+	[_Super].Echo(EchoOn, Hourglass)
+End Sub		   &apos;   SFDocuments.SF_FormDocument.Echo
+
+REM -----------------------------------------------------------------------------
 Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							, Optional ByVal Overwrite As Variant _
 							, Optional ByVal Pages As Variant _

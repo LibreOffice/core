@@ -539,6 +539,78 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Document.CreateMenu
 
 REM -----------------------------------------------------------------------------
+Public Sub Echo(Optional ByVal EchoOn As Variant _
+						, Optional ByVal Hourglass As Variant _
+						)
+&apos;&apos;&apos;	While a script is executed any display update resulting from that execution
+&apos;&apos;&apos;	is done immediately.
+&apos;&apos;&apos;	For performance reasons it might be an advantage to differ the display updates
+&apos;&apos;&apos;	up to the end of the script.
+&apos;&apos;&apos;	This is where pairs of Echo() methods to set and reset the removal of the
+&apos;&apos;&apos;	immediate updates may be beneficial.
+&apos;&apos;&apos;	Optionally the actual mouse pointer can be modified to the image of an hourglass.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		EchoOn: when False, the display updates are suspended. Default = True.
+&apos;&apos;&apos;			Multiple calls with EchoOn = False are harmless.
+&apos;&apos;&apos;		Hourglass: when True, the mouse pointer is changed to an hourglass. Default = False.
+&apos;&apos;&apos;			The mouse pointer needs to be inside the actual document&apos;s window.
+&apos;&apos;&apos;			Note that it is very likely that at the least manual movement of the mouse,
+&apos;&apos;&apos;			the operating system or the LibreOffice process will take back the control
+&apos;&apos;&apos;			of the mouse icon and its usual behaviour.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.Echo(False, Hourglass := True)
+&apos;&apos;&apos;		&apos;	... &quot;long-lasting&quot; script ...
+&apos;&apos;&apos;		oDoc.Echo()			&apos;	Reset to normal
+
+Dim oContainer As Object		&apos;	com.sun.star.awt.XWindow
+Dim lPointer As Long			&apos;	com.sun.star.awt.SystemPointer constant
+Dim oPointer As Object			&apos;	com.sun.star.awt.Pointer
+Const cstThisSub = &quot;SFDocuments.Document.Echo&quot;
+Const cstSubArgs = &quot;[EchoOn=True], [Hourglass=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(EchoOn) Or IsEmpty(EchoOn) Then EchoOn = True
+	If IsMissing(Hourglass) Or IsEmpty(Hourglass) Then Hourglass = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not SF_Utils._Validate(EchoOn, &quot;EchoOn&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Hourglass, &quot;Hourglass&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	With _Component
+
+		Set oContainer = .CurrentController.Frame.GetContainerWindow()
+		Set oPointer = CreateUnoService(&quot;com.sun.star.awt.Pointer&quot;)
+		With com.sun.star.awt.SystemPointer
+			If Hourglass Then lPointer = .WAIT Else lPointer = .ARROW
+		End With
+		oPointer.setType(lPointer)
+
+		&apos;	Mouse icon is set when controller is unlocked
+		If Not EchoOn Then
+			oContainer.setPointer(oPointer)
+			.lockControllers()
+		Else			&apos;	EchoOn = True
+			Do While .hasControllersLocked()
+				.unlockControllers()
+			Loop
+			oContainer.setPointer(oPointer)
+		End If
+
+	End With
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally	
+End Sub			&apos;	SFDocuments.SF_Document.Echo
+
+REM -----------------------------------------------------------------------------
 Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							, Optional ByVal Overwrite As Variant _
 							, Optional ByVal Pages As Variant _
@@ -679,6 +751,7 @@ Public Function Methods() As Variant
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
 					, &quot;CreateMenu&quot; _
+					, &quot;Echo&quot; _
 					, &quot;ExportAsPDF&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RemoveMenu&quot; _
