@@ -27,7 +27,6 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <rtl/ref.hxx>
 #include <svx/rectenum.hxx>
@@ -128,13 +127,11 @@ private:
     tools::Long                                mnSelectedChild;
 };
 
-typedef ::cppu::ImplHelper3 <   css::accessibility::XAccessible,
-                                css::accessibility::XAccessibleValue,
-                                css::accessibility::XAccessibleAction
-                            >   OAccessibleHelper_Base_3;
-
-class SvxRectCtlChildAccessibleContext final : public ::comphelper::OAccessibleComponentHelper,
-                                            public OAccessibleHelper_Base_3
+class SvxRectCtlChildAccessibleContext final : public cppu::ImplInheritanceHelper<
+                                                   ::comphelper::OAccessibleComponentHelper,
+                                                   css::accessibility::XAccessible,
+                                                   css::accessibility::XAccessibleValue,
+                                                   css::accessibility::XAccessibleAction>
 {
 public:
     SvxRectCtlChildAccessibleContext(
@@ -142,9 +139,6 @@ public:
         OUString aName, OUString aDescription,
         const tools::Rectangle& rBoundingBox,
         tools::Long nIndexInParent );
-
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
 
     // XAccessibleComponent
     virtual void SAL_CALL grabFocus() override;

@@ -638,7 +638,4 @@ void SvxRectCtlChildAccessibleContext::FireFocusEvent()
     NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxRectCtlChildAccessibleContext, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxRectCtlChildAccessibleContext, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
