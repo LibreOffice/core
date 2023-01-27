@@ -49,9 +49,6 @@ AccFrameSelector::~AccFrameSelector()
 {
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( AccFrameSelector, OAccessibleComponentHelper, OAccessibleHelper_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccFrameSelector, OAccessibleComponentHelper, OAccessibleHelper_Base )
-
 Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
 {
     return this;
