@@ -935,10 +935,14 @@ bool SVGFilter::implExportDocument()
     // #i124608#
     mbExportShapeSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
 
-    if(xDefaultPagePropertySet.is())
+    if (xDefaultPagePropertySet.is())
     {
-        xDefaultPagePropertySet->getPropertyValue( "Width" ) >>= nDocWidth;
-        xDefaultPagePropertySet->getPropertyValue( "Height" ) >>= nDocHeight;
+        sal_Int32 nWidth = 0;
+        sal_Int32 nHeight = 0;
+        if (xDefaultPagePropertySet->getPropertyValue("Width") >>= nWidth)
+            nDocWidth = nWidth;
+        if (xDefaultPagePropertySet->getPropertyValue("Height") >>= nHeight)
+            nDocHeight = nHeight;
     }
 
     if(mbExportShapeSelection)

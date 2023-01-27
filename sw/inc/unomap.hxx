@@ -128,7 +128,8 @@ class SfxItemPropertySet;
 #define PROPERTY_MAP_FIELDMARK                          102
 #define PROPERTY_MAP_LINEBREAK                          103
 #define PROPERTY_MAP_CONTENTCONTROL                     104
-#define PROPERTY_MAP_END                                105
+#define PROPERTY_MAP_TEXT_PAGE                          105
+#define PROPERTY_MAP_END                                106
 
 //S&E
 #define WID_WORDS                0
@@ -306,6 +307,21 @@ class SfxItemPropertySet;
 #define WID_IS_ABS_MARGINS              3
 #define WID_IS_OUTLINE                  4
 #define WID_DEFAULT_LIST_ID             5
+
+#define WID_PAGE_BOTTOM 0
+#define WID_PAGE_LEFT   1
+#define WID_PAGE_RIGHT  2
+#define WID_PAGE_TOP    3
+#define WID_PAGE_WIDTH  4
+#define WID_PAGE_HEIGHT 5
+#define WID_PAGE_NUMBER 6
+#define WID_PAGE_ORIENT 7
+#define WID_PAGE_USERATTRIBS 8
+#define WID_PAGE_ISDARK 9
+#define WID_NAVORDER 10
+#define WID_PAGE_BACKFULL 11
+
+#define WID_PAGE_THEME 12
 
 // This define would need the include of <svx/unoshprp.hxx>, but this ends
 // in a mess; there *are* double used symbols which are used in a #define in

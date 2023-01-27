@@ -45,6 +45,8 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/XTheme.hpp>
+#include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <osl/diagnose.h>
@@ -230,6 +232,27 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
             case PROPERTY_MAP_EMBEDDED_OBJECT:
             {
                 m_aMapEntriesArr[nPropertyId] = GetEmbeddedPropertyMap();
+            }
+            break;
+            case PROPERTY_MAP_TEXT_PAGE:
+            {
+                static SfxItemPropertyMapEntry const aPageMap_Impl[] =
+                {
+                    { u"BorderBottom", WID_PAGE_BOTTOM, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderLeft", WID_PAGE_LEFT,     ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderRight", WID_PAGE_RIGHT,   ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderTop", WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Height", WID_PAGE_HEIGHT,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Width", WID_PAGE_WIDTH,         ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Number", WID_PAGE_NUMBER,       ::cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Orientation", WID_PAGE_ORIENT,  ::cppu::UnoType<view::PaperOrientation>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
+                    { u"UserDefinedAttributes", WID_PAGE_USERATTRIBS, ::cppu::UnoType<container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"IsBackgroundDark", WID_PAGE_ISDARK, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
+                    { u"NavigationOrder", WID_NAVORDER,     ::cppu::UnoType<container::XIndexAccess>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BackgroundFullSize", WID_PAGE_BACKFULL, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Theme", WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), PropertyAttribute::MAYBEVOID,  0}
+                };
+                m_aMapEntriesArr[nPropertyId] = aPageMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE:

@@ -114,14 +114,14 @@ sw.SwXTextDocument::com::sun::star::frame::XStorable
 
 ### i85640 ###
 sw.SwXMailMerge
-#-> disabled in sw.sce 
+#-> disabled in sw.sce
 
 ### i86656 ###
 sw.SwAccessibleDocumentView::com::sun::star::accessibility::XAccessibleComponent
 
 ### i86751 ###
 sw.SwAccessibleDocumentPageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
-#-> disabled in sw.sce 
+#-> disabled in sw.sce
 
 ### i87978 ###
 sw.DocumentSettings::com::sun::star::beans::XPropertySet
@@ -148,11 +148,11 @@ sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleCont
 
 ### i89021 ###
 sw.SwXTextDefaults
-#-> disabled in sw.sce 
+#-> disabled in sw.sce
 
 ### i89022 ###
 sw.SwAccessiblePageView
-#-> disabled in sw.sce 
+#-> disabled in sw.sce
 
 ### i89419 ###
 sw.SwXTextEmbeddedObject::com::sun::star::text::BaseFrameProperties
