@@ -31,16 +31,13 @@ skia_patches := \
     swap-buffers-rect.patch.1 \
     ubsan.patch.1 \
     fast-png-write.patch.1 \
-    skia_sk_cpu_sse_level_0_by_default.patch.1 \
     fix-warnings.patch.1 \
     windows-libraries-system32.patch.1 \
-    fix-graphite-ifdef.patch.1 \
     allow-no-es2restrictions.patch.1 \
     vk_mem_alloc.patch.1 \
-    tdf148624.patch.1 \
     constexpr-template.patch.0 \
-    missing-include.patch.0 \
     tdf147342.patch.0 \
+    redefinition-of-op.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
@@ -49,7 +46,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,skia,\
 ))
 
 $(eval $(call gb_UnpackedTarball_set_post_action,skia,\
-    mv third_party/skcms/skcms.cc third_party/skcms/skcms.cpp \
+    mv modules/skcms/skcms.cc modules/skcms/skcms.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -5,7 +5,7 @@
 
 #include <skia_opts.hxx>
 
-#include "include/private/SkOnce.h"
+#include "include/private/base/SkOnce.h"
 
 #if defined __GNUC__
 #pragma GCC diagnostic push

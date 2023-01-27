@@ -1,0 +1,11 @@
+--- src/core/SkRasterPipeline.cpp	2023-01-27 11:37:56.102294572 +0200
++++ src/core/SkRasterPipeline.cpp	2023-01-27 11:40:24.300538398 +0200
+@@ -21,7 +21,7 @@
+ #include <vector>
+ 
+ using namespace skia_private;
+-using Op = SkRasterPipelineOp;
++#define Op SkRasterPipelineOp
+ 
+ bool gForceHighPrecisionRasterPipeline;
+ 

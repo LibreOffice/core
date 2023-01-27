@@ -34,6 +34,7 @@
 #include <SkGradientShader.h>
 #include <SkPath.h>
 #include <SkRegion.h>
+#include <SkPathEffect.h>
 #include <SkDashPathEffect.h>
 #include <GrBackendSurface.h>
 #include <SkTextBlob.h>

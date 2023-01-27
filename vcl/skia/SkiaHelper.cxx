@@ -501,7 +501,7 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
-                surface = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
+                surface = SkSurface::MakeRenderTarget(grDirectContext, skgpu::Budgeted::kNo,
                                                       SkImageInfo::Make(width, height, type, alpha),
                                                       0, surfaceProps());
                 if (surface)
@@ -548,7 +548,7 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
                 sk_sp<SkSurface> surface = SkSurface::MakeRenderTarget(
-                    grDirectContext, SkBudgeted::kNo,
+                    grDirectContext, skgpu::Budgeted::kNo,
                     bitmap.info().makeAlphaType(kPremul_SkAlphaType), 0, surfaceProps());
                 if (surface)
                 {
@@ -748,7 +748,7 @@ void setBlenderXor(SkPaint* paint)
         // Skia does not allow binary operators in the default ES2Strict mode, but that's only
         // because of OpenGL support. We don't use OpenGL, and it's safe for all modes that we do use.
         // https://groups.google.com/g/skia-discuss/c/EPLuQbg64Kc/m/2uDXFIGhAwAJ
-        opts.enforceES2Restrictions = false;
+        opts.maxVersionAllowed = SkSL::Version::k300;
         auto effect = SkRuntimeEffect::MakeForBlender(SkString(diff), opts);
         if (!effect.effect)
         {
