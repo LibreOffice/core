@@ -24,6 +24,8 @@ using namespace com::sun::star;
 
 namespace model
 {
+Theme::Theme() = default;
+
 Theme::Theme(OUString const& rName)
     : maName(rName)
 {

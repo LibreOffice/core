@@ -46,6 +46,7 @@
 #include <docmodel/uno/UnoThemeColor.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -1195,14 +1196,24 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     uno::Reference<drawing::XMasterPageTarget> xMasterPageTarget(xDrawPage, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xMasterPageTarget->getMasterPage(),
                                                     uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap;
-    aMap["Name"] <<= OUString("mytheme");
-    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
-    uno::Sequence<util::Color> aColorScheme
-        = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
-    aMap["ColorScheme"] <<= aColorScheme;
-    uno::Any aTheme(aMap.getAsConstPropertyValueList());
-    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    model::Theme aTheme("mytheme");
+    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+    pColorSet->add(model::ThemeColorType::Dark1, 0x0);
+    pColorSet->add(model::ThemeColorType::Light1, 0x1);
+    pColorSet->add(model::ThemeColorType::Dark2, 0x2);
+    pColorSet->add(model::ThemeColorType::Light2, 0x3);
+    pColorSet->add(model::ThemeColorType::Accent1, 0x4);
+    pColorSet->add(model::ThemeColorType::Accent2, 0x5);
+    pColorSet->add(model::ThemeColorType::Accent3, 0x6);
+    pColorSet->add(model::ThemeColorType::Accent4, 0x7);
+    pColorSet->add(model::ThemeColorType::Accent5, 0x8);
+    pColorSet->add(model::ThemeColorType::Accent6, 0x9);
+    pColorSet->add(model::ThemeColorType::Hyperlink, 0xa);
+    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
+    aTheme.SetColorSet(std::move(pColorSet));
+
+    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(aTheme)));
 
     // When inserting a shape:
     uno::Sequence<beans::PropertyValue> aArgs = {

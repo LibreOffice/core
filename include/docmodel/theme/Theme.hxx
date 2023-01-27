@@ -134,6 +134,7 @@ private:
     FontScheme maFontScheme;
 
 public:
+    Theme();
     Theme(OUString const& rName);
 
     Theme(Theme const& rTheme);

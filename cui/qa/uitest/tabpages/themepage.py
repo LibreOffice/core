@@ -41,7 +41,7 @@ class Test(UITestCase):
                     0x000000,  # folHlink
                 ])
             })
-            master.Theme = theme
+            master.ThemeUnoRepresentation = theme
 
             # When changing the name of the theme:
             self.xUITest.executeCommand(".uno:SlideMasterPage")
@@ -71,7 +71,7 @@ class Test(UITestCase):
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: 'nameA' != 'nameB'
             # i.e. the UI didn't update the theme name.
-            theme = convert_property_values_to_dict(master.Theme)
+            theme = convert_property_values_to_dict(master.ThemeUnoRepresentation)
             self.assertEqual(theme["Name"], "nameB")
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: 'colorSetA' != 'colorSetB'

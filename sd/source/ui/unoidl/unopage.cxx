@@ -29,6 +29,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -74,6 +75,7 @@
 #include <vcl/dibtools.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 #include <o3tl/string_view.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
@@ -100,7 +102,7 @@ enum WID_PAGE
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
-    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME
+    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME, WID_PAGE_THEME_UNO_REPRESENTATION
 };
 
 }
@@ -279,7 +281,9 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"BackgroundFullSize",           WID_PAGE_BACKFULL,  cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
-        { u"Theme", WID_PAGE_THEME, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0,  0}
+        { u"Theme", WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
+        // backwards compatible view of the theme for use in tests
+        { u"ThemeUnoRepresentation", WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0,  0}
     };
 
     static const SfxItemPropertyMapEntry aHandoutMasterPagePropertyMap_Impl[] =
@@ -976,6 +980,19 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_THEME:
         {
             SdrPage* pPage = GetPage();
+            uno::Reference<util::XTheme> xTheme;
+            if (aValue >>= xTheme)
+            {
+                auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+                std::unique_ptr<model::Theme> pTheme(new model::Theme(pUnoTheme->getTheme()));
+                pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+            }
+            break;
+        }
+
+        case WID_PAGE_THEME_UNO_REPRESENTATION:
+        {
+            SdrPage* pPage = GetPage();
             std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
             pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
             break;
@@ -1296,6 +1313,17 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
 
     case WID_PAGE_THEME:
+    {
+        SdrPage* pPage = GetPage();
+        css::uno::Reference<css::util::XTheme> xTheme;
+        auto* pTheme = pPage->getSdrPageProperties().GetTheme();
+        if (pTheme)
+            xTheme = new UnoTheme(*pTheme);
+        aAny <<= xTheme;
+        break;
+    }
+
+    case WID_PAGE_THEME_UNO_REPRESENTATION:
     {
         SdrPage* pPage = GetPage();
         model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
