@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,docmodel))
 
 $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/uno/UnoThemeColor \
+    docmodel/source/uno/UnoTheme \
     docmodel/source/theme/ColorSet \
     docmodel/source/theme/Theme \
 ))
