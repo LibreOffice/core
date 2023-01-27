@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include<comphelper/accessiblecomponenthelper.hxx>
 #include <svx/framebordertype.hxx>
 
@@ -32,8 +31,6 @@ namespace svx {
 class FrameSelector;
 
 namespace a11y {
-
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
 
 class AccFrameSelector final : public cppu::ImplInheritanceHelper<
                                    ::comphelper::OAccessibleComponentHelper,
@@ -77,16 +74,14 @@ private:
     FrameSelector*      mpFrameSel;
 };
 
-class AccFrameSelectorChild final : public ::comphelper::OAccessibleComponentHelper,
-                                    public OAccessibleHelper_Base
+class AccFrameSelectorChild final : public cppu::ImplInheritanceHelper<
+                                        ::comphelper::OAccessibleComponentHelper,
+                                        css::accessibility::XAccessible>
 {
 public:
     explicit            AccFrameSelectorChild( FrameSelector& rFrameSel, FrameBorderType eBorder );
 
     virtual             ~AccFrameSelectorChild() override;
-
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
 
     //XAccessibleComponent
     virtual void SAL_CALL grabFocus(  ) override;
