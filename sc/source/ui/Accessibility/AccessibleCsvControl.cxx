@@ -246,7 +246,7 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::
 }
 
 ScAccessibleCsvRuler::ScAccessibleCsvRuler(ScCsvRuler& rRuler)
-    : ScAccessibleCsvControl(rRuler)
+    : ImplInheritanceHelper(rRuler)
 {
     constructStringBuffer();
 }
@@ -609,37 +609,6 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
 sal_Bool SAL_CALL ScAccessibleCsvRuler::scrollSubstringTo( sal_Int32 /* nStartIndex */, sal_Int32/* nEndIndex */, AccessibleScrollType /* aScrollType */ )
 {
     return false;
-}
-
-// XInterface -----------------------------------------------------------------
-
-Any SAL_CALL ScAccessibleCsvRuler::queryInterface( const css::uno::Type& rType )
-{
-    Any aAny( ScAccessibleCsvRulerImpl::queryInterface( rType ) );
-    return aAny.hasValue() ? aAny : ScAccessibleCsvControl::queryInterface( rType );
-}
-
-void SAL_CALL ScAccessibleCsvRuler::acquire() noexcept
-{
-    ScAccessibleCsvControl::acquire();
-}
-
-void SAL_CALL ScAccessibleCsvRuler::release() noexcept
-{
-    ScAccessibleCsvControl::release();
-}
-
-// XTypeProvider --------------------------------------------------------------
-
-Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes()
-{
-    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(),
-        Sequence { cppu::UnoType<XAccessibleText>::get() });
-}
-
-Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // events ---------------------------------------------------------------------

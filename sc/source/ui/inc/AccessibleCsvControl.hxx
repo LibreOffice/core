@@ -29,8 +29,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
@@ -83,11 +83,11 @@ protected:
 
 class ScCsvRuler;
 
-typedef ::cppu::ImplHelper2<css::accessibility::XAccessible,
-                            css::accessibility::XAccessibleText> ScAccessibleCsvRulerImpl;
-
 /** Accessible class representing the CSV ruler control. */
-class ScAccessibleCsvRuler : public ScAccessibleCsvControl, public ScAccessibleCsvRulerImpl
+class ScAccessibleCsvRuler : public cppu::ImplInheritanceHelper<
+                                     ScAccessibleCsvControl,
+                                     css::accessibility::XAccessible,
+                                     css::accessibility::XAccessibleText>
 {
 private:
     OUStringBuffer       maBuffer;   /// Contains the text representation of the ruler.
@@ -174,14 +174,6 @@ public:
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
 
     virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
-
-    // XInterface -------------------------------------------------------------
-
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider ----------------------------------------------------------
-
-    DECLARE_XTYPEPROVIDER()
 
     // events -----------------------------------------------------------------
 public:
