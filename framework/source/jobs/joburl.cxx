@@ -99,7 +99,6 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
 */
 bool JobURL::isValid() const
 {
-    SolarMutexGuard g;
     return (m_eRequest!=E_UNKNOWN);
 }
 
@@ -121,8 +120,6 @@ bool JobURL::isValid() const
 */
 bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
-    SolarMutexGuard g;
-
     sEvent.clear();
     bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
@@ -149,8 +146,6 @@ bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 */
 bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
-    SolarMutexGuard g;
-
     sAlias.clear();
     bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
@@ -177,8 +172,6 @@ bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 */
 bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
-    SolarMutexGuard g;
-
     sService.clear();
     bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
