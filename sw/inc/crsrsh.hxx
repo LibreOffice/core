@@ -327,8 +327,9 @@ public:
     void ExtendedSelectAll(bool bFootnotes = true);
     /// If ExtendedSelectAll() was called and selection didn't change since then.
     bool ExtendedSelectedAll();
-    /// If document body starts with a table.
-    bool StartsWithTable();
+    enum class StartsWith { None, Table, HiddenPara };
+    /// If document body starts with a table or starts/ends with hidden paragraph.
+    StartsWith StartsWith_();
 
     SwPaM* GetCursor( bool bMakeTableCursor = true ) const;
     inline SwCursor* GetSwCursor() const;
