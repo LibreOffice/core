@@ -19,23 +19,26 @@
 #ifndef CHART_DRAWCOMMANDDISPATCH_HRC
 #define CHART_DRAWCOMMANDDISPATCH_HRC
 
-//Command Ids:
-#define COMMAND_ID_OBJECT_SELECT                1
-#define COMMAND_ID_DRAW_LINE                    2
-#define COMMAND_ID_LINE_ARROW_END               3
-#define COMMAND_ID_DRAW_RECT                    4
-#define COMMAND_ID_DRAW_ELLIPSE                 5
-#define COMMAND_ID_DRAW_FREELINE_NOFILL         6
-#define COMMAND_ID_DRAW_TEXT                    7
-#define COMMAND_ID_DRAW_TEXT_VERTICAL           8
-#define COMMAND_ID_DRAW_CAPTION                 9
-#define COMMAND_ID_DRAW_CAPTION_VERTICAL       10
-#define COMMAND_ID_DRAWTBX_CS_BASIC            11
-#define COMMAND_ID_DRAWTBX_CS_SYMBOL           12
-#define COMMAND_ID_DRAWTBX_CS_ARROW            13
-#define COMMAND_ID_DRAWTBX_CS_FLOWCHART        14
-#define COMMAND_ID_DRAWTBX_CS_CALLOUT          15
-#define COMMAND_ID_DRAWTBX_CS_STAR             16
+//Draw Command Ids:
+enum DrawCommandID
+{
+    COMMAND_ID_OBJECT_SELECT              = 1,
+    COMMAND_ID_DRAW_LINE                  = 2,
+    COMMAND_ID_LINE_ARROW_END             = 3,
+    COMMAND_ID_DRAW_RECT                  = 4,
+    COMMAND_ID_DRAW_ELLIPSE               = 5,
+    COMMAND_ID_DRAW_FREELINE_NOFILL       = 6,
+    COMMAND_ID_DRAW_TEXT                  = 7,
+    COMMAND_ID_DRAW_TEXT_VERTICAL         = 8,
+    COMMAND_ID_DRAW_CAPTION               = 9,
+    COMMAND_ID_DRAW_CAPTION_VERTICAL      = 10,
+    COMMAND_ID_DRAWTBX_CS_BASIC           = 11,
+    COMMAND_ID_DRAWTBX_CS_SYMBOL          = 12,
+    COMMAND_ID_DRAWTBX_CS_ARROW           = 13,
+    COMMAND_ID_DRAWTBX_CS_FLOWCHART       = 14,
+    COMMAND_ID_DRAWTBX_CS_CALLOUT         = 15,
+    COMMAND_ID_DRAWTBX_CS_STAR            = 16
+};
 
 #endif
 
