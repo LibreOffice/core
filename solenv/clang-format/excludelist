@@ -8014,7 +8014,8 @@ sc/qa/unit/helper/sorthelper.hxx
 sc/qa/unit/helper/xpath.cxx
 sc/qa/unit/helper/xpath.hxx
 sc/qa/unit/mark_test.cxx
-sc/qa/unit/opencl-test.cxx
+sc/qa/unit/opencl-test-1.cxx
+sc/qa/unit/opencl-test-2.cxx
 sc/qa/unit/screenshots/screenshots.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
