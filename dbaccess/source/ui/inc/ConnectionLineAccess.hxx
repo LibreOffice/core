@@ -20,21 +20,20 @@
 
 #include "TableConnection.hxx"
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper2< css::accessibility::XAccessibleRelationSet,
-                                 css::accessibility::XAccessible
-                                            > OConnectionLineAccess_BASE;
     class OTableConnection;
     /** the class OConnectionLineAccess represents the accessible object for the connection between two table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OConnectionLineAccess     :   public VCLXAccessibleComponent
-                                    ,   public OConnectionLineAccess_BASE
+    class OConnectionLineAccess     :   public cppu::ImplInheritanceHelper<
+                                            VCLXAccessibleComponent,
+                                            css::accessibility::XAccessibleRelationSet,
+                                            css::accessibility::XAccessible>
     {
         VclPtr<const OTableConnection>             m_pLine; // the window which I should give accessibility to
     protected:
@@ -44,20 +43,6 @@ namespace dbaui
 
     public:
         OConnectionLineAccess(OTableConnection* _pLine);
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire(  ) noexcept override
-        { // here inline is allowed because we do not use this class outside this dll
-            VCLXAccessibleComponent::acquire(  );
-        }
-        virtual void SAL_CALL release(  ) noexcept override
-        { // here inline is allowed because we do not use this class outside this dll
-            VCLXAccessibleComponent::release(  );
-        }
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

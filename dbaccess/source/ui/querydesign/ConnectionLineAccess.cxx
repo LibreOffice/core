@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <TableConnection.hxx>
 #include <TableWindow.hxx>
-#include <comphelper/sequence.hxx>
 
 namespace dbaui
 {
@@ -36,7 +35,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
-        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : nullptr)
+        : ImplInheritanceHelper(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : nullptr)
         ,m_pLine(_pLine)
     {
     }
@@ -44,15 +43,6 @@ namespace dbaui
     {
         m_pLine = nullptr;
         VCLXAccessibleComponent::disposing();
-    }
-    Any SAL_CALL OConnectionLineAccess::queryInterface( const Type& aType )
-    {
-        Any aRet(VCLXAccessibleComponent::queryInterface( aType ));
-        return aRet.hasValue() ? aRet : OConnectionLineAccess_BASE::queryInterface( aType );
-    }
-    Sequence< Type > SAL_CALL OConnectionLineAccess::getTypes(  )
-    {
-        return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OConnectionLineAccess_BASE::getTypes());
     }
     OUString SAL_CALL OConnectionLineAccess::getImplementationName()
     {
