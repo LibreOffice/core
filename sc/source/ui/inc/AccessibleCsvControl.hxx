@@ -30,7 +30,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include <map>
@@ -400,8 +399,9 @@ private:
 };
 
 /** Accessible class representing a cell of the CSV grid control. */
-class ScAccessibleCsvCell : public ScAccessibleCsvControl
-                          , public cppu::ImplHelper1<css::accessibility::XAccessible>
+class ScAccessibleCsvCell : public cppu::ImplInheritanceHelper<
+                                ScAccessibleCsvControl,
+                                css::accessibility::XAccessible>
                           , public ::accessibility::AccessibleStaticTextBase
 {
 protected:
