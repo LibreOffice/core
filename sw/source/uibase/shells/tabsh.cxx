@@ -175,7 +175,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
         rSet.Put(*aBoxDirection);
     }
 
-    bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll();
+    bool bSelectAll = rSh.StartsWith_() == SwCursorShell::StartsWith::Table && rSh.ExtendedSelectedAll();
     bool bTableSel = rSh.IsTableMode() || bSelectAll;
     if(!bTableSel)
     {

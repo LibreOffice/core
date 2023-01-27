@@ -242,7 +242,7 @@ void SwCursorShell::StartAction()
 
 void SwCursorShell::EndAction( const bool bIdleEnd )
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWith_() != StartsWith::None && ExtendedSelectedAll());
     bool bVis = m_bSVCursorVis;
 
     // Idle-formatting?
@@ -623,12 +623,26 @@ bool SwCursorShell::ExtendedSelectedAll()
     return aStart == *pShellCursor->Start() && aEnd == *pShellCursor->End();
 }
 
-bool SwCursorShell::StartsWithTable()
+typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
     SwNodeIndex nNode(rNodes.GetEndOfExtras());
     SwContentNode* pContentNode = rNodes.GoNext(&nNode);
-    return pContentNode->FindTableNode();
+    if (pContentNode->FindTableNode())
+    {
+        return StartsWith::Table;
+    }
+    if (pContentNode->GetTextNode()->IsHidden())
+    {
+        return StartsWith::HiddenPara;
+    }
+    nNode = rNodes.GetEndOfContent();
+    pContentNode = SwNodes::GoPrevious(&nNode);
+    if (pContentNode->GetTextNode()->IsHidden())
+    {
+        return StartsWith::HiddenPara;
+    }
+    return StartsWith::None;
 }
 
 bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
@@ -1410,7 +1424,7 @@ void SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
 
 void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWith_() != StartsWith::None && ExtendedSelectedAll());
     CurrShell aCurr( this );
 
     // always switch off all cursors when painting
@@ -1495,7 +1509,7 @@ void SwCursorShell::UpdateCursorPos()
     SwShellCursor* pShellCursor = getShellCursor( true );
     Size aOldSz( GetDocSize() );
 
-    if( isInHiddenTextFrame(pShellCursor) )
+    if (isInHiddenTextFrame(pShellCursor) && !ExtendedSelectedAll())
     {
         SwCursorMoveState aTmpState( CursorMoveState::NONE );
         aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -2455,7 +2469,7 @@ void SwCursorShell::ShellLoseFocus()
 
 void SwCursorShell::ShellGetFocus()
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWith_() != StartsWith::None && ExtendedSelectedAll());
 
     m_bHasFocus = true;
     if( !m_bBasicHideCursor && VisArea().Width() )

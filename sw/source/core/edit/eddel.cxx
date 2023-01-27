@@ -33,7 +33,7 @@
 
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
-    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
+    bool bSelectAll = StartsWith_() != SwCursorShell::StartsWith::None && ExtendedSelectedAll();
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()
