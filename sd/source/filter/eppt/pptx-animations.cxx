@@ -572,7 +572,7 @@ public:
     const OUString& getEffectPresetSubType() const { return msEffectPresetSubType; }
     bool isValid() const { return mbValid; }
     const std::vector<NodeContextPtr>& getChildNodes() const { return maChildNodes; };
-    Any getCondition(bool bBegin) const;
+    const Reference<XAnimationNode>& getNodeForCondition() const;
 };
 
 struct Cond
@@ -1101,8 +1101,8 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType), XML_repeatCount,
         sRepeatCount);
 
-    WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
-    WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
+    WriteAnimationCondList(mpContext->getNodeForCondition()->getBegin(), XML_stCondLst);
+    WriteAnimationCondList(mpContext->getNodeForCondition()->getEnd(), XML_endCondLst);
 
     if (rXNode->getType() == AnimationNodeType::ITERATE)
     {
@@ -1287,8 +1287,8 @@ void PPTXAnimationExport::WriteAnimationNodeMedia()
     {
         mpFS->startElementNS(XML_p, XML_cTn);
     }
-    WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
-    WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
+    WriteAnimationCondList(mpContext->getNodeForCondition()->getBegin(), XML_stCondLst);
+    WriteAnimationCondList(mpContext->getNodeForCondition()->getEnd(), XML_endCondLst);
     mpFS->endElementNS(XML_p, XML_cTn);
 
     mpFS->startElementNS(XML_p, XML_tgtEl);
@@ -1528,13 +1528,12 @@ bool NodeContext::initChildNodes()
     return bValid;
 }
 
-Any NodeContext::getCondition(bool bBegin) const
+const Reference<XAnimationNode>& NodeContext::getNodeForCondition() const
 {
     const bool bParent
         = (mnEffectNodeType != EffectNodeType::INTERACTIVE_SEQUENCE || maChildNodes.empty());
     const Reference<XAnimationNode>& rNode = bParent ? mxNode : maChildNodes[0]->getNode();
-
-    return bBegin ? rNode->getBegin() : rNode->getEnd();
+    return rNode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
