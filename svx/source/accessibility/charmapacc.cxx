@@ -91,9 +91,6 @@ void SAL_CALL SvxShowCharSetAcc::disposing()
     m_pParent = nullptr;
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-
 bool SvxShowCharSetAcc::implIsSelected( sal_Int64 nAccessibleChildIndex )
 {
     if (!m_pParent)

@@ -23,6 +23,7 @@
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/gen.hxx>
@@ -60,26 +61,21 @@ namespace svx
     };
 
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                    css::accessibility::XAccessibleTable
-                                >   OAccessibleHelper_Base;
-
     // - SvxShowCharSetAcc -
 
     /** The table implementation of the vcl control.
     */
 
-    class SvxShowCharSetAcc final : public ::comphelper::OAccessibleSelectionHelper,
-                              public OAccessibleHelper_Base
+    class SvxShowCharSetAcc final : public cppu::ImplInheritanceHelper<
+                                        ::comphelper::OAccessibleSelectionHelper,
+                                        css::accessibility::XAccessible,
+                                        css::accessibility::XAccessibleTable>
     {
         ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
         SvxShowCharSet*             m_pParent; // the vcl control
         virtual void SAL_CALL disposing() override;
     public:
         SvxShowCharSetAcc(SvxShowCharSet* pParent);
-
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleComponent
         virtual void SAL_CALL grabFocus(  ) override;
