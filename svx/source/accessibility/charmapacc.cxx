@@ -379,9 +379,6 @@ SvxShowCharSetItemAcc::~SvxShowCharSetItemAcc()
     ensureDisposed();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
-
 void SvxShowCharSetItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( GetMutex() );

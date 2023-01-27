@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ref.hxx>
 
@@ -149,14 +148,12 @@ namespace svx
 
     // - SvxShowCharSetItemAcc -
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                    css::accessibility::XAccessibleAction
-                                >   OAccessibleHelper_Base_3;
-
     /** The child implementation of the table.
     */
-    class SvxShowCharSetItemAcc final : public ::comphelper::OAccessibleComponentHelper,
-                                  public OAccessibleHelper_Base_3
+    class SvxShowCharSetItemAcc final : public cppu::ImplInheritanceHelper<
+                                            ::comphelper::OAccessibleComponentHelper,
+                                            css::accessibility::XAccessible,
+                                            css::accessibility::XAccessibleAction>
     {
     private:
         SvxShowCharSetItem* mpParent;
@@ -167,10 +164,6 @@ namespace svx
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
         virtual css::awt::Rectangle implGetBounds(  ) override;
     public:
-
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
 
         SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent );
 
