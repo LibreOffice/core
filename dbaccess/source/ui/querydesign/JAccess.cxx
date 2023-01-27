@@ -33,7 +33,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
-        :VCLXAccessibleComponent(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : nullptr)
+        :ImplInheritanceHelper(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : nullptr)
         ,m_pTableView(_pTableView)
     {
     }
@@ -82,10 +82,6 @@ namespace dbaui
     {
         return this;
     }
-    // XInterface
-    IMPLEMENT_FORWARD_XINTERFACE2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
-    // XTypeProvider
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
