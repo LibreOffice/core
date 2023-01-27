@@ -105,8 +105,8 @@ private:
     double              mfDist;     /// Distance between primary and secondary line.
     double              mfSecn;     /// Width of secondary (right or bottom) line.
     double              mfPatternScale; /// Scale used for line pattern spacing.
-    RefMode             meRefMode;  /// Reference point handling for this frame border.
     SvxBorderLineStyle  mnType;
+    RefMode             meRefMode;  /// Reference point handling for this frame border.
     bool                mbWordTableCell : 1;
     bool                mbUseGapColor : 1;
 
@@ -172,8 +172,8 @@ inline Style::Style()
     , mfDist(0)
     , mfSecn(0)
     , mfPatternScale(1.0)
-    , meRefMode(RefMode::Centered)
     , mnType(SvxBorderLineStyle::SOLID)
+    , meRefMode(RefMode::Centered)
     , mbWordTableCell(false)
     , mbUseGapColor(false)
 {}
