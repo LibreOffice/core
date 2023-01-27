@@ -301,11 +301,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    /* SAFE { */
-    SolarMutexResettableGuard aReadLock;
     std::vector< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
-    aReadLock.clear();
-    /* } SAFE */
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
@@ -317,9 +313,6 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     int nExecutedJobs=0;
     for (const OUString & lJob : lJobs)
     {
-        /* SAFE { */
-        aReadLock.reset();
-
         JobData aCfg(m_xContext);
         aCfg.setEvent(sEvent, lJob);
         aCfg.setEnvironment(JobData::E_DISPATCH);
@@ -327,9 +320,6 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 
         rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
         pJob->setJobData(aCfg);
-
-        aReadLock.clear();
-        /* } SAFE */
 
         if (!bIsEnabled)
             continue;
@@ -374,9 +364,6 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
                                         /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                         /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    /* SAFE { */
-    SolarMutexClearableGuard aReadLock;
-
     JobData aCfg(m_xContext);
     aCfg.setService(sService);
     aCfg.setEnvironment(JobData::E_DISPATCH);
@@ -388,9 +375,6 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
      */
     rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
-
-    aReadLock.clear();
-    /* } SAFE */
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
@@ -423,18 +407,12 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
                                       /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    /* SAFE { */
-    SolarMutexClearableGuard aReadLock;
-
     JobData aCfg(m_xContext);
     aCfg.setAlias(sAlias);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 
     rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
-
-    aReadLock.clear();
-    /* } SAFE */
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 

@@ -77,7 +77,6 @@ JobData::JobData( const JobData& rCopy )
 */
 JobData& JobData::operator=( const JobData& rCopy )
 {
-    SolarMutexGuard g;
     // Please don't copy the uno service manager reference.
     // That can change the uno context, which isn't a good idea!
     m_eMode                = rCopy.m_eMode;
@@ -111,7 +110,6 @@ JobData::~JobData()
 */
 void JobData::setAlias( const OUString& sAlias )
 {
-    SolarMutexGuard g;
     // delete all old information! Otherwise we mix it with the new one ...
     impl_reset();
 
@@ -177,7 +175,6 @@ void JobData::setAlias( const OUString& sAlias )
 */
 void JobData::setService( const OUString& sService )
 {
-    SolarMutexGuard g;
     // delete all old information! Otherwise we mix it with the new one ...
     impl_reset();
     // take over the new information
@@ -209,7 +206,6 @@ void JobData::setEvent( const OUString& sEvent ,
     // share code to read all job properties!
     setAlias(sAlias);
 
-    SolarMutexGuard g;
     // take over the new information - which differ against set one of method setAlias()!
     m_sEvent = sEvent;
     m_eMode  = E_EVENT;
@@ -228,8 +224,6 @@ void JobData::setEvent( const OUString& sEvent ,
  */
 void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
 {
-    SolarMutexGuard g;
-
     // update member
     m_lArguments = std::move(lArguments);
 
@@ -276,7 +270,6 @@ void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
  */
 void JobData::setEnvironment( EEnvironment eEnvironment )
 {
-    SolarMutexGuard g;
     m_eEnvironment = eEnvironment;
 }
 
@@ -287,20 +280,17 @@ void JobData::setEnvironment( EEnvironment eEnvironment )
  */
 JobData::EMode JobData::getMode() const
 {
-    SolarMutexGuard g;
     return m_eMode;
 }
 
 JobData::EEnvironment JobData::getEnvironment() const
 {
-    SolarMutexGuard g;
     return m_eEnvironment;
 }
 
 OUString JobData::getEnvironmentDescriptor() const
 {
     OUString sDescriptor;
-    SolarMutexGuard g;
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
@@ -322,25 +312,21 @@ OUString JobData::getEnvironmentDescriptor() const
 
 OUString JobData::getService() const
 {
-    SolarMutexGuard g;
     return m_sService;
 }
 
 OUString JobData::getEvent() const
 {
-    SolarMutexGuard g;
     return m_sEvent;
 }
 
 std::vector< css::beans::NamedValue > JobData::getJobConfig() const
 {
-    SolarMutexGuard g;
     return m_lArguments;
 }
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
-    SolarMutexGuard g;
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
@@ -364,7 +350,6 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
  */
 bool JobData::hasConfig() const
 {
-    SolarMutexGuard g;
     return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
 }
 
@@ -380,8 +365,6 @@ bool JobData::hasConfig() const
  */
 void JobData::disableJob()
 {
-    SolarMutexGuard g;
-
     // No configuration - not used from EXECUTOR and not triggered from an event => no chance!
     if (m_eMode!=E_EVENT)
         return;
@@ -548,7 +531,6 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
  */
 void JobData::impl_reset()
 {
-    SolarMutexGuard g;
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
     m_sAlias.clear();
