@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <comphelper/sequence.hxx>
 #include <vcl/vclevent.hxx>
 
 namespace dbaui
@@ -36,7 +35,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
-        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : nullptr)
+        :ImplInheritanceHelper(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : nullptr)
         ,m_pTable(_pTable)
     {
     }
@@ -54,15 +53,6 @@ namespace dbaui
         }
 
         VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-    }
-    Any SAL_CALL OTableWindowAccess::queryInterface( const Type& aType )
-    {
-        Any aRet(VCLXAccessibleComponent::queryInterface( aType ));
-        return aRet.hasValue() ? aRet : OTableWindowAccess_BASE::queryInterface( aType );
-    }
-    Sequence< Type > SAL_CALL OTableWindowAccess::getTypes(  )
-    {
-        return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OTableWindowAccess_BASE::getTypes());
     }
     OUString SAL_CALL OTableWindowAccess::getImplementationName()
     {

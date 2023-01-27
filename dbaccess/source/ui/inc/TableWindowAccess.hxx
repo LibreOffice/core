@@ -20,21 +20,20 @@
 
 #include "TableWindow.hxx"
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper2< css::accessibility::XAccessibleRelationSet,
-                                 css::accessibility::XAccessible
-                                            > OTableWindowAccess_BASE;
     class OTableWindow;
     /** the class OTableWindowAccess represents the accessible object for table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OTableWindowAccess    :   public VCLXAccessibleComponent
-                                ,   public OTableWindowAccess_BASE
+    class OTableWindowAccess    :   public cppu::ImplInheritanceHelper<
+                                        VCLXAccessibleComponent,
+                                        css::accessibility::XAccessibleRelationSet,
+                                        css::accessibility::XAccessible>
     {
         VclPtr<OTableWindow>   m_pTable; // the window which I should give accessibility to
 
@@ -47,20 +46,6 @@ namespace dbaui
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     public:
         OTableWindowAccess( OTableWindow* _pTable);
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire(  ) noexcept override
-        { // here inline is allowed because we do not use this class outside this dll
-            VCLXAccessibleComponent::acquire(  );
-        }
-        virtual void SAL_CALL release(  ) noexcept override
-        { // here inline is allowed because we do not use this class outside this dll
-            VCLXAccessibleComponent::release(  );
-        }
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
