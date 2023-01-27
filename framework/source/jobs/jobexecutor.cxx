@@ -247,9 +247,6 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     OUString aModuleIdentifier;
     ::std::vector< JobData::TJob2DocEventBinding > lJobs;
 
-    /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
-
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
     // This optimization suppress using of the cfg api for getting event and job descriptions.
@@ -262,6 +259,9 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     }
     catch( const css::uno::Exception& )
     {}
+
+    /* SAFE */ {
+    osl::MutexGuard g(rBHelper.rMutex);
 
     // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
     if (
