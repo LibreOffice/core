@@ -27,19 +27,16 @@ namespace framework
 {
 bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
-    SolarMutexGuard g;
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
 }
 
 bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
-    SolarMutexGuard g;
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());
 }
 
 AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 {
-    SolarMutexGuard g;
     TKeyList lKeys;
     lKeys.reserve(m_lKey2Commands.size());
 
@@ -53,8 +50,6 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey, const OUString& sCommand)
 {
-    SolarMutexGuard g;
-
     // register command for the specified key
     m_lKey2Commands[aKey] = sCommand;
 
@@ -65,7 +60,6 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey, const O
 
 AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
-    SolarMutexGuard g;
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
     if (pCommand == m_lCommand2Keys.end())
         throw css::container::NoSuchElementException();
@@ -74,7 +68,6 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
 
 OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
-    SolarMutexGuard g;
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
         throw css::container::NoSuchElementException();
@@ -83,8 +76,6 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
-    SolarMutexGuard g;
-
     // check if key exists
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
@@ -105,8 +96,6 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
-    SolarMutexGuard g;
-
     const TKeyList& lKeys = getKeysByCommand(sCommand);
     for (auto const& lKey : lKeys)
     {
