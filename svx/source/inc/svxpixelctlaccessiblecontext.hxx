@@ -24,6 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <rtl/ref.hxx>
@@ -97,14 +98,12 @@ private:
     tools::Long mnIndexInParent;
 };
 
-class SvxPixelCtlAccessible final : public ::comphelper::OAccessibleSelectionHelper,
-                                    public OAccessibleHelper_Base
+class SvxPixelCtlAccessible final : public cppu::ImplInheritanceHelper<
+                                        ::comphelper::OAccessibleSelectionHelper,
+                                        css::accessibility::XAccessible>
 {
 public:
     SvxPixelCtlAccessible(SvxPixelCtl* pPixelCtl);
-
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
 
     //XAccessibleComponent
     virtual void SAL_CALL grabFocus(  ) override;

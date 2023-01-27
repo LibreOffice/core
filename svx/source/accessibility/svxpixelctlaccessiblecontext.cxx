@@ -49,9 +49,6 @@ SvxPixelCtlAccessible::~SvxPixelCtlAccessible()
     ensureDisposed();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxPixelCtlAccessible, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxPixelCtlAccessible, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-
 uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext(  )
 {
     return this;
