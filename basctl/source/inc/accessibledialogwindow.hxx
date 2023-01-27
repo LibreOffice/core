@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -40,13 +40,11 @@ class DlgEdObj;
 
 
 
-typedef ::cppu::ImplHelper3 <
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleSelection,
-    css::lang::XServiceInfo > AccessibleDialogWindow_BASE;
-
-class AccessibleDialogWindow final : public comphelper::OAccessibleExtendedComponentHelper,
-                                public AccessibleDialogWindow_BASE,
+class AccessibleDialogWindow final : public cppu::ImplInheritanceHelper<
+                                         comphelper::OAccessibleExtendedComponentHelper,
+                                         css::accessibility::XAccessible,
+                                         css::accessibility::XAccessibleSelection,
+                                         css::lang::XServiceInfo>,
                                 public SfxListener
 {
 private:
@@ -98,12 +96,6 @@ public:
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

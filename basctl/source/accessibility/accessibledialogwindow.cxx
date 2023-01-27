@@ -493,18 +493,6 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
-// XInterface
-
-
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogWindow, OAccessibleExtendedComponentHelper, AccessibleDialogWindow_BASE )
-
-
-// XTypeProvider
-
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogWindow, OAccessibleExtendedComponentHelper, AccessibleDialogWindow_BASE )
-
-
 // XComponent
 
 
