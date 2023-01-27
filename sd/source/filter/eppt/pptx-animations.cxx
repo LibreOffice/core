@@ -490,9 +490,8 @@ class PPTXAnimationExport
     void WriteAnimationNodeMedia();
     void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
-    void WriteAnimationCondList(const Any& rAny, sal_Int32 nToken);
+    void WriteAnimationCondList(const std::vector<Cond>& rList, sal_Int32 nToken);
     void WriteAnimationCond(const Cond& rCond);
-    bool isMainSeqChild() const;
     const Reference<XAnimationNode>& getCurrentNode() const;
 
     PowerPointExport& mrPowerPointExport;
@@ -533,12 +532,6 @@ PPTXAnimationExport::PPTXAnimationExport(PowerPointExport& rExport, const FSHelp
     , mpFS(pFS)
     , mpContext(nullptr)
 {
-}
-
-bool PPTXAnimationExport::isMainSeqChild() const
-{
-    assert(mpContext);
-    return mpContext->isMainSeqChild();
 }
 
 const Reference<XAnimationNode>& PPTXAnimationExport::getCurrentNode() const
@@ -589,37 +582,13 @@ void PPTXAnimationExport::WriteAnimationTarget(const Any& rTarget)
     mpFS->endElementNS(XML_p, XML_tgtEl);
 }
 
-void PPTXAnimationExport::WriteAnimationCondList(const Any& rAny, sal_Int32 nToken)
+void PPTXAnimationExport::WriteAnimationCondList(const std::vector<Cond>& rList, sal_Int32 nToken)
 {
-    if (!rAny.hasValue())
-        return;
-
-    std::vector<Cond> aList;
-
-    bool bIsMainSeqChild = isMainSeqChild();
-
-    Sequence<Any> aCondSeq;
-    if (rAny >>= aCondSeq)
-    {
-        for (const auto& rCond : std::as_const(aCondSeq))
-        {
-            Cond aCond(rCond, bIsMainSeqChild);
-            if (aCond.isValid())
-                aList.push_back(aCond);
-        }
-    }
-    else
-    {
-        Cond aCond(rAny, bIsMainSeqChild);
-        if (aCond.isValid())
-            aList.push_back(aCond);
-    }
-
-    if (aList.size() > 0)
+    if (rList.size() > 0)
     {
         mpFS->startElementNS(XML_p, nToken);
 
-        for (const Cond& rCond : aList)
+        for (const Cond& rCond : rList)
             WriteAnimationCond(rCond);
 
         mpFS->endElementNS(XML_p, nToken);
@@ -954,8 +923,8 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType), XML_repeatCount,
         sRepeatCount);
 
-    WriteAnimationCondList(mpContext->getNodeForCondition()->getBegin(), XML_stCondLst);
-    WriteAnimationCondList(mpContext->getNodeForCondition()->getEnd(), XML_endCondLst);
+    WriteAnimationCondList(mpContext->getBeginCondList(), XML_stCondLst);
+    WriteAnimationCondList(mpContext->getEndCondList(), XML_endCondLst);
 
     if (rXNode->getType() == AnimationNodeType::ITERATE)
     {
@@ -1140,8 +1109,8 @@ void PPTXAnimationExport::WriteAnimationNodeMedia()
     {
         mpFS->startElementNS(XML_p, XML_cTn);
     }
-    WriteAnimationCondList(mpContext->getNodeForCondition()->getBegin(), XML_stCondLst);
-    WriteAnimationCondList(mpContext->getNodeForCondition()->getEnd(), XML_endCondLst);
+    WriteAnimationCondList(mpContext->getBeginCondList(), XML_stCondLst);
+    WriteAnimationCondList(mpContext->getEndCondList(), XML_endCondLst);
     mpFS->endElementNS(XML_p, XML_cTn);
 
     mpFS->startElementNS(XML_p, XML_tgtEl);

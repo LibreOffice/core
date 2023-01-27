@@ -56,6 +56,29 @@ bool IsAudioURL(const OUString& rURL)
 
 /// Returns if rURL has an extension which is a video format.
 bool IsVideoURL(const OUString& rURL) { return rURL.endsWithIgnoreAsciiCase(".mp4"); }
+
+void initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChild)
+{
+    if (!rAny.hasValue())
+        return;
+
+    Sequence<Any> aCondSeq;
+    if (rAny >>= aCondSeq)
+    {
+        for (const auto& rCond : std::as_const(aCondSeq))
+        {
+            Cond aCond(rCond, bIsMainSeqChild);
+            if (aCond.isValid())
+                rList.push_back(aCond);
+        }
+    }
+    else
+    {
+        Cond aCond(rAny, bIsMainSeqChild);
+        if (aCond.isValid())
+            rList.push_back(aCond);
+    }
+}
 }
 
 NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild,
@@ -71,6 +94,10 @@ NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqCh
     initUserData();
 
     initValid(initChildNodes(), bIsIterateChild);
+
+    initCondList(getNodeForCondition()->getBegin(), maBeginCondList, mbMainSeqChild);
+
+    initCondList(getNodeForCondition()->getEnd(), maEndCondList, mbMainSeqChild);
 }
 
 void NodeContext::initUserData()

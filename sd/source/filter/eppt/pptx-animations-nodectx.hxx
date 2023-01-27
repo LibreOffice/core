@@ -11,6 +11,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <vector>
+#include "pptx-animations-cond.hxx"
 
 namespace oox::core
 {
@@ -24,6 +25,8 @@ class NodeContext
     const bool mbMainSeqChild;
 
     std::vector<NodeContextPtr> maChildNodes;
+    std::vector<Cond> maBeginCondList;
+    std::vector<Cond> maEndCondList;
     // if the node has valid target or contains at least one valid target.
     bool mbValid;
 
@@ -55,5 +58,7 @@ public:
     bool isValid() const { return mbValid; }
     const std::vector<NodeContextPtr>& getChildNodes() const { return maChildNodes; };
     const css::uno::Reference<css::animations::XAnimationNode>& getNodeForCondition() const;
+    const std::vector<Cond>& getBeginCondList() const { return maBeginCondList; }
+    const std::vector<Cond>& getEndCondList() const { return maEndCondList; }
 };
 }
