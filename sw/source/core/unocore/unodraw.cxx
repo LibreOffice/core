@@ -77,6 +77,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <docmodel/uno/UnoTheme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -252,8 +253,11 @@ public:
     }
 };
 
-SwFmDrawPage::SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage ) :
-    SwFmDrawPage_Base( pPage ), m_pDoc(pDoc), m_pPageView(nullptr)
+SwFmDrawPage::SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage )
+    : SwFmDrawPage_Base(pPage)
+    , m_pDoc(pDoc)
+    , m_pPageView(nullptr)
+    , m_pPropertySet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_PAGE))
 {
 }
 
@@ -380,6 +384,120 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         pShape->m_pPage = this;
     }
     return xRet;
+}
+
+uno::Reference<beans::XPropertySetInfo> SwFmDrawPage::getPropertySetInfo()
+{
+    static uno::Reference<beans::XPropertySetInfo> xRet = m_pPropertySet->getPropertySetInfo();
+    return xRet;
+}
+
+void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+{
+    SolarMutexGuard aGuard;
+    const SfxItemPropertyMapEntry* pEntry = m_pPropertySet->getPropertyMap().getByName(rPropertyName);
+
+    switch (pEntry ? pEntry->nWID : -1)
+    {
+        case WID_PAGE_THEME:
+        {
+            SdrPage* pPage = GetSdrPage();
+            css::uno::Reference<css::util::XTheme> xTheme;
+            if (aValue >>= xTheme)
+            {
+                auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+                std::unique_ptr<model::Theme> pTheme(new model::Theme(pUnoTheme->getTheme()));
+                pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+            }
+        }
+        break;
+        case WID_PAGE_BOTTOM:
+        case WID_PAGE_LEFT:
+        case WID_PAGE_RIGHT:
+        case WID_PAGE_TOP:
+        case WID_PAGE_WIDTH:
+        case WID_PAGE_HEIGHT:
+        case WID_PAGE_NUMBER:
+        case WID_PAGE_ORIENT:
+        case WID_PAGE_USERATTRIBS:
+        case WID_PAGE_ISDARK:
+        case WID_NAVORDER:
+        case WID_PAGE_BACKFULL:
+            break;
+
+        default:
+            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    }
+}
+
+uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
+{
+    SolarMutexGuard aGuard;
+    const SfxItemPropertyMapEntry* pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName);
+
+    uno::Any aAny;
+
+    switch (pEntry ? pEntry->nWID : -1)
+    {
+        case WID_PAGE_THEME:
+        {
+            css::uno::Reference<css::util::XTheme> xTheme;
+
+            auto* pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
+            if (pTheme)
+                xTheme = new UnoTheme(*pTheme);
+            aAny <<= xTheme;
+        }
+        break;
+
+        case WID_PAGE_NUMBER:
+        {
+            const sal_uInt16 nPageNumber(GetSdrPage()->GetPageNum());
+            aAny <<= o3tl::narrowing<sal_Int16>(nPageNumber);
+        }
+        break;
+
+        case WID_PAGE_BOTTOM:
+        case WID_PAGE_LEFT:
+        case WID_PAGE_RIGHT:
+        case WID_PAGE_TOP:
+        case WID_PAGE_WIDTH:
+        case WID_PAGE_HEIGHT:
+        case WID_PAGE_ORIENT:
+        case WID_PAGE_USERATTRIBS:
+        case WID_PAGE_ISDARK:
+        case WID_NAVORDER:
+        case WID_PAGE_BACKFULL:
+            break;
+
+        default:
+            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    }
+    return aAny;
+}
+
+void SwFmDrawPage::addPropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener> & /*aListener*/)
+{
+    OSL_FAIL("not implemented");
+}
+
+void SwFmDrawPage::removePropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener> & /*aListener*/)
+{
+    OSL_FAIL("not implemented");
+}
+
+void SwFmDrawPage::addVetoableChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener> & /*aListener*/)
+{
+    OSL_FAIL("not implemented");
+}
+
+void SwFmDrawPage::removeVetoableChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener> & /*aListener*/)
+{
+    OSL_FAIL("not implemented");
 }
 
 namespace

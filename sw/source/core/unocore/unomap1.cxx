@@ -1162,6 +1162,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_GRAPHIC;
             }
             break;
+            case PROPERTY_MAP_TEXT_PAGE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_PAGE(pEntries);
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_PAGE;
+            }
+            break;
             case PROPERTY_MAP_TEXT_SHAPE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_SHAPE(pEntries);

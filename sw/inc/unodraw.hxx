@@ -30,7 +30,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
@@ -39,16 +40,20 @@ class SdrView;
 class SwDoc;
 class SwXShape;
 
-typedef cppu::ImplInheritanceHelper
+typedef cppu::AggImplInheritanceHelper2
 <
     SvxFmDrawPage,
-    css::container::XEnumerationAccess
-> SwFmDrawPage_Base;
+    css::container::XEnumerationAccess,
+    css::beans::XPropertySet>
+        SwFmDrawPage_Base;
+
 class SwFmDrawPage final : public SwFmDrawPage_Base
 {
     SwDoc*          m_pDoc;
     SdrPageView*        m_pPageView;
     std::vector<rtl::Reference<SwXShape>> m_vShapes;
+    const SfxItemPropertySet* m_pPropertySet;
+
 public:
     SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage );
     virtual ~SwFmDrawPage() noexcept override;
@@ -99,6 +104,15 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    //XPropertySet
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const css::uno::Any& aValue) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     // renamed and outlined to detect where it's called
     void    InvalidateSwDoc(); // {pDoc = 0;}
