@@ -2258,6 +2258,12 @@ void ScOrcusStyles::applyXfToItemSet( SfxItemSet& rSet, const ScOrcusXf& rXf )
         rSet.Put(SvxJustifyMethodItem(rXf.meHorAlignMethod, ATTR_HOR_JUSTIFY_METHOD));
         rSet.Put(SvxJustifyMethodItem(rXf.meVerAlignMethod, ATTR_VER_JUSTIFY_METHOD));
     }
+
+    if (rXf.mbWrapText)
+        rSet.Put(ScLineBreakCell(*rXf.mbWrapText));
+
+    if (rXf.mbShrinkToFit)
+        rSet.Put(ScShrinkToFitCell(*rXf.mbShrinkToFit));
 }
 
 void ScOrcusStyles::applyXfToItemSet( SfxItemSet& rSet, std::size_t xfId )

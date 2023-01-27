@@ -153,6 +153,7 @@ public:
     void testHiddenRowsColumnsXLSXML();
     void testColumnWidthRowHeightXLSXML();
     void testCharacterSetXLSXML();
+    void testWrapAndShrinkXLSXML();
     void testTdf137091();
     void testTdf141495();
     void testTdf70455();
@@ -272,6 +273,7 @@ public:
     CPPUNIT_TEST(testHiddenRowsColumnsXLSXML);
     CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
     CPPUNIT_TEST(testCharacterSetXLSXML);
+    CPPUNIT_TEST(testWrapAndShrinkXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf137091);
     CPPUNIT_TEST(testTdf141495);
@@ -1984,6 +1986,38 @@ void ScFiltersTest2::testCharacterSetXLSXML()
     aBuf = { 0x041e, 0x0441, 0x0442, 0x0430, 0x0442, 0x043e, 0x043a };
     aExpected = OUString(aBuf.data(), aBuf.size());
     CPPUNIT_ASSERT_EQUAL(aExpected, aVal);
+}
+
+void ScFiltersTest2::testWrapAndShrinkXLSXML()
+{
+    createScDoc("xml/wrap-and-shrink.xml");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pDoc->GetTableCount());
+
+    struct Check
+    {
+        SCCOL nCol;
+        SCROW nRow;
+
+        bool bWrapText;
+        bool bShrinkToFit;
+    };
+
+    constexpr Check aChecks[] = {
+        { 1, 0, false, false },
+        { 1, 1, true, false },
+        { 1, 2, false, true },
+    };
+
+    for (const auto& rC : aChecks)
+    {
+        const ScLineBreakCell* pLB = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_LINEBREAK);
+        CPPUNIT_ASSERT_EQUAL(pLB->GetValue(), rC.bWrapText);
+
+        const ScShrinkToFitCell* pSTF = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_SHRINKTOFIT);
+        CPPUNIT_ASSERT_EQUAL(pSTF->GetValue(), rC.bShrinkToFit);
+    }
 }
 
 void ScFiltersTest2::testCondFormatXLSB()
