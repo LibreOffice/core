@@ -2440,7 +2440,7 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     if (m_pContentControl->GetTabIndex())
     {
-        // write the unsigned value as as if it were signed since that is all we can import
+        // write the unsigned value as if it were signed since that is all we can import
         const sal_Int32 nTabIndex = static_cast<sal_Int32>(m_pContentControl->GetTabIndex());
         m_pSerializer->singleElementNS(XML_w, XML_tabIndex, FSNS(XML_w, XML_val),
                                        OString::number(nTabIndex));
