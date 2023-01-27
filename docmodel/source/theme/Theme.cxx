@@ -29,6 +29,13 @@ Theme::Theme(OUString const& rName)
 {
 }
 
+Theme::Theme(Theme const& rTheme)
+    : maName(rTheme.maName)
+    , mpColorSet(new ColorSet(*rTheme.GetColorSet()))
+    , maFontScheme(rTheme.maFontScheme)
+{
+}
+
 void Theme::SetColorSet(std::unique_ptr<model::ColorSet> pColorSet)
 {
     mpColorSet = std::move(pColorSet);

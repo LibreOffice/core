@@ -136,6 +136,8 @@ private:
 public:
     Theme(OUString const& rName);
 
+    Theme(Theme const& rTheme);
+
     void setFontScheme(FontScheme const& rFontScheme) { maFontScheme = rFontScheme; }
 
     FontScheme const& getFontScheme() const { return maFontScheme; }
