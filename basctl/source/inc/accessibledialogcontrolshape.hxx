@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
@@ -35,13 +35,11 @@ class DialogWindow;
 
 
 
-typedef ::cppu::ImplHelper3<
-        css::accessibility::XAccessible,
-        css::lang::XServiceInfo,
-        css::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;
-
-class AccessibleDialogControlShape final : public comphelper::OAccessibleExtendedComponentHelper,
-                                        public AccessibleDialogControlShape_BASE
+class AccessibleDialogControlShape final : public cppu::ImplInheritanceHelper<
+                                               comphelper::OAccessibleExtendedComponentHelper,
+                                               css::accessibility::XAccessible,
+                                               css::lang::XServiceInfo,
+                                               css::beans::XPropertyChangeListener>
 {
     friend class AccessibleDialogWindow;
 
@@ -78,12 +76,6 @@ private:
 public:
     AccessibleDialogControlShape (DialogWindow*, DlgEdObj*);
     virtual ~AccessibleDialogControlShape() override;
-
-    // XInterface
-    DECLARE_XINTERFACE()
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;

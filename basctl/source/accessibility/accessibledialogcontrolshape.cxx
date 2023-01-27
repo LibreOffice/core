@@ -227,12 +227,6 @@ awt::Rectangle AccessibleDialogControlShape::implGetBounds()
     return GetBounds();
 }
 
-// XInterface
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogControlShape, OAccessibleExtendedComponentHelper, AccessibleDialogControlShape_BASE )
-
-// XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogControlShape, OAccessibleExtendedComponentHelper, AccessibleDialogControlShape_BASE )
-
 // XComponent
 void AccessibleDialogControlShape::disposing()
 {
