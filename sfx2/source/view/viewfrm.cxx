@@ -53,6 +53,7 @@
 #if !ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>
 #endif
+#include <unotools/securityoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1285,19 +1286,10 @@ void SfxViewFrame::AppendReadOnlyInfobar()
 
 void SfxViewFrame::AppendContainsMacrosInfobar()
 {
-    auto pInfoBar = AppendInfoBar("macro", SfxResId(RID_SECURITY_WARNING_TITLE), SfxResId(STR_CONTAINS_MACROS), InfobarType::WARNING);
-    if (!pInfoBar)
-        return;
-
     SfxObjectShell_Impl* pObjImpl = m_xObjSh->Get_Impl();
 
     // what's the difference between pObjImpl->documentStorageHasMacros() and pObjImpl->aMacroMode.hasMacroLibrary() ?
-    if (pObjImpl->aMacroMode.hasMacroLibrary())
-    {
-        weld::Button& rMacroButton = pInfoBar->addButton();
-        rMacroButton.set_label(SfxResId(STR_MACROS));
-        rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
-    }
+    bool bHasDocumentMacros = pObjImpl->aMacroMode.hasMacroLibrary();
 
     Reference<XModel> xModel = m_xObjSh->GetModel();
     uno::Reference<document::XEventsSupplier> xSupplier(xModel, uno::UNO_QUERY);
@@ -1332,11 +1324,31 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         }
     }
 
-    if (bHasBoundConfigEvents)
+    if (bHasDocumentMacros || bHasBoundConfigEvents)
     {
-        weld::Button& rEventButton = pInfoBar->addButton();
-        rEventButton.set_label(SfxResId(STR_EVENTS));
-        rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
+        auto aResId = SvtSecurityOptions::IsMacroDisabled() ? STR_MACROS_DISABLED : STR_CONTAINS_MACROS;
+        auto pInfoBar = AppendInfoBar("macro", SfxResId(RID_SECURITY_WARNING_TITLE),
+                                      SfxResId(aResId), InfobarType::WARNING);
+        if (!pInfoBar)
+            return;
+
+        // No access to macro dialog when macros are disabled globally.
+        if (SvtSecurityOptions::IsMacroDisabled())
+            return;
+
+        if (bHasDocumentMacros)
+        {
+            weld::Button& rMacroButton = pInfoBar->addButton();
+            rMacroButton.set_label(SfxResId(STR_MACROS));
+            rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
+        }
+
+        if (bHasBoundConfigEvents)
+        {
+            weld::Button& rEventButton = pInfoBar->addButton();
+            rEventButton.set_label(SfxResId(STR_EVENTS));
+            rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
+        }
     }
 }
 
