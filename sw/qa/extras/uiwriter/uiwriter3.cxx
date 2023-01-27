@@ -193,6 +193,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf149507)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114973)
+{
+    createSwDoc("tdf114973.fodt");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // bug: cursor jumped into header
+    CPPUNIT_ASSERT(!pWrtShell->IsInHeaderFooter());
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // check that hidden paragraphs at start and end are deleted
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(int(1), getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(1)->getString());
+
+    // check that hidden paragraphs at start and end are copied
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(int(3), getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("hidden first paragraph"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Press CTRL+A for dispatching .uno:SelectAll. You see that "
+                                  "nothing will be selected. The cursor jumps to the header"),
+                         getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("hidden last paragraph"), getParagraph(3)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
 {
     createSwDoc("tdf145321.odt");
