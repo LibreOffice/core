@@ -41,7 +41,7 @@ class Test(UITestCase):
                     0x000000,  # folHlink
                 ])
             })
-            master.Theme = theme
+            master.ThemeUnoRepresentation = theme
             # Select the title shape.
             editWin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
 

@@ -30,6 +30,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdomedia.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -130,14 +131,25 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap;
-    aMap["Name"] <<= OUString("mytheme");
-    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
-    uno::Sequence<util::Color> aColorScheme
-        = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
-    aMap["ColorScheme"] <<= aColorScheme;
-    uno::Any aTheme(aMap.getAsConstPropertyValueList());
-    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    model::Theme aTheme("mytheme");
+    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+    pColorSet->add(model::ThemeColorType::Dark1, 0x0);
+    pColorSet->add(model::ThemeColorType::Light1, 0x1);
+    pColorSet->add(model::ThemeColorType::Dark2, 0x2);
+    pColorSet->add(model::ThemeColorType::Light2, 0x3);
+    pColorSet->add(model::ThemeColorType::Accent1, 0x4);
+    pColorSet->add(model::ThemeColorType::Accent2, 0x5);
+    pColorSet->add(model::ThemeColorType::Accent3, 0x6);
+    pColorSet->add(model::ThemeColorType::Accent4, 0x7);
+    pColorSet->add(model::ThemeColorType::Accent5, 0x8);
+    pColorSet->add(model::ThemeColorType::Accent6, 0x9);
+    pColorSet->add(model::ThemeColorType::Hyperlink, 0xa);
+    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
+    aTheme.SetColorSet(std::move(pColorSet));
+
+    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(aTheme);
+    xMasterPage->setPropertyValue("Theme", uno::Any(xTheme));
 
     // Export to ODP:
     save("impress8");
@@ -205,15 +217,21 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap(xMasterpage->getPropertyValue("Theme"));
-    // Without the accompanying fix in place, this test would have failed with:
-    // Cannot extract an Any(void) to string!
-    // i.e. the master page had no theme.
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), aMap["Name"].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), aMap["ColorSchemeName"].get<OUString>());
-    auto aColorScheme = aMap["ColorScheme"].get<uno::Sequence<util::Color>>();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aColorScheme.getLength());
-    CPPUNIT_ASSERT_EQUAL(static_cast<util::Color>(0x954F72), aColorScheme[11]);
+
+    uno::Reference<util::XTheme> xTheme;
+    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+
+    // We expect the theme to be set on the master page
+    CPPUNIT_ASSERT(xTheme.is());
+    auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+    CPPUNIT_ASSERT(pUnoTheme);
+    auto const& rTheme = pUnoTheme->getTheme();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), rTheme.GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), rTheme.GetColorSet()->getName());
+
+    CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
+                         rTheme.GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)

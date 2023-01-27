@@ -14,14 +14,14 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/namecontainer.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 
 /// Imports the theme
 class XMLThemeContext : public SvXMLImportContext
 {
     css::uno::Reference<css::drawing::XDrawPage> m_xPage;
-    comphelper::SequenceAsHashMap m_aTheme;
+    model::Theme maTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,
@@ -37,13 +37,14 @@ public:
 /// Imports the color table of a theme
 class XMLColorTableContext : public SvXMLImportContext
 {
-    comphelper::SequenceAsHashMap& m_rTheme;
+    model::Theme& mrTheme;
+    std::unique_ptr<model::ColorSet> mpColorSet;
     std::vector<css::util::Color> m_aColorScheme;
 
 public:
     XMLColorTableContext(SvXMLImport& rImport,
                          css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                         comphelper::SequenceAsHashMap& rTheme);
+                         model::Theme& mrTheme);
     ~XMLColorTableContext();
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
@@ -57,7 +58,7 @@ class XMLColorContext : public SvXMLImportContext
 public:
     XMLColorContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    std::vector<css::util::Color>& rColorScheme);
+                    std::unique_ptr<model::ColorSet>& rpColorSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

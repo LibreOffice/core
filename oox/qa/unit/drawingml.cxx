@@ -28,8 +28,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -373,19 +375,21 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap(xMasterpage->getPropertyValue("Theme"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), aMap["Name"].get<OUString>());
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Cannot extract an Any(void) to string!
-    // i.e. the name of the color scheme was lost on import.
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), aMap["ColorSchemeName"].get<OUString>());
 
-    // Check the last color in the color set, value is from ppt/theme/theme1.xml.
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Cannot extract an Any(void) to []long!
-    auto aColorScheme = aMap["ColorScheme"].get<uno::Sequence<util::Color>>();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aColorScheme.getLength());
-    CPPUNIT_ASSERT_EQUAL(static_cast<util::Color>(0x954F72), aColorScheme[11]);
+    uno::Reference<util::XTheme> xTheme;
+    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+
+    // We expect the theme to be set on the master page
+    CPPUNIT_ASSERT(xTheme.is());
+    auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+    CPPUNIT_ASSERT(pUnoTheme);
+    auto const& rTheme = pUnoTheme->getTheme();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), rTheme.GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), rTheme.GetColorSet()->getName());
+
+    CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
+                         rTheme.GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 
     // Check the reference to that theme:
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);

@@ -15,7 +15,7 @@
 #include <com/sun/star/util/Color.hpp>
 
 #include <test/xmldocptr.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -66,14 +66,24 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap;
-    aMap["Name"] <<= OUString("mytheme");
-    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
-    uno::Sequence<util::Color> aColorScheme
-        = { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc };
-    aMap["ColorScheme"] <<= aColorScheme;
-    uno::Any aTheme(aMap.getAsConstPropertyValueList());
-    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    model::Theme aTheme("mytheme");
+    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+    pColorSet->add(model::ThemeColorType::Dark1, 0x1);
+    pColorSet->add(model::ThemeColorType::Light1, 0x2);
+    pColorSet->add(model::ThemeColorType::Dark2, 0x3);
+    pColorSet->add(model::ThemeColorType::Light2, 0x4);
+    pColorSet->add(model::ThemeColorType::Accent1, 0x5);
+    pColorSet->add(model::ThemeColorType::Accent2, 0x6);
+    pColorSet->add(model::ThemeColorType::Accent3, 0x7);
+    pColorSet->add(model::ThemeColorType::Accent4, 0x8);
+    pColorSet->add(model::ThemeColorType::Accent5, 0x9);
+    pColorSet->add(model::ThemeColorType::Accent6, 0xa);
+    pColorSet->add(model::ThemeColorType::Hyperlink, 0xb);
+    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc);
+    aTheme.SetColorSet(std::move(pColorSet));
+
+    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(aTheme)));
 
     // When exporting to PPTX:
     save("Impress Office Open XML");

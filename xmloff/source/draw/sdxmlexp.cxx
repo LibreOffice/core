@@ -73,8 +73,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/Color.hpp>
-
-#include <comphelper/sequenceashashmap.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
+#include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2367,56 +2367,42 @@ void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
 
 void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
-    if (!xPropertySet.is())
-        return;
-
-    comphelper::SequenceAsHashMap aMap(xPropertySet->getPropertyValue("Theme"));
-    if (aMap.empty())
-    {
-        return;
-    }
-
     if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
     {
         // Do not export in standard ODF 1.3 or older.
         return;
     }
 
-    auto it = aMap.find("Name");
-    if (it != aMap.end())
-    {
-        OUString aName;
-        it->second >>= aName;
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aName);
-    }
+    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    uno::Reference<util::XTheme> xTheme;
+    xPropertySet->getPropertyValue("Theme") >>= xTheme;
+    if (!xTheme.is())
+        return;
+
+    auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+    if (!pUnoTheme)
+        return;
+
+    auto const& rTheme = pUnoTheme->getTheme();
+
+    if (!rTheme.GetName().isEmpty())
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rTheme.GetName());
     SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
 
-    uno::Sequence<util::Color> aColors;
-    it = aMap.find("ColorScheme");
-    if (it != aMap.end())
-    {
-        it->second >>= aColors;
-    }
-    if (!aColors.hasElements())
-    {
-        return;
-    }
-
-    it = aMap.find("ColorSchemeName");
-    if (it != aMap.end())
-    {
-        OUString aName;
-        it->second >>= aName;
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aName);
-    }
+    auto* pColorSet = rTheme.GetColorSet();
+    if (!pColorSet->getName().isEmpty())
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pColorSet->getName());
     SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_COLOR_TABLE, true, true);
 
-    static const XMLTokenEnum aColorTokens[] = {
-        XML_DK1, // Background 1
-        XML_LT1, // Text 1
-        XML_DK2, // Background 2
-        XML_LT2, // Text 2
+    static const XMLTokenEnum aColorTokens[] =
+    {
+        XML_DK1, // Text 1
+        XML_LT1, // Background 1
+        XML_DK2, // Text 2
+        XML_LT2, // Background 2
         XML_ACCENT1,
         XML_ACCENT2,
         XML_ACCENT3,
@@ -2426,17 +2412,17 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
         XML_HLINK, // Hyperlink
         XML_FOLHLINK, // Followed hyperlink
     };
-    for (size_t nColor = 0; nColor < aColors.size(); ++nColor)
+
+    for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
     {
-        // Import goes via model::Theme::FromAny(), which sanitizes user input.
-        assert(nColor < SAL_N_ELEMENTS(aColorTokens));
+        if (eThemeColorType == model::ThemeColorType::Unknown)
+            continue;
 
+        auto nColor = size_t(eThemeColorType);
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, GetXMLToken(aColorTokens[nColor]));
-
         OUStringBuffer sValue;
-        sax::Converter::convertColor(sValue, aColors[nColor]);
+        sax::Converter::convertColor(sValue, pColorSet->getColor(eThemeColorType));
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR, sValue.makeStringAndClear());
-
         SvXMLElementExport aColor(*this, XML_NAMESPACE_LO_EXT, XML_COLOR, true, true);
     }
 }
