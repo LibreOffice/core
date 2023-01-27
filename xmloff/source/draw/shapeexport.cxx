@@ -3011,6 +3011,51 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
+                else
+                {
+                    // tdf#153179 Export the preview graphic of the object if the object is missing.
+                    uno::Reference<graphic::XGraphic> xGraphic;
+                    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+
+                    if (xGraphic.is())
+                    {
+                        OUString aMimeType;
+                        const OUString aHref = mrExport.AddEmbeddedXGraphic(xGraphic, aMimeType);
+
+                        if (aMimeType.isEmpty())
+                            mrExport.GetGraphicMimeTypeFromStream(xGraphic, aMimeType);
+
+                        if (!aHref.isEmpty())
+                        {
+                            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aHref);
+                            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+                            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+                            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
+                        }
+
+                        if (!aMimeType.isEmpty()
+                            && GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                        { // ODF 1.3 OFFICE-3943
+                            mrExport.AddAttribute(SvtSaveOptions::ODFSVER_013
+                                                          <= GetExport().getSaneDefaultVersion()
+                                                      ? XML_NAMESPACE_DRAW
+                                                      : XML_NAMESPACE_LO_EXT,
+                                                  "mime-type", aMimeType);
+                        }
+
+                        SvXMLElementExport aImageElem(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true,
+                                                      true);
+
+                        // optional office:binary-data
+                        mrExport.AddEmbeddedXGraphicAsBase64(xGraphic);
+
+                        ImpExportEvents(xShape);
+                        ImpExportGluePoints(xShape);
+                        ImpExportDescription(xShape);
+
+                        return;
+                    }
+                }
             }
         }
 
