@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ref.hxx>
 
@@ -33,9 +32,6 @@ class SvxShowCharSet;
 
 namespace svx
 {
-    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
-                                >   OAccessibleHelper_Base_2;
-
     class SvxShowCharSetAcc;
 
     class SvxShowCharSetItemAcc;
