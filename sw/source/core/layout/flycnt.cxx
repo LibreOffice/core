@@ -50,6 +50,7 @@
 #include <textboxhelper.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <unoprnms.hxx>
+#include <rootfrm.hxx>
 
 using namespace ::com::sun::star;
 
@@ -79,6 +80,13 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 {
     m_bAtCnt = true;
     m_bAutoPosition = (RndStdIds::FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
+}
+
+SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede)
+    : SwFlyAtContentFrame(rPrecede.GetFormat(), rPrecede.getRootFrame(), /*pAnchor=*/nullptr)
+{
+    SetFollow(rPrecede.GetFollow());
+    rPrecede.SetFollow(this);
 }
 
 // #i28701#
