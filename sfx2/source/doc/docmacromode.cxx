@@ -95,22 +95,6 @@ namespace sfx2
             rbAlreadyShown = true;
         }
 
-
-        void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
-        {
-            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_MACROS_SUPPORT_DISABLED, rbAlreadyShown );
-        }
-
-
-        void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
-        {
-#ifdef MACOSX
-            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC, rbAlreadyShown );
-#else
-            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED, rbAlreadyShown );
-#endif
-        }
-
         void lcl_showMacrosDisabledUnsignedContentError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_CONTENT_UNSIGNED, rbAlreadyShown );
@@ -150,7 +134,6 @@ namespace sfx2
         if ( SvtSecurityOptions::IsMacroDisabled() )
         {
             // no macro should be executed at all
-            lcl_showMacrosDisabledError( rxInteraction, m_xData->m_bMacroDisabledMessageShown );
             return disallowMacroExecution();
         }
 
@@ -219,7 +202,6 @@ namespace sfx2
             // at this point it is clear that the document is not in the secure location
             if ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
             {
-                lcl_showDocumentMacrosDisabledError( rxInteraction, m_xData->m_bDocMacroDisabledMessageShown );
                 return disallowMacroExecution();
             }
 
@@ -235,8 +217,6 @@ namespace sfx2
                 SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SignatureState::BROKEN )
                 {
-                    if (!bAllowUIToAddAuthor)
-                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
                 else if ( m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading() &&
@@ -256,8 +236,6 @@ namespace sfx2
                        || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
-                    if (!bAllowUIToAddAuthor)
-                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
             }
@@ -267,9 +245,6 @@ namespace sfx2
                 ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
                 )
             {
-                if  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                    lcl_showDocumentMacrosDisabledError( rxInteraction, m_xData->m_bDocMacroDisabledMessageShown );
-
                 return disallowMacroExecution();
             }
         }
