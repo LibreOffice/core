@@ -112,9 +112,6 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
     ensureDisposed();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxRectCtlAccessibleContext, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxRectCtlAccessibleContext, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-
 Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );

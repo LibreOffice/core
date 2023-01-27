@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <rtl/ref.hxx>
@@ -44,17 +44,13 @@ namespace tools { class Rectangle; }
 class SvxRectCtl;
 class SvxRectCtlChildAccessibleContext;
 
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
-
-class SvxRectCtlAccessibleContext final : public ::comphelper::OAccessibleSelectionHelper,
-                                       public OAccessibleHelper_Base
+class SvxRectCtlAccessibleContext final : public cppu::ImplInheritanceHelper<
+                                              ::comphelper::OAccessibleSelectionHelper,
+                                              css::accessibility::XAccessible>
 {
 public:
     // internal
     SvxRectCtlAccessibleContext(SvxRectCtl* pRepresentation);
-
-    DECLARE_XINTERFACE( )
-    DECLARE_XTYPEPROVIDER( )
 
     // XAccessibleComponent
     virtual void SAL_CALL grabFocus() override;
