@@ -95,6 +95,7 @@ public:
     void testMasterPageBackgroundFullSize();
     void testColumnsODG();
     void testTdf112126();
+    void testTdf153179();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -143,6 +144,7 @@ public:
     CPPUNIT_TEST(testMasterPageBackgroundFullSize);
     CPPUNIT_TEST(testColumnsODG);
     CPPUNIT_TEST(testTdf112126);
+    CPPUNIT_TEST(testTdf153179);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1733,6 +1735,20 @@ void SdExportTest::testTdf112126()
     // - Actual  : Slide 1
     CPPUNIT_ASSERT_EQUAL(OUString("Page 1"), xPageName);
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf153179()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/ole-emf_min.pptx"), PPTX);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect", sal_Int32(1),
+                                 getPage(0, xDocShRef)->getCount());
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+
+    // Check number of shapes after export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0, xDocShRef)->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
