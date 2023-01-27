@@ -187,6 +187,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/filter/eppt/pptx-epptbase \
     sd/source/filter/eppt/pptx-epptooxml \
     sd/source/filter/eppt/pptx-animations \
+    sd/source/filter/eppt/pptx-animations-cond \
     sd/source/filter/eppt/pptx-grouptable \
     sd/source/filter/eppt/pptx-stylesheet \
     sd/source/filter/eppt/pptx-text \
