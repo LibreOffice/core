@@ -142,7 +142,6 @@ JobResult::~JobResult()
 */
 JobResult& JobResult::operator=(const JobResult& rCopy)
 {
-    SolarMutexGuard g;
     m_eParts = rCopy.m_eParts;
     m_lArguments = rCopy.m_lArguments;
     m_aDispatchResult = rCopy.m_aDispatchResult;
@@ -161,11 +160,7 @@ JobResult& JobResult::operator=(const JobResult& rCopy)
 
     @return     We return true only, if any set flag of the given mask match.
 */
-bool JobResult::existPart(sal_uInt32 eParts) const
-{
-    SolarMutexGuard g;
-    return ((m_eParts & eParts) == eParts);
-}
+bool JobResult::existPart(sal_uInt32 eParts) const { return ((m_eParts & eParts) == eParts); }
 
 /**
     @short      provides access to our internal members
@@ -175,17 +170,9 @@ bool JobResult::existPart(sal_uInt32 eParts) const
     @return     It returns the state of the internal member
                 without any checks!
 */
-std::vector<css::beans::NamedValue> JobResult::getArguments() const
-{
-    SolarMutexGuard g;
-    return m_lArguments;
-}
+std::vector<css::beans::NamedValue> JobResult::getArguments() const { return m_lArguments; }
 
-css::frame::DispatchResultEvent JobResult::getDispatchResult() const
-{
-    SolarMutexGuard g;
-    return m_aDispatchResult;
-}
+css::frame::DispatchResultEvent JobResult::getDispatchResult() const { return m_aDispatchResult; }
 
 } // namespace framework
 
