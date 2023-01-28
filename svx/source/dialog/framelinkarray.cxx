@@ -22,6 +22,7 @@
 #include <math.h>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include <algorithm>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
@@ -1279,7 +1280,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
     // remember for which merged cells crossed lines were already created. To
     // do so, hold the sal_Int32 cell index in a set for fast check
-    std::set< sal_Int32 > aMergedCells;
+    std::unordered_set< sal_Int32 > aMergedCells;
 
     for (sal_Int32 nRow(nStartRow); nRow <= nEndRow; ++nRow)
     {
