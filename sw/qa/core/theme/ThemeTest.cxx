@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 {
     createSwDoc("ThemeColorInHeading.docx");
     SwDoc* pDoc = getSwDoc();
@@ -81,6 +81,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExists)
                          rFontScheme.findMajorSupplementalTypeface(u"Thai"));
     CPPUNIT_ASSERT_EQUAL(OUString(u"Cordia New"),
                          rFontScheme.findMinorSupplementalTypeface(u"Thai"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
+{
+    createSwDoc("ThemeColorInHeading.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    CPPUNIT_ASSERT(pTheme);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+    model::ColorSet* pColorSet = pTheme->GetColorSet();
+    CPPUNIT_ASSERT(pColorSet);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
+
+    CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xBD582C), pTheme->GetColor(model::ThemeColorType::Accent2));
+    CPPUNIT_ASSERT_EQUAL(Color(0x865640), pTheme->GetColor(model::ThemeColorType::Accent3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
+    CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
+    CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
+    CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
