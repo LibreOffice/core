@@ -69,14 +69,14 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	unoidl-check \
 	xrmex \
 	$(if $(filter-out ANDROID iOS WNT,$(OS)), \
-        svdemo \
-        minvcl \
         fftester \
         svptest \
         svpclient ) \
 	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
 	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest) \
 	vcldemo \
+	svdemo \
+	minvcl \
 	tiledrendering \
 	mtfdemo \
 	visualbackendtest \

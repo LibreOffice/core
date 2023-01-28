@@ -43,6 +43,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
         , \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
+                Executable_svdemo \
+                Executable_minvcl \
                 Executable_icontest \
                 Executable_visualbackendtest \
                 Executable_mtfdemo \
@@ -54,8 +56,6 @@ ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
 
 $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter-out ANDROID iOS WNT,$(OS)), \
-        Executable_svdemo \
-        Executable_minvcl \
         Executable_fftester \
         Executable_svptest \
         Executable_listfonts \
