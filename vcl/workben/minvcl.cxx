@@ -66,7 +66,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (...)
     {
-        std::cout << "Exception has occured\n";
+        std::cout << "Exception has occurred\n";
         return 1;
     }
 
