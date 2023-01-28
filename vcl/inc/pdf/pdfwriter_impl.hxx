@@ -669,6 +669,7 @@ struct PDFDocumentAttachedFile
 {
     OUString maFilename;
     OUString maMimeType;
+    OUString maDescription;
     sal_Int32 mnEmbeddedFileObjectId;
     sal_Int32 mnObjectId;
 };
@@ -1330,7 +1331,7 @@ public:
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
 
     // attached file
-    void addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, std::unique_ptr<PDFOutputStream> rStream);
+    void addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> rStream);
 
     sal_Int32 addEmbeddedFile(BinaryDataContainer const & rDataContainer);
     sal_Int32 addEmbeddedFile(std::unique_ptr<PDFOutputStream> rStream, OUString const& rMimeType);

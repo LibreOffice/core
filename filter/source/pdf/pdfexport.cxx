@@ -935,7 +935,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.graphics")
                     aExt = ".odg";
                 std::unique_ptr<vcl::PDFOutputStream> pStream(new PDFExportStreamDoc(mxSrcDoc, aPreparedPermissionPassword));
-                aPDFWriter.AddAttachedFile("Original" + aExt, aSrcMimetype, std::move(pStream));
+                aPDFWriter.AddAttachedFile("Original" + aExt, aSrcMimetype, u"Embedded original document of this PDF file", std::move(pStream));
             }
 
             if ( pOut )

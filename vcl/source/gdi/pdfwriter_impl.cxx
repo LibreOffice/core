@@ -3423,12 +3423,13 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
     return true;
 }
 
-void PDFWriterImpl::addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, std::unique_ptr<PDFOutputStream> rStream)
+void PDFWriterImpl::addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> rStream)
 {
     sal_Int32 nObjectID = addEmbeddedFile(std::move(rStream), rMimeType);
     auto& rAttachedFile = m_aDocumentAttachedFiles.emplace_back();
     rAttachedFile.maFilename = rFileName;
     rAttachedFile.maMimeType = rMimeType;
+    rAttachedFile.maDescription = rDescription;
     rAttachedFile.mnEmbeddedFileObjectId = nObjectID;
     rAttachedFile.mnObjectId = createObject();
 }
@@ -4930,6 +4931,7 @@ bool PDFWriterImpl::emitEmbeddedFiles()
             continue;
 
         sal_Int32 nSizeObject = createObject();
+        sal_Int32 nParamsObject = createObject();
 
         OStringBuffer aLine;
         aLine.append(rEmbeddedFile.m_nObject);
@@ -4942,6 +4944,8 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         }
         aLine.append(" /Length ");
         appendObjectReference(nSizeObject, aLine);
+        aLine.append(" /Params ");
+        appendObjectReference(nParamsObject, aLine);
         aLine.append(">>\nstream\n");
         checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -4972,6 +4976,19 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(nSizeObject);
         aLine.append(" 0 obj\n");
         aLine.append(nSize);
+        aLine.append("\nendobj\n\n");
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return false;
+        aLine.setLength(0);
+
+        if (!updateObject(nParamsObject))
+            return false;
+        aLine.append(nParamsObject);
+        aLine.append(" 0 obj\n");
+        aLine.append("<<");
+        aLine.append("/Size ");
+        aLine.append(nSize);
+        aLine.append(">>");
         aLine.append("\nendobj\n\n");
         if (!writeBuffer(aLine.getStr(), aLine.getLength()))
             return false;
@@ -5093,11 +5110,20 @@ bool PDFWriterImpl::emitCatalog()
         aLine.setLength( 0 );
 
         appendObjectID(rAttachedFile.mnObjectId, aLine);
-        aLine.append("<</Type/Filespec /F");
-        aLine.append('<');
+        aLine.append("<</Type /Filespec");
+        aLine.append("/F<");
         PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
-        aLine.append('>');
-        aLine.append(" /EF <</F ");
+        aLine.append("> ");
+        aLine.append("/UF<");
+        PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+        aLine.append("> ");
+        if (!rAttachedFile.maDescription.isEmpty())
+        {
+            aLine.append("/Desc <");
+            PDFWriter::AppendUnicodeTextString(rAttachedFile.maDescription, aLine);
+            aLine.append("> ");
+        }
+        aLine.append("/EF <</F ");
         appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
         aLine.append(">>");
         aLine.append(">>\nendobj\n\n");

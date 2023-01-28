@@ -1210,7 +1210,7 @@ The following structure describes the permissions used in PDF security
     @param pStream
     the interface to the additional stream
     */
-    void AddAttachedFile(OUString const& rFileName, const OUString& rMimeType, std::unique_ptr<PDFOutputStream> pStream);
+    void AddAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> pStream);
 
     /// Write rString as a PDF hex string into rBuffer.
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
