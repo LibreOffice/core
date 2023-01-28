@@ -829,12 +829,6 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
 bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rContentControl)
 {
     std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
-    if (!pContentControl->GetShowingPlaceHolder() && !pContentControl->GetCheckbox()
-        && !pContentControl->GetSelectedListItem() && !pContentControl->GetSelectedDate())
-    {
-        return false;
-    }
-
     const SwTextContentControl* pTextContentControl = pContentControl->GetTextAttr();
     if (!pTextContentControl)
         return false;
@@ -845,16 +839,25 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
     SwCursor* pCursor = getShellCursor(true);
     SwCursorSaveState aSaveState(*pCursor);
 
-    pCursor->SetMark();
     SwTextNode* pTextNode = pContentControl->GetTextNode();
     // Don't select the text attribute itself at the start.
     sal_Int32 nStart = pTextContentControl->GetStart() + 1;
     pCursor->GetPoint()->Assign(*pTextNode, nStart);
-    // Don't select the CH_TXTATR_BREAKWORD itself at the end.
-    sal_Int32 nEnd = *pTextContentControl->End() - 1;
-    pCursor->GetMark()->Assign(*pTextNode, nEnd);
 
-    bool bRet = !pCursor->IsSelOvr();
+    bool bRet = true;
+    // select contents for certain controls or conditions
+    if (pContentControl->GetShowingPlaceHolder() || pContentControl->GetCheckbox()
+        || pContentControl->GetSelectedListItem() || pContentControl->GetSelectedDate())
+    {
+        pCursor->SetMark();
+        // Don't select the CH_TXTATR_BREAKWORD itself at the end.
+        sal_Int32 nEnd = *pTextContentControl->End() - 1;
+        pCursor->GetMark()->Assign(*pTextNode, nEnd);
+        bRet = !pCursor->IsSelOvr();
+    }
+    else
+        ClearMark();
+
     if (bRet)
     {
         UpdateCursor(SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE
