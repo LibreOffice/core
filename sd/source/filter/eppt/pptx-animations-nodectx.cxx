@@ -57,10 +57,11 @@ bool IsAudioURL(const OUString& rURL)
 /// Returns if rURL has an extension which is a video format.
 bool IsVideoURL(const OUString& rURL) { return rURL.endsWithIgnoreAsciiCase(".mp4"); }
 
-void initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChild)
+bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChild)
 {
+    bool bEventTrigger = false;
     if (!rAny.hasValue())
-        return;
+        return false;
 
     Sequence<Any> aCondSeq;
     if (rAny >>= aCondSeq)
@@ -69,15 +70,24 @@ void initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChil
         {
             Cond aCond(rCond, bIsMainSeqChild);
             if (aCond.isValid())
+            {
                 rList.push_back(aCond);
+                if (aCond.mpEvent)
+                    bEventTrigger = true;
+            }
         }
     }
     else
     {
         Cond aCond(rAny, bIsMainSeqChild);
         if (aCond.isValid())
+        {
             rList.push_back(aCond);
+            if (aCond.mpEvent)
+                bEventTrigger = true;
+        }
     }
+    return bEventTrigger;
 }
 }
 
@@ -86,6 +96,7 @@ NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqCh
     : mxNode(xNode)
     , mbMainSeqChild(bMainSeqChild)
     , mbValid(true)
+    , mbOnSubTnLst(false)
     , mnEffectNodeType(-1)
     , mnEffectPresetClass(css::presentation::EffectPresetClass::CUSTOM)
 {
@@ -95,7 +106,10 @@ NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqCh
 
     initValid(initChildNodes(), bIsIterateChild);
 
-    initCondList(getNodeForCondition()->getBegin(), maBeginCondList, mbMainSeqChild);
+    // Put event triggered Audio time nodes to SubTnLst.
+    // Add other types of nodes once we find more test cases.
+    mbOnSubTnLst = initCondList(getNodeForCondition()->getBegin(), maBeginCondList, mbMainSeqChild)
+                   && mxNode->getType() == AnimationNodeType::AUDIO;
 
     initCondList(getNodeForCondition()->getEnd(), maEndCondList, mbMainSeqChild);
 }

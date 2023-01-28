@@ -1113,10 +1113,14 @@ void SdOOXMLExportTest3::testTdf44223()
 
     xmlDocUniquePtr pDoc1 = parseExport("ppt/slides/slide1.xml");
 
+    // tdf#124230 all nodes were under p:childTnLst, but event triggered nodes need
+    // to be under p:subTnLst, especially for audio to work correctly.
     // Start condition: 0s after timenode id 5 begins.
-    assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "evt", "begin");
-    assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "delay", "0");
-    assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond/p:tn", "val", "5");
+    assertXPath(pDoc1, "//p:subTnLst/p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "evt",
+                "begin");
+    assertXPath(pDoc1, "//p:subTnLst/p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "delay", "0");
+    assertXPath(pDoc1, "//p:subTnLst/p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond/p:tn", "val",
+                "5");
 
     xmlDocUniquePtr pDoc2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pDoc2, "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);

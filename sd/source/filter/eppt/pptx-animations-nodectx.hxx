@@ -30,6 +30,9 @@ class NodeContext
     // if the node has valid target or contains at least one valid target.
     bool mbValid;
 
+    // if the node should be on SubTnLst or ChildTnLst
+    bool mbOnSubTnLst;
+
     // Attributes initialized from mxNode->getUserData().
     sal_Int16 mnEffectNodeType;
     sal_Int16 mnEffectPresetClass;
@@ -56,6 +59,7 @@ public:
     const OUString& getEffectPresetId() const { return msEffectPresetId; }
     const OUString& getEffectPresetSubType() const { return msEffectPresetSubType; }
     bool isValid() const { return mbValid; }
+    bool isOnSubTnLst() const { return mbOnSubTnLst; }
     const std::vector<NodeContextPtr>& getChildNodes() const { return maChildNodes; };
     const css::uno::Reference<css::animations::XAnimationNode>& getNodeForCondition() const;
     const std::vector<Cond>& getBeginCondList() const { return maBeginCondList; }

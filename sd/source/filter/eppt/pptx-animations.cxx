@@ -943,13 +943,30 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     const std::vector<NodeContextPtr>& aChildNodes = mpContext->getChildNodes();
     if (!aChildNodes.empty())
     {
+        bool bSubTnLst = false;
         mpFS->startElementNS(XML_p, XML_childTnLst);
         for (const NodeContextPtr& pChildContext : aChildNodes)
         {
             if (pChildContext->isValid())
-                WriteAnimationNode(pChildContext);
+            {
+                if (pChildContext->isOnSubTnLst())
+                    bSubTnLst = true;
+                else
+                    WriteAnimationNode(pChildContext);
+            }
         }
         mpFS->endElementNS(XML_p, XML_childTnLst);
+
+        if (bSubTnLst)
+        {
+            mpFS->startElementNS(XML_p, XML_subTnLst);
+            for (const NodeContextPtr& pChildContext : aChildNodes)
+            {
+                if (pChildContext->isValid() && pChildContext->isOnSubTnLst())
+                    WriteAnimationNode(pChildContext);
+            }
+            mpFS->endElementNS(XML_p, XML_subTnLst);
+        }
     }
     mpFS->endElementNS(XML_p, XML_cTn);
 }
