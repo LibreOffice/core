@@ -16,11 +16,13 @@
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/tempfile.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -905,6 +907,53 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
     // - Actual  : 0in
     // i.e. the deleted image had zero size, which is incorrect.
     assertXPath(pXmlDoc, "//draw:frame[@draw:name='Image45']", "width", "6.1728in");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xPageProps(xDrawPage, uno::UNO_QUERY);
+
+    model::Theme aTheme("My Theme");
+    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("My Color Scheme"));
+    pColorSet->add(model::ThemeColorType::Dark1, 0x101010);
+    pColorSet->add(model::ThemeColorType::Light1, 0x202020);
+    pColorSet->add(model::ThemeColorType::Dark2, 0x303030);
+    pColorSet->add(model::ThemeColorType::Light2, 0x404040);
+    pColorSet->add(model::ThemeColorType::Accent1, 0x505050);
+    pColorSet->add(model::ThemeColorType::Accent2, 0x606060);
+    pColorSet->add(model::ThemeColorType::Accent3, 0x707070);
+    pColorSet->add(model::ThemeColorType::Accent4, 0x808080);
+    pColorSet->add(model::ThemeColorType::Accent5, 0x909090);
+    pColorSet->add(model::ThemeColorType::Accent6, 0xa0a0a0);
+    pColorSet->add(model::ThemeColorType::Hyperlink, 0xb0b0b0);
+    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc0c0c0);
+    aTheme.SetColorSet(std::move(pColorSet));
+
+    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(aTheme);
+    xPageProps->setPropertyValue("Theme", uno::Any(xTheme));
+
+    // Export to ODT:
+    save("writer8");
+
+    // Check if the 12 colors are written in the XML:
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color", 12);
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[1]", "name",
+                "dk1");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[1]", "color",
+                "#101010");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[2]", "name",
+                "lt1");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[2]", "color",
+                "#202020");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[12]", "name",
+                "folHlink");
+    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[12]", "color",
+                "#c0c0c0");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

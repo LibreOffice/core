@@ -27,6 +27,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <PageMasterPropMapper.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
@@ -44,6 +45,7 @@
 #include <xmloff/xmlnumfi.hxx>
 #include <XMLChartStyleContext.hxx>
 #include <XMLChartPropertySetMapper.hxx>
+#include <XMLThemeContext.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include "FillStyleContext.hxx"
 #include <XMLFootnoteConfigurationImportContext.hxx>
@@ -708,13 +710,22 @@ SvXMLStylesContext::~SvXMLStylesContext()
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLStyleContext *pStyle =
-        CreateStyleChildContext( nElement, xAttrList );
-    if( pStyle )
+    SvXMLStyleContext* pStyle = CreateStyleChildContext( nElement, xAttrList );
+    if (pStyle)
     {
-        if( !pStyle->IsTransient() )
-            mpImpl->AddStyle( pStyle );
+        if (!pStyle->IsTransient())
+            mpImpl->AddStyle(pStyle);
         return pStyle;
+    }
+    else if (nElement ==  XML_ELEMENT(LO_EXT, XML_THEME))
+    {
+        uno::Reference<drawing::XDrawPageSupplier> const xDrawPageSupplier(GetImport().GetModel(), uno::UNO_QUERY);
+        if (xDrawPageSupplier.is())
+        {
+            uno::Reference<drawing::XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
+            if (xPage.is())
+                return new XMLThemeContext(GetImport(), xAttrList, xPage);
+        }
     }
 
     return nullptr;
