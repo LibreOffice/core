@@ -112,13 +112,15 @@ public:
     // almost always makes two copies of the SkiaSalBitmap's bitmap data: the
     // first copy is made in SkiaSalBitmap::AcquireBuffer() and then
     // QuartzSalBitmap makes a copy of the first copy.
-    // By making QuartzSalBitmap's methods that return a CGImageRef pure
-    // virtual, a non-Skia SalGraphics can now create a CGImageRef directly
-    // from a SkiaSalBitmap's Skia bitmap data without copying to any
-    // intermediate buffers.
-    virtual CGImageRef      CreateWithMask( const SalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const = 0;
-    virtual CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, Color nMaskColor ) const = 0;
-    virtual CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const = 0;
+    // By making QuartzSalBitmap's methods that return a CGImageRef virtual,
+    // a non-Skia SalGraphics can now create a CGImageRef directly from a
+    // SkiaSalBitmap's Skia bitmap data without copying to any intermediate
+    // buffers.
+    // Note: these methods are not pure virtual as the SvpSalBitmap class
+    // extends this class directly.
+    virtual CGImageRef      CreateWithMask( const SalBitmap&, int, int, int, int ) const { return nullptr; }
+    virtual CGImageRef      CreateColorMask( int, int, int, int, Color ) const { return nullptr; }
+    virtual CGImageRef      CreateCroppedImage( int, int, int, int ) const { return nullptr; }
 #endif
 
     BitmapChecksum GetChecksum() const

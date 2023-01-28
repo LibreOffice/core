@@ -684,9 +684,6 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
 ))
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/quartz/cgutils \
-    $(if $(filter SKIA,$(BUILD_TYPE)), \
-        vcl/skia/quartz/salbmp \
-    ) \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
@@ -704,6 +701,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/quartz/utils \
     vcl/quartz/AquaGraphicsBackend \
     $(vcl_headless_code) \
+    vcl/unx/generic/app/gendata \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     UIKit \

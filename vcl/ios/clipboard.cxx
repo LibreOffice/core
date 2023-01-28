@@ -18,6 +18,7 @@
  */
 
 #include "ios/iosinst.hxx"
+#include "quartz/utils.h"
 
 #include "clipboard.hxx"
 

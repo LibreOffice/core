@@ -30,6 +30,8 @@
 #include "headless/svpframe.hxx"
 
 class IosSalFrame;
+class SystemFontList;
+
 class IosSalInstance : public SvpSalInstance
 {
 public:
@@ -45,6 +47,19 @@ public:
     void GetWorkArea(tools::Rectangle& rRect);
     SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+};
+
+class SalData
+{
+public:
+    std::unique_ptr<SystemFontList> mpFontList;
+    CGColorSpaceRef mxRGBSpace;
+    CGColorSpaceRef mxGraySpace;
+
+    static void ensureThreadAutoreleasePool(){};
+
+    explicit SalData();
+    virtual ~SalData();
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX

@@ -34,9 +34,14 @@
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
-#include "salgeom.hxx"
 #endif
 #include <postmac.h>
+
+#ifdef IOS
+// iOS defines a different Point class so include salgeom.hxx after postmac.h
+// so that it will use the Point class in tools/gen.hxx
+#include "salgeom.hxx"
+#endif
 
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>

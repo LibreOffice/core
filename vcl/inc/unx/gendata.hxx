@@ -16,8 +16,13 @@
 
 #include <memory>
 
+#ifndef IOS
 class FreetypeManager;
+#endif
 class SalGenericDisplay;
+
+#ifndef IOS
+
 namespace psp
 {
 class PrintFontManager;
@@ -38,12 +43,16 @@ public:
     virtual ~SalData();
 };
 
+#endif
+
 // This class is kind of a misnomer. What this class is mainly about is the
 // usage of Freetype and Fontconfig, which happens to match all *nix backends;
 // except that the osx and ios backends are *nix but don't use this.
 class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
 {
+#ifndef IOS
     friend class ::psp::PrinterInfoManager;
+#endif
 
     SalGenericDisplay* m_pDisplay;
     // cached hostname to avoid slow lookup
@@ -51,9 +60,11 @@ class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
     // for transient storage of unicode strings eg. 'u123' by input methods
     OUString m_aUnicodeEntry;
 
+#ifndef IOS
     std::unique_ptr<FreetypeManager> m_pFreetypeManager;
     std::unique_ptr<psp::PrintFontManager> m_pPrintFontManager;
     std::unique_ptr<psp::PrinterInfoManager> m_pPrinterInfoManager;
+#endif
 
     void InitFreetypeManager();
     void InitPrintFontManager();
@@ -75,6 +86,8 @@ public:
 
     OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
 
+#ifndef IOS
+
     FreetypeManager* GetFreetypeManager()
     {
         if (!m_pFreetypeManager)
@@ -90,6 +103,8 @@ public:
         assert(m_pFreetypeManager);
         return m_pPrintFontManager.get();
     }
+
+#endif
 
     // Mostly useful for remote protocol backends
     virtual void ErrorTrapPush() = 0;

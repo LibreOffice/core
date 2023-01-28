@@ -22,8 +22,9 @@
 #include <postmac.h>
 
 #include "ios/iosinst.hxx"
+#include "quartz/salgdi.h"
+#include "headless/svpdata.hxx"
 #include "headless/svpdummies.hxx"
-#include <osx/saldata.hxx>
 #include "quartz/utils.h"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
@@ -120,7 +121,7 @@ public:
 
 SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    pParent = NULL;
+    (void)pParent;
     return new IosSalFrame( this, NULL, nStyle );
 }
 
@@ -130,10 +131,10 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSt
 }
 
 SalData::SalData() :
-    mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
     mxGraySpace( CGColorSpaceCreateDeviceGray() )
 {
+    SetSalData(this);
 }
 
 SalData::~SalData()
@@ -142,12 +143,10 @@ SalData::~SalData()
     CGColorSpaceRelease(mxGraySpace);
 }
 
-void SalData::ensureThreadAutoreleasePool() {}
-
 extern "C" SalInstance *create_SalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new SvpSalData(pInstance);
+    new SvpSalData();
     return pInstance;
 }
 
