@@ -20,7 +20,11 @@
 #include <quartz/cgutils.h>
 
 #include <salbmp.hxx>
+#ifdef MACOSX
 #include <osx/saldata.hxx>
+#else
+#include <ios/iosinst.hxx>
+#endif
 
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {

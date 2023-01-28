@@ -28,6 +28,7 @@
 #include <osx/saldata.hxx>
 #include <osx/salframe.h>
 #else
+#include <ios/iosinst.hxx>
 #include "headless/svpframe.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpvd.hxx"

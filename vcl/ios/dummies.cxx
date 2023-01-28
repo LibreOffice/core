@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vcl/svapp.hxx>
+#include "ios/iosinst.hxx"
 #include "salprn.hxx"
 #include "quartz/salgdi.h"
+#include "headless/svpdata.hxx"
 #include "headless/svpinst.hxx"
 #include "unx/fontmanager.hxx"
-#include "unx/gendata.hxx"
 
 std::unique_ptr<SalPrinter> SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {

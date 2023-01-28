@@ -41,7 +41,7 @@
 #endif
 #include <quartz/utils.h>
 #ifdef IOS
-#include <svdata.hxx>
+#include <ios/iosinst.hxx>
 #endif
 
 using namespace vcl;
