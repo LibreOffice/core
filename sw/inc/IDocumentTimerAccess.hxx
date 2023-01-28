@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
-#define INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
+#pragma once
 
 /**
  * Handle the background jobs of a Writer document.
@@ -68,7 +67,5 @@ public:
 protected:
     virtual ~IDocumentTimerAccess(){};
 };
-
-#endif // INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

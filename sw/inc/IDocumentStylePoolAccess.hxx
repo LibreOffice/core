@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
-#define INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -66,7 +65,5 @@ public:
 protected:
     virtual ~IDocumentStylePoolAccess(){};
 };
-
-#endif // INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
