@@ -1491,6 +1491,61 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf95699)
                          pFieldMark->GetFieldname());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
+{
+    // given a form-protected doc with 2 unchecked legacy fieldmark checkboxes, 1 modern
+    // checkbox, and a couple of other content controls that are not supposed to
+    // have their contents selected upon entry into the control (i.e. no placeholder text).
+    createSwDoc("tdf151548_tabNavigation2.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getFieldmarksCount());
+
+    // verify that the checkboxes start off in the unchecked state
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+    }
+
+    // Toggle on the legacy checkbox
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    // Tab to the next control - the modern checkbox
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    // Tab to the next control - the second legacy checkbox, and toggle it on.
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    // Tab to the next control - a plain text control without placeholder text
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    // Tab to the next control - a combobox with custom text
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
+    {
+        sw::mark::ICheckboxFieldmark* pCheckBox
+            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        // verify that the legacy checkbox became checked by the first loop.
+        CPPUNIT_ASSERT(pCheckBox->IsChecked());
+
+        // This is where it was failing. Tab got stuck moving into the plain text/combobox,
+        // so it could never loop around. At this point we are at the end of the loop,
+        // so the next tab should take us back to the beginning with the first legacy checkbox.
+
+        // Tab to the legacy checkbox, and toggle it off.
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+
+        // Tab to the next content control
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
 {
     // given a form-protected doc with 4 unchecked legacy fieldmark checkboxes (and several modern
