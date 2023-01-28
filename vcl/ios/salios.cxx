@@ -27,6 +27,7 @@
 
 #include <vcl/bitmap.hxx>
 
+#include <ios/iosinst.hxx>
 #include <quartz/salbmp.h>
 #include <quartz/salgdi.h>
 #include <quartz/salvd.h>

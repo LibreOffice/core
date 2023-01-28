@@ -457,7 +457,7 @@ public:
         rtl_string_release( pData );
     }
 
-#if LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY
     /** Provides an OString const & passing a storage pointer of an
         rtl_String * handle.
         It is more convenient to use C++ OString member functions when dealing

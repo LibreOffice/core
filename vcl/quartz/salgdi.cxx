@@ -51,7 +51,7 @@
 #endif
 #include <quartz/utils.h>
 #ifdef IOS
-#include <svdata.hxx>
+#include <ios/iosinst.hxx>
 #endif
 #include <sallayout.hxx>
 
@@ -154,6 +154,7 @@ AquaSalGraphics::AquaSalGraphics(bool bPrinter)
     if(!bPrinter && SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
 #else
+    (void)bPrinter;
     if(false)
         ;
 #endif

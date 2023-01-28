@@ -27,6 +27,7 @@
 #include <vector>
 
 #ifdef IOS
+#include <quartz/salgdi.h>
 #define SvpSalInstance AquaSalInstance
 #define SvpSalGraphics AquaSalGraphics
 #endif
