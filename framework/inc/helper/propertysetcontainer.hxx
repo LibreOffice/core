@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <mutex>
 #include <vector>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -65,7 +66,7 @@ class PropertySetContainer : public css::container::XIndexContainer    ,
     private:
         typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;
         PropertySetVector                                                               m_aPropertySetVector;
-
+        std::mutex m_aMutex;
 };
 
 }

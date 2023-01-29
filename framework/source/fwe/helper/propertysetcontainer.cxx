@@ -73,7 +73,7 @@ Any SAL_CALL PropertySetContainer::queryInterface( const Type& rType )
 // XIndexContainer
 void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
 {
-    SolarMutexGuard g;
+    std::unique_lock g(m_aMutex);
 
     sal_Int32 nSize = m_aPropertySetVector.size();
 
@@ -101,7 +101,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::u
 
 void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 {
-    SolarMutexGuard g;
+    std::unique_lock g(m_aMutex);
 
     if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= nIndex )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
@@ -112,6 +112,8 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 // XIndexReplace
 void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
 {
+    std::unique_lock g(m_aMutex);
+
     if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
@@ -130,14 +132,14 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::
 // XIndexAccess
 sal_Int32 SAL_CALL PropertySetContainer::getCount()
 {
-    SolarMutexGuard g;
+    std::unique_lock g(m_aMutex);
 
     return m_aPropertySetVector.size();
 }
 
 Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 {
-    SolarMutexGuard g;
+    std::unique_lock g(m_aMutex);
 
     if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
@@ -148,7 +150,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 // XElementAccess
 sal_Bool SAL_CALL PropertySetContainer::hasElements()
 {
-    SolarMutexGuard g;
+    std::unique_lock g(m_aMutex);
 
     return !( m_aPropertySetVector.empty() );
 }
