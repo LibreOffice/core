@@ -291,8 +291,15 @@ const XclImpName* XclImpNameManager::FindName( std::u16string_view rXclName, SCT
 {
     const XclImpName* pGlobalName = nullptr;   // a found global name
     const XclImpName* pLocalName = nullptr;    // a found local name
-    for( const auto& rxName : maNameList )
+    // If a duplicate name is seen by ScRangeName::insert then the existing
+    // name is erased and the new one inserted, so in the case of duplicates
+    // the last one seen is valid and the others invalid. So do this lookup in
+    // reverse in order to return the XclImpName* that references the valid
+    // entry (see tdf#44831 for the insert behavior and 'forum-mso-en4-30276.xls'
+    // for an example of this problem)
+    for (auto itName = maNameList.rbegin(); itName != maNameList.rend(); ++itName)
     {
+        const auto& rxName = *itName;
         if( rxName->GetXclName() == rXclName )
         {
             if( rxName->GetScTab() == nScTab )
