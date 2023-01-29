@@ -332,7 +332,9 @@ bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
 
     std::vector<sal_uInt8>& encryptedHashInput = mInfo.encryptedVerifierHashInput;
     // SALT - needs to be a multiple of block size (?)
-    sal_Int32 nSaltSize = roundUp(mInfo.saltSize, mInfo.blockSize);
+    sal_uInt32 nSaltSize = roundUp(mInfo.saltSize, mInfo.blockSize);
+    if (nSaltSize < encryptedHashInput.size())
+        return false;
     std::vector<sal_uInt8> hashInput(nSaltSize, 0);
     calculateBlock(constBlock1, hashFinal, encryptedHashInput, hashInput);
 
