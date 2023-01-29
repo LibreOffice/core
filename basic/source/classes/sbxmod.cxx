@@ -2375,9 +2375,9 @@ public:
     virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) override
     {
         // early disposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
-        SolarMutexGuard g;
         if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
         {
+            SolarMutexGuard g;
             removeListener();
             mbDisposed = true;
             if ( mpUserForm )
