@@ -439,22 +439,17 @@ LngSvcMgr::LngSvcMgr()
 // css::util::XModifyListener
 void LngSvcMgr::modified(const lang::EventObject&)
 {
-    {
-        osl::MutexGuard aGuard(GetLinguMutex());
-        //assume that if an extension has been added/removed that
-        //it might be a dictionary extension, so drop our cache
+    osl::MutexGuard aGuard(GetLinguMutex());
+    //assume that if an extension has been added/removed that
+    //it might be a dictionary extension, so drop our cache
 
-        pAvailSpellSvcs.reset();
-        pAvailGrammarSvcs.reset();
-        pAvailHyphSvcs.reset();
-        pAvailThesSvcs.reset();
-    }
+    pAvailSpellSvcs.reset();
+    pAvailGrammarSvcs.reset();
+    pAvailHyphSvcs.reset();
+    pAvailThesSvcs.reset();
 
-    {
-        SolarMutexGuard aGuard;
-        //schedule in an update to execute in the main thread
-        aUpdateIdle.Start();
-    }
+    //schedule in an update to execute in the main thread
+    aUpdateIdle.Start();
 }
 
 //run update, and inform everyone that dictionaries (may) have changed, this
