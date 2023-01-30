@@ -1114,6 +1114,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
     CPPUNIT_ASSERT_EQUAL(sExpectedText, xShape->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148810)
+{
+    createSdImpressDoc("pptx/tdf148810_PARA_OUTLLEVEL.pptx");
+
+    // type something to get into text editing mode (instead of shape selection).
+    insertStringToObject(1, u"x", /*bUseEscape*/ false);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeKey(pXImpressDocument, KEY_HOME);
+
+    typeKey(pXImpressDocument, KEY_BACKSPACE);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+    sal_Int16 nNumberingLevel = -1;
+    xPropSet->getPropertyValue("NumberingLevel") >>= nNumberingLevel;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nNumberingLevel);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    nNumberingLevel = -1;
+    xPropSet->getPropertyValue("NumberingLevel") >>= nNumberingLevel;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : -1
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nNumberingLevel);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
 {
     createSdImpressDoc();
