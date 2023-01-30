@@ -23,6 +23,21 @@
          collectArgs(args, std::forward<RemainingArgs>(remaining)...);
      }
  
+--- src/core/SkStrikeCache.h
++++ src/core/SkStrikeCache.h
+@@ -13,11 +13,10 @@
+ #include "include/private/base/SkLoadUserConfig.h" // IWYU pragma: keep
+ #include "include/private/base/SkMutex.h"
+ #include "src/core/SkDescriptor.h"
++#include "src/core/SkStrike.h"
+ #include "src/core/SkStrikeSpec.h"
+ #include "src/text/StrikeForGPU.h"
+ 
+-class SkStrike;
+-class SkStrikePinner;
+ class SkTraceMemoryDump;
+ 
+ //  SK_DEFAULT_FONT_CACHE_COUNT_LIMIT and SK_DEFAULT_FONT_CACHE_LIMIT can be set using -D on your
 --- src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
 +++ src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
 @@ -10,8 +10,7 @@
