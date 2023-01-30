@@ -140,7 +140,11 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     pCTLLangItem,
     pCTLPostureItem,
     pCTLWeightItem,
-    pShadowItem ;
+    pShadowItem,
+    pCharReliefItem,
+    pCharRotate,
+    pCharScaleWidth,
+    pParaVertAlign;
 
     auto funcClone = [&rSet](sal_uInt16 nWID, std::unique_ptr<SfxPoolItem> & rpPoolItem)
     {
@@ -297,6 +301,18 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
             break;
             case RES_CHRATR_SHADOW:
                 pTempItem = funcClone(nWID, pShadowItem);
+            break;
+            case RES_CHRATR_RELIEF:
+                pTempItem = funcClone(nWID, pCharReliefItem);
+            break;
+            case RES_CHRATR_ROTATE:
+                pTempItem = funcClone(nWID, pCharRotate);
+            break;
+            case RES_CHRATR_SCALEW:
+                pTempItem = funcClone(nWID, pCharScaleWidth);
+            break;
+            case RES_PARATR_VERTALIGN:
+                pTempItem = funcClone(nWID, pParaVertAlign);
             break;
         }
         if(pTempItem)
