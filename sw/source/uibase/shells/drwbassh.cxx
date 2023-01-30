@@ -101,8 +101,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    bool        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(false);
+    bool        bChanged = pSdrView->GetModel().IsChanged();
+    pSdrView->GetModel().SetChanged(false);
     const SfxPoolItem* pItem = nullptr;
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
@@ -242,7 +242,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         pDlg->StartExecuteAsync([bCaption, bChanged, pDlg, pFrameFormat, pSdrView,
                                                  pSh, &rMarkList, this](
                                                     sal_Int32 nResult){
-                            pSdrView->GetModel()->SetChanged(false);
+                            pSdrView->GetModel().SetChanged(false);
 
                             if (nResult == RET_OK)
                             {
@@ -336,10 +336,10 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 pSh->EndAllAction();
                             }
 
-                            if (pSdrView->GetModel()->IsChanged())
+                            if (pSdrView->GetModel().IsChanged())
                                 pSh->SetModified();
                             else if (bChanged)
-                                pSdrView->GetModel()->SetChanged();
+                                pSdrView->GetModel().SetChanged();
 
                             pDlg->disposeOnce();
                         });
@@ -689,10 +689,10 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
     {
         if(nSlotId >= SID_OBJECT_ALIGN_LEFT && nSlotId <= SID_OBJECT_ALIGN_DOWN)
             rBind.Invalidate(SID_ATTR_LONG_LRSPACE);
-        if (pSdrView->GetModel()->IsChanged())
+        if (pSdrView->GetModel().IsChanged())
             pSh->SetModified();
         else if (bChanged)
-            pSdrView->GetModel()->SetChanged();
+            pSdrView->GetModel().SetChanged();
     }
 }
 

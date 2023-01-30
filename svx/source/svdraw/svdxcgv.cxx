@@ -154,7 +154,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
 
     pObj->SetMergedItemSet(maDefaultAttr);
 
-    SfxItemSet aTempAttr(mpModel->GetItemPool());  // no fill, no line
+    SfxItemSet aTempAttr(GetModel().GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
@@ -162,7 +162,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
 
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
-    MapUnit eMap = mpModel->GetScaleUnit();
+    MapUnit eMap = GetModel().GetScaleUnit();
     Fraction aMap(1,1);
     ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
@@ -193,7 +193,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
 
     pObj->SetMergedItemSet(maDefaultAttr);
 
-    SfxItemSet aTempAttr(mpModel->GetItemPool());  // no fill, no line
+    SfxItemSet aTempAttr(GetModel().GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
@@ -202,7 +202,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     pObj->NbcSetText(rInput,OUString(),eFormat);
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
-    MapUnit eMap=mpModel->GetScaleUnit();
+    MapUnit eMap = GetModel().GetScaleUnit();
     Fraction aMap(1,1);
     ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
@@ -233,7 +233,7 @@ bool SdrExchangeView::Paste(
     const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     const SdrModel* pSrcMod=&rMod;
-    if (pSrcMod==mpModel)
+    if (pSrcMod == &GetModel())
         return false; // this can't work, right?
 
     const bool bUndo = IsUndoEnabled();
@@ -266,8 +266,8 @@ bool SdrExchangeView::Paste(
 
     // Rescale, if the Model uses a different MapUnit.
     // Calculate the necessary factors first.
-    MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
-    MapUnit eDstUnit=mpModel->GetScaleUnit();
+    MapUnit eSrcUnit = pSrcMod->GetScaleUnit();
+    MapUnit eDstUnit = GetModel().GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
     Fraction aXResize,aYResize;
     Point aPt0;
@@ -302,7 +302,7 @@ bool SdrExchangeView::Paste(
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            rtl::Reference<SdrObject> pNewObj(pSrcOb->CloneSdrObject(*mpModel));
+            rtl::Reference<SdrObject> pNewObj(pSrcOb->CloneSdrObject(GetModel()));
 
             if (pNewObj!=nullptr)
             {
@@ -399,7 +399,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     BigInt nSizX(rSiz.Width());
     BigInt nSizY(rSiz.Height());
     MapUnit eSrcMU=rMap.GetMapUnit();
-    MapUnit eDstMU=mpModel->GetScaleUnit();
+    MapUnit eDstMU = GetModel().GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
     Fraction aDstFr(1,1);
     nSizX *= double(aMapFact.X() * rMap.GetScaleX() * aDstFr);
@@ -500,7 +500,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
                 {
                     o3tl::Length eRangeUnit = o3tl::Length::mm100;
 
-                    if (GetModel()->IsWriter())
+                    if (GetModel().IsWriter())
                     {
                         eRangeUnit = o3tl::Length::twip;
                     }
@@ -530,7 +530,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
     {
         tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode aMap(mpModel->GetScaleUnit(), Point(), Fraction(1,1), Fraction(1,1));
+        MapMode aMap(GetModel().GetScaleUnit(), Point(), Fraction(1,1), Fraction(1,1));
 
         if( bNoVDevIfOneMtfMarked )
         {
@@ -686,7 +686,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
-    const SdrLayerAdmin&                        rLayerAdmin = mpModel->GetLayerAdmin();
+    const SdrLayerAdmin& rLayerAdmin = GetModel().GetLayerAdmin();
     const SdrLayerID                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
     for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
@@ -731,7 +731,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
     SortMarkedObjects();
-    std::unique_ptr<SdrModel> pNewModel(mpModel->AllocModel());
+    std::unique_ptr<SdrModel> pNewModel(GetModel().AllocModel());
     rtl::Reference<SdrPage> pNewPage = pNewModel->AllocPage(false);
     pNewModel->InsertPage(pNewPage.get());
     ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
@@ -766,7 +766,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
         if(!pNewObj)
         {
             // not cloned yet
-            if(pObj->GetObjIdentifier() == SdrObjKind::OLE2 && nullptr == mpModel->GetPersist())
+            if(pObj->GetObjIdentifier() == SdrObjKind::OLE2 && nullptr == GetModel().GetPersist())
             {
                 // tdf#125520 - former fix was wrong, the SdrModel
                 // has to have a GetPersist() already, see task.

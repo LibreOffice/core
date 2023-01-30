@@ -261,7 +261,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                         mpView->UnmarkAllPoints();
 
                         if( bUndo )
-                            mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+                            mpView->AddUndo(mpView->GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
 
                         pPathObj->ToggleClosed();
 

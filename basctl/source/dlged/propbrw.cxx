@@ -443,7 +443,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     {
         if ( pView )
         {
-            EndListening( *(pView->GetModel()) );
+            EndListening(pView->GetModel());
             pView = nullptr;
         }
 
@@ -464,7 +464,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
 
         if ( nMarkCount == 0 )
         {
-            EndListening( *(pView->GetModel()) );
+            EndListening(pView->GetModel());
             pView = nullptr;
             implSetNewObject( nullptr );
             return;
@@ -492,7 +492,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         else
             implSetNewObject( xNewObject );
 
-        StartListening( *(pView->GetModel()) );
+        StartListening(pView->GetModel());
     }
     catch ( const PropertyVetoException& ) { /* silence */ }
     catch ( const Exception& )

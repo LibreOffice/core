@@ -448,7 +448,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                         {
                             OUString aStr( SvxResId( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
                             rSdrView.BegUndo(aStr);
-                            rSdrView.AddUndo(rSdrView.GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+                            rSdrView.AddUndo(rSdrView.GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
                         }
                         SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
@@ -526,7 +526,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                     {
                         OUString aStr( SvxResId( pStrResId ) );
                         rSdrView.BegUndo(aStr);
-                        rSdrView.AddUndo(rSdrView.GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+                        rSdrView.AddUndo(rSdrView.GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
                     }
                     SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                     impl_execute( rReq, aGeometryItem, pObj );

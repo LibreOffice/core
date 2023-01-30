@@ -1343,7 +1343,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if ( nFlags & InsertDeleteFlags::OBJECTS )
     {
         ScDrawView* pScDrawView = GetScDrawView();
-        SdrModel* pModel = ( pScDrawView ? pScDrawView->GetModel() : nullptr );
+        SdrModel* pModel = ( pScDrawView ? &pScDrawView->GetModel() : nullptr );
         pPage = ( pModel ? pModel->GetPage( static_cast< sal_uInt16 >( nStartTab ) ) : nullptr );
         if ( pPage )
         {

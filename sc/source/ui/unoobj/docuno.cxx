@@ -2192,7 +2192,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         aDrawViewKeeper.mpDrawView.reset( new FmFormView(
             *pModel,
             pDev) );
-        aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel()->GetPage(nTab));
+        aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel().GetPage(nTab));
         aDrawViewKeeper.mpDrawView->SetPrintPreview();
     }
 

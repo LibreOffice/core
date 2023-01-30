@@ -184,7 +184,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
         aArrow.append( aNewArrow );
     }
 
-    SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+    SfxItemSet aSet(pDrawViewWrapper->GetModel().GetItemPool());
     pDrawViewWrapper->GetAttributes( aSet );
 
     tools::Long nWidth = 300; // (1/100th mm)

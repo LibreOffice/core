@@ -241,7 +241,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                         nPgNum++;
 
                     pView->HideSdrPage();
-                    pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
+                    pView->ShowSdrPage(pView->GetModel().GetMasterPage(nPgNum));
                 }
             }
 

@@ -268,7 +268,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                                 pNewObj->SetLogicRect(aRet);
                             }
                         }
-                        m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                        m_pView->AddUndo(m_pView->GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
                         m_pView->MarkObj( pNewObj.get(), m_pView->GetSdrPageView() );
                         if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getOpenHeight() + aRet.Top()) > m_xSection->getHeight()) )
                             m_xSection->setHeight(aRet.getOpenHeight() + aRet.Top());
@@ -330,7 +330,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
     aCopies.reserve(nMark);
 
-    SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
+    SdrUndoFactory& rUndo = m_pView->GetModel().GetSdrUndoFactory();
 
     for( size_t i = nMark; i > 0; )
     {

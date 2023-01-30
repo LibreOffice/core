@@ -91,10 +91,10 @@ static void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& r
 SfxItemSet E3dView::Get3DAttributes() const
 {
     // Creating itemset with corresponding field
+    SfxItemPool& rPool = GetModel().GetItemPool();
     SfxItemSet aSet(
-        mpModel->GetItemPool(),
-        svl::Items<SDRATTR_START,      SDRATTR_END,
-        SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN>);
+        rPool,
+        svl::Items<SDRATTR_START, SDRATTR_END, SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN>);
 
     sal_uInt32 nSelectedItems(0);
 
@@ -118,7 +118,7 @@ SfxItemSet E3dView::Get3DAttributes() const
     if(!nSelectedItems)
     {
         // Get defaults and apply
-        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(mpModel->GetItemPool());
+        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(GetModel().GetItemPool());
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
@@ -158,7 +158,7 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
     if(!nSelectedItems)
     {
         // Set defaults
-        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(mpModel->GetItemPool());
+        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(GetModel().GetItemPool());
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
     }
@@ -166,12 +166,12 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
 
 double E3dView::GetDefaultCamPosZ()
 {
-    return static_cast<double>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE).GetValue());
+    return static_cast<double>(GetModel().GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE).GetValue());
 }
 
 double E3dView::GetDefaultCamFocal()
 {
-    return static_cast<double>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue());
+    return static_cast<double>(GetModel().GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

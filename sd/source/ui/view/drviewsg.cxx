@@ -168,7 +168,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         case SID_PICK_THROUGH:
         {
             pOptions->SetPickThrough(
-                !mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() );
+                !mpDrawView->GetModel().IsPickThroughTransparentTextFrames() );
         }
         break;
 
@@ -221,7 +221,7 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 
     rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
     rSet.Put( SfxBoolItem( SID_PICK_THROUGH,
-                mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
+                mpDrawView->GetModel().IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );
     rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, mpFrameView->IsClickChangeRotation() ) );

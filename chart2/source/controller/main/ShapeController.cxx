@@ -353,7 +353,7 @@ void ShapeController::executeDispatch_TransformDialog()
     if ( pSelectedObj && pSelectedObj->GetObjIdentifier() == SdrObjKind::Caption )
     {
         // item set for caption
-        SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
+        SfxItemSet aAttr(pDrawViewWrapper->GetModel().GetItemPool());
         pDrawViewWrapper->GetAttributes( aAttr );
         // item set for position and size
         SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
@@ -505,7 +505,7 @@ void ShapeController::executeDispatch_FontDialog()
     DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
     if ( pChartWindow && pDrawModelWrapper && pDrawViewWrapper )
     {
-        SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
+        SfxItemSet aAttr(pDrawViewWrapper->GetModel().GetItemPool());
         pDrawViewWrapper->GetAttributes( aAttr );
         ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
         ShapeFontDialog aDlg(pChartWindow, &aAttr, &aViewElementListProvider);
@@ -528,7 +528,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
     if ( !(pChartWindow && pDrawViewWrapper) )
         return;
 
-    SfxItemPool& rPool = pDrawViewWrapper->GetModel()->GetItemPool();
+    SfxItemPool& rPool = pDrawViewWrapper->GetModel().GetItemPool();
     SfxItemSet aAttr( rPool );
     pDrawViewWrapper->GetAttributes( aAttr );
 

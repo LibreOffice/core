@@ -1374,8 +1374,8 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
 
             if(rSh.IsFrameSelected())
             {
-                SdrModel* pDoc = rSh.GetDrawView()->GetModel();
-                SfxItemSet aNewAttr(pDoc->GetItemPool());
+                SdrModel& rModel = rSh.GetDrawView()->GetModel();
+                SfxItemSet aNewAttr(rModel.GetItemPool());
 
                 // get attributes from FlyFrame
                 rSh.GetFlyFrameAttr(aNewAttr);
@@ -1384,7 +1384,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                 VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     GetView().GetFrameWeld(),
                     &aNewAttr,
-                    pDoc,
+                    &rModel,
                     false,
                     false));
 

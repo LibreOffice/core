@@ -1110,7 +1110,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
         if (pObject)
         {
             SdrView aEditView(*pModel);
-            aEditView.ShowSdrPage(aEditView.GetModel()->GetPage(nTab));
+            aEditView.ShowSdrPage(aEditView.GetModel().GetPage(nTab));
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 

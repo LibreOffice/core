@@ -301,7 +301,7 @@ void FrameView::Update(SdOptions const * pOptions)
     SetBigOrtho( pOptions->IsBigOrtho() );
     SetOrtho( pOptions->IsOrtho() );
     SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
-    GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
+    GetModel().SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
     SetSolidDragging( pOptions->IsSolidDragging() );
 
@@ -538,7 +538,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     if (!nLength)
         return;
 
-    SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(GetModel());
+    SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(&GetModel());
     const bool bImpress = pDrawDocument && pDrawDocument->GetDocumentType() == DocumentType::Impress;
 
     bool bBool = false;
@@ -595,7 +595,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt16 )
             {
-                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                SdDrawDocument* pDoc = dynamic_cast<SdDrawDocument*>(&GetModel());
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                     SetPageKind( static_cast<PageKind>(nInt16) );
 
@@ -606,7 +606,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt16 )
             {
-                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                SdDrawDocument* pDoc = dynamic_cast<SdDrawDocument*>(&GetModel());
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                     SetSelectedPage( static_cast<sal_uInt16>(nInt16) );
 
@@ -645,7 +645,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt32 )
             {
-                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                SdDrawDocument* pDoc = dynamic_cast<SdDrawDocument*>(&GetModel());
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                     SetViewShEditMode( static_cast<EditMode>(nInt32) );
             }
@@ -657,7 +657,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt32 )
             {
-                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                SdDrawDocument* pDoc = dynamic_cast<SdDrawDocument*>(&GetModel());
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                     SetViewShEditMode( static_cast<EditMode>(nInt32) );
             }

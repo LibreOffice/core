@@ -81,14 +81,14 @@ void ScDrawView::Construct()
     if (pViewData)
     {
         SCTAB nViewTab = pViewData->GetTabNo();
-        ShowSdrPage(GetModel()->GetPage(nViewTab));
+        ShowSdrPage(GetModel().GetPage(nViewTab));
 
         bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
         bool bProt = rDoc.IsTabProtected( nViewTab ) ||
                      pViewData->GetSfxDocShell()->IsReadOnly();
 
         SdrLayer* pLayer;
-        SdrLayerAdmin& rAdmin = GetModel()->GetLayerAdmin();
+        SdrLayerAdmin& rAdmin = GetModel().GetLayerAdmin();
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
             SetLayerLocked( pLayer->GetName(), bProt || !bEx );
@@ -115,7 +115,7 @@ void ScDrawView::Construct()
     }
     else
     {
-        ShowSdrPage(GetModel()->GetPage(nTab));
+        ShowSdrPage(GetModel().GetPage(nTab));
     }
 
     UpdateUserViewOptions();
@@ -262,7 +262,7 @@ bool ScDrawView::HasMarkedInternal() const
 
 void ScDrawView::UpdateWorkArea()
 {
-    SdrPage* pPage = GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
+    SdrPage* pPage = GetModel().GetPage(static_cast<sal_uInt16>(nTab));
     if (pPage)
     {
         Size aPageSize( pPage->GetSize() );
@@ -654,11 +654,11 @@ SdrObject* ScDrawView::GetObjectByName(std::u16string_view rName)
     SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
-        SdrModel* pDrawLayer = GetModel();
+        SdrModel& rDrawLayer = GetModel();
         sal_uInt16 nTabCount = rDoc.GetTableCount();
         for (sal_uInt16 i=0; i<nTabCount; i++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(i);
+            SdrPage* pPage = rDrawLayer.GetPage(i);
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
@@ -687,11 +687,11 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
     SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
-        SdrModel* pDrawLayer = GetModel();
+        SdrModel& rDrawLayer = GetModel();
         sal_uInt16 nTabCount = rDoc.GetTableCount();
         for (sal_uInt16 i=0; i<nTabCount && !pFound; i++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(i);
+            SdrPage* pPage = rDrawLayer.GetPage(i);
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
@@ -722,7 +722,7 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
             !rDoc.IsTabProtected( nTab ) &&
             !pViewData->GetSfxDocShell()->IsReadOnly() )
     {
-        SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
+        SdrLayer* pLayer = GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
             SetLayerLocked( pLayer->GetName(), false );
     }
@@ -741,11 +741,11 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
     SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
-        SdrModel* pDrawLayer = GetModel();
+        SdrModel& rDrawLayer = GetModel();
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB i=0; i<nTabCount && !pFound; i++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
+            SdrPage* pPage = rDrawLayer.GetPage(static_cast<sal_uInt16>(i));
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
@@ -836,7 +836,7 @@ SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )
 
 void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
 {
-    SdrLayer* pLockLayer = GetModel()->GetLayerAdmin().GetLayerPerID( nLayer );
+    SdrLayer* pLockLayer = GetModel().GetLayerAdmin().GetLayerPerID( nLayer );
     if( pLockLayer && (IsLayerLocked( pLockLayer->GetName() ) != bLock) )
         SetLayerLocked( pLockLayer->GetName(), bLock );
 }
@@ -1147,7 +1147,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     {
         AddUndo(std::make_unique<SdrUndoAttrObj>(rHitObject));
 
-        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(GetModel()->GetItemPool());
+        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(GetModel().GetItemPool());
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         aSet.Put(XFillBitmapItem(OUString(), rGraphic));

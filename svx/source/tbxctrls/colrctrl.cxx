@@ -360,7 +360,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                     SdrView* pView = pViewSh->GetDrawView();
                     if ( pView )
                     {
-                        SfxItemSet aAttrSet( pView->GetModel()->GetItemPool() );
+                        SfxItemSet aAttrSet(pView->GetModel().GetItemPool());
                         pView->GetAttributes( aAttrSet );
                         if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
                         {

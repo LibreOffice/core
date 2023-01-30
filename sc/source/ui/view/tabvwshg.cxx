@@ -58,10 +58,10 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     ScTabView*  pView   = rViewData.GetView();
     ScDrawView* pDrView = pView->GetScDrawView();
-    SdrModel*   pModel  = pDrView->GetModel();
+    SdrModel& rModel = pDrView->GetModel();
 
     rtl::Reference<SdrObject> pObj = SdrObjFactory::MakeNewObject(
-        *pModel,
+        rModel,
         SdrInventor::FmForm,
         SdrObjKind::FormButton);
 

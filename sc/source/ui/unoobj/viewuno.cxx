@@ -616,11 +616,11 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, const ScDrawView& rDrawView
     bool bFound = false;
     SCTAB nObjectTab = 0;
 
-    SdrModel* pModel = rDrawView.GetModel();
-    sal_uInt16 nPageCount = pModel->GetPageCount();
+    SdrModel& rModel = rDrawView.GetModel();
+    sal_uInt16 nPageCount = rModel.GetPageCount();
     for (sal_uInt16 i=0; i<nPageCount && !bFound; i++)
     {
-        SdrPage* pPage = pModel->GetPage(i);
+        SdrPage* pPage = rModel.GetPage(i);
         if (pPage)
         {
             SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );

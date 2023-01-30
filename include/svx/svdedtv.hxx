@@ -174,14 +174,37 @@ public:
     // between BegUndo() and EndUndo() calls (unlimited).
     // The comment used for the UndoAction is the first BegUndo(String).
     // In this case NotifyNewUndoAction is called at the last EndUndo().
-    // NotifyNewUndoAction() is not called for an empty group.
-    void BegUndo()                         { mpModel->BegUndo();         } // open undo-grouping
-    void BegUndo(const OUString& rComment) { mpModel->BegUndo(rComment); } // open undo-grouping
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
-    void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
-    void AddUndo(std::unique_ptr<SdrUndoAction> pUndo)   { mpModel->AddUndo(std::move(pUndo));    } // add action
+    // NotifyNewUndoAction() is not called for an empty group
+    void BegUndo()
+    {
+        // open undo-grouping
+        GetModel().BegUndo();
+    }
+    void BegUndo(const OUString& rComment)
+    {
+        // open undo-grouping
+        GetModel().BegUndo(rComment);
+    }
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE)
+    {
+        // open undo-grouping
+        GetModel().BegUndo(rComment,rObjDescr,eFunc);
+    }
+
+    void EndUndo(); // close undo-grouping  (incl. BroadcastEdges)
+
+    void AddUndo(std::unique_ptr<SdrUndoAction> pUndo)
+    {
+        // add action
+        GetModel().AddUndo(std::move(pUndo));
+    }
+
     // only after first BegUndo or before last EndUndo:
-    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
+    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr)
+    {
+        GetModel().SetUndoComment(rComment,rObjDescr);
+    }
+
     bool IsUndoEnabled() const;
 
     /**

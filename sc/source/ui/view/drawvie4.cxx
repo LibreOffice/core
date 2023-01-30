@@ -430,7 +430,7 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 
 void ScDrawView::SetMarkedOriginalSize()
 {
-    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(*GetModel()));
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(GetModel()));
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     tools::Long nDone = 0;
@@ -545,7 +545,7 @@ void ScDrawView::FitToCellSize()
         return;
     }
 
-    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(*GetModel()));
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(GetModel()));
     tools::Rectangle aGraphicRect = pObj->GetSnapRect();
     tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( rDoc, pObjData->maStart, true);
 

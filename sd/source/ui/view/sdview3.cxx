@@ -417,7 +417,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( IsUndoEnabled() )
                                 {
                                     BegUndo(SdResId(STR_MODIFYLAYER));
-                                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
+                                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
                                     EndUndo();
                                 }
 
@@ -506,7 +506,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         if( IsUndoEnabled() )
                                         {
                                             BegUndo(SdResId(STR_UNDO_DRAGDROP));
-                                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+                                            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
                                             EndUndo();
                                         }
 
@@ -625,7 +625,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( !pSourceView->IsPresObjSelected() )
                 {
                     // model is owned by from AllocModel() created DocShell
-                    SdDrawDocument* pSourceDoc = static_cast<SdDrawDocument*>( pSourceView->GetModel() );
+                    SdDrawDocument* pSourceDoc = static_cast<SdDrawDocument*>(&pSourceView->GetModel());
                     pSourceDoc->CreatingDataObj( pOwnData );
                     SdDrawDocument* pModel = static_cast<SdDrawDocument*>( pSourceView->CreateMarkedObjModel().release() );
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
@@ -1354,7 +1354,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( IsUndoEnabled() )
             {
                 BegUndo( SdResId(STR_UNDO_DRAGDROP) );
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
                 EndUndo();
             }
 

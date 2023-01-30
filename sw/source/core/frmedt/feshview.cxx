@@ -3037,9 +3037,9 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 sal_uInt16 nSlotId)
 {
     SdrView* pDrawView = GetDrawView();
-    SdrModel* pDrawModel = pDrawView->GetModel();
+    SdrModel& rDrawModel = pDrawView->GetModel();
     rtl::Reference<SdrObject> pObj = SdrObjFactory::MakeNewObject(
-        *pDrawModel,
+        rDrawModel,
         SdrInventor::Default,
         eSdrObjectKind);
 
@@ -3069,7 +3069,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
         if(dynamic_cast<const SdrCircObj*>( pObj.get()) !=  nullptr)
         {
-            SfxItemSet aAttr(pDrawModel->GetItemPool());
+            SfxItemSet aAttr(rDrawModel.GetItemPool());
             aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
             aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
             pObj->SetMergedItemSet(aAttr);
@@ -3210,7 +3210,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             if(bVertical)
             {
-                SfxItemSet aSet(pDrawModel->GetItemPool());
+                SfxItemSet aSet(rDrawModel.GetItemPool());
                 aSet.Put(makeSdrTextAutoGrowWidthItem(true));
                 aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
@@ -3220,7 +3220,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             if(bMarquee)
             {
-                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(pDrawModel->GetItemPool());
+                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(rDrawModel.GetItemPool());
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SdrTextAniKind::Slide ) );

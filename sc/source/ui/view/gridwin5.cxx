@@ -359,7 +359,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 bool ScGridWindow::IsMyModel(const SdrEditView* pSdrView)
 {
     return pSdrView &&
-            pSdrView->GetModel() == mrViewData.GetDocument().GetDrawLayer();
+            &pSdrView->GetModel() == mrViewData.GetDocument().GetDrawLayer();
 }
 
 void ScGridWindow::HideNoteMarker()

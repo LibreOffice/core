@@ -911,7 +911,7 @@ void View::SetMarkedOriginalSize()
             {
                 const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
                 const Size aSize = pSdrGrafObj->getOriginalSize( );
-                pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
+                pUndoGroup->AddAction(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 ::tools::Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
@@ -1227,12 +1227,10 @@ bool View::ShouldToggleOn(
     // If setting bullets/numbering by the dialog, always should toggle on.
     if (!bBulletOnOffMode)
         return true;
-    SdrModel* pSdrModel = GetModel();
-    if (!pSdrModel)
-        return false;
+    SdrModel& rSdrModel = GetModel();
 
     bool bToggleOn = false;
-    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, *pSdrModel));
+    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
@@ -1290,18 +1288,18 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bHandleBullets,
     const SvxNumRule* pNumRule )
 {
-    SdrModel* pSdrModel = GetModel();
+    SdrModel& rSdrModel = GetModel();
     OutputDevice* pOut = GetFirstOutputDevice();
     vcl::Window* pWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
-    if (!pSdrModel || !pWindow)
+    if (!pWindow)
         return;
 
-    const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
-    std::unique_ptr<SdrUndoGroup> pUndoGroup(bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr);
+    const bool bUndoEnabled = rSdrModel.IsUndoEnabled();
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(bUndoEnabled ? new SdrUndoGroup(rSdrModel) : nullptr);
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
-    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, *pSdrModel));
+    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
     OutlinerView aOutlinerView(pOutliner.get(), pWindow);
 
     const size_t nMarkCount = GetMarkedObjectCount();
@@ -1339,7 +1337,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     pOutliner->SetText(*(pText->GetOutlinerParaObject()));
                     if (bUndoEnabled)
                     {
-                        pUndoGroup->AddAction(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
+                        pUndoGroup->AddAction(rSdrModel.GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
                     }
                     if ( !bToggleOn )
                     {
@@ -1370,7 +1368,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
             if (bUndoEnabled)
             {
                 pUndoGroup->AddAction(
-                    pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
+                    rSdrModel.GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
             }
             if ( !bToggleOn )
             {
@@ -1388,9 +1386,9 @@ void View::ChangeMarkedObjectsBulletsNumbering(
 
     if ( bUndoEnabled && pUndoGroup->GetActionCount() > 0 )
     {
-        pSdrModel->BegUndo();
-        pSdrModel->AddUndo(std::move(pUndoGroup));
-        pSdrModel->EndUndo();
+        rSdrModel.BegUndo();
+        rSdrModel.AddUndo(std::move(pUndoGroup));
+        rSdrModel.EndUndo();
     }
 }
 

@@ -1609,7 +1609,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
         {
             pView->AddUndo(std::make_unique<SdrUndoAttrObj>(*pObj));
 
-            SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(pView->GetModel()->GetItemPool());
+            SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(pView->GetModel().GetItemPool());
 
             aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             aSet.Put(XFillBitmapItem(OUString(), rGrf));

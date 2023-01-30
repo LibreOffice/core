@@ -152,7 +152,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         if (pSdrView)
         {
             std::shared_ptr<svx::FontWorkGalleryDialog> pDlg = std::make_shared<svx::FontWorkGalleryDialog>(rWin.GetFrameWeld(), *pSdrView);
-            pDlg->SetSdrObjectRef( pSdrView->GetModel() );
+            pDlg->SetSdrObjectRef(&pSdrView->GetModel());
             weld::DialogController::runAsync(pDlg, [this, pDlg](int) {
                 vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
 
@@ -509,7 +509,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    std::unique_ptr<SdrOutliner> pOutliner = ::SdrMakeOutliner(OutlinerMode::TextObject, *pSdrView->GetModel());
+    std::unique_ptr<SdrOutliner> pOutliner = ::SdrMakeOutliner(OutlinerMode::TextObject, pSdrView->GetModel());
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
@@ -735,7 +735,7 @@ bool SwView::IsDrawTextHyphenate()
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
     bool bHyphenate = false;
 
-    SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aNewAttr( pSdrView->GetModel()->GetItemPool() );
+    SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aNewAttr( pSdrView->GetModel().GetItemPool() );
     pSdrView->GetAttributes( aNewAttr );
     if( aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         bHyphenate = aNewAttr.Get( EE_PARA_HYPHENATE ).GetValue();

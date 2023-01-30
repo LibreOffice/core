@@ -428,7 +428,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
         SdrView* pView = mrViewData.GetScDrawView();
-        SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
+        SfxItemSet aAttrs(pView->GetModel().GetItemPool());
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
@@ -550,7 +550,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     SfxItemSet aSet( pView->GetDefaultAttr() );
 
-    SfxItemSet aViewAttr(pView->GetModel()->GetItemPool());
+    SfxItemSet aViewAttr(pView->GetModel().GetItemPool());
     pView->GetAttributes(aViewAttr);
 
     //  Underline
@@ -662,7 +662,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     const SfxItemSet*   pArgs = rReq.GetArgs();
     sal_uInt16          nSlot = rReq.GetSlot();
 
-    SfxItemSet aEditAttr( pView->GetModel()->GetItemPool() );
+    SfxItemSet aEditAttr( pView->GetModel().GetItemPool() );
     pView->GetAttributes( aEditAttr );
     SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
 
@@ -969,7 +969,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     SdrView* pView = mrViewData.GetScDrawView();
-    SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
+    SfxItemSet aAttrSet(pView->GetModel().GetItemPool());
     pView->GetAttributes(aAttrSet);
 
     //  direct attributes
@@ -1192,7 +1192,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
 
     SdrView*            pView = mrViewData.GetScDrawView();
 
-    SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
+    SfxItemSet aEditAttr(pView->GetModel().GetItemPool());
     pView->GetAttributes(aEditAttr);
     //SfxItemSet    aAttrs( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
 

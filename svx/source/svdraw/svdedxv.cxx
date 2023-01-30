@@ -235,11 +235,11 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     SdrHintKind eKind = pSdrHint->GetKind();
     if (eKind == SdrHintKind::RefDeviceChange)
     {
-        mpTextEditOutliner->SetRefDevice(mpModel->GetRefDevice());
+        mpTextEditOutliner->SetRefDevice(GetModel().GetRefDevice());
     }
     if (eKind == SdrHintKind::DefaultTabChange)
     {
-        mpTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
+        mpTextEditOutliner->SetDefTab(GetModel().GetDefaultTabulator());
     }
 }
 
@@ -1102,12 +1102,12 @@ void SdrObjEditView::ImpChainingEventHdl()
         // Handling Undo
         const int nText = 0; // XXX: hardcoded index (SdrTextObj::getText handles only 0)
 
-        const bool bUndoEnabled = GetModel() && IsUndoEnabled();
+        const bool bUndoEnabled = IsUndoEnabled();
         std::unique_ptr<SdrUndoObjSetText> pTxtUndo;
         if (bUndoEnabled)
             pTxtUndo.reset(
                 dynamic_cast<SdrUndoObjSetText*>(GetModel()
-                                                     ->GetSdrUndoFactory()
+                                                     .GetSdrUndoFactory()
                                                      .CreateUndoObjectSetText(*pTextObj, nText)
                                                      .release()));
 
@@ -1198,7 +1198,7 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
             }
         }
     }
-    Outliner& rDrawOutl = mpModel->GetDrawOutliner(pTextObj.get());
+    Outliner& rDrawOutl = GetModel().GetDrawOutliner(pTextObj.get());
     Link<EditFieldInfo*, void> aDrawOutlLink = rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet())
     {
@@ -1495,19 +1495,15 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 pWin->Invalidate(aTextEditArea);
             }
 
-            if (GetModel())
-            {
-                SdrHint aHint(SdrHintKind::BeginEdit, *pTextObj);
-                GetModel()->Broadcast(aHint);
-            }
+            SdrHint aHint(SdrHintKind::BeginEdit, *pTextObj);
+            GetModel().Broadcast(aHint);
 
             mpTextEditOutliner->setVisualizedPage(nullptr);
 
             if (mxSelectionController.is())
                 mxSelectionController->onSelectionHasChanged();
 
-            if (GetModel() && IsUndoEnabled()
-                && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
+            if (IsUndoEnabled() && !GetModel().GetDisableTextEditUsesCommonUndoManager())
             {
                 SdrUndoManager* pSdrUndoManager = nullptr;
                 mpLocalTextEditUndoManager = createLocalTextUndoManager();
@@ -1577,8 +1573,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrUndoManager* pUndoEditUndoManager = nullptr;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if (GetModel() && IsUndoEnabled() && pTEObj && mpTextEditOutliner
-        && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
+    if (IsUndoEnabled() && pTEObj && mpTextEditOutliner
+        && !GetModel().GetDisableTextEditUsesCommonUndoManager())
     {
         // change back the UndoManager to the remembered original one
         SfxUndoManager* pOriginal = mpTextEditOutliner->SetUndoManager(mpOldTextEditUndoManager);
@@ -1632,12 +1628,11 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         assert(nullptr == mpOldTextEditUndoManager); // cannot be restored!
     }
 
-    if (GetModel())
-        if (auto pTextEditObj = mxWeakTextEditObj.get())
-        {
-            SdrHint aHint(SdrHintKind::EndEdit, *pTextEditObj);
-            GetModel()->Broadcast(aHint);
-        }
+    if (auto pTextEditObj = mxWeakTextEditObj.get())
+    {
+        SdrHint aHint(SdrHintKind::EndEdit, *pTextEditObj);
+        GetModel().Broadcast(aHint);
+    }
 
     // if new mechanism was used, clean it up. At cleanup no need to check
     // for LibreOfficeKit
@@ -1676,7 +1671,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
                 pTxtUndo.reset(
                     dynamic_cast<SdrUndoObjSetText*>(GetModel()
-                                                         ->GetSdrUndoFactory()
+                                                         .GetSdrUndoFactory()
                                                          .CreateUndoObjectSetText(*pTEObj, nText)
                                                          .release()));
             }
@@ -1724,7 +1719,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     SdrObjKind eIdent = pTEObj->GetObjIdentifier();
                     if (eIdent == SdrObjKind::Text)
                     {
-                        pDelUndo = GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
+                        pDelUndo = GetModel().GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
                 }
             }
@@ -1969,11 +1964,8 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
         if (mpTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
-            if (mpModel)
-            {
-                if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
-                    mpModel->SetChanged();
-            }
+            if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
+                GetModel().SetChanged();
 
             /* Start chaining processing */
             ImpChainingEventHdl();
@@ -2159,12 +2151,12 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
         else
         {
             mpTextEditOutlinerView->Command(rCEvt);
-            if (mpModel && comphelper::LibreOfficeKit::isActive())
+            if (comphelper::LibreOfficeKit::isActive())
             {
                 // It could execute CommandEventId::ExtTextInput, while SdrObjEditView::KeyInput
                 // isn't called
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
-                    mpModel->SetChanged();
+                    GetModel().SetChanged();
             }
             return true;
         }
@@ -2358,7 +2350,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (bUndo)
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
 
                     // If this is a text object also rescue the OutlinerParaObject since
                     // applying attributes to the object may change text layout when
@@ -2367,7 +2359,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     // implementation itself.
                     bool bRescueText(pTextEditObj);
 
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(
                         *pTextEditObj, false, !bNoEEItems || bRescueText));
                     EndUndo();
                 }
@@ -2384,7 +2376,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             // *pSet (otherwise it would be a copy).
             WhichRangesContainer pNewWhichTable
                 = RemoveWhichRange(pSet->GetRanges(), EE_ITEMS_START, EE_ITEMS_END);
-            SfxItemSet aSet(mpModel->GetItemPool(), std::move(pNewWhichTable));
+            SfxItemSet aSet(GetModel().GetItemPool(), std::move(pNewWhichTable));
             SfxWhichIter aIter(aSet);
             sal_uInt16 nWhich = aIter.FirstWhich();
             while (nWhich != 0)
@@ -2404,8 +2396,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (IsUndoEnabled())
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pTextEditObj));
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pTextEditObj));
                     EndUndo();
                 }
 
@@ -2428,8 +2420,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             mpTextEditOutlinerView->SetAttribs(rSet);
 
             Outliner* pTEOutliner = mpTextEditOutlinerView->GetOutliner();
-            if (mpModel && pTEOutliner && pTEOutliner->IsModified())
-                mpModel->SetChanged();
+            if (pTEOutliner && pTEOutliner->IsModified())
+                GetModel().SetChanged();
 
             ImpMakeTextCursorAreaVisible();
         }
@@ -2814,7 +2806,7 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
 
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    rFormatSet = std::make_shared<SfxItemSet>(GetModel()->GetItemPool(),
+    rFormatSet = std::make_shared<SfxItemSet>(GetModel().GetItemPool(),
                                               GetFormatRangeImpl(pOLV != nullptr));
     if (pOLV)
     {

@@ -7718,7 +7718,7 @@ Graphic SwDrawFrameFormat::MakeGraphic( ImageMap*, const sal_uInt32 nMaximumQuad
     {
         SdrObject *pObj = FindSdrObject();
         SdrView aView( *pMod );
-        SdrPageView *pPgView = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+        SdrPageView *pPgView = aView.ShowSdrPage(aView.GetModel().GetPage(0));
         aView.MarkObj( pObj, pPgView );
         aRet = aView.GetMarkedObjBitmapEx(/*bNoVDevIfOneBmpMarked=*/false, nMaximumQuadraticPixels, rTargetDPI);
         aView.HideSdrPage();

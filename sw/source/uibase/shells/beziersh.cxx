@@ -65,8 +65,8 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    bool        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(false);
+    bool bChanged = pSdrView->GetModel().IsChanged();
+    pSdrView->GetModel().SetChanged(false);
     const SfxPoolItem* pItem;
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
@@ -208,10 +208,10 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
             break;
     }
 
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->GetModel().IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged();
+        pSdrView->GetModel().SetChanged();
 }
 
 void SwBezierShell::GetState(SfxItemSet &rSet)

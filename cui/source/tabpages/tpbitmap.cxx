@@ -260,7 +260,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     double fUIScale  = 1.0;
     if (mpView)
     {
-        fUIScale  = ( mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+        fUIScale  = double(mpView->GetModel().GetUIScale());
 
 
         if (mpView->AreObjectsMarked())
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
     {
         BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
         Size aTempBitmapSize = aBmpEx.GetSizePixel();
-        const double fUIScale = ( (mpView && mpView->GetModel()) ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+        const double fUIScale = mpView ? double(mpView->GetModel().GetUIScale()) : 1.0;
         Size aBitmapSize100mm = o3tl::convert(aTempBitmapSize, o3tl::Length::pt, o3tl::Length::mm100);
 
         rBitmapSize.setWidth(aBitmapSize100mm.Width() / fUIScale);

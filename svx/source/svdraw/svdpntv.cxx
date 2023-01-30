@@ -129,8 +129,7 @@ BitmapEx convertMetafileToBitmapEx(
 }
 
 SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
-    : mrSdrModelFromSdrView(rSdrModel)
-    , mpModel(&rSdrModel)
+    : mrModel(rSdrModel)
     , mpActualOutDev(nullptr)
     , mpDragWin(nullptr)
     , mpDefaultStyleSheet(nullptr)
@@ -171,8 +170,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     maComeBackIdle.SetPriority(TaskPriority::REPAINT);
     maComeBackIdle.SetInvokeHandler(LINK(this,SdrPaintView,ImpComeBackHdl));
 
-    if (mpModel)
-        SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);
+    SetDefaultStyleSheet(GetModel().GetDefaultStyleSheet(), true);
 
     if (pOut)
         AddDeviceToPaintView(*pOut, nullptr);
@@ -769,7 +767,7 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
 
     if(pKnownTarget)
     {
-        const SdrModel& rModel = *(GetModel());
+        const SdrModel& rModel = GetModel();
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
 
@@ -907,7 +905,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr)
     if (const SdrLayerIdItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_LAYERID))
     {
         SdrLayerID nLayerId = pPoolItem->GetValue();
-        const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayerPerID(nLayerId);
+        const SdrLayer* pLayer = GetModel().GetLayerAdmin().GetLayerPerID(nLayerId);
         if (pLayer!=nullptr) {
             if (bMeasure) maMeasureLayer=pLayer->GetName();
             else maActualLayer=pLayer->GetName();
@@ -926,7 +924,7 @@ void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr) const
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<const SdrView*>(this)->IsMeasureTool();
     const OUString& aNam = bMeasure ? maMeasureLayer : maActualLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
-    SdrLayerID nLayer=mpModel->GetLayerAdmin().GetLayerID(aNam);
+    SdrLayerID nLayer = GetModel().GetLayerAdmin().GetLayerID(aNam);
     if (nLayer!=SDRLAYER_NOTFOUND) {
         rAttr.Put(SdrLayerIdItem(nLayer));
     }

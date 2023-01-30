@@ -1354,18 +1354,18 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
             {
                 if (DragStat().IsEndDragChangesAttributes())
                 {
-                    pUndo=getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
+                    pUndo=getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
 
                     if (DragStat().IsEndDragChangesGeoAndAttributes())
                     {
                         vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                        pUndo2 = getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                        pUndo2 = getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                     }
                 }
                 else
                 {
                     vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                    pUndo= getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                    pUndo= getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
             }
 
@@ -1474,9 +1474,9 @@ OUString SdrDragMove::GetSdrDragComment() const
 {
     OUString aStr = ImpGetDescriptionStr(STR_DragMethMove)
             + " (x="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDX())
             + " y="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDY())
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3352,7 +3352,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 
                     Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
                     if( bUndo )
-                        AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
+                        AddUndo(getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
                     pO->Move(aSiz);
                 }
             }
@@ -3393,9 +3393,9 @@ OUString SdrDragDistort::GetSdrDragComment() const
 {
     OUString aStr = ImpGetDescriptionStr(STR_DragMethDistort)
             + " (x="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDX())
             + " y="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDY())
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3538,9 +3538,9 @@ OUString SdrDragCrop::GetSdrDragComment() const
 {
     OUString aStr = ImpGetDescriptionStr(STR_DragMethCrop)
             + " (x="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDX())
             + " y="
-            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + getSdrDragView().GetModel().GetMetricString(DragStat().GetDY())
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3625,9 +3625,9 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         OUString aUndoStr = ImpGetDescriptionStr(STR_DragMethCrop);
 
         getSdrDragView().BegUndo( aUndoStr );
-        getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        getSdrDragView().AddUndo(getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
         // also need attr undo, the SdrGrafCropItem will be changed
-        getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+        getSdrDragView().AddUndo(getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
     // get the original objects transformation
@@ -3839,7 +3839,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
         sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
 
-        SfxItemPool& rPool = getSdrDragView().GetModel()->GetItemPool();
+        SfxItemPool& rPool = getSdrDragView().GetModel().GetItemPool();
         SfxItemSetFixed<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP> aSet( rPool );
         aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
         getSdrDragView().SetAttributes( aSet, false );

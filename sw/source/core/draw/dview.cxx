@@ -286,7 +286,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
                     }
                     if ( nOrdNum )
                     {
-                        SdrPage *pTmpPage = GetModel()->GetPage( 0 );
+                        SdrPage *pTmpPage = GetModel().GetPage( 0 );
                         ++nOrdNum;
                         if ( nOrdNum < pTmpPage->GetObjCount() )
                         {
@@ -367,7 +367,7 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     if ( aAnchoredObjs.size() <= 1 )
         return;
 
-    SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+    SdrPage* pDrawPage = GetModel().GetPage( 0 );
 
     // move 'repeated' ones to the same order number as the already moved one.
     const size_t nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
@@ -444,7 +444,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
     }
 
     // determine drawing page and assure that the order numbers are correct.
-    SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+    SdrPage* pDrawPage = GetModel().GetPage( 0 );
     if ( pDrawPage->IsObjOrdNumsDirty() )
         pDrawPage->RecalcObjOrdNums();
     const size_t nObjCount = pDrawPage->GetObjCount();

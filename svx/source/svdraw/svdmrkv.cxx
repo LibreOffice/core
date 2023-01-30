@@ -1554,7 +1554,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             if(nMarkCount == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
-                SdrModel* pModel = GetModel();
+                SdrModel& rModel = GetModel();
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
                 if(SfxItemState::SET != rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, false))
@@ -1569,14 +1569,14 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     aNewItem.SetGradientValue(aGrad);
 
                     // add undo to allow user to take back this step
-                    if( pModel->IsUndoEnabled() )
+                    if (rModel.IsUndoEnabled())
                     {
-                        pModel->BegUndo(SvxResId(SIP_XA_FILLTRANSPARENCE));
-                        pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
-                        pModel->EndUndo();
+                        rModel.BegUndo(SvxResId(SIP_XA_FILLTRANSPARENCE));
+                        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+                        rModel.EndUndo();
                     }
 
-                    SfxItemSet aNewSet(pModel->GetItemPool());
+                    SfxItemSet aNewSet(rModel.GetItemPool());
                     aNewSet.Put(aNewItem);
                     pObj->SetMergedItemSetAndBroadcast(aNewSet);
                 }

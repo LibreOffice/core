@@ -82,7 +82,7 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     if ( pClient )
         return;
 
-    pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
+    pClient = new ScClient( this, pWin, &GetScDrawView()->GetModel(), pObj );
     ScViewData& rViewData = GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -169,7 +169,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
-            pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
+            pClient = new ScClient( this, pWin, &GetScDrawView()->GetModel(), pObj );
 
         if (bNegativeX)
             pClient->SetNegativeX(true);
@@ -370,22 +370,22 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData().GetDocShell();
     ScDocument&  rDoc      = pDocSh->GetDocument();
-    SdrModel*    pDrModel  = pView->GetModel();
+    SdrModel& rModel = pView->GetModel();
 
     switch ( nSlot )
     {
         case SID_INSERT_GRAPHIC:
-            FuInsertGraphic(*this, pWin, pView, pDrModel, rReq);
+            FuInsertGraphic(*this, pWin, pView, &rModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_AVMEDIA:
-            FuInsertMedia(*this, pWin, pView, pDrModel, rReq);
+            FuInsertMedia(*this, pWin, pView, &rModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_DIAGRAM:
-            FuInsertChart(*this, pWin, pView, pDrModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
+            FuInsertChart(*this, pWin, pView, &rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
             if (comphelper::LibreOfficeKit::isActive())
                 pDocSh->SetModified();
             break;
@@ -393,7 +393,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_OBJECT:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
-            FuInsertOLE(*this, pWin, pView, pDrModel, rReq);
+            FuInsertOLE(*this, pWin, pView, &rModel, rReq);
             break;
 
         case SID_INSERT_SIGNATURELINE:

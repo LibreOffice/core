@@ -499,7 +499,7 @@ VclPtr<InterimItemWindow> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Wind
 
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
-    SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
+    SfxItemPool&    rPool = rView.GetModel().GetItemPool();
     SfxItemSetFixed<SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST> aSet( rPool );
     OUString        aUndoStr;
     const bool      bUndo = rView.IsUndoEnabled();
@@ -725,7 +725,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                     if( bUndo )
                                     {
                                         rView.BegUndo( aUndoStr );
-                                        rView.AddUndo( rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                                        rView.AddUndo(rView.GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                                     }
                                     pObj->SetSnapRect( aNewRect );
                                     rView.SetAttributes( aSet );
@@ -770,7 +770,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
 void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rView )
 {
-    SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
+    SfxItemPool&    rPool = rView.GetModel().GetItemPool();
     SfxItemSet      aAttrSet( rPool );
     SfxWhichIter    aIter( rSet );
     sal_uInt16      nWhich = aIter.FirstWhich();

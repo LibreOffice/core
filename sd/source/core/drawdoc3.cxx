@@ -1025,7 +1025,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 
                 if (pPage->IsMasterPage())
                 {
-                    pPV = pBMView->ShowSdrPage(pBMView->GetModel()->GetMasterPage(pPage->GetPageNum()));
+                    pPV = pBMView->ShowSdrPage(pBMView->GetModel().GetMasterPage(pPage->GetPageNum()));
                 }
                 else
                 {

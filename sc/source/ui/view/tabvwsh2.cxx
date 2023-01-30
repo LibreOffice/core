@@ -80,7 +80,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     vcl::Window*     pWin    = pTabView->GetActiveWin();
     ScDrawView* pView   = pTabView->GetScDrawView();
-    SdrModel*   pDoc    = pView->GetModel();
+    SdrModel& rModel = pView->GetModel();
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nNewId = rReq.GetSlot();
@@ -88,7 +88,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_DRAW_CHART )
     {
         // #i71254# directly insert a chart instead of drawing its output rectangle
-        FuInsertChart(*this, pWin, pView, pDoc, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
+        FuInsertChart(*this, pWin, pView, &rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
         return;
     }
 
@@ -215,7 +215,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_OBJECT_SELECT:
             // not always switch back
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
-            pTabView->SetDrawFuncPtr(new FuSelection(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuSelection(*this, pWin, pView, &rModel, aNewReq));
             break;
 
         case SID_DRAW_LINE:
@@ -230,13 +230,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_MEASURELINE:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, &rModel, aNewReq));
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, &rModel, aNewReq));
             pView->SetFrameDragSingles( false );
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
@@ -249,26 +249,26 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE:
         case SID_DRAW_FREELINE_NOFILL:
-            pTabView->SetDrawFuncPtr(new FuConstPolygon(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstPolygon(*this, pWin, pView, &rModel, aNewReq));
             break;
 
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pTabView->SetDrawFuncPtr(new FuConstArc(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstArc(*this, pWin, pView, &rModel, aNewReq));
             break;
 
         case SID_DRAW_TEXT:
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
-            pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, &rModel, aNewReq));
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             break;
 
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(true);
-            pTabView->SetDrawFuncPtr(new FuConstUnoControl(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstUnoControl(*this, pWin, pView, &rModel, aNewReq));
             eFormObjKind = eNewFormObjKind;
             break;
 
@@ -280,7 +280,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pTabView->SetDrawFuncPtr(new FuConstCustomShape(*this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstCustomShape(*this, pWin, pView, &rModel, aNewReq));
 
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
 

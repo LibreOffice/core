@@ -122,7 +122,7 @@ void DrawViewWrapper::ReInit()
     tools::Rectangle aRect(Point(0,0), aOutputSize);
     SetWorkArea(aRect);
 
-    ShowSdrPage(GetModel()->GetPage(0));
+    ShowSdrPage(GetModel().GetPage(0));
 }
 
 DrawViewWrapper::~DrawViewWrapper()
@@ -256,7 +256,7 @@ SdrOutliner* DrawViewWrapper::getOutliner() const
 SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 {
     SfxItemSet aFullSet(
-        GetModel()->GetItemPool(),
+        GetModel().GetItemPool(),
         svl::Items<
             SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS,
             SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
@@ -293,8 +293,8 @@ bool DrawViewWrapper::IsObjectHit( SdrObject const * pObj, const Point& rPnt )
 void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //prevent wrong reselection of objects
-    SdrModel* pSdrModel( GetModel() );
-    if( pSdrModel && pSdrModel->isLocked() )
+    SdrModel& rSdrModel = GetModel();
+    if (rSdrModel.isLocked())
         return;
 
     const SdrHint* pSdrHint = ( rHint.GetId() == SfxHintId::ThisIsAnSdrHint ? static_cast<const SdrHint*>(&rHint) : nullptr );

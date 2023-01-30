@@ -3600,8 +3600,9 @@ void FmXFormShell::viewActivated_Lock(FmFormView& _rCurrentView, bool _bSyncActi
         // first-time initializations for the views
         if ( !_rCurrentView.GetImpl()->hasEverBeenActivated( ) )
         {
-            _rCurrentView.GetImpl()->onFirstViewActivation( dynamic_cast<FmFormModel*>( _rCurrentView.GetModel() )  );
-            _rCurrentView.GetImpl()->setHasBeenActivated( );
+            auto* pFormModel = dynamic_cast<FmFormModel*>(&_rCurrentView.GetModel());
+            _rCurrentView.GetImpl()->onFirstViewActivation(pFormModel);
+            _rCurrentView.GetImpl()->setHasBeenActivated();
         }
 
         // activate the current view

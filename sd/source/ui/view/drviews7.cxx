@@ -1782,7 +1782,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
     {
         SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
         const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
-        SfxItemSet aTempSet = aPageItemSet.CloneAsValue(false, &mpDrawView->GetModel()->GetItemPool());
+        SfxItemSet aTempSet = aPageItemSet.CloneAsValue(false, &mpDrawView->GetModel().GetItemPool());
         const SfxPoolItem* pItem = nullptr;
 
         rPageProperties.ClearItem(XATTR_FILLSTYLE);
@@ -1820,9 +1820,9 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     XFillGradientItem aGradientItem( XGradient::fromJSON(pJSON->GetValue()) );
 
                     // MigrateItemSet guarantees unique gradient names
-                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet( mpDrawView->GetModel()->GetItemPool() );
+                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
                     aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet( &aMigrateSet, &aTempSet, mpDrawView->GetModel() );
+                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, &mpDrawView->GetModel());
 
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                     rPageProperties.PutItemSet( aTempSet );
@@ -1832,9 +1832,9 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     XFillGradientItem aGradientItem( pArgs->Get( XATTR_FILLGRADIENT ) );
 
                     // MigrateItemSet guarantees unique gradient names
-                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet( mpDrawView->GetModel()->GetItemPool() );
+                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
                     aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet( &aMigrateSet, &aTempSet, mpDrawView->GetModel() );
+                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, &mpDrawView->GetModel());
 
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                     rPageProperties.PutItemSet( aTempSet );

@@ -136,7 +136,7 @@ void GraphCtrl::InitSdrModel()
     pView.reset(new GraphCtrlView(*pModel, this));
     pView->SetWorkArea( tools::Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
-    pView->ShowSdrPage(pView->GetModel()->GetPage(0));
+    pView->ShowSdrPage(pView->GetModel().GetPage(0));
     pView->SetFrameDragSingles();
     pView->SetMarkedPointsSmooth( SdrPathSmoothKind::Symmetric );
     pView->SetEditMode();

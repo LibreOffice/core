@@ -152,7 +152,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
     {
         pSdrView->AddUndo(std::make_unique<SdrUndoAttrObj>(rObject));
 
-        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(pSdrView->GetModel()->GetItemPool());
+        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(pSdrView->GetModel().GetItemPool());
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         aSet.Put(XFillBitmapItem(OUString(), std::move(aGraphic)));
@@ -175,9 +175,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     const SfxItemSet    *pArgs = rReq.GetArgs();
     SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
     sal_uInt16               nSlotId = rReq.GetSlot();
-    bool                 bChanged = pSdrView->GetModel()->IsChanged();
+    bool bChanged = pSdrView->GetModel().IsChanged();
 
-    pSdrView->GetModel()->SetChanged(false);
+    pSdrView->GetModel().SetChanged(false);
 
     const SfxPoolItem* pItem;
     if(pArgs)
@@ -395,10 +395,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->GetModel().IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged();
+        pSdrView->GetModel().SetChanged();
 }
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
@@ -563,8 +563,8 @@ void SwDrawShell::ExecFormText(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();
-    bool        bChanged = pDrView->GetModel()->IsChanged();
-    pDrView->GetModel()->SetChanged(false);
+    bool bChanged = pDrView->GetModel().IsChanged();
+    pDrView->GetModel().SetChanged(false);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
@@ -580,11 +580,11 @@ void SwDrawShell::ExecFormText(SfxRequest const & rReq)
 
         pDrView->SetAttributes(rSet);
     }
-    if (pDrView->GetModel()->IsChanged())
+    if (pDrView->GetModel().IsChanged())
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged();
+            pDrView->GetModel().SetChanged();
 }
 
 //Return status values for FontWork

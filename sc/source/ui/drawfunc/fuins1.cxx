@@ -188,7 +188,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     // Yes, due to the SdrObject had no SdrModel
     //  Path is no longer used as name for the graphics object
 
-    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>(pView->GetModel());
+    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>(&pView->GetModel());
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 

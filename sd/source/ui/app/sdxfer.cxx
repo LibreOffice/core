@@ -283,8 +283,7 @@ void SdTransferable::CreateData()
         // Use dimension of source page
         SdrPageView*        pPgView = mpSdView->GetSdrPageView();
         SdPage*             pOldPage = static_cast<SdPage*>( pPgView->GetPage() );
-        SdrModel*           pOldModel = mpSdView->GetModel();
-        SdStyleSheetPool*   pOldStylePool = static_cast<SdStyleSheetPool*>( pOldModel->GetStyleSheetPool() );
+        SdStyleSheetPool*   pOldStylePool = static_cast<SdStyleSheetPool*>(mpSdView->GetModel().GetStyleSheetPool());
         SdStyleSheetPool*   pNewStylePool = static_cast<SdStyleSheetPool*>( mpSdDrawDocumentIntern->GetStyleSheetPool() );
         SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PageKind::Standard );
         OUString            aOldLayoutName( pOldPage->GetLayoutName() );

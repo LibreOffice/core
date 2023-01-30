@@ -67,7 +67,7 @@ ScDrawShell::ScDrawShell( ScViewData& rData ) :
             GetFrame()->GetFrame().GetController(),
             vcl::EnumContext::Context::Cell))
 {
-    SetPool( &rViewData.GetScDrawView()->GetModel()->GetItemPool() );
+    SetPool( &rViewData.GetScDrawView()->GetModel().GetItemPool() );
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !rViewData.GetDocument().IsUndoEnabled() )
@@ -305,7 +305,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
-        SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
+        SfxItemSet aAttrs( pView->GetModel().GetItemPool() );
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {

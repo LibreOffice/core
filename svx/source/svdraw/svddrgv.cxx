@@ -641,7 +641,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
     if(auto pMarkedPath = dynamic_cast<SdrPathObj*>( mpMarkedObj))
     {
         BrkAction();
-        mpInsPointUndo = dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj).release() );
+        mpInsPointUndo = dynamic_cast<SdrUndoGeoObj*>(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj).release());
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
 
         OUString aStr(SvxResId(STR_DragInsertPoint));
@@ -739,7 +739,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
     {
         BrkAction();
         UnmarkAllGluePoints();
-        mpInsPointUndo= dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj).release() );
+        mpInsPointUndo = dynamic_cast<SdrUndoGeoObj*>(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj).release());
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
         OUString aStr(SvxResId(STR_DragInsertGluePoint));
 

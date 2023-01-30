@@ -217,7 +217,7 @@ DlgEditor::DlgEditor (
     rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
-    pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
+    pDlgEdView->ShowSdrPage(pDlgEdView->GetModel().GetPage(0));
     pDlgEdView->SetLayerVisible( "HiddenLayer", false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
     pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );

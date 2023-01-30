@@ -435,7 +435,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
         case FN_DRAWTEXT_ATTR_DLG:
             {
-                SfxItemSet aNewAttr( m_pSdrView->GetModel()->GetItemPool() );
+                SfxItemSet aNewAttr(m_pSdrView->GetModel().GetItemPool());
                 m_pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
@@ -466,7 +466,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                     else if (nSId == SID_TABLE_VERT_BOTTOM)
                         eTVA = SDRTEXTVERTADJUST_BOTTOM;
 
-                    SfxItemSet aNewAttr( m_pSdrView->GetModel()->GetItemPool() );
+                    SfxItemSet aNewAttr(m_pSdrView->GetModel().GetItemPool());
                     m_pSdrView->GetAttributes( aNewAttr );
                     aNewAttr.Put(SdrTextVertAdjustItem(eTVA));
                     m_pSdrView->SetAttributes(aNewAttr);
@@ -802,7 +802,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     m_pSdrView = rSh.GetDrawView();
 
-    SfxItemSet aAttrs( m_pSdrView->GetModel()->GetItemPool() );
+    SfxItemSet aAttrs(m_pSdrView->GetModel().GetItemPool());
     m_pSdrView->GetAttributes( aAttrs );
 
     while ( nWhich )

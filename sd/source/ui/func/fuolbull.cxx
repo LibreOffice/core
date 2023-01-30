@@ -222,7 +222,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     SdrOutliner* pOwner = bInMasterView ? mpView->GetTextEditOutliner() : nullptr;
     const bool bOutlinerUndoEnabled = pOwner && !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
-    SdrModel* pSdrModel = bInMasterView ? mpView->GetModel() : nullptr;
+    SdrModel* pSdrModel = bInMasterView ? &mpView->GetModel() : nullptr;
     const bool bModelUndoEnabled = pSdrModel && pSdrModel->IsUndoEnabled();
 
     if ( bOutlinerUndoEnabled )

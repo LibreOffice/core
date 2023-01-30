@@ -347,7 +347,7 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
                             FmFormView aView(*aModel.GetModel(), pVDev);
 
                             aView.hideMarkHandles();
-                            aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+                            aView.ShowSdrPage(aView.GetModel().GetPage(0));
                             aView.MarkAll();
                             rGraphic = aView.GetAllMarkedGraphic();
                             bRet = true;

@@ -35,8 +35,8 @@ void SwNavigationShell::Execute(SfxRequest const& rReq)
     SdrView* pSdrView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const sal_uInt16 nSlotId = rReq.GetSlot();
-    bool bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(false);
+    bool bChanged = pSdrView->GetModel().IsChanged();
+    pSdrView->GetModel().SetChanged(false);
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();
     const SfxPoolItem* pItem;
     if (pArgs)
@@ -60,10 +60,10 @@ void SwNavigationShell::Execute(SfxRequest const& rReq)
         default:
             break;
     }
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->GetModel().IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged();
+        pSdrView->GetModel().SetChanged();
 }
 
 // determine if the buttons should be enabled/disabled

@@ -212,7 +212,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
         if (aEditor.SetPointsSmooth(eFlags, rPts))
         {
             if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+                AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
             pPath->SetPathPoly(aEditor.GetPolyPolygon());
         }
     }
@@ -245,7 +245,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
         if (aEditor.SetSegmentsKind(eKind, rPts))
         {
             if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+                AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
             pPath->SetPathPoly(aEditor.GetPolyPolygon());
         }
     }
@@ -313,14 +313,14 @@ void SdrPolyEditView::DeleteMarkedPoints()
         {
             if( aEditor.GetPolyPolygon().count() )
             {
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
+                if (bUndo)
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
                 pPath->SetPathPoly( aEditor.GetPolyPolygon() );
             }
             else
             {
-                if( bUndo )
-                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
+                if (bUndo)
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoDeleteObject(*pPath));
                 pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
             }
         }
@@ -354,8 +354,8 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
         SdrUShortCont& rPts = pM->GetMarkedPoints();
 
-        if( bUndo )
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        if (bUndo)
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
         bool bCorrectionFlag(false);
         sal_uInt32 nMax(pObj->GetHdlCount());
 
@@ -367,8 +367,8 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
             if(pNewObj)
             {
                 pM->GetPageView()->GetObjList()->InsertObject(pNewObj.get(), pObj->GetOrdNum() + 1);
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
+                if (bUndo)
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
                 MarkObj(pNewObj.get(), pM->GetPageView(), false, true);
             }
 
@@ -533,7 +533,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
             continue;
 
         if( bUndo )
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
         basegfx::B2DPolyPolygon aXPP(pPath->GetPathPoly());
 

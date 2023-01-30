@@ -670,7 +670,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
         maOptionsMisc.SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
         maOptionsMisc.SetDragWithCopy( pView->IsDragWithCopy() );
-        maOptionsMisc.SetPickThrough( pView->GetModel()->IsPickThroughTransparentTextFrames() );
+        maOptionsMisc.SetPickThrough(pView->GetModel().IsPickThroughTransparentTextFrames());
         maOptionsMisc.SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
         maOptionsMisc.SetClickChangeRotation( pView->IsClickChangeRotation() );
         maOptionsMisc.SetSolidDragging( pView->IsSolidDragging() );

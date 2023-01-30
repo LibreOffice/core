@@ -585,7 +585,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
             new FmFormView(
                 *pModel,
                 pDev));
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+        pDrawView->ShowSdrPage(pDrawView->GetModel().GetPage(nTab));
         pDrawView->SetPrintPreview();
         aOutputData.SetDrawView( pDrawView.get() );
     }

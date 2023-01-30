@@ -285,7 +285,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 
         SCTAB nTab = aViewData.GetTabNo();
         pDrawView->HideSdrPage();
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+        pDrawView->ShowSdrPage(pDrawView->GetModel().GetPage(nTab));
 
         UpdateLayerLocks();
 
@@ -363,7 +363,7 @@ void ScTabView::UpdateLayerLocks()
     bool bShared = aViewData.GetDocShell()->IsDocShared();
 
     SdrLayer* pLayer;
-    SdrLayerAdmin& rAdmin = pDrawView->GetModel()->GetLayerAdmin();
+    SdrLayerAdmin& rAdmin = pDrawView->GetModel().GetLayerAdmin();
     pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
     if (pLayer)
         pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx || bShared );

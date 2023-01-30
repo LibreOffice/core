@@ -1666,7 +1666,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                 &rDevice));
 
         mpLOKDrawView->SetNegativeX(bLayoutRTL);
-        mpLOKDrawView->ShowSdrPage(mpLOKDrawView->GetModel()->GetPage(nTab));
+        mpLOKDrawView->ShowSdrPage(mpLOKDrawView->GetModel().GetPage(nTab));
         aOutputData.SetDrawView(mpLOKDrawView.get());
         aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
     }

@@ -51,8 +51,8 @@ void SwMediaShell::ExecMedia(SfxRequest const& rReq)
     if (!pSdrView)
         return;
 
-    const bool bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(false);
+    const bool bChanged = pSdrView->GetModel().IsChanged();
+    pSdrView->GetModel().SetChanged(false);
 
     switch (rReq.GetSlot())
     {
@@ -78,10 +78,10 @@ void SwMediaShell::ExecMedia(SfxRequest const& rReq)
             break;
     }
 
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->GetModel().IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged();
+        pSdrView->GetModel().SetChanged();
 }
 
 void SwMediaShell::GetMediaState(SfxItemSet& rSet)

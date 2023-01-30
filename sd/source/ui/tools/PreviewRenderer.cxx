@@ -227,7 +227,7 @@ bool PreviewRenderer::Initialize (
     SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
     if (pPage->IsMasterPage())
     {
-        mpView->ShowSdrPage(mpView->GetModel()->GetMasterPage(pPage->GetPageNum()));
+        mpView->ShowSdrPage(mpView->GetModel().GetMasterPage(pPage->GetPageNum()));
     }
     else
     {

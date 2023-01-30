@@ -572,8 +572,8 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     bRetval = true;
 
                     // Create undo
-                    if( GetModel()->IsUndoEnabled() )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewCompoundObj));
+                    if( GetModel().IsUndoEnabled() )
+                        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pNewCompoundObj));
                 }
             }
         }
@@ -648,8 +648,8 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
         pObj->SetMergedItem(SvxColorItem(COL_BLACK, EE_CHAR_COLOR));
 
         // add undo now
-        if( GetModel()->IsUndoEnabled() )
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+        if (GetModel().IsUndoEnabled())
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
     pObj->SetMergedItem(SvxColorItem(COL_GRAY, EE_CHAR_COLOR));
@@ -671,9 +671,9 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
         && !nLineWidth
         && eFillStyle != drawing::FillStyle_NONE)
     {
-        if(pObj->getSdrPageFromSdrObject() && GetModel()->IsUndoEnabled() )
+        if (pObj->getSdrPageFromSdrObject() && GetModel().IsUndoEnabled())
         {
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
         }
 
         pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));

@@ -339,7 +339,7 @@ void SdrCreateView::SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent)
         mnCurrentIdent=nIdent;
         rtl::Reference<SdrObject> pObj = (nIdent == SdrObjKind::NONE) ? nullptr :
             SdrObjFactory::MakeNewObject(
-                *GetModel(),
+                GetModel(),
                 nInvent,
                 nIdent);
 
@@ -397,9 +397,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
             else
             {
                 mpCurrentCreate = SdrObjFactory::MakeNewObject(
-                    *mpModel,
-                    nInvent,
-                    nIdent);
+                    GetModel(), nInvent, nIdent);
             }
 
             Point aPnt(rPnt);
@@ -421,19 +419,18 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
                     mpCurrentCreate->SetMergedItemSet(maDefaultAttr);
                 }
 
-                if (mpModel && dynamic_cast<const SdrCaptionObj *>(mpCurrentCreate.get()) != nullptr)
+                if (dynamic_cast<const SdrCaptionObj *>(mpCurrentCreate.get()) != nullptr)
                 {
-                    SfxItemSet aSet(mpModel->GetItemPool());
+                    SfxItemSet aSet(GetModel().GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),COL_WHITE)); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     mpCurrentCreate->SetMergedItemSet(aSet);
                 }
-                if (mpModel && nInvent==SdrInventor::Default && (nIdent==SdrObjKind::Text ||
-                    nIdent==SdrObjKind::TitleText || nIdent==SdrObjKind::OutlineText))
+                if (nInvent == SdrInventor::Default && (nIdent==SdrObjKind::Text || nIdent==SdrObjKind::TitleText || nIdent==SdrObjKind::OutlineText))
                 {
                     // default for all text frames: no background, no border
-                    SfxItemSet aSet(mpModel->GetItemPool());
+                    SfxItemSet aSet(GetModel().GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),COL_WHITE)); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                     aSet.Put(XLineColorItem(OUString(),COL_BLACK)); // in case someone turns on Solid

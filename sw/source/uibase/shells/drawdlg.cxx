@@ -47,11 +47,11 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
     SwWrtShell*     pSh     = &GetShell();
     SdrView*        pView   = pSh->GetDrawView();
-    SdrModel*       pDoc    = pView->GetModel();
-    bool            bChanged = pDoc->IsChanged();
-    pDoc->SetChanged(false);
+    SdrModel& rModel = pView->GetModel();
+    bool            bChanged = rModel.IsChanged();
+    rModel.SetChanged(false);
 
-    SfxItemSet aNewAttr( pDoc->GetItemPool() );
+    SfxItemSet aNewAttr(rModel.GetItemPool());
     pView->GetAttributes( aNewAttr );
 
     GetView().NoRotate();
@@ -110,13 +110,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(rReq.GetFrameWeld(),
                                                                             &aNewAttr,
-                                                                            pDoc,
+                                                                            &rModel,
                                                                             true,
                                                                             false));
 
-            pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
+            pDlg->StartExecuteAsync([bChanged, bHasMarked, &rModel, pDlg, pSh, pView, this](
                                         sal_Int32 nResult){
-                pDoc->SetChanged(false);
+                rModel.SetChanged(false);
 
                 if (nResult == RET_OK)
                 {
@@ -143,10 +143,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
                 }
 
-                if (pDoc->IsChanged())
+                if (rModel.IsChanged())
                     GetShell().SetModified();
                 else if (bChanged)
-                    pDoc->SetChanged();
+                    rModel.SetChanged();
 
                 pDlg->disposeOnce();
             });
@@ -165,13 +165,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog(rReq.GetFrameWeld(),
                     &aNewAttr,
-                pDoc,
+                &rModel,
                 pObj,
                 bHasMarked));
 
-            pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
+            pDlg->StartExecuteAsync([bChanged, bHasMarked, &rModel, pDlg, pSh, pView, this](
                                         sal_Int32 nResult){
-                pDoc->SetChanged(false);
+                rModel.SetChanged(false);
 
                 if (nResult == RET_OK)
                 {
@@ -199,10 +199,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
                 }
 
-                if (pDoc->IsChanged())
+                if (rModel.IsChanged())
                     GetShell().SetModified();
                 else if (bChanged)
-                    pDoc->SetChanged();
+                    rModel.SetChanged();
 
                 pDlg->disposeOnce();
             });
@@ -213,10 +213,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             break;
     }
 
-    if (pDoc->IsChanged())
+    if (rModel.IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pDoc->SetChanged();
+        rModel.SetChanged();
 }
 
 namespace
@@ -247,8 +247,8 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
     SwWrtShell* pSh   = &GetShell();
     SdrView*    pView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    bool        bChanged = pView->GetModel()->IsChanged();
-    pView->GetModel()->SetChanged(false);
+    bool        bChanged = pView->GetModel().IsChanged();
+    pView->GetModel().SetChanged(false);
 
     GetView().NoRotate();
 
@@ -288,11 +288,11 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
                 break;
         }
     }
-    if (pView->GetModel()->IsChanged())
+    if (pView->GetModel().IsChanged())
         GetShell().SetModified();
     else
         if (bChanged)
-            pView->GetModel()->SetChanged();
+            pView->GetModel().SetChanged();
 }
 
 static void lcl_unifyFillTransparencyItems(const SfxItemSet& rSet)

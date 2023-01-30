@@ -816,7 +816,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
             if ( lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification) )
             {
                 const Size aSize(nXMov,nYMov);
-                pView->AddUndo(pView->GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pObj,aSize));
+                pView->AddUndo(pView->GetModel().GetSdrUndoFactory().CreateUndoMoveObject(*pObj,aSize));
                 pObj->Move(aSize);
                 aObjRect =   pObj->GetSnapRect();
             }
@@ -838,7 +838,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                         [[fallthrough]];
                     case ControlModification::WIDTH_SMALLEST:
                     case ControlModification::HEIGHT_SMALLEST:
-                        pView->AddUndo( pView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+                        pView->AddUndo( pView->GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                         {
                             OObjectBase* pObjBase = dynamic_cast<OObjectBase*>(pObj);
                             OSL_ENSURE(pObjBase,"Where comes this object from?");
@@ -974,9 +974,9 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
 
             pNewObj->SetLogicRect(_aRect);
             pNewObj->Move(Size(0, aNewPos.Y()));
-            bool bChanged = rView.GetModel()->IsChanged();
+            bool bChanged = rView.GetModel().IsChanged();
             rReportSection.getPage()->InsertObject(pNewObj.get());
-            rView.GetModel()->SetChanged(bChanged);
+            rView.GetModel().SetChanged(bChanged);
             m_aBegDragTempList.push_back(pNewObj.get());
 
             rView.MarkObj( pNewObj.get(), rView.GetSdrPageView() );

@@ -616,7 +616,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                         {
                             OUString aStr( SvxResId( pStrResId ) );
                             pSdrView->BegUndo( aStr );
-                            pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                            pSdrView->AddUndo( pSdrView->GetModel().GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }
                         SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         impl_execute( rReq, aGeometryItem, pObj );
@@ -1027,11 +1027,9 @@ static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
         }
     }
 
-    if( pSdrView->GetModel() )
-    {
-        FieldUnit eUnit = pSdrView->GetModel()->GetUIUnit();
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(eUnit) ) );
-    }
+
+    FieldUnit eUnit = pSdrView->GetModel().GetUIUnit();
+    rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(eUnit) ) );
 
     if( bHasCustomShape )
         rSet.Put( SvxDoubleItem( fFinalDepth, SID_EXTRUSION_DEPTH ) );

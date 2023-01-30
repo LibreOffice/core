@@ -81,7 +81,7 @@ void FuConstUnoControl::Activate()
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
+    SdrLayer* pLayer = pView->GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
@@ -92,7 +92,7 @@ void FuConstUnoControl::Deactivate()
 {
     FuConstruct::Deactivate();
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
+    SdrLayer* pLayer = pView->GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 

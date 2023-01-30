@@ -118,11 +118,10 @@ private:
     friend class SdrGrafObj;
 
     // the SdrModel this view was created with, unchanged during lifetime
-    SdrModel& mrSdrModelFromSdrView;
+    SdrModel& mrModel;
 
     std::unique_ptr<SdrPageView> mpPageView;
 protected:
-    SdrModel* mpModel;
     VclPtr<OutputDevice> mpActualOutDev; // Only for comparison
     VclPtr<OutputDevice> mpDragWin;
     SfxStyleSheet* mpDefaultStyleSheet;
@@ -255,10 +254,11 @@ protected:
 
 public:
     // SdrModel access on SdrView level
-    SdrModel& getSdrModelFromSdrView() const { return mrSdrModelFromSdrView; }
+    SdrModel& getSdrModelFromSdrView() const { return mrModel; }
+
+    SdrModel& GetModel() const { return mrModel; }
 
     virtual void ClearPageView();
-    SdrModel* GetModel() const { return mpModel; }
 
     virtual bool IsAction() const;
     virtual void MovAction(const Point& rPnt);

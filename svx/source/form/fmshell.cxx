@@ -1155,7 +1155,7 @@ void FmFormShell::SetView( FmFormView* _pView )
 
     m_pFormView = _pView;
     m_pFormView->SetFormShell( this, FmFormView::FormShellAccess() );
-    m_pFormModel = static_cast<FmFormModel*>(m_pFormView->GetModel());
+    m_pFormModel = static_cast<FmFormModel*>(&m_pFormView->GetModel());
 
     impl_setDesignMode( m_pFormView->IsDesignMode() );
 

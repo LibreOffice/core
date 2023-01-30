@@ -124,15 +124,15 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         if ( _pPageBackgrdColor )
         {
             aOldOutlinerBackgroundColor =
-                    GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
-            GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
+                    GetDrawView()->GetModel().GetDrawOutliner().GetBackgroundColor();
+            GetDrawView()->GetModel().GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
         }
 
         aOldEEHoriTextDir =
-            GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
+            GetDrawView()->GetModel().GetDrawOutliner().GetDefaultHorizontalTextDirection();
         EEHorizontalTextDirection aEEHoriTextDirOfPage =
             _bIsPageRightToLeft ? EEHorizontalTextDirection::R2L : EEHorizontalTextDirection::L2R;
-        GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
+        GetDrawView()->GetModel().GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
     }
 
     pOutDev->Push( vcl::PushFlags::LINECOLOR );
@@ -150,8 +150,8 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     if ( (_nLayerID == rIDDMA.GetHellId()) ||
          (_nLayerID == rIDDMA.GetHeavenId()) )
     {
-        GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgroundColor );
-        GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
+        GetDrawView()->GetModel().GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgroundColor );
+        GetDrawView()->GetModel().GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
     }
 
     pOutDev->SetDrawMode( nOldDrawMode );

@@ -382,7 +382,7 @@ void TableDesignWidget::EditStyle(std::string_view rCommand)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxFormatCellsDialog(
-            mrBase.GetFrameWeld(), &aNewAttr, *mrBase.GetDrawView()->GetModel(), true) : nullptr);
+            mrBase.GetFrameWeld(), &aNewAttr, mrBase.GetDrawView()->GetModel(), true) : nullptr);
         if (pDlg && pDlg->Execute() == RET_OK)
         {
             endTextEditForStyle(xTableStyle);

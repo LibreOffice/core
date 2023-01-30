@@ -157,7 +157,7 @@ void SdrPageView::ModelHasChanged()
 
 bool SdrPageView::IsReadOnly() const
 {
-    return (nullptr == GetPage() || GetView().GetModel()->IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
+    return (nullptr == GetPage() || GetView().GetModel().IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
 }
 
 void SdrPageView::Show()

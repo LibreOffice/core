@@ -54,7 +54,7 @@ using namespace com::sun::star;
 
 static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSize )
 {
-    SdrPage* pPage = rData.GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
+    SdrPage* pPage = rData.GetScDrawView()->GetModel().GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
     OSL_ENSURE(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
@@ -114,7 +114,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     if (bGroup)
         pScDrawView->BegUndo( ScResId( STR_UNDO_PASTE ) );
 
-    bool bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
+    bool bSameDoc = ( pDragEditView && &pDragEditView->GetModel() == &pScDrawView->GetModel() );
     if (bSameDoc)
     {
             // copy locally - incl. charts
@@ -134,9 +134,9 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         }
         else
         {
-            SdrModel* pDrawModel = pDragEditView->GetModel();
+            SdrModel& rDrawModel = pDragEditView->GetModel();
             SCTAB nTab = GetViewData().GetTabNo();
-            SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
+            SdrPage* pDestPage = rDrawModel.GetPage( static_cast< sal_uInt16 >( nTab ) );
             OSL_ENSURE(pDestPage,"who is this, Page?");
 
             ::std::vector< OUString > aExcludedChartNames;
@@ -153,13 +153,13 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
                 // Directly Clone to target SdrModel
-                rtl::Reference<SdrObject> pNewObj(pObj->CloneSdrObject(*pDrawModel));
+                rtl::Reference<SdrObject> pNewObj(pObj->CloneSdrObject(rDrawModel));
 
                 if (pNewObj!=nullptr)
                 {
                     //  copy graphics within the same model - always needs new name
                     if ( dynamic_cast<const SdrGrafObj*>( pNewObj.get()) !=  nullptr && !bPasteIsMove )
-                        pNewObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
+                        pNewObj->SetName(static_cast<ScDrawLayer*>(&rDrawModel)->GetNewGraphicName());
 
                     if (nDiffX!=0 || nDiffY!=0)
                         pNewObj->NbcMove(Size(nDiffX,nDiffY));
@@ -191,7 +191,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     {
         bPasteIsMove = false;       // no internal move happened
         SdrView aView(*pModel);     // #i71529# never create a base class of SdrView directly!
-        SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+        SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel().GetPage(0));
         aView.MarkAllObj(pPv);
         Size aSize = aView.GetAllMarkedRect().GetSize();
         lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
@@ -206,7 +206,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         ::std::vector< OUString > aExcludedChartNames;
         SCTAB nTab = GetViewData().GetTabNo();
-        SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+        SdrPage* pPage = pScDrawView->GetModel().GetPage( static_cast< sal_uInt16 >( nTab ) );
         OSL_ENSURE( pPage, "Page?" );
         if ( pPage )
         {
@@ -437,7 +437,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     // path was the name of the graphic in history
 
-    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>( pScDrawView->GetModel() );
+    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>(&pScDrawView->GetModel());
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pGrafObj->SetName(aName);
 

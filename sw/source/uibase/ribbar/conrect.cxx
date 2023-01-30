@@ -94,7 +94,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     // Set the attributes needed for scrolling
                     SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>
-                        aItemSet( pSdrView->GetModel()->GetItemPool() );
+                        aItemSet(pSdrView->GetModel().GetItemPool());
 
                     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                     aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
@@ -111,7 +111,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 if (SdrTextObj* pText = DynCastSdrTextObj(pObj))
                 {
-                    SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
+                    SfxItemSet aSet(pSdrView->GetModel().GetItemPool());
 
                     pText->SetVerticalWriting(true);
 

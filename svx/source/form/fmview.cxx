@@ -79,7 +79,7 @@ void FmFormView::Init()
     pImpl = new FmXFormView(this);
 
     // set model
-    SdrModel* pModel = GetModel();
+    SdrModel* pModel = &GetModel();
 
     DBG_ASSERT( dynamic_cast<const FmFormModel*>( pModel) !=  nullptr, "Wrong model" );
     FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(pModel);
@@ -201,7 +201,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     if (bDesign == IsDesignMode())
         return;
 
-    FmFormModel* pModel = dynamic_cast<FmFormModel*>( GetModel() );
+    FmFormModel* pModel = dynamic_cast<FmFormModel*>(&GetModel());
     if (pModel)
     {   // For the duration of the transition the Undo-Environment is disabled. This ensures that non-transient Properties can
         // also be changed (this should be done with care and also reversed before switching the mode back. An example is the

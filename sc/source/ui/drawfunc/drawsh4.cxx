@@ -56,7 +56,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     }
     else
     {
-        SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
+        SfxItemSet aViewAttr(pDrView->GetModel().GetItemPool());
         pDrView->GetAttributes(aViewAttr);
         rSet.Set(aViewAttr);
     }

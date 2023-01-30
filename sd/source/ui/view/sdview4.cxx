@@ -161,7 +161,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( IsUndoEnabled() )
         {
             BegUndo(SdResId(STR_UNDO_DRAGDROP));
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
             EndUndo();
         }
 

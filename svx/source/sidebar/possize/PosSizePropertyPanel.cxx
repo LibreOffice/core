@@ -237,7 +237,7 @@ void PosSizePropertyPanel::Initialize()
 
     if ( mpView != nullptr )
     {
-        maUIScale = mpView->GetModel()->GetUIScale();
+        maUIScale = mpView->GetModel().GetUIScale();
         mbAdjustEnabled = hasText(*mpView);
     }
 
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
     {
         tools::Long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
 
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel().GetUIScale();
         lX = tools::Long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
     {
         tools::Long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
 
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel().GetUIScale();
         lY = tools::Long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
     Degree100 nTmp = mxCtrlDial->GetRotation();
 
     // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+    const double fUIScale(mpView ? double(mpView->GetModel().GetUIScale()) : 1.0);
     SdrAngleItem aAngleItem( SID_ATTR_TRANSFORM_ANGLE, nTmp);
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
@@ -804,7 +804,7 @@ void PosSizePropertyPanel::executeSize()
     if ( !mxMtrWidth->get_value_changed_from_saved() && !mxMtrHeight->get_value_changed_from_saved())
         return;
 
-    Fraction aUIScale = mpView->GetModel()->GetUIScale();
+    Fraction aUIScale = mpView->GetModel().GetUIScale();
 
     // get Width
     double nWidth = static_cast<double>(mxMtrWidth->get_value(FieldUnit::MM_100TH));
@@ -1021,7 +1021,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     pPV->LogicToPagePos(aTmpRect2);
     maWorkArea = vcl::unotools::b2DRectangleFromRectangle(aTmpRect2);
 
-    const Fraction aUIScale(mpView->GetModel()->GetUIScale());
+    const Fraction aUIScale(mpView->GetModel().GetUIScale());
     TransfrmHelper::ScaleRect( maWorkArea, aUIScale );
     TransfrmHelper::ScaleRect( maRect, aUIScale );
 
@@ -1060,7 +1060,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
 
 void PosSizePropertyPanel::UpdateUIScale()
 {
-    const Fraction aUIScale (mpView->GetModel()->GetUIScale());
+    const Fraction aUIScale (mpView->GetModel().GetUIScale());
     if (maUIScale == aUIScale)
         return;
 
