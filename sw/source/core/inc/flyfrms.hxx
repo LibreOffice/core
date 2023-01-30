@@ -193,6 +193,8 @@ public:
         format isn't possible, if method <MakeAll()> is already in progress.
     */
     virtual bool IsFormatPossible() const override;
+    const SwFlyAtContentFrame* GetFollow() const;
+    SwFlyAtContentFrame* GetFollow();
 };
 
 // Flys that are bound to a character in Content
