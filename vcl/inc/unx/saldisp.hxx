@@ -227,14 +227,6 @@ public:
 class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
 {
 public:
-    struct RenderEntry
-    {
-        Pixmap      m_aPixmap;
-
-        RenderEntry() : m_aPixmap( 0 ) {}
-    };
-
-    typedef std::unordered_map<int,RenderEntry> RenderEntryMap;
 
     struct ScreenData
     {
@@ -252,7 +244,6 @@ public:
         GC                  m_aOrGC;
         GC                  m_aStippleGC;
         Pixmap              m_hInvert50;
-        mutable RenderEntryMap m_aRenderData;
 
         ScreenData() :
         m_bInit( false ),
@@ -264,8 +255,7 @@ public:
         m_aAndGC( None ),
         m_aOrGC( None ),
         m_aStippleGC( None ),
-        m_hInvert50( None ),
-        m_aRenderData( 1 )
+        m_hInvert50( None )
         {}
     };
 
@@ -364,7 +354,6 @@ public:
     Pixmap          GetInvert50( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_hInvert50; }
     const SalColormap&    GetColormap( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aColormap; }
     const SalVisual&      GetVisual( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aVisual; }
-    RenderEntryMap&       GetRenderEntries( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
     sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
     Time            GetLastUserEventTime() const { return GetEventTimeImpl(); }

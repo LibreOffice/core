@@ -281,23 +281,6 @@ void SalDisplay::doDestruct()
 
     m_pWMAdaptor.reset();
 
-    if (ImplGetSVData())
-    {
-        SalDisplay* pSalDisp = vcl_sal::getSalDisplay(pData);
-        Display* const pX11Disp = pSalDisp->GetDisplay();
-        int nMaxScreens = pSalDisp->GetXScreenCount();
-
-        for (int i = 0; i < nMaxScreens; i++)
-        {
-            SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries(SalX11Screen(i));
-            for (auto const& elem : rMap)
-            {
-                if (elem.second.m_aPixmap)
-                    ::XFreePixmap(pX11Disp, elem.second.m_aPixmap);
-            }
-            rMap.clear();
-        }
-    }
     FreetypeManager::get().ClearFontCache();
 
     if( IsDisplay() )

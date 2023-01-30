@@ -149,9 +149,6 @@ private:
 
     SalX11Screen                    m_nXScreen;
 
-    bool                            bWindow_ : 1;       // is Window
-    bool                            bVirDev_ : 1;       // is VirDev
-
     std::unique_ptr<SalGraphicsImpl> mxImpl;
     std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
     X11Common maX11Common;

@@ -78,9 +78,6 @@ void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, 
     m_pVDev      = pDevice;
     m_pFrame     = nullptr;
 
-    bWindow_     = pDisplay->IsDisplay();
-    bVirDev_     = true;
-
     SetDrawable(pDevice->GetDrawable(), pDevice->GetSurface(), m_nXScreen);
     mxImpl->Init();
 }

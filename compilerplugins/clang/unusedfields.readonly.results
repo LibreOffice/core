@@ -1,7 +1,7 @@
 basegfx/source/polygon/b2dtrapezoid.cxx:205
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock B2DPoint[32]
 basic/source/inc/expr.hxx:111
-    SbiExprNode::(anonymous union at /home/noel/libo/basic/source/inc/expr.hxx:110:5) nTypeStrId sal_uInt16
+    SbiExprNode::(anonymous union at /home/noel/libo2/basic/source/inc/expr.hxx:110:5) nTypeStrId sal_uInt16
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:63
     Data rdx sal_uInt64
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:64
@@ -49,9 +49,9 @@ bridges/source/jni_uno/jni_java2uno.cxx:154
 chart2/source/model/main/DataPoint.hxx:104
     chart::DataPoint m_bNoParentPropAllowed _Bool
 codemaker/source/javamaker/classfile.cxx:508
-    (unnamed union at /home/noel/libo/codemaker/source/javamaker/classfile.cxx:508:5) uint32Bytes sal_uInt32
+    (unnamed union at /home/noel/libo2/codemaker/source/javamaker/classfile.cxx:508:5) uint32Bytes sal_uInt32
 codemaker/source/javamaker/classfile.cxx:540
-    (unnamed union at /home/noel/libo/codemaker/source/javamaker/classfile.cxx:540:5) uint64Bytes sal_uInt64
+    (unnamed union at /home/noel/libo2/codemaker/source/javamaker/classfile.cxx:540:5) uint64Bytes sal_uInt64
 connectivity/inc/sdbcx/VCatalog.hxx:66
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
 connectivity/inc/sdbcx/VGroup.hxx:52
@@ -176,15 +176,15 @@ cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
 cppu/source/uno/check.cxx:271
     (anonymous namespace)::Char4 c char
-cui/source/options/optcolor.cxx:260
+cui/source/options/optcolor.cxx:259
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions SvtModuleOptions
-dbaccess/source/core/api/RowSetBase.hxx:84
+dbaccess/source/core/api/RowSetBase.hxx:82
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
-dbaccess/source/core/api/RowSetBase.hxx:95
+dbaccess/source/core/api/RowSetBase.hxx:93
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:68
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
-dbaccess/source/core/inc/ContentHelper.hxx:103
+dbaccess/source/core/inc/ContentHelper.hxx:101
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:34
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
@@ -288,6 +288,8 @@ include/basic/sbstar.hxx:50
     StarBASIC aErrorHdl Link<StarBASIC *, _Bool>
 include/basic/sbstar.hxx:51
     StarBASIC aBreakHdl Link<StarBASIC *, BasicDebugFlags>
+include/comphelper/guarding.hxx:40
+    comphelper::ORelease m_rMutex MUTEX &
 include/comphelper/parallelsort.hxx:164
     comphelper::(anonymous namespace)::Binner maLabels uint8_t[51200]
 include/comphelper/servicedecl.hxx:130
@@ -296,9 +298,11 @@ include/comphelper/servicedecl.hxx:131
     comphelper::service_decl::ServiceDecl m_pImplName const char *const
 include/comphelper/servicedecl.hxx:132
     comphelper::service_decl::ServiceDecl m_pServiceNames const char *const
+include/comphelper/stl_types.hxx:115
+    comphelper::mem_fun1_t M_f const _fun_type
 include/connectivity/DriversConfig.hxx:76
     connectivity::DriversConfig m_aNode OSharedConfigNode
-include/connectivity/sdbcx/VDescriptor.hxx:51
+include/connectivity/sdbcx/VDescriptor.hxx:49
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
 include/connectivity/sdbcx/VTable.hxx:77
     connectivity::sdbcx::OTable m_xColumns std::unique_ptr<OCollection>
@@ -316,6 +320,8 @@ include/filter/msfilter/svdfppt.hxx:891
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize size_t
+include/oox/helper/containerhelper.hxx:130
+    oox::Matrix maData container_type
 include/oox/ole/axbinarywriter.hxx:153
     oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
 include/sfx2/lokhelper.hxx:35
@@ -351,45 +357,49 @@ include/svx/svdmark.hxx:142
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/unoidl/unoidl.hxx:445
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:445:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5)
 include/unoidl/unoidl.hxx:446
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) booleanValue _Bool
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) booleanValue _Bool
 include/unoidl/unoidl.hxx:447
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) byteValue sal_Int8
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) byteValue sal_Int8
 include/unoidl/unoidl.hxx:448
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) shortValue sal_Int16
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) shortValue sal_Int16
 include/unoidl/unoidl.hxx:449
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) unsignedShortValue sal_uInt16
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) unsignedShortValue sal_uInt16
 include/unoidl/unoidl.hxx:450
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) longValue sal_Int32
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) longValue sal_Int32
 include/unoidl/unoidl.hxx:451
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) unsignedLongValue sal_uInt32
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) unsignedLongValue sal_uInt32
 include/unoidl/unoidl.hxx:452
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) hyperValue sal_Int64
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) hyperValue sal_Int64
 include/unoidl/unoidl.hxx:453
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) unsignedHyperValue sal_uInt64
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) unsignedHyperValue sal_uInt64
 include/unoidl/unoidl.hxx:454
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) floatValue float
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) floatValue float
 include/unoidl/unoidl.hxx:455
-    unoidl::ConstantValue::(anonymous union at /home/noel/libo/include/unoidl/unoidl.hxx:445:5) doubleValue double
+    unoidl::ConstantValue::(anonymous union at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories Directories
+include/vcl/bitmap.hxx:101
+    BitmapSystemData mnWidth int
+include/vcl/bitmap.hxx:102
+    BitmapSystemData mnHeight int
 include/vcl/formatter.hxx:127
     Formatter m_aStaticFormatter StaticFormatter
 include/vcl/toolkit/field.hxx:399
     DateFormatter maStaticFormatter class Formatter::StaticFormatter
 io/source/stm/odata.cxx:235
-    (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:235:5) f float
+    (unnamed union at /home/noel/libo2/io/source/stm/odata.cxx:235:5) f float
 io/source/stm/odata.cxx:242
-    (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:242:5) d double
+    (unnamed union at /home/noel/libo2/io/source/stm/odata.cxx:242:5) d double
 io/source/stm/odata.cxx:551
-    (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:551:5) n sal_uInt32
+    (unnamed union at /home/noel/libo2/io/source/stm/odata.cxx:551:5) n sal_uInt32
 io/source/stm/odata.cxx:558
-    (unnamed union at /home/noel/libo/io/source/stm/odata.cxx:558:5) ad struct (unnamed struct at /home/noel/libo/io/source/stm/odata.cxx:558:23)
+    (unnamed union at /home/noel/libo2/io/source/stm/odata.cxx:558:5) ad struct (unnamed struct at /home/noel/libo2/io/source/stm/odata.cxx:558:23)
 io/source/stm/odata.cxx:558
-    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo/io/source/stm/odata.cxx:558:23) n1 sal_uInt32
+    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo2/io/source/stm/odata.cxx:558:23) n1 sal_uInt32
 io/source/stm/odata.cxx:558
-    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo/io/source/stm/odata.cxx:558:23) n2 sal_uInt32
+    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo2/io/source/stm/odata.cxx:558:23) n2 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:86
@@ -435,23 +445,23 @@ sal/rtl/uuid.cxx:59
 sc/inc/attarray.hxx:69
     ScMergePatternState pItemSet std::optional<SfxItemSet>
 sc/inc/cellvalue.hxx:113
-    ScRefCellValue::(anonymous union at /home/noel/libo/sc/inc/cellvalue.hxx:111:5) mpString const svl::SharedString *
+    ScRefCellValue::(anonymous union at /home/noel/libo2/sc/inc/cellvalue.hxx:111:5) mpString const svl::SharedString *
 sc/inc/cellvalue.hxx:114
-    ScRefCellValue::(anonymous union at /home/noel/libo/sc/inc/cellvalue.hxx:111:5) mpEditText const EditTextObject *
+    ScRefCellValue::(anonymous union at /home/noel/libo2/sc/inc/cellvalue.hxx:111:5) mpEditText const EditTextObject *
 sc/inc/compiler.hxx:132
-    ScRawToken::(anonymous union)::(unnamed struct at /home/noel/libo/sc/inc/compiler.hxx:131:9) nIndex sal_uInt16
+    ScRawToken::(anonymous union)::(unnamed struct at /home/noel/libo2/sc/inc/compiler.hxx:131:9) nIndex sal_uInt16
 sc/inc/compiler.hxx:133
-    ScRawToken::(anonymous union)::(unnamed struct at /home/noel/libo/sc/inc/compiler.hxx:131:9) eItem class ScTableRefToken::Item
+    ScRawToken::(anonymous union)::(unnamed struct at /home/noel/libo2/sc/inc/compiler.hxx:131:9) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:134
-    ScRawToken::(anonymous union at /home/noel/libo/sc/inc/compiler.hxx:109:5) table struct (unnamed struct at /home/noel/libo/sc/inc/compiler.hxx:131:9)
+    ScRawToken::(anonymous union at /home/noel/libo2/sc/inc/compiler.hxx:109:5) table struct (unnamed struct at /home/noel/libo2/sc/inc/compiler.hxx:131:9)
 sc/inc/compiler.hxx:139
-    ScRawToken::(anonymous union at /home/noel/libo/sc/inc/compiler.hxx:109:5) pMat ScMatrix *
+    ScRawToken::(anonymous union at /home/noel/libo2/sc/inc/compiler.hxx:109:5) pMat ScMatrix *
 sc/inc/formulagroup.hxx:38
-    sc::FormulaGroupEntry::(anonymous union at /home/noel/libo/sc/inc/formulagroup.hxx:35:5) mpCells ScFormulaCell **
+    sc::FormulaGroupEntry::(anonymous union at /home/noel/libo2/sc/inc/formulagroup.hxx:35:5) mpCells ScFormulaCell **
 sc/inc/reordermap.hxx:20
     sc::ColRowReorderMapType maData DataType
 sc/source/core/inc/adiasync.hxx:41
-    ScAddInAsync::(anonymous union at /home/noel/libo/sc/source/core/inc/adiasync.hxx:38:5) pStr OUString *
+    ScAddInAsync::(anonymous union at /home/noel/libo2/sc/source/core/inc/adiasync.hxx:38:5) pStr OUString *
 sc/source/core/inc/interpre.hxx:99
     ScTokenStack pPointer const formula::FormulaToken *[512]
 sc/source/filter/excel/xltoolbar.cxx:31
@@ -520,9 +530,9 @@ sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/core/CustomAnimationCloner.cxx:71
     sd::(anonymous namespace)::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
-sd/source/ui/inc/unopage.hxx:163
+sd/source/ui/inc/unopage.hxx:165
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
-sd/source/ui/inc/unopage.hxx:223
+sd/source/ui/inc/unopage.hxx:227
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/sidebar/MasterPageContainer.cxx:141
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated Image
@@ -544,7 +554,7 @@ sdext/source/pdfimport/tree/style.hxx:44
     pdfi::StyleContainer::Style Contents OUString
 sfx2/source/appl/lnkbase2.cxx:81
     sfx2::(anonymous namespace)::ImplDdeItem pLink SvBaseLink *
-slideshow/source/engine/slideshowimpl.cxx:140
+slideshow/source/engine/slideshowimpl.cxx:141
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:408
     UCBStorageStream_Impl m_aKey OString
@@ -586,15 +596,13 @@ svx/source/inc/datanavi.hxx:182
     svxform::XFormsPage m_aMethodString MethodString
 svx/source/inc/datanavi.hxx:183
     svxform::XFormsPage m_aReplaceString ReplaceString
-svx/source/inc/datanavi.hxx:367
-    svxform::AddDataItemDialog m_xDataTypeLB std::unique_ptr<weld::ComboBox>
 svx/source/inc/datanavi.hxx:487
     svxform::AddSubmissionDialog m_aMethodString MethodString
 svx/source/inc/datanavi.hxx:488
     svxform::AddSubmissionDialog m_aReplaceString ReplaceString
-svx/source/inc/gridcell.hxx:514
+svx/source/inc/gridcell.hxx:513
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/gridcell.hxx:515
+svx/source/inc/gridcell.hxx:514
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/svdpdf.hxx:61
     ImpSdrPdfImport maDash XDash
@@ -604,14 +612,14 @@ sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/breakit.hxx:38
     SwBreakIt m_xLanguageTag std::unique_ptr<LanguageTag>
-sw/inc/dpage.hxx:35
+sw/inc/dpage.hxx:38
     SwDPage m_pGridLst std::unique_ptr<SdrPageGridFrameList>
 sw/inc/hints.hxx:308
     SwAttrSetChg m_bDelSet _Bool
-sw/inc/shellio.hxx:145
+sw/inc/shellio.hxx:141
     SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
-    SwCallMouseEvent::(anonymous union)::(unnamed struct at /home/noel/libo/sw/inc/swevent.hxx:69:9) pFormat const SwFrameFormat *
+    SwCallMouseEvent::(anonymous union)::(unnamed struct at /home/noel/libo2/sw/inc/swevent.hxx:69:9) pFormat const SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
@@ -639,11 +647,11 @@ sw/source/core/text/redlnitr.hxx:75
 sw/source/filter/html/htmltab.cxx:2834
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
-    RTFSurround::(unnamed union at /home/noel/libo/sw/source/filter/inc/rtf.hxx:26:5) nVal sal_uInt8
+    RTFSurround::(unnamed union at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:26:5) nVal sal_uInt8
 sw/source/ui/dbui/dbinsdlg.cxx:104
-    DB_Column::(anonymous union at /home/noel/libo/sw/source/ui/dbui/dbinsdlg.cxx:103:5) pText OUString *
+    DB_Column::(anonymous union at /home/noel/libo2/sw/source/ui/dbui/dbinsdlg.cxx:103:5) pText OUString *
 sw/source/ui/dbui/dbinsdlg.cxx:106
-    DB_Column::(anonymous union at /home/noel/libo/sw/source/ui/dbui/dbinsdlg.cxx:103:5) nFormat sal_uInt32
+    DB_Column::(anonymous union at /home/noel/libo2/sw/source/ui/dbui/dbinsdlg.cxx:103:5) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:115
@@ -652,7 +660,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:80
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:435
+toolkit/source/awt/vclxtoolkit.cxx:436
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 toolkit/source/controls/table/gridtablerenderer.cxx:71
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending BitmapEx
@@ -670,8 +678,8 @@ ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/package/pkgprovider.hxx:48
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
-ucb/source/ucp/webdav-curl/CurlSession.cxx:129
-    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo/ucb/source/ucp/webdav-curl/CurlSession.cxx:128:5) pValue const void *const
+ucb/source/ucp/webdav-curl/CurlSession.cxx:130
+    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo2/ucb/source/ucp/webdav-curl/CurlSession.cxx:129:5) pValue const void *const
 ucbhelper/source/client/proxydecider.cxx:132
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:79
@@ -715,19 +723,19 @@ unoidl/source/unoidl-read.cxx:152
 unoidl/source/unoidl-read.cxx:153
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
 unoidl/source/unoidl-write.cxx:177
-    (unnamed union at /home/noel/libo/unoidl/source/unoidl-write.cxx:176:5) buf unsigned char[4]
+    (unnamed union at /home/noel/libo2/unoidl/source/unoidl-write.cxx:176:5) buf unsigned char[4]
 unoidl/source/unoidl-write.cxx:190
-    (unnamed union at /home/noel/libo/unoidl/source/unoidl-write.cxx:189:5) buf unsigned char[8]
+    (unnamed union at /home/noel/libo2/unoidl/source/unoidl-write.cxx:189:5) buf unsigned char[8]
 unoidl/source/unoidlprovider.cxx:89
     unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char[2]
 unoidl/source/unoidlprovider.cxx:99
     unoidl::detail::(anonymous namespace)::Memory32 byte unsigned char[4]
 unoidl/source/unoidlprovider.cxx:111
-    (unnamed union at /home/noel/libo/unoidl/source/unoidlprovider.cxx:109:9) f float
+    (unnamed union at /home/noel/libo2/unoidl/source/unoidlprovider.cxx:109:9) f float
 unoidl/source/unoidlprovider.cxx:130
     unoidl::detail::(anonymous namespace)::Memory64 byte unsigned char[8]
 unoidl/source/unoidlprovider.cxx:146
-    (unnamed union at /home/noel/libo/unoidl/source/unoidlprovider.cxx:144:9) d double
+    (unnamed union at /home/noel/libo2/unoidl/source/unoidlprovider.cxx:144:9) d double
 unoidl/source/unoidlprovider.cxx:458
     unoidl::detail::MapEntry name Memory32
 unoidl/source/unoidlprovider.cxx:459
@@ -746,13 +754,17 @@ vcl/inc/salwtype.hxx:171
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:224
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:323
+vcl/inc/svdata.hxx:272
+    ImplSVWinData mbIsLiveResize _Bool
+vcl/inc/svdata.hxx:324
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:330
+vcl/inc/svdata.hxx:331
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:109
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
-vcl/inc/unx/saldisp.hxx:281
+vcl/inc/unx/saldisp.hxx:232
+    SalDisplay::RenderEntry m_aPixmap Pixmap
+vcl/inc/unx/saldisp.hxx:280
     SalDisplay m_aInvalidScreenData ScreenData
 vcl/inc/widgetdraw/WidgetDefinition.hxx:225
     vcl::WidgetDefinitionStyle maDefaultButtonTextColor Color
@@ -846,11 +858,11 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:82
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-writerfilter/source/ooxml/OOXMLFactory.hxx:57
-    writerfilter::ooxml::AttributeInfo m_nToken Token_t
-writerfilter/source/ooxml/OOXMLFactory.hxx:58
-    writerfilter::ooxml::AttributeInfo m_nResource ResourceType
 writerfilter/source/ooxml/OOXMLFactory.hxx:59
+    writerfilter::ooxml::AttributeInfo m_nToken Token_t
+writerfilter/source/ooxml/OOXMLFactory.hxx:60
+    writerfilter::ooxml::AttributeInfo m_nResource ResourceType
+writerfilter/source/ooxml/OOXMLFactory.hxx:61
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:85
     MultiPropertySetHelper aEmptyAny css::uno::Any

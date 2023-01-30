@@ -26,9 +26,6 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     m_pVDev = pDevice;
     m_pFrame = nullptr;
 
-    bWindow_ = pDisplay->IsDisplay();
-    bVirDev_ = true;
-
     mxImpl->Init();
 }
 

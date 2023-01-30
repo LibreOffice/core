@@ -69,9 +69,7 @@ X11Common::X11Common()
 X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
     m_pVDev(nullptr),
-    m_nXScreen( 0 ),
-    bWindow_(false),
-    bVirDev_(false)
+    m_nXScreen( 0 )
 {
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
@@ -143,9 +141,6 @@ void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
 
     m_pFrame    = &rFrame;
     m_pVDev     = nullptr;
-
-    bWindow_    = true;
-    bVirDev_    = false;
 
     SetDrawable(aTarget, rFrame.GetSurface(), nXScreen);
     mxImpl->Init();

@@ -72,13 +72,11 @@ namespace sfx2
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
-        bool                    m_bMacroDisabledMessageShown;
         bool                    m_bDocMacroDisabledMessageShown;
         bool m_bHasUnsignedContentError;
 
         explicit DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
             :m_rDocumentAccess( rDocumentAccess )
-            ,m_bMacroDisabledMessageShown( false )
             ,m_bDocMacroDisabledMessageShown( false )
             ,m_bHasUnsignedContentError( false )
         {
