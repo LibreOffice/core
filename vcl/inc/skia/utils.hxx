@@ -32,7 +32,15 @@
 #include <premac.h>
 #include <SkRegion.h>
 #include <SkSurface.h>
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <tools/sk_app/WindowContext.h>
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 #include <postmac.h>
 
 #include <string_view>
