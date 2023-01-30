@@ -960,8 +960,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             OUString aSize = OUString::number(nSizeF);
                             aStyle += ";font-size:" + aSize + "pt";
                         }
-                        if (IsWaterMarkShape(m_pSdrObject->GetName()))
-                            pAttrList->add(XML_trim, "t");
+                        // tdf#153260. LO renders all Fontwork shapes as if trim="t" is set. Default
+                        // value is "f". So always write out "t", otherwise import will reduce the
+                        // shape height as workaround for "f".
+                        pAttrList->add(XML_trim, "t");
 
                         if (!aStyle.isEmpty())
                             pAttrList->add(XML_style, aStyle);
