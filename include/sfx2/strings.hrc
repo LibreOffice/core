@@ -292,9 +292,10 @@
 #define STR_HYPHENATION_BUTTON                  NC_("STR_HYPHENATION_BUTTON", "Learn more")
 #define STR_REFRESH_MASTER_PASSWORD             NC_("STR_REFRESH_MASTER_PASSWORD", "The master password is stored in an outdated format, you should refresh it")
 #define STR_REFRESH_PASSWORD                    NC_("STR_REFRESH_PASSWORD", "Refresh Password")
+#define STR_MACROS_DISABLED_TITLE               NC_("STR_MACROS_DISABLED_TITLE", "Macros disabled")
 #define STR_CONTAINS_MACROS                     NC_("STR_CONTAINS_MACROS", "Macros in this document are disabled due to the Macro Security settings.")
 #define STR_MACROS_DISABLED                     NC_("STR_MACROS_DISABLED", "Macros are disabled due to the Macro Security settings.")
-#define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are disabled. Macros are signed, but the document (containing document events) is not signed.")
+#define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are signed, but the document (containing document events) is not signed.")
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
 #define STR_EVENTS                              NC_("STR_EVENTS", "Show Events")
 
