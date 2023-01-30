@@ -129,22 +129,28 @@ class navigator(UITestCase):
 
             xRow = xNavigatorPanel.getChild('row')
             xColumn = xNavigatorPanel.getChild('column')
+
             self.assertEqual(get_state_as_dict(xColumn)['Value'], '1')
             self.assertEqual(get_state_as_dict(xRow)['Value'], '1')
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "0")
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], "0")
 
-            xRow.executeAction("UP", tuple())
-            xColumn.executeAction("UP", tuple())
-
-            # Use return to update the current cell
+            xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xColumn.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
             xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
-
             self.ui_test.wait_until_property_is_updated(xColumn, "Value", "2")
             self.assertEqual(get_state_as_dict(xColumn)['Value'], '2')
+
+            xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xRow.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+            xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
             self.ui_test.wait_until_property_is_updated(xRow, "Value", "2")
             self.assertEqual(get_state_as_dict(xRow)['Value'], '2')
 
+            # Without the fix in place, this test would have failed with
+            # AssertionError: '0' != '1'
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], "1")
 
