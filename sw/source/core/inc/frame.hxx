@@ -544,6 +544,7 @@ public:
     SwLayoutFrame *GetNextLeaf   ( MakePageType eMakePage );
     SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextSctLeaf( MakePageType eMakePage );
+    SwLayoutFrame *GetNextFlyLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextCellLeaf();
     SwLayoutFrame *GetPrevLeaf   ();
     SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote );

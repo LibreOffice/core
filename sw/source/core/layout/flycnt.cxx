@@ -1532,4 +1532,55 @@ bool SwFlyAtContentFrame::ShouldBwdMoved(SwLayoutFrame* /*pNewUpper*/, bool& /*r
     return false;
 }
 
+const SwFlyAtContentFrame* SwFlyAtContentFrame::GetFollow() const
+{
+    return static_cast<const SwFlyAtContentFrame*>(SwFlowFrame::GetFollow());
+}
+
+SwFlyAtContentFrame* SwFlyAtContentFrame::GetFollow()
+{
+    return static_cast<SwFlyAtContentFrame*>(SwFlowFrame::GetFollow());
+}
+
+SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
+{
+    auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());
+    assert(pFly && "GetNextFlyLeaf: missing fly frame");
+
+    SwLayoutFrame *pLayLeaf = GetNextLayoutLeaf();
+    if (!pLayLeaf)
+    {
+        if (eMakePage == MAKEPAGE_INSERT)
+        {
+            InsertPage(FindPageFrame(), false);
+            pLayLeaf = GetNextLayoutLeaf();
+        }
+    }
+
+    if( pLayLeaf )
+    {
+        SwFlyAtContentFrame* pNew = nullptr;
+        {
+            pNew = new SwFlyAtContentFrame( *pFly );
+            pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
+
+            SwFrame* pTmp = pFly->GetNext();
+            if( pTmp && pTmp != pFly->GetFollow() )
+            {
+                SwFlowFrame* pNxt = nullptr;
+                if( pTmp->IsContentFrame() )
+                {
+                    pNxt = static_cast<SwContentFrame*>(pTmp);
+                }
+                if (pNxt)
+                {
+                    pNxt->MoveSubTree(pLayLeaf, pNew->GetNext());
+                }
+            }
+        }
+        pLayLeaf = pNew;
+    }
+    return pLayLeaf;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
