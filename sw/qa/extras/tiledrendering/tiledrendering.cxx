@@ -3799,7 +3799,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 
     uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(sAuthor)},
+        {".uno:Author", uno::Any(sAuthor)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
@@ -3837,7 +3837,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
     const OUString sAuthor("XYZ ABCD");
     uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(sAuthor)},
+        {".uno:Author", uno::Any(sAuthor)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
