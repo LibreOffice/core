@@ -588,10 +588,11 @@ hchar_string Outline::GetUnicode() const
             case OLSTY_NUMSIG1:
             case OLSTY_NUMSIG2:
             case OLSTY_NUMSIG3:
-                {
-                getOutlineNumStr(shape, level, number[level], buffer);
+            {
+                if (level < std::size(number))
+                    getOutlineNumStr(shape, level, number[level], buffer);
                 return hstr2ucsstr(buffer);
-                }
+            }
             case OLSTY_BULLET1:
             case OLSTY_BULLET2:
             case OLSTY_BULLET3:
