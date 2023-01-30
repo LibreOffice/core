@@ -390,8 +390,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformF
     MapMode aDestMap(
         getSdrModelFromSdrObject().GetScaleUnit(),
         Point(),
-        getSdrModelFromSdrObject().GetScaleFraction(),
-        getSdrModelFromSdrObject().GetScaleFraction());
+        Fraction(1,1),
+        Fraction(1,1));
     const Size aDestSize( GetLogicRect().GetSize() );
     GraphicAttr aActAttr = GetGraphicAttr(nTransformFlags);
 
@@ -872,8 +872,8 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const
         const MapMode aMap(
             getSdrModelFromSdrObject().GetScaleUnit(),
             Point(),
-            getSdrModelFromSdrObject().GetScaleFraction(),
-            getSdrModelFromSdrObject().GetScaleFraction());
+            Fraction(1,1),
+            Fraction(1,1));
 
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);

@@ -238,7 +238,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
     rtl::Reference<SdrObject> pRet;
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
     double fMap(1.0), *pMap = nullptr;
-    Fraction aFraction( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleFraction() );
+    Fraction aFraction(1, 1);
 
     if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
     {

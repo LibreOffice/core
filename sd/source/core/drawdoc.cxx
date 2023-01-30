@@ -165,7 +165,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetUIUnit( static_cast<FieldUnit>(pOptions->GetMetric()), Fraction( 1, 1 ) );    // default
 
     SetScaleUnit(MapUnit::Map100thMM);
-    SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100));
 
     m_pItemPool->SetDefaultMetric(MapUnit::Map100thMM);

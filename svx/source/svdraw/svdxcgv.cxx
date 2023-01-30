@@ -162,8 +162,8 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
 
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
-    MapUnit eMap=mpModel->GetScaleUnit();
-    Fraction aMap=mpModel->GetScaleFraction();
+    MapUnit eMap = mpModel->GetScaleUnit();
+    Fraction aMap(1,1);
     ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
 }
@@ -203,7 +203,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=mpModel->GetScaleUnit();
-    Fraction aMap=mpModel->GetScaleFraction();
+    Fraction aMap(1,1);
     ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
@@ -401,7 +401,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU=mpModel->GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    Fraction aDstFr(mpModel->GetScaleFraction());
+    Fraction aDstFr(1,1);
     nSizX *= double(aMapFact.X() * rMap.GetScaleX() * aDstFr);
     nSizX *= aDstFr.GetDenominator();
     nSizY *= double(aMapFact.Y() * rMap.GetScaleY());
@@ -530,7 +530,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
     {
         tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode     aMap( mpModel->GetScaleUnit(), Point(), mpModel->GetScaleFraction(), mpModel->GetScaleFraction() );
+        MapMode aMap(mpModel->GetScaleUnit(), Point(), Fraction(1,1), Fraction(1,1));
 
         if( bNoVDevIfOneMtfMarked )
         {
@@ -650,8 +650,8 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         const tools::Rectangle aBoundRect(rSdrObject.GetCurrentBoundRect());
         const MapMode aMap(rSdrObject.getSdrModelFromSdrObject().GetScaleUnit(),
             Point(),
-            rSdrObject.getSdrModelFromSdrObject().GetScaleFraction(),
-            rSdrObject.getSdrModelFromSdrObject().GetScaleFraction());
+            Fraction(1,1),
+            Fraction(1,1));
 
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);

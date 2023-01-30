@@ -96,8 +96,7 @@ struct SdrModelImpl
 
 
 SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHelper, bool bDisablePropertyFiles)
-    : m_aObjUnit(SdrEngineDefaults::GetMapFraction())
-    , m_eObjUnit(SdrEngineDefaults::GetMapUnit())
+    : m_eObjUnit(SdrEngineDefaults::GetMapUnit())
     , m_eUIUnit(FieldUnit::MM)
     , m_aUIScale(Fraction(1,1))
     , m_nUIUnitDecimalMark(0)
@@ -582,7 +581,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
 SdrModel* SdrModel::AllocModel() const
 {
     SdrModel* pModel=new SdrModel();
-    pModel->SetScaleUnit(m_eObjUnit,m_aObjUnit);
+    pModel->SetScaleUnit(m_eObjUnit);
     return pModel;
 }
 
@@ -683,7 +682,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 
     if ( !GetRefDevice() )
     {
-        MapMode aMapMode(m_eObjUnit, Point(0,0), m_aObjUnit, m_aObjUnit);
+        MapMode aMapMode(m_eObjUnit, Point(0,0), Fraction(1,1), Fraction(1,1));
         pOutliner->SetRefMapMode(aMapMode);
     }
 }
@@ -871,35 +870,11 @@ void SdrModel::ImpSetUIUnit()
     m_aUIUnitStr = GetUnitString(m_eUIUnit);
 }
 
-void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
-{
-    if (m_eObjUnit!=eMap || m_aObjUnit!=rFrac) {
-        m_eObjUnit=eMap;
-        m_aObjUnit=rFrac;
-        m_pItemPool->SetDefaultMetric(m_eObjUnit);
-        ImpSetUIUnit();
-        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
-        ImpReformatAllTextObjects();
-    }
-}
-
 void SdrModel::SetScaleUnit(MapUnit eMap)
 {
     if (m_eObjUnit!=eMap) {
         m_eObjUnit=eMap;
         m_pItemPool->SetDefaultMetric(m_eObjUnit);
-        ImpSetUIUnit();
-        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
-        ImpReformatAllTextObjects();
-    }
-}
-
-void SdrModel::SetScaleFraction(const Fraction& rFrac)
-{
-    if (m_aObjUnit!=rFrac) {
-        m_aObjUnit=rFrac;
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
         ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );

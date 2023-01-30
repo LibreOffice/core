@@ -48,8 +48,6 @@ DrawModelWrapper::DrawModelWrapper()
 {
     m_xChartItemPool = ChartItemPool::CreateChartItemPool();
 
-    SetScaleUnit(MapUnit::Map100thMM);
-    SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();

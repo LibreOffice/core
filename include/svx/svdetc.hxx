@@ -77,9 +77,6 @@ namespace SdrEngineDefaults
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
     // Default MapUnit is MapUnit::Map100thMM
     inline MapUnit GetMapUnit() { return MapUnit::Map100thMM; }
-
-    // Default MapFraction is 1/1.
-    inline Fraction GetMapFraction() { return Fraction(1, 1); }
 };
 
 class SfxItemSet;

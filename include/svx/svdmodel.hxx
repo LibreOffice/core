@@ -173,7 +173,6 @@ protected:
     std::vector<rtl::Reference<SdrPage>> maPages;
     std::function<void(std::unique_ptr<SdrUndoAction>)> m_aUndoLink;  // link to a NotifyUndo-Handler
     Size           m_aMaxObjSize; // e.g. for auto-growing text
-    Fraction       m_aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
     MapUnit        m_eObjUnit;   // see above
     FieldUnit      m_eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
     Fraction       m_aUIScale;     // see above
@@ -370,10 +369,6 @@ public:
     // with the correct sizes.
     MapUnit          GetScaleUnit() const                       { return m_eObjUnit; }
     void             SetScaleUnit(MapUnit eMap);
-    const Fraction&  GetScaleFraction() const                   { return m_aObjUnit; }
-    void             SetScaleFraction(const Fraction& rFrac);
-    // Setting both simultaneously performs a little better
-    void             SetScaleUnit(MapUnit eMap, const Fraction& rFrac);
 
     // maximal size e.g. for auto growing texts
     const Size&      GetMaxObjSize() const                      { return m_aMaxObjSize; }

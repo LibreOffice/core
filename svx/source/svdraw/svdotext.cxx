@@ -1327,8 +1327,8 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
     const MapMode aMapMode(
         getSdrModelFromSdrObject().GetScaleUnit(),
         Point(0,0),
-        getSdrModelFromSdrObject().GetScaleFraction(),
-        getSdrModelFromSdrObject().GetScaleFraction());
+        Fraction(1,1),
+        Fraction(1,1));
 
     rOutl.SetRefMapMode(aMapMode);
     ImpSetupDrawOutlinerForPaint(
