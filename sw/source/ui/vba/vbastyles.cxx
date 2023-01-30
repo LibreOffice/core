@@ -174,7 +174,7 @@ class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAcc
 {
 private:
     uno::Reference< container::XNameAccess > mxParaStyles;
-    uno::Any cachePos;
+    uno::Any m_cachePos;
 public:
     explicit StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel )
     {
@@ -191,7 +191,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        return cachePos;
+        return m_cachePos;
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -208,7 +208,7 @@ public:
                 OUString sStyleName = OUString::createFromAscii( pTable->pOOoStyleName );
                 if( mxParaStyles->hasByName( sStyleName ) )
                 {
-                    cachePos = mxParaStyles->getByName( sStyleName );
+                    m_cachePos = mxParaStyles->getByName( sStyleName );
                     return true;
                 }
                 return false;
@@ -217,7 +217,7 @@ public:
 
         if( mxParaStyles->hasByName( aName ) )
         {
-            cachePos = mxParaStyles->getByName( aName );
+            m_cachePos = mxParaStyles->getByName( aName );
             return true;
         }
         else
@@ -227,7 +227,7 @@ public:
                 [&aName](const OUString& rStyleName) { return rStyleName.equalsIgnoreAsciiCase( aName ); });
             if (pStyleName != sElementNames.end())
             {
-                cachePos = mxParaStyles->getByName( *pStyleName );
+                m_cachePos = mxParaStyles->getByName( *pStyleName );
                 return true;
             }
         }
@@ -257,19 +257,19 @@ public:
 
 class StylesEnumWrapper : public EnumerationHelper_BASE
 {
-    SwVbaStyles* pStyles;
-    sal_Int32 nIndex;
+    SwVbaStyles* m_pStyles;
+    sal_Int32 m_nIndex;
 public:
-    explicit StylesEnumWrapper( SwVbaStyles* _pStyles ) : pStyles( _pStyles ), nIndex( 1 ) {}
+    explicit StylesEnumWrapper( SwVbaStyles* _pStyles ) : m_pStyles( _pStyles ), m_nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
-        return ( nIndex <= pStyles->getCount() );
+        return ( m_nIndex <= m_pStyles->getCount() );
     }
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
-        if ( nIndex <= pStyles->getCount() )
-            return pStyles->Item( uno::Any( nIndex++ ), uno::Any() );
+        if ( m_nIndex <= m_pStyles->getCount() )
+            return m_pStyles->Item( uno::Any( m_nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
