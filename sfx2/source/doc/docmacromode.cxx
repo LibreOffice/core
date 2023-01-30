@@ -74,38 +74,19 @@ namespace sfx2
         IMacroDocumentAccess&       m_rDocumentAccess;
         bool                    m_bMacroDisabledMessageShown;
         bool                    m_bDocMacroDisabledMessageShown;
+        bool m_bHasUnsignedContentError;
 
         explicit DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
             :m_rDocumentAccess( rDocumentAccess )
             ,m_bMacroDisabledMessageShown( false )
             ,m_bDocMacroDisabledMessageShown( false )
+            ,m_bHasUnsignedContentError( false )
         {
         }
     };
 
-
-    //= helper
-
     namespace
     {
-
-        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, ErrCode nSfxErrorCode, bool& rbAlreadyShown )
-        {
-            if ( rbAlreadyShown )
-                return;
-
-            ErrorCodeRequest aErrorCodeRequest;
-            aErrorCodeRequest.ErrCode = sal_uInt32(nSfxErrorCode);
-
-            SfxMedium::CallApproveHandler( rxHandler, Any( aErrorCodeRequest ), false );
-            rbAlreadyShown = true;
-        }
-
-        void lcl_showMacrosDisabledUnsignedContentError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
-        {
-            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_CONTENT_UNSIGNED, rbAlreadyShown );
-        }
-
         bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
             const OUString& rDocumentLocation )
         {
@@ -231,7 +212,7 @@ namespace sfx2
                           !bHasValidContentSignature)
                 {
                     // When macros are signed, and the document has events which call macros, the document content needs to be signed too.
-                    lcl_showMacrosDisabledUnsignedContentError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
+                    m_xData->m_bHasUnsignedContentError = true;
                     return disallowMacroExecution();
                 }
                 else if ( bHasTrustedMacroSignature )
@@ -405,6 +386,11 @@ namespace sfx2
         }
 #endif
         return bHasMacroLib;
+    }
+
+    bool DocumentMacroMode::hasUnsignedContentError() const
+    {
+        return m_xData->m_bHasUnsignedContentError;
     }
 
 

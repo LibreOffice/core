@@ -34,7 +34,6 @@ class ErrCode;
 #define ERRCODE_SFX_CANTGETPASSWD           ErrCode(ErrCodeArea::Sfx, ErrCodeClass::Read, 42)
 #define ERRCODE_SFX_NOMOREDOCUMENTSALLOWED  ErrCode(WarningFlag::Yes, ErrCodeArea::Sfx, ErrCodeClass::NONE, 44)
 #define ERRCODE_SFX_CANTCREATEBACKUP        ErrCode(ErrCodeArea::Sfx, ErrCodeClass::Create, 50)
-#define ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_CONTENT_UNSIGNED ErrCode(WarningFlag::Yes, ErrCodeArea::Sfx, ErrCodeClass::NONE, 53)
 #define ERRCODE_SFX_SHARED_NOPASSWORDCHANGE ErrCode(WarningFlag::Yes, ErrCodeArea::Sfx, ErrCodeClass::NONE, 54)
 #define ERRCODE_SFX_INCOMPLETE_ENCRYPTION   ErrCode(WarningFlag::Yes, ErrCodeArea::Sfx, ErrCodeClass::NONE, 55)
 #define ERRCODE_SFX_FORMAT_ROWCOL           ErrCode(ErrCodeArea::Sfx, ErrCodeClass::NONE, 57)
