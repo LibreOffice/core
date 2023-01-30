@@ -21,7 +21,6 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/sequence.hxx>
@@ -42,12 +41,13 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <deque>
+#include <mutex>
 #include <algorithm>
 #include <utility>
 
@@ -85,9 +85,9 @@ class ImplEventAttacherManager
 {
     friend class AttacherAllListener_Impl;
     std::deque< AttacherIndex_Impl >  aIndex;
-    Mutex aLock;
+    std::mutex m_aMutex;
     // Container for the ScriptListener
-    OInterfaceContainerHelper3<XScriptListener> aScriptListeners;
+    OInterfaceContainerHelper4<XScriptListener> aScriptListeners;
     // Instance of EventAttacher
     Reference< XEventAttacher2 >        xAttacher;
     Reference< XComponentContext >      mxContext;
@@ -117,6 +117,12 @@ public:
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) override;
 
 private:
+    void registerScriptEvent(std::unique_lock<std::mutex>&, sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent);
+    void registerScriptEvents(std::unique_lock<std::mutex>&, sal_Int32 Index, const Sequence< ScriptEventDescriptor >& ScriptEvents);
+    void attach(std::unique_lock<std::mutex>&, sal_Int32 Index, const Reference< XInterface >& Object, const Any& Helper);
+    void detach(std::unique_lock<std::mutex>&, sal_Int32 nIndex, const Reference< XInterface >& xObject);
+    void insertEntry(std::unique_lock<std::mutex>&, sal_Int32 Index);
+
     /// @throws Exception
     Reference< XIdlReflection > getReflection();
 
@@ -180,7 +186,8 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     aScriptEvent.ScriptCode     = aScriptCode;
 
     // Iterate over all listeners and pass events.
-    mxManager->aScriptListeners.notifyEach( &XScriptListener::firing, aScriptEvent );
+    std::unique_lock l(mxManager->m_aMutex);
+    mxManager->aScriptListeners.notifyEach( l, &XScriptListener::firing, aScriptEvent );
 }
 
 
@@ -241,7 +248,8 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
     Any aRet;
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper3 aIt( mxManager->aScriptListeners );
+    std::unique_lock l(mxManager->m_aMutex);
+    OInterfaceIteratorHelper4 aIt( l, mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
         aRet = aIt.next()->approveFiring( aScriptEvent );
@@ -339,8 +347,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 
 ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                                                     const Reference< XComponentContext >& rContext )
-    : aScriptListeners( aLock )
-    , mxContext( rContext )
+    : mxContext( rContext )
     , nVersion(0)
 {
     if ( rContext.is() )
@@ -363,7 +370,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
 
 Reference< XIdlReflection > ImplEventAttacherManager::getReflection()
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     // Do we already have a service? If not, create one.
     if( !mxCoreReflection.is() )
     {
@@ -389,8 +396,17 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     const ScriptEventDescriptor& ScriptEvent
 )
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
+    registerScriptEvent(l, nIndex, ScriptEvent);
+}
 
+void ImplEventAttacherManager::registerScriptEvent
+(
+    std::unique_lock<std::mutex>&,
+    sal_Int32 nIndex,
+    const ScriptEventDescriptor& ScriptEvent
+)
+{
     // Examine the index and apply the array
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
@@ -424,20 +440,29 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     const Sequence< ScriptEventDescriptor >& ScriptEvents
 )
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
+    registerScriptEvents(l, nIndex, ScriptEvents);
+}
 
+void ImplEventAttacherManager::registerScriptEvents
+(
+    std::unique_lock<std::mutex>& l,
+    sal_Int32 nIndex,
+    const Sequence< ScriptEventDescriptor >& ScriptEvents
+)
+{
     // Examine the index and apply the array
     std::deque< AttachedObject_Impl > aList = implCheckIndex( nIndex )->aObjList;
     for( const auto& rObj : aList )
-        detach( nIndex, rObj.xTarget );
+        detach( l, nIndex, rObj.xTarget );
 
     const ScriptEventDescriptor* pArray = ScriptEvents.getConstArray();
     sal_Int32 nLen = ScriptEvents.getLength();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
-        registerScriptEvent( nIndex, pArray[ i ] );
+        registerScriptEvent( l, nIndex, pArray[ i ] );
 
     for( const auto& rObj : aList )
-        attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( l, nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
@@ -449,13 +474,13 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     const OUString& ToRemoveListenerParam
 )
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
 
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        detach( nIndex, rObj.xTarget );
+        detach( l, nIndex, rObj.xTarget );
 
     std::u16string_view aLstType = ListenerType;
     size_t nLastDot = aLstType.rfind('.');
@@ -472,30 +497,35 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
         aIt->aEventList.erase( aEvtIt );
 
     for( const auto& rObj : aList )
-        attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( l, nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
 void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        detach( nIndex, rObj.xTarget );
+        detach( l, nIndex, rObj.xTarget );
     aIt->aEventList.clear();
     for( const auto& rObj : aList )
-        attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( l, nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
 void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     if( nIndex < 0 )
         throw IllegalArgumentException("negative index", static_cast<cppu::OWeakObject*>(this), 1);
 
+    insertEntry(l, nIndex);
+}
+
+void ImplEventAttacherManager::insertEntry(std::unique_lock<std::mutex>&, sal_Int32 nIndex)
+{
     if ( o3tl::make_unsigned(nIndex) >= aIndex.size() )
         aIndex.resize(nIndex+1);
 
@@ -503,15 +533,14 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     aIndex.insert( aIndex.begin() + nIndex, aTmp );
 }
 
-
 void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        detach( nIndex, rObj.xTarget );
+        detach( l, nIndex, rObj.xTarget );
 
     aIndex.erase( aIt );
 }
@@ -519,7 +548,7 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
 
 Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEvents(sal_Int32 nIndex)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
     return comphelper::containerToSequence(aIt->aEventList);
 }
@@ -527,17 +556,21 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 
 void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any & Helper)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     if( nIndex < 0 || !xObject.is() )
         throw IllegalArgumentException("negative index, or null object", static_cast<cppu::OWeakObject*>(this), -1);
+    attach(l, nIndex, xObject, Helper);
+}
 
+void ImplEventAttacherManager::attach(std::unique_lock<std::mutex>& l, sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any & Helper)
+{
     if( o3tl::make_unsigned(nIndex) >= aIndex.size() )
     {
         // read older files
         if( nVersion != 1 )
             throw IllegalArgumentException();
-        insertEntry( nIndex );
-        attach( nIndex, xObject, Helper );
+        insertEntry( l, nIndex );
+        attach( l, nIndex, xObject, Helper );
         return;
     }
 
@@ -583,11 +616,15 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 
 void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     //return;
     if( nIndex < 0 || o3tl::make_unsigned(nIndex) >= aIndex.size() || !xObject.is() )
         throw IllegalArgumentException("bad index or null object", static_cast<cppu::OWeakObject*>(this), 1);
+    detach(l, nIndex, xObject);
+}
 
+void ImplEventAttacherManager::detach(std::unique_lock<std::mutex>&, sal_Int32 nIndex, const Reference< XInterface >& xObject)
+{
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
     auto aObjIt = std::find_if(aCurrentPosition->aObjList.begin(), aCurrentPosition->aObjList.end(),
         [&xObject](const AttachedObject_Impl& rObj) { return rObj.xTarget == xObject; });
@@ -615,14 +652,14 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 
 void SAL_CALL ImplEventAttacherManager::addScriptListener(const Reference< XScriptListener >& aListener)
 {
-    Guard< Mutex > aGuard( aLock );
-    aScriptListeners.addInterface( aListener );
+    std::unique_lock l(m_aMutex);
+    aScriptListeners.addInterface( l, aListener );
 }
 
 void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XScriptListener >& aListener)
 {
-    Guard< Mutex > aGuard( aLock );
-    aScriptListeners.removeInterface( aListener );
+    std::unique_lock l(m_aMutex);
+    aScriptListeners.removeInterface( l, aListener );
 }
 
 
@@ -634,7 +671,7 @@ OUString SAL_CALL ImplEventAttacherManager::getServiceName()
 
 void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStream >& OutStream)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     // Don't run without XMarkableStream
     Reference< XMarkableStream > xMarkStream( OutStream, UNO_QUERY );
     if( !xMarkStream.is() )
@@ -673,7 +710,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
 
 void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream >& InStream)
 {
-    Guard< Mutex > aGuard( aLock );
+    std::unique_lock l(m_aMutex);
     // Don't run without XMarkableStream
     Reference< XMarkableStream > xMarkStream( InStream, UNO_QUERY );
     if( !xMarkStream.is() )
@@ -694,7 +731,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 
     for( sal_Int32 i = 0 ; i < nItemCount ; i++ )
     {
-        insertEntry( i );
+        insertEntry( l, i );
         // Read the length of the sequence
         sal_Int32 nSeqLen = InStream->readLong();
 
@@ -710,7 +747,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
             rDesc.ScriptType = InStream->readUTF();
             rDesc.ScriptCode = InStream->readUTF();
         }
-        registerScriptEvents( i, aSEDSeq );
+        registerScriptEvents( l, i, aSEDSeq );
     }
 
     // Have we read the specified length?
