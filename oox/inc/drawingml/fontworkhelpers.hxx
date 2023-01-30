@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <svx/msdffdef.hxx>
 
 #include "customshapeproperties.hxx"
 
@@ -40,5 +41,10 @@ void putCustomShapeIntoTextPathMode(
     const css::uno::Reference<css::drawing::XShape>& xShape,
     const oox::drawingml::CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
     const OUString& sMSPresetType, const bool bFromWordArt);
+
+/** Returns the markup for the v:shapetype element for export of a Fontwork shape to VML.
+    If eShapeType is not a Fontwork shape type or the special type is not yet implemented,
+    it returns an empty string.*/
+OString GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

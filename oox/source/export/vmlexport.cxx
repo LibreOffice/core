@@ -42,6 +42,7 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/string_view.hxx>
+#include <drawingml/fontworkhelpers.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -1305,10 +1306,27 @@ sal_Int32 VMLExport::StartShape()
             break;
         }
         default:
-            if ( m_nShapeType < ESCHER_ShpInst_COUNT )
+            nShapeElement = XML_shape;
+            if (m_pSdrObject->IsTextPath())
             {
-                nShapeElement = XML_shape;
-
+                bReferToShapeType = m_aShapeTypeWritten[m_nShapeType];
+                if (!bReferToShapeType)
+                {
+                    // Does a predefined markup exist at all?
+                    OString sMarkup = FontworkHelpers::GetVMLFontworkShapetypeMarkup(
+                        static_cast<MSO_SPT>(m_nShapeType));
+                    if (!sMarkup.isEmpty())
+                    {
+                        m_pSerializer->write(sMarkup);
+                        m_aShapeTypeWritten[m_nShapeType] = true;
+                        bReferToShapeType = true;
+                    }
+                }
+                // ToDo: The case bReferToShapeType==false happens for 'non-primitive' shapes for
+                // example. We need to get the geometry from CustomShapeGeometry in these cases.
+            }
+            else if ( m_nShapeType < ESCHER_ShpInst_COUNT )
+            {
                 // a predefined shape?
                 static std::vector<OString> aShapeTypes = lcl_getShapeTypes();
                 SAL_WARN_IF(m_nShapeType >= aShapeTypes.size(), "oox.vml", "Unknown shape type!");

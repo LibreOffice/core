@@ -832,6 +832,57 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
     sStyle = getXPath(pXmlDoc, "(//v:shape)[5]/v:textpath", "style");
     CPPUNIT_ASSERT(sStyle.indexOf("v-same-letter-heights:t") > -1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkSlantUp)
+{
+    // The document has a Fontwork shape type 'textSlantUp' (172). When exporting to docx, Word does
+    // not recognize its markup as preset WordArt, because the used markup differs from what Word
+    // expects for this type of shape. As a result Word saves the shape as having custom geometry
+    // and such is not understand by LibreOffice.
+    loadFromURL(u"tdf153296_VML_export_SlantUp.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup. I could identify the following two problems to hinder Word from
+    // accepting the markup. There might exist more problems.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Make sure a <v:path> element exists and has an o:connecttype attribute
+    assertXPath(pXmlDoc, "//v:shapetype/v:path", 1);
+    assertXPath(pXmlDoc, "//v:shapetype/v:path[@o:connecttype]", 1);
+
+    // Make sure the handle position is written without reference to a formula
+    OUString sPosition = getXPath(pXmlDoc, "//v:h", "position");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPosition.indexOf("@"));
+    CPPUNIT_ASSERT_EQUAL(OUString("topLeft,#0"), sPosition);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
+{
+    // The document has a Fontwork shape type 'textArchUp' (172). When exporting to docx, the shape
+    // was not exported as VML Fontwork but as a rectangle.
+    loadFromURL(u"tdf153296_VML_export_ArchUpCurve.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Make sure there is no <v:rect> element
+    assertXPath(pXmlDoc, "//v:rect", 0);
+    // ..., but a <v:shapetype> element with <v:textpath> subelement
+    assertXPath(pXmlDoc, "//v:shapetype/v:textpath", 1);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
