@@ -38,6 +38,7 @@ skia_patches := \
     constexpr-template.patch.0 \
     tdf147342.patch.0 \
     redefinition-of-op.patch.0 \
+    0001-Added-missing-include-cstdio.patch \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
