@@ -1322,7 +1322,13 @@ void SalInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewPare
     assert(!pNewParent || pNewVclParent);
     vcl::Window* pVclWindow = pVclWidget->getWidget();
     if (pNewVclParent)
-        pVclWindow->SetParent(pNewVclParent->getWidget());
+    {
+        vcl::Window* pNew = pNewVclParent->getWidget();
+        if (!pNew->isDisposed())
+            pVclWindow->SetParent(pNewVclParent->getWidget());
+        else
+            SAL_WARN("vcl", "ignoring move because new parent is already disposed");
+    }
     else
     {
         pVclWindow->Hide();
