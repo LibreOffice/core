@@ -17,6 +17,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
@@ -199,6 +200,28 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
     // - Actual  : 0
     // i.e. the color mode was STANDARD, not WATERMARK.
     CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_WATERMARK, eMode);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
+{
+    // The document contains a shape, that will be exported as VML shape to docx. Error was that the
+    // attribute trim was not written out and thus import had treated it as the default 'false' and
+    // had reduced the shape height.
+    loadFromURL(u"tdf153260_VML_trim_export.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+    saveAndReload("Office Open XML Text");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+                                           uno::UNO_QUERY);
+
+    // Make sure the shape height is not changed.
+    // Without the fix the test would have failed with expected 4999 actual 1732.
+    awt::Size aSize = xShape->getSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4999, aSize.Height, 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
