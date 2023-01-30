@@ -28,6 +28,8 @@ class SwNodes;
 class SwDoc;
 class SwRootFrame;
 
+/// SwTextAttr subclass for footnotes and endnotes. If it's an endnote is decided by the owned
+/// SwFormatFootnote's m_bEndNote.
 class SW_DLLPUBLIC SwTextFootnote final : public SwTextAttr
 {
     std::optional<SwNodeIndex> m_oStartNode;
