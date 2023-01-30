@@ -459,8 +459,8 @@ public:
     void GetNatNumXml(
             css::i18n::NativeNumberXmlAttributes2& rAttr,
             sal_uInt16 nNumFor ) const;
-    /** Return empty string if no NatNum modifier or unvalid nNumFor
-        otherwhise return "[NatNum1]" or "[NatNum12 ...]" */
+    /** Return empty string if no NatNum modifier or invalid nNumFor
+        otherwise return "[NatNum1]" or "[NatNum12 ...]" */
     OUString GetNatNumModifierString( sal_uInt16 nNumFor = 0 ) const;
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
