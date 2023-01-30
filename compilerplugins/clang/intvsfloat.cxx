@@ -10,6 +10,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "llvm/ADT/Optional.h"
 #include <iostream>
 
 /**

@@ -25,6 +25,7 @@
 #include "check.hxx"
 
 #include "clang/AST/ParentMapContext.h"
+#include "llvm/ADT/Optional.h"
 
 /**
   Finds variables that are effectively write-only.

@@ -8,6 +8,7 @@
  */
 
 #include "plugin.hxx"
+#include "llvm/ADT/Optional.h"
 #include <cassert>
 #include <string>
 #include <iostream>

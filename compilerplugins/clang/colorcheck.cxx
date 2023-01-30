@@ -15,6 +15,8 @@
 #include <fstream>
 #include <set>
 
+#include "llvm/ADT/Optional.h"
+
 #include "config_clang.h"
 
 #include "check.hxx"

@@ -13,6 +13,8 @@
 
 #include "config_clang.h"
 
+#include "llvm/ADT/Optional.h"
+
 #include <string>
 #include <set>
 

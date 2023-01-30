@@ -13,6 +13,8 @@
 #include <cassert>
 #include <map>
 
+#include "llvm/ADT/Optional.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
