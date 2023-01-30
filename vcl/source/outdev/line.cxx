@@ -224,6 +224,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
+    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor());
@@ -231,7 +232,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
     const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
     const bool bLineWidthUsed(rInfo.GetWidth() > 1);
 
-    if(bDashUsed && aLinePolyPolygon.count())
+    if (!bFuzzing && bDashUsed && aLinePolyPolygon.count())
     {
         ::std::vector< double > fDotDashArray = rInfo.GetDotDashArray();
         const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
@@ -340,7 +341,6 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if(!bDone)
         {
-            static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
             if (bFuzzing)
             {
                 const basegfx::B2DRange aRange(basegfx::utils::getRange(aFillPolyPolygon));
