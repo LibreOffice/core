@@ -60,6 +60,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="MacrosDisabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown macros were blocked due to Macro Security settings.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
