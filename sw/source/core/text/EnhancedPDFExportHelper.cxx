@@ -354,7 +354,7 @@ static auto GetReopenTagFromFrame(SwFrame const& rFrame) -> sal_Int32
     return -1;
 }
 
-sal_Int32 SwDrawContact::GetPDFAnchorStructureElementId(SdrObject const& rObj, OutputDevice const&)
+sal_Int32 SwDrawContact::GetPDFAnchorStructureElementId(SdrObject const& rObj)
 {
     SwFrame const*const pAnchorFrame(GetAnchoredObj(&rObj)->GetAnchorFrame());
     return pAnchorFrame ? GetReopenTagFromFrame(*pAnchorFrame) : -1;

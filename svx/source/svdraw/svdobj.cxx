@@ -136,7 +136,7 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 {
 }
 
-sal_Int32 SdrObjUserCall::GetPDFAnchorStructureElementId(SdrObject const&, OutputDevice const&)
+sal_Int32 SdrObjUserCall::GetPDFAnchorStructureElementId(SdrObject const&)
 {
     return -1;
 }

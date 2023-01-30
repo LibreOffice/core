@@ -70,7 +70,7 @@ include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
 include/editeng/editeng.hxx:494
     void EditEngine::ParagraphConnected(int,int,)
     01
-include/filter/msfilter/msdffimp.hxx:545
+include/filter/msfilter/msdffimp.hxx:547
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00
 include/oox/dump/dumperbase.hxx:473
@@ -112,6 +112,9 @@ include/svx/IAccessibleParent.hxx:81
 include/svx/selectioncontroller.hxx:48
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
     10
+include/svx/svdobj.hxx:133
+    int SdrObjUserCall::GetPDFAnchorStructureElementId(const class SdrObject &,const class OutputDevice &,)
+    10
 include/vcl/accessibletable.hxx:90
     class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
     001
@@ -139,9 +142,15 @@ sc/inc/filter.hxx:83
 sc/inc/formulagroup.hxx:144
     class boost::intrusive_ptr<class ScMatrix> sc::FormulaGroupInterpreter::inverseMatrix(const class ScMatrix &,)
     0
-sc/source/core/opencl/formulagroupcl.cxx:1075
-    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
+sc/source/core/opencl/opbase.hxx:447
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
     0
+sd/source/console/PresenterScrollBar.hxx:177
+    double sdext::presenter::PresenterScrollBar::GetDragDistance(const int,const int,)const
+    01
+sd/source/console/PresenterScrollBar.hxx:179
+    double sdext::presenter::PresenterScrollBar::GetMinor(const double,const double,)const
+    10
 sdext/source/pdfimport/inc/contentsink.hxx:151
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10
@@ -169,18 +178,15 @@ sdext/source/pdfimport/inc/treevisiting.hxx:52
 sdext/source/pdfimport/inc/treevisiting.hxx:53
     void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
-sdext/source/presenter/PresenterScrollBar.hxx:177
-    double sdext::presenter::PresenterScrollBar::GetDragDistance(const int,const int,)const
-    01
-sdext/source/presenter/PresenterScrollBar.hxx:179
-    double sdext::presenter::PresenterScrollBar::GetMinor(const double,const double,)const
-    10
 starmath/source/wordexportbase.hxx:28
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10
 sw/inc/swcrsr.hxx:163
     _Bool SwCursor::LeftRight(_Bool,unsigned short,enum SwCursorSkipMode,_Bool,_Bool,_Bool,const class SwRootFrame *,_Bool,)
     11000000
+sw/qa/inc/swmodeltestbase.hxx:158
+    void SwModelTestBase::postLoad(const char *,)
+    0
 sw/source/core/access/acccontext.hxx:349
     _Bool SwAccessibleContext::SetSelectedState(_Bool,)
     0
@@ -193,10 +199,25 @@ sw/source/filter/ww8/wrtww8.hxx:799
 sw/source/filter/ww8/wrtww8.hxx:869
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
+unoxml/inc/node.hxx:137
+    _Bool DOM::CNode::IsChildTypeAllowed(const enum com::sun::star::xml::dom::NodeType,const enum com::sun::star::xml::dom::NodeType *const,)
+    00
 vcl/inc/font/fontsubstitution.hxx:53
     _Bool vcl::font::GlyphFallbackFontSubstitution::FindFontSubstitute(class vcl::font::FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
     101
-vcl/inc/salbmp.hxx:79
+vcl/inc/font/LogicalFontInstance.hxx:126
+    void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
+    0
+vcl/inc/font/PhysicalFontFace.hxx:198
+    const class std::vector<struct hb_variation_t> & vcl::font::PhysicalFontFace::GetVariations(const class LogicalFontInstance &,)const
+    0
+vcl/inc/salbmp.hxx:71
+    _Bool SalBitmap::Create(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
+    000
+vcl/inc/salbmp.hxx:80
+    _Bool SalBitmap::GetSystemData(struct BitmapSystemData &,)
+    0
+vcl/inc/salbmp.hxx:86
     _Bool SalBitmap::Replace(const class Color &,const class Color &,unsigned char,)
     000
 vcl/inc/salframe.hxx:145

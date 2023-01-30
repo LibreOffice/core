@@ -426,8 +426,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                     sal_Int32 nAnchorId(-1);
                     if (auto const pUserCall = pSdrObj->GetUserCall())
                     {
-                        nAnchorId = pUserCall->GetPDFAnchorStructureElementId(
-                            *pSdrObj, *GetObjectContact().TryToGetOutputDevice());
+                        nAnchorId = pUserCall->GetPDFAnchorStructureElementId(*pSdrObj);
                     }
 
                     drawinglayer::primitive2d::Primitive2DReference xReference(
