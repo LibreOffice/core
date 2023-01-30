@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <mutex>
 #include <utility>
 #include <vector>
 #include <limits>
@@ -356,8 +357,8 @@ private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
 };
 
-static bool bElementsMaxFetched;
-static size_t nElementsMax;
+static std::once_flag bElementsMaxFetched;
+static std::atomic<size_t> nElementsMax;
 
 /** The maximum number of elements a matrix or the pool may have at runtime.
 
@@ -3010,30 +3011,30 @@ bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
     if (!nC || !nR)
         return true;
 
-    if (!bElementsMaxFetched)
-    {
-        const char* pEnv = std::getenv("SC_MAX_MATRIX_ELEMENTS");
-        if (pEnv)
+    std::call_once(bElementsMaxFetched,
+        []()
         {
-            // Environment specifies the overall elements pool.
-            nElementsMax = std::atoi(pEnv);
-        }
-        else
-        {
-            // GetElementsMax() uses an (~arbitrary) elements limit.
-            // The actual allocation depends on the types of individual matrix
-            // elements and is averaged for type double.
+            const char* pEnv = std::getenv("SC_MAX_MATRIX_ELEMENTS");
+            if (pEnv)
+            {
+                // Environment specifies the overall elements pool.
+                nElementsMax = std::atoi(pEnv);
+            }
+            else
+            {
+                // GetElementsMax() uses an (~arbitrary) elements limit.
+                // The actual allocation depends on the types of individual matrix
+                // elements and is averaged for type double.
 #if SAL_TYPES_SIZEOFPOINTER < 8
-            // Assume 1GB memory could be consumed by matrices.
-            constexpr size_t nMemMax = 0x40000000;
+                // Assume 1GB memory could be consumed by matrices.
+                constexpr size_t nMemMax = 0x40000000;
 #else
-            // Assume 6GB memory could be consumed by matrices.
-            constexpr size_t nMemMax = 0x180000000;
+                // Assume 6GB memory could be consumed by matrices.
+                constexpr size_t nMemMax = 0x180000000;
 #endif
-            nElementsMax = GetElementsMax( nMemMax);
-        }
-        bElementsMaxFetched = true;
-    }
+                nElementsMax = GetElementsMax( nMemMax);
+            }
+        });
 
     if (nC > (nElementsMax / nR))
     {
