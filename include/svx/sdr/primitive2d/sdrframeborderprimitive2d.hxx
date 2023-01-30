@@ -90,7 +90,7 @@ namespace drawinglayer::primitive2d
         class SVXCORE_DLLPUBLIC SdrFrameBorderPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
-            std::shared_ptr<SdrFrameBorderDataVector>   maFrameBorders;
+            SdrFrameBorderDataVector                    maFrameBorders;
             double                                      mfMinimalNonZeroBorderWidth;
             double                                      mfMinimalNonZeroBorderWidthUsedForDecompose;
             bool                                        mbForceToSingleDiscreteUnit;
@@ -102,7 +102,7 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrFrameBorderPrimitive2D(
-                std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
+                SdrFrameBorderDataVector&& rFrameBorders,
                 bool bForceToSingleDiscreteUnit);
 
             // compare operator
@@ -114,7 +114,7 @@ namespace drawinglayer::primitive2d
                 const geometry::ViewInformation2D& rViewInformation) const override;
 
             // data access
-            const std::shared_ptr<SdrFrameBorderDataVector>& getFrameBorders() const { return maFrameBorders; }
+            const SdrFrameBorderDataVector& getFrameBorders() const { return maFrameBorders; }
             bool doForceToSingleDiscreteUnit() const { return mbForceToSingleDiscreteUnit; }
 
             // provide unique ID

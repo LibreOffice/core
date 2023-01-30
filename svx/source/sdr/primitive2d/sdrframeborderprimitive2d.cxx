@@ -767,7 +767,7 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer& rContainer,
             const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            if(!getFrameBorders())
+            if(getFrameBorders().empty())
             {
                 return;
             }
@@ -783,7 +783,7 @@ namespace drawinglayer::primitive2d
             {
                 // decompose all buffered SdrFrameBorderData entries and try to merge them
                 // to reduce existing number of BorderLinePrimitive2D(s)
-                for(const auto& rCandidate : *getFrameBorders())
+                for(const auto& rCandidate : getFrameBorders())
                 {
                     // get decomposition on one SdrFrameBorderData entry
                     Primitive2DContainer aPartial;
@@ -847,17 +847,17 @@ namespace drawinglayer::primitive2d
         }
 
         SdrFrameBorderPrimitive2D::SdrFrameBorderPrimitive2D(
-            std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
+            SdrFrameBorderDataVector&& rFrameBorders,
             bool bForceToSingleDiscreteUnit)
         :   maFrameBorders(std::move(rFrameBorders)),
             mfMinimalNonZeroBorderWidth(0.0),
             mfMinimalNonZeroBorderWidthUsedForDecompose(0.0),
             mbForceToSingleDiscreteUnit(bForceToSingleDiscreteUnit)
         {
-            if(getFrameBorders() && doForceToSingleDiscreteUnit())
+            if(!getFrameBorders().empty() && doForceToSingleDiscreteUnit())
             {
                 // detect used minimal non-zero partial border width
-                for(const auto& rCandidate : *getFrameBorders())
+                for(const auto& rCandidate : getFrameBorders())
                 {
                     mfMinimalNonZeroBorderWidth = getMinimalNonZeroValue(
                         mfMinimalNonZeroBorderWidth,
@@ -872,9 +872,7 @@ namespace drawinglayer::primitive2d
             {
                 const SdrFrameBorderPrimitive2D& rCompare = static_cast<const SdrFrameBorderPrimitive2D&>(rPrimitive);
 
-                return (getFrameBorders() == rCompare.getFrameBorders()
-                    || (getFrameBorders() && rCompare.getFrameBorders()
-                        && *getFrameBorders() == *rCompare.getFrameBorders()))
+                return getFrameBorders() == rCompare.getFrameBorders()
                     && doForceToSingleDiscreteUnit() == rCompare.doForceToSingleDiscreteUnit();
             }
 

@@ -1275,8 +1275,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     const sal_Int32 nEndCol(nLastCol < GetColCount() - 1 ? nLastCol + 1 : nLastCol);
 
     // prepare SdrFrameBorderDataVector
-    std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
-        std::make_shared<drawinglayer::primitive2d::SdrFrameBorderDataVector>());
+    drawinglayer::primitive2d::SdrFrameBorderDataVector aData;
 
     // remember for which merged cells crossed lines were already created. To
     // do so, hold the sal_Int32 cell index in a set for fast check
@@ -1328,7 +1327,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rTop.IsUsed())
                     {
-                        HelperCreateHorizontalEntry(*this, rTop, nCol, nRow, aOrigin, aX, aY, *aData, true, pForceColor);
+                        HelperCreateHorizontalEntry(*this, rTop, nCol, nRow, aOrigin, aX, aY, aData, true, pForceColor);
                     }
                 }
 
@@ -1340,7 +1339,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rBottom.IsUsed())
                     {
-                        HelperCreateHorizontalEntry(*this, rBottom, nCol, nRow + 1, aOrigin, aX, aY, *aData, false, pForceColor);
+                        HelperCreateHorizontalEntry(*this, rBottom, nCol, nRow + 1, aOrigin, aX, aY, aData, false, pForceColor);
                     }
                 }
 
@@ -1353,7 +1352,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rLeft.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData, true, pForceColor);
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, aData, true, pForceColor);
                     }
                 }
 
@@ -1365,7 +1364,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rRight.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rRight, nCol + 1, nRow, aOrigin, aX, aY, *aData, false, pForceColor);
+                        HelperCreateVerticalEntry(*this, rRight, nCol + 1, nRow, aOrigin, aX, aY, aData, false, pForceColor);
                     }
                 }
 
@@ -1441,12 +1440,12 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                                 }
 
                                 // create top-left to bottom-right geometry
-                                HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY,
+                                HelperCreateTLBREntry(*this, rTLBR, aData, aOrigin, aX, aY,
                                     nColLeft, nRowTop, nColRight, nRowBottom, pForceColor,
                                     bNeedToClip ? &aClipRange : nullptr);
 
                                 // create bottom-left to top-right geometry
-                                HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY,
+                                HelperCreateBLTREntry(*this, rBLTR, aData, aOrigin, aX, aY,
                                     nColLeft, nRowTop, nColRight, nRowBottom, pForceColor,
                                     bNeedToClip ? &aClipRange : nullptr);
                             }
@@ -1465,10 +1464,10 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                         if(rTLBR.IsUsed() || rBLTR.IsUsed())
                         {
-                            HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY,
+                            HelperCreateTLBREntry(*this, rTLBR, aData, aOrigin, aX, aY,
                                 nCol, nRow, nCol, nRow, pForceColor, nullptr);
 
-                            HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY,
+                            HelperCreateBLTREntry(*this, rBLTR, aData, aOrigin, aX, aY,
                                 nCol, nRow, nCol, nRow, pForceColor, nullptr);
                         }
                     }
@@ -1485,7 +1484,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if (rLeft.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData, true, pForceColor);
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, aData, true, pForceColor);
                     }
                 }
             }
@@ -1500,12 +1499,12 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     // SdrFrameBorderDataVector is used
     drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
-    if(!aData->empty())
+    if(!aData.empty())
     {
         aSequence.append(
             drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
-                    aData,
+                    std::move(aData),
                     true)));    // force visualization to minimal one discrete unit (pixel)
     }
 

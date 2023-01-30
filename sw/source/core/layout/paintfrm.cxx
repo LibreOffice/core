@@ -2468,8 +2468,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
 
     // prepare SdrFrameBorderDataVector
-    std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
-        std::make_shared<drawinglayer::primitive2d::SdrFrameBorderDataVector>());
+    drawinglayer::primitive2d::SdrFrameBorderDataVector aData;
 
     while ( true )
     {
@@ -2611,12 +2610,12 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        aData->emplace_back(
+                        aData.emplace_back(
                             aOrigin,
                             aX,
                             aStyles[0],
                             pTmpColor);
-                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                         rInstance.addSdrConnectStyleData(true, aStyles[1], -aY, true); // aLFromT
                         rInstance.addSdrConnectStyleData(true, aStyles[2], -aX, true); // aLFromL
@@ -2635,12 +2634,12 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        aData->emplace_back(
+                        aData.emplace_back(
                             aOrigin,
                             aX,
                             aStyles[0],
                             pTmpColor);
-                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                         rInstance.addSdrConnectStyleData(true, aStyles[3], -aY, false); // aTFromR
                         rInstance.addSdrConnectStyleData(true, aStyles[2], -aX, true); // aTFromT
@@ -2658,13 +2657,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
     // create instance of SdrFrameBorderPrimitive2D if
     // SdrFrameBorderDataVector is used
-    if(!aData->empty())
+    if(!aData.empty())
     {
         drawinglayer::primitive2d::Primitive2DContainer aSequence;
         aSequence.append(
             drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
-                    aData,
+                    std::move(aData),
                     true)));    // force visualization to minimal one discrete unit (pixel)
         // paint
         mrTabFrame.ProcessPrimitives(aSequence);
@@ -4726,8 +4725,7 @@ namespace drawinglayer::primitive2d
             basegfx::B2DPoint aBottomRight(getB2DHomMatrix() * basegfx::B2DPoint(1.0, 1.0));
 
             // prepare SdrFrameBorderDataVector
-            std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
-                std::make_shared<drawinglayer::primitive2d::SdrFrameBorderDataVector>());
+            drawinglayer::primitive2d::SdrFrameBorderDataVector aData;
 
             if(getStyleTop().IsUsed())
             {
@@ -4771,12 +4769,12 @@ namespace drawinglayer::primitive2d
             {
                 // create BorderPrimitive(s) for top border
                 const basegfx::B2DVector aVector(aTopRight - aTopLeft);
-                aData->emplace_back(
+                aData.emplace_back(
                     aTopLeft,
                     aVector,
                     getStyleTop(),
                     nullptr);
-                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                 if(getStyleLeft().IsUsed())
                 {
@@ -4793,12 +4791,12 @@ namespace drawinglayer::primitive2d
             {
                 // create BorderPrimitive(s) for right border
                 const basegfx::B2DVector aVector(aBottomRight - aTopRight);
-                aData->emplace_back(
+                aData.emplace_back(
                     aTopRight,
                     aVector,
                     getStyleRight(),
                     nullptr);
-                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                 if(getStyleTop().IsUsed())
                 {
@@ -4815,12 +4813,12 @@ namespace drawinglayer::primitive2d
             {
                 // create BorderPrimitive(s) for bottom border
                 const basegfx::B2DVector aVector(aBottomLeft - aBottomRight);
-                aData->emplace_back(
+                aData.emplace_back(
                     aBottomRight,
                     aVector,
                     getStyleBottom(),
                     nullptr);
-                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                 if(getStyleRight().IsUsed())
                 {
@@ -4837,12 +4835,12 @@ namespace drawinglayer::primitive2d
             {
                 // create BorderPrimitive(s) for left border
                 const basegfx::B2DVector aVector(aTopLeft - aBottomLeft);
-                aData->emplace_back(
+                aData.emplace_back(
                     aBottomLeft,
                     aVector,
                     getStyleLeft(),
                     nullptr);
-                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+                drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData.back());
 
                 if(getStyleBottom().IsUsed())
                 {
@@ -4857,12 +4855,12 @@ namespace drawinglayer::primitive2d
 
             // create instance of SdrFrameBorderPrimitive2D if
             // SdrFrameBorderDataVector is used
-            if(!aData->empty())
+            if(!aData.empty())
             {
                 rContainer.append(
                     drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
-                            aData,
+                            std::move(aData),
                             true)));    // force visualization to minimal one discrete unit (pixel)
             }
         }
