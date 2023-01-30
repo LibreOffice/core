@@ -681,22 +681,22 @@ namespace framework
 
     void UndoManagerHelper_Impl::impl_clear()
     {
-        // SYNCHRONIZED --->
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-
-        SfxUndoManager& rUndoManager = getUndoManager();
-        if ( rUndoManager.IsInListAction() )
-            throw UndoContextNotClosedException( OUString(), getXUndoManager() );
-
+        EventObject aEvent;
         {
-            ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
-            SolarMutexGuard aGuard2;
-            rUndoManager.Clear();
-        }
+            SolarMutexGuard aGuard;
+            ::osl::MutexGuard aGuard2( m_aMutex );
 
-        const EventObject aEvent( getXUndoManager() );
-        aGuard.clear();
-        // <--- SYNCHRONIZED
+            SfxUndoManager& rUndoManager = getUndoManager();
+            if ( rUndoManager.IsInListAction() )
+                throw UndoContextNotClosedException( OUString(), getXUndoManager() );
+
+            {
+                ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
+                rUndoManager.Clear();
+            }
+
+            aEvent = EventObject( getXUndoManager() );
+        }
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::allActionsCleared, aEvent );
         impl_notifyModified();
