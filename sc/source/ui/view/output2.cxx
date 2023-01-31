@@ -2228,6 +2228,8 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
     if (rPara.Count())
         rEngine.SetParaAttribs( 0,
                     SfxItemSet( *rPara.GetPool(), rPara.GetRanges() ) );
+
+    rEngine.SetControlWord(rEngine.GetControlWord() & ~EEControlBits::SINGLELINE);
 }
 
 static bool lcl_SafeIsValue( ScRefCellValue& rCell )
@@ -2429,7 +2431,18 @@ bool ScOutputData::DrawEditParam::readCellContent(
         const EditTextObject* pData = maCell.mpEditText;
         if (pData)
         {
-            mpEngine->SetTextCurrentDefaults(*pData);
+            /* TODO. Improve loading cell string text, when importing from file,
+               the cell string is loaded and create the associated EditTextObject,
+               later the attributes are loaded, so no way to ignore line breaks */
+            if (!mbBreak && pData->GetSharedStrings().size() > 1)
+            {
+                mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::SINGLELINE);
+                mpEngine->SetTextCurrentDefaults(maString);
+            }
+            else
+            {
+                mpEngine->SetTextCurrentDefaults(*pData);
+            }
 
             if ( mbBreak && !mbAsianVertical && pData->HasField() )
             {
