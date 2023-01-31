@@ -283,6 +283,7 @@ bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 break;
             }
             [[fallthrough]]; // QPalette::Window
+        case ControlType::Frame:
         case ControlType::Menubar:
         case ControlType::WindowBackground:
             m_image->fill(QApplication::palette().color(QPalette::Window).rgb());
