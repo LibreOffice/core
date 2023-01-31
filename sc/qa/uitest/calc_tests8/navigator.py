@@ -135,18 +135,20 @@ class navigator(UITestCase):
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "0")
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], "0")
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+
             xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             xColumn.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
             xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
-            self.ui_test.wait_until_property_is_updated(xColumn, "Value", "2")
+            xToolkit.processEventsToIdle()
             self.assertEqual(get_state_as_dict(xColumn)['Value'], '2')
 
             xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             xRow.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
             xRow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
-            self.ui_test.wait_until_property_is_updated(xRow, "Value", "2")
+            xToolkit.processEventsToIdle()
             self.assertEqual(get_state_as_dict(xRow)['Value'], '2')
 
             # Without the fix in place, this test would have failed with
