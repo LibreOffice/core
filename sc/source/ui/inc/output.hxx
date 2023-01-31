@@ -140,6 +140,7 @@ private:
         const SfxItemSet*       mpOldPreviewFontSet;
         RowInfo*                mpThisRowInfo;
         const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
+        OUString                maString;
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
