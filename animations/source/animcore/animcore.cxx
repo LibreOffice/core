@@ -61,7 +61,6 @@
 #include <mutex>
 #include <vector>
 #include <algorithm>
-#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::beans { struct NamedValue; }
