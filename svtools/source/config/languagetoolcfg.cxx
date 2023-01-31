@@ -62,9 +62,19 @@ void SvxLanguageToolOptions::setUsername(const OUString& rVal)
     SetModified();
 }
 
-OUString SvxLanguageToolOptions::getLocaleListURL() const { return pImpl->sBaseURL + "/languages"; }
+OUString SvxLanguageToolOptions::getLocaleListURL() const
+{
+    if (pImpl->sBaseURL.isEmpty())
+        return OUString();
+    return pImpl->sBaseURL + "/languages";
+}
 
-OUString SvxLanguageToolOptions::getCheckerURL() const { return pImpl->sBaseURL + "/check"; }
+OUString SvxLanguageToolOptions::getCheckerURL() const
+{
+    if (pImpl->sBaseURL.isEmpty())
+        return OUString();
+    return pImpl->sBaseURL + "/check";
+}
 
 const OUString& SvxLanguageToolOptions::getApiKey() const { return pImpl->sApiKey; }
 
