@@ -678,6 +678,10 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     auto pResolutions = getKey( "Resolution" );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
+    if (pResolutions == nullptr) {
+        SAL_INFO( "vcl.unx.print", "no Resolution in " << m_aFile);
+    }
+    SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
     auto pInputSlots = getKey( "InputSlot" );
     if( pInputSlots )
@@ -832,6 +836,10 @@ PPDParser::PPDParser( OUString aFile ) :
     auto pResolutions = getKey( "Resolution" );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
+    if (pResolutions == nullptr) {
+        SAL_INFO( "vcl.unx.print", "no Resolution in " << m_aFile);
+    }
+    SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
     auto pInputSlots = getKey( "InputSlot" );
     if( pInputSlots )
@@ -1543,7 +1551,6 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
         return;
     }
 
-    SAL_WARN("vcl.unx.print", "no DefaultResolution in " << m_aFile << " assuming 300x300");
     rXRes = 300;
     rYRes = 300;
 }
