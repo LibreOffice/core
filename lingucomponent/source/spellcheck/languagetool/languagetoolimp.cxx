@@ -43,7 +43,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/lingucfg.hxx>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
