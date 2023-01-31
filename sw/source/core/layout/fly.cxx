@@ -75,6 +75,7 @@
 #include <bodyfrm.hxx>
 #include <FrameControlsManager.hxx>
 #include <ndtxt.hxx>
+#include <formatflysplit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1302,6 +1303,21 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
             if ( nRemaining < MINFLY )
                 nRemaining = MINFLY;
+
+            const SwFrame* pAnchor = GetAnchorFrame();
+            const SwFrame* pAnchorUpper = pAnchor ? pAnchor->GetUpper() : nullptr;
+            if (pAnchorUpper && GetFormat()->GetFlySplit().GetValue())
+            {
+                // If the fly is allowed to be split, then limit its size to the upper of the
+                // anchor.
+                SwTwips nDeadline = aRectFnSet.GetPrtBottom(*pAnchorUpper);
+                SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+                SwTwips nBottom = aRectFnSet.GetTop(getFrameArea()) + nRemaining;
+                if (nBottom > nDeadline)
+                {
+                    nRemaining = nDeadline - nTop;
+                }
+            }
 
             {
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);

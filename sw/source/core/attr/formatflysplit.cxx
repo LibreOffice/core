@@ -21,6 +21,15 @@
 
 #include <libxml/xmlwriter.h>
 
+SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
+    : SfxBoolItem(RES_FLY_SPLIT, bSplit)
+{
+    if (getenv("SW_FORCE_FLY_SPLIT"))
+    {
+        SetValue(true);
+    }
+}
+
 SwFormatFlySplit* SwFormatFlySplit::Clone(SfxItemPool*) const
 {
     return new SwFormatFlySplit(*this);
