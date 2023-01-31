@@ -447,67 +447,12 @@ bool ScValidationData::IsDataValidCustom(
 
     if (rTest[0] == '=')
     {
-        std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, *mpDoc, rPos, rTest, true);
-        pFCell->SetLimitString(true);
-
-        bool bColRowName = pFCell->HasColRowName();
-        if (bColRowName)
-        {
-            // ColRowName from RPN-Code?
-            if (pFCell->GetCode()->GetCodeLen() <= 1)
-            {   // ==1: area
-                // ==0: would be an area if...
-                OUString aBraced = "(" + rTest + ")";
-                pFCell.emplace(*mpDoc, rPos, aBraced, true);
-                pFCell->SetLimitString(true);
-            }
-            else
-                bColRowName = false;
-        }
-
-        FormulaError nErrCode = pFCell->GetErrCode();
-        if (nErrCode == FormulaError::NONE || pFCell->IsMatrix())
-        {
-            pFormatter = mpDoc->GetFormatTable();
-            const Color* pColor;
-            if (pFCell->IsMatrix())
-            {
-                rStrResult = pFCell->GetString().getString();
-            }
-            else if (pFCell->IsValue())
-            {
-                nVal = pFCell->GetValue();
-                nFormat = pFormatter->GetStandardFormat(nVal, 0,
-                    pFCell->GetFormatType(), ScGlobal::eLnge);
-                pFormatter->GetOutputString(nVal, nFormat, rStrResult, &pColor);
-                bIsVal = true;
-            }
-            else
-            {
-                nFormat = pFormatter->GetStandardFormat(
-                    pFCell->GetFormatType(), ScGlobal::eLnge);
-                pFormatter->GetOutputString(pFCell->GetString().getString(), nFormat,
-                    rStrResult, &pColor);
-                // Indicate it's a string, so a number string doesn't look numeric.
-                // Escape embedded quotation marks first by doubling them, as
-                // usual. Actually the result can be copy-pasted from the result
-                // box as literal into a formula expression.
-                rStrResult = "\"" + rStrResult.replaceAll("\"", "\"\"") + "\"";
-            }
-
-            ScRange aTestRange;
-            if (bColRowName || (aTestRange.Parse(rTest, *mpDoc) & ScRefFlags::VALID))
-                rStrResult += " ...";
-            // area
-
-            // check whether empty cells are allowed
-            if (rStrResult.isEmpty())
-                return IsIgnoreBlank();
-        }
-        else
-        {
+        if (!isFormulaResultsValidatable(rTest, rPos, pFormatter, rStrResult, nVal, nFormat, bIsVal))
             return false;
-        }
+
+        // check whether empty cells are allowed
+        if (rStrResult.isEmpty())
+            return IsIgnoreBlank();
     }
     else
     {
@@ -602,69 +547,14 @@ bool ScValidationData::IsDataValid(
     OUString rStrResult = "";
     bool bIsVal = false;
 
-    if (rTest[0] == '=')   // formulas do not pass the validity test
+    if (rTest[0] == '=')
     {
-        std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, *mpDoc, rPos, rTest, true);
-        pFCell->SetLimitString(true);
-
-        bool bColRowName = pFCell->HasColRowName();
-        if (bColRowName)
-        {
-            // ColRowName from RPN-Code?
-            if (pFCell->GetCode()->GetCodeLen() <= 1)
-            {   // ==1: area
-                // ==0: would be an area if...
-                OUString aBraced = "(" + rTest + ")";
-                pFCell.emplace(*mpDoc, rPos, aBraced, true);
-                pFCell->SetLimitString(true);
-            }
-            else
-                bColRowName = false;
-        }
-
-        FormulaError nErrCode = pFCell->GetErrCode();
-        if (nErrCode == FormulaError::NONE || pFCell->IsMatrix())
-        {
-            pFormatter = mpDoc->GetFormatTable();
-            const Color* pColor;
-            if (pFCell->IsMatrix())
-            {
-                rStrResult = pFCell->GetString().getString();
-            }
-            else if (pFCell->IsValue())
-            {
-                nVal = pFCell->GetValue();
-                nFormat = pFormatter->GetStandardFormat(nVal, 0,
-                    pFCell->GetFormatType(), ScGlobal::eLnge);
-                pFormatter->GetOutputString(nVal, nFormat, rStrResult, &pColor);
-                bIsVal = true;
-            }
-            else
-            {
-                nFormat = pFormatter->GetStandardFormat(
-                    pFCell->GetFormatType(), ScGlobal::eLnge);
-                pFormatter->GetOutputString(pFCell->GetString().getString(), nFormat,
-                    rStrResult, &pColor);
-                // Indicate it's a string, so a number string doesn't look numeric.
-                // Escape embedded quotation marks first by doubling them, as
-                // usual. Actually the result can be copy-pasted from the result
-                // box as literal into a formula expression.
-                rStrResult = "\"" + rStrResult.replaceAll("\"", "\"\"") + "\"";
-            }
-
-            ScRange aTestRange;
-            if (bColRowName || (aTestRange.Parse(rTest, *mpDoc) & ScRefFlags::VALID))
-                rStrResult += " ...";
-            // area
-
-            // check whether empty cells are allowed
-            if (rStrResult.isEmpty())
-                return IsIgnoreBlank();
-        }
-        else
-        {
+        if (!isFormulaResultsValidatable(rTest, rPos, pFormatter, rStrResult, nVal, nFormat, bIsVal))
             return false;
-        }
+
+        // check whether empty cells are allowed
+        if (rStrResult.isEmpty())
+            return IsIgnoreBlank();
     }
     else
     {
@@ -777,6 +667,70 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     }
 
     return bOk;
+}
+
+bool ScValidationData::isFormulaResultsValidatable(const OUString& rTest, const ScAddress& rPos, SvNumberFormatter* pFormatter,
+    OUString& rStrResult, double& nVal, sal_uInt32& nFormat, bool& bIsVal) const
+{
+    std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, *mpDoc, rPos, rTest, true);
+    pFCell->SetLimitString(true);
+
+    bool bColRowName = pFCell->HasColRowName();
+    if (bColRowName)
+    {
+        // ColRowName from RPN-Code?
+        if (pFCell->GetCode()->GetCodeLen() <= 1)
+        {   // ==1: area
+            // ==0: would be an area if...
+            OUString aBraced = "(" + rTest + ")";
+            pFCell.emplace(*mpDoc, rPos, aBraced, true);
+            pFCell->SetLimitString(true);
+        }
+        else
+            bColRowName = false;
+    }
+
+    FormulaError nErrCode = pFCell->GetErrCode();
+    if (nErrCode == FormulaError::NONE || pFCell->IsMatrix())
+    {
+        pFormatter = mpDoc->GetFormatTable();
+        const Color* pColor;
+        if (pFCell->IsMatrix())
+        {
+            rStrResult = pFCell->GetString().getString();
+        }
+        else if (pFCell->IsValue())
+        {
+            nVal = pFCell->GetValue();
+            nFormat = pFormatter->GetStandardFormat(nVal, 0,
+                pFCell->GetFormatType(), ScGlobal::eLnge);
+            pFormatter->GetOutputString(nVal, nFormat, rStrResult, &pColor);
+            bIsVal = true;
+        }
+        else
+        {
+            nFormat = pFormatter->GetStandardFormat(
+                pFCell->GetFormatType(), ScGlobal::eLnge);
+            pFormatter->GetOutputString(pFCell->GetString().getString(), nFormat,
+                rStrResult, &pColor);
+            // Indicate it's a string, so a number string doesn't look numeric.
+            // Escape embedded quotation marks first by doubling them, as
+            // usual. Actually the result can be copy-pasted from the result
+            // box as literal into a formula expression.
+            rStrResult = "\"" + rStrResult.replaceAll("\"", "\"\"") + "\"";
+        }
+
+        ScRange aTestRange;
+        if (bColRowName || (aTestRange.Parse(rTest, *mpDoc) & ScRefFlags::VALID))
+            rStrResult += " ...";
+        // area
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 namespace {
