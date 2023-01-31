@@ -19,7 +19,6 @@ class edit_file_properties_before_saving(UITestCase):
 
     def change_doc_info_setting(self, enabled):
         with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
-
             xPages = xDialog.getChild("pages")
             xLoadSaveEntry = xPages.getChild('1')
             xLoadSaveEntry.executeAction("EXPAND", tuple())
@@ -38,27 +37,28 @@ class edit_file_properties_before_saving(UITestCase):
 
             with self.ui_test.create_doc_in_start_center("writer"):
 
-                self.change_doc_info_setting("true")
+                try:
+                    self.change_doc_info_setting("true")
 
-                # Save Copy as
-                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="") as xDialog:
-                    xFileName = xDialog.getChild('file_name')
-                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
-                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
-                    xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
+                    # Save Copy as
+                    with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="") as xDialog:
+                        xFileName = xDialog.getChild('file_name')
+                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                        xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-                    xOpen = xDialog.getChild("open")
-                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPropertiesDialog:
-                        xReadOnly = xPropertiesDialog.getChild("readonly")
-                        xReadOnly.executeAction("CLICK", tuple())
-                        self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+                        xOpen = xDialog.getChild("open")
+                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPropertiesDialog:
+                            xReadOnly = xPropertiesDialog.getChild("readonly")
+                            xReadOnly.executeAction("CLICK", tuple())
+                            self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+                finally:
+                    # Put this setting back to false, otherwise it might affect other tests
+                    self.change_doc_info_setting("false")
 
             self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
-
-                self.change_doc_info_setting("false")
-
                 # Without the fix in place, this test would have failed here
                 self.assertTrue(doc2.isReadonly())
 
@@ -69,35 +69,36 @@ class edit_file_properties_before_saving(UITestCase):
 
             with self.ui_test.create_doc_in_start_center("writer"):
 
-                self.change_doc_info_setting("true")
+                try:
+                    self.change_doc_info_setting("true")
 
-                xWriterDoc = self.xUITest.getTopFocusWindow()
-                xWriterEdit = xWriterDoc.getChild("writer_edit")
-                type_text(xWriterEdit, "XXXX")
+                    xWriterDoc = self.xUITest.getTopFocusWindow()
+                    xWriterEdit = xWriterDoc.getChild("writer_edit")
+                    type_text(xWriterEdit, "XXXX")
 
-                # Close document and save
-                with self.ui_test.execute_dialog_through_command('.uno:CloseDoc', close_button="") as xConfirmationDialog:
-                    xSave = xConfirmationDialog.getChild("save")
+                    # Close document and save
+                    with self.ui_test.execute_dialog_through_command('.uno:CloseDoc', close_button="") as xConfirmationDialog:
+                        xSave = xConfirmationDialog.getChild("save")
 
-                    with self.ui_test.execute_dialog_through_action(xSave, "CLICK", close_button="") as xDialog:
-                        xFileName = xDialog.getChild('file_name')
-                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
-                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
-                        xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
+                        with self.ui_test.execute_dialog_through_action(xSave, "CLICK", close_button="") as xDialog:
+                            xFileName = xDialog.getChild('file_name')
+                            xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                            xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                            xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-                        xOpen = xDialog.getChild("open")
-                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPropertiesDialog:
-                            # Without the fix in place, this test would have crashed here
-                            xReadOnly = xPropertiesDialog.getChild("readonly")
-                            xReadOnly.executeAction("CLICK", tuple())
-                            self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+                            xOpen = xDialog.getChild("open")
+                            with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPropertiesDialog:
+                                # Without the fix in place, this test would have crashed here
+                                xReadOnly = xPropertiesDialog.getChild("readonly")
+                                xReadOnly.executeAction("CLICK", tuple())
+                                self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+                finally:
+                    # Put this setting back to false, otherwise it might affect other tests
+                    self.change_doc_info_setting("false")
 
             self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
-
-                self.change_doc_info_setting("false")
-
                 self.assertTrue(doc2.isReadonly())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
