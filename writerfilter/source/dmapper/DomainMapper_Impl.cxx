@@ -89,6 +89,7 @@
 #include <oox/mathml/imexport.hxx>
 #include <utility>
 #include <xmloff/odffields.hxx>
+#include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -449,7 +450,10 @@ DomainMapper_Impl::~DomainMapper_Impl()
     ChainTextFrames();
     // Don't remove last paragraph when pasting, sw expects that empty paragraph.
     if (m_bIsNewDoc)
+    {
         RemoveLastParagraph();
+        GetStyleSheetTable()->ApplyClonedTOCStyles();
+    }
     if (hasTableManager())
     {
         getTableManager().endLevel();
@@ -6107,6 +6111,51 @@ DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
     return xRet;
 }
 
+/**
+ This is a heuristic to find Word's w:styleId value from localised style name.
+ It's not clear how exactly it works, but apparently Word stores into
+ w:styleId some filtered representation of the localised style name.
+ Tragically there are references to the localised style name itself in TOC
+ fields.
+ Hopefully this works and a complete map of >100 built-in style names
+ localised to all languages isn't needed.
+*/
+static auto FilterChars(OUString const& rStyleName) -> OUString
+{
+    OUStringBuffer ret;
+    sal_Int32 index(0);
+    while (index < rStyleName.getLength())
+    {
+        auto const c(rStyleName.iterateCodePoints(&index));
+        if (rtl::isAsciiAlphanumeric(c))
+        {
+            ret.appendUtf32(c);
+        }
+    }
+    return ret.makeStringAndClear();
+}
+
+OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
+{
+    assert(!rTOCStyleName.isEmpty());
+    if (auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(rTOCStyleName))
+    {   // theoretical case: what OOXML says
+        return pStyle->sStyleName;
+    }
+    auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(FilterChars(rTOCStyleName));
+    if (pStyle && m_bIsNewDoc)
+    {   // practical case: Word wrote i18n name to TOC field, but it doesn't
+        // exist in styles.xml; tdf#153083 clone it for best roundtrip
+        SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rTOCStyleName << " from " << pStyle->sStyleName);
+        GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+        return rTOCStyleName;
+    }
+    else
+    {
+        return GetStyleSheetTable()->ConvertStyleName(rTOCStyleName);
+    }
+}
+
 void DomainMapper_Impl::handleToc
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
@@ -6308,8 +6357,8 @@ void DomainMapper_Impl::handleToc
                     uno::Sequence< OUString> aStyles( nLevelCount );
                     for ( auto& rStyle : asNonConstRange(aStyles) )
                     {
-                        // tdf#153082 must map w:styleId to w:name
-                        rStyle = GetStyleSheetTable()->ConvertStyleName(aTOCStyleIter->second, true);
+                        // tdf#153083 must map w:styleId to w:name
+                        rStyle = ConvertTOCStyleName(aTOCStyleIter->second);
                         ++aTOCStyleIter;
                     }
                     xParaStyles->replaceByIndex(nLevel - 1, uno::Any(aStyles));
@@ -6344,7 +6393,7 @@ void DomainMapper_Impl::handleToc
 
         if (!sTemplate.isEmpty())
         {
-            OUString const sConvertedStyleName(GetStyleSheetTable()->ConvertStyleName(sTemplate, true));
+            OUString const sConvertedStyleName(ConvertTOCStyleName(sTemplate));
             xTOC->setPropertyValue("CreateFromParagraphStyle", uno::Any(sConvertedStyleName));
         }
 

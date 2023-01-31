@@ -725,8 +725,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_semicolon, "custom-styles-TOC-semicolon.d
     xParaStyles->getByIndex(1) >>= styles;
     CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{}, styles);
     xParaStyles->getByIndex(2) >>= styles;
-    // the first one is built-in Word style that was localised DE "Intensives Zitat" in the file
-    CPPUNIT_ASSERT_EQUAL((uno::Sequence<OUString>{"Intense Quote", "Custom1", "_MyStyle0"}), styles);
+    // the first one is built-in Word style "Intense Quote" that was localised DE "Intensives Zitat" in the file
+    CPPUNIT_ASSERT_EQUAL((uno::Sequence<OUString>{"Intensives Zitat", "Custom1", "_MyStyle0"}), styles);
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
     CPPUNIT_ASSERT(tocContent.startsWith("Table of Contents"));
@@ -749,8 +749,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
     xParaStyles->getByIndex(1) >>= styles;
     CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"Custom1"}, styles);
     xParaStyles->getByIndex(2) >>= styles;
-    // the first one is built-in Word style that was localised DE "Intensives Zitat" in the file
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"Intense Quote"}, styles);
+    // the first one is built-in Word style "Intense Quote" that was localised DE "Intensives Zitat" in the file
+    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{"Intensives Zitat"}, styles);
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
     CPPUNIT_ASSERT(tocContent.startsWith("Table of Contents"));

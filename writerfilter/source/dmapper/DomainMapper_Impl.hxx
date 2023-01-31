@@ -1209,6 +1209,8 @@ public:
 
     void commentProps(const OUString& sId, const CommentProperties& rProps);
 
+    OUString ConvertTOCStyleName(OUString const&);
+
     OUString getFontNameForTheme(const Id id);
 
 private:

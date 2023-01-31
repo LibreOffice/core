@@ -30,9 +30,13 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -42,7 +46,6 @@
 #include <map>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
@@ -272,6 +275,7 @@ struct StyleSheetTable_Impl
     uno::Reference< beans::XPropertySet>    m_xTextDefaults;
     std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
     std::map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
+    std::map<OUString, OUString>            m_ClonedTOCStylesMap;
     StyleSheetEntryPtr                      m_pCurrentEntry;
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
     OUString                                m_sDefaultParaStyleName; //WW8 name
@@ -287,6 +291,7 @@ struct StyleSheetTable_Impl
     void AppendLatentStyleProperty(const OUString& aName, Value const & rValue);
     /// Sets all properties of xStyle back to default.
     static void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
+    void ApplyClonedTOCStylesToXText(uno::Reference<text::XText> const& xText);
 };
 
 
@@ -993,7 +998,90 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
     }
 }
 
+void StyleSheetTable_Impl::ApplyClonedTOCStylesToXText(uno::Reference<text::XText> const& xText)
+{
+    uno::Reference<container::XEnumerationAccess> const xEA(xText, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> const xParaEnum(xEA->createEnumeration());
+
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<lang::XServiceInfo> const xElem(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+        if (xElem->supportsService(u"com.sun.star.text.Paragraph"))
+        {
+            uno::Reference<beans::XPropertySet> const xPara(xElem, uno::UNO_QUERY_THROW);
+            OUString styleName;
+            if (xPara->getPropertyValue(u"ParaStyleName") >>= styleName)
+            {
+                auto const it(m_ClonedTOCStylesMap.find(styleName));
+                if (it != m_ClonedTOCStylesMap.end())
+                {
+                    xPara->setPropertyValue(u"ParaStyleName", uno::Any(it->second));
+                }
+            }
+        }
+        else if (xElem->supportsService(u"com.sun.star.text.TextTable"))
+        {
+            uno::Reference<text::XTextTable> const xTable(xElem, uno::UNO_QUERY_THROW);
+            uno::Sequence<OUString> const cells(xTable->getCellNames());
+            for (OUString const& rCell : cells)
+            {
+                uno::Reference<text::XText> const xCell(xTable->getCellByName(rCell), uno::UNO_QUERY_THROW);
+                ApplyClonedTOCStylesToXText(xCell);
+            }
+        }
+    }
+}
+
+/**
+ Replace the applied en-US Word built-in styles that were referenced from
+ TOC fields (also STYLEREF and likely AUTOTEXTLIST) with the localised clones.
+
+ With the style cloned, and the clone referenced, the ToX should work in
+ Writer and also, when exported to DOCX, in Word.
+ */
+void StyleSheetTable::ApplyClonedTOCStyles()
+{
+    if (m_pImpl->m_ClonedTOCStylesMap.empty()
+        || !m_pImpl->m_bIsNewDoc) // avoid modifying pre-existing content
+    {
+        return;
+    }
+    SAL_INFO("writerfilter.dmapper", "Applying cloned styles to make TOC work");
+    // ignore header / footer, irrelevant for ToX
+    // text frames
+    uno::Reference<text::XTextFramesSupplier> const xDocTFS(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> const xFrames(xDocTFS->getTextFrames(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> const xFramesEnum(xFrames->createEnumeration());
+    while (xFramesEnum->hasMoreElements())
+    {
+        uno::Reference<text::XText> const xFrame(xFramesEnum->nextElement(), uno::UNO_QUERY_THROW);
+        m_pImpl->ApplyClonedTOCStylesToXText(xFrame);
+    }
+    // body
+    uno::Reference<text::XText> const xBody(m_pImpl->m_xTextDocument->getText());
+    m_pImpl->ApplyClonedTOCStylesToXText(xBody);
+}
+
+void StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rNewName)
+{
+    StyleSheetEntryPtr const pClone(new StyleSheetEntry(*pStyle));
+    pClone->sStyleIdentifierD = rNewName;
+    pClone->sStyleName = rNewName;
+    pClone->sConvertedStyleName = ConvertStyleName(rNewName);
+    m_pImpl->m_aStyleSheetEntries.push_back(pClone);
+    // add it so it will be found if referenced from another TOC
+    m_pImpl->m_aStyleSheetEntriesMap.emplace(rNewName, pClone);
+    m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->sStyleName, rNewName);
+    std::vector<StyleSheetEntryPtr> const styles{ pClone };
+    return ApplyStyleSheetsImpl(rFontTable, styles);
+}
+
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
+{
+    return ApplyStyleSheetsImpl(rFontTable, m_pImpl->m_aStyleSheetEntries);
+}
+
+void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries)
 {
     try
     {
@@ -1013,7 +1101,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingFollow;
             std::vector<std::pair<OUString, uno::Reference<style::XStyle>>> aMissingLink;
             std::vector<beans::PropertyValue> aTableStylesVec;
-            for( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
+            for (auto& pEntry : rEntries)
             {
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_UNKNOWN && !pEntry->sStyleName.isEmpty() )
                     pEntry->nStyleTypeCode = STYLE_TYPE_PARA; // unspecified style types are considered paragraph styles
@@ -1413,30 +1501,6 @@ const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
     return m_pImpl->m_pCurrentEntry;
 }
 
-/**
- This is a heuristic to find Word's w:styleId value from localised style name.
- It's not clear how exactly it works, but apparently Word stores into
- w:styleId some filtered representation of the localised style name.
- Tragically there are references to the localised style name itself in TOC
- fields.
- Hopefully this works and a complete map of >100 built-in style names
- localised to all languages isn't needed.
-*/
-static auto FilterChars(OUString const& rStyleName) -> OUString
-{
-    OUStringBuffer ret;
-    sal_Int32 index(0);
-    while (index < rStyleName.getLength())
-    {
-        auto const c(rStyleName.iterateCodePoints(&index));
-        if (rtl::isAsciiAlphanumeric(c))
-        {
-            ret.appendUtf32(c);
-        }
-    }
-    return ret.makeStringAndClear();
-}
-
 OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExtendedSearch)
 {
     OUString sRet( rWWName );
@@ -1444,10 +1508,6 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
         auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(rWWName);
-        if (findIt == m_pImpl->m_aStyleSheetEntriesMap.end())
-        {
-            findIt = m_pImpl->m_aStyleSheetEntriesMap.find(FilterChars(rWWName));
-        }
         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
         {
             if (!findIt->second->sConvertedStyleName.isEmpty())
