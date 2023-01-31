@@ -29,10 +29,7 @@
 class SW_DLLPUBLIC SwFormatFlySplit final : public SfxBoolItem
 {
 public:
-    SwFormatFlySplit(bool bSplit = false)
-        : SfxBoolItem(RES_FLY_SPLIT, bSplit)
-    {
-    }
+    SwFormatFlySplit(bool bSplit = false);
 
     SwFormatFlySplit* Clone(SfxItemPool* pPool = nullptr) const override;
 
