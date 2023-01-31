@@ -1202,6 +1202,8 @@ public:
 
     void commentProps(const OUString& sId, const CommentProperties& rProps);
 
+    OUString ConvertTOCStyleName(OUString const&);
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     // Start a new index section; if needed, finish current paragraph
