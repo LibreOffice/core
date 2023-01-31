@@ -54,8 +54,6 @@ class tdf119661(UITestCase):
                             args=("CLICK", tuple()), close_button="yes"):
                         pass
 
-
-
                     # Save Copy as
                     with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="open") as xDialog:
 
@@ -63,8 +61,6 @@ class tdf119661(UITestCase):
                         xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                         xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                         xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
-
-            self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 

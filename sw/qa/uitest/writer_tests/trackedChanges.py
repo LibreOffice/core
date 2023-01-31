@@ -418,7 +418,6 @@ class trackedchanges(UITestCase):
                     xFileTypeCombo = xSaveDialog.getChild("file_type")
                     select_by_text(xFileTypeCombo, "ODF Text Document (.odt)")
 
-            self.ui_test.wait_until_file_is_available(xFilePath)
             # load the temporary file, and check ODF roundtrip of the tracked deletion in a tracked insertion
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
                 # check tracked deletion in tracked insertion

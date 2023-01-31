@@ -41,8 +41,6 @@ class save_shared_readonly_with_password(UITestCase):
                             xConfirmPassword = xPasswordDialog.getChild("confirmropassEntry")
                             xConfirmPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
 
-            self.ui_test.wait_until_file_is_available(xFilePath)
-
             with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="") as xOpenDialog:
                 # Open document
                 xFileName = xOpenDialog.getChild("file_name")

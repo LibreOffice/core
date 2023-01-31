@@ -60,8 +60,6 @@ class saveToCSV(UITestCase):
 
                             xFormulas.executeAction("CLICK", tuple())
 
-            self.ui_test.wait_until_file_is_available(xFilePath)
-
             with open(xFilePath, "r") as f:
                 lines = f.readlines()
                 self.assertEqual("1", lines[0].strip())

@@ -58,8 +58,6 @@ class Tdf145326(UITestCase):
 
             self.ui_test.close_doc()
 
-            self.ui_test.wait_until_file_is_available(xFilePath)
-
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
                 self.xUITest.executeCommand(".uno:LinkDialog")
