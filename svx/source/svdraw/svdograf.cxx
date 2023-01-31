@@ -387,11 +387,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformF
 {
     // Refactored most of the code to GraphicObject, where
     // everybody can use e.g. the cropping functionality
-    MapMode aDestMap(
-        getSdrModelFromSdrObject().GetScaleUnit(),
-        Point(),
-        Fraction(1,1),
-        Fraction(1,1));
+    MapMode aDestMap(getSdrModelFromSdrObject().GetScaleUnit());
     const Size aDestSize( GetLogicRect().GetSize() );
     GraphicAttr aActAttr = GetGraphicAttr(nTransformFlags);
 
@@ -869,11 +865,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const
     {
         ScopedVclPtrInstance< VirtualDevice > pOut;
         const tools::Rectangle aBoundRect(GetCurrentBoundRect());
-        const MapMode aMap(
-            getSdrModelFromSdrObject().GetScaleUnit(),
-            Point(),
-            Fraction(1,1),
-            Fraction(1,1));
+        const MapMode aMap(getSdrModelFromSdrObject().GetScaleUnit());
 
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);

@@ -163,8 +163,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap = GetModel().GetScaleUnit();
-    Fraction aMap(1,1);
-    ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
+    ImpPasteObject(pObj.get(), *pLst, aPos, aSiz, MapMode(eMap), nOptions);
     return true;
 }
 
@@ -203,8 +202,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap = GetModel().GetScaleUnit();
-    Fraction aMap(1,1);
-    ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
+    ImpPasteObject(pObj.get(), *pLst, aPos, aSiz, MapMode(eMap), nOptions);
 
     // b4967543
     if(pObj->GetOutlinerParaObject())
@@ -401,11 +399,8 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU = GetModel().GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    Fraction aDstFr(1,1);
-    nSizX *= double(aMapFact.X() * rMap.GetScaleX() * aDstFr);
-    nSizX *= aDstFr.GetDenominator();
+    nSizX *= double(aMapFact.X() * rMap.GetScaleX());
     nSizY *= double(aMapFact.Y() * rMap.GetScaleY());
-    nSizY /= aDstFr.GetNumerator();
     tools::Long xs=nSizX;
     tools::Long ys=nSizY;
     // set the pos to 0, 0 for online case
@@ -530,7 +525,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
     {
         tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode aMap(GetModel().GetScaleUnit(), Point(), Fraction(1,1), Fraction(1,1));
+        MapMode aMap(GetModel().GetScaleUnit());
 
         if( bNoVDevIfOneMtfMarked )
         {
@@ -648,10 +643,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         ScopedVclPtrInstance< VirtualDevice > pOut;
         GDIMetaFile aMtf;
         const tools::Rectangle aBoundRect(rSdrObject.GetCurrentBoundRect());
-        const MapMode aMap(rSdrObject.getSdrModelFromSdrObject().GetScaleUnit(),
-            Point(),
-            Fraction(1,1),
-            Fraction(1,1));
+        const MapMode aMap(rSdrObject.getSdrModelFromSdrObject().GetScaleUnit());
 
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);

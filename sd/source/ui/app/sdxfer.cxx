@@ -251,7 +251,7 @@ void SdTransferable::CreateData()
             CreateObjectReplacement( pPage->GetObj( 0 ) );
 
         mpVDev = VclPtr<VirtualDevice>::Create( *Application::GetDefaultDevice() );
-        mpVDev->SetMapMode(MapMode(mpSdDrawDocumentIntern->GetScaleUnit(), Point(), Fraction(1,1), Fraction(1,1)));
+        mpVDev->SetMapMode(MapMode(mpSdDrawDocumentIntern->GetScaleUnit()));
         mpSdViewIntern = new ::sd::View( *mpSdDrawDocumentIntern, mpVDev );
         mpSdViewIntern->EndListening(*mpSdDrawDocumentIntern );
         mpSdViewIntern->hideMarkHandles();

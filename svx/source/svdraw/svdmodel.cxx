@@ -682,7 +682,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 
     if ( !GetRefDevice() )
     {
-        MapMode aMapMode(m_eObjUnit, Point(0,0), Fraction(1,1), Fraction(1,1));
+        MapMode aMapMode(m_eObjUnit);
         pOutliner->SetRefMapMode(aMapMode);
     }
 }

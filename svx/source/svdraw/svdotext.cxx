@@ -1324,11 +1324,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
     Fraction aFitXCorrection(1,1);
 
     const bool bContourFrame(IsContourTextFrame());
-    const MapMode aMapMode(
-        getSdrModelFromSdrObject().GetScaleUnit(),
-        Point(0,0),
-        Fraction(1,1),
-        Fraction(1,1));
+    const MapMode aMapMode(getSdrModelFromSdrObject().GetScaleUnit());
 
     rOutl.SetRefMapMode(aMapMode);
     ImpSetupDrawOutlinerForPaint(
