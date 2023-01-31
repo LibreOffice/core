@@ -149,7 +149,7 @@ void FreeTypeTextRenderImpl::GetFontMetric( ImplFontMetricDataRef& rxFontMetric,
 
 std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFallbackLevel)
 {
-    assert(mpFreetypeFont[nFallbackLevel]);
+    //assert(mpFreetypeFont[nFallbackLevel]);
     if (!mpFreetypeFont[nFallbackLevel])
         return nullptr;
     return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
