@@ -1146,7 +1146,20 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             hTheme = getThemeHandle(mhWnd, L"Button", mpImpl.get());
             break;
         case ControlType::Scrollbar:
-            hTheme = getThemeHandle(mhWnd, L"Scrollbar", mpImpl.get());
+            if (bUseDarkMode)
+            {
+                // tdf#153273 undo the earlier SetWindowTheme, and use an explicit Explorer::Scrollbar
+                // a) with "Scrollbar" and SetWindowTheme(... "Explorer" ...) then scrollbars in dialog
+                // and main windows are dark, but dropdowns are light
+                // b) with "Explorer::Scrollbar" and SetWindowTheme(... "Explorer" ...) then scrollbars
+                // in dropdowns are dark, but scrollbars in dialogs and main windows are sort of "extra
+                // dark"
+                // c) with "Explorer::Scrollbar" and no SetWindowTheme both cases are dark
+                SetWindowTheme(mhWnd, nullptr, nullptr);
+                hTheme = getThemeHandle(mhWnd, L"Explorer::Scrollbar", mpImpl.get());
+            }
+            else
+                hTheme = getThemeHandle(mhWnd, L"Scrollbar", mpImpl.get());
             break;
         case ControlType::Combobox:
             if( nPart == ControlPart::Entire )
