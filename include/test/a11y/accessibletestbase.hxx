@@ -183,14 +183,11 @@ protected:
     /* Dialog handling */
     class Dialog : public test::EventPosterHelper
     {
-        friend class AccessibleTestBase;
-
     private:
         bool mbAutoClose;
 
-        Dialog(vcl::Window* pWindow, bool bAutoClose = true);
-
     public:
+        Dialog(vcl::Window* pWindow, bool bAutoClose = true);
         virtual ~Dialog();
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }

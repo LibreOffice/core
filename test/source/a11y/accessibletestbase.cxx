@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
+#include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -393,6 +394,9 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
         std::function<void(Dialog&)> mCallback;
         bool mbAutoClose;
         Timer maTimeoutTimer;
+        Idle maIdleHandler;
+
+        std::unique_ptr<Dialog> mxDialog;
 
     public:
         virtual ~ListenerHelper()
@@ -400,6 +404,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             Application::SetDialogCancelMode(miPreviousDialogCancelMode);
             Application::RemoveEventListener(mLink);
             maTimeoutTimer.Stop();
+            maIdleHandler.Stop();
         }
 
         ListenerHelper(const std::u16string_view& name, std::function<void(Dialog&)> callback,
@@ -409,6 +414,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             , mCallback(callback)
             , mbAutoClose(bAutoClose)
             , maTimeoutTimer("workaround timer if we don't catch WindowActivate")
+            , maIdleHandler("runs user callback in idle time")
         {
             mLink = LINK(this, ListenerHelper, eventListener);
             Application::AddEventListener(mLink);
@@ -416,6 +422,9 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             maTimeoutTimer.SetInvokeHandler(LINK(this, ListenerHelper, timeoutTimerHandler));
             maTimeoutTimer.SetTimeout(60000);
             maTimeoutTimer.Start();
+
+            maIdleHandler.SetInvokeHandler(LINK(this, ListenerHelper, idleHandler));
+            maIdleHandler.SetPriority(TaskPriority::DEFAULT_IDLE);
 
             miPreviousDialogCancelMode = Application::GetDialogCancelMode();
             Application::SetDialogCancelMode(DialogCancelMode::Off);
@@ -458,42 +467,54 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             if (!pWin->IsDialog())
                 return;
 
-            mbWaitingForDialog = false;
-
             // remove ourselves, we don't want to run again
             Application::RemoveEventListener(mLink);
+
+            mxDialog = std::make_unique<Dialog>(pWin, true);
+
+            maIdleHandler.Start();
+        }
+
+        // mimic IMPL_LINK inline
+        static void LinkStubidleHandler(void* instance, Timer* idle)
+        {
+            static_cast<ListenerHelper*>(instance)->idleHandler(idle);
+        }
+
+        void idleHandler(Timer*)
+        {
+            mbWaitingForDialog = false;
+
             maTimeoutTimer.ClearInvokeHandler();
             maTimeoutTimer.Stop();
-
-            /* bind the dialog before checking its name so auto-close can kick in if anything
-             * fails/throws */
-            Dialog dialog(pWin, true);
 
             /* The popping up dialog ought to be the right one, or something's fishy and
              * we're bound to failure (e.g. waiting on a dialog that either will never come, or
              * that will not run after the current one -- deadlock style) */
-            if (msName != pWin->GetText())
+            if (msName != mxDialog->getWindow()->GetText())
             {
                 mpException = std::make_exception_ptr(css::uno::RuntimeException(
-                    "Unexpected dialog '" + pWin->GetText() + "' opened instead of the expected '"
-                    + msName + "'"));
+                    "Unexpected dialog '" + mxDialog->getWindow()->GetText()
+                    + "' opened instead of the expected '" + msName + "'"));
             }
             else
             {
                 std::cout << "found dialog, calling user callback" << std::endl;
 
                 // set the real requested auto close now we're just calling the user callback
-                dialog.setAutoClose(mbAutoClose);
+                mxDialog->setAutoClose(mbAutoClose);
 
                 try
                 {
-                    mCallback(dialog);
+                    mCallback(*mxDialog);
                 }
                 catch (...)
                 {
                     mpException = std::current_exception();
                 }
             }
+
+            mxDialog.reset();
         }
 
     public:

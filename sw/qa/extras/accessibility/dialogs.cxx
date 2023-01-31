@@ -17,8 +17,8 @@
 
 using namespace css;
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialog)
 {
     load(u"private:factory/swriter");
@@ -64,8 +64,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 /* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocus)
 {
@@ -98,8 +98,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 {
     load(u"private:factory/swriter");
@@ -125,8 +125,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 {
     load(u"private:factory/swriter");
@@ -152,8 +152,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 {
     load(u"private:factory/swriter");
@@ -173,8 +173,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
 {
     load(u"private:factory/swriter");
@@ -197,8 +197,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(_WIN32) && !defined(MACOSX)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
 {
     load(u"private:factory/swriter");

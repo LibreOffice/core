@@ -9,8 +9,8 @@
 
 #include <test/a11y/accessibletestbase.hxx>
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(MACOSX) && !defined(_WIN32)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 /* Checks an unexpected dialog opening (instead of the expected one) is properly caught, as it would
  * otherwise block the test potentially indefinitely */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
@@ -29,8 +29,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
 }
 #endif
 
-// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
-#if !defined(MACOSX) && !defined(_WIN32)
+// FIXME: dialog doesn't pop up on macos...
+#if !defined(MACOSX)
 /* Checks that an exception in the dialog callback code is properly handled and won't disturb
  * subsequent tests if caught -- especially that DialogWaiter::waitEndDialog() won't timeout. */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestThrowInDialogCallback)
