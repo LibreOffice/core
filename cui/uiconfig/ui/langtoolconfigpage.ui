@@ -112,7 +112,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamelbl">User name:</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamelbl">Username:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">username</property>
                           </object>
@@ -160,7 +160,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL e.g. without "/check" at the end.</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL, i.e., without “/check” at the end.</property>
+                            <attributes>
+                              <attribute name="scale" value="0.9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -172,7 +175,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamedesc">Your LanguageTool account's username for premium usage.</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamedesc">Your LanguageTool account’s username for premium usage.</property>
+                            <attributes>
+                              <attribute name="scale" value="0.9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -184,7 +190,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="langtoolconfigpage|apikeydesc">Your LanguageTool account's api key for premium usage.</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|apikeydesc">Your LanguageTool account’s API key for premium usage.</property>
+                            <attributes>
+                              <attribute name="scale" value="0.9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -221,6 +230,9 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="langtoolconfigpage|restdesc">Your LanguageTool REST API protocol for usage.</property>
+                            <attributes>
+                              <attribute name="scale" value="0.9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -244,7 +256,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="verifyssl">
-                        <property name="label" translatable="yes" context="langtoolconfigpage|verifyssl">Disable SSL Certificate Verification</property>
+                        <property name="label" translatable="yes" context="langtoolconfigpage|verifyssl">Disable SSL certificate verification</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
