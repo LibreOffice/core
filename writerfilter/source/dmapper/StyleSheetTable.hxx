@@ -74,6 +74,7 @@ public:
     PropertyMapPtr GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable);
 
     StyleSheetEntry();
+    StyleSheetEntry(StyleSheetEntry const&) = default;
     virtual ~StyleSheetEntry() override;
 };
 
@@ -98,6 +99,8 @@ public:
     StyleSheetEntryPtr FindDefaultParaStyle();
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
+    void CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
+    void ApplyClonedTOCStyles();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
@@ -117,6 +120,8 @@ private:
     virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
 
     void applyDefaults(bool bParaProperties);
+
+    void ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries);
 };
 
 
