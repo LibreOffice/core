@@ -1037,6 +1037,18 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
 
+void SAL_CALL
+ScVbaWorksheet::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+    const css::uno::Any& IncludeDocProperties, const css::uno::Any& /*IgnorePrintAreas*/, const css::uno::Any& From,
+    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& /*FixedFormatExtClassPtr*/)
+{
+    uno::Reference< frame::XModel > xModel(getModel(), uno::UNO_SET_THROW);
+    uno::Reference< excel::XApplication > xApplication(Application(), uno::UNO_QUERY_THROW);
+
+    excel::ExportAsFixedFormatHelper(xModel, xApplication, Type, FileName, Quality,
+        IncludeDocProperties, From, To, OpenAfterPublish);
+}
+
 sal_Int64 SAL_CALL
 ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId)
 {

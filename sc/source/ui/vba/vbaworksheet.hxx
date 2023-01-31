@@ -157,6 +157,9 @@ public:
     sal_Int16 getSheetID() const;
 
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) override;
+    virtual void SAL_CALL ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+        const css::uno::Any& IncludeDocProperties, const css::uno::Any& IgnorePrintAreas, const css::uno::Any& From,
+        const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& FixedFormatExtClassPtr) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

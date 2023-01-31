@@ -124,6 +124,7 @@ interface XRange
         void Insert([in] any Shift, [in] any CopyOrigin);
     void Autofit() raises(com::sun::star::script::BasicErrorException);
     void PrintOut([in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName);
+    void ExportAsFixedFormat([in] any Type, [in] any FileName, [in] any Quality, [in] any IncludeDocProperties, [in] any IgnorePrintAreas, [in] any From, [in] any To, [in] any OpenAfterPublish, [in] any FixedFormatExtClassPtr);
     void AutoFill( [in] XRange Destination, [in] any Type );
     boolean GoalSeek( [in] any Goal, [in] XRange ChangingCell );
     void ClearOutline() raises(com::sun::star::script::BasicErrorException);

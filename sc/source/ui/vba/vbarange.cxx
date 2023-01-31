@@ -5721,6 +5721,25 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
     }
 }
 
+void SAL_CALL
+ScVbaRange::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+    const css::uno::Any& IncludeDocProperties, const css::uno::Any& /*IgnorePrintAreas*/, const css::uno::Any& From,
+    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& /*FixedFormatExtClassPtr*/)
+{
+    ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
+    if (!pUnoRangesBase)
+        throw uno::RuntimeException("Failed to access underlying uno range object");
+    ScDocShell* pShell = pUnoRangesBase->GetDocShell();
+    if (!pShell)
+        return;
+
+    uno::Reference< frame::XModel > xModel(pShell->GetModel(), uno::UNO_SET_THROW);
+    uno::Reference< excel::XApplication > xApplication(Application(), uno::UNO_QUERY_THROW);
+
+    excel::ExportAsFixedFormatHelper(xModel, xApplication, Type, FileName, Quality,
+        IncludeDocProperties, From, To, OpenAfterPublish);
+}
+
 OUString
 ScVbaRange::getServiceImplName()
 {

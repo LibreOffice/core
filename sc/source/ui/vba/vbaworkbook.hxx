@@ -58,6 +58,9 @@ public:
     virtual css::uno::Any SAL_CALL Colors( const css::uno::Any& Index ) override;
     virtual ::sal_Int32 SAL_CALL getFileFormat(  ) override;
     virtual void SAL_CALL SaveCopyAs( const OUString& Filename ) override;
+    virtual void SAL_CALL ExportAsFixedFormat( const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+        const css::uno::Any& IncludeDocProperties, const css::uno::Any& IgnorePrintAreas, const css::uno::Any& From,
+        const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& FixedFormatExtClassPtr) override;
 
     // code name
     virtual OUString SAL_CALL getCodeName() override;

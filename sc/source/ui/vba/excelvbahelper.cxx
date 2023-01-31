@@ -20,15 +20,23 @@
 #include "excelvbahelper.hxx"
 
 #include <basic/basmgr.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <osl/file.hxx>
+#include <tools/urlobj.hxx>
 #include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 
 #include <document.hxx>
 #include <docuno.hxx>
@@ -386,6 +394,216 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     catch( uno::Exception& )
     {
     }
+}
+
+void ExportAsFixedFormatHelper(
+    const uno::Reference< frame::XModel >& xModel, const css::uno::Reference< XApplication >& xApplication,
+    const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+    const css::uno::Any& IncludeDocProperties, const css::uno::Any& From,
+    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish)
+{
+    OUString sType;
+    if ((Type >>= sType) && (sType.equalsIgnoreAsciiCase(u"xlTypeXPS") || sType == "1"))
+    {
+        /* xlTypePDF    0   "PDF" - Portable Document Format file(.pdf)
+           xlTypeXPS    1   "XPS" - XPS Document(.xps) --> not supported in LibreOffice */
+        return;
+    }
+
+    OUString sFileName;
+    FileName >>= sFileName;
+    OUString sRelURL;;
+    osl::FileBase::getFileURLFromSystemPath(sFileName, sRelURL);
+    // detect if there is no path then we need
+    // to use the current folder
+    INetURLObject aURL(sRelURL);
+    OUString sURL;
+    sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+    if (sURL.isEmpty())
+    {
+        // need to add cur dir ( of this workbook ) or else the 'Work' dir
+        sURL = xModel->getURL();
+
+        if (sURL.isEmpty())
+        {
+            // not path available from 'this' document
+            // need to add the 'document'/work directory then
+            OUString sWorkPath = xApplication->getDefaultFilePath();
+            OUString sWorkURL;
+            osl::FileBase::getFileURLFromSystemPath(sWorkPath, sWorkURL);
+            aURL.SetURL(sWorkURL);
+        }
+        else
+        {
+            if (!sFileName.isEmpty())
+            {
+                aURL.SetURL(INetURLObject::GetAbsURL(sURL, sRelURL));
+            }
+            else
+            {
+                aURL.SetURL(sURL);
+                if (aURL.removeExtension())
+                    aURL.setExtension(u"pdf");
+            }
+        }
+        sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+
+    }
+
+    sal_Int32 nTo = 0;
+    sal_Int32 nFrom = 0;
+    From >>= nFrom;
+    To >>= nTo;
+
+    OUString sRange("-");
+
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData;
+    if (nFrom || nTo)
+    {
+        if (nFrom)
+            sRange = OUString::number(nFrom) + sRange;
+        if (nTo)
+            sRange += OUString::number(nTo);
+
+        aFilterData.realloc(aFilterData.getLength() + 1);
+        aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("PageRange", sRange);
+    }
+
+    OUString sQuality;
+    if (Quality >>= sQuality)
+    {
+        if (sQuality.equalsIgnoreAsciiCase(u"xlQualityMinimum") || sQuality == "1")
+        {
+            aFilterData.realloc(aFilterData.getLength() + 1);
+            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("Quality", sal_Int32(70));
+        }
+        else if (sQuality.equalsIgnoreAsciiCase(u"xlQualityStandard") || sQuality == "0")
+        {
+            aFilterData.realloc(aFilterData.getLength() + 1);
+            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("UseLosslessCompression", true);
+        }
+        else
+        {
+            /* Name               Value Description
+               xlQualityMinimum   1     Minimum quality
+               xlQualityStandard  0     Standard quality */
+        }
+    }
+
+    // init set of params for storeToURL() call
+    css::uno::Sequence<css::beans::PropertyValue> storeProps{
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("FilterName", OUString("calc_pdf_Export")),
+        comphelper::makePropertyValue("URL", sURL)
+    };
+
+    bool bIncludeDocProperties = true;
+    if ((IncludeDocProperties >>= bIncludeDocProperties) && !bIncludeDocProperties)
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(xModel, uno::UNO_QUERY);
+        if (xDPS.is())
+        {
+            uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+            uno::Reference<util::XCloneable> xCloneable(xDocProps, uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xOldDocProps(xCloneable->createClone(), uno::UNO_QUERY_THROW);
+
+            // reset doc properties to default temporary
+            xDocProps->resetUserData(OUString());
+
+            uno::Reference< frame::XStorable > xStor(xModel, uno::UNO_QUERY_THROW);
+            try {
+                xStor->storeToURL(sURL, storeProps);
+            }
+            catch (const uno::Exception&)
+            {
+                SetDocInfoState(xModel, xOldDocProps);
+                throw;
+            }
+
+            SetDocInfoState(xModel, xOldDocProps);
+        }
+    }
+    else
+    {
+        uno::Reference< frame::XStorable > xStor(xModel, uno::UNO_QUERY_THROW);
+        xStor->storeToURL(sURL, storeProps);
+    }
+
+    bool bOpenAfterPublish = false;
+    if ((OpenAfterPublish >>= bOpenAfterPublish) && bOpenAfterPublish)
+    {
+        uno::Reference<css::system::XSystemShellExecute> xSystemShellExecute(css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()));
+        xSystemShellExecute->execute(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), "", css::system::SystemShellExecuteFlags::URIS_ONLY);
+    }
+}
+
+void SetDocInfoState(
+    const uno::Reference< frame::XModel >& xModel,
+    const uno::Reference< css::document::XDocumentProperties>& i_xOldDocProps)
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> const
+        xModelDocPropsSupplier(xModel, uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> const xDocPropsToFill =
+        xModelDocPropsSupplier->getDocumentProperties();
+    uno::Reference< beans::XPropertySet > const xPropSet(
+        i_xOldDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+
+    uno::Reference< util::XModifiable > xModifiable(xModel, uno::UNO_QUERY);
+    if (!xModifiable.is())
+        throw uno::RuntimeException();
+
+    bool bIsModified = xModifiable->isModified();
+
+    try
+    {
+        uno::Reference< beans::XPropertySet > const xSet(
+            xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertyContainer > xContainer(xSet, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+        const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        for (const beans::Property& rProp : lProps)
+        {
+            uno::Any aValue = xPropSet->getPropertyValue(rProp.Name);
+            if (rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE)
+            {
+                try
+                {
+                    // QUESTION: DefaultValue?!
+                    xContainer->addProperty(rProp.Name, rProp.Attributes, aValue);
+                }
+                catch (beans::PropertyExistException const&) {}
+                try
+                {
+                    // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
+                    xSet->setPropertyValue(rProp.Name, aValue);
+                }
+                catch (const uno::Exception&) {}
+            }
+        }
+
+        // sigh... have to set these manually I'm afraid...
+        xDocPropsToFill->setAuthor(i_xOldDocProps->getAuthor());
+        xDocPropsToFill->setGenerator(i_xOldDocProps->getGenerator());
+        xDocPropsToFill->setCreationDate(i_xOldDocProps->getCreationDate());
+        xDocPropsToFill->setTitle(i_xOldDocProps->getTitle());
+        xDocPropsToFill->setSubject(i_xOldDocProps->getSubject());
+        xDocPropsToFill->setDescription(i_xOldDocProps->getDescription());
+        xDocPropsToFill->setKeywords(i_xOldDocProps->getKeywords());
+        xDocPropsToFill->setModifiedBy(i_xOldDocProps->getModifiedBy());
+        xDocPropsToFill->setModificationDate(i_xOldDocProps->getModificationDate());
+        xDocPropsToFill->setPrintedBy(i_xOldDocProps->getPrintedBy());
+        xDocPropsToFill->setPrintDate(i_xOldDocProps->getPrintDate());
+        xDocPropsToFill->setAutoloadURL(i_xOldDocProps->getAutoloadURL());
+        xDocPropsToFill->setAutoloadSecs(i_xOldDocProps->getAutoloadSecs());
+        xDocPropsToFill->setDefaultTarget(i_xOldDocProps->getDefaultTarget());
+        xDocPropsToFill->setEditingCycles(i_xOldDocProps->getEditingCycles());
+        xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
+    }
+    catch (const uno::Exception&) {}
+
+    // set the modified flag back if required
+    if (bIsModified != bool(xModifiable->isModified()))
+        xModifiable->setModified(bIsModified);
 }
 
 SfxItemSet*

@@ -290,6 +290,9 @@ public:
     virtual void SAL_CALL RemoveSubtotal(  ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL MergeArea() override;
     virtual void SAL_CALL Subtotal( ::sal_Int32 GroupBy, ::sal_Int32 Function, const css::uno::Sequence< ::sal_Int32 >& TotalList, const css::uno::Any& Replace, const css::uno::Any& PageBreaks, const css::uno::Any& SummaryBelowData ) override;
+    virtual void SAL_CALL ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+        const css::uno::Any& IncludeDocProperties, const css::uno::Any& IgnorePrintAreas, const css::uno::Any& From,
+        const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& FixedFormatExtClassPtr) override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;

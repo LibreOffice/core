@@ -99,6 +99,7 @@ interface XWorksheet
     void setEnableCalculation( [in] boolean EnableCalculation ) raises(com::sun::star::script::BasicErrorException);
     boolean getEnableCalculation() raises(com::sun::star::script::BasicErrorException);
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName, [in] any IgnorePrintAreas );
+    void ExportAsFixedFormat([in] any Type, [in] any FileName, [in] any Quality, [in] any IncludeDocProperties, [in] any IgnorePrintAreas, [in] any From, [in] any To, [in] any OpenAfterPublish, [in] any FixedFormatExtClassPtr);
 };
 
 

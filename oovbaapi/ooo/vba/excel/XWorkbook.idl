@@ -46,6 +46,7 @@ interface XWorkbook
                  [in] any ConflictResolution, [in] any AddToMru,
                  [in] any TextCodepage, [in] any TextVisualLayout,
                  [in] any Local );
+    void ExportAsFixedFormat([in] any Type, [in] any FileName, [in] any Quality, [in] any IncludeDocProperties, [in] any IgnorePrintAreas, [in] any From, [in] any To, [in] any OpenAfterPublish, [in] any FixedFormatExtClassPtr);
 };
 
 }; }; };

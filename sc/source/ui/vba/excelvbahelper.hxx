@@ -21,6 +21,8 @@
 #include <sal/config.h>
 
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
 
 #include <vector>
 #include <global.hxx>
@@ -73,6 +75,16 @@ css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cs
 /// @throws css::uno::RuntimeException
 ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange );
 void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
+
+void ExportAsFixedFormatHelper(
+    const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< ooo::vba::excel::XApplication >& xApplication,
+    const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+    const css::uno::Any& IncludeDocProperties, const css::uno::Any& From,
+    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish);
+
+void SetDocInfoState(
+    const css::uno::Reference< css::frame::XModel >& xModel,
+    const css::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo);
 
 class ScVbaCellRangeAccess
 {

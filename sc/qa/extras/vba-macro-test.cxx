@@ -65,6 +65,7 @@ public:
     void testTdf149531();
     void testTdf118247();
     void testTdf126457();
+    void testVbaPDFExport();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testTdf149531);
     CPPUNIT_TEST(testTdf118247);
     CPPUNIT_TEST(testTdf126457);
+    CPPUNIT_TEST(testVbaPDFExport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -828,6 +830,14 @@ void VBAMacroTest::testTdf126457()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nReturnValue);
 
     pDocSh->DoClose();
+}
+
+void VBAMacroTest::testVbaPDFExport()
+{
+    loadFromURL(u"ExportAsPDF.xlsm");
+
+    executeMacro("vnd.sun.Star.script:VBAProject.Module1.ExportAsPDF?"
+                 "language=Basic&location=document");
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 

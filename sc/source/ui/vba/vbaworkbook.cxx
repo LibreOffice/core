@@ -352,6 +352,18 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     xStor->storeAsURL( sURL, storeProps );
 }
 
+void SAL_CALL
+ScVbaWorkbook::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
+    const css::uno::Any& IncludeDocProperties, const css::uno::Any& /*IgnorePrintAreas*/, const css::uno::Any& From,
+    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& /*FixedFormatExtClassPtr*/)
+{
+    uno::Reference< frame::XModel > xModel(getModel(), uno::UNO_SET_THROW);
+    uno::Reference< excel::XApplication > xApplication(Application(), uno::UNO_QUERY_THROW);
+
+    excel::ExportAsFixedFormatHelper(xModel, xApplication, Type, FileName, Quality,
+        IncludeDocProperties, From, To, OpenAfterPublish);
+}
+
 css::uno::Any SAL_CALL
 ScVbaWorkbook::Styles( const uno::Any& Item )
 {
