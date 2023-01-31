@@ -1795,7 +1795,6 @@ SwFrameFormat* SwTextBoxNode::GetTextBox(const SdrObject* pDrawObject) const
         if (size_t(pTextBoxes.use_count()) != pTextBoxes->GetTextBoxCount() + size_t(1))
         {
             SAL_WARN("sw.core", "SwTextBoxNode::GetTextBox(): RefCount and TexBox count mismatch!");
-            assert(false);
         }
     }
 
