@@ -1189,7 +1189,11 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             break;
         case ControlType::Combobox:
             if( nPart == ControlPart::Entire )
+            {
+                if (bUseDarkMode && !(nState & ControlState::FOCUSED))
+                    SetWindowTheme(mhWnd, L"CFD", nullptr);
                 hTheme = getThemeHandle(mhWnd, L"Edit", mWinSalGraphicsImplBase);
+            }
             else if( nPart == ControlPart::ButtonDown )
             {
                 if (bUseDarkMode)
@@ -1199,7 +1203,11 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             break;
         case ControlType::Spinbox:
             if( nPart == ControlPart::Entire )
+            {
+                if (bUseDarkMode && !(nState & ControlState::FOCUSED))
+                    SetWindowTheme(mhWnd, L"CFD", nullptr);
                 hTheme = getThemeHandle(mhWnd, L"Edit", mWinSalGraphicsImplBase);
+            }
             else
                 hTheme = getThemeHandle(mhWnd, L"Spin", mWinSalGraphicsImplBase);
             break;
@@ -1207,6 +1215,10 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             hTheme = getThemeHandle(mhWnd, L"Spin", mWinSalGraphicsImplBase);
             break;
         case ControlType::Editbox:
+            if (bUseDarkMode && !(nState & ControlState::FOCUSED))
+                SetWindowTheme(mhWnd, L"CFD", nullptr);
+            hTheme = getThemeHandle(mhWnd, L"Edit", mWinSalGraphicsImplBase);
+            break;
         case ControlType::MultilineEditbox:
             hTheme = getThemeHandle(mhWnd, L"Edit", mWinSalGraphicsImplBase);
             break;
