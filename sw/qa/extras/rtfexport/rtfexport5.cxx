@@ -38,6 +38,7 @@
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/scopeguard.hxx>
 
 using namespace css;
 
@@ -48,24 +49,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format")
     {
     }
-
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        m_aSavedSettings = Application::GetSettings();
-        if (filename == std::string_view("fdo72031.rtf"))
-        {
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
-            AllSettings aSettings(m_aSavedSettings);
-            aSettings.SetLanguageTag(LanguageTag("ru"));
-            Application::SetSettings(aSettings);
-            return pResetter;
-        }
-        return nullptr;
-    }
-
-protected:
-    AllSettings m_aSavedSettings;
 };
 
 DECLARE_RTFEXPORT_TEST(testFdo63023, "fdo63023.rtf")
@@ -756,9 +739,22 @@ DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString(u"\u00D2\u00DA\u00DB"), xTextRange->getString());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo72031, "fdo72031.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo72031)
 {
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0C5"), getRun(getParagraph(1), 1)->getString());
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0C5"), getRun(getParagraph(1), 1)->getString());
+    };
+
+    AllSettings aSavedSettings = Application::GetSettings();
+    AllSettings aSettings(aSavedSettings);
+    aSettings.SetLanguageTag(LanguageTag("ru"));
+    Application::SetSettings(aSettings);
+    comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
+
+    createSwDoc("fdo72031.rtf");
+    verify();
+    reload(mpFilter, "fdo72031.rtf");
+    verify();
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo86750, "fdo86750.rtf")
