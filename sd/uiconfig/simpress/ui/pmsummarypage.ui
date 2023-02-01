@@ -66,6 +66,7 @@
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
+                <property name="active">True</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
