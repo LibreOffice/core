@@ -100,6 +100,7 @@
                           <object class="GtkEntry" id="baseurl">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -138,6 +139,7 @@
                         <child>
                           <object class="GtkEntry" id="username">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -148,6 +150,7 @@
                         <child>
                           <object class="GtkEntry" id="apikey">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -217,6 +220,7 @@
                         <child>
                           <object class="GtkEntry" id="restprotocol">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
