@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WIZDLG_HXX
-#define INCLUDED_VCL_WIZDLG_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/toolkit/button.hxx>
@@ -279,7 +278,4 @@ namespace vcl
     };
 
 } // namespace vcl
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

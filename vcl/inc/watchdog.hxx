@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_WATCHDOG_H
-#define INCLUDED_VCL_INC_WATCHDOG_H
+#pragma once
 
 #include <sal/config.h>
 #include <salhelper/thread.hxx>
@@ -26,7 +25,5 @@ public:
     static void start();
     static void stop();
 };
-
-#endif // INCLUDED_VCL_INC_WATCHDOG_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
