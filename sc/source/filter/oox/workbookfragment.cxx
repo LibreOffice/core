@@ -477,6 +477,10 @@ void WorkbookFragment::finalizeImport()
     // load all worksheets
     importSheetFragments(*this, aSheetFragments);
 
+    // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
+    // has been called already
+    getTables().applyAutoFilters();
+
     sal_Int16 nActiveSheet = getViewSettings().getActiveCalcSheet();
     getWorksheets().finalizeImport( nActiveSheet );
 
