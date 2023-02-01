@@ -31,7 +31,6 @@
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include <osl/mutex.hxx>
 #include <o3tl/string_view.hxx>
 
 // filename of configuration files
@@ -40,6 +39,7 @@ constexpr OUStringLiteral PRINT_FILENAME = u"psprint.conf";
 constexpr OStringLiteral GLOBAL_DEFAULTS_GROUP = "__Global_Printer_Defaults__";
 
 #include <cstddef>
+#include <mutex>
 #include <unordered_set>
 
 using namespace psp;
@@ -49,7 +49,7 @@ namespace psp
 {
     class SystemQueueInfo final : public Thread
     {
-        mutable Mutex               m_aMutex;
+        mutable std::mutex          m_aMutex;
         bool                        m_bChanged;
         std::vector< PrinterInfoManager::SystemPrintQueue >
                                     m_aQueues;
@@ -655,23 +655,21 @@ SystemQueueInfo::~SystemQueueInfo()
 
 bool SystemQueueInfo::hasChanged() const
 {
-    MutexGuard aGuard( m_aMutex );
-    bool bChanged = m_bChanged;
-    return bChanged;
+    std::unique_lock aGuard( m_aMutex );
+    return m_bChanged;
 }
 
 void SystemQueueInfo::getSystemQueues( std::vector< PrinterInfoManager::SystemPrintQueue >& rQueues )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     rQueues = m_aQueues;
     m_bChanged = false;
 }
 
 OUString SystemQueueInfo::getCommand() const
 {
-    MutexGuard aGuard( m_aMutex );
-    OUString aRet = m_aCommand;
-    return aRet;
+    std::unique_lock aGuard( m_aMutex );
+    return m_aCommand;
 }
 
 namespace {
@@ -873,7 +871,7 @@ void SystemQueueInfo::run()
             {
                 std::vector< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
                 rParm.pHandler( aLines, aSysPrintQueues, &rParm );
-                MutexGuard aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
                 m_bChanged  = true;
                 m_aQueues   = aSysPrintQueues;
                 m_aCommand  = OUString::createFromAscii( rParm.pPrintCommand );
