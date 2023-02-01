@@ -18,17 +18,6 @@ class tdf69981(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf69981.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
-
-                xPages = xDialogOpt.getChild("pages")
-                xWriterEntry = xPages.getChild('3')                 # Calc
-                xWriterEntry.executeAction("EXPAND", tuple())
-                xWriterGeneralEntry = xWriterEntry.getChild('0')
-                xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-                xreplwarncb = xDialogOpt.getChild("replwarncb")
-                if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-                    xreplwarncb.executeAction("CLICK", tuple())
 
             #Select A2:A7
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A7"}))
