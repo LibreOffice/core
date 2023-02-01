@@ -938,9 +938,6 @@ void WorksheetGlobals::finalizeWorksheetImport()
 {
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     maSheetData.finalizeImport();
-    // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
-    // has been called already
-    getTables().applyAutoFilters();
 
     getCondFormats().finalizeImport();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );
