@@ -94,6 +94,7 @@
                     <property name="button-sensitivity">off</property>
                     <property name="has-entry">True</property>
                     <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="sensitive">False</property>
@@ -273,6 +274,7 @@
                     <property name="model">liststore1</property>
                     <property name="has-entry">True</property>
                     <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can-focus">False</property>
