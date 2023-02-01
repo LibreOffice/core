@@ -341,9 +341,15 @@ bool Window::IsTracking() const
 {
     if (!mpWindowImpl)
         return false;
-    return (mpWindowImpl->mbUseFrameData ?
-            mpWindowImpl->mpFrameData->mpTrackWin == this :
-            ImplGetSVData()->mpWinData->mpTrackWin == this);
+    if (mpWindowImpl->mbUseFrameData && mpWindowImpl->mpFrameData)
+    {
+        return mpWindowImpl->mpFrameData->mpTrackWin == this;
+    }
+    if (!mpWindowImpl->mbUseFrameData && ImplGetSVData()->mpWinData)
+    {
+        return ImplGetSVData()->mpWinData->mpTrackWin == this;
+    }
+    return false;
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
