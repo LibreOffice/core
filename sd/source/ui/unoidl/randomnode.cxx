@@ -34,12 +34,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <osl/mutex.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <randomnode.hxx>
-
-using ::osl::Mutex;
-using ::osl::Guard;
+#include <mutex>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -139,7 +136,7 @@ public:
 
 private:
     // our first, last and only protection from multi-threads!
-    Mutex maMutex;
+    std::mutex maMutex;
 
     sal_Int16 mnPresetClass;
     WeakReference<XInterface> mxParent;
@@ -227,215 +224,215 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getType()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return css::animations::AnimationNodeType::PAR;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getBegin()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maBegin;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setBegin( const Any& _begin )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maBegin = _begin;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getDuration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maDuration;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setDuration( const Any& _duration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maDuration = _duration;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getEnd()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maEnd;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setEnd( const Any& _end )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maEnd = _end;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getEndSync()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maEndSync;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setEndSync( const Any& _endsync )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maEndSync = _endsync;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getRepeatCount()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maRepeatCount;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRepeatCount( const Any& _repeatcount )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maRepeatCount = _repeatcount;
 }
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getRepeatDuration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maRepeatDuration;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRepeatDuration( const Any& _repeatduration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maRepeatDuration = _repeatduration;
 }
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getFill()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mnFill;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setFill( sal_Int16 _fill )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mnFill = _fill;
 }
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getFillDefault()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mnFillDefault;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setFillDefault( sal_Int16 _filldefault )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mnFillDefault = _filldefault;
 }
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getRestart()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mnRestart;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRestart( sal_Int16 _restart )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mnRestart = _restart;
 }
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getRestartDefault()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mnRestartDefault;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRestartDefault( sal_Int16 _restartdefault )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mnRestartDefault = _restartdefault;
 }
 
 // XAnimationNode
 double SAL_CALL RandomAnimationNode::getAcceleration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mfAcceleration;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setAcceleration( double _acceleration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mfAcceleration = _acceleration;
 }
 
 // XAnimationNode
 double SAL_CALL RandomAnimationNode::getDecelerate()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mfDecelerate;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setDecelerate( double _decelerate )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mfDecelerate = _decelerate;
 }
 
 // XAnimationNode
 sal_Bool SAL_CALL RandomAnimationNode::getAutoReverse()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mbAutoReverse;
 }
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setAutoReverse( sal_Bool _autoreverse )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mbAutoReverse = _autoreverse;
 }
 
 Sequence< NamedValue > SAL_CALL RandomAnimationNode::getUserData()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return maUserData;
 }
 
 void SAL_CALL RandomAnimationNode::setUserData( const Sequence< NamedValue >& _userdata )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maUserData = _userdata;
 }
 
 // XChild
 Reference< XInterface > SAL_CALL RandomAnimationNode::getParent()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     return mxParent.get();
 }
 
 // XChild
 void SAL_CALL RandomAnimationNode::setParent( const Reference< XInterface >& Parent )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mxParent = Parent;
 }
 
@@ -461,7 +458,7 @@ sal_Bool SAL_CALL RandomAnimationNode::hasElements()
 // XEnumerationAccess
 Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if( !maTarget.hasValue() && mxFirstNode.is() )
     {
