@@ -5747,10 +5747,21 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     rtl::Reference<::sax_fastparser::FastAttributeList> docPrattrList = FastSerializerHelper::createAttrList();
     docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
     docPrattrList->add( XML_name, OUStringToOString( pFrameFormat->GetName(), RTL_TEXTENCODING_UTF8 ) );
-    docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription(), RTL_TEXTENCODING_UTF8 ));
+    OUString const descr(pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription());
+    OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     if (GetExport().GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
     {
-        docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle(), RTL_TEXTENCODING_UTF8 ));
+        docPrattrList->add(XML_descr, OUStringToOString(descr, RTL_TEXTENCODING_UTF8));
+        docPrattrList->add(XML_title, OUStringToOString(title, RTL_TEXTENCODING_UTF8));
+    }
+    else
+    {   // tdf#148952 no title attribute, merge it into descr
+        OUString const value(title.isEmpty()
+            ? descr
+            : descr.isEmpty()
+                ? title
+                : title + OUString::Concat("\n") + descr);
+        docPrattrList->add(XML_descr, OUStringToOString(value, RTL_TEXTENCODING_UTF8));
     }
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
