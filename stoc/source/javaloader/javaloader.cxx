@@ -67,6 +67,7 @@
 // this one is header-only
 #include <comphelper/sequence.hxx>
 
+#include <mutex>
 #include <thread>
 #include <utility>
 
@@ -297,8 +298,8 @@ void JavaComponentLoader::disposing()
 
 const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader(OUString & rRemoteArg)
 {
-    static Mutex ourMutex;
-    MutexGuard aGuard(ourMutex);
+    static std::mutex ourMutex;
+    std::unique_lock aGuard(ourMutex);
 
     if (m_javaLoader.is())
         return m_javaLoader;
