@@ -1400,6 +1400,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
+    if (!pFormat && !IsDescriptor())
+        throw uno::RuntimeException();
 
     // Hack to support hidden property to transfer textDirection
     if(rPropertyName == "FRMDirection")
@@ -1409,9 +1411,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             SwDocModifyAndUndoGuard guard(*pFormat);
             SvxFrameDirectionItem aItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
             aItem.PutValue(_rValue, 0);
-            GetFrameFormat()->SetFormatAttr(aItem);
+            pFormat->SetFormatAttr(aItem);
         }
-        else if(IsDescriptor())
+        else // if(IsDescriptor())
         {
             m_pProps->SetProperty(o3tl::narrowing<sal_uInt16>(RES_FRAMEDIR), 0, _rValue);
         }
@@ -1450,7 +1452,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
         if(bDoIt)
         {
-            const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : GetFrameFormat()->GetDoc());
+            const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : pFormat->GetDoc());
             const SfxItemPool& rPool = pDoc->GetAttrPool();
             const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
@@ -1941,7 +1943,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
         }
     }
-    else if(IsDescriptor())
+    else // if(IsDescriptor())
     {
         m_pProps->SetProperty(pEntry->nWID, nMemberId, aValue);
         if( FN_UNO_FRAME_STYLE_NAME == pEntry->nWID )
@@ -1986,8 +1988,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             m_nVisibleAreaHeight = sAspect.toInt64();
         }
     }
-    else
-        throw uno::RuntimeException();
 }
 
 namespace
