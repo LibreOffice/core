@@ -45,6 +45,7 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
@@ -203,7 +204,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         typedef std::unordered_map< OUString,
                                     WindowStateInfo > ResourceURLToInfoCache;
 
-        osl::Mutex                        m_aMutex;
+        std::mutex                        m_aMutex;
         OUString                          m_aConfigWindowAccess;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
@@ -230,7 +231,7 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( std::u16string
 ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -240,7 +241,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
 Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResourceURL )
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -257,7 +258,7 @@ Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResour
 Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -274,7 +275,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -298,7 +299,7 @@ Type SAL_CALL ConfigurationAccess_WindowState::getElementType()
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -316,7 +317,7 @@ sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rResourceURL )
 {
     // SAFE
-    osl::ClearableMutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -334,7 +335,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
         Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
         if ( xNameContainer.is() )
         {
-            g.clear();
+            g.unlock();
 
             xNameContainer->removeByName( rResourceURL );
             Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
@@ -350,7 +351,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
 void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
 {
     // SAFE
-    osl::ClearableMutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( !(aPropertySet >>= aPropSet) )
@@ -383,7 +384,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
         return;
 
     Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
-    g.clear();
+    g.unlock();
 
     try
     {
@@ -408,7 +409,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
 void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
 {
     // SAFE
-    osl::ClearableMutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( !(aPropertySet >>= aPropSet) )
@@ -453,7 +454,7 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
     WindowStateInfo aWinStateInfo( pIter->second );
     OUString        aResourceURL( pIter->first );
     m_bModified = false;
-    g.clear();
+    g.unlock();
 
     try
     {
@@ -492,7 +493,7 @@ void SAL_CALL ConfigurationAccess_WindowState::disposing( const EventObject& aEv
 {
     // SAFE
     // remove our reference to the config access
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
