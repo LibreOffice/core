@@ -51,12 +51,12 @@
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="row-spacing">6</property>
-            <property name="column-spacing">5</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
@@ -76,7 +76,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin-end">5</property>
                 <property name="label" translatable="yes" context="optdeeplpage|label3">Authentication key:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">authkey</property>
