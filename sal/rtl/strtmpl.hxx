@@ -982,16 +982,7 @@ template <typename IMPL_RTL_STRINGDATA>
 void newFromStr                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                  const STRCODE<IMPL_RTL_STRINGDATA>* pCharStr )
 {
-#if OSL_DEBUG_LEVEL > 0
-    //TODO: For now, only abort in non-production debug builds; once all places that rely on the
-    // undocumented newFromStr behavior of treating a null pCharStr like an empty string have been
-    // found and fixed, drop support for that behavior and turn this into a general assert:
-    if (pCharStr == nullptr) {
-        std::abort();
-    }
-#endif
-
-    newFromStr_WithLength(ppThis, pCharStr, pCharStr ? getLength(pCharStr) : 0);
+    newFromStr_WithLength(ppThis, pCharStr, getLength(pCharStr));
 }
 
 /* ----------------------------------------------------------------------- */
