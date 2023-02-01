@@ -199,6 +199,9 @@ public:
 
     SwFlyFrame *FindChainNeighbour( SwFrameFormat const &rFormat, SwFrame *pAnch = nullptr );
 
+    /// Is this fly allowed to split across pages? (Disabled by default.)
+    bool IsFlySplitAllowed() const;
+
     // #i26791#
     const SwVirtFlyDrawObj* GetVirtDrawObj() const;
     SwVirtFlyDrawObj *GetVirtDrawObj();

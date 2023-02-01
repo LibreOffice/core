@@ -594,6 +594,16 @@ SwFlyFrame *SwFlyFrame::FindChainNeighbour( SwFrameFormat const &rChain, SwFrame
     return pFly;
 }
 
+bool SwFlyFrame::IsFlySplitAllowed() const
+{
+    if (!IsFlyAtContentFrame())
+    {
+        return false;
+    }
+
+    return GetFormat()->GetFlySplit().GetValue();
+}
+
 SwFrame *SwFlyFrame::FindLastLower()
 {
     SwFrame *pRet = ContainsAny();
@@ -1306,7 +1316,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
             const SwFrame* pAnchor = GetAnchorFrame();
             const SwFrame* pAnchorUpper = pAnchor ? pAnchor->GetUpper() : nullptr;
-            if (pAnchorUpper && GetFormat()->GetFlySplit().GetValue())
+            if (pAnchorUpper && IsFlySplitAllowed())
             {
                 // If the fly is allowed to be split, then limit its size to the upper of the
                 // anchor.

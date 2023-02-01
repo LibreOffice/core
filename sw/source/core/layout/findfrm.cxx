@@ -40,6 +40,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <formatflysplit.hxx>
 
 
 /// Searches the first ContentFrame in BodyText below the page.
@@ -1447,9 +1448,10 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
             {
                 if ( _pLayoutFrame->IsInFly() )
                 {
-                    // if fly frame has a follow (next linked fly frame),
+                    // if fly frame has a follow (next linked fly frame) or can split,
                     // frame is moveable.
-                    if ( const_cast<SwLayoutFrame*>(_pLayoutFrame)->FindFlyFrame()->GetNextLink() )
+                    SwFlyFrame* pFlyFrame = const_cast<SwLayoutFrame*>(_pLayoutFrame)->FindFlyFrame();
+                    if ( pFlyFrame->GetNextLink() || pFlyFrame->IsFlySplitAllowed() )
                     {
                         bRetVal = true;
                     }
