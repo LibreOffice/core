@@ -131,7 +131,7 @@ ExceptionInfos::~ExceptionInfos() noexcept
 {
     SAL_INFO("bridges", "> freeing exception infos... <");
 
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     for (auto& rEntry : m_allRaiseInfos)
         delete static_cast<RaiseInfo*>(rEntry.second);
 }
@@ -154,7 +154,7 @@ RaiseInfo* ExceptionInfos::getRaiseInfo(typelib_TypeDescription* pTD) noexcept
     RaiseInfo* pRaiseInfo;
 
     OUString const& rTypeName = OUString::unacquired(&pTD->pTypeName);
-    osl::MutexGuard aGuard(s_pInfos->m_aMutex);
+    std::unique_lock aGuard(s_pInfos->m_aMutex);
     t_string2PtrMap::const_iterator const iFind(s_pInfos->m_allRaiseInfos.find(rTypeName));
     if (iFind != s_pInfos->m_allRaiseInfos.end())
         pRaiseInfo = static_cast<RaiseInfo*>(iFind->second);

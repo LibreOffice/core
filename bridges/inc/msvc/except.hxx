@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 
+#include <mutex>
 #include <unordered_map>
 
 typedef struct _uno_Any uno_Any;
@@ -101,7 +102,7 @@ public:
 
 class ExceptionInfos final
 {
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     t_string2PtrMap m_allRaiseInfos;
 
 public:
