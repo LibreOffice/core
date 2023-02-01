@@ -2233,6 +2233,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ShowCurrentModuleOnly" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>The entry specifies if the recent document list should show only
+          files that can be handled by the current module.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <set oor:name="HelpBookmarks" oor:node-type="HistoryType">
         <info>
           <desc>Contains the most recently opened help documents.</desc>

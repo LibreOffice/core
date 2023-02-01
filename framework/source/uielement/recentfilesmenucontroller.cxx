@@ -20,6 +20,8 @@
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
@@ -34,6 +36,8 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace css;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -42,6 +46,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
 #define MAX_MENU_ITEMS  99
+#define MAX_MENU_ITEMS_PER_MODULE  5
 
 namespace {
 
@@ -154,12 +159,50 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.size(), MAX_MENU_ITEMS );
     m_aRecentFilesItems.clear();
 
+    // tdf#56696 - retrieve expert configuration option if the recent document
+    // list should show only files that can be handled by the current module
+    const bool bShowCurrentModuleOnly
+        = officecfg::Office::Common::History::ShowCurrentModuleOnly::get();
+
+    size_t nItemPosModule = 0;
     if (( nPickListMenuItems > 0 ) && !m_bDisabled )
     {
-        for ( int i = 0; i < nPickListMenuItems; i++ )
+        size_t nItemPos = 0;
+        if (m_aModuleName != "com.sun.star.frame.StartModule")
         {
-            const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-            m_aRecentFilesItems.emplace_back(rPickListEntry.sURL, rPickListEntry.isReadOnly);
+            ::comphelper::MimeConfigurationHelper aConfigHelper(
+                comphelper::getProcessComponentContext());
+            // Show the first MAX_MENU_ITEMS_PER_MODULE items of the current module
+            // on top of the recent document list.
+            for (int i = 0; i < nPickListMenuItems; i++)
+            {
+                const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+                const std::pair<OUString, bool> aPickListEntry(rPickListEntry.sURL,
+                                                               rPickListEntry.isReadOnly);
+                if ((nItemPosModule < MAX_MENU_ITEMS_PER_MODULE || bShowCurrentModuleOnly)
+                    && aConfigHelper.GetDocServiceNameFromFilter(rPickListEntry.sFilter)
+                           == m_aModuleName)
+                {
+                    m_aRecentFilesItems.insert(m_aRecentFilesItems.begin() + nItemPosModule,
+                                               aPickListEntry);
+                    nItemPos++;
+                    nItemPosModule++;
+                }
+                else if (!bShowCurrentModuleOnly)
+                {
+                    m_aRecentFilesItems.insert(m_aRecentFilesItems.begin() + nItemPos,
+                                               aPickListEntry);
+                    nItemPos++;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < nPickListMenuItems; i++)
+            {
+                const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+                m_aRecentFilesItems.emplace_back(rPickListEntry.sURL, rPickListEntry.isReadOnly);
+            }
         }
     }
 
@@ -220,6 +263,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
             rPopupMenu->setTipHelpText(sal_uInt16(i + 1), aTipHelpText);
             rPopupMenu->setCommand(sal_uInt16(i + 1), aURLString);
+
+            // Show a separator after the MAX_MENU_ITEMS_PER_MODULE recent document items
+            if (nItemPosModule > 0 && i == nItemPosModule - 1)
+                rPopupMenu->insertSeparator(-1);
         }
 
         rPopupMenu->insertSeparator(-1);
