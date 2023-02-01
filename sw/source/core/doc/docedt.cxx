@@ -607,8 +607,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                             pSpellArgs->pStartPos->GetContentIndex();
                             if( nCurrNd != nEndNd )
                             {
-                                pSttPos->Assign(nCurrNd);
-                                pEndPos->Assign(nCurrNd);
+                                pSttPos->Assign(nCurrNd, pSttPos->GetContentIndex());
+                                pEndPos->Assign(nCurrNd, pEndPos->GetContentIndex());
                                 nCurrNd = nEndNd;
                             }
                         }
