@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
     }
     // checking second object (chart)
     {
-        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Object2"), uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Diagram 1"), uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
         CPPUNIT_ASSERT(xObj.is());
 
@@ -974,7 +974,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
     }
     // checking third object (chart)
     {
-        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Object3"), uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Diagram 2"), uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
         CPPUNIT_ASSERT(xObj.is());
 

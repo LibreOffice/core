@@ -5646,6 +5646,30 @@ uno::Reference<css::text::XTextFrame> DocxAttributeOutput::GetUnoTextFrame(
     return SwTextBoxHelper::getUnoTextFrame(xShape);
 }
 
+static rtl::Reference<::sax_fastparser::FastAttributeList> CreateDocPrAttrList(
+    DocxExport & rExport, int const nAnchorId, std::u16string_view const& rName,
+    std::u16string_view const& rTitle, std::u16string_view const& rDescription)
+{
+    rtl::Reference<::sax_fastparser::FastAttributeList> const pAttrs(FastSerializerHelper::createAttrList());
+    pAttrs->add(XML_id, OString::number(nAnchorId).getStr());
+    pAttrs->add(XML_name, OUStringToOString(rName, RTL_TEXTENCODING_UTF8));
+    if (rExport.GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
+    {
+        pAttrs->add(XML_descr, OUStringToOString(rDescription, RTL_TEXTENCODING_UTF8));
+        pAttrs->add(XML_title, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8));
+    }
+    else
+    {   // tdf#148952 no title attribute, merge it into descr
+        OUString const value(rTitle.empty()
+            ? OUString(rDescription)
+            : rDescription.empty()
+                ? OUString(rTitle)
+                : OUString::Concat(rTitle) + OUString::Concat("\n") + OUString::Concat(rDescription));
+        pAttrs->add(XML_descr, OUStringToOString(value, RTL_TEXTENCODING_UTF8));
+    }
+    return pAttrs;
+}
+
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )
 {
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
@@ -5744,25 +5768,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
 
     // picture description (used for pic:cNvPr later too)
-    rtl::Reference<::sax_fastparser::FastAttributeList> docPrattrList = FastSerializerHelper::createAttrList();
-    docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
-    docPrattrList->add( XML_name, OUStringToOString( pFrameFormat->GetName(), RTL_TEXTENCODING_UTF8 ) );
     OUString const descr(pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription());
     OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
-    if (GetExport().GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
-    {
-        docPrattrList->add(XML_descr, OUStringToOString(descr, RTL_TEXTENCODING_UTF8));
-        docPrattrList->add(XML_title, OUStringToOString(title, RTL_TEXTENCODING_UTF8));
-    }
-    else
-    {   // tdf#148952 no title attribute, merge it into descr
-        OUString const value(title.isEmpty()
-            ? descr
-            : descr.isEmpty()
-                ? title
-                : title + OUString::Concat("\n") + descr);
-        docPrattrList->add(XML_descr, OUStringToOString(value, RTL_TEXTENCODING_UTF8));
-    }
+    auto const docPrattrList(CreateDocPrAttrList(
+        GetExport(), m_anchorId++, pFrameFormat->GetName(), title, descr));
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
@@ -5965,14 +5974,19 @@ void DocxAttributeOutput::WritePostponedChart()
             if( xNamed.is() )
                 sName = xNamed->getName();
 
+            // tdf#153203  export a11y related properties
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            OUString const title(xShapeProps->getPropertyValue("Title").get<OUString>());
+            OUString const descr(xShapeProps->getPropertyValue("Description").get<OUString>());
+
             /* If there is a scenario where a chart is followed by a shape
                which is being exported as an alternate content then, the
                docPr Id is being repeated, ECMA 20.4.2.5 says that the
                docPr Id should be unique, ensuring the same here.
                */
-            m_pSerializer->singleElementNS( XML_wp, XML_docPr,
-                    XML_id, OString::number(m_anchorId++),
-                    XML_name, sName );
+            auto const docPrattrList(CreateDocPrAttrList(
+                GetExport(), m_anchorId++, sName, title, descr));
+            m_pSerializer->singleElementNS(XML_wp, XML_docPr, docPrattrList);
 
             m_pSerializer->singleElementNS(XML_wp, XML_cNvGraphicFramePr);
 

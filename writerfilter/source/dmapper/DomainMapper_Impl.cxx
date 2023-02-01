@@ -4165,8 +4165,27 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
     awt::Size aSize = xShape->getSize( );
     xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_WIDTH), uno::Any(sal_Int32(aSize.Width)));
     xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_HEIGHT), uno::Any(sal_Int32(aSize.Height)));
+    uno::Reference<beans::XPropertySet> const xShapeProps(xShape, uno::UNO_QUERY);
+    // tdf#130782 copy a11y related properties
+    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_DESCRIPTION),
+        xShapeProps->getPropertyValue(getPropertyName(PROP_DESCRIPTION)));
+    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_TITLE),
+        xShapeProps->getPropertyValue(getPropertyName(PROP_TITLE)));
+    uno::Reference<container::XNamed> const xEmbedName(m_xEmbedded, uno::UNO_QUERY);
+    uno::Reference<container::XNamed> const xShapeName(xShape, uno::UNO_QUERY);
+    OUString const name(xShapeName->getName());
+    if (!name.isEmpty()) // setting empty name will throw
+    {
+        try
+        {
+            xEmbedName->setName(name);
+        }
+        catch (uno::RuntimeException const&)
+        {
+            // ignore - document may contain duplicates (testchartoleobjectembeddings.docx)
+        }
+    }
 }
-
 
 void DomainMapper_Impl::PopShapeContext()
 {

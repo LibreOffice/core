@@ -127,6 +127,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xAccess(xTEOSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xAccess->getCount());
+    uno::Reference<container::XNamed> xObj(xAccess->getByIndex(0), uno::UNO_QUERY);
+
+    // these properties were not imported
+    CPPUNIT_ASSERT_EQUAL(OUString("Diagramm 1"), xObj->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("uninspired default chart"), getProperty<OUString>(xObj, "Title"));
+    CPPUNIT_ASSERT_EQUAL(OUString("the description is here"), getProperty<OUString>(xObj, "Description"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
 {
     // Given a document with a single paragraph, direct formatting asks 24pt font size for the
