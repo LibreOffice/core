@@ -42,7 +42,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarcellappearance|cellbackground|tooltip_text">Select the background color of the selected cells.</property>
                 <property name="use-underline">True</property>
               </object>
@@ -68,7 +67,6 @@
             <child>
               <object class="GtkMenuToolButton" id="SetBorderStyle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarcellappearance|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
@@ -99,7 +97,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:FrameLineColor">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarcellappearance|linecolor|tooltip_text">Select the line color of the borders.</property>
                 <property name="use-underline">True</property>
               </object>
@@ -131,7 +128,6 @@
             <child>
               <object class="GtkMenuToolButton" id="LineStyle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarcellappearance|linestyle|tooltip_text">Select the line style of the borders.</property>
                 <property name="use-underline">True</property>
               </object>

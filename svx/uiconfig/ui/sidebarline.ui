@@ -47,7 +47,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the arrowheads.</property>
                 <property name="use-underline">True</property>
               </object>
@@ -59,7 +58,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:XLineStyle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the line.</property>
                 <property name="use-underline">True</property>
               </object>
@@ -101,7 +99,6 @@
             <child>
               <object class="GtkMenuToolButton" id="SelectWidth">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="use-underline">True</property>
@@ -144,7 +141,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:XLineColor">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|setcolor|tooltip_text">Select the color of the line.</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
