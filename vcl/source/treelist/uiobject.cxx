@@ -69,6 +69,9 @@ std::unique_ptr<UIObject> TreeListUIObject::get_child(const OUString& rID)
             return nullptr;
 
         return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, pEntry));
+            //TODO: this looks dangerous, as there appears to be no protocol to guarantee that
+            // *pEntry will live as long as the new TreeListEntryUIObject referencing it by raw
+            // pointer
     }
     else if (nID == -1) // FIXME hack?
     {
@@ -172,6 +175,9 @@ std::unique_ptr<UIObject> TreeListEntryUIObject::get_child(const OUString& rID)
             return nullptr;
 
         return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, pEntry));
+            //TODO: this looks dangerous, as there appears to be no protocol to guarantee that
+            // *pEntry will live as long as the new TreeListEntryUIObject referencing it by raw
+            // pointer
     }
 
     return nullptr;
