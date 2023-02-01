@@ -842,6 +842,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
+{
+    createSwDoc();
+
+    dispatchCommand(mxComponent,
+                    ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true",
+                    {});
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/tab/row", 2);
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Delete the header
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+
+    discardDumpedLayout();
+    pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header", 0);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/tab/row", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141613)
 {
     createSwDoc();
