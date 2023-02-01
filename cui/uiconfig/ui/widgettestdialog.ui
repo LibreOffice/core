@@ -8,8 +8,8 @@
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
-      <property name="orientation">vertical</property>
-      <child internal-child="action_area">
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
@@ -46,159 +46,70 @@
             <property name="position">1</property>
           </packing>
         </child>
-      <child>
-      <!-- n-columns=2 n-rows=2 -->
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="row-spacing">5</property>
-        <property name="column-spacing">5</property>
         <child>
-          <!-- n-columns=2 n-rows=7 -->
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="row-spacing">5</property>
             <property name="column-spacing">5</property>
             <child>
-              <object class="GtkEntry" id="entry_box_1">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="text" translatable="no">Editable Entry</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_box_2">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="text" translatable="no">Disabled Entry</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="combo_box_disable">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">False</property>
-                <property name="model">liststore1</property>
-                <property name="button-sensitivity">off</property>
-                <property name="has-entry">True</property>
-                <property name="entry-text-column">0</property>
-                <child internal-child="entry">
-                  <object class="GtkEntry">
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="toggle_btn_1">
-                <property name="label" translatable="no">Toggle Button</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="toggle_btn_2">
-                <property name="label" translatable="no">Toggle Button</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="toggle_btn_3">
-                <property name="label" translatable="no">Toggle Button</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="active">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLinkButton" id="link_btn_1">
-                <property name="label" translatable="no">Collabora Office</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="relief">none</property>
-                <property name="uri">https://www.collaboraoffice.com/</property>
-                <property name="visited">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLinkButton" id="link_btn_2">
-                <property name="label" translatable="no">Collabora Office</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="relief">none</property>
-                <property name="uri">https://www.collaboraoffice.com/</property>
-                <property name="visited">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=4 n-rows=1 -->
+              <!-- n-columns=2 n-rows=7 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can-focus">False</property>
                 <property name="row-spacing">5</property>
                 <property name="column-spacing">5</property>
                 <child>
-                  <object class="GtkLabel" id="label_1">
+                  <object class="GtkEntry" id="entry_box_1">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="no">Label</property>
-                    <property name="justify">center</property>
-                    <property name="mnemonic-widget">spin_btn_1</property>
-                    <property name="ellipsize">start</property>
+                    <property name="can-focus">True</property>
+                    <property name="text" translatable="no">Editable Entry</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="spin_btn_1">
+                  <object class="GtkEntry" id="entry_box_2">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="text" translatable="no">Disabled Entry</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combo_box_disable">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">False</property>
+                    <property name="model">liststore1</property>
+                    <property name="button-sensitivity">off</property>
+                    <property name="has-entry">True</property>
+                    <property name="entry-text-column">0</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="toggle_btn_1">
+                    <property name="label" translatable="no">Toggle Button</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -206,123 +117,78 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_2">
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="no">Label</property>
-                    <property name="justify">center</property>
-                    <property name="mnemonic-widget">spin_btn_2</property>
-                    <property name="ellipsize">start</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spin_btn_2">
+                  <object class="GtkToggleButton" id="toggle_btn_2">
+                    <property name="label" translatable="no">Toggle Button</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                   </object>
                   <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinner" id="spinner_1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="no">switch_1</property>
-                <property name="active">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinner" id="spinner_2">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">False</property>
-                <property name="active">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="combo_box_enable">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="model">liststore1</property>
-                <property name="has-entry">True</property>
-                <property name="entry-text-column">0</property>
-                <child internal-child="entry">
-                  <object class="GtkEntry">
-                    <property name="can-focus">False</property>
-                    <property name="text" translatable="no">Test 3</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="row-spacing">5</property>
-            <property name="column-spacing">5</property>
-            <child>
-              <object class="GtkExpander" id="expander_1">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="expanded">True</property>
                 <child>
-                  <!-- n-columns=2 n-rows=4 -->
+                  <object class="GtkToggleButton" id="toggle_btn_3">
+                    <property name="label" translatable="no">Toggle Button</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="link_btn_1">
+                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="relief">none</property>
+                    <property name="uri">https://www.collaboraoffice.com/</property>
+                    <property name="visited">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="link_btn_2">
+                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="relief">none</property>
+                    <property name="uri">https://www.collaboraoffice.com/</property>
+                    <property name="visited">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=4 n-rows=1 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-top">5</property>
                     <property name="row-spacing">5</property>
                     <property name="column-spacing">5</property>
                     <child>
-                      <object class="GtkCheckButton" id="check_btn_1">
-                        <property name="label" translatable="no">Check Button 1</property>
+                      <object class="GtkLabel" id="label_1">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="mnemonic-widget">entry_box_1</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="no">Label</property>
+                        <property name="justify">center</property>
+                        <property name="mnemonic-widget">spin_btn_1</property>
+                        <property name="ellipsize">start</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -330,56 +196,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="check_btn_2">
-                        <property name="label" translatable="no">Check Button 2</property>
+                      <object class="GtkSpinButton" id="spin_btn_1">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="mnemonic-widget">entry_box_2</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="check_btn_4">
-                        <property name="label" translatable="no">Check Button 4</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="check_btn_3">
-                        <property name="label" translatable="no">Check Button 3</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="radio_btn_1">
-                        <property name="label" translatable="no">Radio Button 1</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -387,212 +206,393 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radio_btn_2">
-                        <property name="label" translatable="no">Radio Button 2</property>
+                      <object class="GtkLabel" id="label_2">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">radio_btn_1</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="no">Label</property>
+                        <property name="justify">center</property>
+                        <property name="mnemonic-widget">spin_btn_2</property>
+                        <property name="ellipsize">start</property>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radio_btn_3">
-                        <property name="label" translatable="no">Radio Button 3</property>
+                      <object class="GtkSpinButton" id="spin_btn_2">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="radio_btn_4">
-                        <property name="label" translatable="no">Radio Button 4</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">radio_btn_3</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
                 </child>
-                <child type="label">
-                  <object class="GtkLabel" id="expander">
+                <child>
+                  <object class="GtkSpinner" id="spinner_1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="no">Expander</property>
+                    <property name="tooltip-text" translatable="no">switch_1</property>
+                    <property name="active">True</property>
                   </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinner" id="spinner_2">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">False</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combo_box_enable">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="model">liststore1</property>
+                    <property name="has-entry">True</property>
+                    <property name="entry-text-column">0</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">False</property>
+                        <property name="text" translatable="no">Test 3</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="contentbox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">5</property>
+                <property name="column-spacing">5</property>
                 <child>
-                  <object class="GtkTreeView" id="contenttree">
-                    <property name="width-request">-1</property>
+                  <object class="GtkExpander" id="expander_1">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore2</property>
-                    <property name="headers-visible">False</property>
-                    <property name="reorderable">True</property>
-                    <property name="search-column">1</property>
-                    <property name="enable-tree-lines">True</property>
+                    <property name="expanded">True</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn0">
-                        <property name="spacing">6</property>
+                      <!-- n-columns=2 n-rows=4 -->
+                      <object class="GtkGrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
+                        <property name="row-spacing">5</property>
+                        <property name="column-spacing">5</property>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf0"/>
-                          <attributes>
-                            <attribute name="sensitive">4</attribute>
-                            <attribute name="pixbuf">0</attribute>
-                          </attributes>
-                        </child>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext0">
-                            <property name="xalign">0</property>
+                          <object class="GtkCheckButton" id="check_btn_1">
+                            <property name="label" translatable="no">Check Button 1</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="mnemonic-widget">entry_box_1</property>
                           </object>
-                          <attributes>
-                            <attribute name="xpad">5</attribute>
-                            <attribute name="sensitive">4</attribute>
-                            <attribute name="text">1</attribute>
-                          </attributes>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="check_btn_2">
+                            <property name="label" translatable="no">Check Button 2</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="mnemonic-widget">entry_box_2</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="check_btn_4">
+                            <property name="label" translatable="no">Check Button 4</property>
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="draw-indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="check_btn_3">
+                            <property name="label" translatable="no">Check Button 3</property>
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="radio_btn_1">
+                            <property name="label" translatable="no">Radio Button 1</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="radio_btn_2">
+                            <property name="label" translatable="no">Radio Button 2</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="group">radio_btn_1</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="radio_btn_3">
+                            <property name="label" translatable="no">Radio Button 3</property>
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="radio_btn_4">
+                            <property name="label" translatable="no">Radio Button 4</property>
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="group">radio_btn_3</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">3</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="expander">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="no">Expander</property>
+                      </object>
+                    </child>
                   </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="contentbox2">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkBox" id="contentbox">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkTreeView" id="contenttree2">
-                    <property name="width-request">-1</property>
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="has-tooltip">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="model">liststore3</property>
-                    <property name="headers-visible">True</property>
-                    <property name="reorderable">True</property>
-                    <property name="search-column">1</property>
-                    <property name="enable-tree-lines">True</property>
+                    <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="no">Column 1</property>
+                      <object class="GtkTreeView" id="contenttree">
+                        <property name="width-request">-1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore2</property>
+                        <property name="headers-visible">False</property>
+                        <property name="reorderable">True</property>
+                        <property name="search-column">1</property>
+                        <property name="enable-tree-lines">True</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="no">Column 2</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf0"/>
+                              <attributes>
+                                <attribute name="sensitive">4</attribute>
+                                <attribute name="pixbuf">0</attribute>
+                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext0">
+                                <property name="xalign">0</property>
+                              </object>
+                              <attributes>
+                                <attribute name="xpad">5</attribute>
+                                <attribute name="sensitive">4</attribute>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="contentbox2">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="contenttree2">
+                        <property name="width-request">-1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore3</property>
+                        <property name="headers-visible">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="search-column">1</property>
+                        <property name="enable-tree-lines">True</property>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="title" translatable="no">Column 1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderer1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="title" translatable="no">Column 2</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderer2"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
       </object>
-    </child>
-    </object>
-    <packing>
-      <property name="position">0</property>
-    </packing>
+      <packing>
+        <property name="position">0</property>
+      </packing>
     </child>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
@@ -644,7 +644,7 @@ t ever since the 1500s, when an unknown printer took a galley of type and scramb
       <column type="gint"/>
     </columns>
   </object>
-    <object class="GtkTreeStore" id="liststore3">
+  <object class="GtkTreeStore" id="liststore3">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
