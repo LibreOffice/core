@@ -168,7 +168,7 @@ struct FilterBaseImpl
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
     meDirection( FILTERDIRECTION_UNKNOWN ),
-    meVersion( ECMA_DIALECT ),
+    meVersion(ECMA_376_1ST_EDITION),
     mxComponentContext( rxContext, UNO_SET_THROW ),
     mbExportVBA(false),
     mbExportTemplate(false)

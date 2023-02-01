@@ -4307,7 +4307,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     const SwTableBox *pTableBox = pTableTextNodeInfoInner->getTableBox( );
 
-    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool const bEcma = GetExport().GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
     // Output any table cell redlines if there are any attached to this specific cell
     TableCellRedline( pTableTextNodeInfoInner );
@@ -4561,7 +4561,7 @@ sal_Int32 lcl_getWordCompatibilityMode(const DocxExport& rDocExport)
 
 void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
-    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool const bEcma = GetExport().GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
     // Write the table properties
     m_pSerializer->startElementNS(XML_w, XML_tblPr);
@@ -4955,7 +4955,7 @@ void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::P
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
     const SvxBoxItem& rBox = pFrameFormat->GetBox( );
-    const bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    const bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_376_1ST_EDITION;
 
     impl_cellMargins(m_pSerializer, rBox, XML_tblCellMar, !bEcma);
 }
@@ -5748,8 +5748,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
     docPrattrList->add( XML_name, OUStringToOString( pFrameFormat->GetName(), RTL_TEXTENCODING_UTF8 ) );
     docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription(), RTL_TEXTENCODING_UTF8 ));
-    if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
+    if (GetExport().GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
+    {
         docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle(), RTL_TEXTENCODING_UTF8 ));
+    }
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
@@ -7774,7 +7776,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
         aCharSet = "0" + aCharSet;
     pAttr->add(FSNS(XML_w, XML_val), aCharSet);
 
-    if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
+    if (GetExport().GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
     {
         if( const char* charset = rtl_getMimeCharsetFromTextEncoding( nEncoding ))
             pAttr->add( FSNS( XML_w, XML_characterSet ), charset );
@@ -8171,7 +8173,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 
     // justification
     const char *pJc;
-    bool ecmaDialect = ( m_rExport.GetFilter().getVersion() == oox::core::ECMA_DIALECT );
+    bool const ecmaDialect = m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
     switch ( eAdjust )
     {
         case SvxAdjust::Center: pJc = "center"; break;
@@ -9273,7 +9275,7 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 {
     const char *pAdjustString;
 
-    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool const bEcma = GetExport().GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
     const SfxItemSet* pItems = GetExport().GetCurItemSet();
     const SvxFrameDirectionItem* rFrameDir = pItems?
@@ -9586,7 +9588,7 @@ void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
-    bool bEcma = m_rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool const bEcma = m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
