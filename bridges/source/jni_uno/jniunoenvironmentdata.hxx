@@ -24,10 +24,10 @@
 #include <jni.h>
 
 #include <jvmaccess/unovirtualmachine.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include "jni_info.h"
+#include <mutex>
 
 namespace jni_uno {
 
@@ -45,7 +45,7 @@ struct JniUnoEnvironmentData {
     rtl::Reference<jvmaccess::UnoVirtualMachine> const machine;
     JNI_info const * const info;
 
-    osl::Mutex mutex;
+    std::mutex mutex;
     jobject asynchronousFinalizer;
 };
 

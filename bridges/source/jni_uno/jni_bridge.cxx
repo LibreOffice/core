@@ -428,7 +428,7 @@ static void java_env_dispose(uno_Environment * env) {
 
     jobject async;
     {
-        osl::MutexGuard g(envData->mutex);
+        std::unique_lock g(envData->mutex);
         async = envData->asynchronousFinalizer;
         envData->asynchronousFinalizer = nullptr;
     }

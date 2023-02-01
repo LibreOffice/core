@@ -74,7 +74,7 @@ jobject Bridge::map_to_java(
         auto * envData = static_cast<jni_uno::JniUnoEnvironmentData *>(
             m_java_env->pContext);
         {
-            osl::MutexGuard g(envData->mutex);
+            std::unique_lock g(envData->mutex);
             args2[ 7 ].l = envData->asynchronousFinalizer;
         }
         jo_iface = jni->CallStaticObjectMethodA(
