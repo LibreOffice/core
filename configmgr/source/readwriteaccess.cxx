@@ -22,9 +22,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <mutex>
 #include <utility>
 #include <sal/types.h>
 
@@ -98,7 +98,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     rtl::Reference< RootAccess > root_;
 };
 
@@ -110,7 +110,7 @@ void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
             "not exactly one string argument",
             static_cast< cppu::OWeakObject * >(this), -1);
     }
-    osl::MutexGuard g1(mutex_);
+    std::unique_lock g1(mutex_);
     if (root_.is()) {
         throw css::uno::RuntimeException(
             "already initialized", static_cast< cppu::OWeakObject * >(this));
@@ -122,7 +122,7 @@ void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
 }
 
 rtl::Reference< RootAccess > Service::getRoot() {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     if (!root_.is()) {
         throw css::lang::NotInitializedException(
             "not initialized", static_cast< cppu::OWeakObject * >(this));
