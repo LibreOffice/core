@@ -19,6 +19,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/link.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/window.hxx>
@@ -153,6 +154,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 
     SolarMutexGuard aGuard;
     aIdle.reset();
+    Scheduler::ProcessEventsToIdle();
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
