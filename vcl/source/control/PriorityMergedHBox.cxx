@@ -27,7 +27,6 @@
 
 #define DUMMY_WIDTH 50
 #define BUTTON_WIDTH 30
-#define TEMP_WIDTH 200
 
 /*
 * PriorityMergedHBox is a VclHBox which hides its own children if there is no sufficient space.
@@ -58,9 +57,6 @@ void PriorityMergedHBox::Resize()
     }
 
     tools::Long nWidth = GetSizePixel().Width();
-    if (nWidth <= 1 || nWidth == TEMP_WIDTH || nWidth == TEMP_WIDTH + 6)
-        return VclHBox::Resize();
-
     tools::Long nCurrentWidth = VclHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
 
     // Hide lower priority controls
@@ -159,7 +155,7 @@ Size PriorityMergedHBox::calculateRequisition() const
         accumulateMaxes(aChildSize, aSize);
     }
 
-    setPrimaryDimension(aSize, TEMP_WIDTH);
+    setPrimaryDimension(aSize, 200);
     return finalizeMaxes(aSize, nVisibleChildren);
 }
 
