@@ -50,7 +50,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="halign">start</property>
-                <property name="valign">start</property>
                 <property name="relief">none</property>
                 <property name="uri">https://languagetool.org/legal/privacy</property>
               </object>
