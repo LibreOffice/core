@@ -83,7 +83,8 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 }
 
 SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede)
-    : SwFlyAtContentFrame(rPrecede.GetFormat(), rPrecede.getRootFrame(), /*pAnchor=*/nullptr)
+    : SwFlyAtContentFrame(rPrecede.GetFormat(), const_cast<SwFrame*>(rPrecede.GetAnchorFrame()),
+                          const_cast<SwFrame*>(rPrecede.GetAnchorFrame()))
 {
     SetFollow(rPrecede.GetFollow());
     rPrecede.SetFollow(this);
@@ -1560,21 +1561,23 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     if( pLayLeaf )
     {
         SwFlyAtContentFrame* pNew = nullptr;
+        SwFrame* pFlyAnchor = const_cast<SwFrame*>(pFly->GetAnchorFrame());
+        if (pFlyAnchor)
         {
-            pNew = new SwFlyAtContentFrame( *pFly );
-            pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
-
-            SwFrame* pTmp = pFly->GetNext();
-            if( pTmp && pTmp != pFly->GetFollow() )
+            SwFrame* pTmp = pFlyAnchor->GetNext();
+            if (pTmp)
             {
                 SwFlowFrame* pNxt = nullptr;
-                if( pTmp->IsContentFrame() )
+                if (pTmp->IsContentFrame())
                 {
                     pNxt = static_cast<SwContentFrame*>(pTmp);
                 }
                 if (pNxt)
                 {
-                    pNxt->MoveSubTree(pLayLeaf, pNew->GetNext());
+                    pNxt->MoveSubTree(pLayLeaf);
+
+                    pNew = new SwFlyAtContentFrame( *pFly );
+                    pNxt->GetFrame().AppendFly( pNew );
                 }
             }
         }

@@ -877,6 +877,14 @@ SwLayoutFrame *SwFrame::GetLeaf( MakePageType eMakePage, bool bFwd )
     if ( bInSct )
         return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf();
 
+    if (IsInFly() && FindFlyFrame()->IsFlySplitAllowed())
+    {
+        if (bFwd)
+        {
+            return GetNextFlyLeaf(eMakePage);
+        }
+    }
+
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf();
 }
 
