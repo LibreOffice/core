@@ -224,6 +224,24 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4999, aSize.Height, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLDetectWordArtOnImport)
+{
+    // The document contains a WordArt shape with type other than "fontwork-foo". Error was that
+    // WordArt was not detected and thus shrinking shape to text content was not prevented.
+    loadFromURL(u"tdf153258_VML_import_WordArt_detection.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+                                           uno::UNO_QUERY);
+
+    // Make sure the shape width and height is not changed.
+    awt::Size aSize = xShape->getSize();
+    // Without the fix the test would have failed with expected 7514 actual 1453.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7514, aSize.Width, 2);
+    // Without the fix the test would have failed with expected 4540 actual 309.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4540, aSize.Height, 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
