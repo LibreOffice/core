@@ -1182,8 +1182,7 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     else
         SAL_WARN("vcl", "No notifier in JSInstanceBuilder::CreateMessageDialog");
 
-    // fallback
-    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
+    return new JSMessageDialog(xMessageDialog, nullptr, true);
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
