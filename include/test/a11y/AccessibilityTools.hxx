@@ -78,7 +78,6 @@ public:
     }
 
     static OUString getRoleName(const sal_Int16 role);
-    static OUString getStateName(const sal_Int16 state);
     static OUString getEventIdName(const sal_Int16 event_id);
     static OUString getRelationTypeName(const sal_Int16 rel_type);
 
