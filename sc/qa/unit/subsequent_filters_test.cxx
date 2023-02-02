@@ -78,6 +78,7 @@ public:
     ScFiltersTest();
 
     //ods, xls, xlsx filter tests
+    void testTdf138601_CondFormatXLSX();
     void testContentODS();
     void testContentXLS();
     void testContentXLSX();
@@ -210,6 +211,7 @@ public:
     void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testTdf138601_CondFormatXLSX);
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
@@ -419,6 +421,30 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 
     //add additional checks here
 }
+}
+
+void ScFiltersTest::testTdf138601_CondFormatXLSX()
+{
+    createScDoc("xlsx/tdf138601.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat1 = pDoc->GetCondFormat(0, 0, 0);
+    const ScFormatEntry* pEntry1 = pFormat1->GetEntry(0);
+    const ScColorScaleFormat* pColorScale1 = static_cast<const ScColorScaleFormat*>(pEntry1);
+    const ScColorScaleEntry* pColorScaleEntry1 = pColorScale1->GetEntry(0);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 201), pColorScaleEntry1->GetColor());
+
+    ScConditionalFormat* pFormat2 = pDoc->GetCondFormat(1, 0, 0);
+    const ScFormatEntry* pEntry2 = pFormat2->GetEntry(0);
+    const ScColorScaleFormat* pColorScale2 = static_cast<const ScColorScaleFormat*>(pEntry2);
+    const ScColorScaleEntry* pColorScaleEntry2 = pColorScale2->GetEntry(0);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 139, 139), pColorScaleEntry2->GetColor());
+
+    ScConditionalFormat* pFormat3 = pDoc->GetCondFormat(0, 1, 0);
+    const ScFormatEntry* pEntry3 = pFormat3->GetEntry(0);
+    const ScColorScaleFormat* pColorScale3 = static_cast<const ScColorScaleFormat*>(pEntry3);
+    const ScColorScaleEntry* pColorScaleEntry3 = pColorScale3->GetEntry(0);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 201), pColorScaleEntry3->GetColor());
 }
 
 void ScFiltersTest::testContentODS()
