@@ -26,6 +26,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
@@ -293,7 +294,7 @@ private:
     static InstanceMap maInstanceMap;
     class ViewURLMap;
     static ViewURLMap maViewURLMap;
-    static osl::Mutex maInstanceMapMutex;
+    static std::mutex maInstanceMapMutex;
 
     ViewShellBase& mrBase;
     css::uno::Reference<css::drawing::framework::XConfigurationController>

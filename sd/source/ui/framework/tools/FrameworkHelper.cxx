@@ -279,11 +279,11 @@ public:
 FrameworkHelper::ViewURLMap FrameworkHelper::maViewURLMap;
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
-osl::Mutex FrameworkHelper::maInstanceMapMutex;
+std::mutex FrameworkHelper::maInstanceMapMutex;
 
 ::std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
-    ::osl::MutexGuard aGuard(maInstanceMapMutex);
+    std::unique_lock aGuard(maInstanceMapMutex);
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper != maInstanceMap.end())
