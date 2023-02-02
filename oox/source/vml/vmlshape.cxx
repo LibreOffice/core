@@ -63,7 +63,7 @@
 #include <oox/vml/vmltextbox.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
-#include <svx/EnhancedCustomShapeTypeNames.hxx>
+#include <svx/msdffdef.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/svdobj.hxx>
 #include <comphelper/sequence.hxx>
@@ -716,10 +716,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
     if( pShape && getShapeType() >= 0 )
     {
-        OUString aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >(getShapeType()) );
         //The resize autoshape to fit text attr of FontWork/Word-Art should always be false
         //for the fallback geometry.
-        if(aShapeType.startsWith("fontwork"))
+        sal_Int32 nType = getShapeType();
+        if((mso_sptTextSimple <= nType && nType <= mso_sptTextOnRing)
+            || (mso_sptTextPlainText <= nType && nType <= mso_sptTextCanDown))
         {
             pShape->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
             pShape->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
