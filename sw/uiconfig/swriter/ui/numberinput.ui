@@ -96,6 +96,7 @@
                 <property name="max-length">2</property>
                 <property name="width-chars">2</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <property name="activates_default">True</property>
               </object>
               <packing>
