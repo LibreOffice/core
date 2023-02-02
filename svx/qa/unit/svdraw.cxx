@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
 {
     std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->SetSize(Size(1000, 1000));
+    pPage->setSize({ 1_cm, 1_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     tools::Rectangle aSize(Point(), Size(100, 100));
@@ -620,7 +620,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
 {
     std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->SetSize(Size(50000, 50000));
+    pPage->setSize({ 50_cm, 50_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     tools::Rectangle aRect(Point(), Size(100, 100));
@@ -640,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
 {
     std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->SetSize(Size(50000, 50000));
+    pPage->setSize({ 50_cm, 50_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     {
@@ -885,6 +885,6 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Width);
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Height);
 }
-}
+} // end anonymous namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

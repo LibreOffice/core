@@ -22,9 +22,11 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/style.hxx>
 #include <svx/fmmodel.hxx>
+#include <svx/svdpage.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/prntypes.hxx>
 #include <xmloff/autolayout.hxx>
+#include <basegfx/units/Size2DLWrap.hxx>
 
 #include <vector>
 #include <memory>
@@ -267,11 +269,8 @@ struct InsertBookmarkOptions
  */
 struct PageProperties
 {
-    Size         size;        // Page size dimensions
-    sal_Int32    left;        // Left margin
-    sal_Int32    right;       // Right margin
-    sal_Int32    upper;       // Upper (top) margin
-    sal_Int32    lower;       // Lower (bottom) margin
+    gfx::Size2DLWrap size;        // Page size dimensions
+    svx::Border border;
     Orientation  orientation; // Page orientation (portrait/landscape)
     SdPage*      pPage;       // Pointer to the page object
 };

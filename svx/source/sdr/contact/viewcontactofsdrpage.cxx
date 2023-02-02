@@ -104,9 +104,12 @@ void ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence(drawingla
 {
     static bool bUseOldPageShadow(false); // loplugin:constvars:ignore
     const SdrPage& rPage = getPage();
+    const double fPageWidth = rPage.getSize().getUnitWidth();
+    const double fPageHeight = rPage.getSize().getUnitHeight();
+
     basegfx::B2DHomMatrix aPageMatrix;
-    aPageMatrix.set(0, 0, static_cast<double>(rPage.GetWidth()));
-    aPageMatrix.set(1, 1, static_cast<double>(rPage.GetHeight()));
+    aPageMatrix.set(0, 0, fPageWidth);
+    aPageMatrix.set(1, 1, fPageHeight);
 
     if(bUseOldPageShadow)
     {
@@ -202,11 +205,9 @@ void ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence(drawingla
             if(!aFill.isDefault())
             {
                 // direct model data is the page size, get and use it
-                const basegfx::B2DRange aOuterRange(
-                    0, 0, rPage.GetWidth(), rPage.GetHeight());
-                const basegfx::B2DRange aInnerRange(
-                    rPage.GetLeftBorder(), rPage.GetUpperBorder(),
-                    rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
+                const basegfx::B2DRange aOuterRange = rPage.getRectangle().toB2DRange();
+                const basegfx::B2DRange aInnerRange = rPage.getInnerRectangle().toB2DRange();
+
                 bool const isFullSize(rPage.IsBackgroundFullSize());
                 const basegfx::B2DPolygon aFillPolygon(
                     basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
@@ -242,7 +243,7 @@ ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(
 void ViewContactOfPageFill::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPage& rPage = getPage();
-    const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
+    const basegfx::B2DRange aPageFillRange = rPage.getInnerRectangle().toB2DRange();
     const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
 
     // We have only the page information, not the view information. Use the
@@ -275,7 +276,7 @@ ViewObjectContact& ViewContactOfOuterPageBorder::CreateObjectSpecificViewObjectC
 void ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPage& rPage = getPage();
-    const basegfx::B2DRange aPageBorderRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
+    const basegfx::B2DRange aPageBorderRange = rPage.getRectangle().toB2DRange();
 
     // Changed to 0x949599 for renaissance, before svtools::FONTCOLOR was used.
     // Added old case as fallback for HighContrast.
@@ -331,9 +332,7 @@ ViewObjectContact& ViewContactOfInnerPageBorder::CreateObjectSpecificViewObjectC
 void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPage& rPage = getPage();
-    const basegfx::B2DRange aPageBorderRange(
-        static_cast<double>(rPage.GetLeftBorder()), static_cast<double>(rPage.GetUpperBorder()),
-        static_cast<double>(rPage.GetWidth() - rPage.GetRightBorder()), static_cast<double>(rPage.GetHeight() - rPage.GetLowerBorder()));
+    const basegfx::B2DRange aPageBorderRange = rPage.getInnerRectangle().toB2DRange();
     basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
 
     // We have only the page information, not the view information. Use the

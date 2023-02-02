@@ -146,7 +146,7 @@ void Svx3DPreviewControl::Resize()
     // size of page
     Size aSize(GetOutputSizePixel());
     aSize = GetDrawingArea()->get_ref_device().PixelToLogic(aSize);
-    mxFmPage->SetSize(aSize);
+    mxFmPage->setToolsSize(aSize);
 
     // set size
     Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
@@ -676,7 +676,7 @@ void Svx3DLightControl::Resize()
 {
     // set size of page
     const Size aSize(GetDrawingArea()->get_ref_device().PixelToLogic(GetOutputSizePixel()));
-    mxFmPage->SetSize(aSize);
+    mxFmPage->setToolsSize(aSize);
 
     // set position and size of scene
     mpScene->SetSnapRect(tools::Rectangle(Point(0, 0), aSize));

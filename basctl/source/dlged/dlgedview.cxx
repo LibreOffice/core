@@ -90,7 +90,7 @@ void DlgEdView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
         nScrollY -= nDeltaY;
 
     // don't scroll beyond the page size
-    Size aPageSize = rDlgEditor.GetPage().GetSize();
+    Size aPageSize = rDlgEditor.GetPage().getSize().toToolsSize();
     sal_Int32 nPageWidth  = aPageSize.Width();
     sal_Int32 nPageHeight = aPageSize.Height();
 

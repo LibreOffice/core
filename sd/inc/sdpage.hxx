@@ -153,7 +153,8 @@ public:
 
     virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
-    virtual void    SetSize(const Size& aSize) override;
+    virtual void setSize(gfx::Size2DLWrap const& rSize) override;
+
     virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr) override;
     virtual void    SetLeftBorder(sal_Int32 nBorder) override;
     virtual void    SetRightBorder(sal_Int32 nBorder) override;

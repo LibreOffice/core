@@ -211,7 +211,7 @@ void ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /
     {
         const SdrPage& rPage = getPage();
 
-        const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
+        const basegfx::B2DRange aPageFillRange = rPage.getRectangle().toB2DRange();
         const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
         Color aPageFillColor;
 
@@ -337,7 +337,7 @@ bool ViewObjectContactOfInnerPageBorder::isPrimitiveVisible(const DisplayInfo& r
 
     const SdrPage& rPage = getPage();
 
-    if(!rPage.GetLeftBorder() && !rPage.GetUpperBorder() && !rPage.GetRightBorder() && !rPage.GetLowerBorder())
+    if (rPage.getBorder().isEmpty())
     {
         return false;
     }
@@ -423,14 +423,17 @@ void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /
     {
         const SdrView& rView = pPageView->GetView();
         const SdrPage& rPage = getPage();
+
+        const auto aPageSize = rPage.getSize();
+
         const Color aGridColor(rView.GetGridColor());
         const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
         basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, static_cast<double>(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
-        aGridMatrix.set(1, 1, static_cast<double>(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
-        aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
-        aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
+        aGridMatrix.set(0, 0, (aPageSize.getWidth() - (rPage.getBorder().right() + rPage.getBorder().left())).as(rPage.getUnit()));
+        aGridMatrix.set(1, 1, (aPageSize.getHeight() - (rPage.getBorder().lower() + rPage.getBorder().upper())).as(rPage.getUnit()));
+        aGridMatrix.set(0, 2, rPage.getBorder().left().as(rPage.getUnit()));
+        aGridMatrix.set(1, 2, rPage.getBorder().upper().as(rPage.getUnit()));
 
         const Size aRaw(rView.GetGridCoarse());
         const Size aFine(rView.GetGridFine());

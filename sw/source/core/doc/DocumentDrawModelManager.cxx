@@ -150,7 +150,8 @@ void DocumentDrawModelManager::InitDrawModel()
             // mpDrawModel->InsertPage( pDrawPage );
             SdrPage* pDrawPage = pMasterPage.get();
             pRoot->SetDrawPage( pDrawPage );
-            pDrawPage->SetSize( pRoot->getFrameArea().SSize() );
+            Size aSize = pRoot->getFrameArea().SSize();
+            pDrawPage->setToolsSize(aSize);
         }
     }
 }

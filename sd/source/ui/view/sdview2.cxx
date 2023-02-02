@@ -102,7 +102,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
 
     if( pOldPage )
     {
-        pNewPage->SetSize( pOldPage->GetSize() );
+        pNewPage->setSize(pOldPage->getSize());
         pNewPage->SetLayoutName( pOldPage->GetLayoutName() );
     }
 

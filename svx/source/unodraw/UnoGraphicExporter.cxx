@@ -305,23 +305,23 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
     VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
     MapMode         aMM( MapUnit::Map100thMM );
 
-    Point aPoint( 0, 0 );
-    Size aPageSize(pPage->GetSize());
+    Point aPoint(0, 0);
+    auto aPageSize = pPage->getSize().toToolsSize();
 
     // use scaling?
     if( nWidthPixel != 0 )
     {
-        const Fraction aFrac( nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const Fraction aFrac(nWidthPixel, pVDev->LogicToPixel(aPageSize, aMM).Width());
 
-        aMM.SetScaleX( aFrac );
+        aMM.SetScaleX(aFrac);
 
-        if( nHeightPixel == 0 )
-            aMM.SetScaleY( aFrac );
+        if (nHeightPixel == 0)
+            aMM.SetScaleY(aFrac);
     }
 
-    if( nHeightPixel != 0 )
+    if (nHeightPixel != 0)
     {
-        const Fraction aFrac( nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const Fraction aFrac(nHeightPixel, pVDev->LogicToPixel(aPageSize, aMM).Height());
 
         if( nWidthPixel == 0 )
             aMM.SetScaleX( aFrac );
@@ -566,6 +566,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
     SdrPage* pPage = mpUnoPage->GetSdrPage();
     if( !pPage )
         return false;
+    auto eUnit = pPage->getUnit();
 
     ScopedVclPtrInstance< VirtualDevice > aVDev;
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
@@ -594,9 +595,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             if(pCorrectProperties)
             {
-                pTempBackgroundShape = new SdrRectObj(
-                    *mpDoc,
-                    tools::Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape = new SdrRectObj(*mpDoc, pPage->getRectangle().toToolsRect());
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
@@ -605,7 +604,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         }
         else
         {
-            const Size aSize( pPage->GetSize() );
+            const Size aSize = pPage->getSize().toToolsSize();
 
             // generate a bitmap to convert it to a pixel format.
             // For gif pictures there can also be a vector format used (bTranslucent)
@@ -700,9 +699,9 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 // want MasterPage content if a whole SdrPage is exported
                 pView->SetPageDecorationAllowed(false);
 
-                const Point aNewOrg( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
-                aNewSize = Size( aSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder(),
-                                 aSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder() );
+                const Point aNewOrg(pPage->getBorder().left().as(eUnit), pPage->getBorder().upper().as(eUnit));
+                aNewSize = Size(aSize.Width() - (pPage->getBorder().left() - pPage->getBorder().right()).as(eUnit),
+                                aSize.Height() - (pPage->getBorder().upper() - pPage->getBorder().lower()).as(eUnit));
                 const tools::Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 

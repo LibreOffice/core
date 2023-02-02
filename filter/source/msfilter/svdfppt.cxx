@@ -1247,7 +1247,7 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
     {
         if ( rObjData.nSpFlags & ShapeFlag::Background )
         {
-            pRet->NbcSetSnapRect( tools::Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
+            pRet->NbcSetSnapRect(rData.pPage.page->getRectangle().toToolsRect()); // set size
         }
         if (rPersistEntry.xSolverContainer)
         {
@@ -2663,7 +2663,8 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, SvxMSDffClientData* pClien
 rtl::Reference<SdrPage> SdrPowerPointImport::MakeBlankPage( bool bMaster ) const
 {
     rtl::Reference<SdrPage> pRet = pSdrModel->AllocPage( bMaster );
-    pRet->SetSize( GetPageSize() );
+    Size const& rSize = GetPageSize();
+    pRet->setSize({ gfx::Length::hmm(rSize.Width()), gfx::Length::hmm(rSize.Height()) });
 
     return pRet;
 }
@@ -2805,7 +2806,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
-                                    tools::Rectangle aPageSize( Point(), pRet->GetSize() );
+                                    tools::Rectangle aPageSize = pRet->getRectangle().toToolsRect();
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background?
                                     {
                                         if ( HasMasterPage( m_nCurrentPageNum, m_eCurrentPageKind ) )
@@ -3053,15 +3054,8 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportPageBackgroundObject( const
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    tools::Rectangle aRect(
-        rPage.GetLeftBorder(),
-        rPage.GetUpperBorder(),
-        rPage.GetWidth() - rPage.GetRightBorder(),
-        rPage.GetHeight() - rPage.GetLowerBorder());
-
-    pRet = new SdrRectObj(
-        *pSdrModel,
-        aRect);
+    tools::Rectangle aRect = rPage.getInnerRectangle().toToolsRect();
+    pRet = new SdrRectObj(*pSdrModel, aRect);
 
     pRet->SetMergedItemSet(*pSet);
     pRet->SetMarkProtect( true );

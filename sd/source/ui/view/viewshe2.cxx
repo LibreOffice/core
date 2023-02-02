@@ -565,13 +565,15 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SdPage* pPage(0 != nPageCnt
         ? GetDoc()->GetSdPage(0, ePageKind)
         : GetDoc()->GetMasterSdPage(0, ePageKind));
-    const ::tools::Long nWidth(pPage->GetSize().Width());
-    const ::tools::Long nHeight(pPage->GetSize().Height());
+    auto aSize = pPage->getSize().toToolsSize();
+    const ::tools::Long nWidth(aSize.Width());
+    const ::tools::Long nHeight(aSize.Height());
     const Point aPageOrg(nWidth, nHeight / 2);
     const Size aViewSize(nWidth * 3, nHeight * 2);
     Point aVisAreaPos;
     ::sd::View* pView(GetView());
-    const Point aNewOrigin(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+    const Point aNewOrigin(pPage->getBorder().leftUnit(),
+                           pPage->getBorder().upperUnit());
 
     InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 

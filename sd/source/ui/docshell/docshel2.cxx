@@ -129,7 +129,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect,
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
         // provide size of first page
-        aVisArea.SetSize(mpDoc->GetSdPage(0, PageKind::Standard)->GetSize());
+        aVisArea.SetSize(mpDoc->GetSdPage(0, PageKind::Standard)->getSize().toToolsSize());
     }
     else
     {
@@ -181,7 +181,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 {
     const sal_uInt16 nMaxEdgePixel = 90;
     MapMode         aMapMode( MapUnit::Map100thMM );
-    const Size      aSize( pPage->GetSize() );
+    const Size aSize = pPage->getSize().toToolsSize();
     const Point     aNullPt;
     ScopedVclPtrInstance< VirtualDevice > pVDev( *Application::GetDefaultDevice() );
 

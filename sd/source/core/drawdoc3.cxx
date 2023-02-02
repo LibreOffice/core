@@ -412,20 +412,14 @@ void SdDrawDocument::getPageProperties(PageProperties& mainProps, PageProperties
 {
     // Get the properties from the first Standard page.
     mainProps.pPage = GetSdPage(0, PageKind::Standard);
-    mainProps.size        = mainProps.pPage->GetSize();
-    mainProps.left        = mainProps.pPage->GetLeftBorder();
-    mainProps.right       = mainProps.pPage->GetRightBorder();
-    mainProps.upper       = mainProps.pPage->GetUpperBorder();
-    mainProps.lower       = mainProps.pPage->GetLowerBorder();
+    mainProps.size = mainProps.pPage->getSize();
+    mainProps.border = mainProps.pPage->getBorder();
     mainProps.orientation = mainProps.pPage->GetOrientation();
 
     // Similarly for the first Notes page.
     notesProps.pPage = GetSdPage(0, PageKind::Notes);
-    notesProps.size        = notesProps.pPage->GetSize();
-    notesProps.left        = notesProps.pPage->GetLeftBorder();
-    notesProps.right       = notesProps.pPage->GetRightBorder();
-    notesProps.upper       = notesProps.pPage->GetUpperBorder();
-    notesProps.lower       = notesProps.pPage->GetLowerBorder();
+    notesProps.size = notesProps.pPage->getSize();
+    notesProps.border = notesProps.pPage->getBorder();
     notesProps.orientation = notesProps.pPage->GetOrientation();
 
     // Adapt the main page properties using the last standard page.
@@ -458,11 +452,11 @@ bool SdDrawDocument::determineScaleObjects(bool bNoDialogs,
     {
         // If not dialog-less, compare the first bookmark page with our reference page.
         SdPage* pBMPage = rParams.pBookmarkDoc->GetSdPage(0, PageKind::Standard);
-        if (pBMPage->GetSize()      != rParams.mainProps.pPage->GetSize()       ||
-            pBMPage->GetLeftBorder()  != rParams.mainProps.pPage->GetLeftBorder()  ||
-            pBMPage->GetRightBorder() != rParams.mainProps.pPage->GetRightBorder() ||
-            pBMPage->GetUpperBorder() != rParams.mainProps.pPage->GetUpperBorder() ||
-            pBMPage->GetLowerBorder() != rParams.mainProps.pPage->GetLowerBorder())
+        if (pBMPage->getSize() != rParams.mainProps.pPage->getSize() ||
+            pBMPage->getBorder().getLeft()  != rParams.mainProps.pPage->getBorder().getLeft() ||
+            pBMPage->getBorder().getRight() != rParams.mainProps.pPage->getBorder().getRight() ||
+            pBMPage->getBorder().getUpper() != rParams.mainProps.pPage->getBorder().getUpper() ||
+            pBMPage->getBorder().getLower() != rParams.mainProps.pPage->getBorder().getLower())
         {
             OUString aStr(SdResId(STR_SCALE_OBJECTS));
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
@@ -936,11 +930,10 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
 
         if (rParams.bScaleObjects)
         {
-            ::tools::Rectangle aBorderRect(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
-            rParams.mainProps.pPage->ScaleObjects(rParams.mainProps.size, aBorderRect, true);
+            rParams.mainProps.pPage->ScaleObjects(rParams.mainProps.size.toToolsSize(), rParams.mainProps.border.toToolsRect(), true);
         }
-        rParams.mainProps.pPage->SetSize(rParams.mainProps.size);
-        rParams.mainProps.pPage->SetBorder(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
+        rParams.mainProps.pPage->setSize(rParams.mainProps.size);
+        rParams.mainProps.pPage->setBorder(rParams.mainProps.border);
         rParams.mainProps.pPage->SetOrientation(rParams.mainProps.orientation);
 
         if (bRemoveEmptyPresObj)
@@ -955,12 +948,11 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
 
         if (rParams.bScaleObjects)
         {
-            ::tools::Rectangle aBorderRect(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
-            rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size, aBorderRect, true);
+            rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size.toToolsSize(), rParams.notesProps.border.toToolsRect(), true);
         }
 
-        rParams.notesProps.pPage->SetSize(rParams.notesProps.size);
-        rParams.notesProps.pPage->SetBorder(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
+        rParams.notesProps.pPage->setSize(rParams.notesProps.size);
+        rParams.notesProps.pPage->setBorder(rParams.notesProps.border);
         rParams.notesProps.pPage->SetOrientation(rParams.notesProps.orientation);
 
         if (bRemoveEmptyPresObj)
@@ -977,11 +969,10 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
         {
             if (rParams.bScaleObjects)
             {
-                ::tools::Rectangle aBorderRect(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
-                rParams.mainProps.pPage->ScaleObjects(rParams.mainProps.size, aBorderRect, true);
+                rParams.mainProps.pPage->ScaleObjects(rParams.mainProps.size.toToolsSize(), rParams.mainProps.border.toToolsRect(), true);
             }
-            rParams.mainProps.pPage->SetSize(rParams.mainProps.size);
-            rParams.mainProps.pPage->SetBorder(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
+            rParams.mainProps.pPage->setSize(rParams.mainProps.size);
+            rParams.mainProps.pPage->setBorder(rParams.mainProps.border);
             rParams.mainProps.pPage->SetOrientation(rParams.mainProps.orientation);
 
             uno::Reference<drawing::XDrawPage> xNewPage(GetMasterPage(nPage)->getUnoPage(), uno::UNO_QUERY_THROW);
@@ -1012,11 +1003,10 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
         {
             if (rParams.bScaleObjects)
             {
-                ::tools::Rectangle aBorderRect(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
-                rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size, aBorderRect, true);
+                rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size.toToolsSize(), rParams.notesProps.border.toToolsRect(), true);
             }
-            rParams.notesProps.pPage->SetSize(rParams.notesProps.size);
-            rParams.notesProps.pPage->SetBorder(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
+            rParams.notesProps.pPage->setSize(rParams.notesProps.size);
+            rParams.notesProps.pPage->setBorder(rParams.notesProps.border);
             rParams.notesProps.pPage->SetOrientation(rParams.notesProps.orientation);
         }
 
@@ -1188,7 +1178,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
         }
         else
         {
-            aObjPos = ::tools::Rectangle(Point(), pPage->GetSize()).Center();
+            aObjPos = ::tools::Rectangle(Point(), pPage->getSize().toToolsSize()).Center();
         }
 
         size_t nCountBefore = 0;
@@ -1873,31 +1863,21 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         // Adapt new master pages
         if (pSourceDoc != this)
         {
-            Size aSize(rOldMaster.GetSize());
-            ::tools::Rectangle aBorderRect(rOldMaster.GetLeftBorder(),
-                                  rOldMaster.GetUpperBorder(),
-                                  rOldMaster.GetRightBorder(),
-                                  rOldMaster.GetLowerBorder());
+            Size aSize = rOldMaster.getSize().toToolsSize();
+
+            tools::Rectangle aBorderRect(rOldMaster.getBorder().toToolsRect());
+
             pMaster->ScaleObjects(aSize, aBorderRect, true);
-            pMaster->SetSize(aSize);
-            pMaster->SetBorder(rOldMaster.GetLeftBorder(),
-                               rOldMaster.GetUpperBorder(),
-                               rOldMaster.GetRightBorder(),
-                               rOldMaster.GetLowerBorder());
+            pMaster->setSize(rOldMaster.getSize());
+            pMaster->setBorder(rOldMaster.getBorder());
             pMaster->SetOrientation( rOldMaster.GetOrientation() );
             pMaster->SetAutoLayout(pMaster->GetAutoLayout());
 
-            aSize = rOldNotesMaster.GetSize();
-            ::tools::Rectangle aNotesBorderRect(rOldNotesMaster.GetLeftBorder(),
-                                       rOldNotesMaster.GetUpperBorder(),
-                                       rOldNotesMaster.GetRightBorder(),
-                                       rOldNotesMaster.GetLowerBorder());
+            aSize = rOldNotesMaster.getSize().toToolsSize();
+            tools::Rectangle aNotesBorderRect(rOldNotesMaster.getBorder().toToolsRect());
             pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, true);
-            pNotesMaster->SetSize(aSize);
-            pNotesMaster->SetBorder(rOldNotesMaster.GetLeftBorder(),
-                                    rOldNotesMaster.GetUpperBorder(),
-                                    rOldNotesMaster.GetRightBorder(),
-                                    rOldNotesMaster.GetLowerBorder());
+            pNotesMaster->setSize(rOldNotesMaster.getSize());
+            pNotesMaster->setBorder(rOldNotesMaster.getBorder());
             pNotesMaster->SetOrientation( rOldNotesMaster.GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
@@ -1932,11 +1912,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
 
         pMaster = AllocSdPage(true);
-        pMaster->SetSize(pSelectedPage->GetSize());
-        pMaster->SetBorder(pSelectedPage->GetLeftBorder(),
-                           pSelectedPage->GetUpperBorder(),
-                           pSelectedPage->GetRightBorder(),
-                           pSelectedPage->GetLowerBorder() );
+        pMaster->setSize(pSelectedPage->getSize());
+        pMaster->setBorder(pSelectedPage->getBorder());
         pMaster->SetName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pMaster.get());
@@ -1948,11 +1925,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         pNotesMaster = AllocSdPage(true);
         pNotesMaster->SetPageKind(PageKind::Notes);
-        pNotesMaster->SetSize(pNotes->GetSize());
-        pNotesMaster->SetBorder(pNotes->GetLeftBorder(),
-                                pNotes->GetUpperBorder(),
-                                pNotes->GetRightBorder(),
-                                pNotes->GetLowerBorder() );
+        pNotesMaster->setSize(pNotes->getSize());
+        pNotesMaster->setBorder(pNotes->getBorder());
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pNotesMaster.get());
