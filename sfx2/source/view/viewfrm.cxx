@@ -1326,9 +1326,9 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
 
     if (bHasDocumentMacros || bHasBoundConfigEvents)
     {
-        auto aResId = STR_MACROS_DISABLED;
+        auto aResId = STR_CONTAINS_MACROS;
         if (SvtSecurityOptions::IsMacroDisabled())
-            aResId = STR_CONTAINS_MACROS;
+            aResId = STR_MACROS_DISABLED;
         else if (pObjImpl->aMacroMode.hasUnsignedContentError())
             aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
         auto pInfoBar = AppendInfoBar("macro", SfxResId(STR_MACROS_DISABLED_TITLE),
