@@ -360,6 +360,16 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
                  // I cannot go forward, because there is no next frame.
                  // I'll try to go up:
                  p = pFrame->GetUpper();
+
+                 if (!p && pFrame->IsFlyFrame())
+                 {
+                     const SwFlyFrame* pFlyFrame = pFrame->FindFlyFrame();
+                     if (pFlyFrame->IsFlySplitAllowed())
+                     {
+                         p = pFlyFrame->GetAnchorFrame();
+                     }
+                 }
+
                  bGoingUp = nullptr != p;
                  if ( !bGoingUp )
                  {
