@@ -1234,7 +1234,9 @@ hchar_string kstr2hstr(uchar const* src)
  */
 char* Int2Str(int value, const char *format, char *buf)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(buf,format,value);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return buf;
 }
 
@@ -1292,7 +1294,9 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
             break;
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(buf,"#%02x%02x%02x", red, green, blue);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return buf;
 }
 

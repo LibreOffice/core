@@ -410,7 +410,9 @@ void start_language_section(
 #ifdef _WIN32
     _itoa(primLangID, buff, 16);
 #else
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(buff, "%x", primLangID);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 #endif
     lang_section += std::string("0x") + std::string(buff);
 
@@ -419,7 +421,9 @@ void start_language_section(
 #ifdef _WIN32
     _itoa(subLangID, buff, 16);
 #else
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(buff, "%x", subLangID);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 #endif
     lang_section += std::string("0x") + std::string(buff);
     ostream_iter = lang_section;

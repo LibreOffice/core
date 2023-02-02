@@ -314,7 +314,9 @@ void LwpGraphicObject::GetBentoNamebyID(LwpObjectID const & rMyID, std::string& 
     sal_uInt32 nLow = rMyID.GetLow();
     char pTempStr[32];
     rName = std::string("Gr");
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(pTempStr, "%X,%" SAL_PRIXUINT32, nHigh, nLow);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rName.append(pTempStr);
 }
 
@@ -370,7 +372,9 @@ sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
     char sDName[64]="";
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(sDName, "%s-D", aGrfObjName.c_str());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get bento stream by the name
     pGrafStream = pBentoContainer->FindValueStreamWithPropertyName(sDName);

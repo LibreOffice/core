@@ -1435,7 +1435,9 @@ const char* CffSubsetterContext::getString( int nStringID)
     // TODO: get rid of static char buffer
     static char aNameBuf[ 2560];
     if( nLen < 0) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( aNameBuf, "name[%d].notfound!", nStringID);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     } else {
         const int nMaxLen = sizeof(aNameBuf) - 1;
         if( nLen >= nMaxLen)
@@ -1555,10 +1557,16 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
 
     // get the glyph specific name
     const int nSID = getGlyphSID( nGlyphIndex);
-    if( nSID < 0)           // default glyph name
+    if( nSID < 0) {         // default glyph name
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( aDefaultGlyphName, "gly%03d", nGlyphIndex);
-    else if( mbCIDFont)     // default glyph name in CIDs
-         sprintf( aDefaultGlyphName, "cid%03d", nSID);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
+    else if( mbCIDFont) {   // default glyph name in CIDs
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
+        sprintf( aDefaultGlyphName, "cid%03d", nSID);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     else {                  // glyph name from string table
         const char* pSidName = getString( nSID);
         // check validity of glyph name
@@ -1569,8 +1577,11 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
                 pGlyphName = pSidName;
         }
         // if needed invent a fallback name
-        if( pGlyphName != pSidName)
+        if( pGlyphName != pSidName) {
+             SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
              sprintf( aDefaultGlyphName, "bad%03d", nSID);
+             SAL_WNODEPRECATED_DECLARATIONS_POP
+        }
     }
 
     return pGlyphName;
@@ -1727,7 +1738,9 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         return;
 
     // emit the line head
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     mpPtr += sprintf( mpPtr, "%s", pLineHead);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // emit the vector values
     std::vector<ValType>::value_type aVal = 0;
     for( std::vector<ValType>::const_iterator it = rVector.begin();;) {
@@ -1740,7 +1753,9 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     // emit the last value
     mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     mpPtr += sprintf( mpPtr, "%s", pLineTail);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
@@ -1787,6 +1802,7 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut, "%%!FontType1-1.0: %s 001.003\n", rEmitter.maSubsetName);
     // emit TOPDICT
     pOut += sprintf( pOut,
@@ -1795,17 +1811,25 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/PaintType 0 def\n");
     pOut += sprintf( pOut, "/FontName /%s def\n", rEmitter.maSubsetName);
     pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // emit FontMatrix
     if( maFontMatrix.size() == 6)
         rEmitter.emitValVector( "/FontMatrix [", "]readonly def\n", maFontMatrix);
-    else // emit default FontMatrix if needed
+    else { // emit default FontMatrix if needed
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     // emit FontBBox
     if( maFontBBox.size() == 4)
         rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", maFontBBox);
-    else // emit default FontBBox if needed
+    else { // emit default FontBBox if needed
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/FontBBox {0 0 999 999}readonly def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     // emit FONTINFO into TOPDICT
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut,
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
         " /FullName (%s) readonly def\n"
@@ -1816,15 +1840,20 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     pOut += sprintf( pOut,
         "/Encoding 256 array\n"
         "0 1 255 {1 index exch /.notdef put} for\n");
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     for( int i = 1; (i < nGlyphCount) && (i < 256); ++i) {
         const char* pGlyphName = getGlyphName( pReqGlyphIds[i]);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "dup %d /%s put\n", pReqEncoding[i], pGlyphName);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut, "readonly def\n");
     pOut += sprintf( pOut,
         // TODO: more topdict entries
         "currentdict end\n"
         "currentfile eexec\n");
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // emit PFB header
     rEmitter.emitAllRaw();
@@ -1859,6 +1888,7 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     nPrivEntryCount += int(mpCffLocal->mnLangGroup == 1);
     nPrivEntryCount += int(mpCffLocal->mbForceBold);
     // emit the privdict header
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut,
         "\110\104\125 "
         "dup\n/Private %d dict dup begin\n"
@@ -1868,61 +1898,100 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/MinFeature{16 16}ND\n"
         "/password 5839 def\n",     // TODO: mnRDCryptSeed?
             nPrivEntryCount);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // emit blue hint related privdict entries
     if( !mpCffLocal->maBlueValues.empty())
         rEmitter.emitValVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
-    else
+    else {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/BlueValues []ND\n"); // default to empty BlueValues
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     rEmitter.emitValVector( "/OtherBlues [", "]ND\n", mpCffLocal->maOtherBlues);
     rEmitter.emitValVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
     rEmitter.emitValVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
 
     if( mpCffLocal->mfBlueScale) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/BlueScale ");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->mfBlueScale);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, " def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     if( mpCffLocal->mfBlueShift) {  // default BlueShift==7
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/BlueShift ");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->mfBlueShift);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, " def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     if( mpCffLocal->mfBlueFuzz) {       // default BlueFuzz==1
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/BlueFuzz ");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->mfBlueFuzz);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, " def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     // emit stem hint related privdict entries
     if( mpCffLocal->maStemStdHW) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/StdHW [");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->maStemStdHW);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "] def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     if( mpCffLocal->maStemStdVW) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/StdVW [");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->maStemStdVW);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "] def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
     rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
     // emit other hints
-    if( mpCffLocal->mbForceBold)
+    if( mpCffLocal->mbForceBold) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/ForceBold true def\n");
-    if( mpCffLocal->mnLangGroup != 0)
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
+    if( mpCffLocal->mnLangGroup != 0) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/LanguageGroup %d def\n", mpCffLocal->mnLangGroup);
-    if( mpCffLocal->mnLangGroup == 1) // compatibility with ancient printers
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
+    if( mpCffLocal->mnLangGroup == 1) { // compatibility with ancient printers
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/RndStemUp false def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     if( mpCffLocal->mfExpFactor) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/ExpansionFactor ");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pOut += dbl2str( pOut, mpCffLocal->mfExpFactor);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, " def\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     // emit remaining privdict entries
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // TODO?: more privdict entries?
 
     static const char aOtherSubrs[] =
@@ -1957,8 +2026,10 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // TODO: emit used LocalSubr charstrings?
 
     // emit the CharStrings for the requested glyphs
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut,
         "2 index /CharStrings %d dict dup begin\n", nGlyphCount);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rEmitter.emitAllCrypted();
     for( int i = 0; i < nGlyphCount; ++i) {
         const int nCffGlyphId = pReqGlyphIds[i];
@@ -1976,10 +2047,14 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         // get the glyph name
         const char* pGlyphName = getGlyphName( nCffGlyphId);
         // emit the encrypted Type1op charstring
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, "/%s %d RD ", pGlyphName, nT1Len);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         memcpy( pOut, aType1Ops, nT1Len);
         pOut += nT1Len;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         pOut += sprintf( pOut, " ND\n");
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
         if( pGlyphWidths ) {
@@ -1989,9 +2064,11 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
             pGlyphWidths[i] = static_cast<sal_Int32>(aCharWidth);
         }
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     pOut += sprintf( pOut, "end end\nreadonly put\nput\n");
     pOut += sprintf( pOut, "dup/FontName get exch definefont pop\n");
     pOut += sprintf( pOut, "mark currentfile closefile\n");
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rEmitter.emitAllCrypted();
 
     // mark stop of eexec encryption

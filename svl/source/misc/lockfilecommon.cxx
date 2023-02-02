@@ -209,7 +209,9 @@ OUString LockFileCommon::GetCurrentLocalTime()
             {
                 char pDateTime[sizeof("65535.65535.-32768 65535:65535")];
                     // reserve enough space for hypothetical max length
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf( pDateTime, "%02" SAL_PRIuUINT32 ".%02" SAL_PRIuUINT32 ".%4" SAL_PRIdINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32, sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Month), sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 aTime = OUString::createFromAscii( pDateTime );
             }
         }

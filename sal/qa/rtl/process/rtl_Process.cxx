@@ -170,10 +170,14 @@ static void printUuidtoBuffer( const sal_uInt8 *pNode, char * pBuffer )
         sal_uInt8 nValue = pNode[i1];
         if (nValue < 16)
         {
+             SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
              sprintf( pBuffer + nPtr, "0");
+             SAL_WNODEPRECATED_DECLARATIONS_POP
              nPtr++;
         }
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( pBuffer + nPtr, "%02x", nValue );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         nPtr += 2 ;
     }
 }

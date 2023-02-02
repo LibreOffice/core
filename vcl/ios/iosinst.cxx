@@ -134,7 +134,7 @@ public:
 
 SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    pParent = NULL;
+    (void)pParent;
     return new IosSalFrame( this, NULL, nStyle );
 }
 

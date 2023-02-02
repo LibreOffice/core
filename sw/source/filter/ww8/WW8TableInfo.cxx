@@ -1278,7 +1278,9 @@ std::string WW8TableCellGrid::toString()
     static char sBuffer[1024];
     while (aTopsIt != getRowTopsEnd())
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(sBuffer, "<row y=\"%" SAL_PRIdINT64 "\">", sal_Int64(*aTopsIt));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         sResult += sBuffer;
 
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);

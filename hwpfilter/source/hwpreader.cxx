@@ -340,7 +340,9 @@ void HwpReader::makeMeta()
         else {
             minute = 0;
         }
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         rstartEl( "meta:creation-date", mxList );
         rchars( ascii(buf));
@@ -587,31 +589,43 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 {
                     if( prop->center_y == 100 )
                     {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         padd( "draw:start-color", sXML_CDATA, ascii( buf ));
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         padd( "draw:end-color", sXML_CDATA, ascii( buf ));
                     }
                     else
                     {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         padd( "draw:start-color", sXML_CDATA, ascii( buf ));
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         padd( "draw:end-color", sXML_CDATA, ascii( buf ));
                     }
                 }
                 else
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                         (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     padd( "draw:start-color", sXML_CDATA,ascii( buf ));
 
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                         (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     padd( "draw:end-color", sXML_CDATA,ascii( buf ));
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
@@ -634,10 +648,12 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     padd( "draw:style", sXML_CDATA, "single" );
                 else
                     padd( "draw:style", sXML_CDATA, "double" );
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(prop->pattern_color & 0xff),
                     sal_uInt16((prop->pattern_color >> 8) & 0xff),
                     sal_uInt16((prop->pattern_color >>16) & 0xff) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 padd( "draw:color", sXML_CDATA, ascii( buf ));
                 padd( "draw:distance", sXML_CDATA, "0.12cm");
                 switch( type )
@@ -1680,8 +1696,10 @@ void HwpReader::makePageStyle()
          {
              if( hwpinfo.back_info.color[0] > 0 || hwpinfo.back_info.color[1] > 0
                      || hwpinfo.back_info.color[2] > 0 ){
+                 SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                  sprintf(buf,"#%02x%02x%02x",hwpinfo.back_info.color[0],
                          hwpinfo.back_info.color[1],hwpinfo.back_info.color[2] );
+                 SAL_WNODEPRECATED_DECLARATIONS_POP
                  padd("fo:background-color", sXML_CDATA, ascii(buf));
              }
          }
@@ -1862,7 +1880,9 @@ void HwpReader::makeTableStyle(Table *tbl)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         padd("style:name", sXML_CDATA, ascii( buf ));
         padd("style:family", sXML_CDATA,"table-column");
         rstartEl("style:style", mxList);
@@ -1878,7 +1898,9 @@ void HwpReader::makeTableStyle(Table *tbl)
 // row
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         padd("style:name", sXML_CDATA, ascii( buf ));
         padd("style:family", sXML_CDATA,"table-row");
         rstartEl("style:style", mxList);
@@ -1894,7 +1916,9 @@ void HwpReader::makeTableStyle(Table *tbl)
 // cell
     for (auto const& tcell : tbl->cells)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         padd("style:name", sXML_CDATA, ascii( buf ));
         padd("style:family", sXML_CDATA,"table-cell");
         rstartEl("style:style", mxList);
@@ -2036,10 +2060,12 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             padd("svg:stroke-width", sXML_CDATA,
                 Double2Str( WTMM(hdo->property.line_width)) + "mm");
             color = hdo->property.line_color;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             padd("svg:stroke-color", sXML_CDATA, ascii( buf) );
         }
 
@@ -2144,10 +2170,12 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     ascii(Int2Str(hdo->index, "Hatch%d", buf)));
                 if( color < 0xffffff )
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf( buf, "#%02x%02x%02x",
                         sal_uInt16(color & 0xff),
                         sal_uInt16((color >> 8) & 0xff),
                         sal_uInt16((color >>16) & 0xff) );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     padd("draw:fill-color", sXML_CDATA, ascii( buf) );
                     padd("draw:fill-hatch-solid", sXML_CDATA, "true");
                 }
@@ -2155,10 +2183,12 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             else if( color <= 0xffffff )
             {
                 padd("draw:fill", sXML_CDATA, "solid");
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 padd("draw:fill-color", sXML_CDATA, ascii( buf) );
             }
             else
@@ -3441,7 +3471,9 @@ void HwpReader::makeTable(TxtBox * hbox)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         padd("table:style-name", sXML_CDATA, ascii( buf ));
         rstartEl("table:table-column", mxList);
         mxList->clear();
@@ -3460,14 +3492,18 @@ void HwpReader::makeTable(TxtBox * hbox)
                 k = j;
             }
 // row
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             padd("table:style-name", sXML_CDATA, ascii( buf ));
             rstartEl("table:table-row", mxList);
             mxList->clear();
             j = tcell->nRowIndex;
         }
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         padd("table:style-name", sXML_CDATA, ascii( buf ));
         if( tcell->nColumnSpan > 1 )
             padd("table:number-columns-spanned", sXML_CDATA,
@@ -4326,7 +4362,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         Double2Str (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
                         Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     padd("svg:viewBox", sXML_CDATA, ascii(buf) );
 
                     OUStringBuffer oustr;
@@ -4373,21 +4411,27 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                   NaturalSpline(n, tarr.get(), yarr.get(), yb, carr, darr);
                               }
 
+                              SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                               sprintf(buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
                                       WTSM(xarr[0] + xb[0]/3), WTSM(yarr[0] + yb[0]/3) );
+                              SAL_WNODEPRECATED_DECLARATIONS_POP
                               oustr.append(ascii(buf));
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
+                                      SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                                       sprintf(buf, " %d %d %d %dz",
                                               WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
                                               WTSM(xarr[i]), WTSM(yarr[i]) );
+                                      SAL_WNODEPRECATED_DECLARATIONS_POP
                                   }
                                   else{
+                                      SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                                       sprintf(buf, " %d %d %d %d %d %d",
                                               WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
                                               WTSM(xarr[i]), WTSM(yarr[i]),
                                               WTSM(xarr[i] + xb[i]/3), WTSM(yarr[i] + yb[i]/3) );
+                                      SAL_WNODEPRECATED_DECLARATIONS_POP
                                   }
 
                                   oustr.append(ascii(buf));
@@ -4426,21 +4470,27 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     padd("svg:height", sXML_CDATA,
                         Double2Str (WTMM( drawobj->extent.h )) + "mm");
 
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     padd("svg:viewBox", sXML_CDATA, ascii(buf) );
 
                     OUStringBuffer oustr;
 
                     if (drawobj->u.freeform.npt > 0)
                     {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf(buf, "%d,%d", WTSM(drawobj->u.freeform.pt[0].x), WTSM(drawobj->u.freeform.pt[0].y));
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         oustr.append(ascii(buf));
                         int i;
                         for (i = 1; i < drawobj->u.freeform.npt  ; i++)
                         {
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                             sprintf(buf, " %d,%d",
                                 WTSM(drawobj->u.freeform.pt[i].x),
                                 WTSM(drawobj->u.freeform.pt[i].y));
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             oustr.append(ascii(buf));
                         }
                         if( drawobj->u.freeform.pt[0].x == drawobj->u.freeform.pt[i-1].x &&

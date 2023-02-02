@@ -306,7 +306,9 @@ record_type_name(sal_uInt32 nRecType)
         // Yes, return a pointer to a static buffer. This is a very
         // local debugging output function, so no big deal.
         static char buffer[11];
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         return buffer;
     }
 #endif

@@ -932,17 +932,27 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                 value += 1;     // month is zero based
                 [[fallthrough]];
             case CalendarDisplayCode::SHORT_DAY:
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 break;
             case CalendarDisplayCode::LONG_YEAR:
-                if ( aCalendar.Name == "gengou" )
+                if ( aCalendar.Name == "gengou" ) {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(aStr, "%02" SAL_PRIdINT32, value);     // #100211# - checked
-                else
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                }
+                else {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                }
                 break;
             case CalendarDisplayCode::LONG_MONTH:
                 value += 1;     // month is zero based
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
                 // Take last 2 digits, or only one if value<10, for example,
@@ -956,13 +966,21 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                 // E for the other calendar and currently (2013-02-28) ROC is
                 // the only calendar using this.
                 // See i#116701 and fdo#60915
-                if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear)))
+                if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear))) {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(aStr, "%" SAL_PRIdINT32, value); // #100211# - checked
-                else
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                }
+                else {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                     sprintf(aStr, "%02" SAL_PRIdINT32, value % 100); // #100211# - checked
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                }
                 break;
             case CalendarDisplayCode::LONG_DAY:
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                 sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 break;
 
             case CalendarDisplayCode::SHORT_DAY_NAME:

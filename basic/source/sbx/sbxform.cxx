@@ -232,7 +232,9 @@ void SbxBasicFormater::InitScan( double _dNum )
     dNum = _dNum;
     InitExp( get_number_of_digits( dNum ) );
     // maximum of 15 positions behind the decimal point, example: -1.234000000000000E-001
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     /*int nCount =*/ sprintf( sBuffer,"%+22.15lE",dNum );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sSciNumStrg = OUString::createFromAscii( sBuffer );
 }
 
@@ -241,7 +243,9 @@ void SbxBasicFormater::InitExp( double _dNewExp )
 {
     char sBuffer[ MAX_DOUBLE_BUFFER_LENGTH ];
     nNumExp = static_cast<short>(_dNewExp);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     /*int nCount =*/ sprintf( sBuffer,"%+i",nNumExp );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sNumExpStrg = OUString::createFromAscii( sBuffer );
     nExpExp = static_cast<short>(get_number_of_digits( static_cast<double>(nNumExp) ));
 }

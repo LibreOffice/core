@@ -44,7 +44,9 @@ OUString XSecController::createId()
     int length = 3;
     for (sal_uInt8 i : aSeq)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         length += sprintf(str+length, "%04x", i);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     return OUString::createFromAscii(str);

@@ -44,7 +44,10 @@ void SwVbaContentControlListEntry::setIndex(sal_Int32 nSet)
 OUString SwVbaContentControlListEntry::getText()
 {
     assert(m_nZIndex < m_pCC->GetListItems().size());
-    const SwContentControlListItem& rListItem = m_pCC->GetListItems()[m_nZIndex];
+    // Xcode 14.2 is really fussy so create a temporary vector before fetching
+    // one of the list items
+    std::vector<SwContentControlListItem> aListItems(m_pCC->GetListItems());
+    const SwContentControlListItem& rListItem = aListItems[m_nZIndex];
     return rListItem.ToString();
 }
 
@@ -77,7 +80,10 @@ void SwVbaContentControlListEntry::setText(const OUString& rSet)
 OUString SwVbaContentControlListEntry::getValue()
 {
     assert(m_nZIndex < m_pCC->GetListItems().size());
-    const SwContentControlListItem& rListItem = m_pCC->GetListItems()[m_nZIndex];
+    // Xcode 14.2 is really fussy so create a temporary vector before fetching
+    // one of the list items
+    std::vector<SwContentControlListItem> aListItems(m_pCC->GetListItems());
+    const SwContentControlListItem& rListItem = aListItems[m_nZIndex];
 
     return rListItem.m_aValue;
 }

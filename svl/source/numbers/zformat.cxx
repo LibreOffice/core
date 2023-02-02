@@ -2906,7 +2906,9 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     else
     {
         char aBuf[100];
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( aBuf, "%.f", fNum ); // simple rounded integer (#100211# - checked)
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         sStr.appendAscii( aBuf );
         impTransliterate(sStr, NumFor[nIx].GetNatNum());
     }

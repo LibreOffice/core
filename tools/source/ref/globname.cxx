@@ -229,24 +229,34 @@ OUString SvGlobalName::GetHexName() const
     OStringBuffer aHexBuffer(36);
 
     char buf[ 10 ];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( buf, "%8.8" SAL_PRIXUINT32, pImp->szData.Data1 );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     aHexBuffer.append(buf);
     aHexBuffer.append('-');
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( buf, "%4.4X", pImp->szData.Data2 );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     aHexBuffer.append(buf);
     aHexBuffer.append('-');
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( buf, "%4.4X", pImp->szData.Data3 );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     aHexBuffer.append(buf);
     aHexBuffer.append('-');
     for( int i = 0; i < 2; i++ )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( buf, "%2.2x", pImp->szData.Data4[ i ] );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         aHexBuffer.append(buf);
     }
     aHexBuffer.append('-');
     for( int i = 2; i < 8; i++ )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( buf, "%2.2x", pImp->szData.Data4[ i ] );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         aHexBuffer.append(buf);
     }
     return OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);

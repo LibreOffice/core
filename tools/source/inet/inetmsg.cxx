@@ -263,9 +263,11 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     tools::Time aCurTime( tools::Time::SYSTEM );
     sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
     nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf (sTail, "%08X%08X",
              static_cast< unsigned int >(aCurTime.GetTime()),
              static_cast< unsigned int >(nThis));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     m_aBoundary = "------------_4D48";
     m_aBoundary += sTail;
 

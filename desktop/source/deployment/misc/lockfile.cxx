@@ -91,7 +91,9 @@ namespace desktop {
         time_t t = time(nullptr);
         for (int i = 0; i<nIdBytes; i++) {
             int tmpByte = comphelper::rng::uniform_int_distribution(0, 0xFF);
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( tmpId+i*2, "%02X", tmpByte );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         tmpId[nIdBytes*2]=0x00;
         m_aId = OUString::createFromAscii( tmpId );

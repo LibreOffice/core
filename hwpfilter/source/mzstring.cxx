@@ -184,7 +184,9 @@ MzString &MzString::operator << (int i)
 {
     char str[80];
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     wsprintfA(str, "%d", i);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     append(str);
     return *this;
 }
@@ -194,7 +196,9 @@ MzString &MzString::operator << (tools::Long l)
 {
     char str[80];
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     wsprintfA(str, "%ld", l);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     append(str);
     return *this;
 }

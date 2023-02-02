@@ -285,7 +285,11 @@ hchar_string DateCode::GetString()
             ret.push_back(*fmt);
         }
         if (num != -1)
+        {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf(cbuf, form, num);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+        }
         for (i = 0; 0 != cbuf[i]; i++)
         {
             ret.push_back(*(cbuf + i));
@@ -519,7 +523,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
         *hstr++ = '(';
     if (fmt & NUM)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(buf, "%d", num);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         str2hstr(buf, hstr);
         hstr += strlen(buf);
     }
@@ -583,9 +589,17 @@ hchar_string Outline::GetUnicode() const
                 {
                     levelnum = ((number[i] < 1) ? 1 : number[i]);
                     if (shape == OLSTY_NUMS2 && i && i == level)
+                    {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf(cur_num_str, "%d%c", levelnum, 0);
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                    }
                     else
+                    {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf(cur_num_str, "%d%c", levelnum, '.');
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                    }
                     strcat(buf, cur_num_str);
                 }
                 str2hstr(buf, buffer);
@@ -677,9 +691,17 @@ hchar_string Outline::GetUnicode() const
                              {
                                   levelnum = ((number[j] < 1) ? 1 : number[j]);
                                   if ((j && j == level) || (j == level && deco[i][1]))
+                                  {
+                                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                                         sprintf(cur_num_str, "%d%c", levelnum, 0);
+                                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                                  }
                                   else
+                                  {
+                                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                                         sprintf(cur_num_str, "%d%c", levelnum, '.');
+                                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                                  }
                                   strcat(buf, cur_num_str);
                              }
                              str2hstr(buf, buffer + l);

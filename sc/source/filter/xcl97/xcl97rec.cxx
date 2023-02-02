@@ -992,7 +992,9 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     sal_uInt32          nPictureId = sal_uInt32(reinterpret_cast<sal_uIntPtr>(this) >> 2);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     aStorageName += OUString::createFromAscii(aBuf);
     tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );
     if( !xOleStg.is() )

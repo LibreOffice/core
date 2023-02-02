@@ -446,7 +446,9 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         drawLine(rRenderContext, fX, m_fMinY, fX, m_fMaxY);
         // draw tickmarks
         Point aPt = transform(fX, m_fMinY);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         std::sprintf(pBuf, "%g", fX);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
         aPt.AdjustX( -(aTextSize.Width() / 2) );
@@ -459,7 +461,9 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         drawLine(rRenderContext, m_fMinX, fY, m_fMaxX, fY);
         // draw tickmarks
         Point aPt = transform(m_fMinX, fY);
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         std::sprintf(pBuf, "%g", fY);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
         aPt.AdjustX( -(aTextSize.Width() + 2) );

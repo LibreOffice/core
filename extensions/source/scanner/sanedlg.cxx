@@ -745,7 +745,9 @@ IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
                 fValue = mfMin;
             else if( fValue > mfMax )
                 fValue = mfMax;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( pBuf, "%g", fValue );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
@@ -757,7 +759,9 @@ IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
         {
             char pBuf[256];
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( pBuf, "%g", fValue );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
             mxNumericEdit->set_text( aValue );
             mxQuantumRangeBox->set_active_text( aValue );
@@ -1002,13 +1006,17 @@ void SaneDlg::EstablishQuantumRange()
         mfMax = mpRange[ nValues-1 ];
         for( int i = 0; i < nValues; i++ )
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( pBuf, "%g", mpRange[ i ] );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             mxQuantumRangeBox->append_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf( pBuf, "%g", fValue );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             mxQuantumRangeBox->set_active_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mxQuantumRangeBox->show();
@@ -1033,12 +1041,16 @@ void SaneDlg::EstablishNumericOption()
     aText += mrSane.GetOptionUnitName( mnCurrentOption );
     if( mfMin != mfMax )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
     mxOptionDescTxt->set_label( aText );
     mxOptionDescTxt->show();
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( pBuf, "%g", fValue );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
     mxNumericEdit->show();
 }
@@ -1398,7 +1410,9 @@ void SaneDlg::SaveState()
                             break;
                         if( n > 0 )
                             aString.append(':');
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
                         sprintf( buf, "%lg", fValue );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         aString.append(buf);
                     }
                     if( n >= mrSane.GetOptionElements( nOption ) )

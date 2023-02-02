@@ -280,8 +280,10 @@ std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
     char sSName[64]="";
     char sDName[64]="";
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(sSName, "%s-S", pObjectName);
     sprintf(sDName, "%s-D", pObjectName);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /* traverse the found properties and construct the stream vectors */
     // get S&D's stream and merge them together

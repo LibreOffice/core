@@ -211,7 +211,9 @@ void T602ImportFilter::inschr(unsigned char ch)
             pst.wasfdash = false;
         } else {
             char s[20];
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
             sprintf(s,"%i",pst.wasspace);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             if (mpAttrList)
                 mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
             Start_("text:s");
@@ -250,8 +252,10 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     xImporter->setTargetDocument(mxDoc);
 
     char fs[32], fs2[32];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(fs, "%ipt", inistruct::fontsize);
     sprintf(fs2,"%ipt", 2*inistruct::fontsize);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     mpAttrList = new SvXMLAttributeList;
 

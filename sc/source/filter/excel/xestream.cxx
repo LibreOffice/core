@@ -707,7 +707,9 @@ OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream
 OString XclXmlUtils::ToOString( const Color& rColor )
 {
     char buf[9];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetAlpha(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     buf[8] = '\0';
     return OString(buf);
 }

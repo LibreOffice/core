@@ -73,7 +73,9 @@ const char * dbg_out(const void * pVoid)
 {
     char sBuffer[1024];
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(sBuffer, "%p", pVoid);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     OUString aTmpStr(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
 
@@ -388,7 +390,9 @@ const char * dbg_out(const SwRect & rRect)
 static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
 {
     char sBuffer[256];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(sBuffer, "%p", &rFrameFormat);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     OUString aResult = "[ " +
         OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US) +
@@ -483,7 +487,9 @@ static OUString lcl_dbg_out_NumType(sal_Int16 nType)
 static OUString lcl_dbg_out(const SwNode & rNode)
 {
     char aBuffer[128];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(aBuffer, "%p", &rNode);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     OUString aTmpStr = "<node "
         "index=\"" +
@@ -735,7 +741,9 @@ static OUString lcl_dbg_out(const SwNumRuleTable & rTable)
         aResult.append(rTable[n]->GetName());
 
         char sBuffer[256];
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         sprintf(sBuffer, "(%p)", rTable[n]);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         aResult.appendAscii(sBuffer);
     }
 

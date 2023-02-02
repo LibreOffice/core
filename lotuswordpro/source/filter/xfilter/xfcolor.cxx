@@ -63,7 +63,9 @@
 OUString XFColor::ToString() const
 {
     char    buf[8] = {};
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     sprintf(buf,"#%2x%2x%2x",m_nRed, m_nGreen, m_nBlue);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     for( int i=1; i<7;i++ )
     {
         if( buf[i] == ' ' )
