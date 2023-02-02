@@ -883,6 +883,33 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
     // ..., but a <v:shapetype> element with <v:textpath> subelement
     assertXPath(pXmlDoc, "//v:shapetype/v:textpath", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
+{
+    // The document has a Fontwork shape type 'textCirclePour' (150). When exporting to docx, the
+    // adjustment values were not exported at all.
+    loadFromURL(u"tdf153246_VML_export_Fontwork_Adjustment.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Make sure an "adj" attribute exists
+    assertXPath(pXmlDoc, "//v:shape[@adj]", 1);
+    // ... and has the correct values
+    OUString sAdjustments = getXPath(pXmlDoc, "//v:shape", "adj");
+    sal_Int32 nTokenStart = 0;
+    OUString sAngle = sAdjustments.getToken(0, ',', nTokenStart);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-7341733), sAngle.toInt32(), 2);
+    OUString sRadius = sAdjustments.copy(nTokenStart);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5296), sRadius.toInt32(), 2);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

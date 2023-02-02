@@ -1010,6 +1010,32 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     bAlreadyWritten[ESCHER_Prop_gtextFont] = true;
                 }
                 break;
+            case DFF_Prop_adjustValue:
+            case DFF_Prop_adjust2Value:
+                {
+                    // FIXME: tdf#153296: The currently exported markup for <v:shapetype> is based on
+                    // OOXML presets and unusable in regard to handles. Fontwork shapes use dedicated
+                    // own markup, see FontworkHelpers::GetVMLFontworkShapetypeMarkup.
+                    // Thus this is restricted to preset Fontwork shapes. Such have maximal two
+                    // adjustment values.
+                    if ((mso_sptTextSimple <= m_nShapeType && m_nShapeType <= mso_sptTextOnRing)
+                        || (mso_sptTextPlainText <= m_nShapeType && m_nShapeType <= mso_sptTextCanDown))
+                    {
+                        sal_uInt32 nValue;
+                        OString sAdj;
+                        if (rProps.GetOpt(DFF_Prop_adjustValue, nValue))
+                        {
+                            sAdj = OString::number(static_cast<sal_Int32>(nValue));
+                            if (rProps.GetOpt(DFF_Prop_adjust2Value, nValue))
+                                sAdj += "," + OString::number(static_cast<sal_Int32>(nValue));
+                        }
+                        if (!sAdj.isEmpty())
+                            m_pShapeAttrList->add(XML_adj, sAdj);
+                        bAlreadyWritten[DFF_Prop_adjustValue] = true;
+                        bAlreadyWritten[DFF_Prop_adjust2Value] = true;
+                    }
+                }
+                break;
             case ESCHER_Prop_Rotation:
                 {
                     // The higher half of the variable contains the angle.
