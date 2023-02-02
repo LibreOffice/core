@@ -46,6 +46,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <UndoAttribute.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <ndindex.hxx>
@@ -1395,6 +1396,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     {
         if (pFormat)
         {
+            SwDocModifyAndUndoGuard guard(*pFormat);
             SvxFrameDirectionItem aItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
             aItem.PutValue(_rValue, 0);
             pFormat->SetFormatAttr(aItem);
@@ -1924,6 +1926,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else
             {
+                SwDocModifyAndUndoGuard guard(*pFormat);
                 pFormat->SetFormatAttr(aSet);
             }
         }
@@ -2522,6 +2525,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);
             aSet.ClearItem(XATTR_FILLBMP_TILE);
 
+            SwDocModifyAndUndoGuard guard(*pFormat);
             pFormat->SetFormatAttr(aSet);
         }
         else if( pEntry->nWID &&
@@ -2558,14 +2562,14 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 GetOrCreateSdrObject(rFlyFormat);
                 rFlyFormat.GetDoc()->SetFlyFrameDescription(rFlyFormat, OUString());
             }
-            else
+            else if (rPropertyName != UNO_NAME_ANCHOR_TYPE)
             {
                 SwDoc* pDoc = pFormat->GetDoc();
                 SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet( pDoc->GetAttrPool() );
                 aSet.SetParent(&pFormat->GetAttrSet());
                 aSet.ClearItem(pEntry->nWID);
-                if(rPropertyName != UNO_NAME_ANCHOR_TYPE)
-                    pFormat->SetFormatAttr(aSet);
+                SwDocModifyAndUndoGuard guard(*pFormat);
+                pFormat->SetFormatAttr(aSet);
             }
         }
         else

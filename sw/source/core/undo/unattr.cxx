@@ -37,6 +37,8 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
 #include <swcrsr.hxx>
@@ -93,6 +95,24 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
     }
 }
 
+SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard(SwFormat& format)
+    : doc(format.GetName().isEmpty() ? nullptr : format.GetDoc())
+    , helper(doc ? new SwUndoFormatAttrHelper(format) : nullptr)
+{
+}
+
+SwDocModifyAndUndoGuard::~SwDocModifyAndUndoGuard()
+{
+    if (helper && helper->GetUndo())
+    {
+        // helper tracks changes, even when DoesUndo is false, to detect modified state
+        if (doc->GetIDocumentUndoRedo().DoesUndo())
+            doc->GetIDocumentUndoRedo().AppendUndo(helper->ReleaseUndo());
+
+        doc->getIDocumentState().SetModified();
+    }
+}
+
 SwUndoFormatAttr::SwUndoFormatAttr( SfxItemSet&& rOldSet,
                               SwFormat& rChgFormat,
                               bool bSaveDrawPt )
@@ -142,7 +162,8 @@ void SwUndoFormatAttr::Init( const SwFormat & rFormat )
                                ->FindTableNode()->GetIndex();
             }
         } else if (dynamic_cast<const SwSectionFormat*>(&rFormat)) {
-            m_nNodeIndex = rFormat.GetContent().GetContentIdx()->GetIndex();
+            if (auto pContentIndex = rFormat.GetContent().GetContentIdx())
+                m_nNodeIndex = pContentIndex->GetIndex();
         } else if(auto pBoxFormat = dynamic_cast<const SwTableBoxFormat*>(&rFormat))
         {
             auto pTableBox = pBoxFormat->GetTableBox();
