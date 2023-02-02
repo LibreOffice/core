@@ -30,8 +30,6 @@
 #define INPUTSIZE  15360
 #define OUTPUTSIZE 15360
 
-#define STRINGIFY(...) #__VA_ARGS__"\n"
-
 namespace {
 
 void DS_CHECK_STATUS(cl_int status, char const * name) {
@@ -55,13 +53,13 @@ struct LibreOfficeDeviceEvaluationIO
     tools::ULong outputSize;
 };
 
-const char* source = STRINGIFY(
-\n#if defined(KHR_DP_EXTENSION)
-\n#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-\n#elif defined(AMD_DP_EXTENSION)
-\n#pragma OPENCL EXTENSION cl_amd_fp64 : enable
-\n#endif
-    \n
+const char* source = R"delimit(
+#if defined(KHR_DP_EXTENSION)
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+#elif defined(AMD_DP_EXTENSION)
+#pragma OPENCL EXTENSION cl_amd_fp64 : enable
+#endif
+
     int isNan(fp_t a) { return a != a; }
     fp_t fsum(fp_t a, fp_t b) { return a + b; }
 
@@ -108,7 +106,7 @@ const char* source = STRINGIFY(
     fp_t tmp1 = fMin(input1) * fSoP(input2, input3);
     result[gid0] = fsum(tmp0, tmp1);
 }
-    );
+    )delimit";
 
 size_t sourceSize[] = { strlen(source) };
 
