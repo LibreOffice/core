@@ -344,7 +344,7 @@ namespace {
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
-                    vcl::Region(::tools::Rectangle(Point(0,0), rPage.GetSize())));
+                    vcl::Region(rPage.getRectangle().toToolsRect()));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 
@@ -861,7 +861,7 @@ namespace {
             Size aPageSize;
             if (mbScaled)
             {
-                aPageSize = pNotesPage->GetSize();
+                aPageSize = pNotesPage->getSize().toToolsSize();
                 lcl_AdjustPageSize(aPageSize, rPrinter.GetPrintPageSize());
             }
             else
@@ -898,8 +898,8 @@ namespace {
                 // to determine the first page break position.
                 // If AutoGrow is not enabled, the notes object defines the first page break.
                 ::tools::Long nNotesPageBottom
-                    = bAutoGrow ? (pNotesPage->GetLowerBorder() != 0)
-                                      ? aPageSize.Height() - pNotesPage->GetLowerBorder()
+                    = bAutoGrow ? (pNotesPage->getBorder().lowerUnit() != 0)
+                                      ? aPageSize.Height() - pNotesPage->getBorder().lowerUnit()
                                       : aPageSize.Height() - nBottom
                                 : aNotesPt.Y() + aNotesSize.Height();
                 if (mbScaled)
@@ -1071,7 +1071,7 @@ namespace {
                 pOut->SetUpdateLayout(bSavedUpdateMode);
                 pOut->Init(nSaveOutlMode);
             }
-            pNotesPage->SetSize(aPageSize);
+            pNotesPage->setToolsSize(aPageSize);
 
             PrintPage(
                 rPrinter,
@@ -1125,30 +1125,30 @@ namespace {
             const SdrLayerIDSet& rPrintableLayers) const override
         {
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
+            gfx::LengthUnit eUnit = pPageToPrint->getUnit();
             if (pPageToPrint==nullptr)
                 return;
             MapMode aMap (rPrinter.GetMapMode());
 
-            const Size aPageSize (pPageToPrint->GetSize());
+            const auto aPageSize (pPageToPrint->getSize());
             const Size aPrintSize (rPrinter.GetOutputSize());
 
-            const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
-                - pPageToPrint->GetLeftBorder() - pPageToPrint->GetRightBorder());
-            const sal_Int32 nPageHeight (aPageSize.Height() + mnGap
-                - pPageToPrint->GetUpperBorder() - pPageToPrint->GetLowerBorder());
-            if (nPageWidth<=0 || nPageHeight<=0)
+            const gfx::Length nPageWidth = aPageSize.getWidth() + mnGap - pPageToPrint->getBorder().getLeft() - pPageToPrint->getBorder().getRight();
+            const gfx::Length nPageHeight = aPageSize.getHeight() + mnGap - pPageToPrint->getBorder().getUpper() - pPageToPrint->getBorder().getLower();
+            if (nPageWidth <= 0_hmm || nPageHeight <= 0_hmm)
                 return;
 
             // Print at least two rows and columns.  More if the document
             // page fits completely onto the printer page.
             const sal_Int32 nColumnCount (std::max(sal_Int32(2),
-                    sal_Int32(aPrintSize.Width() / nPageWidth)));
+                    sal_Int32(aPrintSize.Width() / nPageWidth.as(eUnit))));
             const sal_Int32 nRowCount (std::max(sal_Int32(2),
-                    sal_Int32(aPrintSize.Height() / nPageHeight)));
+                    sal_Int32(aPrintSize.Height() / nPageHeight.as(eUnit))));
             for (sal_Int32 nRow=0; nRow<nRowCount; ++nRow)
                 for (sal_Int32 nColumn=0; nColumn<nColumnCount; ++nColumn)
                 {
-                    aMap.SetOrigin(Point(nColumn*nPageWidth,nRow*nPageHeight));
+                    aMap.SetOrigin(Point(nColumn * nPageWidth.as(eUnit),
+                                         nRow * nPageHeight.as(eUnit)));
                     rPrinter.SetMapMode(aMap);
                     PrintPage(
                         rPrinter,
@@ -1168,7 +1168,7 @@ namespace {
 
     private:
         const sal_uInt16 mnPageIndex;
-        static const sal_Int32 mnGap = 500;
+        static const constexpr gfx::Length mnGap = 500_hmm;
     };
 
     /** Print two slides to one printer page so that the resulting pages
@@ -1277,7 +1277,7 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
-            Size aPageSize(rHandoutPage.GetSize());
+            Size aPageSize(rHandoutPage.getSize().toToolsSize());
             Size aPrintPageSize = rPrinter.GetPrintPageSize();
 
             if ((aPageSize.Width() < aPageSize.Height()
@@ -1289,7 +1289,7 @@ namespace {
                 aPageSize.setWidth(aPageSize.Height());
                 aPageSize.setHeight(nTmp);
 
-                rHandoutPage.SetSize(aPageSize);
+                rHandoutPage.setToolsSize(aPageSize);
             }
 
             Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
@@ -1764,7 +1764,7 @@ private:
         // Draw and Notes should usually use specified paper size when printing
         if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
         {
-            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSize();
+            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->getSize().toToolsSize();
             maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
                                     aInfo.maPrintSize.Height());
         }
@@ -1848,7 +1848,7 @@ private:
 
         const bool bDrawLines (eLayout == AUTOLAYOUT_HANDOUT3);
 
-        Size aHandoutPageSize = pHandout->GetSize();
+        Size aHandoutPageSize = pHandout->getSize().toToolsSize();
         lcl_AdjustPageSize(aHandoutPageSize, mpPrinter->GetPrintPageSize());
         Orientation eOrient = aHandoutPageSize.Width() > aHandoutPageSize.Height()
                                   ? Orientation::Landscape
@@ -2107,7 +2107,7 @@ private:
 
         if ( bScalePage )
         {
-            Size aPageSize (rHandoutPage.GetSize());
+            Size aPageSize (rHandoutPage.getSize().toToolsSize());
             Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
             lcl_AdjustPageSize(aPageSize, aPrintSize);
 
@@ -2199,7 +2199,7 @@ private:
         if (!mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()) && mpOptions->IsNotes())
             rInfo.maPageSize = mpPrinter->GetPrintPageSize();
         else
-            rInfo.maPageSize = pRefPage->GetSize();
+            rInfo.maPageSize = pRefPage->getSize().toToolsSize();
 
         SetupPaperOrientation(ePageKind, rInfo);
 
@@ -2235,21 +2235,22 @@ private:
 
             MapMode aMap (rInfo.maMap);
 
-            Size aPageSize = pPage->GetSize();
+            auto aPageSize = pPage->getSize();
+            Size aPageSizeHmm = aPageSize.toToolsSize();
 
             if (mpOptions->IsPageSize())
             {
                 Size aPrintSize = rInfo.maPrintSize;
-                lcl_AdjustPageSize(aPageSize, aPrintSize);
+                lcl_AdjustPageSize(aPageSizeHmm, aPrintSize);
 
-                const double fHorz(static_cast<double>(aPrintSize.Width()) / aPageSize.Width());
-                const double fVert(static_cast<double>(aPrintSize.Height()) / aPageSize.Height());
+                const double fHorz(static_cast<double>(aPrintSize.Width()) / aPageSizeHmm.Width());
+                const double fVert(static_cast<double>(aPrintSize.Height()) / aPageSizeHmm.Height());
 
                 Fraction aFract;
                 if (fHorz < fVert)
-                    aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
+                    aFract = Fraction(aPrintSize.Width(), aPageSizeHmm.Width());
                 else
-                    aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
+                    aFract = Fraction(aPrintSize.Height(), aPageSizeHmm.Height());
 
                 aMap.SetScaleX(aFract);
                 aMap.SetScaleY(aFract);
@@ -2264,8 +2265,9 @@ private:
                 rInfo.msPageString.clear();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            ::tools::Long aPageWidth   = aPageSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
-            ::tools::Long aPageHeight  = aPageSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder();
+            gfx::LengthUnit eUnit = pPage->getUnit();
+            ::tools::Long aPageWidth = basegfx::fround((aPageSize.getWidth() - pPage->getBorder().getLeft() - pPage->getBorder().getRight()).as(eUnit));
+            ::tools::Long aPageHeight = basegfx::fround((aPageSize.getHeight() - pPage->getBorder().getUpper() - pPage->getBorder().getLower()).as(eUnit));
             // Bugfix for 44530:
             // if it was implicitly changed (Landscape/Portrait),
             // this is considered for tiling, respectively for the splitting up
@@ -2502,7 +2504,7 @@ private:
                 rtl::Reference<SdPage> pNotesPage
                     = static_cast<SdPage*>(pPage->CloneSdrPage(*pDocument).get());
 
-                Size aPageSize = bScalePage ? pNotesPage->GetSize() : rInfo.mpPrinter->GetPrintPageSize();
+                Size aPageSize = bScalePage ? pNotesPage->getSize().toToolsSize() : rInfo.mpPrinter->GetPrintPageSize();
                 // Adjusts the objects on the notes page to fit the new page size.
                 ::tools::Rectangle aNewBorderRect(-1, -1, -1, -1);
                 pNotesPage->ScaleObjects(aPageSize, aNewBorderRect, true);
@@ -2531,8 +2533,8 @@ private:
                     if (bAutoGrow)
                     {
                         nNotesHeight += pNotesObj->GetRelativePos().Y();
-                        nFirstPageBottomMargin = (pNotesPage->GetLowerBorder() != 0)
-                                                     ? pNotesPage->GetLowerBorder()
+                        nFirstPageBottomMargin = (pNotesPage->getBorder().lowerUnit() != 0)
+                                                     ? pNotesPage->getBorder().lowerUnit()
                                                      : nBottomMargin;
                     }
                     double nOverflowedTextHeight = 0;
@@ -2617,9 +2619,9 @@ private:
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
             const ::tools::Long nPageWidth (
-                rInfo.maPageSize.Width() - rPage.GetLeftBorder() - rPage.GetRightBorder());
+                rInfo.maPageSize.Width() - rPage.getBorder().leftUnit() - rPage.getBorder().rightUnit());
             const ::tools::Long nPageHeight (
-                rInfo.maPageSize.Height() - rPage.GetUpperBorder() - rPage.GetLowerBorder());
+                rInfo.maPageSize.Height() - rPage.getBorder().upperUnit() - rPage.getBorder().lowerUnit());
 
             Point aOrigin ( 0, 0 );
 

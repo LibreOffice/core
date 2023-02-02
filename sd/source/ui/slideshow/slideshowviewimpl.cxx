@@ -286,7 +286,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     }
 
     SdPage* pP = mpDoc->GetSdPage( 0, PageKind::Standard );
-    Size aPageSize( pP->GetSize() );
+    Size aPageSize(pP->getSize().toToolsSize());
 
     const double page_ratio = static_cast<double>(aPageSize.Width()) / static_cast<double>(aPageSize.Height());
     const double output_ratio = static_cast<double>(aOutputSize.Width()) / static_cast<double>(aOutputSize.Height());

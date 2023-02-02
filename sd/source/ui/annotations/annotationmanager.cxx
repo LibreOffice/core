@@ -488,7 +488,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     sdr::annotation::AnnotationVector aAnnotations(pPage->getAnnotations());
     if (!aAnnotations.empty())
     {
-        const int fPageWidth = pPage->GetSize().Width();
+        const int fPageWidth = pPage->getSize().toToolsSize().Width();
         const int fWidth = 1000;
         const int fHeight = 800;
 

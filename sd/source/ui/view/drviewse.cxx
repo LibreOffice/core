@@ -686,7 +686,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     if (comphelper::LibreOfficeKit::isActive())
     {
         // aVisArea is nonsensical in the LOK case, use the slide size
-        aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
+        aVisArea = getCurrentPage()->getRectangle().toToolsRect();
     }
 
     Point aPagePos = aVisArea.Center();
@@ -1218,7 +1218,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( pPageView )
             {
                 Point aPagePos(0, 0); // = pPageView->GetOffset();
-                Size aPageSize = pPageView->GetPage()->GetSize();
+                Size aPageSize = pPageView->GetPage()->getSize().toToolsSize();
 
                 aPagePos.AdjustX(aPageSize.Width()  / 2 );
                 aPageSize.setWidth( static_cast<::tools::Long>(aPageSize.Width() * 1.03) );

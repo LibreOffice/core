@@ -359,14 +359,15 @@ SdPage* DocumentHelper::AddMasterPage (
 
         // Adapt the size of the new master page to that of the pages in
         // the document.
-        Size aNewSize (rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind())->GetSize());
-        ::tools::Rectangle aBorders (
-            pClonedMasterPage->GetLeftBorder(),
-            pClonedMasterPage->GetUpperBorder(),
-            pClonedMasterPage->GetRightBorder(),
-            pClonedMasterPage->GetLowerBorder());
+        auto pPage = rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind());
+        Size aNewSize = pPage->getSize().toToolsSize();
+        ::tools::Rectangle aBorders(
+            pClonedMasterPage->getBorder().leftUnit(),
+            pClonedMasterPage->getBorder().upperUnit(),
+            pClonedMasterPage->getBorder().rightUnit(),
+            pClonedMasterPage->getBorder().lowerUnit());
         pClonedMasterPage->ScaleObjects(aNewSize, aBorders, true);
-        pClonedMasterPage->SetSize(aNewSize);
+        pClonedMasterPage->setSize(pPage->getSize());
         pClonedMasterPage->CreateTitleAndLayout(true);
     }
 

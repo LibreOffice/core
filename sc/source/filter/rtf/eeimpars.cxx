@@ -604,7 +604,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         aLogicSize = pDefaultDev->PixelToLogic( aSizePix, MapMode( MapUnit::Map100thMM ) );
 
         // Limit size
-        ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+        ::ScLimitSizeOnDrawPage(aLogicSize, aInsertPos, pPage->getSize().toToolsSize());
 
         if ( pI->oGraphic )
         {

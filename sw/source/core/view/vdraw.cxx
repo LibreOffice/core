@@ -186,8 +186,10 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     if ( !HasDrawView() )
         return;
 
-    if ( GetPageView() )
-        GetPageView()->GetPage()->SetSize( rNewSz );
+    if (GetPageView())
+    {
+        GetPageView()->GetPage()->setToolsSize(rNewSz);
+    }
 
     // Limitation of the work area
     const tools::Rectangle aDocRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );

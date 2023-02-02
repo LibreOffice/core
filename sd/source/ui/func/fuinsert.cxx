@@ -594,7 +594,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 {
                     // we create a new OLE object
                     SdrPageView* pPV = mpView->GetSdrPageView();
-                    Size aPageSize = pPV->GetPage()->GetSize();
+                    Size aPageSize = pPV->GetPage()->getSize().toToolsSize();
 
                     // get the size from the iconified object
                     ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );

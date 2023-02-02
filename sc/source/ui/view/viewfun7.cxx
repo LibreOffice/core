@@ -57,7 +57,7 @@ static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSi
 {
     SdrPage* pPage = rData.GetScDrawView()->GetModel().GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
     assert(pPage && "pPage ???");
-    Size aPgSize( pPage->GetSize() );
+    Size aPgSize(pPage->getSize().toToolsSize());
     if (aPgSize.Width() < 0)
         aPgSize.setWidth( -aPgSize.Width() );
     tools::Long x = aPgSize.Width() - rPos.X() - rSize.Width();

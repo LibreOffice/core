@@ -432,7 +432,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     if( nIndex != -1 )
         aLayoutName = aLayoutName.copy(0, nIndex);
 
-    aOutliner.SetPaperSize(pPage->GetSize());
+    aOutliner.SetPaperSize(pPage->getSize().toToolsSize());
 
     SvStream* pStream = pMedium->GetInStream();
     assert(pStream && "No InStream!");

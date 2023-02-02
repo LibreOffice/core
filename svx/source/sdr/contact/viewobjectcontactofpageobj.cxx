@@ -167,7 +167,7 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 
     if(pStartPage && !rRange.isEmpty())
     {
-        const basegfx::B2DRange aPageRange(0.0, 0.0, static_cast<double>(pStartPage->GetWidth()), static_cast<double>(pStartPage->GetHeight()));
+        const basegfx::B2DRange aPageRange = pStartPage->getRectangle().toB2DRange();
 
         if(rRange.overlaps(aPageRange))
         {
@@ -217,7 +217,7 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
     {
         // get displayed page's geometry
         drawinglayer::primitive2d::Primitive2DContainer xPageContent;
-        const Size aPageSize(pPage->GetSize());
+        auto aPageSize = pPage->getSize().toB2DSize();
         const double fPageWidth(aPageSize.getWidth());
         const double fPageHeight(aPageSize.getHeight());
 

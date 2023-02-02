@@ -218,12 +218,13 @@ DlgEditor::DlgEditor (
     aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
 
     rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );
-    pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
+    Size aPageSize = rWindow.PixelToLogic(Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN));
+    pDlgEdPage->setToolsSize(aPageSize);
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel().GetPage(0));
     pDlgEdView->SetLayerVisible( u"HiddenLayer"_ustr, false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
-    pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
+    pDlgEdView->SetWorkArea(pDlgEdPage->getRectangle().toToolsRect());
 
     Size aGridSize( 100, 100 );  // 100TH_MM
     pDlgEdView->SetGridCoarse( aGridSize );
@@ -269,7 +270,7 @@ void DlgEditor::InitScrollBars()
         return;
 
     Size aOutSize = rWindow.GetOutDev()->GetOutputSize();
-    Size aPgSize  = pDlgEdPage->GetSize();
+    Size aPgSize = pDlgEdPage->getSize().toToolsSize();
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
     pVScroll->SetRange( Range( 0, aPgSize.Height() ));
@@ -1202,11 +1203,11 @@ bool DlgEditor::AdjustPageSize()
 
             if ( pDlgEdPage )
             {
-                Size aPageSize = pDlgEdPage->GetSize();
+                Size aPageSize = pDlgEdPage->getSize().toToolsSize();
                 if ( nNewPageWidth != aPageSize.Width() || nNewPageHeight != aPageSize.Height() )
                 {
                     Size aNewPageSize( nNewPageWidth, nNewPageHeight );
-                    pDlgEdPage->SetSize( aNewPageSize );
+                    pDlgEdPage->setToolsSize(aNewPageSize);
                     pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), aNewPageSize ) );
                     bAdjustedPageSize = true;
                 }

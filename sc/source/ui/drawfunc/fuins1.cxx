@@ -183,7 +183,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     if ( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.AdjustX( -(aLogicSize.Width()) );       // move position to left edge
 
-    ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+    ScLimitSizeOnDrawPage(aLogicSize, aInsertPos, pPage->getSize().toToolsSize());
 
     tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
@@ -237,7 +237,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     else
         aSize = Size( 5000, 5000 );
 
-    ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
+    ScLimitSizeOnDrawPage(aSize, aInsertPos, pPage->getSize().toToolsSize());
 
     if( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.AdjustX( -(aSize.Width()) );

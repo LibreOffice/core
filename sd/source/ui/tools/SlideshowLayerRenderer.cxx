@@ -116,7 +116,7 @@ public:
 
         maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, rScale, Point(),
                                                                    pBuffer);
-        Size aPageSize(rPage.GetSize());
+        Size aPageSize(rPage.getSize().toToolsSize());
 
         MapMode aMapMode(MapUnit::Map100thMM);
         const Fraction aFracX(rSlideSize.Width(),
@@ -821,7 +821,8 @@ void SlideshowLayerRenderer::setupMasterPageFields()
 
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
 {
-    double fRatio = double(mrPage.GetHeight()) / mrPage.GetWidth();
+    double fRatio
+        = double(mrPage.getSize().getHeight().as_hmm()) / mrPage.getSize().getWidth().as_hmm();
     Size aSize(rDesiredSizePixel.Width(), ::tools::Long(rDesiredSizePixel.Width() * fRatio));
     maSlideSize = aSize;
 
@@ -842,7 +843,7 @@ void SlideshowLayerRenderer::createViewAndDraw(
     aView.setHideBackground(!(mbRenderBackground && maRenderState.includeBackground()));
     aView.ShowSdrPage(&mrPage);
 
-    Size aPageSize(mrPage.GetSize());
+    Size aPageSize = mrPage.getSize().toToolsSize();
     Point aPoint;
 
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
