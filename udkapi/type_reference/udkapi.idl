@@ -1366,7 +1366,7 @@ module com {
    module registry {
     published exception InvalidRegistryException: ::com::sun::star::uno::Exception {
     };
-    published exception MergeConflictException: ::com::sun::star::uno::Exception {
+    /** @deprecated */ published exception MergeConflictException: ::com::sun::star::uno::Exception {
     };
     published interface XSimpleRegistry {
      interface ::com::sun::star::uno::XInterface;
@@ -1377,7 +1377,7 @@ module com {
      void destroy() raises (::com::sun::star::registry::InvalidRegistryException);
      ::com::sun::star::registry::XRegistryKey getRootKey() raises (::com::sun::star::registry::InvalidRegistryException);
      boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
-     void mergeKey([in] string aKeyName, [in] string aUrl) raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::MergeConflictException);
+     /** @deprecated */ void mergeKey([in] string aKeyName, [in] string aUrl) raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::MergeConflictException);
     };
     published service DefaultRegistry {
      interface ::com::sun::star::registry::XSimpleRegistry;

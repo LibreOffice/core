@@ -531,6 +531,7 @@ module com {
      const short REPEAT = 1301;
      const short RETURN = 1280;
      const short RIGHT = 1027;
+     const short RIGHTCURLYBRACKET = 1319;
      const short S = 530;
      const short SCROLLLOCK = 1314;
      const short SELECT_ALL = 1557;
@@ -1142,6 +1143,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] sequence< any > TypedItemList;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XControlContainer {
      interface ::com::sun::star::uno::XInterface;
@@ -1242,6 +1245,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
    };
    module util {
@@ -1307,6 +1312,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XDialog {
      interface ::com::sun::star::uno::XInterface;
@@ -1395,6 +1402,8 @@ module com {
      [property] boolean VScroll;
      [property, optional] short WritingMode;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published service UnoControlFileControl {
      service ::com::sun::star::awt::UnoControlEdit;
@@ -1467,6 +1476,8 @@ module com {
      [property] ::com::sun::star::util::Color TextLineColor;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
      [property, optional] boolean NoLabel;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published service UnoControlFormattedField {
      service ::com::sun::star::awt::UnoControlEdit;
@@ -1511,6 +1522,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published service UnoControlGroupBox {
      service ::com::sun::star::awt::UnoControl;
@@ -1606,6 +1619,8 @@ module com {
      [property, optional] short MouseWheelBehavior;
      [property, maybevoid, optional] short ItemSeparatorPos;
      [property, optional] sequence< any > TypedItemList;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XNumericField {
      interface ::com::sun::star::uno::XInterface;
@@ -1661,6 +1676,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XPatternField {
      interface ::com::sun::star::uno::XInterface;
@@ -1701,6 +1718,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XProgressBar {
      interface ::com::sun::star::uno::XInterface;
@@ -1871,6 +1890,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published struct VclContainerEvent: ::com::sun::star::lang::EventObject {
      ::com::sun::star::uno::XInterface Child;
@@ -13850,6 +13871,7 @@ module com {
      [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property, optional] boolean AllowOverlap;
      [property, optional] string Tooltip;
+     [property, optional] boolean Decorative;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -14264,6 +14286,10 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::container::XIndexReplace getChapterNumberingRules();
     };
+    interface XContentControlsSupplier {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::container::XIndexAccess getContentControls();
+    };
     published interface XDocumentIndexesSupplier {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::container::XIndexAccess getDocumentIndexes();
@@ -14330,6 +14356,7 @@ module com {
      [optional] interface ::com::sun::star::tiledrendering::XTiledRenderable;
      [optional] interface ::com::sun::star::text::XFootnotesSupplier;
      [optional] interface ::com::sun::star::text::XEndnotesSupplier;
+     [optional] interface ::com::sun::star::text::XContentControlsSupplier;
      [optional] interface ::com::sun::star::util::XReplaceable;
      [optional] interface ::com::sun::star::text::XPagePrintable;
      [optional] interface ::com::sun::star::text::XReferenceMarksSupplier;
@@ -15246,6 +15273,7 @@ module com {
      const short RL_TB = 1;
      const short TB_LR = 3;
      const short TB_RL = 2;
+     const short TB_RL90 = 6;
     };
     published interface XBookmarkInsertTool {
      interface ::com::sun::star::uno::XInterface;
@@ -17418,6 +17446,7 @@ module com {
      [property, optional] short DuplexMode;
      [property, optional] string PrinterName;
      [property, optional] boolean SinglePrintJobs;
+     [property, optional] boolean JobName;
     };
     published service PrintSettings {
      [property] boolean PrintBlackFonts;
