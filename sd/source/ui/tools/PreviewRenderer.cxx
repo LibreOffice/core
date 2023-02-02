@@ -87,7 +87,7 @@ Image PreviewRenderer::RenderPage (
 {
     if (pPage != nullptr)
     {
-        const Size aPageModelSize (pPage->GetSize());
+        const Size aPageModelSize(pPage->getSize().toToolsSize());
         const double nAspectRatio (
             double(aPageModelSize.Width()) / double(aPageModelSize.Height()));
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
@@ -272,7 +272,7 @@ void PreviewRenderer::PaintPage (
     const bool bDisplayPresentationObjects)
 {
     // Paint the page.
-    ::tools::Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
+    ::tools::Rectangle aPaintRectangle = pPage->getRectangle().toToolsRect();
     vcl::Region aRegion (aPaintRectangle);
 
     // Turn off online spelling and redlining.
@@ -358,7 +358,7 @@ void PreviewRenderer::SetupOutputSize (
     aMapMode.SetMapUnit(MapUnit::MapPixel);
 
     // Adapt it to the desired width.
-    const Size aPageModelSize (rPage.GetSize());
+    const Size aPageModelSize = rPage.getSize().toToolsSize();
     if (!aPageModelSize.IsEmpty())
     {
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);

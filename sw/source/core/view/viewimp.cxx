@@ -52,8 +52,11 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( rIDDMA.GetDrawModel()->GetPage( 0 ) );
 
-        if ( pRoot->GetDrawPage()->GetSize() != pRoot->getFrameArea().SSize() )
-            pRoot->GetDrawPage()->SetSize( pRoot->getFrameArea().SSize() );
+        if ( pRoot->GetDrawPage()->getSize().toToolsSize() != pRoot->getFrameArea().SSize() )
+        {
+            Size aSize = pRoot->getFrameArea().SSize();
+            pRoot->GetDrawPage()->setToolsSize(aSize);
+        }
 
         m_pSdrPageView = m_pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // Notify drawing page view about invisible layers

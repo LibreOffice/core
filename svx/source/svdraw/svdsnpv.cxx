@@ -303,12 +303,13 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if (mbBordVisible && mbBordSnap) {
         SdrPage* pPage=pPV->GetPage();
-        tools::Long xs=pPage->GetWidth();
-        tools::Long ys=pPage->GetHeight();
-        tools::Long lft=pPage->GetLeftBorder();
-        tools::Long rgt=pPage->GetRightBorder();
-        tools::Long upp=pPage->GetUpperBorder();
-        tools::Long lwr=pPage->GetLowerBorder();
+        auto eUnit = pPage->getUnit();
+        tools::Long xs = pPage->getSize().getWidth().as(eUnit);
+        tools::Long ys = pPage->getSize().getHeight().as(eUnit);
+        tools::Long lft = pPage->getBorder().left().as(eUnit);
+        tools::Long rgt = pPage->getBorder().right().as(eUnit);
+        tools::Long upp = pPage->getBorder().upper().as(eUnit);
+        tools::Long lwr = pPage->getBorder().lower().as(eUnit);
         tools::Long a;
         a=x- lft    ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left margin
         a=x-(xs-rgt); if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right margin

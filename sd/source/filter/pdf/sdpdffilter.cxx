@@ -100,7 +100,7 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
             return false;
 
         // Make the page size match the rendered image.
-        pPage->SetSize(aSizeHMM);
+        pPage->setToolsSize(aSizeHMM);
         if (nPageNumber == 0)
         {
             aMasterSizeHMM = aSizeHMM;
@@ -254,7 +254,7 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
     if (SdPage* pPage = bAllPagesSameSize ? rDocument.GetSdPage(0, PageKind::Standard) : nullptr)
     {
         SdPage& rMasterPage = static_cast<SdPage&>(pPage->TRG_GetMasterPage());
-        rMasterPage.SetSize(aMasterSizeHMM);
+        rMasterPage.setToolsSize(aMasterSizeHMM);
     }
 
     rDocument.setLock(bWasLocked);

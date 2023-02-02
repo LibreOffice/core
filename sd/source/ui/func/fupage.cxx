@@ -229,7 +229,7 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     aNewAttr->Put( aPageItem );
 
     // size
-    maSize = mpPage->GetSize();
+    maSize = mpPage->getSize().toToolsSize();
     SvxSizeItem aSizeItem( SID_ATTR_PAGE_SIZE, maSize );
     aNewAttr->Put( aSizeItem );
 
@@ -241,13 +241,15 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, static_cast<sal_uInt8>(mpPage->GetPaperBin()) );
     aNewAttr->Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem(SvxIndentValue::twips(mpPage->GetLeftBorder()),
-                                SvxIndentValue::twips(mpPage->GetRightBorder()),
+    SvxLRSpaceItem aLRSpaceItem(SvxIndentValue::twips(mpPage->getBorder().leftUnit()),
+                                SvxIndentValue::twips(mpPage->getBorder().rightUnit()),
                                 SvxIndentValue::zero(),
                                 mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
     aNewAttr->Put( aLRSpaceItem );
 
-    SvxULSpaceItem aULSpaceItem( static_cast<sal_uInt16>(mpPage->GetUpperBorder()), static_cast<sal_uInt16>(mpPage->GetLowerBorder()), mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
+    SvxULSpaceItem aULSpaceItem(static_cast<sal_uInt16>(mpPage->getBorder().upperUnit()),
+                                static_cast<sal_uInt16>(mpPage->getBorder().lowerUnit()),
+                                mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
     aNewAttr->Put( aULSpaceItem );
 
     // Application
@@ -516,7 +518,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     {
         aNewSize = static_cast<const SvxSizeItem*>(pPoolItem)->GetSize();
 
-        if( mpPage->GetSize() != aNewSize )
+        if (mpPage->getSize().toToolsSize() != aNewSize)
             bSetPageSizeAndBorder = true;
     }
 
@@ -526,9 +528,11 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->ResolveLeft({});
         nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->ResolveRight({});
 
-        if( mpPage->GetLeftBorder() != nLeft || mpPage->GetRightBorder() != nRight )
+        if (mpPage->getBorder().leftUnit() != nLeft
+         || mpPage->getBorder().rightUnit() != nRight)
+        {
             bSetPageSizeAndBorder = true;
-
+        }
     }
 
     if( pArgs->GetItemState(mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE),
@@ -537,8 +541,11 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nUpper = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetUpper();
         nLower = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetLower();
 
-        if( mpPage->GetUpperBorder() != nUpper || mpPage->GetLowerBorder() != nLower )
+        if (mpPage->getBorder().upperUnit() != nUpper
+         || mpPage->getBorder().lowerUnit() != nLower)
+        {
             bSetPageSizeAndBorder = true;
+        }
     }
 
     if( pArgs->GetItemState(mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SfxItemState::SET )
@@ -573,14 +580,14 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if (nLeft == -1 && nUpper != -1)
     {
         bSetPageSizeAndBorder = true;
-        nLeft  = mpPage->GetLeftBorder();
-        nRight = mpPage->GetRightBorder();
+        nLeft  = mpPage->getBorder().leftUnit();
+        nRight = mpPage->getBorder().rightUnit();
     }
     else if (nLeft != -1 && nUpper == -1)
     {
         bSetPageSizeAndBorder = true;
-        nUpper = mpPage->GetUpperBorder();
-        nLower = mpPage->GetLowerBorder();
+        nUpper = mpPage->getBorder().upperUnit();
+        nLower = mpPage->getBorder().lowerUnit();
     }
 
     if( bSetPageSizeAndBorder || !mbMasterPage )
@@ -613,7 +620,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     // Objects can not be bigger than ViewSize
-    Size aPageSize = mrDoc.GetSdPage(0, ePageKind)->GetSize();
+    Size aPageSize = mrDoc.GetSdPage(0, ePageKind)->getSize().toToolsSize();
     Size aViewSize(aPageSize.Width() * 3, aPageSize.Height() * 2);
     mrDoc.SetMaxObjSize(aViewSize);
 

@@ -64,11 +64,10 @@ namespace sdr::contact
 
             // used range (retval) is fixed here, it's the MasterPage fill range
             const SdrPage& rOwnerPage = rDescriptor.GetOwnerPage();
-            const basegfx::B2DRange aInnerRange(
-                rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
-                rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(), rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
-            const basegfx::B2DRange aOuterRange(
-                0, 0, rOwnerPage.GetWidth(), rOwnerPage.GetHeight());
+
+            const basegfx::B2DRange aInnerRange = rOwnerPage.getInnerRectangle().toB2DRange();
+            const basegfx::B2DRange aOuterRange = rOwnerPage.getRectangle().toB2DRange();
+
             // ??? somehow only the master page's bit is used
             bool const isFullSize(rDescriptor.GetUsedPage().IsBackgroundFullSize());
             basegfx::B2DRange const& rPageFillRange(isFullSize ? aOuterRange : aInnerRange);

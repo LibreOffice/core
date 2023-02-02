@@ -611,7 +611,7 @@ public:
             pMasterPage->InsertObject(pObject.get());
 
             // Calculate position
-            ::tools::Rectangle aRectangle(Point(), pMasterPage->GetSize());
+            ::tools::Rectangle aRectangle = pMasterPage->getRectangle().toToolsRect();
             Point aPosition(aRectangle.Center().X(), aRectangle.Bottom());
 
             aPosition.AdjustX( -(aTextSize.Width() / 2) );

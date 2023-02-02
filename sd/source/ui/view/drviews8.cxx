@@ -53,7 +53,7 @@ void DrawViewShell::ScannerEvent()
                 {
                     const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
-                    Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
+                    Size aBmpSize(aScanBmp.GetPrefSize()), aPageSize(pPage->getSize().toToolsSize());
                     const MapMode       aMap100( MapUnit::Map100thMM );
 
                     if( !aBmpSize.Width() || !aBmpSize.Height() )
@@ -64,8 +64,9 @@ void DrawViewShell::ScannerEvent()
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-                    aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+                    gfx::LengthUnit eUnit = pPage->getUnit();
+                    aPageSize.AdjustWidth(-basegfx::fround((pPage->getBorder().getLeft() + pPage->getBorder().getRight()).as(eUnit)) );
+                    aPageSize.AdjustHeight(-basegfx::fround((pPage->getBorder().getUpper() + pPage->getBorder().getLower()).as(eUnit)) );
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -85,7 +86,8 @@ void DrawViewShell::ScannerEvent()
                     }
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
-                    aPnt += Point( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
+                    aPnt += Point(pPage->getBorder().leftUnit(),
+                                  pPage->getBorder().upperUnit());
                     ::tools::Rectangle   aRect( aPnt, aBmpSize );
                     bool        bInsertNewObject = true;
 

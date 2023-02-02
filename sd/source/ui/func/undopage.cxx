@@ -29,7 +29,7 @@ void SdPageFormatUndoAction::Undo()
 {
     ::tools::Rectangle aOldBorderRect(mnOldLeft, mnOldUpper, mnOldRight, mnOldLower);
     mpPage->ScaleObjects(maOldSize, aOldBorderRect, mbNewScale);
-    mpPage->SetSize(maOldSize);
+    mpPage->setToolsSize(maOldSize);
     mpPage->SetLeftBorder(mnOldLeft);
     mpPage->SetRightBorder(mnOldRight);
     mpPage->SetUpperBorder(mnOldUpper);
@@ -47,7 +47,7 @@ void SdPageFormatUndoAction::Redo()
 {
     ::tools::Rectangle aNewBorderRect(mnNewLeft, mnNewUpper, mnNewRight, mnNewLower);
     mpPage->ScaleObjects(maNewSize, aNewBorderRect, mbNewScale);
-    mpPage->SetSize(maNewSize);
+    mpPage->setToolsSize(maNewSize);
     mpPage->SetLeftBorder(mnNewLeft);
     mpPage->SetRightBorder(mnNewRight);
     mpPage->SetUpperBorder(mnNewUpper);

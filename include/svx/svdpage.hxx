@@ -24,6 +24,7 @@
 #include <vcl/prntypes.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sdrpageuser.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/svxdllapi.h>
@@ -31,6 +32,10 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
 #include <unotools/weakref.hxx>
+#include <basegfx/units/Length.hxx>
+#include <basegfx/units/Size2DLWrap.hxx>
+#include <basegfx/units/Range2DLWrap.hxx>
+#include <svx/Border.hxx>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -359,7 +364,6 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-
 /**
   A SdrPage contains exactly one SdrObjList and a description of the physical
   page dimensions (size / margins).  The latter is required to "catch" objects
@@ -425,12 +429,8 @@ protected:
     std::vector<rtl::Reference<sdr::annotation::Annotation>> maAnnotations;
 
 private:
-    tools::Long mnWidth;       // page size
-    tools::Long mnHeight;      // page size
-    sal_Int32 mnBorderLeft;  // left page margin
-    sal_Int32 mnBorderUpper; // top page margin
-    sal_Int32 mnBorderRight; // right page margin
-    sal_Int32 mnBorderLower; // bottom page margin
+    gfx::Size2DLWrap maSize;
+    svx::Border maBorder;
     UniqueID maUniqueID;
     bool mbBackgroundFullSize = false; ///< Background object to represent the whole page.
 
@@ -488,21 +488,50 @@ public:
     void setPageBorderOnlyLeftRight(bool bNew) { mbPageBorderOnlyLeftRight = bNew; }
     bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
-    virtual void SetSize(const Size& aSiz);
-    Size GetSize() const;
+    gfx::LengthUnit getUnit() const { return getSdrModelFromSdrPage().getUnit(); }
+    virtual void setSize(gfx::Size2DLWrap const& rSize);
+
+    void setToolsSize(Size const rSize)
+    {
+        setSize(gfx::Size2DLWrap::create(rSize, getUnit()));
+    }
+
+    const gfx::Size2DLWrap& getSize() const
+    {
+        return maSize;
+    }
+
+    gfx::Range2DLWrap getRectangle() const
+    {
+        return gfx::Range2DLWrap(0_emu, 0_emu, maSize.getWidth(), maSize.getHeight(), getUnit());
+    }
+
+    gfx::Range2DLWrap getInnerRectangle() const
+    {
+        return gfx::Range2DLWrap(maBorder.getLeft(), maBorder.getUpper(),
+                                 maSize.getWidth() - maBorder.getRight(),
+                                 maSize.getHeight() - maBorder.getLower(),
+                                 getUnit());
+    }
+
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    tools::Long GetWidth() const;
-    tools::Long GetHeight() const;
-    virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
+
+    virtual svx::Border const& getBorder() const
+    {
+        return maBorder;
+    }
+
+    virtual void setBorder(svx::Border const& rBorder)
+    {
+        maBorder = rBorder;
+    }
+
+    virtual void  SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 Lower);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
     virtual void  SetUpperBorder(sal_Int32 nBorder);
     virtual void  SetRightBorder(sal_Int32 nBorder);
     virtual void  SetLowerBorder(sal_Int32 nBorder);
-    sal_Int32 GetLeftBorder() const;
-    sal_Int32 GetUpperBorder() const;
-    sal_Int32 GetRightBorder() const;
-    sal_Int32 GetLowerBorder() const;
     sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
     void    SetBackgroundFullSize(bool bIn);
     bool    IsBackgroundFullSize() const;

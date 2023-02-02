@@ -85,7 +85,7 @@ void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin
         const sal_Int32 nVisBottom = aVisRect.Bottom();
 
         // don't scroll beyond the page size
-        Size aPageSize = m_pSectionWindow->getPage()->GetSize();
+        Size aPageSize = m_pSectionWindow->getPage()->getSize().toToolsSize();
         const sal_Int32 nPageWidth  = aPageSize.Width();
         const sal_Int32 nPageHeight = aPageSize.Height();
 

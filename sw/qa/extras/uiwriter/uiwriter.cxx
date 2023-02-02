@@ -1068,10 +1068,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         SdrObject* pObject = pPage->GetObj(0);
         pObject->RecalcBoundRect();
         const tools::Rectangle& rRect = pObject->GetSnapRect();
-        Size rSize = pPage->GetSize();
 
         // Page break, calculate height of a page
-        const int nPageHeight = rSize.getHeight() / aPages;
+        const int nPageHeight = pPage->getSize().getHeight().as(pPage->getUnit()) / aPages;
 
         std::stringstream aMessage;
         aMessage << "Case: " << i << ", nPageHeight = " << nPageHeight << ", rRect.Bottom = " << rRect.Bottom();

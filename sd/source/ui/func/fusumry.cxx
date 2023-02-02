@@ -119,11 +119,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // page with title & structuring!
                     pSummaryPage = mrDoc.AllocSdPage(false);
-                    pSummaryPage->SetSize(pActualPage->GetSize() );
-                    pSummaryPage->SetBorder(pActualPage->GetLeftBorder(),
-                                     pActualPage->GetUpperBorder(),
-                                     pActualPage->GetRightBorder(),
-                                     pActualPage->GetLowerBorder() );
+                    pSummaryPage->setSize(pActualPage->getSize());
+                    pSummaryPage->setBorder(pActualPage->getBorder());
+
 
                     // insert page at the back
                     mrDoc.InsertPage(pSummaryPage.get(), nCount * 2 + 1);
@@ -139,11 +137,8 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // notes-page
                     rtl::Reference<SdPage> pNotesPage = mrDoc.AllocSdPage(false);
-                    pNotesPage->SetSize(pActualNotesPage->GetSize());
-                    pNotesPage->SetBorder(pActualNotesPage->GetLeftBorder(),
-                                          pActualNotesPage->GetUpperBorder(),
-                                          pActualNotesPage->GetRightBorder(),
-                                          pActualNotesPage->GetLowerBorder() );
+                    pNotesPage->setSize(pActualNotesPage->getSize());
+                    pNotesPage->setBorder(pActualNotesPage->getBorder());
                     pNotesPage->SetPageKind(PageKind::Notes);
 
                     // insert page at the back

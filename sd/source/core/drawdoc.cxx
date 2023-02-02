@@ -469,9 +469,11 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
                 new SdPageFormatUndoAction(
                     *this,
                     pPage,
-                    pPage->GetSize(),
-                    pPage->GetLeftBorder(), pPage->GetRightBorder(),
-                    pPage->GetUpperBorder(), pPage->GetLowerBorder(),
+                    pPage->getSize().toToolsSize(),
+                    pPage->getBorder().leftUnit(),
+                    pPage->getBorder().rightUnit(),
+                    pPage->getBorder().upperUnit(),
+                    pPage->getBorder().lowerUnit(),
                     pPage->GetOrientation(),
                     pPage->GetPaperBin(),
                     pPage->IsBackgroundFullSize(),
@@ -492,7 +494,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
 
             if (rNewSize.Width() > 0)
             {
-                pPage->SetSize(rNewSize);
+                pPage->setToolsSize(rNewSize);
             }
         }
 
@@ -524,9 +526,11 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
                 new SdPageFormatUndoAction(
                     *this,
                     pPage,
-                    pPage->GetSize(),
-                    pPage->GetLeftBorder(), pPage->GetRightBorder(),
-                    pPage->GetUpperBorder(), pPage->GetLowerBorder(),
+                    pPage->getSize().toToolsSize(),
+                    pPage->getBorder().leftUnit(),
+                    pPage->getBorder().rightUnit(),
+                    pPage->getBorder().upperUnit(),
+                    pPage->getBorder().lowerUnit(),
                     pPage->GetOrientation(),
                     pPage->GetPaperBin(),
                     pPage->IsBackgroundFullSize(),
@@ -547,7 +551,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
 
             if (rNewSize.Width() > 0)
             {
-                pPage->SetSize(rNewSize);
+                pPage->setToolsSize(rNewSize);
             }
         }
 

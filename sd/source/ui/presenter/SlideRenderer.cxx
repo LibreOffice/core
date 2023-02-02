@@ -93,7 +93,7 @@ Bitmap SlideRenderer::CreatePreview (
             0);
 
     // Determine the size of the current slide and its aspect ratio.
-    Size aPageSize = pPage->GetSize();
+    Size aPageSize = pPage->getSize().toToolsSize();
     if (aPageSize.Height() <= 0)
         throw lang::IllegalArgumentException(u"SlideRenderer::createPreview() called with invalid size"_ustr,
             static_cast<XWeak*>(this),

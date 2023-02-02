@@ -147,7 +147,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         new SdrModel());
 
     rtl::Reference<SdrPage> pPage = new SdrPage( *pModel, false );
-    pPage->SetSize(Size(1000,1000));
+    pPage->setSize({ 1000_hmm, 1000_hmm });
     pModel->InsertPage( pPage.get(), 0 );
     SdrView aView(*pModel, pVDev);
     aView.hideMarkHandles();

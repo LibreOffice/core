@@ -116,7 +116,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             if (aScroll.X() != 0 || aScroll.Y() != 0)
             {
                 Size aWorkSize = mpView->GetWorkArea().GetSize();
-                Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
+                Size aPageSize = mpView->GetSdrPageView()->GetPage()->getSize().toToolsSize();
                 if (aWorkSize.Width() != 0 && aWorkSize.Height() != 0 &&
                         aPageSize.Width() != 0 && aPageSize.Height() != 0)
                 {
