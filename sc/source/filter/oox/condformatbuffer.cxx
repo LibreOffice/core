@@ -1163,6 +1163,26 @@ void CondFormatBuffer::finalizeImport()
         ++nExtCFIndex;
     }
 
+    // tdf#138601 sort conditional formatting rules by their priority
+    if (maCondFormats.size() > 1)
+    {
+        size_t minIndex;
+        for (size_t i = 0; i < maCondFormats.size() - 1; ++i)
+        {
+            minIndex = i;
+            for (size_t j = i + 1; j < maCondFormats.size(); ++j)
+            {
+                if (maCondFormats[j]->maRules.begin()->first
+                    < maCondFormats[minIndex]->maRules.begin()->first)
+                {
+                    minIndex = j;
+                }
+            }
+            if (i != minIndex)
+                std::swap(maCondFormats[i], maCondFormats[minIndex]);
+        }
+    }
+
     for( const auto& rxCondFormat : maCondFormats )
     {
         if ( rxCondFormat)
