@@ -23,6 +23,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 
 #include <QtTools.hxx>
 #include <QtGraphicsBase.hxx>
@@ -129,9 +130,10 @@ bool QtGraphics_Controls::isNativeControlSupported(ControlType type, ControlPart
     return false;
 }
 
-inline int QtGraphics_Controls::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option)
+inline int QtGraphics_Controls::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option,
+                                            const QWidget* pWidget)
 {
-    return QApplication::style()->pixelMetric(metric, option);
+    return QApplication::style()->pixelMetric(metric, option, pWidget);
 }
 
 inline QSize QtGraphics_Controls::sizeFromContents(QStyle::ContentsType type,
@@ -759,6 +761,30 @@ bool QtGraphics_Controls::getNativeControlRegion(ControlType type, ControlPart p
             int nRight = qMax(nLine, upscale(fo.rect.right() - aSubRect.right(), Round::Ceil));
             int nBottom = qMax(nLine, upscale(fo.rect.bottom() - aSubRect.bottom(), Round::Ceil));
             boundingRect.adjust(nLeft, nTop, nRight, nBottom);
+
+            // tdf#150451: ensure a minimium size that fits text content + frame at top and bottom.
+            // Themes may use the widget type for determining the actual frame width to use,
+            // so pass a dummy QLineEdit
+            //
+            // NOTE: This is currently only done here for the minimum size calculation and
+            // not above because the handling for edit boxes here and in the calling code
+            // currently does all kinds of "interesting" things like doing extra size adjustments
+            // or passing the content rect where the bounding rect would be expected,...
+            // Ideally this should be cleaned up in the callers and all platform integrations
+            // to adhere to what the doc in vcl/inc/WidgetDrawInterface.hxx says, but this
+            // here keeps it working with existing code for now.
+            // (s.a. discussion in https://gerrit.libreoffice.org/c/core/+/146516 for more details)
+            QLineEdit aDummyEdit;
+            const int nFrameWidth = pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, &aDummyEdit);
+            QFontMetrics aFontMetrics(QApplication::font());
+            const int minHeight = upscale(aFontMetrics.height() + 2 * nFrameWidth, Round::Floor);
+            if (boundingRect.height() < minHeight)
+            {
+                const int nDiff = minHeight - boundingRect.height();
+                boundingRect.setHeight(boundingRect.height() + nDiff);
+                contentRect.setHeight(contentRect.height() + nDiff);
+            }
+
             retVal = true;
             break;
         }
