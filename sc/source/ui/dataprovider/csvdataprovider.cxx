@@ -84,14 +84,12 @@ CSVFetchThread::~CSVFetchThread()
 
 bool CSVFetchThread::IsRequestedTerminate()
 {
-    osl::MutexGuard aGuard(maMtxTerminate);
-    return mbTerminate;
+    return mbTerminate.load();
 }
 
 void CSVFetchThread::RequestTerminate()
 {
-    osl::MutexGuard aGuard(maMtxTerminate);
-    mbTerminate = true;
+    mbTerminate.store(true);
 }
 
 void CSVFetchThread::EndThread()

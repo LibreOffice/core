@@ -19,6 +19,7 @@
 
 #include <rtl/strbuf.hxx>
 
+#include <atomic>
 #include <vector>
 //#include <map>
 
@@ -37,8 +38,7 @@ class CSVFetchThread : public salhelper::Thread
     ScDocument& mrDocument;
     OUString maURL;
 
-    bool mbTerminate;
-    osl::Mutex maMtxTerminate;
+    std::atomic<bool> mbTerminate;
 
     orcus::csv::parser_config maConfig;
 
