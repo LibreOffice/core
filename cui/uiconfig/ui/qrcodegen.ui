@@ -116,6 +116,7 @@
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be stored in the QR">URL/Text:</property>
                         <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_text</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
