@@ -59,7 +59,8 @@ public:
                                 tools::Rectangle& rNativeContentRegion) override;
 
 private:
-    static int pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option = nullptr);
+    static int pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option = nullptr,
+                           const QWidget* pWidget = nullptr);
     static QSize sizeFromContents(QStyle::ContentsType type, const QStyleOption* option,
                                   const QSize& contentsSize);
     static QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option,
