@@ -28,6 +28,7 @@
 
 #include <orcus/csv_parser.hpp>
 
+#include <atomic>
 #include <queue>
 
 namespace com::sun::star::ui { class XUIElement; }
@@ -96,8 +97,7 @@ class ReaderThread : public salhelper::Thread
 {
     std::unique_ptr<SvStream> mpStream;
     size_t mnColCount;
-    bool mbTerminate;
-    osl::Mutex maMtxTerminate;
+    std::atomic<bool> mbTerminate;
 
     std::queue<std::unique_ptr<DataStream::LinesType>> maPendingLines;
     std::queue<std::unique_ptr<DataStream::LinesType>> maUsedLines;
@@ -122,14 +122,12 @@ public:
 
     bool isTerminateRequested()
     {
-        osl::MutexGuard aGuard(maMtxTerminate);
-        return mbTerminate;
+        return mbTerminate.load();
     }
 
     void requestTerminate()
     {
-        osl::MutexGuard aGuard(maMtxTerminate);
-        mbTerminate = true;
+        mbTerminate.store(true);
     }
 
     void endThread()
