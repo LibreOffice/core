@@ -294,7 +294,7 @@ void SlideSorterView::Rearrange()
         mpLayouter->Rearrange (
             meOrientation,
             aWindowSize,
-            mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+            mrModel.GetPageDescriptor(0)->GetPage()->getSize().toToolsSize(),
             mrModel.GetPageCount()));
     if (bRearrangeSuccess)
     {

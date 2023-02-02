@@ -318,7 +318,7 @@ namespace {
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
-                    vcl::Region(::tools::Rectangle(Point(0,0), rPage.GetSize())));
+                    vcl::Region(rPage.getRectangle().toToolsRect()));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 
@@ -812,30 +812,30 @@ namespace {
             const SdrLayerIDSet& rPrintableLayers) const override
         {
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
+            gfx::LengthUnit eUnit = pPageToPrint->getUnit();
             if (pPageToPrint==nullptr)
                 return;
             MapMode aMap (rPrinter.GetMapMode());
 
-            const Size aPageSize (pPageToPrint->GetSize());
+            const auto aPageSize (pPageToPrint->getSize());
             const Size aPrintSize (rPrinter.GetOutputSize());
 
-            const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
-                - pPageToPrint->GetLeftBorder() - pPageToPrint->GetRightBorder());
-            const sal_Int32 nPageHeight (aPageSize.Height() + mnGap
-                - pPageToPrint->GetUpperBorder() - pPageToPrint->GetLowerBorder());
-            if (nPageWidth<=0 || nPageHeight<=0)
+            const gfx::Length nPageWidth = aPageSize.getWidth() + mnGap - pPageToPrint->getBorder().getLeft() - pPageToPrint->getBorder().getRight();
+            const gfx::Length nPageHeight = aPageSize.getHeight() + mnGap - pPageToPrint->getBorder().getUpper() - pPageToPrint->getBorder().getLower();
+            if (nPageWidth <= 0_hmm || nPageHeight <= 0_hmm)
                 return;
 
             // Print at least two rows and columns.  More if the document
             // page fits completely onto the printer page.
             const sal_Int32 nColumnCount (std::max(sal_Int32(2),
-                    sal_Int32(aPrintSize.Width() / nPageWidth)));
+                    sal_Int32(aPrintSize.Width() / nPageWidth.as(eUnit))));
             const sal_Int32 nRowCount (std::max(sal_Int32(2),
-                    sal_Int32(aPrintSize.Height() / nPageHeight)));
+                    sal_Int32(aPrintSize.Height() / nPageHeight.as(eUnit))));
             for (sal_Int32 nRow=0; nRow<nRowCount; ++nRow)
                 for (sal_Int32 nColumn=0; nColumn<nColumnCount; ++nColumn)
                 {
-                    aMap.SetOrigin(Point(nColumn*nPageWidth,nRow*nPageHeight));
+                    aMap.SetOrigin(Point(nColumn * nPageWidth.as(eUnit),
+                                         nRow * nPageHeight.as(eUnit)));
                     rPrinter.SetMapMode(aMap);
                     PrintPage(
                         rPrinter,
@@ -855,7 +855,7 @@ namespace {
 
     private:
         const sal_uInt16 mnPageIndex;
-        static const sal_Int32 mnGap = 500;
+        static const constexpr gfx::Length mnGap = 500_hmm;
     };
 
     /** Print two slides to one printer page so that the resulting pages
@@ -1428,7 +1428,7 @@ private:
         // Draw and Notes should usually use specified paper size when printing
         if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
         {
-            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSize();
+            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->getSize().toToolsSize();
             maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
                                     aInfo.maPrintSize.Height());
         }
@@ -1776,7 +1776,7 @@ private:
 
         if ( bScalePage )
         {
-            const Size aPageSize (rHandoutPage.GetSize());
+            const Size aPageSize (rHandoutPage.getSize().toToolsSize());
             const Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
 
             const double fHorz = static_cast<double>(aPrintSize.Width())    / aPageSize.Width();
@@ -1863,7 +1863,7 @@ private:
         if (pDocument->GetSdPageCount(ePageKind) == 0)
             return;
         SdPage* pRefPage = pDocument->GetSdPage(0, ePageKind);
-        rInfo.maPageSize = pRefPage->GetSize();
+        rInfo.maPageSize = pRefPage->getSize().toToolsSize();
 
         SetupPaperOrientation(ePageKind, rInfo);
 
@@ -1899,18 +1899,19 @@ private:
 
             MapMode aMap (rInfo.maMap);
             // is it possible that the page size changed?
-            const Size aPageSize = pPage->GetSize();
+            const auto aPageSize = pPage->getSize();
+            const Size aPageSizeHmm = aPageSize.toToolsSize();
 
             if (mpOptions->IsPageSize())
             {
-                const double fHorz (static_cast<double>(rInfo.maPrintSize.Width())  / aPageSize.Width());
-                const double fVert (static_cast<double>(rInfo.maPrintSize.Height()) / aPageSize.Height());
+                const double fHorz (static_cast<double>(rInfo.maPrintSize.Width())  / aPageSizeHmm.Width());
+                const double fVert (static_cast<double>(rInfo.maPrintSize.Height()) / aPageSizeHmm.Height());
 
                 Fraction aFract;
                 if (fHorz < fVert)
-                    aFract = Fraction(rInfo.maPrintSize.Width(), aPageSize.Width());
+                    aFract = Fraction(rInfo.maPrintSize.Width(), aPageSizeHmm.Width());
                 else
-                    aFract = Fraction(rInfo.maPrintSize.Height(), aPageSize.Height());
+                    aFract = Fraction(rInfo.maPrintSize.Height(), aPageSizeHmm.Height());
 
                 aMap.SetScaleX(aFract);
                 aMap.SetScaleY(aFract);
@@ -1925,8 +1926,9 @@ private:
                 rInfo.msPageString.clear();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            ::tools::Long aPageWidth   = aPageSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
-            ::tools::Long aPageHeight  = aPageSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder();
+            gfx::LengthUnit eUnit = pPage->getUnit();
+            ::tools::Long aPageWidth = basegfx::fround((aPageSize.getWidth() - pPage->getBorder().getLeft() - pPage->getBorder().getRight()).as(eUnit));
+            ::tools::Long aPageHeight = basegfx::fround((aPageSize.getHeight() - pPage->getBorder().getUpper() - pPage->getBorder().getLower()).as(eUnit));
             // Bugfix for 44530:
             // if it was implicitly changed (Landscape/Portrait),
             // this is considered for tiling, respectively for the splitting up
@@ -2159,9 +2161,9 @@ private:
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
             const ::tools::Long nPageWidth (
-                rInfo.maPageSize.Width() - rPage.GetLeftBorder() - rPage.GetRightBorder());
+                rInfo.maPageSize.Width() - rPage.getBorder().leftUnit() - rPage.getBorder().rightUnit());
             const ::tools::Long nPageHeight (
-                rInfo.maPageSize.Height() - rPage.GetUpperBorder() - rPage.GetLowerBorder());
+                rInfo.maPageSize.Height() - rPage.getBorder().upperUnit() - rPage.getBorder().lowerUnit());
 
             Point aOrigin ( 0, 0 );
 

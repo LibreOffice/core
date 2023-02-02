@@ -1552,9 +1552,10 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     {
         if (addPageMargin)
         {
-            SdrPage * pPage = GetSdrPageView()->GetPage();
-            Point upperLeft(pPage->GetLeftBorder(), pPage->GetUpperBorder());
-            aRect.Move(upperLeft.getX(), upperLeft.getY());
+            SdrPage* pPage = GetSdrPageView()->GetPage();
+            aRect.Move(
+                pPage->getBorder().left().as(pPage->getUnit()),
+                pPage->getBorder().upper().as(pPage->getUnit()));
         }
         GetSdrPageView()->LogicToPagePos(aRect);
     }
@@ -1956,9 +1957,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             }
             else
             {
-                aBound=tools::Rectangle(pPage->GetLeftBorder(),pPage->GetUpperBorder(),
-                                 pPage->GetWidth()-pPage->GetRightBorder(),
-                                 pPage->GetHeight()-pPage->GetLowerBorder());
+                aBound = pPage->getInnerRectangle().toToolsRect();
             }
         }
         else

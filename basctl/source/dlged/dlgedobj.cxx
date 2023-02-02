@@ -419,7 +419,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     DBG_ASSERT( pDlgEdForm, "DlgEdObj::PositionAndSizeChange: no form!" );
     DlgEdPage& rPage = pDlgEdForm->GetDlgEditor().GetPage();
     {
-        Size aPageSize = rPage.GetSize();
+        Size aPageSize = rPage.getSize().toToolsSize();
         sal_Int32 nPageWidthIn = aPageSize.Width();
         sal_Int32 nPageHeightIn = aPageSize.Height();
         sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
@@ -1298,7 +1298,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
     sal_Int32 nPageXIn = 0;
     sal_Int32 nPageYIn = 0;
-    Size aPageSize = rPage.GetSize();
+    Size aPageSize = rPage.getSize().toToolsSize();
     sal_Int32 nPageWidthIn = aPageSize.Width();
     sal_Int32 nPageHeightIn = aPageSize.Height();
     sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
@@ -1348,7 +1348,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     if ( bAdjustedPageSize )
     {
         rEditor.InitScrollBars();
-        aPageSize = rPage.GetSize();
+        aPageSize = rPage.getSize().toToolsSize();
         nPageWidthIn = aPageSize.Width();
         nPageHeightIn = aPageSize.Height();
         if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )

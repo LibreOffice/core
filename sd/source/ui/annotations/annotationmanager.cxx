@@ -456,7 +456,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     AnnotationVector aAnnotations( pPage->getAnnotations() );
     if( !aAnnotations.empty() )
     {
-        const int page_width = pPage->GetSize().Width();
+        const int page_width = pPage->getSize().toToolsSize().Width();
         const int width = 1000;
         const int height = 800;
         ::tools::Rectangle aTagRect;

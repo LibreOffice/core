@@ -24,6 +24,7 @@
 #include <vcl/prntypes.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sdrpageuser.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/svxdllapi.h>
@@ -31,10 +32,12 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
 #include <unotools/weakref.hxx>
+#include <basegfx/units/Length.hxx>
 #include <memory>
 #include <optional>
 #include <vector>
 #include <deque>
+#include <basegfx/units/Size2DLWrap.hxx>
 
 
 // predefines
@@ -42,7 +45,6 @@ namespace model { class Theme; }
 namespace reportdesign { class OSection; }
 namespace sdr::contact { class ViewContact; }
 class SdrPage;
-class SdrModel;
 class SfxItemPool;
 class SdrPageView;
 class SdrLayerAdmin;
@@ -361,6 +363,77 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
+namespace svx
+{
+
+class Border
+{
+private:
+    gfx::Length maLeft;
+    gfx::Length maRight;
+    gfx::Length maUpper;
+    gfx::Length maLower;
+    gfx::LengthUnit meUnit;
+
+public:
+    Border(gfx::LengthUnit eUnit = gfx::LengthUnit::hmm)
+        : maLeft(0_emu)
+        , maRight(0_emu)
+        , maUpper(0_emu)
+        , maLower(0_emu)
+        , meUnit(eUnit)
+    {}
+
+    gfx::Length const& left() const { return maLeft; }
+    gfx::Length const& right() const { return maRight; }
+    gfx::Length const& upper() const { return maUpper; }
+    gfx::Length const& lower() const { return maLower; }
+
+    gfx::Length const& getLeft() const { return maLeft; }
+    gfx::Length const& getRight() const { return maRight; }
+    gfx::Length const& getUpper() const { return maUpper; }
+    gfx::Length const& getLower() const { return maLower; }
+
+    tools::Long leftUnit() const { return maLeft.as(meUnit); }
+    tools::Long rightUnit() const { return maRight.as(meUnit); }
+    tools::Long upperUnit() const { return maUpper.as(meUnit); }
+    tools::Long lowerUnit() const { return maLower.as(meUnit); }
+
+    tools::Rectangle toToolsRect() const
+    {
+        return tools::Rectangle(leftUnit(), upperUnit(), rightUnit(), lowerUnit());
+    }
+
+    bool isEmpty() const
+    {
+        return maLeft == 0_emu
+            && maRight == 0_emu
+            && maUpper == 0_emu
+            && maLower == 0_emu;
+    }
+
+    void setLeft(gfx::Length const& rLeft)
+    {
+        maLeft = rLeft;
+    }
+
+    void setRight(gfx::Length const& rRight)
+    {
+        maRight = rRight;
+    }
+
+    void setUpper(gfx::Length const& rUpper)
+    {
+        maUpper = rUpper;
+    }
+
+    void setLower(gfx::Length const& rLower)
+    {
+        maLower = rLower;
+    }
+};
+
+} // end svx
 
 /**
   A SdrPage contains exactly one SdrObjList and a description of the physical
@@ -423,12 +496,9 @@ private:
     SdrModel&                   mrSdrModelFromSdrPage;
 
 private:
-    tools::Long mnWidth;       // page size
-    tools::Long mnHeight;      // page size
-    sal_Int32 mnBorderLeft;  // left page margin
-    sal_Int32 mnBorderUpper; // top page margin
-    sal_Int32 mnBorderRight; // right page margin
-    sal_Int32 mnBorderLower; // bottom page margin
+    gfx::Size2DLWrap maSize;
+    svx::Border maBorder;
+
     bool mbBackgroundFullSize = false; ///< Background object to represent the whole page.
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
@@ -485,21 +555,51 @@ public:
     void setPageBorderOnlyLeftRight(bool bNew) { mbPageBorderOnlyLeftRight = bNew; }
     bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
-    virtual void SetSize(const Size& aSiz);
-    Size GetSize() const;
+    gfx::LengthUnit getUnit() const { return getSdrModelFromSdrPage().getUnit(); }
+    virtual void setSize(gfx::Size2DLWrap const& rSize);
+
+    void setToolsSize(Size const rSize)
+    {
+        setSize(gfx::Size2DLWrap::create(rSize, getUnit()));
+    }
+
+    const gfx::Size2DLWrap& getSize() const
+    {
+        return maSize;
+    }
+
+    gfx::Range2DLWrap getRectangle() const
+    {
+        return gfx::Range2DLWrap(0_emu, 0_emu, maSize.getWidth(), maSize.getHeight(), getUnit());
+    }
+
+    gfx::Range2DLWrap getInnerRectangle() const
+    {
+        return gfx::Range2DLWrap(maBorder.getLeft(), maBorder.getUpper(),
+                                 maSize.getWidth() - maBorder.getRight(),
+                                 maSize.getHeight() - maBorder.getLower(),
+                                 getUnit());
+    }
+
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    tools::Long GetWidth() const;
-    tools::Long GetHeight() const;
-    virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
+
+    virtual svx::Border const& getBorder() const
+    {
+        return maBorder;
+    }
+
+    virtual void setBorder(svx::Border const& rBorder)
+    {
+        maBorder = rBorder;
+    }
+
+    virtual void  SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 Lower);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
     virtual void  SetUpperBorder(sal_Int32 nBorder);
     virtual void  SetRightBorder(sal_Int32 nBorder);
     virtual void  SetLowerBorder(sal_Int32 nBorder);
-    sal_Int32 GetLeftBorder() const;
-    sal_Int32 GetUpperBorder() const;
-    sal_Int32 GetRightBorder() const;
-    sal_Int32 GetLowerBorder() const;
+
     void    SetBackgroundFullSize(bool bIn);
     bool    IsBackgroundFullSize() const;
 

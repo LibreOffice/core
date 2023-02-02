@@ -1295,12 +1295,8 @@ void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 :   mrSdrModelFromSdrPage(rModel),
-    mnWidth(10),
-    mnHeight(10),
-    mnBorderLeft(0),
-    mnBorderUpper(0),
-    mnBorderRight(0),
-    mnBorderLower(0),
+    maSize(10_hmm, 10_hmm, rModel.getUnit()),
+    maBorder(rModel.getUnit()),
     mpLayerAdmin(new SdrLayerAdmin(&rModel.GetLayerAdmin())),
     m_nPageNum(0),
     mbMaster(bMasterPage),
@@ -1357,12 +1353,8 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
-    mnWidth = rSrcPage.mnWidth;
-    mnHeight = rSrcPage.mnHeight;
-    mnBorderLeft = rSrcPage.mnBorderLeft;
-    mnBorderUpper = rSrcPage.mnBorderUpper;
-    mnBorderRight = rSrcPage.mnBorderRight;
-    mnBorderLower = rSrcPage.mnBorderLower;
+    maSize = rSrcPage.maSize;
+    maBorder = rSrcPage.maBorder;
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     m_nPageNum = rSrcPage.m_nPageNum;
 
@@ -1403,46 +1395,29 @@ rtl::Reference<SdrPage> SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
     return pClonedPage;
 }
 
-void SdrPage::SetSize(const Size& aSiz)
+void SdrPage::setSize(gfx::Size2DLWrap const& rSize)
 {
-    bool bChanged(false);
+    bool bChanged = false;
 
-    if(aSiz.Width() != mnWidth)
+    if (maSize != rSize)
     {
-        mnWidth = aSiz.Width();
+        maSize = rSize;
         bChanged = true;
     }
 
-    if(aSiz.Height() != mnHeight)
-    {
-        mnHeight = aSiz.Height();
-        bChanged = true;
-    }
-
-    if(bChanged)
-    {
+    if (bChanged)
         SetChanged();
-    }
-}
-
-Size SdrPage::GetSize() const
-{
-    return Size(mnWidth,mnHeight);
-}
-
-tools::Long SdrPage::GetWidth() const
-{
-    return mnWidth;
 }
 
 void SdrPage::SetOrientation(Orientation eOri)
 {
     // square: handle like portrait format
-    Size aSiz(GetSize());
-    if (aSiz.Width()!=aSiz.Height()) {
-        if ((eOri==Orientation::Portrait) == (aSiz.Width()>aSiz.Height())) {
+    if (maSize.getWidth() != maSize.getHeight())
+    {
+        if ((eOri == Orientation::Portrait) == (maSize.getWidth() > maSize.getHeight()))
+        {
             // coverity[swapped_arguments : FALSE] - this is in the correct order
-            SetSize(Size(aSiz.Height(),aSiz.Width()));
+            maSize = gfx::Size2DLWrap(maSize.getHeight(), maSize.getWidth(), maSize.getUnit());
         }
     }
 }
@@ -1450,105 +1425,87 @@ void SdrPage::SetOrientation(Orientation eOri)
 Orientation SdrPage::GetOrientation() const
 {
     // square: handle like portrait format
-    Orientation eRet=Orientation::Portrait;
-    Size aSiz(GetSize());
-    if (aSiz.Width()>aSiz.Height()) eRet=Orientation::Landscape;
-    return eRet;
+    if (maSize.getWidth() > maSize.getHeight())
+        return Orientation::Landscape;
+    return Orientation::Portrait;
 }
 
-tools::Long SdrPage::GetHeight() const
-{
-    return mnHeight;
-}
 
-void  SdrPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 nLwr)
+void  SdrPage::SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 nLower)
 {
     bool bChanged(false);
 
-    if(mnBorderLeft != nLft)
+    auto left = gfx::Length::from(getUnit(), nLeft);
+    auto upper = gfx::Length::from(getUnit(), nUpper);
+    auto right = gfx::Length::from(getUnit(), nRight);
+    auto lower = gfx::Length::from(getUnit(), nLower);
+
+    if (maBorder.getLeft() != left)
     {
-        mnBorderLeft = nLft;
+        maBorder.setLeft(left);
         bChanged = true;
     }
 
-    if(mnBorderUpper != nUpp)
+    if (maBorder.getUpper() != upper)
     {
-        mnBorderUpper = nUpp;
+        maBorder.setUpper(upper);
         bChanged = true;
     }
 
-    if(mnBorderRight != nRgt)
+    if (maBorder.getRight() != right)
     {
-        mnBorderRight = nRgt;
+        maBorder.setRight(right);
         bChanged = true;
     }
 
-    if(mnBorderLower != nLwr)
+    if (maBorder.getLower() != lower)
     {
-        mnBorderLower =  nLwr;
+        maBorder.setLower(lower);
         bChanged = true;
     }
 
-    if(bChanged)
-    {
+    if (bChanged)
         SetChanged();
-    }
 }
 
 void  SdrPage::SetLeftBorder(sal_Int32 nBorder)
 {
-    if(mnBorderLeft != nBorder)
+    auto aBorder = gfx::Length::from(getUnit(), nBorder);
+    if (maBorder.getLeft() != aBorder)
     {
-        mnBorderLeft = nBorder;
+        maBorder.setLeft(aBorder);
         SetChanged();
     }
 }
 
 void  SdrPage::SetUpperBorder(sal_Int32 nBorder)
 {
-    if(mnBorderUpper != nBorder)
+    auto aBorder = gfx::Length::from(getUnit(), nBorder);
+    if (maBorder.getUpper() != aBorder)
     {
-        mnBorderUpper = nBorder;
+        maBorder.setUpper(aBorder);
         SetChanged();
     }
 }
 
 void  SdrPage::SetRightBorder(sal_Int32 nBorder)
 {
-    if(mnBorderRight != nBorder)
+    auto aBorder = gfx::Length::from(getUnit(), nBorder);
+    if (maBorder.getRight() != aBorder)
     {
-        mnBorderRight=nBorder;
+        maBorder.setRight(aBorder);
         SetChanged();
     }
 }
 
 void  SdrPage::SetLowerBorder(sal_Int32 nBorder)
 {
-    if(mnBorderLower != nBorder)
+    auto aBorder = gfx::Length::from(getUnit(), nBorder);
+    if (maBorder.getLower() != aBorder)
     {
-        mnBorderLower=nBorder;
+        maBorder.setLower(aBorder);
         SetChanged();
     }
-}
-
-sal_Int32 SdrPage::GetLeftBorder() const
-{
-    return mnBorderLeft;
-}
-
-sal_Int32 SdrPage::GetUpperBorder() const
-{
-    return mnBorderUpper;
-}
-
-sal_Int32 SdrPage::GetRightBorder() const
-{
-    return mnBorderRight;
-}
-
-sal_Int32 SdrPage::GetLowerBorder() const
-{
-    return mnBorderLower;
 }
 
 void SdrPage::SetBackgroundFullSize(bool const bIn)
@@ -1826,11 +1783,11 @@ void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("width"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%s",
-                                            BAD_CAST(OString::number(mnWidth).getStr()));
+                                            BAD_CAST(OString::number(maSize.getWidth().as(getUnit())).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("height"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%s",
-                                            BAD_CAST(OString::number(mnHeight).getStr()));
+                                            BAD_CAST(OString::number(maSize.getHeight().as(getUnit())).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     if (mpSdrPageProperties)

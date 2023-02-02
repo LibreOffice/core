@@ -96,8 +96,8 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
     if(mpPage)
     {
-        maPageOrigin.setX(mpPage->GetLeftBorder() );
-        maPageOrigin.setY(mpPage->GetUpperBorder() );
+        maPageOrigin.setX(mpPage->getBorder().leftUnit());
+        maPageOrigin.setY(mpPage->getBorder().upperUnit());
     }
     // For example, in the case of charts, there is a LayerAdmin, but it has no valid values. Therefore
     // a solution like pLayerAdmin->getVisibleLayersODF(aLayerVisi) is not possible. So use the
@@ -188,15 +188,22 @@ void SdrPageView::Hide()
 
 tools::Rectangle SdrPageView::GetPageRect() const
 {
-    if (GetPage()==nullptr) return tools::Rectangle();
-    return tools::Rectangle(Point(),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
+    if (GetPage() == nullptr)
+        return tools::Rectangle();
+    auto aWidth = GetPage()->getSize().getWidth() + 1_hmm;
+    auto aHeight = GetPage()->getSize().getHeight() + 1_hmm;
+    gfx::Size2DLWrap aSize(aWidth, aHeight, GetPage()->getUnit());
+    return tools::Rectangle(Point(), aSize.toToolsSize());
 }
 
 void SdrPageView::InvalidateAllWin()
 {
     if(IsVisible() && GetPage())
     {
-        tools::Rectangle aRect(Point(0,0),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
+        auto aWidth = GetPage()->getSize().getWidth() + 1_hmm;
+        auto aHeight = GetPage()->getSize().getHeight() + 1_hmm;
+        gfx::Size2DLWrap aSize(aWidth, aHeight, GetPage()->getUnit());
+        tools::Rectangle aRect(Point(), aSize.toToolsSize());
         aRect.Union(GetPage()->GetAllObjBoundRect());
         GetView().InvalidateAllWin(aRect);
     }
@@ -442,18 +449,20 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     Point aOrg(maPageOrigin);
     tools::Long x1 = 0;
     tools::Long x2 = 0;
-    if (GetPage()->GetWidth() < 0) // ScDrawPage of RTL sheet
+    auto aPageSize = GetPage()->getSize();
+    auto eUnit = GetPage()->getUnit();
+    if (aPageSize.getWidth() < 0_emu) // ScDrawPage of RTL sheet
     {
-        x1 = GetPage()->GetWidth() + GetPage()->GetLeftBorder() + 1;
-        x2 = - GetPage()->GetRightBorder() - 1;
+        x1 = (aPageSize.getWidth() + GetPage()->getBorder().left() + 1_hmm).as(eUnit);
+        x2 = (-gfx::Length(GetPage()->getBorder().right()) - 1_hmm).as(eUnit);
     }
     else
     {
-        x1 = GetPage()->GetLeftBorder() + 1;
-        x2 = GetPage()->GetWidth() - GetPage()->GetRightBorder() - 1;
+        x1 = (GetPage()->getBorder().left() + 1_hmm).as(eUnit);
+        x2 = (aPageSize.getWidth() - GetPage()->getBorder().right() - 1_hmm).as(eUnit);
     }
-    tools::Long y1 = GetPage()->GetUpperBorder() + 1;
-    tools::Long y2 = GetPage()->GetHeight() - GetPage()->GetLowerBorder() - 1;
+    tools::Long y1 = (GetPage()->getBorder().upper() + 1_hmm).as(eUnit);
+    tools::Long y2 = (aPageSize.getHeight() - GetPage()->getBorder().lower() - 1_hmm).as(eUnit);
     const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
     sal_uInt16 nGridPaintCnt=1;

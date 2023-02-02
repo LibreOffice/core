@@ -52,12 +52,10 @@ namespace sdr::contact
             {
                 // direct model data is the page size, get and use it
                 const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
-                const basegfx::B2DRange aInnerRange(
-                    rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
-                    rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(),
-                    rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
-                const basegfx::B2DRange aOuterRange(
-                    0, 0, rOwnerPage.GetWidth(), rOwnerPage.GetHeight());
+
+                const basegfx::B2DRange aInnerRange = rOwnerPage.getInnerRectangle().toB2DRect();
+                const basegfx::B2DRange aOuterRange = rOwnerPage.getRectangle().toB2DRect();
+
                 // ??? somehow only the master page's bit is used
                 bool const isFullSize(GetMasterPageDescriptor().GetUsedPage().IsBackgroundFullSize());
                 const basegfx::B2DPolygon aFillPolygon(

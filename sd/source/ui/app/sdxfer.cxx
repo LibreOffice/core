@@ -288,7 +288,7 @@ void SdTransferable::CreateData()
         SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PageKind::Standard );
         OUString            aOldLayoutName( pOldPage->GetLayoutName() );
 
-        pPage->SetSize( pOldPage->GetSize() );
+        pPage->setSize(pOldPage->getSize());
         pPage->SetLayoutName( aOldLayoutName );
         pNewStylePool->CopyGraphicSheets( *pOldStylePool );
         pNewStylePool->CopyCellSheets( *pOldStylePool );
@@ -320,7 +320,7 @@ void SdTransferable::CreateData()
             pObj->NbcMove( aVector );
     }
     else
-        maVisArea.SetSize( pPage->GetSize() );
+        maVisArea.SetSize(pPage->getSize().toToolsSize());
 
     // output is at the zero point
     maVisArea.SetPos( Point() );

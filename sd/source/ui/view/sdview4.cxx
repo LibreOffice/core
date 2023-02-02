@@ -221,9 +221,10 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         else
         {
             SdrPage* pPage = pPV->GetPage();
-            Size aPageSize( pPage->GetSize() );
-            aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-            aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+            gfx::LengthUnit eUnit = pPage->getUnit();
+            Size aPageSize(pPage->getSize().toToolsSize());
+            aPageSize.AdjustWidth(-basegfx::fround((pPage->getBorder().getLeft() + pPage->getBorder().getRight()).as(eUnit)) );
+            aPageSize.AdjustHeight(-basegfx::fround((pPage->getBorder().getUpper() + pPage->getBorder().getLower()).as(eUnit)) );
             pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );
         }
 

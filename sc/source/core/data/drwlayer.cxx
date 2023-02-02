@@ -647,9 +647,9 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
     if (!pPage)
         return;
 
-    if ( rSize != pPage->GetSize() )
+    if (rSize != pPage->getSize().toToolsSize())
     {
-        pPage->SetSize( rSize );
+        pPage->setToolsSize(rSize);
         Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() on the views
     }
 

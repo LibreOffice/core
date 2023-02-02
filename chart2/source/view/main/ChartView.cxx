@@ -1384,7 +1384,7 @@ void ChartView::createShapes()
 
     if (pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
     {
-        pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
+        pPage->setSize({ gfx::Length::hmm(aPageSize.Width), gfx::Length::hmm(aPageSize.Height) });
     }
     else
     {

@@ -258,8 +258,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxLRSpaceItem aTmpPageLRSpace ( rDesc.GetMaster().GetLRSpace() );
                 const SvxLongLRSpaceItem aLongLR(
-                    static_cast<::tools::Long>(pPage->GetLeftBorder()),
-                    static_cast<::tools::Long>(pPage->GetRightBorder()),
+                    ::tools::Long(pPage->getBorder().leftUnit()),
+                    ::tools::Long(pPage->getBorder().rightUnit()),
                     SID_ATTR_PAGE_LRSPACE );
                 rSet.Put( aLongLR );
             }
@@ -269,8 +269,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                 SvxLongULSpaceItem aLongUL(
-                    static_cast<::tools::Long>(pPage->GetUpperBorder()),
-                    static_cast<::tools::Long>(pPage->GetLowerBorder()),
+                    ::tools::Long(pPage->getBorder().upperUnit()),
+                    ::tools::Long(pPage->getBorder().lowerUnit()),
                     SID_ATTR_PAGE_ULSPACE );
                 rSet.Put( aLongUL );
             }
@@ -1707,7 +1707,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
     SvxPageItem aPageItem(SID_ATTR_PAGE);
     aPageItem.SetLandscape( pPage->GetOrientation() == Orientation::Landscape );
 
-    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
+    rSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, pPage->getSize().toToolsSize()));
     rSet.Put(aPageItem);
 
     const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
@@ -1863,7 +1863,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
     {
         PageKind            ePageKind = GetPageKind();
         const SfxPoolItem*  pPoolItem = nullptr;
-        Size                aNewSize(pPage->GetSize());
+        Size aNewSize = pPage->getSize().toToolsSize();
         sal_Int32           nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
         bool                bScaleAll = true;
         Orientation         eOrientation = pPage->GetOrientation();
@@ -1881,8 +1881,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     nRight = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetRight();
                     if (nLeft != -1)
                     {
-                        nUpper  = pPage->GetUpperBorder();
-                        nLower  = pPage->GetLowerBorder();
+                        nUpper  = pPage->getBorder().upperUnit();
+                        nLower  = pPage->getBorder().lowerUnit();
                     }
                     SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
                 }
@@ -1896,8 +1896,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     nLower = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetLower();
                     if (nUpper != -1)
                     {
-                        nLeft   = pPage->GetLeftBorder();
-                        nRight  = pPage->GetRightBorder();
+                        nLeft   = pPage->getBorder().leftUnit();
+                        nRight  = pPage->getBorder().rightUnit();
                     }
                     SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
                 }

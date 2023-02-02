@@ -221,9 +221,10 @@ void OReportSection::fill()
 //  m_pPage->SetUpperBorder(-10000);
 
     m_pView->SetDesignMode();
-
-    m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
-    const Size aPageSize = m_pPage->GetSize();
+    auto aWidth = getStyleProperty<awt::Size>(xReportDefinition, PROPERTY_PAPERSIZE).Width;
+    auto aHeight = 5 * m_xSection->getHeight();
+    m_pPage->setToolsSize(Size(aWidth, aHeight));
+    const Size aPageSize = m_pPage->getSize().toToolsSize();
     m_pView->SetWorkArea( tools::Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
 }
 
@@ -481,12 +482,12 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         {
             m_pPage->SetRightBorder(nRightMargin);
         }
-        const Size aOldPageSize = m_pPage->GetSize();
+        const Size aOldPageSize = m_pPage->getSize().toToolsSize();
         sal_Int32 nNewHeight = 5*m_xSection->getHeight();
         if ( aOldPageSize.Height() != nNewHeight || nPaperWidth != aOldPageSize.Width() )
         {
-            m_pPage->SetSize( Size( nPaperWidth,nNewHeight) );
-            const Size aPageSize = m_pPage->GetSize();
+            m_pPage->setToolsSize(Size(nPaperWidth, nNewHeight));
+            const Size aPageSize = m_pPage->getSize().toToolsSize();
             m_pView->SetWorkArea( tools::Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
         }
         impl_adjustObjectSizePosition(nPaperWidth,nLeftMargin,nRightMargin);

@@ -99,7 +99,7 @@ void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
         return;
 
     Point aPos;
-    Size aSize = pPage->GetSize();
+    Size aSize = pPage->getSize().toToolsSize();
     if ( aSize.Width() < 0 )
     {
         aPos.setX( aSize.Width() + 1 );       // negative

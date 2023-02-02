@@ -91,7 +91,7 @@ void CopyDlg::Reset()
 {
     // Set Min/Max values
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
-    Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
+    Size aPageSize = mpView->GetSdrPageView()->GetPage()->getSize().toToolsSize();
 
     // tdf#125011 draw/impress sizes are in mm_100th already, "normalize" to
     // decimal shift by number of decimal places the widgets are using (2) then

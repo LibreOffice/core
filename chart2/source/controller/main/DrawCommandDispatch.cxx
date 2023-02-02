@@ -423,7 +423,7 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const ChartC
             if ( pObj )
             {
                 Size aObjectSize( 4000, 2500 );
-                tools::Rectangle aPageRect( tools::Rectangle( Point( 0, 0 ), pPage->GetSize() ) );
+                tools::Rectangle aPageRect(pPage->getRectangle().toToolsRect());
                 Point aObjectPos = aPageRect.Center();
                 aObjectPos.AdjustX( -(aObjectSize.Width() / 2) );
                 aObjectPos.AdjustY( -(aObjectSize.Height() / 2) );

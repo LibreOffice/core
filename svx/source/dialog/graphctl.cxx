@@ -127,7 +127,7 @@ void GraphCtrl::InitSdrModel()
 
     pPage = new SdrPage( *pModel );
 
-    pPage->SetSize( aGraphSize );
+    pPage->setToolsSize(aGraphSize);
     pPage->SetBorder( 0, 0, 0, 0 );
     pModel->InsertPage( pPage.get() );
     pModel->SetChanged( false );
