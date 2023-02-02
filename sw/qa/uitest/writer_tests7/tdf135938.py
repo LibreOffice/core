@@ -10,12 +10,21 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
+import time
 
 class tdf135938(UITestCase):
 
     def test_tdf135938_cross_reference_update(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:InsertReferenceField", close_button="cancel") as xDialog:
+                # HACK, see the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+                # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, which can
+                # invalidate the TreeListEntryUIObjects used by the below get_state_as_dict calls
+                # (see 2798430c8a711861fdcdfbf9ac00a0527abd3bfc "Mark the uses of
+                # TreeListEntryUIObject as dubious"); lets double that 200 ms timeout value here to
+                # hopefully be on the safe side:
+                time.sleep(0.4);
+
                 # Select set reference type
                 xTreelistType = xDialog.getChild("type-ref")
                 xTreeEntry = xTreelistType.getChild('0')
