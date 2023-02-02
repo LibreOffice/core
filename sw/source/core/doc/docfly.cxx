@@ -555,22 +555,9 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
     if( !rSet.Count() )
         return false;
 
-    std::unique_ptr<SwUndoFormatAttrHelper> pSaveUndo;
-
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
-        pSaveUndo.reset( new SwUndoFormatAttrHelper( rFlyFormat ) );
-    }
+    SwDocModifyAndUndoGuard guard(rFlyFormat);
 
     bool const bRet = lcl_SetFlyFrameAttr(*this, &SwDoc::SetFlyFrameAnchor, rFlyFormat, rSet);
-
-    if (pSaveUndo && pSaveUndo->GetUndo() )
-    {
-        GetIDocumentUndoRedo().AppendUndo( pSaveUndo->ReleaseUndo() );
-    }
-
-    getIDocumentState().SetModified();
 
     //SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
 

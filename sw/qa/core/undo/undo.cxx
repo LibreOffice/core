@@ -106,6 +106,52 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
     pWrtShell->Undo();
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
+{
+    createSwDoc("image-as-character.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    css::uno::Reference<css::beans::XPropertySet> xImage(
+        pTextDoc->getGraphicObjects()->getByName("Image1"), css::uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(pTextDoc->isSetModifiedEnabled());
+    CPPUNIT_ASSERT(!pTextDoc->isModified());
+    CPPUNIT_ASSERT(!pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+
+    // Check that modifications of the geometry mark document dirty, and create an undo
+
+    xImage->setPropertyValue("RelativeWidth", css::uno::Any(sal_Int16(80)));
+
+    // Without the fix, this would fail
+    CPPUNIT_ASSERT(pTextDoc->isModified());
+    CPPUNIT_ASSERT(pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(!pTextDoc->isModified());
+    CPPUNIT_ASSERT(!pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+
+    // Check that modifications of anchor mark document dirty, and create an undo
+
+    xImage->setPropertyValue("AnchorType",
+                             css::uno::Any(css::text::TextContentAnchorType_AT_PARAGRAPH));
+
+    CPPUNIT_ASSERT(pTextDoc->isModified());
+    CPPUNIT_ASSERT(pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(!pTextDoc->isModified());
+    CPPUNIT_ASSERT(!pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+
+    // Check that setting the same values do not make it dirty and do not add undo
+
+    xImage->setPropertyValue("RelativeWidth", xImage->getPropertyValue("RelativeWidth"));
+    xImage->setPropertyValue("AnchorType", xImage->getPropertyValue("AnchorType"));
+
+    CPPUNIT_ASSERT(!pTextDoc->isModified());
+    CPPUNIT_ASSERT(!pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

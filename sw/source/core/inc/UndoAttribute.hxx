@@ -176,6 +176,16 @@ public:
     std::unique_ptr<SwUndoFormatAttr> ReleaseUndo() { return std::move(m_pUndo); }
 };
 
+class SwDocModifyAndUndoGuard final
+{
+    SwDoc* doc;
+    std::unique_ptr<SwUndoFormatAttrHelper> helper;
+
+public:
+    SwDocModifyAndUndoGuard(SwFormat& format);
+    ~SwDocModifyAndUndoGuard();
+};
+
 class SwUndoMoveLeftMargin final : public SwUndo, private SwUndRng
 {
     const std::unique_ptr<SwHistory> m_pHistory;
