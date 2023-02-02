@@ -34,6 +34,7 @@
 #include <tools/solar.h>
 
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -360,9 +361,10 @@ private:
     };
     typedef std::unordered_map<sal_uInt16, DocItem>  DocDataType;
     DocItem* getDocItem(sal_uInt16 nFileId) const;
+    DocItem* getDocItem(std::unique_lock<std::mutex>& rGuard, sal_uInt16 nFileId) const;
 
 private:
-    mutable osl::Mutex maMtxDocs;
+    mutable std::mutex maMtxDocs;
     mutable DocDataType maDocs;
     const ScDocument& mrDoc;
 };
