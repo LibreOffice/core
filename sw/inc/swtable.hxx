@@ -357,6 +357,8 @@ public:
     // it doesn't contain box content (except single empty nested tables of the boxes
     // which could remain after deletion of text content of the selected table)
     bool IsEmpty() const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /// SwTableLine is one table row in the document model.

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <editeng/lrspitem.hxx>
@@ -1608,6 +1610,21 @@ bool SwTable::IsDeleted() const
             return false;
     }
     return true;
+}
+
+void SwTable::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    GetFrameFormat()->dumpAsXml(pWriter);
+    for (const auto& pLine : GetTabLines())
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pLine);
+        pLine->GetFrameFormat()->dumpAsXml(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // TODO Set HasTextChangesOnly=true, if needed based on the redlines in the cells.

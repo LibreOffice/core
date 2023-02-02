@@ -2488,17 +2488,7 @@ void SwTableNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     if (m_pTable)
     {
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_pTable.get());
-        m_pTable->GetFrameFormat()->dumpAsXml(pWriter);
-        for (const auto& pLine : m_pTable->GetTabLines())
-        {
-            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
-            (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pLine);
-            pLine->GetFrameFormat()->dumpAsXml(pWriter);
-            (void)xmlTextWriterEndElement(pWriter);
-        }
-        (void)xmlTextWriterEndElement(pWriter);
+        m_pTable->dumpAsXml(pWriter);
     }
 
     // (void)xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
