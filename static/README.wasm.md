@@ -1,8 +1,19 @@
 # Support for Emscripten Cross Build
 
-This module provides support for emscripten cross build
+This module provides support for building LibreOffice as WASM, with the Emscripten toolchain.
 
-## Status
+You can build LibreOffice core for WASM for two separate purposes:
+Either to produce a WASM binary of LibreOffice as suchn, using Qt5 as
+the GUI, or just compiling the LibreOffice code to WASM libraries
+without any UI for use in other software that has the UI, like
+Collabora Online.
+
+The first purpose was the original reason for the WASM port and this
+document was originally written with that in mind. For the second
+purpose, look towards the end of the document for the section
+"Building headless LibreOffice as WASM for use in another product".
+
+## Status of LibreOffice as WASM with Qt
 
 The build generates a Writer-only LO build. You should be able to run either
 
@@ -326,3 +337,27 @@ Emscripten supports standalone WASI binaries:
 - <https://emscripten.org/docs/introducing_emscripten/about_emscripten.html#about-emscripten-porting-code>
 - <https://emscripten.org/docs/compiling/Building-Projects.html>
 
+## Building headless LibreOffice as WASM for use in another product
+
+### Set up Emscripten
+
+Follow the instructions in the first part of this document.
+
+### No Qt needed.
+
+You don't need any dependencies other than those that building LO normally downloads and compiled when building core.
+
+### Set up LO
+
+For instance, this autogen.input works for me:
+
+`--disable-debug`
+`--enable-sal-log`
+`--disable-crashdump`
+`--host=wasm32-local-emscripten`
+`--disable-gui`
+`--with-main-module=writer`
+
+### That's all
+
+After all, in this case you are building LO core headless for it to be used by other software.
