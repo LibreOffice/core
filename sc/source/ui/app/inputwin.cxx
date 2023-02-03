@@ -850,14 +850,8 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
 {
     InitControlBase(m_xContainer.get());
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
     SetPaintTransparent(false);
-    SetBackground(rStyleSettings.GetFaceColor());
-
-    // match to bg used in ScTextWnd::SetDrawingArea to the margin area is drawn with the
-    // same desired bg
-    mxBackground->set_background(rStyleSettings.GetWindowColor());
+    SetBackgrounds();
 
     mxButtonUp->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
     mxButtonDown->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
@@ -876,6 +870,25 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!comphelper::LibreOfficeKit::isActive() || !(pViewShell && pViewShell->isLOKMobilePhone()))
         mxButtonDown->show();
+}
+
+void ScInputBarGroup::SetBackgrounds()
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    SetBackground(rStyleSettings.GetFaceColor());
+    // match to bg used in ScTextWnd::SetDrawingArea to the margin area is drawn with the
+    // same desired bg
+    mxBackground->set_background(rStyleSettings.GetWindowColor());
+}
+
+void ScInputBarGroup::DataChanged(const DataChangedEvent& rDCEvt)
+{
+    InterimItemWindow::DataChanged(rDCEvt);
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        SetBackgrounds();
+        Invalidate();
+    }
 }
 
 Point ScInputBarGroup::GetCursorScreenPixelPos(bool bBelow)
