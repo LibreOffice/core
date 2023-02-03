@@ -71,7 +71,7 @@ protected:
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrame *pPage,
                                    const SwRect& rRect, PrepareHint eHint) override;
-    SwFlyFreeFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
+    SwFlyFreeFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor, bool bFollow = false );
 
     virtual void DestroyImpl() override;
     virtual ~SwFlyFreeFrame() override;
@@ -177,7 +177,7 @@ class SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
 public:
     // #i28701#
 
-    SwFlyAtContentFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
+    SwFlyAtContentFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor, bool bFollow = false );
     SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede);
 
     void SetAbsPos( const Point &rNew );

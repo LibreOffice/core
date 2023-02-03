@@ -147,7 +147,7 @@ protected:
 
     Size CalcRel( const SwFormatFrameSize &rSz ) const;
 
-    SwFlyFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
+    SwFlyFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor, bool bFollow = false );
 
     virtual void DestroyImpl() override;
     virtual ~SwFlyFrame() override;
