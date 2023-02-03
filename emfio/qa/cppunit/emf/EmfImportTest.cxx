@@ -180,14 +180,19 @@ void Test::testPolyPolygon()
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path",
                 "m2574 13194v-12065h15303v12065z");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 116);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 44);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       "2574,13194 2574,1129 17877,1129 17877,13194");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", "#ffffff");
-
+                       "2574,13194 2574,1129");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", "0");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
+                       "2574,1129 2574,1129");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", "0");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[10]/polygon",
-                       "8674,13194 8674,1129");
+                       "8674,1129 8674,1129");
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "width", "0");
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 28);
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "width", "459");
@@ -1547,7 +1552,7 @@ void Test::TestRoundRect()
 void Test::TestCreatePen()
 {
     // Check import of EMF image with records: RESTOREDC, SAVEDC, MOVETOEX, LINETO, POLYLINE16, EXTTEXTOUTW with DxBuffer
-    // The CREATEPEN record is used with PS_COSMETIC line style, which sometimes will be displayed as solid hairline
+    // The CREATEPEN record is used with PS_COSMETIC line style, and in this case width must be set to 0
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
@@ -1556,29 +1561,29 @@ void Test::TestCreatePen()
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h31250v18192h-31250z");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 748);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 3);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       "27875,16523 27875,1453");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", "6");
+                       "17898,5693 20172,5693");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", "#008000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", "0");
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       "27975,16453 27875,16453");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", "6");
+                       "17898,6959 20172,6959");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", "#000080");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", "0");
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[3]/polygon",
-                       "27925,16078 27875,16078");
+                       "17898,7381 20172,7381");
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "color", "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width", "6");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width", "0");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 10);
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[5]", "color", "#008000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 755);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[5]", "color", "#ff0000");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[5]/polygon",
-                       "25850,2179 25844,1958");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[10]", "color", "#000080");
+                       "27925,16078 27875,16078");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[10]", "color", "#ff0000");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[10]/polygon",
-                       "2025,1642 2025,1501");
+                       "27925,14180 27875,14180");
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 69);
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", "374");
