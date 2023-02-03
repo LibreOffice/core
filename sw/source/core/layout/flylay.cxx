@@ -52,8 +52,8 @@
 
 using namespace ::com::sun::star;
 
-SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch )
-:   SwFlyFrame( pFormat, pSib, pAnch ),
+SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch, bool bFollow )
+:   SwFlyFrame( pFormat, pSib, pAnch, bFollow ),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#

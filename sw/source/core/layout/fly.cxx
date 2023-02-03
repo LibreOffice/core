@@ -81,7 +81,7 @@ using namespace ::com::sun::star;
 
 static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame );
 
-SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
+SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch, bool bFollow ) :
     SwLayoutFrame( pFormat, pSib ),
      // #i26791#
     m_pPrevLink( nullptr ),
@@ -171,7 +171,10 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
     Chain( pAnch );
 
-    InsertCnt();
+    if (!bFollow)
+    {
+        InsertCnt();
+    }
 
     // Put it somewhere outside so that out document is not formatted unnecessarily often
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);

@@ -74,8 +74,8 @@ SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert, const 
 
 }
 
-SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
-    SwFlyFreeFrame( pFormat, pSib, pAnch ),
+SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch, bool bFollow ) :
+    SwFlyFreeFrame( pFormat, pSib, pAnch, bFollow ),
     SwFlowFrame(static_cast<SwFrame&>(*this))
 {
     m_bAtCnt = true;
@@ -84,7 +84,7 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 
 SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede)
     : SwFlyAtContentFrame(rPrecede.GetFormat(), const_cast<SwFrame*>(rPrecede.GetAnchorFrame()),
-                          const_cast<SwFrame*>(rPrecede.GetAnchorFrame()))
+                          const_cast<SwFrame*>(rPrecede.GetAnchorFrame()), /*bFollow=*/true)
 {
     SetFollow(rPrecede.GetFollow());
     rPrecede.SetFollow(this);
