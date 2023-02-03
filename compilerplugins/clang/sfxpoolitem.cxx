@@ -93,7 +93,7 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (ignoreLocation(decl)) {
        return true;
     }
-    if (!decl->hasDefinition()) {
+    if (!decl->isThisDeclarationADefinition()) {
        return true;
     }
     // check if this class is derived from Window
