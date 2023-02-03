@@ -775,7 +775,7 @@ static void lpgetSysQueueTokenHandler(
                     o_rQueues.back().m_aComment = OStringToOUString(aComment, aEncoding);
                 continue;
             }
-            // look for "location" attribute, inser as location
+            // look for "location" attribute, insert as location
             nPos = line.indexOf( aLocStr, 0 );
             if( nPos != -1 )
             {
