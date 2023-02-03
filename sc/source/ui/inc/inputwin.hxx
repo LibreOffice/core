@@ -252,6 +252,7 @@ public:
     virtual bool            HasEditView() const override;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);
     virtual void            Resize() override;
+    virtual void            DataChanged(const DataChangedEvent& rDCEvt) override;
     virtual const OUString& GetTextString() const override;
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
@@ -272,6 +273,7 @@ public:
 
 private:
     void            TriggerToolboxLayout();
+    void            SetBackgrounds();
 
     std::unique_ptr<weld::Container> mxBackground;
     std::unique_ptr<ScTextWndGroup> mxTextWndGroup;
