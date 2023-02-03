@@ -2683,7 +2683,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetInactiveTabColor( ImplWinColorToSal( color ) );
         CloseThemeData(hTheme);
 
-        if (hTheme = OpenThemeData(mhWnd, L"Textstyle"))
+        hTheme = OpenThemeData(mhWnd, L"Textstyle");
+        if (hTheme)
         {
             GetThemeColor(hTheme, TEXT_HYPERLINKTEXT, TS_HYPERLINK_NORMAL, TMT_TEXTCOLOR, &color);
             aStyleSettings.SetLinkColor(ImplWinColorToSal(color));
