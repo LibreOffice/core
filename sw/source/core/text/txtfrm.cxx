@@ -1657,6 +1657,8 @@ TextFrameIndex SwTextFrame::FindBrk(std::u16string_view aText,
 
 bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nLen) const
 {
+    if (nPos == TextFrameIndex(COMPLETE_STRING)) // the "not found" range
+        return false;
 // Silence over-eager warning emitted at least by GCC trunk towards 6:
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
