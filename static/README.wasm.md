@@ -3,7 +3,7 @@
 This module provides support for building LibreOffice as WASM, with the Emscripten toolchain.
 
 You can build LibreOffice core for WASM for two separate purposes:
-Either to produce a WASM binary of LibreOffice as suchn, using Qt5 as
+Either to produce a WASM binary of LibreOffice as such, using Qt5 as
 the GUI, or just compiling the LibreOffice code to WASM libraries
 without any UI for use in other software that has the UI, like
 Collabora Online.
