@@ -791,12 +791,12 @@ namespace emfio
                 break;
                 case StockObject::WHITE_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle( COL_WHITE );
+                    maLineStyle = WinMtfLineStyle(COL_WHITE, PS_COSMETIC, 0);
                 }
                 break;
                 case StockObject::BLACK_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle( COL_BLACK );
+                    maLineStyle = WinMtfLineStyle(COL_BLACK, PS_COSMETIC, 0);
                 }
                 break;
                 case StockObject::NULL_PEN :
