@@ -22,7 +22,7 @@ import os
 srcdir = os.path.dirname(os.path.realpath(__file__)) + '/..' # go up from /bin
 builddir = os.getcwd()
 
-REPO = 'https://opengrok.libreoffice.org/xref/core/'
+REPO = 'https://opengrok.libreoffice.org/xref/core'
 
 BLACKLIST = ('_SwitchViewShell0', '_SwitchViewShell1', '_SwitchViewShell2', '_SwitchViewShell3', '_SwitchViewShell4')
 
@@ -344,9 +344,9 @@ def print_output(all_commands):
         xcufile, xculinenumber, hxxfile, hxxlinenumber, sdifile, sdilinenumber = 2, 3, 8, 10, 14, 16
         src = ''
         if cmd[xcufile] >= 0:
-            src += '[' + REPO + XCU_FILES[cmd[xcufile]] + '#' + str(cmd[xculinenumber]) + ' XCU]'
+            src += '[' + REPO + XCU_FILES[cmd[xcufile]].replace(srcdir, '') + '#' + str(cmd[xculinenumber]) + ' XCU]'
         if cmd[sdifile] >= 0:
-            src += ' [' + REPO + SDI_FILES[cmd[sdifile]] + '#' + str(cmd[sdilinenumber]) + ' SDI]'
+            src += ' [' + REPO + SDI_FILES[cmd[sdifile]].replace(srcdir, '') + '#' + str(cmd[sdilinenumber]) + ' SDI]'
         if cmd[hxxfile] >= 0:
             file = str(cmd[hxxfile] + 1 + len(XCU_FILES) + len(SDI_FILES))
             src += ' <span title="File (' + file + ') line ' + str(cmd[hxxlinenumber]) + '">[[#hxx' + file + '|HXX]]</span>'
@@ -398,15 +398,15 @@ def print_output(all_commands):
     fn = 0
     for i in range(len(XCU_FILES)):
         fn += 1
-        print(f'({fn}) {REPO}{XCU_FILES[i]}\n')
+        print(f'({fn}) {REPO}{XCU_FILES[i]}\n'.replace(srcdir, ''))
     print('\n')
     for i in range(len(SDI_FILES)):
         fn += 1
-        print(f'({fn}) {REPO}{SDI_FILES[i]}\n')
+        print(f'({fn}) {REPO}{SDI_FILES[i]}\n'.replace(srcdir, ''))
     print('\n')
     for i in range(len(HXX_FILES)):
         fn += 1
-        print(f'<span id="hxx{fn}">({fn}) {HXX_FILES[i][2:]}</span>\n')
+        print(f'<span id="hxx{fn}">({fn}) {HXX_FILES[i]}</span>\n'.replace(builddir, ''))
     print('</small>')
 
 
