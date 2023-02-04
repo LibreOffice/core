@@ -66,9 +66,10 @@ struct SvXMLEmbeddedTextEntry
     sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
     sal_Int32       nFormatPos;     // resulting position in embedded-text element
     OUString   aText;
+    bool            isBlankWidth;   // "_x"
 
-    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, OUString aT ) :
-        nSourcePos(nSP), nFormatPos(nFP), aText(std::move(aT)) {}
+    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, OUString aT, bool bBW = false ) :
+        nSourcePos(nSP), nFormatPos(nFP), aText(std::move(aT)), isBlankWidth( bBW ) {}
 };
 
 }
@@ -323,6 +324,16 @@ void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
     if ( m_bHasText )
     {
+        if ( !m_sBlankWidthString.isEmpty() )
+        {
+            // Export only for 1.3 with extensions and later.
+            SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
+            if (eVersion > SvtSaveOptions::ODFSVER_013 && ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0 ))
+            {
+                m_rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_BLANK_WIDTH_CHAR,
+                                      m_sBlankWidthString.makeStringAndClear() );
+            }
+        }
         sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
         SvXMLElementExport aElem( m_rExport, nNS, XML_TEXT,
                                   true, false );
@@ -502,6 +513,36 @@ void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
     }
 }
 
+namespace {
+void lcl_WriteBlankWidthString( std::u16string_view rBlankWidthChar, OUStringBuffer& rBlankWidthString, OUStringBuffer& rTextContent )
+{
+    // export "_x"
+    if ( rBlankWidthString.isEmpty() )
+    {
+        rBlankWidthString.append( rBlankWidthChar );
+        if ( !rTextContent.isEmpty() )
+        {
+            // add position in rTextContent
+            rBlankWidthString.append( rTextContent.getLength() );
+        }
+    }
+    else
+    {
+        // add "_" as separator if there are several blank width char
+        rBlankWidthString.append( "_" );
+        rBlankWidthString.append( rBlankWidthChar );
+        rBlankWidthString.append( rTextContent.getLength() );
+    }
+    // for previous versions, turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
+    if ( !rBlankWidthChar.empty() )
+    {
+        OUString aBlanks;
+        SvNumberformat::InsertBlanks( aBlanks, 0, rBlankWidthChar[0] );
+        rTextContent.append( aBlanks );
+    }
+}
+}
+
 void SvXMLNumFmtExport::WriteSecondsElement_Impl( bool bLong, sal_uInt16 nDecimals )
 {
     FinishTextElement_Impl();
@@ -553,28 +594,45 @@ void SvXMLNumFmtExport::WriteIntegerElement_Impl(
 void SvXMLNumFmtExport::WriteEmbeddedEntries_Impl( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     auto nEntryCount = rEmbeddedEntries.size();
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
     for (decltype(nEntryCount) nEntry=0; nEntry < nEntryCount; ++nEntry)
     {
-        const SvXMLEmbeddedTextEntry *const pObj = &rEmbeddedEntries[nEntry];
+        const SvXMLEmbeddedTextEntry* pObj = &rEmbeddedEntries[nEntry];
 
         //  position attribute
         // position == 0 is between first integer digit and decimal separator
         // position < 0 is inside decimal part
         m_rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
                                 OUString::number( pObj->nFormatPos ) );
-        SvXMLElementExport aChildElem( m_rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
-                                          true, false );
 
         //  text as element content
-        OUStringBuffer aContent( pObj->aText );
-        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
+        OUStringBuffer aContent;
+        OUStringBuffer aBlankWidthString;
+        do
         {
-            // The array can contain several elements for the same position in the number
-            // (for example, literal text and space from underscores). They must be merged
-            // into a single embedded-text element.
-            aContent.append(rEmbeddedEntries[nEntry+1].aText);
+            pObj = &rEmbeddedEntries[nEntry];
+            if ( pObj->isBlankWidth  )
+            {
+                //  (#i20396# the spaces may also be in embedded-text elements)
+                lcl_WriteBlankWidthString( pObj->aText, aBlankWidthString, aContent );
+            }
+            else
+            {
+                // The array can contain several elements for the same position in the number.
+                // Literal texts are merged into a single embedded-text element.
+                aContent.append( pObj->aText );
+            }
             ++nEntry;
         }
+        while ( nEntry < nEntryCount
+            && rEmbeddedEntries[nEntry].nFormatPos == pObj->nFormatPos );
+        --nEntry;
+
+        // Export only for 1.3 with extensions and later.
+        if ( !aBlankWidthString.isEmpty() && eVersion > SvtSaveOptions::ODFSVER_013 && ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0 ) )
+            m_rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_BLANK_WIDTH_CHAR, aBlankWidthString.makeStringAndClear() );
+        SvXMLElementExport aChildElem( m_rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
+                                          true, false );
         m_rExport.Characters( aContent.makeStringAndClear() );
     }
 }
@@ -1196,13 +1254,13 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               aAttr.Style );
     }
 
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
     if ( !aAttr.Spellout.isEmpty() )
     {
         const bool bWriteSpellout = aAttr.Format.isEmpty();
         assert(bWriteSpellout);     // mutually exclusive
 
         // Export only for 1.2 and later with extensions
-        SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
         // Also ensure that duplicated transliteration-language and
         // transliteration-country attributes never escape into the wild with
         // releases.
@@ -1389,7 +1447,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         }
 
         //  collect strings for embedded-text (must be known before number element is written)
-        SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
         bool bAllowEmbedded = ( nFmtType == SvNumFormatType::ALL || nFmtType == SvNumFormatType::NUMBER ||
                                         nFmtType == SvNumFormatType::CURRENCY ||
                                         // Export only for 1.x with extensions
@@ -1429,18 +1486,25 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  text (literal or underscore) within the integer (>=0) or decimal (<0) part of a number:number element
 
                             OUString aEmbeddedStr;
+                            bool bSaveBlankWidthSymbol = false;
                             if ( nElemType == NF_SYMBOLTYPE_STRING || nElemType == NF_SYMBOLTYPE_PERCENT )
                             {
                                 aEmbeddedStr = *pElemStr;
                             }
                             else if (pElemStr->getLength() >= 2)
                             {
-                                SvNumberformat::InsertBlanks( aEmbeddedStr, 0, (*pElemStr)[1] );
+                                if ( eVersion > SvtSaveOptions::ODFSVER_013 && ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0 ) )
+                                {
+                                    aEmbeddedStr = pElemStr->copy( 1, 1 );
+                                    bSaveBlankWidthSymbol = true;
+                                }
+                                else //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
+                                    SvNumberformat::InsertBlanks( aEmbeddedStr, 0, (*pElemStr)[1] );
                             }
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
                             aEmbeddedEntries.push_back(
-                                SvXMLEmbeddedTextEntry(nPos, nEmbedPos, aEmbeddedStr));
+                                SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr, bSaveBlankWidthSymbol ));
                         }
                         break;
                 }
@@ -1505,13 +1569,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_SYMBOLTYPE_BLANK:
                     if ( pElemStr && !lcl_IsInEmbedded( aEmbeddedEntries, nPos ) )
                     {
-                        //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
-                        //  (#i20396# the spaces may also be in embedded-text elements)
-
-                        OUString aBlanks;
-                        if (pElemStr->getLength() >= 2)
-                            SvNumberformat::InsertBlanks( aBlanks, 0, (*pElemStr)[1] );
-                        AddToTextElement_Impl( aBlanks );
+                        if ( pElemStr->getLength() == 2 )
+                        {
+                            OUString aBlankWidthChar = pElemStr->copy( 1 );
+                            lcl_WriteBlankWidthString( aBlankWidthChar, m_sBlankWidthString, m_sTextContent );
+                            m_bHasText = true;
+                        }
                     }
                     break;
                 case NF_KEY_GENERAL :

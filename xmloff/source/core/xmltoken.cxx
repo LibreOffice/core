@@ -3471,6 +3471,7 @@ namespace xmloff::token {
         TOKEN( "zeros-denominator-digits",        XML_ZEROS_DENOMINATOR_DIGITS ),
         TOKEN( "integer-fraction-delimiter",      XML_INTEGER_FRACTION_DELIMITER ),
         TOKEN( "max-blank-integer-digits",        XML_MAX_BLANK_INTEGER_DIGITS ),
+        TOKEN( "blank-width-char",                XML_BLANK_WIDTH_CHAR ),
 
         // for optional language-dependent reference formats
         TOKEN( "reference-language",              XML_REFERENCE_LANGUAGE ),

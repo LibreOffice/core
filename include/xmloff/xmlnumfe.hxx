@@ -51,6 +51,7 @@ private:
     OUString                    m_sPrefix;
     SvNumberFormatter*          m_pFormatter;
     OUStringBuffer              m_sTextContent;
+    OUStringBuffer              m_sBlankWidthString;
     bool                        m_bHasText;
     std::unique_ptr<SvXMLNumUsedList_Impl>      m_pUsedList;
     std::unique_ptr<LocaleDataWrapper>          m_pLocaleData;

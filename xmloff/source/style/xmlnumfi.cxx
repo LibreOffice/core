@@ -123,6 +123,7 @@ class SvXMLNumFmtElementContext : public SvXMLImportContext
     bool                    bLong;
     bool                    bTextual;
     OUString                sCalendar;
+    OUString                sBlankWidthString;
 
 public:
                 SvXMLNumFmtElementContext( SvXMLImport& rImport, sal_Int32 nElement,
@@ -134,7 +135,7 @@ public:
     virtual void SAL_CALL characters( const OUString& rChars ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    void    AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent );
+    void    AddEmbeddedElement( sal_Int32 nFormatPos, std::u16string_view rContent, std::u16string_view rBlankWidthString );
 };
 
 class SvXMLNumFmtEmbeddedTextContext : public SvXMLImportContext
@@ -142,6 +143,7 @@ class SvXMLNumFmtEmbeddedTextContext : public SvXMLImportContext
     SvXMLNumFmtElementContext&  rParent;
     OUStringBuffer         aContent;
     sal_Int32                   nTextPosition;
+    OUString                    aBlankWidthString;
 
 public:
                 SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport, sal_Int32 nElement,
@@ -461,6 +463,11 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
             if (::sax::Converter::convertNumber( nAttrVal, aIter.toView() ))
                 nTextPosition = nAttrVal;
         }
+        else if ( aIter.getToken() == XML_ELEMENT(LO_EXT, XML_BLANK_WIDTH_CHAR)
+                || aIter.getToken() == XML_ELEMENT(NUMBER, XML_BLANK_WIDTH_CHAR) )
+        {
+            aBlankWidthString = aIter.toString();
+        }
         else
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
@@ -473,7 +480,7 @@ void SvXMLNumFmtEmbeddedTextContext::characters( const OUString& rChars )
 
 void SvXMLNumFmtEmbeddedTextContext::endFastElement(sal_Int32 )
 {
-    rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
+    rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear(), aBlankWidthString );
 }
 
 static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
@@ -778,6 +785,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
             case XML_ELEMENT(NUMBER, XML_CALENDAR):
                 sCalendar = aIter.toString();
                 break;
+            case XML_ELEMENT(NUMBER, XML_BLANK_WIDTH_CHAR):
+            case XML_ELEMENT(LO_EXT, XML_BLANK_WIDTH_CHAR):
+                sBlankWidthString = aIter.toString();
+                break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
@@ -856,15 +867,83 @@ void SvXMLNumFmtElementContext::characters( const OUString& rChars )
     aContent.append( rChars );
 }
 
-void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent )
+namespace {
+void lcl_InsertBlankWidthChars( std::u16string_view rBlankWidthString, OUStringBuffer& rContent )
 {
-    if (rContent.isEmpty())
-        return;
+    sal_Int32 nShiftPosition = 1; // rContent starts with a quote
+    const size_t nLenBlank = rBlankWidthString.size();
+    for ( size_t i = 0 ; i < nLenBlank ; i++ )
+    {
+        sal_Unicode nChar = rBlankWidthString[ i ];
+        OUString aBlanks;
+        SvNumberformat::InsertBlanks( aBlanks, 0, nChar );
+        sal_Int32 nPositionContent = 0;
+        if ( ++i < nLenBlank )
+        {
+            sal_Int32 nNext = rBlankWidthString.find( '_', i );
+            if ( static_cast<sal_Int32>( i ) < nNext )
+            {
+                nPositionContent = o3tl::toInt32( rBlankWidthString.substr( i, nNext - i ) );
+                i = nNext;
+            }
+            else
+                nPositionContent = o3tl::toInt32( rBlankWidthString.substr( i ) );
+        }
+        nPositionContent += nShiftPosition;
+        if ( nPositionContent >= 0 )
+        {
+            rContent.remove( nPositionContent, aBlanks.getLength() );
+            if ( nPositionContent >= 1 && rContent[ nPositionContent-1 ] == '\"' )
+            {
+                nPositionContent--;
+                rContent.insert( nPositionContent, nChar );
+                rContent.insert( nPositionContent, '_' );
+            }
+            else
+            {
+                rContent.insert( nPositionContent, '\"' );
+                rContent.insert( nPositionContent, nChar );
+                rContent.insert( nPositionContent, "\"_" );
+                nShiftPosition += 2;
+            }
+            // rContent length was modified: remove blanks, add "_x"
+            nShiftPosition += 2 - aBlanks.getLength();
+        }
+    }
+    // remove empty string at the end of rContent
+    if ( std::u16string_view( rContent ).substr( rContent.getLength() - 2 ) == u"\"\"" )
+    {
+        sal_Int32 nLen = rContent.getLength();
+        if ( nLen >= 3 && rContent[ nLen-3 ] != '\\' )
+            rContent.truncate( nLen - 2 );
+    }
+}
+}
 
-    auto iterPair = aNumInfo.m_EmbeddedElements.emplace(nFormatPos, rContent);
+void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, std::u16string_view rContentEmbedded, std::u16string_view rBlankWidthString )
+{
+    if ( rContentEmbedded.empty() )
+        return;
+    OUStringBuffer aContentEmbedded( rContentEmbedded );
+    //  #107805# always quote embedded strings - even space would otherwise
+    //  be recognized as thousands separator in French.
+    aContentEmbedded.insert( 0, '"' );
+    aContentEmbedded.append( '"' );
+    if ( !rBlankWidthString.empty() )
+        lcl_InsertBlankWidthChars( rBlankWidthString, aContentEmbedded );
+
+    auto iterPair = aNumInfo.m_EmbeddedElements.emplace( nFormatPos, aContentEmbedded.toString() );
     if (!iterPair.second)
+    {
         // there's already an element at this position - append text to existing element
-        iterPair.first->second += rContent;
+        if ( iterPair.first->second.endsWith( "\"" ) && aContentEmbedded[ 0 ] == '"' )
+        {   // remove double quote
+            iterPair.first->second = OUString::Concat( iterPair.first->second.subView( 0, iterPair.first->second.getLength() - 1 ) )
+                                + aContentEmbedded.subView( 1, aContentEmbedded.getLength() - 1 );
+        }
+        else
+            iterPair.first->second += aContentEmbedded;
+    }
 }
 
 void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
@@ -889,6 +968,11 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
             if ( !aContent.isEmpty() )
             {
                 lcl_EnquoteIfNecessary( aContent, rParent );
+                if ( !sBlankWidthString.isEmpty() )
+                {
+                    lcl_InsertBlankWidthChars( sBlankWidthString, aContent );
+                    sBlankWidthString = "";
+                }
                 rParent.AddToCode( aContent );
                 aContent.setLength(0);
             }
@@ -1818,10 +1902,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
             if ( nInsertPos >= 0 )
             {
-                //  #107805# always quote embedded strings - even space would otherwise
-                //  be recognized as thousands separator in French.
-
-                aNumStr.insert(nInsertPos, OUString::Concat("\"") + it.second + "\"");
+                aNumStr.insert( nInsertPos, it.second );
             }
         }
     }

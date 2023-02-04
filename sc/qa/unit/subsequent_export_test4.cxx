@@ -1480,6 +1480,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSecondsWithoutTruncateAndDecimals)
     lcl_TestNumberFormat(*getScDoc(), "[SS].00");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testBlankWidthCharacter)
+{
+    createScDoc("ods/tdf152724-Blank-width-char.ods");
+
+    // save to ODS and reload
+    saveAndReload("calc8");
+    lcl_TestNumberFormat(*getScDoc(), "[>0]_-?0;[<0]-?0;_-?0;@");
+
+    // save to XLSX and reload
+    saveAndReload("Calc Office Open XML");
+    lcl_TestNumberFormat(*getScDoc(), "_-?0;-?0;_-?0;@");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmbeddedTextInDecimal)
 {
     createScDoc("xlsx/embedded-text-in-decimal.xlsx");

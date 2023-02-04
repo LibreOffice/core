@@ -2047,6 +2047,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:empty/>
       </rng:element>
     </rng:define>
+    <rng:define name="number-text">
+      <rng:element name="number:text">
+        <rng:optional>
+          <rng:ref name="number-text-attlist"/>
+         </rng:optional>
+        <rng:text/>
+      </rng:element>
+    </rng:define>
 
    </rng:include>
 
@@ -2743,6 +2751,26 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="positiveInteger"/>
       </rng:attribute>
     </rng:optional>
+  </rng:define>
+
+  <rng:define name="number-embedded-text-attlist" combine="interleave">
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:blank-width-char">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-text-attlist">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="loext:blank-width-char">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
   </rng:define>
 
   <!-- TODO no proposal -->
