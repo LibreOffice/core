@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
-#define INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -77,7 +76,6 @@ struct HwpReaderPrivate;
  */
 class HwpReader : public WeakImplHelper<XFilter>
 {
-
 public:
     HwpReader();
     virtual ~HwpReader() override;
@@ -86,24 +84,26 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) override;
+    virtual sal_Bool SAL_CALL filter(const Sequence<PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override {}
-    void setDocumentHandler(Reference< XDocumentHandler > const & xHandler)
+    void setDocumentHandler(Reference<XDocumentHandler> const& xHandler)
     {
         m_rxDocumentHandler = xHandler;
     }
 
     bool importHStream(std::unique_ptr<HStream> stream);
+
 private:
-    Reference< XDocumentHandler > m_rxDocumentHandler;
+    Reference<XDocumentHandler> m_rxDocumentHandler;
     rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
     std::unique_ptr<HwpReaderPrivate> d;
+
 private:
     /* -------- Document Parsing --------- */
     void makeMeta();
     void makeStyles();
-    void makeDrawMiscStyle(HWPDrawingObject *);
+    void makeDrawMiscStyle(HWPDrawingObject*);
     void makeAutoStyles();
     void makeMasterStyles();
     void makeBody();
@@ -111,45 +111,45 @@ private:
     void makeTextDecls();
 
     /* -------- Paragraph Parsing --------- */
-    void parsePara(HWPPara *para);
-    void make_text_p0(HWPPara *para, bool bParaStart);
-    void make_text_p1(HWPPara *para, bool bParaStart);
-    void make_text_p3(HWPPara *para, bool bParaStart);
+    void parsePara(HWPPara* para);
+    void make_text_p0(HWPPara* para, bool bParaStart);
+    void make_text_p1(HWPPara* para, bool bParaStart);
+    void make_text_p3(HWPPara* para, bool bParaStart);
 
     /* -------- rDocument->characters(x) --------- */
-    void makeChars(hchar_string & rStr);
+    void makeChars(hchar_string& rStr);
 
     /* -------- Special Char Parsing --------- */
-    void makeFieldCode(hchar_string const & rStr, FieldCode const *hbox); //6
-    void makeBookmark(Bookmark const *hbox);      //6
-    void makeDateFormat(DateCode *hbox);    //7
-    void makeDateCode(DateCode *hbox);      //8
-    void makeTab();            //9
-    void makeTable(TxtBox *hbox);
-    void makeTextBox(TxtBox *hbox);
-    void makeFormula(TxtBox *hbox);
-    void makeHyperText(TxtBox *hbox);
-    void makePicture(Picture *hbox);
-    void makePictureDRAW(HWPDrawingObject *drawobj, const Picture *hbox);
+    void makeFieldCode(hchar_string const& rStr, FieldCode const* hbox); //6
+    void makeBookmark(Bookmark const* hbox); //6
+    void makeDateFormat(DateCode* hbox); //7
+    void makeDateCode(DateCode* hbox); //8
+    void makeTab(); //9
+    void makeTable(TxtBox* hbox);
+    void makeTextBox(TxtBox* hbox);
+    void makeFormula(TxtBox* hbox);
+    void makeHyperText(TxtBox* hbox);
+    void makePicture(Picture* hbox);
+    void makePictureDRAW(HWPDrawingObject* drawobj, const Picture* hbox);
     void makeLine();
-    void makeHidden(Hidden *hbox);
-    void makeFootnote(Footnote *hbox);
-    void makeAutoNum(AutoNum const *hbox);
+    void makeHidden(Hidden* hbox);
+    void makeFootnote(Footnote* hbox);
+    void makeAutoNum(AutoNum const* hbox);
     void makeShowPageNum();
-    void makeMailMerge(MailMerge *hbox);
-    void makeOutline(Outline const *hbox);
+    void makeMailMerge(MailMerge* hbox);
+    void makeOutline(Outline const* hbox);
 
     /* --------- Styles Parsing ------------ */
     void makePageStyle();
-    void makeColumns(ColumnDef const *);
-    void makeTStyle(CharShape const *);
-    void makePStyle(ParaShape const *);
-    void makeFStyle(FBoxStyle *);
-    void makeCaptionStyle(FBoxStyle *);
-    void makeDrawStyle(HWPDrawingObject *,FBoxStyle *);
-    void makeTableStyle(Table *);
-    void parseCharShape(CharShape const *);
-    void parseParaShape(ParaShape const *);
+    void makeColumns(ColumnDef const*);
+    void makeTStyle(CharShape const*);
+    void makePStyle(ParaShape const*);
+    void makeFStyle(FBoxStyle*);
+    void makeCaptionStyle(FBoxStyle*);
+    void makeDrawStyle(HWPDrawingObject*, FBoxStyle*);
+    void makeTableStyle(Table*);
+    void parseCharShape(CharShape const*);
+    void parseParaShape(ParaShape const*);
     static OUString getTStyleName(int);
     static OUString getPStyleName(int);
 
@@ -157,8 +157,5 @@ private:
     void endEl(const OUString& el);
     void chars(const OUString& s);
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
