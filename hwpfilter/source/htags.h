@@ -21,6 +21,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 #include <memory>
+#include <vector>
 #ifdef _WIN32
 #include <objidl.h>
 #endif
@@ -34,7 +35,7 @@ struct EmPicture
     size_t size;
     char name[16];
     char type[16];
-    std::unique_ptr<uchar[]> data;
+    std::vector<uchar> data;
 
     explicit EmPicture(size_t size);
     ~EmPicture(void);

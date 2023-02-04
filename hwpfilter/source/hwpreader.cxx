@@ -510,7 +510,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if (emp)
                 {
                     startEl("office:binary-data");
-                    chars(base64_encode_string(emp->data.get(), emp->size));
+                    chars(base64_encode_string(emp->data.data(), emp->size));
                     endEl("office:binary-data");
                 }
                 endEl("draw:fill-image");
@@ -3824,7 +3824,7 @@ void HwpReader::makePicture(Picture * hbox)
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
                          {
-                             chars(base64_encode_string(emp->data.get(), emp->size));
+                             chars(base64_encode_string(emp->data.data(), emp->size));
                          }
                 }
                 else{
