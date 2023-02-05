@@ -1628,6 +1628,11 @@ ViewShellDocId SfxViewShell::GetDocId() const
     return pImpl->m_nDocId;
 }
 
+void SfxViewShell::notifyInvalidation(tools::Rectangle const* pRect) const
+{
+    SfxLokHelper::notifyInvalidation(this, pRect);
+}
+
 void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
 {
     SfxLokHelper::notifyOtherViews(this, nType, rKey, rPayload);

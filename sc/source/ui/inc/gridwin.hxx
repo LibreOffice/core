@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/DocWindow.hxx>
 #include <vcl/transfer.hxx>
 #include "viewutil.hxx"
 #include "viewdata.hxx"
@@ -85,7 +86,7 @@ namespace sdr::overlay { class OverlayObjectList; }
 
 class ScFilterListBox;
 
-class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
+class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTargetHelper, public DragSourceHelper
 {
     // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;

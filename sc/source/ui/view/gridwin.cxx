@@ -348,7 +348,7 @@ static bool lcl_GetHyperlinkCell(
 
 //  WB_DIALOGCONTROL needed for UNO-Controls
 ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos eWhichPos )
-:           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
+:           DocWindow( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             maVisibleRange(rData.GetDocument()),

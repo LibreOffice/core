@@ -44,10 +44,10 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
-#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -58,6 +58,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
+#include <utility>
 /*
 
 Form controls (more precise: UNO Controls) in the drawing layer are ... prone to breakage, since they have some
@@ -279,6 +280,10 @@ namespace sdr::contact {
     static void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
+        // In the LOK case, control geometry is handled by LokControlHandler
+        if (comphelper::LibreOfficeKit::isActive())
+            return;
+
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
         if ( !_rControl.is() )
             return;

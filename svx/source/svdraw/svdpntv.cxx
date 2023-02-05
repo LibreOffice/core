@@ -629,7 +629,8 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
     {
         // draw postprocessing, only for known devices
         // it is necessary to always paint FormLayer
-        if(bPaintFormLayer)
+        // In the LOK case control rendering is performed through LokControlHandler
+        if(!comphelper::LibreOfficeKit::isActive() && bPaintFormLayer)
         {
             ImpFormLayerDrawing(rPaintWindow);
         }

@@ -21,7 +21,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/long.hxx>
-#include <vcl/window.hxx>
+#include <vcl/DocWindow.hxx>
 #include <vcl/transfer.hxx>
 
 class OutlinerView;
@@ -41,7 +41,7 @@ class ViewShell;
     member of the <type>OutputDevice</type> base class.  It is calculated to
     be an integer percent value.
 */
-class Window : public vcl::Window, public ::DropTargetHelper
+class Window : public vcl::DocWindow, public ::DropTargetHelper
 {
 public:
     Window(vcl::Window* pParent);

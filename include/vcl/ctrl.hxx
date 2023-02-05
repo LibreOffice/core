@@ -229,6 +229,9 @@ public:
 
     vcl::Font       GetUnzoomedControlPointFont() const;
     void            SetShowAccelerator (bool val);
+
+    /// Notify the LOK client about an invalidated area.
+    virtual void LogicInvalidate( const tools::Rectangle* pRectangle ) override;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -25,6 +26,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <vcl/DocWindow.hxx>
 #include <sal/log.hxx>
 
 #include <textlayout.hxx>
@@ -491,6 +493,35 @@ Control::GetUnzoomedControlPointFont() const
     if (IsControlFont())
         aFont.Merge(GetControlFont());
     return aFont;
+}
+
+void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
+{
+    // avoid endless paint/invalidate loop in Impress
+    if (comphelper::LibreOfficeKit::isTiledPainting())
+        return;
+
+    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    if (!pParent)
+        return;
+
+    // invalidate only controls that belong to a DocWindow
+    if (!dynamic_cast<vcl::DocWindow*>(GetParent()))
+        return;
+
+    tools::Rectangle aResultRectangle;
+    if (!pRectangle)
+    {
+        // we have to invalidate the whole control area not the whole document
+        aResultRectangle = tools::Rectangle(GetPosPixel(), GetSizePixel());
+    }
+    else
+    {
+        aResultRectangle = *pRectangle;
+    }
+
+    aResultRectangle = PixelToLogic(aResultRectangle, MapMode(MapUnit::MapTwip));
+    pParent->GetLOKNotifier()->notifyInvalidation(&aResultRectangle);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

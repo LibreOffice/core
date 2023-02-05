@@ -5344,7 +5344,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
  * Ctor
  */
 SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
-    Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+    DocWindow(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
     DropTargetHelper( this ),
     DragSourceHelper( this ),
 

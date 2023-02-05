@@ -124,6 +124,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/LokControlHandler.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -2192,6 +2193,9 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     if (!pViewSh)
         return;
 
+    // we need to skip tile invalidation for controls on rendering
+    comphelper::LibreOfficeKit::setTiledPainting(true);
+
     // Setup drawing layer to work properly. Since we use a custom VirtualDevice
     // for the drawing, SdrPaintView::BeginCompleteRedraw() will call FindPaintWindow()
     // unsuccessfully and use a temporary window that doesn't keep state. So patch
@@ -2260,6 +2264,17 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     if(patchedPageWindow != nullptr)
         patchedPageWindow->unpatchPaintWindow(previousPaintWindow);
+
+    // Draw Form controls
+    SdrView* pDrawView = pViewSh->GetDrawView();
+    SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    SdrPage* pPage = pPageView->GetPage();
+    ::sd::Window* pActiveWin = pViewSh->GetActiveWindow();
+    ::tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+    Size aOutputSize(nOutputWidth, nOutputHeight);
+    LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
+
+    comphelper::LibreOfficeKit::setTiledPainting(false);
 }
 
 void SdXImpressDocument::selectPart(int nPart, int nSelect)
@@ -2561,8 +2576,17 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
             pViewShell->GetViewShell(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
-    const Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
-    LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
+    // try to forward mouse event to control
+    const Point aPointTwip(nX, nY);
+    const Point aPointHMM = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
+    SdrView* pDrawView = pViewShell->GetDrawView();
+    SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    SdrPage* pPage = pPageView->GetPage();
+    ::sd::Window* pActiveWin = pViewShell->GetActiveWindow();
+    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, nType, aPointHMM, nCount, nButtons, nModifier))
+            return;
+
+    LokMouseEventData aMouseEventData(nType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
     SfxLokHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }

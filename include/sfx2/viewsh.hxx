@@ -71,7 +71,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::ui { class XContextMenuInterceptor; }
 namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
 namespace com::sun::star::view { class XRenderable; }
-
+namespace tools { class Rectangle; }
 
 enum class SfxPrinterChangeFlags
 {
@@ -404,6 +404,8 @@ public:
     /// Get the DocId used by Mobile LOKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
+    /// ILibreOfficeKitNotifier. Emits a LOK_CALLBACK_INVALIDATE_TILES.
+    virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().

@@ -333,6 +333,9 @@ void Application::libreOfficeKitViewCallback(int nType, const char* pPayload) co
     }
 }
 
+void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
+{
+}
 
 namespace
 {

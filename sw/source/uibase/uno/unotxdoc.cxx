@@ -30,6 +30,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/LokControlHandler.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -3113,6 +3114,17 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    // Draw Form controls
+    comphelper::LibreOfficeKit::setTiledPainting(true);
+    SwDrawModel* pDrawLayer = m_pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(0));
+    SdrView* pDrawView = pViewShell->GetDrawView();
+    SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
+    tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+    Size aOutputSize(nOutputWidth, nOutputHeight);
+    LokControlHandler::paintControlTile(pPage, pDrawView, rEditWin, rDevice, aOutputSize, aTileRect);
+    comphelper::LibreOfficeKit::setTiledPainting(false);
 }
 
 Size SwXTextDocument::getDocumentSize()
@@ -3664,7 +3676,16 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
             m_pDocShell->GetView(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
+    // try to forward mouse event to controls
+    SwDrawModel* pDrawLayer = m_pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(0));
+    SdrView* pDrawView = pWrtViewShell->GetDrawView();
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
+    Point aPointTwip(nX, nY);
+    Point aPointHMMDraw = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
+    if (LokControlHandler::postMouseEvent(pPage, pDrawView, rEditWin, nType, aPointHMMDraw, nCount, nButtons, nModifier))
+            return;
+
     LokMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
