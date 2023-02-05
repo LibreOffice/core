@@ -13,10 +13,11 @@
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
-
 #include <rtl/ustring.hxx>
 
 #include <vector>
+
+namespace tools { class Rectangle; }
 
 class SfxItemSet;
 
@@ -38,6 +39,9 @@ public:
                               const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
 
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
+
+    /// Emits a LOK_CALLBACK_INVALIDATE_TILES.
+    virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 };
 
 } // namespace vcl

@@ -43,6 +43,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
+#include <comphelper/lok.hxx>
+
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -276,6 +278,10 @@ namespace sdr::contact {
     static void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
+        // In the LOK case, control geometry is handled by LokControlHandler
+        if (comphelper::LibreOfficeKit::isActive())
+            return;
+
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
         if ( !_rControl.is() )
             return;

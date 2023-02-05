@@ -9,9 +9,13 @@
 
 #pragma once
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/lokhelper.hxx>
 #include <svx/svdouno.hxx>
-#include <vcl/window.hxx>
+#include <svx/svditer.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/DocWindow.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -19,14 +23,22 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
+
+#include <sal/log.hxx>
+
+#include <optional>
 
 class LokControlHandler
 {
 public:
     static bool postMouseEvent(const SdrPage* pPage, const SdrView* pDrawView,
-                               vcl::Window const& rMainWindow, int nType, Point aPointHmm,
+                               vcl::DocWindow& rMainWindow, int nType, Point aPointHmm,
                                int nCount, int nButtons, int nModifier)
     {
+        static std::optional<PointerStyle> eDocPointerStyle;
+
+        o3tl::Length eControlUnitLength = MapToO3tlLength(rMainWindow.GetMapMode().GetMapUnit());
         SdrObjListIter aIterator(pPage, SdrIterMode::Flat);
         while (aIterator.IsMore())
         {
@@ -34,7 +46,10 @@ public:
             SdrUnoObj* pUnoObect = dynamic_cast<SdrUnoObj*>(pObject);
             if (pUnoObect)
             {
-                tools::Rectangle aControlRectHMM = pUnoObect->GetLogicRect();
+                tools::Rectangle aControlRect = pUnoObect->GetLogicRect();
+                tools::Rectangle aControlRectHMM = o3tl::convert(
+                        aControlRect, eControlUnitLength, o3tl::Length::mm100);
+
                 if (aControlRectHMM.Contains(aPointHmm))
                 {
                     css::uno::Reference<css::awt::XControl> xControl
@@ -52,6 +67,19 @@ public:
                     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindowPeer);
                     if (pWindow)
                     {
+                        tools::Rectangle aControlRectPx = o3tl::convert(
+                                aControlRectHMM, o3tl::Length::mm100, o3tl::Length::px);
+                        // used by Control::LogicInvalidate
+                        pWindow->SetPosPixel(aControlRectPx.TopLeft());
+
+                        // when entering into control area save current pointer style
+                        // and set pointer style to arrow
+                        if (!eDocPointerStyle)
+                        {
+                            *eDocPointerStyle = rMainWindow.GetPointer();
+                            rMainWindow.SetPointer(pWindow->GetPointer());
+                        }
+
                         Point aControlRelativePositionHMM = aPointHmm - aControlRectHMM.TopLeft();
                         Point aControlRelativePosition = o3tl::convert(
                             aControlRelativePositionHMM, o3tl::Length::mm100, o3tl::Length::px);
@@ -59,12 +87,18 @@ public:
                         LokMouseEventData aMouseEventData(nType, aControlRelativePosition, nCount,
                                                           MouseEventModifiers::SIMPLECLICK,
                                                           nButtons, nModifier);
-
                         SfxLokHelper::postMouseEventAsync(pWindow, aMouseEventData);
                         return true;
                     }
                 }
             }
+        }
+
+        // when exiting from control area restore document pointer style
+        if (eDocPointerStyle)
+        {
+            rMainWindow.SetPointer(*eDocPointerStyle);
+            eDocPointerStyle.reset();
         }
         return false;
     }
@@ -90,17 +124,27 @@ public:
         if (!xControlView.is())
             return;
 
-        tools::Rectangle aObjectRectHMM = pUnoObect->GetLogicRect();
+        o3tl::Length eControlUnitLength = MapToO3tlLength(rMainWindow.GetMapMode().GetMapUnit());
+        tools::Rectangle aControlRect = pUnoObect->GetLogicRect();
+        tools::Rectangle aObjectRectHMM = o3tl::convert(
+                aControlRect, eControlUnitLength, o3tl::Length::mm100);
+        tools::Rectangle aControltRectPx = o3tl::convert(
+                aObjectRectHMM, o3tl::Length::mm100, o3tl::Length::px);
+
         Point aOffsetFromTile(aObjectRectHMM.Left() - rTileRectHMM.Left(),
                               aObjectRectHMM.Top() - rTileRectHMM.Top());
         tools::Rectangle aRectangleHMM(aOffsetFromTile, aObjectRectHMM.GetSize());
         tools::Rectangle aRectanglePx
             = o3tl::convert(aRectangleHMM, o3tl::Length::mm100, o3tl::Length::px);
 
-        xControlWindow->setPosSize(0, 0, aRectanglePx.GetWidth(), aRectanglePx.GetHeight(),
-                                   css::awt::PosSize::POSSIZE);
+        xControlWindow->setPosSize(
+                aControltRectPx.Left(), aControltRectPx.Top(),
+                aRectanglePx.GetWidth(), aRectanglePx.GetHeight(),
+                css::awt::PosSize::POSSIZE);
 
         xControlView->setGraphics(xGraphics);
+        // required for getting text label rendered with the correct scale
+        xControlView->setZoom(1,1);
 
         xControlView->draw(aRectanglePx.Left() * scaleX, aRectanglePx.Top() * scaleY);
     }
@@ -118,13 +162,15 @@ public:
         rDevice.Push(vcl::PushFlags::MAPMODE);
         MapMode aDeviceMapMode(rDevice.GetMapMode());
 
-        const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::mm100);
-        Fraction scaleX = Fraction(aOutputSize.Width(), aTileRectHMM.GetWidth()) * scale;
-        Fraction scaleY = Fraction(aOutputSize.Height(), aTileRectHMM.GetHeight()) * scale;
+        const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+        Fraction scaleX = Fraction(aOutputSize.Width(), rTileRect.GetWidth()) * scale;
+        Fraction scaleY = Fraction(aOutputSize.Height(), rTileRect.GetHeight()) * scale;
         aDeviceMapMode.SetScaleX(scaleX);
         aDeviceMapMode.SetScaleY(scaleY);
+        aDeviceMapMode.SetMapUnit(MapUnit::MapPixel);
         rDevice.SetMapMode(aDeviceMapMode);
 
+        o3tl::Length eControlUnitLength = MapToO3tlLength(rMainWindow.GetMapMode().GetMapUnit());
         SdrObjListIter aIterator(pPage, SdrIterMode::Flat);
 
         while (aIterator.IsMore())
@@ -133,7 +179,9 @@ public:
             SdrUnoObj* pUnoObect = dynamic_cast<SdrUnoObj*>(pObject);
             if (pUnoObect)
             {
-                tools::Rectangle aObjectRectHMM = pUnoObect->GetLogicRect();
+                tools::Rectangle aControlRect = pUnoObect->GetLogicRect();
+                tools::Rectangle aObjectRectHMM = o3tl::convert(
+                        aControlRect, eControlUnitLength, o3tl::Length::mm100);
 
                 // Check if we intersect with the tile rectangle and we
                 // need to draw the control.

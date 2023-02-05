@@ -132,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/dockingarea \
     vcl/source/window/dockmgr \
     vcl/source/window/dockwin \
+    vcl/source/window/DocWindow \
     vcl/source/window/event \
     vcl/source/window/floatwin \
     vcl/source/window/introwin \
