@@ -661,9 +661,10 @@ OUString SalInstanceWidget::strip_mnemonic(const OUString& rLabel) const
 
 VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 {
-    // create with (annoying) separate alpha layer that LibreOffice itself uses
-    return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
-                                         DeviceFormat::WITH_ALPHA);
+    // create with no separate alpha layer like everything sane does
+    auto xRet = VclPtr<VirtualDevice>::Create();
+    xRet->SetBackground(COL_TRANSPARENT);
+    return xRet;
 }
 
 void SalInstanceWidget::call_attention_to()
