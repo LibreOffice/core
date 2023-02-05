@@ -1018,7 +1018,7 @@ public:
     void                                ReleaseMouse();
     bool                                IsMouseCaptured() const;
 
-    void                                SetPointer( PointerStyle );
+    virtual void                        SetPointer( PointerStyle );
     PointerStyle                        GetPointer() const;
     void                                EnableChildPointerOverwrite( bool bOverwrite );
     void                                SetPointerPosPixel( const Point& rPos );

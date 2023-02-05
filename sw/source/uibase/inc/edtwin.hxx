@@ -24,7 +24,7 @@
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/window.hxx>
+#include <vcl/DocWindow.hxx>
 #include <vcl/transfer.hxx>
 #include <swevent.hxx>
 #include <swtypes.hxx>
@@ -56,7 +56,7 @@ class SwTextFrame;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
+class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
                 public DropTargetHelper, public DragSourceHelper
 {
     static  QuickHelpData* s_pQuickHlpData;

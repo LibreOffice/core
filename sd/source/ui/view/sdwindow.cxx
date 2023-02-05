@@ -60,7 +60,7 @@ namespace sd {
 #define MAX_ZOOM           3000     ///< maximal zoom factor
 
 Window::Window(vcl::Window* pParent)
-    : vcl::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+    : vcl::DocWindow(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
       maWinPos(0, 0),           // precautionary; but the values should be set
       maViewOrigin(0, 0),       // again from the owner of the window

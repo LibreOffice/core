@@ -493,30 +493,6 @@ void Window::SetPointer( PointerStyle nPointer )
     // possibly immediately move pointer
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
         mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
-
-    VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier();
-    if (!pWin)
-        return;
-
-    PointerStyle aPointer = GetPointer();
-    // We don't map all possible pointers hence we need a default
-    OString aPointerString = "default";
-    auto aIt = vcl::gaLOKPointerMap.find(aPointer);
-    if (aIt != vcl::gaLOKPointerMap.end())
-    {
-        aPointerString = aIt->second;
-    }
-
-    // issue mouse pointer events only for document windows
-    // Doc windows' immediate parent SfxFrameViewWindow_Impl is the one with
-    // parent notifier set during initialization
-    if ((ImplGetFrameData()->mbDragging &&
-         ImplGetFrameData()->mpMouseDownWin == this) ||
-        (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
-         GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0))
-    {
-        pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
-    }
 }
 
 void Window::EnableChildPointerOverwrite( bool bOverwrite )
