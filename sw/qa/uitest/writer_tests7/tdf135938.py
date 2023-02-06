@@ -17,14 +17,6 @@ class tdf135938(UITestCase):
     def test_tdf135938_cross_reference_update(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:InsertReferenceField", close_button="cancel") as xDialog:
-                # HACK, see the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
-                # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, which can
-                # invalidate the TreeListEntryUIObjects used by the below get_state_as_dict calls
-                # (see 2798430c8a711861fdcdfbf9ac00a0527abd3bfc "Mark the uses of
-                # TreeListEntryUIObject as dubious"); lets double that 200 ms timeout value here to
-                # hopefully be on the safe side:
-                time.sleep(0.4);
-
                 # Select set reference type
                 xTreelistType = xDialog.getChild("type-ref")
                 xTreeEntry = xTreelistType.getChild('0')
@@ -37,6 +29,15 @@ class tdf135938(UITestCase):
                 xInsert = xDialog.getChild("ok")
                 xInsert.executeAction("CLICK", tuple())
 
+                # HACK, see the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+                # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+                # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+                # xInsert click above, and which can invalidate the TreeListEntryUIObjects used by
+                # the below get_state_as_dict calls (see 2798430c8a711861fdcdfbf9ac00a0527abd3bfc
+                # "Mark the uses of TreeListEntryUIObject as dubious"); lets double that 200 ms
+                # timeout value here to hopefully be on the safe side:
+                time.sleep(.4);
+
                 xSelect = xDialog.getChild("select-ref")
                 self.assertEqual("1", get_state_as_dict(xSelect)["Children"])
                 self.assertEqual("ABC", get_state_as_dict(xSelect.getChild(0))["Text"])
@@ -44,6 +45,15 @@ class tdf135938(UITestCase):
                 xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xName.executeAction("TYPE", mkPropertyValues({"TEXT": "DEF"}))
                 xInsert.executeAction("CLICK", tuple())
+
+                # HACK, see the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+                # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+                # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+                # xInsert click above, and which can invalidate the TreeListEntryUIObjects used by
+                # the below get_state_as_dict calls (see 2798430c8a711861fdcdfbf9ac00a0527abd3bfc
+                # "Mark the uses of TreeListEntryUIObject as dubious"); lets double that 200 ms
+                # timeout value here to hopefully be on the safe side:
+                time.sleep(.4);
 
                 self.assertEqual("2", get_state_as_dict(xSelect)["Children"])
                 self.assertEqual("ABC", get_state_as_dict(xSelect.getChild(0))["Text"])
