@@ -467,6 +467,40 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
+void SvxLRSpaceItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
+{
+    nLeftMargin = (nL * nProp) / 100;
+    nTxtLeft = nLeftMargin;
+    nPropLeftMargin = nProp;
+}
+
+void SvxLRSpaceItem::SetRight(const tools::Long nR, const sal_uInt16 nProp)
+{
+    if (0 == nR)
+    {
+        SetExplicitZeroMarginValRight(true);
+    }
+    nRightMargin = (nR * nProp) / 100;
+    nPropRightMargin = nProp;
+}
+
+void SvxLRSpaceItem::SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp)
+{
+    nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
+    nPropFirstLineOffset = nProp;
+    AdjustLeft();
+}
+
+void SvxLRSpaceItem::SetTextLeft(const tools::Long nL, const sal_uInt16 nProp)
+{
+    if (0 == nL)
+    {
+        SetExplicitZeroMarginValLeft(true);
+    }
+    nTxtLeft = (nL * nProp) / 100;
+    nPropLeftMargin = nProp;
+    AdjustLeft();
+}
 
 /// Adapt nLeftMargin and nTxtLeft.
 void SvxLRSpaceItem::AdjustLeft()

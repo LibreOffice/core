@@ -29,14 +29,15 @@
 
     Left/Right margin and first line indent
 
-    SvxLRSpaceItem offers two interfaces for views from the left margin and
-    first line indent. The get methods return the member, with the layout also
-    as expected: the left edge shifts to the negative first line indent to the
-    left. The SetTxt/Gettxt methods assume that the left side represents the
-    0 coordinate for the first line indent:
+    SvxLRSpaceItem offers two interfaces to get the left margin and first line
+    indent.
+    - The Get* methods return the member in the way the layout used to expect:
+      with a negative first line indent, the left margin shifts to the left.
+    - The SetText*,GetText* methods assume that the left margin represents
+      the 0 coordinate for the first line indent:
 
     UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Where?)
-    SetTextLeft SetTxtFirst GetLeft  GetTextLeft  GetTxtFirst  (What?)
+SetTextLeft SetTextFirst GetLeft GetTextLeft  GetTextFirst  (What?)
     500       -500        0        500         -500      (How much?)
     500         0        500       500           0
     500       +500       500       500         +500
@@ -90,8 +91,8 @@ public:
     virtual bool                 HasMetrics() const override;
 
     // The "layout interface":
-    inline void   SetLeft ( const tools::Long nL, const sal_uInt16 nProp = 100 );
-    inline void   SetRight( const tools::Long nR, const sal_uInt16 nProp = 100 );
+    void   SetLeft (const tools::Long nL, const sal_uInt16 nProp = 100);
+    void   SetRight(const tools::Long nR, const sal_uInt16 nProp = 100);
 
     // Query/direct setting of the absolute values
     tools::Long GetLeft()  const { return nLeftMargin; }
@@ -109,10 +110,10 @@ public:
     sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
     // The UI/text interface:
-    inline void SetTextLeft( const tools::Long nL, const sal_uInt16 nProp = 100 );
+    void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
     tools::Long GetTextLeft() const { return nTxtLeft; }
 
-    inline void   SetTextFirstLineOffset( const short nF, const sal_uInt16 nProp = 100 );
+    void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short  GetTextFirstLineOffset() const { return nFirstLineOffset; }
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )
                     { nPropFirstLineOffset = nProp; }
@@ -128,40 +129,6 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
-
-inline void SvxLRSpaceItem::SetLeft( const tools::Long nL, const sal_uInt16 nProp )
-{
-    nLeftMargin = (nL * nProp) / 100;
-    nTxtLeft = nLeftMargin;
-    nPropLeftMargin = nProp;
-}
-inline void SvxLRSpaceItem::SetRight( const tools::Long nR, const sal_uInt16 nProp )
-{
-    if (0 == nR)
-    {
-        SetExplicitZeroMarginValRight(true);
-    }
-    nRightMargin = (nR * nProp) / 100;
-    nPropRightMargin = nProp;
-}
-inline void SvxLRSpaceItem::SetTextFirstLineOffset( const short nF,
-                                                 const sal_uInt16 nProp )
-{
-    nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
-    nPropFirstLineOffset = nProp;
-    AdjustLeft();
-}
-
-inline void SvxLRSpaceItem::SetTextLeft( const tools::Long nL, const sal_uInt16 nProp )
-{
-    if (0 == nL)
-    {
-        SetExplicitZeroMarginValLeft(true);
-    }
-    nTxtLeft = (nL * nProp) / 100;
-    nPropLeftMargin = nProp;
-    AdjustLeft();
-}
 
 #endif
 
