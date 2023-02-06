@@ -155,6 +155,15 @@ Size PriorityMergedHBox::calculateRequisition() const
         accumulateMaxes(aChildSize, aSize);
     }
 
+    // find max height
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        Size aChildSize = getLayoutRequisition(*pChild);
+        setPrimaryDimension(aChildSize, getPrimaryDimension(aSize));
+        accumulateMaxes(aChildSize, aSize);
+    }
+
     setPrimaryDimension(aSize, 200);
     return finalizeMaxes(aSize, nVisibleChildren);
 }
