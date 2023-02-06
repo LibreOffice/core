@@ -883,6 +883,10 @@ SwLayoutFrame *SwFrame::GetLeaf( MakePageType eMakePage, bool bFwd )
         {
             return GetNextFlyLeaf(eMakePage);
         }
+        else
+        {
+            return GetPrevFlyLeaf();
+        }
     }
 
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf();
