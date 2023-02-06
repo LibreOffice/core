@@ -996,24 +996,10 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         mpOutDev->SetLineColor( COL_BLACK );
     else
-        mpOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
+        mpOutDev->SetLineColor( rStyleSettings.GetSeparatorColor() );
 
     mpOutDev->DrawLine( aStart, aStop );
-    if ( !(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
-    {
-        mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-        if( bVertical )
-        {
-            aStart.AdjustX( 1 );
-            aStop.AdjustX( 1 );
-        }
-        else
-        {
-            aStart.AdjustY( 1 );
-            aStop.AdjustY( 1 );
-        }
-        mpOutDev->DrawLine( aStart, aStop );
-    }
+
     mpOutDev->Pop();
 }
 
