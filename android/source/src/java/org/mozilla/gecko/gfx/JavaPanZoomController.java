@@ -426,7 +426,7 @@ class JavaPanZoomController
     private float panDistance(MotionEvent move) {
         float dx = mX.panDistance(move.getX(0));
         float dy = mY.panDistance(move.getY(0));
-        return (float) Math.sqrt(dx * dx + dy * dy);
+        return (float) Math.hypot(dx , dy);
     }
 
     private void track(float x, float y, long time) {
