@@ -528,6 +528,8 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
+    , m_xDarkModeFrame(m_xBuilder->weld_widget("darkmode"))
+    , m_xAppearanceStyleLB(m_xBuilder->weld_combo_box("appearance"))
     , m_xIconStyleLB(m_xBuilder->weld_combo_box("iconstyle"))
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
@@ -547,8 +549,13 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
     , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
 {
-    if (Application::GetToolkitName().startsWith("gtk"))
+    OUString sToolKitName(Application::GetToolkitName());
+    if (sToolKitName.startsWith("gtk"))
         m_xMenuIconBox->hide();
+
+    const bool bHasDarkMode = sToolKitName.startsWith("gtk") || sToolKitName == "osx" || sToolKitName == "win";
+    if (!bHasDarkMode)
+        m_xDarkModeFrame->hide();
 
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
@@ -668,6 +675,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
     bool bMenuOptModified = false;
+    bool bDarkModeOptModified = false;
     bool bRepaintWindows(false);
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
 
@@ -781,6 +789,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bAppearanceChanged = true;
     }
 
+    if (m_xAppearanceStyleLB->get_value_changed_from_saved())
+    {
+        bDarkModeOptModified = true;
+        bModified = true;
+    }
+
     if (m_xContextMenuShortcutsLB->get_value_changed_from_saved())
     {
         officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::set(
@@ -824,12 +838,20 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     xChanges->commit();
 
-    if( bMenuOptModified )
+    if (bMenuOptModified || bDarkModeOptModified)
     {
         // Set changed settings to the application instance
         AllSettings aAllSettings = Application::GetSettings();
-        StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-        aAllSettings.SetStyleSettings(aStyleSettings);
+
+        if (bMenuOptModified)
+        {
+            StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+            aAllSettings.SetStyleSettings(aStyleSettings);
+        }
+
+        if (bDarkModeOptModified)
+            MiscSettings::SetDarkMode(m_xAppearanceStyleLB->get_active());
+
         Application::MergeSystemSettings( aAllSettings );
         Application::SetSettings(aAllSettings);
     }
@@ -911,6 +933,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     m_xIconStyleLB->set_active(nStyleLB_InitialSelection);
     m_xIconStyleLB->save_value();
+
+    m_xAppearanceStyleLB->set_active(officecfg::Office::Common::Misc::Appearance::get());
+    m_xAppearanceStyleLB->save_value();
 
     // Mouse Snap
     m_xMousePosLB->set_active(static_cast<sal_Int32>(pAppearanceCfg->GetSnapMode()));
