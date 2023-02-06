@@ -53,6 +53,7 @@
 
 using namespace ::com::sun::star;
 
+#include <salframe.hxx>
 #include <svdata.hxx>
 
 struct ImplMouseData
@@ -2753,6 +2754,25 @@ void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 bool MiscSettings::GetEnableLocalizedDecimalSep() const
 {
     return mxData->mbEnableLocalizedDecimalSep;
+}
+
+int MiscSettings::GetDarkMode()
+{
+    return officecfg::Office::Common::Misc::Appearance::get();
+}
+
+void MiscSettings::SetDarkMode(int nMode)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::Appearance::set(nMode, batch);
+    batch->commit();
+
+    vcl::Window *pWin = Application::GetFirstTopLevelWindow();
+    while (pWin)
+    {
+        pWin->ImplGetFrame()->UpdateDarkMode();
+        pWin = Application::GetNextTopLevelWindow(pWin);
+    }
 }
 
 HelpSettings::HelpSettings()

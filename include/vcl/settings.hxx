@@ -645,6 +645,9 @@ public:
     bool                            GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( bool bEnable );
     bool                            GetEnableLocalizedDecimalSep() const;
+    // 0 auto, 1 light, 2, dark
+    static void                     SetDarkMode(int nMode);
+    static int                      GetDarkMode();
 
     bool                            operator ==( const MiscSettings& rSet ) const;
     bool                            operator !=( const MiscSettings& rSet ) const;

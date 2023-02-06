@@ -163,6 +163,7 @@ public:
         tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     // done setting up the clipregion
     virtual void EndSetClipRegion() override;
+    virtual void UpdateDarkMode() override;
 
     void UpdateFrameGeometry();
 
