@@ -39,6 +39,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectPCX();
     void testDetectJPG();
     void testDetectPNG();
+    void testDetectAPNG();
     void testDetectGIF();
     void testDetectPSD();
     void testDetectTGA();
@@ -63,6 +64,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectPCX);
     CPPUNIT_TEST(testDetectJPG);
     CPPUNIT_TEST(testDetectPNG);
+    CPPUNIT_TEST(testDetectAPNG);
     CPPUNIT_TEST(testDetectGIF);
     CPPUNIT_TEST(testDetectPSD);
     CPPUNIT_TEST(testDetectTGA);
@@ -184,6 +186,21 @@ void GraphicFormatDetectorTest::testDetectPNG()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PNG"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectAPNG()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.apng"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "APNG");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkAPNG());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("APNG"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectGIF()

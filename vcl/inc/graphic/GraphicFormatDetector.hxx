@@ -52,6 +52,9 @@ static inline OUString getImportFormatShortName(GraphicFileFormat nFormat)
         case GraphicFileFormat::PNG:
             pKeyName = "PNG";
             break;
+        case GraphicFileFormat::APNG:
+            pKeyName = "APNG";
+            break;
         case GraphicFileFormat::XBM:
             pKeyName = "XBM";
             break;
@@ -163,6 +166,7 @@ public:
     bool checkTIF();
     bool checkGIF();
     bool checkPNG();
+    bool checkAPNG();
     bool checkJPG();
     bool checkSVM();
     bool checkPCD();

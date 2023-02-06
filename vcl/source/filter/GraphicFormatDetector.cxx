@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <vcl/filter/PngImageReader.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/DetectorTools.hxx>
 #include <tools/solar.h>
@@ -128,6 +129,16 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
     {
         bSomethingTested = true;
         if (aDetector.checkGIF())
+        {
+            rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("APNG"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkAPNG())
         {
             rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
             return true;
@@ -937,6 +948,17 @@ bool GraphicFormatDetector::checkPNG()
                 }
             } while (false);
         }
+        return true;
+    }
+    return false;
+}
+
+bool GraphicFormatDetector::checkAPNG()
+{
+    mrStream.Seek(mnStreamPosition);
+    if (PngImageReader::isAPng(mrStream))
+    {
+        maMetadata.mnFormat = GraphicFileFormat::APNG;
         return true;
     }
     return false;

@@ -16,6 +16,8 @@
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <unotools/configmgr.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <osl/endian.h>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
@@ -50,6 +52,19 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
 }
 
 constexpr int PNG_SIGNATURE_SIZE = 8;
+constexpr int PNG_IHDR_SIZE = 13;
+constexpr int PNG_TYPE_SIZE = 4;
+constexpr int PNG_SIZE_SIZE = 4;
+constexpr int PNG_CRC_SIZE = 4;
+constexpr int PNG_IEND_SIZE = 0;
+constexpr sal_uInt64 PNG_SIGNATURE = 0x89504E470D0A1A0A;
+constexpr sal_uInt32 PNG_IHDR_SIGNATURE = 0x49484452;
+constexpr sal_uInt32 PNG_IDAT_SIGNATURE = 0x49444154;
+constexpr sal_uInt32 PNG_ACTL_SIGNATURE = 0x6163544C;
+constexpr sal_uInt32 PNG_FCTL_SIGNATURE = 0x6663544C;
+constexpr sal_uInt32 PNG_FDAT_SIGNATURE = 0x66644154;
+constexpr sal_uInt32 PNG_IEND_SIGNATURE = 0x49454E44;
+constexpr sal_uInt32 PNG_IEND_CRC = 0xAE426082;
 
 bool isPng(SvStream& rStream)
 {
@@ -67,11 +82,245 @@ struct PngDestructor
     png_infop pInfo;
 };
 
+/// Animation Control chunk for APNG files
+struct acTLChunk
+{
+    sal_uInt32 num_frames;
+    sal_uInt32 num_plays;
+};
+
+/// Base class for fcTL and fdAT chunks since both of these chunks use a sequence number for ordering
+struct FrameDataChunk
+{
+    sal_uInt32 sequence_number;
+    virtual ~FrameDataChunk() = default;
+};
+
+/// fcTL (Frame Control) chunk for APNG files
+struct fcTLChunk : public FrameDataChunk
+{
+    sal_uInt32 width;
+    sal_uInt32 height;
+    sal_uInt32 x_offset;
+    sal_uInt32 y_offset;
+    sal_uInt16 delay_num;
+    sal_uInt16 delay_den;
+    sal_uInt8 dispose_op;
+    sal_uInt8 blend_op;
+};
+
+/// fdAT (Frame Data) chunk for APNG files
+struct fdATChunk : public FrameDataChunk
+{
+    std::vector<sal_uInt8> frame_data;
+};
+
+/// APNG chunk holder class, used for the user pointer in the libpng callback function
+struct APNGInfo
+{
+    bool mbIsApng = false;
+    acTLChunk maACTLChunk;
+    std::vector<std::unique_ptr<FrameDataChunk>> maFrameData;
+};
+
+int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
+{
+    std::string sName(chunk->name, chunk->name + 4);
+    APNGInfo* aAPNGInfo = static_cast<APNGInfo*>(png_get_user_chunk_ptr(png));
+    if (sName == "acTL")
+    {
+        aAPNGInfo->maACTLChunk = *reinterpret_cast<acTLChunk*>(chunk->data);
+        aAPNGInfo->maACTLChunk.num_frames = OSL_SWAPDWORD(aAPNGInfo->maACTLChunk.num_frames);
+        aAPNGInfo->maACTLChunk.num_plays = OSL_SWAPDWORD(aAPNGInfo->maACTLChunk.num_plays);
+        aAPNGInfo->mbIsApng = true;
+    }
+    else
+    {
+        std::unique_ptr<FrameDataChunk> pBaseChunk;
+        sal_uInt32 nSequenceNumber = 0;
+        std::memcpy(&nSequenceNumber, chunk->data, 4);
+        nSequenceNumber = OSL_SWAPDWORD(nSequenceNumber);
+
+        if (sName == "fcTL")
+        {
+            // Can't check with sizeof(fcTLChunk) because it may not be packed
+            if (chunk->size != 26)
+            {
+                return -1;
+            }
+
+            // byte
+            //  0    sequence_number      (unsigned int)   Sequence number of the animation chunk, starting from 0
+            //  4    width                (unsigned int)   Width of the following frame
+            //  8    height               (unsigned int)   Height of the following frame
+            //  12   x_offset             (unsigned int)   X position at which to render the following frame
+            //  16   y_offset             (unsigned int)   Y position at which to render the following frame
+            //  20   delay_num            (unsigned short) Frame delay fraction numerator
+            //  22   delay_den            (unsigned short) Frame delay fraction denominator
+            //  24   dispose_op           (byte)           Type of frame area disposal to be done after rendering this frame
+            //  25   blend_op             (byte)           Type of frame area rendering for this frame
+
+            // memcpy each member instead of reinterpret_cast because struct may not be packed
+            std::unique_ptr<fcTLChunk> aChunk = std::make_unique<fcTLChunk>();
+            std::memcpy(&aChunk->width, chunk->data + 4, 4);
+            std::memcpy(&aChunk->height, chunk->data + 8, 4);
+            std::memcpy(&aChunk->x_offset, chunk->data + 12, 4);
+            std::memcpy(&aChunk->y_offset, chunk->data + 16, 4);
+            std::memcpy(&aChunk->delay_num, chunk->data + 20, 2);
+            std::memcpy(&aChunk->delay_den, chunk->data + 22, 2);
+            std::memcpy(&aChunk->dispose_op, chunk->data + 24, 1);
+            std::memcpy(&aChunk->blend_op, chunk->data + 25, 1);
+            aChunk->width = OSL_SWAPDWORD(aChunk->width);
+            aChunk->height = OSL_SWAPDWORD(aChunk->height);
+            aChunk->x_offset = OSL_SWAPDWORD(aChunk->x_offset);
+            aChunk->y_offset = OSL_SWAPDWORD(aChunk->y_offset);
+            aChunk->delay_num = OSL_SWAPWORD(aChunk->delay_num);
+            aChunk->delay_den = OSL_SWAPWORD(aChunk->delay_den);
+            pBaseChunk = std::move(aChunk);
+        }
+        else if (sName == "fdAT")
+        {
+            std::unique_ptr<fdATChunk> aChunk = std::make_unique<fdATChunk>();
+            size_t nDataSize = chunk->size;
+            aChunk->frame_data.resize(nDataSize);
+            // Replace sequence number with the IDAT signature
+            sal_uInt32 nIDATSwapped = OSL_SWAPDWORD(PNG_IDAT_SIGNATURE);
+            std::memcpy(aChunk->frame_data.data(), &nIDATSwapped, 4);
+            // Skip sequence number when copying
+            std::memcpy(aChunk->frame_data.data() + 4, chunk->data + 4, nDataSize - 4);
+            pBaseChunk = std::move(aChunk);
+        }
+        else
+        {
+            // Unknown ancilliary chunk
+            return 0;
+        }
+
+        pBaseChunk->sequence_number = nSequenceNumber;
+        if (pBaseChunk->sequence_number < aAPNGInfo->maFrameData.size())
+        {
+            // Make sure chunks are ordered based on their sequence number because the
+            // png specification does not impose ordering restrictions on ancillary chunks
+            aAPNGInfo->maFrameData.insert(aAPNGInfo->maFrameData.begin()
+                                              + pBaseChunk->sequence_number,
+                                          std::move(pBaseChunk));
+        }
+        else
+        {
+            aAPNGInfo->maFrameData.push_back(std::move(pBaseChunk));
+        }
+    }
+    return 1;
+}
+
+/// Gets the important chunks (IHDR, PLTE etc.) to a stream so that a stream can be constructed for each APNG frame
+void getImportantChunks(SvStream& rInStream, SvStream& rOutStream, sal_uInt32 nWidth,
+                        sal_uInt32 nHeight)
+{
+    sal_uInt64 nPos = rInStream.Tell();
+    sal_uInt32 nChunkSize, nChunkType;
+    rInStream.SetEndian(SvStreamEndian::BIG);
+    rOutStream.SetEndian(SvStreamEndian::BIG);
+    rOutStream.WriteUInt64(PNG_SIGNATURE);
+    rOutStream.WriteUInt32(PNG_IHDR_SIZE);
+    rOutStream.WriteUInt32(PNG_IHDR_SIGNATURE);
+    rOutStream.WriteUInt32(nWidth);
+    rOutStream.WriteUInt32(nHeight);
+    rInStream.Seek(rOutStream.Tell());
+    sal_uInt32 nIHDRData1;
+    sal_uInt8 nIHDRData2;
+    rInStream.ReadUInt32(nIHDRData1);
+    rInStream.ReadUChar(nIHDRData2);
+    rOutStream.WriteUInt32(nIHDRData1);
+    rOutStream.WriteUChar(nIHDRData2);
+    rOutStream.SeekRel(-PNG_IHDR_SIZE - PNG_CRC_SIZE);
+    std::vector<uint8_t> aIHDRData(PNG_IHDR_SIZE + PNG_CRC_SIZE);
+    rOutStream.ReadBytes(aIHDRData.data(), aIHDRData.size());
+    rOutStream.WriteUInt32(rtl_crc32(0, aIHDRData.data(), aIHDRData.size()));
+    rInStream.Seek(PNG_SIGNATURE_SIZE + PNG_TYPE_SIZE + PNG_SIZE_SIZE + PNG_IHDR_SIZE
+                   + PNG_CRC_SIZE);
+    while (rInStream.good())
+    {
+        rInStream.ReadUInt32(nChunkSize);
+        rInStream.ReadUInt32(nChunkType);
+        bool bBreakOuter = false;
+        switch (nChunkType)
+        {
+            case PNG_ACTL_SIGNATURE:
+            case PNG_FCTL_SIGNATURE:
+            case PNG_FDAT_SIGNATURE:
+            {
+                // skip apng chunks
+                rInStream.SeekRel(nChunkSize + PNG_CRC_SIZE);
+                continue;
+            }
+            case PNG_IDAT_SIGNATURE:
+            {
+                // IDAT chunk hit, no more important png chunks
+                bBreakOuter = true;
+                break;
+            }
+            default:
+            {
+                // Seek back to start of chunk
+                rInStream.SeekRel(-PNG_TYPE_SIZE - PNG_SIZE_SIZE);
+                // Copy chunk to rOutStream
+                std::vector<uint8_t> aData(nChunkSize + PNG_TYPE_SIZE + PNG_SIZE_SIZE);
+                rInStream.ReadBytes(aData.data(),
+                                    PNG_TYPE_SIZE + PNG_SIZE_SIZE + nChunkSize + PNG_CRC_SIZE);
+                rOutStream.WriteBytes(aData.data(),
+                                      PNG_TYPE_SIZE + PNG_SIZE_SIZE + nChunkSize + PNG_CRC_SIZE);
+                break;
+            }
+        }
+        if (bBreakOuter)
+        {
+            break;
+        }
+    }
+    rInStream.Seek(nPos);
+}
+
+sal_uInt32 NumDenToTime(sal_uInt16 nNumerator, sal_uInt16 nDenominator)
+{
+    if (nDenominator == 0)
+        nDenominator = 100;
+    return (static_cast<double>(nNumerator) / nDenominator) * 100;
+}
+
+bool fcTLbeforeIDAT(SvStream& rStream)
+{
+    sal_uInt64 nPos = rStream.Tell();
+    comphelper::ScopeGuard aGuard([&rStream, nPos]() { rStream.Seek(nPos); });
+    // Skip PNG header and IHDR
+    rStream.SetEndian(SvStreamEndian::BIG);
+    rStream.Seek(PNG_SIGNATURE_SIZE + PNG_TYPE_SIZE + PNG_SIZE_SIZE + PNG_IHDR_SIZE + PNG_CRC_SIZE);
+    sal_uInt32 nChunkSize, nChunkType;
+    while (rStream.good())
+    {
+        rStream.ReadUInt32(nChunkSize);
+        rStream.ReadUInt32(nChunkType);
+        switch (nChunkType)
+        {
+            case PNG_FCTL_SIGNATURE:
+                return true;
+            case PNG_IDAT_SIGNATURE:
+                return false;
+            default:
+            {
+                rStream.SeekRel(nChunkSize + PNG_CRC_SIZE);
+                break;
+            }
+        }
+    }
+    return false;
+}
+
 #if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclobbered"
 #endif
-bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
+bool reader(SvStream& rStream, Graphic& rGraphic,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
             AlphaScopedWriteAccess* pAlphaAccess = nullptr)
@@ -82,6 +331,9 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (!pPng)
         return false;
+
+    APNGInfo aAPNGInfo;
+    png_set_read_user_chunk_fn(pPng, &aAPNGInfo, &handle_unknown_chunk);
 
     png_infop pInfo = png_create_info_struct(pPng);
     if (!pInfo)
@@ -95,6 +347,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     // All variables holding resources need to be declared here in order to be
     // properly cleaned up in case of an error, otherwise libpng's longjmp()
     // jumps over the destructor calls.
+    BitmapEx aBitmapEx;
     Bitmap aBitmap;
     AlphaMask aBitmapAlpha;
     Size prefSize;
@@ -116,14 +369,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
             pWriteAccessInstance.reset();
             pWriteAccessAlphaInstance.reset();
             if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
-                rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             else if (!aBitmap.IsEmpty())
-                rBitmapEx = BitmapEx(aBitmap);
-            if (!rBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+                aBitmapEx = BitmapEx(aBitmap);
+            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
             {
-                rBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                rBitmapEx.SetPrefSize(prefSize);
+                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmapEx.SetPrefSize(prefSize);
             }
+            rGraphic = aBitmapEx;
         }
         return false;
     }
@@ -232,14 +486,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
         if (bOnlyCreateBitmap)
         {
             if (!aBitmapAlpha.IsEmpty())
-                rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             else
-                rBitmapEx = BitmapEx(aBitmap);
+                aBitmapEx = BitmapEx(aBitmap);
             if (!prefSize.IsEmpty())
             {
-                rBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                rBitmapEx.SetPrefSize(prefSize);
+                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmapEx.SetPrefSize(prefSize);
             }
+            rGraphic = aBitmapEx;
             return true;
         }
 
@@ -408,14 +663,90 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
         pWriteAccess.reset();
         pWriteAccessAlpha.reset();
         if (!aBitmapAlpha.IsEmpty())
-            rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+            aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
         else
-            rBitmapEx = BitmapEx(aBitmap);
+            aBitmapEx = BitmapEx(aBitmap);
         if (!prefSize.IsEmpty())
         {
-            rBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-            rBitmapEx.SetPrefSize(prefSize);
+            aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            aBitmapEx.SetPrefSize(prefSize);
         }
+    }
+
+    if (aAPNGInfo.mbIsApng)
+    {
+        Animation aAnimation;
+        // We create new pngs for each frame and use the PngImageReader to create
+        // the BitmapExs for each frame
+        bool bFctlBeforeIDAT = fcTLbeforeIDAT(rStream);
+        size_t nSequenceIndex = static_cast<size_t>(bFctlBeforeIDAT);
+        sal_uInt32 nFrames
+            = aAPNGInfo.maACTLChunk.num_frames - static_cast<sal_uInt32>(bFctlBeforeIDAT);
+        {
+            fcTLChunk* aFctlChunk = dynamic_cast<fcTLChunk*>(aAPNGInfo.maFrameData[0].get());
+            if (!aFctlChunk)
+                return false;
+            Size aCanvasSize(aFctlChunk->width, aFctlChunk->height);
+            aAnimation.SetDisplaySizePixel(aCanvasSize);
+            aAnimation.SetLoopCount(aAPNGInfo.maACTLChunk.num_plays);
+            if (bFctlBeforeIDAT)
+            {
+                Point aFirstPoint(0, 0);
+                auto aDisposal = static_cast<Disposal>(aFctlChunk->dispose_op);
+                if (aDisposal == Disposal::Previous)
+                    aDisposal = Disposal::Back;
+                AnimationFrame aAnimationFrame(
+                    aBitmapEx, aFirstPoint, aCanvasSize,
+                    NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal);
+                aAnimation.Insert(aAnimationFrame);
+            }
+        }
+        for (sal_uInt32 i = 0; i < nFrames; i++)
+        {
+            // Guaranteed to be fcTL chunk here because it was checked earlier
+            fcTLChunk* aFctlChunk
+                = static_cast<fcTLChunk*>(aAPNGInfo.maFrameData[nSequenceIndex++].get());
+            Disposal aDisposal = static_cast<Disposal>(aFctlChunk->dispose_op);
+            if (i == 0 && aDisposal == Disposal::Back)
+                aDisposal = Disposal::Previous;
+            SvMemoryStream aFrameStream;
+            getImportantChunks(rStream, aFrameStream, aFctlChunk->width, aFctlChunk->height);
+            // A single frame can have multiple fdAT chunks
+            while (fdATChunk* pFdatChunk
+                   = dynamic_cast<fdATChunk*>(aAPNGInfo.maFrameData[nSequenceIndex].get()))
+            {
+                // Write fdAT chunks as IDAT chunks
+                auto nDataSize = pFdatChunk->frame_data.size();
+                aFrameStream.WriteUInt32(nDataSize - PNG_TYPE_SIZE);
+                aFrameStream.WriteBytes(pFdatChunk->frame_data.data(), nDataSize);
+                sal_uInt32 nCrc = rtl_crc32(0, pFdatChunk->frame_data.data(), nDataSize);
+                aFrameStream.WriteUInt32(nCrc);
+                nSequenceIndex++;
+                if (nSequenceIndex >= aAPNGInfo.maFrameData.size())
+                    break;
+            }
+            aFrameStream.WriteUInt32(PNG_IEND_SIZE);
+            aFrameStream.WriteUInt32(PNG_IEND_SIGNATURE);
+            aFrameStream.WriteUInt32(PNG_IEND_CRC);
+            Graphic aFrameGraphic;
+            aFrameStream.Seek(0);
+            bool bSuccess = reader(aFrameStream, aFrameGraphic);
+            if (!bSuccess)
+                return false;
+            BitmapEx aFrameBitmapEx = aFrameGraphic.GetBitmapEx();
+            Point aStartPoint(aFctlChunk->x_offset, aFctlChunk->y_offset);
+            Size aSize(aFctlChunk->width, aFctlChunk->height);
+            AnimationFrame aAnimationFrame(
+                aFrameBitmapEx, aStartPoint, aSize,
+                NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal);
+            aAnimation.Insert(aAnimationFrame);
+        }
+        rGraphic = aAnimation;
+        return true;
+    }
+    else
+    {
+        rGraphic = aBitmapEx;
     }
 
     return true;
@@ -470,8 +801,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
             return {};
         rStream.SeekRel(length);
         rStream.ReadUInt32(crc);
-        constexpr sal_uInt32 PNGCHUNK_IEND = 0x49454e44;
-        if (type == PNGCHUNK_IEND)
+        if (type == PNG_IEND_SIGNATURE)
             return {};
     }
 }
@@ -488,13 +818,21 @@ PngImageReader::PngImageReader(SvStream& rStream)
 {
 }
 
-bool PngImageReader::read(BitmapEx& rBitmapEx) { return reader(mrStream, rBitmapEx); }
+bool PngImageReader::read(BitmapEx& rBitmapEx)
+{
+    Graphic aGraphic;
+    bool bRet = reader(mrStream, aGraphic);
+    rBitmapEx = aGraphic.GetBitmapEx();
+    return bRet;
+}
+
+bool PngImageReader::read(Graphic& rGraphic) { return reader(mrStream, rGraphic); }
 
 BitmapEx PngImageReader::read()
 {
-    BitmapEx bitmap;
-    read(bitmap);
-    return bitmap;
+    Graphic aGraphic;
+    read(aGraphic);
+    return aGraphic.GetBitmapEx();
 }
 
 BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
@@ -512,14 +850,54 @@ bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFla
                BitmapScopedWriteAccess* pAccess, AlphaScopedWriteAccess* pAlphaAccess)
 {
     // Creating empty bitmaps should be practically a no-op, and thus thread-safe.
-    BitmapEx bitmap;
-    if (reader(rInputStream, bitmap, nImportFlags, pAccess, pAlphaAccess))
+    Graphic aGraphic;
+    if (reader(rInputStream, aGraphic, nImportFlags, pAccess, pAlphaAccess))
     {
         if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
-            rGraphic = bitmap;
+            rGraphic = aGraphic;
         return true;
     }
     return false;
+}
+
+bool PngImageReader::isAPng(SvStream& rStream)
+{
+    auto nStmPos = rStream.Tell();
+    comphelper::ScopeGuard aGuard([&rStream, &nStmPos] {
+        rStream.Seek(nStmPos);
+        rStream.SetEndian(SvStreamEndian::LITTLE);
+    });
+    if (!isPng(rStream))
+        return false;
+    rStream.SetEndian(SvStreamEndian::BIG);
+    sal_uInt32 nChunkSize, nChunkType;
+    rStream.ReadUInt32(nChunkSize);
+    rStream.ReadUInt32(nChunkType);
+    if (nChunkType != PNG_IHDR_SIGNATURE)
+        return false;
+    rStream.SeekRel(nChunkSize);
+    // Skip IHDR CRC
+    rStream.SeekRel(PNG_CRC_SIZE);
+    // Look for acTL chunk that exists before the first IDAT chunk
+    while (true)
+    {
+        rStream.ReadUInt32(nChunkSize);
+        if (!rStream.good())
+            return false;
+        rStream.ReadUInt32(nChunkType);
+        if (!rStream.good())
+            return false;
+        // Check if it's an IDAT chunk -> regular PNG
+        if (nChunkType == PNG_IDAT_SIGNATURE)
+            return false;
+        else if (nChunkType == PNG_ACTL_SIGNATURE)
+            return true;
+        else
+        {
+            rStream.SeekRel(nChunkSize);
+            rStream.SeekRel(PNG_CRC_SIZE);
+        }
+    }
 }
 
 } // namespace vcl

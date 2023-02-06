@@ -170,6 +170,7 @@ public:
     }
 
     void testPng();
+    void testApng();
     void testPngSuite();
     void testMsGifInPng();
     void testPngRoundtrip8BitGrey();
@@ -182,6 +183,7 @@ public:
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
+    CPPUNIT_TEST(testApng);
     CPPUNIT_TEST(testPngSuite);
     CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST(testPngRoundtrip8BitGrey);
@@ -368,6 +370,24 @@ void PngFilterTest::testPng()
             }
         }
     }
+}
+
+void PngFilterTest::testApng()
+{
+    SvFileStream aFileStream(getFullUrl(u"apng_simple.apng"), StreamMode::READ);
+    vcl::PngImageReader aPngReader(aFileStream);
+    Graphic aGraphic;
+    bool bSuccess = aPngReader.read(aGraphic);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT(aGraphic.IsAnimated());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aGraphic.GetAnimation().GetAnimationFrames().size());
+
+    auto aFrame1 = aGraphic.GetAnimation().GetAnimationFrames()[0]->maBitmapEx;
+    auto aFrame2 = aGraphic.GetAnimation().GetAnimationFrames()[1]->maBitmapEx;
+
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2.GetPixelColor(0, 0));
 }
 
 void PngFilterTest::testPngSuite()

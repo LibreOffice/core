@@ -26,6 +26,7 @@ namespace com::sun::star::task
 class XStatusIndicator;
 }
 
+class Graphic;
 class BitmapEx;
 class SvStream;
 
@@ -42,12 +43,15 @@ public:
     // Returns true if image was successfully read without errors.
     // A usable bitmap may be returned even if there were errors (e.g. incomplete image).
     bool read(BitmapEx& rBitmap);
+    bool read(Graphic& rGraphic);
     // Returns a bitmap without indicating if there were errors.
     BitmapEx read();
 
     // Returns the contents of the msOG chunk (containing a Gif image), if it exists.
     // Does not change position in the stream.
     static BinaryDataContainer getMicrosoftGifChunk(SvStream& rStream);
+
+    static bool isAPng(SvStream& rStream);
 };
 
 } // namespace vcl

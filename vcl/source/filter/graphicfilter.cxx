@@ -944,11 +944,12 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
     }
 
     // PNG has no GIF chunk
+    Graphic aGraphic;
     vcl::PngImageReader aPNGReader(rStream);
-    BitmapEx aBitmapEx(aPNGReader.read());
-    if (!aBitmapEx.IsEmpty())
+    aPNGReader.read(aGraphic);
+    if (!aGraphic.GetBitmapEx().IsEmpty())
     {
-        rGraphic = aBitmapEx;
+        rGraphic = aGraphic;
         rLinkType = GfxLinkType::NativePng;
     }
     else
