@@ -72,14 +72,6 @@ public:
 
     void      SetCharacterStyle(const OUString& rStyle);
     OUString  GetCharacterStyle() const;
-
-    virtual short run() override
-    {
-        int nRet = GenericDialogController::run();
-        if (nRet == RET_OK)
-            Apply();
-        return nRet;
-    }
 };
 
 }
@@ -319,6 +311,7 @@ IMPL_LINK_NOARG(SwCaptionDialog, OptionHdl, weld::Button&, void)
 
     GenericDialogController::runAsync(pDlg, [pDlg, this](sal_Int32 nResult){
         if (nResult == RET_OK) {
+            pDlg->Apply();
             m_bCopyAttributes = pDlg->IsApplyBorderAndShadow();
             m_sCharacterStyle = pDlg->GetCharacterStyle();
             //#i61007# order of captions
