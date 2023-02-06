@@ -2918,11 +2918,18 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
     }
     SwLineEntrySet::iterator aIter = pLineSet->begin();
 
+    bool bWordTableCell = false;
+    SwViewShell* pShell = mrTabFrame.getRootFrame()->GetCurrShell();
+    if (pShell)
+    {
+        const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
+        bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+    }
     while ( aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
     {
         const SwLineEntry& rOld = *aIter;
 
-        if (rOld.mnLimitedEndPos || rOld.mbOuter != rNew.mbOuter)
+        if (rOld.mnLimitedEndPos || (bWordTableCell && (rOld.mbOuter != rNew.mbOuter)))
         {
             // Don't merge with this line entry as it ends sooner than mnEndPos.
             ++aIter;
