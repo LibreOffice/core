@@ -549,6 +549,7 @@ public:
     SwLayoutFrame *GetPrevLeaf   ();
     SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote );
     SwLayoutFrame *GetPrevSctLeaf();
+    SwLayoutFrame *GetPrevFlyLeaf();
     SwLayoutFrame *GetPrevCellLeaf();
     const SwLayoutFrame *GetLeaf ( MakePageType eMakePage, bool bFwd,
                                  const SwFrame *pAnch ) const;

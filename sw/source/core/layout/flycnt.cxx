@@ -1586,4 +1586,25 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     return pLayLeaf;
 }
 
+const SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede() const
+{
+    return static_cast<const SwFlyAtContentFrame*>(SwFlowFrame::GetPrecede());
+}
+
+SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede()
+{
+    return static_cast<SwFlyAtContentFrame*>(SwFlowFrame::GetPrecede());
+}
+
+SwLayoutFrame* SwFrame::GetPrevFlyLeaf()
+{
+    auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());
+    if (!pFly->IsFlySplitAllowed())
+    {
+        return nullptr;
+    }
+
+    return pFly->GetPrecede();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

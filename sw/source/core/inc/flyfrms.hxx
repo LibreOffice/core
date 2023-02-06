@@ -195,6 +195,8 @@ public:
     virtual bool IsFormatPossible() const override;
     const SwFlyAtContentFrame* GetFollow() const;
     SwFlyAtContentFrame* GetFollow();
+    const SwFlyAtContentFrame* GetPrecede() const;
+    SwFlyAtContentFrame* GetPrecede();
 };
 
 // Flys that are bound to a character in Content
