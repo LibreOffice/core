@@ -249,112 +249,112 @@ class formatParagraph(UITestCase):
    def test_format_paragraph_tab_tabs(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xDecimal = xDialog.getChild("radiobuttonBTN_TABTYPE_DECIMAL")
-                xDecimalTxt = xDialog.getChild("entryED_TABTYPE_DECCHAR")
-                xFill = xDialog.getChild("radiobuttonBTN_FILLCHAR_OTHER")
-                xFillTxt = xDialog.getChild("entryED_FILLCHAR_OTHER")
-                xNewButtn = xDialog.getChild("buttonBTN_NEW")
-                xED_TABPOS = xDialog.getChild("ED_TABPOS")
+                    xDecimal = xDialog.getChild("radiobuttonBTN_TABTYPE_DECIMAL")
+                    xDecimalTxt = xDialog.getChild("entryED_TABTYPE_DECCHAR")
+                    xFill = xDialog.getChild("radiobuttonBTN_FILLCHAR_OTHER")
+                    xFillTxt = xDialog.getChild("entryED_FILLCHAR_OTHER")
+                    xNewButtn = xDialog.getChild("buttonBTN_NEW")
+                    xED_TABPOS = xDialog.getChild("ED_TABPOS")
 
-                xDecimal.executeAction("CLICK", tuple())
-                xDecimalTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xDecimalTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"i"}))
-                xFill.executeAction("CLICK", tuple())
-                xFillTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xFillTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"p"}))
-                xED_TABPOS.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xED_TABPOS.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-                xNewButtn.executeAction("CLICK", tuple())
-
-
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
-
-                xDecimal = xDialog.getChild("radiobuttonBTN_TABTYPE_DECIMAL")
-                xDecimalTxt = xDialog.getChild("entryED_TABTYPE_DECCHAR")
-                xFill = xDialog.getChild("radiobuttonBTN_FILLCHAR_OTHER")
-                xFillTxt = xDialog.getChild("entryED_FILLCHAR_OTHER")
-                xNewButtn = xDialog.getChild("buttonBTN_NEW")
-                xED_TABPOS = xDialog.getChild("ED_TABPOS")
-
-                self.assertEqual(get_state_as_dict(xDecimal)["Checked"], "true")
-                self.assertEqual(get_state_as_dict(xDecimalTxt)["Text"], "i")
-                self.assertEqual(get_state_as_dict(xFill)["Checked"], "true")
-                self.assertEqual(get_state_as_dict(xFillTxt)["Text"], "p")
-                self.assertEqual(get_state_as_dict(xED_TABPOS)["Text"], "1.00 cm")
+                    xDecimal.executeAction("CLICK", tuple())
+                    xDecimalTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xDecimalTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"i"}))
+                    xFill.executeAction("CLICK", tuple())
+                    xFillTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xFillTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"p"}))
+                    xED_TABPOS.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xED_TABPOS.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                    xNewButtn.executeAction("CLICK", tuple())
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xCentered = xDialog.getChild("radiobuttonBTN_TABTYPE_CENTER")
-                xUnderscore = xDialog.getChild("radiobuttonBTN_FILLCHAR_UNDERSCORE")
-                xNewButtn = xDialog.getChild("buttonBTN_NEW")
+                    xDecimal = xDialog.getChild("radiobuttonBTN_TABTYPE_DECIMAL")
+                    xDecimalTxt = xDialog.getChild("entryED_TABTYPE_DECCHAR")
+                    xFill = xDialog.getChild("radiobuttonBTN_FILLCHAR_OTHER")
+                    xFillTxt = xDialog.getChild("entryED_FILLCHAR_OTHER")
+                    xNewButtn = xDialog.getChild("buttonBTN_NEW")
+                    xED_TABPOS = xDialog.getChild("ED_TABPOS")
 
-                xCentered.executeAction("CLICK", tuple())
-                xUnderscore.executeAction("CLICK", tuple())
-                xNewButtn.executeAction("CLICK", tuple())
-
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
-
-                xCentered = xDialog.getChild("radiobuttonBTN_TABTYPE_CENTER")
-                xUnderscore = xDialog.getChild("radiobuttonBTN_FILLCHAR_UNDERSCORE")
-                self.assertEqual(get_state_as_dict(xCentered)["Checked"], "true")
-                self.assertEqual(get_state_as_dict(xUnderscore)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xDecimal)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xDecimalTxt)["Text"], "i")
+                    self.assertEqual(get_state_as_dict(xFill)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xFillTxt)["Text"], "p")
+                    self.assertEqual(get_state_as_dict(xED_TABPOS)["Text"], "1.00 cm")
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xRight = xDialog.getChild("radiobuttonST_RIGHTTAB_ASIAN")
-                xDashLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_DASHLINE")
-                xNewButtn = xDialog.getChild("buttonBTN_NEW")
+                    xCentered = xDialog.getChild("radiobuttonBTN_TABTYPE_CENTER")
+                    xUnderscore = xDialog.getChild("radiobuttonBTN_FILLCHAR_UNDERSCORE")
+                    xNewButtn = xDialog.getChild("buttonBTN_NEW")
 
-                xRight.executeAction("CLICK", tuple())
-                xDashLine.executeAction("CLICK", tuple())
-                xNewButtn.executeAction("CLICK", tuple())
+                    xCentered.executeAction("CLICK", tuple())
+                    xUnderscore.executeAction("CLICK", tuple())
+                    xNewButtn.executeAction("CLICK", tuple())
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xRight = xDialog.getChild("radiobuttonST_RIGHTTAB_ASIAN")
-                xDashLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_DASHLINE")
-                self.assertEqual(get_state_as_dict(xRight)["Checked"], "true")
-                self.assertEqual(get_state_as_dict(xDashLine)["Checked"], "true")
+                    xCentered = xDialog.getChild("radiobuttonBTN_TABTYPE_CENTER")
+                    xUnderscore = xDialog.getChild("radiobuttonBTN_FILLCHAR_UNDERSCORE")
+                    self.assertEqual(get_state_as_dict(xCentered)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xUnderscore)["Checked"], "true")
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xLeft = xDialog.getChild("radiobuttonST_LEFTTAB_ASIAN")
-                xPointsLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_POINTS")
-                xNewButtn = xDialog.getChild("buttonBTN_NEW")
+                    xRight = xDialog.getChild("radiobuttonST_RIGHTTAB_ASIAN")
+                    xDashLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_DASHLINE")
+                    xNewButtn = xDialog.getChild("buttonBTN_NEW")
 
-                xLeft.executeAction("CLICK", tuple())
-                xPointsLine.executeAction("CLICK", tuple())
-                xNewButtn.executeAction("CLICK", tuple())
+                    xRight.executeAction("CLICK", tuple())
+                    xDashLine.executeAction("CLICK", tuple())
+                    xNewButtn.executeAction("CLICK", tuple())
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
 
-                xLeft = xDialog.getChild("radiobuttonST_LEFTTAB_ASIAN")
-                xPointsLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_POINTS")
-                self.assertEqual(get_state_as_dict(xLeft)["Checked"], "true")
-                self.assertEqual(get_state_as_dict(xPointsLine)["Checked"], "true")
+                    xRight = xDialog.getChild("radiobuttonST_RIGHTTAB_ASIAN")
+                    xDashLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_DASHLINE")
+                    self.assertEqual(get_state_as_dict(xRight)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xDashLine)["Checked"], "true")
+
+
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
+
+                    xLeft = xDialog.getChild("radiobuttonST_LEFTTAB_ASIAN")
+                    xPointsLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_POINTS")
+                    xNewButtn = xDialog.getChild("buttonBTN_NEW")
+
+                    xLeft.executeAction("CLICK", tuple())
+                    xPointsLine.executeAction("CLICK", tuple())
+                    xNewButtn.executeAction("CLICK", tuple())
+
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")
+
+                    xLeft = xDialog.getChild("radiobuttonST_LEFTTAB_ASIAN")
+                    xPointsLine = xDialog.getChild("radiobuttonBTN_FILLCHAR_POINTS")
+                    self.assertEqual(get_state_as_dict(xLeft)["Checked"], "true")
+                    self.assertEqual(get_state_as_dict(xPointsLine)["Checked"], "true")
 
 
 
@@ -400,48 +400,48 @@ class formatParagraph(UITestCase):
    def test_format_paragraph_tab_borders(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "7")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "7")
 
-                xwidth = xDialog.getChild("linewidthmf")
-                xSync = xDialog.getChild("sync")
-                xLeft = xDialog.getChild("leftmf")
-                xRight = xDialog.getChild("rightmf")
-                xTop = xDialog.getChild("topmf")
-                xBottom = xDialog.getChild("bottommf")
-                xMerge = xDialog.getChild("mergewithnext")
+                    xwidth = xDialog.getChild("linewidthmf")
+                    xSync = xDialog.getChild("sync")
+                    xLeft = xDialog.getChild("leftmf")
+                    xRight = xDialog.getChild("rightmf")
+                    xTop = xDialog.getChild("topmf")
+                    xBottom = xDialog.getChild("bottommf")
+                    xMerge = xDialog.getChild("mergewithnext")
 
-                xwidth.executeAction("UP", tuple())
-                xSync.executeAction("CLICK", tuple())
-                xLeft.executeAction("UP", tuple())
-                xLeft.executeAction("UP", tuple())
-                xRight.executeAction("UP", tuple())
-                xTop.executeAction("UP", tuple())
-                xBottom.executeAction("UP", tuple())
-                xMerge.executeAction("CLICK", tuple())
+                    xwidth.executeAction("UP", tuple())
+                    xSync.executeAction("CLICK", tuple())
+                    xLeft.executeAction("UP", tuple())
+                    xLeft.executeAction("UP", tuple())
+                    xRight.executeAction("UP", tuple())
+                    xTop.executeAction("UP", tuple())
+                    xBottom.executeAction("UP", tuple())
+                    xMerge.executeAction("CLICK", tuple())
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "7")
+                with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "7")
 
-                xwidth = xDialog.getChild("linewidthmf")
-                xSync = xDialog.getChild("sync")
-                xLeft = xDialog.getChild("leftmf")
-                xRight = xDialog.getChild("rightmf")
-                xTop = xDialog.getChild("topmf")
-                xBottom = xDialog.getChild("bottommf")
-                xMerge = xDialog.getChild("mergewithnext")
+                    xwidth = xDialog.getChild("linewidthmf")
+                    xSync = xDialog.getChild("sync")
+                    xLeft = xDialog.getChild("leftmf")
+                    xRight = xDialog.getChild("rightmf")
+                    xTop = xDialog.getChild("topmf")
+                    xBottom = xDialog.getChild("bottommf")
+                    xMerge = xDialog.getChild("mergewithnext")
 
-                self.assertEqual(get_state_as_dict(xSync)["Selected"], "false")
-                self.assertEqual(get_state_as_dict(xMerge)["Selected"], "false")
-                self.assertEqual(get_state_as_dict(xLeft)["Text"], "0.20 cm")
-                self.assertEqual(get_state_as_dict(xRight)["Text"], "0.10 cm")
-                self.assertEqual(get_state_as_dict(xTop)["Text"], "0.10 cm")
-                self.assertEqual(get_state_as_dict(xBottom)["Text"], "0.10 cm")
+                    self.assertEqual(get_state_as_dict(xSync)["Selected"], "false")
+                    self.assertEqual(get_state_as_dict(xMerge)["Selected"], "false")
+                    self.assertEqual(get_state_as_dict(xLeft)["Text"], "0.20 cm")
+                    self.assertEqual(get_state_as_dict(xRight)["Text"], "0.10 cm")
+                    self.assertEqual(get_state_as_dict(xTop)["Text"], "0.10 cm")
+                    self.assertEqual(get_state_as_dict(xBottom)["Text"], "0.10 cm")
 
 
    def test_format_paragraph_area(self):

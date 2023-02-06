@@ -6,6 +6,7 @@
 #
 
 from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
+from contextlib import contextmanager
 import org.libreoffice.unotest
 import pathlib
 
@@ -28,7 +29,16 @@ def select_text(ui_object, from_pos, to):
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
+@contextmanager
 def change_measurement_unit(UITestCase, unit):
+    try:
+        launch_option_dialog(UITestCase, unit)
+        yield
+    finally:
+        # change to default value
+        launch_option_dialog(UITestCase, 'Inch')
+
+def launch_option_dialog(UITestCase, unit):
     with UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
         xPages = xDialogOpt.getChild("pages")
         xAppEntry = xPages.getChild('3')

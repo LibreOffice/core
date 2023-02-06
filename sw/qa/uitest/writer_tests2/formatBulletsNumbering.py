@@ -20,34 +20,34 @@ class formatBulletsNumbering(UITestCase):
    def test_bullets_and_numbering_dialog_tab_position(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            change_measurement_unit(self, "Millimeter")
+            with change_measurement_unit(self, "Millimeter"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xalignedatmf = xDialog.getChild("alignedatmf")
-                xnum2alignlb = xDialog.getChild("num2alignlb")
-                xatmf = xDialog.getChild("atmf")
-                xindentatmf = xDialog.getChild("indentatmf")
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xalignedatmf = xDialog.getChild("alignedatmf")
+                    xnum2alignlb = xDialog.getChild("num2alignlb")
+                    xatmf = xDialog.getChild("atmf")
+                    xindentatmf = xDialog.getChild("indentatmf")
 
-                xalignedatmf.executeAction("UP", tuple())
-                select_by_text(xnum2alignlb, "Centered")
-                xatmf.executeAction("UP", tuple())
-                xindentatmf.executeAction("UP", tuple())
+                    xalignedatmf.executeAction("UP", tuple())
+                    select_by_text(xnum2alignlb, "Centered")
+                    xatmf.executeAction("UP", tuple())
+                    xindentatmf.executeAction("UP", tuple())
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xalignedatmf = xDialog.getChild("alignedatmf")
-                xnum2alignlb = xDialog.getChild("num2alignlb")
-                xatmf = xDialog.getChild("atmf")
-                xindentatmf = xDialog.getChild("indentatmf")
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xalignedatmf = xDialog.getChild("alignedatmf")
+                    xnum2alignlb = xDialog.getChild("num2alignlb")
+                    xatmf = xDialog.getChild("atmf")
+                    xindentatmf = xDialog.getChild("indentatmf")
 
-                self.assertEqual(get_state_as_dict(xalignedatmf)["Text"], "6.5 mm")
-                self.assertEqual(get_state_as_dict(xnum2alignlb)["SelectEntryText"], "Centered")
-                self.assertEqual(get_state_as_dict(xatmf)["Text"], "12.8 mm")
-                self.assertEqual(get_state_as_dict(xindentatmf)["Text"], "12.8 mm")
+                    self.assertEqual(get_state_as_dict(xalignedatmf)["Text"], "6.5 mm")
+                    self.assertEqual(get_state_as_dict(xnum2alignlb)["SelectEntryText"], "Centered")
+                    self.assertEqual(get_state_as_dict(xatmf)["Text"], "12.8 mm")
+                    self.assertEqual(get_state_as_dict(xindentatmf)["Text"], "12.8 mm")
 
 
 
@@ -133,62 +133,62 @@ class formatBulletsNumbering(UITestCase):
 
    def test_bullets_and_numbering_tab_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            change_measurement_unit(self, "Millimeter")
+            with change_measurement_unit(self, "Millimeter"):
+                xWriterDoc = self.xUITest.getTopFocusWindow()
+                xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
 
 
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"})) #TAB to move indent right
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue2 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
-                self.assertEqual(indentValue < indentValue2 , True)
+                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"})) #TAB to move indent right
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue2 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                    self.assertEqual(indentValue < indentValue2 , True)
 
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue3 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
-                self.assertEqual(indentValue == indentValue3 , True)
+                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue3 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                    self.assertEqual(indentValue == indentValue3 , True)
 
 
    def test_bullets_and_numbering_button_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            change_measurement_unit(self, "Millimeter")
+            with change_measurement_unit(self, "Millimeter"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
 
 
-            self.xUITest.executeCommand(".uno:DecrementSubLevels")
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue2 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
-                self.assertEqual(indentValue < indentValue2 , True)
+                self.xUITest.executeCommand(".uno:DecrementSubLevels")
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue2 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                    self.assertEqual(indentValue < indentValue2 , True)
 
-            self.xUITest.executeCommand(".uno:IncrementLevel")
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xindentatmf = xDialog.getChild("indentatmf")
-                indentValue3 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
-                self.assertEqual(indentValue == indentValue3 , True)
+                self.xUITest.executeCommand(".uno:IncrementLevel")
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
+                    xindentatmf = xDialog.getChild("indentatmf")
+                    indentValue3 = get_state_as_dict(xindentatmf)["Text"][0:len(get_state_as_dict(xindentatmf)["Text"])-3]
+                    self.assertEqual(indentValue == indentValue3 , True)
 
 
    def test_bullets_and_numbering_selection(self):

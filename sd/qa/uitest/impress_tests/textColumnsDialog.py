@@ -21,32 +21,31 @@ class textColumnsDialog(UITestCase):
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            change_measurement_unit(self, 'Centimeter')
+            with change_measurement_unit(self, 'Centimeter'):
+                xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            xImpressDoc = self.xUITest.getTopFocusWindow()
+                xEditWin = xImpressDoc.getChild("impress_win")
+                xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+                self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
-            xEditWin = xImpressDoc.getChild("impress_win")
-            xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
-            self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+                # Test defaults and set some values
+                with self.ui_test.execute_dialog_through_command(".uno:TextAttributes") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "2")
+                    colNumber = xDialog.getChild('FLD_COL_NUMBER')
+                    colSpacing = xDialog.getChild('MTR_FLD_COL_SPACING')
+                    self.assertEqual('1', get_state_as_dict(colNumber)['Text'])
+                    self.assertEqual('0.00 cm', get_state_as_dict(colSpacing)['Text'])
+                    colNumber.executeAction("SET", mkPropertyValues({"TEXT": "3"}))
+                    colSpacing.executeAction("SET", mkPropertyValues({"TEXT": "1.5"}))
 
-            # Test defaults and set some values
-            with self.ui_test.execute_dialog_through_command(".uno:TextAttributes") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "2")
-                colNumber = xDialog.getChild('FLD_COL_NUMBER')
-                colSpacing = xDialog.getChild('MTR_FLD_COL_SPACING')
-                self.assertEqual('1', get_state_as_dict(colNumber)['Text'])
-                self.assertEqual('0.00 cm', get_state_as_dict(colSpacing)['Text'])
-                colNumber.executeAction("SET", mkPropertyValues({"TEXT": "3"}))
-                colSpacing.executeAction("SET", mkPropertyValues({"TEXT": "1.5"}))
-
-            # Test that settings persist
-            with self.ui_test.execute_dialog_through_command(".uno:TextAttributes") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "2")
-                colNumber = xDialog.getChild('FLD_COL_NUMBER')
-                colSpacing = xDialog.getChild('MTR_FLD_COL_SPACING')
-                self.assertEqual('3', get_state_as_dict(colNumber)['Text'])
-                self.assertEqual('1.50 cm', get_state_as_dict(colSpacing)['Text'])
+                # Test that settings persist
+                with self.ui_test.execute_dialog_through_command(".uno:TextAttributes") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "2")
+                    colNumber = xDialog.getChild('FLD_COL_NUMBER')
+                    colSpacing = xDialog.getChild('MTR_FLD_COL_SPACING')
+                    self.assertEqual('3', get_state_as_dict(colNumber)['Text'])
+                    self.assertEqual('1.50 cm', get_state_as_dict(colSpacing)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
