@@ -87,6 +87,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xIconSizeLB;
     std::unique_ptr<weld::ComboBox> m_xSidebarIconSizeLB;
     std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSizeLB;
+    std::unique_ptr<weld::Widget> m_xDarkModeFrame;
+    std::unique_ptr<weld::ComboBox> m_xAppearanceStyleLB;
     std::unique_ptr<weld::ComboBox> m_xIconStyleLB;
 
     std::unique_ptr<weld::CheckButton> m_xFontAntiAliasing;
