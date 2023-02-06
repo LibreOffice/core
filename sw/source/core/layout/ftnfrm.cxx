@@ -2420,7 +2420,8 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
     if ( !bLock && bUnlockLastFootnoteFrame &&
          !pLastFootnoteFrame->GetLower() &&
          !pLastFootnoteFrame->IsColLocked() &&
-         !pLastFootnoteFrame->IsBackMoveLocked() )
+         !pLastFootnoteFrame->IsBackMoveLocked() &&
+         !pLastFootnoteFrame->IsDeleteForbidden() )
     {
         pLastFootnoteFrame->Cut();
         SwFrame::DestroyFrame(pLastFootnoteFrame);
