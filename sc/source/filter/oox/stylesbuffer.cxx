@@ -1972,38 +1972,64 @@ void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
     // as xfId attribute is always created during export to .xlsx
     // Not setting "0" value is causing wrong .xlsx import by LibreOffice,
     // for spreadsheets created by external applications (ex. SAP BI).
+    bool bApplyDefault;
     if ( maModel.mbCellXf )
     {
-        maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, 0 );
+        const sal_Int32 xfId = rAttribs.getInteger( XML_xfId, -1 );
+        // No xfId => no cellStyleXfs that could overwrite this on change, thus
+        // has to be applied.
+        bApplyDefault = (xfId < 0);
+        maModel.mnStyleXfId = std::max<sal_Int32>(0, xfId);
     }
     else
     {
         maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
+        bApplyDefault = true;
     }
     maModel.mnFontId = rAttribs.getInteger( XML_fontId, -1 );
     maModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
     maModel.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
     maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
 
+    // Default value of the apply*** attributes is dependent on context:
+    // true in cellStyleXfs element, false in cellXfs element...
+    // But it's not as easy as it sounds, for docs see
+    // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/59922f8b-0edc-4e93-a822-9f22254aec46
+    // and apparently in reality cellStyleXfs xf and cellXfs xf are not merged
+    // at all, see
+    // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/bcf98682-e8d3-44b8-b8f8-0bf696878ba1
+    // "b. The standard states that both the cell style xf records and cell xf
+    // records must be read to understand the full set of formatting applied to
+    // a cell."
+    // "In Office, only the cell xf record defines the formatting applied to a cell."
 
-    maModel.mbAlignUsed = maModel.mbCellXf || rAttribs.getBool(XML_applyAlignment, true);
-    maModel.mbProtUsed = maModel.mbCellXf || rAttribs.getBool(XML_applyProtection, true);
-    /*  Default value of the apply*** attributes is dependent on context:
-        true in cellStyleXfs element, false in cellXfs element... */
-    maModel.mbFontUsed   = rAttribs.getBool( XML_applyFont,         !maModel.mbCellXf );
-    maModel.mbNumFmtUsed = rAttribs.getBool( XML_applyNumberFormat, !maModel.mbCellXf );
-    maModel.mbBorderUsed = rAttribs.getBool( XML_applyBorder,       !maModel.mbCellXf );
-    maModel.mbAreaUsed   = rAttribs.getBool( XML_applyFill,         !maModel.mbCellXf );
+    // So for reading documents this is all crap and effectively xf records
+    // apply their explicit properties by default unless denied.
+    // bApplyDefault==false only for cellXf xf with xfId.
+
+    // For cellXf xf, mbAlignUsed and mbProtUsed will be set when actually
+    // importing the element.
+    maModel.mbAlignUsed  = rAttribs.getBool( XML_applyAlignment,    bApplyDefault);
+    maModel.mbProtUsed   = rAttribs.getBool( XML_applyProtection,   bApplyDefault);
+
+    maModel.mbFontUsed   = rAttribs.getBool( XML_applyFont,         bApplyDefault || maModel.mnFontId > 0);
+    maModel.mbNumFmtUsed = rAttribs.getBool( XML_applyNumberFormat, bApplyDefault || maModel.mnNumFmtId > 0);
+    maModel.mbBorderUsed = rAttribs.getBool( XML_applyBorder,       bApplyDefault || maModel.mnBorderId > 0);
+    maModel.mbAreaUsed   = rAttribs.getBool( XML_applyFill,         bApplyDefault || maModel.mnFillId > 0);
 }
 
 void Xf::importAlignment( const AttributeList& rAttribs )
 {
     maAlignment.importAlignment( rAttribs );
+    if (maModel.mbCellXf)
+        maModel.mbAlignUsed = true;
 }
 
 void Xf::importProtection( const AttributeList& rAttribs )
 {
     maProtection.importProtection( rAttribs );
+    if (maModel.mbCellXf)
+        maModel.mbProtUsed = true;
 }
 
 void Xf::importXf( SequenceInputStream& rStrm, bool bCellXf )
