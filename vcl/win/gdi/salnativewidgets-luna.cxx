@@ -402,16 +402,30 @@ bool UseDarkMode()
     if (!bOSSupportsDarkMode)
         return false;
 
-    HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-    if (!hUxthemeLib)
-        return false;
+    bool bRet(false);
+    switch (Application::GetSettings().GetMiscSettings().GetDarkMode())
+    {
+        case 0: // auto
+        default:
+        {
+            HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+            if (!hUxthemeLib)
+                return false;
 
-    bool bRet = false;
-    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
-    if (auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132))))
-        bRet = ShouldAppsUseDarkMode();
+            typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+            if (auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132))))
+                bRet = ShouldAppsUseDarkMode();
 
-    FreeLibrary(hUxthemeLib);
+            FreeLibrary(hUxthemeLib);
+            break;
+        }
+        case 1: // light
+            bRet = false;
+            break;
+        case 2: // dark
+            bRet = true;
+            break;
+    }
 
     return bRet;
 }
@@ -421,7 +435,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlPart nPart,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            OUString const & aCaption )
+                            OUString const & aCaption,
+                            bool bUseDarkMode )
 {
     // a listbox dropdown is actually a combobox dropdown
     if( nType == ControlType::Listbox )
@@ -767,7 +782,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         // tabpane in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing a frame directly
-        if (UseDarkMode())
+        if (bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -783,7 +798,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::TabBody )
     {
         // tabbody in main window gets drawn in white in "darkmode", so bodge this here
-        if (UseDarkMode())
+        if (bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -843,7 +858,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
         // tabitem in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing with a button instead
-        if (UseDarkMode())
+        if (bUseDarkMode)
         {
             Color aColor;
             if (iState == TILES_SELECTED)
@@ -911,7 +926,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
 
             // toolbar in main window gets drawn in white in "darkmode", so bodge this here
-            if (UseDarkMode())
+            if (bUseDarkMode)
             {
                 Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
                 ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -943,7 +958,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
 
                 // menubar in main window gets drawn in white in "darkmode", so bodge this here
-                if (UseDarkMode())
+                if (bUseDarkMode)
                 {
                     Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
                     ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -1302,7 +1317,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         // set default text alignment
         int ta = SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
 
-        bOk = ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr);
+        bOk = ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode);
 
         // restore alignment
         SetTextAlign(getHDC(), ta);
@@ -1318,8 +1333,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         SetTextAlign(aWhiteDC->getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
         aWhiteDC->fill(RGB(0xff, 0xff, 0xff));
 
-        if (ImplDrawNativeControl(aBlackDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
-            ImplDrawNativeControl(aWhiteDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
+        if (ImplDrawNativeControl(aBlackDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode) &&
+            ImplDrawNativeControl(aWhiteDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode))
         {
             bOk = pImpl->RenderAndCacheNativeControl(*aWhiteDC, *aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
         }

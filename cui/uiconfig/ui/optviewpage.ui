@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -18,7 +18,7 @@
     <property name="border-width">6</property>
     <property name="column-spacing">24</property>
     <child>
-      <!-- n-columns=1 n-rows=4 -->
+      <!-- n-columns=1 n-rows=5 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -126,7 +126,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
@@ -249,7 +249,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -390,7 +390,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -466,6 +466,76 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="optviewpage|label1">Icon Theme</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="darkmode">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid" id="refgrid2">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkComboBoxText" id="appearance">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="optviewpage|appearance">Automatic</item>
+                      <item translatable="yes" context="optviewpage|appearance">Light</item>
+                      <item translatable="yes" context="optviewpage|appearance">Dark</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="appearance-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | iconstyle">Specifies the icon style for icons in toolbars and dialogs.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optviewpage|label7">Mode:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">iconstyle</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label16">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="optviewpage|label16">Appearance</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -757,26 +827,28 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
-      <widget name="label6"/>
-      <widget name="label14"/>
-      <widget name="label8"/>
-      <widget name="label9"/>
-      <widget name="label13"/>
-      <widget name="label10"/>
       <widget name="label11"/>
       <widget name="label12"/>
+      <widget name="label13"/>
+      <widget name="label10"/>
+      <widget name="label8"/>
+      <widget name="label9"/>
+      <widget name="label14"/>
+      <widget name="label6"/>
+      <widget name="label7"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
-      <widget name="iconstyle"/>
-      <widget name="iconsize"/>
-      <widget name="notebookbariconsize"/>
-      <widget name="sidebariconsize"/>
-      <widget name="menuicons"/>
-      <widget name="contextmenushortcuts"/>
       <widget name="mousepos"/>
       <widget name="mousemiddle"/>
+      <widget name="menuicons"/>
+      <widget name="contextmenushortcuts"/>
+      <widget name="notebookbariconsize"/>
+      <widget name="sidebariconsize"/>
+      <widget name="iconsize"/>
+      <widget name="iconstyle"/>
+      <widget name="appearance"/>
     </widgets>
   </object>
 </interface>

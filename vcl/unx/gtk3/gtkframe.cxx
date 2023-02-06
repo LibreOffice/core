@@ -45,6 +45,7 @@
 #include <window.h>
 
 #include <basegfx/vector/b2ivector.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <dlfcn.h>
 
@@ -1358,20 +1359,20 @@ namespace
         PREFER_LIGHT
     };
 
-    bool ReadColorScheme(GDBusProxy* proxy, GVariant** out)
+    void ReadColorScheme(GDBusProxy* proxy, GVariant** out)
     {
         g_autoptr (GVariant) ret =
             g_dbus_proxy_call_sync(proxy, "Read",
                                    g_variant_new ("(ss)", "org.freedesktop.appearance", "color-scheme"),
                                    G_DBUS_CALL_FLAGS_NONE, G_MAXINT, nullptr, nullptr);
         if (!ret)
-            return false;
+            return;
 
         g_autoptr (GVariant) child = nullptr;
         g_variant_get(ret, "(v)", &child);
         g_variant_get(child, "v", out);
 
-        return true;
+        return;
     }
 }
 
@@ -1380,9 +1381,30 @@ void GtkSalFrame::SetColorScheme(GVariant* variant)
     if (!m_pWindow)
         return;
 
-    guint32 color_scheme = g_variant_get_uint32(variant);
-    if (color_scheme > PREFER_LIGHT)
-        color_scheme = DEFAULT;
+    guint32 color_scheme;
+
+    switch (officecfg::Office::Common::Misc::Appearance::get())
+    {
+        default:
+        case 0: // Auto
+        {
+            if (variant)
+            {
+                color_scheme = g_variant_get_uint32(variant);
+                if (color_scheme > PREFER_LIGHT)
+                    color_scheme = DEFAULT;
+            }
+            else
+                color_scheme = DEFAULT;
+            break;
+        }
+        case 1: // Light
+            color_scheme = PREFER_LIGHT;
+            break;
+        case 2: // Dark
+            color_scheme = PREFER_DARK;
+            break;
+    }
 
     bool bDarkIconTheme(color_scheme == PREFER_DARK);
     GtkSettings* pSettings = gtk_widget_get_settings(m_pWindow);
@@ -1423,16 +1445,18 @@ void GtkSalFrame::ListenPortalSettings()
                                               "org.freedesktop.portal.Settings",
                                               nullptr,
                                               nullptr);
-    if (!m_pSettingsPortal)
-        return;
 
-    g_autoptr (GVariant) value = nullptr;
+    UpdateDarkMode();
 
-    if (!ReadColorScheme(m_pSettingsPortal, &value))
-        return;
-
-    SetColorScheme(value);
     m_nPortalSettingChangedSignalId = g_signal_connect(m_pSettingsPortal, "g-signal", G_CALLBACK(settings_portal_changed_cb), this);
+}
+
+void GtkSalFrame::UpdateDarkMode()
+{
+    g_autoptr (GVariant) value = nullptr;
+    if (m_pSettingsPortal)
+        ReadColorScheme(m_pSettingsPortal, &value);
+    SetColorScheme(value);
 }
 
 #if GTK_CHECK_VERSION(4,0,0)

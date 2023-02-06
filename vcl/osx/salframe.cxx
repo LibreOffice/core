@@ -1258,6 +1258,26 @@ void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
     mpGraphics->GetResolution( o_rDPIX, o_rDPIY );
 }
 
+void AquaSalFrame::UpdateDarkMode()
+{
+    if (@available(macOS 10.14, iOS 13, *))
+    {
+        switch (Application::GetSettings().GetMiscSettings().GetDarkMode())
+        {
+            case 0: // auto
+            default:
+                [NSApp setAppearance: nil];
+                break;
+            case 1: // light
+                [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
+                break;
+            case 2: // dark
+                [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
+                break;
+        }
+    }
+}
+
 // on OSX-Aqua the style settings are independent of the frame, so it does
 // not really belong here. Since the connection to the Appearance_Manager
 // is currently done in salnativewidgets.cxx this would be a good place.

@@ -611,6 +611,7 @@ public:
     virtual bool                UpdatePopover(void* nId, const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea) override;
     virtual bool                HidePopover(void* nId) override;
     virtual weld::Window*       GetFrameWeld() const override;
+    virtual void                UpdateDarkMode() override;
 
     static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 

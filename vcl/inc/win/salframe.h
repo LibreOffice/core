@@ -139,6 +139,7 @@ public:
     virtual void                BeginSetClipRegion( sal_uInt32 nRects ) override;
     virtual void                UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                EndSetClipRegion() override;
+    virtual void                UpdateDarkMode() override;
 
     constexpr vcl::WindowState state() const { return m_eState; }
     void UpdateFrameState();

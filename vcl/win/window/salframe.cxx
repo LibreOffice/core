@@ -261,6 +261,13 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
     }
 }
 
+enum PreferredAppMode
+{
+    AllowDark = 1,
+    ForceDark = 2,
+    ForceLight = 3
+};
+
 static void UpdateDarkMode(HWND hWnd)
 {
     static bool bOSSupportsDarkMode = OSSupportsDarkMode();
@@ -271,18 +278,37 @@ static void UpdateDarkMode(HWND hWnd)
     if (!hUxthemeLib)
         return;
 
-    typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
-    if (auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133))))
-        AllowDarkModeForWindow(hWnd, TRUE);
-
-    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
-    if (auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132))))
+    typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
+    auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
+    if (SetPreferredAppMode)
     {
-        BOOL bDarkMode = ShouldAppsUseDarkMode();
-        DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
+        switch (Application::GetSettings().GetMiscSettings().GetDarkMode())
+        {
+            case 0:
+                SetPreferredAppMode(AllowDark);
+                break;
+            case 1:
+                SetPreferredAppMode(ForceLight);
+                break;
+            case 2:
+                SetPreferredAppMode(ForceDark);
+                break;
+        }
     }
 
+    BOOL bDarkMode = UseDarkMode();
+
+    typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
+    auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133)));
+    if (AllowDarkModeForWindow)
+        AllowDarkModeForWindow(hWnd, bDarkMode);
+
     FreeLibrary(hUxthemeLib);
+
+    if (!AllowDarkModeForWindow)
+        return;
+
+    DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
 }
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
@@ -3060,6 +3086,11 @@ void WinSalFrame::EndSetClipRegion()
         if( SetWindowRgn( mhWnd, hRegion, TRUE ) == 0 )
             DeleteObject( hRegion );
     }
+}
+
+void WinSalFrame::UpdateDarkMode()
+{
+    ::UpdateDarkMode(mhWnd);
 }
 
 static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
