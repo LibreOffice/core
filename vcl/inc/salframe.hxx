@@ -299,6 +299,8 @@ public:
     void SetModalHierarchyHdl(const Link<bool, void>& rLink) { m_aModalHierarchyHdl = rLink; }
     void NotifyModalHierarchy(bool bModal) { m_aModalHierarchyHdl.Call(bModal); }
 
+    virtual void            UpdateDarkMode() {}
+
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
