@@ -2,11 +2,11 @@
 
 This module provides support for building LibreOffice as WASM, with the Emscripten toolchain.
 
-You can build LibreOffice core for WASM for two separate purposes:
-Either to produce a WASM binary of LibreOffice as such, using Qt5 as
-the GUI, or just compiling the LibreOffice code to WASM libraries
-without any UI for use in other software that has the UI, like
-Collabora Online.
+You can build LibreOffice for WASM for two separate purposes: 1)
+Either to produce a WASM binary of LibreOffice as such, using Qt5 for
+its GUI, or 2) just compiling LibreOffice core ("LibreOffice
+Technology") to WASM without any UI for use in other software that
+provides the UI, like Collabora Online built as WASM.
 
 The first purpose was the original reason for the WASM port and this
 document was originally written with that in mind. For the second
@@ -345,7 +345,8 @@ Follow the instructions in the first part of this document.
 
 ### No Qt needed.
 
-You don't need any dependencies other than those that building LO normally downloads and compiled when building core.
+You don't need any dependencies other than those that normally are
+downloaded and compiled when building LibreOffice.
 
 ### Set up LO
 
@@ -361,3 +362,9 @@ For instance, this autogen.input works for me:
 ### That's all
 
 After all, in this case you are building LO core headless for it to be used by other software.
+
+Note that a soffice.wasm will be built, but that is just because of
+how the makefilery has been set up. We do need the soffice.data file
+that contains the in-memory file system needed by the LibreOffice
+Technology core code during run-time, though. That is at the moment
+built as a side-effect when building soffice.wasm.
