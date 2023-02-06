@@ -128,46 +128,46 @@ class Forms(UITestCase):
         # Reuse file from another test
         with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")) as document:
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
 
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
+                self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            drawPage = document.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
-            self.assertEqual(13996, shape.getSize().Width)
-            self.assertEqual(2408, shape.getSize().Height)
+                drawPage = document.getDrawPages().getByIndex(0)
+                shape = drawPage.getByIndex(0)
+                self.assertEqual(13996, shape.getSize().Width)
+                self.assertEqual(2408, shape.getSize().Height)
 
-            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
-                xWidth = self.ui_test.wait_until_child_is_available('numericfield-Width')
-                xHeight = self.ui_test.wait_until_child_is_available('numericfield-Height')
+                with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
+                    xWidth = self.ui_test.wait_until_child_is_available('numericfield-Width')
+                    xHeight = self.ui_test.wait_until_child_is_available('numericfield-Height')
 
-                self.assertEqual("14.00 cm", get_state_as_dict(xWidth)['Text'])
-                self.assertEqual("2.41 cm", get_state_as_dict(xHeight)['Text'])
+                    self.assertEqual("14.00 cm", get_state_as_dict(xWidth)['Text'])
+                    self.assertEqual("2.41 cm", get_state_as_dict(xHeight)['Text'])
 
-                xWidth.executeAction("FOCUS", tuple())
-                xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xWidth.executeAction("TYPE", mkPropertyValues({"TEXT":"20 cm"}))
+                    xWidth.executeAction("FOCUS", tuple())
+                    xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xWidth.executeAction("TYPE", mkPropertyValues({"TEXT":"20 cm"}))
 
-                self.assertEqual("20 cm", get_state_as_dict(xWidth)['Text'])
+                    self.assertEqual("20 cm", get_state_as_dict(xWidth)['Text'])
 
-                xHeight.executeAction("FOCUS", tuple())
-                xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xHeight.executeAction("TYPE", mkPropertyValues({"TEXT":"5 cm"}))
+                    xHeight.executeAction("FOCUS", tuple())
+                    xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xHeight.executeAction("TYPE", mkPropertyValues({"TEXT":"5 cm"}))
 
-                self.assertEqual("5 cm", get_state_as_dict(xHeight)['Text'])
+                    self.assertEqual("5 cm", get_state_as_dict(xHeight)['Text'])
 
-                # Move the focus to another element so the changes done before take effect on the document
-                xDialog = self.xUITest.getTopFocusWindow()
-                xDialog.getChild('numericfield-PositionY').executeAction("FOCUS", tuple())
+                    # Move the focus to another element so the changes done before take effect on the document
+                    xDialog = self.xUITest.getTopFocusWindow()
+                    xDialog.getChild('numericfield-PositionY').executeAction("FOCUS", tuple())
 
-                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-                xToolkit.processEventsToIdle()
+                    xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                    xToolkit.processEventsToIdle()
 
-                # Without the fix in place, the size of the form wouldn't have changed
-                self.assertEqual(20001, shape.getSize().Width)
-                self.assertEqual(5001, shape.getSize().Height)
+                    # Without the fix in place, the size of the form wouldn't have changed
+                    self.assertEqual(20001, shape.getSize().Width)
+                    self.assertEqual(5001, shape.getSize().Height)
 
     def test_tdf138271(self):
 

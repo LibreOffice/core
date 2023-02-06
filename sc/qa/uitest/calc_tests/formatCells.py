@@ -246,108 +246,109 @@ class formatCell(UITestCase):
     def test_minimal_border_width(self):
         #borderpage.ui, tdf#137790
         with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
 
             #set points pt measurement
-            change_measurement_unit(self, "Point")
+            with change_measurement_unit(self, "Point"):
 
-            #select cell A1
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            #format - cell
-            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")  #tab Borders
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-                linewidthmf = xDialog.getChild("linewidthmf")
-                xLineSet = xDialog.getChild('lineset')
+                #select cell A1
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                #format - cell
+                with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")  #tab Borders
 
-                # check line-width for default solid line
-                self.assertEqual('0', get_state_as_dict(xLineSet)['SelectedItemPos'])
-                widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '0.75 pt')
+                    linewidthmf = xDialog.getChild("linewidthmf")
+                    xLineSet = xDialog.getChild('lineset')
 
-                # set line style to "double" (minimal width is taken)
-                xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
-                widthVal = get_state_as_dict(linewidthmf)["Text"]
-                # minimum predefined width is Medium (1.50 pt)
-                self.assertEqual(widthVal, '1.50 pt')
+                    # check line-width for default solid line
+                    self.assertEqual('0', get_state_as_dict(xLineSet)['SelectedItemPos'])
+                    widthVal = get_state_as_dict(linewidthmf)["Text"]
+                    self.assertEqual(widthVal, '0.75 pt')
 
-                # set line style to "solid"
-                xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
-                widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '1.50 pt')
+                    # set line style to "double" (minimal width is taken)
+                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
+                    widthVal = get_state_as_dict(linewidthmf)["Text"]
+                    # minimum predefined width is Medium (1.50 pt)
+                    self.assertEqual(widthVal, '1.50 pt')
 
-                # make custom line width
-                linewidthmf.executeAction("UP", tuple())
-                linewidthmf.executeAction("UP", tuple())
-                linewidthmf.executeAction("UP", tuple())
-                widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '2.25 pt')
+                    # set line style to "solid"
+                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+                    widthVal = get_state_as_dict(linewidthmf)["Text"]
+                    self.assertEqual(widthVal, '1.50 pt')
 
-                # set line style to "double" (minimal width is not taken)
-                xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
-                widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '2.25 pt')
+                    # make custom line width
+                    linewidthmf.executeAction("UP", tuple())
+                    linewidthmf.executeAction("UP", tuple())
+                    linewidthmf.executeAction("UP", tuple())
+                    widthVal = get_state_as_dict(linewidthmf)["Text"]
+                    self.assertEqual(widthVal, '2.25 pt')
+
+                    # set line style to "double" (minimal width is not taken)
+                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
+                    widthVal = get_state_as_dict(linewidthmf)["Text"]
+                    self.assertEqual(widthVal, '2.25 pt')
 
 
 
     def test_format_cell_borders_tab(self):
         #borderpage.ui
         with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
 
             #set points pt measurement
-            change_measurement_unit(self, "Point")
+            with change_measurement_unit(self, "Point"):
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-            #select cell A1
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            #format - cell
-            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")  #tab Borders
-                xsync = xDialog.getChild("sync")
-                xleftmf = xDialog.getChild("leftmf")
-                xrightmf = xDialog.getChild("rightmf")
-                xtopmf = xDialog.getChild("topmf")
-                xbottommf = xDialog.getChild("bottommf")
+                #select cell A1
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                #format - cell
+                with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")  #tab Borders
+                    xsync = xDialog.getChild("sync")
+                    xleftmf = xDialog.getChild("leftmf")
+                    xrightmf = xDialog.getChild("rightmf")
+                    xtopmf = xDialog.getChild("topmf")
+                    xbottommf = xDialog.getChild("bottommf")
 
-                xsync.executeAction("CLICK", tuple())  #uncheck Synchronize
-                xleftmf.executeAction("UP", tuple())
-                xrightmf.executeAction("UP", tuple())
-                xrightmf.executeAction("UP", tuple())
-                xtopmf.executeAction("UP", tuple())
-                xtopmf.executeAction("UP", tuple())
-                xtopmf.executeAction("UP", tuple())
-                xbottommf.executeAction("UP", tuple())
-                xbottommf.executeAction("UP", tuple())
-                xbottommf.executeAction("UP", tuple())
-                xbottommf.executeAction("UP", tuple())
+                    xsync.executeAction("CLICK", tuple())  #uncheck Synchronize
+                    xleftmf.executeAction("UP", tuple())
+                    xrightmf.executeAction("UP", tuple())
+                    xrightmf.executeAction("UP", tuple())
+                    xtopmf.executeAction("UP", tuple())
+                    xtopmf.executeAction("UP", tuple())
+                    xtopmf.executeAction("UP", tuple())
+                    xbottommf.executeAction("UP", tuple())
+                    xbottommf.executeAction("UP", tuple())
+                    xbottommf.executeAction("UP", tuple())
+                    xbottommf.executeAction("UP", tuple())
 
-                leftVal = get_state_as_dict(xleftmf)["Text"]
-                rightVal = get_state_as_dict(xrightmf)["Text"]
-                topVal = get_state_as_dict(xtopmf)["Text"]
-                bottomVal = get_state_as_dict(xbottommf)["Text"]
+                    leftVal = get_state_as_dict(xleftmf)["Text"]
+                    rightVal = get_state_as_dict(xrightmf)["Text"]
+                    topVal = get_state_as_dict(xtopmf)["Text"]
+                    bottomVal = get_state_as_dict(xbottommf)["Text"]
 
 
-            # Verify select cell A1
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            #format - cell
-            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "5")  #tab Borders
-                xsync = xDialog.getChild("sync")
-                xleftmf = xDialog.getChild("leftmf")
-                xrightmf = xDialog.getChild("rightmf")
-                xtopmf = xDialog.getChild("topmf")
-                xbottommf = xDialog.getChild("bottommf")
+                # Verify select cell A1
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                #format - cell
+                with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "5")  #tab Borders
+                    xsync = xDialog.getChild("sync")
+                    xleftmf = xDialog.getChild("leftmf")
+                    xrightmf = xDialog.getChild("rightmf")
+                    xtopmf = xDialog.getChild("topmf")
+                    xbottommf = xDialog.getChild("bottommf")
 
-                self.assertEqual(get_state_as_dict(xsync)["Selected"], "false")
-                self.assertEqual(get_state_as_dict(xleftmf)["Text"] == leftVal, True)
-                self.assertEqual(get_state_as_dict(xrightmf)["Text"] == rightVal, True)
-                self.assertEqual(get_state_as_dict(xtopmf)["Text"] == topVal, True)
-                self.assertEqual(get_state_as_dict(xbottommf)["Text"] == bottomVal, True)
+                    self.assertEqual(get_state_as_dict(xsync)["Selected"], "false")
+                    self.assertEqual(get_state_as_dict(xleftmf)["Text"] == leftVal, True)
+                    self.assertEqual(get_state_as_dict(xrightmf)["Text"] == rightVal, True)
+                    self.assertEqual(get_state_as_dict(xtopmf)["Text"] == topVal, True)
+                    self.assertEqual(get_state_as_dict(xbottommf)["Text"] == bottomVal, True)
 
 
 

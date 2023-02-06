@@ -16,32 +16,32 @@ class columns(UITestCase):
     def test_columns(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
 
-            #dialog Columns
-            with self.ui_test.execute_dialog_through_command(".uno:FormatColumns") as xDialog:
+                #dialog Columns
+                with self.ui_test.execute_dialog_through_command(".uno:FormatColumns") as xDialog:
 
-                colsnf = xDialog.getChild("colsnf")
-                colsnf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                colsnf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                colsnf.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-                colsnf.executeAction("UP", tuple())
-                colsnf.executeAction("DOWN", tuple())
-                spacing1mf = xDialog.getChild("spacing1mf")
-                spacing1mf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                spacing1mf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                spacing1mf.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-                autowidth = xDialog.getChild("autowidth")
-                autowidth.executeAction("CLICK", tuple())
-            #verify
-            with self.ui_test.execute_dialog_through_command(".uno:FormatColumns", close_button="cancel") as xDialog:
-                colsnf = xDialog.getChild("colsnf")
-                spacing1mf = xDialog.getChild("spacing1mf")
-                autowidth = xDialog.getChild("autowidth")
+                    colsnf = xDialog.getChild("colsnf")
+                    colsnf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    colsnf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    colsnf.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+                    colsnf.executeAction("UP", tuple())
+                    colsnf.executeAction("DOWN", tuple())
+                    spacing1mf = xDialog.getChild("spacing1mf")
+                    spacing1mf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    spacing1mf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    spacing1mf.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                    autowidth = xDialog.getChild("autowidth")
+                    autowidth.executeAction("CLICK", tuple())
+                #verify
+                with self.ui_test.execute_dialog_through_command(".uno:FormatColumns", close_button="cancel") as xDialog:
+                    colsnf = xDialog.getChild("colsnf")
+                    spacing1mf = xDialog.getChild("spacing1mf")
+                    autowidth = xDialog.getChild("autowidth")
 
-                self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
-                self.assertEqual(get_state_as_dict(spacing1mf)["Text"], "1.00 cm")
-                self.assertEqual(get_state_as_dict(autowidth)["Selected"], "false")
+                    self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
+                    self.assertEqual(get_state_as_dict(spacing1mf)["Text"], "1.00 cm")
+                    self.assertEqual(get_state_as_dict(autowidth)["Selected"], "false")
 
     def test_tdf150293_separator_width_unit_conversion(self):
         with self.ui_test.load_file(get_url_for_data_file("section-columns-separator.fodt")):

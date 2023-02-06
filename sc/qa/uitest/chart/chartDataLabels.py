@@ -256,35 +256,35 @@ class chartDataLabels(UITestCase):
 
    def test_tdf136573(self):
     with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")):
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
 
-        change_measurement_unit(self, "Centimeter")
+        with change_measurement_unit(self, "Centimeter"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-        gridwin.executeAction("ACTIVATE", tuple())
-        xChartMainTop = self.xUITest.getTopFocusWindow()
-        xChartMain = xChartMainTop.getChild("chart_window")
+            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+            gridwin.executeAction("ACTIVATE", tuple())
+            xChartMainTop = self.xUITest.getTopFocusWindow()
+            xChartMain = xChartMainTop.getChild("chart_window")
 
-        # Select the first label
-        xDataLabel = xChartMain.getChild("CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0")
-        xDataLabel.executeAction("SELECT", tuple())
+            # Select the first label
+            xDataLabel = xChartMain.getChild("CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0")
+            xDataLabel.executeAction("SELECT", tuple())
 
-        with self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+            with self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
 
-            self.assertEqual("0.74", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-            self.assertEqual("2.82", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+                self.assertEqual("0.74", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+                self.assertEqual("2.82", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-            # Use OK button in order to test tdf#137165
+                # Use OK button in order to test tdf#137165
 
-        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+            xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
-        with self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+            with self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
 
-            # Check the position has changed after moving the label using the arrows keys
-            self.assertEqual("0.64", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-            self.assertEqual("2.72", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+                # Check the position has changed after moving the label using the arrows keys
+                self.assertEqual("0.64", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+                self.assertEqual("2.72", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

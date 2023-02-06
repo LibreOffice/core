@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
+from uitest.uihelper.common import change_measurement_unit
 from com.sun.star.awt.GradientStyle import LINEAR
 from com.sun.star.drawing.HatchStyle import SINGLE
 from com.sun.star.drawing.BitmapMode import REPEAT
@@ -118,23 +119,25 @@ class WriterPageDialog(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
-            for index, button in enumerate(buttons):
+            with change_measurement_unit(self, "Centimeter"):
 
-                with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-                    tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "2")
-                    self.click_button(xDialog, button)
+                buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
+                for index, button in enumerate(buttons):
 
-                self.check_default_area(button)
+                    with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                        tabcontrol = xDialog.getChild("tabcontrol")
+                        select_pos(tabcontrol, "2")
+                        self.click_button(xDialog, button)
 
-                with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-                    tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "2")
+                    self.check_default_area(button)
 
-                    self.click_button(xDialog, 'btnnone')
+                    with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                        tabcontrol = xDialog.getChild("tabcontrol")
+                        select_pos(tabcontrol, "2")
 
-                self.check_default_area('btnnone')
+                        self.click_button(xDialog, 'btnnone')
+
+                    self.check_default_area('btnnone')
 
 
     def test_paper_format(self):

@@ -16,24 +16,23 @@ class tdf99711(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("shape.odt")):
 
-            #set measurement to millimeters
-            change_measurement_unit(self, "Millimeter")
+            with change_measurement_unit(self, "Millimeter"):
 
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
+                xWriterDoc = self.xUITest.getTopFocusWindow()
+                xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
+                self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            self.xUITest.executeCommand(".uno:Sidebar")
-            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
+                self.xUITest.executeCommand(".uno:Sidebar")
+                xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
 
-            #wait until the sidebar is available
-            xChild = self.ui_test.wait_until_child_is_available('selectwidth')
-            self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
+                #wait until the sidebar is available
+                xChild = self.ui_test.wait_until_child_is_available('selectwidth')
+                self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
 
-            xChild = self.ui_test.wait_until_child_is_available('selectheight')
-            self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
+                xChild = self.ui_test.wait_until_child_is_available('selectheight')
+                self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
 
-            self.xUITest.executeCommand(".uno:Sidebar")
+                self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

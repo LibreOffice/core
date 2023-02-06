@@ -14,42 +14,41 @@ from uitest.uihelper.common import change_measurement_unit
 class tdf152295(UITestCase):
     def test_tdf152295(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
-            change_measurement_unit(self, "Centimeter")
             TemplateDialog = self.xUITest.getTopFocusWindow()
             close = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(close)
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
-                xTabs = DrawPageDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
-                btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                btnbitmap.executeAction("CLICK",tuple())
-                width = DrawPageDialog.getChild("width")
-                for _ in range(50):
-                    width.executeAction("UP",tuple())
-                height = DrawPageDialog.getChild("height")
-                for _ in range(50):
-                    height.executeAction("UP",tuple())
+            with change_measurement_unit(self, "Centimeter"):
+                with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
+                    xTabs = DrawPageDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "1")
+                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
+                    btnbitmap.executeAction("CLICK",tuple())
+                    width = DrawPageDialog.getChild("width")
+                    for _ in range(50):
+                        width.executeAction("UP",tuple())
+                    height = DrawPageDialog.getChild("height")
+                    for _ in range(50):
+                        height.executeAction("UP",tuple())
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
-                xTabs = DrawPageDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
-                btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                btnbitmap.executeAction("CLICK",tuple())
+                with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
+                    xTabs = DrawPageDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "1")
+                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
+                    btnbitmap.executeAction("CLICK",tuple())
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
-                xTabs = DrawPageDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
-                btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                btnbitmap.executeAction("CLICK",tuple())
-                width = DrawPageDialog.getChild("width")
-                height = DrawPageDialog.getChild("height")
+                with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
+                    xTabs = DrawPageDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "1")
+                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
+                    btnbitmap.executeAction("CLICK",tuple())
+                    width = DrawPageDialog.getChild("width")
+                    height = DrawPageDialog.getChild("height")
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: '6.00 cm' != '13.55 cm'
-                # AssertionError: '6.00 cm' != '13.55 cm'
-                self.assertEqual("6.00 cm", get_state_as_dict(width)['Text'])
-                self.assertEqual("6.00 cm", get_state_as_dict(height)['Text'])
-
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: '6.00 cm' != '13.55 cm'
+                    # AssertionError: '6.00 cm' != '13.55 cm'
+                    self.assertEqual("6.00 cm", get_state_as_dict(width)['Text'])
+                    self.assertEqual("6.00 cm", get_state_as_dict(height)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

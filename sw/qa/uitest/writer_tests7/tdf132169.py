@@ -15,29 +15,28 @@ class tdf132169(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("shape.odt")) as writer_doc:
 
-            #set measurement to points
-            change_measurement_unit(self, "Point")
+            with change_measurement_unit(self, "Point"):
 
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
+                self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            #wait until the toolbar is available
-            xLineMetric = self.ui_test.wait_until_child_is_available('metricfield')
-            self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
+                #wait until the toolbar is available
+                xLineMetric = self.ui_test.wait_until_child_is_available('metricfield')
+                self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
 
-            #Check changing value from dialog also works
-            with self.ui_test.execute_dialog_through_command(".uno:FormatLine") as xFormatLineDlg:
-                xWidth = xFormatLineDlg.getChild('MTR_FLD_LINE_WIDTH')
-                type_text(xWidth, "4.0")
+                #Check changing value from dialog also works
+                with self.ui_test.execute_dialog_through_command(".uno:FormatLine") as xFormatLineDlg:
+                    xWidth = xFormatLineDlg.getChild('MTR_FLD_LINE_WIDTH')
+                    type_text(xWidth, "4.0")
 
-            self.ui_test.wait_until_property_is_updated(xLineMetric, "Text", "4.0 pt")
-            self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "4.0 pt")
+                self.ui_test.wait_until_property_is_updated(xLineMetric, "Text", "4.0 pt")
+                self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "4.0 pt")
 
-            xLineMetric.executeAction("UP", tuple())
+                xLineMetric.executeAction("UP", tuple())
 
-            drawPage = writer_doc.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
+                drawPage = writer_doc.getDrawPages().getByIndex(0)
+                shape = drawPage.getByIndex(0)
 
-            #Without the fix in place, it would have been 310
-            self.assertEqual(shape.LineWidth, 176)
+                #Without the fix in place, it would have been 310
+                self.assertEqual(shape.LineWidth, 176)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

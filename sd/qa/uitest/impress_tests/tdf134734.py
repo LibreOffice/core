@@ -9,7 +9,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_pos
-from uitest.uihelper.common import change_measurement_unit
 from com.sun.star.drawing.FillStyle import SOLID
 
 
@@ -19,8 +18,6 @@ class TestClass(UITestCase):
             TemplateDialog = self.xUITest.getTopFocusWindow()
             close = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(close)
-
-            change_measurement_unit(self, "Inch")
 
             # set margins and fill color
             with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:

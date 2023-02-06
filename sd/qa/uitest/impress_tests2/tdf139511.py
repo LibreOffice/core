@@ -19,33 +19,33 @@ class tdf139511(UITestCase):
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
 
-            self.xUITest.executeCommand(".uno:InsertTable?Columns:short=4&Rows:short=4")
+                self.xUITest.executeCommand(".uno:InsertTable?Columns:short=4&Rows:short=4")
 
-            self.assertEqual(8036, document.DrawPages[0].getByIndex(2).BoundRect.Height)
-            self.assertEqual(14136, document.DrawPages[0].getByIndex(2).BoundRect.Width)
+                self.assertEqual(8036, document.DrawPages[0].getByIndex(2).BoundRect.Height)
+                self.assertEqual(14136, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
-            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
-
-
-                xWidth = xDialog.getChild('MTR_FLD_WIDTH')
-                xHeight = xDialog.getChild('MTR_FLD_HEIGHT')
-
-                xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-                xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-                xWidth.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
-
-                xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-                xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-                xHeight.executeAction("TYPE", mkPropertyValues({"TEXT": "5"}))
+                with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
 
+                    xWidth = xDialog.getChild('MTR_FLD_WIDTH')
+                    xHeight = xDialog.getChild('MTR_FLD_HEIGHT')
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 5037 != 8036
-            self.assertEqual(5037, document.DrawPages[0].getByIndex(2).BoundRect.Height)
-            self.assertEqual(10037, document.DrawPages[0].getByIndex(2).BoundRect.Width)
+                    xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+                    xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+                    xWidth.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
+
+                    xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+                    xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+                    xHeight.executeAction("TYPE", mkPropertyValues({"TEXT": "5"}))
+
+
+
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 5037 != 8036
+                self.assertEqual(5037, document.DrawPages[0].getByIndex(2).BoundRect.Height)
+                self.assertEqual(10037, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

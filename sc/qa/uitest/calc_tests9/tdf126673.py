@@ -17,23 +17,23 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf126673(UITestCase):
     def test_tdf126673_auto_fit_row_height(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf126673.ods")):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
 
-            change_measurement_unit(self, "Centimeter")
+            with change_measurement_unit(self, "Centimeter"):
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-            #select A2
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-            #optimal row height
-            with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight") as xDialog:
-                xvalue = xDialog.getChild("value")
-                self.assertEqual("0.00 cm", get_state_as_dict(xvalue)["Text"])
+                #select A2
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+                #optimal row height
+                with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight") as xDialog:
+                    xvalue = xDialog.getChild("value")
+                    self.assertEqual("0.00 cm", get_state_as_dict(xvalue)["Text"])
 
-            #select A2
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-            #row height
-            with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
-                xvalue = xDialog.getChild("value")
-                self.assertEqual("1.24 cm", get_state_as_dict(xvalue)["Text"])
+                #select A2
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+                #row height
+                with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
+                    xvalue = xDialog.getChild("value")
+                    self.assertEqual("1.24 cm", get_state_as_dict(xvalue)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -16,59 +16,58 @@ class tdf135590(UITestCase):
     def test_tdf135590(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            #change measurement to Centimeter
-            change_measurement_unit(self, 'Centimeter')
+            with change_measurement_unit(self, 'Centimeter'):
 
-            with self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope") as xDialog:
-
-
-                tabcontrol = xDialog.getChild("tabcontrol")
-                select_pos(tabcontrol, "1")
-
-                xWidth = xDialog.getChild('width')
-                xHeight = xDialog.getChild('height')
-                xFormat = xDialog.getChild("format")
-
-                select_by_text(xFormat, "C6 Envelope")
-
-                self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
-                self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])
+                with self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope") as xDialog:
 
 
-            # A new document is created
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
+                    tabcontrol = xDialog.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-                tabcontrol = xDialog.getChild("tabcontrol")
-                select_pos(tabcontrol, "1")
+                    xWidth = xDialog.getChild('width')
+                    xHeight = xDialog.getChild('height')
+                    xFormat = xDialog.getChild("format")
 
-                xWidth = xDialog.getChild('spinWidth')
-                xHeight = xDialog.getChild('spinHeight')
-                xFormatList = xDialog.getChild("comboPageFormat")
+                    select_by_text(xFormat, "C6 Envelope")
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: '16.2' != '11.4'
-                self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
-                self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])
-                self.assertEqual("User", get_state_as_dict(xFormatList)['SelectEntryText'])
+                    self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
+                    self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])
 
 
-            self.xUITest.executeCommand(".uno:Sidebar")
-            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "PageStylesPanel"}))
+                # A new document is created
+                xWriterDoc = self.xUITest.getTopFocusWindow()
+                xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            xPaperSize = xWriterEdit.getChild('papersize')
-            self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
-            self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
+                with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                    tabcontrol = xDialog.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
 
-            xPaperHeight = xWriterEdit.getChild('paperheight')
-            self.ui_test.wait_until_property_is_updated(xPaperHeight, "Text", "11.40 cm")
-            self.assertEqual(get_state_as_dict(xPaperHeight)['Text'], "11.40 cm")
+                    xWidth = xDialog.getChild('spinWidth')
+                    xHeight = xDialog.getChild('spinHeight')
+                    xFormatList = xDialog.getChild("comboPageFormat")
 
-            xPaperWidth = xWriterEdit.getChild('paperwidth')
-            self.ui_test.wait_until_property_is_updated(xPaperWidth, "Text", "16.20 cm")
-            self.assertEqual(get_state_as_dict(xPaperWidth)['Text'], "16.20 cm")
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: '16.2' != '11.4'
+                    self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
+                    self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])
+                    self.assertEqual("User", get_state_as_dict(xFormatList)['SelectEntryText'])
 
-            self.xUITest.executeCommand(".uno:Sidebar")
+
+                self.xUITest.executeCommand(".uno:Sidebar")
+                xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "PageStylesPanel"}))
+
+                xPaperSize = xWriterEdit.getChild('papersize')
+                self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
+                self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
+
+                xPaperHeight = xWriterEdit.getChild('paperheight')
+                self.ui_test.wait_until_property_is_updated(xPaperHeight, "Text", "11.40 cm")
+                self.assertEqual(get_state_as_dict(xPaperHeight)['Text'], "11.40 cm")
+
+                xPaperWidth = xWriterEdit.getChild('paperwidth')
+                self.ui_test.wait_until_property_is_updated(xPaperWidth, "Text", "16.20 cm")
+                self.assertEqual(get_state_as_dict(xPaperWidth)['Text'], "16.20 cm")
+
+                self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
