@@ -632,7 +632,7 @@ static double lcl_HandleScrollHelper( Scrollable* pScrl, double nN, bool isMulti
         }
 
         // compute how many quantized units to scroll
-        tools::Long magnitude = o3tl::saturating_cast<tools::Long>(abs(nN));
+        tools::Long magnitude = o3tl::saturating_cast<tools::Long>(fabs(nN));
         tools::Long change = copysign(magnitude, nN);
 
         nNewPos = nNewPos - change;
