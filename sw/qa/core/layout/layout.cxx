@@ -16,6 +16,7 @@
 #include <o3tl/string_view.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -602,6 +603,68 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
     CPPUNIT_ASSERT_GREATER(aBorderStartEnds[0].first, aBorderStartEnds[1].first);
     CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[2].second);
     CPPUNIT_ASSERT_LESS(aBorderStartEnds[0].second, aBorderStartEnds[1].second);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderNocompatIntersect)
+{
+    // Given a table with both outer and inner borders:
+    createSwDoc();
+    SwDocShell* pShell = getSwDocShell();
+    SwDoc* pDoc = pShell->GetDoc();
+    // Set the default page style's writing direction to vertical:
+    SwPageDesc aStandard(pDoc->GetPageDesc(0));
+    SvxFrameDirectionItem aDirection(SvxFrameDirection::Vertical_RL_TB, RES_FRAMEDIR);
+    aStandard.GetMaster().SetFormatAttr(aDirection);
+    pDoc->ChgPageDesc(0, aStandard);
+    // Insert a 4x4 table:
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 4, 4);
+
+    // When rendering table borders:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure that all horizontal lines have the same length:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Collect start/end (vertical) positions of horizontal borders.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    std::vector<std::pair<sal_Int32, sal_Int32>> aBorderStartEnds;
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); i += 2)
+    {
+        xmlNodePtr pStart = pXmlNodes->nodeTab[i];
+        xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
+        xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
+        xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
+        if (nStartY != nEndY)
+        {
+            // Vertical border.
+            continue;
+        }
+        xmlChar* pStartX = xmlGetProp(pStart, BAD_CAST("x"));
+        xmlChar* pEndX = xmlGetProp(pEnd, BAD_CAST("x"));
+        sal_Int32 nStartX = o3tl::toInt32(reinterpret_cast<char const*>(pStartX));
+        sal_Int32 nEndX = o3tl::toInt32(reinterpret_cast<char const*>(pEndX));
+        aBorderStartEnds.emplace_back(nStartX, nEndX);
+    }
+    xmlXPathFreeObject(pXmlObj);
+    // We have 5 lines: top of 4 cells + bottom.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aBorderStartEnds.size());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9719
+    // - Actual  : 10064
+    // i.e. the 2nd line started later than the first one, which is incorrect.
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].first, aBorderStartEnds[1].first);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].first, aBorderStartEnds[2].first);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].first, aBorderStartEnds[3].first);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].first, aBorderStartEnds[4].first);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[1].second);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[2].second);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[3].second);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[4].second);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
