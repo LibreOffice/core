@@ -21,8 +21,9 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ShowSinglePage"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages"/>
- <toolbar:toolbaritem xlink:href=".uno:ShowBookview"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowBookview"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc"/>
  <toolbar:toolbaritem xlink:href=".uno:PageUp"/>

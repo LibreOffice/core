@@ -20,8 +20,9 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:ShowSinglePage" toolbar:style="image text"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages" toolbar:style="image text"/>
- <toolbar:toolbaritem xlink:href=".uno:ShowBookview" toolbar:style="image text"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages" toolbar:style="image text"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowBookview" toolbar:style="image text"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc"/>
  <toolbar:toolbaritem xlink:href=".uno:PageUp"/>
