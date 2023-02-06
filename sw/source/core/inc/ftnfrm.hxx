@@ -76,6 +76,8 @@ inline SwFootnoteFrame* SwFootnoteContFrame::PrependChained(SwFrame* pThis, bool
     return AddChained(false, pThis, bDefaultFormat);
 }
 
+/// Represents one footnote or endnote in the layout. Typical upper is an SwFootnoteContFrame,
+/// typical lower is an SwTextFrame.
 class SwFootnoteFrame final : public SwLayoutFrame
 {
     // Pointer to FootnoteFrame in which the footnote will be continued:
