@@ -458,7 +458,7 @@ static hchar olHanglJaso(int num, int type)
 
 static const hchar *GetOutlineStyleChars(int style)
 {
-    static const hchar out_bul_style_entry[5][8] =      // extern
+    static const hchar out_bul_style_entry[5][MAX_OUTLINE_LEVEL+1] = // extern
     {
         {                                         // 0 OLSTY_BULLET1
             0x2f18, 0x2f12, 0x2f08, 0x2f02, 0x2f06, 0x2f00, 0x2043, 0x0000
@@ -473,7 +473,7 @@ static const hchar *GetOutlineStyleChars(int style)
             0x2f18, 0x2f16, 0x2f12, 0x2f10, 0x2f06, 0x2f00, 0x2043, 0x0000
         },
         {
-            0xAC61, 0xB677, 0xB861, 0xB8F7, 0xB781, 0x0000
+            0xAC61, 0xB677, 0xB861, 0xB8F7, 0xB781, 0x0000, 0x0000, 0x0000
         },
     };
     if (style >= OLSTY_BULLET1 && style <= OLSTY_BULLET5)
@@ -598,12 +598,15 @@ hchar_string Outline::GetUnicode() const
             case OLSTY_BULLET3:
             case OLSTY_BULLET4:
             case OLSTY_BULLET5:
+            {
+                if (level < MAX_OUTLINE_LEVEL)
                 {
-                p = GetOutlineStyleChars(shape);
-                buffer[0] = p[level];
-                buffer[1] = 0;
-                return hstr2ucsstr(buffer);
+                    p = GetOutlineStyleChars(shape);
+                    buffer[0] = p[level];
+                    buffer[1] = 0;
                 }
+                return hstr2ucsstr(buffer);
+            }
             case OLSTY_USER:
             case OLSTY_BULUSER:
                 {
