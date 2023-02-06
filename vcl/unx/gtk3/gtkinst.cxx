@@ -4483,7 +4483,7 @@ public:
             gtk_container_resize_children(GTK_CONTAINER(m_pWidget));
 #endif
 
-        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
         xOutput->SetOutputSizePixel(aSize);
 
         switch (rOutput.GetOutDevType())
@@ -6543,7 +6543,7 @@ public:
 #endif
         }
 
-        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
         xOutput->SetOutputSizePixel(get_size());
         cairo_surface_t* pSurface = get_underlying_cairo_surface(*xOutput);
         cairo_t* cr = cairo_create(pSurface);
@@ -18352,7 +18352,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_pAccessible(nullptr)
 #endif
-        , m_xDevice(DeviceFormat::DEFAULT)
+        , m_xDevice(DeviceFormat::WITHOUT_ALPHA)
         , m_pSurface(nullptr)
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
 #if !GTK_CHECK_VERSION(4, 0, 0)

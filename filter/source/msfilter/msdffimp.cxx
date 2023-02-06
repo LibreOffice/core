@@ -4561,7 +4561,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                             rOutliner.SetStyleSheetPool(static_cast< SfxStyleSheetPool* >(xRet->getSdrModelFromSdrObject().GetStyleSheetPool()));
                             bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );
                             rOutliner.SetText( *pParaObj );
-                            ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
+                            ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
                             pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                             sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )

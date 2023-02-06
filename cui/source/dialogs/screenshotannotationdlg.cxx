@@ -232,7 +232,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         maDimmedDialogBitmap.Adjust(-15, 0, 0, 0, 0);
 
         // init paint buffering VirtualDevice
-        mxVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT);
+        mxVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA);
         mxVirtualBufferDevice->SetOutputSizePixel(maParentDialogSize);
         mxVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
 

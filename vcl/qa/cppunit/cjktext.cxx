@@ -105,7 +105,7 @@ static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Poin
 void VclCjkTextTest::testVerticalText()
 {
     OUString text(u"\x30e8");
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(100, 100));
     device->SetBackground(Wallpaper(COL_WHITE));
     // Disable AA, to make all pixels be black or white.

@@ -50,8 +50,7 @@ private:
     VclPtr<VirtualDevice>  mpNext;
     sal_uInt16          mnBitCount;
     bool                mbScreenComp;
-    const DeviceFormat  meFormat;
-    const DeviceFormat  meAlphaFormat;
+    const DeviceFormat meFormatAndAlpha;
     RefDevMode          meRefDevMode;
     bool                mbForceZeroExtleadBug;
 
@@ -81,33 +80,23 @@ protected:
         If it's the nullptr, it uses Application::GetDefaultDevice().
 
         @param eFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
-
-        @param eAlphaFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
+        Device format of the generated virtual device.
 
         @param eOutDevType
         This real virtual output device type.
      */
     explicit VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
-                           DeviceFormat eAlphaFormat, OutDevType eOutDevType);
+                           OutDevType eOutDevType);
 
 public:
 
     /** Create a virtual device of size 1x1
 
         @param eFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
-
-        @param eAlphaFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
+        Device format of the generated virtual device.
      */
-    explicit VirtualDevice(DeviceFormat eFormat = DeviceFormat::DEFAULT, DeviceFormat eAlphaFormat = DeviceFormat::NONE)
-        : VirtualDevice(nullptr, eFormat, eAlphaFormat, OUTDEV_VIRDEV) {}
+    explicit VirtualDevice(DeviceFormat eFormat = DeviceFormat::WITHOUT_ALPHA)
+        : VirtualDevice(nullptr, eFormat, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device of size 1x1
 
@@ -115,29 +104,11 @@ public:
         The generated vdev will be compatible to this device.
 
         @param eFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
+        Device format of the generated virtual device.
      */
     explicit VirtualDevice(const OutputDevice& rCompDev,
-                           DeviceFormat eFormat = DeviceFormat::DEFAULT)
-        : VirtualDevice(&rCompDev, eFormat, DeviceFormat::NONE, OUTDEV_VIRDEV) {}
-
-    /** Create a virtual device  of size 1x1 with alpha channel
-
-        @param rCompDev
-        The generated vdev will be compatible to this device.
-
-        @param eFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
-
-        @param eAlphaFormat
-        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
-        indicate: take default screen depth.
-     */
-    explicit VirtualDevice(const OutputDevice& rCompDev,
-                           DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-        : VirtualDevice(&rCompDev, eFormat, eAlphaFormat, OUTDEV_VIRDEV) {}
+                           DeviceFormat eFormat = DeviceFormat::WITHOUT_ALPHA)
+        : VirtualDevice(&rCompDev, eFormat, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.

@@ -83,7 +83,7 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
-        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::DEFAULT);
+        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
 
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
@@ -246,7 +246,7 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(GetDC( nullptr ));
-        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::DEFAULT);
+        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
 
         // create the font
         const css::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();

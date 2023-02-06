@@ -42,7 +42,7 @@ void FontFeatureTest::testGetFontFeaturesGraphite()
 {
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
-                                              DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                                              DeviceFormat::WITH_ALPHA);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
     OUString aFontName("Linux Libertine G");
@@ -126,7 +126,7 @@ void FontFeatureTest::testGetFontFeaturesOpenType()
 {
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
-                                              DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                                              DeviceFormat::WITH_ALPHA);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
     OUString aFontName("Amiri");
@@ -175,7 +175,7 @@ void FontFeatureTest::testGetFontFeaturesOpenTypeEnum()
 {
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
-                                              DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                                              DeviceFormat::WITH_ALPHA);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
     OUString aFontName("Reem Kufi");

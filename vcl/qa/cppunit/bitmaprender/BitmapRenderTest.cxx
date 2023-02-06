@@ -182,8 +182,8 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
     // Create an alpha virtual device
-    ScopedVclPtr<VirtualDevice> pAlphaVirtualDevice(VclPtr<VirtualDevice>::Create(
-        *Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
+    ScopedVclPtr<VirtualDevice> pAlphaVirtualDevice(
+        VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::WITH_ALPHA));
 
     // Set it up
     pAlphaVirtualDevice->SetOutputSizePixel(Size(4, 4));

@@ -175,7 +175,7 @@ static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point
 void VclTextTest::testSimpleText()
 {
     OUString text("L");
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(100, 100));
     device->SetBackground(Wallpaper(COL_WHITE));
     // Disable AA, to make all pixels be black or white.
@@ -605,7 +605,7 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
 
 void VclTextTest::testGetStringWithCenterEllpsis()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
@@ -617,7 +617,7 @@ void VclTextTest::testGetStringWithCenterEllpsis()
 
 void VclTextTest::testGetStringWithEndEllpsis()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
@@ -636,7 +636,7 @@ void VclTextTest::testGetStringWithEndEllpsis()
 
 void VclTextTest::testGetStringWithNewsEllpsis()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
@@ -670,7 +670,7 @@ void VclTextTest::testGetStringWithNewsEllpsis()
 
 void VclTextTest::testGetTextBreak()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
@@ -694,7 +694,7 @@ void VclTextTest::testGetTextBreak()
 
 void VclTextTest::testGetSingleLineTextRect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -705,7 +705,7 @@ void VclTextTest::testGetSingleLineTextRect()
 
 void VclTextTest::testGetSingleLineTextRectWithEndEllipsis()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -717,7 +717,7 @@ void VclTextTest::testGetSingleLineTextRectWithEndEllipsis()
 
 void VclTextTest::testGetRightBottomAlignedSingleLineTextRect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -729,7 +729,7 @@ void VclTextTest::testGetRightBottomAlignedSingleLineTextRect()
 
 void VclTextTest::testGetRotatedSingleLineTextRect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -744,7 +744,7 @@ void VclTextTest::testGetRotatedSingleLineTextRect()
 
 void VclTextTest::testGetMultiLineTextRect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -756,7 +756,7 @@ void VclTextTest::testGetMultiLineTextRect()
 
 void VclTextTest::testGetMultiLineTextRectWithEndEllipsis()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 
@@ -769,7 +769,7 @@ void VclTextTest::testGetMultiLineTextRectWithEndEllipsis()
 
 void VclTextTest::testGetRightBottomAlignedMultiLineTextRect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 11)));
 

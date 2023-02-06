@@ -779,7 +779,7 @@ public:
         {
             // Create normal virtual device (no alpha).
             ScopedVclPtr<VirtualDevice> device
-                = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+                = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
             device->SetOutputSizePixel(Size(10, 10));
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
@@ -806,7 +806,7 @@ public:
         {
             // Create virtual device with alpha.
             ScopedVclPtr<VirtualDevice> device
-                = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                = VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA);
             device->SetOutputSizePixel(Size(10, 10));
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
@@ -1139,7 +1139,7 @@ public:
             return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
-            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA);
 #ifdef MACOSX
         // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
         if (getRenderBackendName(device) == "aqua")
@@ -1194,7 +1194,8 @@ public:
         if (getDefaultDeviceBitCount() < 24)
             return;
         // Normal virtual device.
-        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        ScopedVclPtr<VirtualDevice> device
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
 #ifdef MACOSX
         // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
         if (getRenderBackendName(device) == "aqua")
@@ -1202,7 +1203,7 @@ public:
 #endif
         // Virtual device with alpha.
         ScopedVclPtr<VirtualDevice> alphaDevice
-            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA);
         device->SetOutputSizePixel(Size(20, 20));
         device->SetBackground(Wallpaper(COL_BLACK));
         device->Erase();
@@ -1349,7 +1350,8 @@ public:
 
     void testTdf124848()
     {
-        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        ScopedVclPtr<VirtualDevice> device
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
 #ifdef MACOSX
         // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
         if (getRenderBackendName(device) == "aqua")
@@ -1390,7 +1392,7 @@ public:
             return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
-            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA);
         device->SetOutputSizePixel(Size(10, 10));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
@@ -1415,7 +1417,8 @@ public:
     {
         // VCL may call copyArea()/copyBits() of backends even with coordinates partially
         // outside of the device, so try various copying like that.
-        ScopedVclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        ScopedVclPtr<VirtualDevice> device1
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
         device1->SetOutputSizePixel(Size(100, 100));
         device1->SetBackground(Wallpaper(COL_YELLOW));
         device1->Erase();
@@ -1429,7 +1432,8 @@ public:
 #endif
 
         // Plain 1:1 copy device1->device2.
-        ScopedVclPtr<VirtualDevice> device2 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        ScopedVclPtr<VirtualDevice> device2
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
         device2->SetOutputSizePixel(Size(100, 100));
         device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
         exportDevice("tdf145811-1.png", device2);

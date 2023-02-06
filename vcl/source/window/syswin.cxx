@@ -1124,7 +1124,7 @@ VclPtr<VirtualDevice> SystemWindow::createScreenshot()
 
     Size aSize(GetOutputSizePixel());
 
-    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
     xOutput->SetOutputSizePixel(aSize);
 
     Point aPos;

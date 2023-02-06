@@ -83,7 +83,7 @@ VclPtr<VirtualDevice> QtSvpSurface::createVirtualDevice() const
     aSystemGraphicsData.pSurface = m_pSurface.get();
 
     return VclPtr<VirtualDevice>::Create(aSystemGraphicsData, get_surface_size(m_pSurface.get()),
-                                         DeviceFormat::DEFAULT);
+                                         DeviceFormat::WITHOUT_ALPHA);
 }
 
 } // namespace cairo

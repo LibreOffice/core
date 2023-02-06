@@ -1838,7 +1838,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPaintCallbacks)
     int nCanvasWidth = 256;
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
     // Make sure that painting a tile in the second view doesn't invoke
     // callbacks on the first view.
@@ -2674,7 +2674,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSemiTransparent)
     size_t nCanvasHeight = 512;
     size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2703,7 +2703,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHighlightNumbering)
     size_t nCanvasHeight = 512;
     size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2728,7 +2728,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHighlightNumbering_shd)
     size_t nCanvasHeight = 512;
     size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2758,7 +2758,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
     size_t nCanvasHeight = 1024;
     size_t nTileSize = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2821,7 +2821,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
     size_t nCanvasHeight = 350;
     size_t nTileSize = 350;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2867,7 +2867,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
     size_t nCanvasHeight = 512;
     size_t nTileSize = 64;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -2910,7 +2910,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClipText)
     size_t nCanvasHeight = 512;
     size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -3039,7 +3039,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -3112,7 +3112,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -3169,7 +3169,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
@@ -3255,7 +3255,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoItem)
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
                                                     Fraction(1.0), Point(), aPixmap.data());
@@ -3292,7 +3292,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTablePaintInvalidate)
     size_t nCanvasWidth = 256;
     size_t nCanvasHeight = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
                                                     Fraction(1.0), Point(), aPixmap.data());

@@ -46,7 +46,8 @@ public:
     // Test that drawing only a part of a gradient draws the proper part of it.
     void testTdf139000()
     {
-        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        ScopedVclPtr<VirtualDevice> device
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
         device->SetOutputSizePixel(Size(100, 200));
         device->SetBackground(Wallpaper(COL_RED));
         device->Erase();

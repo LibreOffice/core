@@ -224,7 +224,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("btnCTLFeatures"))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label("lbCTLFontinfo"))
 
-    , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
+    , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::WITH_ALPHA)
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
 #ifdef IOS

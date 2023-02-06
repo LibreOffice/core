@@ -1521,8 +1521,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
     // paint metafile to VDev
     VclPtrInstance<VirtualDevice> pMaskedDevice(*i_pTargetOutDev,
-                                                DeviceFormat::DEFAULT,
-                                                DeviceFormat::DEFAULT);
+                                                DeviceFormat::WITH_ALPHA);
 
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );

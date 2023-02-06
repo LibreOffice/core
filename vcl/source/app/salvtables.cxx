@@ -662,8 +662,8 @@ OUString SalInstanceWidget::strip_mnemonic(const OUString& rLabel) const
 VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 {
     // create with (annoying) separate alpha layer that LibreOffice itself uses
-    return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT,
-                                         DeviceFormat::DEFAULT);
+    return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
+                                         DeviceFormat::WITH_ALPHA);
 }
 
 void SalInstanceWidget::call_attention_to()
@@ -1379,7 +1379,7 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
         pWindow->SetMapMode(aMapMode);
     }
 
-    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
     Size aChildSizePixel(pWindow->GetSizePixel());
     xOutput->SetOutputSizePixel(aChildSizePixel);
 

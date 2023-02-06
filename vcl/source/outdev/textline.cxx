@@ -1050,8 +1050,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             size_t nWordLength = nEndX - nStartX;
             // start with something big to avoid updating it frequently
             nWordLength = nWordLength < 1024 ? 1024 : nWordLength;
-            ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::DEFAULT,
-                                                           DeviceFormat::DEFAULT );
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::WITH_ALPHA );
             pVirtDev->SetOutputSizePixel( Size( nWordLength, nWaveHeight * 2 ), false );
             pVirtDev->SetLineColor( GetLineColor() );
             pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );

@@ -37,7 +37,7 @@ public:
 
 void VclLogicalFontInstanceTest::testglyphboundrect()
 {
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("Liberation Sans", Size(0, 110)));
 

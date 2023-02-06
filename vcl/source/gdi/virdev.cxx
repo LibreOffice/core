@@ -154,7 +154,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormat, pData);
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha, pData);
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )
@@ -200,14 +200,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
-                             DeviceFormat eAlphaFormat, OutDevType eOutDevType)
+VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormatAndAlpha,
+                             OutDevType eOutDevType)
     : OutputDevice(eOutDevType)
-    , meFormat(eFormat)
-    , meAlphaFormat(eAlphaFormat)
+    , meFormatAndAlpha(eFormatAndAlpha)
 {
-    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat)
-                            << ", " << static_cast<int>(eAlphaFormat)
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormatAndAlpha)
                             << ", " << static_cast<int>(eOutDevType) << " )" );
 
     ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
@@ -216,8 +214,7 @@ VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
 VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
                              DeviceFormat eFormat)
     : OutputDevice(OUTDEV_VIRDEV)
-    , meFormat(eFormat)
-    , meAlphaFormat(DeviceFormat::NONE)
+    , meFormatAndAlpha(eFormat)
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -303,7 +300,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         assert(mpGraphics);
 
-        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormat);
+        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormatAndAlpha);
         if ( pNewVirDev )
         {
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
@@ -359,7 +356,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
-        if (meAlphaFormat != DeviceFormat::NONE)
+        if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
         {
             // #110958# Setup alpha bitmap
             if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
@@ -369,7 +366,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
 
             if( !mpAlphaVDev )
             {
-                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
+                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meFormatAndAlpha);
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
             }
 

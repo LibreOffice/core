@@ -250,7 +250,7 @@ namespace cairo
 
         return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
                               Size(width, height),
-                              DeviceFormat::DEFAULT);
+                              DeviceFormat::WITHOUT_ALPHA);
     }
 
     /**

@@ -163,7 +163,7 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
                 loadStockAtScale(pGraphics, maBitmapEx);
             else // if (mxMetaFile)
             {
-                ScopedVclPtrInstance<VirtualDevice> aVDev(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+                ScopedVclPtrInstance<VirtualDevice> aVDev(DeviceFormat::WITH_ALPHA);
                 aVDev->SetOutputSizePixel(aTarget);
                 mxMetaFile->WindStart();
                 mxMetaFile->Play(*aVDev, Point(), aTarget);

@@ -76,9 +76,8 @@ public:
 
     void setupCanvas(const Size& size, Color backgroundColor = COL_WHITE, bool alpha = false)
     {
-        mVclDevice
-            = alpha ? VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
-                    : VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        mVclDevice = alpha ? VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA)
+                           : VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();

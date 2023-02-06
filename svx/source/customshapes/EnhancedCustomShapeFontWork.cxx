@@ -225,7 +225,7 @@ static void CalculateHorizontalScalingFactor(
     aFont.SetOrientation( 0_deg10 );
     // initializing virtual device
 
-    ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
     pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     pVirDev->SetFont( aFont );
 
@@ -338,7 +338,7 @@ static void GetTextAreaOutline(
             aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
-            ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
+            ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
             pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL();

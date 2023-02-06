@@ -85,8 +85,7 @@ namespace svt::table
 
             Point const aBitmapPos( 0, 0 );
             Size const aBitmapSize( nSortIndicatorWidth, nSortIndicatorHeight );
-            ScopedVclPtrInstance< VirtualDevice > aDevice(i_device, DeviceFormat::DEFAULT,
-                                                          DeviceFormat::DEFAULT);
+            ScopedVclPtrInstance< VirtualDevice > aDevice(i_device, DeviceFormat::WITH_ALPHA);
             aDevice->SetOutputSizePixel( aBitmapSize );
 
             DecorationView aDecoView(aDevice.get());

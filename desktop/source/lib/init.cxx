@@ -3754,7 +3754,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     double fDPIScaleX = 1.0;
     paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::WITHOUT_ALPHA);
 
     // Set background to transparent by default.
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
@@ -5632,7 +5632,7 @@ static char* getFontSubset (std::string_view aFontName)
     if (const vcl::Font* pFont = FindFont(aFoundFont))
     {
         FontCharMapRef xFontCharMap (new FontCharMap());
-        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
 
         aDevice->SetFont(*pFont);
         aDevice->GetFontCharMap(xFontCharMap);
@@ -6269,7 +6269,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     if (aText.isEmpty())
         aText = aFont.GetFamilyName();
 
-    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
     ::tools::Rectangle aRect;
     aFont.SetFontSize(Size(0, nDefaultFontSize));
     aFont.SetOrientation(Degree10(pOrientation));
@@ -6408,7 +6408,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
 
 #else
 
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);

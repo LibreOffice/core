@@ -116,7 +116,7 @@ void SkiaTest::testDrawShaders()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(20, 20));
     device->SetBackground(Wallpaper(COL_WHITE));
     device->Erase();
@@ -159,7 +159,8 @@ void SkiaTest::testDrawShaders()
     device->Erase();
 
     // Test with scaling. Use everything 10x larger to reduce the impact of smoothscaling.
-    ScopedVclPtr<VirtualDevice> deviceLarge = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> deviceLarge
+        = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     deviceLarge->SetOutputSizePixel(Size(200, 200));
     deviceLarge->SetBackground(Wallpaper(COL_WHITE));
     deviceLarge->Erase();
@@ -439,7 +440,7 @@ void SkiaTest::testDrawDelayedScaleImage()
         return;
     if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
         return; // This test tests caching that's done only in raster mode.
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(10, 10));
     device->SetBackground(Wallpaper(COL_WHITE));
     device->Erase();
@@ -513,7 +514,7 @@ void SkiaTest::testTdf137329()
         return;
     // Draw a filled polygon in the entire device, with AA enabled.
     // All pixels in the device should be black, even those at edges (i.e. not affected by AA).
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(10, 10));
     device->SetBackground(Wallpaper(COL_WHITE));
     device->SetAntialiasing(AntialiasingFlags::Enable);
@@ -534,7 +535,7 @@ void SkiaTest::testTdf140848()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1300, 400));
     device->SetBackground(Wallpaper(COL_BLACK));
     device->SetAntialiasing(AntialiasingFlags::Enable);
@@ -562,7 +563,7 @@ void SkiaTest::testTdf132367()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
-    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(2, 2));
     device->SetBackground(Wallpaper(COL_BLACK));
     device->Erase();

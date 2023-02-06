@@ -234,7 +234,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     // no success yet, create new buffer
     if (!pRetval)
     {
-        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::DEFAULT);
+        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::WITHOUT_ALPHA);
         maDeviceTemplates[pRetval] = &rOutDev;
         pRetval->SetOutputSizePixel(rSizePixel, true);
     }

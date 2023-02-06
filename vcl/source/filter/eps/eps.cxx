@@ -1997,7 +1997,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, KernArra
         vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0_deg10 );
 
-        ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
+        ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
         pVirDev->SetMapMode( rVDev.GetMapMode() );
         pVirDev->SetFont( aNotRotatedFont );
         pVirDev->SetTextAlign( eTextAlign );

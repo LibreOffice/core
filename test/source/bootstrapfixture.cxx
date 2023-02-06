@@ -274,7 +274,7 @@ std::pair<double, double> test::BootstrapFixture::getDPIScaling()
 sal_uInt16 test::BootstrapFixture::getDefaultDeviceBitCount()
 {
     ScopedVclPtr<VirtualDevice> device
-        = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     return device->GetBitCount();
 }
 

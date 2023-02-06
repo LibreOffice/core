@@ -28,7 +28,7 @@
 namespace vclcanvas
 {
     BackBuffer::BackBuffer( const OutputDevice& rRefDevice ) :
-        maVDev( VclPtr<VirtualDevice>::Create( rRefDevice, DeviceFormat::DEFAULT ) )
+        maVDev( VclPtr<VirtualDevice>::Create( rRefDevice, DeviceFormat::WITHOUT_ALPHA ) )
     {
         tools::SetDefaultDeviceAntiAliasing( maVDev );
     }
