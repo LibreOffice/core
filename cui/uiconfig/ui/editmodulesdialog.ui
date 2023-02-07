@@ -231,7 +231,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="back">
-                            <property name="label" translatable="yes" context="editmodulesdialog|back">_Back</property>
+                            <property name="label" translatable="yes" context="editmodulesdialog|back">_Reset</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
