@@ -10,6 +10,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
+#include <rtl/character.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
@@ -309,6 +310,24 @@ const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSO
     if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > sal_Int32(SAL_N_ELEMENTS( spPaperSizeTable )) - 1 )
         return spPaperSizeTable[ 0 ];
     return spPaperSizeTable[ nMSOPaperIndex ];
+}
+
+OUString CreateDOCXStyleId(std::u16string_view const aName)
+{
+    OUStringBuffer aStyleIdBuf(aName.size());
+    for (size_t i = 0; i < aName.size(); ++i)
+    {
+        sal_Unicode nChar = aName[i];
+        if (rtl::isAsciiAlphanumeric(nChar) || nChar == '-')
+        {
+            // first letter should be uppercase
+            if (aStyleIdBuf.isEmpty())
+                aStyleIdBuf.append(char(rtl::toAsciiUpperCase(nChar)));
+            else
+                aStyleIdBuf.append(char(nChar));
+        }
+    }
+    return aStyleIdBuf.makeStringAndClear();
 }
 
 std::u16string_view findQuotedText( std::u16string_view rCommand,
