@@ -6134,8 +6134,14 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     {
                         newConditions.insert( newConditions.end(), nStartRowDiff, 0 );
                         SCCOL oldCol = col - ( nCol1 + nStartColDiff );
-                        auto it = vConditions.begin() + oldCol * nDimensionRows;
-                        newConditions.insert( newConditions.end(), it, it + nDimensionRows );
+                        size_t nIndex = oldCol * nDimensionRows;
+                        if (nIndex < vConditions.size())
+                        {
+                            auto it = vConditions.begin() + nIndex;
+                            newConditions.insert( newConditions.end(), it, it + nDimensionRows );
+                        }
+                        else
+                            newConditions.insert( newConditions.end(), nDimensionRows, 0 );
                         newConditions.insert( newConditions.end(), -nEndRowDiff, 0 );
                     }
                     for(; col <= nCol2; ++col)
