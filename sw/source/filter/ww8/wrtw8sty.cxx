@@ -423,20 +423,7 @@ void MSWordStyles::BuildWwNames()
 
 OString MSWordStyles::CreateStyleId(std::u16string_view aName)
 {
-    OStringBuffer aStyleIdBuf(aName.size());
-    for (size_t i = 0; i < aName.size(); ++i)
-    {
-        sal_Unicode nChar = aName[i];
-        if (rtl::isAsciiAlphanumeric(nChar) || nChar == '-')
-        {
-            // first letter should be uppercase
-            if (aStyleIdBuf.isEmpty())
-                aStyleIdBuf.append(char(rtl::toAsciiUpperCase(nChar)));
-            else
-                aStyleIdBuf.append(char(nChar));
-        }
-    }
-    return aStyleIdBuf.makeStringAndClear();
+    return OUStringToOString(msfilter::util::CreateDOCXStyleId(aName), RTL_TEXTENCODING_UTF8);
 }
 
 void MSWordStyles::BuildStyleIds()

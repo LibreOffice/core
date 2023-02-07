@@ -79,6 +79,8 @@ public:
     static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
 };
 
+MSFILTER_DLLPUBLIC OUString CreateDOCXStyleId(std::u16string_view aName);
+
 /**
  * Finds the quoted text in a field instruction text.
  *

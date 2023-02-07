@@ -93,7 +93,6 @@
 #include <oox/mathml/import.hxx>
 #include <utility>
 #include <xmloff/odffields.hxx>
-#include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -6565,19 +6564,9 @@ DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
  Hopefully this works and a complete map of >100 built-in style names
  localised to all languages isn't needed.
 */
-static auto FilterChars(OUString const& rStyleName) -> OUString
+static OUString FilterChars(std::u16string_view const& rStyleName)
 {
-    OUStringBuffer ret;
-    sal_Int32 index(0);
-    while (index < rStyleName.getLength())
-    {
-        auto const c(rStyleName.iterateCodePoints(&index));
-        if (rtl::isAsciiAlphanumeric(c))
-        {
-            ret.appendUtf32(c);
-        }
-    }
-    return ret.makeStringAndClear();
+    return msfilter::util::CreateDOCXStyleId(rStyleName);
 }
 
 static OUString UnquoteFieldText(std::u16string_view s)
