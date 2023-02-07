@@ -90,6 +90,10 @@ SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede)
     rPrecede.SetFollow(this);
 }
 
+SwFlyAtContentFrame::~SwFlyAtContentFrame()
+{
+}
+
 // #i28701#
 
 void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
