@@ -52,36 +52,38 @@ class tdf126248(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.changeLocalSetting("Chinese (traditional)")
+            try:
+                self.changeLocalSetting("Chinese (traditional)")
 
-            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
+                with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
+                    xTabs = xDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "1")
 
-                # Get current font names from the Format Cell dialog
-                westFontName = get_state_as_dict(xDialog.getChild("edWestFontName"))['Text']
-                eastFontName = get_state_as_dict(xDialog.getChild("edCJKFontName"))['Text']
+                    # Get current font names from the Format Cell dialog
+                    westFontName = get_state_as_dict(xDialog.getChild("edWestFontName"))['Text']
+                    eastFontName = get_state_as_dict(xDialog.getChild("edCJKFontName"))['Text']
 
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-            enter_text_to_cell(gridwin, "A1", "Test")
+                enter_text_to_cell(gridwin, "A1", "Test")
 
-            # Without the fix in place, this test would have failed here
-            self.assertFontName(gridwin, westFontName)
+                # Without the fix in place, this test would have failed here
+                self.assertFontName(gridwin, westFontName)
 
-            enter_text_to_cell(gridwin, "B1", "測試")
+                enter_text_to_cell(gridwin, "B1", "測試")
 
-            self.assertFontName(gridwin, eastFontName)
+                self.assertFontName(gridwin, eastFontName)
 
-            self.changeLocalSetting("English (USA)")
+            finally:
+                self.changeLocalSetting("English (USA)")
 
-            enter_text_to_cell(gridwin, "C1", "Test")
+                enter_text_to_cell(gridwin, "C1", "Test")
 
-            self.assertFontName(gridwin, westFontName)
+                self.assertFontName(gridwin, westFontName)
 
-            enter_text_to_cell(gridwin, "D1", "測試")
+                enter_text_to_cell(gridwin, "D1", "測試")
 
-            self.assertFontName(gridwin, eastFontName)
+                self.assertFontName(gridwin, eastFontName)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
