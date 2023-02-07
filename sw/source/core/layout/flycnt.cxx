@@ -1597,6 +1597,7 @@ SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede()
 SwLayoutFrame* SwFrame::GetPrevFlyLeaf()
 {
     auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());
+    assert(pFly && "GetPrevFlyLeaf: missing fly frame");
     if (!pFly->IsFlySplitAllowed())
     {
         return nullptr;
