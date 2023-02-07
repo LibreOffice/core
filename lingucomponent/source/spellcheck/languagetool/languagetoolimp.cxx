@@ -421,24 +421,24 @@ std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aU
     if (!sAccessToken.isEmpty())
         pList = curl_slist_append(pList, sAccessToken.getStr());
 
-    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pList);
-    curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
-    curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
-    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&sResponseBody));
+    (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pList);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
+    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&sResponseBody));
 
     // allow unknown or self-signed certificates
     if (rLanguageOpts.getSSLVerification() == false)
     {
-        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
     }
 
     if (method == HTTP_METHOD::HTTP_POST)
     {
-        curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
-        curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aData.getStr());
+        (void)curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aData.getStr());
     }
 
     CURLcode cc = curl_easy_perform(curl.get());
