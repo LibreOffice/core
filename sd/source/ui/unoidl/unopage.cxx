@@ -983,8 +983,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             uno::Reference<util::XTheme> xTheme;
             if (aValue >>= xTheme)
             {
-                auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
-                std::unique_ptr<model::Theme> pTheme(new model::Theme(pUnoTheme->getTheme()));
+                auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
+                std::unique_ptr<model::Theme> pTheme(new model::Theme(rUnoTheme.getTheme()));
                 pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
             }
             break;
