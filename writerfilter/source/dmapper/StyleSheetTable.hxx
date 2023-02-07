@@ -99,7 +99,7 @@ public:
     StyleSheetEntryPtr FindDefaultParaStyle();
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
-    void CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
+    OUString CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
     void ApplyClonedTOCStyles();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
