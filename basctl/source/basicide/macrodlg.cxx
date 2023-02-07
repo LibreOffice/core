@@ -295,7 +295,11 @@ void MacroChooser::DeleteMacro()
 SbMethod* MacroChooser::CreateMacro()
 {
     SbMethod* pMethod = nullptr;
-    m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+    if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+    {
+        SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+        return nullptr;
+    }
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isAlive(), "MacroChooser::CreateMacro: no document!" );
@@ -474,8 +478,9 @@ IMPL_LINK_NOARG(MacroChooser, MacroSelectHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
 {
-    m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
-    SbModule* pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
+    SbModule* pModule = nullptr;
+    if (m_xBasicBox->get_cursor(m_xBasicBoxIter.get()))
+        pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
     m_xMacroBox->clear();
     if (pModule)
     {
@@ -614,7 +619,11 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xEditButton.get() || &rButton == m_xDelButton.get() || &rButton == m_xNewButton.get())
     {
-        m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        {
+            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+            return;
+        }
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
@@ -697,7 +706,11 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xAssignButton.get())
     {
-        m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        {
+            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+            return;
+        }
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
@@ -724,14 +737,22 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xNewLibButton.get())
     {
-        m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        {
+            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+            return;
+        }
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         createLibImpl(m_xDialog.get(), aDocument, nullptr, m_xBasicBox.get());
     }
     else if (&rButton == m_xNewModButton.get())
     {
-        m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        {
+            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+            return;
+        }
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         const OUString& aLibName( aDesc.GetLibName() );
