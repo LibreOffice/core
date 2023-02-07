@@ -410,8 +410,12 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
     assertXPath(pDoc, "/html/body/p/img", 1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImagesEnabled, "textAndImage.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
 {
+    createSwDoc("textAndImage.docx");
+    setFilterOptions("SkipImages");
+    save(OUString::createFromAscii(mpFilter));
+
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
