@@ -1624,7 +1624,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
                 aBox.SetAllDistances( 85 );
                 aSet.Put( aBox );
-                aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
+                aSet.Put( SvxLRSpaceItem( 114, 114, 0, RES_LR_SPACE ) );
                 aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );
             }
 
@@ -1645,7 +1645,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE ) );
+            aSet.Put( SvxLRSpaceItem( 0, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
@@ -1673,7 +1673,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
+            aSet.Put( SvxLRSpaceItem( 114, 114, 0, RES_LR_SPACE ) );
 
             SvxProtectItem aProtect( RES_PROTECT );
             aProtect.SetSizeProtect( true );

@@ -526,7 +526,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFormat.SetFormatAttr(aSz);
 
-    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE);
+    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, RES_LR_SPACE);
     aLR.SetGutterMargin(rSection.m_nPgGutter);
     rFormat.SetFormatAttr(aLR);
 
@@ -764,7 +764,7 @@ SwSectionFormat *wwSectionManager::InsertSection(
     tools::Long nSectionRight = rSection.GetPageRight() - nPageRight;
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
-        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, 0, RES_LR_SPACE);
+        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, RES_LR_SPACE);
         pFormat->SetFormatAttr(aLR);
     }
 
@@ -2183,7 +2183,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if (pFS->nLeMgn || pFS->nRiMgn)     // set borders
-        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn, 0, 0, RES_LR_SPACE));
+        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn, 0, RES_LR_SPACE));
 
     if (pFS->nUpMgn || pFS->nLoMgn)
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn, RES_UL_SPACE));
@@ -2244,7 +2244,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         brcVer9[i] = WW8_BRCVer9(rPic.rgbrc[i]);
     if (SwWW8ImplReader::SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
-        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, 0, RES_LR_SPACE ) );
+        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, RES_LR_SPACE ) );
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
         aSizeArray[WW8_RIGHT]*=2;
         aSizeArray[WW8_BOT]*=2;

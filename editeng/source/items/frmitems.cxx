@@ -284,19 +284,16 @@ bool SvxSizeItem::HasMetrics() const
 }
 
 
-SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    nTxtLeft        ( 0 ),
-    nLeftMargin     ( 0 ),
-    nRightMargin    ( 0 ),
-    m_nGutterMargin(0),
-    m_nRightGutterMargin(0),
+SvxLRSpaceItem::SvxLRSpaceItem(const sal_uInt16 nId)
+    : SfxPoolItem(nId)
+    , nFirstLineOffset(0)
+    , nLeftMargin(0)
+    , nRightMargin(0)
+    , m_nGutterMargin(0)
+    , m_nRightGutterMargin(0),
     nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    nFirstLineOffset  ( 0 ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)
@@ -305,19 +302,17 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
 
 
 SvxLRSpaceItem::SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
-                                const tools::Long nTLeft, const short nOfset,
+                                const short nOfset,
                                 const sal_uInt16 nId )
-:   SfxPoolItem( nId ),
-
-    nTxtLeft        ( nTLeft ),
-    nLeftMargin     ( nLeft ),
-    nRightMargin    ( nRight ),
-    m_nGutterMargin(0),
-    m_nRightGutterMargin(0),
+    : SfxPoolItem(nId)
+    , nFirstLineOffset(nOfset)
+    , nLeftMargin(nLeft)
+    , nRightMargin(nRight)
+    , m_nGutterMargin(0)
+    , m_nRightGutterMargin(0),
     nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    nFirstLineOffset  ( nOfset ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)
@@ -337,7 +332,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             css::frame::status::LeftRightMarginScale aLRSpace;
             aLRSpace.Left = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
-            aLRSpace.TextLeft = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
+            aLRSpace.TextLeft = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetTextLeft()) : GetTextLeft());
             aLRSpace.Right = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
             aLRSpace.ScaleLeft = static_cast<sal_Int16>(nPropLeftMargin);
             aLRSpace.ScaleRight = static_cast<sal_Int16>(nPropRightMargin);
@@ -352,7 +347,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
 
         case MID_TXT_LMARGIN :
-            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetTextLeft()) : GetTextLeft());
         break;
         case MID_R_MARGIN:
             rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
@@ -470,7 +465,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 void SvxLRSpaceItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
 {
     nLeftMargin = (nL * nProp) / 100;
-    nTxtLeft = nLeftMargin;
+    assert(nFirstLineOffset == 0); // probably call SetTextLeft instead? looks inconsistent otherwise
     nPropLeftMargin = nProp;
 }
 
@@ -486,9 +481,17 @@ void SvxLRSpaceItem::SetRight(const tools::Long nR, const sal_uInt16 nProp)
 
 void SvxLRSpaceItem::SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp)
 {
+    // note: left margin contains any negative first line offset - preserve it!
+    if (nFirstLineOffset < 0)
+    {
+        nLeftMargin -= nFirstLineOffset;
+    }
     nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
     nPropFirstLineOffset = nProp;
-    AdjustLeft();
+    if (nFirstLineOffset < 0)
+    {
+        nLeftMargin += nFirstLineOffset;
+    }
 }
 
 void SvxLRSpaceItem::SetTextLeft(const tools::Long nL, const sal_uInt16 nProp)
@@ -497,20 +500,22 @@ void SvxLRSpaceItem::SetTextLeft(const tools::Long nL, const sal_uInt16 nProp)
     {
         SetExplicitZeroMarginValLeft(true);
     }
-    nTxtLeft = (nL * nProp) / 100;
+    auto const nTxtLeft = (nL * nProp) / 100;
     nPropLeftMargin = nProp;
-    AdjustLeft();
-}
-
-/// Adapt nLeftMargin and nTxtLeft.
-void SvxLRSpaceItem::AdjustLeft()
-{
+    // note: left margin contains any negative first line offset
     if ( 0 > nFirstLineOffset )
         nLeftMargin = nTxtLeft + nFirstLineOffset;
     else
         nLeftMargin = nTxtLeft;
 }
 
+tools::Long SvxLRSpaceItem::GetTextLeft() const
+{
+    // remove any negative first line offset from left margin to get text-left
+    return (nFirstLineOffset < 0)
+        ? nLeftMargin - nFirstLineOffset
+        : nLeftMargin;
+}
 
 bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -520,7 +525,6 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 
     return (
         nFirstLineOffset == rOther.GetTextFirstLineOffset() &&
-        nTxtLeft == rOther.GetTextLeft() &&
         m_nGutterMargin == rOther.GetGutterMargin() &&
         m_nRightGutterMargin == rOther.GetRightGutterMargin() &&
         nLeftMargin == rOther.GetLeft()  &&
@@ -625,7 +629,6 @@ bool SvxLRSpaceItem::GetPresentation
 void SvxLRSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     nFirstLineOffset = static_cast<short>(BigInt::Scale( nFirstLineOffset, nMult, nDiv ));
-    nTxtLeft = BigInt::Scale( nTxtLeft, nMult, nDiv );
     nLeftMargin = BigInt::Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = BigInt::Scale( nRightMargin, nMult, nDiv );
 }
@@ -642,7 +645,6 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOffset"), BAD_CAST(OString::number(nFirstLineOffset).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nGutterMargin"),

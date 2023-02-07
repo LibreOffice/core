@@ -49,7 +49,8 @@ SetTextLeft SetTextFirst GetLeft GetTextLeft  GetTextFirst  (What?)
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
 {
-    tools::Long    nTxtLeft;           // We spend a sal_uInt16
+    /// First-line indent always relative to GetTextLeft()
+    short   nFirstLineOffset;
     tools::Long    nLeftMargin;        // nLeft or the negative first-line indent
     tools::Long    nRightMargin;       // The unproblematic right edge
     /// The amount of extra space added to the left margin.
@@ -58,12 +59,9 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
     tools::Long    m_nRightGutterMargin;
 
     sal_uInt16  nPropFirstLineOffset, nPropLeftMargin, nPropRightMargin;
-    short   nFirstLineOffset;     // First-line indent _always_ relative to nTxtLeft
     bool        bAutoFirst;    // Automatic calculation of the first line indent
     bool        bExplicitZeroMarginValRight;
     bool        bExplicitZeroMarginValLeft;
-
-    void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
 
 public:
 
@@ -71,7 +69,7 @@ public:
 
     explicit SvxLRSpaceItem( const sal_uInt16 nId  );
     SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
-                    const tools::Long nTLeft /*= 0*/, const short nOfset /*= 0*/,
+                    const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -97,7 +95,7 @@ public:
     // Query/direct setting of the absolute values
     tools::Long GetLeft()  const { return nLeftMargin; }
     tools::Long GetRight() const { return nRightMargin;}
-    void SetLeftValue( const tools::Long nL ) { nTxtLeft = nLeftMargin = nL; }
+    void SetLeftValue( const tools::Long nL ) { assert(nFirstLineOffset == 0); nLeftMargin = nL; }
     void SetRightValue( const tools::Long nR ) { nRightMargin = nR; }
     bool IsAutoFirst()  const { return bAutoFirst; }
     void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
@@ -111,7 +109,7 @@ public:
 
     // The UI/text interface:
     void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
-    tools::Long GetTextLeft() const { return nTxtLeft; }
+    tools::Long GetTextLeft() const;
 
     void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short  GetTextFirstLineOffset() const { return nFirstLineOffset; }

@@ -809,7 +809,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
-                        rItem.GetRight(), rItem.GetTextLeft(),
+                        rItem.GetRight(),
                         rItem.GetTextFirstLineOffset(), nId );
 
                 const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
@@ -938,7 +938,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     const SvxLRSpaceItem& rLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
-                            rLRSpaceItem.GetRight(), rLRSpaceItem.GetTextLeft(),
+                            rLRSpaceItem.GetRight(),
                             rLRSpaceItem.GetTextFirstLineOffset(), SID_ATTR_PARA_LRSPACE );
 
                     const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();

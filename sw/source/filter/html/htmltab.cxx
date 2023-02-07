@@ -3440,7 +3440,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                     sal_uInt16 nSpace = pCurTable->GetHSpace();
                     if( nSpace )
-                        aFrameSet.Put( SvxLRSpaceItem(nSpace,nSpace, 0, 0, RES_LR_SPACE) );
+                        aFrameSet.Put( SvxLRSpaceItem(nSpace, nSpace, 0, RES_LR_SPACE) );
                     nSpace = pCurTable->GetVSpace();
                     if( nSpace )
                         aFrameSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );

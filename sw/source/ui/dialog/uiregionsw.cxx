@@ -2075,7 +2075,7 @@ bool SwSectionIndentTabPage::FillItemSet(SfxItemSet* rSet)
     {
         SvxLRSpaceItem aLRSpace(
                 m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FieldUnit::TWIP)) ,
-                m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP)), 0, 0, RES_LR_SPACE);
+                m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP)), 0, RES_LR_SPACE);
         rSet->Put(aLRSpace);
     }
     return true;

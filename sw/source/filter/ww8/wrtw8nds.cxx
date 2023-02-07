@@ -3042,7 +3042,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 const SfxPoolItem* pLrSpaceItem = oTmpSet->GetItemIfSet(RES_LR_SPACE);
                 SvxLRSpaceItem aLRSpace(
                     ( pLrSpaceItem == nullptr )
-                        ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
+                        ? SvxLRSpaceItem(0, 0, 0, RES_LR_SPACE)
                         : *static_cast<const SvxLRSpaceItem*>( pLrSpaceItem ) );
 
                 // new left margin = old left + label space

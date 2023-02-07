@@ -77,7 +77,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
 , mnPagesProcessed(0)
 , mbFirstPaint(true)
 , maDocColor( COL_WHITE )
-, maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
+, maLRSpaceItem(2000, 0, 0, EE_PARA_OUTLLRSPACE)
 {
     bool bInitOutliner = false;
 

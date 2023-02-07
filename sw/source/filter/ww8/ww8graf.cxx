@@ -2011,7 +2011,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
     if (rRecord.nDxWrapDistLeft || rRecord.nDxWrapDistRight)
     {
         SvxLRSpaceItem aLR(writer_cast<sal_uInt16>(rRecord.nDxWrapDistLeft),
-                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight), 0, 0, RES_LR_SPACE);
+                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight), 0, RES_LR_SPACE);
         AdjustLRWrapForWordMargins(rRecord, aLR);
         rFlyFormat.SetFormatAttr(aLR);
     }
