@@ -1566,24 +1566,18 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     {
         SwFlyAtContentFrame* pNew = nullptr;
         SwFrame* pFlyAnchor = const_cast<SwFrame*>(pFly->GetAnchorFrame());
-        if (pFlyAnchor)
+        if (pFlyAnchor && pFlyAnchor->IsTextFrame())
         {
-            SwFrame* pTmp = pFlyAnchor->GetNext();
-            if (pTmp)
-            {
-                SwFlowFrame* pNxt = nullptr;
-                if (pTmp->IsContentFrame())
-                {
-                    pNxt = static_cast<SwContentFrame*>(pTmp);
-                }
-                if (pNxt)
-                {
-                    pNxt->MoveSubTree(pLayLeaf);
+            // Split the anchor at char 0: all the content goes to the follow of the anchor.
+            auto pFlyAnchorTextFrame = static_cast<SwTextFrame*>(pFlyAnchor);
+            pFlyAnchorTextFrame->SplitFrame(TextFrameIndex(0));
+            auto pNext = static_cast<SwTextFrame*>(pFlyAnchor->GetNext());
+            pNext->MoveSubTree(pLayLeaf);
 
-                    pNew = new SwFlyAtContentFrame( *pFly );
-                    pNxt->GetFrame().AppendFly( pNew );
-                }
-            }
+            // Now create the follow of the fly and anchor it in the just created follow of the
+            // anchor.
+            pNew = new SwFlyAtContentFrame(*pFly);
+            pFlyAnchorTextFrame->AppendFly(pNew);
         }
         pLayLeaf = pNew;
     }

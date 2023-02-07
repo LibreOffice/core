@@ -49,6 +49,7 @@
 #include <editeng/tstpitem.hxx>
 #include <redline.hxx>
 #include <comphelper/lok.hxx>
+#include <flyfrms.hxx>
 
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
@@ -579,6 +580,17 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
             }
             if (GetFollow()->IsDeleteForbidden())
                 return;
+
+            for (const auto& pFlyFrame : GetSplitFlyDrawObjs())
+            {
+                // If a fly frame is anchored to us that has a follow, then don't join the anchor.
+                // First those fly frames have to be joined.
+                if (pFlyFrame->GetFollow())
+                {
+                    return;
+                }
+            }
+
             JoinFrame();
         }
 

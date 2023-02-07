@@ -41,6 +41,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
+#include <flyfrms.hxx>
 
 using namespace ::com::sun::star;
 
@@ -224,6 +225,23 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             pOrientFrame = &(const_cast<SwTextFrame&>(rAnchorTextFrame).GetFrameAtOfst(
                 rAnchorTextFrame.MapModelToViewPos(*rAnch.GetContentAnchor())));
             mpToCharOrientFrame = pOrientFrame;
+        }
+        else if (SwFlyFrame* pFlyFrame = GetAnchoredObj().DynCastFlyFrame())
+        {
+            // See if this fly is split. If so, then the anchor is also split. All anchors are
+            // empty, except the last follow.
+            if (pFlyFrame->IsFlySplitAllowed())
+            {
+                auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
+                if (pFlyAtContentFrame->GetPrecede())
+                {
+                    const SwTextFrame* pFollow = rAnchorTextFrame.GetFollow();
+                    if (pFollow)
+                    {
+                        pOrientFrame = pFollow;
+                    }
+                }
+            }
         }
     }
     aRectFnSet.Refresh(pOrientFrame);

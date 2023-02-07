@@ -1936,36 +1936,19 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
             if (m_pFrame)
             {
                 // Don't oversize the line in case of split flys, so we don't try to move the anchor
-                // of a precede fly forward.
+                // of a precede fly forward, next to its follow.
                 bool bHasNonLastFlySplitAnchored = false;
-                SwSortedObjs* pSortedObjs = m_pFrame->GetDrawObjs();
-                if (pSortedObjs)
+                for (const auto& pFlyFrame : m_pFrame->GetSplitFlyDrawObjs())
                 {
-                    for (const auto& pSortedObj : *pSortedObjs)
+                    if (pFlyFrame->GetFollow())
                     {
-                        SwFlyFrame* pFlyFrame = pSortedObj->DynCastFlyFrame();
-                        if (!pFlyFrame)
-                        {
-                            continue;
-                        }
-
-                        if (!pFlyFrame->IsFlySplitAllowed())
-                        {
-                            continue;
-                        }
-
-                        auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
-                        if (pFlyAtContentFrame->GetFollow())
-                        {
-                            bHasNonLastFlySplitAnchored = true;
-                            break;
-                        }
+                        bHasNonLastFlySplitAnchored = true;
+                        break;
                     }
                 }
-
                 if (bHasNonLastFlySplitAnchored)
                 {
-                    m_pCurr->SetRealHeight( GetFrameRstHeight() );
+                    m_pCurr->SetRealHeight(GetFrameRstHeight());
                 }
             }
 

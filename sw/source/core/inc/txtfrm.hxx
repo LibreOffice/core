@@ -50,6 +50,7 @@ enum class ExpandMode;
 class SwTextAttr;
 class SwWrtShell;
 class SwNode;
+class SwFlyAtContentFrame;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
@@ -782,6 +783,9 @@ public:
     bool IsSymbolAt(TextFrameIndex) const;
     OUString GetCurWord(SwPosition const&) const;
     sal_uInt16 GetScalingOfSelectedText(TextFrameIndex nStt, TextFrameIndex nEnd);
+
+    /// Like GetDrawObjs(), but limit to fly frames which are allowed to split.
+    std::vector<SwFlyAtContentFrame*> GetSplitFlyDrawObjs();
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

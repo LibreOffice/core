@@ -31,6 +31,7 @@
 #include <pagefrm.hxx>
 #include <layouter.hxx>
 #include <osl/diagnose.h>
+#include <flyfrms.hxx>
 
 using namespace ::com::sun::star;
 
@@ -715,6 +716,24 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
             SwTextFrame *const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
             TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));
             pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
+        }
+        else if (SwFlyFrame* pFlyFrame = DynCastFlyFrame())
+        {
+            // See if this fly is split. If so, then the anchor is also split. All anchors are
+            // empty, except the last follow.
+            if (pFlyFrame->IsFlySplitAllowed())
+            {
+                auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
+                if (pFlyAtContentFrame->GetPrecede())
+                {
+                    SwTextFrame* pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
+                    const SwTextFrame* pFollow = pFrame->GetFollow();
+                    if (pFollow)
+                    {
+                        pAnchorCharFrame = const_cast<SwTextFrame*>(pFollow);
+                    }
+                }
+            }
         }
     }
 

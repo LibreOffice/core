@@ -1318,6 +1318,12 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nRemaining = MINFLY;
 
             const SwFrame* pAnchor = GetAnchorFrame();
+            if (SwFrame* pAnchorChar = FindAnchorCharFrame())
+            {
+                // If we find a follow of the anchor that is effectively the anchor of this fly,
+                // then use that as the anchor for sizing purposes.
+                pAnchor = pAnchorChar;
+            }
             const SwFrame* pAnchorUpper = pAnchor ? pAnchor->GetUpper() : nullptr;
             if (pAnchorUpper && IsFlySplitAllowed())
             {
