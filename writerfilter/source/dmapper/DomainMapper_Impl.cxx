@@ -6155,8 +6155,7 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
     {   // practical case: Word wrote i18n name to TOC field, but it doesn't
         // exist in styles.xml; tdf#153083 clone it for best roundtrip
         SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rTOCStyleName << " from " << pStyle->sStyleName);
-        GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
-        return rTOCStyleName;
+        return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
     }
     else
     {

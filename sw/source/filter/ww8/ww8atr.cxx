@@ -2375,7 +2375,11 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     SwTextFormatColl const*const pColl = GetExport().m_rDoc.FindTextFormatCollByName(rStyle);
                     if (pColl)
                     {
-                        sStr += "\\t \"" + rStyle + sEntryEnd;
+                        OUString const converted(GetExport().m_pStyles->GetStyleWWName(pColl));
+                        if (!converted.isEmpty())
+                        {
+                            sStr += "\\t \"" + converted + sEntryEnd;
+                        }
                     }
                 }
                 break;
@@ -2524,11 +2528,14 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                         SwTextFormatColl* pColl = GetExport().m_rDoc.FindTextFormatCollByName(sStyle);
                                         if (pColl)
                                         {
-                                            if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                            OUString const converted(GetExport().m_pStyles->GetStyleWWName(pColl));
+                                            if (!converted.isEmpty() &&
+                                                (!pColl->IsAssignedToListLevelOfOutlineStyle()
+                                                 || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl))
                                             {
                                                 if( !sTOption.isEmpty() )
                                                     sTOption += tsep;
-                                                sTOption += sStyle + sLvl;
+                                                sTOption += converted + sLvl;
                                             }
                                         }
                                     }
