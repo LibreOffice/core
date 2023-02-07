@@ -57,6 +57,10 @@
 #include <editeng/lrspitem.hxx>
 #include <calbck.hxx>
 #include <frameformats.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <flyfrm.hxx>
+#include <flyfrms.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -1445,6 +1449,34 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
 
     SwDrawTextInfo aDrawInf(pSh, *pOut, GetText(), sal_Int32(nStart), 1);
     return o3tl::narrowing<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
+}
+
+std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs()
+{
+    std::vector<SwFlyAtContentFrame*> aObjs;
+    SwSortedObjs* pSortedObjs = GetDrawObjs();
+    if (!pSortedObjs)
+    {
+        return aObjs;
+    }
+
+    for (const auto& pSortedObj : *pSortedObjs)
+    {
+        SwFlyFrame* pFlyFrame = pSortedObj->DynCastFlyFrame();
+        if (!pFlyFrame)
+        {
+            continue;
+        }
+
+        if (!pFlyFrame->IsFlySplitAllowed())
+        {
+            continue;
+        }
+
+        aObjs.push_back(static_cast<SwFlyAtContentFrame*>(pFlyFrame));
+    }
+
+    return aObjs;
 }
 
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const
