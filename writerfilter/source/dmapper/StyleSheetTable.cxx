@@ -1062,7 +1062,7 @@ void StyleSheetTable::ApplyClonedTOCStyles()
     m_pImpl->ApplyClonedTOCStylesToXText(xBody);
 }
 
-void StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rNewName)
+OUString StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rNewName)
 {
     StyleSheetEntryPtr const pClone(new StyleSheetEntry(*pStyle));
     pClone->sStyleIdentifierD = rNewName;
@@ -1071,9 +1071,10 @@ void StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEn
     m_pImpl->m_aStyleSheetEntries.push_back(pClone);
     // add it so it will be found if referenced from another TOC
     m_pImpl->m_aStyleSheetEntriesMap.emplace(rNewName, pClone);
-    m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->sStyleName, rNewName);
+    m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->sStyleName, pClone->sConvertedStyleName);
     std::vector<StyleSheetEntryPtr> const styles{ pClone };
-    return ApplyStyleSheetsImpl(rFontTable, styles);
+    ApplyStyleSheetsImpl(rFontTable, styles);
+    return pClone->sConvertedStyleName;
 }
 
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
