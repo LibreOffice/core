@@ -265,7 +265,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     if (mpDoc->GetDocumentType() == DocumentType::Impress && mpPage->IsMasterPage())
     {
         // A master slide may have a theme.
-        model::Theme* pTheme = mpPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = mpPage->getSdrPageProperties().GetTheme();
         if (pTheme)
         {
             uno::Any aTheme;

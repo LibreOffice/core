@@ -1316,7 +1316,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     {
         SdrPage* pPage = GetPage();
         css::uno::Reference<css::util::XTheme> xTheme;
-        auto* pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
             xTheme = new UnoTheme(*pTheme);
         aAny <<= xTheme;
@@ -1326,7 +1326,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_THEME_UNO_REPRESENTATION:
     {
         SdrPage* pPage = GetPage();
-        model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
         {
             pTheme->ToAny(aAny);

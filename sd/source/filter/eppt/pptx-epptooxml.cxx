@@ -1511,7 +1511,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     model::Theme* pTheme = nullptr;
     if (pMasterPage)
     {
-        pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+        pTheme = pMasterPage->getSdrPageProperties().GetTheme().get();
     }
 
     // write theme per master

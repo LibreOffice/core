@@ -492,10 +492,10 @@ std::vector<Color> DrawDocShell::GetThemeColors()
     }
 
     SdPage* pPage = pViewShell->getCurrentPage();
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme().get();
     if (!pPage->IsMasterPage())
     {
-        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme();
+        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme().get();
     }
 
     if (!pTheme)

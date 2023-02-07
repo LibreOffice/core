@@ -347,7 +347,7 @@ public:
     SfxStyleSheet* GetStyleSheet() const { return mpStyleSheet;}
 
     void SetTheme(std::unique_ptr<model::Theme> pTheme);
-    model::Theme* GetTheme();
+    std::unique_ptr<model::Theme> const& GetTheme() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

@@ -11,6 +11,7 @@
 #include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svx
@@ -29,17 +30,19 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme,
     mxValueSetThemeColors->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
     mxValueSetThemeColors->SetDoubleClickHdl(LINK(this, ThemeDialog, DoubleClickValueSetHdl));
 
-    maColorSets.init();
-    maColorSets.insert(*mpTheme->GetColorSet());
+    if (mpTheme)
+        maColorSets.push_back(*mpTheme->GetColorSet());
+    auto const& rColorSetVector = ColorSets::get().getColorSetVector();
+    maColorSets.insert(maColorSets.end(), rColorSetVector.begin(), rColorSetVector.end());
 
-    for (auto const& rColorSet : maColorSets.getColorSets())
+    for (auto const& rColorSet : maColorSets)
     {
         mxValueSetThemeColors->insert(rColorSet);
     }
 
     mxValueSetThemeColors->SetOptimalSize();
 
-    if (!maColorSets.getColorSets().empty())
+    if (!rColorSetVector.empty())
         mxValueSetThemeColors->SelectItem(1); // ItemId 1, position 0
 }
 
@@ -55,9 +58,11 @@ void ThemeDialog::DoubleClickHdl()
 
     sal_uInt32 nIndex = nItemId - 1;
 
-    model::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
-
-    mpChanger->apply(rColorSet);
+    if (nIndex < maColorSets.size())
+    {
+        model::ColorSet const& rColorSet = maColorSets[nIndex];
+        mpChanger->apply(rColorSet);
+    }
 }
 
 } // end svx namespace

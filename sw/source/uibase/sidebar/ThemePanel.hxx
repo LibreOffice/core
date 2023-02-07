@@ -43,8 +43,6 @@ private:
     std::unique_ptr<weld::CustomWeld> mxValueSetColorsWin;
     std::unique_ptr<weld::Button> mxApplyButton;
 
-    svx::ColorSets maColorSets;
-
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);

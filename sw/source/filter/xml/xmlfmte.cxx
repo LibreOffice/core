@@ -205,7 +205,7 @@ void SwXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     if (!pPage)
         return;
 
-    auto* pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pTheme)
         return;
 

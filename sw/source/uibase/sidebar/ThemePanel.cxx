@@ -47,28 +47,15 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     mxApplyButton->connect_clicked(LINK(this, ThemePanel, ClickHdl));
     mxValueSetColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickValueSetHdl));
 
-    maColorSets.init();
-
-    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-    SwDoc* pDocument = pDocSh->GetDoc();
-    if (pDocument)
+    auto const& rColorSets = svx::ColorSets::get();
+    for (model::ColorSet const& rColorSet : rColorSets.getColorSetVector())
     {
-        SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-        model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
-        if (pTheme)
-            maColorSets.insert(*pTheme->GetColorSet());
-    }
-
-    const std::vector<model::ColorSet>& aColorSets = maColorSets.getColorSets();
-    for (size_t i = 0; i < aColorSets.size(); ++i)
-    {
-        const model::ColorSet& rColorSet = aColorSets[i];
         mxValueSetColors->insert(rColorSet);
     }
 
     mxValueSetColors->SetOptimalSize();
 
-    if (!aColorSets.empty())
+    if (!rColorSets.getColorSetVector().empty())
         mxValueSetColors->SelectItem(1); // ItemId 1, position 0
 }
 
@@ -106,7 +93,8 @@ void ThemePanel::DoubleClickHdl()
         return;
     sal_uInt32 nIndex = nItemId - 1;
 
-    model::ColorSet const& rColorSet = maColorSets.getColorSet(nIndex);
+    auto const& rColorSets = svx::ColorSets::get();
+    model::ColorSet const& rColorSet = rColorSets.getColorSet(nIndex);
 
     ThemeColorChanger aChanger(pDocSh);
     aChanger.apply(rColorSet);

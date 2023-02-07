@@ -12,7 +12,6 @@
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
 #include <docmodel/theme/Theme.hxx>
-#include <svx/ColorSets.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
@@ -23,7 +22,8 @@ class SVX_DLLPUBLIC ThemeDialog final : public weld::GenericDialogController
 {
 private:
     model::Theme* mpTheme;
-    svx::ColorSets maColorSets;
+    std::vector<model::ColorSet> maColorSets;
+
     std::shared_ptr<IThemeColorChanger> mpChanger;
 
     std::unique_ptr<svx::ThemeColorValueSet> mxValueSetThemeColors;
