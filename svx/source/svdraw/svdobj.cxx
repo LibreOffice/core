@@ -328,7 +328,7 @@ SdrObjList* SdrObject::getChildrenOfSdrObject() const
 
 void SdrObject::SetBoundRectDirty()
 {
-    m_aOutRect = tools::Rectangle();
+    resetOutRectangle();
 }
 
 #ifdef DBG_UTIL
@@ -425,7 +425,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties = rSource.GetProperties().Clone(*this);
 
-    m_aOutRect=rSource.m_aOutRect;
+    setOutRectangle(rSource.getOutRectangle());
     mnLayerID = rSource.mnLayerID;
     m_aAnchor =rSource.m_aAnchor;
     m_bVirtObj=rSource.m_bVirtObj;
@@ -925,12 +925,13 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // GetCurrentBoundRect().
 const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 {
-    if(m_aOutRect.IsEmpty())
+    auto const& rRectangle = getOutRectangle();
+    if (rRectangle.IsEmpty())
     {
         const_cast< SdrObject* >(this)->RecalcBoundRect();
     }
 
-    return m_aOutRect;
+    return rRectangle;
 }
 
 // To have a possibility to get the last calculated BoundRect e.g for producing
@@ -939,7 +940,7 @@ const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 // a new method for accessing the last BoundRect.
 const tools::Rectangle& SdrObject::GetLastBoundRect() const
 {
-    return m_aOutRect;
+    return getOutRectangle();
 }
 
 void SdrObject::RecalcBoundRect()
@@ -948,8 +949,10 @@ void SdrObject::RecalcBoundRect()
     if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
+    auto const& rRectangle = getOutRectangle();
+
     // central new method which will calculate the BoundRect using primitive geometry
-    if(!m_aOutRect.IsEmpty())
+    if (!rRectangle.IsEmpty())
         return;
 
     // Use view-independent data - we do not want any connections
@@ -957,20 +960,21 @@ void SdrObject::RecalcBoundRect()
     drawinglayer::primitive2d::Primitive2DContainer xPrimitives;
     GetViewContact().getViewIndependentPrimitive2DContainer(xPrimitives);
 
-    if(xPrimitives.empty())
+    if (xPrimitives.empty())
         return;
 
     // use neutral ViewInformation and get the range of the primitives
     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
 
-    if(!aRange.isEmpty())
+    if (!aRange.isEmpty())
     {
-        m_aOutRect = tools::Rectangle(
-            static_cast<tools::Long>(floor(aRange.getMinX())),
-            static_cast<tools::Long>(floor(aRange.getMinY())),
-            static_cast<tools::Long>(ceil(aRange.getMaxX())),
-            static_cast<tools::Long>(ceil(aRange.getMaxY())));
+        tools::Rectangle aNewRectangle(
+            tools::Long(floor(aRange.getMinX())),
+            tools::Long(floor(aRange.getMinY())),
+            tools::Long(ceil(aRange.getMaxX())),
+            tools::Long(ceil(aRange.getMaxY())));
+        setOutRectangle(aNewRectangle);
         return;
     }
 }
@@ -1664,7 +1668,7 @@ void SdrObject::RecalcSnapRect()
 
 const tools::Rectangle& SdrObject::GetSnapRect() const
 {
-    return m_aOutRect;
+    return getOutRectangle();
 }
 
 void SdrObject::NbcSetSnapRect(const tools::Rectangle& rRect)

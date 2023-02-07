@@ -250,7 +250,7 @@ const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const
         setOutRectangleConst(GetAllObjBoundRect());
     }
 
-    return m_aOutRect;
+    return getOutRectangle();
 }
 
 const tools::Rectangle& SdrObjGroup::GetSnapRect() const
@@ -262,7 +262,7 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
     else
     {
-        return m_aOutRect;
+        return getOutRectangle();
     }
 }
 

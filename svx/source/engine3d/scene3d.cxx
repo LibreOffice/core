@@ -524,8 +524,9 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 {
     Point UpperLeft, LowerRight, Center, NewCenter;
 
-    UpperLeft = m_aOutRect.TopLeft();
-    LowerRight = m_aOutRect.BottomRight();
+    auto const& rRectangle = getOutRectangle();
+    UpperLeft = rRectangle.TopLeft();
+    LowerRight = rRectangle.BottomRight();
 
     tools::Long dxOutRectHalf = std::abs(UpperLeft.X() - LowerRight.X());
     dxOutRectHalf /= 2;

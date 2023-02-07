@@ -65,7 +65,7 @@ private:
     {
         bTextDirty=true;
         SetTextSizeDirty();
-        if (!m_aOutRect.IsEmpty())
+        if (!getOutRectangle().IsEmpty())
         {
             SetBoundRectDirty();
             SetBoundAndSnapRectsDirty(/*bNotMyself*/true);

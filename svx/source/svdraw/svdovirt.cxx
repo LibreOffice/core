@@ -146,7 +146,7 @@ const tools::Rectangle& SdrVirtObj::GetCurrentBoundRect() const
     auto aRectangle = mxRefObj->GetCurrentBoundRect(); // TODO: Optimize this.
     aRectangle += m_aAnchor;
     setOutRectangleConst(aRectangle);
-    return m_aOutRect;
+    return getOutRectangle();
 }
 
 const tools::Rectangle& SdrVirtObj::GetLastBoundRect() const
@@ -154,7 +154,7 @@ const tools::Rectangle& SdrVirtObj::GetLastBoundRect() const
     auto aRectangle = mxRefObj->GetLastBoundRect(); // TODO: Optimize this.
     aRectangle += m_aAnchor;
     setOutRectangleConst(aRectangle);
-    return m_aOutRect;
+    return getOutRectangle();
 }
 
 void SdrVirtObj::RecalcBoundRect()
