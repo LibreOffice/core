@@ -125,7 +125,19 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 
             // Fix up generic languages (without territory code) and odd combinations that LO
             // doesn't handle.
-            if ([pLangStr isEqualToString:@"da"])
+            if ([pLangStr isEqualToString:@"ar"])
+            {
+                const std::vector<NSString*> aAR
+                    { @"AE", @"BH", @"DJ", @"DZ", @"EG", @"ER", @"IL", @"IQ", @"JO",
+                      @"KM", @"KW", @"LB", @"LY", @"MA", @"MR", @"OM", @"PS", @"QA",
+                      @"SA", @"SD", @"SO", @"SY", @"TD", @"TN", @"YE" };
+                for (auto c: aAR)
+                {
+                    pLangStr = [@"ar_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+            else if ([pLangStr isEqualToString:@"da"])
             {
                 postspdict.push_back( @"da_DK" );
             }
