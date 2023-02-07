@@ -543,8 +543,8 @@ public:
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
-    void SetTheme(std::unique_ptr<model::Theme> pTheme);
-    model::Theme* GetTheme();
+    void setTheme(std::unique_ptr<model::Theme> pTheme);
+    std::unique_ptr<model::Theme> const& getTheme() const;
 
     void    SetStarDrawPreviewMode(bool bPreview);
     bool    IsStarDrawPreviewMode() const { return m_bStarDrawPreviewMode; }

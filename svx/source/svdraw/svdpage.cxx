@@ -45,6 +45,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/theme/ThemeColorChanger.hxx>
+#include <svx/ColorSets.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -1210,15 +1211,26 @@ static void ImpPageChange(SdrPage& rSdrPage)
 }
 
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
-:   mpSdrPage(&rSdrPage),
-    mpStyleSheet(nullptr),
-    maProperties(
+    : mpSdrPage(&rSdrPage)
+    , mpStyleSheet(nullptr)
+    , maProperties(
         mpSdrPage->getSdrModelFromSdrPage().GetItemPool(),
         svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>)
 {
-    if(!rSdrPage.IsMasterPage())
+    if (!rSdrPage.IsMasterPage())
     {
         maProperties.Put(XFillStyleItem(drawing::FillStyle_NONE));
+    }
+
+    if (rSdrPage.getSdrModelFromSdrPage().IsWriter())
+    {
+        mpTheme.reset(new model::Theme("Office"));
+        auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
+        if (pColorSet)
+        {
+            std::unique_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
+            mpTheme->SetColorSet(std::move(pDefaultColorSet));
+        }
     }
 }
 
@@ -1310,7 +1322,10 @@ void SdrPageProperties::SetTheme(std::unique_ptr<model::Theme> pTheme)
     }
 }
 
-model::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
+std::unique_ptr<model::Theme> const& SdrPageProperties::GetTheme() const
+{
+    return mpTheme;
+}
 
 void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

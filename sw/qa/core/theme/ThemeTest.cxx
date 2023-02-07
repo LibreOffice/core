@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT(pDoc);
 
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     CPPUNIT_ASSERT(pDoc);
 
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 

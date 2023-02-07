@@ -1585,7 +1585,7 @@ std::vector<Color> SwDocShell::GetThemeColors()
     SdrPage* pPage = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     if (!pPage)
         return {};
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pTheme)
         return {};
     return pTheme->GetColors();

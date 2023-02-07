@@ -73,6 +73,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <svx/ColorSets.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoashp.hxx>
 
@@ -96,7 +97,18 @@ struct SdrModelImpl
         , mbLegacySingleLineFontwork(false)
         , mbConnectorUseSnapRect(false)
         , mbIgnoreBreakAfterMultilineField(false)
+        , mpTheme(new model::Theme("Office"))
     {}
+
+    void initTheme()
+    {
+        auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
+        if (pColorSet)
+        {
+            std::unique_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
+            mpTheme->SetColorSet(std::move(pDefaultColorSet));
+        }
+    }
 };
 
 
@@ -183,6 +195,8 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     ImpSetOutlinerDefaults(m_pChainingOutliner.get(), true);
 
     ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
+
+    mpImpl->initTheme();
 }
 
 SdrModel::~SdrModel()
@@ -1575,9 +1589,15 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     }
 }
 
-void SdrModel::SetTheme(std::unique_ptr<model::Theme> pTheme) { mpImpl->mpTheme = std::move(pTheme); }
+void SdrModel::setTheme(std::unique_ptr<model::Theme> pTheme)
+{
+    mpImpl->mpTheme = std::move(pTheme);
+}
 
-model::Theme* SdrModel::GetTheme() { return mpImpl->mpTheme.get(); }
+std::unique_ptr<model::Theme> const& SdrModel::getTheme() const
+{
+    return mpImpl->mpTheme;
+}
 
 uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
 {

@@ -443,7 +443,7 @@ uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
         {
             css::uno::Reference<css::util::XTheme> xTheme;
 
-            auto* pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
+            auto const& pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
             if (pTheme)
                 xTheme = new UnoTheme(*pTheme);
             aAny <<= xTheme;

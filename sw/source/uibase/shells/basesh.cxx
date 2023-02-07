@@ -2217,7 +2217,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
                     if (pPage)
                     {
-                        model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+                        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
                         if (pTheme)
                             bDisable = false;
                     }
@@ -3078,11 +3078,11 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             if (pDocumentShell)
             {
                 SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-                model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+                auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
                 if (pTheme)
                 {
                     std::shared_ptr<svx::IThemeColorChanger> pChanger(new sw::ThemeColorChanger(pDocumentShell));
-                    auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme, pChanger);
+                    auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme.get(), pChanger);
                     weld::DialogController::runAsync(pDialog, [](int) {});
                 }
             }

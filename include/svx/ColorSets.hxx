@@ -16,19 +16,21 @@
 #include <sal/log.hxx>
 #include <svx/svxdllapi.h>
 #include <docmodel/theme/ColorSet.hxx>
+#include <optional>
 
 namespace svx
 {
 
 class SVXCORE_DLLPUBLIC ColorSets
 {
+private:
     std::vector<model::ColorSet> maColorSets;
-public:
     ColorSets();
-    ~ColorSets();
-
     void init();
-    const std::vector<model::ColorSet>& getColorSets() const
+public:
+    static ColorSets& get();
+
+    const std::vector<model::ColorSet>& getColorSetVector() const
     {
         return maColorSets;
     }
@@ -38,7 +40,7 @@ public:
         return maColorSets[nIndex];
     }
 
-    const model::ColorSet& getColorSet(std::u16string_view rName);
+    model::ColorSet const* getColorSet(std::u16string_view rName) const;
 
     void insert(model::ColorSet const& rColorSet);
 };

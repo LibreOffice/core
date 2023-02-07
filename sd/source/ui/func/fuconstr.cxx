@@ -379,7 +379,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
                 pThemePage = &pThemePage->TRG_GetMasterPage();
             }
 
-            model::Theme* pTheme = pThemePage->getSdrPageProperties().GetTheme();
+            auto const& pTheme = pThemePage->getSdrPageProperties().GetTheme();
             if (pTheme)
             {
                 // We construct an object on a page where the master page has a theme. Take the

@@ -151,7 +151,7 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
     pDocument->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme().get();
     if (pTheme)
     {
         pTheme->SetColorSet(std::make_unique<model::ColorSet>(rColorSet));
@@ -159,7 +159,7 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
     else
     {
         pPage->getSdrPageProperties().SetTheme(std::make_unique<model::Theme>("Office"));
-        pTheme = pPage->getSdrPageProperties().GetTheme();
+        pTheme = pPage->getSdrPageProperties().GetTheme().get();
         pTheme->SetColorSet(std::make_unique<model::ColorSet>(rColorSet));
     }
 

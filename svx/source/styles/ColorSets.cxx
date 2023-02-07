@@ -19,10 +19,18 @@ namespace svx
 {
 
 ColorSets::ColorSets()
-{}
+{
+    init();
+}
 
-ColorSets::~ColorSets()
-{}
+ColorSets& ColorSets::get()
+{
+    static std::optional<ColorSets> sColorSet;
+    if (!sColorSet)
+        sColorSet = ColorSets();
+    return *sColorSet;
+}
+
 
 void ColorSets::init()
 {
@@ -140,19 +148,29 @@ void ColorSets::init()
     }
 }
 
-const model::ColorSet& ColorSets::getColorSet(std::u16string_view rName)
+model::ColorSet const* ColorSets::getColorSet(std::u16string_view rName) const
 {
     for (const model::ColorSet & rColorSet : maColorSets)
     {
         if (rColorSet.getName() == rName)
-            return rColorSet;
+            return &rColorSet;
     }
-    return maColorSets[0];
+    return nullptr;
 }
 
-void ColorSets::insert(model::ColorSet const& rColorSet)
+void ColorSets::insert(model::ColorSet const& rNewColorSet)
 {
-    maColorSets.push_back(rColorSet);
+    for (model::ColorSet& rColorSet : maColorSets)
+    {
+        if (rColorSet.getName() == rNewColorSet.getName())
+        {
+            rColorSet = rNewColorSet;
+            return;
+        }
+    }
+
+    // color set not found, so insert it
+    maColorSets.push_back(rNewColorSet);
 }
 
 } // end of namespace svx
