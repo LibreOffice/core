@@ -179,6 +179,7 @@ public:
 
     SwFlyAtContentFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor, bool bFollow = false );
     SwFlyAtContentFrame(SwFlyAtContentFrame& rPrecede);
+    ~SwFlyAtContentFrame();
 
     void SetAbsPos( const Point &rNew );
 
