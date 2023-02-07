@@ -7190,18 +7190,24 @@ void setLanguageToolConfig()
         const char* pRestProtocol = ::getenv("LANGUAGETOOL_RESTPROTOCOL");
 
         OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
-        OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
         if (aEnabled != "true")
             return;
         OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
-        OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
         try
         {
             SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
             rLanguageOpts.setBaseURL(aBaseUrl);
             rLanguageOpts.setEnabled(true);
-            rLanguageOpts.setSSLVerification(aSSLVerification == "true");
-            rLanguageOpts.setRestProtocol(aRestProtocol);
+            if (pSSLVerification)
+            {
+                OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
+                rLanguageOpts.setSSLVerification(aSSLVerification == "true");
+            }
+            if (pRestProtocol)
+            {
+                OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
+                rLanguageOpts.setRestProtocol(aRestProtocol);
+            }
             if (pUsername && pApikey)
             {
                 OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
