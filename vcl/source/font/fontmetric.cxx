@@ -523,6 +523,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
                 auto aOS2(pFace->GetRawFontData(HB_TAG('O', 'S', '/', '2')));
                 SvMemoryStream aStream(const_cast<uint8_t*>(aOS2.data()), aOS2.size(),
                                        StreamMode::READ);
+                // Font data are big endian.
+                aStream.SetEndian(SvStreamEndian::BIG);
                 if (aStream.Seek(vcl::OS2_fsSelection_offset) == vcl::OS2_fsSelection_offset)
                     aStream.ReadUInt16(fsSelection);
                 bUseTypoMetrics = fsSelection & (1 << 7);
