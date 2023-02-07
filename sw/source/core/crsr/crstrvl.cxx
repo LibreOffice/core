@@ -844,6 +844,7 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
     sal_Int32 nStart = pTextContentControl->GetStart() + 1;
     pCursor->GetPoint()->Assign(*pTextNode, nStart);
 
+    bool bRet = true;
     // select contents for certain controls or conditions
     if (pContentControl->GetShowingPlaceHolder() || pContentControl->GetCheckbox()
         || pContentControl->GetSelectedListItem() || pContentControl->GetSelectedDate())
@@ -852,11 +853,11 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
         // Don't select the CH_TXTATR_BREAKWORD itself at the end.
         sal_Int32 nEnd = *pTextContentControl->End() - 1;
         pCursor->GetMark()->Assign(*pTextNode, nEnd);
+        bRet = !pCursor->IsSelOvr();
     }
     else
         ClearMark();
 
-    bool bRet = !pCursor->IsSelOvr();
     if (bRet)
     {
         UpdateCursor(SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE
