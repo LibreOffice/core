@@ -18,6 +18,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -181,23 +182,25 @@ protected:
                       const EventPosterHelperBase* pEventPosterHelper = nullptr);
 
     /* Dialog handling */
-    class Dialog : public test::EventPosterHelper
+    class Dialog : public test::AccessibleEventPosterHelper
     {
     private:
         bool mbAutoClose;
+        css::uno::Reference<css::awt::XDialog2> mxDialog2;
+        css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
 
     public:
-        Dialog(vcl::Window* pWindow, bool bAutoClose = true);
+        Dialog(css::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
         virtual ~Dialog();
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
 
         css::uno::Reference<css::accessibility::XAccessible> getAccessible() const
         {
-            return mxWindow ? mxWindow->GetAccessible() : nullptr;
+            return mxAccessible;
         }
 
-        bool close(sal_Int32 result = VclResponseType::RET_CANCEL);
+        void close(sal_Int32 result = VclResponseType::RET_CANCEL);
 
         css::uno::Reference<css::accessibility::XAccessibleContext>
         tabTo(const sal_Int16 role, const std::u16string_view name)

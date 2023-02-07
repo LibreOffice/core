@@ -17,7 +17,9 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -30,7 +32,8 @@
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
+
+#include <cppuhelper/implbase.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -347,12 +350,22 @@ bool test::AccessibleTestBase::tabTo(
 
 /* Dialog handling */
 
-test::AccessibleTestBase::Dialog::Dialog(vcl::Window* pWindow, bool bAutoClose)
-    : test::EventPosterHelper(pWindow)
-    , mbAutoClose(bAutoClose)
+test::AccessibleTestBase::Dialog::Dialog(uno::Reference<awt::XDialog2>& xDialog2, bool bAutoClose)
+    : mbAutoClose(bAutoClose)
+    , mxDialog2(xDialog2)
 {
-    CPPUNIT_ASSERT(pWindow);
-    CPPUNIT_ASSERT(pWindow->IsDialog());
+    CPPUNIT_ASSERT(xDialog2.is());
+
+    mxAccessible.set(xDialog2, uno::UNO_QUERY);
+    if (mxAccessible)
+        setWindow(mxAccessible);
+    else
+    {
+        std::cerr << "WARNING: AccessibleTestBase::Dialog() constructed with awt::XDialog2 '"
+                  << xDialog2->getTitle()
+                  << "' not implementing accessibility::XAccessible. Event delivery will not work."
+                  << std::endl;
+    }
 }
 
 test::AccessibleTestBase::Dialog::~Dialog()
@@ -361,16 +374,13 @@ test::AccessibleTestBase::Dialog::~Dialog()
         close();
 }
 
-bool test::AccessibleTestBase::Dialog::close(sal_Int32 result)
+void test::AccessibleTestBase::Dialog::close(sal_Int32 result)
 {
-    if (mxWindow && !mxWindow->isDisposed())
+    if (mxDialog2)
     {
-        uno::Reference<awt::XDialog2> xDialog2(mxWindow->GetComponentInterface(),
-                                               uno::UNO_QUERY_THROW);
-        xDialog2->endDialog(result);
-        return mxWindow->isDisposed();
+        mxDialog2->endDialog(result);
+        mxDialog2.clear();
     }
-    return true;
 }
 
 std::shared_ptr<test::AccessibleTestBase::DialogWaiter>
@@ -387,7 +397,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
     class ListenerHelper : public DialogWaiter
     {
         DialogCancelMode miPreviousDialogCancelMode;
-        Link<VclSimpleEvent&, void> mLink;
+        uno::Reference<awt::XExtendedToolkit> mxToolkit;
         bool mbWaitingForDialog;
         std::exception_ptr mpException;
         std::u16string_view msName;
@@ -395,14 +405,14 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
         bool mbAutoClose;
         Timer maTimeoutTimer;
         Idle maIdleHandler;
-
+        uno::Reference<awt::XTopWindowListener> mxTopWindowListener;
         std::unique_ptr<Dialog> mxDialog;
 
     public:
         virtual ~ListenerHelper()
         {
             Application::SetDialogCancelMode(miPreviousDialogCancelMode);
-            Application::RemoveEventListener(mLink);
+            mxToolkit->removeTopWindowListener(mxTopWindowListener);
             maTimeoutTimer.Stop();
             maIdleHandler.Stop();
         }
@@ -416,8 +426,9 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             , maTimeoutTimer("workaround timer if we don't catch WindowActivate")
             , maIdleHandler("runs user callback in idle time")
         {
-            mLink = LINK(this, ListenerHelper, eventListener);
-            Application::AddEventListener(mLink);
+            mxTopWindowListener.set(new MyTopWindowListener(this));
+            mxToolkit.set(Application::GetVCLToolkit(), uno::UNO_QUERY_THROW);
+            mxToolkit->addTopWindowListener(mxTopWindowListener);
 
             maTimeoutTimer.SetInvokeHandler(LINK(this, ListenerHelper, timeoutTimerHandler));
             maTimeoutTimer.SetTimeout(60000);
@@ -449,31 +460,47 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             throw new css::uno::RuntimeException("Timeout waiting for dialog");
         }
 
-        // mimic IMPL_LINK inline
-        static void LinkStubeventListener(void* instance, VclSimpleEvent& event)
+        class MyTopWindowListener : public ::cppu::WeakImplHelper<awt::XTopWindowListener>
         {
-            static_cast<ListenerHelper*>(instance)->eventListener(event);
-        }
+        private:
+            ListenerHelper* mpHelper;
 
-        void eventListener(VclSimpleEvent& event)
-        {
-            assert(mbWaitingForDialog);
+        public:
+            MyTopWindowListener(ListenerHelper* pHelper)
+                : mpHelper(pHelper)
+            {
+                assert(mpHelper);
+            }
 
-            if (event.GetId() != VclEventId::WindowActivate)
-                return;
+            // XTopWindowListener
+            virtual void SAL_CALL windowOpened(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowClosing(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowClosed(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowMinimized(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowNormalized(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowDeactivated(const lang::EventObject&) override {}
+            virtual void SAL_CALL windowActivated(const lang::EventObject& xEvent) override
+            {
+                assert(mpHelper->mbWaitingForDialog);
 
-            auto pWin = static_cast<VclWindowEvent*>(&event)->GetWindow();
+                if (!xEvent.Source)
+                    return;
 
-            if (!pWin->IsDialog())
-                return;
+                uno::Reference<awt::XDialog2> xDialog(xEvent.Source, uno::UNO_QUERY);
+                if (!xDialog)
+                    return;
 
-            // remove ourselves, we don't want to run again
-            Application::RemoveEventListener(mLink);
+                // remove ourselves, we don't want to run again
+                mpHelper->mxToolkit->removeTopWindowListener(this);
 
-            mxDialog = std::make_unique<Dialog>(pWin, true);
+                mpHelper->mxDialog = std::make_unique<Dialog>(xDialog, true);
 
-            maIdleHandler.Start();
-        }
+                mpHelper->maIdleHandler.Start();
+            }
+
+            // XEventListener
+            virtual void SAL_CALL disposing(const lang::EventObject&) override {}
+        };
 
         // mimic IMPL_LINK inline
         static void LinkStubidleHandler(void* instance, Timer* idle)
