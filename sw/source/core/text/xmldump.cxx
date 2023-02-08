@@ -353,8 +353,14 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             {
                 aText = aText.replace( i, '*' );
             }
-            OString aText8 =OUStringToOString( aText,
-                                                          RTL_TEXTENCODING_UTF8 );
+            auto nTextOffset = static_cast<sal_Int32>(pTextFrame->GetOffset());
+            sal_Int32 nTextLength = aText.getLength() - nTextOffset;
+            if (const SwTextFrame* pTextFrameFollow = pTextFrame->GetFollow())
+            {
+                nTextLength = static_cast<sal_Int32>(pTextFrameFollow->GetOffset() - pTextFrame->GetOffset());
+            }
+            OString aText8
+                = OUStringToOString(aText.subView(nTextOffset, nTextLength), RTL_TEXTENCODING_UTF8);
             (void)xmlTextWriterWriteString( writer,
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
             if (const SwParaPortion* pPara = pTextFrame->GetPara())
@@ -527,6 +533,8 @@ void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 
     if (m_pPrecede != nullptr)
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
+
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("offset"), BAD_CAST(OString::number(static_cast<sal_Int32>(mnOffset)).getStr()));
 }
 
 void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
